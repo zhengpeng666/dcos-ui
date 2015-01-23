@@ -6,7 +6,7 @@ var MesosStateStore = require("../stores/MesosStateStore");
 
 function getMesosServices() {
   return {
-    allItems: MesosStateStore.getAll()
+    allItems: MesosStateStore.getAll().frameworks
   };
 }
 

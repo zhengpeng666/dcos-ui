@@ -3,13 +3,13 @@ var _ = require("underscore");
 
 var AppDispatcher = _.extend(new Dispatcher(), {
 
-  handleViewAction: function (action) {
+  handleServerAction: function (action) {
     if (!action.type) {
       console.warn("Empty action.type: you likely mistyped the action.");
     }
 
     this.dispatch({
-      source: "VIEW_ACTION",
+      source: "SERVER_ACTION",
       action: action
     });
   }
