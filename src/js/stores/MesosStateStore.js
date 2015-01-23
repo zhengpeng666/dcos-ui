@@ -7,40 +7,7 @@ var _ = require("underscore");
 var CHANGE_EVENT = "change";
 var UPDATE_INTERVAL = 2000;
 var _initCalled = false;
-
-/* jshint camelcase:false */
-/* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-var _mesosState = {
-  activated_slaves: null,
-  build_date: null,
-  build_time: null,
-  build_user: null,
-  completed_frameworks:[],
-  deactivated_slaves:0,
-  elected_time: null,
-  failed_tasks: 0,
-  finished_tasks: 0,
-  flags: null,
-  frameworks:[],
-  git_branch: null,
-  git_sha: null,
-  hostname: null,
-  id: null,
-  killed_tasks:0,
-  leader: null,
-  log_dir: null,
-  lost_tasks:0,
-  orphan_tasks:[],
-  pid: null,
-  slaves:[],
-  staged_tasks: 0,
-  start_time: null,
-  started_tasks: 0,
-  unregistered_frameworks:[],
-  version: null
-};
-/* jshint camelcase:true */
-/* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
+var _mesosState = {};
 
 var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 

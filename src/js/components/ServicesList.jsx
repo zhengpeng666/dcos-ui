@@ -19,7 +19,9 @@ var ServicesList = React.createClass({
   mixins: [Router.State],
 
   getInitialState: function () {
-    return getMesosServices();
+    return {
+      frameworks: []
+    };
   },
 
   componentDidMount: function () {
