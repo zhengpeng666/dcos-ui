@@ -6,7 +6,7 @@ var MesosStateStore = require("../stores/MesosStateStore");
 
 function getMesosServices() {
   return {
-    allItems: MesosStateStore.getAll().frameworks
+    frameworks: MesosStateStore.getAll().frameworks || []
   };
 }
 
@@ -19,9 +19,7 @@ var ServicesList = React.createClass({
   mixins: [Router.State],
 
   getInitialState: function () {
-    return {
-      frameworks: []
-    };
+    return getMesosServices();
   },
 
   componentDidMount: function () {
@@ -50,7 +48,7 @@ var ServicesList = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className={classSet}>
-        <Griddle results={this.state.allItems} />
+        <Griddle results={this.state.frameworks} />
       </div>
     );
   }
