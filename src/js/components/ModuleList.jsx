@@ -5,22 +5,22 @@ var Router = require("react-router");
 var _ = require("underscore");
 
 var MesosStateStore = require("../stores/MesosStateStore");
-var ServiceItem = require("./ServiceItem");
+var ModuleItem = require("./ModuleItem");
 
-function getMesosServices() {
+function getMesosModules() {
   return {
-    collection: MesosStateStore.getAll().frameworks || []
+    collection: MesosStateStore.getAll().modules || []
   };
 }
 
-var ServicesList = React.createClass({
+var ModuleList = React.createClass({
 
-  displayName: "ServicesList",
+  displayName: "ModuleList",
 
   mixins: [Router.State],
 
   getInitialState: function () {
-    return getMesosServices();
+    return getMesosModules();
   },
 
   componentDidMount: function () {
@@ -32,15 +32,15 @@ var ServicesList = React.createClass({
   },
 
   _onChange: function () {
-    this.setState(getMesosServices());
+    this.setState(getMesosModules());
   },
 
-  getServiceItems: function () {
-    return _.map(this.state.collection, function (service) {
+  getModulesItems: function () {
+    return _.map(this.state.collection, function (module) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
-        <ServiceItem key={service.id} model={service} />
+        <ModuleItem key={module.id} model={module} />
       );
     });
   },
@@ -73,11 +73,11 @@ var ServicesList = React.createClass({
           <td>User</td>
         </thead>
         <tbody>
-          {this.getServiceItems()}
+          {this.getModulesItems()}
         </tbody>
       </table>
     );
   }
 });
 
-module.exports = ServicesList;
+module.exports = ModuleList;

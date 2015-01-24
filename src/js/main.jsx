@@ -7,13 +7,14 @@ var Route = Router.Route;
 
 var Activity = require("./components/Activity");
 var Index = require("./components/Index");
+var ModuleList = require("./components/ModuleList");
 var ServicesList = require("./components/ServicesList");
 
 /* jshint trailing:false, quotmark:false, newcap:false */
 /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
 var routes = (
   <Route name="home" path="/" handler={Index}>
-    <Route name="modules" path="/modules" handler={ServicesList} />
+    <Route name="modules" path="/modules" handler={ModuleList} />
     <Route name="services" path="/services" handler={ServicesList} />
     <DefaultRoute handler={Activity}/>
   </Route>

@@ -6,6 +6,7 @@ var _ = require("underscore");
 
 var CHANGE_EVENT = "change";
 var UPDATE_INTERVAL = 2000;
+
 var _initCalled = false;
 var _mesosState = {};
 
@@ -38,6 +39,29 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
   },
 
+  getFrameworks: function (frameworks) {
+    var displayKeys = [
+      "active",
+      "completed_tasks",
+      "hostname",
+      "id",
+      "name",
+      "offers",
+      "resources",
+      "tasks",
+      "user"
+    ];
+
+    return _.map(frameworks, function (framework) {
+      return _.reduce(framework, function (obj, val, key) {
+        if (_.contains(displayKeys, key)) {
+          obj[key] = val;
+        }
+        return obj;
+      }, {});
+    });
+  },
+
   emitChange: function () {
     this.emit(CHANGE_EVENT);
   },
@@ -57,7 +81,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     switch (action.type) {
       case ActionTypes.REQUEST_MESOS_STATE:
         data = action.data;
-        data.date = Date.now();
+        data.frameworks = MesosStateStore.getFrameworks(data.frameworks);
         _mesosState = data;
         MesosStateStore.emitChange();
         break;
