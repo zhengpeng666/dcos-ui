@@ -28,12 +28,54 @@ Sidebar
 	left: -100%;
 	width: 100%;
 	height: 100%;
-	margin-left: -((2 * (@grid-gutter-width / 2)) + @icon-glyph-small-width);
-	padding-left: ((2 * (@grid-gutter-width / 2)) + @icon-glyph-small-width);
+	margin-left: -((2 * (@grid-gutter-width * 1.0)) + @icon-medium-width);
+	padding-left: ((2 * (@grid-gutter-width * 1.0)) + @icon-medium-width);
 	overflow: hidden;
 	background: ~`color_lightness("@{gray}", -50)`;
 	z-index: 5000;
 	.transition(left 0.3s ease);
+	
+	
+	
+	
+	
+	
+	/* ----------------------------------------------------------------------------------------------------
+    -------------------------------------------------------------------------------------------------------
+    
+    Sidebar Header
+    
+    -------------------------------------------------------------------------------------------------------
+    ---------------------------------------------------------------------------------------------------- */
+	
+	#sidebar-header {
+    	
+    	.sidebar-header-image {
+        	
+        	margin: 0 auto;
+        	display: block;
+        	width: 64px;
+        	height: 64px;
+        	padding: 3px;
+        	background: @white;
+        	.border-radius(1000px);
+        	overflow: hidden;
+        	margin-bottom: (@base-spacing-unit * 0.25);
+        	
+        	.sidebar-header-image-inner {
+            	
+            	display: block;
+            	width: 64px - (2 * 3px);
+            	height: 64px - (2 * 3px);
+            	background: ~`color_lightness("@{gray}", 80)`;
+            	.border-radius(1000px);
+                overflow: hidden;
+            	
+        	}
+        	
+    	}
+    	
+    }
 	
 	
 	
@@ -71,12 +113,12 @@ Sidebar
 	
 	#sidebar-navigation {
     	
-    	ul {
+    	.sidebar-menu {
         	
         	padding: 0px;
-        	margin: 0px -(@base-spacing-unit * 0.5);
+        	margin: 0px -(@grid-gutter-width * 0.5);
         	
-        	li {
+        	.sidebar-menu-item {
             	
             	color: ~`color_lightness("@{gray}", 50)`;
             	margin: 0px;
@@ -89,8 +131,8 @@ Sidebar
                     background: rgba(255, 255, 255, 0.05);
                     position: absolute;
                     bottom: 0px;
-                    left: (@base-spacing-unit * 0.25);
-                    right: (@base-spacing-unit * 0.25);
+                    left: (@grid-gutter-width * 0.25);
+                    right: (@grid-gutter-width * 0.25);
                     
                 }
                 
@@ -104,7 +146,7 @@ Sidebar
                     
                 }
                 
-            	.icon {
+            	.sidebar-menu-item-icon {
                 	
                 	margin-right: (@base-spacing-unit * 0.25);
                 	.opacity(0.40);
@@ -115,14 +157,14 @@ Sidebar
                 	
                 	color: ~`color_lightness("@{gray}", 50)`;
                 	display: block;
-                	padding: (@base-spacing-unit * 0.5) (@base-spacing-unit * 0.5);
+                	padding: (@base-spacing-unit * 0.5) (@grid-gutter-width * 0.5);
                 	
                 	&:hover {
                     	
                     	text-decoration: none;
                     	color: ~`color_lightness("@{gray}", 80)`;
                     	
-                    	.icon {
+                    	.sidebar-menu-item-icon {
                         	
                         	.opacity(0.80);
                         	
@@ -135,7 +177,7 @@ Sidebar
                     	text-decoration: none;
                     	color: ~`color_lightness("@{gray}", 50)`;
                     	
-                    	.icon {
+                    	.sidebar-menu-item-icon {
                         	
                         	.opacity(0.40);
                         	
@@ -150,7 +192,7 @@ Sidebar
                 	color: @white;
                 	.box-shadow(inset 3px 0px 0px 0px @mesosphere-heliotrope);
                 	
-                	.icon {
+                	.sidebar-menu-item-icon {
                     	
                     	.opacity(1.00);
                     	
@@ -183,7 +225,7 @@ body.canvas-sidebar-open {
 	#page {
 		
 		left: 100%;
-		margin-left: -((2 * (@grid-gutter-width / 2)) + @icon-glyph-small-width);
+		margin-left: -((2 * (@grid-gutter-width * 1.0)) + @icon-medium-width);
 		position: fixed;
 		
 	}
@@ -206,6 +248,112 @@ body.canvas-sidebar-open {
 	---------------------------------------------------------------------------------------------------- */
 	
 	@media (min-width: @screen-mini) {
+		
+		/* ----------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------
+        
+        Sidebar
+        
+        -------------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------- */
+        
+        #sidebar {
+        	
+        	margin-left: -((2 * (@grid-gutter-width-screen-mini * 1.0)) + @icon-medium-width);
+        	padding-left: ((2 * (@grid-gutter-width-screen-mini * 1.0)) + @icon-medium-width);
+        	
+        	
+        	
+        	
+        	
+        	
+        	/* ----------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------
+            
+            Sidebar Header
+            
+            -------------------------------------------------------------------------------------------------------
+            ---------------------------------------------------------------------------------------------------- */
+        	
+        	#sidebar-header {
+            	
+            	.sidebar-header-image {
+                	
+                	width: 64px;
+                	height: 64px;
+                	padding: 3px;
+                	margin-bottom: (@base-spacing-unit-screen-mini * 0.25);
+                	
+                	.sidebar-header-image-inner {
+                    	
+                    	width: 64px - (2 * 3px);
+                    	height: 64px - (2 * 3px);
+                    	
+                	}
+                	
+            	}
+            	
+            }
+        	
+        	
+        	
+        	
+        	
+        	
+        	/* ----------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------
+            
+            Sidebar Navigation
+            
+            -------------------------------------------------------------------------------------------------------
+            ---------------------------------------------------------------------------------------------------- */
+        	
+        	#sidebar-navigation {
+            	
+            	.sidebar-menu {
+                	
+                	margin: 0px -(@grid-gutter-width-screen-mini * 0.5);
+                	
+                	.sidebar-menu-item {
+                    	
+                    	&:after {
+                            
+                            left: (@grid-gutter-width-screen-mini * 0.25);
+                            right: (@grid-gutter-width-screen-mini * 0.25);
+                            
+                        }
+                        
+                    	.sidebar-menu-item-icon {
+                        	
+                        	margin-right: (@base-spacing-unit-screen-mini * 0.25);
+                        	
+                    	}
+                    	
+                    	a {
+                        	
+                        	padding: (@base-spacing-unit-screen-mini * 0.5) (@grid-gutter-width-screen-mini * 0.5);
+                        	
+                    	}
+                    	
+                	}
+                	
+            	}
+            	
+        	}
+        	
+        }
+        
+        body.canvas-sidebar-open {
+        	
+        	#page {
+        		
+        		left: 100%;
+        		margin-left: -((2 * (@grid-gutter-width-screen-mini * 1.0)) + @icon-medium-width);
+        		position: fixed;
+        		
+        	}
+        	
+        }
 		
 	}
 	
@@ -238,6 +386,67 @@ body.canvas-sidebar-open {
         
         #sidebar {
             
+            float: left;
+            position: absolute;
+        	top: auto;
+        	left: auto;
+        	width: (2 * (@base-spacing-unit-screen-small * 0.5)) + @icon-medium-width;
+        	margin-left: auto;
+        	padding-left: 0px;
+        	overflow: hidden;
+            .box-shadow(0px 0px 0px 1px rgba(255, 255, 255, 0.05));
+            .transition(none);
+	
+	
+	
+	
+	
+	
+        	/* ----------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------
+            
+            Sidebar Header
+            
+            -------------------------------------------------------------------------------------------------------
+            ---------------------------------------------------------------------------------------------------- */
+        	
+        	#sidebar-header {
+            	
+            	.sidebar-header-image {
+                	
+                	width: @icon-medium-width;
+                	height: @icon-medium-height;
+                	padding: 3px;
+                	margin-bottom: 0px;
+                	
+                	.sidebar-header-image-inner {
+                    	
+                    	width: @icon-medium-width - (2 * 3px);
+                    	height: @icon-medium-height - (2 * 3px);
+                    	
+                	}
+                	
+            	}
+            	
+            	.sidebar-header-label {
+                	
+                	display: none;
+                	
+            	}
+            	
+            	.sidebar-header-sublabel {
+                	
+                	display: none;
+                	
+            	}
+            	
+            }
+            
+            
+            
+            
+            
+            
             /* ----------------------------------------------------------------------------------------------------
             -------------------------------------------------------------------------------------------------------
             
@@ -248,11 +457,11 @@ body.canvas-sidebar-open {
         	
         	#sidebar-navigation {
             	
-            	ul {
+            	.sidebar-menu {
                 	
                 	margin: 0px -(@base-spacing-unit-screen-small * 0.5);
                 	
-                	li {
+                	.sidebar-menu-item {
                     	
                     	&:after {
                             
@@ -261,11 +470,17 @@ body.canvas-sidebar-open {
                             
                         }
                         
-                    	.icon {
+                    	.sidebar-menu-item-icon {
                         	
                         	margin-right: (@base-spacing-unit-screen-small * 0.25);
                         	
                     	}
+                        
+                    	.sidebar-menu-item-label {
+                        	
+                        	display: none;
+                        	
+                        }
                     	
                     	a {
                         	
@@ -312,17 +527,58 @@ body.canvas-sidebar-open {
         
         #sidebar {
             
-            float: left;
-            position: absolute;
-        	top: auto;
-        	left: auto;
-        	width: 250px;
-        	margin-left: auto;
-        	padding-left: 0px;
-        	overflow: hidden;
-            .box-shadow(0px 0px 0px 1px rgba(255, 255, 255, 0.05));
-            .transition(none);
+            width: 250px;
+	
+	
+	
+	
+	
+	
+        	/* ----------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------
             
+            Sidebar Header
+            
+            -------------------------------------------------------------------------------------------------------
+            ---------------------------------------------------------------------------------------------------- */
+        	
+        	#sidebar-header {
+            	
+            	.sidebar-header-image {
+                	
+                	width: 64px;
+                	height: 64px;
+                	padding: 3px;
+                	margin-bottom: (@base-spacing-unit-screen-medium * 0.25);
+                	
+                	.sidebar-header-image-inner {
+                    	
+                    	width: 64px - (2 * 3px);
+                    	height: 64px - (2 * 3px);
+                    	
+                	}
+                	
+            	}
+            	
+            	.sidebar-header-label {
+                	
+                	display: block;
+                	
+            	}
+            	
+            	.sidebar-header-sublabel {
+                	
+                	display: block;
+                	
+            	}
+            	
+            }
+        	
+        	
+        	
+        	
+        	
+        	
             /* ----------------------------------------------------------------------------------------------------
             -------------------------------------------------------------------------------------------------------
             
@@ -333,11 +589,11 @@ body.canvas-sidebar-open {
         	
         	#sidebar-navigation {
             	
-            	ul {
+            	.sidebar-menu {
                 	
                 	margin: 0px -(@base-spacing-unit-screen-medium * 0.5);
                 	
-                	li {
+                	.sidebar-menu-item {
                     	
                     	&:after {
                             
@@ -346,11 +602,17 @@ body.canvas-sidebar-open {
                             
                         }
                         
-                    	.icon {
+                    	.sidebar-menu-item-icon {
                         	
                         	margin-right: (@base-spacing-unit-screen-medium * 0.25);
                         	
                     	}
+                        
+                    	.sidebar-menu-item-label {
+                        	
+                        	display: inline-block;
+                        	
+                        }
                     	
                     	a {
                         	
@@ -398,6 +660,44 @@ body.canvas-sidebar-open {
         #sidebar {
             
             width: 300px;
+	
+	
+	
+	
+	
+	
+        	/* ----------------------------------------------------------------------------------------------------
+            -------------------------------------------------------------------------------------------------------
+            
+            Sidebar Header
+            
+            -------------------------------------------------------------------------------------------------------
+            ---------------------------------------------------------------------------------------------------- */
+        	
+        	#sidebar-header {
+            	
+            	.sidebar-header-image {
+                	
+                	width: 64px;
+                	height: 64px;
+                	padding: 3px;
+                	margin-bottom: (@base-spacing-unit-screen-large * 0.25);
+                	
+                	.sidebar-header-image-inner {
+                    	
+                    	width: 64px - (2 * 3px);
+                    	height: 64px - (2 * 3px);
+                    	
+                	}
+                	
+            	}
+            	
+            }
+            
+            
+            
+            
+            
             
             /* ----------------------------------------------------------------------------------------------------
             -------------------------------------------------------------------------------------------------------
@@ -409,11 +709,11 @@ body.canvas-sidebar-open {
         	
         	#sidebar-navigation {
             	
-            	ul {
+            	.sidebar-menu {
                 	
                 	margin: 0px -(@base-spacing-unit-screen-large * 0.5);
                 	
-                	li {
+                	.sidebar-menu-item {
                     	
                     	&:after {
                             
@@ -422,7 +722,7 @@ body.canvas-sidebar-open {
                             
                         }
                         
-                    	.icon {
+                    	.sidebar-menu-item-icon {
                         	
                         	margin-right: (@base-spacing-unit-screen-large * 0.25);
                         	
