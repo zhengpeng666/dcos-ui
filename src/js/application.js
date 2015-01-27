@@ -157,7 +157,7 @@
 
 	    }
 
-	    if (responsive_viewport >= 768) {
+	    if (responsive_viewport >= 992) {
 
 	    	canvas_sidebar_close();
 
@@ -193,6 +193,30 @@
 	    sidebar_content.css({
     	   
     	   'height' :   sidebar_content_height
+    	    
+	    });
+	    
+	    
+	    
+		/* ----------------------------------------------------------------------------------------------------
+		Resize page content height
+		---------------------------------------------------------------------------------------------------- */
+	    
+	    var page = $('#sidebar');
+	    var page_header = $('#page-header');
+	    var page_content = $('#page-content');
+	    
+	    var page_content_height = page.outerHeight() - page_header.outerHeight();
+	    
+	    if (page_content_height < 0) {
+    	    
+    	    page_content_height = 0;
+    	    
+	    }
+	    
+	    page_content.css({
+    	   
+    	   'height' :   page_content_height
     	    
 	    });
 	    
