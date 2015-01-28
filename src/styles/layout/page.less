@@ -46,39 +46,70 @@ Page
     
     #page-header {
         
-        .page-header-sidebar-toggle {
+        .clearfix();
+        
+        
+        
+        
+        
+        
+        /* ----------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------
+        
+        Page Header Context
+        
+        -------------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------- */
+        
+        #page-header-context {
             
-            float: left;
-            cursor: pointer;
+            width: 100%;
             
-            .page-header-sidebar-toggle-icon {
+            .page-header-title {
                 
-                margin-right: (@base-spacing-unit * 1.0);
-                .opacity(0.40);
+                float: left;
                 
             }
             
-            .page-header-sidebar-toggle-label {
-                
-                display: none;
-                
-            }
+            /* ----------------------------------------------------------------------------------------------------
+            Page Header Sidebar Toggle
+            ---------------------------------------------------------------------------------------------------- */
             
-            &:hover {
+            .page-header-sidebar-toggle {
                 
-                 .page-header-sidebar-toggle-icon {
+                float: left;
+                cursor: pointer;
+                
+                .page-header-sidebar-toggle-icon {
                     
-                    .opacity(0.80);
+                    margin-right: (@base-spacing-unit * 1.0);
+                    .opacity(0.40);
                     
                 }
                 
-            }
-            
-            &:active {
-                
-                 .page-header-sidebar-toggle-icon {
+                .page-header-sidebar-toggle-label {
                     
-                    .opacity(0.40);
+                    display: none;
+                    
+                }
+                
+                &:hover {
+                    
+                     .page-header-sidebar-toggle-icon {
+                        
+                        .opacity(0.80);
+                        
+                    }
+                    
+                }
+                
+                &:active {
+                    
+                     .page-header-sidebar-toggle-icon {
+                        
+                        .opacity(0.40);
+                        
+                    }
                     
                 }
                 
@@ -90,17 +121,38 @@ Page
         
         
         
+        
         /* ----------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------
         
-        Page Header
+        Page Header Actions
+        
+        -------------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------- */
+        
+        #page-header-actions {
+            
+            float: right;
+            
+        }
+        
+        
+        
+        
+        
+        
+        /* ----------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------
+        
+        Page Header Navigation
         
         -------------------------------------------------------------------------------------------------------
         ---------------------------------------------------------------------------------------------------- */
         
         #page-header-navigation {
             
-            margin-top: @container-pod-short-padding-vertical;
+            clear: both;
+            padding-top: @container-pod-short-padding-vertical;
             margin-bottom: -@container-pod-short-padding-vertical;
             
             ul {
@@ -251,9 +303,17 @@ Page
             
             #page-header {
                 
-                .page-header-sidebar-toggle {
+                #page-header-context {
                     
-                    display: none;
+                    /* ----------------------------------------------------------------------------------------------------
+                    Page Header Sidebar Toggle
+                    ---------------------------------------------------------------------------------------------------- */
+                    
+                    .page-header-sidebar-toggle {
+                        
+                        display: none;
+                        
+                    }
                     
                 }
                 
@@ -264,14 +324,14 @@ Page
                 /* ----------------------------------------------------------------------------------------------------
                 -------------------------------------------------------------------------------------------------------
                 
-                Page Header
+                Page Header Navigation
                 
                 -------------------------------------------------------------------------------------------------------
                 ---------------------------------------------------------------------------------------------------- */
                 
                 #page-header-navigation {
                     
-                    margin-top: @container-pod-short-padding-vertical-screen-small;
+                    padding-top: @container-pod-short-padding-vertical-screen-small;
                     margin-bottom: -@container-pod-short-padding-vertical-screen-small;
                     
                     ul {
@@ -342,14 +402,14 @@ Page
                 /* ----------------------------------------------------------------------------------------------------
                 -------------------------------------------------------------------------------------------------------
                 
-                Page Header
+                Page Header Navigation
                 
                 -------------------------------------------------------------------------------------------------------
                 ---------------------------------------------------------------------------------------------------- */
                 
                 #page-header-navigation {
                     
-                    margin-top: @container-pod-short-padding-vertical-screen-medium;
+                    padding-top: @container-pod-short-padding-vertical-screen-medium;
                     margin-bottom: -@container-pod-short-padding-vertical-screen-medium;
                     
                     ul {
@@ -420,14 +480,14 @@ Page
                 /* ----------------------------------------------------------------------------------------------------
                 -------------------------------------------------------------------------------------------------------
                 
-                Page Header
+                Page Header Navigation
                 
                 -------------------------------------------------------------------------------------------------------
                 ---------------------------------------------------------------------------------------------------- */
                 
                 #page-header-navigation {
                     
-                    margin-top: @container-pod-short-padding-vertical-screen-large;
+                    padding-top: @container-pod-short-padding-vertical-screen-large;
                     margin-bottom: -@container-pod-short-padding-vertical-screen-large;
                     
                     ul {
