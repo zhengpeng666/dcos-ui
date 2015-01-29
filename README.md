@@ -3,34 +3,41 @@
 #### Working on assets
 
 1. Install [NPM](https://npmjs.org/)
-2. Change to the assets directory
 
-        cd src/main/resources/assets
-3. Install dev dependencies
+1. Install dev dependencies
 
-        npm install
-        npm install -g broccoli-cli
+```sh
+npm install
+npm install -g broccoli-cli
+```
 
-4. Run development environment
+1. Run development environment
 
-        npm run serve
-5. Build the assets
+```sh
+npm run serve
+```
 
-        npm run dist
+1. Build the assets
+
+```sh
+npm run dist
+```
 
 #### Development Setup (Sublime Text)
 
 1. Add the following to your Sublime Text User Settings:
 
-    {
-      ...
-      "rulers": [80], // lines no longer than 80 chars
-      "tab_size": 2, // use two spaces for indentation
-      "translate_tabs_to_spaces": true, // use spaces for indentation
-      "ensure_newline_at_eof_on_save": true, // add newline on save
-      "trim_trailing_white_space_on_save": true, // trim trailing white space on save
-      "default_line_ending": "unix"
-    }
+```json
+{
+  ...
+  "rulers": [80], // lines no longer than 80 chars
+  "tab_size": 2, // use two spaces for indentation
+  "translate_tabs_to_spaces": true, // use spaces for indentation
+  "ensure_newline_at_eof_on_save": true, // add newline on save
+  "trim_trailing_white_space_on_save": true, // trim trailing white space on save
+  "default_line_ending": "unix"
+}
+```
 
 2. Add Sublime-linter with jshint & jsxhint:
 
