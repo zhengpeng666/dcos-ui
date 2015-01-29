@@ -5,36 +5,39 @@
 1. Install [NPM](https://npmjs.org/)
 1. Install dev dependencies
 
-```sh
-npm install
-npm install -g broccoli-cli
-```
+  ```sh
+  npm install
+  npm install -g broccoli-cli
+  ```
+
 1. Run development environment
 
-```sh
-npm run serve
-```
+  ```sh
+  npm run serve
+  ```
+
 1. Build the assets
 
-```sh
-npm run dist
-```
+  ```sh
+  npm run dist
+  ```
 
 #### Development Setup (Sublime Text)
 
 1. Add the following to your Sublime Text User Settings:
 
-```json
-{
-  ...
-  "rulers": [80], // lines no longer than 80 chars
-  "tab_size": 2, // use two spaces for indentation
-  "translate_tabs_to_spaces": true, // use spaces for indentation
-  "ensure_newline_at_eof_on_save": true, // add newline on save
-  "trim_trailing_white_space_on_save": true, // trim trailing white space on save
-  "default_line_ending": "unix"
-}
-```
+  ```json
+  {
+    ...
+    "rulers": [80], // lines no longer than 80 chars
+    "tab_size": 2, // use two spaces for indentation
+    "translate_tabs_to_spaces": true, // use spaces for indentation
+    "ensure_newline_at_eof_on_save": true, // add newline on save
+    "trim_trailing_white_space_on_save": true, // trim trailing white space on save
+    "default_line_ending": "unix"
+  }
+  ```
+
 1. Add Sublime-linter with jshint & jsxhint:
 
   1. Installing SublimeLinter is straightforward using Sublime Package Manager, see [instructions](http://sublimelinter.readthedocs.org/en/latest/installation.html#installing-via-pc)
