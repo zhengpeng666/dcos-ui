@@ -3,20 +3,20 @@
 #### Working on assets
 
 1. Install [NPM](https://npmjs.org/)
-1. Install dev dependencies
+2. Install dev dependencies
 
   ```sh
   npm install
   npm install -g broccoli-cli
   ```
 
-1. Run development environment
+3. Run development environment
 
   ```sh
   npm run serve
   ```
 
-1. Build the assets
+4. Build the assets
 
   ```sh
   npm run dist
@@ -38,7 +38,7 @@
   }
   ```
 
-1. Add Sublime-linter with jshint & jsxhint:
+2. Add Sublime-linter with jshint & jsxhint:
 
   1. Installing SublimeLinter is straightforward using Sublime Package Manager, see [instructions](http://sublimelinter.readthedocs.org/en/latest/installation.html#installing-via-pc)
 
