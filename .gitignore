@@ -3,6 +3,5 @@ tmp/
 !dist/
 
 dist/*
-!dist/img/
-!dist/main.css*
-!dist/main.js*
+
+.DS_Store

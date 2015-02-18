@@ -7,12 +7,10 @@
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 .ps-container {
-	
 	position: relative;
 	overflow: hidden;
 	height: 100%;
 	width: 100%;
-	
 }
 
 .ps-container .ps-scrollbar-x-rail {
@@ -117,22 +115,18 @@
 
 
 .container-scrollable {
-	
 	//*zoom: 1;
 	//display: block;
 	//height: 100%;
-	
 }
 
 .scroller {
-	
 	overflow: hidden;
 	overflow-x: hidden;
 	overflow-y: hidden;
 	position: relative;
-	
+
 	.scroller-content {
-		
 		height: 100%;
 		overflow: auto;
 		overflow-x: hidden;
@@ -140,11 +134,9 @@
 		position: relative;
 		z-index: 1;
 		-webkit-overflow-scrolling: touch;
-		
 	}
-	
+
 	.scroller-bar {
-		
 		display: none;
 		height: 100% !important;
 		position: absolute;
@@ -154,71 +146,53 @@
 		z-index: 2;
 		.opacity(.25);
 		.transition(opacity 0.25s ease);
-		
+
 		.scroller-track {
-			
 			height: 100%;
 			position: relative;
 			width: 100%;
 			.border-radius(10px);
 			background: rgba(0, 0, 0, 0.05);
 			.box-shadow(0px 0px 0px 1px rgba(0, 0, 0, 0.08));
-			
+
 			.scroller-handle {
-				
 				cursor: pointer;
 				height: 20px;
 				position: absolute;
 				right: 0px;
 				top: 0px;
-				width: 6px; 
+				width: 6px;
 				z-index: 2;
 				.border-radius(10px);
 				background: rgba(0, 0, 0, 0.25);
 				.box-shadow(0px 0px 0px 1px rgba(0, 0, 0, 0.28));
 				.opacity(.50);
 				.transition(opacity 0.25s ease);
-				
 			}
-			
 		}
-		
 	}
-	
+
 	&:hover {
-		
 		.scroller-bar {
-			
 			.opacity(1);
-			
 		}
-		
 	}
-	
+
 	&.scroller-white {
-		
 		.scroller-bar {
-			
 			.scroller-track {
-				
 				background: rgba(255, 255, 255, 0.1);
 				.box-shadow(0px 0px 0px 1px rgba(255, 255, 255, 0.12));
-				
+
 				.scroller-handle {
-					
 					background: rgba(255, 255, 255, 0.4);
 					.box-shadow(0px 0px 0px 1px rgba(255, 255, 255, 0.42));
-					
 				}
-				
 			}
-			
 		}
-					
 	}
-		
 }
-	
+
 
 /* Webkit Fix */
 .scroller-content::-webkit-scrollbar,

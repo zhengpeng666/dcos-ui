@@ -3,7 +3,7 @@
 var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
-var Menu = require("../components/Menu");
+var Sidebar = require("../components/Sidebar");
 var MesosStateStore = require("../stores/MesosStateStore");
 
 var Index = React.createClass({
@@ -18,10 +18,11 @@ var Index = React.createClass({
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     return (
-      <div className="container">
-        <Menu />
-        <hr />
-        <RouteHandler />
+      <div id="canvas">
+        <Sidebar />
+        <div id="page">
+          <RouteHandler />
+        </div>
       </div>
     );
   }
