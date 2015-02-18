@@ -4,6 +4,8 @@ var React = require("react/addons");
 var Link = require("react-router").Link;
 var RouteHandler = require("react-router").RouteHandler;
 
+var SidebarToggle = require("../components/SidebarToggle");
+
 var ActivityPage = React.createClass({
 
   displayName: "ActivityPage",
@@ -18,12 +20,7 @@ var ActivityPage = React.createClass({
           <div id="page-header">
             <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
               <div id="page-header-context">
-                <div className="page-header-sidebar-toggle">
-                  <i className="page-header-sidebar-toggle-icon icon icon-medium icon-medium-white"></i>
-                  <span className="page-header-sidebar-toggle-label">
-                    Show/Hide Sidebar
-                  </span>
-                </div>
+                <SidebarToggle />
                 <h1 className="page-header-title flush-top flush-bottom">
                   Activity
                 </h1>

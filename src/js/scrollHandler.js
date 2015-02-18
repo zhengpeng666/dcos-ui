@@ -3,7 +3,13 @@ require("perfect-scrollbar");
 
 /* Get Scrollbar Width */
 function getScrollbarWidth() {
-  var div = $("<div style='width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;'><div style='height:100px;'></div></div>");
+  var div = $(
+    "<div style='width:50px;height:50px;overflow:hidden;" +
+      "position:absolute;top:-200px;left:-200px;'>" +
+      "<div style='height:100px;'>" +
+      "</div>" +
+    "</div>"
+  );
   $("body").append(div);
   var w1 = $("div", div).innerWidth();
   div.css("overflow-y", "auto");
@@ -87,12 +93,9 @@ function modalResize() {
 function windowResize() {
   var responsiveViewport = $(window).width() + $.app.scrollbarWidth;
 
-  if (responsiveViewport < 481) {
-  }
-  if (responsiveViewport > 481) {
-  }
-  if (responsiveViewport < 768) {
-  }
+  // if (responsiveViewport < 481) {}
+  // if (responsiveViewport > 481) {}
+  // if (responsiveViewport < 768) {}
   if (responsiveViewport >= 992) {
     canvasSidebarClose();
   }

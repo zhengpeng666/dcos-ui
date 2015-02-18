@@ -2,10 +2,20 @@
 
 var React = require("react/addons");
 var Link = require("react-router").Link;
+var State = require("react-router").State;
 
 var Sidebar = React.createClass({
 
   displayName: "Sidebar",
+
+  mixins: [State],
+
+  getItemClassSet: function (routeName) {
+    return React.addons.classSet({
+      "sidebar-menu-item h3": true,
+      "selected": this.isActive(routeName)
+    });
+  },
 
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -31,7 +41,7 @@ var Sidebar = React.createClass({
           <nav id="sidebar-navigation">
             <div className="container container-fluid container-fluid-narrow">
               <ul className="sidebar-menu list-unstyled">
-                <li className="sidebar-menu-item selected h3">
+                <li className={this.getItemClassSet("activity")}>
                   <Link to="activity">
                     <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
                     <span className="sidebar-menu-item-label">
@@ -39,19 +49,11 @@ var Sidebar = React.createClass({
                     </span>
                   </Link>
                 </li>
-                <li className="sidebar-menu-item h3">
+                <li className={this.getItemClassSet("services")}>
                   <Link to="services">
                     <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
                     <span className="sidebar-menu-item-label">
                       Services
-                    </span>
-                  </Link>
-                </li>
-                <li className="sidebar-menu-item h3">
-                  <Link to="modules">
-                    <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
-                    <span className="sidebar-menu-item-label">
-                      Modules
                     </span>
                   </Link>
                 </li>
