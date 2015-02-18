@@ -1,0 +1,22 @@
+@button-text-font-size-scale-screen-large: 1.2;
+
+@button-large-text-font-size: floor(@button-text-font-size * 1.0);
+@button-large-text-line-height: floor(@button-text-line-height * 1.0);
+@button-large-padding-horizontal: @button-padding-horizontal * 1.5;
+@button-large-border-radius: 3px;
+
+@button-default-text-color: rgba(255, 255, 255, 0.8);
+@button-default-background-color: rgba(255, 255, 255, 0.2);
+
+@button-default-hover-text-color: ~`color_lightness("@{white}", 0)`;
+
+@button-default-active-text-color: ~`color_lightness("@{white}", 0)`;
+@button-default-active-background-color: rgba(255, 255, 255, 0.4);
+
+@button-primary-background-color: ~`color_lightness("@{mesosphere-azure}", 0)`;
+
+@button-primary-hover-background-color: ~`color_lightness("@{mesosphere-azure}", -10)`;
+
+@button-primary-active-text-color: ~`color_lightness("@{mesosphere-azure}", 80)`;
+
+@button-primary-active-background-color: ~`color_lightness("@{mesosphere-azure}", -20)`;

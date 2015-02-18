@@ -1,0 +1,82 @@
+/* Fluid Container */
+.container.container-fluid {
+	margin-left: (@grid-gutter-width * 1.0);
+	margin-right: (@grid-gutter-width * 1.0);
+
+	&.container-fluid-narrow {
+    	margin-left: (@grid-gutter-width * 0.5);
+    	margin-right: (@grid-gutter-width * 0.5);
+	}
+}
+
+/* Screen Size: Mini (@screen-mini) and above */
+& when (@screen-mini-enabled) {
+	@media (min-width: @screen-mini) {
+
+		/* Fluid Container */
+		.container.container-fluid {
+			margin-left: @grid-gutter-width-screen-mini * 1.0;
+			margin-right: @grid-gutter-width-screen-mini * 1.0;
+
+      &.container-fluid-narrow {
+          margin-left: @grid-gutter-width-screen-mini * 0.5;
+          margin-right: @grid-gutter-width-screen-mini * 0.5;
+
+      }
+		}
+	}
+}
+
+/* Screen Size: Small (@screen-small) and above */
+& when (@screen-small-enabled) {
+	@media (min-width: @screen-small) {
+
+		/* Fluid Container */
+		.container.container-fluid {
+			margin-left: (@grid-gutter-width-screen-small * 1.0);
+			margin-right: (@grid-gutter-width-screen-small * 1.0);
+
+      &.container-fluid-narrow {
+          margin-left: @grid-gutter-width-screen-small * 0.5;
+          margin-right: @grid-gutter-width-screen-small * 0.5;
+
+      }
+		}
+	}
+}
+
+/* Screen Size: Medium (@screen-medium) and above */
+& when (@screen-medium-enabled) {
+	@media (min-width: @screen-medium) {
+
+		/* Fluid Container */
+		.container.container-fluid {
+			margin-left: (@grid-gutter-width-screen-medium * 1.0);
+			margin-right: (@grid-gutter-width-screen-medium * 1.0);
+
+      &.container-fluid-narrow {
+          margin-left: @grid-gutter-width-screen-medium * 0.5;
+          margin-right: @grid-gutter-width-screen-medium * 0.5;
+
+      }
+		}
+	}
+}
+
+/* Screen Size: Large (@screen-large) and above */
+& when (@screen-large-enabled) {
+	@media (min-width: @screen-large) {
+
+		/* Fluid Container */
+		.container.container-fluid {
+			margin-left: (@grid-gutter-width-screen-large * 1.0);
+			margin-right: (@grid-gutter-width-screen-large * 1.0);
+
+      &.container-fluid-narrow {
+          margin-left: @grid-gutter-width-screen-large * 0.5;
+          margin-right: @grid-gutter-width-screen-large * 0.5;
+
+      }
+		}
+	}
+}
