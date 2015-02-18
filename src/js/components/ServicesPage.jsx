@@ -1,9 +1,9 @@
 /** @jsx React.DOM */
 
 var React = require("react/addons");
-var RouteHandler = require("react-router").RouteHandler;
-
-var SidebarToggle = require("../components/SidebarToggle");
+var SidebarToggle = require("./SidebarToggle");
+var ServicesFilter = require("./ServicesFilter");
+var ServiceList = require("./ServiceList");
 
 var ServicesPage = React.createClass({
 
@@ -27,7 +27,8 @@ var ServicesPage = React.createClass({
         </div>
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
-            <RouteHandler/>
+            <ServicesFilter />
+            <ServiceList />
           </div>
         </div>
       </div>

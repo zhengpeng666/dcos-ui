@@ -2,9 +2,9 @@
 
 var React = require("react/addons");
 var Link = require("react-router").Link;
-var RouteHandler = require("react-router").RouteHandler;
 
-var SidebarToggle = require("../components/SidebarToggle");
+var Activity = require("./Activity");
+var SidebarToggle = require("./SidebarToggle");
 
 var ActivityPage = React.createClass({
 
@@ -52,7 +52,7 @@ var ActivityPage = React.createClass({
         </div>
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
-            <RouteHandler/>
+            <Activity />
           </div>
         </div>
       </div>

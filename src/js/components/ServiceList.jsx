@@ -8,8 +8,15 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ServiceItem = require("./ServiceItem");
 
 function getMesosServices() {
+  var mesosState = MesosStateStore.getAll();
+
+  if (MesosStateStore.hasFilter()) {
+    mesosState = MesosStateStore.getFiltered();
+  }
+
   return {
-    collection: MesosStateStore.getAll().frameworks || []
+    collection: mesosState.frameworks || [],
+    totalResources: mesosState.totalResources || {}
   };
 }
 
@@ -36,12 +43,19 @@ var ServicesList = React.createClass({
   },
 
   getServiceItems: function () {
+    var totalResources = this.state.totalResources;
+
     return _.map(this.state.collection, function (service) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
-        <ServiceItem key={service.id} model={service} />
+        <ServiceItem
+          key={service.id}
+          model={service}
+          totalResources={totalResources} />
       );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     });
   },
 
@@ -61,17 +75,6 @@ var ServicesList = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <table className={classSet}>
-        <thead>
-          <td>Status</td>
-          <td>Completed Tasks</td>
-          <td>Hostname</td>
-          <td>Id</td>
-          <td>Name</td>
-          <td>Offers</td>
-          <td>Resource</td>
-          <td>Tasks</td>
-          <td>User</td>
-        </thead>
         <tbody>
           {this.getServiceItems()}
         </tbody>

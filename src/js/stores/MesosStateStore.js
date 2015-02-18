@@ -9,6 +9,10 @@ var UPDATE_INTERVAL = 2000;
 
 var _initCalled = false;
 var _mesosState = {};
+var _mesosStateFiltered = {};
+var _filterOptions = {
+  searchString: ""
+};
 
 var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
@@ -25,6 +29,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _mesosState;
   },
 
+  getFiltered: function () {
+    return _mesosStateFiltered;
+  },
+
   startPolling: function () {
     if (this._interval == null) {
       MesosStateActions.fetch();
@@ -37,6 +45,16 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       clearInterval(this._interval);
       this._interval = null;
     }
+  },
+
+  getTotalResources: function (slaves) {
+    return _.reduce(slaves, function (total, slave) {
+      var resources = slave.resources;
+      total.cpus += resources.cpus;
+      total.mem += resources.mem;
+      total.disk += resources.disk;
+      return total;
+    }, {cpus: 0, mem: 0, disk: 0});
   },
 
   getFrameworks: function (frameworks) {
@@ -62,6 +80,30 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     });
   },
 
+  getFilterOptions: function () {
+    return _filterOptions;
+  },
+
+  hasFilter: function () {
+    return _.find(_filterOptions, function (option) {
+      return !!option;
+    });
+  },
+
+  applyAllFilter: function () {
+    var searchPattern;
+
+    _mesosStateFiltered = _.clone(_mesosState);
+
+    if (_filterOptions.searchString !== "") {
+      searchPattern = new RegExp(_filterOptions.searchString, "i");
+      _mesosStateFiltered.frameworks = _.filter(
+          _mesosStateFiltered.frameworks, function (framework) {
+        return searchPattern.test(JSON.stringify(framework));
+      });
+    }
+  },
+
   emitChange: function () {
     this.emit(CHANGE_EVENT);
   },
@@ -82,7 +124,14 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       case ActionTypes.REQUEST_MESOS_STATE:
         data = action.data;
         data.frameworks = MesosStateStore.getFrameworks(data.frameworks);
+        data.totalResources = MesosStateStore.getTotalResources(data.slaves);
         _mesosState = data;
+        MesosStateStore.applyAllFilter();
+        MesosStateStore.emitChange();
+        break;
+      case ActionTypes.FILTER_SERVICES_BY_STRING:
+        _filterOptions.searchString = action.data;
+        MesosStateStore.applyAllFilter();
         MesosStateStore.emitChange();
         break;
     }
