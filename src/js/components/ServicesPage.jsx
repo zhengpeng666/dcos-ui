@@ -14,19 +14,21 @@ var ServicesPage = React.createClass({
   render: function () {
 
     return (
-      <div id="page-content" className="container-scrollable">
-        <div className="container container-fluid container-pod">
-          <div id="page-header">
-            <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
-              <div id="page-header-context">
-                <SidebarToggle />
-                <h1 className="page-header-title flush-top flush-bottom">
-                  Services
-                </h1>
-              </div>
+      <div>
+        <div id="page-header">
+          <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
+            <div id="page-header-context">
+              <h1 className="page-header-title flush-top flush-bottom">
+                Services
+              </h1>
+              <SidebarToggle />
             </div>
           </div>
-          <RouteHandler/>
+        </div>
+        <div id="page-content" className="container-scrollable">
+          <div className="container container-fluid container-pod">
+            <RouteHandler/>
+          </div>
         </div>
       </div>
     );
