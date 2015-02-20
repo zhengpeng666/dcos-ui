@@ -32,6 +32,7 @@ var ServiceItem = React.createClass({
     }
 
     var statusClassSet = React.addons.classSet({
+      "collection-item-content-status": true,
       "text-success": model.active,
       "text-danger": !model.active
     });
@@ -39,7 +40,7 @@ var ServiceItem = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <p className={statusClassSet}>{status} ({model.tasks.length} Tasks)</p>
+      <span className={statusClassSet}>{status} ({model.tasks.length} Tasks)</span>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -56,10 +57,10 @@ var ServiceItem = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <ul>
-        <li><span>{cpus}%</span> CPU</li>
-        <li><span>{mem}%</span> Mem</li>
-        <li><span>{disk}%</span> Disk</li>
+      <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
+        <li><strong>{cpus}%</strong> CPU</li>
+        <li><strong>{mem}%</strong> Mem</li>
+        <li><strong>{disk}%</strong> Disk</li>
       </ul>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
@@ -72,26 +73,21 @@ var ServiceItem = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <tr title={model.id}>
-        <td width="1">
-          {/* That is a dummy icon, please replace. */}
-          <div
-            style={{
-              "backgroundColor": "#000",
-              "backgroundImage": "url('http://placekitten.com/g/32/32')",
-              width: "32px",
-              height: "32px",
-              "borderRadius": "5px"}}>
-          </div>
-        </td>
-        <td>
-          <p>{model.name}</p>
+      <li className="collection-item" title={model.id}>
+        <div className="collection-item-header">
+          <i className="icon icon-medium icon-medium-white"></i>
+        </div>
+        <div className="collection-item-content">
+          <h5
+            className="collection-item-content-headline flush-top flush-bottom">
+            {model.name}
+          </h5>
           {this.getStatus()}
-        </td>
-        <td>
+        </div>
+        <div className="collection-item-footer">
           {this.getStatistics()}
-        </td>
-      </tr>
+        </div>
+      </li>
     );
   }
 });

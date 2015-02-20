@@ -60,25 +60,12 @@ var ServicesList = React.createClass({
   },
 
   render: function () {
-
-    var classes = {
-      "table": true
-    };
-
-    if (this.props.className != null) {
-      classes[this.props.className] = true;
-    }
-
-    var classSet = React.addons.classSet(classes);
-
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <table className={classSet}>
-        <tbody>
-          {this.getServiceItems()}
-        </tbody>
-      </table>
+      <ul className="collection collection-list inverse">
+        {this.getServiceItems()}
+      </ul>
     );
   }
 });
