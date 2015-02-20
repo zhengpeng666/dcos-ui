@@ -2,85 +2,31 @@
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
 
-collection.less
+forms.less
 
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------- */
 
-.collection.collection-list {
 
-  .collection-item {
 
-    border-top: 1px solid @gray;
-    margin-bottom: 0px;
-    .clearfix;
 
-    &:before {
-
-      display: none;
-
-    }
-
-    .icon {
-
-      .border-radius(@icon-medium-border-radius);
-
-    }
-
-    .collection-item-header {
-
-      float: left;
-      height: @collection-list-item-height-small;
-      width: @icon-glyph-medium-width;
-      margin-top: @grid-gutter-width * 0.5;
-      margin-right: @grid-gutter-width * 0.5;
-
-    }
-
-    .collection-item-content {
-
-      float: left;
-      height: @collection-list-item-height-small;
-      margin-top: @grid-gutter-width * 0.5;
-
-    }
-
-    .collection-item-footer {
-
-      float: left;
-      width: 100%;
-      margin-top: @grid-gutter-width * 0.5;
-      margin-bottom: @grid-gutter-width * 0.5;
-
-      .list-inline {
-
-        display: inline-block;
-
-      }
-
-      .fixed-width {
-
-        display: inline-block;
-        width: 46px;
-        text-align: right;
-
-      }
-
-    }
-
-  }
-
-}
 
 
 /* ----------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
 
-.collection
+Element
 
 -------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------- */
+
+.form-control {
+
+  margin-bottom: @grid-gutter-width;
+
+}
+
 
 
 & when (@screen-mini-enabled) {
@@ -100,6 +46,10 @@ collection.less
 }
 
 
+
+
+
+
 & when (@screen-small-enabled) {
 
   /* ----------------------------------------------------------------------------------------------------
@@ -111,45 +61,6 @@ collection.less
   ---------------------------------------------------------------------------------------------------- */
 
   @media (min-width: @screen-small) {
-
-    .collection.collection-list {
-
-      .collection-item {
-
-        height: @collection-list-item-height;
-
-        .collection-item-header {
-
-          height: auto;
-          margin-top: 0;
-          .vertical-align;
-
-        }
-
-        .collection-item-content {
-
-          height: auto;
-          margin-top: 0;
-          .vertical-align;
-
-        }
-
-        .collection-item-footer {
-
-          float: right;
-          height: auto;
-          width: auto;
-          margin-top: 0;
-          margin-bottom: 0;
-          margin-left: @grid-gutter-width * 0.5;
-          text-align: right;
-          .vertical-align;
-
-        }
-
-      }
-
-    }
 
   }
 

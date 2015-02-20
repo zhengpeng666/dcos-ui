@@ -63,7 +63,7 @@ var ServicesList = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <ul className="collection collection-list inverse">
+      <ul className="collection collection-list list-unstyled inverse">
         {this.getServiceItems()}
       </ul>
     );

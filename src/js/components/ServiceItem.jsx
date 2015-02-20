@@ -58,9 +58,9 @@ var ServiceItem = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
-        <li><strong>{cpus}%</strong> CPU</li>
-        <li><strong>{mem}%</strong> Mem</li>
-        <li><strong>{disk}%</strong> Disk</li>
+        <li><strong className="fixed-width">{cpus}%</strong> CPU</li>
+        <li><strong className="fixed-width">{mem}%</strong> Mem</li>
+        <li><strong className="fixed-width">{disk}%</strong> Disk</li>
       </ul>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
