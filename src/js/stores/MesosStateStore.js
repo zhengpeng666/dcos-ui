@@ -91,16 +91,24 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   applyAllFilter: function () {
-    var searchPattern;
-
     _mesosStateFiltered = _.clone(_mesosState);
 
     if (_filterOptions.searchString !== "") {
-      searchPattern = new RegExp(_filterOptions.searchString, "i");
-      _mesosStateFiltered.frameworks = _.filter(
-          _mesosStateFiltered.frameworks, function (framework) {
-        return searchPattern.test(JSON.stringify(framework));
-      });
+      (function () {
+        var searchPattern = new RegExp(_filterOptions.searchString, "i");
+        var nonStringValuesPattern = /:(?:[^\"]+),/g;
+        var keysAndBracketsPattern = /\"(?:\w+)\":|[{}\[\]]|\"/g;
+        var commaPattern = /,/g;
+
+        _mesosStateFiltered.frameworks = _.filter(
+            _mesosStateFiltered.frameworks, function (framework) {
+          return searchPattern.test(JSON.stringify(framework).
+            replace(nonStringValuesPattern, ":").
+            replace(keysAndBracketsPattern, "").
+            replace(commaPattern, " ")
+          );
+        });
+      })();
     }
   },
 
