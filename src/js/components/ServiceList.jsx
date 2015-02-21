@@ -50,9 +50,9 @@ var ServicesList = React.createClass({
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <ServiceItem
-          key={service.id}
-          model={service}
-          totalResources={totalResources} />
+            key={service.id}
+            model={service}
+            totalResources={totalResources} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -63,7 +63,7 @@ var ServicesList = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <ul className="collection collection-list list-unstyled inverse">
+      <ul className="collection-list list-unstyled inverse">
         {this.getServiceItems()}
       </ul>
     );

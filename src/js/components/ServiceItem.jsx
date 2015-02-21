@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var _ = require("underscore");
 var React = require("react");
 
 var roundPercentage = function (value, decimalPlaces) {
@@ -46,23 +47,23 @@ var ServiceItem = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
-  getStatistics: function () {
-    var resources = this.props.model.resources;
-    var totalResources = this.props.totalResources;
-
-    var cpus = roundPercentage(resources.cpus / totalResources.cpus, 2);
-    var mem = roundPercentage(resources.mem / totalResources.mem, 2);
-    var disk = roundPercentage(resources.disk / totalResources.disk, 2);
-
+  getStatistics: function (resources, totalResources) {
+    var labels = {
+      cpus: "CPU",
+      mem: "Mem",
+      disk: "Disk"
+    };
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return (
-      <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
-        <li><strong className="fixed-width">{cpus}%</strong> CPU</li>
-        <li><strong className="fixed-width">{mem}%</strong> Mem</li>
-        <li><strong className="fixed-width">{disk}%</strong> Disk</li>
-      </ul>
-    );
+    return _.map(_.keys(labels), function (r) {
+      return (
+        <li key={r}>
+          <strong className="fixed-width">
+            {roundPercentage(resources[r] / totalResources[r], 2)}%
+          </strong> {labels[r]}
+        </li>
+      );
+    });
     /* jshint trailing:true, quotmark:true, newcap:true */
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
@@ -78,14 +79,15 @@ var ServiceItem = React.createClass({
           <i className="icon icon-medium icon-medium-white"></i>
         </div>
         <div className="collection-item-content">
-          <h5
-            className="collection-item-content-headline flush-top flush-bottom">
+          <h5 className="collection-item-content-headline flush-top flush-bottom">
             {model.name}
           </h5>
           {this.getStatus()}
         </div>
         <div className="collection-item-footer">
-          {this.getStatistics()}
+          <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
+            {this.getStatistics(model.resources, this.props.totalResources)}
+          </ul>
         </div>
       </li>
     );

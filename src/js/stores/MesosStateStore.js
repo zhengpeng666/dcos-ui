@@ -47,14 +47,14 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
   },
 
-  getTotalResources: function (slaves) {
-    return _.reduce(slaves, function (total, slave) {
-      var resources = slave.resources;
-      total.cpus += resources.cpus;
-      total.mem += resources.mem;
-      total.disk += resources.disk;
-      return total;
-    }, {cpus: 0, mem: 0, disk: 0});
+  sumResources: function (resourceList) {
+    return _.reduce(resourceList, function (sumMap, resource) {
+      _.each(sumMap, function (value, key) {
+        sumMap[key] = value + resource[key];
+      });
+
+      return sumMap;
+    }, { cpus: 0, mem: 0, disk: 0 });
   },
 
   getFrameworks: function (frameworks) {
@@ -86,7 +86,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   hasFilter: function () {
     return _.find(_filterOptions, function (option) {
-      return !!option;
+      return !_.isEmpty(option);
     });
   },
 
@@ -124,7 +124,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       case ActionTypes.REQUEST_MESOS_STATE:
         data = action.data;
         data.frameworks = MesosStateStore.getFrameworks(data.frameworks);
-        data.totalResources = MesosStateStore.getTotalResources(data.slaves);
+        data.totalResources =
+          MesosStateStore.sumResources(_.pluck(data.slaves, "resources"));
         _mesosState = data;
         MesosStateStore.applyAllFilter();
         MesosStateStore.emitChange();
