@@ -1,0 +1,77 @@
+/* Collection list */
+.collection-list {
+  .collection-item {
+    border-top: 1px solid @gray;
+    margin-bottom: 0px;
+    .clearfix();
+
+    &:before {
+      display: none;
+    }
+
+    .collection-item-header {
+      float: left;
+      height: @collection-list-item-height;
+      width: @icon-glyph-medium-width;
+      margin-top: @base-spacing-unit * 0.5;
+      margin-right: @base-spacing-unit * 0.5;
+    }
+
+    .collection-item-content {
+      float: left;
+      height: @collection-list-item-height;
+      margin-top: @base-spacing-unit * 0.5;
+    }
+
+    .collection-item-footer {
+      float: left;
+      width: 100%;
+      margin-top: @base-spacing-unit * 0.5;
+      margin-bottom: @base-spacing-unit * 0.5;
+
+      .list-inline {
+        display: inline-block;
+      }
+
+      .fixed-width {
+        display: inline-block;
+        width: 46px;
+        text-align: right;
+      }
+    }
+  }
+}
+
+/* Screen Size: Small (@screen-small) and above */
+& when (@screen-small-enabled) {
+  @media (min-width: @screen-small) {
+    .collection-list {
+      .collection-item {
+        height: @collection-list-item-height-small;
+
+        .collection-item-header {
+          height: auto;
+          margin-top: 0;
+          .vertical-center();
+        }
+
+        .collection-item-content {
+          height: auto;
+          margin-top: 0;
+          .vertical-center();
+        }
+
+        .collection-item-footer {
+          float: right;
+          height: auto;
+          width: auto;
+          margin-top: 0;
+          margin-bottom: 0;
+          margin-left: @base-spacing-unit * 0.5;
+          text-align: right;
+          .vertical-center();
+        }
+      }
+    }
+  }
+}

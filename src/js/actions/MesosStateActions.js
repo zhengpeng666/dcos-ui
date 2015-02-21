@@ -1,6 +1,6 @@
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("../dispatcher/AppDispatcher");
-var API_ROOT = "http://10.141.141.10:5050/master/state.json";
+var API_ROOT = "http://localhost:5050/master/state.json";
 var $ = require("jquery");
 
 var MesosStateActions = {

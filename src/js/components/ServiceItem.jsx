@@ -1,19 +1,11 @@
 /** @jsx React.DOM */
 
-var React = require("react");
 var _ = require("underscore");
+var React = require("react");
 
-function length(val, key) {
-  return <td key={key}>{val.length}</td>;
-}
-
-var displayValues = {
-  "active": function (val, key) {
-    return <td key={key}>{val ? "Active" : "Inactive"}</td>;
-  },
-  "completed_tasks": length,
-  "offers": length,
-  "tasks": length
+var roundPercentage = function (value, decimalPlaces) {
+  var factor = Math.pow(10, decimalPlaces);
+  return Math.round(value * 100 * factor) / factor;
 };
 
 var ServiceItem = React.createClass({
@@ -21,31 +13,83 @@ var ServiceItem = React.createClass({
   displayName: "ServiceItem",
 
   propTypes: {
-    model: React.PropTypes.object.isRequired
+    model: React.PropTypes.object.isRequired,
+    totalResources: React.PropTypes.object.isRequired
   },
 
   getDefaultProps: function () {
     return {
-      model: {}
+      model: {},
+      totalResources: {cpus: 0, mem: 0, disk: 0}
     };
   },
 
-  getDisplayNodes: function () {
-    return _.map(this.props.model, function (value, key) {
-      if (_.isFunction(displayValues[key])) {
-        return displayValues[key](value, key);
-      }
-      return <td key={key}>{value}</td>;
-    });
-  },
+  getStatus: function () {
+    var model = this.props.model;
 
-  render: function () {
+    var status = "Active";
+    if (model.active !== true) {
+      status = "Inactive";
+    }
+
+    var statusClassSet = React.addons.classSet({
+      "collection-item-content-status": true,
+      "text-success": model.active,
+      "text-danger": !model.active
+    });
+
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <tr>
-        {this.getDisplayNodes()}
-      </tr>
+      <span className={statusClassSet}>{status} ({model.tasks.length} Tasks)</span>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getStatistics: function (resources, totalResources) {
+    var labels = {
+      cpus: "CPU",
+      mem: "Mem",
+      disk: "Disk"
+    };
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return _.map(_.keys(labels), function (r) {
+      return (
+        <li key={r}>
+          <strong className="fixed-width">
+            {roundPercentage(resources[r] / totalResources[r], 2)}%
+          </strong> {labels[r]}
+        </li>
+      );
+    });
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  render: function () {
+    var model = this.props.model;
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <li className="collection-item" title={model.id}>
+        <div className="collection-item-header">
+          <i className="icon icon-medium icon-medium-white border-radius"></i>
+        </div>
+        <div className="collection-item-content">
+          <h5 className="collection-item-content-headline flush-top flush-bottom">
+            {model.name}
+          </h5>
+          {this.getStatus()}
+        </div>
+        <div className="collection-item-footer">
+          <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
+            {this.getStatistics(model.resources, this.props.totalResources)}
+          </ul>
+        </div>
+      </li>
     );
   }
 });
