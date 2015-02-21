@@ -76,7 +76,7 @@ var ServiceItem = React.createClass({
     return (
       <li className="collection-item" title={model.id}>
         <div className="collection-item-header">
-          <i className="icon icon-medium icon-medium-white"></i>
+          <i className="icon icon-medium icon-medium-white border-radius"></i>
         </div>
         <div className="collection-item-content">
           <h5 className="collection-item-content-headline flush-top flush-bottom">
