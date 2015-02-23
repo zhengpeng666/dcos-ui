@@ -16,12 +16,11 @@ var TimeSeriesChart = React.createClass({
   },
 
   getDefaultProps: function () {
-    var noop = function () {};
     return {
       height: 0,
       width: 0,
-      formatXAxis: noop,
-      formatYAxis: noop
+      formatXAxis: _.noop,
+      formatYAxis: _.noop
     };
   },
 
@@ -57,18 +56,18 @@ var TimeSeriesChart = React.createClass({
 
   getStack: function () {
     return d3.layout.stack()
-        .values(function (d) { return d.values; })
-        .x(function (d) { return d.date; });
+      .values(function (d) { return d.values; })
+      .x(function (d) { return d.date; });
   },
 
   getXScale: function (props) {
-    var first = _.first(props.data).values;
+    var firstDataSet = _.first(props.data).values;
     return d3.time.scale().range([0, props.width])
       // [first date, last date - 1]
       // ristrict x domain to have extra point outside of graph area,
       // since we are animating the graph in from right
       .domain([
-        first[1].date, first[first.length - 2].date
+        firstDataSet[1].date, firstDataSet[firstDataSet.length - 2].date
       ]);
   },
 
@@ -119,23 +118,25 @@ var TimeSeriesChart = React.createClass({
   },
 
   getTransitionTime: function (data) {
-    // look at the two last points to calculate transition time
+    // look at the difference between the last and the third last point
+    // to calculate transition time
     var l = data.length - 1;
-    return data[l].date - data[l - 1].date;
+    return (data[l].date - data[l - 3].date) / 3;
   },
 
   getPosition: function (data) {
-    return "translate(" + this.state.xScale(_.first(data).date) + ")";
+    return this.state.xScale(_.first(data).date);
   },
 
   getAreaList: function () {
-    var first = _.first(this.props.data);
-    var transition = this.getTransitionTime(first.values);
-    var position = this.getPosition(first.values);
+    var firstDataSet = _.first(this.props.data);
+    var transition = this.getTransitionTime(firstDataSet.values);
+    var position = this.getPosition(firstDataSet.values);
 
+    var classes;
     // stack before drawing!
     return _.map(this.state.stack(this.props.data), function (obj, i) {
-      var classes = {
+      classes = {
         "area": true
       };
       classes["path-color-" + obj.colorIndex] = true;
@@ -156,7 +157,8 @@ var TimeSeriesChart = React.createClass({
   },
 
   getStripes: function (number) {
-    var width = (this.props.width - this.props.margin.left) / (2 * number);
+    var props = this.props;
+    var width = (props.width - props.margin.left) / (2 * number);
     return _.map(_.range(0, number), function (i) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -164,13 +166,13 @@ var TimeSeriesChart = React.createClass({
         <rect key={i}
             className="background"
             x={width + 2 * i * width + "px"}
-            height={this.props.height}
+            height={props.height}
             width={width}>
         </rect>
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    }, this);
+    });
   },
 
   render: function () {
@@ -189,11 +191,10 @@ var TimeSeriesChart = React.createClass({
             </ReactTransitionGroup>
           </g>
           <g className="x axis"
-            transform={"translate(" + [0, this.props.height] + ")"}
-            ref="xAxis"></g>
-          <g className="y axis"
-
-            ref="yAxis"></g>
+              transform={"translate(" + [0, this.props.height] + ")"}
+              ref="xAxis">
+          </g>
+          <g className="y axis" ref="yAxis"></g>
         </g>
       </svg>
     );

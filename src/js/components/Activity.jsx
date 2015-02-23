@@ -57,7 +57,7 @@ var Activity = React.createClass({
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
-          <button
+        <button
             key={key}
             className={classSet}
             onClick={this.changeMode.bind(this, key)}>
@@ -70,7 +70,9 @@ var Activity = React.createClass({
   },
 
   render: function () {
-    if (this.state.frameworks.length === 0) {
+    var state = this.state;
+    var data = state.frameworks;
+    if (data.length === 0) {
       return null;
     }
     /* jshint trailing:false, quotmark:false, newcap:false */
@@ -78,9 +80,9 @@ var Activity = React.createClass({
     return (
       <div>
         <ResourceChart
-            data={this.state.frameworks}
-            totalResources={this.state.totalResources}
-            mode={this.state.mode}
+            data={data}
+            totalResources={state.totalResources}
+            mode={state.mode}
             height={200}
             width={600} />
         <div className="button-collection flush-bottom">

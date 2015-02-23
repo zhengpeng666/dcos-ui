@@ -45,11 +45,11 @@ var ResourceChart = React.createClass({
   },
 
   render: function () {
-    var data = _.map(this.props.data, function (fw) {
+    var data = _.map(this.props.data, function (framework) {
       return {
-        name: fw.name,
-        colorIndex: fw.colorIndex,
-        values: fw.values[this.props.mode]
+        name: framework.name,
+        colorIndex: framework.colorIndex,
+        values: framework.values[this.props.mode]
       };
     }, this);
 

@@ -13,7 +13,7 @@ var _mesosStateFiltered = {};
 var _filterOptions = {
   searchString: ""
 };
-var _colorIndexes = [];
+var _frameworkIndexes = [];
 var _mesosStates = [];
 var _mesosStatesTransposed = {};
 
@@ -120,31 +120,32 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   //   }]
   // ]}]
   getFrameworks: function (data) {
-    var frameworks = _.map(data.frameworks, function (fw) {
-      fw.date = data.date;
-      var i = _.indexOf(_colorIndexes, fw.name);
-      // This is a new framework, fill in 0s for all the previous datapoints.
-      if (i === -1) {
-        _colorIndexes.push(fw.name);
-        i = _colorIndexes.length - 1;
-        this.fillFramework(fw.name, i);
+    var frameworks = _.map(data.frameworks, function (framework) {
+      framework.date = data.date;
+      var index = _.indexOf(_frameworkIndexes, framework.name);
+      // this is a new framework, fill in 0s for all the previous datapoints
+      if (index === -1) {
+        _frameworkIndexes.push(framework.name);
+        index = _frameworkIndexes.length - 1;
+        this.fillFramework(framework.name, index);
       }
-      fw.colorIndex = i;
-      return fw;
+      // set color index after discovering and assigning index framework
+      framework.colorIndex = index;
+      return framework;
     }, this);
 
     return frameworks;
   },
 
   // [{
-  //   cpus: [{data: request time, y: value}]
-  //   disk: [{data: request time, y: value}]
-  //   mem: [{data: request time, y: value}]
+  //   cpus: [{date: request time, y: value}]
+  //   disk: [{date: request time, y: value}]
+  //   mem: [{date: request time, y: value}]
   // }]
-  createValuesArray: function (fw) {
+  createValuesArray: function (framework) {
     var values = {"cpus": [], "disk": [], "mem": []};
     return _.reduce(values, function (acc, arr, r) {
-      _.map(fw, function (v) {
+      _.map(framework, function (v) {
         acc[r].push({
           date: v.date,
           y: v.resources[r]
@@ -182,21 +183,21 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   // [{
   //   colorIndex: 0,
   //   name: "Marathon",
-  //   cpus: [{data: request time, y: value}]
-  //   disk: [{data: request time, y: value}]
-  //   mem: [{data: request time, y: value}]
+  //   cpus: [{date: request time, y: value}]
+  //   disk: [{date: request time, y: value}]
+  //   mem: [{date: request time, y: value}]
   // }]
   getTransposedFrameworks: function () {
     return _.chain(_mesosStates)
       .pluck("frameworks")
       .flatten()
-      .groupBy(function (fw) {
-        return fw.name;
-      }).map(function (fw) {
+      .groupBy(function (framework) {
+        return framework.name;
+      }).map(function (framework) {
         return {
-          colorIndex: _.first(fw).colorIndex,
-          name: _.first(fw).name,
-          values: this.createValuesArray(fw)
+          colorIndex: _.first(framework).colorIndex,
+          name: _.first(framework).name,
+          values: this.createValuesArray(framework)
         };
       }, this).value();
   },

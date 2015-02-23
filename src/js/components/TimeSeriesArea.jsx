@@ -11,22 +11,20 @@ var TimeSeriesArea = React.createClass({
     // "M-22.179096201829775,200C-18.48258016819148,200..."
     path: React.PropTypes.string.isRequired,
     transitionTime: React.PropTypes.number.isRequired,
-    position: React.PropTypes.string.isRequired,
+    position: React.PropTypes.number.isRequired,
   },
 
-  componentWillReceiveProps: function (next) {
-    if (this.props.position === next.position) {
-      return;
-    }
-
+  shouldComponentUpdate: function (props) {
     // XXX - This is probably an anti-pattern with react. I'm not sure how to
     // get the animation stuff reading the attr and transitioning
     d3.select(this.getDOMNode()).interrupt()
       .attr("transform", null)
       .transition()
-      .duration(next.transitionTime)
+      .duration(props.transitionTime)
       .ease("linear")
-      .attr("transform", next.position);
+      .attr("transform", "translate(" + props.position + ")");
+
+    return true;
   },
 
   render: function () {
@@ -35,9 +33,9 @@ var TimeSeriesArea = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <path
-        transform={"translate(" + [0, -20] + ")"}
-        className={this.props.className}
-        d={this.props.path} />
+          transform={"translate(" + [0, -20] + ")"}
+          className={this.props.className}
+          d={this.props.path} />
     );
   }
 });
