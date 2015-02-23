@@ -90,17 +90,28 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     });
   },
 
-  applyAllFilter: function () {
-    var searchPattern;
+  applySearchString: function (frameworks, searchString) {
+    var searchPattern = new RegExp(searchString, "i");
+    var valuesPattern = /:\"[^\"]+\"/g;
+    var cleanupPattern = /[:\"]/g;
 
+    return _.filter(frameworks, function (framework) {
+      var str = JSON.stringify(framework)
+        .match(valuesPattern)
+        .join(" ")
+        .replace(cleanupPattern, "");
+      return searchPattern.test(str);
+    });
+  },
+
+  applyAllFilter: function () {
     _mesosStateFiltered = _.clone(_mesosState);
 
     if (_filterOptions.searchString !== "") {
-      searchPattern = new RegExp(_filterOptions.searchString, "i");
-      _mesosStateFiltered.frameworks = _.filter(
-          _mesosStateFiltered.frameworks, function (framework) {
-        return searchPattern.test(JSON.stringify(framework));
-      });
+      _mesosStateFiltered.frameworks = this.applySearchString(
+        _mesosState.frameworks,
+        _filterOptions.searchString
+      );
     }
   },
 
