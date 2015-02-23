@@ -13,13 +13,13 @@ var ResourceChart = React.createClass({
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
-    maxResources: React.PropTypes.object.isRequired,
+    totalResources: React.PropTypes.object.isRequired,
     mode: React.PropTypes.string
   },
 
   getDefaultProps: function () {
     return {
-      maxResources: {
+      totalResources: {
         cpus: 0,
         mem: 0,
         disk: 0
@@ -30,7 +30,7 @@ var ResourceChart = React.createClass({
   formatYAxis: function () {
     var mode = this.props.mode;
     var formatPercent = d3.format(".0%");
-    var max = this.props.maxResources[mode];
+    var max = this.props.totalResources[mode];
     return function (d) {
       var a = formatPercent(d / max);
       if (d >= max) {
@@ -65,7 +65,7 @@ var ResourceChart = React.createClass({
           data={data}
           formatYAxis={this.formatYAxis}
           minY={0}
-          maxY={this.props.maxResources[this.props.mode]}
+          maxY={this.props.totalResources[this.props.mode]}
           margin={margin}
           height={200}
           width={600} />

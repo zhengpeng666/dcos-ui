@@ -217,9 +217,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     _mesosStatesTransposed.frameworks =
       MesosStateStore.getTransposedFrameworks();
     _mesosStatesTransposed.totalResources =
-      MesosStateStore.sumResources(
-        _.pluck(_.last(_mesosStates).slaves, "resources")
-      );
+      _.last(_mesosStates).totalResources;
+
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -231,7 +230,9 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         data = action.data;
         data.date = Date.now();
         data.frameworks = MesosStateStore.getFrameworks(data);
-
+        data.totalResources = MesosStateStore.sumResources(
+          _.pluck(data.slaves, "resources")
+        );
         _mesosStates.push(data);
         if (_mesosStates.length > HISTORY_LENGTH) {
           _mesosStates.shift();

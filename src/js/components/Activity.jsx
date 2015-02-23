@@ -11,7 +11,7 @@ function getMesosState() {
 
   return {
     frameworks: mesosTransp.frameworks,
-    maxResources: mesosTransp.maxResources
+    totalResources: mesosTransp.totalResources
   };
 }
 
@@ -79,7 +79,7 @@ var Activity = React.createClass({
       <div>
         <ResourceChart
             data={this.state.frameworks}
-            maxResources={this.state.maxResources}
+            totalResources={this.state.totalResources}
             mode={this.state.mode}
             height={200}
             width={600} />
