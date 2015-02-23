@@ -7,7 +7,7 @@ var State = require("react-router").State;
 var MesosStateStore = require("../stores/MesosStateStore");
 
 function getMesosInfo() {
-  return MesosStateStore.getAll() || {};
+  return MesosStateStore.getLatest() || {};
 }
 
 var Sidebar = React.createClass({

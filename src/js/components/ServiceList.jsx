@@ -8,7 +8,7 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ServiceItem = require("./ServiceItem");
 
 function getMesosServices() {
-  var mesosState = MesosStateStore.getAll();
+  var mesosState = MesosStateStore.getLatest();
 
   if (MesosStateStore.hasFilter()) {
     mesosState = MesosStateStore.getFiltered();
