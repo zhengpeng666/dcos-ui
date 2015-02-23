@@ -21,14 +21,14 @@ var Sidebar = React.createClass({
   },
 
   componentDidMount: function () {
-    MesosStateStore.addChangeListener(this._onChange);
+    MesosStateStore.addChangeListener(this.onChange);
   },
 
   componentWillUnmount: function () {
-    MesosStateStore.removeChangeListener(this._onChange);
+    MesosStateStore.removeChangeListener(this.onChange);
   },
 
-  _onChange: function () {
+  onChange: function () {
     this.setState(getMesosInfo());
   },
 
