@@ -4,11 +4,33 @@ var React = require("react/addons");
 var Link = require("react-router").Link;
 var State = require("react-router").State;
 
+var MesosStateStore = require("../stores/MesosStateStore");
+
+function getMesosInfo() {
+  return MesosStateStore.getLatest() || {};
+}
+
 var Sidebar = React.createClass({
 
   displayName: "Sidebar",
 
   mixins: [State],
+
+  getInitialState: function () {
+    return getMesosInfo();
+  },
+
+  componentDidMount: function () {
+    MesosStateStore.addChangeListener(this.onChange);
+  },
+
+  componentWillUnmount: function () {
+    MesosStateStore.removeChangeListener(this.onChange);
+  },
+
+  onChange: function () {
+    this.setState(getMesosInfo());
+  },
 
   getItemClassSet: function (routeName) {
     return React.addons.classSet({
@@ -33,7 +55,7 @@ var Sidebar = React.createClass({
               Datacenter Name
             </h2>
             <p className="sidebar-header-sublabel text-align-center flush-bottom">
-              172.03.12.1
+              {this.state.hostname}
             </p>
           </div>
         </div>
@@ -64,7 +86,7 @@ var Sidebar = React.createClass({
         <div id="sidebar-footer">
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom">
             <p className="text-align-center flush-top flush-bottom">
-              Mesosphere DCOS v.1.0
+              Mesosphere DCOS v.{this.state.version}
             </p>
           </div>
         </div>

@@ -4,7 +4,8 @@ var React = require("react");
 var Router = require("react-router");
 var Route = Router.Route;
 
-require("./scrollHandler");
+require("./utils/ScrollHandler");
+require("./utils/ReactSVG");
 var ActivityPage = require("./components/ActivityPage");
 var Index = require("./components/Index");
 var ServicesPage = require("./components/ServicesPage");

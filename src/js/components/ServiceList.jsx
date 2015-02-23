@@ -8,7 +8,7 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ServiceItem = require("./ServiceItem");
 
 function getMesosServices() {
-  var mesosState = MesosStateStore.getAll();
+  var mesosState = MesosStateStore.getLatest();
 
   if (MesosStateStore.hasFilter()) {
     mesosState = MesosStateStore.getFiltered();
@@ -31,14 +31,14 @@ var ServicesList = React.createClass({
   },
 
   componentDidMount: function () {
-    MesosStateStore.addChangeListener(this._onChange);
+    MesosStateStore.addChangeListener(this.onChange);
   },
 
   componentWillUnmount: function () {
-    MesosStateStore.removeChangeListener(this._onChange);
+    MesosStateStore.removeChangeListener(this.onChange);
   },
 
-  _onChange: function () {
+  onChange: function () {
     this.setState(getMesosServices());
   },
 
