@@ -142,7 +142,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   //   disk: [{date: request time, y: value}]
   //   mem: [{date: request time, y: value}]
   // }]
-  createValuesArray: function (framework) {
+  getResourceValues: function (framework) {
     var values = {"cpus": [], "disk": [], "mem": []};
     return _.reduce(values, function (acc, arr, r) {
       _.map(framework, function (v) {
@@ -197,7 +197,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         return {
           colorIndex: _.first(framework).colorIndex,
           name: _.first(framework).name,
-          values: this.createValuesArray(framework)
+          values: this.getResourceValues(framework)
         };
       }, this).value();
   },
