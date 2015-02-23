@@ -1,0 +1,41 @@
+svg .background {
+  // fill: ~`color_lightness("@{gray}", 50)`;
+  fill: fade(@gray, 80%);
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: ~`color_lightness("@{gray}", 50)`;
+  stroke-width: .5px;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  fill: ~`color_lightness("@{gray}", 50)`;
+}
+
+.area {
+  stroke-width: 1px;
+  fill-opacity: 0.3;
+}
+
+.area.path-color-0 {
+  stroke: @mesosphere-heliotrope;
+  fill: @mesosphere-heliotrope;
+}
+
+.area.path-color-1 {
+  stroke: @mesosphere-lemon;
+  fill: @mesosphere-lemon;
+}
+
+.area.path-color-2 {
+  stroke: @mesosphere-mars;
+  fill: @mesosphere-mars;
+}
+
+.area.path-color-2 {
+  stroke: @mesosphere-azure;
+  fill: @mesosphere-azure;
+}
