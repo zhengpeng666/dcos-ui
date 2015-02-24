@@ -23,6 +23,11 @@ var _totalResources = {
   disk: 0,
   mem: 0
 };
+var _totalUsedResources = {
+  cpus: 0,
+  disk: 0,
+  mem: 0
+};
 
 function sumResources(resourceList) {
   return _.reduce(resourceList, function (sumMap, resource) {
@@ -59,7 +64,7 @@ function getResourceValues(framework) {
 //   disk: [{date: request time, y: value}]
 //   mem: [{date: request time, y: value}]
 // }]
-function getFrameworkValues() {
+function getStateByFramework() {
   return _.chain(_mesosStates)
     .pluck("frameworks")
     .flatten()
@@ -192,6 +197,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _totalResources;
   },
 
+  getUsedResources: function () {
+    return _totalUsedResources;
+  },
+
   getFilterOptions: function () {
     return _filterOptions;
   },
@@ -227,7 +236,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   updateFrameworks: function () {
     if (!_.isEmpty(this.listeners(EventTypes.MESOS_STATE_FRAMEWORKS_CHANGE))) {
-      _frameworks = getFrameworkValues();
+      _frameworks = getStateByFramework();
       this.emitChange(EventTypes.MESOS_STATE_FRAMEWORKS_CHANGE);
     }
   },
@@ -237,6 +246,9 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     data.frameworks = normailzeFrameworks(data.frameworks, data.date);
     _totalResources = sumResources(
       _.pluck(data.slaves, "resources")
+    );
+    _totalUsedResources = sumResources(
+      _.pluck(data.frameworks, "used_resources")
     );
     _mesosStates.push(data);
     if (_mesosStates.length > HISTORY_LENGTH) {

@@ -11,7 +11,8 @@ var ResourceChart = require("./ResourceChart");
 function getMesosState() {
   return {
     frameworks: MesosStateStore.getFrameworks(),
-    totalResources: MesosStateStore.getTotalResources()
+    totalResources: MesosStateStore.getTotalResources(),
+    usedResources: MesosStateStore.getUsedResources()
   };
 }
 
@@ -20,9 +21,11 @@ var Activity = React.createClass({
   displayName: "Activity",
 
   getInitialState: function () {
-    var state = getMesosState();
-    state.mode = "cpus";
-    return state;
+    var state = {
+      mode: "cpus"
+    };
+
+    return _.extend(state, getMesosState());
   },
 
   componentDidMount: function () {
@@ -30,7 +33,7 @@ var Activity = React.createClass({
       EventTypes.MESOS_STATE_FRAMEWORKS_CHANGE,
       this.onChange
     );
-    MesosStateActions.updateTransposed();
+    MesosStateActions.updateFrameworks();
   },
 
   componentWillUnmount: function () {
@@ -78,17 +81,14 @@ var Activity = React.createClass({
 
   render: function () {
     var state = this.state;
-    var data = state.frameworks;
-    if (data.length === 0) {
-      return null;
-    }
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <ResourceChart
-            data={data}
+            data={state.frameworks}
             totalResources={state.totalResources}
+            usedResources={state.usedResources}
             mode={state.mode}
             height={200}
             width={600} />
