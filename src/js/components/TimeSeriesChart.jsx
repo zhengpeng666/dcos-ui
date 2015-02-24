@@ -91,12 +91,6 @@ var TimeSeriesChart = React.createClass({
       .range([props.height, 0]);
   },
 
-  customAxis: function (g) {
-    g.selectAll("g.y.axis text")
-      .attr("x", -40)
-      .attr("dy", 5);
-  },
-
   formatYAxis: function (ticks, maxY) {
     var formatPercent = d3.scale.linear().tickFormat(ticks, ".0%");
     return function (d) {
@@ -126,13 +120,10 @@ var TimeSeriesChart = React.createClass({
     var yAxis = d3.svg.axis()
       .scale(yScale)
       .ticks(props.ticksY)
-      // .tickSize(props.width)
       .tickFormat(this.formatYAxis(props.ticksY, props.maxY))
       .orient("left");
     d3.select(this.refs.yAxis.getDOMNode())
-      .call(yAxis)
-      // .call(this.customAxis)
-      ;
+      .call(yAxis);
 
     d3.select(this.refs.grid.getDOMNode())
       .attr("class", "grid")
