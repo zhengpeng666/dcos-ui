@@ -24,7 +24,7 @@ var MesosStateActions = {
     });
   },
 
-  updateTransposed: function () {
+  updateFrameworks: function () {
     AppDispatcher.dispatch({
       action: {
         type: ActionTypes.REQUEST_MESOS_STATE_FRAMEWORKS

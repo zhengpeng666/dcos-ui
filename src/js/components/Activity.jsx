@@ -30,7 +30,7 @@ var Activity = React.createClass({
       EventTypes.MESOS_STATE_FRAMEWORKS_CHANGE,
       this.onChange
     );
-    MesosStateActions.updateTransposed();
+    MesosStateActions.updateFrameworks();
   },
 
   componentWillUnmount: function () {
