@@ -19,8 +19,14 @@ var TimeSeriesChart = React.createClass({
     return {
       height: 0,
       width: 0,
-      formatXAxis: _.noop,
-      formatYAxis: _.noop
+      margin: {
+        left: 20,
+        bottom: 40,
+        right: 0,
+        top: 0
+      },
+      maxY: 10,
+      ticksY: 10
     };
   },
 
@@ -61,19 +67,28 @@ var TimeSeriesChart = React.createClass({
   },
 
   getXScale: function (props) {
-    var firstDataSet = _.first(props.data).values;
-    return d3.time.scale().range([0, props.width])
-      // [first date, last date - 1]
+    var date = Date.now();
+    var dateDelta = Date.now();
+
+    var firstDataSet = _.first(props.data);
+    if (firstDataSet != null) {
+      var values = firstDataSet.values;
+      // [first date - 1, last date - 1]
       // ristrict x domain to have extra point outside of graph area,
       // since we are animating the graph in from right
-      .domain([
-        firstDataSet[1].date, firstDataSet[firstDataSet.length - 2].date
-      ]);
+      date = values[1].date;
+      dateDelta = values[values.length - 2].date;
+    }
+
+    return d3.time.scale()
+      .range([0, props.width])
+      .domain([date, dateDelta]);
   },
 
   getYScale: function (props) {
-    return d3.scale.linear().range([props.height, 0])
-      .domain([props.minY, props.maxY]).nice();
+    return d3.scale.linear()
+      .domain([0, props.maxY])
+      .range([props.height, 0]);
   },
 
   customAxis: function (g) {
@@ -82,11 +97,27 @@ var TimeSeriesChart = React.createClass({
       .attr("dy", 5);
   },
 
+  formatYAxis: function (ticks, maxY) {
+    var formatPercent = d3.scale.linear().tickFormat(ticks, ".0%");
+    return function (d) {
+      var a = formatPercent(d / maxY);
+      if (d >= maxY) {
+        a = "100%";
+      }
+      return a;
+    };
+  },
+
   renderAxis: function (props, xScale, yScale) {
+    var length = props.width;
+    var firstDataSet = _.first(props.data);
+    if (firstDataSet != null) {
+      length = firstDataSet.values.length;
+    }
+
     var xAxis = d3.svg.axis()
-      .ticks(d3.time.second, _.first(props.data).values.length)
+      .ticks(d3.time.second, length)
       .scale(xScale)
-      .tickFormat(this.props.formatXAxis())
       .orient("bottom");
     d3.select(this.refs.xAxis.getDOMNode())
       .attr("class", "x axis")
@@ -94,13 +125,24 @@ var TimeSeriesChart = React.createClass({
 
     var yAxis = d3.svg.axis()
       .scale(yScale)
-      .ticks(2)
-      .tickSize(this.props.width)
-      .tickFormat(this.props.formatYAxis())
-      .orient("right");
+      .ticks(props.ticksY)
+      // .tickSize(props.width)
+      .tickFormat(this.formatYAxis(props.ticksY, props.maxY))
+      .orient("left");
     d3.select(this.refs.yAxis.getDOMNode())
       .call(yAxis)
-      .call(this.customAxis);
+      // .call(this.customAxis)
+      ;
+
+    d3.select(this.refs.grid.getDOMNode())
+      .attr("class", "grid")
+      .call(
+        d3.svg.axis().scale(yScale)
+          .orient("left")
+          .ticks(props.ticksY)
+          .tickSize(-props.width, 0, 0)
+          .tickFormat("")
+      );
   },
 
   componentWillReceiveProps: function (props) {
@@ -125,18 +167,18 @@ var TimeSeriesChart = React.createClass({
   },
 
   getPosition: function (data) {
-    return this.state.xScale(_.first(data).date);
+    var firstDataSet = _.first(data);
+    var date = Date.now();
+    if (firstDataSet != null) {
+      date = firstDataSet.date;
+    }
+    return this.state.xScale(date);
   },
 
   getAreaList: function () {
-    var firstDataSet = _.first(this.props.data);
-    var transition = this.getTransitionTime(firstDataSet.values);
-    var position = this.getPosition(firstDataSet.values);
-
-    var classes;
     // stack before drawing!
     return _.map(this.state.stack(this.props.data), function (obj, i) {
-      classes = {
+      var classes = {
         "area": true
       };
       classes["path-color-" + obj.colorIndex] = true;
@@ -144,12 +186,12 @@ var TimeSeriesChart = React.createClass({
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <TimeSeriesArea
-            className={React.addons.classSet(classes)}
-            path={this.state.area(obj.values)}
-            key={i}
-            name={obj.name}
-            transitionTime={transition}
-            position={position} />
+          className={React.addons.classSet(classes)}
+          path={this.state.area(obj.values)}
+          key={i}
+          name={obj.name}
+          transitionTime={this.getTransitionTime(obj.values)}
+          position={this.getPosition(obj.values)} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -164,11 +206,10 @@ var TimeSeriesChart = React.createClass({
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <rect key={i}
-            className="background"
-            x={width + 2 * i * width + "px"}
-            height={props.height}
-            width={width}>
-        </rect>
+          className="background"
+          x={width + 2 * i * width + "px"}
+          height={props.height}
+          width={width} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -185,16 +226,16 @@ var TimeSeriesChart = React.createClass({
       <svg height={this.props.height + margin.bottom} width={this.props.width + margin.left}>
         <g transform={"translate(" + [margin.left * 2, margin.bottom / 2] + ")"}>
           {this.getStripes(4)}
+          <g className="x axis"
+            transform={"translate(" + [0, this.props.height] + ")"}
+            ref="xAxis"/>
+          <g className="y axis" ref="yAxis" />
+          <g className="bars" ref="grid" />
           <g clip-path="url(#clip)">
             <ReactTransitionGroup component="g">
               {this.getAreaList()}
             </ReactTransitionGroup>
           </g>
-          <g className="x axis"
-              transform={"translate(" + [0, this.props.height] + ")"}
-              ref="xAxis">
-          </g>
-          <g className="y axis" ref="yAxis"></g>
         </g>
       </svg>
     );
