@@ -13,6 +13,23 @@ var MesosStateActions = {
         data: response
       });
     });
+  },
+
+  setFilterString: function (filterString) {
+    AppDispatcher.dispatch({
+      action: {
+        type: ActionTypes.FILTER_SERVICES_BY_STRING,
+        data: filterString
+      }
+    });
+  },
+
+  updateTransposed: function () {
+    AppDispatcher.dispatch({
+      action: {
+        type: ActionTypes.REQUEST_MESOS_TRANSPOSED_STATE
+      }
+    });
   }
 };
 
