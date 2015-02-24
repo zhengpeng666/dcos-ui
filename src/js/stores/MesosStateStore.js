@@ -249,7 +249,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         _filterOptions.searchString = action.data;
         MesosStateStore.applyAllFilter();
 
-        MesosStateStore.emitChange();
+        MesosStateStore.emitChange(EventTypes.MESOS_STATE_CHANGE);
         break;
     }
 
