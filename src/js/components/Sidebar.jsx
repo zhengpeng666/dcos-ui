@@ -5,7 +5,6 @@ var Link = require("react-router").Link;
 var State = require("react-router").State;
 
 var EventTypes = require("../constants/EventTypes");
-
 var MesosStateStore = require("../stores/MesosStateStore");
 
 function getMesosInfo() {
