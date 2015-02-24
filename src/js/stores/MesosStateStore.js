@@ -58,8 +58,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         slaves: []
       };
     });
-
-    // MesosStateActions.updateTransposed();
   },
 
   getFilterOptions: function () {
