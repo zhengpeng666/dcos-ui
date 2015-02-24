@@ -11,12 +11,14 @@ var HISTORY_LENGTH = 30;
 
 var _interval;
 var _initCalled = false;
-var _mesosStateFiltered = {};
-var _filterOptions = {
+var _pagetype = "Default";
+var _filterOptions = {};
+_filterOptions[_pagetype] = {
   searchString: ""
 };
 var _frameworkIndexes = [];
 var _frameworks = [];
+var _frameworksFiltered = [];
 var _mesosStates = [];
 var _totalResources = {};
 var _usedResources = {};
@@ -71,7 +73,7 @@ function getStatesByFramework() {
     .pluck("frameworks")
     .flatten()
     .groupBy(function (framework) {
-      return framework.name;
+      return framework.id;
     }).map(function (framework) {
       return {
         colorIndex: _.first(framework).colorIndex,
@@ -81,13 +83,17 @@ function getStatesByFramework() {
     }, this).value();
 }
 
-function fillFramework(name, colorIndex) {
+function fillFramework(id, name, colorIndex) {
   _.each(_mesosStates, function (state) {
     state.frameworks.push({
+      active: false,
+      id: id,
       name: name,
       date: state.date,
       colorIndex: colorIndex,
-      used_resources: {cpus: 0, mem: 0, disk: 0}
+      resources: {cpus: 0, mem: 0, disk: 0},
+      used_resources: {cpus: 0, mem: 0, disk: 0},
+      tasks: []
     });
   });
 }
@@ -101,7 +107,7 @@ function fillFramework(name, colorIndex) {
 //     ...
 //   }]
 // ]}]
-function normailzeFrameworks(frameworks, date) {
+function normalizeFrameworks(frameworks, date) {
   return _.map(frameworks, function (framework) {
     framework.date = date;
     var index = _.indexOf(_frameworkIndexes, framework.name);
@@ -109,7 +115,7 @@ function normailzeFrameworks(frameworks, date) {
     if (index === -1) {
       _frameworkIndexes.push(framework.name);
       index = _frameworkIndexes.length - 1;
-      fillFramework(framework.name, index);
+      fillFramework(framework.id, framework.name, index);
     }
     // set color index after discovering and assigning index framework
     framework.colorIndex = index;
@@ -118,17 +124,17 @@ function normailzeFrameworks(frameworks, date) {
 }
 
 function hasFilter() {
-  return _.find(_filterOptions, function (option) {
+  return _.find(_filterOptions[_pagetype], function (option) {
     return !_.isEmpty(option);
   });
 }
 
-function filterFrameworks(frameworks, searchString) {
+function filterFrameworks(searchString) {
   var searchPattern = new RegExp(searchString, "i");
   var valuesPattern = /:\"[^\"]+\"/g;
   var cleanupPattern = /[:\"]/g;
 
-  return _.filter(frameworks, function (framework) {
+  return _.filter(_frameworks, function (framework) {
     var str = JSON.stringify(framework)
       .match(valuesPattern)
       .join(" ")
@@ -168,6 +174,13 @@ function stopPolling() {
   }
 }
 
+function setPageType (pagetype) {
+  _pagetype = pagetype;
+  if (_filterOptions[_pagetype] === undefined) {
+    _filterOptions[_pagetype] = _.clone(_filterOptions.Default);
+  }
+}
+
 var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   init: function () {
@@ -190,14 +203,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getFrameworks: function () {
-    return _frameworks;
-  },
-
-  getFiltered: function () {
     if (hasFilter()) {
-      return _mesosStateFiltered;
+      return _frameworksFiltered;
     }
-    return this.getLatest();
+    return _frameworks;
   },
 
   getTotalResources: function () {
@@ -209,20 +218,15 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getFilterOptions: function () {
-    return _filterOptions;
+    return _filterOptions[_pagetype];
   },
 
   applyAllFilter: function () {
-    _mesosStateFiltered = _.clone(this.getLatest());
-
-    if (_filterOptions.searchString !== "") {
-      _mesosStateFiltered.frameworks = filterFrameworks(
-        _mesosStateFiltered.frameworks,
-        _filterOptions.searchString
+    if (_filterOptions[_pagetype].searchString !== "") {
+      _frameworksFiltered = filterFrameworks(
+        _filterOptions[_pagetype].searchString
       );
     }
-
-    this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },
 
   emitChange: function (eventName) {
@@ -241,16 +245,15 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
   },
 
-  updateFrameworks: function () {
-    if (!_.isEmpty(this.listeners(EventTypes.MESOS_STATE_FRAMEWORKS_CHANGE))) {
-      _frameworks = getStatesByFramework();
-      this.emitChange(EventTypes.MESOS_STATE_FRAMEWORKS_CHANGE);
-    }
+  processFilter: function (searchString) {
+    _filterOptions[_pagetype].searchString = searchString;
+    this.applyAllFilter();
+    this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },
 
   processState: function (data) {
     data.date = Date.now();
-    data.frameworks = normailzeFrameworks(data.frameworks, data.date);
+    data.frameworks = normalizeFrameworks(data.frameworks, data.date);
     data.total_resources = sumResources(
       _.pluck(data.slaves, "resources")
     );
@@ -263,11 +266,14 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       _mesosStates.shift();
     }
 
+    _frameworks = getStatesByFramework();
+
     this.applyAllFilter();
 
     _totalResources = getStatesByResource(_mesosStates, "total_resources");
     _usedResources = getStatesByResource(_mesosStates, "used_resources");
     this.updateFrameworks();
+
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },
 
@@ -278,12 +284,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       case ActionTypes.REQUEST_MESOS_STATE:
         MesosStateStore.processState(action.data);
         break;
-      case ActionTypes.REQUEST_MESOS_STATE_FRAMEWORKS:
-        MesosStateStore.updateFrameworks();
-        break;
       case ActionTypes.FILTER_SERVICES_BY_STRING:
-        _filterOptions.searchString = action.data;
-        MesosStateStore.applyAllFilter();
+        MesosStateStore.processFilter(action.data);
+        break;
+      case ActionTypes.SET_PAGETYPE:
+        setPageType(action.data);
         break;
     }
 

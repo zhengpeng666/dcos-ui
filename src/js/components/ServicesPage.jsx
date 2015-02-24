@@ -1,17 +1,55 @@
 /** @jsx React.DOM */
 
 var React = require("react/addons");
+
+var EventTypes = require("../constants/EventTypes");
+var MesosStateActions = require("../actions/MesosStateActions");
+var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
+// var ServicesChart = require("./ServicesChart");
 var ServicesFilter = require("./ServicesFilter");
 var ServiceList = require("./ServiceList");
+
+function getMesosServices() {
+  return {
+    filterString: MesosStateStore.getFilterOptions().searchString,
+    frameworks: MesosStateStore.getFrameworks(),
+    totalResources: MesosStateStore.getTotalResources()
+  };
+}
 
 var ServicesPage = React.createClass({
 
   displayName: "ServicesPage",
 
+  getInitialState: function () {
+    MesosStateActions.setPageType(ServicesPage.displayName);
+    return getMesosServices();
+  },
+
+  componentDidMount: function () {
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onChange
+    );
+  },
+
+  componentWillUnmount: function () {
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onChange
+    );
+  },
+
+  onChange: function () {
+    this.setState(getMesosServices());
+  },
+
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
+
+    // console.log("f", this.state.frameworks);
 
     return (
       <div>
@@ -27,8 +65,11 @@ var ServicesPage = React.createClass({
         </div>
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
-            <ServicesFilter />
-            <ServiceList />
+            <ServicesFilter
+                filterString={this.state.filterString} />
+            <ServiceList
+                frameworks={this.state.frameworks}
+                totalResources={this.state.totalResources} />
           </div>
         </div>
       </div>

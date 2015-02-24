@@ -2,51 +2,29 @@
 
 var _ = require("underscore");
 var React = require("react/addons");
-var Router = require("react-router");
 
-var EventTypes = require("../constants/EventTypes");
-var MesosStateStore = require("../stores/MesosStateStore");
 var ServiceItem = require("./ServiceItem");
-
-function getMesosServices() {
-  return {
-    collection: MesosStateStore.getFiltered().frameworks,
-    totalResources: MesosStateStore.getTotalResources()
-  };
-}
 
 var ServicesList = React.createClass({
 
   displayName: "ServicesList",
 
-  mixins: [Router.State],
-
-  getInitialState: function () {
-    return getMesosServices();
+  propTypes: {
+    frameworks: React.PropTypes.array.isRequired,
+    totalResources: React.PropTypes.object.isRequired
   },
 
-  componentDidMount: function () {
-    MesosStateStore.addChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
-      this.onChange
-    );
-  },
-
-  componentWillUnmount: function () {
-    MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
-      this.onChange
-    );
-  },
-
-  onChange: function () {
-    this.setState(getMesosServices());
+  getDefaultProps: function() {
+    return {
+      frameworks: [],
+      totalResources: {}
+    };
   },
 
   getServiceItems: function () {
-    var totalResources = this.state.totalResources;
+    var totalResources = this.props.totalResources;
 
-    return _.map(this.state.collection, function (service) {
+    return _.map(this.props.frameworks, function (service) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (

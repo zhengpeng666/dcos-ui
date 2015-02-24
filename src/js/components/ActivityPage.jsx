@@ -4,11 +4,16 @@ var React = require("react/addons");
 var Link = require("react-router").Link;
 
 var Activity = require("./Activity");
+var MesosStateActions = require("../actions/MesosStateActions");
 var SidebarToggle = require("./SidebarToggle");
 
 var ActivityPage = React.createClass({
 
   displayName: "ActivityPage",
+
+  componentWillMount: function () {
+    MesosStateActions.setPageType(ActivityPage.displayName);
+  },
 
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */

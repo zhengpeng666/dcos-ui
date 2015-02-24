@@ -4,7 +4,6 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
-var MesosStateActions = require("../actions/MesosStateActions");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceChart = require("./ResourceChart");
 
@@ -31,15 +30,14 @@ var Activity = React.createClass({
 
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
-      EventTypes.MESOS_STATE_FRAMEWORKS_CHANGE,
+      EventTypes.MESOS_STATE_CHANGE,
       this.onChange
     );
-    MesosStateActions.updateFrameworks();
   },
 
   componentWillUnmount: function () {
     MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_FRAMEWORKS_CHANGE,
+      EventTypes.MESOS_STATE_CHANGE,
       this.onChange
     );
   },

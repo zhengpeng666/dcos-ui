@@ -4,6 +4,7 @@ var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
 var Sidebar = require("../components/Sidebar");
+var MesosStateActions = require("../actions/MesosStateActions");
 var MesosStateStore = require("../stores/MesosStateStore");
 
 var Index = React.createClass({
@@ -12,6 +13,10 @@ var Index = React.createClass({
 
   componentWillMount: function () {
     MesosStateStore.init();
+  },
+
+  componentWillUpdate: function () {
+    MesosStateActions.setPageType("Default");
   },
 
   /* jshint trailing:false, quotmark:false, newcap:false */

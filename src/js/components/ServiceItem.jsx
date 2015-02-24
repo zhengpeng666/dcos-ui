@@ -59,7 +59,7 @@ var ServiceItem = React.createClass({
       return (
         <li key={r}>
           <strong className="fixed-width">
-            {roundPercentage(resources[r] / totalResources[r], 2)}%
+            {roundPercentage(_.last(resources[r]).y / totalResources[r], 2)}%
           </strong> {labels[r]}
         </li>
       );
@@ -86,7 +86,7 @@ var ServiceItem = React.createClass({
         </div>
         <div className="collection-item-footer">
           <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
-            {this.getStatistics(model.resources, this.props.totalResources)}
+            {this.getStatistics(model["used_resources"], this.props.totalResources)}
           </ul>
         </div>
       </li>

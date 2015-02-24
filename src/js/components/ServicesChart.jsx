@@ -1,0 +1,76 @@
+/** @jsx React.DOM */
+
+var _ = require("underscore");
+var d3 = require("d3");
+var Humanize = require("humanize");
+var React = require("react/addons");
+
+var StackedBarChart = require("./StackedBarChart");
+
+var ServicesChart = React.createClass({
+
+  displayName: "ServicesChart",
+
+  propTypes: {
+    data: React.PropTypes.array.isRequired,
+    totalResources: React.PropTypes.object.isRequired,
+    mode: React.PropTypes.string
+  },
+
+  getDefaultProps: function () {
+    return {
+      totalResources: {
+        cpus: 0,
+        mem: 0,
+        disk: 0
+      }
+    };
+  },
+
+  formatYAxis: function () {
+    var mode = this.props.mode;
+    var formatPercent = d3.format(".0%");
+    var max = this.props.totalResources[mode];
+    return function (d) {
+      var a = formatPercent(d / max);
+      if (d >= max) {
+        if (mode === "cpus") {
+          a = "100% - " + d + " CPU";
+        } else {
+          a = "100% - " + Humanize.filesize(d * 1024 * 1024);
+        }
+      }
+      return a;
+    };
+  },
+
+  render: function () {
+    var data = _.map(this.props.data, function (framework) {
+      return {
+        name: framework.name,
+        colorIndex: framework.colorIndex,
+        values: framework.values[this.props.mode]
+      };
+    }, this);
+
+    var margin = {
+      left: 20,
+      bottom: 40
+    };
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <StackedBarChart
+          data={data}
+          formatYAxis={this.formatYAxis}
+          minY={0}
+          maxY={this.props.totalResources[this.props.mode]}
+          margin={margin}
+          height={200}
+          width={600} />
+    );
+  }
+});
+
+module.exports = ServicesChart;

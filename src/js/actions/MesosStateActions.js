@@ -1,6 +1,6 @@
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("../dispatcher/AppDispatcher");
-var API_ROOT = "http://srv4.hw.ca1.mesosphere.com:5050/master/state.json";
+var API_ROOT = "http://localhost:5050/master/state.json";
 var $ = require("jquery");
 
 var MesosStateActions = {
@@ -15,19 +15,20 @@ var MesosStateActions = {
     });
   },
 
+  setPageType: function (pagetype) {
+    AppDispatcher.dispatch({
+      action: {
+        type: ActionTypes.SET_PAGETYPE,
+        data: pagetype
+      }
+    });
+  },
+
   setFilterString: function (filterString) {
     AppDispatcher.dispatch({
       action: {
         type: ActionTypes.FILTER_SERVICES_BY_STRING,
         data: filterString
-      }
-    });
-  },
-
-  updateFrameworks: function () {
-    AppDispatcher.dispatch({
-      action: {
-        type: ActionTypes.REQUEST_MESOS_STATE_FRAMEWORKS
       }
     });
   }
