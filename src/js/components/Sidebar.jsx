@@ -8,7 +8,7 @@ var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 
 function getMesosInfo() {
-  return MesosStateStore.getLatest() || {};
+  return MesosStateStore.getLatest();
 }
 
 var Sidebar = React.createClass({
@@ -93,7 +93,7 @@ var Sidebar = React.createClass({
         <div id="sidebar-footer">
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom">
             <p className="text-align-center flush-top flush-bottom">
-              Mesosphere DCOS v.{this.state.version}
+              Mesosphere DCOS v.0.0.1
             </p>
           </div>
         </div>

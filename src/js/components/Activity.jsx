@@ -9,11 +9,9 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceChart = require("./ResourceChart");
 
 function getMesosState() {
-  var mesosTransp = MesosStateStore.getTransposed();
-
   return {
-    frameworks: mesosTransp.frameworks || [],
-    totalResources: mesosTransp.totalResources
+    frameworks: MesosStateStore.getFrameworks(),
+    totalResources: MesosStateStore.getTotalResources()
   };
 }
 
@@ -29,7 +27,7 @@ var Activity = React.createClass({
 
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
-      EventTypes.MESOS_TRANSPOSED_STATE_CHANGE,
+      EventTypes.MESOS_STATE_FRAMEWORKS_CHANGE,
       this.onChange
     );
     MesosStateActions.updateTransposed();
@@ -37,7 +35,7 @@ var Activity = React.createClass({
 
   componentWillUnmount: function () {
     MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_TRANSPOSED_STATE_CHANGE,
+      EventTypes.MESOS_STATE_FRAMEWORKS_CHANGE,
       this.onChange
     );
   },

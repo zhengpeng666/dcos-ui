@@ -9,15 +9,9 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ServiceItem = require("./ServiceItem");
 
 function getMesosServices() {
-  var mesosState = MesosStateStore.getLatest();
-
-  if (MesosStateStore.hasFilter()) {
-    mesosState = MesosStateStore.getFiltered();
-  }
-
   return {
-    collection: mesosState.frameworks || [],
-    totalResources: mesosState.totalResources || {}
+    collection: MesosStateStore.getFiltered().frameworks,
+    totalResources: MesosStateStore.getTotalResources()
   };
 }
 

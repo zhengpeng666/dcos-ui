@@ -1,6 +1,6 @@
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("../dispatcher/AppDispatcher");
-var API_ROOT = "http://localhost:5050/master/state.json";
+var API_ROOT = "http://srv4.hw.ca1.mesosphere.com:5050/master/state.json";
 var $ = require("jquery");
 
 var MesosStateActions = {
@@ -27,7 +27,7 @@ var MesosStateActions = {
   updateTransposed: function () {
     AppDispatcher.dispatch({
       action: {
-        type: ActionTypes.REQUEST_MESOS_TRANSPOSED_STATE
+        type: ActionTypes.REQUEST_MESOS_STATE_FRAMEWORKS
       }
     });
   }
