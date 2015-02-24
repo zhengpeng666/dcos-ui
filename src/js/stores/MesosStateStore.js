@@ -1,10 +1,11 @@
+var _ = require("underscore");
+var EventEmitter = require("events").EventEmitter;
+
 var AppDispatcher = require("../dispatcher/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
+var EventTypes = require("../constants/EventTypes");
 var MesosStateActions = require("../actions/MesosStateActions");
-var EventEmitter = require("events").EventEmitter;
-var _ = require("underscore");
 
-var CHANGE_EVENT = "change";
 var STATE_REFRESH = 2000;
 var HISTORY_LENGTH = 30;
 
@@ -57,8 +58,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         slaves: []
       };
     });
-
-    this.updateTransposed();
   },
 
   getFilterOptions: function () {
@@ -202,24 +201,24 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       }, this).value();
   },
 
-  emitChange: function () {
-    this.emit(CHANGE_EVENT);
+  emitChange: function (eventName) {
+    this.emit(eventName);
   },
 
-  addChangeListener: function (callback) {
-    this.on(CHANGE_EVENT, callback);
+  addChangeListener: function (eventName, callback) {
+    this.on(eventName, callback);
   },
 
-  removeChangeListener: function (callback) {
-    this.removeListener(CHANGE_EVENT, callback);
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
   },
 
   updateTransposed: function () {
-    _mesosStatesTransposed.frameworks =
-      MesosStateStore.getTransposedFrameworks();
-    _mesosStatesTransposed.totalResources =
-      _.last(_mesosStates).totalResources;
-
+    if (this.listeners(EventTypes.MESOS_TRANSPOSED_STATE_CHANGE).length > 0) {
+      _mesosStatesTransposed.frameworks = this.getTransposedFrameworks();
+      _mesosStatesTransposed.totalResources = this.getLatest().totalResources;
+      this.emitChange(EventTypes.MESOS_TRANSPOSED_STATE_CHANGE);
+    }
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -241,10 +240,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
         MesosStateStore.applyAllFilter();
         MesosStateStore.updateTransposed();
-
-        MesosStateStore.emitChange();
+        MesosStateStore.emitChange(EventTypes.MESOS_STATE_CHANGE);
         break;
-
+      case ActionTypes.REQUEST_MESOS_TRANSPOSED_STATE:
+        MesosStateStore.updateTransposed();
+        break;
       case ActionTypes.FILTER_SERVICES_BY_STRING:
         _filterOptions.searchString = action.data;
         MesosStateStore.applyAllFilter();

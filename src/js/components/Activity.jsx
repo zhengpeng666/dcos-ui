@@ -3,6 +3,8 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
+var EventTypes = require("../constants/EventTypes");
+var MesosStateActions = require("../actions/MesosStateActions");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceChart = require("./ResourceChart");
 
@@ -10,7 +12,7 @@ function getMesosState() {
   var mesosTransp = MesosStateStore.getTransposed();
 
   return {
-    frameworks: mesosTransp.frameworks,
+    frameworks: mesosTransp.frameworks || [],
     totalResources: mesosTransp.totalResources
   };
 }
@@ -26,11 +28,18 @@ var Activity = React.createClass({
   },
 
   componentDidMount: function () {
-    MesosStateStore.addChangeListener(this.onChange);
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_TRANSPOSED_STATE_CHANGE,
+      this.onChange
+    );
+    MesosStateActions.updateTransposed();
   },
 
   componentWillUnmount: function () {
-    MesosStateStore.removeChangeListener(this.onChange);
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_TRANSPOSED_STATE_CHANGE,
+      this.onChange
+    );
   },
 
   onChange: function () {
