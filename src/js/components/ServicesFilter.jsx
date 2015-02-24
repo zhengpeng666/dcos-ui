@@ -1,8 +1,10 @@
 /** @jsx React.DOM */
 
 var React = require("react/addons");
+
+var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
-var ServicesFilterActions = require("../actions/ServicesFilterActions");
+var MesosStateActions = require("../actions/MesosStateActions");
 var ServicesFilter = React.createClass({
 
   displayName: "ServicesFilter",
@@ -16,15 +18,21 @@ var ServicesFilter = React.createClass({
   handleSubmit: function () {
     var filterString = this.refs.filterInput.getDOMNode().value;
 
-    ServicesFilterActions.setFilterString(filterString);
+    MesosStateActions.setFilterString(filterString);
   },
 
   componentDidMount: function () {
-    MesosStateStore.addChangeListener(this.onChange);
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onChange
+    );
   },
 
   componentWillUnmount: function () {
-    MesosStateStore.removeChangeListener(this.onChange);
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onChange
+    );
   },
 
   onChange: function () {

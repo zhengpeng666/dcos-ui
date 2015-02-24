@@ -4,6 +4,8 @@ var React = require("react/addons");
 var Link = require("react-router").Link;
 var State = require("react-router").State;
 
+var EventTypes = require("../constants/EventTypes");
+
 var MesosStateStore = require("../stores/MesosStateStore");
 
 function getMesosInfo() {
@@ -21,11 +23,17 @@ var Sidebar = React.createClass({
   },
 
   componentDidMount: function () {
-    MesosStateStore.addChangeListener(this.onChange);
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onChange
+    );
   },
 
   componentWillUnmount: function () {
-    MesosStateStore.removeChangeListener(this.onChange);
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onChange
+    );
   },
 
   onChange: function () {
