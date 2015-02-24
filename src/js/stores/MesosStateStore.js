@@ -248,6 +248,9 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       case ActionTypes.FILTER_SERVICES_BY_STRING:
         _filterOptions.searchString = action.data;
         MesosStateStore.applyAllFilter();
+
+        MesosStateStore.emitChange();
+        break;
     }
 
     return true;
