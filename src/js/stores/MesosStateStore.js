@@ -18,16 +18,8 @@ var _filterOptions = {
 var _frameworkIndexes = [];
 var _frameworks = [];
 var _mesosStates = [];
-var _totalResources = {
-  cpus: 0,
-  disk: 0,
-  mem: 0
-};
-var _totalUsedResources = {
-  cpus: 0,
-  disk: 0,
-  mem: 0
-};
+var _totalResources = {};
+var _usedResources = {};
 
 function sumResources(resourceList) {
   return _.reduce(resourceList, function (sumMap, resource) {
@@ -44,13 +36,13 @@ function sumResources(resourceList) {
 //   disk: [{date: request time, y: value}]
 //   mem: [{date: request time, y: value}]
 // }]
-function getResourceValues(framework) {
+function getResourceValues(list, resourcesKey) {
   var values = {"cpus": [], "disk": [], "mem": []};
   return _.reduce(values, function (acc, arr, r) {
-    _.map(framework, function (v) {
+    _.map(list, function (v) {
       acc[r].push({
         date: v.date,
-        y: v.resources[r]
+        y: v[resourcesKey][r]
       });
     });
     return acc;
@@ -74,7 +66,7 @@ function getStateByFramework() {
       return {
         colorIndex: _.first(framework).colorIndex,
         name: _.first(framework).name,
-        values: getResourceValues(framework)
+        resources: getResourceValues(framework, "resources")
       };
     }, this).value();
 }
@@ -142,9 +134,14 @@ function initStates() {
     return {
       date: currentDate + (i * STATE_REFRESH),
       frameworks: [],
-      slaves: []
+      slaves: [],
+      "used_resources": {cpus: 0, mem: 0, disk: 0},
+      "total_resources": {cpus: 0, mem: 0, disk: 0}
     };
   });
+
+  _totalResources = getResourceValues(_mesosStates, "total_resources");
+  _usedResources = getResourceValues(_mesosStates, "used_resources");
 }
 
 function startPolling() {
@@ -198,7 +195,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getUsedResources: function () {
-    return _totalUsedResources;
+    return _usedResources;
   },
 
   getFilterOptions: function () {
@@ -244,18 +241,18 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   processState: function (data) {
     data.date = Date.now();
     data.frameworks = normailzeFrameworks(data.frameworks, data.date);
-    _totalResources = sumResources(
-      _.pluck(data.slaves, "resources")
-    );
-    _totalUsedResources = sumResources(
-      _.pluck(data.frameworks, "used_resources")
-    );
+    data.total_resources = sumResources(_.pluck(data.slaves, "resources"));
+    data.used_resources = sumResources(_.pluck(data.frameworks, "resources"));
+
     _mesosStates.push(data);
     if (_mesosStates.length > HISTORY_LENGTH) {
       _mesosStates.shift();
     }
 
     this.applyAllFilter();
+
+    _totalResources = getResourceValues(_mesosStates, "total_resources");
+    _usedResources = getResourceValues(_mesosStates, "used_resources");
     this.updateFrameworks();
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },
