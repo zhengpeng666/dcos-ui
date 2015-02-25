@@ -22,7 +22,8 @@ var Activity = React.createClass({
 
   getInitialState: function () {
     var state = {
-      mode: "cpus"
+      mode: "cpus",
+      divideByFramework: false
     };
 
     return _.extend(state, getMesosState());
@@ -79,6 +80,33 @@ var Activity = React.createClass({
     }, this);
   },
 
+  changeDivision: function () {
+    this.setState({divideByFramework: !this.state.divideByFramework});
+  },
+
+  getDivideButton: function () {
+    var divideByFramework = this.state.divideByFramework;
+    var classSet = React.addons.classSet({
+      "button button-large": true,
+      "button-primary": divideByFramework
+    });
+    var label = "Divide by frameworks";
+    if (divideByFramework) {
+      label = "Show accumulated";
+    }
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <button
+          className={classSet}
+          onClick={this.changeDivision}>
+        {label}
+      </button>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
   render: function () {
     var state = this.state;
     /* jshint trailing:false, quotmark:false, newcap:false */
@@ -90,10 +118,14 @@ var Activity = React.createClass({
             totalResources={state.totalResources}
             usedResources={state.usedResources}
             mode={state.mode}
+            divide={state.divideByFramework}
             height={200}
             width={600} />
         <div className="button-collection flush-bottom">
           {this.getModeButtons()}
+        </div>
+        <div className="button-collection flush-bottom">
+          {this.getDivideButton()}
         </div>
       </div>
     );

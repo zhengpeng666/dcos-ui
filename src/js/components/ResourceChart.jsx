@@ -21,40 +21,49 @@ var ResourceChart = React.createClass({
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
+    divide: React.PropTypes.bool.isRequired,
     totalResources: React.PropTypes.object.isRequired,
     usedResources: React.PropTypes.object.isRequired,
     mode: React.PropTypes.string
   },
 
-  getDefaultProps: function () {
-    return {
-      totalResources: {
-        cpus: 0,
-        mem: 0,
-        disk: 0
-      }
-    };
-  },
-
-  getData: function () {
+  getFrameworksData: function () {
     var props = this.props;
     return _.map(props.data, function (framework) {
       return {
         name: framework.name,
         colorIndex: framework.colorIndex,
-        values: framework.values[props.mode]
+        values: framework.resources[props.mode]
       };
     });
   },
 
+  getAllData: function () {
+    var props = this.props;
+    return [{
+      name: "All",
+      colorIndex: 0,
+      values: props.usedResources[props.mode],
+    }];
+  },
+
+  getData: function () {
+    if (this.props.divide) {
+      return this.getFrameworksData();
+    } else {
+      return this.getAllData();
+    }
+  },
+
   getMaxY: function () {
     var props = this.props;
-    return props.totalResources[props.mode];
+    return _.last(props.totalResources[props.mode]).y;
   },
 
   getUsed: function () {
     var props = this.props;
-    return props.usedResources[props.mode];
+
+    return _.last(props.usedResources[props.mode]).y;
   },
 
   getTotalHeadline: function () {
