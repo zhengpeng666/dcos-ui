@@ -12,7 +12,10 @@ var TimeSeriesChart = React.createClass({
 
   propTypes: {
     // [{name: "Area Name", values: [{date: some time, y: 0}]}]
-    data: React.PropTypes.array.isRequired
+    data: React.PropTypes.array.isRequired,
+    maxY: React.PropTypes.number,
+    ticksY: React.PropTypes.number,
+    width: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
