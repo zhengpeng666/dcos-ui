@@ -31,7 +31,7 @@ var TimeSeriesChart = React.createClass({
       left: 45,
       bottom: 45,
     };
-    var width = Math.round(props.width - margin.left);
+    var width = props.width;
     var height = Math.round(width / 2 - margin.bottom - margin.top);
     return _.extend(props, {
       width: width,
@@ -67,9 +67,9 @@ var TimeSeriesChart = React.createClass({
           .attr("transform",
             "translate(" + props.margin.left + "," + props.margin.top + ")"
           )
-          .attr("width", props.width + props.margin.left)
+          .attr("width", props.width - props.margin.left)
           .attr("height",
-            props.height + props.margin.top + props.margin.bottom
+            props.height + props.margin.bottom
           );
   },
 
@@ -217,16 +217,19 @@ var TimeSeriesChart = React.createClass({
   },
 
   getStripes: function (number, props) {
-    var width = Math.round(props.width / (2 * number));
+    var width = Math.round((props.width - props.margin.left) / (2 * number));
     return _.map(_.range(0, number), function (i) {
+      // indent with margin, start one width length in
+      // and add two times width per step
+      var position = props.margin.left + width + i * 2 * width;
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <rect key={i}
           className="background"
-          x={props.margin.left + width + 2 * i * width + "px"}
+          x={position + "px"}
           y={props.margin.top}
-          height={props.height + props.margin.top}
+          height={props.height - props.margin.top}
           width={width} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
@@ -241,7 +244,7 @@ var TimeSeriesChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <svg height={props.height + props.margin.bottom} width={props.width + props.margin.left}>
+      <svg height={props.height + props.margin.bottom} width={props.width}>
         {this.getStripes(4, props)}
         <g className="bars" ref="grid" />
         <g clip-path="url(#clip)">
