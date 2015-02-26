@@ -21,7 +21,7 @@ var TimeSeriesChart = React.createClass({
   getDefaultProps: function () {
     return {
       maxY: 10,
-      ticksY: 10
+      ticksY: 4
     };
   },
 
@@ -242,15 +242,15 @@ var TimeSeriesChart = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <svg height={props.height + props.margin.bottom} width={props.width + props.margin.left}>
-          {this.getStripes(4, props)}
-          <g className="bars" ref="grid" />
-          <g clip-path="url(#clip)">
-            <ReactTransitionGroup component="g">
-              {this.getAreaList()}
-            </ReactTransitionGroup>
+        {this.getStripes(4, props)}
+        <g className="bars" ref="grid" />
+        <g clip-path="url(#clip)">
+          <ReactTransitionGroup component="g">
+            {this.getAreaList()}
+          </ReactTransitionGroup>
           <g className="x axis" ref="xAxis"/>
-          </g>
-          <g className="y axis" ref="yAxis" />
+        </g>
+        <g className="y axis" ref="yAxis" />
       </svg>
     );
   }
