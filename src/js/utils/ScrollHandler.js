@@ -1,22 +1,4 @@
 var $ = require("jquery");
-require("perfect-scrollbar");
-
-/* Get Scrollbar Width */
-function getScrollbarWidth() {
-  var div = $(
-    "<div style='width:50px;height:50px;overflow:hidden;" +
-      "position:absolute;top:-200px;left:-200px;'>" +
-      "<div style='height:100px;'>" +
-      "</div>" +
-    "</div>"
-  );
-  $("body").append(div);
-  var w1 = $("div", div).innerWidth();
-  div.css("overflow-y", "auto");
-  var w2 = $("div", div).innerWidth();
-  $(div).remove();
-  return (w1 - w2);
-}
 
 function canvasSidebarOpen() {
   $("body").addClass("canvas-sidebar-open");
@@ -91,17 +73,14 @@ function modalResize() {
 
 /* Event Handler: Window Resize */
 function windowResize() {
-  var responsiveViewport = $(window).width() + $.app.scrollbarWidth;
+  var responsiveViewport = $(window).width();
 
-  // if (responsiveViewport < 481) {}
-  // if (responsiveViewport > 481) {}
-  // if (responsiveViewport < 768) {}
   if (responsiveViewport >= 992) {
     canvasSidebarClose();
   }
 
   /* Resize canvas to fit height of viewport */
-  $("#canvas").height($(window).height());
+  $("#sidebar").height($(window).height());
 
   /* Resize sidebar content height */
   var sidebar = $("#sidebar");
@@ -143,10 +122,6 @@ function windowResize() {
 
 /* Initialize */
 function init() {
-  /* Define Namespace */
-  $.app = {};
-  $.app.canvas = $("#canvas");
-  $.app.scrollbarWidth = getScrollbarWidth();
 
   /* Define window resize event listener */
   $(window).resize(function () {
@@ -154,9 +129,6 @@ function init() {
   });
 
   windowResize();
-
-  /* Initialize Scrollbars */
-  $(".container-scrollable").perfectScrollbar();
 
   /* Allow modal backdrop click to trigger close */
   $(document.body).on("click", "> .modal-backdrop", function () {
