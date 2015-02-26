@@ -53,13 +53,16 @@ var ServiceItem = React.createClass({
       mem: "Mem",
       disk: "Disk"
     };
+
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return _.map(_.keys(labels), function (r) {
       return (
         <li key={r}>
           <strong className="fixed-width">
-            {roundPercentage(_.last(resources[r]).y / totalResources[r], 2)}%
+            {roundPercentage(
+              _.last(resources[r]).y / _.last(totalResources[r]).y, 2)
+          }%
           </strong> {labels[r]}
         </li>
       );
@@ -86,7 +89,7 @@ var ServiceItem = React.createClass({
         </div>
         <div className="collection-item-footer">
           <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
-            {this.getStatistics(model["used_resources"], this.props.totalResources)}
+            {this.getStatistics(model.resources, this.props.totalResources)}
           </ul>
         </div>
       </li>

@@ -75,11 +75,9 @@ function getStatesByFramework() {
     .groupBy(function (framework) {
       return framework.id;
     }).map(function (framework) {
-      return {
-        colorIndex: _.first(framework).colorIndex,
-        name: _.first(framework).name,
+      return _.extend(_.clone(_.last(framework)), {
         used_resources: getStatesByResource(framework, "used_resources")
-      };
+      });
     }, this).value();
 }
 
@@ -260,7 +258,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     data.used_resources = sumResources(
       _.pluck(data.frameworks, "used_resources")
     );
-
     _mesosStates.push(data);
     if (_mesosStates.length > HISTORY_LENGTH) {
       _mesosStates.shift();

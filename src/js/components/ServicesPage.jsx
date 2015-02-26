@@ -6,7 +6,7 @@ var EventTypes = require("../constants/EventTypes");
 var MesosStateActions = require("../actions/MesosStateActions");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
-// var ServicesChart = require("./ServicesChart");
+var ServicesChart = require("./ServicesChart");
 var ServicesFilter = require("./ServicesFilter");
 var ServiceList = require("./ServiceList");
 
@@ -14,7 +14,8 @@ function getMesosServices() {
   return {
     filterString: MesosStateStore.getFilterOptions().searchString,
     frameworks: MesosStateStore.getFrameworks(),
-    totalResources: MesosStateStore.getTotalResources()
+    totalResources: MesosStateStore.getTotalResources(),
+    usedResources: MesosStateStore.getUsedResources()
   };
 }
 
@@ -48,8 +49,7 @@ var ServicesPage = React.createClass({
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
-
-    // console.log("f", this.state.frameworks);
+    var state = this.state;
 
     return (
       <div>
@@ -65,11 +65,18 @@ var ServicesPage = React.createClass({
         </div>
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
+            <ServicesChart
+              data={state.frameworks}
+              totalResources={state.totalResources}
+              usedResources={state.usedResources}
+              stacked={true}
+              height={240}
+              width={960} />
             <ServicesFilter
-                filterString={this.state.filterString} />
+                filterString={state.filterString} />
             <ServiceList
-                frameworks={this.state.frameworks}
-                totalResources={this.state.totalResources} />
+                frameworks={state.frameworks}
+                totalResources={state.totalResources} />
           </div>
         </div>
       </div>
