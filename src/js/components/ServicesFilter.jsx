@@ -12,7 +12,7 @@ var ServicesFilter = React.createClass({
     filterString: React.PropTypes.string.isRequired
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function () {
     return {
       filterString: ""
     };

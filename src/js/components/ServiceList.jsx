@@ -14,7 +14,7 @@ var ServicesList = React.createClass({
     totalResources: React.PropTypes.object.isRequired
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function () {
     return {
       frameworks: [],
       totalResources: {}

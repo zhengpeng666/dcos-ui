@@ -69,9 +69,7 @@ var ServicesPage = React.createClass({
               data={state.frameworks}
               totalResources={state.totalResources}
               usedResources={state.usedResources}
-              stacked={true}
-              height={240}
-              width={960} />
+              stacked={true} />
             <ServicesFilter
                 filterString={state.filterString} />
             <ServiceList

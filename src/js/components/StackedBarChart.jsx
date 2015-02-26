@@ -9,27 +9,22 @@ var StackedBarChart = React.createClass({
   displayName: "StackedBarChart",
 
   propTypes: {
-    data: React.PropTypes.array.isRequired
+    data: React.PropTypes.array.isRequired,
+    width: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
     return {
-      height: 0,
-      width: 0,
-      margin: {
-        left: 20,
-        bottom: 40,
-        right: 0,
-        top: 0
-      },
       maxY: 10,
       ticksY: 10
     };
   },
 
   getInitialState: function () {
-    var xScale = this.getXScale(this.props);
-    var yScale = this.getYScale(this.props);
+    var props = this.calcSizes(this.props);
+
+    var xScale = this.getXScale(props);
+    var yScale = this.getYScale(props);
     return {
       stack: this.getStack(),
       xScale: xScale,
@@ -37,15 +32,32 @@ var StackedBarChart = React.createClass({
     };
   },
 
+  calcSizes: function (props) {
+    var margin = {
+      top: 0,
+      left: 20,
+      bottom: 40,
+    };
+    var width = props.width;
+    var height = Math.round(width / 3 - margin.bottom - margin.top);
+    return _.extend(props, {
+      width: width,
+      height: height,
+      margin: margin
+    });
+  },
+
   componentDidMount: function () {
-    this.renderAxis(this.props, this.state.xScale, this.state.yScale);
+    var props = this.calcSizes(this.props);
+
+    this.renderAxis(props, this.state.xScale, this.state.yScale);
     d3.select(this.getDOMNode())
       .append("defs")
         .append("clipPath")
           .attr("id", "clip")
         .append("rect")
-          .attr("width", this.props.width - this.props.margin.left)
-          .attr("height", this.props.height);
+          .attr("width", props.width - props.margin.left)
+          .attr("height", props.height);
   },
 
   getStack: function () {
@@ -134,7 +146,9 @@ var StackedBarChart = React.createClass({
       );
   },
 
-  componentWillReceiveProps: function (props) {
+  componentWillReceiveProps: function (newprops) {
+    var props = this.calcSizes(newprops);
+
     var xScale = this.getXScale(props);
     var yScale = this.getYScale(props);
     // the d3 axis helper requires a <g> element passed into do its work. This
@@ -148,13 +162,13 @@ var StackedBarChart = React.createClass({
   },
 
   getBarList: function () {
-    var props = this.props;
+    var props = this.calcSizes(this.props);
     var width = props.width - props.margin.left;
     var height = props.height;
     var maxY = props.maxY;
     var posY;
 
-    return _.flatten(_.map(this.state.stack(this.props.data), function (obj, i) {
+    return _.flatten(_.map(this.state.stack(props.data), function (obj, i) {
       var valuesLength = obj.values.length;
       var colorClass = "path-color-" + obj.colorIndex;
       var rectWidth = (width - valuesLength) / valuesLength;
@@ -174,7 +188,6 @@ var StackedBarChart = React.createClass({
         }
         var posX = props.width - (rectWidth + 1) * (obj.values.length - j + 1);
         posY[j] -= rectHeight;
-
 
         /* jshint trailing:false, quotmark:false, newcap:false */
         /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -202,16 +215,17 @@ var StackedBarChart = React.createClass({
   },
 
   render: function () {
+    var props = this.calcSizes(this.props);
+    var margin = props.margin;
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    var margin = this.props.margin;
     return (
-      <svg height={this.props.height + margin.bottom}
-          width={this.props.width + margin.left}
+      <svg height={props.height + margin.bottom}
+          width={props.width + margin.left}
           className="barchart">
         <g transform={"translate(" + [margin.left * 2, margin.bottom / 2] + ")"}>
           <g className="x axis"
-            transform={"translate(" + [0, this.props.height] + ")"}
+            transform={"translate(" + [0, props.height] + ")"}
             ref="xAxis"/>
           <g className="y axis" ref="yAxis" />
           <g ref="yGrid" />
