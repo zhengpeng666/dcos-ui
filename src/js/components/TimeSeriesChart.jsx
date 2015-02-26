@@ -64,9 +64,13 @@ var TimeSeriesChart = React.createClass({
         .append("clipPath")
           .attr("id", "clip")
         .append("rect")
-          .attr("transform", "translate(" + props.margin.left + "," + props.margin.top + ")")
+          .attr("transform",
+            "translate(" + props.margin.left + "," + props.margin.top + ")"
+          )
           .attr("width", props.width + props.margin.left)
-          .attr("height", props.height + props.margin.top + props.margin.bottom);
+          .attr("height",
+            props.height + props.margin.top + props.margin.bottom
+          );
   },
 
   getArea: function (xScale, yScale) {

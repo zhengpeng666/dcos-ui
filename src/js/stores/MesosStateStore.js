@@ -21,6 +21,8 @@ var _mesosStates = [];
 var _totalResources = {};
 var _usedResources = {};
 
+/*jshint camelcase:false */
+/* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
 function sumResources(resourceList) {
   return _.reduce(resourceList, function (sumMap, resource) {
     _.each(sumMap, function (value, key) {
@@ -277,5 +279,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   })
 
 });
+/* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
+/*jshint camelcase:true */
 
 module.exports = MesosStateStore;

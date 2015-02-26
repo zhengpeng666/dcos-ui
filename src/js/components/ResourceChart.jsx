@@ -38,7 +38,7 @@ var ResourceChart = React.createClass({
     window.addEventListener("resize", this.updateWidth);
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount: function () {
     window.removeEventListener("resize", this.updateWidth);
   },
 
