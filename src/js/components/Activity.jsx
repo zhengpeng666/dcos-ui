@@ -114,13 +114,11 @@ var Activity = React.createClass({
     return (
       <div>
         <ResourceChart
-            data={state.frameworks}
-            totalResources={state.totalResources}
-            usedResources={state.usedResources}
-            mode={state.mode}
-            divide={state.divideByFramework}
-            height={200}
-            width={600} />
+          data={state.frameworks}
+          totalResources={state.totalResources}
+          usedResources={state.usedResources}
+          mode={state.mode}
+          divide={state.divideByFramework} />
         <div className="button-collection flush-bottom">
           {this.getModeButtons()}
         </div>

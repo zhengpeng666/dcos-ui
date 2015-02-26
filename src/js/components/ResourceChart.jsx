@@ -27,6 +27,27 @@ var ResourceChart = React.createClass({
     mode: React.PropTypes.string
   },
 
+  getInitialState: function () {
+    return {
+      width: null
+    };
+  },
+
+  componentDidMount: function () {
+    this.updateWidth();
+    window.addEventListener("resize", this.updateWidth);
+  },
+
+  componentWillUnmount: function() {
+    window.removeEventListener("resize", this.updateWidth);
+  },
+
+  updateWidth: function () {
+    this.setState({
+      width: this.getDOMNode().offsetWidth
+    });
+  },
+
   getFrameworksData: function () {
     var props = this.props;
     return _.map(props.data, function (framework) {
@@ -88,11 +109,25 @@ var ResourceChart = React.createClass({
     return str;
   },
 
+  getChart: function () {
+    var width = this.state.width;
+
+    if (width != null) {
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+      return (
+        <TimeSeriesChart
+          width={width}
+          data={this.getData()}
+          maxY={this.getMaxY()} />
+      );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    }
+    return null;
+  },
+
   render: function () {
-    var margin = {
-      left: 20,
-      bottom: 40
-    };
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -100,13 +135,7 @@ var ResourceChart = React.createClass({
       <div>
         <h4>{this.getUsedHeadline()}</h4>
         <h5>{this.getTotalHeadline()}</h5>
-        <TimeSeriesChart
-          data={this.getData()}
-          maxY={this.getMaxY()}
-          margin={margin}
-          ticksY={4}
-          height={200}
-          width={600} />
+        {this.getChart()}
       </div>
     );
   }

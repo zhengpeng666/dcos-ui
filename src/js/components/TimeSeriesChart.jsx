@@ -17,22 +17,32 @@ var TimeSeriesChart = React.createClass({
 
   getDefaultProps: function () {
     return {
-      height: 0,
-      width: 0,
-      margin: {
-        left: 20,
-        bottom: 40,
-        right: 0,
-        top: 0
-      },
       maxY: 10,
       ticksY: 10
     };
   },
 
+  calcSizes: function (props) {
+    var margin = {
+      top: 10,
+      left: 45,
+      bottom: 45,
+    };
+    var width = Math.round(props.width - margin.left);
+    var height = Math.round(width / 2 - margin.bottom - margin.top);
+    return _.extend(props, {
+      width: width,
+      height: height,
+      margin: margin
+    });
+  },
+
   getInitialState: function () {
-    var xScale = this.getXScale(this.props);
-    var yScale = this.getYScale(this.props);
+    var props = this.calcSizes(this.props);
+
+    var xScale = this.getXScale(props);
+    var yScale = this.getYScale(props);
+
     return {
       area: this.getArea(xScale, yScale),
       stack: this.getStack(),
@@ -42,14 +52,18 @@ var TimeSeriesChart = React.createClass({
   },
 
   componentDidMount: function () {
-    this.renderAxis(this.props, this.state.xScale, this.state.yScale);
+    var props = this.calcSizes(this.props);
+    this.renderAxis(props, this.state.xScale, this.state.yScale);
+
+    // create clip path for areas and x-axis
     d3.select(this.getDOMNode())
       .append("defs")
         .append("clipPath")
           .attr("id", "clip")
         .append("rect")
-          .attr("width", this.props.width - this.props.margin.left)
-          .attr("height", this.props.height);
+          .attr("transform", "translate(" + props.margin.left + "," + props.margin.top + ")")
+          .attr("width", props.width + props.margin.left)
+          .attr("height", props.height + props.margin.top + props.margin.bottom);
   },
 
   getArea: function (xScale, yScale) {
@@ -87,8 +101,9 @@ var TimeSeriesChart = React.createClass({
 
   getYScale: function (props) {
     return d3.scale.linear()
-      .domain([0, props.maxY])
-      .range([props.height, 0]);
+      // give a little space in the top for the number
+      .range([props.height, props.margin.top])
+      .domain([0, props.maxY]);
   },
 
   formatYAxis: function (ticks, maxY) {
@@ -113,8 +128,9 @@ var TimeSeriesChart = React.createClass({
       .ticks(d3.time.second, length)
       .scale(xScale)
       .orient("bottom");
+
     d3.select(this.refs.xAxis.getDOMNode())
-      .attr("class", "x axis")
+      .attr("transform", "translate(0," + props.height + ")")
       .call(xAxis);
 
     var yAxis = d3.svg.axis()
@@ -123,20 +139,24 @@ var TimeSeriesChart = React.createClass({
       .tickFormat(this.formatYAxis(props.ticksY, props.maxY))
       .orient("left");
     d3.select(this.refs.yAxis.getDOMNode())
+      .attr("transform", "translate(" + props.margin.left + ",0)")
       .call(yAxis);
 
     d3.select(this.refs.grid.getDOMNode())
       .attr("class", "grid")
+      .attr("transform", "translate(" + props.margin.left + ",0)")
       .call(
         d3.svg.axis().scale(yScale)
           .orient("left")
           .ticks(props.ticksY)
-          .tickSize(-props.width, 0, 0)
+          .tickSize(props.margin.left - props.width, 0, 0)
           .tickFormat("")
       );
   },
 
-  componentWillReceiveProps: function (props) {
+  componentWillReceiveProps: function (nextProps) {
+    var props = this.calcSizes(nextProps);
+
     var xScale = this.getXScale(props);
     var yScale = this.getYScale(props);
     // the d3 axis helper requires a <g> element passed into do its work. This
@@ -181,7 +201,7 @@ var TimeSeriesChart = React.createClass({
           path={this.state.area(obj.values)}
           key={i}
           name={obj.name}
-          transitionTime={this.getTransitionTime(obj.values)}
+          transitionTime={this.getTransitionTime(obj.values, this.state.xScale)}
           position={this.getPosition(obj.values)} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
@@ -189,17 +209,17 @@ var TimeSeriesChart = React.createClass({
     }, this);
   },
 
-  getStripes: function (number) {
-    var props = this.props;
-    var width = (props.width - props.margin.left) / (2 * number);
+  getStripes: function (number, props) {
+    var width = Math.round(props.width / (2 * number));
     return _.map(_.range(0, number), function (i) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <rect key={i}
           className="background"
-          x={width + 2 * i * width + "px"}
-          height={props.height}
+          x={props.margin.left + width + 2 * i * width + "px"}
+          y={props.margin.top}
+          height={props.height + props.margin.top}
           width={width} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
@@ -209,25 +229,21 @@ var TimeSeriesChart = React.createClass({
 
   render: function () {
     var ReactTransitionGroup = React.addons.TransitionGroup;
+    var props = this.calcSizes(this.props);
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    var margin = this.props.margin;
     return (
-      <svg height={this.props.height + margin.bottom} width={this.props.width + margin.left}>
-        <g transform={"translate(" + [margin.left * 2, margin.bottom / 2] + ")"}>
-          {this.getStripes(4)}
-          <g className="x axis"
-            transform={"translate(" + [0, this.props.height] + ")"}
-            ref="xAxis"/>
-          <g className="y axis" ref="yAxis" />
+      <svg height={props.height + props.margin.bottom} width={props.width + props.margin.left}>
+          {this.getStripes(4, props)}
           <g className="bars" ref="grid" />
           <g clip-path="url(#clip)">
             <ReactTransitionGroup component="g">
               {this.getAreaList()}
             </ReactTransitionGroup>
+          <g className="x axis" ref="xAxis"/>
           </g>
-        </g>
+          <g className="y axis" ref="yAxis" />
       </svg>
     );
   }
