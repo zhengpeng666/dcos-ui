@@ -1,4 +1,4 @@
-.path-colors {
+.path-colors() {
   .path-color-0 {
     stroke: @mesosphere-heliotrope;
     fill: @mesosphere-heliotrope;
@@ -29,7 +29,7 @@
     fill: @mesosphere-orchid;
   }
 }
-
+.path-colors();
 
 svg .background {
   fill: fade(@gray, 80%);
@@ -51,8 +51,6 @@ svg .background {
 .area {
   stroke-width: 2px;
   fill-opacity: 0.3;
-
-  .path-colors();
 }
 
 .barchart {
@@ -68,8 +66,6 @@ svg .background {
         stroke-width: 0px;
       }
     }
-
-    .path-colors();
   }
 
   .axis {

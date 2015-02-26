@@ -16,11 +16,32 @@ var ServicesChart = React.createClass({
     usedResources: React.PropTypes.object.isRequired
   },
 
+  calcChartSizes: function (props) {
+    var margin = {
+      top: 0,
+      left: 40,
+      bottom: 40,
+    };
+    var width = this.state.width;
+    var height = Math.round(width / 3 - margin.bottom - margin.top);
+    return _.extend(props, {
+      width: width,
+      height: height,
+      margin: margin
+    });
+  },
+
   getInitialState: function () {
     return {
       resourceMode: "cpus",
       width: null
     };
+  },
+
+  updateWidth: function () {
+    this.setState({
+      width: this.getDOMNode().offsetWidth
+    });
   },
 
   componentDidMount: function () {
@@ -34,16 +55,11 @@ var ServicesChart = React.createClass({
     window.removeEventListener("resize", this.updateWidth);
   },
 
-  updateWidth: function () {
-    this.setState({
-      width: this.getDOMNode().offsetWidth
-    });
-  },
-
   getFrameworksData: function () {
     var props = this.props;
     return _.map(props.data, function (framework) {
       return {
+        id: framework.id,
         name: framework.name,
         colorIndex: framework.colorIndex,
         values: framework.resources[this.state.resourceMode]
@@ -54,6 +70,7 @@ var ServicesChart = React.createClass({
   getAllData: function () {
     var props = this.props;
     return [{
+      id: "all",
       name: "All",
       colorIndex: 0,
       values: props.usedResources[this.state.resourceMode],
@@ -106,9 +123,9 @@ var ServicesChart = React.createClass({
   },
 
   getStackedBarChart: function () {
-    var width = this.state.width;
+    var props = this.calcChartSizes(this.props);
 
-    if (width != null) {
+    if (props.width != null) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
@@ -116,7 +133,9 @@ var ServicesChart = React.createClass({
           data={this.getData()}
           maxY={this.getMaxY()}
           ticksY={4}
-          width={width} />
+          width={props.width}
+          height={props.height}
+          margin={props.margin} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -125,14 +144,45 @@ var ServicesChart = React.createClass({
     return null;
   },
 
-  render: function () {
+  getServiceLegend: function () {
+    var props = this.calcChartSizes(this.props);
+    var maxY = this.getMaxY();
 
+    var frameworks = _.filter(this.getData(), function (framework) {
+      return _.find(framework.values, function (val) {
+        return props.height * (val.y / maxY) >= 1;
+      });
+    });
+
+    return _.map(frameworks, function (service) {
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+      return (
+        <li className="service" key={service.id}>
+          <span
+            className={"line color-" + service.colorIndex}></span>
+          <strong>{service.name}</strong>
+        </li>
+      );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    });
+  },
+
+  render: function () {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div>
-        {this.getModeButtons()}
+      <div className="container-pod">
+        <div className="button-collection">
+          {this.getModeButtons()}
+        </div>
         {this.getStackedBarChart()}
+        <div className="services-legend">
+          <ul className="list-unstyled list-inline inverse">
+            {this.getServiceLegend()}
+          </ul>
+        </div>
       </div>
     );
   }
