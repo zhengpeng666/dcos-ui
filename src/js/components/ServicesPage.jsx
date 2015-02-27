@@ -63,6 +63,7 @@ var ServicesPage = React.createClass({
             </div>
           </div>
         </div>
+        <div id="page-header-navigation" />
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
             <ServicesChart
