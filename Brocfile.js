@@ -3,7 +3,6 @@ var assetRev = require("broccoli-asset-rev");
 var cleanCSS = require("broccoli-clean-css");
 var concatCSS = require("broccoli-concat");
 var env = require("broccoli-env").getEnv();
-var filterReact = require("broccoli-react");
 var jscs = require("broccoli-jscs");
 var jsHintTree = require("broccoli-jshint");
 var less = require("broccoli-less-single");
@@ -70,9 +69,22 @@ var tasks = {
   webpack: function (masterTree) {
     // transform merge module dependencies into one file
     return webpackify(masterTree, {
-      entry: "./" + fileNames.mainJs + ".js",
+      entry: "./" + fileNames.mainJs + ".jsx",
       output: {
+        // library: "Test",
         filename: dirs.jsDist + "/" + fileNames.mainJsDist + ".js"
+      },
+      module: {
+        loaders: [
+          {
+            // tell webpack to use jsx-loader for all *.jsx files
+            test: /\.jsx$/,
+            loader: "jsx-loader?harmony"
+          }
+        ]
+      },
+      resolve: {
+        extensions: ["", ".js", ".jsx"]
       }
     });
   },
@@ -171,9 +183,6 @@ function createJsTree() {
       "**/*.js"
     ]
   });
-
-  // compile react files
-  jsTree = filterReact(jsTree);
 
   // replace @@ENV in js code with current BROCCOLI_ENV environment variable
   // {default: "development" | "production"}
