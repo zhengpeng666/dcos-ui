@@ -269,7 +269,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
     _totalResources = getStatesByResource(_mesosStates, "total_resources");
     _usedResources = getStatesByResource(_mesosStates, "used_resources");
-    this.updateFrameworks();
 
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },

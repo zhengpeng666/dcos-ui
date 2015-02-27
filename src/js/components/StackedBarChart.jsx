@@ -12,13 +12,15 @@ var StackedBarChart = React.createClass({
     data: React.PropTypes.array.isRequired,
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
-    margin: React.PropTypes.object.isRequired
+    margin: React.PropTypes.object.isRequired,
+    y: React.PropTypes.string
   },
 
   getDefaultProps: function () {
     return {
       maxY: 10,
-      ticksY: 10
+      ticksY: 10,
+      y: "y"
     };
   },
 
@@ -150,6 +152,7 @@ var StackedBarChart = React.createClass({
     var props = this.props;
     var marginLeft = props.margin.left;
     var posY;
+    var y = props.y;
 
     return _.flatten(_.map(this.state.stack(props.data),
         function (framework, i) {
@@ -164,12 +167,16 @@ var StackedBarChart = React.createClass({
       }
 
       return _.map(framework.values, function (val, j) {
-        var rectHeight = props.height * (val.y / props.maxY);
+        var rectHeight = props.height * val[y] / props.maxY;
         var lineClass = colorClass;
         if (rectHeight < 1) {
           rectHeight = 0;
           lineClass += " hidden";
         }
+        if (rectHeight >= 2) {
+          rectHeight -= 2;
+        }
+
         var posX = props.width - marginLeft - rectWidth * (valuesLength - j);
         posY[j] -= rectHeight;
 

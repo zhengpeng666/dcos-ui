@@ -62,7 +62,7 @@ var ServicesChart = React.createClass({
         id: framework.id,
         name: framework.name,
         colorIndex: framework.colorIndex,
-        values: framework.resources[this.state.resourceMode]
+        values: framework.used_resources[this.state.resourceMode]
       };
     }.bind(this));
   },
@@ -73,7 +73,7 @@ var ServicesChart = React.createClass({
       id: "all",
       name: "All",
       colorIndex: 0,
-      values: props.usedResources[this.state.resourceMode],
+      values: props.usedResources[this.state.resourceMode]
     }];
   },
 
@@ -87,7 +87,7 @@ var ServicesChart = React.createClass({
 
   getMaxY: function () {
     var props = this.props;
-    return _.last(props.totalResources[this.state.resourceMode]).y;
+    return _.last(props.totalResources[this.state.resourceMode]).percentage;
   },
 
   changeMode: function (mode) {
@@ -135,7 +135,8 @@ var ServicesChart = React.createClass({
           ticksY={4}
           width={props.width}
           height={props.height}
-          margin={props.margin} />
+          margin={props.margin}
+          y="percentage" />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -150,7 +151,7 @@ var ServicesChart = React.createClass({
 
     var frameworks = _.filter(this.getData(), function (framework) {
       return _.find(framework.values, function (val) {
-        return props.height * (val.y / maxY) >= 1;
+        return props.height * val["percentage"] / maxY >= 1;
       });
     });
 
@@ -173,15 +174,17 @@ var ServicesChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="container-pod">
-        <div className="button-collection">
-          {this.getModeButtons()}
-        </div>
-        {this.getStackedBarChart()}
-        <div className="services-legend">
-          <ul className="list-unstyled list-inline inverse">
-            {this.getServiceLegend()}
-          </ul>
+      <div className="panel">
+        <div className="panel-content">
+          <div className="button-collection">
+            {this.getModeButtons()}
+          </div>
+          {this.getStackedBarChart()}
+          <div className="services-legend">
+            <ul className="list-unstyled list-inline inverse">
+              {this.getServiceLegend()}
+            </ul>
+          </div>
         </div>
       </div>
     );

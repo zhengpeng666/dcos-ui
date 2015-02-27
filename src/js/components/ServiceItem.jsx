@@ -47,7 +47,7 @@ var ServiceItem = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
-  getStatistics: function (resources, totalResources) {
+  getStatistics: function (resources) {
     var labels = {
       cpus: "CPU",
       mem: "Mem",
@@ -60,9 +60,7 @@ var ServiceItem = React.createClass({
       return (
         <li key={r}>
           <strong className="fixed-width">
-            {roundPercentage(
-              _.last(resources[r]).y / _.last(totalResources[r]).y, 2)
-          }%
+            {_.last(resources[r]).percentage}%
           </strong> {labels[r]}
         </li>
       );
@@ -89,7 +87,7 @@ var ServiceItem = React.createClass({
         </div>
         <div className="collection-item-footer">
           <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
-            {this.getStatistics(model.resources, this.props.totalResources)}
+            {this.getStatistics(model.used_resources)}
           </ul>
         </div>
       </li>
