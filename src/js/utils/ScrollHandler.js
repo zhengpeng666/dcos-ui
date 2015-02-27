@@ -80,7 +80,7 @@ function windowResize() {
   }
 
   /* Resize canvas to fit height of viewport */
-  $("#sidebar").height($(window).height());
+  $("#canvas").height($(window).height());
 
   /* Resize sidebar content height */
   var sidebar = $("#sidebar");
