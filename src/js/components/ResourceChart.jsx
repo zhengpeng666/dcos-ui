@@ -6,15 +6,6 @@ var Humanize = require("humanize");
 
 var TimeSeriesChart = require("./TimeSeriesChart");
 
-var getPercentage = function (value, decimalPlaces) {
-  var percentage = "-";
-  if (!_.isNaN(value * 1)) {
-    var factor = Math.pow(10, decimalPlaces);
-    percentage = Math.round(value * 100 * factor) / factor;
-  }
-  return percentage;
-};
-
 var ResourceChart = React.createClass({
 
   displayName: "ResourceChart",
@@ -56,7 +47,7 @@ var ResourceChart = React.createClass({
       return {
         name: framework.name,
         colorIndex: framework.colorIndex,
-        values: framework.resources[props.mode]
+        values: framework.used_resources[props.mode]
       };
     });
   },
@@ -80,19 +71,19 @@ var ResourceChart = React.createClass({
 
   getMaxY: function () {
     var props = this.props;
-    return _.last(props.totalResources[props.mode]).y;
+    return _.last(props.totalResources[props.mode]).percentage;
   },
 
   getUsed: function () {
     var props = this.props;
-
-    return _.last(props.usedResources[props.mode]).y;
+    return _.last(props.usedResources[props.mode]).percentage;
   },
 
   getTotalHeadline: function () {
-    var max = this.getMaxY();
+    var props = this.props;
+    var max = _.last(props.totalResources[props.mode]).value;
     var str = "Total: ";
-    if (this.props.mode === "cpus") {
+    if (props.mode === "cpus") {
       str += max + " CPU";
     } else {
       str += Humanize.filesize(max * 1024 * 1024);
@@ -101,10 +92,11 @@ var ResourceChart = React.createClass({
   },
 
   getUsedHeadline: function () {
+    var props = this.props;
     var used = this.getUsed();
-    var str = "Used: " + getPercentage(used / this.getMaxY(), 2) + "% (";
+    var str = "Used: " + used + "% (";
     if (this.props.mode === "cpus") {
-      str += used + " CPU)";
+      str += _.last(props.usedResources[props.mode]).value + " CPU)";
     } else {
       str += Humanize.filesize(used * 1024 * 1024) + ")";
     }
@@ -121,7 +113,8 @@ var ResourceChart = React.createClass({
         <TimeSeriesChart
           width={width}
           data={this.getData()}
-          maxY={this.getMaxY()} />
+          maxY={this.getMaxY()}
+          y={"percentage"} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */

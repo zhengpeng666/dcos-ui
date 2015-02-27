@@ -15,13 +15,15 @@ var TimeSeriesChart = React.createClass({
     data: React.PropTypes.array.isRequired,
     maxY: React.PropTypes.number,
     ticksY: React.PropTypes.number,
+    y: React.PropTypes.string,
     width: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
     return {
       maxY: 10,
-      ticksY: 4
+      ticksY: 4,
+      y: "y"
     };
   },
 
@@ -74,10 +76,11 @@ var TimeSeriesChart = React.createClass({
   },
 
   getArea: function (xScale, yScale) {
+    var y = this.props.y;
     return d3.svg.area()
       .x(function (d) { return xScale(d.date); })
       .y0(function (d) { return yScale(d.y0); })
-      .y1(function (d) { return yScale(d.y0 + d.y); })
+      .y1(function (d) { return yScale(d.y0 + d[y]); })
       .interpolate("monotone");
   },
 
