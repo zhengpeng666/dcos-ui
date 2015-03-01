@@ -22,7 +22,7 @@ var TimeSeriesChart = React.createClass({
   getDefaultProps: function () {
     return {
       maxY: 10,
-      ticksY: 4,
+      ticksY: 3,
       y: "y"
     };
   },

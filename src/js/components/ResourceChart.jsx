@@ -11,8 +11,6 @@ var ResourceChart = React.createClass({
   displayName: "ResourceChart",
 
   propTypes: {
-    data: React.PropTypes.array.isRequired,
-    divide: React.PropTypes.bool.isRequired,
     totalResources: React.PropTypes.object.isRequired,
     usedResources: React.PropTypes.object.isRequired,
     mode: React.PropTypes.string
@@ -41,32 +39,13 @@ var ResourceChart = React.createClass({
     });
   },
 
-  getFrameworksData: function () {
-    var props = this.props;
-    return _.map(props.data, function (framework) {
-      return {
-        name: framework.name,
-        colorIndex: framework.colorIndex,
-        values: framework.used_resources[props.mode]
-      };
-    });
-  },
-
-  getAllData: function () {
+  getData: function () {
     var props = this.props;
     return [{
       name: "All",
       colorIndex: 0,
       values: props.usedResources[props.mode],
     }];
-  },
-
-  getData: function () {
-    if (this.props.divide) {
-      return this.getFrameworksData();
-    } else {
-      return this.getAllData();
-    }
   },
 
   getMaxY: function () {
