@@ -101,7 +101,7 @@ var tasks = {
     // create tree for less (pick all less and css files needed)
     var cssTree = pickFiles(dirs.styles, {
       srcDir: "./",
-      files: ["**/*.less", "**/*.css"],
+      files: ["**/*.less"],
       destDir: dirs.stylesDist
     });
 
