@@ -55,10 +55,10 @@ var tasks = {
     });
 
     // hack to strip test files from jshint tree
-    // hintTree = pickFiles(hintTree, {
-    //   srcDir: "./",
-    //   files: []
-    // });
+    hintTree = pickFiles(hintTree, {
+      srcDir: "./",
+      files: []
+    });
 
     return mergeTrees(
       [jscsTree, hintTree, jsTree],
@@ -79,7 +79,8 @@ var tasks = {
           {
             // tell webpack to use jsx-loader for all *.jsx files
             test: /\.jsx$/,
-            loader: "jsx-loader?harmony"
+            loader: "jsx-loader?harmony",
+            exclude: /node_modules/
           }
         ]
       },
