@@ -1,0 +1,24 @@
+.button-collection {
+  border: 1px solid @button-default-background-color;
+  .border-radius(@icon-medium-border-radius);
+  display: block;
+  overflow: hidden;
+
+  .button {
+    .flush-bottom();
+    background-color: transparent;
+    .border-radius(0);
+    border-right: 1px solid @button-default-background-color;
+    margin-right: 0px;
+
+    &.button-primary {
+      background-color: @button-default-background-color;
+      border: 0px;
+    }
+
+    &:last-child {
+      border: 0px;
+    }
+  }
+
+}

@@ -11,6 +11,16 @@
   text-align: center;
   float: right;
 
+  margin-top: 0px;
+
+  /*
+  .list-unstyled {
+    border: 1px solid @button-default-background-color;
+    .border-radius(@icon-medium-border-radius);
+    height: 48px;
+  }
+  */
+
   .service {
     padding-left: @base-spacing-unit * 0.5;
     padding-right: @base-spacing-unit * 0.5;
@@ -45,6 +55,15 @@
 
     &.color-5 {
       border-top-color: @mesosphere-orchid;
+    }
+  }
+}
+
+.panel {
+  &.services-chart {
+    .panel-heading {
+      padding: @base-spacing-unit;
+      border: 0;
     }
   }
 }

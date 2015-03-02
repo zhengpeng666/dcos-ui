@@ -120,7 +120,7 @@ var ServicesChart = React.createClass({
 
     return _.map(buttonNameMap, function (value, key) {
       var classSet = React.addons.classSet({
-        "button button-large": true,
+        "button": true,
         "button-primary": mode === key
       });
       /* jshint trailing:false, quotmark:false, newcap:false */
@@ -191,7 +191,7 @@ var ServicesChart = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="panel services-chart">
-        <div className="panel-content" ref="panelContent">
+        <div className="panel-heading">
           <div className="button-collection">
             {this.getModeButtons()}
           </div>
@@ -200,6 +200,8 @@ var ServicesChart = React.createClass({
               {this.getLegend()}
             </ul>
           </div>
+        </div>
+        <div className="panel-content" ref="panelContent">
           {this.getOverlapBarChart()}
         </div>
       </div>
