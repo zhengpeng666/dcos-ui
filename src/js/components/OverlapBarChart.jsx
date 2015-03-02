@@ -4,9 +4,9 @@ var _ = require("underscore");
 var d3 = require("d3");
 var React = require("react/addons");
 
-var StackedBarChart = React.createClass({
+var OverlapBarChart = React.createClass({
 
-  displayName: "StackedBarChart",
+  displayName: "OverlapBarChart",
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
@@ -148,37 +148,23 @@ var StackedBarChart = React.createClass({
     });
   },
 
-  getStackedBarList: function () {
+  getOverlapBarList: function () {
     var props = this.props;
+    var chartWidth = props.width;
+    var chartHeight = props.height;
     var marginLeft = props.margin.left;
-    var posY;
     var y = props.y;
 
     return _.flatten(_.map(this.state.stack(props.data),
         function (framework, i) {
       var valuesLength = framework.values.length;
       var colorClass = "path-color-" + framework.colorIndex;
-      var rectWidth = (props.width - marginLeft) / valuesLength;
-
-      if (posY == null) {
-        posY = _.map(new Array(valuesLength), function () {
-          return props.height;
-        });
-      }
+      var rectWidth = (chartWidth - marginLeft) / valuesLength;
 
       return _.map(framework.values, function (val, j) {
-        var rectHeight = props.height * val[y] / props.maxY;
-        var lineClass = colorClass;
-        if (rectHeight < 1) {
-          rectHeight = 0;
-          lineClass += " hidden";
-        }
-        if (rectHeight >= 2) {
-          rectHeight -= 2;
-        }
-
-        var posX = props.width - marginLeft - rectWidth * (valuesLength - j);
-        posY[j] -= rectHeight;
+        var rectHeight = chartHeight * val[y] / props.maxY;
+        var posX = chartWidth - marginLeft - rectWidth * (valuesLength - j);
+        var posY = chartHeight - rectHeight;
 
         /* jshint trailing:false, quotmark:false, newcap:false */
         /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -186,15 +172,9 @@ var StackedBarChart = React.createClass({
           <g className="bar"
               key={i.toString() + j.toString()}
               transform={"translate(" + [posX, 0] + ")"}>
-            <line
-                className={lineClass}
-                x1={0}
-                y1={posY[j]}
-                x2={rectWidth - 1}
-                y2={posY[j]} />
             <rect
                 className={colorClass}
-                y={posY[j]}
+                y={posY}
                 height={rectHeight}
                 width={rectWidth - 1} />
           </g>
@@ -213,7 +193,7 @@ var StackedBarChart = React.createClass({
     return (
       <svg height={props.height + margin.bottom}
           width={props.width}
-          className="barchart"
+          className="barchart overlap"
           ref="barchart">
         <g transform={"translate(" + [margin.left, margin.bottom / 2] + ")"}>
           <g className="y axis" ref="yAxis" />
@@ -222,11 +202,11 @@ var StackedBarChart = React.createClass({
             ref="xAxis"/>
           <g ref="yGrid" />
           <g ref="xGrid" />
-            {this.getStackedBarList()}
+            {this.getOverlapBarList()}
         </g>
       </svg>
     );
   }
 });
 
-module.exports = StackedBarChart;
+module.exports = OverlapBarChart;

@@ -1,8 +1,15 @@
+.services-chart {
+  .button-collection {
+    float: left;
+  }
+}
+
 .services-legend {
 
   display: table;
   margin: (@base-spacing-unit * 0.5) auto 0 auto;
   text-align: center;
+  float: right;
 
   .service {
     padding-left: @base-spacing-unit * 0.5;
@@ -11,8 +18,8 @@
 
   .line {
     display: inline-block;
-    border-top: 2px solid;
-    height: (@body-text-font-size - 2px) * 0.5;
+    border-top: 4px solid;
+    height: (@body-text-font-size) * 0.5;
     width: @base-spacing-unit * 0.5;
     margin-right: @base-spacing-unit * 0.25;
 
@@ -21,7 +28,7 @@
     }
 
     &.color-1 {
-      border-top-color: @mesosphere-lemon;
+      border-top-color: ~`color_lightness("@{mesosphere-heliotrope}", 40)`;
     }
 
     &.color-2 {
