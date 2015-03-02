@@ -4,7 +4,17 @@
 
   .border-radius(@icon-medium-border-radius);
 
+  .panel-heading {
+    padding: @base-spacing-unit / 2;
+    line-height: @heading-h3-text-line-height;
+    border-bottom: 1px solid @border-color-inverse;
+    .panel-title {
+      .flush-top();
+      .flush-bottom();
+    }
+  }
+
   .panel-content {
-    padding: @base-spacing-unit;
+    padding: 0 @base-spacing-unit @base-spacing-unit;
   }
 }

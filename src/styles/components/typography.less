@@ -1,9 +1,27 @@
 & when (@typography-enabled) {
+  .unit {
+    font-size: 300%;
+
+    sup {
+      top: 0em;
+      vertical-align: super;
+      font-size: 45%;
+    }
+  }
+
+  .unit-label {
+    color: @mesosphere-heliotrope;
+  }
+
   .text-danger {
     color: ~`color_lightness("@{mesosphere-mars}", 0)`;
   }
 
   .text-success {
     color: ~`color_lightness("@{mesosphere-seafoam}", 0)`;
+  }
+
+  .text-muted {
+    color: @body-text-mute-color;
   }
 }

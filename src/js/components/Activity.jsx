@@ -1,6 +1,5 @@
 /** @jsx React.DOM */
 
-var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
@@ -47,19 +46,19 @@ var Activity = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="row">
-        <div className="column-small-4">
+        <div className="column-small-6 column-large-4">
           <ResourceChart
             totalResources={state.totalResources}
             usedResources={state.usedResources}
             mode="cpus" />
         </div>
-        <div className="column-small-4">
+        <div className="column-small-6 column-large-4">
           <ResourceChart
             totalResources={state.totalResources}
             usedResources={state.usedResources}
             mode="mem" />
         </div>
-        <div className="column-small-4">
+        <div className="column-small-6 column-large-4">
           <ResourceChart
             totalResources={state.totalResources}
             usedResources={state.usedResources}

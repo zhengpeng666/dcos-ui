@@ -6,6 +6,31 @@ var Humanize = require("humanize");
 
 var TimeSeriesChart = require("./TimeSeriesChart");
 
+var labelMap = {
+  mem: "Memory",
+  cpus: "CPU",
+  disk: "Disk"
+};
+
+function getCompedWidth(obj) {
+  var compstyle;
+  if (typeof window.getComputedStyle === "undefined") {
+    compstyle = obj.currentStyle;
+  } else {
+    compstyle = window.getComputedStyle(obj);
+  }
+  return _.foldl(
+    ["paddingLeft", "paddingRight", "borderLeftWidth", "borderRightWidth"],
+    function (acc, key) {
+      var val = parseInt(compstyle[key], 10);
+    if (_.isNaN(val)) {
+      return acc;
+    } else {
+      return acc - val;
+    }
+  }, obj.offsetWidth);
+}
+
 var ResourceChart = React.createClass({
 
   displayName: "ResourceChart",
@@ -35,7 +60,7 @@ var ResourceChart = React.createClass({
 
   updateWidth: function () {
     this.setState({
-      width: this.getDOMNode().offsetWidth
+      width: getCompedWidth(this.refs.chartContainer.getDOMNode())
     });
   },
 
@@ -60,26 +85,22 @@ var ResourceChart = React.createClass({
 
   getTotalHeadline: function () {
     var props = this.props;
-    var max = _.last(props.totalResources[props.mode]).value;
-    var str = "Total: ";
+    var total = _.last(props.totalResources[props.mode]).value;
     if (props.mode === "cpus") {
-      str += max + " CPU";
+      return total + " CPU";
     } else {
-      str += Humanize.filesize(max * 1024 * 1024);
+      return Humanize.filesize(total * 1024 * 1024, 1024, 0);
     }
-    return str;
   },
 
   getUsedHeadline: function () {
     var props = this.props;
-    var used = this.getUsed();
-    var str = "Used: " + used + "% (";
+    var value = _.last(props.usedResources[props.mode]).value;
     if (this.props.mode === "cpus") {
-      str += _.last(props.usedResources[props.mode]).value + " CPU)";
+      return "(" + value + " CPU)";
     } else {
-      str += Humanize.filesize(used * 1024 * 1024) + ")";
+      return "(" + Humanize.filesize(value * 1024 * 1024, 1024, 0) + ")";
     }
-    return str;
   },
 
   getChart: function () {
@@ -93,7 +114,7 @@ var ResourceChart = React.createClass({
           width={width}
           data={this.getData()}
           maxY={this.getMaxY()}
-          y={"percentage"} />
+          y="percentage" />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -102,14 +123,34 @@ var ResourceChart = React.createClass({
   },
 
   render: function () {
+    var totalHeadline = this.getTotalHeadline().split(" ");
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div>
-        <h4>{this.getUsedHeadline()}</h4>
-        <h5>{this.getTotalHeadline()}</h5>
-        {this.getChart()}
+      <div className="panel">
+        <div className="panel-heading text-align-center">
+          <h3 className="panel-title">
+            {labelMap[this.props.mode]} Overview
+          </h3>
+        </div>
+        <div className="panel-content" ref="chartContainer">
+          <div className="row text-align-center">
+            <div className="column-small-offset-2 column-small-4">
+              <h1 className="unit">{totalHeadline[0]}</h1>
+              <h4 className="unit-label text-muted">{totalHeadline[1]} Total</h4>
+            </div>
+            <div className="column-small-4">
+              <h1 className="unit">
+                {this.getUsed()}<sup>%</sup>
+              </h1>
+              <h4 className="unit-label">
+                {this.getUsedHeadline()} Used
+              </h4>
+            </div>
+          </div>
+          {this.getChart()}
+        </div>
       </div>
     );
   }
