@@ -3149,8 +3149,9 @@
       }
     },
     "canvas-ui-system": {
-      "version": "0.0.1",
-      "from": "canvas-ui-system@0.0.1"
+      "version": "0.0.4",
+      "from": "canvas-ui-system@*",
+      "resolved": "http://registry.npmjs.org/canvas-ui-system/-/canvas-ui-system-0.0.4.tgz"
     },
     "d3": {
       "version": "3.5.5",
