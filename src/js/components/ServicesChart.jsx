@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var $ = require("jquery");
 var React = require("react/addons");
 
 var StackedBarChart = require("./StackedBarChart");
@@ -39,8 +40,15 @@ var ServicesChart = React.createClass({
   },
 
   updateWidth: function () {
+    // Don't know why this is empty
+    // this.refs.panelContent.getDOMNode().style.paddingLeft;
+
+    var padding =
+      parseInt($(this.refs.panelContent.getDOMNode()).css("padding-left"), 10) +
+      parseInt($(this.refs.panelContent.getDOMNode()).css("padding-right"), 10);
+
     this.setState({
-      width: this.getDOMNode().offsetWidth
+      width: this.getDOMNode().offsetWidth - padding
     });
   },
 
@@ -175,7 +183,7 @@ var ServicesChart = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="panel">
-        <div className="panel-content">
+        <div className="panel-content" ref="panelContent">
           <div className="button-collection">
             {this.getModeButtons()}
           </div>
