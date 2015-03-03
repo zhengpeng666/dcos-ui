@@ -19,7 +19,6 @@ var ServicesChart = React.createClass({
   propTypes: {
     data: React.PropTypes.array.isRequired,
     stacked: React.PropTypes.bool.isRequired,
-    allocatedResources: React.PropTypes.object.isRequired,
     totalResources: React.PropTypes.object.isRequired,
     usedResources: React.PropTypes.object.isRequired
   },
@@ -31,7 +30,7 @@ var ServicesChart = React.createClass({
       bottom: 40,
     };
     var width = this.state.width;
-    var height = Math.round(width / 3 - margin.bottom - margin.top);
+    var height = Math.round(width / 4 - margin.bottom - margin.top);
     return _.extend(props, {
       width: width,
       height: height,
@@ -89,11 +88,6 @@ var ServicesChart = React.createClass({
       id: "allocatedResources",
       name: "Allocated",
       colorIndex: 0,
-      values: props.allocatedResources[this.state.resourceMode]
-    }, {
-      id: "usedResources",
-      name: "Used",
-      colorIndex: 1,
       values: props.usedResources[this.state.resourceMode]
     }];
   },
@@ -167,23 +161,35 @@ var ServicesChart = React.createClass({
 
     var frameworks = _.filter(this.getData(), function (framework) {
       return _.find(framework.values, function (val) {
-        return props.height * val["percentage"] / maxY >= 1;
+        return props.height * val.percentage / maxY >= 1;
       });
     });
 
-    return _.map(frameworks, function (service) {
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-      return (
-        <li className="service" key={service.id}>
-          <span
-            className={"line color-" + service.colorIndex}></span>
-          <strong>{buttonNameMap[this.state.resourceMode]} {service.name}</strong>
-        </li>
-      );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    }.bind(this));
+    if (frameworks.length === 0) {
+      return null;
+    }
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <ul className="list-unstyled list-inline inverse">
+      {
+        _.map(frameworks, function (service) {
+          return (
+            <li className="service" key={service.id}>
+              <span
+                className={"line color-" + service.colorIndex}></span>
+              <strong>
+                {buttonNameMap[this.state.resourceMode]} {service.name}
+              </strong>
+            </li>
+          );
+        }.bind(this))
+      }
+      </ul>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   render: function () {
@@ -192,13 +198,11 @@ var ServicesChart = React.createClass({
     return (
       <div className="panel services-chart">
         <div className="panel-heading">
-          <div className="button-collection">
+          <div className="button-group">
             {this.getModeButtons()}
           </div>
           <div className="services-legend">
-            <ul className="list-unstyled list-inline inverse">
-              {this.getLegend()}
-            </ul>
+            {this.getLegend()}
           </div>
         </div>
         <div className="panel-content" ref="panelContent">

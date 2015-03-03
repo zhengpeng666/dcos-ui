@@ -156,12 +156,12 @@ var OverlapBarChart = React.createClass({
     var y = props.y;
 
     return _.flatten(_.map(this.state.stack(props.data),
-        function (framework, i) {
-      var valuesLength = framework.values.length;
-      var colorClass = "path-color-" + framework.colorIndex;
+        function (data, i) {
+      var valuesLength = data.values.length;
+      var colorClass = "path-color-" + data.colorIndex;
       var rectWidth = (chartWidth - marginLeft) / valuesLength;
 
-      return _.map(framework.values, function (val, j) {
+      return _.map(data.values, function (val, j) {
         var rectHeight = chartHeight * val[y] / props.maxY;
         var posX = chartWidth - marginLeft - rectWidth * (valuesLength - j);
         var posY = chartHeight - rectHeight;

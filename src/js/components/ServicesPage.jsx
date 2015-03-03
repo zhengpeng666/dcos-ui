@@ -14,7 +14,7 @@ function getMesosServices() {
   return {
     filterString: MesosStateStore.getFilterOptions().searchString,
     frameworks: MesosStateStore.getFrameworks(),
-    allocatedResources: MesosStateStore.getAllocatedResources(),
+    totalFrameworks: MesosStateStore.getLatest().frameworks.length,
     totalResources: MesosStateStore.getTotalResources(),
     usedResources: MesosStateStore.getUsedResources()
   };
@@ -70,11 +70,13 @@ var ServicesPage = React.createClass({
           <div className="container container-fluid container-pod">
             <ServicesChart
               data={state.frameworks}
-              allocatedResources={state.allocatedResources}
               totalResources={state.totalResources}
               usedResources={state.usedResources}
               stacked={false}
               width={this.state.width} />
+            <div className="services-stats">
+              <h4>{state.totalFrameworks} Total Services</h4>
+            </div>
             <ServicesFilter
                 filterString={state.filterString} />
             <ServiceList

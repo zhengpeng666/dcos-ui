@@ -1,24 +1,34 @@
-.button-collection {
-  border: 1px solid @button-default-background-color;
+.button-group {
+  border: @button-border-width solid @button-default-background-color;
   .border-radius(@icon-medium-border-radius);
-  display: block;
+  display: inline-block;
   overflow: hidden;
 
   .button {
     .flush-bottom();
     background-color: transparent;
     .border-radius(0);
-    border-right: 1px solid @button-default-background-color;
+    border-right: @button-border-width solid @button-default-background-color;
     margin-right: 0px;
 
     &.button-primary {
       background-color: @button-default-background-color;
-      border: 0px;
+      border: 0;
     }
 
     &:last-child {
-      border: 0px;
+      border: 0;
     }
+  }
+
+  .button, .button:hover {
+    color: @body-text-inverse-emphasize-color;
+    font-family: @body-text-emphasize-font-family;
+    font-size: @body-text-emphasize-font-size;
+    font-style: @body-text-emphasize-font-style;
+    font-weight: @body-text-emphasize-font-weight;
+    line-height: @body-text-emphasize-line-height;
+    transform: @body-text-emphasize-transform;
   }
 
 }

@@ -21,7 +21,6 @@ var _frameworks = [];
 var _frameworksFiltered = [];
 var _mesosStates = [];
 var _totalResources = {};
-var _allocatedResources = {};
 var _usedResources = {};
 
 function round(value, decimalPlaces) {
@@ -92,7 +91,6 @@ function fillFramework(id, name, colorIndex) {
       date: state.date,
       colorIndex: colorIndex,
       resources: {cpus: 0, mem: 0, disk: 0},
-      allocated_resources: {cpus: 0, mem: 0, disk: 0},
       used_resources: {cpus: 0, mem: 0, disk: 0},
       tasks: []
     });
@@ -153,14 +151,11 @@ function initStates() {
       frameworks: [],
       slaves: [],
       used_resources: {cpus: 0, mem: 0, disk: 0},
-      allocated_resources: {cpus: 0, mem: 0, disk: 0},
       total_resources: {cpus: 0, mem: 0, disk: 0}
     };
   });
 
   _totalResources = getStatesByResource(_mesosStates, "total_resources");
-  _allocatedResources = getStatesByResource(_mesosStates,
-    "allocated_resources");
   _usedResources = getStatesByResource(_mesosStates, "used_resources");
 }
 
@@ -221,10 +216,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _usedResources;
   },
 
-  getAllocatedResources: function () {
-    return _allocatedResources;
-  },
-
   getFilterOptions: function () {
     return _filterOptions[_pagetype];
   },
@@ -265,9 +256,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     data.total_resources = sumResources(
       _.pluck(data.slaves, "resources")
     );
-    data.allocated_resources = sumResources(
-      _.pluck(data.frameworks, "resources")
-    );
     data.used_resources = sumResources(
       _.pluck(data.frameworks, "used_resources")
     );
@@ -281,8 +269,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     this.applyAllFilter();
 
     _totalResources = getStatesByResource(_mesosStates, "total_resources");
-    _allocatedResources = getStatesByResource(_mesosStates,
-      "allocated_resources");
     _usedResources = getStatesByResource(_mesosStates, "used_resources");
 
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
