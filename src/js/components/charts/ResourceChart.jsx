@@ -4,6 +4,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 var Humanize = require("humanize");
 
+var Chart = require("./Chart");
 var TimeSeriesChart = require("./TimeSeriesChart");
 
 var labelMap = {
@@ -11,25 +12,6 @@ var labelMap = {
   cpus: "CPU",
   disk: "Disk"
 };
-
-function getComputedWidth(obj) {
-  var compstyle;
-  if (typeof window.getComputedStyle === "undefined") {
-    compstyle = obj.currentStyle;
-  } else {
-    compstyle = window.getComputedStyle(obj);
-  }
-  return _.foldl(
-    ["paddingLeft", "paddingRight", "borderLeftWidth", "borderRightWidth"],
-    function (acc, key) {
-      var val = parseInt(compstyle[key], 10);
-    if (_.isNaN(val)) {
-      return acc;
-    } else {
-      return acc - val;
-    }
-  }, obj.offsetWidth);
-}
 
 var ResourceChart = React.createClass({
 
@@ -39,29 +21,6 @@ var ResourceChart = React.createClass({
     totalResources: React.PropTypes.object.isRequired,
     usedResources: React.PropTypes.object.isRequired,
     mode: React.PropTypes.string
-  },
-
-  getInitialState: function () {
-    return {
-      width: null
-    };
-  },
-
-  componentDidMount: function () {
-    this.updateWidth();
-    window.addEventListener("focus", this.updateWidth);
-    window.addEventListener("resize", this.updateWidth);
-  },
-
-  componentWillUnmount: function () {
-    window.removeEventListener("focus", this.updateWidth);
-    window.removeEventListener("resize", this.updateWidth);
-  },
-
-  updateWidth: function () {
-    this.setState({
-      width: getComputedWidth(this.refs.chartContainer.getDOMNode())
-    });
   },
 
   getData: function () {
@@ -104,22 +63,18 @@ var ResourceChart = React.createClass({
   },
 
   getChart: function () {
-    var width = this.state.width;
-
-    if (width != null) {
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-      return (
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <Chart calcHeight={function (w) { return w/2; }}>
         <TimeSeriesChart
-          width={width}
           data={this.getData()}
           maxY={this.getMaxY()}
           y="percentage" />
-      );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    }
-    return null;
+      </Chart>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   render: function () {
@@ -134,7 +89,7 @@ var ResourceChart = React.createClass({
             {labelMap[this.props.mode]} Overview
           </h3>
         </div>
-        <div className="panel-content" ref="chartContainer">
+        <div className="panel-content">
           <div className="row text-align-center">
             <div className="column-small-offset-2 column-small-4">
               <h1 className="unit">{totalHeadline[0]}</h1>

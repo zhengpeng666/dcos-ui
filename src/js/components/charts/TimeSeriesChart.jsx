@@ -5,6 +5,7 @@ var d3 = require("d3");
 var React = require("react/addons");
 
 var TimeSeriesArea = require("./TimeSeriesArea");
+var AnimationCircle = require("./AnimationCircle");
 
 var TimeSeriesChart = React.createClass({
 
@@ -16,37 +17,27 @@ var TimeSeriesChart = React.createClass({
     maxY: React.PropTypes.number,
     ticksY: React.PropTypes.number,
     y: React.PropTypes.string,
-    width: React.PropTypes.number.isRequired
+    width: React.PropTypes.number.isRequired,
+    height: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
     return {
       maxY: 10,
       ticksY: 3,
-      y: "y"
+      y: "y",
+      margin: {
+        top: 10,
+        left: 45,
+        bottom: 25,
+        right: 4
+      }
     };
-  },
-
-  calcSizes: function (props) {
-    var margin = {
-      top: 10,
-      left: 45,
-      bottom: 45,
-    };
-    var width = props.width;
-    var height = Math.round(width / 2 - margin.bottom - margin.top);
-    return _.extend(props, {
-      width: width,
-      height: height,
-      margin: margin
-    });
   },
 
   getInitialState: function () {
-    var props = this.calcSizes(this.props);
-
-    var xScale = this.getXScale(props);
-    var yScale = this.getYScale(props);
+    var xScale = this.getXScale(this.props);
+    var yScale = this.getYScale(this.props);
 
     return {
       area: this.getArea(xScale, yScale),
@@ -57,7 +48,8 @@ var TimeSeriesChart = React.createClass({
   },
 
   componentDidMount: function () {
-    var props = this.calcSizes(this.props);
+    var props = this.props;
+    var margin = props.margin;
     this.renderAxis(props, this.state.xScale, this.state.yScale);
 
     // create clip path for areas and x-axis
@@ -67,12 +59,10 @@ var TimeSeriesChart = React.createClass({
           .attr("id", "clip")
         .append("rect")
           .attr("transform",
-            "translate(" + props.margin.left + "," + props.margin.top + ")"
+            "translate(" + margin.left + "," + margin.top + ")"
           )
-          .attr("width", props.width - props.margin.left)
-          .attr("height",
-            props.height + props.margin.bottom
-          );
+          .attr("width", props.width - margin.right - margin.left)
+          .attr("height", props.height - margin.top);
   },
 
   getArea: function (xScale, yScale) {
@@ -101,7 +91,7 @@ var TimeSeriesChart = React.createClass({
       // ristrict x domain to have extra point outside of graph area,
       // since we are animating the graph in from right
       date = values[1].date;
-      dateDelta = values[values.length - 2].date;
+      dateDelta = values[values.length - 3].date;
     }
 
     return d3.time.scale()
@@ -110,9 +100,10 @@ var TimeSeriesChart = React.createClass({
   },
 
   getYScale: function (props) {
+    var margin = props.margin;
     return d3.scale.linear()
       // give a little space in the top for the number
-      .range([props.height, props.margin.top])
+      .range([props.height - margin.bottom - margin.top, margin.top])
       .domain([0, props.maxY]);
   },
 
@@ -128,6 +119,7 @@ var TimeSeriesChart = React.createClass({
   },
 
   renderAxis: function (props, xScale, yScale) {
+    var margin = props.margin;
     var length = props.width;
     var firstDataSet = _.first(props.data);
     if (firstDataSet != null) {
@@ -138,9 +130,9 @@ var TimeSeriesChart = React.createClass({
       .ticks(d3.time.second, length)
       .scale(xScale)
       .orient("bottom");
-
+      var h = props.height - margin.bottom  - margin.top;
     d3.select(this.refs.xAxis.getDOMNode())
-      .attr("transform", "translate(0," + props.height + ")")
+      .attr("transform", "translate(" + margin.left + "," + h + ")")
       .call(xAxis);
 
     var yAxis = d3.svg.axis()
@@ -149,23 +141,22 @@ var TimeSeriesChart = React.createClass({
       .tickFormat(this.formatYAxis(props.ticksY, props.maxY))
       .orient("left");
     d3.select(this.refs.yAxis.getDOMNode())
-      .attr("transform", "translate(" + props.margin.left + ",0)")
+      .attr("transform", "translate(" + margin.left + ",0)")
       .call(yAxis);
 
     d3.select(this.refs.grid.getDOMNode())
       .attr("class", "grid")
-      .attr("transform", "translate(" + props.margin.left + ",0)")
+      .attr("transform", "translate(" + margin.left + ",0)")
       .call(
         d3.svg.axis().scale(yScale)
           .orient("left")
           .ticks(props.ticksY)
-          .tickSize(props.margin.left - props.width, 0, 0)
+          .tickSize(-props.width + margin.left + margin.right, 0, 0)
           .tickFormat("")
       );
   },
 
-  componentWillReceiveProps: function (nextProps) {
-    var props = this.calcSizes(nextProps);
+  componentWillReceiveProps: function (props) {
 
     var xScale = this.getXScale(props);
     var yScale = this.getYScale(props);
@@ -196,43 +187,71 @@ var TimeSeriesChart = React.createClass({
     return this.state.xScale(date);
   },
 
+  getCirclePosition: function (obj) {
+    var props = this.props;
+    var lastestVisibleDataPoint = obj.values[obj.values.length - 2];
+    // [stay in x-value, most recent y - height of chart]
+    return [
+      0,
+      this.state.yScale(lastestVisibleDataPoint[props.y]) -
+      props.height + props.margin.top + props.margin.bottom
+    ];
+  },
+
   getAreaList: function () {
+    var props = this.props;
     // stack before drawing!
-    return _.map(this.state.stack(this.props.data), function (obj, i) {
+    return _.map(this.state.stack(props.data), function (obj, i) {
       var classes = {
         "area": true
       };
       classes["path-color-" + obj.colorIndex] = true;
+
+      var transitionTime =
+        this.getTransitionTime(obj.values, this.state.xScale);
+      // y0 of lastest visible obj + account for stroke size
+      var initialPosition =
+        this.state.yScale(obj.values[obj.values.length - 2].y0);
+
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
-        <TimeSeriesArea
-          className={React.addons.classSet(classes)}
-          path={this.state.area(obj.values)}
-          key={i}
-          name={obj.name}
-          transitionTime={this.getTransitionTime(obj.values, this.state.xScale)}
-          position={this.getPosition(obj.values)} />
+        <g className={React.addons.classSet(classes)} key={i}>
+          <AnimationCircle
+            transitionTime={transitionTime}
+            position={this.getCirclePosition(obj)}
+            cx={props.width - props.margin.right}
+            cy={initialPosition} />
+          <g clip-path="url(#clip)">
+            <TimeSeriesArea
+              path={this.state.area(obj.values)}
+              name={obj.name}
+              transitionTime={transitionTime}
+              position={this.getPosition(obj.values)} />
+          </g>
+        </g>
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }, this);
   },
 
-  getStripes: function (number, props) {
-    var width = Math.round((props.width - props.margin.left) / (2 * number));
+  getStripes: function (number) {
+    var props = this.props;
+    var margin = props.margin;
+    var width = (props.width - margin.left - margin.right) / (2 * number);
     return _.map(_.range(0, number), function (i) {
       // indent with margin, start one width length in
       // and add two times width per step
-      var position = props.margin.left + width + i * 2 * width;
+      var position = margin.left + width + i * 2 * width;
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <rect key={i}
           className="background"
           x={position + "px"}
-          y={props.margin.top}
-          height={props.height - props.margin.top}
+          y={margin.top}
+          height={props.height - margin.bottom - margin.top  - margin.top}
           width={width} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
@@ -242,21 +261,20 @@ var TimeSeriesChart = React.createClass({
 
   render: function () {
     var ReactTransitionGroup = React.addons.TransitionGroup;
-    var props = this.calcSizes(this.props);
-
+    var props = this.props;
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <svg height={props.height + props.margin.bottom} width={props.width}>
-        {this.getStripes(4, props)}
+      <svg height={props.height} width={props.width}>
+        {this.getStripes(4)}
         <g className="bars" ref="grid" />
         <g clip-path="url(#clip)">
-          <ReactTransitionGroup component="g">
-            {this.getAreaList()}
-          </ReactTransitionGroup>
           <g className="x axis" ref="xAxis"/>
         </g>
         <g className="y axis" ref="yAxis" />
+        <ReactTransitionGroup component="g">
+          {this.getAreaList()}
+        </ReactTransitionGroup>
       </svg>
     );
   }

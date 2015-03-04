@@ -3,23 +3,28 @@
 var d3 = require("d3");
 var React = require("react/addons");
 
-var TimeSeriesArea = React.createClass({
+var AnitmationCircle = React.createClass({
 
-  displayName: "TimeSeriesArea",
+  displayName: "AnitmationCircle",
 
   propTypes: {
-    // "M-22.179096201829775,200C-18.48258016819148,200..."
-    path: React.PropTypes.string.isRequired,
     transitionTime: React.PropTypes.number.isRequired,
-    position: React.PropTypes.number.isRequired
+    position: React.PropTypes.array.isRequired,
+    r: React.PropTypes.number,
+    cx: React.PropTypes.number,
+    cy: React.PropTypes.number
+  },
+
+  getDefaultProps: function () {
+    return {
+      r: 4,
+      cx: 0,
+      cy: 0
+    };
   },
 
   shouldComponentUpdate: function (props) {
-    // XXX - This is probably an anti-pattern with react. I'm not sure how to
-    // get the animation stuff reading the attr and transitioning
-
-    d3.select(this.getDOMNode()).interrupt()
-      .attr("transform", null)
+    d3.select(this.getDOMNode())
       .transition()
       .duration(props.transitionTime)
       .ease("linear")
@@ -29,13 +34,14 @@ var TimeSeriesArea = React.createClass({
   },
 
   render: function () {
+    var r = this.props.r;
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <path transform={"translate(0,-20)"} d={this.props.path} />
+      <circle r={r} cx={this.props.cx} cy={this.props.cy} />
     );
   }
 });
 
-module.exports = TimeSeriesArea;
+module.exports = AnitmationCircle;
