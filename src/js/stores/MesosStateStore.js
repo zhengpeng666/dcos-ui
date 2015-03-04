@@ -12,6 +12,12 @@ var HISTORY_LENGTH = 30;
 var _interval;
 var _initCalled = false;
 var _frameworkIndexes = [];
+<<<<<<< HEAD
+=======
+var _frameworks = [];
+var _frameworksFiltered = [];
+var _tasks = [];
+>>>>>>> First stab at creating tasks data set
 var _mesosStates = [];
 
 function round(value, decimalPlaces) {
@@ -71,6 +77,30 @@ function getStatesByFramework() {
         used_resources: getStatesByResource(framework, "used_resources")
       });
     }, this).value();
+}
+
+// [{
+//   colorIndex: 0,
+//   name: "Marathon",
+//   cpus: [{date: request time, y: value}]
+//   disk: [{date: request time, y: value}]
+//   mem: [{date: request time, y: value}]
+// }]
+function getStatesByTasks() {
+  return _.chain(_mesosStates)
+    .pluck("frameworks")
+    .map(function (framework) {
+      return _.pluck(framework, "tasks");
+    })
+    .flatten()
+    .groupBy(function (task) {
+      return task.framework_id;
+    })
+    .map(function (task) {
+      //do something
+      return task
+    })
+    .value();
 }
 
 function fillFramework(id, name, colorIndex) {
