@@ -1,4 +1,32 @@
 /* Forms */
+
+.placeholder-color(@color) {
+  &::-webkit-input-placeholder {
+     color: @color;
+  }
+
+  &:-moz-placeholder { /* Firefox 18- */
+     color: @color;
+  }
+
+  &::-moz-placeholder {  /* Firefox 19+ */
+     color: @color;
+  }
+
+  &:-ms-input-placeholder {
+     color: @color;
+  }
+}
+
 .form-control {
   margin-bottom: @base-spacing-unit;
+  .border-radius(@icon-medium-border-radius);
+
+  &, &:hover, &:active, &:focus {
+    background-color: transparent;
+    border: 0;
+    box-shadow: 0 0 0 1px @gray;
+    color: ~`color_lightness("@{gray}", 40)`;
+    .placeholder-color(~`color_lightness("@{gray}", 40)`);
+  }
 }

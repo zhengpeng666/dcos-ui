@@ -86,6 +86,14 @@ var Sidebar = React.createClass({
                     </span>
                   </Link>
                 </li>
+                <li className={this.getItemClassSet("datacenter")}>
+                  <Link to="datacenter">
+                    <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
+                    <span className="sidebar-menu-item-label">
+                      Datacenter
+                    </span>
+                  </Link>
+                </li>
               </ul>
             </div>
           </nav>

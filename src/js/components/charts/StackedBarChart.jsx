@@ -4,6 +4,8 @@ var _ = require("underscore");
 var d3 = require("d3");
 var React = require("react/addons");
 
+var StackedBarList = require("./StackedBarList");
+
 var StackedBarChart = React.createClass({
 
   displayName: "StackedBarChart",
@@ -12,12 +14,16 @@ var StackedBarChart = React.createClass({
     data: React.PropTypes.array.isRequired,
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
-    margin: React.PropTypes.object.isRequired,
     y: React.PropTypes.string
   },
 
   getDefaultProps: function () {
     return {
+      margin: {
+        top: 0,
+        left: 40,
+        bottom: 40,
+      },
       maxY: 10,
       ticksY: 10,
       y: "y"
@@ -32,7 +38,8 @@ var StackedBarChart = React.createClass({
     return {
       stack: this.getStack(),
       xScale: xScale,
-      yScale: yScale
+      yScale: yScale,
+      stackedData: []
     };
   },
 
@@ -143,71 +150,16 @@ var StackedBarChart = React.createClass({
     // unfortunately.
     this.renderAxis(props, xScale, yScale);
     this.setState({
+      stackedData: this.state.stack(props.data),
       xScale: xScale,
       yScale: yScale
     });
   },
 
-  getBarList: function () {
-    var props = this.props;
-    var marginLeft = props.margin.left;
-    var posY;
-    var y = props.y;
-
-    return _.flatten(_.map(this.state.stack(props.data),
-        function (framework, i) {
-      var valuesLength = framework.values.length;
-      var colorClass = "path-color-" + framework.colorIndex;
-      var rectWidth = (props.width - marginLeft) / valuesLength;
-
-      if (posY == null) {
-        posY = _.map(new Array(valuesLength), function () {
-          return props.height;
-        });
-      }
-
-      return _.map(framework.values, function (val, j) {
-        var rectHeight = props.height * val[y] / props.maxY;
-        var lineClass = colorClass;
-        if (rectHeight < 1) {
-          rectHeight = 0;
-          lineClass += " hidden";
-        }
-        if (rectHeight >= 2) {
-          rectHeight -= 2;
-        }
-
-        var posX = props.width - marginLeft - rectWidth * (valuesLength - j);
-        posY[j] -= rectHeight;
-
-        /* jshint trailing:false, quotmark:false, newcap:false */
-        /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-        return (
-          <g className="bar"
-              key={i.toString() + j.toString()}
-              transform={"translate(" + [posX, 0] + ")"}>
-            <line
-                className={lineClass}
-                x1={0}
-                y1={posY[j]}
-                x2={rectWidth - 1}
-                y2={posY[j]} />
-            <rect
-                className={colorClass}
-                y={posY[j]}
-                height={rectHeight}
-                width={rectWidth - 1} />
-          </g>
-        );
-        /* jshint trailing:true, quotmark:true, newcap:true */
-        /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-      });
-    }));
-  },
-
   render: function () {
     var props = this.props;
     var margin = props.margin;
+
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
@@ -222,7 +174,14 @@ var StackedBarChart = React.createClass({
             ref="xAxis"/>
           <g ref="yGrid" />
           <g ref="xGrid" />
-            {this.getBarList()}
+          <StackedBarList
+            stackedData={this.state.stackedData}
+            width={props.width}
+            height={props.height}
+            marginLeft={margin.left}
+            peakline={false}
+            maxY={props.maxY}
+            y={props.y} />
         </g>
       </svg>
     );

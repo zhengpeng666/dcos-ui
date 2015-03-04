@@ -6,26 +6,20 @@ var EventTypes = require("../constants/EventTypes");
 var MesosStateActions = require("../actions/MesosStateActions");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
-var ServicesChart = require("./charts/ServicesChart");
-var ServicesFilter = require("./ServicesFilter");
-var ServiceList = require("./ServiceList");
+
 
 function getMesosServices() {
   return {
-    filterString: MesosStateStore.getFilterOptions().searchString,
-    frameworks: MesosStateStore.getFrameworks(),
-    totalFrameworks: MesosStateStore.getLatest().frameworks.length,
-    totalResources: MesosStateStore.getTotalResources(),
-    usedResources: MesosStateStore.getUsedResources()
+
   };
 }
 
-var ServicesPage = React.createClass({
+var DatacenterPage = React.createClass({
 
-  displayName: "ServicesPage",
+  displayName: "DatacenterPage",
 
   getInitialState: function () {
-    MesosStateActions.setPageType(ServicesPage.displayName);
+    MesosStateActions.setPageType(DatacenterPage.displayName);
     return getMesosServices();
   },
 
@@ -59,7 +53,7 @@ var ServicesPage = React.createClass({
             <div id="page-header-context">
               <SidebarToggle />
               <h1 className="page-header-title flush-top flush-bottom">
-                Services
+                Datacenter
               </h1>
             </div>
             <div id="page-header-navigation" />
@@ -68,19 +62,7 @@ var ServicesPage = React.createClass({
         <div id="page-header-navigation" />
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
-            <ServicesChart
-              data={state.frameworks}
-              totalResources={state.totalResources}
-              usedResources={state.usedResources}
-              width={this.state.width} />
-            <div className="services-stats">
-              <h4>{state.totalFrameworks} Total Services</h4>
-            </div>
-            <ServicesFilter
-                filterString={state.filterString} />
-            <ServiceList
-                frameworks={state.frameworks}
-                totalResources={state.totalResources} />
+
           </div>
         </div>
       </div>
@@ -89,4 +71,4 @@ var ServicesPage = React.createClass({
 
 });
 
-module.exports = ServicesPage;
+module.exports = DatacenterPage;
