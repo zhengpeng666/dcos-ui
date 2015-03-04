@@ -7,6 +7,7 @@ var Route = Router.Route;
 require("./utils/ScrollHandler");
 require("./utils/ReactSVG");
 var ActivityPage = require("./components/ActivityPage");
+var DatacenterPage = require("./components/DatacenterPage");
 var Index = require("./components/Index");
 var ServicesPage = require("./components/ServicesPage");
 
@@ -16,6 +17,7 @@ var routes = (
   <Route name="home" path="/" handler={Index}>
     <Route name="activity" path="activity/" handler={ActivityPage} />
     <Route name="services" path="services/" handler={ServicesPage} />
+    <Route name="datacenter" path="datacenter/" handler={DatacenterPage} />
   </Route>
 );
 

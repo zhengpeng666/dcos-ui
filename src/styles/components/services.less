@@ -11,14 +11,15 @@
   text-align: center;
   float: right;
 
+  border: @button-border-width solid @button-default-background-color;
+  .border-radius(@icon-medium-border-radius);
+
   .service {
     padding-left: @base-spacing-unit * 0.5;
     padding-right: @base-spacing-unit * 0.5;
     padding-top: @button-text-line-height * 0.5 - @button-border-width;
     padding-bottom: @button-text-line-height * 0.5 - @button-border-width;
     margin: 0;
-    border: @button-border-width solid @button-default-background-color;
-    .border-radius(@icon-medium-border-radius);
   }
 
   .line {
@@ -34,7 +35,7 @@
     }
 
     &.color-1 {
-      border-top-color: ~`color_lightness("@{mesosphere-heliotrope}", 40)`;
+      border-top-color: @mesosphere-lemon;
     }
 
     &.color-2 {

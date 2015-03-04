@@ -4,7 +4,7 @@ var _ = require("underscore");
 var $ = require("jquery");
 var React = require("react/addons");
 
-var OverlapBarChart = require("./OverlapBarChart");
+var StackedBarChart = require("./StackedBarChart");
 
 var buttonNameMap = {
   cpus: "CPU",
@@ -18,7 +18,6 @@ var ServicesChart = React.createClass({
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
-    stacked: React.PropTypes.bool.isRequired,
     totalResources: React.PropTypes.object.isRequired,
     usedResources: React.PropTypes.object.isRequired
   },
@@ -69,35 +68,16 @@ var ServicesChart = React.createClass({
     window.removeEventListener("resize", this.updateWidth);
   },
 
-  getFrameworksData: function () {
+  getData: function () {
     var props = this.props;
     return _.map(props.data, function (framework) {
       return {
         id: framework.id,
         name: framework.name,
-        colorIndex: framework.colorIndex,
+        colorIndex: 0,
         values: framework.used_resources[this.state.resourceMode]
       };
     }.bind(this));
-  },
-
-  getAllData: function () {
-    var props = this.props;
-
-    return [{
-      id: "allocatedResources",
-      name: "Allocated",
-      colorIndex: 0,
-      values: props.usedResources[this.state.resourceMode]
-    }];
-  },
-
-  getData: function () {
-    if (this.props.stacked) {
-      return this.getFrameworksData();
-    } else {
-      return this.getAllData();
-    }
   },
 
   getMaxY: function () {
@@ -132,14 +112,14 @@ var ServicesChart = React.createClass({
     }, this);
   },
 
-  getOverlapBarChart: function () {
+  getStackedBarChart: function () {
     var props = this.calcChartSizes(this.props);
 
     if (props.width != null) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
-        <OverlapBarChart
+        <StackedBarChart
           data={this.getData()}
           maxY={this.getMaxY()}
           ticksY={4}
@@ -156,12 +136,9 @@ var ServicesChart = React.createClass({
   },
 
   getLegend: function () {
-    var props = this.calcChartSizes(this.props);
-    var maxY = this.getMaxY();
-
     var frameworks = _.filter(this.getData(), function (framework) {
       return _.find(framework.values, function (val) {
-        return props.height * val.percentage / maxY >= 1;
+        return val.percentage;
       });
     });
 
@@ -172,20 +149,14 @@ var ServicesChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <ul className="list-unstyled list-inline inverse">
-      {
-        _.map(frameworks, function (service) {
-          return (
-            <li className="service" key={service.id}>
-              <span
-                className={"line color-" + service.colorIndex}></span>
-              <strong>
-                {buttonNameMap[this.state.resourceMode]} {service.name}
-              </strong>
-            </li>
-          );
-        }.bind(this))
-      }
+      <ul className="services-legend list-unstyled list-inline inverse">
+        <li className="service">
+          <span
+            className={"line color-0"}></span>
+          <strong>
+            {buttonNameMap[this.state.resourceMode]} Allocated
+          </strong>
+        </li>
       </ul>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
@@ -201,12 +172,10 @@ var ServicesChart = React.createClass({
           <div className="button-group">
             {this.getModeButtons()}
           </div>
-          <div className="services-legend">
-            {this.getLegend()}
-          </div>
+          {this.getLegend()}
         </div>
         <div className="panel-content" ref="panelContent">
-          {this.getOverlapBarChart()}
+          {this.getStackedBarChart()}
         </div>
       </div>
     );
