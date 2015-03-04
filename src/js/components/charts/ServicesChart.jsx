@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
-var $ = require("jquery");
 var React = require("react/addons");
 
 var Chart = require("./Chart");
