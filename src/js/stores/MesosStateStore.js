@@ -24,6 +24,7 @@ var _totalResources = {};
 var _usedResources = {};
 
 function round(value, decimalPlaces) {
+  decimalPlaces || (decimalPlaces = 0);
   var factor = Math.pow(10, decimalPlaces);
   return Math.round(value * factor) / factor;
 }
@@ -53,8 +54,8 @@ function getStatesByResource(list, resourcesKey) {
       var max = Math.max(1, _mesosStates[i].total_resources[r]);
       acc[r].push({
         date: v.date,
-        value: value,
-        percentage: round(100 * value / max, 2)
+        value: round(value),
+        percentage: round(100 * value / max)
       });
     });
     return acc;
