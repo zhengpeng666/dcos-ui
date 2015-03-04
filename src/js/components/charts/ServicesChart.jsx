@@ -104,8 +104,7 @@ var ServicesChart = React.createClass({
     return (
       <ul className="services-legend list-unstyled list-inline inverse">
         <li className="service">
-          <span
-            className={"line color-0"}></span>
+          <span className={"line color-0"}></span>
           <strong>
             {buttonNameMap[this.state.resourceMode]} Allocated
           </strong>
