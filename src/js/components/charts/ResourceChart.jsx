@@ -12,7 +12,7 @@ var labelMap = {
   disk: "Disk"
 };
 
-function getCompedWidth(obj) {
+function getComputedWidth(obj) {
   var compstyle;
   if (typeof window.getComputedStyle === "undefined") {
     compstyle = obj.currentStyle;
@@ -60,7 +60,7 @@ var ResourceChart = React.createClass({
 
   updateWidth: function () {
     this.setState({
-      width: getCompedWidth(this.refs.chartContainer.getDOMNode())
+      width: getComputedWidth(this.refs.chartContainer.getDOMNode())
     });
   },
 

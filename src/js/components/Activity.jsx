@@ -4,7 +4,7 @@ var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
-var ResourceChart = require("./ResourceChart");
+var ResourceChart = require("./charts/ResourceChart");
 
 function getMesosState() {
   return {
