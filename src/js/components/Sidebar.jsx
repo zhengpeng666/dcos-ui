@@ -59,7 +59,7 @@ var Sidebar = React.createClass({
               </div>
             </div>
             <h2 className="sidebar-header-label flush-top text-align-center short-bottom">
-              Datacenter Name
+              {this.state.cluster}
             </h2>
             <p className="sidebar-header-sublabel text-align-center flush-bottom">
               {this.state.hostname}
