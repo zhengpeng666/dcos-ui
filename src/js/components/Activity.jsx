@@ -1,14 +1,16 @@
 /** @jsx React.DOM */
 
+var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceChart = require("./charts/ResourceChart");
+var DialChart = require("./charts/DialChart");
 
 function getMesosState() {
   return {
-    frameworks: MesosStateStore.getFrameworks(),
+    tasks: MesosStateStore.getTasks(),
     totalResources: MesosStateStore.getTotalResources(),
     usedResources: MesosStateStore.getUsedResources()
   };
@@ -40,8 +42,15 @@ var Activity = React.createClass({
     this.setState(getMesosState());
   },
 
+  getTasks: function () {
+    return _.map(this.state.tasks, function (data, i) {
+      return {colorIndex: i, name: data.state, value: data.tasks.length};
+    });
+  },
+
   render: function () {
     var state = this.state;
+
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
@@ -63,6 +72,13 @@ var Activity = React.createClass({
             totalResources={state.totalResources}
             usedResources={state.usedResources}
             mode="disk" />
+        </div>
+        <div className="column-small-6 column-large-4">
+          <DialChart
+            data={this.getTasks()}
+            coords={{x:100, y:100}}
+            value="value"
+            size={200} />
         </div>
       </div>
     );

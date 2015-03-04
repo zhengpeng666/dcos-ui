@@ -12,12 +12,6 @@ var HISTORY_LENGTH = 30;
 var _interval;
 var _initCalled = false;
 var _frameworkIndexes = [];
-<<<<<<< HEAD
-=======
-var _frameworks = [];
-var _frameworksFiltered = [];
-var _tasks = [];
->>>>>>> First stab at creating tasks data set
 var _mesosStates = [];
 
 function round(value, decimalPlaces) {
@@ -72,7 +66,8 @@ function getStatesByFramework() {
     .flatten()
     .groupBy(function (framework) {
       return framework.id;
-    }).map(function (framework) {
+    })
+    .map(function (framework) {
       return _.extend(_.clone(_.last(framework)), {
         used_resources: getStatesByResource(framework, "used_resources")
       });
@@ -80,25 +75,28 @@ function getStatesByFramework() {
 }
 
 // [{
-//   colorIndex: 0,
-//   name: "Marathon",
-//   cpus: [{date: request time, y: value}]
-//   disk: [{date: request time, y: value}]
-//   mem: [{date: request time, y: value}]
+//   state: "TASK_RUNNING",
+//   tasks: [{
+//     executor_id: 0,
+//     framework_id: "askdfjaalsjf",
+//     id: "askdfja"
+//     name: "datanode"
+//     resources: {mem: 0, cpus: 0, disk: 0},
+//     state: "TASK_RUNNING"
+//   }, ...]
 // }]
-function getStatesByTasks() {
-  return _.chain(_mesosStates)
-    .pluck("frameworks")
-    .map(function (framework) {
-      return _.pluck(framework, "tasks");
-    })
+function getTasksByStatus(frameworks) {
+  return _.chain(frameworks)
+    .pluck("tasks")
     .flatten()
     .groupBy(function (task) {
-      return task.framework_id;
+      return task.state;
     })
-    .map(function (task) {
-      //do something
-      return task
+    .map(function (tasks, value) {
+      return {
+        state: value,
+        tasks: tasks
+      };
     })
     .value();
 }
@@ -216,6 +214,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   getFrameworks: function () {
     return getStatesByFramework();
+  },
+
+  getTasks: function () {
+    return getTasksByStatus(this.getLastest().frameworks);
   },
 
   getTotalResources: function () {
