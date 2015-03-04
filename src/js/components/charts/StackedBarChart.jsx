@@ -14,12 +14,16 @@ var StackedBarChart = React.createClass({
     data: React.PropTypes.array.isRequired,
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
-    margin: React.PropTypes.object.isRequired,
     y: React.PropTypes.string
   },
 
   getDefaultProps: function () {
     return {
+      margin: {
+        top: 0,
+        left: 40,
+        bottom: 40,
+      },
       maxY: 10,
       ticksY: 10,
       y: "y"

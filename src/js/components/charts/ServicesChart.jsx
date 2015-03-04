@@ -4,6 +4,7 @@ var _ = require("underscore");
 var $ = require("jquery");
 var React = require("react/addons");
 
+var Chart = require("./Chart");
 var StackedBarChart = require("./StackedBarChart");
 
 var buttonNameMap = {
@@ -22,50 +23,10 @@ var ServicesChart = React.createClass({
     usedResources: React.PropTypes.object.isRequired
   },
 
-  calcChartSizes: function (props) {
-    var margin = {
-      top: 0,
-      left: 40,
-      bottom: 40,
-    };
-    var width = this.state.width;
-    var height = Math.round(width / 4 - margin.bottom - margin.top);
-    return _.extend(props, {
-      width: width,
-      height: height,
-      margin: margin
-    });
-  },
-
   getInitialState: function () {
     return {
-      resourceMode: "cpus",
-      width: null
+      resourceMode: "cpus"
     };
-  },
-
-  updateWidth: function () {
-    // Don't know why this is empty
-    // this.refs.panelContent.getDOMNode().style.paddingLeft;
-
-    var padding =
-      parseInt($(this.refs.panelContent.getDOMNode()).css("padding-left"), 10) +
-      parseInt($(this.refs.panelContent.getDOMNode()).css("padding-right"), 10);
-
-    this.setState({
-      width: this.getDOMNode().offsetWidth - padding
-    });
-  },
-
-  componentDidMount: function () {
-    this.updateWidth();
-    window.addEventListener("focus", this.updateWidth);
-    window.addEventListener("resize", this.updateWidth);
-  },
-
-  componentWillUnmount: function () {
-    window.removeEventListener("focus", this.updateWidth);
-    window.removeEventListener("resize", this.updateWidth);
   },
 
   getData: function () {
@@ -113,26 +74,19 @@ var ServicesChart = React.createClass({
   },
 
   getStackedBarChart: function () {
-    var props = this.calcChartSizes(this.props);
-
-    if (props.width != null) {
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-      return (
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <Chart calcHeight={function (w) { return w/4; }}>
         <StackedBarChart
           data={this.getData()}
           maxY={this.getMaxY()}
           ticksY={4}
-          width={props.width}
-          height={props.height}
-          margin={props.margin}
           y="percentage" />
-      );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    }
-
-    return null;
+      </Chart>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getLegend: function () {

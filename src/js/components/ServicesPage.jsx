@@ -6,7 +6,7 @@ var EventTypes = require("../constants/EventTypes");
 var MesosStateActions = require("../actions/MesosStateActions");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
-var ServicesChart = require("./ServicesChart");
+var ServicesChart = require("./charts/ServicesChart");
 var ServicesFilter = require("./ServicesFilter");
 var ServiceList = require("./ServiceList");
 
