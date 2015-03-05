@@ -54,6 +54,31 @@ var ServicesPage = React.createClass({
     this.setState(state);
   },
 
+  getServiceStats: function () {
+    var state = this.state;
+    var filteredLength = state.frameworks.length;
+    var totalLength = state.totalFrameworks;
+
+    var filteredClassSet = React.addons.classSet({
+      "hidden": filteredLength === totalLength
+    });
+
+    var unfilteredClassSet = React.addons.classSet({
+      "hidden": filteredLength !== totalLength
+    });
+
+    return (
+      <div className="services-stats">
+        <h4 className={filteredClassSet}>
+          Showing {filteredLength} of {totalLength} Total Services
+        </h4>
+        <h4 className={unfilteredClassSet}>
+          {totalLength} Total Services
+        </h4>
+      </div>
+    );
+  },
+
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
@@ -80,9 +105,7 @@ var ServicesPage = React.createClass({
               totalResources={state.totalResources}
               usedResources={state.usedResources}
               width={this.state.width} />
-            <div className="services-stats">
-              <h4>{state.totalFrameworks} Total Services</h4>
-            </div>
+            {this.getServiceStats()}
             <ServicesFilter
               searchString={this.state.searchString}
               onSubmit={this.onChange} />
