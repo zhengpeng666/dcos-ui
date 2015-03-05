@@ -12,7 +12,7 @@ var DialChart = React.createClass({
   displayName: "DialChart",
 
   propTypes: {
-    // [{state: "TASK_RUNNING", tasks: []}]
+    // [{colorIndex: 0, name: "Some Name", value: 4}]
     data: React.PropTypes.array.isRequired,
     value: React.PropTypes.string
   },
@@ -30,6 +30,38 @@ var DialChart = React.createClass({
         .sort(null)
         .value(function(d) { return d[value]; })
     }, this.getArcs(this.props));
+  },
+
+  getSlice: function(props) {
+    return d3.select(this.getDOMNode()).selectAll("path")
+      .data(this.state.pie(props.data), this.key);
+  },
+
+  shouldComponentUpdate: function (nextProps) {
+
+    var slice = this.getSlice(this.props);
+    var arc = this.state.innerArc;
+
+    slice.each(function(d) { this._current = d; });
+
+    slice = this.getSlice(nextProps);
+    slice.transition()
+      .duration(1000)
+      .attrTween("d", function(d) {
+        var interpolate = d3.interpolate(this._current, d);
+        var _this = this;
+        return function(t) {
+          _this._current = interpolate(t);
+          return arc(_this._current);
+        };
+      });
+
+    slice.exit().transition()
+      .delay(this.state.duration)
+      .duration(0)
+      .remove();
+
+    return true;
   },
 
   getArcs: function(props) {
