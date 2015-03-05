@@ -4,7 +4,6 @@ var _ = require("underscore");
 var d3 = require("d3");
 var React = require("react/addons");
 
-var Chart = require("./Chart");
 var DialSlice = require("./DialSlice");
 
 var DialChart = React.createClass({
@@ -19,7 +18,8 @@ var DialChart = React.createClass({
 
   getDefaultProps: function () {
     return {
-      value: "value"
+      value: "value",
+      duration: 1000
     };
   },
 
@@ -34,7 +34,7 @@ var DialChart = React.createClass({
 
   getSlice: function(props) {
     return d3.select(this.getDOMNode()).selectAll("path")
-      .data(this.state.pie(props.data), this.key);
+      .data(this.state.pie(props.data));
   },
 
   shouldComponentUpdate: function (nextProps) {
@@ -46,30 +46,25 @@ var DialChart = React.createClass({
 
     slice = this.getSlice(nextProps);
     slice.transition()
-      .duration(1000)
-      .attrTween("d", function(d) {
-        var interpolate = d3.interpolate(this._current, d);
-        var _this = this;
-        return function(t) {
-          _this._current = interpolate(t);
-          return arc(_this._current);
-        };
-      });
-
-    slice.exit().transition()
-      .delay(this.state.duration)
-      .duration(0)
-      .remove();
+      .duration(nextProps.duration)
+      .attrTween("d", function (d) {
+      var interpolate = d3.interpolate(this._current, d);
+      var _this = this;
+      return function(t) {
+        _this._current = interpolate(t);
+        return arc(_this._current);
+      };
+    });
 
     return true;
   },
 
   getArcs: function(props) {
-    var radius = props.size / 2;
+    var radius = props.width / 2;
     return {
       innerArc: d3.svg.arc()
         .outerRadius(radius * 0.9)
-        .innerRadius(radius * 0.5),
+        .innerRadius(radius * 0.83),
       outerArc: d3.svg.arc()
         .outerRadius(radius * 1)
         .innerRadius(radius * 1),
@@ -79,7 +74,7 @@ var DialChart = React.createClass({
 
   getPosition: function() {
     return "translate(" +
-      this.props.coords.x + "," + this.props.coords.y + ")";
+      this.props.width / 2 + "," + this.props.height / 2 + ")";
   },
 
   getWedges: function () {
@@ -103,17 +98,13 @@ var DialChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <Chart calcHeight={function (w) { return w/2; }}>
-        <svg height={this.props.height} width={this.props.width}>
-          <g transform={this.getPosition()}
-              onMouseOver={this.showTooltip}
-              onMouseOut={this.hideTooltip}>
-            <g className="slices">
-              {this.getWedges()}
-            </g>
+      <svg height={this.props.height} width={this.props.width}>
+        <g transform={this.getPosition()}>
+          <g className="slices">
+            {this.getWedges()}
           </g>
-        </svg>
-      </Chart>
+        </g>
+      </svg>
     );
   }
 

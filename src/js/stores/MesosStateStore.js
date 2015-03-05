@@ -79,8 +79,8 @@ function getStatesByFramework() {
 //   tasks: [{
 //     executor_id: 0,
 //     framework_id: "askdfjaalsjf",
-//     id: "askdfja"
-//     name: "datanode"
+//     id: "askdfja",
+//     name: "datanode",
 //     resources: {mem: 0, cpus: 0, disk: 0},
 //     state: "TASK_RUNNING"
 //   }, ...]

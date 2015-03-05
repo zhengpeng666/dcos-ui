@@ -6,18 +6,24 @@ svg .background {
 .grid .tick,
 .axis line {
   fill: none;
-  stroke: ~`color_lightness("@{gray}", 50)`;
+  stroke: @panel-background-color;
   stroke-width: 1px;
   shape-rendering: crispEdges;
 }
 
 .axis text {
-  fill: ~`color_lightness("@{gray}", 50)`;
+  fill: @panel-background-color;
 }
 
 .area path {
   stroke-width: 2px;
   fill-opacity: 0.3;
+}
+
+.arc path {
+  stroke-width: 4px;
+  stroke: @panel-background-color;
+
 }
 
 .arc,

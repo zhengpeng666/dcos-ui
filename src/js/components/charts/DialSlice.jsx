@@ -15,7 +15,7 @@ var DialSlice = React.createClass({
     var classes = {
       "arc": true
     };
-    if (this.props.colorIndex) {
+    if (this.props.colorIndex != null) {
       classes["path-color-" + this.props.colorIndex] = true;
     }
     var classSet = React.addons.classSet(classes);
