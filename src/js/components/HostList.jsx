@@ -3,30 +3,30 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
-var ServiceItem = require("./ServiceItem");
+var HostItem = require("./HostItem");
 
-var ServicesList = React.createClass({
+var HostList = React.createClass({
 
-  displayName: "ServicesList",
+  displayName: "HostList",
 
   propTypes: {
-    frameworks: React.PropTypes.array.isRequired
+    hosts: React.PropTypes.array.isRequired
   },
 
   getDefaultProps: function () {
     return {
-      frameworks: []
+      hosts: []
     };
   },
 
-  getServiceItems: function () {
-    return _.map(this.props.frameworks, function (service) {
+  getHostItems: function () {
+    return _.map(this.props.hosts, function (host) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
-        <ServiceItem
-            key={service.id}
-            model={service} />
+        <HostItem
+            key={host.id}
+            model={host} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -38,10 +38,10 @@ var ServicesList = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <ul className="collection-list list-unstyled inverse">
-        {this.getServiceItems()}
+        {this.getHostItems()}
       </ul>
     );
   }
 });
 
-module.exports = ServicesList;
+module.exports = HostList;

@@ -5,11 +5,11 @@ var React = require("react/addons");
 var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
+var HostList = require("./HostList");
 
-
-function getMesosServices() {
+function getMesosHosts() {
   return {
-
+    hosts: MesosStateStore.getHosts()
   };
 }
 
@@ -36,7 +36,7 @@ var DatacenterPage = React.createClass({
   },
 
   onChange: function () {
-    this.setState(getMesosServices());
+    this.setState(getMesosHosts());
   },
 
   /* jshint trailing:false, quotmark:false, newcap:false */
@@ -59,7 +59,7 @@ var DatacenterPage = React.createClass({
         <div id="page-header-navigation" />
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
-
+            <HostList hosts={state.hosts} />
           </div>
         </div>
       </div>
