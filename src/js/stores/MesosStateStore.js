@@ -17,11 +17,8 @@ _filterOptions[_pagetype] = {
   searchString: ""
 };
 var _frameworkIndexes = [];
-var _frameworks = [];
 var _frameworksFiltered = [];
 var _mesosStates = [];
-var _totalResources = {};
-var _usedResources = {};
 
 function round(value, decimalPlaces) {
   decimalPlaces || (decimalPlaces = 0);
@@ -133,7 +130,7 @@ function filterFrameworks(searchString) {
   var valuesPattern = /:\"[^\"]+\"/g;
   var cleanupPattern = /[:\"]/g;
 
-  return _.filter(_frameworks, function (framework) {
+  return _.filter(getStatesByFramework(), function (framework) {
     var str = JSON.stringify(framework)
       .match(valuesPattern)
       .join(" ")
@@ -154,9 +151,6 @@ function initStates() {
       total_resources: {cpus: 0, mem: 0, disk: 0}
     };
   });
-
-  _totalResources = getStatesByResource(_mesosStates, "total_resources");
-  _usedResources = getStatesByResource(_mesosStates, "used_resources");
 }
 
 function startPolling() {
@@ -205,15 +199,15 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     if (hasFilter()) {
       return _frameworksFiltered;
     }
-    return _frameworks;
+    return getStatesByFramework();
   },
 
   getTotalResources: function () {
-    return _totalResources;
+    return getStatesByResource(_mesosStates, "total_resources");
   },
 
   getUsedResources: function () {
-    return _usedResources;
+    return getStatesByResource(_mesosStates, "used_resources");
   },
 
   getFilterOptions: function () {
@@ -264,12 +258,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       _mesosStates.shift();
     }
 
-    _frameworks = getStatesByFramework();
-
     this.applyAllFilter();
-
-    _totalResources = getStatesByResource(_mesosStates, "total_resources");
-    _usedResources = getStatesByResource(_mesosStates, "used_resources");
 
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },
