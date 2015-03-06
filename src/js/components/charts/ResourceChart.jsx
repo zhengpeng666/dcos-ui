@@ -92,16 +92,16 @@ var ResourceChart = React.createClass({
         <div className="panel-content">
           <div className="row text-align-center">
             <div className="column-small-offset-2 column-small-4">
-              <h1 className="unit">{totalHeadline[0]}</h1>
-              <h4 className="unit-label text-muted">{totalHeadline[1]} Total</h4>
+              <p className="h1 unit">{totalHeadline[0]}</p>
+              <p className="h4 unit-label text-muted">{totalHeadline[1]} Total</p>
             </div>
             <div className="column-small-4">
-              <h1 className="unit">
+              <p className="h1 unit">
                 {this.getUsed()}<sup>%</sup>
-              </h1>
-              <h4 className="unit-label">
+              </p>
+              <p className="h4 unit-label">
                 {this.getUsedHeadline()} Used
-              </h4>
+              </p>
             </div>
           </div>
           {this.getChart()}

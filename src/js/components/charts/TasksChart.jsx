@@ -6,6 +6,8 @@ var React = require("react/addons");
 var Chart = require("./Chart");
 var DialChart = require("./DialChart");
 
+var tasksPerRow = 3;
+
 var TasksChart = React.createClass({
 
   displayName: "TasksChart",
@@ -16,25 +18,31 @@ var TasksChart = React.createClass({
   },
 
   getTaskInfo: function (tasks) {
-    var classes = {
-      "text-align-center": true
-    };
-    classes["column-small-" + Math.floor(12/tasks.length)] = true;
+    var numberOfTasks = tasks.length;
+    var leftover = numberOfTasks % tasksPerRow;
 
-    var classSet = React.addons.classSet(classes);
     return _.map(tasks, function (task, i) {
-        return (
-          <div key={i} className={classSet}>
-            <h5 className="unit">
-              {task.value}
-            </h5>
-            <p className="unit-label">
-              {task.name}
-            </p>
-          </div>
-        );
+      var classes = {
+        "text-align-center": true
+      };
+      // equalize columns for units
+      if (i < numberOfTasks - leftover) {
+        classes["column-small-4"] = true;
+      } else {
+        classes["column-small-" + 12 / leftover] = true;
       }
-    );
+      var classSet = React.addons.classSet(classes);
+      return (
+        <div key={i} className={classSet}>
+          <h5 className="h1 unit">
+            {task.value}
+          </h5>
+          <p className="unit-label">
+            {task.name}
+          </p>
+        </div>
+      );
+    });
   },
 
   getTasks: function () {
