@@ -217,7 +217,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getTasks: function () {
-    return getTasksByStatus(this.getLastest().frameworks);
+    return getTasksByStatus(this.getLatest().frameworks);
   },
 
   getTotalResources: function () {
