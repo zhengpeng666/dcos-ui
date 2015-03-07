@@ -2,26 +2,24 @@
 
 var React = require("react/addons");
 
-var MesosStateActions = require("../actions/MesosStateActions");
-
 var ServicesFilter = React.createClass({
 
   displayName: "ServicesFilter",
 
   propTypes: {
-    filterString: React.PropTypes.string.isRequired
+    searchString: React.PropTypes.string.isRequired,
+    onSubmit: React.PropTypes.func.isRequired
   },
 
   getDefaultProps: function () {
     return {
-      filterString: ""
+      searchString: ""
     };
   },
 
-  handleSubmit: function () {
-    var filterString = this.refs.filterInput.getDOMNode().value;
-
-    MesosStateActions.setFilterString(filterString);
+  handleChange: function (e) {
+    e.preventDefault();
+    this.props.onSubmit(this.refs.filterInput.getDOMNode().value);
   },
 
   getFilterInputField: function () {
@@ -32,8 +30,8 @@ var ServicesFilter = React.createClass({
           type="text"
           className="form-control"
           placeholder="Filter for..."
-          defaultValue={this.props.filterString}
-          onChange={this.handleSubmit}
+          defaultValue={this.props.searchString}
+          onChange={this.handleChange}
           ref="filterInput" />
     );
     /* jshint trailing:true, quotmark:true, newcap:true */

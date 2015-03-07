@@ -11,13 +11,7 @@ var HISTORY_LENGTH = 30;
 
 var _interval;
 var _initCalled = false;
-var _pagetype = "Default";
-var _filterOptions = {};
-_filterOptions[_pagetype] = {
-  searchString: ""
-};
 var _frameworkIndexes = [];
-var _frameworksFiltered = [];
 var _mesosStates = [];
 
 function round(value, decimalPlaces) {
@@ -119,14 +113,12 @@ function normalizeFrameworks(frameworks, date) {
   });
 }
 
-function hasFilter() {
-  return _.find(_filterOptions[_pagetype], function (option) {
-    return !_.isEmpty(option);
-  });
-}
+function filterFrameworks(options) {
+  if (options.searchString === "") {
+    return getStatesByFramework();
+  }
 
-function filterFrameworks(searchString) {
-  var searchPattern = new RegExp(searchString, "i");
+  var searchPattern = new RegExp(options.searchString, "i");
   var valuesPattern = /:\"[^\"]+\"/g;
   var cleanupPattern = /[:\"]/g;
 
@@ -167,13 +159,6 @@ function stopPolling() {
   }
 }
 
-function setPageType (pagetype) {
-  _pagetype = pagetype;
-  if (_filterOptions[_pagetype] === undefined) {
-    _filterOptions[_pagetype] = _.clone(_filterOptions.Default);
-  }
-}
-
 var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   init: function () {
@@ -195,10 +180,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _.last(_mesosStates);
   },
 
+  getFilteredFrameworks: function (options) {
+    return filterFrameworks(options);
+  },
+
   getFrameworks: function () {
-    if (hasFilter()) {
-      return _frameworksFiltered;
-    }
     return getStatesByFramework();
   },
 
@@ -208,18 +194,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   getUsedResources: function () {
     return getStatesByResource(_mesosStates, "used_resources");
-  },
-
-  getFilterOptions: function () {
-    return _filterOptions[_pagetype];
-  },
-
-  applyAllFilter: function () {
-    if (_filterOptions[_pagetype].searchString !== "") {
-      _frameworksFiltered = filterFrameworks(
-        _filterOptions[_pagetype].searchString
-      );
-    }
   },
 
   emitChange: function (eventName) {
@@ -238,12 +212,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
   },
 
-  processFilter: function (searchString) {
-    _filterOptions[_pagetype].searchString = searchString;
-    this.applyAllFilter();
-    this.emitChange(EventTypes.MESOS_STATE_CHANGE);
-  },
-
   processState: function (data) {
     data.date = Date.now();
     data.frameworks = normalizeFrameworks(data.frameworks, data.date);
@@ -258,8 +226,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       _mesosStates.shift();
     }
 
-    this.applyAllFilter();
-
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },
 
@@ -269,12 +235,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     switch (action.type) {
       case ActionTypes.REQUEST_MESOS_STATE:
         MesosStateStore.processState(action.data);
-        break;
-      case ActionTypes.FILTER_SERVICES_BY_STRING:
-        MesosStateStore.processFilter(action.data);
-        break;
-      case ActionTypes.SET_PAGETYPE:
-        setPageType(action.data);
         break;
     }
 
