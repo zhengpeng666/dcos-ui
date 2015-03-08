@@ -92,11 +92,11 @@ var ResourceChart = React.createClass({
         <div className="panel-content">
           <div className="row text-align-center">
             <div className="column-small-offset-2 column-small-4">
-              <p className="h1 unit">{totalHeadline[0]}</p>
+              <p className="h1-jumbo unit">{totalHeadline[0]}</p>
               <p className="h4 unit-label text-muted">{totalHeadline[1]} Total</p>
             </div>
             <div className="column-small-4">
-              <p className="h1 unit">
+              <p className="h1-jumbo unit">
                 {this.getUsed()}<sup>%</sup>
               </p>
               <p className="h4 unit-label">

@@ -64,8 +64,9 @@ var Chart = React.createClass({
 
       var children = this.props.children;
       if (_.isArray(children)) {
+        height = height / children.length;
         return _.map(children, function (child) {
-          React.addons.cloneWithProps(
+          return React.addons.cloneWithProps(
             child,
             {width: width, height: height}
           );

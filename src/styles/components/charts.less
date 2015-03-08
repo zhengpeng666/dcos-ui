@@ -6,13 +6,13 @@ svg .background {
 .grid .tick,
 .axis line {
   fill: none;
-  stroke: @panel-background-color;
+  stroke: @body-text-inverse-color;
   stroke-width: 1px;
   shape-rendering: crispEdges;
 }
 
 .axis text {
-  fill: @panel-background-color;
+  fill: @body-text-inverse-color;
 }
 
 .area path {
@@ -100,5 +100,50 @@ svg .background {
       stroke: @gray;
       stroke-dasharray: 4,4;
     }
+  }
+}
+
+& when (@typography-enabled) {
+  .unit {
+    fill: ~`color_lightness("@{gray}", 100)`;
+  }
+
+  .unit-label {
+    fill: @mesosphere-heliotrope;
+    &.path-color-0 {
+      color: @mesosphere-heliotrope;
+    }
+
+    &.path-color-1 {
+      color: @mesosphere-lemon;
+    }
+
+    &.path-color-2 {
+      color: @mesosphere-mars;
+    }
+
+    &.path-color-3 {
+      color: @mesosphere-azure;
+    }
+
+    &.path-color-4 {
+      color: @mesosphere-seafoam;
+    }
+
+    &.path-color-5 {
+      color: @mesosphere-orchid;
+    }
+  }
+
+  .text-danger {
+    fill: ~`color_lightness("@{mesosphere-mars}", 0)`;
+  }
+
+  .text-success {
+    fill: ~`color_lightness("@{mesosphere-seafoam}", 0)`;
+  }
+
+  .text-muted {
+    fill: @body-text-mute-color;
   }
 }

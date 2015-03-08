@@ -7,6 +7,15 @@ var Chart = require("./Chart");
 var DialChart = require("./DialChart");
 
 var tasksPerRow = 3;
+var taskLabels = {
+  "TASK_FAILED": "Tasks failed",
+  "TASK_FINISHED:": "Tasks finished",
+  "TASK_KILLED": "Tasks killed",
+  "TASK_LOST": "Tasks lost",
+  "TASK_RUNNING": "Tasks running",
+  "TASK_STAGING": "Tasks staging",
+  "TASK_STARTING": "Tasks startingg"
+};
 
 var TasksChart = React.createClass({
 
@@ -34,11 +43,11 @@ var TasksChart = React.createClass({
       var classSet = React.addons.classSet(classes);
       return (
         <div key={i} className={classSet}>
-          <h5 className="h1 unit">
+          <p className="h1 unit">
             {task.value}
-          </h5>
-          <p className="unit-label">
-            {task.name}
+          </p>
+          <p className={"unit-label path-color-" + i}>
+            {taskLabels[task.name]}
           </p>
         </div>
       );
@@ -66,7 +75,7 @@ var TasksChart = React.createClass({
           <div className="row">
             <div className="column-small-offset-1 column-small-10">
               <Chart calcHeight={function (w) { return w; }}>
-                <DialChart data={tasks} />
+                <DialChart data={tasks} unit={_.reduce(tasks, function(acc, task){ return acc + task.value; }, 0)} label={"Total Tasks"} />
               </Chart>
             </div>
           </div>

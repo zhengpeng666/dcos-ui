@@ -13,13 +13,17 @@ var DialChart = React.createClass({
   propTypes: {
     // [{colorIndex: 0, name: "Some Name", value: 4}]
     data: React.PropTypes.array.isRequired,
+    duration: React.PropTypes.number,
+    unit: React.PropTypes.number,
+    label: React.PropTypes.string,
     value: React.PropTypes.string
   },
 
   getDefaultProps: function () {
     return {
-      value: "value",
-      duration: 1000
+      duration: 1000,
+      label: "",
+      value: "value"
     };
   },
 
@@ -102,6 +106,14 @@ var DialChart = React.createClass({
         <g transform={this.getPosition()}>
           <g className="slices">
             {this.getWedges()}
+          </g>
+          <g text-anchor="middle">
+            <text className="h1-jumbo unit" dominant-baseline="text-after-edge">
+              {this.props.unit}
+            </text>
+            <text className="h4 unit-label text-muted" dominant-baseline="text-before-edge">
+              {this.props.label}
+            </text>
           </g>
         </g>
       </svg>

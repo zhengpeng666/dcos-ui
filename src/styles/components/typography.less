@@ -1,6 +1,7 @@
 & when (@typography-enabled) {
   .unit {
     font-weight: 100;
+    .flush-top();
     .flush-bottom();
 
     sup {
@@ -12,6 +13,7 @@
 
   .unit-label {
     color: @mesosphere-heliotrope;
+    .flush-top();
   }
 
   .text-danger {
@@ -24,5 +26,254 @@
 
   .text-muted {
     color: @body-text-mute-color;
+  }
+
+  /* Heading h1 Jumbo Text */
+  & when (@heading-h1-jumbo-text-enabled) {
+
+    .h1-jumbo {
+      .text-styling (
+        @heading-h1-jumbo-text-color,
+        @heading-h1-jumbo-text-font-family,
+        @heading-h1-jumbo-text-font-size,
+        @heading-h1-jumbo-text-font-style,
+        @heading-h1-jumbo-text-font-weight,
+        @heading-h1-jumbo-text-line-height,
+        @heading-h1-jumbo-text-transform,
+        @heading-h1-jumbo-text-shadow
+      );
+
+      margin-top: @heading-h1-jumbo-text-margin-top;
+      margin-bottom: @heading-h1-jumbo-text-margin-bottom;
+
+      /* Short */
+      &.short {
+        margin-top: @heading-h1-jumbo-text-short-margin-top;
+        margin-bottom: @heading-h1-jumbo-text-short-margin-bottom;
+      }
+
+      &.short-top {
+        margin-top: @heading-h1-jumbo-text-short-margin-top;
+      }
+
+      &.short-bottom {
+        margin-bottom: @heading-h1-jumbo-text-short-margin-bottom;
+      }
+
+      /* Tall */
+      &.tall {
+        margin-top: @heading-h1-jumbo-text-tall-margin-top;
+        margin-bottom: @heading-h1-jumbo-text-tall-margin-bottom;
+      }
+
+      &.tall-top {
+        margin-top: @heading-h1-jumbo-text-tall-margin-top;
+      }
+
+      &.tall-bottom {
+        margin-bottom: @heading-h1-jumbo-text-tall-margin-bottom;
+      }
+
+      /* Links */
+      & when (@heading-h1-jumbo-text-link-enabled) {
+        a {
+          color: @heading-h1-jumbo-text-link-text-color;
+          text-decoration: @heading-h1-jumbo-text-link-text-decoration;
+
+          &:hover {
+            color: @heading-h1-jumbo-text-link-hover-text-color;
+            text-decoration: @heading-h1-jumbo-text-link-hover-text-decoration;
+          }
+
+          &:active {
+            color: @heading-h1-jumbo-text-link-active-text-color;
+            text-decoration: @heading-h1-jumbo-text-link-active-text-decoration;
+          }
+
+          &:disabled {
+            color: @heading-h1-jumbo-text-link-active-text-color;
+            text-decoration: @heading-h1-jumbo-text-link-active-text-decoration;
+          }
+        }
+      }
+
+      /* Emphasize */
+      & when (@heading-h1-jumbo-text-emphasize-enabled) {
+        strong,
+        .emphasize {
+          .text-styling (
+            @heading-h1-jumbo-text-emphasize-color,
+            @heading-h1-jumbo-text-emphasize-font-family,
+            @heading-h1-jumbo-text-emphasize-font-size,
+            @heading-h1-jumbo-text-emphasize-font-style,
+            @heading-h1-jumbo-text-emphasize-font-weight,
+            @heading-h1-jumbo-text-emphasize-line-height,
+            @heading-h1-jumbo-text-emphasize-transform,
+            @heading-h1-jumbo-text-emphasize-shadow
+          );
+
+
+
+          /* Links */
+          & when (@heading-h1-jumbo-text-emphasize-link-enabled) {
+            a {
+              color: @heading-h1-jumbo-text-emphasize-link-text-color;
+              text-decoration: @heading-h1-jumbo-text-emphasize-link-text-decoration;
+
+              &:hover {
+                color: @heading-h1-jumbo-text-emphasize-link-hover-text-color;
+                text-decoration: @heading-h1-jumbo-text-emphasize-link-hover-text-decoration;
+              }
+
+              &:active {
+                color: @heading-h1-jumbo-text-emphasize-link-active-text-color;
+                text-decoration: @heading-h1-jumbo-text-emphasize-link-active-text-decoration;
+              }
+
+              &:disabled {
+                color: @heading-h1-jumbo-text-emphasize-link-active-text-color;
+                text-decoration: @heading-h1-jumbo-text-emphasize-link-active-text-decoration;
+              }
+            }
+          }
+        }
+      }
+
+      /* Mute */
+      & when (@heading-h1-jumbo-text-mute-enabled) {
+        .mute {
+          .text-styling (
+            @heading-h1-jumbo-text-mute-color,
+            @heading-h1-jumbo-text-mute-font-family,
+            @heading-h1-jumbo-text-mute-font-size,
+            @heading-h1-jumbo-text-mute-font-style,
+            @heading-h1-jumbo-text-mute-font-weight,
+            @heading-h1-jumbo-text-mute-line-height,
+            @heading-h1-jumbo-text-mute-transform,
+            @heading-h1-jumbo-text-mute-shadow
+          );
+
+          /* Links */
+          & when (@heading-h1-jumbo-text-mute-link-enabled) {
+            a {
+              color: @heading-h1-jumbo-text-mute-link-text-color;
+              text-decoration: @heading-h1-jumbo-text-mute-link-text-decoration;
+
+              &:hover {
+                color: @heading-h1-jumbo-text-mute-link-hover-text-color;
+                text-decoration: @heading-h1-jumbo-text-mute-link-hover-text-decoration;
+              }
+
+              &:active {
+                color: @heading-h1-jumbo-text-mute-link-active-text-color;
+                text-decoration: @heading-h1-jumbo-text-mute-link-active-text-decoration;
+              }
+
+              &:disabled {
+                color: @heading-h1-jumbo-text-mute-link-active-text-color;
+                text-decoration: @heading-h1-jumbo-text-mute-link-active-text-decoration;
+              }
+            }
+          }
+        }
+      }
+
+      /* Inverse */
+      & when (@heading-h1-jumbo-text-inverse-enabled) {
+        &.inverse {
+          color: @heading-h1-jumbo-text-inverse-color;
+          text-shadow: @heading-h1-jumbo-text-inverse-shadow;
+
+          /* Links */
+          & when (@heading-h1-jumbo-text-inverse-link-enabled) {
+
+            a {
+              color: @heading-h1-jumbo-text-inverse-link-text-color;
+              text-decoration: @heading-h1-jumbo-text-inverse-link-text-decoration;
+
+              &:hover {
+                color: @heading-h1-jumbo-text-inverse-link-hover-text-color;
+                text-decoration: @heading-h1-jumbo-text-inverse-link-hover-text-decoration;
+              }
+
+              &:active {
+                color: @heading-h1-jumbo-text-inverse-link-active-text-color;
+                text-decoration: @heading-h1-jumbo-text-inverse-link-active-text-decoration;
+              }
+
+              &:disabled {
+                color: @heading-h1-jumbo-text-inverse-link-active-text-color;
+                text-decoration: @heading-h1-jumbo-text-inverse-link-active-text-decoration;
+              }
+            }
+          }
+
+          /* Emphasize Inverse */
+          & when (@heading-h1-jumbo-text-inverse-emphasize-enabled) {
+            strong,
+            .emphasize {
+              color: @heading-h1-jumbo-text-inverse-emphasize-color;
+              text-shadow: @heading-h1-jumbo-text-inverse-emphasize-shadow;
+
+              /* Links */
+              & when (@heading-h1-jumbo-text-inverse-emphasize-link-enabled) {
+
+                a {
+                  color: @heading-h1-jumbo-text-inverse-emphasize-link-text-color;
+                  text-decoration: @heading-h1-jumbo-text-inverse-emphasize-link-text-decoration;
+
+                  &:hover {
+                    color: @heading-h1-jumbo-text-inverse-emphasize-link-hover-text-color;
+                    text-decoration: @heading-h1-jumbo-text-inverse-emphasize-link-hover-text-decoration;
+                  }
+
+                  &:active {
+                    color: @heading-h1-jumbo-text-inverse-emphasize-link-active-text-color;
+                    text-decoration: @heading-h1-jumbo-text-inverse-emphasize-link-active-text-decoration;
+                  }
+
+                  &:disabled {
+                    color: @heading-h1-jumbo-text-inverse-emphasize-link-active-text-color;
+                    text-decoration: @heading-h1-jumbo-text-inverse-emphasize-link-active-text-decoration;
+                  }
+                }
+              }
+            }
+          }
+
+          /* Mute Inverse */
+          & when (@heading-h1-jumbo-text-inverse-mute-enabled) {
+            .mute {
+              color: @heading-h1-jumbo-text-inverse-mute-color;
+              text-shadow: @heading-h1-jumbo-text-inverse-mute-shadow;
+
+              /* Links */
+              & when (@heading-h1-jumbo-text-inverse-mute-link-enabled) {
+
+                a {
+                  color: @heading-h1-jumbo-text-inverse-mute-link-text-color;
+                  text-decoration: @heading-h1-jumbo-text-inverse-mute-link-text-decoration;
+
+                  &:hover {
+                    color: @heading-h1-jumbo-text-inverse-mute-link-hover-text-color;
+                    text-decoration: @heading-h1-jumbo-text-inverse-mute-link-hover-text-decoration;
+                  }
+
+                  &:active {
+                    color: @heading-h1-jumbo-text-inverse-mute-link-active-text-color;
+                    text-decoration: @heading-h1-jumbo-text-inverse-mute-link-active-text-decoration;
+                  }
+
+                  &:disabled {
+                    color: @heading-h1-jumbo-text-inverse-mute-link-active-text-color;
+                    text-decoration: @heading-h1-jumbo-text-inverse-mute-link-active-text-decoration;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
