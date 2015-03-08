@@ -4,7 +4,6 @@ var React = require("react");
 var Router = require("react-router");
 var Route = Router.Route;
 
-require("./utils/ScrollHandler");
 require("./utils/ReactSVG");
 var ActivityPage = require("./components/ActivityPage");
 var DatacenterPage = require("./components/DatacenterPage");

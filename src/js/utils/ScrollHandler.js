@@ -1,23 +1,12 @@
 var $ = require("jquery");
 require("perfect-scrollbar");
 
-/* Get Scrollbar Width */
-function getScrollbarWidth() {
-  var div = $(
-    "<div style='width:50px;height:50px;overflow:hidden;" +
-      "position:absolute;top:-200px;left:-200px;'>" +
-      "<div style='height:100px;'>" +
-      "</div>" +
-    "</div>"
-  );
-  $("body").append(div);
-  var w1 = $("div", div).innerWidth();
-  div.css("overflow-y", "auto");
-  var w2 = $("div", div).innerWidth();
-  $(div).remove();
-  return (w1 - w2);
+/* Event Handler: Window Scroll */
+function windowScroll() {
+  $(window).scrollTop();
 }
 
+/* Canvas Sidebar Toggle */
 function canvasSidebarOpen() {
   $("body").addClass("canvas-sidebar-open");
 }
@@ -26,12 +15,46 @@ function canvasSidebarClose() {
   $("body").removeClass("canvas-sidebar-open");
 }
 
-/* Canvas Sidebar Toggle */
 function canvasSidebarToggle() {
   if ($("body").hasClass("canvas-sidebar-open")) {
     canvasSidebarClose();
   } else {
     canvasSidebarOpen();
+  }
+}
+
+/* Simulate input placeholder */
+function simulatePlaceholders() {
+  var input = document.createElement("input");
+
+  if (("placeholder" in input) === false) {
+    $("[placeholder]").focus(function () {
+      var i = $(this);
+      if (i.val() === i.attr("placeholder")) {
+        i.val("").removeClass("placeholder");
+        if (i.hasClass("password")) {
+          i.removeClass("password");
+          this.type = "password";
+        }
+      }
+    }).blur(function () {
+      var i = $(this);
+
+      if (i.val() === "" || i.val() === i.attr("placeholder")) {
+        if (this.type === "password") {
+          i.addClass("password");
+          this.type = "text";
+        }
+        i.addClass("placeholder").val(i.attr("placeholder"));
+      }
+    }).blur().parents("form").submit(function () {
+      $(this).find("[placeholder]").each(function () {
+        var i = $(this);
+        if (i.val() === i.attr("placeholder")) {
+          i.val("");
+        }
+      });
+    });
   }
 }
 
@@ -76,6 +99,7 @@ function modalResize() {
         "height": modalContentInnerHeight
       });
     }
+
     $(this).css({
       "margin-top": -1 * ($(this).outerHeight() / 2)
     });
@@ -96,7 +120,7 @@ function windowResize() {
   // if (responsiveViewport < 481) {}
   // if (responsiveViewport > 481) {}
   // if (responsiveViewport < 768) {}
-  if (responsiveViewport >= 992) {
+  if (responsiveViewport >= 768) {
     canvasSidebarClose();
   }
 
@@ -115,30 +139,33 @@ function windowResize() {
     sidebarFooter.outerHeight();
 
   if (sidebarContentHeight < 0) {
+
     sidebarContentHeight = 0;
+
   }
 
   sidebarContent.css({
-   "height": sidebarContentHeight
+    "height": sidebarContentHeight
   });
-
-  /* Resize page content height */
-  var page = $("#sidebar");
-  var pageHeader = $("#page-header");
-  var pageContent = $("#page-content");
-
-  var pageContentHeight = page.outerHeight() - pageHeader.outerHeight();
-
-  if (pageContentHeight < 0) {
-    pageContentHeight = 0;
-  }
-
-  pageContent.css({
-    "height": pageContentHeight
-  });
+  /* Invoke Window Scroll method */
+  windowScroll();
 
   /* Resize Modal */
   modalResize();
+}
+
+/* Get Scrollbar Width */
+function getScrollbarWidth() {
+  var div = $("<div style='width:50px;height:50px;overflow:hidden;" +
+    "position:absolute;top:-200px;left:-200px;'>" +
+    "<div style='height:100px;'></div></div>"
+  );
+  $("body").append(div);
+  var w1 = $("div", div).innerWidth();
+  div.css("overflow-y", "auto");
+  var w2 = $("div", div).innerWidth();
+  $(div).remove();
+  return (w1 - w2);
 }
 
 /* Initialize */
@@ -154,6 +181,15 @@ function init() {
   });
 
   windowResize();
+
+  /* Define window scroll event listener */
+  $(window).scroll(function () {
+    windowScroll();
+  });
+
+  windowScroll();
+  /* Simulate placeholder text */
+  simulatePlaceholders();
 
   /* Initialize Scrollbars */
   $(".container-scrollable").perfectScrollbar();
