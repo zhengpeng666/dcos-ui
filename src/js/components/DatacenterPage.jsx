@@ -18,7 +18,7 @@ var DatacenterPage = React.createClass({
   displayName: "DatacenterPage",
 
   getInitialState: function () {
-    return getMesosServices();
+    return getMesosHosts();
   },
 
   componentDidMount: function () {
@@ -42,7 +42,6 @@ var DatacenterPage = React.createClass({
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
-
     return (
       <div>
         <div id="page-header">
@@ -59,7 +58,7 @@ var DatacenterPage = React.createClass({
         <div id="page-header-navigation" />
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
-            <HostList hosts={state.hosts} />
+            <HostList hosts={this.state.hosts} />
           </div>
         </div>
       </div>

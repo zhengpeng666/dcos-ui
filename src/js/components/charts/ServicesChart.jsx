@@ -4,7 +4,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var Chart = require("./Chart");
-var StackedBarChart = require("./StackedBarChart");
+var BarChart = require("./BarChart");
 
 var buttonNameMap = {
   cpus: "CPU",
@@ -22,13 +22,22 @@ var ServicesChart = React.createClass({
     usedResources: React.PropTypes.object.isRequired
   },
 
+  getDefaultProps: function () {
+    return {
+      data: [],
+      totalResources: {},
+      usedResources: {},
+      y: "percentage"
+    };
+  },
+
   getInitialState: function () {
     return {
       resourceMode: "cpus"
     };
   },
 
-  getData: function () {
+  getStackedData: function () {
     var props = this.props;
     return _.map(props.data, function (framework) {
       return {
@@ -40,9 +49,37 @@ var ServicesChart = React.createClass({
     }.bind(this));
   },
 
+  getData: function () {
+    var props = this.props;
+    var y = props.y;
+
+    if (props.data.length === 0) {
+      return [];
+    }
+
+    var summedData = _.reduce(props.data, function (acc, framework) {
+      var values = framework.used_resources[this.state.resourceMode];
+      _.each(values, function (val, i) {
+        if (acc.values[i] == null) {
+          acc.values.push({date: val.date});
+          acc.values[i][y] = 0;
+        }
+        acc.values[i][y] += val[y];
+      });
+      return acc;
+    }.bind(this), {
+        id: "used_resources",
+        name: this.state.resourceMode + " allocated",
+        colorIndex: 0,
+        values: []
+    });
+
+    return [summedData];
+  },
+
   getMaxY: function () {
     var props = this.props;
-    return _.last(props.totalResources[this.state.resourceMode]).percentage;
+    return _.last(props.totalResources[this.state.resourceMode])[props.y];
   },
 
   changeMode: function (mode) {
@@ -72,16 +109,16 @@ var ServicesChart = React.createClass({
     }, this);
   },
 
-  getStackedBarChart: function () {
+  getBarChart: function () {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Chart calcHeight={function (w) { return w/4; }}>
-        <StackedBarChart
+        <BarChart
           data={this.getData()}
           maxY={this.getMaxY()}
           ticksY={4}
-          y="percentage" />
+          y={this.props.y} />
       </Chart>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
@@ -89,9 +126,10 @@ var ServicesChart = React.createClass({
   },
 
   getLegend: function () {
+    var y = this.props.y;
     var frameworks = _.filter(this.getData(), function (framework) {
       return _.find(framework.values, function (val) {
-        return val.percentage;
+        return val[y];
       });
     });
 
@@ -127,7 +165,7 @@ var ServicesChart = React.createClass({
           {this.getLegend()}
         </div>
         <div className="panel-content" ref="panelContent">
-          {this.getStackedBarChart()}
+          {this.getBarChart()}
         </div>
       </div>
     );

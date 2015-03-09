@@ -4,11 +4,11 @@ var _ = require("underscore");
 var d3 = require("d3");
 var React = require("react/addons");
 
-var StackedBar = require("./StackedBar");
+var Bar = require("./Bar");
 
-var StackedBarChart = React.createClass({
+var BarChart = React.createClass({
 
-  displayName: "StackedBarChart",
+  displayName: "BarChart",
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
@@ -40,7 +40,6 @@ var StackedBarChart = React.createClass({
     return {
       stack: this.getStack(),
       stackedData: [],
-      posY: [],
       rectWidth: 0,
       valuesLength: 0,
       xScale: xScale,
@@ -156,21 +155,19 @@ var StackedBarChart = React.createClass({
     this.renderAxis(props, xScale, yScale);
 
     var stackedData = this.state.stack(props.data);
-    var valuesLength;
-    var state = {};
+    var valuesLength = 0;
+    var rectWidth = 0;
 
     if (stackedData.length !== 0) {
       valuesLength = _.last(stackedData).values.length;
-
-      state = {
-        valuesLength: valuesLength,
-        posY: _.map(_.range(valuesLength), function () {
-          return props.height;
-        }),
-        rectWidth: (props.width - props.margin.left) / valuesLength,
-        stackedData: stackedData
-      };
+      rectWidth = (props.width - props.margin.left) / valuesLength;
     }
+
+    var state = {
+      valuesLength: valuesLength,
+      rectWidth: rectWidth,
+      stackedData: stackedData
+    };
 
     this.setState(_.extend(state, {
       xScale: xScale,
@@ -178,14 +175,16 @@ var StackedBarChart = React.createClass({
     }));
   },
 
-  getStackedBarList: function () {
+  getBarList: function () {
     var props = this.props;
     var state = this.state;
     var marginLeft = props.margin.left;
     var chartWidth = props.width;
     var y = props.y;
-    var posY = state.posY;
     var valuesLength = state.valuesLength;
+    var posY = _.map(_.range(valuesLength), function () {
+      return props.height;
+    });
     var peaklineHeight = 2;
     var lineClass;
     if (!props.peakline) {
@@ -206,7 +205,7 @@ var StackedBarChart = React.createClass({
         /* jshint trailing:false, quotmark:false, newcap:false */
         /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
         return (
-          <StackedBar
+          <Bar
             posX={posX}
             posY={posY[j]}
             rectHeight={rectHeight}
@@ -238,11 +237,11 @@ var StackedBarChart = React.createClass({
             ref="xAxis"/>
           <g ref="yGrid" />
           <g ref="xGrid" />
-          {this.getStackedBarList()}
+          {this.getBarList()}
         </g>
       </svg>
     );
   }
 });
 
-module.exports = StackedBarChart;
+module.exports = BarChart;

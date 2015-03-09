@@ -293,7 +293,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getHosts: function () {
-    return _hosts;
+    return getStatesByHost();
   },
 
   getTasks: function () {
