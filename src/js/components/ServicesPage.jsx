@@ -1,19 +1,18 @@
 /** @jsx React.DOM */
 
+var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
-var MesosStateActions = require("../actions/MesosStateActions");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
 var ServicesChart = require("./charts/ServicesChart");
 var ServicesFilter = require("./ServicesFilter");
 var ServiceList = require("./ServiceList");
 
-function getMesosServices() {
+function getMesosServices(options) {
   return {
-    filterString: MesosStateStore.getFilterOptions().searchString,
-    frameworks: MesosStateStore.getFrameworks(),
+    frameworks: MesosStateStore.getFilteredFrameworks(options),
     totalFrameworks: MesosStateStore.getLatest().frameworks.length,
     totalResources: MesosStateStore.getTotalResources(),
     usedResources: MesosStateStore.getUsedResources()
@@ -25,8 +24,8 @@ var ServicesPage = React.createClass({
   displayName: "ServicesPage",
 
   getInitialState: function () {
-    MesosStateActions.setPageType(ServicesPage.displayName);
-    return getMesosServices();
+    var filterOptions = {searchString: ""};
+    return _.extend(getMesosServices(filterOptions), filterOptions);
   },
 
   componentDidMount: function () {
@@ -34,6 +33,7 @@ var ServicesPage = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onChange
     );
+    this.onChange();
   },
 
   componentWillUnmount: function () {
@@ -43,8 +43,15 @@ var ServicesPage = React.createClass({
     );
   },
 
-  onChange: function () {
-    this.setState(getMesosServices());
+  onChange: function (searchString) {
+    var state;
+    if (searchString != null) {
+      var filterOptions = {searchString: searchString};
+      state = _.extend(getMesosServices(filterOptions), filterOptions);
+    } else {
+      state = getMesosServices({searchString: this.state.searchString});
+    }
+    this.setState(state);
   },
 
   /* jshint trailing:false, quotmark:false, newcap:false */
@@ -77,10 +84,11 @@ var ServicesPage = React.createClass({
               <h4>{state.totalFrameworks} Total Services</h4>
             </div>
             <ServicesFilter
-                filterString={state.filterString} />
+              searchString={this.state.searchString}
+              onSubmit={this.onChange} />
             <ServiceList
-                frameworks={state.frameworks}
-                totalResources={state.totalResources} />
+              frameworks={state.frameworks}
+              totalResources={state.totalResources} />
           </div>
         </div>
       </div>

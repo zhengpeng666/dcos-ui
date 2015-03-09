@@ -5,10 +5,11 @@ var React = require("react/addons");
 var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceChart = require("./charts/ResourceChart");
+var TasksChart = require("./charts/TasksChart");
 
 function getMesosState() {
   return {
-    frameworks: MesosStateStore.getFrameworks(),
+    tasks: MesosStateStore.getTasks(),
     totalResources: MesosStateStore.getTotalResources(),
     usedResources: MesosStateStore.getUsedResources()
   };
@@ -63,6 +64,9 @@ var Activity = React.createClass({
             totalResources={state.totalResources}
             usedResources={state.usedResources}
             mode="disk" />
+        </div>
+        <div className="column-small-6 column-large-4">
+          <TasksChart tasks={state.tasks} />
         </div>
       </div>
     );

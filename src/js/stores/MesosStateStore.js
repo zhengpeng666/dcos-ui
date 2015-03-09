@@ -11,17 +11,8 @@ var HISTORY_LENGTH = 30;
 
 var _interval;
 var _initCalled = false;
-var _pagetype = "Default";
-var _filterOptions = {};
-_filterOptions[_pagetype] = {
-  searchString: ""
-};
 var _frameworkIndexes = [];
-var _frameworks = [];
-var _frameworksFiltered = [];
 var _mesosStates = [];
-var _totalResources = {};
-var _usedResources = {};
 
 function round(value, decimalPlaces) {
   decimalPlaces || (decimalPlaces = 0);
@@ -75,11 +66,39 @@ function getStatesByFramework() {
     .flatten()
     .groupBy(function (framework) {
       return framework.id;
-    }).map(function (framework) {
+    })
+    .map(function (framework) {
       return _.extend(_.clone(_.last(framework)), {
         used_resources: getStatesByResource(framework, "used_resources")
       });
     }, this).value();
+}
+
+// [{
+//   state: "TASK_RUNNING",
+//   tasks: [{
+//     executor_id: 0,
+//     framework_id: "askdfjaalsjf",
+//     id: "askdfja",
+//     name: "datanode",
+//     resources: {mem: 0, cpus: 0, disk: 0},
+//     state: "TASK_RUNNING"
+//   }, ...]
+// }]
+function getTasksByStatus(frameworks) {
+  return _.chain(frameworks)
+    .pluck("tasks")
+    .flatten()
+    .groupBy(function (task) {
+      return task.state;
+    })
+    .map(function (tasks, value) {
+      return {
+        state: value,
+        tasks: tasks
+      };
+    })
+    .value();
 }
 
 function fillFramework(id, name, colorIndex) {
@@ -122,18 +141,16 @@ function normalizeFrameworks(frameworks, date) {
   });
 }
 
-function hasFilter() {
-  return _.find(_filterOptions[_pagetype], function (option) {
-    return !_.isEmpty(option);
-  });
-}
+function filterFrameworks(options) {
+  if (options.searchString === "") {
+    return getStatesByFramework();
+  }
 
-function filterFrameworks(searchString) {
-  var searchPattern = new RegExp(searchString, "i");
+  var searchPattern = new RegExp(options.searchString, "i");
   var valuesPattern = /:\"[^\"]+\"/g;
   var cleanupPattern = /[:\"]/g;
 
-  return _.filter(_frameworks, function (framework) {
+  return _.filter(getStatesByFramework(), function (framework) {
     var str = JSON.stringify(framework)
       .match(valuesPattern)
       .join(" ")
@@ -154,9 +171,6 @@ function initStates() {
       total_resources: {cpus: 0, mem: 0, disk: 0}
     };
   });
-
-  _totalResources = getStatesByResource(_mesosStates, "total_resources");
-  _usedResources = getStatesByResource(_mesosStates, "used_resources");
 }
 
 function startPolling() {
@@ -170,13 +184,6 @@ function stopPolling() {
   if (_interval != null) {
     clearInterval(_interval);
     _interval = null;
-  }
-}
-
-function setPageType (pagetype) {
-  _pagetype = pagetype;
-  if (_filterOptions[_pagetype] === undefined) {
-    _filterOptions[_pagetype] = _.clone(_filterOptions.Default);
   }
 }
 
@@ -201,31 +208,24 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _.last(_mesosStates);
   },
 
+  getFilteredFrameworks: function (options) {
+    return filterFrameworks(options);
+  },
+
   getFrameworks: function () {
-    if (hasFilter()) {
-      return _frameworksFiltered;
-    }
-    return _frameworks;
+    return getStatesByFramework();
+  },
+
+  getTasks: function () {
+    return getTasksByStatus(this.getLatest().frameworks);
   },
 
   getTotalResources: function () {
-    return _totalResources;
+    return getStatesByResource(_mesosStates, "total_resources");
   },
 
   getUsedResources: function () {
-    return _usedResources;
-  },
-
-  getFilterOptions: function () {
-    return _filterOptions[_pagetype];
-  },
-
-  applyAllFilter: function () {
-    if (_filterOptions[_pagetype].searchString !== "") {
-      _frameworksFiltered = filterFrameworks(
-        _filterOptions[_pagetype].searchString
-      );
-    }
+    return getStatesByResource(_mesosStates, "used_resources");
   },
 
   emitChange: function (eventName) {
@@ -244,12 +244,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
   },
 
-  processFilter: function (searchString) {
-    _filterOptions[_pagetype].searchString = searchString;
-    this.applyAllFilter();
-    this.emitChange(EventTypes.MESOS_STATE_CHANGE);
-  },
-
   processState: function (data) {
     data.date = Date.now();
     data.frameworks = normalizeFrameworks(data.frameworks, data.date);
@@ -264,13 +258,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       _mesosStates.shift();
     }
 
-    _frameworks = getStatesByFramework();
-
-    this.applyAllFilter();
-
-    _totalResources = getStatesByResource(_mesosStates, "total_resources");
-    _usedResources = getStatesByResource(_mesosStates, "used_resources");
-
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },
 
@@ -280,12 +267,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     switch (action.type) {
       case ActionTypes.REQUEST_MESOS_STATE:
         MesosStateStore.processState(action.data);
-        break;
-      case ActionTypes.FILTER_SERVICES_BY_STRING:
-        MesosStateStore.processFilter(action.data);
-        break;
-      case ActionTypes.SET_PAGETYPE:
-        setPageType(action.data);
         break;
     }
 

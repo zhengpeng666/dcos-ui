@@ -3,7 +3,6 @@
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
-var MesosStateActions = require("../actions/MesosStateActions");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
 
@@ -19,7 +18,6 @@ var DatacenterPage = React.createClass({
   displayName: "DatacenterPage",
 
   getInitialState: function () {
-    MesosStateActions.setPageType(DatacenterPage.displayName);
     return getMesosServices();
   },
 
@@ -44,7 +42,6 @@ var DatacenterPage = React.createClass({
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
-    var state = this.state;
 
     return (
       <div>
