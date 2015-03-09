@@ -3,9 +3,9 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
-var StackedBar = React.createClass({
+var Bar = React.createClass({
 
-  displayName: "StackedBar",
+  displayName: "Bar",
 
   propTypes: {
     posX: React.PropTypes.number.isRequired,
@@ -46,4 +46,4 @@ var StackedBar = React.createClass({
   }
 });
 
-module.exports = StackedBar;
+module.exports = Bar;

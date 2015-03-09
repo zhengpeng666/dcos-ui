@@ -3,9 +3,9 @@
 var _ = require("underscore");
 var React = require("react");
 
-var ServiceItem = React.createClass({
+var HostItem = React.createClass({
 
-  displayName: "ServiceItem",
+  displayName: "HostItem",
 
   propTypes: {
     model: React.PropTypes.object.isRequired
@@ -15,29 +15,6 @@ var ServiceItem = React.createClass({
     return {
       model: {}
     };
-  },
-
-  getStatus: function () {
-    var model = this.props.model;
-
-    var status = "Active";
-    if (model.active !== true) {
-      status = "Inactive";
-    }
-
-    var statusClassSet = React.addons.classSet({
-      "collection-item-content-status": true,
-      "text-success": model.active,
-      "text-danger": !model.active
-    });
-
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return (
-      <span className={statusClassSet}>{status} ({model.tasks.length} Tasks)</span>
-    );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getStatistics: function (resources) {
@@ -70,13 +47,11 @@ var ServiceItem = React.createClass({
     return (
       <li className="collection-item" title={model.id}>
         <div className="collection-item-header">
-          <i className="icon icon-medium icon-medium-white border-radius"></i>
         </div>
         <div className="collection-item-content">
           <h5 className="collection-item-content-headline flush-top flush-bottom">
-            {model.name}
+            {model.hostname}
           </h5>
-          {this.getStatus()}
         </div>
         <div className="collection-item-footer">
           <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
@@ -88,4 +63,4 @@ var ServiceItem = React.createClass({
   }
 });
 
-module.exports = ServiceItem;
+module.exports = HostItem;
