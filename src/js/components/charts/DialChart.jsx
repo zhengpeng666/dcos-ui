@@ -108,10 +108,10 @@ var DialChart = React.createClass({
             {this.getWedges()}
           </g>
           <g text-anchor="middle">
-            <text className="h1-jumbo unit" dominant-baseline="text-after-edge">
+            <text className="h1-jumbo unit">
               {this.props.unit}
             </text>
-            <text className="h4 unit-label text-muted" dominant-baseline="text-before-edge">
+            <text className="h4 unit-label text-muted" dy="2em">
               {this.props.label}
             </text>
           </g>

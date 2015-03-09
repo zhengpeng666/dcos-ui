@@ -54,6 +54,12 @@ var TasksChart = React.createClass({
     });
   },
 
+  getTotal: function (tasks) {
+    return _.reduce(tasks, function(acc, task) {
+      return acc + task.value;
+    }, 0);
+  },
+
   getTasks: function () {
     return _.map(this.props.tasks, function (task, i) {
       return {colorIndex: i, name: task.state, value: task.tasks.length};
@@ -75,7 +81,10 @@ var TasksChart = React.createClass({
           <div className="row">
             <div className="column-small-offset-1 column-small-10">
               <Chart calcHeight={function (w) { return w; }}>
-                <DialChart data={tasks} unit={_.reduce(tasks, function(acc, task){ return acc + task.value; }, 0)} label={"Total Tasks"} />
+                <DialChart
+                  data={tasks}
+                  label={"Total Tasks"}
+                  unit={this.getTotal(tasks)} />
               </Chart>
             </div>
           </div>
