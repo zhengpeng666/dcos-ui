@@ -3,6 +3,7 @@
 var React = require("react");
 var Router = require("react-router");
 var Route = Router.Route;
+var Redirect = Router.Redirect;
 
 require("./utils/ReactSVG");
 var ActivityPage = require("./components/ActivityPage");
@@ -17,6 +18,7 @@ var routes = (
     <Route name="activity" path="activity/" handler={ActivityPage} />
     <Route name="services" path="services/" handler={ServicesPage} />
     <Route name="datacenter" path="datacenter/" handler={DatacenterPage} />
+    <Redirect from="/" to="activity" />
   </Route>
 );
 
