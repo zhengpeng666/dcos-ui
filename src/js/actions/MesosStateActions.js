@@ -1,11 +1,12 @@
+var $ = require("jquery");
+
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("../dispatcher/AppDispatcher");
-var API_ROOT = "http://localhost:5050/master/state.json";
-var $ = require("jquery");
+var Config = require("../utils/Config");
 
 var MesosStateActions = {
   fetch: function () {
-    var url = API_ROOT + "?jsonp=?";
+    var url = Config.rootUrl + "/master/state.json?jsonp=?";
 
     $.getJSON(url, function (response) {
       AppDispatcher.handleServerAction({

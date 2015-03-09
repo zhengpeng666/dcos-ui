@@ -3,16 +3,13 @@ var EventEmitter = require("events").EventEmitter;
 
 var AppDispatcher = require("../dispatcher/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
+var Config = require("../utils/Config");
 var EventTypes = require("../constants/EventTypes");
 var MesosStateActions = require("../actions/MesosStateActions");
-
-var STATE_REFRESH = 2000;
-var HISTORY_LENGTH = 30;
 
 var _interval;
 var _initCalled = false;
 var _frameworkIndexes = [];
-var _hosts = [];
 var _mesosStates = [];
 
 function round(value, decimalPlaces) {
@@ -46,7 +43,7 @@ function getStatesByResource(list, resourcesKey) {
       var max = Math.max(1, _mesosStates[i].total_resources[r]);
       acc[r].push({
         date: v.date,
-        value: round(value),
+        value: round(value, 2),
         percentage: round(100 * value / max)
       });
     });
@@ -238,9 +235,9 @@ function filterFrameworks(options) {
 function initStates() {
   var currentDate = Date.now();
   // reverse date range!!!
-  _mesosStates = _.map(_.range(-HISTORY_LENGTH, 0), function (i) {
+  _mesosStates = _.map(_.range(-Config.historyLength, 0), function (i) {
     return {
-      date: currentDate + (i * STATE_REFRESH),
+      date: currentDate + (i * Config.stateRefresh),
       frameworks: [],
       slaves: [],
       used_resources: {cpus: 0, mem: 0, disk: 0},
@@ -252,7 +249,7 @@ function initStates() {
 function startPolling() {
   if (_interval == null) {
     MesosStateActions.fetch();
-    _interval = setInterval(MesosStateActions.fetch, STATE_REFRESH);
+    _interval = setInterval(MesosStateActions.fetch, Config.stateRefresh);
   }
 }
 
@@ -334,7 +331,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       _.pluck(data.frameworks, "used_resources")
     );
     _mesosStates.push(data);
-    if (_mesosStates.length > HISTORY_LENGTH) {
+    if (_mesosStates.length > Config.historyLength) {
       _mesosStates.shift();
     }
 
