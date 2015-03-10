@@ -51,36 +51,6 @@ function getStatesByResource(list, resourcesKey) {
   }, values);
 }
 
-function getResourceByHost(list, slave) {
-  var values = {"cpus": [], "disk": [], "mem": []};
-  return _.foldl(values, function (acc, arr, r) {
-    _.each(list, function (v, i) {
-      var value = 0;
-      var percentage = 0;
-
-      if (v != null) {
-        value = v[r];
-      }
-
-      var matchedSlave = _.find(_mesosStates[i].slaves, function (s) {
-        return s.id === slave.id;
-      });
-
-      if (matchedSlave != null) {
-        percentage =
-          round(100 * value / Math.max(1, matchedSlave.resources[r]));
-      }
-
-      acc[r].push({
-        date: _mesosStates[i].date,
-        value: round(value),
-        percentage: percentage
-      });
-    });
-    return acc;
-  }, values);
-}
-
 // [{
 //   colorIndex: 0,
 //   name: "Marathon",
@@ -129,49 +99,51 @@ function getTasksByStatus(frameworks) {
     .value();
 }
 
-function getResourcesBySlave() {
-  return _.map(_mesosStates, function (state) {
-    return _.chain(state.frameworks)
-
-      // Will pass a framework filter on this place
-
+function getHostResourcesBySlave (slave) {
+  return _.reduce(_mesosStates, function (usedResources, state) {
+    var tasks = _.chain(state.frameworks)
       .pluck("tasks")
       .flatten()
       .groupBy(function (task) {
         return task.slave_id;
       })
-      .reduce(function (slave, tasks, slaveid) {
-        slave[slaveid] = sumResources(_.pluck(tasks, "resources"));
-        return slave;
-      }, {})
       .value();
-  });
+
+    var resources = sumResources(_.pluck(tasks[slave.id], "resources"));
+
+    _.each(resources, function (resourceVal, resourceKey) {
+      usedResources[resourceKey].push({
+        date: state.date,
+        value: resourceVal,
+        percentage:
+          round(100 * resourceVal / Math.max(1, slave.resources[resourceKey]))
+      });
+    });
+    return usedResources;
+  }, {cpus: [], mem: [], disk: []});
 }
 
-function getStatesByHost(frameworks) {
-  var usedResources = getResourcesBySlave();
+function getStateByHosts () {
+  var data = _.last(_mesosStates);
 
-  return _.chain(_mesosStates)
-    .pluck("slaves")
-    .flatten()
-    .groupBy(function (slave) {
-      return slave.id;
-    })
-    .map(function (slave) {
-      var last = _.clone(_.last(slave));
+  var hosts = _.reduce(data.slaves, function (acc, v) {
+    acc[v.id] = v;
+    acc[v.id].tasks = {};
+    acc[v.id].frameworks = {};
+    acc[v.id].used_resources = getHostResourcesBySlave(v);
+    return acc;
+  }, {});
 
-      var matchedFrameworks = _.filter(frameworks, function (framework) {
-        return _.find(framework.tasks, function (task) {
-          return task.slave_id === last.id;
-        });
-      });
-
-      return _.extend(last, {
-        frameworks: matchedFrameworks,
-        used_resources: getResourceByHost(_.pluck(usedResources, last.id), last)
-      });
-    }, this)
-    .value();
+  return _.toArray(_.reduce(_.flatten(_.map(data.frameworks, function (fw) {
+    return fw.tasks;
+  })), function (acc, v) {
+    acc[v.slave_id].tasks[v.id] = v;
+    acc[v.slave_id].frameworks[v.framework_id] = _.find(data.frameworks,
+        function (framework) {
+      return v.framework_id === framework.id;
+    });
+    return acc;
+  }, hosts));
 }
 
 function fillFramework(id, name, colorIndex) {
@@ -214,17 +186,13 @@ function normalizeFrameworks(frameworks, date) {
   });
 }
 
-function filterFrameworks(options) {
-  if (options.searchString === "") {
-    return getStatesByFramework();
-  }
-
-  var searchPattern = new RegExp(options.searchString, "i");
+function filterByString(objects, searchString) {
+  var searchPattern = new RegExp(searchString, "i");
   var valuesPattern = /:\"[^\"]+\"/g;
   var cleanupPattern = /[:\"]/g;
 
-  return _.filter(getStatesByFramework(), function (framework) {
-    var str = JSON.stringify(framework)
+  return _.filter(objects, function (obj) {
+    var str = JSON.stringify(obj)
       .match(valuesPattern)
       .join(" ")
       .replace(cleanupPattern, "");
@@ -281,16 +249,24 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _.last(_mesosStates);
   },
 
-  getFilteredFrameworks: function (options) {
-    return filterFrameworks(options);
+  getFrameworks: function (filterOptions) {
+    var frameworks = getStatesByFramework();
+
+    if (filterOptions && filterOptions.searchString === "") {
+      return frameworks;
+    }
+
+    return filterByString(frameworks, filterOptions.searchString);
   },
 
-  getFrameworks: function () {
-    return getStatesByFramework();
-  },
+  getHosts: function (filterOptions) {
+    var hosts = getStateByHosts();
 
-  getHosts: function () {
-    return getStatesByHost();
+    if (filterOptions && filterOptions.searchString === "") {
+      return hosts;
+    }
+
+    return filterByString(hosts, filterOptions.searchString);
   },
 
   getTasks: function () {

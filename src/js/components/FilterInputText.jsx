@@ -2,9 +2,9 @@
 
 var React = require("react/addons");
 
-var ServicesFilter = React.createClass({
+var FilterInputText = React.createClass({
 
-  displayName: "ServicesFilter",
+  displayName: "FilterInputText",
 
   propTypes: {
     searchString: React.PropTypes.string.isRequired,
@@ -49,4 +49,4 @@ var ServicesFilter = React.createClass({
   }
 });
 
-module.exports = ServicesFilter;
+module.exports = FilterInputText;

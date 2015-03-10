@@ -1,16 +1,20 @@
 /** @jsx React.DOM */
 
+var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
+var FilterInputText = require("./FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
 var HostList = require("./HostList");
 
-function getMesosHosts() {
-  return {
-    hosts: MesosStateStore.getHosts()
-  };
+function getMesosHosts(filterOptions) {
+  filterOptions = filterOptions || {searchString: ""};
+  return _.extend({
+    hosts: MesosStateStore.getHosts(filterOptions),
+    totalHosts: MesosStateStore.getLatest().slaves.length
+  }, filterOptions);
 }
 
 var DatacenterPage = React.createClass({
@@ -36,7 +40,40 @@ var DatacenterPage = React.createClass({
   },
 
   onChange: function () {
-    this.setState(getMesosHosts());
+    this.setState(getMesosHosts({searchString: this.state.searchString}));
+  },
+
+  onFilterChange: function (searchString) {
+    this.setState(getMesosHosts({searchString: searchString}));
+  },
+
+  getHostsStats: function () {
+    var state = this.state;
+    var filteredLength = state.hosts.length;
+    var totalLength = state.totalHosts;
+
+    var filteredClassSet = React.addons.classSet({
+      "hidden": filteredLength === totalLength
+    });
+
+    var unfilteredClassSet = React.addons.classSet({
+      "hidden": filteredLength !== totalLength
+    });
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div className="services-stats">
+        <h4 className={filteredClassSet}>
+          Showing {filteredLength} of {totalLength} Total Hosts
+        </h4>
+        <h4 className={unfilteredClassSet}>
+          {totalLength} Total Hosts
+        </h4>
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   /* jshint trailing:false, quotmark:false, newcap:false */
@@ -58,6 +95,10 @@ var DatacenterPage = React.createClass({
         <div id="page-header-navigation" />
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
+            {this.getHostsStats()}
+            <FilterInputText
+              searchString={this.state.searchString}
+              onSubmit={this.onFilterChange} />
             <HostList hosts={this.state.hosts} />
           </div>
         </div>
