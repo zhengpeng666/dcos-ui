@@ -63,7 +63,9 @@ var ResourceChart = React.createClass({
 
   render: function () {
     var props = this.props;
-
+    var allocResources = props.allocResources[props.mode];
+    var totalHeadline =
+      this.getHeadline(props.totalResources[props.mode]).split(" ");
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -71,27 +73,26 @@ var ResourceChart = React.createClass({
       <div className="panel">
         <div className="panel-heading text-align-center">
           <h3 className="panel-title">
-            {labelMap[this.props.mode]} Overview
+            {labelMap[props.mode]} Overview
           </h3>
         </div>
         <div className="panel-content">
           <div className="row text-align-center">
             <div className="column-small-offset-2 column-small-4">
               <p className="h1-jumbo unit">
-                {this.getLatestPercent(props.totalResources[props.mode])}
-                <sup>%</sup>
+                {totalHeadline[0]}
               </p>
               <p className="h4 unit-label path-color-6">
-                {this.getHeadline(props.totalResources[props.mode])} Total
+                {totalHeadline[1]} Total
               </p>
             </div>
             <div className="column-small-4">
               <p className="h1-jumbo unit">
-                {this.getLatestPercent(props.allocResources[props.mode])}
+                {this.getLatestPercent(allocResources)}
                 <sup>%</sup>
               </p>
               <p className="h4 unit-label path-color-0">
-                {this.getHeadline(props.allocResources[props.mode])} Alloc
+                {this.getHeadline(allocResources)} Alloc
               </p>
             </div>
           </div>
