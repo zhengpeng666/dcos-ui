@@ -19,57 +19,41 @@ var ResourceChart = React.createClass({
 
   propTypes: {
     totalResources: React.PropTypes.object.isRequired,
-    usedResources: React.PropTypes.object.isRequired,
+    allocResources: React.PropTypes.object.isRequired,
     mode: React.PropTypes.string
   },
 
   getData: function () {
     var props = this.props;
     return [{
-      name: "All",
-      colorIndex: 0,
-      values: props.usedResources[props.mode],
-    }];
+        name: "Alloc",
+        colorIndex: 0,
+        values: props.allocResources[props.mode],
+      }];
   },
 
-  getMaxY: function () {
-    var props = this.props;
-    return _.last(props.totalResources[props.mode]).percentage;
+  getLatestPercent: function (values) {
+    return _.last(values).percentage;
   },
 
-  getUsed: function () {
-    var props = this.props;
-    return _.last(props.usedResources[props.mode]).percentage;
-  },
-
-  getTotalHeadline: function () {
-    var props = this.props;
-    var total = _.last(props.totalResources[props.mode]).value;
-    if (props.mode === "cpus") {
-      return total + " CPU";
-    } else {
-      return Humanize.filesize(total * 1024 * 1024, 1024, 0);
-    }
-  },
-
-  getUsedHeadline: function () {
-    var props = this.props;
-    var value = _.last(props.usedResources[props.mode]).value;
+  getHeadline: function (values) {
+    var value = _.last(values).value;
     if (this.props.mode === "cpus") {
-      return "(" + value + " CPU)";
+      return value + " CPU";
     } else {
-      return "(" + Humanize.filesize(value * 1024 * 1024, 1024, 0) + ")";
+      return Humanize.filesize(value * 1024 * 1024, 1024, 0);
     }
   },
 
   getChart: function () {
+    var props = this.props;
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Chart calcHeight={function (w) { return w/2; }}>
         <TimeSeriesChart
           data={this.getData()}
-          maxY={this.getMaxY()}
+          maxY={this.getLatestPercent(props.totalResources[props.mode])}
           y="percentage" />
       </Chart>
     );
@@ -78,7 +62,8 @@ var ResourceChart = React.createClass({
   },
 
   render: function () {
-    var totalHeadline = this.getTotalHeadline().split(" ");
+    var props = this.props;
+
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -92,15 +77,21 @@ var ResourceChart = React.createClass({
         <div className="panel-content">
           <div className="row text-align-center">
             <div className="column-small-offset-2 column-small-4">
-              <p className="h1-jumbo unit">{totalHeadline[0]}</p>
-              <p className="h4 unit-label text-muted">{totalHeadline[1]} Total</p>
+              <p className="h1-jumbo unit">
+                {this.getLatestPercent(props.totalResources[props.mode])}
+                <sup>%</sup>
+              </p>
+              <p className="h4 unit-label path-color-6">
+                {this.getHeadline(props.totalResources[props.mode])} Total
+              </p>
             </div>
             <div className="column-small-4">
               <p className="h1-jumbo unit">
-                {this.getUsed()}<sup>%</sup>
+                {this.getLatestPercent(props.allocResources[props.mode])}
+                <sup>%</sup>
               </p>
-              <p className="h4 unit-label">
-                {this.getUsedHeadline()} Alloc
+              <p className="h4 unit-label path-color-0">
+                {this.getHeadline(props.allocResources[props.mode])} Alloc
               </p>
             </div>
           </div>

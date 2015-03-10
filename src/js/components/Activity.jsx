@@ -11,7 +11,7 @@ function getMesosState() {
   return {
     tasks: MesosStateStore.getTasks(),
     totalResources: MesosStateStore.getTotalResources(),
-    usedResources: MesosStateStore.getUsedResources()
+    allocResources: MesosStateStore.getAllocResources()
   };
 }
 
@@ -28,6 +28,7 @@ var Activity = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onChange
     );
+    this.onChange();
   },
 
   componentWillUnmount: function () {
@@ -43,27 +44,23 @@ var Activity = React.createClass({
 
   render: function () {
     var state = this.state;
+
+
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="row">
         <div className="column-small-6 column-large-4">
           <ResourceChart
+            allocResources={state.allocResources}
             totalResources={state.totalResources}
-            usedResources={state.usedResources}
             mode="cpus" />
         </div>
         <div className="column-small-6 column-large-4">
           <ResourceChart
+            allocResources={state.allocResources}
             totalResources={state.totalResources}
-            usedResources={state.usedResources}
             mode="mem" />
-        </div>
-        <div className="column-small-6 column-large-4">
-          <ResourceChart
-            totalResources={state.totalResources}
-            usedResources={state.usedResources}
-            mode="disk" />
         </div>
         <div className="column-small-6 column-large-4">
           <TasksChart tasks={state.tasks} />

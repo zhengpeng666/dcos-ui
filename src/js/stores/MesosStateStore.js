@@ -295,7 +295,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return getStatesByResource(_mesosStates, "total_resources");
   },
 
-  getUsedResources: function () {
+  getAllocResources: function () {
     return getStatesByResource(_mesosStates, "used_resources");
   },
 
