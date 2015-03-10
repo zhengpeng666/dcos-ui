@@ -146,13 +146,8 @@ var BarChart = React.createClass({
       );
   },
 
-  componentWillReceiveProps: function (props) {
-    var xScale = this.getXScale(props);
-    var yScale = this.getYScale(props);
-    // the d3 axis helper requires a <g> element passed into do its work. This
-    // happens after mount and ends up keeping the axis code outside of react
-    // unfortunately.
-    this.renderAxis(props, xScale, yScale);
+  prepareValues: function () {
+    var props = this.props;
 
     var stackedData = this.state.stack(props.data);
     var valuesLength = 0;
@@ -163,13 +158,26 @@ var BarChart = React.createClass({
       rectWidth = (props.width - props.margin.left) / valuesLength;
     }
 
-    var state = {
+    return {
       valuesLength: valuesLength,
       rectWidth: rectWidth,
       stackedData: stackedData
     };
+  },
 
-    this.setState(_.extend(state, {
+  componentWillMount: function () {
+    this.setState(this.prepareValues());
+  },
+
+  componentWillReceiveProps: function (props) {
+    var xScale = this.getXScale(props);
+    var yScale = this.getYScale(props);
+    // the d3 axis helper requires a <g> element passed into do its work. This
+    // happens after mount and ends up keeping the axis code outside of react
+    // unfortunately.
+    this.renderAxis(props, xScale, yScale);
+
+    this.setState(_.extend(this.prepareValues(), {
       xScale: xScale,
       yScale: yScale
     }));
