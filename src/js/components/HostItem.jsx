@@ -49,9 +49,16 @@ var HostItem = React.createClass({
         <div className="collection-item-header">
         </div>
         <div className="collection-item-content">
-          <h5 className="collection-item-content-headline flush-top flush-bottom">
-            {model.hostname}
-          </h5>
+          <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
+            <li>
+              <h5 className="collection-item-content-headline flush-top flush-bottom">
+                {model.hostname}
+              </h5>
+            </li>
+            <li>
+              <span>{_.size(model.tasks)} Tasks</span>
+            </li>
+          </ul>
         </div>
         <div className="collection-item-footer">
           <ul className="list-unstyled list-inline inverse flush-top flush-bottom">

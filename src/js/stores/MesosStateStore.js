@@ -99,6 +99,11 @@ function getTasksByStatus(frameworks) {
     .value();
 }
 
+// [{
+//   cpus: [{date: request time, value: absolute, percentage: value}]
+//   disk: [{date: request time, value: absolute, percentage: value}]
+//   mem: [{date: request time, value: absolute, percentage: value}]
+// }]
 function getHostResourcesBySlave (slave) {
   return _.reduce(_mesosStates, function (usedResources, state) {
     var tasks = _.chain(state.frameworks)
@@ -123,6 +128,14 @@ function getHostResourcesBySlave (slave) {
   }, {cpus: [], mem: [], disk: []});
 }
 
+// [{
+//  ...
+//  id: "",
+//  hostname: "",
+//  tasks: {},
+//  frameworks: {},
+//  used_resources: []
+// }]
 function getStateByHosts () {
   var data = _.last(_mesosStates);
 

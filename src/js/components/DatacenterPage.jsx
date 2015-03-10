@@ -6,6 +6,7 @@ var React = require("react/addons");
 var EventTypes = require("../constants/EventTypes");
 var FilterInputText = require("./FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
+var HostsChart = require("./charts/HostsChart");
 var SidebarToggle = require("./SidebarToggle");
 var HostList = require("./HostList");
 
@@ -13,7 +14,8 @@ function getMesosHosts(filterOptions) {
   filterOptions = filterOptions || {searchString: ""};
   return _.extend({
     hosts: MesosStateStore.getHosts(filterOptions),
-    totalHosts: MesosStateStore.getLatest().slaves.length
+    totalHosts: MesosStateStore.getLatest().slaves.length,
+    totalResources: MesosStateStore.getTotalResources()
   }, filterOptions);
 }
 
@@ -79,6 +81,8 @@ var DatacenterPage = React.createClass({
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
+    var state = this.state;
+
     return (
       <div>
         <div id="page-header">
@@ -95,6 +99,9 @@ var DatacenterPage = React.createClass({
         <div id="page-header-navigation" />
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
+            <HostsChart
+              data={state.hosts}
+              totalResources={state.totalResources} />
             {this.getHostsStats()}
             <FilterInputText
               searchString={this.state.searchString}
