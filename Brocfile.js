@@ -193,9 +193,6 @@ function createJsTree() {
       {
         match: "ENV", // replaces @@ENV
         replacement: env
-      }, {
-        match: "USER",
-        replacement: process.env.USER
       }
     ]
   });
