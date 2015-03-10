@@ -6,6 +6,12 @@ var React = require("react/addons");
 var Chart = require("./Chart");
 var BarChart = require("./BarChart");
 
+function round(value, decimalPlaces) {
+  decimalPlaces || (decimalPlaces = 0);
+  var factor = Math.pow(10, decimalPlaces);
+  return Math.round(value * factor) / factor;
+}
+
 var buttonNameMap = {
   cpus: "CPU",
   mem: "Memory",
@@ -37,21 +43,23 @@ var HostsChart = React.createClass({
 
   getData: function () {
     var props = this.props;
-    var y = props.y;
 
     if (props.data.length === 0) {
       return [];
     }
+
+    var maxY = _.last(props.totalResources[this.state.resourceMode]).value;
 
     var summedData = _.reduce(props.data, function (acc, host) {
       var values = host.used_resources[this.state.resourceMode];
       _.each(values, function (val, i) {
         if (acc.values[i] == null) {
           acc.values.push({date: val.date});
-          acc.values[i][y] = 0;
+          acc.values[i].value = 0;
         }
-        acc.values[i][y] += val[y];
-      });
+        acc.values[i].value += val.value;
+        acc.values[i].percentage = round(100 * acc.values[i].value / maxY);
+      }.bind(this));
       return acc;
     }.bind(this), {
         id: "used_resources",
