@@ -147,16 +147,21 @@ function getStateByHosts () {
     return acc;
   }, {});
 
-  return _.toArray(_.reduce(_.flatten(_.map(data.frameworks, function (fw) {
-    return fw.tasks;
-  })), function (acc, v) {
-    acc[v.slave_id].tasks[v.id] = v;
-    acc[v.slave_id].frameworks[v.framework_id] = _.find(data.frameworks,
-        function (framework) {
-      return v.framework_id === framework.id;
-    });
-    return acc;
-  }, hosts));
+  return _.chain(data.frameworks)
+    .map(function (fw) {
+      return fw.tasks;
+    })
+    .flatten()
+    .reduce(function (acc, v) {
+      acc[v.slave_id].tasks[v.id] = v;
+      acc[v.slave_id].frameworks[v.framework_id] = _.find(data.frameworks,
+          function (framework) {
+        return v.framework_id === framework.id;
+      });
+      return acc;
+    }, hosts)
+    .toArray()
+    .value();
 }
 
 function fillFramework(id, name, colorIndex) {
