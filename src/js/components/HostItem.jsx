@@ -26,9 +26,9 @@ var HostItem = React.createClass({
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return _.map(_.keys(labels), function (r) {
+    return _.map(_.keys(labels), function (r, i) {
       return (
-        <li key={r}>
+        <li key={r} className={"col-"+(i+3)}>
           <strong className="fixed-width">
             {_.last(resources[r]).percentage}%
           </strong> {labels[r]}
@@ -49,9 +49,16 @@ var HostItem = React.createClass({
         <div className="collection-item-header">
         </div>
         <div className="collection-item-content">
-          <h5 className="collection-item-content-headline flush-top flush-bottom">
-            {model.hostname}
-          </h5>
+          <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
+            <li className="col-1">
+              <h5 className="collection-item-content-headline flush-top flush-bottom">
+                {model.hostname}
+              </h5>
+            </li>
+            <li className="col-2">
+              <span>{_.size(model.tasks)} Tasks</span>
+            </li>
+          </ul>
         </div>
         <div className="collection-item-footer">
           <ul className="list-unstyled list-inline inverse flush-top flush-bottom">

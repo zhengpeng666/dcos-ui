@@ -6,15 +6,21 @@ var React = require("react/addons");
 var Chart = require("./Chart");
 var BarChart = require("./BarChart");
 
+function round(value, decimalPlaces) {
+  decimalPlaces || (decimalPlaces = 0);
+  var factor = Math.pow(10, decimalPlaces);
+  return Math.round(value * factor) / factor;
+}
+
 var buttonNameMap = {
   cpus: "CPU",
   mem: "Memory",
   disk: "Disk"
 };
 
-var ServicesChart = React.createClass({
+var HostsChart = React.createClass({
 
-  displayName: "ServicesChart",
+  displayName: "HostsChart",
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
@@ -35,35 +41,25 @@ var ServicesChart = React.createClass({
     };
   },
 
-  getStackedData: function () {
-    var props = this.props;
-    return _.map(props.data, function (framework) {
-      return {
-        id: framework.id,
-        name: framework.name,
-        colorIndex: 0,
-        values: framework.used_resources[this.state.resourceMode]
-      };
-    }.bind(this));
-  },
-
   getData: function () {
     var props = this.props;
-    var y = props.y;
 
     if (props.data.length === 0) {
       return [];
     }
 
-    var summedData = _.reduce(props.data, function (acc, framework) {
-      var values = framework.used_resources[this.state.resourceMode];
+    var maxY = _.last(props.totalResources[this.state.resourceMode]).value;
+
+    var summedData = _.reduce(props.data, function (acc, host) {
+      var values = host.used_resources[this.state.resourceMode];
       _.each(values, function (val, i) {
         if (acc.values[i] == null) {
           acc.values.push({date: val.date});
-          acc.values[i][y] = 0;
+          acc.values[i].value = 0;
         }
-        acc.values[i][y] += val[y];
-      });
+        acc.values[i].value += val.value;
+        acc.values[i].percentage = round(100 * acc.values[i].value / maxY);
+      }.bind(this));
       return acc;
     }.bind(this), {
         id: "used_resources",
@@ -170,4 +166,4 @@ var ServicesChart = React.createClass({
   }
 });
 
-module.exports = ServicesChart;
+module.exports = HostsChart;

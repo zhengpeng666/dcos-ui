@@ -7,15 +7,14 @@ var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
 var ServicesChart = require("./charts/ServicesChart");
-var ServicesFilter = require("./ServicesFilter");
+var FilterInputText = require("./FilterInputText");
 var ServiceList = require("./ServiceList");
 
-function getMesosServices(options) {
+function getMesosServices(filterOptions) {
   return {
-    frameworks: MesosStateStore.getFilteredFrameworks(options),
+    frameworks: MesosStateStore.getFrameworks(filterOptions),
     totalFrameworks: MesosStateStore.getLatest().frameworks.length,
-    totalResources: MesosStateStore.getTotalResources(),
-    usedResources: MesosStateStore.getUsedResources()
+    totalResources: MesosStateStore.getTotalResources()
   };
 }
 
@@ -67,6 +66,8 @@ var ServicesPage = React.createClass({
       "hidden": filteredLength !== totalLength
     });
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="services-stats">
         <h4 className={filteredClassSet}>
@@ -77,6 +78,8 @@ var ServicesPage = React.createClass({
         </h4>
       </div>
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   /* jshint trailing:false, quotmark:false, newcap:false */
@@ -102,11 +105,9 @@ var ServicesPage = React.createClass({
           <div className="container container-fluid container-pod">
             <ServicesChart
               data={state.frameworks}
-              totalResources={state.totalResources}
-              usedResources={state.usedResources}
-              width={this.state.width} />
+              totalResources={state.totalResources} />
             {this.getServiceStats()}
-            <ServicesFilter
+            <FilterInputText
               searchString={this.state.searchString}
               onSubmit={this.onChange} />
             <ServiceList

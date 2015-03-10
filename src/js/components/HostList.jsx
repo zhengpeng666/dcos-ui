@@ -37,7 +37,28 @@ var HostList = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <ul className="collection-list list-unstyled inverse">
+      <ul className="host-list collection-list list-unstyled inverse">
+        <li className="collection-item collection-header">
+          <div className="collection-item-header">
+          </div>
+          <div className="collection-item-content">
+            <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
+              <li className="col-1">
+                SERVICE NAME
+              </li>
+              <li className="col-2">
+                TASKS
+              </li>
+            </ul>
+          </div>
+          <div className="collection-item-footer">
+            <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
+              <li className="col-3">CPU</li>
+              <li className="col-4">MEM</li>
+              <li className="col-5">DISK</li>
+            </ul>
+          </div>
+        </li>
         {this.getHostItems()}
       </ul>
     );
