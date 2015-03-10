@@ -66,6 +66,7 @@ var TasksChart = React.createClass({
         }
         return _.contains(keys, task.state);
       })
+      .sortBy("state")
       .map(function (task, i) {
         var value = task.tasks.length;
         // add starting to staging
