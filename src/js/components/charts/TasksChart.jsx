@@ -8,13 +8,8 @@ var DialChart = require("./DialChart");
 
 var tasksPerRow = 3;
 var taskLabels = {
-  "TASK_FAILED": "Tasks failed",
-  "TASK_FINISHED:": "Tasks finished",
-  "TASK_KILLED": "Tasks killed",
-  "TASK_LOST": "Tasks lost",
   "TASK_RUNNING": "Tasks running",
-  "TASK_STAGING": "Tasks staging",
-  "TASK_STARTING": "Tasks startingg"
+  "TASK_STAGING": "Tasks staging"
 };
 
 var TasksChart = React.createClass({
@@ -61,9 +56,25 @@ var TasksChart = React.createClass({
   },
 
   getTasks: function () {
-    return _.map(this.props.tasks, function (task, i) {
-      return {colorIndex: i, name: task.state, value: task.tasks.length};
-    });
+    var keys = _.keys(taskLabels);
+    var starting = 0;
+    return _.chain(this.props.tasks)
+      .filter(function (task) {
+        // save starting tasks for use later
+        if (task.state === "TASK_STARTING") {
+          starting = task.tasks.length;
+        }
+        return _.contains(keys, task.state);
+      })
+      .map(function (task, i) {
+        var value = task.tasks.length;
+        // add starting to staging
+        if (task.state === "TASK_STAGING") {
+          value = starting + task.tasks.length;
+        }
+        return {colorIndex: i, name: task.state, value: value};
+      }
+    ).value();
   },
 
   render: function() {

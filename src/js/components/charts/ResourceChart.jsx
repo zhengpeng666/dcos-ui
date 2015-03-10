@@ -100,7 +100,7 @@ var ResourceChart = React.createClass({
                 {this.getUsed()}<sup>%</sup>
               </p>
               <p className="h4 unit-label">
-                {this.getUsedHeadline()} Used
+                {this.getUsedHeadline()} Alloc
               </p>
             </div>
           </div>
