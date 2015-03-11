@@ -10,13 +10,20 @@
   npm install -g broccoli-cli
   ```
 
-3. Run development environment
+3. Setup project configuration
+
+  1. Copy `src/js/utils/Config.template.js` to `src/js/utils/Config.dev.js`
+
+  2. Override variables in `Config.dev.js` to reflect
+  your local development configuration
+
+4. Run development environment
 
   ```sh
   npm run serve
   ```
 
-4. Build the assets
+5. Build the assets
 
   ```sh
   npm run dist
@@ -40,8 +47,12 @@
 
 2. Add Sublime-linter with jshint & jsxhint:
 
-  1. Installing SublimeLinter is straightforward using Sublime Package Manager, see [instructions](http://sublimelinter.readthedocs.org/en/latest/installation.html#installing-via-pc)
+  1. Installing SublimeLinter is straightforward using Sublime Package Manager,
+  see [instructions](http://sublimelinter.readthedocs.org/en/latest/installation.html#installing-via-pc)
 
-  2. SublimeLinter-jshint needs a global jshint in your system, see [instructions](https://github.com/SublimeLinter/SublimeLinter-jshint#linter-installation)
+  2. SublimeLinter-jshint needs a global jshint in your system,
+  see [instructions](https://github.com/SublimeLinter/SublimeLinter-jshint#linter-installation)
 
-  3. SublimeLinter-jsxhint needs a global jsxhint in your system, as well as JavaScript (JSX) bundle inside Packages/JavaScript, see [instructions](https://github.com/SublimeLinter/SublimeLinter-jsxhint#linter-installation)
+  3. SublimeLinter-jsxhint needs a global jsxhint in your system,
+  as well as JavaScript (JSX) bundle inside Packages/JavaScript,
+  see [instructions](https://github.com/SublimeLinter/SublimeLinter-jsxhint#linter-installation)
