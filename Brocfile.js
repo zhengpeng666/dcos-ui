@@ -5,7 +5,7 @@ var concatCSS = require("broccoli-concat");
 var env = require("broccoli-env").getEnv();
 var jscs = require("broccoli-jscs");
 var jsHintTree = require("broccoli-jshint");
-var less = require("broccoli-less-single");
+var less = require("broccoli-less");
 var mergeTrees = require("broccoli-merge-trees");
 var pickFiles = require("broccoli-static-compiler");
 var replace = require("broccoli-replace");
@@ -101,17 +101,14 @@ var tasks = {
     // create tree for less (pick all less and css files needed)
     var cssTree = pickFiles(dirs.styles, {
       srcDir: "./",
-      files: ["**/*.less"],
+      files: [fileNames.mainStylesDist + ".less"],
       destDir: dirs.stylesDist
     });
 
     // compile main less to css
-    cssTree = less(
-      cssTree,
-      fileNames.mainStyles + ".less",
-      fileNames.mainStylesDist + ".css",
-      {}
-    );
+    cssTree = less(cssTree, {
+      paths: ["node_modules", dirs.styles]
+    });
 
     // concatenate css
     cssTree = concatCSS(cssTree, {
