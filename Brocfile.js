@@ -1,8 +1,10 @@
 // dependencies
 var assetRev = require("broccoli-asset-rev");
+var chalk = require("chalk");
 var cleanCSS = require("broccoli-clean-css");
 var concatCSS = require("broccoli-concat");
 var env = require("broccoli-env").getEnv();
+var fs = require("fs");
 var jscs = require("broccoli-jscs");
 var jsHintTree = require("broccoli-jshint");
 var less = require("broccoli-less");
@@ -195,6 +197,21 @@ function createJsTree() {
   });
 }
 
+/*
+ * Check if development environment is properly setup
+ */
+if (env === "development") {
+  try {
+    // Query the entry
+    fs.lstatSync("src/js/utils/Config.dev.js");
+  }
+  catch (err) {
+    err.message = chalk.red("Please copy 'src/js/utils/Config.template.js' " +
+      "to 'src/js/utils/Config.dev.js' and make necessary changes " +
+      "to start working on assets.");
+    throw err;
+  }
+}
 /*
  * Start the build
  */
