@@ -62,6 +62,7 @@ var TimeSeriesChart = React.createClass({
             "translate(" + margin.left + "," + margin.top + ")"
           )
           .attr("width", props.width - margin.right - margin.left)
+          // includes x-axis as we want to clip that as well
           .attr("height", props.height - margin.top);
   },
 

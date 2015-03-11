@@ -28,7 +28,11 @@ var BarChart = React.createClass({
       peakline: false,
       maxY: 10,
       ticksY: 10,
-      y: "y"
+      y: "y",
+      transition: {
+        delay: 200,
+        duration: 800
+      }
     };
   },
 
@@ -57,7 +61,9 @@ var BarChart = React.createClass({
           .attr("id", "clip")
         .append("rect")
           .attr("width", props.width - props.margin.left)
-          .attr("height", props.height);
+          .attr("height", props.height + props.margin.bottom);
+
+    this.resetXAxis(props);
   },
 
   getStack: function () {
@@ -113,9 +119,18 @@ var BarChart = React.createClass({
       .ticks(d3.time.second, length)
       .scale(xScale)
       .orient("bottom");
-    d3.select(this.refs.xAxis.getDOMNode())
-      .attr("class", "x axis")
-      .call(xAxis);
+    var xAxisEl = d3.select(this.refs.xAxis.getDOMNode()).interrupt()
+      .attr("class", "x axis");
+
+    // prevents subsequent animations from animating from 0
+    if (this.state.rectWidth > 0) {
+      xAxisEl = xAxisEl.transition()
+          .delay(props.transition.delay)
+          .duration(props.transition.duration)
+          .ease("linear")
+          .attr("transform", "translate(" + -this.state.rectWidth + ")");
+    }
+    xAxisEl.call(xAxis);
 
     var yAxis = d3.svg.axis()
       .scale(yScale)
@@ -135,15 +150,25 @@ var BarChart = React.createClass({
           .tickFormat("")
       );
 
-    d3.select(this.refs.xGrid.getDOMNode())
-      .attr("class", "grid x")
-      .call(
-        d3.svg.axis().scale(xScale)
-          .orient("top")
-          .ticks(props.ticksY)
-          .tickSize(-props.height, 0, 0)
-          .tickFormat("")
-      );
+    var xGridEl = d3.select(this.refs.xGrid.getDOMNode()).interrupt()
+      .attr("class", "grid x");
+
+    // prevents subsequent animations from animating from 0
+    if (this.state.rectWidth > 0) {
+      xGridEl = xGridEl.transition()
+        .delay(props.transition.delay)
+        .duration(props.transition.duration)
+        .ease("linear")
+        .attr("transform", "translate(" + [-this.state.rectWidth, props.height] + ")");
+    }
+
+    xGridEl.call(
+      d3.svg.axis().scale(xScale)
+        .orient("top")
+        .ticks(props.ticksY)
+        .tickSize(-props.height, 0, 0)
+        .tickFormat("")
+    );
   },
 
   prepareValues: function (props) {
@@ -179,6 +204,22 @@ var BarChart = React.createClass({
       xScale: xScale,
       yScale: yScale
     }));
+
+    this.resetXAxis(props);
+  },
+
+  resetXAxis: function (props) {
+    // here we reset the position of the axis to what it was before the animation started
+    // the axis is reset right before we update the bar to the new value/position
+    // prevents subsequent animations from animating from 0
+    if (this.state.rectWidth) {
+      d3.select(this.refs.xAxis.getDOMNode()).interrupt()
+        .transition().delay(0)
+        .attr("transform", "translate(" + [0, props.height] + ")");
+      d3.select(this.refs.xGrid.getDOMNode()).interrupt()
+        .transition().delay(0)
+        .attr("transform", "translate(0)");
+    }
   },
 
   getBarList: function () {
@@ -200,12 +241,12 @@ var BarChart = React.createClass({
 
     return _.map(state.stackedData, function (framework) {
       var colorClass = "path-color-" + framework.colorIndex;
-      var rectWidth = (chartWidth - marginLeft) / valuesLength;
+      var rectWidth = (chartWidth - marginLeft) / (valuesLength - 1);
 
       return _.map(framework.values, function (val, j) {
         var rectHeight = props.height * val[y] / props.maxY - peaklineHeight;
 
-        var posX = chartWidth - marginLeft - rectWidth * (valuesLength - j);
+        var posX = chartWidth - marginLeft - rectWidth * (valuesLength - 1 - j);
         posY[j] -= rectHeight;
 
         /* jshint trailing:false, quotmark:false, newcap:false */
@@ -217,6 +258,8 @@ var BarChart = React.createClass({
             rectHeight={rectHeight}
             rectWidth={rectWidth}
             colorClass={colorClass}
+            transitionDelay={props.transition.delay}
+            transitionDuration={props.transition.duration}
             lineClass={lineClass + colorClass} />
         );
         /* jshint trailing:true, quotmark:true, newcap:true */
@@ -237,13 +280,15 @@ var BarChart = React.createClass({
           className="barchart"
           ref="barchart">
         <g transform={"translate(" + [margin.left, margin.bottom / 2] + ")"}>
-          <g className="y axis" ref="yAxis" />
-          <g className="x axis"
-            transform={"translate(" + [0, props.height] + ")"}
-            ref="xAxis"/>
           <g ref="yGrid" />
-          <g ref="xGrid" />
-          {this.getBarList()}
+          <g className="y axis" ref="yAxis" />
+          <g clip-path="url(#clip)">
+            <g ref="xGrid" />
+            <g className="x axis"
+              transform={"translate(" + [0, props.height] + ")"}
+              ref="xAxis"/>
+            {this.getBarList()}
+          </g>
         </g>
       </svg>
     );
