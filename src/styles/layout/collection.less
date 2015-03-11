@@ -1,5 +1,9 @@
 /* Collection list */
 .collection-list {
+  .collection-header {
+    display: none;
+  }
+
   .collection-item {
     border-top: 1px solid @gray;
     margin-bottom: 0px;
@@ -46,6 +50,15 @@
 & when (@screen-small-enabled) {
   @media (min-width: @screen-small) {
     .collection-list {
+      .collection-header {
+        display: block;
+        .border-top-radius(@collection-list-header-border-radius);
+
+        &.collection-item {
+          border: 0;
+        }
+      }
+
       .collection-item {
         height: @collection-list-item-height-small;
 

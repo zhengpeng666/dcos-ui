@@ -146,9 +146,7 @@ var BarChart = React.createClass({
       );
   },
 
-  prepareValues: function () {
-    var props = this.props;
-
+  prepareValues: function (props) {
     var stackedData = this.state.stack(props.data);
     var valuesLength = 0;
     var rectWidth = 0;
@@ -166,7 +164,7 @@ var BarChart = React.createClass({
   },
 
   componentWillMount: function () {
-    this.setState(this.prepareValues());
+    this.setState(this.prepareValues(this.props));
   },
 
   componentWillReceiveProps: function (props) {
@@ -177,7 +175,7 @@ var BarChart = React.createClass({
     // unfortunately.
     this.renderAxis(props, xScale, yScale);
 
-    this.setState(_.extend(this.prepareValues(), {
+    this.setState(_.extend(this.prepareValues(props), {
       xScale: xScale,
       yScale: yScale
     }));

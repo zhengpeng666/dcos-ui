@@ -24,6 +24,7 @@ var HostsChart = React.createClass({
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
+    totalHostsResources: React.PropTypes.object.isRequired,
     totalResources: React.PropTypes.object.isRequired
   },
 
@@ -48,27 +49,12 @@ var HostsChart = React.createClass({
       return [];
     }
 
-    var maxY = _.last(props.totalResources[this.state.resourceMode]).value;
-
-    var summedData = _.reduce(props.data, function (acc, host) {
-      var values = host.used_resources[this.state.resourceMode];
-      _.each(values, function (val, i) {
-        if (acc.values[i] == null) {
-          acc.values.push({date: val.date});
-          acc.values[i].value = 0;
-        }
-        acc.values[i].value += val.value;
-        acc.values[i].percentage = round(100 * acc.values[i].value / maxY);
-      }.bind(this));
-      return acc;
-    }.bind(this), {
+    return [{
         id: "used_resources",
         name: this.state.resourceMode + " allocated",
         colorIndex: 0,
-        values: []
-    });
-
-    return [summedData];
+        values: props.totalHostsResources[this.state.resourceMode]
+    }];
   },
 
   getMaxY: function () {

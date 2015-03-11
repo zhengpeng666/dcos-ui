@@ -31,6 +31,55 @@ function sumResources(resourceList) {
 }
 
 // [{
+//   cpus: [{date: request time, value: value, percentage: value}]
+//   disk: [{date: request time, value: value, percentage: value}]
+//   mem: [{date: request time, value: value, percentage: value}]
+// }]
+function sumFrameworkResources(frameworks) {
+  return _.reduce(frameworks, function (sumMap, framework) {
+    _.each(sumMap, function (value, key) {
+      var values = framework.used_resources[key];
+      _.each(values, function (val, i) {
+        if (value[i] == null) {
+          value.push({date: val.date});
+          value[i].value = 0;
+          value[i].percentage = 0;
+        }
+        value[i].value += val.value;
+        value[i].percentage += val.percentage;
+      });
+    });
+
+    return sumMap;
+  }, {cpus: [], mem: [], disk: []});
+}
+
+// [{
+//   cpus: [{date: request time, value: value, percentage: value}]
+//   disk: [{date: request time, value: value, percentage: value}]
+//   mem: [{date: request time, value: value, percentage: value}]
+// }]
+function sumHostResources(hosts) {
+  return _.reduce(hosts, function (sumMap, host) {
+    _.each(sumMap, function (value, key) {
+      var values = host.used_resources[key];
+      _.each(values, function (val, i) {
+        var max = Math.max(1, _mesosStates[i].total_resources[key]);
+        if (value[i] == null) {
+          value.push({date: val.date});
+          value[i].value = 0;
+          value[i].percentage = 0;
+        }
+        value[i].value += val.value;
+        value[i].percentage += round(100 * value[i].value / max);
+      });
+    });
+
+    return sumMap;
+  }, {cpus: [], mem: [], disk: []});
+}
+
+// [{
 //   cpus: [{date: request time, y: value}]
 //   disk: [{date: request time, y: value}]
 //   mem: [{date: request time, y: value}]
@@ -270,21 +319,29 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   getFrameworks: function (filterOptions) {
     var frameworks = getStatesByFramework();
 
-    if (filterOptions && filterOptions.searchString === "") {
-      return frameworks;
+    if (filterOptions && filterOptions.searchString !== "") {
+      frameworks = filterByString(frameworks, filterOptions.searchString);
     }
 
-    return filterByString(frameworks, filterOptions.searchString);
+    return frameworks;
+  },
+
+  getTotalFrameworksResources: function (frameworks) {
+    return sumFrameworkResources(frameworks);
+  },
+
+  getTotalHostsResources: function (hosts) {
+    return sumHostResources(hosts);
   },
 
   getHosts: function (filterOptions) {
     var hosts = getStateByHosts();
 
-    if (filterOptions && filterOptions.searchString === "") {
-      return hosts;
+    if (filterOptions && filterOptions.searchString !== "") {
+      hosts = filterByString(hosts, filterOptions.searchString);
     }
 
-    return filterByString(hosts, filterOptions.searchString);
+    return hosts;
   },
 
   getTasks: function () {

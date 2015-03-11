@@ -12,9 +12,11 @@ var HostList = require("./HostList");
 
 function getMesosHosts(filterOptions) {
   filterOptions = filterOptions || {searchString: ""};
+  var hosts = MesosStateStore.getHosts(filterOptions);
   return _.extend({
-    hosts: MesosStateStore.getHosts(filterOptions),
+    hosts: hosts,
     totalHosts: MesosStateStore.getLatest().slaves.length,
+    totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
     totalResources: MesosStateStore.getTotalResources()
   }, filterOptions);
 }
@@ -101,6 +103,7 @@ var DatacenterPage = React.createClass({
           <div className="container container-fluid container-pod">
             <HostsChart
               data={state.hosts}
+              totalHostsResources={state.totalHostsResources}
               totalResources={state.totalResources} />
             {this.getHostsStats()}
             <FilterInputText

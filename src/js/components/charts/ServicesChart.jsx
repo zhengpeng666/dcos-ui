@@ -18,6 +18,7 @@ var ServicesChart = React.createClass({
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
+    totalFrameworksResources: React.PropTypes.object.isRequired,
     totalResources: React.PropTypes.object.isRequired
   },
 
@@ -55,24 +56,12 @@ var ServicesChart = React.createClass({
       return [];
     }
 
-    var summedData = _.reduce(props.data, function (acc, framework) {
-      var values = framework.used_resources[this.state.resourceMode];
-      _.each(values, function (val, i) {
-        if (acc.values[i] == null) {
-          acc.values.push({date: val.date});
-          acc.values[i][y] = 0;
-        }
-        acc.values[i][y] += val[y];
-      });
-      return acc;
-    }.bind(this), {
+    return [{
         id: "used_resources",
         name: this.state.resourceMode + " allocated",
         colorIndex: 0,
-        values: []
-    });
-
-    return [summedData];
+        values: props.totalFrameworksResources[this.state.resourceMode]
+    }];
   },
 
   getMaxY: function () {

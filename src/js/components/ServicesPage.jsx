@@ -11,9 +11,12 @@ var FilterInputText = require("./FilterInputText");
 var ServiceList = require("./ServiceList");
 
 function getMesosServices(filterOptions) {
+  var frameworks = MesosStateStore.getFrameworks(filterOptions);
   return {
-    frameworks: MesosStateStore.getFrameworks(filterOptions),
+    frameworks: frameworks,
     totalFrameworks: MesosStateStore.getLatest().frameworks.length,
+    totalFrameworksResources:
+      MesosStateStore.getTotalFrameworksResources(frameworks),
     totalResources: MesosStateStore.getTotalResources()
   };
 }
@@ -105,6 +108,7 @@ var ServicesPage = React.createClass({
           <div className="container container-fluid container-pod">
             <ServicesChart
               data={state.frameworks}
+              totalFrameworksResources={state.totalFrameworksResources}
               totalResources={state.totalResources} />
             {this.getServiceStats()}
             <FilterInputText
