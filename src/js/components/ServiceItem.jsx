@@ -79,7 +79,7 @@ var ServiceItem = React.createClass({
         </td>
         <td>{this.getStatus()}</td>
         <td className="align-right">
-          {model.tasks.length}
+          {model.tasks_size}
           <span className="mobile-displayed-text"> Tasks</span>
         </td>
         {this.getStatistics(model.used_resources)}

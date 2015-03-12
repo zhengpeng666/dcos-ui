@@ -50,7 +50,7 @@ var HostItem = React.createClass({
           </h5>
         </td>
         <td className="align-right">
-          {_.size(model.tasks)}
+          {model.tasks_size}
           <span className="mobile-displayed-text"> Tasks</span>
         </td>
         {this.getStatistics(model.used_resources)}

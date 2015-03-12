@@ -118,8 +118,10 @@ function getStatesByFramework() {
       return framework.id;
     })
     .map(function (framework) {
-      return _.extend(_.clone(_.last(framework)), {
-        used_resources: getStatesByResource(framework, "used_resources")
+      var lastFramework = _.clone(_.last(framework));
+      return _.extend(lastFramework, {
+        used_resources: getStatesByResource(framework, "used_resources"),
+        tasks_size: lastFramework.tasks.length
       });
     }, this).value();
 }
