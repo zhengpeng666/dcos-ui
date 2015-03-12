@@ -212,6 +212,9 @@ function getStateByHosts () {
       });
       return acc;
     }, hosts)
+    .each(function (slave) {
+      slave.tasks_size = _.size(slave.tasks);
+    })
     .toArray()
     .value();
 }
