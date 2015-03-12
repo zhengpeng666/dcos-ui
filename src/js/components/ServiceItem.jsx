@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var Humanize = require("humanize");
 var React = require("react");
 
 var ServiceItem = React.createClass({
@@ -49,11 +50,14 @@ var ServiceItem = React.createClass({
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return _.map(_.keys(labels), function (r) {
+    return _.map(_.keys(labels), function (key) {
+      var value = _.last(resources[key]).value;
+      if (key !== "cpus") {
+        value = Humanize.filesize(value * 1024 * 1024, 1024, 1);
+      }
+
       return (
-        <td key={r} className="align-right mobile-hidden">
-          {_.last(resources[r]).percentage}%
-        </td>
+        <td key={key} className="align-right mobile-hidden">{value}</td>
       );
     });
     /* jshint trailing:true, quotmark:true, newcap:true */

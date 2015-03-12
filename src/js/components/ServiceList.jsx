@@ -40,12 +40,12 @@ var ServicesList = React.createClass({
       <table className="table">
         <thead>
           <tr>
-            <th className="grow">SERVICE NAME</th>
+            <th>SERVICE NAME</th>
             <th>HEALTH</th>
             <th className="align-right">TASKS</th>
-            <th className="align-right">CPU</th>
-            <th className="align-right">MEM</th>
-            <th className="align-right">DISK</th>
+            <th className="align-right fixed-width">CPU</th>
+            <th className="align-right fixed-width">MEM</th>
+            <th className="align-right fixed-width">DISK</th>
           </tr>
         </thead>
         <tbody>
