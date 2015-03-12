@@ -308,6 +308,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     startPolling();
   },
 
+  getRefreshRate: function () {
+    return Config.stateRefresh;
+  },
+
   getAll: function () {
     return _mesosStates;
   },

@@ -3,7 +3,6 @@
 var _ = require("underscore");
 var d3 = require("d3");
 var React = require("react/addons");
-var Config = require("../../utils/Config");
 
 var Bar = require("./Bar");
 
@@ -16,7 +15,8 @@ var BarChart = React.createClass({
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
     peakline: React.PropTypes.bool,
-    y: React.PropTypes.string
+    y: React.PropTypes.string,
+    refreshRate: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
@@ -34,7 +34,8 @@ var BarChart = React.createClass({
       transition: {
         delay: 200,
         duration: 800
-      }
+      },
+      refreshRate: 0
     };
   },
 
@@ -75,7 +76,13 @@ var BarChart = React.createClass({
   },
 
   getXScale: function (props) {
-    var timeAgo = -(Config.historyLength - 1) * (Config.stateRefresh / 1000);
+    var length = props.width;
+    var firstDataSet = _.first(props.data);
+    if (firstDataSet != null) {
+      length = firstDataSet.values.length;
+    }
+
+    var timeAgo = -(length - 1) * (props.refreshRate / 1000);
     return d3.scale.linear()
       .range([0, props.width - props.margin.left - props.margin.right])
       .domain([timeAgo, 0]);
@@ -106,14 +113,16 @@ var BarChart = React.createClass({
     }
 
     // The 4 is a number that works, though random :)
-    var xTicks = Config.historyLength / (Config.stateRefresh / 1000) / 4;
-    var xAxis = d3.svg.axis()
-      .scale(xScale)
-      .ticks(xTicks)
-      .orient("bottom");
-    var xAxisEl = d3.select(this.refs.xAxis.getDOMNode()).interrupt()
-      .attr("class", "x axis")
-      .call(xAxis);
+    if (firstDataSet) {
+      var xTicks = length / (props.refreshRate / 1000) / 4;
+      var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .ticks(xTicks)
+        .orient("bottom");
+      var xAxisEl = d3.select(this.refs.xAxis.getDOMNode()).interrupt()
+        .attr("class", "x axis")
+        .call(xAxis);
+    }
 
     var yAxis = d3.svg.axis()
       .scale(yScale)

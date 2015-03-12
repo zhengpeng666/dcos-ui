@@ -19,14 +19,16 @@ var ServicesChart = React.createClass({
   propTypes: {
     data: React.PropTypes.array.isRequired,
     totalFrameworksResources: React.PropTypes.object.isRequired,
-    totalResources: React.PropTypes.object.isRequired
+    totalResources: React.PropTypes.object.isRequired,
+    refreshRate: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
     return {
       data: [],
       totalResources: {},
-      y: "percentage"
+      y: "percentage",
+      refreshRate: 0
     };
   },
 
@@ -105,7 +107,8 @@ var ServicesChart = React.createClass({
           data={this.getData()}
           maxY={this.getMaxY()}
           ticksY={4}
-          y={this.props.y} />
+          y={this.props.y}
+          refreshRate={this.props.refreshRate} />
       </Chart>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */

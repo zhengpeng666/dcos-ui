@@ -90,6 +90,8 @@ var ServicesPage = React.createClass({
   render: function () {
     var state = this.state;
 
+    var refreshRate = MesosStateStore.getRefreshRate();
+
     return (
       <div>
         <div id="page-header">
@@ -109,7 +111,8 @@ var ServicesPage = React.createClass({
             <ServicesChart
               data={state.frameworks}
               totalFrameworksResources={state.totalFrameworksResources}
-              totalResources={state.totalResources} />
+              totalResources={state.totalResources}
+              refreshRate={refreshRate} />
             {this.getServiceStats()}
             <FilterInputText
               searchString={this.state.searchString}
