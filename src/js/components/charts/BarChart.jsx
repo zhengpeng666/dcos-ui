@@ -15,15 +15,17 @@ var BarChart = React.createClass({
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
     peakline: React.PropTypes.bool,
-    y: React.PropTypes.string
+    y: React.PropTypes.string,
+    refreshRate: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
     return {
       margin: {
         top: 0,
-        left: 40,
+        right: 5,
         bottom: 40,
+        left: 43
       },
       peakline: false,
       maxY: 10,
@@ -32,7 +34,8 @@ var BarChart = React.createClass({
       transition: {
         delay: 200,
         duration: 800
-      }
+      },
+      refreshRate: 0
     };
   },
 
@@ -60,8 +63,8 @@ var BarChart = React.createClass({
         .append("clipPath")
           .attr("id", "clip")
         .append("rect")
-          .attr("width", props.width - props.margin.left)
-          .attr("height", props.height + props.margin.bottom);
+          .attr("width", props.width - props.margin.left - props.margin.right)
+          .attr("height", props.height + 1); // +1 for the base axis line
 
     this.resetXAxis(props);
   },
@@ -73,22 +76,16 @@ var BarChart = React.createClass({
   },
 
   getXScale: function (props) {
-    var date = Date.now();
-    var dateDelta = Date.now();
-
+    var length = props.width;
     var firstDataSet = _.first(props.data);
     if (firstDataSet != null) {
-      var values = firstDataSet.values;
-      // [first date - 1, last date - 1]
-      // ristrict x domain to have extra point outside of graph area,
-      // since we are animating the graph in from right
-      date = values[1].date;
-      dateDelta = values[values.length - 2].date;
+      length = firstDataSet.values.length;
     }
 
-    return d3.time.scale()
-      .range([0, props.width])
-      .domain([date, dateDelta]);
+    var timeAgo = -(length - 1) * (props.refreshRate / 1000);
+    return d3.scale.linear()
+      .range([0, props.width - props.margin.left - props.margin.right])
+      .domain([timeAgo, 0]);
   },
 
   getYScale: function (props) {
@@ -115,22 +112,17 @@ var BarChart = React.createClass({
       length = firstDataSet.values.length;
     }
 
-    var xAxis = d3.svg.axis()
-      .ticks(d3.time.second, length)
-      .scale(xScale)
-      .orient("bottom");
-    var xAxisEl = d3.select(this.refs.xAxis.getDOMNode()).interrupt()
-      .attr("class", "x axis");
-
-    // prevents subsequent animations from animating from 0
-    if (this.state.rectWidth > 0) {
-      xAxisEl = xAxisEl.transition()
-          .delay(props.transition.delay)
-          .duration(props.transition.duration)
-          .ease("linear")
-          .attr("transform", "translate(" + -this.state.rectWidth + ")");
+    // The 4 is a number that works, though random :)
+    if (firstDataSet) {
+      var xTicks = length / (props.refreshRate / 1000) / 4;
+      var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .ticks(xTicks)
+        .orient("bottom");
+      var xAxisEl = d3.select(this.refs.xAxis.getDOMNode()).interrupt()
+        .attr("class", "x axis")
+        .call(xAxis);
     }
-    xAxisEl.call(xAxis);
 
     var yAxis = d3.svg.axis()
       .scale(yScale)
@@ -150,25 +142,15 @@ var BarChart = React.createClass({
           .tickFormat("")
       );
 
-    var xGridEl = d3.select(this.refs.xGrid.getDOMNode()).interrupt()
-      .attr("class", "grid x");
-
-    // prevents subsequent animations from animating from 0
-    if (this.state.rectWidth > 0) {
-      xGridEl = xGridEl.transition()
-        .delay(props.transition.delay)
-        .duration(props.transition.duration)
-        .ease("linear")
-        .attr("transform", "translate(" + [-this.state.rectWidth, props.height] + ")");
-    }
-
-    xGridEl.call(
-      d3.svg.axis().scale(xScale)
-        .orient("top")
-        .ticks(props.ticksY)
-        .tickSize(-props.height, 0, 0)
-        .tickFormat("")
-    );
+    d3.select(this.refs.xGrid.getDOMNode()).interrupt()
+      .attr("class", "grid x")
+      .call(
+        d3.svg.axis().scale(xScale)
+          .orient("top")
+          .ticks(props.ticksY)
+          .tickSize(-props.height, 0, 0)
+          .tickFormat("")
+      );
   },
 
   prepareValues: function (props) {
@@ -178,7 +160,7 @@ var BarChart = React.createClass({
 
     if (stackedData.length !== 0) {
       valuesLength = _.last(stackedData).values.length;
-      rectWidth = (props.width - props.margin.left) / valuesLength;
+      rectWidth = (props.width - props.margin.left - props.margin.right) / valuesLength;
     }
 
     return {
@@ -216,9 +198,6 @@ var BarChart = React.createClass({
       d3.select(this.refs.xAxis.getDOMNode()).interrupt()
         .transition().delay(0)
         .attr("transform", "translate(" + [0, props.height] + ")");
-      d3.select(this.refs.xGrid.getDOMNode()).interrupt()
-        .transition().delay(0)
-        .attr("transform", "translate(0)");
     }
   },
 
@@ -226,6 +205,7 @@ var BarChart = React.createClass({
     var props = this.props;
     var state = this.state;
     var marginLeft = props.margin.left;
+    var marginRight = props.margin.right;
     var chartWidth = props.width;
     var y = props.y;
     var valuesLength = state.valuesLength;
@@ -241,12 +221,12 @@ var BarChart = React.createClass({
 
     return _.map(state.stackedData, function (framework) {
       var colorClass = "path-color-" + framework.colorIndex;
-      var rectWidth = (chartWidth - marginLeft) / (valuesLength - 1);
+      var rectWidth = (chartWidth - marginLeft - marginRight) / (valuesLength - 1);
 
       return _.map(framework.values, function (val, j) {
         var rectHeight = props.height * val[y] / props.maxY - peaklineHeight;
 
-        var posX = chartWidth - marginLeft - rectWidth * (valuesLength - 1 - j);
+        var posX = chartWidth - marginLeft - marginRight - rectWidth * (valuesLength - 1 - j);
         posY[j] -= rectHeight;
 
         /* jshint trailing:false, quotmark:false, newcap:false */
@@ -280,13 +260,13 @@ var BarChart = React.createClass({
           className="barchart"
           ref="barchart">
         <g transform={"translate(" + [margin.left, margin.bottom / 2] + ")"}>
-          <g ref="yGrid" />
           <g className="y axis" ref="yAxis" />
+          <g className="x axis"
+            transform={"translate(" + [0, props.height] + ")"}
+            ref="xAxis"/>
           <g clip-path="url(#clip)">
+            <g ref="yGrid" />
             <g ref="xGrid" />
-            <g className="x axis"
-              transform={"translate(" + [0, props.height] + ")"}
-              ref="xAxis"/>
             {this.getBarList()}
           </g>
         </g>
