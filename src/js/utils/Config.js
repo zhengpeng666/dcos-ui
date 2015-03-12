@@ -2,7 +2,7 @@ var Config = {
   isDevelopment: false,
   rootUrl: "http://localhost:5050",
   stateRefresh: 2000,
-  historyLength: 30
+  historyLength: 31
 };
 
 // @@ENV gets replaced by Broccoli
