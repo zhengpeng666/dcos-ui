@@ -40,6 +40,11 @@
     &.mobile-hidden {
       display: none;
     }
+
+    &.highlighted {
+      background: ~`color_lightness("@{gray}", -25)`;
+      color: @white;
+    }
   }
 
   h5 {
@@ -69,7 +74,7 @@
         th {
           background: ~`color_lightness("@{gray}", -15)`;
 
-          &:hover {
+          &:hover, &.highlighted {
             background: ~`color_lightness("@{gray}", 5)`;
             color: @white;
           }

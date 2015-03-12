@@ -85,14 +85,15 @@ var HostList = React.createClass({
     return hosts;
   },
 
-  getHostItems: function () {
+  getHostItems: function (highlighted) {
     return _.map(this.sortHosts(this.props.hosts), function (host) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <HostItem
             key={host.id}
-            model={host} />
+            model={host}
+            columnHighlighted={highlighted} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -101,15 +102,19 @@ var HostList = React.createClass({
 
   render: function () {
     var sortKey = this.state.sortKey;
+    var highlighted = [];
 
     var headerClassSet = React.addons.classSet({
       "dropup": this.state.sortOrder === -1
     });
 
     var carets = _.reduce(["hostname", "tasks_size", "cpus", "mem", "disk"],
-        function(caret, key) {
+        function(caret, key, i) {
       if (key === sortKey) {
         caret[key] = <span className="caret"></span>;
+        highlighted[i] = " highlighted";
+      } else {
+        highlighted[i] = "";
       }
       return caret;
     }, {});
@@ -120,31 +125,31 @@ var HostList = React.createClass({
       <table className="table">
         <thead>
           <tr>
-            <th className="clickable"
+            <th className={"clickable" + highlighted[0]}
                 onClick={this.sortBy.bind(null, "hostname")}>
               <span className={headerClassSet}>
                 HOST NAME{carets.hostname}
               </span>
             </th>
-            <th className="align-right fixed-width clickable"
+            <th className={"align-right fixed-width clickable" + highlighted[1]}
                 onClick={this.sortBy.bind(null, "tasks_size")}>
               <span className={headerClassSet}>
                 TASKS{carets.tasks_size}
               </span>
             </th>
-            <th className="align-right fixed-width clickable"
+            <th className={"align-right fixed-width clickable" + highlighted[2]}
                 onClick={this.sortBy.bind(null, "cpus")}>
               <span className={headerClassSet}>
                 CPU{carets.cpus}
               </span>
             </th>
-            <th className="align-right fixed-width clickable"
+            <th className={"align-right fixed-width clickable" + highlighted[3]}
               onClick={this.sortBy.bind(null, "mem")}>
               <span className={headerClassSet}>
                 MEM{carets.mem}
               </span>
             </th>
-            <th className="align-right fixed-width clickable"
+            <th className={"align-right fixed-width clickable" + highlighted[4]}
                 onClick={this.sortBy.bind(null, "disk")}>
               <span className={headerClassSet}>
                 DISK{carets.disk}
@@ -153,7 +158,7 @@ var HostList = React.createClass({
           </tr>
         </thead>
         <tbody>
-          {this.getHostItems()}
+          {this.getHostItems(highlighted)}
         </tbody>
       </table>
     );
