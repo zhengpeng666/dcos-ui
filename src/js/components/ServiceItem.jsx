@@ -34,7 +34,7 @@ var ServiceItem = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <span className={statusClassSet}>{status} ({model.tasks.length} Tasks)</span>
+      <span className={statusClassSet}>{status}</span>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -51,11 +51,9 @@ var ServiceItem = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return _.map(_.keys(labels), function (r) {
       return (
-        <li key={r}>
-          <strong className="fixed-width">
-            {_.last(resources[r]).percentage}%
-          </strong> {labels[r]}
-        </li>
+        <td key={r} className="align-right mobile-hidden">
+          {_.last(resources[r]).percentage}%
+        </td>
       );
     });
     /* jshint trailing:true, quotmark:true, newcap:true */
@@ -68,22 +66,20 @@ var ServiceItem = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <li className="collection-item" title={model.id}>
-        <div className="collection-item-header">
-          <i className="icon icon-medium icon-medium-white border-radius"></i>
-        </div>
-        <div className="collection-item-content">
-          <h5 className="collection-item-content-headline flush-top flush-bottom">
+      <tr title={model.id}>
+        <td>
+          <h5 className="flush-top flush-bottom">
+            <i className="icon icon-small icon-small-white border-radius"></i>
             {model.name}
           </h5>
-          {this.getStatus()}
-        </div>
-        <div className="collection-item-footer">
-          <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
-            {this.getStatistics(model.used_resources)}
-          </ul>
-        </div>
-      </li>
+        </td>
+        <td>{this.getStatus()}</td>
+        <td className="align-right">
+          {model.tasks.length}
+          <span className="mobile-displayed-text"> Tasks</span>
+        </td>
+        {this.getStatistics(model.used_resources)}
+      </tr>
     );
   }
 });

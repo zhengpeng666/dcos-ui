@@ -68,6 +68,10 @@
   display: none;
 }
 
+.mobile-displayed-text {
+  display: inline;
+}
+
 /* Screen Size: Mini (@screen-mini) and above */
 & when (@screen-mini-enabled) {
   @media (min-width: @screen-mini) {
@@ -113,6 +117,10 @@
           }
         }
       }
+    }
+
+    .mobile-displayed-text {
+      display: none;
     }
   }
 }

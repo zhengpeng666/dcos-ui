@@ -1,0 +1,72 @@
+.table {
+  width: 100%;
+  vertical-align: middle;
+  text-align: left;
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    height: @collection-list-item-height + @base-spacing-unit * 0.5;
+  }
+
+  th, td {
+    padding: 0 @base-spacing-unit * 0.5;
+  }
+
+  td {
+    border-top: 1px solid @gray;
+    font-weight: @body-text-emphasize-font-weight;
+
+    &.mobile-hidden {
+      display: none;
+    }
+  }
+
+  h5 {
+    color: @white;
+  }
+
+  .align-right {
+    text-align: right;
+  }
+
+  .grow {
+    width: 100%;
+  }
+}
+
+/* Screen Size: Small (@screen-small) and above */
+& when (@screen-small-enabled) {
+  @media (min-width: @screen-small) {
+    .table {
+      thead {
+        display: table-header-group;
+
+        th {
+          background: ~`color_lightness("@{gray}", -15)`;
+
+          &:hover {
+            background: ~`color_lightness("@{gray}", 5)`;
+            color: @white;
+          }
+        }
+
+        th:first-child {
+          .border-top-left-radius(@collection-list-header-border-radius);
+        }
+
+        th:last-child {
+          .border-top-right-radius(@collection-list-header-border-radius);
+        }
+      }
+
+      td {
+        &.mobile-hidden {
+          display: table-cell;
+        }
+      }
+    }
+  }
+}

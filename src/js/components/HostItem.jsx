@@ -26,13 +26,11 @@ var HostItem = React.createClass({
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return _.map(_.keys(labels), function (r, i) {
+    return _.map(_.keys(labels), function (r) {
       return (
-        <li key={r} className={"col-"+(i+3)}>
-          <strong className="fixed-width">
-            {_.last(resources[r]).percentage}%
-          </strong> {labels[r]}
-        </li>
+        <td key={r} className="align-right mobile-hidden">
+          {_.last(resources[r]).percentage}%
+        </td>
       );
     });
     /* jshint trailing:true, quotmark:true, newcap:true */
@@ -45,27 +43,18 @@ var HostItem = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <li className="collection-item" title={model.id}>
-        <div className="collection-item-header">
-        </div>
-        <div className="collection-item-content">
-          <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
-            <li className="col-1">
-              <h5 className="collection-item-content-headline flush-top flush-bottom">
-                {model.hostname}
-              </h5>
-            </li>
-            <li className="col-2">
-              <span>{_.size(model.tasks)} Tasks</span>
-            </li>
-          </ul>
-        </div>
-        <div className="collection-item-footer">
-          <ul className="list-unstyled list-inline inverse flush-top flush-bottom">
-            {this.getStatistics(model.used_resources)}
-          </ul>
-        </div>
-      </li>
+      <tr title={model.id}>
+        <td>
+          <h5 className="flush-top flush-bottom">
+            {model.hostname}
+          </h5>
+        </td>
+        <td className="align-right">
+          {_.size(model.tasks)}
+          <span className="mobile-displayed-text"> Tasks</span>
+        </td>
+        {this.getStatistics(model.used_resources)}
+      </tr>
     );
   }
 });

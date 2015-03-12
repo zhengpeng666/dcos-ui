@@ -37,9 +37,21 @@ var ServicesList = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <ul className="collection-list list-unstyled inverse">
-        {this.getServiceItems()}
-      </ul>
+      <table className="table">
+        <thead>
+          <tr>
+            <th className="grow">SERVICE NAME</th>
+            <th>HEALTH</th>
+            <th className="align-right">TASKS</th>
+            <th className="align-right">CPU</th>
+            <th className="align-right">MEM</th>
+            <th className="align-right">DISK</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.getServiceItems()}
+        </tbody>
+      </table>
     );
   }
 });
