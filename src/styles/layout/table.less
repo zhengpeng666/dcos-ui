@@ -1,3 +1,21 @@
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: @base-spacing-unit * 0.25;
+  vertical-align: middle;
+  border-top: @caret-width-base dashed;
+  border-right: @caret-width-base solid transparent;
+  border-left: @caret-width-base solid transparent;
+}
+
+.dropup {
+  .caret {
+    border-top: 0;
+    border-bottom: @caret-width-base solid;
+  }
+}
+
 .table {
   width: 100%;
   vertical-align: middle;

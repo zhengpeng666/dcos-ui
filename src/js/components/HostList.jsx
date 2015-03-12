@@ -30,6 +30,10 @@ var HostList = React.createClass({
     var state = this.state;
     var sortOrder;
 
+    if (state.sortKey !== comparator) {
+      sortOrder = 1;
+    }
+
     if (state.sortKey == null || state.sortKey === comparator) {
       if (state.sortOrder == null) {
         sortOrder = 1;
@@ -50,26 +54,24 @@ var HostList = React.createClass({
   sortHosts: function (hosts) {
     var key = this.state.sortKey;
     var order = this.state.sortOrder;
-    var sortfunction;
+    var sortfunction = function (a, b) {
+      if (a[key] > b[key]) {
+        return 1 * order;
+      }
+      if (a[key] < b[key]) {
+        return -1 * order;
+      }
+      return 0;
+    };
 
-    if (key === "hostname" || key === "tasks_size") {
-      sortfunction = function (a, b) {
-        if (a[key] > b[key]) {
-          return 1 * order;
-        }
-        if (a[key] < b[key]) {
-          return -1 * order;
-        }
-        return 0;
-      };
-    } else if (key === "cpus" || key === "mem" || key === "disk") {
+    if (key === "cpus" || key === "mem" || key === "disk") {
       sortfunction = function (a, b) {
         a = _.last(a.used_resources[key]).percentage;
         b = _.last(b.used_resources[key]).percentage;
-        if (a < b) {
+        if (a > b) {
           return 1 * order;
         }
-        if (a > b) {
+        if (a < b) {
           return -1 * order;
         }
         return 0;
@@ -101,7 +103,7 @@ var HostList = React.createClass({
     var sortKey = this.state.sortKey;
 
     var headerClassSet = React.addons.classSet({
-      "dropup": false
+      "dropup": this.state.sortOrder === -1
     });
 
     var carets = _.reduce(["hostname", "tasks_size", "cpus", "mem", "disk"],
@@ -118,34 +120,34 @@ var HostList = React.createClass({
       <table className="table">
         <thead>
           <tr>
-            <th className="grow clickable"
+            <th className="clickable"
                 onClick={this.sortBy.bind(null, "hostname")}>
               <span className={headerClassSet}>
-                HOST NAME{carets[sortKey]}
+                HOST NAME{carets.hostname}
               </span>
             </th>
-            <th className="align-right clickable"
+            <th className="align-right fixed-width clickable"
                 onClick={this.sortBy.bind(null, "tasks_size")}>
               <span className={headerClassSet}>
-                TASKS{carets[sortKey]}
+                TASKS{carets.tasks_size}
               </span>
             </th>
-            <th className="align-right clickable"
+            <th className="align-right fixed-width clickable"
                 onClick={this.sortBy.bind(null, "cpus")}>
               <span className={headerClassSet}>
-                CPU{carets[sortKey]}
+                CPU{carets.cpus}
               </span>
             </th>
-            <th className="align-right clickable"
+            <th className="align-right fixed-width clickable"
               onClick={this.sortBy.bind(null, "mem")}>
               <span className={headerClassSet}>
-                MEM{carets[sortKey]}
+                MEM{carets.mem}
               </span>
             </th>
-            <th className="align-right clickable"
+            <th className="align-right fixed-width clickable"
                 onClick={this.sortBy.bind(null, "disk")}>
               <span className={headerClassSet}>
-                DISK{carets[sortKey]}
+                DISK{carets.disk}
               </span>
             </th>
           </tr>
