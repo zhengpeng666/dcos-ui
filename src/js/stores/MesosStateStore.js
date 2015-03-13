@@ -431,7 +431,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
           health = HealthTypes.HEALTHY;
         }
 
-        return {name: framework.labels.DCOS_PACKAGE_NAME, health: health};
+        return {name: framework.labels.DCOS_PACKAGE_NAME, value: health};
       })
       .indexBy(function (obj) {
         return obj.name;
