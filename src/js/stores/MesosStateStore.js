@@ -5,12 +5,15 @@ var AppDispatcher = require("../dispatcher/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../utils/Config");
 var EventTypes = require("../constants/EventTypes");
+var HealthTypes = require("../constants/HealthTypes");
 var MesosStateActions = require("../actions/MesosStateActions");
 
 var _interval;
 var _initCalled = false;
 var _frameworkIndexes = [];
+var _frameworkHealth = {};
 var _mesosStates = [];
+var _marathonUrl;
 
 function round(value, decimalPlaces) {
   /* jshint -W030 */
@@ -241,6 +244,10 @@ function normalizeFrameworks(frameworks, date) {
   return _.map(frameworks, function (framework) {
     framework.date = date;
     var index = _.indexOf(_frameworkIndexes, framework.name);
+    if (framework.name.toLowerCase().indexOf("marathon") > -1 &&
+        framework.webui_url != null) {
+      _marathonUrl = framework.webui_url.replace("ip-", "").replace(/-/g, ".");
+    }
     // this is a new framework, fill in 0s for all the previous datapoints
     if (index === -1) {
       _frameworkIndexes.push(framework.name);
@@ -281,10 +288,17 @@ function initStates() {
   });
 }
 
+function fetchData() {
+  if (!_.isEmpty(_marathonUrl)) {
+    MesosStateActions.fetchMarathonHealth(_marathonUrl);
+  }
+  MesosStateActions.fetch();
+}
+
 function startPolling() {
   if (_interval == null) {
-    MesosStateActions.fetch();
-    _interval = setInterval(MesosStateActions.fetch, Config.stateRefresh);
+    fetchData();
+    _interval = setInterval(fetchData, Config.stateRefresh);
   }
 }
 
@@ -321,6 +335,9 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getFrameworks: function (filterOptions) {
+    /* jshint -W030 */
+    filterOptions || (filterOptions = {});
+    /* jshint +W030 */
     var frameworks = getStatesByFramework();
 
     if (filterOptions && filterOptions.searchString !== "") {
@@ -328,6 +345,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
 
     return frameworks;
+  },
+
+  getFrameworkHealth: function () {
+    return _frameworkHealth;
   },
 
   getTotalFrameworksResources: function (frameworks) {
@@ -393,12 +414,46 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },
 
+  processMarathonHealth: function (data) {
+    _frameworkHealth = _.chain(data.apps)
+      .filter(function (app) {
+        return (
+          app.labels.DCOS_PACKAGE_IS_FRAMEWORK === "true" &&
+          _.contains(_frameworkIndexes, app.labels.DCOS_PACKAGE_NAME)
+        );
+      })
+      .map(function (framework) {
+        var health = HealthTypes.IDLE;
+        if (framework.tasksUnhealthy > 0) {
+          health = HealthTypes.SICK;
+        }
+        if (framework.tasksHealthy > 0) {
+          health = HealthTypes.HEALTHY;
+        }
+
+        return {name: framework.labels.DCOS_PACKAGE_NAME, health: health};
+      })
+      .indexBy(function (obj) {
+        return obj.name;
+      })
+      .value();
+  },
+
   dispatcherIndex: AppDispatcher.register(function (payload) {
     var action = payload.action;
 
     switch (action.type) {
-      case ActionTypes.REQUEST_MESOS_STATE:
+      case ActionTypes.REQUEST_MESOS_STATE_SUCCESS:
         MesosStateStore.processState(action.data);
+        break;
+      case ActionTypes.REQUEST_MESOS_STATE_ERROR:
+        // TODO (ml): handle mesos state fetch error
+        break;
+      case ActionTypes.REQUEST_MARATHON_HEALTH_SUCCESS:
+        MesosStateStore.processMarathonHealth(action.data);
+        break;
+      case ActionTypes.REQUEST_MARATHON_HEALTH_ERROR:
+        // TODO (ml): handle marathon health fetch error
         break;
     }
 
