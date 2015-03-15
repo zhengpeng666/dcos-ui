@@ -40,7 +40,7 @@ function renderTask(prop, model) {
   return (
     <span>
       {model[prop]}
-      <span className="mobile-displayed-text"> Tasks</span>
+      <span className="visible-mini-inline"> Tasks</span>
     </span>
   );
 }
@@ -58,8 +58,25 @@ function renderStats(prop, model) {
   );
 }
 
+function classHeader(prop, sortBy) {
+  if (sortBy.prop === prop) {
+    return "highlighted";
+  }
+
+  return "";
+}
+
+function classHeaderStats(prop, sortBy) {
+  var className = "align-right hidden-mini";
+  if (sortBy.prop === prop) {
+    className += " highlighted";
+  }
+
+  return className;
+}
+
 function classNameStats(prop, row, sortBy) {
-  var className = "align-right mobile-hidden";
+  var className = "align-right hidden-mini";
   if (sortBy.prop === prop) {
     className += " highlighted";
   }
@@ -69,44 +86,50 @@ function classNameStats(prop, row, sortBy) {
 
 var columns = [
   {
+    headerClassName: classHeader,
     prop: "name",
     render: renderHeadline,
     sortable: true,
-    title: "SERIVCE NAME"
+    title: "SERIVCE NAME",
   },
   {
+    headerClassName: classHeader,
     prop: "active",
     render: renderHealth,
     sortable: true,
-    title: "HEALTH"
+    title: "HEALTH",
   },
   {
     className: "align-right",
+    headerClassName: classHeader,
     prop: "tasks_size",
     render: renderTask,
     sortable: true,
-    title: "TASKS"
+    title: "TASKS",
   },
   {
     className: classNameStats,
+    headerClassName: classHeaderStats,
     prop: "cpus",
     render: renderStats,
     sortable: true,
-    title: "CPU"
+    title: "CPU",
   },
   {
     className: classNameStats,
+    headerClassName: classHeaderStats,
     prop: "mem",
     render: renderStats,
     sortable: true,
-    title: "MEM"
+    title: "MEM",
   },
   {
     className: classNameStats,
+    headerClassName: classHeaderStats,
     prop: "disk",
     render: renderStats,
     sortable: true,
-    title: "DISK"
+    title: "DISK",
   },
 ];
 

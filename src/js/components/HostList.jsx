@@ -8,8 +8,7 @@ var Table = require("./Table");
 
 function renderHeadline(prop) {
   return (
-    <h5 className="flush-top flush-bottom">
-      <i className="icon icon-small icon-small-white border-radius"></i>
+    <h5 className="flush-top flush-bottom headline">
       {prop}
     </h5>
   );
@@ -19,7 +18,7 @@ function renderTask(prop, model) {
   return (
     <span>
       {model[prop]}
-      <span className="mobile-displayed-text"> Tasks</span>
+      <span className="visible-mini-inline"> Tasks</span>
     </span>
   );
 }
@@ -37,8 +36,25 @@ function renderStats(prop, model) {
   );
 }
 
+function classHeader(prop, sortBy) {
+  if (sortBy.prop === prop) {
+    return "highlighted";
+  }
+
+  return "";
+}
+
+function classHeaderStats(prop, sortBy) {
+  var className = "align-right hidden-mini";
+  if (sortBy.prop === prop) {
+    className += " highlighted";
+  }
+
+  return className;
+}
+
 function classNameStats(prop, row, sortBy) {
-  var className = "align-right mobile-hidden";
+  var className = "align-right hidden-mini";
   if (sortBy.prop === prop) {
     className += " highlighted";
   }
@@ -48,6 +64,7 @@ function classNameStats(prop, row, sortBy) {
 
 var columns = [
   {
+    headerClassName: classHeader,
     prop: "hostname",
     render: renderHeadline,
     sortable: true,
@@ -55,6 +72,7 @@ var columns = [
   },
   {
     className: "align-right",
+    headerClassName: classHeader,
     prop: "tasks_size",
     render: renderTask,
     sortable: true,
@@ -62,6 +80,7 @@ var columns = [
   },
   {
     className: classNameStats,
+    headerClassName: classHeaderStats,
     prop: "cpus",
     render: renderStats,
     sortable: true,
@@ -69,6 +88,7 @@ var columns = [
   },
   {
     className: classNameStats,
+    headerClassName: classHeaderStats,
     prop: "mem",
     render: renderStats,
     sortable: true,
@@ -76,6 +96,7 @@ var columns = [
   },
   {
     className: classNameStats,
+    headerClassName: classHeaderStats,
     prop: "disk",
     render: renderStats,
     sortable: true,
