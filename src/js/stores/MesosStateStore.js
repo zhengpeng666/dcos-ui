@@ -13,13 +13,13 @@ var _frameworkIndexes = [];
 var _mesosStates = [];
 
 function round(value, decimalPlaces) {
+  /* jshint -W030 */
   decimalPlaces || (decimalPlaces = 0);
+  /* jshint +W030 */
   var factor = Math.pow(10, decimalPlaces);
   return Math.round(value * factor) / factor;
 }
 
-/* jshint camelcase:false */
-/* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
 function sumResources(resourceList) {
   return _.reduce(resourceList, function (sumMap, resource) {
     _.each(sumMap, function (value, key) {
@@ -406,7 +406,5 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   })
 
 });
-/* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-/* jshint camelcase:true */
 
 module.exports = MesosStateStore;
