@@ -12,7 +12,6 @@ function request(url, type, data, options) {
     type: type
   }, options);
 
-
   if (data == null && options.contentType == null) { // don't send data
     options.contentType = "text/plain";
   } else if (options.contentType == null) { // send data
@@ -38,8 +37,8 @@ var MesosStateActions = {
             data: response
           });
         },
-        error: function(e) {
-           AppDispatcher.handleServerAction({
+        error: function (e) {
+          AppDispatcher.handleServerAction({
             type: ActionTypes.REQUEST_MESOS_STATE_ERROR,
             data: e.message
           });
@@ -58,14 +57,14 @@ var MesosStateActions = {
         withCredentials: false
       },
       dataType: "json",
-      success: function(response) {
-         AppDispatcher.handleServerAction({
+      success: function (response) {
+        AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_MARATHON_HEALTH_SUCCESS,
           data: response
         });
       },
-      error: function(e) {
-         AppDispatcher.handleServerAction({
+      error: function (e) {
+        AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_MARATHON_HEALTH_ERROR,
           data: e.message
         });
