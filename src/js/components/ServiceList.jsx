@@ -8,10 +8,10 @@ var Table = require("./Table");
 
 function renderHeadline(prop) {
   return (
-    <h5 className="flush-top flush-bottom">
+    <span className="h5 flush-top flush-bottom headline">
       <i className="icon icon-small icon-small-white border-radius"></i>
       {prop}
-    </h5>
+    </span>
   );
 }
 

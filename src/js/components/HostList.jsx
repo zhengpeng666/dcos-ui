@@ -8,9 +8,9 @@ var Table = require("./Table");
 
 function renderHeadline(prop) {
   return (
-    <h5 className="flush-top flush-bottom headline">
+    <span className="h5 flush-top flush-bottom headline">
       {prop}
-    </h5>
+    </span>
   );
 }
 
