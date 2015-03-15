@@ -8,7 +8,7 @@ var FilterInputText = require("./FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var HostsChart = require("./charts/HostsChart");
 var SidebarToggle = require("./SidebarToggle");
-var HostList = require("./HostList");
+var HostTable = require("./HostTable");
 
 function getMesosHosts(filterOptions) {
   filterOptions = filterOptions || {searchString: ""};
@@ -109,7 +109,7 @@ var DatacenterPage = React.createClass({
             <FilterInputText
               searchString={this.state.searchString}
               onSubmit={this.onFilterChange} />
-            <HostList hosts={this.state.hosts} />
+            <HostTable hosts={this.state.hosts} />
           </div>
         </div>
       </div>

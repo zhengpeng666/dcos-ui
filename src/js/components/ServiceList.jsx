@@ -1,180 +1,70 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
-var Humanize = require("humanize");
-var React = require("react/addons");
+var React = require("react");
 
-var Table = require("./Table");
+var HealthTypes = require("../constants/HealthTypes");
+var List = require("./List");
 
-function renderHeadline(prop) {
-  return (
-    <span className="h5 flush-top flush-bottom headline">
-      <i className="icon icon-small icon-small-white border-radius"></i>
-      {prop}
-    </span>
-  );
-}
+var ServiceList = React.createClass({
 
-function renderHealth(prop, model) {
-  var status = "Active";
-  if (model.active !== true) {
-    status = "Inactive";
-  }
+  displayName: "ServiceList",
 
-  var statusClassSet = React.addons.classSet({
-    "collection-item-content-status": true,
-    "text-success": model.active,
-    "text-danger": !model.active
-  });
-
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-  return (
-    <span className={statusClassSet}>{status}</span>
-  );
-  /* jshint trailing:true, quotmark:true, newcap:true */
-  /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-}
-
-function renderTask(prop, model) {
-  return (
-    <span>
-      {model[prop]}
-      <span className="visible-mini-inline"> Tasks</span>
-    </span>
-  );
-}
-
-function renderStats(prop, model) {
-  var value = _.last(model.used_resources[prop]).value;
-  if(prop !== "cpus") {
-    value = Humanize.filesize(value * 1024 * 1024, 1024, 1);
-  }
-
-  return (
-    <span>
-      {value}
-    </span>
-  );
-}
-
-function classHeader(prop, sortBy) {
-  if (sortBy.prop === prop) {
-    return "highlighted";
-  }
-
-  return "";
-}
-
-function classHeaderStats(prop, sortBy) {
-  var className = "align-right hidden-mini";
-  if (sortBy.prop === prop) {
-    className += " highlighted";
-  }
-
-  return className;
-}
-
-function classNameStats(prop, row, sortBy) {
-  var className = "align-right hidden-mini";
-  if (sortBy.prop === prop) {
-    className += " highlighted";
-  }
-
-  return className;
-}
-
-var columns = [
-  {
-    headerClassName: classHeader,
-    prop: "name",
-    render: renderHeadline,
-    sortable: true,
-    title: "SERIVCE NAME",
-  },
-  {
-    headerClassName: classHeader,
-    prop: "active",
-    render: renderHealth,
-    sortable: true,
-    title: "HEALTH",
-  },
-  {
-    className: "align-right",
-    headerClassName: classHeader,
-    prop: "tasks_size",
-    render: renderTask,
-    sortable: true,
-    title: "TASKS",
-  },
-  {
-    className: classNameStats,
-    headerClassName: classHeaderStats,
-    prop: "cpus",
-    render: renderStats,
-    sortable: true,
-    title: "CPU",
-  },
-  {
-    className: classNameStats,
-    headerClassName: classHeaderStats,
-    prop: "mem",
-    render: renderStats,
-    sortable: true,
-    title: "MEM",
-  },
-  {
-    className: classNameStats,
-    headerClassName: classHeaderStats,
-    prop: "disk",
-    render: renderStats,
-    sortable: true,
-    title: "DISK",
-  },
-];
-
-var ServicesList = React.createClass({
-
-  displayName: "ServicesList",
-
-  propTypes: {
-    frameworks: React.PropTypes.array.isRequired
+  getInitialState: function () {
+    return {
+      servicesHealth: []
+    };
   },
 
   getDefaultProps: function () {
     return {
-      frameworks: []
+      servicesHealth: []
     };
   },
 
-  sortFunction: function (prop) {
-    if (prop === "cpus" || prop === "mem" || prop === "disk") {
+  componentWillReceiveProps: function (nextProps) {
+    var servicesHealth = this.mapSearvicesHealth(nextProps.servicesHealth);
+    this.setState({servicesHealth: servicesHealth});
+  },
 
-      return function (a, b) {
-        a = _.last(a.used_resources[prop]).value;
-        b = _.last(b.used_resources[prop]).value;
-        return a < b ? -1 : a > b ? 1 : 0;
+  mapSearvicesHealth: function (servicesHealth) {
+    var states = [
+      {mapping: "SICK", value: "Sick", classes: {"text-danger": true}},
+      {mapping: "HEALTHY", value: "Healthy", classes: {"text-success": true}},
+      {mapping: "IDLE", value: "Idle", classes: {"text-warning": true}}
+    ].map(function (obj, key) {
+      obj.order = key;
+      return obj;
+    });
+
+    var services = _.map(servicesHealth, function (service) {
+      var state = _.find(states, function (obj) {
+        return service.value === HealthTypes[obj.mapping];
+      });
+      return {
+        title: {value: service.name},
+        health: {value: state.value, classes: state.classes, textAlign: "right"}
       };
-    }
+    });
 
-    // rely on default sorting
-    return null;
+    services.sort(function (a, b) {
+      var order1 = _.findWhere(states, {value: a.health.value}).order;
+      var order2 = _.findWhere(states, {value: b.health.value}).order;
+      return order1 - order2;
+    });
+
+    return services;
   },
 
   render: function () {
+    var listOrder = ["title", "health"];
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <Table
-        className="table"
-        columns={columns}
-        keys={["name"]}
-        sortBy={{ prop: "name", order: "desc" }}
-        sortFunc={this.sortFunction}
-        dataArray={this.props.frameworks} />
+      <List list={this.state.servicesHealth} order={listOrder} />
     );
   }
 });
 
-module.exports = ServicesList;
+module.exports = ServiceList;

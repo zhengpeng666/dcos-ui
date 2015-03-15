@@ -70,34 +70,27 @@ var ResourceChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="panel">
-        <div className="panel-heading text-align-center">
-          <h3 className="panel-title">
-            {labelMap[props.mode]} Overview
-          </h3>
-        </div>
-        <div className="panel-content">
-          <div className="row text-align-center">
-            <div className="column-small-offset-2 column-small-4">
-              <p className="h1-jumbo unit">
-                {totalHeadline[0]}
-              </p>
-              <p className="h4 unit-label path-color-6">
-                {totalHeadline[1]} Total
-              </p>
-            </div>
-            <div className="column-small-4">
-              <p className="h1-jumbo unit">
-                {this.getLatestPercent(allocResources)}
-                <sup>%</sup>
-              </p>
-              <p className="h4 unit-label path-color-0">
-                {this.getHeadline(allocResources)} Alloc
-              </p>
-            </div>
+      <div>
+        <div className="row text-align-center">
+          <div className="column-small-offset-2 column-small-4">
+            <p className="h1-jumbo unit">
+              {totalHeadline[0]}
+            </p>
+            <p className="h4 unit-label path-color-6">
+              {totalHeadline[1]} Total
+            </p>
           </div>
-          {this.getChart()}
+          <div className="column-small-4">
+            <p className="h1-jumbo unit">
+              {this.getLatestPercent(allocResources)}
+              <sup>%</sup>
+            </p>
+            <p className="h4 unit-label path-color-0">
+              {this.getHeadline(allocResources)} Alloc
+            </p>
+          </div>
         </div>
+        {this.getChart()}
       </div>
     );
   }

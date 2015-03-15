@@ -8,7 +8,7 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
 var ServicesChart = require("./charts/ServicesChart");
 var FilterInputText = require("./FilterInputText");
-var ServiceList = require("./ServiceList");
+var ServiceTable = require("./ServiceTable");
 
 function getMesosServices(filterOptions) {
   var frameworks = MesosStateStore.getFrameworks(filterOptions);
@@ -117,7 +117,7 @@ var ServicesPage = React.createClass({
             <FilterInputText
               searchString={this.state.searchString}
               onSubmit={this.onChange} />
-            <ServiceList
+            <ServiceTable
               frameworks={state.frameworks}
               totalResources={state.totalResources} />
           </div>

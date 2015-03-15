@@ -3,7 +3,7 @@
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
-var ServicesHealthList = require("./ServicesHealthList");
+var ServiceList = require("./ServiceList");
 var MesosStateStore = require("../stores/MesosStateStore");
 var Panel = require("./Panel");
 var ResourceChart = require("./charts/ResourceChart");
@@ -54,23 +54,29 @@ var Activity = React.createClass({
       <div className="row">
         <div className="column-small-6 column-large-4">
           <Panel title="Services Health" className="services-panel">
-            <ServicesHealthList servicesHealth={state.servicesHealth} />
+            <ServiceList servicesHealth={state.servicesHealth} />
           </Panel>
         </div>
         <div className="column-small-6 column-large-4">
-          <ResourceChart
-            allocResources={state.allocResources}
-            totalResources={state.totalResources}
-            mode="cpus" />
+          <Panel title="CPU Allocation" className="services-panel">
+            <ResourceChart
+              allocResources={state.allocResources}
+              totalResources={state.totalResources}
+              mode="cpus" />
+          </Panel>
         </div>
         <div className="column-small-6 column-large-4">
-          <ResourceChart
-            allocResources={state.allocResources}
-            totalResources={state.totalResources}
-            mode="mem" />
+          <Panel title="Memory Allocation" className="services-panel">
+            <ResourceChart
+              allocResources={state.allocResources}
+              totalResources={state.totalResources}
+              mode="mem" />
+          </Panel>
         </div>
         <div className="column-small-6 column-large-4">
-          <TasksChart tasks={state.tasks} />
+          <Panel title="Tasks" className="services-panel">
+            <TasksChart tasks={state.tasks} />
+          </Panel>
         </div>
       </div>
     );
