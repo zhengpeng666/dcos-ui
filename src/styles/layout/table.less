@@ -19,8 +19,11 @@
   vertical-align: middle;
   text-align: left;
 
+  tr {
+    height: @table-row-height;
+  }
+
   th {
-    .border-top-radius(@table-header-border-radius);
     font-weight: @body-text-font-weight;
     background: ~`color_lightness("@{gray}", -15)`;
 
@@ -29,10 +32,12 @@
       background: ~`color_lightness("@{gray}", 5)`;
       color: @white;
     }
-  }
-
-  tr {
-    height: @table-row-height;
+    &:first-child {
+      .border-top-left-radius(@table-header-border-radius);
+    }
+    &:last-child {
+      .border-top-right-radius(@table-header-border-radius);
+    }
   }
 
   th, td {
@@ -58,6 +63,10 @@
 
   .icon {
     margin-right: @base-spacing-unit * 0.25;
+  }
+
+  .fixed-width {
+    width: @grid-gutter-width-screen-large * 2;
   }
 }
 
