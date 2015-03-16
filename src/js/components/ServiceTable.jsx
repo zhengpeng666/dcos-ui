@@ -6,11 +6,15 @@ var React = require("react/addons");
 
 var Table = require("./Table");
 
-function renderHeadline(prop) {
+function isStat(prop) {
+  return prop === "cpus" || prop === "mem" || prop === "disk";
+}
+
+function renderHeadline(prop, model) {
   return (
     <span className="h5 flush-top flush-bottom headline">
       <i className="icon icon-small icon-small-white border-radius"></i>
-      {prop}
+      {model[prop]}
     </span>
   );
 }
@@ -58,74 +62,60 @@ function renderStats(prop, model) {
   );
 }
 
-function classHeader(prop, sortBy) {
-  if (sortBy.prop === prop) {
-    return "highlighted";
-  }
+function getClassName(prop, sortBy) {
+  var classSet = React.addons.classSet({
+    "align-right": isStat(prop) || prop === "tasks_size",
+    "hidden-mini": isStat(prop),
+    "highlighted": sortBy.prop === prop
+  });
 
-  return "";
-}
-
-function classHeaderStats(prop, sortBy) {
-  var className = "align-right hidden-mini";
-  if (sortBy.prop === prop) {
-    className += " highlighted";
-  }
-
-  return className;
-}
-
-function classNameStats(prop, row, sortBy) {
-  var className = "align-right hidden-mini";
-  if (sortBy.prop === prop) {
-    className += " highlighted";
-  }
-
-  return className;
+  return classSet;
 }
 
 var columns = [
   {
-    headerClassName: classHeader,
+    className: getClassName,
+    headerClassName: getClassName,
     prop: "name",
     render: renderHeadline,
     sortable: true,
     title: "SERIVCE NAME",
   },
   {
-    headerClassName: classHeader,
+    className: getClassName,
+    headerClassName: getClassName,
     prop: "active",
     render: renderHealth,
     sortable: true,
     title: "HEALTH",
   },
   {
-    className: "align-right",
-    headerClassName: classHeader,
+    className: getClassName,
+    headerClassName: getClassName,
     prop: "tasks_size",
     render: renderTask,
     sortable: true,
     title: "TASKS",
   },
   {
-    className: classNameStats,
-    headerClassName: classHeaderStats,
+    className: getClassName,
+    headerClassName: getClassName,
     prop: "cpus",
     render: renderStats,
     sortable: true,
     title: "CPU",
   },
   {
-    className: classNameStats,
-    headerClassName: classHeaderStats,
+    className: getClassName,
+    headerClassName: getClassName,
     prop: "mem",
     render: renderStats,
     sortable: true,
     title: "MEM",
   },
   {
-    className: classNameStats,
-    headerClassName: classHeaderStats,
+    className: getClassName,
+    headerClassName: getClassName,
     prop: "disk",
     render: renderStats,
     sortable: true,
@@ -133,9 +123,9 @@ var columns = [
   },
 ];
 
-var ServicesList = React.createClass({
+var ServicesTable = React.createClass({
 
-  displayName: "ServicesList",
+  displayName: "ServicesTable",
 
   propTypes: {
     frameworks: React.PropTypes.array.isRequired
@@ -148,8 +138,7 @@ var ServicesList = React.createClass({
   },
 
   sortFunction: function (prop) {
-    if (prop === "cpus" || prop === "mem" || prop === "disk") {
-
+    if (isStat(prop)) {
       return function (a, b) {
         a = _.last(a.used_resources[prop]).value;
         b = _.last(b.used_resources[prop]).value;
@@ -177,4 +166,4 @@ var ServicesList = React.createClass({
   }
 });
 
-module.exports = ServicesList;
+module.exports = ServicesTable;
