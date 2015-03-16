@@ -83,7 +83,7 @@ var TasksChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div>
+      <div className="chart">
         <div className="row">
           <div className="column-small-offset-1 column-small-10">
             <Chart calcHeight={function (w) { return w; }}>

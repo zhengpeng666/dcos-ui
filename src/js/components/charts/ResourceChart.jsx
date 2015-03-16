@@ -70,7 +70,7 @@ var ResourceChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div>
+      <div className="chart">
         <div className="row text-align-center">
           <div className="column-small-offset-2 column-small-4">
             <p className="h1-jumbo unit">

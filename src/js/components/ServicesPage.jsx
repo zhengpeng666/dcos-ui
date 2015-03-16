@@ -14,6 +14,7 @@ function getMesosServices(filterOptions) {
   var frameworks = MesosStateStore.getFrameworks(filterOptions);
   return {
     frameworks: frameworks,
+    refreshRate: MesosStateStore.getRefreshRate(),
     totalFrameworks: MesosStateStore.getLatest().frameworks.length,
     totalFrameworksResources:
       MesosStateStore.getTotalFrameworksResources(frameworks),
@@ -72,7 +73,7 @@ var ServicesPage = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="services-stats">
+      <div>
         <h4 className={filteredClassSet}>
           Showing {filteredLength} of {totalLength} Total Services
         </h4>
@@ -90,8 +91,6 @@ var ServicesPage = React.createClass({
   render: function () {
     var state = this.state;
 
-    var refreshRate = MesosStateStore.getRefreshRate();
-
     return (
       <div>
         <div id="page-header">
@@ -105,14 +104,13 @@ var ServicesPage = React.createClass({
             <div id="page-header-navigation" />
           </div>
         </div>
-        <div id="page-header-navigation" />
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
             <ServicesChart
               data={state.frameworks}
               totalFrameworksResources={state.totalFrameworksResources}
               totalResources={state.totalResources}
-              refreshRate={refreshRate} />
+              refreshRate={state.refreshRate} />
             {this.getServiceStats()}
             <FilterInputText
               searchString={this.state.searchString}

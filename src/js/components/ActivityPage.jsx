@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 
 var React = require("react/addons");
-var Link = require("react-router").Link;
 
 var Activity = require("./Activity");
 var SidebarToggle = require("./SidebarToggle");
@@ -24,30 +23,7 @@ var ActivityPage = React.createClass({
                 Activity
               </h1>
             </div>
-            <div id="page-header-actions">
-              <div className="button-collection flush-bottom">
-                <Link to="home" className="button button-large button-primary">
-                  Primary Button
-                </Link>
-                <Link to="home" className="button button-large">
-                  Default Button
-                </Link>
-              </div>
-            </div>
-            <div id="page-header-navigation">
-              <ul className="list-unstyled list-inline flush-bottom">
-                <li className="selected">
-                  <Link to="activity">
-                    Overview
-                  </Link>
-                </li>
-                <li>
-                  <Link to="services">
-                    Services
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <div id="page-header-navigation" />
           </div>
         </div>
         <div id="page-content" className="container-scrollable">

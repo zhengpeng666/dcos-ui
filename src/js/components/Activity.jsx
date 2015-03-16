@@ -53,12 +53,12 @@ var Activity = React.createClass({
     return (
       <div className="row">
         <div className="column-small-6 column-large-4">
-          <Panel title="Services Health" className="services-panel">
+          <Panel title="Services Health">
             <ServiceList servicesHealth={state.servicesHealth} />
           </Panel>
         </div>
         <div className="column-small-6 column-large-4">
-          <Panel title="CPU Allocation" className="services-panel">
+          <Panel title="CPU Allocation">
             <ResourceChart
               allocResources={state.allocResources}
               totalResources={state.totalResources}
@@ -66,7 +66,7 @@ var Activity = React.createClass({
           </Panel>
         </div>
         <div className="column-small-6 column-large-4">
-          <Panel title="Memory Allocation" className="services-panel">
+          <Panel title="Memory Allocation">
             <ResourceChart
               allocResources={state.allocResources}
               totalResources={state.totalResources}
@@ -74,7 +74,7 @@ var Activity = React.createClass({
           </Panel>
         </div>
         <div className="column-small-6 column-large-4">
-          <Panel title="Tasks" className="services-panel">
+          <Panel title="Tasks">
             <TasksChart tasks={state.tasks} />
           </Panel>
         </div>

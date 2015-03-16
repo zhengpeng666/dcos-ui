@@ -20,6 +20,7 @@
   text-align: left;
 
   th {
+    font-weight: @body-text-font-weight;
     background: ~`color_lightness("@{gray}", -15)`;
 
     &:hover,
@@ -39,7 +40,6 @@
 
   td {
     border-top: 1px solid @gray;
-    font-weight: @body-text-emphasize-font-weight;
 
     &.highlighted {
       background: ~`color_lightness("@{gray}", -25)`;
@@ -49,7 +49,6 @@
 
   .headline {
     color: @white;
-    font-weight: 200;
   }
 
   .align-right {
