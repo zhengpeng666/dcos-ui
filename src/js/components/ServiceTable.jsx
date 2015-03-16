@@ -79,7 +79,7 @@ var columns = [
     prop: "name",
     render: renderHeadline,
     sortable: true,
-    title: "SERIVCE NAME",
+    title: "SERVICE NAME",
   },
   {
     className: getClassName,
@@ -142,7 +142,13 @@ var ServicesTable = React.createClass({
       return function (a, b) {
         a = _.last(a.used_resources[prop]).value;
         b = _.last(b.used_resources[prop]).value;
-        return a < b ? -1 : a > b ? 1 : 0;
+        if (a < b) {
+          return -1;
+        }
+        if (a > b) {
+          return 1;
+        }
+        return 0;
       };
     }
 

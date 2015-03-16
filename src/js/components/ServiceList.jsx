@@ -23,11 +23,11 @@ var ServiceList = React.createClass({
   },
 
   componentWillReceiveProps: function (nextProps) {
-    var servicesHealth = this.mapSearvicesHealth(nextProps.servicesHealth);
+    var servicesHealth = this.mapServicesHealth(nextProps.servicesHealth);
     this.setState({servicesHealth: servicesHealth});
   },
 
-  mapSearvicesHealth: function (servicesHealth) {
+  mapServicesHealth: function (servicesHealth) {
     var states = [
       {mapping: "SICK", value: "Sick", classes: {"text-danger": true}},
       {mapping: "HEALTHY", value: "Healthy", classes: {"text-success": true}},
