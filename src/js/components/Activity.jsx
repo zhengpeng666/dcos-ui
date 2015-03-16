@@ -51,13 +51,13 @@ var Activity = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="row">
-        <div className="column-small-6 column-large-4">
+      <div className="grid">
+        <div className="grid-item column-small-6 column-large-4">
           <Panel title="Services Health">
             <ServiceList servicesHealth={state.servicesHealth} />
           </Panel>
         </div>
-        <div className="column-small-6 column-large-4">
+        <div className="grid-item column-small-6 column-large-4">
           <Panel title="CPU Allocation">
             <ResourceChart
               allocResources={state.allocResources}
@@ -65,7 +65,7 @@ var Activity = React.createClass({
               mode="cpus" />
           </Panel>
         </div>
-        <div className="column-small-6 column-large-4">
+        <div className="grid-item column-small-6 column-large-4">
           <Panel title="Memory Allocation">
             <ResourceChart
               allocResources={state.allocResources}
@@ -73,7 +73,7 @@ var Activity = React.createClass({
               mode="mem" />
           </Panel>
         </div>
-        <div className="column-small-6 column-large-4">
+        <div className="grid-item column-small-6 column-large-4">
           <Panel title="Tasks">
             <TasksChart tasks={state.tasks} />
           </Panel>
