@@ -35,7 +35,7 @@ var ListItem = React.createClass({
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     return (
-      <li className="list-component-item">
+      <li className="list-item">
         {this.getObjectItems(this.props.data, this.props.order)}
       </li>
     );

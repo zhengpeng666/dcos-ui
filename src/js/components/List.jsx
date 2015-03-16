@@ -14,12 +14,16 @@ var List = React.createClass({
     order: React.PropTypes.array.isRequired
   },
 
-  getListItems: function (list) {
+  getListItems: function () {
     var order = this.props.order;
-    return _.map(list, function (item, key) {
+    return _.map(this.props.list, function (item, key) {
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <ListItem key={key} data={item} order={order} />
       );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     });
   },
 
@@ -27,8 +31,8 @@ var List = React.createClass({
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     return (
-      <ul className="list-component list-unstyled">
-        {this.getListItems(this.props.list)}
+      <ul className="list list-unstyled">
+        {this.getListItems()}
       </ul>
     );
   }
