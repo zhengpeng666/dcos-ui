@@ -346,7 +346,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getFrameworkHealth: function () {
-    return _frameworkHealth;
+    return _.values(_frameworkHealth);
   },
 
   getTotalFrameworksResources: function (frameworks) {
