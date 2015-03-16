@@ -31,7 +31,7 @@
   }
 
   tr {
-    height: @collection-list-item-height + @base-spacing-unit * 0.5;
+    height: @table-row-height;
   }
 
   th, td {
@@ -57,5 +57,16 @@
 
   .icon {
     margin-right: @base-spacing-unit * 0.25;
+  }
+}
+
+/* Screen Size: Small (@screen-small) and above */
+& when (@screen-small-enabled) {
+  @media (min-width: @screen-small) {
+    .table {
+      tr {
+        height: @table-row-height-small;
+      }
+    }
   }
 }
