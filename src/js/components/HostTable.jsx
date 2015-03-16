@@ -7,7 +7,7 @@ var React = require("react/addons");
 var Table = require("./Table");
 
 function isStat(prop) {
-  return prop === "cpus" || prop === "mem" || prop === "disk";
+  return _.contains(["cpus", "mem", "disk"], prop);
 }
 
 function renderHeadline(prop, model) {
@@ -43,7 +43,7 @@ function renderStats(prop, model) {
 function getClassName(prop, sortBy) {
   var classSet = React.addons.classSet({
     "align-right": isStat(prop) || prop === "tasks_size",
-    "hidden-mini": isStat(prop),
+    "hidden-mini fixed-width": isStat(prop),
     "highlighted": sortBy.prop === prop
   });
 
@@ -128,7 +128,7 @@ var HostTable = React.createClass({
       <Table
         className="table"
         columns={columns}
-        keys={["hostname"]}
+        keys={["id"]}
         sortBy={{ prop: "hostname", order: "desc" }}
         sortFunc={this.sortFunction}
         dataArray={this.props.hosts} />

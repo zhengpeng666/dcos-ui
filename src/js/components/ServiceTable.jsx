@@ -7,7 +7,7 @@ var React = require("react/addons");
 var Table = require("./Table");
 
 function isStat(prop) {
-  return prop === "cpus" || prop === "mem" || prop === "disk";
+  return _.contains(["cpus", "mem", "disk"], prop);
 }
 
 function renderHeadline(prop, model) {
@@ -164,7 +164,7 @@ var ServicesTable = React.createClass({
       <Table
         className="table"
         columns={columns}
-        keys={["name"]}
+        keys={["id"]}
         sortBy={{ prop: "name", order: "desc" }}
         sortFunc={this.sortFunction}
         dataArray={this.props.frameworks} />
