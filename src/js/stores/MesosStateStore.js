@@ -168,7 +168,9 @@ function getHostResourcesBySlave (slave) {
         date: state.date,
         value: resourceVal,
         percentage:
-          Maths.round(100 * resourceVal / Math.max(1, slave.resources[resourceKey]))
+          Maths.round(
+            100 * resourceVal / Math.max(1, slave.resources[resourceKey])
+          )
       });
     });
     return usedResources;
@@ -333,9 +335,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getFrameworks: function (filterOptions) {
-    /* jshint -W030 */
-    filterOptions || (filterOptions = {});
-    /* jshint +W030 */
+    filterOptions = filterOptions || {};
     var frameworks = getStatesByFramework();
 
     if (filterOptions && filterOptions.searchString !== "") {
@@ -359,7 +359,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   getHosts: function (filterOptions) {
     var hosts = getStateByHosts();
-
     if (filterOptions && filterOptions.searchString !== "") {
       hosts = filterByString(hosts, filterOptions.searchString);
     }
