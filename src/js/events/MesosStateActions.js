@@ -2,7 +2,7 @@ var _ = require("underscore");
 var $ = require("jquery");
 
 var ActionTypes = require("../constants/ActionTypes");
-var AppDispatcher = require("../dispatcher/AppDispatcher");
+var AppDispatcher = require("./AppDispatcher");
 var Config = require("../utils/Config");
 
 function request(url, type, data, options) {

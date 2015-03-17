@@ -6,9 +6,9 @@ var React = require("react/addons");
 var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
-var ServicesChart = require("./charts/ServicesChart");
-var FilterInputText = require("./FilterInputText");
-var ServiceTable = require("./ServiceTable");
+var ServicesChart = require("../components/charts/ServicesChart");
+var FilterInputText = require("../components/FilterInputText");
+var ServiceTable = require("../components/ServiceTable");
 
 function getMesosServices(filterOptions) {
   var frameworks = MesosStateStore.getFrameworks(filterOptions);

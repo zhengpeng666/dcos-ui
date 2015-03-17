@@ -4,11 +4,11 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
-var FilterInputText = require("./FilterInputText");
+var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
-var HostsChart = require("./charts/HostsChart");
+var HostsChart = require("../components/charts/HostsChart");
 var SidebarToggle = require("./SidebarToggle");
-var HostTable = require("./HostTable");
+var HostTable = require("../components/HostTable");
 
 function getMesosHosts(filterOptions) {
   filterOptions = filterOptions || {searchString: ""};

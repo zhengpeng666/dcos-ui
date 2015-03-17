@@ -6,7 +6,7 @@ var RouteHandler = require("react-router").RouteHandler;
 
 
 require("../utils/ScrollHandler");
-var Sidebar = require("../components/Sidebar");
+var Sidebar = require("./Sidebar");
 var MesosStateStore = require("../stores/MesosStateStore");
 
 var Index = React.createClass({
