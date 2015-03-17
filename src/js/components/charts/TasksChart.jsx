@@ -83,26 +83,19 @@ var TasksChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="panel">
-        <div className="panel-heading text-align-center">
-          <h3 className="panel-title">
-            Tasks
-          </h3>
+      <div className="chart">
+        <div className="row">
+          <div className="column-small-offset-1 column-small-10">
+            <Chart calcHeight={function (w) { return w; }}>
+              <DialChart
+                data={tasks}
+                label={"Total Tasks"}
+                unit={this.getTotal(tasks)} />
+            </Chart>
+          </div>
         </div>
-        <div className="panel-content">
-          <div className="row">
-            <div className="column-small-offset-1 column-small-10">
-              <Chart calcHeight={function (w) { return w; }}>
-                <DialChart
-                  data={tasks}
-                  label={"Total Tasks"}
-                  unit={this.getTotal(tasks)} />
-              </Chart>
-            </div>
-          </div>
-          <div className="row">
-            {this.getTaskInfo(tasks)}
-          </div>
+        <div className="row">
+          {this.getTaskInfo(tasks)}
         </div>
       </div>
     );

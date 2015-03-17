@@ -12,13 +12,6 @@ function request(url, type, data, options) {
     type: type
   }, options);
 
-  if (data == null && options.contentType == null) { // don't send data
-    options.contentType = "text/plain";
-  } else if (options.contentType == null) { // send data
-    options.contentType = "application/json; charset=utf-8";
-    options.data = JSON.stringify(data);
-  }
-
   // make request
   $.ajax(options);
 }
@@ -29,7 +22,7 @@ var MesosStateActions = {
 
     request(url, "GET", null, {
         jsonpCallback: "mesosStateCallback",
-        contentType: "application/json",
+        contentType: "application/json; charset=utf-8",
         dataType: "jsonp",
         success: function (response) {
           AppDispatcher.handleServerAction({
@@ -51,7 +44,7 @@ var MesosStateActions = {
 
     request(url, "GET", null, {
       jsonpCallback: "marathonHealthCallback",
-      contentType: "application/json",
+      contentType: "application/json; charset=utf-8",
       crossDomain: true,
       xhrFields: {
         withCredentials: false

@@ -6,6 +6,7 @@ var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../utils/Config");
 var EventTypes = require("../constants/EventTypes");
 var HealthTypes = require("../constants/HealthTypes");
+var Maths = require("../utils/Maths");
 var MesosStateActions = require("../actions/MesosStateActions");
 
 var _interval;
@@ -14,14 +15,6 @@ var _frameworkIndexes = [];
 var _frameworkHealth = {};
 var _mesosStates = [];
 var _marathonUrl;
-
-function round(value, decimalPlaces) {
-  /* jshint -W030 */
-  decimalPlaces || (decimalPlaces = 0);
-  /* jshint +W030 */
-  var factor = Math.pow(10, decimalPlaces);
-  return Math.round(value * factor) / factor;
-}
 
 function sumResources(resourceList) {
   return _.reduce(resourceList, function (sumMap, resource) {
@@ -74,7 +67,7 @@ function sumHostResources(hosts) {
           value[i].percentage = 0;
         }
         value[i].value += val.value;
-        value[i].percentage += round(100 * value[i].value / max);
+        value[i].percentage += Maths.round(100 * value[i].value / max);
       });
     });
 
@@ -95,8 +88,8 @@ function getStatesByResource(list, resourcesKey) {
       var max = Math.max(1, _mesosStates[i].total_resources[r]);
       acc[r].push({
         date: v.date,
-        value: round(value, 2),
-        percentage: round(100 * value / max)
+        value: Maths.round(value, 2),
+        percentage: Maths.round(100 * value / max)
       });
     });
     return acc;
@@ -118,8 +111,10 @@ function getStatesByFramework() {
       return framework.id;
     })
     .map(function (framework) {
-      return _.extend(_.clone(_.last(framework)), {
-        used_resources: getStatesByResource(framework, "used_resources")
+      var lastFramework = _.clone(_.last(framework));
+      return _.extend(lastFramework, {
+        used_resources: getStatesByResource(framework, "used_resources"),
+        tasks_size: lastFramework.tasks.length
       });
     }, this).value();
 }
@@ -173,7 +168,9 @@ function getHostResourcesBySlave (slave) {
         date: state.date,
         value: resourceVal,
         percentage:
-          round(100 * resourceVal / Math.max(1, slave.resources[resourceKey]))
+          Maths.round(
+            100 * resourceVal / Math.max(1, slave.resources[resourceKey])
+          )
       });
     });
     return usedResources;
@@ -212,6 +209,9 @@ function getStateByHosts () {
       });
       return acc;
     }, hosts)
+    .each(function (slave) {
+      slave.tasks_size = _.size(slave.tasks);
+    })
     .toArray()
     .value();
 }
@@ -335,9 +335,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getFrameworks: function (filterOptions) {
-    /* jshint -W030 */
-    filterOptions || (filterOptions = {});
-    /* jshint +W030 */
+    filterOptions = filterOptions || {};
     var frameworks = getStatesByFramework();
 
     if (filterOptions && filterOptions.searchString !== "") {
@@ -361,7 +359,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   getHosts: function (filterOptions) {
     var hosts = getStateByHosts();
-
     if (filterOptions && filterOptions.searchString !== "") {
       hosts = filterByString(hosts, filterOptions.searchString);
     }

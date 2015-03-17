@@ -1,3 +1,35 @@
+
+
+.grid {
+  .visible-block;
+  -webkit-box-lines: multiple;
+  -ms-box-lines: multiple;
+  box-lines: multiple;
+
+  -webkit-flex-flow: row wrap;
+  -moz-flex-flow: row wrap;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+
+  margin-left: (@grid-gutter-width / -2);
+  margin-right: (@grid-gutter-width / -2);
+
+  .grid-item {
+    .visible-block;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-flow: column wrap;
+    .panel {
+
+      -webkit-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+    }
+  }
+}
+
+
 /* Fluid Container */
 .container.container-fluid {
 	margin-left: (@grid-gutter-width * 1.0);
@@ -30,6 +62,13 @@
 /* Screen Size: Small (@screen-small) and above */
 & when (@screen-small-enabled) {
 	@media (min-width: @screen-small) {
+
+    .grid {
+      .flexbox;
+      .grid-item {
+        .flexbox;
+      }
+    }
 
 		/* Fluid Container */
 		.container.container-fluid {

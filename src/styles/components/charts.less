@@ -1,158 +1,218 @@
-svg .background {
-  fill: fade(@gray, 80%);
-}
-
-.axis path,
-.grid .tick,
-.axis line {
-  fill: none;
-  stroke: @body-text-inverse-color;
-  stroke-width: 1px;
-  shape-rendering: crispEdges;
-}
-
-.axis text {
-  fill: @body-text-inverse-color;
-}
-
-.area path {
-  stroke-width: 2px;
-  fill-opacity: 0.3;
-}
-
-.arc path {
-  stroke-width: 4px;
-  stroke: @panel-background-color;
-
-}
-
-.arc,
-.area,
-.bar rect {
-  &.path-color-0 {
-    stroke: @mesosphere-heliotrope;
-    fill: @mesosphere-heliotrope;
+.chart {
+  svg .background {
+    fill: fade(@gray, 80%);
   }
 
-  &.path-color-1 {
-    stroke: @mesosphere-lemon;
-    fill: @mesosphere-lemon;
+  .axis path,
+  .grid .tick,
+  .axis line {
+    fill: none;
+    stroke: @body-text-inverse-color;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
   }
 
-  &.path-color-2 {
-    stroke: @mesosphere-mars;
-    fill: @mesosphere-mars;
+  .axis text {
+    fill: @body-text-inverse-color;
   }
 
-  &.path-color-3 {
-    stroke: @mesosphere-azure;
-    fill: @mesosphere-azure;
+  .area path {
+    stroke-width: 2px;
+    fill-opacity: 0.3;
   }
 
-  &.path-color-4 {
-    stroke: @mesosphere-seafoam;
-    fill: @mesosphere-seafoam;
+  .arc path {
+    stroke-width: 4px;
+    stroke: @panel-background-color;
+
   }
 
-  &.path-color-5 {
-    stroke: @mesosphere-orchid;
-    fill: @mesosphere-orchid;
-  }
-
-  &.path-color-6 {
-    stroke: @body-text-mute-color;
-    fill: @body-text-mute-color;
-  }
-}
-
-.barchart {
-  .bar {
-    fill-opacity: 0.5;
-    stroke-width: 0px;
-
-    line {
-      fill-opacity: 1;
-      stroke-width: 2px;
-
-      &.hidden {
-        stroke-width: 0px;
-      }
-    }
-  }
-
-  .axis {
-    &.x path {
-      display: none;
-    }
-
-    &.y path {
-      stroke: @gray;
-    }
-
-    line {
-      display: none;
-    }
-  }
-
-  .grid {
-    &.y {
-      .tick:first-child line {
-        stroke-dasharray: 0,0;
-      }
-    }
-
-    line {
-      stroke: @gray;
-      stroke-dasharray: 4,4;
-    }
-  }
-}
-
-& when (@typography-enabled) {
-  .unit {
-    fill: ~`color_lightness("@{gray}", 100)`;
-  }
-
-  .unit-label {
-    fill: @mesosphere-heliotrope;
+  .arc,
+  .area,
+  .bar rect {
     &.path-color-0 {
-      color: @mesosphere-heliotrope;
+      stroke: @mesosphere-heliotrope;
+      fill: @mesosphere-heliotrope;
     }
 
     &.path-color-1 {
-      color: @mesosphere-lemon;
+      stroke: @mesosphere-lemon;
+      fill: @mesosphere-lemon;
     }
 
     &.path-color-2 {
-      color: @mesosphere-mars;
+      stroke: @mesosphere-mars;
+      fill: @mesosphere-mars;
     }
 
     &.path-color-3 {
-      color: @mesosphere-azure;
+      stroke: @mesosphere-azure;
+      fill: @mesosphere-azure;
     }
 
     &.path-color-4 {
-      color: @mesosphere-seafoam;
+      stroke: @mesosphere-seafoam;
+      fill: @mesosphere-seafoam;
     }
 
     &.path-color-5 {
-      color: @mesosphere-orchid;
+      stroke: @mesosphere-orchid;
+      fill: @mesosphere-orchid;
     }
 
     &.path-color-6 {
-      color: @body-text-mute-color;
+      stroke: @body-text-mute-color;
+      fill: @body-text-mute-color;
     }
   }
 
-  .text-danger {
-    fill: ~`color_lightness("@{mesosphere-mars}", 0)`;
+  .barchart {
+    .bar {
+      fill-opacity: 0.5;
+      stroke-width: 0px;
+
+      line {
+        fill-opacity: 1;
+        stroke-width: 2px;
+
+        &.hidden,
+        &.invisble {
+          stroke-width: 0px;
+        }
+      }
+    }
+
+    .axis {
+      &.x path {
+        display: none;
+      }
+
+      &.y path {
+        stroke: @gray;
+      }
+
+      line {
+        display: none;
+      }
+    }
+
+    .grid {
+      &.y {
+        .tick:first-child line {
+          stroke-dasharray: 0,0;
+        }
+      }
+
+      line {
+        stroke: @gray;
+        stroke-dasharray: 4,4;
+      }
+    }
   }
 
-  .text-success {
-    fill: ~`color_lightness("@{mesosphere-seafoam}", 0)`;
+  & when (@typography-enabled) {
+    .unit {
+      fill: ~`color_lightness("@{gray}", 100)`;
+    }
+
+    .unit-label {
+      fill: @mesosphere-heliotrope;
+      &.path-color-0 {
+        color: @mesosphere-heliotrope;
+      }
+
+      &.path-color-1 {
+        color: @mesosphere-lemon;
+      }
+
+      &.path-color-2 {
+        color: @mesosphere-mars;
+      }
+
+      &.path-color-3 {
+        color: @mesosphere-azure;
+      }
+
+      &.path-color-4 {
+        color: @mesosphere-seafoam;
+      }
+
+      &.path-color-5 {
+        color: @mesosphere-orchid;
+      }
+
+      &.path-color-6 {
+        color: @body-text-mute-color;
+      }
+    }
+
+    .text-danger {
+      fill: ~`color_lightness("@{mesosphere-mars}", 0)`;
+    }
+
+    .text-success {
+      fill: ~`color_lightness("@{mesosphere-seafoam}", 0)`;
+    }
+
+    .text-muted {
+      fill: @body-text-mute-color;
+    }
   }
 
-  .text-muted {
-    fill: @body-text-mute-color;
+  .legend {
+
+    display: table;
+    margin: 0 auto;
+    text-align: center;
+    float: right;
+
+    border: @button-border-width solid @button-default-background-color;
+    .border-radius(@icon-medium-border-radius);
+
+    .legend-item {
+      padding-left: @base-spacing-unit * 0.5;
+      padding-right: @base-spacing-unit * 0.5;
+      padding-top: @button-text-line-height * 0.5 - @button-border-width;
+      padding-bottom: @button-text-line-height * 0.5 - @button-border-width;
+      margin: 0;
+
+      .line {
+        display: inline-block;
+        border-top: 4px solid;
+        height: (@body-text-font-size) * 0.5;
+        width: @base-spacing-unit * 0.5;
+        margin-right: @base-spacing-unit * 0.25;
+        line-height: @button-text-line-height;
+
+        &.path-color-0 {
+          color: @mesosphere-heliotrope;
+        }
+
+        &.path-color-1 {
+          color: @mesosphere-lemon;
+        }
+
+        &.path-color-2 {
+          color: @mesosphere-mars;
+        }
+
+        &.path-color-3 {
+          color: @mesosphere-azure;
+        }
+
+        &.path-color-4 {
+          color: @mesosphere-seafoam;
+        }
+
+        &.path-color-5 {
+          color: @mesosphere-orchid;
+        }
+
+        &.path-color-6 {
+          color: @body-text-mute-color;
+        }
+      }
+    }
+
   }
 }

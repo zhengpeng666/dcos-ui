@@ -6,12 +6,6 @@ var React = require("react/addons");
 var Chart = require("./Chart");
 var BarChart = require("./BarChart");
 
-function round(value, decimalPlaces) {
-  decimalPlaces || (decimalPlaces = 0);
-  var factor = Math.pow(10, decimalPlaces);
-  return Math.round(value * factor) / factor;
-}
-
 var buttonNameMap = {
   cpus: "CPU",
   mem: "Memory",
@@ -25,7 +19,8 @@ var HostsChart = React.createClass({
   propTypes: {
     data: React.PropTypes.array.isRequired,
     totalHostsResources: React.PropTypes.object.isRequired,
-    totalResources: React.PropTypes.object.isRequired
+    totalResources: React.PropTypes.object.isRequired,
+    refreshRate: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
@@ -72,7 +67,7 @@ var HostsChart = React.createClass({
     return _.map(buttonNameMap, function (value, key) {
       var classSet = React.addons.classSet({
         "button": true,
-        "button-primary": mode === key
+        "active": mode === key
       });
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -98,7 +93,8 @@ var HostsChart = React.createClass({
           data={this.getData()}
           maxY={this.getMaxY()}
           ticksY={4}
-          y={this.props.y} />
+          y={this.props.y}
+          refreshRate={this.props.refreshRate} />
       </Chart>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
@@ -120,9 +116,9 @@ var HostsChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <ul className="services-legend list-unstyled list-inline inverse">
-        <li className="service">
-          <span className={"line color-0"}></span>
+      <ul className="legend list-unstyled list-inline inverse">
+        <li className="legend-item">
+          <span className="line path-color-0"></span>
           <strong>
             {buttonNameMap[this.state.resourceMode]} Allocated
           </strong>
@@ -137,8 +133,8 @@ var HostsChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="panel services-chart">
-        <div className="panel-heading">
+      <div className="chart panel">
+        <div className="panel-heading panel-heading-large">
           <div className="button-group">
             {this.getModeButtons()}
           </div>

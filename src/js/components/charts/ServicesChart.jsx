@@ -52,7 +52,6 @@ var ServicesChart = React.createClass({
 
   getData: function () {
     var props = this.props;
-    var y = props.y;
 
     if (props.data.length === 0) {
       return [];
@@ -81,7 +80,7 @@ var ServicesChart = React.createClass({
     return _.map(buttonNameMap, function (value, key) {
       var classSet = React.addons.classSet({
         "button": true,
-        "button-primary": mode === key
+        "active": mode === key
       });
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -130,9 +129,9 @@ var ServicesChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <ul className="services-legend list-unstyled list-inline inverse">
-        <li className="service">
-          <span className={"line color-0"}></span>
+      <ul className="legend list-unstyled list-inline inverse">
+        <li className="legend-item">
+          <span className="line path-color-0"></span>
           <strong>
             {buttonNameMap[this.state.resourceMode]} Allocated
           </strong>
@@ -147,12 +146,14 @@ var ServicesChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="panel services-chart">
-        <div className="panel-heading">
-          <div className="button-group">
-            {this.getModeButtons()}
+      <div className="chart panel">
+        <div className="panel-heading panel-heading-large">
+          <div className="panel-title">
+            <div className="button-group">
+              {this.getModeButtons()}
+            </div>
+            {this.getLegend()}
           </div>
-          {this.getLegend()}
         </div>
         <div className="panel-content" ref="panelContent">
           {this.getBarChart()}

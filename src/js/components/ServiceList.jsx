@@ -1,47 +1,70 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
-var React = require("react/addons");
+var React = require("react");
 
-var ServiceItem = require("./ServiceItem");
+var HealthTypes = require("../constants/HealthTypes");
+var List = require("./List");
 
-var ServicesList = React.createClass({
+var ServiceList = React.createClass({
 
-  displayName: "ServicesList",
+  displayName: "ServiceList",
 
-  propTypes: {
-    frameworks: React.PropTypes.array.isRequired
+  getInitialState: function () {
+    return {
+      servicesHealth: []
+    };
   },
 
   getDefaultProps: function () {
     return {
-      frameworks: []
+      servicesHealth: []
     };
   },
 
-  getServiceItems: function () {
-    return _.map(this.props.frameworks, function (service) {
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-      return (
-        <ServiceItem
-            key={service.id}
-            model={service} />
-      );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  componentWillReceiveProps: function (nextProps) {
+    var servicesHealth = this.mapServicesHealth(nextProps.servicesHealth);
+    this.setState({servicesHealth: servicesHealth});
+  },
+
+  mapServicesHealth: function (servicesHealth) {
+    var states = [
+      {mapping: "SICK", value: "Sick", classes: {"text-danger": true}},
+      {mapping: "HEALTHY", value: "Healthy", classes: {"text-success": true}},
+      {mapping: "IDLE", value: "Idle", classes: {"text-warning": true}}
+    ].map(function (obj, key) {
+      obj.order = key;
+      return obj;
     });
+
+    var services = _.map(servicesHealth, function (service) {
+      var state = _.find(states, function (obj) {
+        return service.value === HealthTypes[obj.mapping];
+      });
+      return {
+        title: {value: service.name},
+        health: {value: state.value, classes: state.classes, textAlign: "right"}
+      };
+    });
+
+    services.sort(function (a, b) {
+      var order1 = _.findWhere(states, {value: a.health.value}).order;
+      var order2 = _.findWhere(states, {value: b.health.value}).order;
+      return order1 - order2;
+    });
+
+    return services;
   },
 
   render: function () {
+    var listOrder = ["title", "health"];
+
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <ul className="collection-list list-unstyled inverse">
-        {this.getServiceItems()}
-      </ul>
+      <List list={this.state.servicesHealth} order={listOrder} />
     );
   }
 });
 
-module.exports = ServicesList;
+module.exports = ServiceList;

@@ -3,7 +3,7 @@
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
-var ServicesHealthList = require("./ServicesHealthList");
+var ServiceList = require("./ServiceList");
 var MesosStateStore = require("../stores/MesosStateStore");
 var Panel = require("./Panel");
 var ResourceChart = require("./charts/ResourceChart");
@@ -51,26 +51,32 @@ var Activity = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="row">
-        <div className="column-small-6 column-large-4">
-          <Panel title="Services Health" className="services-panel">
-            <ServicesHealthList servicesHealth={state.servicesHealth} />
+      <div className="grid">
+        <div className="grid-item column-small-6 column-large-4">
+          <Panel title="Services Health">
+            <ServiceList servicesHealth={state.servicesHealth} />
           </Panel>
         </div>
-        <div className="column-small-6 column-large-4">
-          <ResourceChart
-            allocResources={state.allocResources}
-            totalResources={state.totalResources}
-            mode="cpus" />
+        <div className="grid-item column-small-6 column-large-4">
+          <Panel title="CPU Allocation">
+            <ResourceChart
+              allocResources={state.allocResources}
+              totalResources={state.totalResources}
+              mode="cpus" />
+          </Panel>
         </div>
-        <div className="column-small-6 column-large-4">
-          <ResourceChart
-            allocResources={state.allocResources}
-            totalResources={state.totalResources}
-            mode="mem" />
+        <div className="grid-item column-small-6 column-large-4">
+          <Panel title="Memory Allocation">
+            <ResourceChart
+              allocResources={state.allocResources}
+              totalResources={state.totalResources}
+              mode="mem" />
+          </Panel>
         </div>
-        <div className="column-small-6 column-large-4">
-          <TasksChart tasks={state.tasks} />
+        <div className="grid-item column-small-6 column-large-4">
+          <Panel title="Tasks">
+            <TasksChart tasks={state.tasks} />
+          </Panel>
         </div>
       </div>
     );

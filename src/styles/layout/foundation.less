@@ -7,6 +7,14 @@
   background: ~`color_lightness("@{mesosphere-fuchsia}", 0)`;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
 #canvas {
   position: absolute;
   top: 0px;
@@ -64,10 +72,6 @@
   }
 }
 
-.hidden {
-  display: none;
-}
-
 /* Screen Size: Mini (@screen-mini) and above */
 & when (@screen-mini-enabled) {
   @media (min-width: @screen-mini) {
@@ -116,11 +120,6 @@
     }
   }
 }
-
-
-
-
-
 
 /* Screen Size: Medium (@screen-medium) and above */
 & when (@screen-medium-enabled) {

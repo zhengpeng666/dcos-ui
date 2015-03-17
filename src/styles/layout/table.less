@@ -1,0 +1,83 @@
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: @base-spacing-unit * 0.25;
+  vertical-align: middle;
+  border-top: @caret-width-base dashed;
+  border-right: @caret-width-base solid transparent;
+  border-left: @caret-width-base solid transparent;
+
+  &.dropup {
+    border-top: 0;
+    border-bottom: @caret-width-base solid;
+  }
+}
+
+.table {
+  width: 100%;
+  vertical-align: middle;
+  text-align: left;
+
+  tr {
+    height: @table-row-height;
+  }
+
+  th {
+    font-weight: @body-text-font-weight;
+    background: ~`color_lightness("@{gray}", -15)`;
+
+    &:hover,
+    &.highlighted {
+      background: ~`color_lightness("@{gray}", 5)`;
+      color: @white;
+    }
+    &:first-child {
+      .border-top-left-radius(@table-header-border-radius);
+    }
+    &:last-child {
+      .border-top-right-radius(@table-header-border-radius);
+    }
+  }
+
+  th, td {
+    padding: 0 @base-spacing-unit * 0.5;
+  }
+
+  td {
+    border-top: 1px solid @gray;
+
+    &.highlighted {
+      font-weight: 500;
+      background: ~`color_lightness("@{gray}", -25)`;
+      color: @white;
+    }
+  }
+
+  .headline {
+    color: @white;
+  }
+
+  .align-right {
+    text-align: right;
+  }
+
+  .icon {
+    margin-right: @base-spacing-unit * 0.25;
+  }
+
+  .fixed-width {
+    width: @grid-gutter-width-screen-large * 2;
+  }
+}
+
+/* Screen Size: Small (@screen-small) and above */
+& when (@screen-small-enabled) {
+  @media (min-width: @screen-small) {
+    .table {
+      tr {
+        height: @table-row-height-small;
+      }
+    }
+  }
+}

@@ -8,13 +8,14 @@ var FilterInputText = require("./FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var HostsChart = require("./charts/HostsChart");
 var SidebarToggle = require("./SidebarToggle");
-var HostList = require("./HostList");
+var HostTable = require("./HostTable");
 
 function getMesosHosts(filterOptions) {
   filterOptions = filterOptions || {searchString: ""};
   var hosts = MesosStateStore.getHosts(filterOptions);
   return _.extend({
     hosts: hosts,
+    refreshRate: MesosStateStore.getRefreshRate(),
     totalHosts: MesosStateStore.getLatest().slaves.length,
     totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
     totalResources: MesosStateStore.getTotalResources()
@@ -67,7 +68,7 @@ var DatacenterPage = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="services-stats">
+      <div>
         <h4 className={filteredClassSet}>
           Showing {filteredLength} of {totalLength} Total Hosts
         </h4>
@@ -98,18 +99,18 @@ var DatacenterPage = React.createClass({
             <div id="page-header-navigation" />
           </div>
         </div>
-        <div id="page-header-navigation" />
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
             <HostsChart
               data={state.hosts}
               totalHostsResources={state.totalHostsResources}
-              totalResources={state.totalResources} />
+              totalResources={state.totalResources}
+              refreshRate={state.refreshRate} />
             {this.getHostsStats()}
             <FilterInputText
               searchString={this.state.searchString}
               onSubmit={this.onFilterChange} />
-            <HostList hosts={this.state.hosts} />
+            <HostTable hosts={this.state.hosts} />
           </div>
         </div>
       </div>
