@@ -29,14 +29,10 @@ function renderTask(prop, model) {
 }
 
 function renderStats(prop, model) {
-  var value = Maths.round(_.last(model.used_resources[prop]).value, 2);
-  if(prop !== "cpus") {
-    value = Humanize.filesize(value * 1024 * 1024, 1024, 1);
-  }
-
+  var value = _.last(model.used_resources[prop]).percentage;
   return (
     <span>
-      {value}
+      {value}%
     </span>
   );
 }
