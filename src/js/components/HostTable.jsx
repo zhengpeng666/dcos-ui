@@ -4,6 +4,7 @@ var _ = require("underscore");
 var Humanize = require("humanize");
 var React = require("react/addons");
 
+var Maths = require("../utils/Maths");
 var Table = require("./Table");
 
 function isStat(prop) {
@@ -28,7 +29,7 @@ function renderTask(prop, model) {
 }
 
 function renderStats(prop, model) {
-  var value = _.last(model.used_resources[prop]).value;
+  var value = Maths.round(_.last(model.used_resources[prop]).value, 2);
   if(prop !== "cpus") {
     value = Humanize.filesize(value * 1024 * 1024, 1024, 1);
   }

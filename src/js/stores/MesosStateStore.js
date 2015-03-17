@@ -6,6 +6,7 @@ var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../utils/Config");
 var EventTypes = require("../constants/EventTypes");
 var HealthTypes = require("../constants/HealthTypes");
+var Maths = require("../utils/Maths");
 var MesosStateActions = require("../actions/MesosStateActions");
 
 var _interval;
@@ -14,14 +15,6 @@ var _frameworkIndexes = [];
 var _frameworkHealth = {};
 var _mesosStates = [];
 var _marathonUrl;
-
-function round(value, decimalPlaces) {
-  /* jshint -W030 */
-  decimalPlaces || (decimalPlaces = 0);
-  /* jshint +W030 */
-  var factor = Math.pow(10, decimalPlaces);
-  return Math.round(value * factor) / factor;
-}
 
 function sumResources(resourceList) {
   return _.reduce(resourceList, function (sumMap, resource) {
@@ -74,7 +67,7 @@ function sumHostResources(hosts) {
           value[i].percentage = 0;
         }
         value[i].value += val.value;
-        value[i].percentage += round(100 * value[i].value / max);
+        value[i].percentage += Maths.round(100 * value[i].value / max);
       });
     });
 
@@ -95,8 +88,8 @@ function getStatesByResource(list, resourcesKey) {
       var max = Math.max(1, _mesosStates[i].total_resources[r]);
       acc[r].push({
         date: v.date,
-        value: round(value, 2),
-        percentage: round(100 * value / max)
+        value: Maths.round(value, 2),
+        percentage: Maths.round(100 * value / max)
       });
     });
     return acc;
@@ -175,7 +168,7 @@ function getHostResourcesBySlave (slave) {
         date: state.date,
         value: resourceVal,
         percentage:
-          round(100 * resourceVal / Math.max(1, slave.resources[resourceKey]))
+          Maths.round(100 * resourceVal / Math.max(1, slave.resources[resourceKey]))
       });
     });
     return usedResources;
