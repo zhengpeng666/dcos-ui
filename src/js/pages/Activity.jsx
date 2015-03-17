@@ -69,12 +69,14 @@ var Activity = React.createClass({
     }
     textContent += "Services >";
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <Link to="services">
-        <button className="button button-wide more-button">
-          {textContent}
-        </button>
+      <Link to="services" className="button button-wide more-button">
+        {textContent}
       </Link>
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     );
   },
 
