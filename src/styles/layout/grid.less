@@ -1,12 +1,11 @@
-
-
 .grid {
   .visible-block;
   box-lines: multiple;
   flex-flow: row wrap;
 
-  margin-left: (@grid-gutter-width / -2);
-  margin-right: (@grid-gutter-width / -2);
+  &::before, &::after {
+    display: none;
+  }
 
   .grid-item {
     .visible-block;
@@ -21,7 +20,7 @@
         flex-grow: 1;
         flex-direction: column;
 
-        :first-child {
+        > :first-child {
           flex-grow: 1;
         }
       }

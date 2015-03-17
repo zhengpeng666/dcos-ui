@@ -84,13 +84,14 @@ var DialChart = React.createClass({
   getWedges: function () {
     var innerArc = this.state.innerArc;
     var pie = this.state.pie;
+
     return _.map(pie(this.props.data), function (data, i) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <DialSlice
           key={i}
-          colorIndex={i}
+          colorIndex={data.data.colorIndex || i}
           path={innerArc(data)} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */

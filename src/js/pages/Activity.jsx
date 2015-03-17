@@ -86,7 +86,7 @@ var Activity = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="grid">
+      <div className="grid row">
         <div className="grid-item column-small-6 column-large-4">
           <Panel title="Services Health">
             <ServiceList servicesHealth={this.getServicesList()} />
