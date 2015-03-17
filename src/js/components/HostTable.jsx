@@ -129,11 +129,11 @@ var HostTable = React.createClass({
       <Table
         className="table"
         columns={columns}
+        data={this.props.hosts.slice(0)}
         keys={["id"]}
         sortBy={{ prop: "hostname", order: "desc" }}
         sortFunc={sortFunction}
-        buildRowOptions={rowOptions}
-        dataArray={this.props.hosts} />
+        buildRowOptions={rowOptions} />
     );
   }
 });
