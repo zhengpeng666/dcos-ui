@@ -72,6 +72,17 @@ function getClassName(prop, sortBy) {
   return classSet;
 }
 
+function sortFunction(prop) {
+  if (isStat(prop)) {
+    return function (model) {
+      return _.last(model.used_resources[prop]).value;
+    };
+  }
+
+  // rely on default sorting
+  return null;
+}
+
 var columns = [
   {
     className: getClassName,
@@ -137,25 +148,6 @@ var ServicesTable = React.createClass({
     };
   },
 
-  sortFunction: function (prop) {
-    if (isStat(prop)) {
-      return function (a, b) {
-        a = _.last(a.used_resources[prop]).value;
-        b = _.last(b.used_resources[prop]).value;
-        if (a < b) {
-          return -1;
-        }
-        if (a > b) {
-          return 1;
-        }
-        return 0;
-      };
-    }
-
-    // rely on default sorting
-    return null;
-  },
-
   render: function () {
 
     /* jshint trailing:false, quotmark:false, newcap:false */
@@ -166,7 +158,7 @@ var ServicesTable = React.createClass({
         columns={columns}
         keys={["id"]}
         sortBy={{ prop: "name", order: "desc" }}
-        sortFunc={this.sortFunction}
+        sortFunc={sortFunction}
         dataArray={this.props.frameworks} />
     );
   }

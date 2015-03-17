@@ -50,6 +50,17 @@ function getClassName(prop, sortBy) {
   return classSet;
 }
 
+function sortFunction(prop) {
+  if (isStat(prop)) {
+    return function (model) {
+      return _.last(model.used_resources[prop]).value;
+    };
+  }
+
+  // rely on default sorting
+  return null;
+}
+
 var columns = [
   {
     className: getClassName,
@@ -107,19 +118,6 @@ var HostTable = React.createClass({
     };
   },
 
-  sortFunction: function (prop) {
-    if (isStat(prop)) {
-      return function (a, b) {
-        a = _.last(a.used_resources[prop]).value;
-        b = _.last(b.used_resources[prop]).value;
-        return a < b ? -1 : a > b ? 1 : 0;
-      };
-    }
-
-    // rely on default sorting
-    return null;
-  },
-
   render: function () {
 
     /* jshint trailing:false, quotmark:false, newcap:false */
@@ -130,7 +128,7 @@ var HostTable = React.createClass({
         columns={columns}
         keys={["id"]}
         sortBy={{ prop: "hostname", order: "desc" }}
-        sortFunc={this.sortFunction}
+        sortFunc={sortFunction}
         dataArray={this.props.hosts} />
     );
   }
