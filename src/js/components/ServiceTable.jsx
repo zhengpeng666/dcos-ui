@@ -66,8 +66,8 @@ function renderStats(prop, model) {
 function getClassName(prop, sortBy) {
   var classSet = React.addons.classSet({
     "align-right": isStat(prop) || prop === "tasks_size",
-    "hidden-mini": isStat(prop),
-    "highlighted": sortBy.prop === prop
+    "hidden-mini fixed-width": isStat(prop),
+    "highlighted": prop === sortBy.prop
   });
 
   return classSet;
