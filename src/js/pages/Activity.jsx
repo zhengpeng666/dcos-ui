@@ -3,11 +3,11 @@
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
-var ServiceList = require("./ServiceList");
+var ServiceList = require("../components/ServiceList");
 var MesosStateStore = require("../stores/MesosStateStore");
-var Panel = require("./Panel");
-var ResourceChart = require("./charts/ResourceChart");
-var TasksChart = require("./charts/TasksChart");
+var Panel = require("../components/Panel");
+var ResourceChart = require("../components/charts/ResourceChart");
+var TasksChart = require("../components/charts/TasksChart");
 
 function getMesosState() {
   return {

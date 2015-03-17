@@ -1,13 +1,13 @@
 var _ = require("underscore");
 var EventEmitter = require("events").EventEmitter;
 
-var AppDispatcher = require("../dispatcher/AppDispatcher");
+var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../utils/Config");
 var EventTypes = require("../constants/EventTypes");
 var HealthTypes = require("../constants/HealthTypes");
 var Maths = require("../utils/Maths");
-var MesosStateActions = require("../actions/MesosStateActions");
+var MesosStateActions = require("../events/MesosStateActions");
 
 var _interval;
 var _initCalled = false;

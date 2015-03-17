@@ -6,10 +6,10 @@ var Route = Router.Route;
 var Redirect = Router.Redirect;
 
 require("./utils/ReactSVG");
-var ActivityPage = require("./components/ActivityPage");
-var DatacenterPage = require("./components/DatacenterPage");
-var Index = require("./components/Index");
-var ServicesPage = require("./components/ServicesPage");
+var ActivityPage = require("./pages/ActivityPage");
+var DatacenterPage = require("./pages/DatacenterPage");
+var Index = require("./pages/Index");
+var ServicesPage = require("./pages/ServicesPage");
 
 /* jshint trailing:false, quotmark:false, newcap:false */
 /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
