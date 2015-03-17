@@ -8,31 +8,40 @@
   margin-left: -((2 * (@grid-gutter-width * 1.0)) + @icon-medium-width);
   padding-left: ((2 * (@grid-gutter-width * 1.0)) + @icon-medium-width);
   overflow: hidden;
-  background: ~`color_lightness("@{gray}", -40)`;
+  background: @white;
   z-index: 5000;
   .transition(left 0.3s ease);
 
   /* Sidebar Header */
   #sidebar-header {
     .sidebar-header-image {
+      border: 1px solid fade(@black, 5%);
+      padding: 3px;
       margin: 0 auto;
       display: block;
-      width: 64px;
-      height: 64px;
-      padding: 3px;
+      // Account for padding and border
+      width: 64px + (3 * 2) + 1;
+      height: 64px + (3 * 2) + 1;
       background: @white;
-      .border-radius(1000px);
+      .border-radius(50%);
       overflow: hidden;
       margin-bottom: (@base-spacing-unit * 0.25);
 
       .sidebar-header-image-inner {
         display: block;
-        width: 64px - (2 * 3px);
-        height: 64px - (2 * 3px);
+        width: 64px;
+        height: 64px;
         background: ~`color_lightness("@{gray}", 80)`;
-        .border-radius(1000px);
+        .border-radius(50%);
         overflow: hidden;
+        margin-right: auto;
+        margin-left: auto;
+        max-width: 100%;
       }
+    }
+
+    .sidebar-header-label {
+      color: @black;
     }
   }
 
@@ -82,7 +91,7 @@
 
           &:hover {
             text-decoration: none;
-            color: ~`color_lightness("@{gray}", 80)`;
+            color: ~`color_lightness("@{gray}", 30)`;
 
             .sidebar-menu-item-icon {
               .opacity(0.80);
@@ -100,15 +109,15 @@
         }
 
         &.selected {
-          color: @white;
-          .box-shadow(inset 3px 0px 0px 0px @body-text-link-text-color);
+          .box-shadow(inset 3px 0px 0px 0px @mesosphere-heliotrope);
+          background-color: fade(@mesosphere-heliotrope, 10%);
 
           .sidebar-menu-item-icon {
-            .opacity(1.00);
+            .opacity(.4);
           }
 
           a {
-            color: @white;
+            color: @mesosphere-heliotrope;
           }
         }
       }
@@ -140,14 +149,13 @@ body.canvas-sidebar-open {
       /* Sidebar Header */
       #sidebar-header {
         .sidebar-header-image {
-          width: 64px;
-          height: 64px;
-          padding: 3px;
+          width: 64px + (3 * 2) + 1;
+          height: 64px + (3 * 2) + 1;
           margin-bottom: (@base-spacing-unit-screen-mini * 0.25);
 
           .sidebar-header-image-inner {
-            width: 64px - (2 * 3px);
-            height: 64px - (2 * 3px);
+            width: 64px;
+            height: 64px;
           }
         }
       }
@@ -205,14 +213,13 @@ body.canvas-sidebar-open {
       /* Sidebar Header */
       #sidebar-header {
         .sidebar-header-image {
-          width: @icon-medium-width;
-          height: @icon-medium-height;
-          padding: 3px;
+          width: @icon-medium-width + (3 * 2) + 1;
+          height: @icon-medium-height + (3 * 2) + 1;
           margin-bottom: 0px;
 
           .sidebar-header-image-inner {
-            width: @icon-medium-width - (2 * 3px);
-            height: @icon-medium-height - (2 * 3px);
+            width: @icon-medium-width;
+            height: @icon-medium-height;
           }
         }
 
@@ -265,14 +272,13 @@ body.canvas-sidebar-open {
       /* Sidebar Header */
       #sidebar-header {
         .sidebar-header-image {
-          width: 64px;
-          height: 64px;
-          padding: 3px;
+          width: 64px + (3 * 2) + 1;
+          height: 64px + (3 * 2) + 1;
           margin-bottom: (@base-spacing-unit-screen-medium * 0.25);
 
           .sidebar-header-image-inner {
-            width: 64px - (2 * 3px);
-            height: 64px - (2 * 3px);
+            width: 64px;
+            height: 64px;
           }
         }
 
@@ -325,14 +331,13 @@ body.canvas-sidebar-open {
       /* Sidebar Header */
       #sidebar-header {
         .sidebar-header-image {
-          width: 64px;
-          height: 64px;
-          padding: 3px;
+          width: 64px + (3 * 2) + 1;
+          height: 64px + (3 * 2) + 1;
           margin-bottom: (@base-spacing-unit-screen-large * 0.25);
 
           .sidebar-header-image-inner {
-            width: 64px - (2 * 3px);
-            height: 64px - (2 * 3px);
+            width: 64px;
+            height: 64px;
           }
         }
       }
