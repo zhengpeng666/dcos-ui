@@ -87,12 +87,13 @@ function getClassName(prop, sortBy) {
 function sortFunction(prop) {
   if (isStat(prop)) {
     return function (model) {
-      return _.last(model.used_resources[prop]).value;
+      return _.last(model.used_resources[prop]).value + "-" + model.name;
+    };
+  } else {
+    return function (model) {
+      return model[prop] + "-" + model.hostname;
     };
   }
-
-  // rely on default sorting
-  return null;
 }
 
 var columns = [
