@@ -171,7 +171,7 @@ var ServicesTable = React.createClass({
         columns={columns}
         data={this.props.frameworks.slice(0)}
         keys={["id"]}
-        sortBy={{ prop: "name", order: "desc" }}
+        sortBy={{prop: "name", order: "desc"}}
         sortFunc={sortFunction} />
     );
   }
