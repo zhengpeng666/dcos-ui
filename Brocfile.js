@@ -1,5 +1,6 @@
 // dependencies
 var assetRev = require("broccoli-asset-rev");
+var autoprefixer = require('broccoli-autoprefixer');
 var chalk = require("chalk");
 var cleanCSS = require("broccoli-clean-css");
 var concatCSS = require("broccoli-concat");
@@ -114,6 +115,8 @@ var tasks = {
       fileNames.mainStylesDist + ".css",
       {}
     );
+
+    cssTree = autoprefixer(cssTree);
 
     // concatenate css
     cssTree = concatCSS(cssTree, {
