@@ -21,7 +21,6 @@ var MesosStateActions = {
     var url = Config.rootUrl + "/master/state.json?jsonp=?";
 
     request(url, "GET", null, {
-        jsonpCallback: "mesosStateCallback",
         contentType: "application/json; charset=utf-8",
         dataType: "jsonp",
         success: function (response) {
@@ -43,7 +42,6 @@ var MesosStateActions = {
     var url = rootUrl + "/v2/apps";
 
     request(url, "GET", null, {
-      jsonpCallback: "marathonHealthCallback",
       contentType: "application/json; charset=utf-8",
       crossDomain: true,
       xhrFields: {
