@@ -1,12 +1,14 @@
 /** @jsx React.DOM */
 
+var _ = require ("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
-var ServiceList = require("../components/ServiceList");
+var Link = require("react-router").Link;
 var MesosStateStore = require("../stores/MesosStateStore");
 var Panel = require("../components/Panel");
 var ResourceChart = require("../components/charts/ResourceChart");
+var ServiceList = require("../components/ServiceList");
 var TasksChart = require("../components/charts/TasksChart");
 
 function getMesosState() {
@@ -24,6 +26,12 @@ var Activity = React.createClass({
 
   getInitialState: function () {
     return getMesosState();
+  },
+
+  getDefaultProps: function () {
+    return {
+      servicesListLength: 5
+    };
   },
 
   componentDidMount: function () {
@@ -45,6 +53,33 @@ var Activity = React.createClass({
     this.setState(getMesosState());
   },
 
+  getServicesList: function () {
+    return _.first(this.state.servicesHealth, this.props.servicesListLength);
+  },
+
+  getViewAllServicesBtn: function () {
+    var serviceHealthCount = this.state.servicesHealth.length;
+    if (!serviceHealthCount) {
+      return;
+    }
+
+    var textContent = "View all ";
+    if (serviceHealthCount > this.props.servicesListLength) {
+      textContent += serviceHealthCount + " ";
+    }
+    textContent += "Services >";
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <Link to="services" className="button button-wide more-button">
+        {textContent}
+      </Link>
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    );
+  },
+
   render: function () {
     var state = this.state;
 
@@ -54,7 +89,8 @@ var Activity = React.createClass({
       <div className="grid">
         <div className="grid-item column-small-6 column-large-4">
           <Panel title="Services Health">
-            <ServiceList servicesHealth={state.servicesHealth} />
+            <ServiceList servicesHealth={this.getServicesList()} />
+            {this.getViewAllServicesBtn()}
           </Panel>
         </div>
         <div className="grid-item column-small-6 column-large-4">
