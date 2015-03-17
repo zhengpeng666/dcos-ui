@@ -58,13 +58,14 @@ var Activity = React.createClass({
   },
 
   getViewAllServicesBtn: function () {
-    if (!this.state.servicesHealth.length) {
+    var serviceHealthCount = this.state.servicesHealth.length;
+    if (!serviceHealthCount) {
       return;
     }
 
     var textContent = "View all ";
-    if (this.state.servicesHealth.length > this.props.servicesListLength) {
-      textContent += this.state.servicesHealth.length + " ";
+    if (serviceHealthCount > this.props.servicesListLength) {
+      textContent += serviceHealthCount + " ";
     }
     textContent += "Services >";
 
