@@ -6,7 +6,7 @@ var React = require("react/addons");
 var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
-var ServicesChart = require("../components/charts/ServicesChart");
+var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var FilterInputText = require("../components/FilterInputText");
 var ServiceTable = require("../components/ServiceTable");
 
@@ -106,9 +106,9 @@ var ServicesPage = React.createClass({
         </div>
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
-            <ServicesChart
+            <ResourceBarChart
               data={state.frameworks}
-              totalFrameworksResources={state.totalFrameworksResources}
+              resources={state.totalFrameworksResources}
               totalResources={state.totalResources}
               refreshRate={state.refreshRate} />
             {this.getServiceStats()}

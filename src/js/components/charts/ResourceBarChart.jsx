@@ -12,13 +12,13 @@ var buttonNameMap = {
   disk: "Disk"
 };
 
-var ServicesChart = React.createClass({
+var ResourceBarChart = React.createClass({
 
-  displayName: "ServicesChart",
+  displayName: "ResourceBarChart",
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
-    totalFrameworksResources: React.PropTypes.object.isRequired,
+    resources: React.PropTypes.object.isRequired,
     totalResources: React.PropTypes.object.isRequired,
     refreshRate: React.PropTypes.number.isRequired
   },
@@ -38,18 +38,6 @@ var ServicesChart = React.createClass({
     };
   },
 
-  getStackedData: function () {
-    var props = this.props;
-    return _.map(props.data, function (framework) {
-      return {
-        id: framework.id,
-        name: framework.name,
-        colorIndex: 0,
-        values: framework.used_resources[this.state.resourceMode]
-      };
-    }.bind(this));
-  },
-
   getData: function () {
     var props = this.props;
 
@@ -61,7 +49,7 @@ var ServicesChart = React.createClass({
         id: "used_resources",
         name: this.state.resourceMode + " allocated",
         colorIndex: 0,
-        values: props.totalFrameworksResources[this.state.resourceMode]
+        values: props.resources[this.state.resourceMode]
     }];
   },
 
@@ -101,7 +89,7 @@ var ServicesChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <Chart calcHeight={function (w) { return w/4; }}>
+      <Chart calcHeight={function (w) { return w/4.5; }}>
         <BarChart
           data={this.getData()}
           maxY={this.getMaxY()}
@@ -163,4 +151,4 @@ var ServicesChart = React.createClass({
   }
 });
 
-module.exports = ServicesChart;
+module.exports = ResourceBarChart;
