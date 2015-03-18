@@ -7,12 +7,6 @@ var Humanize = require("humanize");
 var Chart = require("./Chart");
 var TimeSeriesChart = require("./TimeSeriesChart");
 
-var labelMap = {
-  mem: "Memory",
-  cpus: "CPU",
-  disk: "Disk"
-};
-
 var ResourceChart = React.createClass({
 
   displayName: "ResourceChart",
