@@ -246,7 +246,12 @@ function normalizeFrameworks(frameworks, date) {
     var index = _.indexOf(_frameworkIndexes, framework.name);
     if (framework.name.toLowerCase().indexOf("marathon") > -1 &&
         framework.webui_url != null) {
-      _marathonUrl = framework.webui_url.replace("ip-", "").replace(/-/g, ".");
+      _marathonUrl = framework.webui_url;
+
+      // only turn into ip address "ip-" is present
+      if (_marathonUrl.indexOf("ip-") > -1) {
+        _marathonUrl = _marathonUrl.replace("ip-", "").replace(/-/g, ".");
+      }
     }
     // this is a new framework, fill in 0s for all the previous datapoints
     if (index === -1) {
@@ -414,10 +419,19 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   processMarathonHealth: function (data) {
     _frameworkHealth = _.chain(data.apps)
       .filter(function (app) {
-        return (
-          app.labels.DCOS_PACKAGE_IS_FRAMEWORK === "true" &&
-          _.contains(_frameworkIndexes, app.labels.DCOS_PACKAGE_NAME)
-        );
+        if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK !== "true" ||
+            _.isEmpty(app.healthChecks)) {
+          return false;
+        }
+
+        // find the framework based on package name
+        var found = _.findWhere(_frameworkIndexes, function (name) {
+          if (name.indexOf(app.labels.DCOS_PACKAGE_NAME) > -1) {
+            return true;
+          }
+        });
+
+        return found != null;
       })
       .map(function (framework) {
         var health = HealthTypes.IDLE;
