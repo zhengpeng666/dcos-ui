@@ -419,7 +419,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   processMarathonHealth: function (data) {
     _frameworkHealth = _.chain(data.apps)
       .filter(function (app) {
-        if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK !== "true") {
+        if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK !== "true" ||
+            _.isEmpty(app.healthChecks)) {
           return false;
         }
 
