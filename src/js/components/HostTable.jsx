@@ -1,10 +1,8 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
-var Humanize = require("humanize");
 var React = require("react/addons");
 
-var Maths = require("../utils/Maths");
 var Table = require("./Table");
 
 function isStat(prop) {
@@ -65,7 +63,7 @@ var columns = [
     prop: "hostname",
     render: renderHeadline,
     sortable: true,
-    title: "SERIVCE NAME"
+    title: "HOST NAME"
   },
   {
     className: getClassName,
