@@ -417,10 +417,17 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   processMarathonHealth: function (data) {
     _frameworkHealth = _.chain(data.apps)
       .filter(function (app) {
-        return (
-          app.labels.DCOS_PACKAGE_IS_FRAMEWORK === "true" &&
-          _.contains(_frameworkIndexes, app.labels.DCOS_PACKAGE_NAME)
-        );
+        if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK !== "true") {
+          return false;
+        }
+        var found = false;
+        _.some(_frameworkIndexes, function (name) {
+          if (name.indexOf(app.labels.DCOS_PACKAGE_NAME) > -1) {
+            found = true;
+          }
+        });
+
+        return found;
       })
       .map(function (framework) {
         var health = HealthTypes.IDLE;
