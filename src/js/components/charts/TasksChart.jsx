@@ -32,7 +32,7 @@ var TasksChart = React.createClass({
   },
 
   getTaskInfo: function (tasks) {
-    if (!tasks.length) {
+    if (tasks.length === 0) {
       tasks = this.getStateWithNoData().infoData;
     }
 
@@ -95,7 +95,7 @@ var TasksChart = React.createClass({
   getDialChart: function (tasks) {
     var total = this.getTotal(tasks);
 
-    if (!tasks.length) {
+    if (tasks.length === 0) {
       tasks = this.getStateWithNoData().dialChartData;
     }
 
