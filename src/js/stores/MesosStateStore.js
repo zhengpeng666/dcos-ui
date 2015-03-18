@@ -282,6 +282,12 @@ function filterByString(objects, searchString) {
   });
 }
 
+function filterByHealth(objects, healthFilter) {
+  return _.filter(objects, function (obj) {
+    return obj.health.value === healthFilter;
+  });
+}
+
 function initStates() {
   var currentDate = Date.now();
   // reverse date range!!!
@@ -342,12 +348,27 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _.last(_mesosStates);
   },
 
+  getFrameworksHealthTypeLength: function (healthType) {
+    return _.reduce(this.getLatest().frameworks, function (length, framework) {
+      if (framework.health.value === healthType) {
+        length++;
+      }
+      return length;
+    }, 0);
+  },
+
   getFrameworks: function (filterOptions) {
     filterOptions = filterOptions || {};
     var frameworks = getStatesByFramework();
 
-    if (filterOptions && filterOptions.searchString !== "") {
-      frameworks = filterByString(frameworks, filterOptions.searchString);
+    if (filterOptions) {
+      if (filterOptions.healthFilter !== "") {
+        frameworks = filterByHealth(frameworks, filterOptions.healthFilter);
+      }
+
+      if (filterOptions.searchString !== "") {
+        frameworks = filterByString(frameworks, filterOptions.searchString);
+      }
     }
 
     return frameworks;

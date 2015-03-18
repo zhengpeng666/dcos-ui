@@ -29,7 +29,7 @@ var FilterInputText = React.createClass({
       <div className="form-group">
         <input
           type="text"
-          className="form-control"
+          className="form-control filter-input-text"
           placeholder="Filter for..."
           defaultValue={this.props.searchString}
           onChange={this.handleChange}
