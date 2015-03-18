@@ -420,14 +420,13 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK !== "true") {
           return false;
         }
-        var found = false;
-        _.some(_frameworkIndexes, function (name) {
-          if (name.indexOf(app.labels.DCOS_PACKAGE_NAME) > -1) {
-            found = true;
-          }
-        });
 
-        return found;
+        // find the framework based on package name
+        return  _.findWhere(_frameworkIndexes, function (name) {
+          if (name.indexOf(app.labels.DCOS_PACKAGE_NAME) > -1) {
+            return true;
+          }
+        }) != null;
       })
       .map(function (framework) {
         var health = HealthTypes.IDLE;
