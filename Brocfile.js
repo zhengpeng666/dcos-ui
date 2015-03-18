@@ -1,6 +1,6 @@
 // dependencies
 var assetRev = require("broccoli-asset-rev");
-var autoprefixer = require('broccoli-autoprefixer');
+var autoprefixer = require("broccoli-autoprefixer");
 var chalk = require("chalk");
 var cleanCSS = require("broccoli-clean-css");
 var concatCSS = require("broccoli-concat");
@@ -12,6 +12,7 @@ var less = require("broccoli-less-single");
 var mergeTrees = require("broccoli-merge-trees");
 var pickFiles = require("broccoli-static-compiler");
 var replace = require("broccoli-replace");
+var removeFile = require("broccoli-file-remover");
 var uglifyJavaScript = require("broccoli-uglify-js");
 var webpackify = require("broccoli-webpack");
 var _ = require("underscore");
@@ -101,6 +102,10 @@ var tasks = {
   },
 
   css: function (masterTree) {
+    removeFile(dirs.styles, {
+      srcFile: dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css"
+    });
+
     // create tree for less (pick all less and css files needed)
     var cssTree = pickFiles(dirs.styles, {
       srcDir: "./",
@@ -122,8 +127,6 @@ var tasks = {
     cssTree = concatCSS(cssTree, {
       inputFiles: [
         "**/*.css",
-        "!" + dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css",
-        dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css"
       ],
       outputFile: "/" + dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css",
     });
