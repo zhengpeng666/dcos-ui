@@ -16,7 +16,6 @@
     "url": "https://github.com/mesosphere/dcos-ui"
   },
   "dependencies": {
-    "broccoli-autoprefixer": "^2.1.0",
     "canvas-ui-system": "0.0.4",
     "d3": "^3.5.5",
     "flux": "^2.0.1",
@@ -31,6 +30,7 @@
   "devDependencies": {
     "broccoli": "^0.13.2",
     "broccoli-asset-rev": "^2.0.0",
+    "broccoli-autoprefixer": "^2.1.0",
     "broccoli-clean-css": "^0.3.0",
     "broccoli-concat": "0.0.12",
     "broccoli-env": "0.0.1",
