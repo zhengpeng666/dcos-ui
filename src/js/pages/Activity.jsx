@@ -7,7 +7,8 @@ var EventTypes = require("../constants/EventTypes");
 var Link = require("react-router").Link;
 var MesosStateStore = require("../stores/MesosStateStore");
 var Panel = require("../components/Panel");
-var ResourceChart = require("../components/charts/ResourceChart");
+var ResourceTimeSeriesChart =
+  require("../components/charts/ResourceTimeSeriesChart");
 var ServiceList = require("../components/ServiceList");
 var TasksChart = require("../components/charts/TasksChart");
 
@@ -95,7 +96,7 @@ var Activity = React.createClass({
         </div>
         <div className="grid-item column-small-6 column-large-4">
           <Panel title="CPU Allocation">
-            <ResourceChart
+            <ResourceTimeSeriesChart
               allocResources={state.allocResources}
               totalResources={state.totalResources}
               mode="cpus" />
@@ -103,7 +104,7 @@ var Activity = React.createClass({
         </div>
         <div className="grid-item column-small-6 column-large-4">
           <Panel title="Memory Allocation">
-            <ResourceChart
+            <ResourceTimeSeriesChart
               allocResources={state.allocResources}
               totalResources={state.totalResources}
               mode="mem" />

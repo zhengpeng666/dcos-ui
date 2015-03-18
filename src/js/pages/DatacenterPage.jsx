@@ -6,7 +6,7 @@ var React = require("react/addons");
 var EventTypes = require("../constants/EventTypes");
 var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
-var HostsChart = require("../components/charts/HostsChart");
+var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarToggle = require("./SidebarToggle");
 var HostTable = require("../components/HostTable");
 
@@ -101,9 +101,9 @@ var DatacenterPage = React.createClass({
         </div>
         <div id="page-content" className="container-scrollable">
           <div className="container container-fluid container-pod">
-            <HostsChart
+            <ResourceBarChart
               data={state.hosts}
-              totalHostsResources={state.totalHostsResources}
+              resources={state.totalHostsResources}
               totalResources={state.totalResources}
               refreshRate={state.refreshRate} />
             {this.getHostsStats()}
