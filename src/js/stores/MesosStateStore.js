@@ -425,11 +425,13 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         }
 
         // find the framework based on package name
-        return _.findWhere(_frameworkIndexes, function (name) {
+        var found = _.findWhere(_frameworkIndexes, function (name) {
           if (name.indexOf(app.labels.DCOS_PACKAGE_NAME) > -1) {
             return true;
           }
-        }) != null;
+        });
+
+        return found != null;
       })
       .map(function (framework) {
         var health = HealthTypes.IDLE;
