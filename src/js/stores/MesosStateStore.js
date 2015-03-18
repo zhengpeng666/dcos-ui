@@ -247,7 +247,7 @@ function normalizeFrameworks(frameworks, date) {
     if (framework.name.toLowerCase().indexOf("marathon") > -1 &&
         framework.webui_url != null) {
       _marathonUrl = framework.webui_url;
-      if (_.contains(_marathonUrl, "ip-")) {
+      if (_marathonUrl.indexOf("ip-") > -1) {
         _marathonUrl = _marathonUrl.replace("ip-", "").replace(/-/g, ".");
       }
     }
