@@ -55,8 +55,7 @@ var Sidebar = React.createClass({
         <div id="sidebar-header">
           <div className="container container-fluid container-fluid-narrow container-pod">
             <div className="sidebar-header-image">
-              <div className="sidebar-header-image-inner">
-              </div>
+              <img className="sidebar-header-image-inner" src="http://placehold.it/64x64" />
             </div>
             <h2 className="sidebar-header-label flush-top text-align-center short-bottom">
               {this.state.cluster}
