@@ -6,6 +6,9 @@ var React = require("react/addons");
 var Chart = require("./Chart");
 var BarChart = require("./BarChart");
 
+// number to fit design of width vs. height ratio
+var WIDTH_HEIGHT_RATIO = 4.5;
+
 var buttonNameMap = {
   cpus: "CPU",
   mem: "Memory",
@@ -89,7 +92,7 @@ var ResourceBarChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <Chart calcHeight={function (w) { return w/4.5; }}>
+      <Chart calcHeight={function (w) { return w/WIDTH_HEIGHT_RATIO; }}>
         <BarChart
           data={this.getData()}
           maxY={this.getMaxY()}
