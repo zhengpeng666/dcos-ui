@@ -12,10 +12,21 @@ function isStat(prop) {
 }
 
 function renderHeadline(prop, model) {
+  if (_.isEmpty(model.webui_url)) {
+    return (
+      <span className="h5 flush-top flush-bottom headline">
+        <i className="icon icon-small icon-small-white border-radius"></i>
+        {model[prop]}
+      </span>
+    );
+  }
+
   return (
-    <span className="h5 flush-top flush-bottom headline">
-      <i className="icon icon-small icon-small-white border-radius"></i>
-      {model[prop]}
+    <span className="h5 flush-top flush-bottom">
+      <a href={model.webui_url} target="_blank" className="headline">
+        <i className="icon icon-small icon-small-white border-radius"></i>
+        {model[prop]}
+      </a>
     </span>
   );
 }
