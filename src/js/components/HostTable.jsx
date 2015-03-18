@@ -56,6 +56,14 @@ function sortFunction(prop) {
   return null;
 }
 
+function rowOptions(model) {
+  return {
+    className: React.addons.classSet({
+      "danger": !model.active
+    })
+  };
+}
+
 var columns = [
   {
     className: getClassName,
@@ -124,6 +132,7 @@ var HostTable = React.createClass({
         keys={["id"]}
         sortBy={{ prop: "hostname", order: "desc" }}
         sortFunc={sortFunction}
+        buildRowOptions={rowOptions}
         dataArray={this.props.hosts} />
     );
   }
