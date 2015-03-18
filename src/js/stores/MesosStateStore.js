@@ -246,7 +246,10 @@ function normalizeFrameworks(frameworks, date) {
     var index = _.indexOf(_frameworkIndexes, framework.name);
     if (framework.name.toLowerCase().indexOf("marathon") > -1 &&
         framework.webui_url != null) {
-      _marathonUrl = framework.webui_url.replace("ip-", "").replace(/-/g, ".");
+      _marathonUrl = framework.webui_url;
+      if (_.contains(_marathonUrl, "ip-")) {
+        _marathonUrl = _marathonUrl.replace("ip-", "").replace(/-/g, ".");
+      }
     }
     // this is a new framework, fill in 0s for all the previous datapoints
     if (index === -1) {
