@@ -247,6 +247,8 @@ function normalizeFrameworks(frameworks, date) {
     if (framework.name.toLowerCase().indexOf("marathon") > -1 &&
         framework.webui_url != null) {
       _marathonUrl = framework.webui_url;
+
+      // only turn into ip address "ip-" is present
       if (_marathonUrl.indexOf("ip-") > -1) {
         _marathonUrl = _marathonUrl.replace("ip-", "").replace(/-/g, ".");
       }
