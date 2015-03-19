@@ -2,12 +2,19 @@
 
 var React = require("react/addons");
 
-var Activity = require("./Activity");
+var Activity = require("../pages/Activity");
+var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
 
 var ActivityPage = React.createClass({
 
   displayName: "ActivityPage",
+
+  statics: {
+    willTransitionTo: function () {
+      SidebarActions.close();
+    }
+  },
 
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */

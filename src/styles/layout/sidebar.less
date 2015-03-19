@@ -1,5 +1,5 @@
 /* Sidebar */
-#sidebar {
+.sidebar {
   position: fixed;
   top: 0px;
   left: -100%;
@@ -13,7 +13,7 @@
   .transition(left 0.3s ease);
 
   /* Sidebar Header */
-  #sidebar-header {
+  .sidebar-header {
     .sidebar-header-image {
       border: 1px solid fade(@black, 5%);
       padding: 3px;
@@ -46,14 +46,14 @@
   }
 
   /* Sidebar Footer */
-  #sidebar-footer {
+  .sidebar-footer {
     width: 100%;
     position: absolute;
     bottom: 0px;
   }
 
   /* Sidebar Navigation */
-  #sidebar-navigation {
+  .sidebar-navigation {
     .sidebar-menu {
       padding: 0px;
       margin: 0px -(@grid-gutter-width * 0.5);
@@ -125,12 +125,12 @@
   }
 }
 
-body.canvas-sidebar-open {
-  #sidebar {
+.canvas-sidebar-open {
+  .sidebar {
     left: 0px;
   }
 
-  #page {
+  .page {
     left: 100%;
     margin-left: -((2 * (@grid-gutter-width * 1.0)) + @icon-medium-width);
     position: fixed;
@@ -142,12 +142,12 @@ body.canvas-sidebar-open {
   @media (min-width: @screen-mini) {
 
     /* Sidebar */
-    #sidebar {
+    .sidebar {
       margin-left: -((2 * (@grid-gutter-width-screen-mini * 1.0)) + @icon-medium-width);
       padding-left: ((2 * (@grid-gutter-width-screen-mini * 1.0)) + @icon-medium-width);
 
       /* Sidebar Header */
-      #sidebar-header {
+      .sidebar-header {
         .sidebar-header-image {
           width: 64px + (3 * 2) + 1;
           height: 64px + (3 * 2) + 1;
@@ -161,7 +161,7 @@ body.canvas-sidebar-open {
       }
 
       /* Sidebar Navigation */
-      #sidebar-navigation {
+      .sidebar-navigation {
         .sidebar-menu {
           margin: 0px -(@grid-gutter-width-screen-mini * 0.5);
 
@@ -183,8 +183,8 @@ body.canvas-sidebar-open {
       }
     }
 
-    body.canvas-sidebar-open {
-      #page {
+    .canvas-sidebar-open {
+      .page {
         left: 100%;
         margin-left: -((2 * (@grid-gutter-width-screen-mini * 1.0)) + @icon-medium-width);
         position: fixed;
@@ -198,7 +198,7 @@ body.canvas-sidebar-open {
   @media (min-width: @screen-small) {
 
     /* Sidebar */
-    #sidebar {
+    .sidebar {
       float: left;
       position: absolute;
       top: auto;
@@ -211,7 +211,7 @@ body.canvas-sidebar-open {
       .transition(none);
 
       /* Sidebar Header */
-      #sidebar-header {
+      .sidebar-header {
         .sidebar-header-image {
           width: @icon-medium-width + (3 * 2) + 1;
           height: @icon-medium-height + (3 * 2) + 1;
@@ -233,7 +233,7 @@ body.canvas-sidebar-open {
       }
 
       /* Sidebar Navigation */
-      #sidebar-navigation {
+      .sidebar-navigation {
         .sidebar-menu {
           margin: 0px -(@base-spacing-unit-screen-small * 0.5);
 
@@ -266,11 +266,11 @@ body.canvas-sidebar-open {
   @media (min-width: @screen-medium) {
 
     /* Sidebar */
-    #sidebar {
+    .sidebar {
       width: 250px;
 
       /* Sidebar Header */
-      #sidebar-header {
+      .sidebar-header {
         .sidebar-header-image {
           width: 64px + (3 * 2) + 1;
           height: 64px + (3 * 2) + 1;
@@ -292,7 +292,7 @@ body.canvas-sidebar-open {
       }
 
       /* Sidebar Navigation */
-      #sidebar-navigation {
+      .sidebar-navigation {
         .sidebar-menu {
           margin: 0px -(@base-spacing-unit-screen-medium * 0.5);
 
@@ -325,11 +325,11 @@ body.canvas-sidebar-open {
   @media (min-width: @screen-large) {
 
     /* Sidebar */
-    #sidebar {
+    .sidebar {
       width: 300px;
 
       /* Sidebar Header */
-      #sidebar-header {
+      .sidebar-header {
         .sidebar-header-image {
           width: 64px + (3 * 2) + 1;
           height: 64px + (3 * 2) + 1;
@@ -343,7 +343,7 @@ body.canvas-sidebar-open {
       }
 
       /* Sidebar Navigation */
-      #sidebar-navigation {
+      .sidebar-navigation {
         .sidebar-menu {
           margin: 0px -(@base-spacing-unit-screen-large * 0.5);
 

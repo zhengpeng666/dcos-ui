@@ -1,14 +1,24 @@
 /** @jsx React.DOM */
 
+var _ = require("underscore");
 var React = require("react/addons");
 var Link = require("react-router").Link;
 var State = require("react-router").State;
 
 var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
+var SidebarStore = require("../stores/SidebarStore");
 
 function getMesosInfo() {
-  return MesosStateStore.getLatest();
+  return {
+    mesosInfo: MesosStateStore.getLatest()
+  };
+}
+
+function getSidebarState() {
+  return {
+    isOpen: SidebarStore.isOpen()
+  };
 }
 
 var Sidebar = React.createClass({
@@ -18,13 +28,18 @@ var Sidebar = React.createClass({
   mixins: [State],
 
   getInitialState: function () {
-    return getMesosInfo();
+    return _.extend(getMesosInfo(), getSidebarState());
   },
 
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
       this.onChange
+    );
+
+    SidebarStore.addChangeListener(
+      EventTypes.SIDEBAR_CHANGE,
+      this.onSidebarChange
     );
   },
 
@@ -33,10 +48,11 @@ var Sidebar = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onChange
     );
-  },
 
-  onChange: function () {
-    this.setState(getMesosInfo());
+    SidebarStore.removeChangeListener(
+      EventTypes.SIDEBAR_CHANGE,
+      this.onSidebarChange
+    );
   },
 
   getItemClassSet: function (routeName) {
@@ -46,13 +62,21 @@ var Sidebar = React.createClass({
     });
   },
 
+  onChange: function () {
+    this.setState(getMesosInfo());
+  },
+
+  onSidebarChange: function () {
+    this.setState(getSidebarState());
+  },
+
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
 
     return (
-      <div id="sidebar">
-        <div id="sidebar-header">
+      <div className="sidebar">
+        <div className="sidebar-header">
           <div className="container container-fluid container-fluid-narrow container-pod">
             <div className="sidebar-header-image">
               <img className="sidebar-header-image-inner" src="http://placehold.it/64x64" />
@@ -65,8 +89,8 @@ var Sidebar = React.createClass({
             </p>
           </div>
         </div>
-        <div id="sidebar-content" className="container-scrollable">
-          <nav id="sidebar-navigation">
+        <div className="sidebar-content container-scrollable">
+          <nav className="sidebar-navigation">
             <div className="container container-fluid container-fluid-narrow">
               <ul className="sidebar-menu list-unstyled">
                 <li className={this.getItemClassSet("activity")}>
@@ -97,7 +121,7 @@ var Sidebar = React.createClass({
             </div>
           </nav>
         </div>
-        <div id="sidebar-footer">
+        <div className="sidebar-footer">
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom">
             <p className="text-align-center flush-top flush-bottom">
               Mesosphere DCOS v.0.0.1

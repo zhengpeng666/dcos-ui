@@ -5,6 +5,7 @@ var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
+var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var FilterHealth = require("../components/FilterHealth");
@@ -49,6 +50,12 @@ var ServicesPage = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onChange
     );
+  },
+
+  statics: {
+    willTransitionTo: function () {
+      SidebarActions.close();
+    }
   },
 
   extendFilterOptions: function (options) {

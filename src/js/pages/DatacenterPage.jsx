@@ -7,6 +7,7 @@ var EventTypes = require("../constants/EventTypes");
 var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
+var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
 var HostTable = require("../components/HostTable");
 
@@ -42,6 +43,12 @@ var DatacenterPage = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onChange
     );
+  },
+
+  statics: {
+    willTransitionTo: function () {
+      SidebarActions.close();
+    }
   },
 
   onChange: function () {
