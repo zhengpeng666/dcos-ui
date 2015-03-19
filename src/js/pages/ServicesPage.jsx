@@ -36,7 +36,6 @@ var ServicesPage = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onChange
     );
-    this.onChange();
   },
 
   componentWillUnmount: function () {

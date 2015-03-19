@@ -23,14 +23,17 @@ var AnitmationCircle = React.createClass({
     };
   },
 
-  shouldComponentUpdate: function (props) {
+  componentDidMount: function () {
+    d3.select(this.getDOMNode())
+      .attr("transform", "translate(" + this.props.position + ")");
+  },
+
+  componentWillReceiveProps: function (props) {
     d3.select(this.getDOMNode())
       .transition()
       .duration(props.transitionTime)
       .ease("linear")
       .attr("transform", "translate(" + props.position + ")");
-
-    return true;
   },
 
   render: function () {

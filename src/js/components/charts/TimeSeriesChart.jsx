@@ -158,7 +158,6 @@ var TimeSeriesChart = React.createClass({
   },
 
   componentWillReceiveProps: function (props) {
-
     var xScale = this.getXScale(props);
     var yScale = this.getYScale(props);
     // the d3 axis helper requires a <g> element passed into do its work. This
@@ -261,7 +260,6 @@ var TimeSeriesChart = React.createClass({
   },
 
   render: function () {
-    var ReactTransitionGroup = React.addons.TransitionGroup;
     var props = this.props;
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -273,9 +271,7 @@ var TimeSeriesChart = React.createClass({
           <g className="x axis" ref="xAxis"/>
         </g>
         <g className="y axis" ref="yAxis" />
-        <ReactTransitionGroup component="g">
           {this.getAreaList()}
-        </ReactTransitionGroup>
       </svg>
     );
   }
