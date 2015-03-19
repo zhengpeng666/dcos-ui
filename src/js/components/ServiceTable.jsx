@@ -44,9 +44,9 @@ var ServicesTable = React.createClass({
   },
 
   renderHeadline: function (prop, model) {
-    if (_.isEmpty(model.webui_url)) {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    if (model.webui_url.length === 0) {
       return (
         <span className="h5 flush-top flush-bottom headline">
           <i className="icon icon-small icon-small-white border-radius"></i>
