@@ -64,10 +64,9 @@ function sumHostResources(hosts) {
         if (value[i] == null) {
           value.push({date: val.date});
           value[i].value = 0;
-          value[i].percentage = 0;
         }
         value[i].value += val.value;
-        value[i].percentage += Maths.round(100 * value[i].value / max);
+        value[i].percentage = Maths.round(100 * value[i].value / max);
       });
     });
 
