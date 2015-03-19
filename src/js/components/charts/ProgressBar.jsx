@@ -8,6 +8,7 @@ var ProgressBar = React.createClass({
 
   propTypes: {
     colorIndex: React.PropTypes.number,
+    initialUpdateTimeout: React.PropTypes.number,
     max: React.PropTypes.number,
     value: React.PropTypes.number.isRequired
   },
@@ -16,12 +17,20 @@ var ProgressBar = React.createClass({
     return {
       colorIndex: 1,
       max: 100,
-      value: 0
+      value: 0,
+      initialUpdateTimeout: 0
     };
   },
 
   componentDidMount: function () {
-    setTimeout(this.applyWidth.bind(this, this.props), 100);
+    var props = this.props;
+    var applyWidth = this.applyWidth.bind(this, props);
+
+    if (props.initialUpdateTimeout === 0) {
+      applyWidth();
+    } else {
+      setTimeout(applyWidth, props.initialUpdateTimeout);
+    }
   },
 
   componentDidUpdate: function () {
