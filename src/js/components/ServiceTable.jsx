@@ -29,10 +29,7 @@ function sortFunction(prop) {
     };
   } else {
     return function (model) {
-      var value = model[prop];
-      if (_.isString(value)) {
-        value = value.toLowerCase();
-      }
+      var value = model[prop].toString().toLowerCase();
       return value + "-" + model.hostname.toLowerCase();
     };
   }
