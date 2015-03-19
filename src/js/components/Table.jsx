@@ -56,14 +56,13 @@ function buildSortProps(col, sortBy, handleSort) {
     order = sortBy.order;
   }
 
-  var nextOrder = "asc";
-  if (order === "asc") {
-    nextOrder = "desc";
+  var nextOrder = "desc";
+  if (order === "desc") {
+    nextOrder = "asc";
   }
 
   // sort state data with new sortBy properties
   var sortEvent = handleSort.bind(
-    null,
     null,
     {prop: col.prop, order: nextOrder}
   );
@@ -126,6 +125,22 @@ function getRowColumns(row, sortBy, columns) {
   }, this);
 }
 
+function sortData(data, sortBy, customSort) {
+  if (_.isFunction(customSort) && _.isFunction(customSort(sortBy.prop))) {
+    // use specfied sorting
+    data = _.sortBy(data, customSort(sortBy.prop));
+  } else {
+    // use default sorting
+    data = _.sortBy(data, sortBy.prop);
+  }
+
+  if (sortBy.order === "asc") {
+    data.reverse();
+  }
+
+  return data;
+}
+
 function getRows(data, columns, keys, sortBy, buildRowOptions) {
   if (data.length === 0) {
     return (
@@ -173,12 +188,8 @@ var Table = React.createClass({
     ).isRequired,
 
     // data to display in the table
-    dataArray: PropTypes.arrayOf(
-      PropTypes.oneOfType([
-        PropTypes.array,
-        PropTypes.object
-      ])
-    ).isRequired,
+    // make sure to clone if data, cannot be modified!
+    data: PropTypes.array.isRequired,
 
     // options to be passed to the rows
     buildRowOptions: PropTypes.func,
@@ -205,8 +216,6 @@ var Table = React.createClass({
 
   getInitialState: function () {
     return {
-      // clone the initial data
-      data: this.props.dataArray.slice(0),
       sortBy: this.props.sortBy,
       headers: []
     };
@@ -229,40 +238,21 @@ var Table = React.createClass({
     });
   },
 
-  componentWillReceiveProps: function (props) {
-      // clone new data
-    this.handleSort(props.dataArray.slice(0));
+  componentWillReceiveProps: function () {
+    this.handleSort();
   },
 
-  handleSort: function (data, sortBy) {
+  handleSort: function (sortBy) {
     // if nothing is passed to handle sort,
     // just sort the state data w. state sortBy
-    data = data || this.state.data;
     sortBy = sortBy || this.state.sortBy;
 
-    var customSort = this.props.sortFunc;
     var onSort = this.props.onSort;
 
-    var sortedData;
-    if (_.isFunction(customSort) && _.isFunction(customSort(sortBy.prop))) {
-      // use specfied sorting
-      sortedData = _.sortBy(data, customSort(sortBy.prop));
-    } else {
-      // use default sorting
-      sortedData = _.sortBy(data, sortBy.prop);
-    }
-
-    if (sortBy.order === "desc") {
-      sortedData.reverse();
-    }
-
-    this.setState({
-      sortBy: sortBy,
-      data: sortedData
-    });
+    this.setState({sortBy: sortBy});
 
     if (_.isFunction(onSort)) {
-      onSort(sortBy, sortedData);
+      onSort(sortBy);
     }
   },
 
@@ -271,6 +261,7 @@ var Table = React.createClass({
     var columns = this.props.columns;
     var keys = this.props.keys;
     var sortBy = this.state.sortBy;
+    var sortedData = sortData(this.props.data, sortBy, this.props.sortFunc);
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -282,7 +273,7 @@ var Table = React.createClass({
           </tr>
         </thead>
         <tbody>
-          {getRows(this.state.data, columns, keys, sortBy, buildRowOptions)}
+          {getRows(sortedData, columns, keys, sortBy, buildRowOptions)}
         </tbody>
       </table>
     );

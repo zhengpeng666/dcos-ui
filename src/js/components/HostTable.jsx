@@ -9,32 +9,6 @@ function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
 }
 
-function renderHeadline(prop, model) {
-  return (
-    <span className="h5 flush-top flush-bottom headline">
-      {model[prop]}
-    </span>
-  );
-}
-
-function renderTask(prop, model) {
-  return (
-    <span>
-      {model[prop]}
-      <span className="visible-mini-inline"> Tasks</span>
-    </span>
-  );
-}
-
-function renderStats(prop, model) {
-  var value = _.last(model.used_resources[prop]).percentage;
-  return (
-    <span>
-      {value}%
-    </span>
-  );
-}
-
 function getClassName(prop, sortBy) {
   var classSet = React.addons.classSet({
     "align-right": isStat(prop) || prop === "tasks_size",
@@ -48,12 +22,15 @@ function getClassName(prop, sortBy) {
 function sortFunction(prop) {
   if (isStat(prop)) {
     return function (model) {
-      return _.last(model.used_resources[prop]).value;
+      return _.last(model.used_resources[prop]).value + "-" +
+          model.name.toLowerCase();
+    };
+  } else {
+    return function (model) {
+      var value = model[prop].toString().toLowerCase();
+      return value + "-" + model.hostname.toLowerCase();
     };
   }
-
-  // rely on default sorting
-  return null;
 }
 
 function rowOptions(model) {
@@ -63,49 +40,6 @@ function rowOptions(model) {
     })
   };
 }
-
-var columns = [
-  {
-    className: getClassName,
-    headerClassName: getClassName,
-    prop: "hostname",
-    render: renderHeadline,
-    sortable: true,
-    title: "HOST NAME"
-  },
-  {
-    className: getClassName,
-    headerClassName: getClassName,
-    prop: "tasks_size",
-    render: renderTask,
-    sortable: true,
-    title: "TASKS"
-  },
-  {
-    className: getClassName,
-    headerClassName: getClassName,
-    prop: "cpus",
-    render: renderStats,
-    sortable: true,
-    title: "CPU"
-  },
-  {
-    className: getClassName,
-    headerClassName: getClassName,
-    prop: "mem",
-    render: renderStats,
-    sortable: true,
-    title: "MEM"
-  },
-  {
-    className: getClassName,
-    headerClassName: getClassName,
-    prop: "disk",
-    render: renderStats,
-    sortable: true,
-    title: "DISK"
-  },
-];
 
 var HostTable = React.createClass({
 
@@ -121,6 +55,89 @@ var HostTable = React.createClass({
     };
   },
 
+  renderHeadline: function (prop, model) {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <span className="h5 flush-top flush-bottom headline">
+        {model[prop]}
+      </span>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  renderTask: function (prop, model) {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <span>
+        {model[prop]}
+        <span className="visible-mini-inline"> Tasks</span>
+      </span>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  renderStats: function (prop, model) {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    var value = _.last(model.used_resources[prop]).percentage;
+    return (
+      <span>
+        {value}%
+      </span>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getColumns: function () {
+    return [
+      {
+        className: getClassName,
+        headerClassName: getClassName,
+        prop: "hostname",
+        render: this.renderHeadline,
+        sortable: true,
+        title: "HOST NAME"
+      },
+      {
+        className: getClassName,
+        headerClassName: getClassName,
+        prop: "tasks_size",
+        render: this.renderTask,
+        sortable: true,
+        title: "TASKS"
+      },
+      {
+        className: getClassName,
+        headerClassName: getClassName,
+        prop: "cpus",
+        render: this.renderStats,
+        sortable: true,
+        title: "CPU"
+      },
+      {
+        className: getClassName,
+        headerClassName: getClassName,
+        prop: "mem",
+        render: this.renderStats,
+        sortable: true,
+        title: "MEM"
+      },
+      {
+        className: getClassName,
+        headerClassName: getClassName,
+        prop: "disk",
+        render: this.renderStats,
+        sortable: true,
+        title: "DISK"
+      },
+    ];
+  },
+
   render: function () {
 
     /* jshint trailing:false, quotmark:false, newcap:false */
@@ -128,12 +145,12 @@ var HostTable = React.createClass({
     return (
       <Table
         className="table"
-        columns={columns}
+        columns={this.getColumns()}
+        data={this.props.hosts.slice(0)}
         keys={["id"]}
         sortBy={{ prop: "hostname", order: "desc" }}
         sortFunc={sortFunction}
-        buildRowOptions={rowOptions}
-        dataArray={this.props.hosts} />
+        buildRowOptions={rowOptions} />
     );
   }
 });
