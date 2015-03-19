@@ -22,41 +22,31 @@ var ProgressBar = React.createClass({
     };
   },
 
-  componentDidMount: function () {
-    var props = this.props;
-    var applyWidth = this.applyWidth.bind(this, props);
-
-    if (props.initialUpdateTimeout === 0) {
-      applyWidth();
-    } else {
-      setTimeout(applyWidth, props.initialUpdateTimeout);
-    }
+  /**
+   * for animation purposes we want to always start at 0
+   * then update the values when we receive props.
+   **/
+  getInitialState: function () {
+    return {
+      value: 0
+    };
   },
 
-  componentDidUpdate: function () {
-    this.applyWidth(this.props);
-  },
-
-  applyWidth: function (props) {
-    var bar = this.refs.bar.getDOMNode();
-    var newValue = (props.value / props.max * 100) + "%";
-    var oldValue = bar.style.width;
-
-    if (oldValue !== newValue) {
-      bar.style.width = newValue;
-    }
+  componentWillReceiveProps: function (nextProps) {
+    this.setState({value: nextProps.value});
   },
 
   render: function () {
     var props = this.props;
+    var state = this.state;
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="progress-bar">
-        <div ref="bar"
+        <div key="bar" ref="bar"
           className={"bar color-" + props.colorIndex}
-          style={{width: "0%"}} />
+          style={{width: state.value + "%"}} />
       </div>
     );
   }
