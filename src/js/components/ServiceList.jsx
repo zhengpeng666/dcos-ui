@@ -3,13 +3,14 @@
 var _ = require("underscore");
 var React = require("react");
 
+var HealthLabels = require("../constants/HealthLabels");
 var List = require("./List");
 
 var STATES = {
-  SICK: {value: "Sick", classes: {"text-danger": true}},
-  HEALTHY: {value: "Healthy", classes: {"text-success": true}},
-  IDLE: {value: "Idle", classes: {"text-warning": true}},
-  NA: {value: "N/A", classes: {"text-mute": true}}
+  SICK: {key: "SICK", classes: {"text-danger": true}},
+  HEALTHY: {key: "HEALTHY", classes: {"text-success": true}},
+  IDLE: {key: "IDLE", classes: {"text-warning": true}},
+  NA: {key: "NA/A", classes: {"text-mute": true}}
 };
 
 var ServiceList = React.createClass({
@@ -31,7 +32,7 @@ var ServiceList = React.createClass({
 
       return {
         title: {value: service.name},
-        health: {value: state.value, classes: state.classes, textAlign: "right"}
+        health: {value: HealthLabels[state.key], classes: state.classes, textAlign: "right"}
       };
     });
 
