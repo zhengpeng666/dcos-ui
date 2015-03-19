@@ -59,7 +59,7 @@ function sortFunction(prop) {
 function rowOptions(model) {
   return {
     className: React.addons.classSet({
-      "danger": !model.active
+      "danger": model.active === false
     })
   };
 }
