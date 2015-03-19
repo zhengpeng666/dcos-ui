@@ -14,12 +14,19 @@ var TasksChart = require("../components/charts/TasksChart");
 
 function getMesosState() {
   return {
-    tasks: MesosStateStore.getTasks(),
-    totalResources: MesosStateStore.getTotalResources(),
     allocResources: MesosStateStore.getAllocResources(),
-    servicesHealth: MesosStateStore.getFrameworkHealth()
+    services: MesosStateStore.getLatest().frameworks,
+    tasks: MesosStateStore.getTasks(),
+    totalResources: MesosStateStore.getTotalResources()
   };
 }
+
+var SORT_ORDER = {
+  SICK: 0,
+  HEALTHY: 1,
+  IDLE: 2,
+  NA: 3
+};
 
 var Activity = React.createClass({
 
@@ -54,19 +61,23 @@ var Activity = React.createClass({
     this.setState(getMesosState());
   },
 
-  getServicesList: function () {
-    return _.first(this.state.servicesHealth, this.props.servicesListLength);
+  getServicesList: function (services) {
+    var sortedServices = _.sortBy(services, function (service) {
+      return SORT_ORDER[service.health.key];
+    });
+
+    return _.first(sortedServices, this.props.servicesListLength);
   },
 
   getViewAllServicesBtn: function () {
-    var serviceHealthCount = this.state.servicesHealth.length;
-    if (!serviceHealthCount) {
+    var servicesCount = this.state.services.length;
+    if (!servicesCount) {
       return;
     }
 
     var textContent = "View all ";
-    if (serviceHealthCount > this.props.servicesListLength) {
-      textContent += serviceHealthCount + " ";
+    if (servicesCount > this.props.servicesListLength) {
+      textContent += servicesCount + " ";
     }
     textContent += "Services >";
 
@@ -90,7 +101,7 @@ var Activity = React.createClass({
       <div className="grid">
         <div className="grid-item column-small-6 column-large-4">
           <Panel title="Services Health">
-            <ServiceList servicesHealth={this.getServicesList()} />
+            <ServiceList services={this.getServicesList(this.state.services)} />
             {this.getViewAllServicesBtn()}
           </Panel>
         </div>

@@ -225,7 +225,8 @@ function fillFramework(id, name, colorIndex) {
       colorIndex: colorIndex,
       resources: {cpus: 0, mem: 0, disk: 0},
       used_resources: {cpus: 0, mem: 0, disk: 0},
-      tasks: []
+      tasks: [],
+      health: {key: "NA", value: HealthTypes.NA}
     });
   });
 }
@@ -260,6 +261,8 @@ function normalizeFrameworks(frameworks, date) {
     }
     // set color index after discovering and assigning index framework
     framework.colorIndex = index;
+    framework.health = _frameworkHealth[framework.name] ||
+      {key: "NA", value: HealthTypes.NA};
     return framework;
   });
 }
@@ -416,37 +419,33 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   processMarathonHealth: function (data) {
-    _frameworkHealth = _.chain(data.apps)
-      .filter(function (app) {
-        if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK !== "true" ||
-            _.isEmpty(app.healthChecks)) {
-          return false;
-        }
+    _frameworkHealth = _.foldl(data.apps, function (curr, app) {
+      if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK !== "true" ||
+          _.isEmpty(app.healthChecks)) {
+        return curr;
+      }
 
-        // find the framework based on package name
-        var found = _.findWhere(_frameworkIndexes, function (name) {
-          if (name.indexOf(app.labels.DCOS_PACKAGE_NAME) > -1) {
-            return true;
-          }
-        });
+      // find the framework based on package name
+      var frameworkName = _.findWhere(_frameworkIndexes, function (name) {
+        return name.indexOf(app.labels.DCOS_PACKAGE_NAME) > -1;
+      });
 
-        return found != null;
-      })
-      .map(function (framework) {
-        var health = HealthTypes.IDLE;
-        if (framework.tasksUnhealthy > 0) {
-          health = HealthTypes.SICK;
-        }
-        if (framework.tasksHealthy > 0) {
-          health = HealthTypes.HEALTHY;
-        }
+      if (frameworkName == null) {
+        return curr;
+      }
 
-        return {name: framework.labels.DCOS_PACKAGE_NAME, value: health};
-      })
-      .indexBy(function (obj) {
-        return obj.name;
-      })
-      .value();
+      var health = {key: "IDLE", value: HealthTypes.IDLE};
+      if (app.tasksUnhealthy > 0) {
+        health = {key: "SICK", value: HealthTypes.SICK};
+      }
+      if (app.tasksHealthy > 0) {
+        health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
+      }
+
+      curr[frameworkName] = health;
+
+      return curr;
+    }, {});
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
