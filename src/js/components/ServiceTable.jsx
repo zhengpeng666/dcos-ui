@@ -11,11 +11,12 @@ function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
 }
 
-function getClassName(prop, sortBy) {
+function getClassName(prop, sortBy, row) {
   var classSet = React.addons.classSet({
     "align-right": isStat(prop) || prop === "tasks_size",
     "hidden-mini fixed-width": isStat(prop),
-    "highlighted": prop === sortBy.prop
+    "highlighted": prop === sortBy.prop,
+    "clickable": row == null // this is a header
   });
 
   return classSet;
