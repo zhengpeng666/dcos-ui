@@ -16,6 +16,8 @@ var _frameworkHealth = {};
 var _mesosStates = [];
 var _marathonUrl;
 
+var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
+
 function sumResources(resourceList) {
   return _.reduce(resourceList, function (sumMap, resource) {
     _.each(sumMap, function (value, key) {
@@ -226,7 +228,7 @@ function fillFramework(id, name, colorIndex) {
       resources: {cpus: 0, mem: 0, disk: 0},
       used_resources: {cpus: 0, mem: 0, disk: 0},
       tasks: [],
-      health: {key: "NA", value: HealthTypes.NA}
+      health: NA_HEALTH
     });
   });
 }
@@ -261,8 +263,7 @@ function normalizeFrameworks(frameworks, date) {
     }
     // set color index after discovering and assigning index framework
     framework.colorIndex = index;
-    framework.health = _frameworkHealth[framework.name] ||
-      {key: "NA", value: HealthTypes.NA};
+    framework.health = _frameworkHealth[framework.name] || NA_HEALTH;
     return framework;
   });
 }
