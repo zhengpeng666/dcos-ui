@@ -4,6 +4,8 @@ var _ = require("underscore");
 var Humanize = require("humanize");
 var React = require("react/addons");
 
+var HealthTypes = require("../constants/HealthTypes");
+var HealthLabels = require("../constants/HealthLabels");
 var Maths = require("../utils/Maths");
 var Table = require("./Table");
 
@@ -69,25 +71,23 @@ var ServicesTable = React.createClass({
   },
 
   renderHealth: function (prop, model) {
-    var status = "Active";
-    if (model.active !== true) {
-      status = "Inactive";
-    }
-
     var statusClassSet = React.addons.classSet({
       "collection-item-content-status": true,
-      "text-success": model.active,
-      "text-danger": !model.active
+      "text-success": model.health.value === HealthTypes.HEALTHY,
+      "text-danger": model.health.value === HealthTypes.UNHEALTHY,
+      "text-warning": model.health.value === HealthTypes.IDLE,
+      "text-mute": model.health.value === HealthTypes.NA
     });
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <span className={statusClassSet}>{status}</span>
+      <span className={statusClassSet}>{HealthLabels[model.health.key]}</span>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
+
 
   renderTask: function (prop, model) {
     return (

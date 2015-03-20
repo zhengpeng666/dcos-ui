@@ -7,6 +7,7 @@ var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
+var FilterHealth = require("../components/FilterHealth");
 var FilterInputText = require("../components/FilterInputText");
 var ServiceTable = require("../components/ServiceTable");
 
@@ -14,6 +15,7 @@ function getMesosServices(filterOptions) {
   var frameworks = MesosStateStore.getFrameworks(filterOptions);
   return {
     frameworks: frameworks,
+    healthHash: MesosStateStore.getFrameworksHealthHash(),
     refreshRate: MesosStateStore.getRefreshRate(),
     totalFrameworks: MesosStateStore.getLatest().frameworks.length,
     totalFrameworksResources:
@@ -22,13 +24,17 @@ function getMesosServices(filterOptions) {
   };
 }
 
+var _filterOptions = {
+  searchString: "",
+  healthFilter: null
+};
+
 var ServicesPage = React.createClass({
 
   displayName: "ServicesPage",
 
   getInitialState: function () {
-    var filterOptions = {searchString: ""};
-    return _.extend(getMesosServices(filterOptions), filterOptions);
+    return _.extend(getMesosServices(_filterOptions), _filterOptions);
   },
 
   componentDidMount: function () {
@@ -45,14 +51,33 @@ var ServicesPage = React.createClass({
     );
   },
 
+  extendFilterOptions: function (options) {
+    options = options || {};
+
+    return _.extend(_.reduce(_filterOptions, function (obj, val, key) {
+      obj[key] = this.state[key];
+      return obj;
+    }.bind(this), {}), options);
+  },
+
   onChange: function (searchString) {
     var state;
     if (searchString != null) {
-      var filterOptions = {searchString: searchString};
+      var filterOptions = this.extendFilterOptions({
+        searchString: searchString
+      });
       state = _.extend(getMesosServices(filterOptions), filterOptions);
     } else {
-      state = getMesosServices({searchString: this.state.searchString});
+      state = getMesosServices(this.extendFilterOptions());
     }
+    this.setState(state);
+  },
+
+  onChangeHealthFilter: function (healthFilter) {
+    var filterOptions = this.extendFilterOptions({
+      healthFilter: healthFilter
+    });
+    var state = _.extend(getMesosServices(filterOptions), filterOptions);
     this.setState(state);
   },
 
@@ -111,9 +136,19 @@ var ServicesPage = React.createClass({
               totalResources={state.totalResources}
               refreshRate={state.refreshRate} />
             {this.getServiceStats()}
-            <FilterInputText
-              searchString={this.state.searchString}
-              onSubmit={this.onChange} />
+            <ul className="list list-unstyled list-inline flush-bottom">
+              <li>
+                <FilterHealth
+                  healthHash={state.healthHash}
+                  healthFilter={state.healthFilter}
+                  onSubmit={this.onChangeHealthFilter} />
+              </li>
+              <li>
+                <FilterInputText
+                  searchString={state.searchString}
+                  onSubmit={this.onChange} />
+              </li>
+            </ul>
             <ServiceTable
               frameworks={state.frameworks}
               totalResources={state.totalResources} />

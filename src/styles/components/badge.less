@@ -1,0 +1,35 @@
+.badge {
+  color: @body-background-color;
+  display: inline-block;
+  font-size: @body-text-font-size;
+  line-height: @body-text-line-height;
+  padding: 0 @body-text-font-size * 0.5;
+  background-color: @button-default-active-background-color;
+  border-radius: 1000px !important;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.active {
+  .badge {
+    background-color: @white;
+  }
+}
+
+.dot {
+  display: inline-block;
+  background-color: @gray;
+  width: @body-text-font-size * 0.75;
+  height: @body-text-font-size * 0.75;
+  border-radius: 50%;
+
+  &.danger {
+    background-color: @text-danger-color;
+  }
+
+  &.success {
+    background-color: @text-success-color;
+  }
+}
