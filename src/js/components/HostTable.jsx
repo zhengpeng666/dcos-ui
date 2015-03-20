@@ -24,7 +24,7 @@ function sortFunction(prop) {
   if (isStat(prop)) {
     return function (model) {
       return _.last(model.used_resources[prop]).value + "-" +
-          model.name.toLowerCase();
+          model.hostname.toLowerCase();
     };
   } else {
     return function (model) {
