@@ -1,0 +1,31 @@
+.progress-bar {
+  background-color: @gray;
+  .border-radius(@table-header-border-radius);
+  display: inline-block;
+  overflow: hidden;
+  margin-right: @progress-bar-height * 0.5;
+  margin-bottom: @progress-bar-height * 0.5;
+  line-height: @body-text-line-height;
+  width: @progress-bar-width;
+  height: @progress-bar-height;
+
+  .bar {
+    height: 100%;
+
+    transition: width 600ms;
+
+    box-shadow: 1px 0px 0px 0px @body-background-color;
+
+    &.color-1 {
+      background-color: @mesosphere-heliotrope;
+    }
+
+    &.color-2 {
+      background-color: @mesosphere-azure;
+    }
+
+    &.color-3 {
+      background-color: @mesosphere-fuchsia;
+    }
+  }
+}

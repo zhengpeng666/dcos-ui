@@ -4,6 +4,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var Table = require("./Table");
+var ProgressBar = require("./charts/ProgressBar");
 
 function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
@@ -82,12 +83,19 @@ var HostTable = React.createClass({
   },
 
   renderStats: function (prop, model) {
+    var colorMapping = {
+      cpus: 1,
+      mem: 2,
+      disk: 3
+    };
+
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     var value = _.last(model.used_resources[prop]).percentage;
     return (
       <span>
-        {value}%
+        <ProgressBar value={value}
+          colorIndex={colorMapping[prop]} /> {value}%
       </span>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
@@ -102,7 +110,7 @@ var HostTable = React.createClass({
         prop: "hostname",
         render: this.renderHeadline,
         sortable: true,
-        title: "HOST NAME"
+        title: "HOSTNAME"
       },
       {
         className: getClassName,

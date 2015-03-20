@@ -41,14 +41,13 @@ var Bar = React.createClass({
     if (!props.transitionDelay && !props.transitionDuration) {
       return;
     }
+
     d3.select(this.getDOMNode()).interrupt()
       .transition()
         .delay(props.transitionDelay)
         .duration(props.transitionDuration)
         .ease("linear")
         .attr("transform", "translate(" + (props.posX - props.rectWidth) + ")");
-
-    return true;
   },
 
   render: function () {
