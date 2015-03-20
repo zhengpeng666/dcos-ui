@@ -56,7 +56,20 @@ var ServiceList = React.createClass({
     return services;
   },
 
-  render: function () {
+  getNoServicesMessage: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div className="text-align-center vertical-center">
+        <h2>No Services Running</h2>
+        <p>Use the DCOS command line tools to find and install services.</p>
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getList: function () {
     var listOrder = ["title", "health"];
 
     /* jshint trailing:false, quotmark:false, newcap:false */
@@ -64,6 +77,20 @@ var ServiceList = React.createClass({
     return (
       <List list={this.state.servicesHealth} order={listOrder} />
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getContent: function () {
+    if (this.state.servicesHealth.length === 0) {
+      return this.getNoServicesMessage();
+    } else {
+      return this.getList();
+    }
+  },
+
+  render: function () {
+    return this.getContent();
   }
 });
 

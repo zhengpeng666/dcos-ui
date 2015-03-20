@@ -12,6 +12,16 @@ var taskLabels = {
   "TASK_STAGING": "Tasks staging"
 };
 
+function getStateWithNoData () {
+  return {
+    dialChartData: [{colorIndex: 6, value: 1}],
+    infoData: [
+      {colorIndex: 0, name: "TASK_RUNNING", value: 0},
+      {colorIndex: 1, name: "TASK_STAGING", value: 0}
+    ]
+  };
+}
+
 var TasksChart = React.createClass({
 
   displayName: "TasksChart",
@@ -22,6 +32,10 @@ var TasksChart = React.createClass({
   },
 
   getTaskInfo: function (tasks) {
+    if (tasks.length === 0) {
+      tasks = getStateWithNoData().infoData;
+    }
+
     var numberOfTasks = tasks.length;
     var leftover = numberOfTasks % tasksPerRow;
 
@@ -78,6 +92,21 @@ var TasksChart = React.createClass({
     ).value();
   },
 
+  getDialChart: function (tasks) {
+    var total = this.getTotal(tasks);
+
+    if (tasks.length === 0) {
+      tasks = getStateWithNoData().dialChartData;
+    }
+
+    return (
+      <DialChart
+        data={tasks}
+        label={"Total Tasks"}
+        unit={total} />
+    );
+  },
+
   render: function() {
     var tasks = this.getTasks();
     /* jshint trailing:false, quotmark:false, newcap:false */
@@ -87,10 +116,7 @@ var TasksChart = React.createClass({
         <div className="row">
           <div className="column-small-offset-1 column-small-10">
             <Chart calcHeight={function (w) { return w; }}>
-              <DialChart
-                data={tasks}
-                label={"Total Tasks"}
-                unit={this.getTotal(tasks)} />
+              {this.getDialChart(tasks)}
             </Chart>
           </div>
         </div>
