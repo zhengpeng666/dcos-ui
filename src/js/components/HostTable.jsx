@@ -94,8 +94,7 @@ var HostTable = React.createClass({
     return (
       <span>
         <ProgressBar value={value}
-          colorIndex={colorMapping[prop]}
-          initialUpdateTimeout={200 /> {value}%
+          colorIndex={colorMapping[prop]} /> {value}%
       </span>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
