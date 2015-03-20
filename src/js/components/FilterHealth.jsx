@@ -6,24 +6,19 @@ var React = require("react/addons");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthTypes = require("../constants/HealthTypes");
 
-var buttonNameMap = {
-  all: "All",
-  healthy: HealthLabels.HEALTHY,
-  sick: HealthLabels.UNHEALTHY
-};
-
-var buttonHealthTypeMap = {
-  all: "",
-  healthy: HealthTypes.HEALTHY,
-  sick: HealthTypes.SICK
-};
+var buttonMap = _.pick(
+  HealthLabels,
+  "ALL",
+  "HEALTHY",
+  "UNHEALTHY"
+);
 
 var FilterHealth = React.createClass({
 
   displayName: "FilterHealth",
 
   propTypes: {
-    healthTypeLengths: React.PropTypes.object.isRequired,
+    healthHash: React.PropTypes.object.isRequired,
     healthFilter: React.PropTypes.oneOfType(
       [React.PropTypes.string, React.PropTypes.number]
     ),
@@ -32,36 +27,37 @@ var FilterHealth = React.createClass({
 
   getDefaultProps: function () {
     return {
-      healthFilter: ""
+      healthFilter: null
     };
   },
 
   getInitialState: function () {
     return {
-      filter: "all"
+      filter: null
     };
   },
 
-  handleChange: function (key) {
-    this.setState({filter: key});
-    this.props.onSubmit(buttonHealthTypeMap[key]);
+  handleChange: function (health) {
+    this.setState({filter: health});
+    this.props.onSubmit(health);
   },
 
   getFilterButtons: function () {
     var mode = this.state.filter;
     var props = this.props;
 
-    return _.map(buttonNameMap, function (value, key) {
+
+    return _.map(buttonMap, function (value, key) {
+      var health = HealthTypes[key];
       var classSet = React.addons.classSet({
         "button": true,
-        "active": mode === key
+        "active": mode === health
       });
 
       var dotClassSet = React.addons.classSet({
-        "dot": true,
-        "hidden": key === "all",
-        "danger": key === "sick",
-        "success": key === "healthy"
+        "dot": _.contains([HealthTypes.UNHEALTHY, HealthTypes.HEALTHY], health),
+        "danger": HealthTypes.UNHEALTHY === health,
+        "success": HealthTypes.HEALTHY === health
       });
 
       /* jshint trailing:false, quotmark:false, newcap:false */
@@ -70,10 +66,10 @@ var FilterHealth = React.createClass({
         <button
             key={key}
             className={classSet}
-            onClick={this.handleChange.bind(this, key)}>
+            onClick={this.handleChange.bind(this, health)}>
           <span className={dotClassSet}></span>
           <span className="label">{value}</span>
-          <span className="badge">{props.healthTypeLengths[key]}</span>
+          <span className="badge">{props.healthHash[key]}</span>
         </button>
       );
       /* jshint trailing:true, quotmark:true, newcap:true */

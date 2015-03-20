@@ -4,7 +4,6 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
-var HealthTypes = require("../constants/HealthTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarToggle = require("./SidebarToggle");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
@@ -16,24 +15,18 @@ function getMesosServices(filterOptions) {
   var frameworks = MesosStateStore.getFrameworks(filterOptions);
   return {
     frameworks: frameworks,
+    healthHash: MesosStateStore.getFrameworksHealthHash(),
     refreshRate: MesosStateStore.getRefreshRate(),
     totalFrameworks: MesosStateStore.getLatest().frameworks.length,
     totalFrameworksResources:
       MesosStateStore.getTotalFrameworksResources(frameworks),
-    totalResources: MesosStateStore.getTotalResources(),
-    healthTypeLengths: {
-      all: MesosStateStore.getLatest().frameworks.length,
-      healthy:
-        MesosStateStore.getFrameworksHealthTypeLength(HealthTypes.HEALTHY),
-      sick:
-        MesosStateStore.getFrameworksHealthTypeLength(HealthTypes.SICK)
-    }
+    totalResources: MesosStateStore.getTotalResources()
   };
 }
 
 var _filterOptions = {
   searchString: "",
-  healthFilter: ""
+  healthFilter: null
 };
 
 var ServicesPage = React.createClass({
@@ -81,15 +74,10 @@ var ServicesPage = React.createClass({
   },
 
   onChangeHealthFilter: function (healthFilter) {
-    var state;
-    if (healthFilter != null) {
-      var filterOptions = this.extendFilterOptions({
-        healthFilter: healthFilter
-      });
-      state = _.extend(getMesosServices(filterOptions), filterOptions);
-    } else {
-      state = getMesosServices(this.extendFilterOptions());
-    }
+    var filterOptions = this.extendFilterOptions({
+      healthFilter: healthFilter
+    });
+    var state = _.extend(getMesosServices(filterOptions), filterOptions);
     this.setState(state);
   },
 
@@ -151,7 +139,7 @@ var ServicesPage = React.createClass({
             <ul className="list list-unstyled list-inline flush-bottom">
               <li>
                 <FilterHealth
-                  healthTypeLengths={state.healthTypeLengths}
+                  healthHash={state.healthHash}
                   healthFilter={state.healthFilter}
                   onSubmit={this.onChangeHealthFilter} />
               </li>

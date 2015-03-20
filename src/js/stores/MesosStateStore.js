@@ -348,13 +348,12 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _.last(_mesosStates);
   },
 
-  getFrameworksHealthTypeLength: function (healthType) {
-    return _.reduce(this.getLatest().frameworks, function (length, framework) {
-      if (framework.health.value === healthType) {
-        length++;
-      }
-      return length;
-    }, 0);
+  getFrameworksHealthHash: function () {
+    var frameworks = this.getLatest().frameworks;
+    return _.reduce(frameworks, function (acc, framework) {
+      acc[framework.health.value]++;
+      return acc;
+    }, {});
   },
 
   getFrameworks: function (filterOptions) {
@@ -362,7 +361,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     var frameworks = getStatesByFramework();
 
     if (filterOptions) {
-      if (filterOptions.healthFilter !== "") {
+      if (filterOptions.healthFilter != null) {
         frameworks = filterByHealth(frameworks, filterOptions.healthFilter);
       }
 

@@ -1,4 +1,5 @@
 var HEALTH_LABELS = {
+  ALL: "All",
   HEALTHY: "Healthy",
   UNHEALTHY: "Unhealthy",
   IDLE: "Idle",

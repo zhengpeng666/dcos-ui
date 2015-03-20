@@ -7,7 +7,7 @@ var HealthLabels = require("../constants/HealthLabels");
 var List = require("./List");
 
 var STATES = {
-  SICK: {key: "SICK", classes: {"text-danger": true}},
+  UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
   HEALTHY: {key: "HEALTHY", classes: {"text-success": true}},
   IDLE: {key: "IDLE", classes: {"text-warning": true}},
   NA: {key: "NA/A", classes: {"text-mute": true}}
