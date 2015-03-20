@@ -94,19 +94,19 @@ var DatacenterPage = React.createClass({
     var state = this.state;
 
     return (
-      <div>
-        <div id="page-header">
+      <div className="flex-container-col flex-item">
+        <div className="page-header">
           <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
-            <div id="page-header-context">
+            <div className="page-header-context">
               <SidebarToggle />
               <h1 className="page-header-title flush-top flush-bottom">
                 Datacenter
               </h1>
             </div>
-            <div id="page-header-navigation" />
+            <div className="page-header-navigation" />
           </div>
         </div>
-        <div id="page-content" className="container-scrollable">
+        <div className="page-content container-scrollable">
           <div className="container container-fluid container-pod">
             <ResourceBarChart
               data={state.hosts}

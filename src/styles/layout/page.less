@@ -1,5 +1,5 @@
 /* Page */
-#page {
+.page {
   position: relative;
   top: 0px;
   left: 0px;
@@ -9,11 +9,11 @@
   .transition(e('left 0.3s ease, margin-left 0.3s ease'));
 
   /* Page Header */
-  #page-header {
+  .page-header {
     .clearfix();
 
     /* Page Header Context */
-    #page-header-context {
+    .page-header-context {
       width: 100%;
 
       .page-header-title {
@@ -49,12 +49,12 @@
     }
 
     /* Page Header Actions */
-    #page-header-actions {
+    .page-header-actions {
       float: right;
     }
 
     /* Page Header Navigation */
-    #page-header-navigation {
+    .page-header-navigation {
       clear: both;
       padding-top: @container-pod-short-padding-vertical;
       margin-bottom: -@container-pod-short-padding-vertical;
@@ -126,7 +126,7 @@
   @media (min-width: @screen-small) {
 
     /* Page */
-    #page {
+    .page {
       margin-left: (2 * (@base-spacing-unit-screen-small * 0.5)) + @icon-medium-width;;
       .transition(none);
       position: relative;
@@ -134,15 +134,15 @@
       width: auto;
 
       /* Page Header */
-      #page-header {
-        #page-header-context {
+      .page-header {
+        .page-header-context {
           .page-header-sidebar-toggle {
             display: none;
           }
         }
 
         /* Page Header Navigation */
-        #page-header-navigation {
+        .page-header-navigation {
           padding-top: @container-pod-short-padding-vertical-screen-small;
           margin-bottom: -@container-pod-short-padding-vertical-screen-small;
 
@@ -163,14 +163,14 @@
   @media (min-width: @screen-medium) {
 
     /* Page */
-    #page {
+    .page {
       margin-left: 250px;
 
       /* Page Header */
-      #page-header {
+      .page-header {
 
         /* Page Header Navigation */
-        #page-header-navigation {
+        .page-header-navigation {
           padding-top: @container-pod-short-padding-vertical-screen-medium;
           margin-bottom: -@container-pod-short-padding-vertical-screen-medium;
 
@@ -191,14 +191,14 @@
   @media (min-width: @screen-large) {
 
     /* Page */
-    #page {
+    .page {
       margin-left: 300px;
 
       /* Page Header */
-      #page-header {
+      .page-header {
 
         /* Page Header Navigation */
-        #page-header-navigation {
+        .page-header-navigation {
           padding-top: @container-pod-short-padding-vertical-screen-large;
           margin-bottom: -@container-pod-short-padding-vertical-screen-large;
 

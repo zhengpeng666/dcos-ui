@@ -75,7 +75,7 @@ var Sidebar = React.createClass({
   render: function () {
 
     return (
-      <div className="sidebar">
+      <div className="sidebar flex-container-col flex-item">
         <div className="sidebar-header">
           <div className="container container-fluid container-fluid-narrow container-pod">
             <div className="sidebar-header-image">
