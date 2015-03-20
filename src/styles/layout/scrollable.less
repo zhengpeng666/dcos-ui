@@ -1,0 +1,43 @@
+/*General layout styling*/
+html, body {
+  height: 100%;
+}
+
+#canvas {
+  min-height: 100%;
+  height: auto;
+  height: 100%;
+}
+
+#canvas,
+.flex-container-col,
+.sidebar,
+.page {
+  display: flex;
+}
+
+#canvas,
+.flex-container-col,
+.sidebar {
+  flex-direction: column;
+}
+
+.flex-item,
+.page,
+.sidebar-content,
+.page-content {
+  flex: 1;
+}
+
+.flexbox {
+  .container-scrollable.flex-item,
+  .sidebar-content,
+  .page-content {
+    flex: 1 1 auto;
+    height: 0;
+  }
+}
+
+.container-scrollable {
+  overflow-y: scroll;
+}
