@@ -3,6 +3,9 @@
   box-lines: multiple;
   flex-flow: row wrap;
 
+  // this is useful when we want a grid to also behave as a .row
+  // this removes the clearfix that gets created from adding .row
+  // removing the clearfix allows flexbox to work the way it should
   &::before, &::after {
     display: none;
   }

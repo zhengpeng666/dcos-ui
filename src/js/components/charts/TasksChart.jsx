@@ -12,6 +12,16 @@ var taskLabels = {
   "TASK_STAGING": "Tasks staging"
 };
 
+function getStateWithNoData () {
+  return {
+    dialChartData: [{colorIndex: 6, value: 1}],
+    infoData: [
+      {colorIndex: 0, name: "TASK_RUNNING", value: 0},
+      {colorIndex: 1, name: "TASK_STAGING", value: 0}
+    ]
+  };
+}
+
 var TasksChart = React.createClass({
 
   displayName: "TasksChart",
@@ -21,19 +31,9 @@ var TasksChart = React.createClass({
     tasks: React.PropTypes.array.isRequired
   },
 
-  getStateWithNoData: function () {
-    return {
-      dialChartData: [{colorIndex: 6, value: 1}],
-      infoData: [
-        {colorIndex: 0, name: "TASK_RUNNING", value: 0},
-        {colorIndex: 1, name: "TASK_STAGING", value: 0}
-      ]
-    };
-  },
-
   getTaskInfo: function (tasks) {
     if (tasks.length === 0) {
-      tasks = this.getStateWithNoData().infoData;
+      tasks = getStateWithNoData().infoData;
     }
 
     var numberOfTasks = tasks.length;
@@ -96,7 +96,7 @@ var TasksChart = React.createClass({
     var total = this.getTotal(tasks);
 
     if (tasks.length === 0) {
-      tasks = this.getStateWithNoData().dialChartData;
+      tasks = getStateWithNoData().dialChartData;
     }
 
     return (
