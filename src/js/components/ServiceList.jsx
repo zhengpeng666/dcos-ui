@@ -17,6 +17,10 @@ var ServiceList = React.createClass({
 
   displayName: "ServiceList",
 
+  propTypes: {
+    servies: React.PropTypes.array.isRequired
+  },
+
   getDefaultProps: function () {
     return {
       services: []
@@ -67,7 +71,7 @@ var ServiceList = React.createClass({
   },
 
   getContent: function () {
-    if (this.state.servicesHealth.length === 0) {
+    if (this.props.services.length === 0) {
       return this.getNoServicesMessage();
     } else {
       return this.getList();
