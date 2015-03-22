@@ -141,14 +141,14 @@ function getTasksByStatus(frameworks, taskTypes) {
   frameworks.forEach(function (framework) {
     // Loop through the requested taskTypes
     taskTypes.forEach(function (taskType) {
-      if (framework[taskType] === void 0) {
+      if (framework[taskType] === undefined) {
         return;
       }
 
       // Loop through tasks in for the task type
       framework[taskType].forEach(function (task) {
         var state = task.state;
-        if (types[state] === void 0) {
+        if (types[state] === undefined) {
           types[state] = {
             state: state,
             tasks: []
