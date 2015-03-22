@@ -164,8 +164,7 @@ function getTasksByStatus(frameworks, taskTypes) {
 }
 
 function getAllFailureRates (list, taskTypes) {
-  var failures = [];
-  _.each(list, function (state) {
+  return  _.map(list, function (state) {
     var statuses = getTasksByStatus(state.frameworks, taskTypes);
     var data = {
       date: state.date,
@@ -180,21 +179,17 @@ function getAllFailureRates (list, taskTypes) {
     var successful = (data.states.TASK_STAGING || 0) +
       (data.states.TASK_STARTING || 0) +
       (data.states.TASK_RUNNING || 0) +
-      (data.states.TASK_FINISHED || 0)
-      ;
+      (data.states.TASK_FINISHED || 0);
     var failed = (data.states.TASK_FAILED || 0) +
       (data.states.TASK_KILLED || 0) +
       (data.states.TASK_LOST || 0) +
-      (data.states.TASK_ERROR || 0)
-      ;
+      (data.states.TASK_ERROR || 0);
 
-    failures.push({
+    return {
       date: data.date,
-      rate: (failed / (successful + failed) * 100)|0
-    });
+      rate: failed / (successful + failed) * 100 | 0
+    };
   });
-
-  return failures;
 }
 
 // [{
