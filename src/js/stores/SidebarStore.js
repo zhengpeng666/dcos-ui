@@ -26,6 +26,11 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
+    var source = payload.source;
+    if (source !== ActionTypes.SIDEBAR_ACTION) {
+      return;
+    }
+
     var action = payload.action;
     var oldIsOpen = _isOpen;
 
