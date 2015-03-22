@@ -10,7 +10,7 @@ var STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
   HEALTHY: {key: "HEALTHY", classes: {"text-success": true}},
   IDLE: {key: "IDLE", classes: {"text-warning": true}},
-  NA: {key: "NA/A", classes: {"text-mute": true}}
+  NA: {key: "NA", classes: {"text-mute": true}}
 };
 
 var ServiceList = React.createClass({

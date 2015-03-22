@@ -22,7 +22,7 @@ function getMesosState() {
 }
 
 var SORT_ORDER = {
-  SICK: 0,
+  UNHEALTHY: 0,
   HEALTHY: 1,
   IDLE: 2,
   NA: 3
