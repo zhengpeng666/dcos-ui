@@ -3,14 +3,44 @@
 var React = require("react");
 
 var SidebarActions = require("../events/SidebarActions");
+var SidebarStore = require("../stores/SidebarStore");
+var EventTypes = require("../constants/EventTypes");
+
+function getSidebarState() {
+  return {
+    isOpen: SidebarStore.isOpen()
+  };
+}
 
 var SidebarToggle = React.createClass({
 
   displayName: "SidebarToggle",
 
+  getInitialState: function () {
+    return getSidebarState();
+  },
+
+  componentDidMount: function () {
+    SidebarStore.addChangeListener(
+      EventTypes.SIDEBAR_CHANGE,
+      this.onChange
+    );
+  },
+
+  componentWillUnmount: function () {
+    SidebarStore.removeChangeListener(
+      EventTypes.SIDEBAR_CHANGE,
+      this.onChange
+    );
+  },
+
+  onChange: function () {
+    this.setState(getSidebarState());
+  },
+
   onClick: function (e) {
     e.preventDefault();
-    var isOpen = this.props.isOpen;
+    var isOpen = this.state.isOpen;
     if (isOpen) {
       SidebarActions.close();
     } else {

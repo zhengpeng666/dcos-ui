@@ -58,7 +58,7 @@ var Index = React.createClass({
   render: function () {
     return (
       <div id="canvas" className={this.getClassSet(this.state.isOpen)}>
-        <Sidebar isOpen={this.state.isOpen} />
+        <Sidebar />
         <div className="page">
           <RouteHandler />
         </div>
