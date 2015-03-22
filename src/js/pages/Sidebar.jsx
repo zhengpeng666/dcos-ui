@@ -82,10 +82,10 @@ var Sidebar = React.createClass({
               <img className="sidebar-header-image-inner" src="http://placehold.it/64x64" />
             </div>
             <h2 className="sidebar-header-label flush-top text-align-center short-bottom">
-              {this.state.cluster}
+              {this.state.mesosInfo.cluster}
             </h2>
             <p className="sidebar-header-sublabel text-align-center flush-bottom">
-              {this.state.hostname}
+              {this.state.mesosInfo.hostname}
             </p>
           </div>
         </div>
