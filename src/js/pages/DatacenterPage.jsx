@@ -70,10 +70,10 @@ var DatacenterPage = React.createClass({
     return (
       <div>
         <h4 className={filteredClassSet}>
-          Showing {filteredLength} of {totalLength} Total Hosts
+          Showing {filteredLength} of {totalLength} Hosts
         </h4>
         <h4 className={unfilteredClassSet}>
-          {totalLength} Total Hosts
+          {totalLength} Hosts
         </h4>
       </div>
     );

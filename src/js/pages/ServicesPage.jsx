@@ -99,10 +99,10 @@ var ServicesPage = React.createClass({
     return (
       <div>
         <h4 className={filteredClassSet}>
-          Showing {filteredLength} of {totalLength} Total Services
+          Showing {filteredLength} of {totalLength} Services
         </h4>
         <h4 className={unfilteredClassSet}>
-          {totalLength} Total Services
+          {totalLength} Services
         </h4>
       </div>
     );
