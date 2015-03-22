@@ -18,7 +18,7 @@ var ServiceList = React.createClass({
   displayName: "ServiceList",
 
   propTypes: {
-    servies: React.PropTypes.array.isRequired
+    services: React.PropTypes.array.isRequired
   },
 
   getDefaultProps: function () {
