@@ -7,6 +7,7 @@ var React = require("react/addons");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthLabels = require("../constants/HealthLabels");
 var Maths = require("../utils/Maths");
+var Strings = require("../utils/Strings");
 var Table = require("./Table");
 
 function isStat(prop) {
@@ -60,7 +61,7 @@ var ServicesTable = React.createClass({
 
     return (
       <span className="h5 flush-top flush-bottom">
-        <a href={model.webui_url} target="_blank" className="headline">
+        <a href={Strings.ipToHostName(model.webui_url)} target="_blank" className="headline">
           <i className="icon icon-small icon-small-white border-radius"></i>
           {model[prop]}
         </a>

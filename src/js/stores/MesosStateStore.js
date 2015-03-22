@@ -8,6 +8,7 @@ var EventTypes = require("../constants/EventTypes");
 var HealthTypes = require("../constants/HealthTypes");
 var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
+var Strings = require("../utils/Strings");
 
 var _interval;
 var _initCalled = false;
@@ -19,7 +20,7 @@ var _marathonUrl;
 var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
 
 function sumResources(resourceList) {
-  return _.reduce(resourceList, function (sumMap, resource) {
+  return _.foldl(resourceList, function (sumMap, resource) {
     _.each(sumMap, function (value, key) {
       sumMap[key] = value + resource[key];
     });
@@ -34,7 +35,7 @@ function sumResources(resourceList) {
 //   mem: [{date: request time, value: value, percentage: value}]
 // }]
 function sumFrameworkResources(frameworks) {
-  return _.reduce(frameworks, function (sumMap, framework) {
+  return _.foldl(frameworks, function (sumMap, framework) {
     _.each(sumMap, function (value, key) {
       var values = framework.used_resources[key];
       _.each(values, function (val, i) {
@@ -58,7 +59,7 @@ function sumFrameworkResources(frameworks) {
 //   mem: [{date: request time, value: value, percentage: value}]
 // }]
 function sumHostResources(hosts) {
-  return _.reduce(hosts, function (sumMap, host) {
+  return _.foldl(hosts, function (sumMap, host) {
     _.each(sumMap, function (value, key) {
       var values = host.used_resources[key];
       _.each(values, function (val, i) {
@@ -153,7 +154,7 @@ function getTasksByStatus(frameworks) {
 //   mem: [{date: request time, value: absolute, percentage: value}]
 // }]
 function getHostResourcesBySlave (slave) {
-  return _.reduce(_mesosStates, function (usedResources, state) {
+  return _.foldl(_mesosStates, function (usedResources, state) {
     var tasks = _.chain(state.frameworks)
       .pluck("tasks")
       .flatten()
@@ -189,7 +190,7 @@ function getHostResourcesBySlave (slave) {
 function getStateByHosts () {
   var data = _.last(_mesosStates);
 
-  var hosts = _.reduce(data.slaves, function (acc, v) {
+  var hosts = _.foldl(data.slaves, function (acc, v) {
     acc[v.id] = v;
     acc[v.id].tasks = {};
     acc[v.id].frameworks = {};
@@ -202,7 +203,7 @@ function getStateByHosts () {
       return fw.tasks;
     })
     .flatten()
-    .reduce(function (acc, v) {
+    .foldl(function (acc, v) {
       acc[v.slave_id].tasks[v.id] = v;
       acc[v.slave_id].frameworks[v.framework_id] = _.find(data.frameworks,
           function (framework) {
@@ -248,12 +249,7 @@ function normalizeFrameworks(frameworks, date) {
     var index = _.indexOf(_frameworkIndexes, framework.name);
     if (framework.name.toLowerCase().indexOf("marathon") > -1 &&
         framework.webui_url != null) {
-      _marathonUrl = framework.webui_url;
-
-      // only turn into ip address "ip-" is present
-      if (_marathonUrl.indexOf("ip-") > -1) {
-        _marathonUrl = _marathonUrl.replace("ip-", "").replace(/-/g, ".");
-      }
+      _marathonUrl = Strings.ipToHostName(framework.webui_url);
     }
     // this is a new framework, fill in 0s for all the previous datapoints
     if (index === -1) {
@@ -350,7 +346,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   getFrameworksHealthHash: function () {
     var frameworks = this.getLatest().frameworks;
-    return _.reduce(frameworks, function (acc, framework) {
+    return _.foldl(frameworks, function (acc, framework) {
       acc[framework.health.value]++;
       return acc;
     }, {});
@@ -457,7 +453,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
       var health = {key: "IDLE", value: HealthTypes.IDLE};
       if (app.tasksUnhealthy > 0) {
-        health = {key: "SICK", value: HealthTypes.SICK};
+        health = {key: "UNHEALTHY", value: HealthTypes.UNHEALTHY};
       }
       if (app.tasksHealthy > 0) {
         health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
