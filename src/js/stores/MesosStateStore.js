@@ -136,19 +136,19 @@ function getTasksByStatus(frameworks, taskTypes) {
     return [];
   }
 
-  var types = {};
   // Loop through all frameworks
-  frameworks.forEach(function (framework) {
+  var data = _.foldl(frameworks, function (types, framework) {
     // Loop through the requested taskTypes
     taskTypes.forEach(function (taskType) {
-      if (framework[taskType] === undefined) {
-        return;
+      if (framework[taskType] == null ||
+        framework[taskType].length === 0) {
+        return types;
       }
 
       // Loop through tasks in for the task type
       framework[taskType].forEach(function (task) {
         var state = task.state;
-        if (types[state] === undefined) {
+        if (types[state] == null) {
           types[state] = {
             state: state,
             tasks: []
@@ -158,9 +158,11 @@ function getTasksByStatus(frameworks, taskTypes) {
         types[state].tasks.push(task);
       });
     });
-  });
 
-  return _.values(types);
+    return types;
+  }, {});
+
+  return _.values(data);
 }
 
 function getAllFailureRates (list, taskTypes) {
