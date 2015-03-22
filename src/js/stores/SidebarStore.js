@@ -27,16 +27,20 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
     var action = payload.action;
+    var oldIsOpen = _isOpen;
 
     switch (action.type) {
       case ActionTypes.REQUEST_SIDEBAR_OPEN:
         _isOpen = action.data;
-        SidebarStore.emitChange(EventTypes.SIDEBAR_CHANGE);
         break;
       case ActionTypes.REQUEST_SIDEBAR_CLOSE:
         _isOpen = action.data;
-        SidebarStore.emitChange(EventTypes.SIDEBAR_CHANGE);
         break;
+    }
+
+    // only emitting on change
+    if (oldIsOpen !== _isOpen) {
+      SidebarStore.emitChange(EventTypes.SIDEBAR_CHANGE);
     }
 
     return true;
