@@ -1,6 +1,8 @@
 /* Page */
 .page {
   position: relative;
+  display: flex;
+  flex: 1;
   top: 0px;
   left: 0px;
   height: 100%;
@@ -111,6 +113,11 @@
         }
       }
     }
+  }
+
+  .page-content {
+    flex: 1 1 auto;
+    height: 0;
   }
 }
 

@@ -123,7 +123,7 @@ var ServicesPage = React.createClass({
     var state = this.state;
 
     return (
-      <div className="flex-container-col flex-item">
+      <div className="flex-container-col">
         <div className="page-header">
           <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
             <div className="page-header-context">

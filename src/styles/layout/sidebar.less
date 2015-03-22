@@ -1,6 +1,8 @@
 /* Sidebar */
 .sidebar {
   position: fixed;
+  display: flex;
+  flex-direction: column;
   top: 0px;
   left: -100%;
   width: 100%;
@@ -52,7 +54,9 @@
   }
 
   /* Sidebar Navigation */
-  .sidebar-navigation {
+  .sidebar-content {
+    flex: 1 1 auto;
+    height: 0;
     .sidebar-menu {
       padding: 0px;
       margin: 0px -(@grid-gutter-width * 0.5);

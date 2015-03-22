@@ -1,4 +1,7 @@
 /* Canvas */
+html, body {
+  height: 100%;
+}
 
 ::selection {
   background: ~`color_lightness("@{mesosphere-fuchsia}", 0)`;
@@ -15,11 +18,29 @@
   display: none;
 }
 
+// scrollable areas
+.flex-container-col {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.container-scrollable {
+  flex: 1 1 auto;
+  height: 0;
+  overflow-y: scroll;
+}
+
 #canvas {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   top: 0px;
   left: 0px;
   width: 100%;
+  min-height: 100%;
+  height: auto;
+  height: 100%;
   overflow: hidden;
   .transition(e('left 0.3s ease, margin-left 0.3s ease'));
 }

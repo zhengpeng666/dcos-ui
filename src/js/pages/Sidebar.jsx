@@ -75,7 +75,7 @@ var Sidebar = React.createClass({
   render: function () {
 
     return (
-      <div className="sidebar flex-container-col flex-item">
+      <div className="sidebar flex-container-col">
         <div className="sidebar-header">
           <div className="container container-fluid container-fluid-narrow container-pod">
             <div className="sidebar-header-image">
@@ -90,7 +90,7 @@ var Sidebar = React.createClass({
           </div>
         </div>
         <div className="sidebar-content container-scrollable">
-          <nav className="sidebar-navigation">
+          <nav>
             <div className="container container-fluid container-fluid-narrow">
               <ul className="sidebar-menu list-unstyled">
                 <li className={this.getItemClassSet("activity")}>
