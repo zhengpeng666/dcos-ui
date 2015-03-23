@@ -22,18 +22,22 @@ var FilterHealth = React.createClass({
     healthFilter: React.PropTypes.oneOfType(
       [React.PropTypes.string, React.PropTypes.number]
     ),
-    onSubmit: React.PropTypes.func
+    onSubmit: React.PropTypes.func,
+    totalFrameworksLength: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
     return {
-      healthFilter: null
+      healthHash: {},
+      healthFilter: null,
+      onSubmit: _.noop,
+      totalFrameworksLength: 0
     };
   },
 
   getInitialState: function () {
     return {
-      filter: null
+      filter: undefined
     };
   },
 
@@ -42,10 +46,16 @@ var FilterHealth = React.createClass({
     this.props.onSubmit(health);
   },
 
+  getHealthTypeLength: function (key) {
+    var props = this.props;
+    if (key === "ALL") {
+      return props.totalFrameworksLength;
+    }
+    return props.healthHash[HealthTypes[key]];
+  },
+
   getFilterButtons: function () {
     var mode = this.state.filter;
-    var props = this.props;
-
 
     return _.map(buttonMap, function (value, key) {
       var health = HealthTypes[key];
@@ -69,7 +79,7 @@ var FilterHealth = React.createClass({
             onClick={this.handleChange.bind(this, health)}>
           <span className={dotClassSet}></span>
           <span className="label">{value}</span>
-          <span className="badge">{props.healthHash[key]}</span>
+          <span className="badge">{this.getHealthTypeLength(key)}</span>
         </button>
       );
       /* jshint trailing:true, quotmark:true, newcap:true */

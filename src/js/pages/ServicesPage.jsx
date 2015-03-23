@@ -148,7 +148,8 @@ var ServicesPage = React.createClass({
                 <FilterHealth
                   healthHash={state.healthHash}
                   healthFilter={state.healthFilter}
-                  onSubmit={this.onChangeHealthFilter} />
+                  onSubmit={this.onChangeHealthFilter}
+                  totalFrameworksLength={state.totalFrameworks} />
               </li>
               <li>
                 <FilterInputText
