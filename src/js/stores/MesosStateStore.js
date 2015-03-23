@@ -132,20 +132,67 @@ function getStatesByFramework() {
 //     state: "TASK_RUNNING"
 //   }, ...]
 // }]
-function getTasksByStatus(frameworks) {
-  return _.chain(frameworks)
-    .pluck("tasks")
-    .flatten()
-    .groupBy(function (task) {
-      return task.state;
-    })
-    .map(function (tasks, value) {
-      return {
-        state: value,
-        tasks: tasks
-      };
-    })
-    .value();
+function getTasksByStatus(frameworks, taskTypes) {
+  if (!taskTypes || frameworks.length === 0) {
+    return [];
+  }
+
+  // Loop through all frameworks
+  var data = _.foldl(frameworks, function (types, framework) {
+    // Loop through the requested taskTypes
+    taskTypes.forEach(function (taskType) {
+      if (framework[taskType] == null ||
+        framework[taskType].length === 0) {
+        return types;
+      }
+
+      // Loop through tasks in for the task type
+      framework[taskType].forEach(function (task) {
+        var state = task.state;
+        if (types[state] == null) {
+          types[state] = {
+            state: state,
+            tasks: []
+          };
+        }
+
+        types[state].tasks.push(task);
+      });
+    });
+
+    return types;
+  }, {});
+
+  return _.values(data);
+}
+
+function getAllFailureRates (list, taskTypes) {
+  return  _.map(list, function (state) {
+    var statuses = getTasksByStatus(state.frameworks, taskTypes);
+    var data = {
+      date: state.date,
+      states: {}
+    };
+
+    statuses.forEach(function (status) {
+      data.states[status.state] = status.tasks.length;
+    });
+
+    // refs: https://github.com/apache/mesos/blob/master/include/mesos/mesos.proto
+    var successful = (data.states.TASK_STAGING || 0) +
+      (data.states.TASK_STARTING || 0) +
+      (data.states.TASK_RUNNING || 0) +
+      (data.states.TASK_FINISHED || 0);
+    var failed = (data.states.TASK_FAILED || 0) +
+      (data.states.TASK_KILLED || 0) +
+      (data.states.TASK_LOST || 0) +
+      (data.states.TASK_ERROR || 0);
+
+    return {
+      date: data.date,
+      rate: failed / (successful + failed) * 100 | 0
+    };
+  });
 }
 
 // [{
@@ -391,7 +438,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getTasks: function () {
-    return getTasksByStatus(this.getLatest().frameworks);
+    return getTasksByStatus(this.getLatest().frameworks, ["tasks"]);
+  },
+
+  getTaskFailureRate: function () {
+    return getAllFailureRates(_mesosStates, ["tasks", "completed_tasks"]);
   },
 
   getTotalResources: function () {

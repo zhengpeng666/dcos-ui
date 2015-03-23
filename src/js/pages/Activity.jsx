@@ -9,6 +9,8 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var Panel = require("../components/Panel");
 var ResourceTimeSeriesChart =
   require("../components/charts/ResourceTimeSeriesChart");
+var TaskFailureTimeSeriesChart =
+  require("../components/charts/TaskFailureTimeSeriesChart");
 var ServiceList = require("../components/ServiceList");
 var TasksChart = require("../components/charts/TasksChart");
 
@@ -17,7 +19,8 @@ function getMesosState() {
     allocResources: MesosStateStore.getAllocResources(),
     services: MesosStateStore.getLatest().frameworks,
     tasks: MesosStateStore.getTasks(),
-    totalResources: MesosStateStore.getTotalResources()
+    totalResources: MesosStateStore.getTotalResources(),
+    failureRate: MesosStateStore.getTaskFailureRate()
   };
 }
 
@@ -119,6 +122,12 @@ var Activity = React.createClass({
               allocResources={state.allocResources}
               totalResources={state.totalResources}
               mode="mem" />
+          </Panel>
+        </div>
+        <div className="grid-item column-small-6 column-large-4">
+          <Panel title="Task Failure Rate">
+            <TaskFailureTimeSeriesChart
+              data={state.failureRate} />
           </Panel>
         </div>
         <div className="grid-item column-small-6 column-large-4">
