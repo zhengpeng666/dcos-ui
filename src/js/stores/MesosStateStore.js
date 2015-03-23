@@ -167,7 +167,7 @@ function getTasksByStatus(frameworks, taskTypes) {
 }
 
 function getAllFailureRates (list, taskTypes) {
-  return  _.map(list, function (state) {
+  return _.map(list, function (state) {
     var statuses = getTasksByStatus(state.frameworks, taskTypes);
     var data = {
       date: state.date,
