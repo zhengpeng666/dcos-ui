@@ -3,24 +3,7 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
-function getComputedWidth(obj) {
-  var compstyle;
-  if (typeof window.getComputedStyle === "undefined") {
-    compstyle = obj.currentStyle;
-  } else {
-    compstyle = window.getComputedStyle(obj);
-  }
-  return _.foldl(
-    ["paddingLeft", "paddingRight", "borderLeftWidth", "borderRightWidth"],
-    function (acc, key) {
-      var val = parseInt(compstyle[key], 10);
-    if (_.isNaN(val)) {
-      return acc;
-    } else {
-      return acc - val;
-    }
-  }, obj.offsetWidth);
-}
+var DOMUtils = require("../../utils/DOMUtils");
 
 var Chart = React.createClass({
 
@@ -49,7 +32,7 @@ var Chart = React.createClass({
 
   updateWidth: function () {
     this.setState({
-      width: getComputedWidth(this.getDOMNode())
+      width: DOMUtils.getComputedWidth(this.getDOMNode())
     });
   },
 
