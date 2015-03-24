@@ -123,9 +123,10 @@ var TimeSeriesChart = React.createClass({
       max: firstDataSet.values.length - 1
     });
 
-    var xPosition = mouse.x - value.toString().length * 7;
+    var characterWidth = 7;
+    var xPosition = mouse.x - value.toString().length * characterWidth;
     if (value <= 1) {
-      xPosition -= 7;
+      xPosition -= characterWidth;
     }
     d3.select(this.refs.xAxisCurrent.getDOMNode())
       .transition()
@@ -138,7 +139,6 @@ var TimeSeriesChart = React.createClass({
     var el = this.getDOMNode();
     var props = this.props;
     var margin = props.margin;
-    var mouse = {};
     var elPosition = el.getBoundingClientRect();
     var containerPositions = {
       top: elPosition.top + margin.top,
@@ -146,8 +146,10 @@ var TimeSeriesChart = React.createClass({
       bottom: elPosition.top + props.height - margin.bottom,
       left: elPosition.left + margin.left
     };
-    mouse.x = e.clientX || e.pageX;
-    mouse.y = e.clientY || e.pageY;
+    var mouse = {
+      x: e.clientX || e.pageX,
+      y: e.clientY || e.pageY
+    };
 
     if (mouse.x < containerPositions.left ||
       mouse.y < containerPositions.top ||
