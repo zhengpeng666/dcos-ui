@@ -4,16 +4,24 @@
   }
 
   .axis path,
-  .grid .tick,
+  .grid-graph .tick,
   .axis line {
     fill: none;
-    stroke: @body-text-inverse-color;
+    stroke: fade(@white, 6%);
     stroke-width: 1px;
     shape-rendering: crispEdges;
   }
 
   .axis text {
     fill: @body-text-inverse-color;
+  }
+
+  .axis text.current-value {
+    fill: @white;
+  }
+
+  .axis text.current-value.shadow {
+    text-shadow: 0px 0px 10px @panel-background-color;
   }
 
   .area path {
@@ -96,7 +104,7 @@
       }
     }
 
-    .grid {
+    .grid-graph {
       &.y {
         .tick:first-child line {
           stroke-dasharray: 0,0;
