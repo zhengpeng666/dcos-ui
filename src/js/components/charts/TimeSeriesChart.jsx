@@ -275,7 +275,7 @@ var TimeSeriesChart = React.createClass({
     // look at the difference between the last and the third last point
     // to calculate transition time
     var l = data.length - 1;
-    return (data[l].date - data[l - 2].date) / 2;
+    return (data[l].date - data[l - 1].date) / 1;
   },
 
   getPosition: function (data) {
