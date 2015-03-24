@@ -1,12 +1,12 @@
 .caret {
+  border-top: @caret-width-base dashed;
+  border-left: @caret-width-base solid transparent;
+  border-right: @caret-width-base solid transparent;
   display: inline-block;
-  width: 0;
   height: 0;
   margin-left: @base-spacing-unit * 0.25;
   vertical-align: middle;
-  border-top: @caret-width-base dashed;
-  border-right: @caret-width-base solid transparent;
-  border-left: @caret-width-base solid transparent;
+  width: 0;
 
   &.dropup {
     border-top: 0;
