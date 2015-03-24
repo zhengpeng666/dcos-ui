@@ -359,7 +359,7 @@ var TimeSeriesChart = React.createClass({
 
   render: function () {
     var props = this.props;
-    var h = props.height - props.margin.bottom  - props.margin.top;
+    var height = props.height - props.margin.bottom  - props.margin.top;
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
@@ -376,7 +376,7 @@ var TimeSeriesChart = React.createClass({
         <g className="x axis">
           <text className="current-value" ref="xAxisCurrent"
             y={props.margin.bottom}
-            transform={"translate(" + props.margin.left + "," + h + ")"}>
+            transform={"translate(" + props.margin.left + "," + height + ")"}>
             </text>
         </g>
         <line ref="xMousePosition"
