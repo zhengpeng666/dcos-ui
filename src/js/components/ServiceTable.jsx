@@ -18,7 +18,7 @@ function getClassName(prop, sortBy, row) {
   var classSet = React.addons.classSet({
     "align-right": isStat(prop) || prop === "tasks_size",
     "hidden-mini fixed-width": isStat(prop),
-    "highlighted": prop === sortBy.prop,
+    "highlight": prop === sortBy.prop,
     "clickable": row == null // this is a header
   });
 
@@ -47,24 +47,27 @@ var ServicesTable = React.createClass({
     frameworks: React.PropTypes.array.isRequired
   },
 
+  handleRowClick: function (model) {
+    if (model.webui_url.length > 0) {
+      var url = Strings.ipToHostName(model.webui_url);
+      window.open(url);
+    }
+  },
+
+  getRowOptions: function (model) {
+    return {
+      onClick: this.handleRowClick.bind(null, model),
+      className: model.webui_url.length > 0 ? "row-hover" : ""
+    };
+  },
+
   renderHeadline: function (prop, model) {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    if (model.webui_url.length === 0) {
-      return (
-        <span className="h5 flush-top flush-bottom headline">
-          <i className="icon icon-small icon-small-white border-radius"></i>
-          {model[prop]}
-        </span>
-      );
-    }
-
     return (
-      <span className="h5 flush-top flush-bottom">
-        <a href={Strings.ipToHostName(model.webui_url)} target="_blank" className="headline">
-          <i className="icon icon-small icon-small-white border-radius"></i>
-          {model[prop]}
-        </a>
+      <span className="h5 flush-top flush-bottom headline">
+        <i className="icon icon-small icon-small-white border-radius"></i>
+        {model[prop]}
       </span>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
@@ -181,9 +184,10 @@ var ServicesTable = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Table
-        className="table"
+        className="table inverse table-borderless-outer table-borderless-inner-columns"
         columns={this.getColumns()}
         data={this.props.frameworks.slice(0)}
+        buildRowOptions={this.getRowOptions}
         keys={["id"]}
         sortBy={{prop: "name", order: "desc"}}
         sortFunc={sortFunction} />
