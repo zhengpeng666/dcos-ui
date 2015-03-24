@@ -33,7 +33,7 @@
         display: block;
         width: 64px;
         height: 64px;
-        background: ~`color_lightness("@{gray}", 80)`;
+        background: ~`color_lightness("@{neutral}", 80)`;
         .border-radius(50%);
         overflow: hidden;
         margin-right: auto;
@@ -62,7 +62,7 @@
       margin: 0px -(@grid-gutter-width * 0.5);
 
       .sidebar-menu-item {
-        color: ~`color_lightness("@{gray}", 50)`;
+        color: ~`color_lightness("@{neutral}", 50)`;
         margin: 0px;
         position: relative;
 
@@ -88,13 +88,13 @@
         }
 
         a {
-          color: ~`color_lightness("@{gray}", 50)`;
+          color: ~`color_lightness("@{neutral}", 50)`;
           display: block;
           padding: (@base-spacing-unit * 0.5) (@grid-gutter-width * 0.5);
 
           &:hover {
             text-decoration: none;
-            color: ~`color_lightness("@{gray}", 30)`;
+            color: ~`color_lightness("@{neutral}", 30)`;
 
             .sidebar-menu-item-icon {
               .opacity(0.80);
@@ -103,7 +103,7 @@
 
           &:active {
             text-decoration: none;
-            color: ~`color_lightness("@{gray}", 50)`;
+            color: ~`color_lightness("@{neutral}", 50)`;
 
             .sidebar-menu-item-icon {
               .opacity(0.40);
@@ -112,15 +112,15 @@
         }
 
         &.selected {
-          .box-shadow(inset 3px 0px 0px 0px @mesosphere-heliotrope);
-          background-color: fade(@mesosphere-heliotrope, 10%);
+          .box-shadow(inset 3px 0px 0px 0px @purple);
+          background-color: fade(@purple, 10%);
 
           .sidebar-menu-item-icon {
             .opacity(.4);
           }
 
           a {
-            color: @mesosphere-heliotrope;
+            color: @purple;
           }
         }
       }

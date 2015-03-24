@@ -1,17 +1,19 @@
-@text-danger-color: ~`color_lightness("@{mesosphere-mars}", 0)`;
-@text-warning-color: ~`color_lightness("@{mesosphere-lemon}", 0)`;
-@text-success-color: ~`color_lightness("@{mesosphere-seafoam}", 0)`;
+@font-family-sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+@text-danger-color: ~`color_lightness("@{red}", 0)`;
+@text-warning-color: ~`color_lightness("@{yellow}", 0)`;
+@text-success-color: ~`color_lightness("@{green}", 0)`;
 @text-muted-color: @body-text-mute-color;
 
 /* Body Text Styling */
-@body-text-color: ~`color_lightness("@{gray}", 40)`;
+@body-text-color: ~`color_lightness("@{neutral}", 40)`;
 @body-text-font-size: 12px;
 @body-text-line-height: 16px;
 
 /* Body Text Links */
-@body-text-link-text-color: ~`color_lightness("@{mesosphere-azure}", 0)`;
-@body-text-link-hover-text-color: ~`color_lightness("@{mesosphere-azure}", -20)`;
-@body-text-link-active-text-color: ~`color_lightness("@{mesosphere-azure}", -40)`;
+@body-text-link-text-color: ~`color_lightness("@{blue}", 0)`;
+@body-text-link-hover-text-color: ~`color_lightness("@{blue}", -20)`;
+@body-text-link-active-text-color: ~`color_lightness("@{blue}", -40)`;
 
 /* Body Text Margins */
 @body-text-margin-bottom: @base-spacing-unit * 0.25;
@@ -22,11 +24,11 @@
 @body-text-font-size-scale-screen-large: 1.1;
 
 /* Body Text Inverse Styling */
-@body-text-inverse-color: ~`color_lightness("@{gray}", 50)`;
-@body-text-inverse-emphasize-color: ~`color_lightness("@{gray}", 80)`;
+@body-text-inverse-color: ~`color_lightness("@{neutral}", 50)`;
+@body-text-inverse-emphasize-color: ~`color_lightness("@{neutral}", 80)`;
 
 /* Heading H1 Text Styling */
-@heading-h1-text-color: ~`color_lightness("@{gray}", 100)`;
+@heading-h1-text-color: ~`color_lightness("@{neutral}", 100)`;
 @heading-h1-text-font-size: @heading-h2-text-font-size * 1.3;
 @heading-h1-text-font-weight: 100;
 @heading-h1-text-line-height: @heading-h2-text-line-height * 1.3;
@@ -35,7 +37,7 @@
 @heading-h1-text-font-size-scale-screen-large: @body-text-font-size-scale-screen-large * 1.2;
 
 /* Heading H2 Text Styling */
-@heading-h2-text-color: ~`color_lightness("@{gray}", 100)`;
+@heading-h2-text-color: ~`color_lightness("@{neutral}", 100)`;
 @heading-h2-text-font-size: @heading-h3-text-font-size * 1.1;
 @heading-h2-text-font-weight: 200;
 @heading-h2-text-line-height: @heading-h3-text-line-height * 1.1;
@@ -45,17 +47,18 @@
 @heading-h2-text-font-size-scale-screen-large: @body-text-font-size-scale-screen-large * 1.0;
 
 /* Heading H3 Text Styling */
-@heading-h3-text-color: ~`color_lightness("@{gray}", 80)`;
+@heading-h3-text-color: ~`color_lightness("@{neutral}", 80)`;
+@heading-h3-text-font-size: @heading-h4-text-font-size * 1.1;
 @heading-h3-text-font-weight: 200;
 
 /* Heading H4 Text Styling */
-@heading-h4-text-color: ~`color_lightness("@{gray}", 75)`;
+@heading-h4-text-color: ~`color_lightness("@{neutral}", 75)`;
 @heading-h4-text-font-size: @heading-h5-text-font-size * 1.2;
 @heading-h4-text-font-weight: 200;
 @heading-h4-text-line-height: @heading-h5-text-line-height * 1.2;
 
 /* Heading H5 Text Styling */
-@heading-h5-text-color: ~`color_lightness("@{gray}", 70)`;
+@heading-h5-text-color: ~`color_lightness("@{neutral}", 70)`;
 @heading-h5-text-font-size: @heading-h6-text-font-size * 1.0;
 @heading-h5-text-font-weight: 500;
 @heading-h5-text-line-height: @heading-h6-text-line-height * 1.0;
@@ -64,7 +67,7 @@
 @heading-h5-text-margin-top: @heading-h5-text-margin-bottom * 1.1;
 
 /* Heading H6 Text Styling */
-@heading-h6-text-color: ~`color_lightness("@{gray}", 60)`;
+@heading-h6-text-color: ~`color_lightness("@{neutral}", 60)`;
 @heading-h6-text-font-weight: 400;
 @heading-h6-text-shadow: none;
 
@@ -175,7 +178,7 @@ Heading H1 Text Emphasize
 
 // Heading H1 Text Emphasize Styling
 
-@heading-h1-jumbo-text-emphasize-color: ~`color_lightness("@{gray}", -100)`;
+@heading-h1-jumbo-text-emphasize-color: ~`color_lightness("@{neutral}", -100)`;
 @heading-h1-jumbo-text-emphasize-font-family: @heading-h1-jumbo-text-font-family;
 @heading-h1-jumbo-text-emphasize-font-size: @heading-h1-jumbo-text-font-size;
 @heading-h1-jumbo-text-emphasize-font-style: @heading-h1-jumbo-text-font-style;
@@ -211,7 +214,7 @@ Heading H1 Text Mute
 
 // Heading H1 Text Mute Styling
 
-@heading-h1-jumbo-text-mute-color: ~`color_lightness("@{gray}", 0)`;
+@heading-h1-jumbo-text-mute-color: ~`color_lightness("@{neutral}", 0)`;
 @heading-h1-jumbo-text-mute-font-family: @heading-h1-jumbo-text-font-family;
 @heading-h1-jumbo-text-mute-font-size: @heading-h1-jumbo-text-font-size;
 @heading-h1-jumbo-text-mute-font-style: @heading-h1-jumbo-text-font-style;
@@ -247,7 +250,7 @@ Heading H1 Inverse
 
 // Heading H1 Text Inverse Styling
 
-@heading-h1-jumbo-text-inverse-color: ~`color_lightness("@{gray}", 30)`;
+@heading-h1-jumbo-text-inverse-color: ~`color_lightness("@{neutral}", 30)`;
 @heading-h1-jumbo-text-inverse-shadow: @heading-h1-jumbo-text-shadow;
 
 // Heading H1 inverse Links
@@ -277,7 +280,7 @@ Heading H1 Inverse Emphasize
 
 // Heading H1 Inverse Emphasize Styling
 
-@heading-h1-jumbo-text-inverse-emphasize-color: ~`color_lightness("@{gray}", 70)`;
+@heading-h1-jumbo-text-inverse-emphasize-color: ~`color_lightness("@{neutral}", 70)`;
 @heading-h1-jumbo-text-inverse-emphasize-shadow: @heading-h1-jumbo-text-inverse-shadow;
 
 // Heading H1 Inverse Emphasize Links
@@ -307,7 +310,7 @@ Heading H1 Inverse Mute
 
 // Heading H1 Inverse Mute Styling
 
-@heading-h1-jumbo-text-inverse-mute-color: ~`color_lightness("@{gray}", -10)`;
+@heading-h1-jumbo-text-inverse-mute-color: ~`color_lightness("@{neutral}", -10)`;
 @heading-h1-jumbo-text-inverse-mute-shadow: @heading-h1-jumbo-text-inverse-shadow;
 
 // Heading H1 Inverse Mute Links
