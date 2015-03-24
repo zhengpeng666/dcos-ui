@@ -20,6 +20,7 @@ function getMesosHosts(filterOptions) {
   var hosts = MesosStateStore.getHosts(filterOptions);
   return _.extend({
     hosts: hosts,
+    statesProcessed: MesosStateStore.getStatesProcessed(),
     refreshRate: MesosStateStore.getRefreshRate(),
     totalHosts: MesosStateStore.getLatest().slaves.length,
     totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
@@ -70,10 +71,62 @@ var DatacenterPage = React.createClass({
     this.setState(getMesosHosts(filterOptions));
   },
 
+  getHostsPage: function () {
+    var state = this.state;
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div className="container container-fluid container-pod">
+        <ResourceBarChart
+          data={state.hosts}
+          resources={state.totalHostsResources}
+          totalResources={state.totalResources}
+          refreshRate={state.refreshRate} />
+        {this.getHostsStats()}
+        <FilterInputText
+          searchString={this.state.searchString}
+          onSubmit={this.onFilterChange} />
+        <HostTable hosts={this.state.hosts} />
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getEmptyHostsPage: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div className="grid centric">
+        <div className="grid-item">
+          <div className="panel">
+            <div className="panel-heading text-align-center">
+              <h3>Empty Datacenter</h3>
+            </div>
+            <div className="panel-content text-align-center">
+              <p>Your datacenter is looking pretty empty.</p>
+              <p>We don't see any nodes other than your master.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     var state = this.state;
+    var page;
+
+    if (state.statesProcessed && state.totalHosts === 0) {
+      page = this.getEmptyHostsPage();
+    } else {
+      page = this.getHostsPage();
+    }
 
     return (
       <div className="flex-container-col">
@@ -89,23 +142,7 @@ var DatacenterPage = React.createClass({
           </div>
         </div>
         <div className="page-content container-scrollable">
-          <div className="container container-fluid container-pod">
-            <ResourceBarChart
-              data={state.hosts}
-              resources={state.totalHostsResources}
-              totalResources={state.totalResources}
-              refreshRate={state.refreshRate}
-              resourceType="Nodes" />
-            <FilterHeadline
-              onReset={this.resetFilter}
-              name="Hosts"
-              currentLength={state.hosts.length}
-              totalLength={state.totalHosts} />
-            <FilterInputText
-              searchString={this.state.filterOptions.searchString}
-              onSubmit={this.onFilterChange} />
-            <HostTable hosts={this.state.hosts} />
-          </div>
+         {page}
         </div>
       </div>
     );

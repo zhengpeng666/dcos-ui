@@ -31,7 +31,8 @@ function getMesosServices(filterOptions) {
 
   return {
     frameworks: frameworks,
-    countByHealth: getCountByHealth(allFrameworks),
+    statesProcessed: MesosStateStore.getStatesProcessed(),
+    countByHealth: MesosStateStore.getCountByHealth(allFrameworks),
     refreshRate: MesosStateStore.getRefreshRate(),
     totalFrameworks: allFrameworks.length,
     totalFrameworksResources:
@@ -100,10 +101,72 @@ var ServicesPage = React.createClass({
     this.setState(getMesosServices(filterOptions));
   },
 
+  getServicesPage: function () {
+    var state = this.state;
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div className="container container-fluid container-pod">
+        <ResourceBarChart
+          data={state.frameworks}
+          resources={state.totalFrameworksResources}
+          totalResources={state.totalResources}
+          refreshRate={state.refreshRate}
+          resourceType="Services" />
+        {this.getServiceStats()}
+        <ul className="list list-unstyled list-inline flush-bottom">
+          <li>
+            <FilterHealth
+              countByHealth={state.countByHealth}
+              healthFilter={state.healthFilter}
+              onSubmit={this.onChangeHealthFilter}
+              servicesLength={state.totalFrameworks} />
+          </li>
+          <li>
+            <FilterInputText
+              searchString={state.searchString}
+              onSubmit={this.onChange} />
+          </li>
+        </ul>
+        <ServiceTable
+          frameworks={state.frameworks}
+          totalResources={state.totalResources} />
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getEmptyServicesPage: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div className="grid centric">
+        <div className="grid-item">
+          <div className="panel">
+            <div className="panel-heading text-align-center">
+              <h3>No Services Installed</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     var state = this.state;
+    var page;
+
+    if (state.statesProcessed && state.totalFrameworks === 0) {
+      page = this.getEmptyServicesPage();
+    } else {
+      page = this.getServicesPage();
+    }
 
     return (
       <div className="flex-container-col">
@@ -119,36 +182,7 @@ var ServicesPage = React.createClass({
           </div>
         </div>
         <div className="page-content container-scrollable">
-          <div className="container container-fluid container-pod">
-            <ResourceBarChart
-              data={state.frameworks}
-              resources={state.totalFrameworksResources}
-              totalResources={state.totalResources}
-              refreshRate={state.refreshRate}
-              resourceType="Services" />
-            <FilterHeadline
-              onReset={this.resetFilter}
-              name="Services"
-              currentLength={state.frameworks.length}
-              totalLength={state.totalFrameworks} />
-            <ul className="list list-unstyled list-inline flush-bottom">
-              <li>
-                <FilterHealth
-                  countByHealth={state.countByHealth}
-                  healthFilter={state.filterOptions.healthFilter}
-                  onSubmit={this.onChangeHealthFilter}
-                  servicesLength={state.totalFrameworks} />
-              </li>
-              <li>
-                <FilterInputText
-                  searchString={state.filterOptions.searchString}
-                  onSubmit={this.onChange} />
-              </li>
-            </ul>
-            <ServiceTable
-              frameworks={state.frameworks}
-              totalResources={state.totalResources} />
-          </div>
+          {page}
         </div>
       </div>
     );
