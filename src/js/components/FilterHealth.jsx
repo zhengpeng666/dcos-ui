@@ -18,26 +18,26 @@ var FilterHealth = React.createClass({
   displayName: "FilterHealth",
 
   propTypes: {
-    healthHash: React.PropTypes.object.isRequired,
+    countByHealth: React.PropTypes.object.isRequired,
     healthFilter: React.PropTypes.oneOfType(
       [React.PropTypes.string, React.PropTypes.number]
     ),
     onSubmit: React.PropTypes.func,
-    totalFrameworksLength: React.PropTypes.number.isRequired
+    servicesLength: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
     return {
-      healthHash: {},
+      countByHealth: {},
       healthFilter: null,
       onSubmit: _.noop,
-      totalFrameworksLength: 0
+      servicesLength: 0
     };
   },
 
   getInitialState: function () {
     return {
-      filter: undefined
+      filter: null
     };
   },
 
@@ -46,12 +46,12 @@ var FilterHealth = React.createClass({
     this.props.onSubmit(health);
   },
 
-  getHealthTypeLength: function (key) {
+  getCountByHealth: function (key) {
     var props = this.props;
     if (key === "ALL") {
-      return props.totalFrameworksLength;
+      return props.servicesLength;
     }
-    return props.healthHash[HealthTypes[key]];
+    return props.countByHealth[HealthTypes[key]];
   },
 
   getFilterButtons: function () {
@@ -59,6 +59,9 @@ var FilterHealth = React.createClass({
 
     return _.map(buttonMap, function (value, key) {
       var health = HealthTypes[key];
+      if (typeof health === "undefined") {
+        health = null;
+      }
       var classSet = React.addons.classSet({
         "button": true,
         "active": mode === health
@@ -77,9 +80,11 @@ var FilterHealth = React.createClass({
             key={key}
             className={classSet}
             onClick={this.handleChange.bind(this, health)}>
-          <span className={dotClassSet}></span>
-          <span className="label">{value}</span>
-          <span className="badge">{this.getHealthTypeLength(key)}</span>
+            <span className="button-align-content">
+              <span className={dotClassSet}></span>
+              <span className="label">{value}</span>
+              <span className="badge">{this.getCountByHealth(key)}</span>
+            </span>
         </button>
       );
       /* jshint trailing:true, quotmark:true, newcap:true */

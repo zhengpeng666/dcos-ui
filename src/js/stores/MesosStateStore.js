@@ -20,7 +20,7 @@ var _marathonUrl;
 var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
 
 function countFrameworksByHealth(frameworks, type) {
-  return _.reduce(frameworks, function (acc, framework) {
+  return _.foldl(frameworks, function (acc, framework) {
     if (framework.health.value === type) {
       acc++;
     }
@@ -400,9 +400,9 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _.last(_mesosStates);
   },
 
-  getFrameworksHealthHash: function () {
+  getCountByHealth: function () {
     var frameworks = this.getLatest().frameworks;
-    return _.reduce(HealthTypes, function (acc, type) {
+    return _.foldl(HealthTypes, function (acc, type) {
       acc[type] = countFrameworksByHealth(frameworks, type);
       return acc;
     }, {});
