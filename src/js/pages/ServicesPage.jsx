@@ -10,6 +10,7 @@ var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
+var Panel = require("../components/Panel");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 
@@ -144,11 +145,11 @@ var ServicesPage = React.createClass({
     return (
       <div className="grid centric">
         <div className="grid-item">
-          <div className="panel">
-            <div className="panel-heading text-align-center">
-              <h3>No Services Installed</h3>
-            </div>
-          </div>
+          <Panel className="vertical-center text-align-center">
+            <h2>
+              No Services Installed
+            </h2>
+          </Panel>
         </div>
       </div>
     );

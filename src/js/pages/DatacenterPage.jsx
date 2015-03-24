@@ -10,6 +10,7 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
+var Panel = require("../components/Panel");
 var HostTable = require("../components/HostTable");
 
 
@@ -100,15 +101,11 @@ var DatacenterPage = React.createClass({
     return (
       <div className="grid centric">
         <div className="grid-item">
-          <div className="panel">
-            <div className="panel-heading text-align-center">
-              <h3>Empty Datacenter</h3>
-            </div>
-            <div className="panel-content text-align-center">
-              <p>Your datacenter is looking pretty empty.</p>
-              <p>We don't see any nodes other than your master.</p>
-            </div>
-          </div>
+          <Panel className="vertical-center text-align-center">
+            <h2>Empty Datacenter</h2>
+            <p>Your datacenter is looking pretty empty.</p>
+            <p>We don't see any nodes other than your master.</p>
+          </Panel>
         </div>
       </div>
     );
