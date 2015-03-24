@@ -16,7 +16,7 @@ function getMesosServices(filterOptions) {
   var frameworks = MesosStateStore.getFrameworks(filterOptions);
   return {
     frameworks: frameworks,
-    healthHash: MesosStateStore.getFrameworksHealthHash(),
+    countByHealth: MesosStateStore.getCountByHealth(),
     refreshRate: MesosStateStore.getRefreshRate(),
     totalFrameworks: MesosStateStore.getLatest().frameworks.length,
     totalFrameworksResources:
@@ -146,9 +146,10 @@ var ServicesPage = React.createClass({
             <ul className="list list-unstyled list-inline flush-bottom">
               <li>
                 <FilterHealth
-                  healthHash={state.healthHash}
+                  countByHealth={state.countByHealth}
                   healthFilter={state.healthFilter}
-                  onSubmit={this.onChangeHealthFilter} />
+                  onSubmit={this.onChangeHealthFilter}
+                  servicesLength={state.totalFrameworks} />
               </li>
               <li>
                 <FilterInputText
