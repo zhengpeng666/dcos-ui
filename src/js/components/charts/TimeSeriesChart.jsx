@@ -6,6 +6,7 @@ var React = require("react/addons");
 
 var TimeSeriesArea = require("./TimeSeriesArea");
 var AnimationCircle = require("./AnimationCircle");
+var Maths = require("../../utils/Maths");
 
 var TimeSeriesChart = React.createClass({
 
@@ -30,7 +31,7 @@ var TimeSeriesChart = React.createClass({
         top: 10,
         left: 45,
         bottom: 25,
-        right: 4
+        right: 5
       }
     };
   },
@@ -43,17 +44,20 @@ var TimeSeriesChart = React.createClass({
       area: this.getArea(xScale, yScale),
       stack: this.getStack(),
       xScale: xScale,
-      yScale: yScale
+      xMouseValue: null,
+      yScale: yScale,
+      yMouseValue: null
     };
   },
 
   componentDidMount: function () {
+    var el = this.getDOMNode();
     var props = this.props;
     var margin = props.margin;
     this.renderAxis(props, this.state.xScale, this.state.yScale);
 
     // create clip path for areas and x-axis
-    d3.select(this.getDOMNode())
+    d3.select(el)
       .append("defs")
         .append("clipPath")
           .attr("id", "clip")
@@ -64,6 +68,109 @@ var TimeSeriesChart = React.createClass({
           .attr("width", props.width - margin.right - margin.left)
           // includes x-axis as we want to clip that as well
           .attr("height", props.height - margin.top);
+
+    el.addEventListener("mousemove", this.handleMouseMove);
+    el.addEventListener("mouseout", this.handleMouseOut);
+  },
+
+  handleMouseMove: function (e) {
+    var mouse = this.calculateMousePositionInGraph(e);
+
+    // This means that mouse is out of bounds
+    if (mouse === false) {
+      return;
+    }
+
+    var props = this.props;
+    var margin = props.margin;
+
+    var firstDataSet = _.first(props.data);
+    // 6 - how many data points we don't show
+    var hiddenDataPoints = 6;
+    // find the data point at the given mouse position
+    var index = mouse.x *
+      (firstDataSet.values.length - hiddenDataPoints - 1) /
+      (props.width - margin.right - margin.left);
+    index = Math.round(index + hiddenDataPoints - 1);
+
+    d3.select(this.refs.xMousePosition.getDOMNode())
+      .transition()
+        .duration(50)
+        .style("stroke", "rgba(255,255,255,0.5")
+        .attr("x1", mouse.x + margin.left)
+        .attr("x2", mouse.x + margin.left);
+
+    d3.select(this.refs.yMousePosition.getDOMNode())
+      .transition()
+        .duration(50)
+        .style("stroke", "rgba(255,255,255,0.5")
+        .attr("y1", this.state.yScale(firstDataSet.values[index][props.y]))
+        .attr("y2", this.state.yScale(firstDataSet.values[index][props.y]));
+
+    d3.select(this.refs.yAxisCurrent.getDOMNode())
+      .transition()
+      .duration(50)
+      .attr("y", this.state.yScale(firstDataSet.values[index][props.y]) + 3)
+      .text(firstDataSet.values[index][props.y] + "%");
+
+    // An extra -1 on each because we show the extra data point at the end
+    var mappedValue = Maths.mapValue(index, {
+      min: firstDataSet.values.length - 1,
+      max: 0
+    });
+    var value = Maths.unmapValue(mappedValue, {
+      min: 0,
+      max: firstDataSet.values.length - 1
+    });
+
+    var xPosition = mouse.x - value.toString().length * 7;
+    if (value <= 1) {
+      xPosition -= 7;
+    }
+    d3.select(this.refs.xAxisCurrent.getDOMNode())
+      .transition()
+      .duration(50)
+      .attr("x", xPosition)
+      .text("-" + value + "s");
+  },
+
+  calculateMousePositionInGraph: function (e) {
+    var el = this.getDOMNode();
+    var props = this.props;
+    var margin = props.margin;
+    var mouse = {};
+    var elPosition = el.getBoundingClientRect();
+    var containerPositions = {
+      top: elPosition.top + margin.top,
+      right: elPosition.left + props.width - margin.right,
+      bottom: elPosition.top + props.height - margin.bottom,
+      left: elPosition.left + margin.left
+    };
+    mouse.x = e.clientX || e.pageX;
+    mouse.y = e.clientY || e.pageY;
+
+    if (mouse.x < containerPositions.left ||
+      mouse.y < containerPositions.top ||
+      mouse.x > containerPositions.right ||
+      mouse.y > containerPositions.bottom) {
+      return false;
+    }
+
+    mouse.x -= containerPositions.left;
+    mouse.y -= containerPositions.top;
+
+    return mouse;
+  },
+
+  handleMouseOut: function () {
+    d3.select(this.refs.yMousePosition.getDOMNode()).interrupt()
+      .style("stroke", "rgba(255,255,255,0");
+    d3.select(this.refs.xMousePosition.getDOMNode()).interrupt()
+      .style("stroke", "rgba(255,255,255,0");
+    d3.select(this.refs.xAxisCurrent.getDOMNode())
+      .text("");
+    d3.select(this.refs.yAxisCurrent.getDOMNode())
+      .text("");
   },
 
   getArea: function (xScale, yScale) {
@@ -92,11 +199,11 @@ var TimeSeriesChart = React.createClass({
       // ristrict x domain to have extra point outside of graph area,
       // since we are animating the graph in from right
       date = values[1].date;
-      dateDelta = values[values.length - 3].date;
+      dateDelta = values[values.length - 2 - 1].date;
     }
 
     return d3.time.scale()
-      .range([0, props.width])
+      .range([0, props.width - props.margin.right])
       .domain([date, dateDelta]);
   },
 
@@ -127,15 +234,6 @@ var TimeSeriesChart = React.createClass({
       length = firstDataSet.values.length;
     }
 
-    var xAxis = d3.svg.axis()
-      .ticks(d3.time.second, length)
-      .scale(xScale)
-      .orient("bottom");
-      var h = props.height - margin.bottom  - margin.top;
-    d3.select(this.refs.xAxis.getDOMNode())
-      .attr("transform", "translate(" + margin.left + "," + h + ")")
-      .call(xAxis);
-
     var yAxis = d3.svg.axis()
       .scale(yScale)
       .ticks(props.ticksY)
@@ -146,7 +244,7 @@ var TimeSeriesChart = React.createClass({
       .call(yAxis);
 
     d3.select(this.refs.grid.getDOMNode())
-      .attr("class", "grid")
+      .attr("class", "grid-graph")
       .attr("transform", "translate(" + margin.left + ",0)")
       .call(
         d3.svg.axis().scale(yScale)
@@ -175,7 +273,7 @@ var TimeSeriesChart = React.createClass({
     // look at the difference between the last and the third last point
     // to calculate transition time
     var l = data.length - 1;
-    return (data[l].date - data[l - 3].date) / 3;
+    return (data[l].date - data[l - 2].date) / 2;
   },
 
   getPosition: function (data) {
@@ -208,7 +306,7 @@ var TimeSeriesChart = React.createClass({
       classes["path-color-" + obj.colorIndex] = true;
 
       var transitionTime =
-        this.getTransitionTime(obj.values, this.state.xScale);
+        this.getTransitionTime(obj.values);
       // y0 of lastest visible obj + account for stroke size
       var initialPosition =
         this.state.yScale(obj.values[obj.values.length - 2].y0);
@@ -261,17 +359,32 @@ var TimeSeriesChart = React.createClass({
 
   render: function () {
     var props = this.props;
+    var h = props.height - props.margin.bottom  - props.margin.top;
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <svg height={props.height} width={props.width}>
         {this.getStripes(4)}
         <g className="bars" ref="grid" />
-        <g clip-path="url(#clip)">
-          <g className="x axis" ref="xAxis"/>
-        </g>
         <g className="y axis" ref="yAxis" />
-          {this.getAreaList()}
+        <g className="y axis">
+          <text className="current-value shadow" ref="yAxisCurrent"
+            style={{textAnchor: "end"}}
+            transform={"translate(" + (props.margin.left - 9) + ",0)"}></text>
+        </g>
+        {this.getAreaList()}
+        <g className="x axis">
+          <text className="current-value" ref="xAxisCurrent"
+            y={props.margin.bottom}
+            transform={"translate(" + props.margin.left + "," + h + ")"}>
+            </text>
+        </g>
+        <line ref="xMousePosition"
+          y1={props.margin.top}
+          y2={props.height - props.margin.bottom - props.margin.top} />
+        <line ref="yMousePosition"
+          x1={props.margin.left}
+          x2={props.width} />
       </svg>
     );
   }

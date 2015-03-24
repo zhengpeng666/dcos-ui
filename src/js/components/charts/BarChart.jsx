@@ -142,7 +142,7 @@ var BarChart = React.createClass({
           .tickFormat("")
       );
 
-    d3.select(this.refs.xGrid.getDOMNode()).interrupt()
+    d3.select(this.refs.xGrid.getDOMNode())
       .attr("class", "grid x")
       .call(
         d3.svg.axis().scale(xScale)
