@@ -54,7 +54,7 @@ var ServicesTable = React.createClass({
     }
   },
 
-  getRowOptions: function (model) {
+  getRowAttributes: function (model) {
     return {
       onClick: this.handleRowClick.bind(null, model),
       className: model.webui_url.length > 0 ? "row-hover" : ""
@@ -187,7 +187,7 @@ var ServicesTable = React.createClass({
         className="table inverse table-borderless-outer table-borderless-inner-columns"
         columns={this.getColumns()}
         data={this.props.frameworks.slice(0)}
-        buildRowOptions={this.getRowOptions}
+        buildRowOptions={this.getRowAttributes}
         keys={["id"]}
         sortBy={{prop: "name", order: "desc"}}
         sortFunc={sortFunction} />
