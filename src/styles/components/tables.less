@@ -1,0 +1,40 @@
+& when (@table-enabled) {
+  & when (@table-cell-default-inverse-enabled) {
+    .table {
+      // create row-hover style
+      &.inverse {
+        & tbody {
+          > tr.row-hover:hover {
+            > th,
+            > td {
+              .table-cell-style-variant('table-cell', 'default-inverse-hover');
+              cursor: pointer;
+              &.highlight {
+                .table-cell-style-variant('table-cell', 'default-inverse-highlight-hover');
+              }
+
+              &.disabled {
+                .opacity(@table-cell-default-disabled-opacity);
+                .table-cell-style-variant('table-cell', 'default-inverse-disabled-hover');
+              }
+            }
+          }
+        }
+
+        .headline {
+          color: @white;
+        }
+      }
+
+      .align-right {
+        text-align: right;
+      }
+      .icon {
+        margin-right: @base-spacing-unit * 0.25;
+      }
+      .fixed-width {
+        width: @grid-gutter-width-screen-large * 2;
+      }
+    }
+  }
+}

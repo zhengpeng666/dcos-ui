@@ -1,6 +1,6 @@
 .chart {
   svg .background {
-    fill: fade(@gray, 80%);
+    fill: fade(@neutral, 80%);
   }
 
   .axis path,
@@ -39,33 +39,33 @@
   .area,
   .bar rect {
     &.path-color-0 {
-      stroke: @mesosphere-heliotrope;
-      fill: @mesosphere-heliotrope;
+      stroke: @purple;
+      fill: @purple;
     }
 
     &.path-color-1 {
-      stroke: @mesosphere-lemon;
-      fill: @mesosphere-lemon;
+      stroke: @yellow;
+      fill: @yellow;
     }
 
     &.path-color-2 {
-      stroke: @mesosphere-mars;
-      fill: @mesosphere-mars;
+      stroke: @red;
+      fill: @red;
     }
 
     &.path-color-3 {
-      stroke: @mesosphere-azure;
-      fill: @mesosphere-azure;
+      stroke: @blue;
+      fill: @blue;
     }
 
     &.path-color-4 {
-      stroke: @mesosphere-seafoam;
-      fill: @mesosphere-seafoam;
+      stroke: @green;
+      fill: @green;
     }
 
     &.path-color-5 {
-      stroke: @mesosphere-orchid;
-      fill: @mesosphere-orchid;
+      stroke: @orchid;
+      fill: @orchid;
     }
 
     &.path-color-6 {
@@ -96,7 +96,7 @@
       }
 
       &.y path {
-        stroke: @gray;
+        stroke: @neutral;
       }
 
       line {
@@ -112,7 +112,7 @@
       }
 
       line {
-        stroke: @gray;
+        stroke: @neutral;
         stroke-dasharray: 4,4;
       }
     }
@@ -120,33 +120,33 @@
 
   & when (@typography-enabled) {
     .unit {
-      fill: ~`color_lightness("@{gray}", 100)`;
+      fill: ~`color_lightness("@{neutral}", 100)`;
     }
 
     .unit-label {
-      fill: @mesosphere-heliotrope;
+      fill: @purple;
       &.path-color-0 {
-        color: @mesosphere-heliotrope;
+        color: @purple;
       }
 
       &.path-color-1 {
-        color: @mesosphere-lemon;
+        color: @yellow;
       }
 
       &.path-color-2 {
-        color: @mesosphere-mars;
+        color: @red;
       }
 
       &.path-color-3 {
-        color: @mesosphere-azure;
+        color: @blue;
       }
 
       &.path-color-4 {
-        color: @mesosphere-seafoam;
+        color: @green;
       }
 
       &.path-color-5 {
-        color: @mesosphere-orchid;
+        color: @orchid;
       }
 
       &.path-color-6 {
@@ -155,11 +155,11 @@
     }
 
     .text-danger {
-      fill: ~`color_lightness("@{mesosphere-mars}", 0)`;
+      fill: ~`color_lightness("@{red}", 0)`;
     }
 
     .text-success {
-      fill: ~`color_lightness("@{mesosphere-seafoam}", 0)`;
+      fill: ~`color_lightness("@{green}", 0)`;
     }
 
     .text-muted {
@@ -193,27 +193,27 @@
         line-height: @button-text-line-height;
 
         &.path-color-0 {
-          color: @mesosphere-heliotrope;
+          color: @purple;
         }
 
         &.path-color-1 {
-          color: @mesosphere-lemon;
+          color: @yellow;
         }
 
         &.path-color-2 {
-          color: @mesosphere-mars;
+          color: @red;
         }
 
         &.path-color-3 {
-          color: @mesosphere-azure;
+          color: @blue;
         }
 
         &.path-color-4 {
-          color: @mesosphere-seafoam;
+          color: @green;
         }
 
         &.path-color-5 {
-          color: @mesosphere-orchid;
+          color: @orchid;
         }
 
         &.path-color-6 {
