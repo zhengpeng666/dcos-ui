@@ -9,10 +9,10 @@ var BarChart = require("./BarChart");
 // number to fit design of width vs. height ratio
 var WIDTH_HEIGHT_RATIO = 4.5;
 
-var buttonNameMap = {
-  cpus: "CPU",
-  mem: "Memory",
-  disk: "Disk"
+var infoMap = {
+  cpus: {label: "CPU", colorIndex: 0},
+  mem: {label: "Memory", colorIndex: 3},
+  disk: {label: "Disk", colorIndex: 5}
 };
 
 var ResourceBarChart = React.createClass({
@@ -51,7 +51,7 @@ var ResourceBarChart = React.createClass({
     return [{
         id: "used_resources",
         name: this.state.resourceMode + " allocated",
-        colorIndex: 0,
+        colorIndex: infoMap[this.state.resourceMode].colorIndex,
         values: props.resources[this.state.resourceMode]
     }];
   },
@@ -68,7 +68,7 @@ var ResourceBarChart = React.createClass({
   getModeButtons: function () {
     var mode = this.state.resourceMode;
 
-    return _.map(buttonNameMap, function (value, key) {
+    return _.map(infoMap, function (info, key) {
       var classSet = React.addons.classSet({
         "button button-stroke button-inverse": true,
         "active": mode === key
@@ -78,9 +78,9 @@ var ResourceBarChart = React.createClass({
       return (
         <button
             key={key}
-            className={classSet}
+            className={classSet + " path-color-" + info.colorIndex}
             onClick={this.changeMode.bind(this, key)}>
-          {value}
+          {info.label}
         </button>
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
@@ -106,25 +106,16 @@ var ResourceBarChart = React.createClass({
   },
 
   getLegend: function () {
-    var y = this.props.y;
-    var frameworks = _.filter(this.getData(), function (framework) {
-      return _.find(framework.values, function (val) {
-        return val[y];
-      });
-    });
-
-    if (frameworks.length === 0) {
-      return null;
-    }
+    var info = infoMap[this.state.resourceMode];
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <ul className="legend list-unstyled list-inline inverse">
         <li className="legend-item">
-          <span className="line path-color-0"></span>
+          <span className={"line path-color-" + info.colorIndex}></span>
           <strong>
-            {buttonNameMap[this.state.resourceMode]} Allocated
+            {info.label} Allocated
           </strong>
         </li>
       </ul>
