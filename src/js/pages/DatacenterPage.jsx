@@ -108,7 +108,8 @@ var DatacenterPage = React.createClass({
           data={data.hosts}
           resources={data.totalHostsResources}
           totalResources={data.totalResources}
-          refreshRate={data.refreshRate} />
+          refreshRate={data.refreshRate}
+          resourceType="Nodes" />
         <FilterHeadline
           onReset={this.resetFilter}
           name="Hosts"
@@ -175,7 +176,7 @@ var DatacenterPage = React.createClass({
           </div>
         </div>
         <div className="page-content container-scrollable">
-         {this.getContents(isEmpty)}
+          {this.getContents(isEmpty)}
         </div>
       </div>
     );

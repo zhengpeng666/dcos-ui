@@ -8,7 +8,7 @@ var FilterInputText = React.createClass({
 
   propTypes: {
     searchString: React.PropTypes.string.isRequired,
-    onSubmit: React.PropTypes.func.isRequired
+    onChange: React.PropTypes.func.isRequired
   },
 
   getDefaultProps: function () {
@@ -19,7 +19,7 @@ var FilterInputText = React.createClass({
 
   handleChange: function (e) {
     e.preventDefault();
-    this.props.onSubmit(this.refs.filterInput.getDOMNode().value);
+    this.props.onChange(this.refs.filterInput.getDOMNode().value);
   },
 
   render: function () {
@@ -29,7 +29,7 @@ var FilterInputText = React.createClass({
       <div className="form-group">
         <input
           type="text"
-          className="form-control filter-input-text"
+          className="form-control filter-input-text form-control-inverse"
           placeholder="Filter for..."
           value={this.props.searchString}
           onChange={this.handleChange}

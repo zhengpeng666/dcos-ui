@@ -3,17 +3,21 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
+var Dropdown = require("./Dropdown");
+
 var FilterByService = React.createClass({
 
   displayName: "FilterByService",
 
   propTypes: {
+    byServiceFilter: React.PropTypes.string,
     services: React.PropTypes.array.isRequired,
     onChange: React.PropTypes.func
   },
 
   getDefaultProps: function () {
     return {
+      byServiceFilter: null,
       services: [],
       onChange: _.noop
     };
@@ -21,37 +25,36 @@ var FilterByService = React.createClass({
 
   getInitialState: function () {
     return {
-      filter: null
+      filter: this.props.byServiceFilter
     };
   },
 
-  handleChange: function (health) {
-    var serviceId = this.refs.select.getDOMNode().value;
+  componentWillRecieveProps: function (props) {
+    this.setState({
+      filter: props.byServiceFilter
+    });
+  },
+
+  handleChange: function (serviceId) {
     this.setState({filter: serviceId});
     this.props.onChange(serviceId);
   },
 
-  getSelectOptions: function () {
+  getDropdownItems: function () {
     var serviceId = this.state.filter;
-    var defaultOption = [{
-      id: "",
-      name: "Filter By Service",
-      slaves_length: ""
-    }];
-    return _.map(defaultOption.concat(this.props.services),
-        function (service, key) {
-      var selected;
-      if (serviceId != null && serviceId === service.id) {
-        selected = "selected";
-      }
+    return _.map(this.props.services, function (service) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-      return (
-        <option key={"key"+service.id} value={service.id} selected={selected}>
-          {service.name}
-          <span className="badge">{service.slaves_length}</span>
-        </option>
-      );
+      return {
+        value: service.id,
+        selected: serviceId === service.id,
+        innerContent: (
+          <a className="dropdown-menuitem">
+            <span>{service.name}</span>
+            <span className="badge">{service.slaves_length}</span>
+          </a>
+        )
+      };
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     });
@@ -61,11 +64,12 @@ var FilterByService = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <span className="form-control form-control-select">
-        <select ref="select" onChange={this.handleChange}>
-          {this.getSelectOptions()}
-        </select>
-      </span>
+      <Dropdown
+        defaultItem={
+          <span className="dropdown-menuitem">Filter by Service</span>
+        }
+        items={this.getDropdownItems()}
+        onChange={this.handleChange} />
     );
   }
 });

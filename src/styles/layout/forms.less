@@ -20,14 +20,17 @@
 
 .form-control {
   margin-bottom: @base-spacing-unit;
-  .border-radius(@icon-medium-border-radius);
 
-  &, &:hover, &:active, &:focus {
-    background-color: transparent;
-    border: 0;
-    box-shadow: 0 0 0 1px @neutral;
-    color: ~`color_lightness("@{neutral}", 40)`;
-    .placeholder-color(~`color_lightness("@{neutral}", 40)`);
+  &.form-control-inverse {
+    .border-radius(@icon-medium-border-radius);
+
+    &, &:hover, &:active, &:focus {
+      background-color: transparent;
+      border: 0;
+      box-shadow: 0 0 0 1px @neutral;
+      color: ~`color_lightness("@{neutral}", 40)`;
+      .placeholder-color(~`color_lightness("@{neutral}", 40)`);
+    }
   }
 }
 

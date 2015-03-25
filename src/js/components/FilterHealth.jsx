@@ -20,7 +20,7 @@ var FilterHealth = React.createClass({
   propTypes: {
     countByHealth: React.PropTypes.object.isRequired,
     healthFilter: React.PropTypes.number,
-    onSubmit: React.PropTypes.func,
+    onChange: React.PropTypes.func,
     servicesLength: React.PropTypes.number.isRequired
   },
 
@@ -28,7 +28,7 @@ var FilterHealth = React.createClass({
     return {
       countByHealth: {},
       healthFilter: null,
-      onSubmit: _.noop,
+      onChange: _.noop,
       servicesLength: 0
     };
   },
