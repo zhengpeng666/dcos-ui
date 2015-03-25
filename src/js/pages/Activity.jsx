@@ -103,12 +103,6 @@ var Activity = React.createClass({
     return (
       <div className="grid row">
         <div className="grid-item column-small-6 column-large-4">
-          <Panel title="Services Health">
-            <ServiceList services={this.getServicesList(this.state.services)} />
-            {this.getViewAllServicesBtn()}
-          </Panel>
-        </div>
-        <div className="grid-item column-small-6 column-large-4">
           <Panel title="CPU Allocation">
             <ResourceTimeSeriesChart
               allocResources={state.allocResources}
@@ -119,6 +113,7 @@ var Activity = React.createClass({
         <div className="grid-item column-small-6 column-large-4">
           <Panel title="Memory Allocation">
             <ResourceTimeSeriesChart
+              colorIndex={3}
               allocResources={state.allocResources}
               totalResources={state.totalResources}
               mode="mem" />
@@ -128,6 +123,12 @@ var Activity = React.createClass({
           <Panel title="Task Failure Rate">
             <TaskFailureTimeSeriesChart
               data={state.failureRate} />
+          </Panel>
+        </div>
+        <div className="grid-item column-small-6 column-large-4">
+          <Panel title="Services Health">
+            <ServiceList services={this.getServicesList(this.state.services)} />
+            {this.getViewAllServicesBtn()}
           </Panel>
         </div>
         <div className="grid-item column-small-6 column-large-4">

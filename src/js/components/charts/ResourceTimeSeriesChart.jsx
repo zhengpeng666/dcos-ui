@@ -12,16 +12,23 @@ var ResourceChart = React.createClass({
   displayName: "ResourceChart",
 
   propTypes: {
-    totalResources: React.PropTypes.object.isRequired,
+    colorIndex: React.PropTypes.number.isRequired,
     allocResources: React.PropTypes.object.isRequired,
+    totalResources: React.PropTypes.object.isRequired,
     mode: React.PropTypes.string
+  },
+
+  getDefaultProps: function () {
+    return {
+      colorIndex: 0
+    };
   },
 
   getData: function () {
     var props = this.props;
     return [{
         name: "Alloc",
-        colorIndex: 0,
+        colorIndex: this.props.colorIndex,
         values: props.allocResources[props.mode],
       }];
   },
