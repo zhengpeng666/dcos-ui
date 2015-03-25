@@ -20,6 +20,18 @@ var _statesProcessed = false;
 
 var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
 
+function setHostsToFrameworkCount(frameworks, hosts) {
+  return _.map(frameworks, function (framework) {
+    framework.slaves_length = _.foldl(hosts, function (acc, host) {
+      if (host.frameworks[framework.id] != null) {
+        acc++;
+      }
+      return acc;
+    }, 0);
+    return framework;
+  });
+}
+
 function sumResources(resourceList) {
   return _.foldl(resourceList, function (sumMap, resource) {
     _.each(sumMap, function (value, key) {
@@ -326,6 +338,12 @@ function filterByHealth(objects, healthFilter) {
   });
 }
 
+function filterHostsByService(hosts, frameworkId) {
+  return _.filter(hosts, function (host) {
+    return host.frameworks[frameworkId] != null;
+  });
+}
+
 function initStates() {
   var currentDate = Date.now();
   // reverse date range!!!
@@ -418,13 +436,25 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return sumHostResources(hosts);
   },
 
+  getFrameworksWithHostsCount: function (hosts) {
+    return setHostsToFrameworkCount(this.getLatest().frameworks, hosts);
+  },
+
   getHosts: function (filterOptions) {
+    filterOptions = filterOptions || {};
     var hosts = getStateByHosts();
-    if (filterOptions && filterOptions.searchString !== "") {
-      hosts = filterByString(hosts,
-        "hostname",
-        filterOptions.searchString
-      );
+
+    if (filterOptions) {
+      if (filterOptions.byServiceFilter != null) {
+        hosts = filterHostsByService(hosts, filterOptions.byServiceFilter);
+      }
+
+      if (filterOptions.searchString !== "") {
+        hosts = filterByString(hosts,
+          "hostname",
+          filterOptions.searchString
+        );
+      }
     }
 
     return hosts;
