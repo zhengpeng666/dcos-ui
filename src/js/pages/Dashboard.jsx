@@ -31,9 +31,9 @@ var SORT_ORDER = {
   NA: 3
 };
 
-var Activity = React.createClass({
+var Dashboard = React.createClass({
 
-  displayName: "Activity",
+  displayName: "Dashboard",
 
   getInitialState: function () {
     return getMesosState();
@@ -142,4 +142,4 @@ var Activity = React.createClass({
 
 });
 
-module.exports = Activity;
+module.exports = Dashboard;

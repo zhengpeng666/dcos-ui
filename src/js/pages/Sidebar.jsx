@@ -93,11 +93,11 @@ var Sidebar = React.createClass({
           <nav>
             <div className="container container-fluid container-fluid-narrow">
               <ul className="sidebar-menu list-unstyled">
-                <li className={this.getItemClassSet("activity")}>
-                  <Link to="activity">
+                <li className={this.getItemClassSet("dashboard")}>
+                  <Link to="dashboard">
                     <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
                     <span className="sidebar-menu-item-label">
-                      Activity
+                      Dashboard
                     </span>
                   </Link>
                 </li>
