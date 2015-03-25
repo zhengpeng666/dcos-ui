@@ -498,7 +498,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   processMarathonHealth: function (data) {
     _frameworkHealth = _.foldl(data.apps, function (curr, app) {
       if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK !== "true" ||
-          _.isEmpty(app.healthChecks)) {
+          app.healthChecks == null ||
+          app.healthChecks.length === 0) {
         return curr;
       }
 
@@ -512,11 +513,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       }
 
       var health = {key: "IDLE", value: HealthTypes.IDLE};
+      if (app.tasksHealthy === app.tasksRunning) {
+        health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
+      }
       if (app.tasksUnhealthy > 0) {
         health = {key: "UNHEALTHY", value: HealthTypes.UNHEALTHY};
-      }
-      if (app.tasksHealthy > 0) {
-        health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
       }
 
       curr[frameworkName] = health;
