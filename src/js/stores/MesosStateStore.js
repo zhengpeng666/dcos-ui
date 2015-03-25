@@ -320,17 +320,11 @@ function normalizeFrameworks(frameworks, date) {
   });
 }
 
-function filterByString(objects, searchString) {
+function filterByString(objects, key, searchString) {
   var searchPattern = new RegExp(searchString, "i");
-  var valuesPattern = /:\"[^\"]+\"/g;
-  var cleanupPattern = /[:\"]/g;
 
   return _.filter(objects, function (obj) {
-    var str = JSON.stringify(obj)
-      .match(valuesPattern)
-      .join(" ")
-      .replace(cleanupPattern, "");
-    return searchPattern.test(str);
+    return searchPattern.test(obj[key]);
   });
 }
 
@@ -418,7 +412,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       }
 
       if (filterOptions.searchString !== "") {
-        frameworks = filterByString(frameworks, filterOptions.searchString);
+        frameworks = filterByString(frameworks,
+          "name",
+          filterOptions.searchString
+        );
       }
     }
 
@@ -440,7 +437,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   getHosts: function (filterOptions) {
     var hosts = getStateByHosts();
     if (filterOptions && filterOptions.searchString !== "") {
-      hosts = filterByString(hosts, filterOptions.searchString);
+      hosts = filterByString(hosts,
+        "hostname",
+        filterOptions.searchString
+      );
     }
 
     return hosts;
