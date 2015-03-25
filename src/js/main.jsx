@@ -17,10 +17,10 @@ var NotFoundPage = require("./pages/NotFoundPage");
 /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
 var routes = (
   <Route name="home" path="/" handler={Index}>
-    <Route name="dashboard" path="dashboard" handler={DashboardPage} />
-    <Route name="services" path="services" handler={ServicesPage} />
-    <Route name="datacenter" path="datacenter" handler={DatacenterPage} />
-    <Redirect from="/" to="dashboard" />
+    <Route name="dashboard" path="dashboard/?" handler={DashboardPage} />
+    <Route name="services" path="services/?" handler={ServicesPage} />
+    <Route name="datacenter" path="datacenter/?" handler={DatacenterPage} />
+    <Redirect from="/" to="dashboard/?" />
     <NotFoundRoute handler={NotFoundPage}/>
   </Route>
 );
