@@ -21,11 +21,12 @@ function getMesosServices(filterOptions) {
     totalFrameworks: MesosStateStore.getLatest().frameworks.length,
     totalFrameworksResources:
       MesosStateStore.getTotalFrameworksResources(frameworks),
-    totalResources: MesosStateStore.getTotalResources()
+    totalResources: MesosStateStore.getTotalResources(),
+    filterOptions: filterOptions
   };
 }
 
-var _filterOptions = {
+var DEFAULT_FILTER_OPTIONS = {
   searchString: "",
   healthFilter: null
 };
@@ -35,7 +36,8 @@ var ServicesPage = React.createClass({
   displayName: "ServicesPage",
 
   getInitialState: function () {
-    return _.extend(getMesosServices(_filterOptions), _filterOptions);
+    var filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
+    return getMesosServices(filterOptions);
   },
 
   componentDidMount: function () {
@@ -58,34 +60,28 @@ var ServicesPage = React.createClass({
     }
   },
 
-  extendFilterOptions: function (options) {
-    options = options || {};
-
-    return _.extend(_.reduce(_filterOptions, function (obj, val, key) {
-      obj[key] = this.state[key];
-      return obj;
-    }.bind(this), {}), options);
-  },
-
   onChange: function (searchString) {
     var state;
     if (searchString != null) {
-      var filterOptions = this.extendFilterOptions({
-        searchString: searchString
-      });
-      state = _.extend(getMesosServices(filterOptions), filterOptions);
+      var filterOptions = this.state.filterOptions;
+      filterOptions.searchString = searchString;
+      state = getMesosServices(filterOptions);
     } else {
-      state = getMesosServices(this.extendFilterOptions());
+      state = getMesosServices(this.state.filterOptions);
     }
     this.setState(state);
   },
 
   onChangeHealthFilter: function (healthFilter) {
-    var filterOptions = this.extendFilterOptions({
-      healthFilter: healthFilter
-    });
-    var state = _.extend(getMesosServices(filterOptions), filterOptions);
-    this.setState(state);
+    var filterOptions = this.state.filterOptions;
+    filterOptions.healthFilter = healthFilter;
+    this.setState(getMesosServices(filterOptions));
+  },
+
+  resetFilter: function (e) {
+    e.preventDefault();
+    var filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
+    this.setState(getMesosServices(filterOptions));
   },
 
   getServiceStats: function () {
@@ -94,24 +90,34 @@ var ServicesPage = React.createClass({
     var totalLength = state.totalFrameworks;
 
     var filteredClassSet = React.addons.classSet({
+      "h4": true,
       "hidden": filteredLength === totalLength
     });
 
     var unfilteredClassSet = React.addons.classSet({
+      "h4": true,
       "hidden": filteredLength !== totalLength
+    });
+
+    var anchorClassSet = React.addons.classSet({
+      "clickable": true,
+      "hidden": filteredLength === totalLength
     });
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div>
-        <h4 className={filteredClassSet}>
+      <p>
+        <span className={filteredClassSet}>
           Showing {filteredLength} of {totalLength} Services
-        </h4>
-        <h4 className={unfilteredClassSet}>
+        </span>&nbsp;
+        <a className={anchorClassSet} onClick={this.resetFilter}>
+          Show all
+        </a>
+        <span className={unfilteredClassSet}>
           {totalLength} Services
-        </h4>
-      </div>
+        </span>
+      </p>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -154,7 +160,7 @@ var ServicesPage = React.createClass({
               </li>
               <li>
                 <FilterInputText
-                  searchString={state.searchString}
+                  searchString={state.filterOptions.searchString}
                   onSubmit={this.onChange} />
               </li>
             </ul>

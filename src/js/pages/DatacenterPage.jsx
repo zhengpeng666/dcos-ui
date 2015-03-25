@@ -11,8 +11,11 @@ var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
 var HostTable = require("../components/HostTable");
 
+
+var DEFAULT_FILTER_OPTIONS = {searchString: ""};
+
 function getMesosHosts(filterOptions) {
-  filterOptions = filterOptions || {searchString: ""};
+  filterOptions = filterOptions || _.clone(DEFAULT_FILTER_OPTIONS);
   var hosts = MesosStateStore.getHosts(filterOptions);
   return _.extend({
     hosts: hosts,
@@ -20,7 +23,7 @@ function getMesosHosts(filterOptions) {
     totalHosts: MesosStateStore.getLatest().slaves.length,
     totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
     totalResources: MesosStateStore.getTotalResources()
-  }, filterOptions);
+  }, {filterOptions: filterOptions});
 }
 
 var DatacenterPage = React.createClass({
@@ -52,11 +55,19 @@ var DatacenterPage = React.createClass({
   },
 
   onChange: function () {
-    this.setState(getMesosHosts({searchString: this.state.searchString}));
+    this.setState(getMesosHosts(this.state.filterOptions));
   },
 
   onFilterChange: function (searchString) {
-    this.setState(getMesosHosts({searchString: searchString}));
+    var filterOptions = this.state.filterOptions;
+    filterOptions.searchString = searchString;
+    this.setState(getMesosHosts(filterOptions));
+  },
+
+  resetFilter: function (e) {
+    e.preventDefault();
+    var filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
+    this.setState(getMesosHosts(filterOptions));
   },
 
   getHostsStats: function () {
@@ -65,24 +76,34 @@ var DatacenterPage = React.createClass({
     var totalLength = state.totalHosts;
 
     var filteredClassSet = React.addons.classSet({
+      "h4": true,
       "hidden": filteredLength === totalLength
     });
 
     var unfilteredClassSet = React.addons.classSet({
+      "h4": true,
       "hidden": filteredLength !== totalLength
+    });
+
+    var anchorClassSet = React.addons.classSet({
+      "clickable": true,
+      "hidden": filteredLength === totalLength
     });
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div>
-        <h4 className={filteredClassSet}>
+      <p>
+        <span className={filteredClassSet}>
           Showing {filteredLength} of {totalLength} Hosts
-        </h4>
-        <h4 className={unfilteredClassSet}>
+        </span>&nbsp;
+        <a className={anchorClassSet} onClick={this.resetFilter}>
+          Show all
+        </a>
+        <span className={unfilteredClassSet}>
           {totalLength} Hosts
-        </h4>
-      </div>
+        </span>
+      </p>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -116,7 +137,7 @@ var DatacenterPage = React.createClass({
               resourceType="Nodes" />
             {this.getHostsStats()}
             <FilterInputText
-              searchString={this.state.searchString}
+              searchString={this.state.filterOptions.searchString}
               onSubmit={this.onFilterChange} />
             <HostTable hosts={this.state.hosts} />
           </div>
