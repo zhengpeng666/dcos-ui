@@ -2,13 +2,13 @@
 
 var React = require("react/addons");
 
-var Activity = require("../pages/Activity");
+var Dashboard = require("../pages/Dashboard");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
 
-var ActivityPage = React.createClass({
+var DashboardPage = React.createClass({
 
-  displayName: "ActivityPage",
+  displayName: "DashboardPage",
 
   statics: {
     willTransitionTo: function () {
@@ -27,7 +27,7 @@ var ActivityPage = React.createClass({
             <div className="page-header-context">
               <SidebarToggle />
               <h1 className="page-header-title flush-top flush-bottom">
-                Activity
+                Dashboard
               </h1>
             </div>
             <div className="page-header-navigation" />
@@ -35,7 +35,7 @@ var ActivityPage = React.createClass({
         </div>
         <div className="page-content container-scrollable">
           <div className="container container-fluid container-pod">
-            <Activity />
+            <Dashboard />
           </div>
         </div>
       </div>
@@ -44,4 +44,4 @@ var ActivityPage = React.createClass({
 
 });
 
-module.exports = ActivityPage;
+module.exports = DashboardPage;

@@ -56,7 +56,7 @@ var NotFoundPage = React.createClass({
                   The page you’ve requested cannot be found.
                   It’s possible you copied the wrong link.
                   Check again, or jump back to your&nbsp;
-                  <Link to="activity">Dashboard</Link>.
+                  <Link to="dashboard">Dashboard</Link>.
                 </p>
               </Panel>
             </div>

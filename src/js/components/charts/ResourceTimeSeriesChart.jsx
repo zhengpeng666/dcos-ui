@@ -12,16 +12,23 @@ var ResourceChart = React.createClass({
   displayName: "ResourceChart",
 
   propTypes: {
-    totalResources: React.PropTypes.object.isRequired,
+    colorIndex: React.PropTypes.number.isRequired,
     allocResources: React.PropTypes.object.isRequired,
+    totalResources: React.PropTypes.object.isRequired,
     mode: React.PropTypes.string
+  },
+
+  getDefaultProps: function () {
+    return {
+      colorIndex: 0
+    };
   },
 
   getData: function () {
     var props = this.props;
     return [{
         name: "Alloc",
-        colorIndex: 0,
+        colorIndex: this.props.colorIndex,
         values: props.allocResources[props.mode],
       }];
   },
@@ -30,12 +37,14 @@ var ResourceChart = React.createClass({
     return _.last(values).percentage;
   },
 
-  getHeadline: function (values) {
+  getHeadline: function (values, totalValues) {
     var value = _.last(values).value;
+    var totalValue = _.last(totalValues).value;
     if (this.props.mode === "cpus") {
-      return value + " CPU";
+      return value + " of " + totalValue + " Shares";
     } else {
-      return Humanize.filesize(value * 1024 * 1024, 1024, 0);
+      return Humanize.filesize(value * 1024 * 1024, 1024, 0) + " of " +
+        Humanize.filesize(totalValue * 1024 * 1024, 1024, 0);
     }
   },
 
@@ -58,31 +67,20 @@ var ResourceChart = React.createClass({
   render: function () {
     var props = this.props;
     var allocResources = props.allocResources[props.mode];
-    var totalHeadline =
-      this.getHeadline(props.totalResources[props.mode]).split(" ");
+    var totalResources = props.totalResources[props.mode];
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="chart">
         <div className="row text-align-center">
-          <div className="column-small-offset-2 column-small-4">
-            <p className="h1-jumbo unit">
-              {totalHeadline[0]}
-            </p>
-            <p className="h4 unit-label path-color-6">
-              {totalHeadline[1]} Total
-            </p>
-          </div>
-          <div className="column-small-4">
-            <p className="h1-jumbo unit">
-              {this.getLatestPercent(allocResources)}
-              <sup>%</sup>
-            </p>
-            <p className="h4 unit-label path-color-0">
-              {this.getHeadline(allocResources)} Alloc
-            </p>
-          </div>
+          <p className="h1-jumbo unit">
+            {this.getLatestPercent(allocResources)}
+            <sup>%</sup>
+          </p>
+          <p className={"h4 unit-label path-color-" + this.props.colorIndex}>
+            {this.getHeadline(allocResources, totalResources)}
+          </p>
         </div>
         {this.getChart()}
       </div>
