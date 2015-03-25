@@ -23,7 +23,8 @@ var ResourceBarChart = React.createClass({
     data: React.PropTypes.array.isRequired,
     resources: React.PropTypes.object.isRequired,
     totalResources: React.PropTypes.object.isRequired,
-    refreshRate: React.PropTypes.number.isRequired
+    refreshRate: React.PropTypes.number.isRequired,
+    resourceType: React.PropTypes.string
   },
 
   getDefaultProps: function () {
@@ -31,7 +32,8 @@ var ResourceBarChart = React.createClass({
       data: [],
       totalResources: {},
       y: "percentage",
-      refreshRate: 0
+      refreshRate: 0,
+      resourceType: ""
     };
   },
 
@@ -105,9 +107,7 @@ var ResourceBarChart = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
-  getLegend: function () {
-    var info = infoMap[this.state.resourceMode];
-
+  getLegend: function (info) {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
@@ -124,17 +124,36 @@ var ResourceBarChart = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
+  getHeadline: function (info) {
+    var headline = info.label + " Allocation Per Second";
+
+    return (
+      <div>
+        <h3>
+          {headline}
+        </h3>
+        <p>
+          {this.props.data.length + " Total " + this.props.resourceType}
+        </p>
+      </div>
+    );
+  },
+
   render: function () {
+    var info = infoMap[this.state.resourceMode];
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="chart panel">
         <div className="panel-heading panel-heading-large">
+          <div className="panel-options-left button-group">
+            {this.getModeButtons()}
+          </div>
           <div className="panel-title">
-            <div className="button-group">
-              {this.getModeButtons()}
-            </div>
-            {this.getLegend()}
+            {this.getHeadline(info)}
+          </div>
+          <div className="panel-options-right">
+            {this.getLegend(info)}
           </div>
         </div>
         <div className="panel-content" ref="panelContent">
