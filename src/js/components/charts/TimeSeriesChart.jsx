@@ -246,7 +246,6 @@ var TimeSeriesChart = React.createClass({
       .call(yAxis);
 
     d3.select(this.refs.grid.getDOMNode())
-      .attr("class", "grid-graph")
       .attr("transform", "translate(" + margin.left + ",0)")
       .call(
         d3.svg.axis().scale(yScale)
@@ -367,7 +366,7 @@ var TimeSeriesChart = React.createClass({
     return (
       <svg height={props.height} width={props.width}>
         {this.getStripes(4)}
-        <g className="bars" ref="grid" />
+        <g className="bars grid-graph" ref="grid" />
         <g className="y axis" ref="yAxis" />
         <g className="y axis">
           <text className="current-value shadow" ref="yAxisCurrent"

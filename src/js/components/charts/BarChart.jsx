@@ -119,7 +119,7 @@ var BarChart = React.createClass({
         .scale(xScale)
         .ticks(xTicks)
         .orient("bottom");
-      var xAxisEl = d3.select(this.refs.xAxis.getDOMNode()).interrupt()
+      d3.select(this.refs.xAxis.getDOMNode()).interrupt()
         .attr("class", "x axis")
         .call(xAxis);
     }
@@ -264,7 +264,7 @@ var BarChart = React.createClass({
           <g className="x axis"
             transform={"translate(" + [0, props.height] + ")"}
             ref="xAxis"/>
-          <g clip-path="url(#clip)">
+          <g className="grid-graph" clip-path="url(#clip)">
             <g ref="yGrid" />
             <g ref="xGrid" />
             {this.getBarList()}

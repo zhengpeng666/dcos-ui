@@ -1,19 +1,13 @@
 @font-family-sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-@text-danger-color: ~`color_lightness("@{red}", 0)`;
-@text-warning-color: ~`color_lightness("@{yellow}", 0)`;
-@text-success-color: ~`color_lightness("@{green}", 0)`;
+@text-danger-color: @red;
+@text-warning-color: @yellow;
+@text-success-color: @green;
 @text-muted-color: @body-text-mute-color;
 
 /* Body Text Styling */
-@body-text-color: ~`color_lightness("@{neutral}", 40)`;
 @body-text-font-size: 12px;
 @body-text-line-height: 16px;
-
-/* Body Text Links */
-@body-text-link-text-color: ~`color_lightness("@{blue}", 0)`;
-@body-text-link-hover-text-color: ~`color_lightness("@{blue}", -20)`;
-@body-text-link-active-text-color: ~`color_lightness("@{blue}", -40)`;
 
 /* Body Text Margins */
 @body-text-margin-bottom: @base-spacing-unit * 0.25;
@@ -47,12 +41,12 @@
 @heading-h2-text-font-size-scale-screen-large: @body-text-font-size-scale-screen-large * 1.0;
 
 /* Heading H3 Text Styling */
-@heading-h3-text-color: ~`color_lightness("@{neutral}", 80)`;
+@heading-h3-text-color: ~`color_lightness("@{neutral}", 90)`;
 @heading-h3-text-font-size: @heading-h4-text-font-size * 1.1;
 @heading-h3-text-font-weight: 200;
 
 /* Heading H4 Text Styling */
-@heading-h4-text-color: ~`color_lightness("@{neutral}", 75)`;
+@heading-h4-text-color: ~`color_lightness("@{neutral}", 80)`;
 @heading-h4-text-font-size: @heading-h5-text-font-size * 1.2;
 @heading-h4-text-font-weight: 200;
 @heading-h4-text-line-height: @heading-h5-text-line-height * 1.2;
@@ -94,10 +88,10 @@ Heading H1 Text Styling
 
 @heading-h1-jumbo-text-color: @heading-h1-text-color;
 @heading-h1-jumbo-text-font-family: @font-family-sans-serif;
-@heading-h1-jumbo-text-font-size: @heading-h1-text-font-size * 2;
+@heading-h1-jumbo-text-font-size: @heading-h1-text-font-size * 2.5;
 @heading-h1-jumbo-text-font-style: normal;
 @heading-h1-jumbo-text-font-weight: 100;
-@heading-h1-jumbo-text-line-height: @heading-h1-text-line-height * 2;
+@heading-h1-jumbo-text-line-height: @heading-h1-text-line-height * 2.5;
 @heading-h1-jumbo-text-transform: none;
 @heading-h1-jumbo-text-shadow: none;
 

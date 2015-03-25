@@ -68,7 +68,7 @@ var DialChart = React.createClass({
     return {
       innerArc: d3.svg.arc()
         .outerRadius(radius * 0.9)
-        .innerRadius(radius * 0.85),
+        .innerRadius(radius * 0.87),
       outerArc: d3.svg.arc()
         .outerRadius(radius * 1)
         .innerRadius(radius * 1),

@@ -21,7 +21,7 @@
   }
 
   .axis text.current-value.shadow {
-    text-shadow: 0px 0px 10px @panel-background-color;
+    text-shadow: 0px 0px 10px fade(@white, 6%);
   }
 
   .area path {
@@ -31,7 +31,7 @@
 
   .arc path {
     stroke-width: 4px;
-    stroke: @panel-background-color;
+    stroke: fade(@white, 6%);
 
   }
 
@@ -120,7 +120,7 @@
 
   & when (@typography-enabled) {
     .unit {
-      fill: ~`color_lightness("@{neutral}", 100)`;
+      fill: @white;
     }
 
     .unit-label {
@@ -155,11 +155,11 @@
     }
 
     .text-danger {
-      fill: ~`color_lightness("@{red}", 0)`;
+      fill: @red;
     }
 
     .text-success {
-      fill: ~`color_lightness("@{green}", 0)`;
+      fill: @green;
     }
 
     .text-muted {
