@@ -48,10 +48,15 @@ var FilterHealth = React.createClass({
 
   getCountByHealth: function (key) {
     var props = this.props;
+    var count = 0;
     if (key === "ALL") {
-      return props.servicesLength;
+      count = props.servicesLength;
     }
-    return props.countByHealth[HealthTypes[key]];
+    if (props.countByHealth[HealthTypes[key]] != null) {
+      count = props.countByHealth[HealthTypes[key]];
+    }
+
+    return count;
   },
 
   getFilterButtons: function () {

@@ -4,19 +4,33 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
+var FilterHealth = require("../components/FilterHealth");
+var FilterInputText = require("../components/FilterInputText");
+// var HealthTypes = require("../constants/HealthTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
-var FilterHealth = require("../components/FilterHealth");
-var FilterInputText = require("../components/FilterInputText");
 var ServiceTable = require("../components/ServiceTable");
+
+function getCountByHealth(frameworks) {
+  return _.foldl(frameworks, function (acc, framework) {
+    if (acc[framework.health.value] === undefined) {
+      acc[framework.health.value] = 1;
+    } else {
+      acc[framework.health.value]++;
+    }
+
+    return acc;
+  }, {});
+}
 
 function getMesosServices(filterOptions) {
   var frameworks = MesosStateStore.getFrameworks(filterOptions);
+
   return {
     frameworks: frameworks,
-    countByHealth: MesosStateStore.getCountByHealth(),
+    countByHealth: getCountByHealth(frameworks),
     refreshRate: MesosStateStore.getRefreshRate(),
     totalFrameworks: MesosStateStore.getLatest().frameworks.length,
     totalFrameworksResources:
@@ -74,7 +88,11 @@ var ServicesPage = React.createClass({
 
   onChangeHealthFilter: function (healthFilter) {
     var filterOptions = this.state.filterOptions;
-    filterOptions.healthFilter = healthFilter;
+    if (healthFilter == null) {
+      filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
+    } else {
+      filterOptions.healthFilter = healthFilter;
+    }
     this.setState(getMesosServices(filterOptions));
   },
 
