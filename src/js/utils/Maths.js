@@ -8,10 +8,10 @@ var Maths = {
   /**
    * maps to domain (0,1)
    *
-   * @param  value {Number} Number in range
-   * @param  stats {Object}
-   * @param  stats.min {Number} Minimum in range
-   * @param  stats.max {Number} Maximum in range
+   * @param  {Number} value Number in range
+   * @param  {Object} stats
+   * @param  {Number} stats.min Minimum in range
+   * @param  {Number} stats.max Maximum in range
    * @return {Number} A mapped number between (0,1)
    **/
   mapValue: function (value, stats) {
@@ -36,10 +36,10 @@ var Maths = {
   /**
    * pass in between 0 and 1
    *
-   * @param  value {Number} Mapped number between (0,1)
-   * @param  stats {Object}
-   * @param  stats.min {Number} Minimum in range
-   * @param  stats.max {Number} Maximum in range
+   * @param  {Number} value Mapped number between (0,1)
+   * @param  {Object} stats
+   * @param  {Number} stats.min Minimum in range
+   * @param  {Number} stats.max Maximum in range
    * @return {Number} An unmapped number between in the provided range
    **/
   unmapValue: function (value, stats) {
