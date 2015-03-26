@@ -6,7 +6,6 @@ var React = require("react/addons");
 var EventTypes = require("../constants/EventTypes");
 var FilterHealth = require("../components/FilterHealth");
 var FilterInputText = require("../components/FilterInputText");
-// var HealthTypes = require("../constants/HealthTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
