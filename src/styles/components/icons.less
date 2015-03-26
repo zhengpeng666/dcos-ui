@@ -246,6 +246,11 @@
 			}
 		}
 
+		&.border-radius {
+		  .border-radius(@icon-medium-border-radius);
+		}
+
+	}
 
 }
 
@@ -268,6 +273,12 @@
 			background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 0);
 		}
 
+		&.border-radius {
+		  .border-radius(@icon-large-border-radius);
+		}
+
+	}
+
 }
 
 /* Icons (Jumbo) */
@@ -288,48 +299,49 @@
 			background-position: floor(-@icon-jumbo-variant-color-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 0);
 		}
 
+		/* Icon: Services */
+		&.icon-services {
+			background-position: floor(-@icon-jumbo-variant-black-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 1);
+
+			&.icon-jumbo-white {
+				background-position: floor(-@icon-jumbo-variant-white-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 1);
+			}
+
+			&.icon-jumbo-color {
+				background-position: floor(-@icon-jumbo-variant-color-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 1);
+			}
+		}
+
+		/* Icon: Datacenter */
+		&.icon-datacenter {
+			background-position: floor(-@icon-jumbo-variant-black-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 2);
+
+			&.icon-jumbo-white {
+				background-position: floor(-@icon-jumbo-variant-white-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 2);
+			}
+
+			&.icon-jumbo-color {
+				background-position: floor(-@icon-jumbo-variant-color-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 2);
+			}
+		}
+
+		/* Icon: Lost Planet */
+		&.icon-lost-planet {
+			background-position: floor(-@icon-jumbo-variant-black-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 3);
+
+			&.icon-jumbo-white {
+				background-position: floor(-@icon-jumbo-variant-white-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 3);
+			}
+
+			&.icon-jumbo-color {
+				background-position: floor(-@icon-jumbo-variant-color-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 3);
+			}
+		}
+
 		&.border-radius {
 		  .border-radius(@icon-jumbo-border-radius);
 		}
-	}
-
-	/* Icon: Services */
-	&.icon-services {
-		background-position: floor(-@icon-jumbo-variant-black-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 1);
-
-		&.icon-jumbo-white {
-			background-position: floor(-@icon-jumbo-variant-white-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 1);
-		}
-
-		&.icon-jumbo-color {
-			background-position: floor(-@icon-jumbo-variant-color-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 1);
-		}
-	}
-
-	/* Icon: Datacenter */
-	&.icon-datacenter {
-		background-position: floor(-@icon-jumbo-variant-black-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 2);
-
-		&.icon-jumbo-white {
-			background-position: floor(-@icon-jumbo-variant-white-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 2);
-		}
-
-		&.icon-jumbo-color {
-			background-position: floor(-@icon-jumbo-variant-color-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 2);
-		}
-	}
-
-	/* Icon: Lost Planet */
-	&.icon-lost-planet {
-		background-position: floor(-@icon-jumbo-variant-black-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 3);
-
-		&.icon-jumbo-white {
-			background-position: floor(-@icon-jumbo-variant-white-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 3);
-		}
-
-		&.icon-jumbo-color {
-			background-position: floor(-@icon-jumbo-variant-color-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 3);
-		}
+		
 	}
 
 }
