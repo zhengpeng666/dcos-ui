@@ -15,7 +15,7 @@ var ListItem = React.createClass({
   getObjectItems: function (object, order) {
     return _.map(order, function (property, key) {
       var propertyData = object[property];
-      var styles = _.omit(propertyData, "value", "classes");
+      var styles = _.omit(propertyData, "value", "classes", "attributes");
 
       var classes = {h3: true};
       if (propertyData.classes) {
@@ -23,10 +23,11 @@ var ListItem = React.createClass({
       }
       var classSet = React.addons.classSet(classes);
 
-      return (
-        <div key={key} style={styles} className={classSet}>
-          {propertyData.value}
-        </div>
+      var attributes = propertyData.attributes || {};
+      return React.createElement(
+        "div",
+        _.extend({className: classSet, key: key, style: styles}, attributes),
+        propertyData.value
       );
     });
   },

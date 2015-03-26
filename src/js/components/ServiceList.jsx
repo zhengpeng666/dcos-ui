@@ -4,6 +4,7 @@ var _ = require("underscore");
 var React = require("react");
 
 var HealthLabels = require("../constants/HealthLabels");
+var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var List = require("./List");
 
 var STATES = {
@@ -29,14 +30,33 @@ var ServiceList = React.createClass({
 
   getServices: function (services) {
     var displayServices = _.map(services, function (service) {
+      var attributes = {};
       var state = STATES.NA;
       if (service.health != null) {
         state = STATES[service.health.key];
+
+        switch (service.health.key) {
+          case STATES.HEALTHY.key:
+          case STATES.UNHEALTHY.key:
+            attributes["data-behavior"] = "show-tip";
+            attributes["data-tip-place"] = "top-left";
+          case STATES.UNHEALTHY.key:
+            attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
+            break;
+          case STATES.UNHEALTHY.key:
+            attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
+            break;
+        }
       }
 
       return {
         title: {value: service.name},
-        health: {value: HealthLabels[state.key], classes: state.classes, textAlign: "right"}
+        health: {
+          value: HealthLabels[state.key],
+          classes: state.classes,
+          attributes: attributes,
+          textAlign: "right"
+        }
       };
     });
 

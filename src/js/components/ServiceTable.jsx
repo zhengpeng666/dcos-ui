@@ -103,12 +103,12 @@ var ServicesTable = React.createClass({
     var attributes = {};
     switch (model.health.value) {
       case HealthTypes.HEALTHY:
-        attributes['data-behavior'] = "show-tip"
-        attributes['data-tip-content'] = HealthTypesDescription.HEALTHY
+        attributes["data-behavior"] = "show-tip";
+        attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
         break;
       case HealthTypes.UNHEALTHY:
-        attributes['data-behavior'] = "show-tip"
-        attributes['data-tip-content'] = HealthTypesDescription.UNHEALTHY
+        attributes["data-behavior"] = "show-tip";
+        attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
         break;
     }
 

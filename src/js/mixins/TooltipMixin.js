@@ -67,7 +67,12 @@ var TooltipMixin = {
 
   _tipCreateTipForElement: function (el) {
     el.dataset.tipID = _.uniqueId("tooltip");
-    var tip = new Tooltip(el.dataset.tipContent);
+    var options = {};
+    if (el.dataset.tipPlace) {
+      options.place = el.dataset.tipPlace;
+    }
+
+    var tip = new Tooltip(el.dataset.tipContent, options);
     tip.attach(el);
 
     this.tips[el.dataset.tipID] = tip;

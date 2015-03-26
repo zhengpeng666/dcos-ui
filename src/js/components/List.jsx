@@ -1,9 +1,10 @@
 /** @jsx React.DOM */
 
-var ListItem = require("./ListItem");
-
 var _ = require("underscore");
 var React = require("react");
+
+var ListItem = require("./ListItem");
+var TooltipMixin = require("../mixins/TooltipMixin");
 
 var List = React.createClass({
 
@@ -13,6 +14,8 @@ var List = React.createClass({
     list: React.PropTypes.array.isRequired,
     order: React.PropTypes.array.isRequired
   },
+
+  mixins: [TooltipMixin],
 
   getListItems: function (list, order) {
     return _.map(list, function (item, key) {
