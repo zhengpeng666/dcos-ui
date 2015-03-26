@@ -4,7 +4,7 @@
 @icon-mini-width: 16px;
 @icon-mini-height: 16px;
 @icon-mini-count-horizontal: 3;
-@icon-mini-count-vertical: 1;
+@icon-mini-count-vertical: 4;
 @icon-mini-border-radius: 2px;
 
 @icon-mini-variant-black-offset-horizontal: 0 * @icon-mini-width;
@@ -151,6 +151,45 @@
 
 		&.icon-mini-color {
 			background-position: floor(-@icon-mini-variant-color-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 0);
+		}
+
+		/* Icon: List */
+		&.icon-list {
+			background-position: floor(-@icon-mini-variant-black-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 1);
+
+			&.icon-mini-white {
+				background-position: floor(-@icon-mini-variant-white-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 1);
+			}
+
+			&.icon-mini-color {
+				background-position: floor(-@icon-mini-variant-color-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 1);
+			}
+		}
+
+		/* Icon: Grid */
+		&.icon-grid {
+			background-position: floor(-@icon-mini-variant-black-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 2);
+
+			&.icon-mini-white {
+				background-position: floor(-@icon-mini-variant-white-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 2);
+			}
+
+			&.icon-mini-color {
+				background-position: floor(-@icon-mini-variant-color-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 2);
+			}
+		}
+
+		/* Icon: Search */
+		&.icon-search {
+			background-position: floor(-@icon-mini-variant-black-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 3);
+
+			&.icon-mini-white {
+				background-position: floor(-@icon-mini-variant-white-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 3);
+			}
+
+			&.icon-mini-color {
+				background-position: floor(-@icon-mini-variant-color-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 3);
+			}
 		}
 
 		&.border-radius {
@@ -341,7 +380,7 @@
 		&.border-radius {
 		  .border-radius(@icon-jumbo-border-radius);
 		}
-		
+
 	}
 
 }
