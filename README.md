@@ -29,6 +29,24 @@
   npm run dist
   ```
 
+#### Adding npm package dependencies to package.json
+
+If you want to add a new npm package to 'node_modules':
+
+1. Install the new package
+
+        npm install [your package] --save
+    will install and save to dependencies in package.json and
+
+        npm install [your package] --save-dev
+    will add it to devDependencies.
+
+2. Create a synced npm-shrinkwrap.json with devDependencies included
+
+        npm shrinkwrap --dev
+
+3. Commit to repository
+
 #### Development Setup (Sublime Text)
 
 1. Add the following to your Sublime Text User Settings:

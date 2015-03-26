@@ -5,18 +5,17 @@
 @z-index-header: 1000;
 
 /* body */
-@body-background-color: @canvas-pod-dark-background-color;
+@body-background-color: ~`color_lightness("@{neutral}", -30)`;//#232937
 
 /* canvas */
-@canvas-background-color: @canvas-pod-dark-background-color;
+@canvas-background-color: ~`color_lightness("@{neutral}", -30)`;
 
 /* canvas pod */
-@canvas-pod-light-background-color: ~`color_lightness("@{gray}", 90)`;
-@canvas-pod-dark-background-color: ~`color_lightness("@{gray}", -30)`;
+@canvas-pod-light-background-color: ~`color_lightness("@{neutral}", 90)`;
 
 /* borders */
 @border-color: rgba(255, 255, 255, 0.1);
-@border-color-inverse: @canvas-pod-dark-background-color;
+@border-color-inverse: @neutral;
 
 /* collection */
 @table-row-height: @icon-small-height + @base-spacing-unit;

@@ -1,19 +1,27 @@
 .chart {
   svg .background {
-    fill: fade(@gray, 80%);
+    fill: fade(@neutral, 80%);
   }
 
   .axis path,
-  .grid .tick,
+  .grid-graph .tick,
   .axis line {
     fill: none;
-    stroke: @body-text-inverse-color;
+    stroke: fade(@white, 6%);
     stroke-width: 1px;
     shape-rendering: crispEdges;
   }
 
   .axis text {
     fill: @body-text-inverse-color;
+  }
+
+  .axis text.current-value {
+    fill: @white;
+  }
+
+  .axis text.current-value.shadow {
+    text-shadow: 0px 0px 10px fade(@white, 6%);
   }
 
   .area path {
@@ -24,40 +32,39 @@
   .arc path {
     stroke-width: 4px;
     stroke: @panel-background-color;
-
   }
 
   .arc,
   .area,
   .bar rect {
     &.path-color-0 {
-      stroke: @mesosphere-heliotrope;
-      fill: @mesosphere-heliotrope;
+      stroke: @purple;
+      fill: @purple;
     }
 
     &.path-color-1 {
-      stroke: @mesosphere-lemon;
-      fill: @mesosphere-lemon;
+      stroke: @yellow;
+      fill: @yellow;
     }
 
     &.path-color-2 {
-      stroke: @mesosphere-mars;
-      fill: @mesosphere-mars;
+      stroke: @red;
+      fill: @red;
     }
 
     &.path-color-3 {
-      stroke: @mesosphere-azure;
-      fill: @mesosphere-azure;
+      stroke: @blue;
+      fill: @blue;
     }
 
     &.path-color-4 {
-      stroke: @mesosphere-seafoam;
-      fill: @mesosphere-seafoam;
+      stroke: @green;
+      fill: @green;
     }
 
     &.path-color-5 {
-      stroke: @mesosphere-orchid;
-      fill: @mesosphere-orchid;
+      stroke: @orchid;
+      fill: @orchid;
     }
 
     &.path-color-6 {
@@ -68,7 +75,6 @@
 
   .barchart {
     .bar {
-      fill-opacity: 0.5;
       stroke-width: 0px;
 
       line {
@@ -88,7 +94,7 @@
       }
 
       &.y path {
-        stroke: @gray;
+        stroke: @neutral;
       }
 
       line {
@@ -96,7 +102,7 @@
       }
     }
 
-    .grid {
+    .grid-graph {
       &.y {
         .tick:first-child line {
           stroke-dasharray: 0,0;
@@ -104,7 +110,7 @@
       }
 
       line {
-        stroke: @gray;
+        stroke: @neutral;
         stroke-dasharray: 4,4;
       }
     }
@@ -112,33 +118,33 @@
 
   & when (@typography-enabled) {
     .unit {
-      fill: ~`color_lightness("@{gray}", 100)`;
+      fill: @white;
     }
 
     .unit-label {
-      fill: @mesosphere-heliotrope;
+      fill: @purple;
       &.path-color-0 {
-        color: @mesosphere-heliotrope;
+        color: @purple;
       }
 
       &.path-color-1 {
-        color: @mesosphere-lemon;
+        color: @yellow;
       }
 
       &.path-color-2 {
-        color: @mesosphere-mars;
+        color: @red;
       }
 
       &.path-color-3 {
-        color: @mesosphere-azure;
+        color: @blue;
       }
 
       &.path-color-4 {
-        color: @mesosphere-seafoam;
+        color: @green;
       }
 
       &.path-color-5 {
-        color: @mesosphere-orchid;
+        color: @orchid;
       }
 
       &.path-color-6 {
@@ -147,11 +153,11 @@
     }
 
     .text-danger {
-      fill: ~`color_lightness("@{mesosphere-mars}", 0)`;
+      fill: @red;
     }
 
     .text-success {
-      fill: ~`color_lightness("@{mesosphere-seafoam}", 0)`;
+      fill: @green;
     }
 
     .text-muted {
@@ -160,11 +166,8 @@
   }
 
   .legend {
-
     display: table;
-    margin: 0 auto;
     text-align: center;
-    float: right;
 
     border: @button-border-width solid @button-default-background-color;
     .border-radius(@icon-medium-border-radius);
@@ -185,27 +188,27 @@
         line-height: @button-text-line-height;
 
         &.path-color-0 {
-          color: @mesosphere-heliotrope;
+          color: @purple;
         }
 
         &.path-color-1 {
-          color: @mesosphere-lemon;
+          color: @yellow;
         }
 
         &.path-color-2 {
-          color: @mesosphere-mars;
+          color: @red;
         }
 
         &.path-color-3 {
-          color: @mesosphere-azure;
+          color: @blue;
         }
 
         &.path-color-4 {
-          color: @mesosphere-seafoam;
+          color: @green;
         }
 
         &.path-color-5 {
-          color: @mesosphere-orchid;
+          color: @orchid;
         }
 
         &.path-color-6 {

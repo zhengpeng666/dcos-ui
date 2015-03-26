@@ -14,7 +14,7 @@ function getClassName(prop, sortBy, row) {
   var classSet = React.addons.classSet({
     "align-right": isStat(prop) || prop === "tasks_size",
     "hidden-mini fixed-width": isStat(prop),
-    "highlighted": prop === sortBy.prop,
+    "highlight": prop === sortBy.prop,
     "clickable": row == null // this is a header
   });
 
@@ -35,7 +35,7 @@ function sortFunction(prop) {
   }
 }
 
-function rowOptions(model) {
+function getRowAttributes(model) {
   return {
     className: React.addons.classSet({
       "danger": model.active === false
@@ -153,13 +153,13 @@ var HostTable = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Table
-        className="table"
+        className="table inverse table-borderless-outer table-borderless-inner-columns"
         columns={this.getColumns()}
         data={this.props.hosts.slice(0)}
         keys={["id"]}
         sortBy={{ prop: "hostname", order: "desc" }}
         sortFunc={sortFunction}
-        buildRowOptions={rowOptions} />
+        buildRowOptions={getRowAttributes} />
     );
   }
 });

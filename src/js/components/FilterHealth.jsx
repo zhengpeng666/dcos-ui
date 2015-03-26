@@ -63,7 +63,7 @@ var FilterHealth = React.createClass({
         health = null;
       }
       var classSet = React.addons.classSet({
-        "button": true,
+        "button button-stroke button-inverse": true,
         "active": mode === health
       });
 

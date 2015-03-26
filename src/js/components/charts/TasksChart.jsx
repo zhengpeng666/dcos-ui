@@ -7,17 +7,17 @@ var Chart = require("./Chart");
 var DialChart = require("./DialChart");
 
 var tasksPerRow = 3;
-var taskLabels = {
-  "TASK_RUNNING": "Tasks running",
-  "TASK_STAGING": "Tasks staging"
+var taskInfo = {
+  "TASK_RUNNING": {label: "Tasks running", colorIndex: 4},
+  "TASK_STAGING": {label: "Tasks staging", colorIndex: 1}
 };
 
-function getStateWithNoData () {
+function getStateWithNoData() {
   return {
     dialChartData: [{colorIndex: 6, value: 1}],
-    infoData: [
-      {colorIndex: 0, name: "TASK_RUNNING", value: 0},
-      {colorIndex: 1, name: "TASK_STAGING", value: 0}
+    tasksData: [
+      {name: "TASK_RUNNING", value: 0},
+      {name: "TASK_STAGING", value: 0}
     ]
   };
 }
@@ -33,13 +33,14 @@ var TasksChart = React.createClass({
 
   getTaskInfo: function (tasks) {
     if (tasks.length === 0) {
-      tasks = getStateWithNoData().infoData;
+      tasks = getStateWithNoData().tasksData;
     }
 
     var numberOfTasks = tasks.length;
     var leftover = numberOfTasks % tasksPerRow;
 
     return _.map(tasks, function (task, i) {
+      var info = taskInfo[task.name];
       var classes = {
         "text-align-center": true
       };
@@ -55,8 +56,8 @@ var TasksChart = React.createClass({
           <p className="h1 unit">
             {task.value}
           </p>
-          <p className={"unit-label path-color-" + i}>
-            {taskLabels[task.name]}
+          <p className={"unit-label path-color-" + info.colorIndex}>
+            {info.label}
           </p>
         </div>
       );
@@ -70,7 +71,7 @@ var TasksChart = React.createClass({
   },
 
   getTasks: function () {
-    var keys = _.keys(taskLabels);
+    var keys = _.keys(taskInfo);
     var starting = 0;
     return _.chain(this.props.tasks)
       .filter(function (task) {
@@ -81,13 +82,14 @@ var TasksChart = React.createClass({
         return _.contains(keys, task.state);
       })
       .sortBy("state")
-      .map(function (task, i) {
+      .map(function (task) {
         var value = task.tasks.length;
+        var info = taskInfo[task.state];
         // add starting to staging
         if (task.state === "TASK_STAGING") {
           value = starting + task.tasks.length;
         }
-        return {colorIndex: i, name: task.state, value: value};
+        return {colorIndex: info.colorIndex, name: task.state, value: value};
       }
     ).value();
   },

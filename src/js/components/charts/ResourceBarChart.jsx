@@ -9,10 +9,10 @@ var BarChart = require("./BarChart");
 // number to fit design of width vs. height ratio
 var WIDTH_HEIGHT_RATIO = 4.5;
 
-var buttonNameMap = {
-  cpus: "CPU",
-  mem: "Memory",
-  disk: "Disk"
+var infoMap = {
+  cpus: {label: "CPU", colorIndex: 0},
+  mem: {label: "Memory", colorIndex: 3},
+  disk: {label: "Disk", colorIndex: 5}
 };
 
 var ResourceBarChart = React.createClass({
@@ -23,7 +23,8 @@ var ResourceBarChart = React.createClass({
     data: React.PropTypes.array.isRequired,
     resources: React.PropTypes.object.isRequired,
     totalResources: React.PropTypes.object.isRequired,
-    refreshRate: React.PropTypes.number.isRequired
+    refreshRate: React.PropTypes.number.isRequired,
+    resourceType: React.PropTypes.string
   },
 
   getDefaultProps: function () {
@@ -31,7 +32,8 @@ var ResourceBarChart = React.createClass({
       data: [],
       totalResources: {},
       y: "percentage",
-      refreshRate: 0
+      refreshRate: 0,
+      resourceType: ""
     };
   },
 
@@ -51,7 +53,7 @@ var ResourceBarChart = React.createClass({
     return [{
         id: "used_resources",
         name: this.state.resourceMode + " allocated",
-        colorIndex: 0,
+        colorIndex: infoMap[this.state.resourceMode].colorIndex,
         values: props.resources[this.state.resourceMode]
     }];
   },
@@ -68,9 +70,9 @@ var ResourceBarChart = React.createClass({
   getModeButtons: function () {
     var mode = this.state.resourceMode;
 
-    return _.map(buttonNameMap, function (value, key) {
+    return _.map(infoMap, function (info, key) {
       var classSet = React.addons.classSet({
-        "button": true,
+        "button button-stroke button-inverse": true,
         "active": mode === key
       });
       /* jshint trailing:false, quotmark:false, newcap:false */
@@ -78,9 +80,9 @@ var ResourceBarChart = React.createClass({
       return (
         <button
             key={key}
-            className={classSet}
+            className={classSet + " path-color-" + info.colorIndex}
             onClick={this.changeMode.bind(this, key)}>
-          {value}
+          {info.label}
         </button>
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
@@ -105,26 +107,15 @@ var ResourceBarChart = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
-  getLegend: function () {
-    var y = this.props.y;
-    var frameworks = _.filter(this.getData(), function (framework) {
-      return _.find(framework.values, function (val) {
-        return val[y];
-      });
-    });
-
-    if (frameworks.length === 0) {
-      return null;
-    }
-
+  getLegend: function (info) {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <ul className="legend list-unstyled list-inline inverse">
         <li className="legend-item">
-          <span className="line path-color-0"></span>
+          <span className={"line path-color-" + info.colorIndex}></span>
           <strong>
-            {buttonNameMap[this.state.resourceMode]} Allocated
+            {info.label} Allocated
           </strong>
         </li>
       </ul>
@@ -133,17 +124,36 @@ var ResourceBarChart = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
+  getHeadline: function (info) {
+    var headline = info.label + " Allocation Per Second";
+
+    return (
+      <div>
+        <h3>
+          {headline}
+        </h3>
+        <p>
+          {this.props.data.length + " Total " + this.props.resourceType}
+        </p>
+      </div>
+    );
+  },
+
   render: function () {
+    var info = infoMap[this.state.resourceMode];
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="chart panel">
         <div className="panel-heading panel-heading-large">
+          <div className="panel-options-left button-group">
+            {this.getModeButtons()}
+          </div>
           <div className="panel-title">
-            <div className="button-group">
-              {this.getModeButtons()}
-            </div>
-            {this.getLegend()}
+            {this.getHeadline(info)}
+          </div>
+          <div className="panel-options-right">
+            {this.getLegend(info)}
           </div>
         </div>
         <div className="panel-content" ref="panelContent">

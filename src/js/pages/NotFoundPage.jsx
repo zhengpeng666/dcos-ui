@@ -49,14 +49,14 @@ var NotFoundPage = React.createClass({
               <Panel ref="panel"
                   style={{height: this.state.height}}
                   className="vertical-center text-align-center">
-                <h2 className="">
+                <h2>
                   Page Not Found
                 </h2>
-                <p className="">
+                <p>
                   The page you’ve requested cannot be found.
                   It’s possible you copied the wrong link.
                   Check again, or jump back to your&nbsp;
-                  <Link to="activity">Dashboard</Link>.
+                  <Link to="dashboard">Dashboard</Link>.
                 </p>
               </Panel>
             </div>

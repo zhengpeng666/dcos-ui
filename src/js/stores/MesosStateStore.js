@@ -320,17 +320,11 @@ function normalizeFrameworks(frameworks, date) {
   });
 }
 
-function filterByString(objects, searchString) {
+function filterByString(objects, key, searchString) {
   var searchPattern = new RegExp(searchString, "i");
-  var valuesPattern = /:\"[^\"]+\"/g;
-  var cleanupPattern = /[:\"]/g;
 
   return _.filter(objects, function (obj) {
-    var str = JSON.stringify(obj)
-      .match(valuesPattern)
-      .join(" ")
-      .replace(cleanupPattern, "");
-    return searchPattern.test(str);
+    return searchPattern.test(obj[key]);
   });
 }
 
@@ -418,7 +412,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       }
 
       if (filterOptions.searchString !== "") {
-        frameworks = filterByString(frameworks, filterOptions.searchString);
+        frameworks = filterByString(frameworks,
+          "name",
+          filterOptions.searchString
+        );
       }
     }
 
@@ -440,7 +437,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   getHosts: function (filterOptions) {
     var hosts = getStateByHosts();
     if (filterOptions && filterOptions.searchString !== "") {
-      hosts = filterByString(hosts, filterOptions.searchString);
+      hosts = filterByString(hosts,
+        "hostname",
+        filterOptions.searchString
+      );
     }
 
     return hosts;
@@ -498,7 +498,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   processMarathonHealth: function (data) {
     _frameworkHealth = _.foldl(data.apps, function (curr, app) {
       if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK !== "true" ||
-          _.isEmpty(app.healthChecks)) {
+          app.healthChecks == null ||
+          app.healthChecks.length === 0) {
         return curr;
       }
 
@@ -512,11 +513,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       }
 
       var health = {key: "IDLE", value: HealthTypes.IDLE};
+      if (app.tasksHealthy === app.tasksRunning) {
+        health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
+      }
       if (app.tasksUnhealthy > 0) {
         health = {key: "UNHEALTHY", value: HealthTypes.UNHEALTHY};
-      }
-      if (app.tasksHealthy > 0) {
-        health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
       }
 
       curr[frameworkName] = health;
