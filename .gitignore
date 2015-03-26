@@ -8,3 +8,6 @@ dist/*
 src/js/utils/Config.dev.js
 
 node_modules/
+
+*.iml
+.idea/*
