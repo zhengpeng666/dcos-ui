@@ -152,15 +152,17 @@ var ServicesPage = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
+  getContents: function (isEmpty) {
+    if (isEmpty) {
+      return this.getEmptyServicesPageContent();
+    } else {
+      return this.getServicesPageContent();
+    }
+  },
+
   render: function () {
     var state = this.state;
-    var page;
-
-    if (state.statesProcessed && state.totalFrameworks === 0) {
-      page = this.getEmptyServicesPageContent();
-    } else {
-      page = this.getServicesPageContent();
-    }
+    var isEmpty = state.statesProcessed && state.totalFrameworks === 0;
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -178,7 +180,7 @@ var ServicesPage = React.createClass({
           </div>
         </div>
         <div className="page-content container-scrollable">
-          {page}
+          {this.getContents(isEmpty)}
         </div>
       </div>
     );

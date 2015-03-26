@@ -108,15 +108,17 @@ var DatacenterPage = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
+  getContents: function (isEmpty) {
+    if (isEmpty) {
+      return this.getEmptyHostsPageContent();
+    } else {
+      return this.getHostsPageContent();
+    }
+  },
+
   render: function () {
     var state = this.state;
-    var page;
-
-    if (state.statesProcessed && state.totalHosts === 0) {
-      page = this.getEmptyHostsPageContent();
-    } else {
-      page = this.getHostsPageContent();
-    }
+    var isEmpty = state.statesProcessed && state.totalHosts === 0;
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -134,7 +136,7 @@ var DatacenterPage = React.createClass({
           </div>
         </div>
         <div className="page-content container-scrollable">
-         {page}
+         {this.getContents(isEmpty)}
         </div>
       </div>
     );
