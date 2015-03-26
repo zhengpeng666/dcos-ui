@@ -6,30 +6,30 @@ var TooltipMixin = {
   componentDidMount: function () {
     this.tips = {};
 
-    this._tipAttachTips();
+    this.tip_attachTips();
 
     var container = this.getDOMNode();
-    container.addEventListener("mousemove", this._tipHandleContainerMouseMove);
+    container.addEventListener("mousemove", this.tip_handleContainerMouseMove);
   },
 
   componentDidUpdate: function () {
-    this._tipAttachTips();
+    this.tip_attachTips();
   },
 
   componentWillUnmount: function () {
-    this._tipDestroyAllTips();
+    this.tip_destroyAllTips();
   },
 
-  _tipHandleContainerMouseMove: function (e) {
+  tip_handleContainerMouseMove: function (e) {
     var el = e.target;
 
     if (el.dataset.behavior && el.dataset.behavior === "show-tip") {
       this.tips[el.dataset.tipID].show();
-      el.addEventListener("mouseleave", this._tipHandleMouseLeave);
+      el.addEventListener("mouseleave", this.tip_handleMouseLeave);
     }
   },
 
-  _tipHandleMouseLeave: function (e) {
+  tip_handleMouseLeave: function (e) {
     var el = e.target;
 
     if (this.tips[el.dataset.tipID]) {
@@ -39,7 +39,7 @@ var TooltipMixin = {
     el.removeEventListener("mouseleave");
   },
 
-  _tipAttachTips: function () {
+  tip_attachTips: function () {
     var container = this.getDOMNode();
     var selected = container.querySelectorAll("[data-behavior~=show-tip]");
     var el;
@@ -51,7 +51,7 @@ var TooltipMixin = {
       if (el.dataset.tipID) {
         found.push(el.dataset.tipID);
       } else if (el.dataset.tipContent) {
-        newTips.push(this._tipCreateTipForElement(el));
+        newTips.push(this.tip_createTipForElement(el));
       }
     }
 
@@ -60,12 +60,12 @@ var TooltipMixin = {
 
     if (removedTips.length) {
       for (var j = removedTips.length - 1; j >= 0; j--) {
-        this._tipDestroyTip(removedTips[j]);
+        this.tip_destroyTip(removedTips[j]);
       }
     }
   },
 
-  _tipCreateTipForElement: function (el) {
+  tip_createTipForElement: function (el) {
     el.dataset.tipID = _.uniqueId("tooltip");
     var options = {};
     if (el.dataset.tipPlace) {
@@ -80,15 +80,15 @@ var TooltipMixin = {
     return el.dataset.tipID;
   },
 
-  _tipDestroyTip: function (tipID) {
+  tip_destroyTip: function (tipID) {
     this.tips[tipID].destroy();
     delete this.tips[tipID];
   },
 
-  _tipDestroyAllTips: function () {
+  tip_destroyAllTips: function () {
     var tips = Object.keys(this.tips);
     for (var i = tips.length - 1; i >= 0; i--) {
-      this._tipDestroyTip(tips[i]);
+      this.tip_destroyTip(tips[i]);
     }
 
     this.tips = {};
