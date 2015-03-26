@@ -86,24 +86,28 @@ var DatacenterPage = React.createClass({
     });
 
     var anchorClassSet = React.addons.classSet({
-      "clickable": true,
+      "h4 clickable": true,
       "hidden": filteredLength === totalLength
     });
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <p>
-        <span className={filteredClassSet}>
+      <ul className="list-unstyled list-inline inverse">
+        <li className={filteredClassSet}>
           Showing {filteredLength} of {totalLength} Hosts
-        </span>&nbsp;
-        <a className={anchorClassSet} onClick={this.resetFilter}>
-          Show all
-        </a>
-        <span className={unfilteredClassSet}>
+        </li>
+        <li className={anchorClassSet} onClick={this.resetFilter}>
+          <small>
+            <a>
+              (Show all)
+            </a>
+          </small>
+        </li>
+        <li className={unfilteredClassSet}>
           {totalLength} Hosts
-        </span>
-      </p>
+        </li>
+      </ul>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
