@@ -73,18 +73,50 @@ var DatacenterPage = React.createClass({
     this.setState(getMesosHosts(filterOptions));
   },
 
+  getHostsPageContent: function () {
+    var state = this.state;
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div className="container container-fluid container-pod">
+        <ResourceBarChart
+          data={state.hosts}
+          resources={state.totalHostsResources}
+          totalResources={state.totalResources}
+          refreshRate={state.refreshRate} />
+        {this.getHostsStats()}
+        <FilterInputText
+          searchString={this.state.searchString}
+          onSubmit={this.onFilterChange} />
+        <HostTable hosts={this.state.hosts} />
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getEmptyHostsPageContent: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <AlertPanel title="Empty Datacenter">
+        <p>Your datacenter is looking pretty empty. We don't see any nodes other than your master.</p>
+      </AlertPanel>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
   render: function () {
     var state = this.state;
-    var datacenterIsEmpty = (state.statesProcessed && state.totalHosts === 0);
+    var page;
 
-    var contentsClassSet = React.addons.classSet({
-      "container container-fluid container-pod": true,
-      "hidden": datacenterIsEmpty
-    });
-
-    var alertClassSet = React.addons.classSet({
-      "hidden": !datacenterIsEmpty
-    });
+    if (state.statesProcessed && state.totalHosts === 0) {
+      page = this.getEmptyHostsPageContent();
+    } else {
+      page = this.getHostsPageContent();
+    }
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -102,23 +134,7 @@ var DatacenterPage = React.createClass({
           </div>
         </div>
         <div className="page-content container-scrollable">
-          <AlertPanel
-            className={alertClassSet}
-            title="Empty Datacenter">
-            <p>Your datacenter is looking pretty empty. We don't see any nodes other than your master.</p>
-          </AlertPanel>
-          <div className={contentsClassSet}>
-            <ResourceBarChart
-              data={state.hosts}
-              resources={state.totalHostsResources}
-              totalResources={state.totalResources}
-              refreshRate={state.refreshRate} />
-            {this.getHostsStats()}
-            <FilterInputText
-              searchString={this.state.searchString}
-              onSubmit={this.onFilterChange} />
-            <HostTable hosts={this.state.hosts} />
-          </div>
+         {page}
         </div>
       </div>
     );
