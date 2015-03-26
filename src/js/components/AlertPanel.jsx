@@ -2,7 +2,7 @@
 
 var React = require("react/addons");
 
-var Panel = require("./Panel.jsx");
+var Panel = require("./Panel");
 var DOMUtils = require("../utils/DOMUtils");
 
 var AlertPanel = React.createClass({
