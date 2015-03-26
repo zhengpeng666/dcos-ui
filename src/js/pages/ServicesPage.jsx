@@ -27,12 +27,13 @@ function getCountByHealth(frameworks) {
 
 function getMesosServices(filterOptions) {
   var frameworks = MesosStateStore.getFrameworks(filterOptions);
+  var allFrameworks = MesosStateStore.getLatest().frameworks;
 
   return {
     frameworks: frameworks,
-    countByHealth: getCountByHealth(frameworks),
+    countByHealth: getCountByHealth(allFrameworks),
     refreshRate: MesosStateStore.getRefreshRate(),
-    totalFrameworks: MesosStateStore.getLatest().frameworks.length,
+    totalFrameworks: allFrameworks.length,
     totalFrameworksResources:
       MesosStateStore.getTotalFrameworksResources(frameworks),
     totalResources: MesosStateStore.getTotalResources(),
@@ -88,11 +89,9 @@ var ServicesPage = React.createClass({
 
   onChangeHealthFilter: function (healthFilter) {
     var filterOptions = this.state.filterOptions;
-    if (healthFilter == null) {
-      filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
-    } else {
-      filterOptions.healthFilter = healthFilter;
-    }
+    // reset filter on health filter change
+    filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
+    filterOptions.healthFilter = healthFilter;
     this.setState(getMesosServices(filterOptions));
   },
 
@@ -137,7 +136,7 @@ var ServicesPage = React.createClass({
               <li>
                 <FilterHealth
                   countByHealth={state.countByHealth}
-                  healthFilter={state.healthFilter}
+                  healthFilter={state.filterOptions.healthFilter}
                   onSubmit={this.onChangeHealthFilter}
                   servicesLength={state.totalFrameworks} />
               </li>
