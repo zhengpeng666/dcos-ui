@@ -4,6 +4,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
+var FilterHeadline = require("../components/FilterHeadline");
 var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
@@ -11,8 +12,11 @@ var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
 var HostTable = require("../components/HostTable");
 
+
+var DEFAULT_FILTER_OPTIONS = {searchString: ""};
+
 function getMesosHosts(filterOptions) {
-  filterOptions = filterOptions || {searchString: ""};
+  filterOptions = filterOptions || _.clone(DEFAULT_FILTER_OPTIONS);
   var hosts = MesosStateStore.getHosts(filterOptions);
   return _.extend({
     hosts: hosts,
@@ -20,7 +24,7 @@ function getMesosHosts(filterOptions) {
     totalHosts: MesosStateStore.getLatest().slaves.length,
     totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
     totalResources: MesosStateStore.getTotalResources()
-  }, filterOptions);
+  }, {filterOptions: filterOptions});
 }
 
 var DatacenterPage = React.createClass({
@@ -52,40 +56,18 @@ var DatacenterPage = React.createClass({
   },
 
   onChange: function () {
-    this.setState(getMesosHosts({searchString: this.state.searchString}));
+    this.setState(getMesosHosts(this.state.filterOptions));
   },
 
   onFilterChange: function (searchString) {
-    this.setState(getMesosHosts({searchString: searchString}));
+    var filterOptions = this.state.filterOptions;
+    filterOptions.searchString = searchString;
+    this.setState(getMesosHosts(filterOptions));
   },
 
-  getHostsStats: function () {
-    var state = this.state;
-    var filteredLength = state.hosts.length;
-    var totalLength = state.totalHosts;
-
-    var filteredClassSet = React.addons.classSet({
-      "hidden": filteredLength === totalLength
-    });
-
-    var unfilteredClassSet = React.addons.classSet({
-      "hidden": filteredLength !== totalLength
-    });
-
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return (
-      <div>
-        <h4 className={filteredClassSet}>
-          Showing {filteredLength} of {totalLength} Hosts
-        </h4>
-        <h4 className={unfilteredClassSet}>
-          {totalLength} Hosts
-        </h4>
-      </div>
-    );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  resetFilter: function () {
+    var filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
+    this.setState(getMesosHosts(filterOptions));
   },
 
   /* jshint trailing:false, quotmark:false, newcap:false */
@@ -114,9 +96,13 @@ var DatacenterPage = React.createClass({
               totalResources={state.totalResources}
               refreshRate={state.refreshRate}
               resourceType="Nodes" />
-            {this.getHostsStats()}
+            <FilterHeadline
+              onReset={this.resetFilter}
+              name="Hosts"
+              currentLength={state.hosts.length}
+              totalLength={state.totalHosts} />
             <FilterInputText
-              searchString={this.state.searchString}
+              searchString={this.state.filterOptions.searchString}
               onSubmit={this.onFilterChange} />
             <HostTable hosts={this.state.hosts} />
           </div>
