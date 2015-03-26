@@ -13,6 +13,11 @@ var FilterHeadline = React.createClass({
     totalLength: React.PropTypes.number.isRequired
   },
 
+  handleReset: function (e) {
+    e.preventDefault();
+    this.props.onReset();
+  },
+
   render: function () {
     var name = this.props.name;
     var filteredLength = this.props.currentLength;
@@ -40,7 +45,7 @@ var FilterHeadline = React.createClass({
         <li className={filteredClassSet}>
           Showing {filteredLength} of {totalLength} {name}
         </li>
-        <li className={anchorClassSet} onClick={this.props.onReset}>
+        <li className={anchorClassSet} onClick={this.handleReset}>
           <small>
             <a>
               (Show all)

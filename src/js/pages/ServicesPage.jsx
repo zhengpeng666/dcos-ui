@@ -95,8 +95,7 @@ var ServicesPage = React.createClass({
     this.setState(getMesosServices(filterOptions));
   },
 
-  resetFilter: function (e) {
-    e.preventDefault();
+  resetFilter: function () {
     var filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
     this.setState(getMesosServices(filterOptions));
   },

@@ -65,8 +65,7 @@ var DatacenterPage = React.createClass({
     this.setState(getMesosHosts(filterOptions));
   },
 
-  resetFilter: function (e) {
-    e.preventDefault();
+  resetFilter: function () {
     var filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
     this.setState(getMesosHosts(filterOptions));
   },
