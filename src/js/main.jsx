@@ -20,7 +20,7 @@ var routes = (
     <Route name="dashboard" path="dashboard/?" handler={DashboardPage} />
     <Route name="services" path="services/?" handler={ServicesPage} />
     <Route name="datacenter" path="datacenter/?" handler={DatacenterPage} />
-    <Redirect from="/" to="dashboard/?" />
+    <Redirect from="/" to="dashboard" />
     <NotFoundRoute handler={NotFoundPage}/>
   </Route>
 );
