@@ -4,7 +4,7 @@
 @icon-mini-width: 16px;
 @icon-mini-height: 16px;
 @icon-mini-count-horizontal: 3;
-@icon-mini-count-vertical: 2;
+@icon-mini-count-vertical: 1;
 @icon-mini-border-radius: 2px;
 
 @icon-mini-variant-black-offset-horizontal: 0 * @icon-mini-width;
@@ -28,7 +28,7 @@
 @icon-small-width: 24px;
 @icon-small-height: 24px;
 @icon-small-count-horizontal: 3;
-@icon-small-count-vertical: 2;
+@icon-small-count-vertical: 1;
 @icon-small-border-radius: 4px;
 
 @icon-small-variant-black-offset-horizontal: 0 * @icon-small-width;
@@ -52,7 +52,7 @@
 @icon-medium-width: 32px;
 @icon-medium-height: 32px;
 @icon-medium-count-horizontal: 3;
-@icon-medium-count-vertical: 10;
+@icon-medium-count-vertical: 4;
 @icon-medium-border-radius: 5px;
 
 @icon-medium-variant-black-offset-horizontal: 0 * @icon-medium-width;
@@ -76,7 +76,7 @@
 @icon-large-width: 48px;
 @icon-large-height: 48px;
 @icon-large-count-horizontal: 3;
-@icon-large-count-vertical: 17;
+@icon-large-count-vertical: 1;
 @icon-large-border-radius: 6px;
 
 @icon-large-variant-black-offset-horizontal: 0 * @icon-large-width;
@@ -97,10 +97,10 @@
 /* Icon (Jumbo) */
 @icon-jumbo-enabled: true;
 
-@icon-jumbo-width: 64px;
-@icon-jumbo-height: 64px;
+@icon-jumbo-width: 90px;
+@icon-jumbo-height: 90px;
 @icon-jumbo-count-horizontal: 3;
-@icon-jumbo-count-vertical: 1;
+@icon-jumbo-count-vertical: 4;
 @icon-jumbo-border-radius: 7px;
 
 @icon-jumbo-variant-black-offset-horizontal: 0 * @icon-jumbo-width;
@@ -133,8 +133,11 @@
 }
 
 /* Icons (Mini) */
+
 & when (@icon-mini-enabled) {
+
 	.icon.icon-mini {
+
 		background-image: url("@{path-images}icons/icons-mini.png");
 		line-height: floor(@icon-mini-height* @icon-mini-scale);
 		width: floor(@icon-mini-width * @icon-mini-scale);
@@ -148,19 +151,6 @@
 
 		&.icon-mini-color {
 			background-position: floor(-@icon-mini-variant-color-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 0);
-		}
-
-		/* Icon: Close */
-		&.icon-close {
-			background-position: floor(-@icon-mini-variant-black-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 1);
-
-			&.icon-mini-white {
-				background-position: floor(-@icon-mini-variant-white-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 1);
-			}
-
-			&.icon-mini-color {
-				background-position: floor(-@icon-mini-variant-color-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 1);
-			}
 		}
 
 		&.border-radius {
@@ -190,19 +180,6 @@
 			background-position: floor(-@icon-small-variant-color-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 0);
 		}
 
-		/* Icon: Menu */
-		&.icon-menu {
-			background-position: floor(-@icon-small-variant-black-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 1);
-
-			&.icon-small-white {
-				background-position: floor(-@icon-small-variant-white-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 1);
-			}
-
-			&.icon-small-color {
-				background-position: floor(-@icon-small-variant-color-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 1);
-			}
-		}
-
 		&.border-radius {
 		  .border-radius(@icon-small-border-radius);
 		}
@@ -230,8 +207,8 @@
 			background-position: floor(-@icon-medium-variant-color-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 0);
 		}
 
-		/* Icon: OS */
-		&.icon-os {
+		/* Icon: Services */
+		&.icon-services {
 			background-position: floor(-@icon-medium-variant-black-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 1);
 
 			&.icon-medium-white {
@@ -243,8 +220,8 @@
 			}
 		}
 
-		/* Icon: Apps */
-		&.icon-apps {
+		/* Icon: Dashboard */
+		&.icon-dashboard {
 			background-position: floor(-@icon-medium-variant-black-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 2);
 
 			&.icon-medium-white {
@@ -256,8 +233,8 @@
 			}
 		}
 
-		/* Icon: CLI */
-		&.icon-cli {
+		/* Icon: Datacenter */
+		&.icon-datacenter {
 			background-position: floor(-@icon-medium-variant-black-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 3);
 
 			&.icon-medium-white {
@@ -269,50 +246,6 @@
 			}
 		}
 
-		/* Icon: Interface */
-		&.icon-interface {
-			background-position: floor(-@icon-medium-variant-black-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 4);
-
-			&.icon-medium-white {
-				background-position: floor(-@icon-medium-variant-white-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 4);
-			}
-
-			&.icon-medium-color {
-				background-position: floor(-@icon-medium-variant-color-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 4);
-			}
-		}
-
-		/* Icon: Cloud */
-		&.icon-cloud {
-			background-position: floor(-@icon-medium-variant-black-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 5);
-
-			&.icon-medium-white {
-				background-position: floor(-@icon-medium-variant-white-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 5);
-			}
-
-			&.icon-medium-color {
-				background-position: floor(-@icon-medium-variant-color-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 5);
-			}
-		}
-
-		/* Icon: Interface */
-		&.icon-scale {
-			background-position: floor(-@icon-medium-variant-black-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 6);
-
-			&.icon-medium-white {
-				background-position: floor(-@icon-medium-variant-white-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 6);
-			}
-
-			&.icon-medium-color {
-				background-position: floor(-@icon-medium-variant-color-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 6);
-			}
-		}
-
-		&.border-radius {
-		  .border-radius(@icon-medium-border-radius);
-		}
-
-	}
 
 }
 
@@ -335,218 +268,6 @@
 			background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 0);
 		}
 
-		/* Icon: Browser Console */
-		&.icon-browser-console {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 1);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 1);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 1);
-			}
-		}
-
-		/* Icon: CLI */
-		&.icon-cli {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 2);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 2);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 2);
-			}
-		}
-
-		/* Icon: Rocket */
-		&.icon-browser-rocket {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 3);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 3);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 3);
-			}
-		}
-
-		/* Icon: Headset */
-		&.icon-headset {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 4);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 4);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 4);
-			}
-		}
-
-		/* Icon: Bandaid */
-		&.icon-bandaid {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 5);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 5);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 5);
-			}
-		}
-
-		/* Icon: Certificate */
-		&.icon-certificate {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 6);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 6);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 6);
-			}
-		}
-
-		/* Icon: Mesos */
-		&.icon-framework-mesos {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 7);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 7);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 7);
-			}
-		}
-
-		/* Icon: Marathon */
-		&.icon-framework-marathon {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 8);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 8);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 8);
-			}
-		}
-
-		/* Icon: Chronos */
-		&.icon-framework-chronos {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 9);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 9);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 9);
-			}
-		}
-
-		/* Icon: Check */
-		&.icon-check {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 10);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 10);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 10);
-			}
-		}
-
-		/* Icon: Hadoop */
-		&.icon-framework-hadoop {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 11);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 11);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 11);
-			}
-		}
-
-		/* Icon: Spark */
-		&.icon-framework-spark {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 12);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 12);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 12);
-			}
-		}
-
-		/* Icon: Storm */
-		&.icon-framework-storm {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 13);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 13);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 13);
-			}
-		}
-
-		/* Icon: Aurora */
-		&.icon-framework-aurora {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 14);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 14);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 14);
-			}
-		}
-
-		/* Icon: Jenkins */
-		&.icon-framework-jenkins {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 15);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 15);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 15);
-			}
-		}
-
-		/* Icon: Cassandra */
-		&.icon-framework-cassandra {
-			background-position: floor(-@icon-large-variant-black-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 16);
-
-			&.icon-large-white {
-				background-position: floor(-@icon-large-variant-white-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 16);
-			}
-
-			&.icon-large-color {
-				background-position: floor(-@icon-large-variant-color-offset-horizontal * @icon-large-scale) -(floor(@icon-large-height * @icon-large-scale) * 16);
-			}
-		}
-
-		&.border-radius {
-		  .border-radius(@icon-large-border-radius);
-		}
-	}
 }
 
 /* Icons (Jumbo) */
@@ -571,6 +292,46 @@
 		  .border-radius(@icon-jumbo-border-radius);
 		}
 	}
+
+	/* Icon: Services */
+	&.icon-services {
+		background-position: floor(-@icon-jumbo-variant-black-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 1);
+
+		&.icon-jumbo-white {
+			background-position: floor(-@icon-jumbo-variant-white-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 1);
+		}
+
+		&.icon-jumbo-color {
+			background-position: floor(-@icon-jumbo-variant-color-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 1);
+		}
+	}
+
+	/* Icon: Datacenter */
+	&.icon-datacenter {
+		background-position: floor(-@icon-jumbo-variant-black-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 2);
+
+		&.icon-jumbo-white {
+			background-position: floor(-@icon-jumbo-variant-white-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 2);
+		}
+
+		&.icon-jumbo-color {
+			background-position: floor(-@icon-jumbo-variant-color-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 2);
+		}
+	}
+
+	/* Icon: Lost Planet */
+	&.icon-lost-planet {
+		background-position: floor(-@icon-jumbo-variant-black-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 3);
+
+		&.icon-jumbo-white {
+			background-position: floor(-@icon-jumbo-variant-white-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 3);
+		}
+
+		&.icon-jumbo-color {
+			background-position: floor(-@icon-jumbo-variant-color-offset-horizontal * @icon-jumbo-scale) -(floor(@icon-jumbo-height * @icon-jumbo-scale) * 3);
+		}
+	}
+
 }
 
 /* Screen Size: Mini (@screen-mini) and above */
