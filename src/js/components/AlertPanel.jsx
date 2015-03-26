@@ -28,8 +28,17 @@ var AlertPanel = React.createClass({
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
+     var classes = {
+      "container container-fluid container-pod": true
+    };
+    if (this.props.className) {
+      classes[this.props.className] = true;
+    }
+
+    var classSet = React.addons.classSet(classes);
+
     return (
-      <div className="container container-fluid container-pod">
+      <div className={classSet}>
         <div className="column-small-offset-2 column-small-8 column-medium-offset-3 column-medium-6 column-large-offset-4 column-large-4">
           <Panel ref="panel"
             style={{height: this.state.height}}
@@ -37,9 +46,7 @@ var AlertPanel = React.createClass({
             <h2>
               {this.props.title}
             </h2>
-            <p>
-              {this.props.children}
-            </p>
+            {this.props.children}
           </Panel>
         </div>
       </div>

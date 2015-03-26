@@ -103,64 +103,18 @@ var ServicesPage = React.createClass({
     this.setState(getMesosServices(filterOptions));
   },
 
-  getServicesPageContent: function () {
-    var state = this.state;
-
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return (
-      <div className="container container-fluid container-pod">
-        <ResourceBarChart
-          data={state.frameworks}
-          resources={state.totalFrameworksResources}
-          totalResources={state.totalResources}
-          refreshRate={state.refreshRate}
-          resourceType="Services" />
-        {this.getServiceStats()}
-        <ul className="list list-unstyled list-inline flush-bottom">
-          <li>
-            <FilterHealth
-              countByHealth={state.countByHealth}
-              healthFilter={state.healthFilter}
-              onSubmit={this.onChangeHealthFilter}
-              servicesLength={state.totalFrameworks} />
-          </li>
-          <li>
-            <FilterInputText
-              searchString={state.searchString}
-              onSubmit={this.onChange} />
-          </li>
-        </ul>
-        <ServiceTable
-          frameworks={state.frameworks}
-          totalResources={state.totalResources} />
-      </div>
-    );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-  },
-
-  getEmptyServicesPageContent: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return (
-      <AlertPanel title="No Services Installed">
-        <p>Use the DCOS command line tools to find and install services.</p>
-      </AlertPanel>
-    );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-  },
-
   render: function () {
     var state = this.state;
-    var page;
+    var noServicesInstalled = (state.statesProcessed && state.totalFrameworks === 0);
 
-    if (state.statesProcessed && state.totalFrameworks === 0) {
-      page = this.getEmptyServicesPageContent();
-    } else {
-      page = this.getServicesPageContent();
-    }
+    var contentsClassSet = React.addons.classSet({
+      "container container-fluid container-pod": true,
+      "hidden": noServicesInstalled
+    });
+
+    var alertClassSet = React.addons.classSet({
+      "hidden": !noServicesInstalled
+    });
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -178,7 +132,37 @@ var ServicesPage = React.createClass({
           </div>
         </div>
         <div className="page-content container-scrollable">
-          {page}
+          <AlertPanel
+            className={alertClassSet}
+            title="No Services Installed">
+            <p>Use the DCOS command line tools to find and install services.</p>
+          </AlertPanel>
+          <div className={contentsClassSet}>
+            <ResourceBarChart
+              data={state.frameworks}
+              resources={state.totalFrameworksResources}
+              totalResources={state.totalResources}
+              refreshRate={state.refreshRate}
+              resourceType="Services" />
+            {this.getServiceStats()}
+            <ul className="list list-unstyled list-inline flush-bottom">
+              <li>
+                <FilterHealth
+                  countByHealth={state.countByHealth}
+                  healthFilter={state.healthFilter}
+                  onSubmit={this.onChangeHealthFilter}
+                  servicesLength={state.totalFrameworks} />
+              </li>
+              <li>
+                <FilterInputText
+                  searchString={state.searchString}
+                  onSubmit={this.onChange} />
+              </li>
+            </ul>
+            <ServiceTable
+              frameworks={state.frameworks}
+              totalResources={state.totalResources} />
+          </div>
         </div>
       </div>
     );
