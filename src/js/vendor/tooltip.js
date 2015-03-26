@@ -1,4 +1,5 @@
 /* jshint ignore:start */
+/* jscs:disable */
 
 /*!
  * tooltip 0.1.0 - 18th Dec 2013

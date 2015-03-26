@@ -1,8 +1,7 @@
 var HealthTypesDescription = {
-  UNHEALTHY: "At least one task in the Marathon app (link to app page in " +
-    "Marathon) for this service is unhealthy",
-  HEALTHY: "All your tasks in the Marathon app " +
-    "(link to app page in Marathon) for this service are healthy",
+  UNHEALTHY: "There are some issues with this service. " +
+    "You should look into them immediately.",
+  HEALTHY: "This service is operating normally.",
   IDLE: "",
   NA: ""
 };
