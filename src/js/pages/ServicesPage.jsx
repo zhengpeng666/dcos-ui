@@ -141,7 +141,8 @@ var ServicesPage = React.createClass({
               data={state.frameworks}
               resources={state.totalFrameworksResources}
               totalResources={state.totalResources}
-              refreshRate={state.refreshRate} />
+              refreshRate={state.refreshRate}
+              resourceType="Services" />
             {this.getServiceStats()}
             <ul className="list list-unstyled list-inline flush-bottom">
               <li>

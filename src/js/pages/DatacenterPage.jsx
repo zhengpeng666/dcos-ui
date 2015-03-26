@@ -112,7 +112,8 @@ var DatacenterPage = React.createClass({
               data={state.hosts}
               resources={state.totalHostsResources}
               totalResources={state.totalResources}
-              refreshRate={state.refreshRate} />
+              refreshRate={state.refreshRate}
+              resourceType="Nodes" />
             {this.getHostsStats()}
             <FilterInputText
               searchString={this.state.searchString}

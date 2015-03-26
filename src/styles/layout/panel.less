@@ -8,8 +8,22 @@
     padding: @base-spacing-unit / 2;
     line-height: @heading-h3-text-line-height;
     border-bottom: 1px solid @border-color-inverse;
+    display: flex;
 
     .panel-title {
+      text-align: center;
+      flex: 1;
+      .flush-top();
+      .flush-bottom();
+    }
+
+    .panel-options-left {
+      .flush-top();
+      .flush-bottom();
+    }
+
+    .panel-options-right {
+      margin-left: auto;
       .flush-top();
       .flush-bottom();
     }
