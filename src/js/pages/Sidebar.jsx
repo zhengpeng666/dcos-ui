@@ -9,6 +9,12 @@ var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarStore = require("../stores/SidebarStore");
 
+var MENU_ITEMS = {
+  dashboard: {label: "Dashboard"},
+  services: {label: "Services"},
+  datacenter: {label: "Datacenter"}
+};
+
 function getMesosInfo() {
   return {
     mesosInfo: MesosStateStore.getLatest()
@@ -62,6 +68,38 @@ var Sidebar = React.createClass({
     });
   },
 
+  getIcon: function (routeName) {
+    var isActive = this.isActive(routeName);
+    var iconClasses = {
+      "sidebar-menu-item-icon icon icon-medium": true,
+      "icon-medium-color": isActive,
+      "icon-medium-black": !isActive
+    };
+
+    iconClasses["icon-" + routeName] = true;
+
+    return <i className={React.addons.classSet(iconClasses)}></i>;
+  },
+
+  getMenuItems: function () {
+    return _.map(MENU_ITEMS, function (val, key) {
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+      return (
+        <li className={this.getItemClassSet(key)}>
+          <Link to={key}>
+            {this.getIcon(key)}
+            <span className="sidebar-menu-item-label">
+              {val.label}
+            </span>
+          </Link>
+        </li>
+      );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    }, this);
+  },
+
   onChange: function () {
     this.setState(getMesosInfo());
   },
@@ -93,30 +131,7 @@ var Sidebar = React.createClass({
           <nav>
             <div className="container container-fluid container-fluid-narrow">
               <ul className="sidebar-menu list-unstyled">
-                <li className={this.getItemClassSet("dashboard")}>
-                  <Link to="dashboard">
-                    <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
-                    <span className="sidebar-menu-item-label">
-                      Dashboard
-                    </span>
-                  </Link>
-                </li>
-                <li className={this.getItemClassSet("services")}>
-                  <Link to="services">
-                    <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
-                    <span className="sidebar-menu-item-label">
-                      Services
-                    </span>
-                  </Link>
-                </li>
-                <li className={this.getItemClassSet("datacenter")}>
-                  <Link to="datacenter">
-                    <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
-                    <span className="sidebar-menu-item-label">
-                      Datacenter
-                    </span>
-                  </Link>
-                </li>
+                {this.getMenuItems()}
               </ul>
             </div>
           </nav>
