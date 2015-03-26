@@ -5,10 +5,12 @@ var Humanize = require("humanize");
 var React = require("react/addons");
 
 var HealthTypes = require("../constants/HealthTypes");
+var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var HealthLabels = require("../constants/HealthLabels");
 var Maths = require("../utils/Maths");
 var Strings = require("../utils/Strings");
 var Table = require("./Table");
+var TooltipMixin = require("../mixins/TooltipMixin");
 
 function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
@@ -42,6 +44,8 @@ function sortFunction(prop) {
 var ServicesTable = React.createClass({
 
   displayName: "ServicesTable",
+
+  mixins: [TooltipMixin],
 
   propTypes: {
     frameworks: React.PropTypes.array.isRequired
@@ -96,13 +100,23 @@ var ServicesTable = React.createClass({
       "text-mute": model.health.value === HealthTypes.NA
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return (
-      <span className={statusClassSet}>{HealthLabels[model.health.key]}</span>
+    var attributes = {};
+    switch (model.health.value) {
+      case HealthTypes.HEALTHY:
+        attributes['data-behavior'] = "show-tip"
+        attributes['data-tip-content'] = HealthTypesDescription.HEALTHY
+        break;
+      case HealthTypes.UNHEALTHY:
+        attributes['data-behavior'] = "show-tip"
+        attributes['data-tip-content'] = HealthTypesDescription.UNHEALTHY
+        break;
+    }
+
+    return React.createElement(
+      "span",
+      _.extend({className: statusClassSet}, attributes),
+      HealthLabels[model.health.key]
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
 
