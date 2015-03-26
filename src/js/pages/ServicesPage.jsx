@@ -4,6 +4,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
+var FilterHeadline = require("../components/FilterHeadline");
 var FilterHealth = require("../components/FilterHealth");
 var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
@@ -101,49 +102,6 @@ var ServicesPage = React.createClass({
     this.setState(getMesosServices(filterOptions));
   },
 
-  getServiceStats: function () {
-    var state = this.state;
-    var filteredLength = state.frameworks.length;
-    var totalLength = state.totalFrameworks;
-
-    var filteredClassSet = React.addons.classSet({
-      "h4": true,
-      "hidden": filteredLength === totalLength
-    });
-
-    var unfilteredClassSet = React.addons.classSet({
-      "h4": true,
-      "hidden": filteredLength !== totalLength
-    });
-
-    var anchorClassSet = React.addons.classSet({
-      "clickable": true,
-      "hidden": filteredLength === totalLength
-    });
-
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return (
-      <ul className="list-unstyled list-inline inverse">
-        <li className={filteredClassSet}>
-          Showing {filteredLength} of {totalLength} Services
-        </li>
-        <li className={anchorClassSet} onClick={this.resetFilter}>
-          <small>
-            <a>
-              (Show all)
-            </a>
-          </small>
-        </li>
-        <li className={unfilteredClassSet}>
-          {totalLength} Services
-        </li>
-      </ul>
-    );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-  },
-
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
@@ -170,7 +128,11 @@ var ServicesPage = React.createClass({
               totalResources={state.totalResources}
               refreshRate={state.refreshRate}
               resourceType="Services" />
-            {this.getServiceStats()}
+            <FilterHeadline
+              onReset={this.resetFilter}
+              name="Services"
+              currentLength={state.frameworks.length}
+              totalLength={state.totalFrameworks} />
             <ul className="list list-unstyled list-inline flush-bottom">
               <li>
                 <FilterHealth

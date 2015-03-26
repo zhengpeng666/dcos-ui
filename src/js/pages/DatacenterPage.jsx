@@ -4,6 +4,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
+var FilterHeadline = require("../components/FilterHeadline");
 var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
@@ -70,49 +71,6 @@ var DatacenterPage = React.createClass({
     this.setState(getMesosHosts(filterOptions));
   },
 
-  getHostsStats: function () {
-    var state = this.state;
-    var filteredLength = state.hosts.length;
-    var totalLength = state.totalHosts;
-
-    var filteredClassSet = React.addons.classSet({
-      "h4": true,
-      "hidden": filteredLength === totalLength
-    });
-
-    var unfilteredClassSet = React.addons.classSet({
-      "h4": true,
-      "hidden": filteredLength !== totalLength
-    });
-
-    var anchorClassSet = React.addons.classSet({
-      "h4 clickable": true,
-      "hidden": filteredLength === totalLength
-    });
-
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return (
-      <ul className="list-unstyled list-inline inverse">
-        <li className={filteredClassSet}>
-          Showing {filteredLength} of {totalLength} Hosts
-        </li>
-        <li className={anchorClassSet} onClick={this.resetFilter}>
-          <small>
-            <a>
-              (Show all)
-            </a>
-          </small>
-        </li>
-        <li className={unfilteredClassSet}>
-          {totalLength} Hosts
-        </li>
-      </ul>
-    );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-  },
-
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
@@ -139,7 +97,11 @@ var DatacenterPage = React.createClass({
               totalResources={state.totalResources}
               refreshRate={state.refreshRate}
               resourceType="Nodes" />
-            {this.getHostsStats()}
+            <FilterHeadline
+              onReset={this.resetFilter}
+              name="Hosts"
+              currentLength={state.hosts.length}
+              totalLength={state.totalHosts} />
             <FilterInputText
               searchString={this.state.filterOptions.searchString}
               onSubmit={this.onFilterChange} />
