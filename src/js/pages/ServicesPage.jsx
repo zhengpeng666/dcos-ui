@@ -3,6 +3,7 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
+var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
 var FilterHeadline = require("../components/FilterHeadline");
 var FilterHealth = require("../components/FilterHealth");
@@ -102,7 +103,7 @@ var ServicesPage = React.createClass({
     this.setState(getMesosServices(filterOptions));
   },
 
-  getServicesPage: function () {
+  getServicesPageContent: function () {
     var state = this.state;
 
     /* jshint trailing:false, quotmark:false, newcap:false */
@@ -139,36 +140,30 @@ var ServicesPage = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
-  getEmptyServicesPage: function () {
+  getEmptyServicesPageContent: function () {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="grid centric">
-        <div className="grid-item">
-          <Panel className="vertical-center text-align-center">
-            <h2>
-              No Services Installed
-            </h2>
-          </Panel>
-        </div>
-      </div>
+      <AlertPanel title="No Services Installed">
+        <p>Use the DCOS command line tools to find and install services.</p>
+      </AlertPanel>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     var state = this.state;
     var page;
 
     if (state.statesProcessed && state.totalFrameworks === 0) {
-      page = this.getEmptyServicesPage();
+      page = this.getEmptyServicesPageContent();
     } else {
-      page = this.getServicesPage();
+      page = this.getServicesPageContent();
     }
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="flex-container-col">
         <div className="page-header">

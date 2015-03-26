@@ -3,6 +3,7 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
+var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
 var FilterHeadline = require("../components/FilterHeadline");
 var FilterInputText = require("../components/FilterInputText");
@@ -72,7 +73,7 @@ var DatacenterPage = React.createClass({
     this.setState(getMesosHosts(filterOptions));
   },
 
-  getHostsPage: function () {
+  getHostsPageContent: function () {
     var state = this.state;
 
     /* jshint trailing:false, quotmark:false, newcap:false */
@@ -95,36 +96,30 @@ var DatacenterPage = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
-  getEmptyHostsPage: function () {
+  getEmptyHostsPageContent: function () {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="grid centric">
-        <div className="grid-item">
-          <Panel className="vertical-center text-align-center">
-            <h2>Empty Datacenter</h2>
-            <p>Your datacenter is looking pretty empty.</p>
-            <p>We don't see any nodes other than your master.</p>
-          </Panel>
-        </div>
-      </div>
+      <AlertPanel title="Empty Datacenter">
+        <p>Your datacenter is looking pretty empty. We don't see any nodes other than your master.</p>
+      </AlertPanel>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     var state = this.state;
     var page;
 
     if (state.statesProcessed && state.totalHosts === 0) {
-      page = this.getEmptyHostsPage();
+      page = this.getEmptyHostsPageContent();
     } else {
-      page = this.getHostsPage();
+      page = this.getHostsPageContent();
     }
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="flex-container-col">
         <div className="page-header">
