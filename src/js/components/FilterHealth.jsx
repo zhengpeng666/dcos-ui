@@ -71,7 +71,7 @@ var FilterHealth = React.createClass({
         <button
             key={key}
             className={classSet}
-            onClick={this.props.onSubmit.bind(null, health)}>
+            onClick={this.props.onChange.bind(null, health)}>
             <span className="button-align-content">
               <span className={dotClassSet}></span>
               <span className="label">{value}</span>

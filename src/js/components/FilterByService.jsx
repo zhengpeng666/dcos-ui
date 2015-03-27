@@ -4,6 +4,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var Dropdown = require("./Dropdown");
+var DropdownItem = require("./DropdownItem");
 
 var FilterByService = React.createClass({
 
@@ -42,34 +43,30 @@ var FilterByService = React.createClass({
 
   getDropdownItems: function () {
     var serviceId = this.state.filter;
-    return _.map(this.props.services, function (service) {
+    var items = [<DropdownItem key="default">Filter by Service</DropdownItem>];
+    return items.concat(_.map(this.props.services, function (service) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-      return {
-        value: service.id,
-        selected: serviceId === service.id,
-        innerContent: (
-          <a>
-            <span>{service.name}</span>
-            <span className="badge">{service.slaves_count}</span>
-          </a>
-        )
-      };
+      return (
+        <DropdownItem key={service.id}
+            value={service.id}
+            selected={serviceId === service.id}>
+          <span>{service.name}</span>
+          <span className="badge">{service.slaves_count}</span>
+        </DropdownItem>
+      );
       /* jshint trailing:true, quotmark:true, newcap:true */
       /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    });
+    }));
   },
 
   render: function () {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <Dropdown
-        defaultItem={
-          <a>Filter by Service</a>
-        }
-        items={this.getDropdownItems()}
-        onChange={this.handleChange} />
+      <Dropdown onChange={this.handleChange}>
+        {this.getDropdownItems()}
+      </Dropdown>
     );
   }
 });

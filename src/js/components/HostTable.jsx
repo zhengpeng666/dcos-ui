@@ -118,7 +118,7 @@ var HostTable = React.createClass({
       {
         className: getClassName,
         headerClassName: getClassName,
-        prop: "tasks_size",
+        prop: "tasks_count",
         render: this.renderTask,
         sortable: true,
         title: "TASKS"
