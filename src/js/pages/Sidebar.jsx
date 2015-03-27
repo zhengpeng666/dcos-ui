@@ -79,7 +79,7 @@ var Sidebar = React.createClass({
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
-        <li className={itemClassSet}>
+        <li className={itemClassSet} key={key}>
           <Link to={key}>
             <i className={React.addons.classSet(iconClasses)}></i>
             <span className="sidebar-menu-item-label">
