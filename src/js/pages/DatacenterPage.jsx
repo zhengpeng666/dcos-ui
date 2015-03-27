@@ -5,26 +5,24 @@ var React = require("react/addons");
 
 var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
-var FilterHeadline = require("../components/FilterHeadline");
 var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
-var Panel = require("../components/Panel");
 var HostTable = require("../components/HostTable");
-
 
 var DEFAULT_FILTER_OPTIONS = {searchString: ""};
 
 function getMesosHosts(filterOptions) {
   filterOptions = filterOptions || _.clone(DEFAULT_FILTER_OPTIONS);
   var hosts = MesosStateStore.getHosts(filterOptions);
+  var allHosts = MesosStateStore.getLatest().slaves;
   return _.extend({
     hosts: hosts,
     statesProcessed: MesosStateStore.getStatesProcessed(),
     refreshRate: MesosStateStore.getRefreshRate(),
-    totalHosts: MesosStateStore.getLatest().slaves.length,
+    allHosts: allHosts,
     totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
     totalResources: MesosStateStore.getTotalResources()
   }, {filterOptions: filterOptions});
@@ -73,6 +71,35 @@ var DatacenterPage = React.createClass({
     this.setState(getMesosHosts(filterOptions));
   },
 
+  getHostsStats: function () {
+    var state = this.state;
+    var filteredLength = state.hosts.length;
+    var totalLength = state.allHosts.length;
+
+    var filteredClassSet = React.addons.classSet({
+      "hidden": filteredLength === totalLength
+    });
+
+    var unfilteredClassSet = React.addons.classSet({
+      "hidden": filteredLength !== totalLength
+    });
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div>
+        <h4 className={filteredClassSet}>
+          Showing {filteredLength} of {totalLength} Hosts
+        </h4>
+        <h4 className={unfilteredClassSet}>
+          {totalLength} Hosts
+        </h4>
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
   getHostsPageContent: function () {
     var state = this.state;
 
@@ -118,7 +145,7 @@ var DatacenterPage = React.createClass({
 
   render: function () {
     var state = this.state;
-    var isEmpty = state.statesProcessed && state.totalHosts === 0;
+    var isEmpty = state.statesProcessed && state.allHosts.length === 0;
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */

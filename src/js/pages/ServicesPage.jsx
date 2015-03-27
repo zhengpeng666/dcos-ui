@@ -5,13 +5,11 @@ var React = require("react/addons");
 
 var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
-var FilterHeadline = require("../components/FilterHeadline");
 var FilterHealth = require("../components/FilterHealth");
 var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
-var Panel = require("../components/Panel");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 
@@ -34,7 +32,7 @@ function getMesosServices(filterOptions) {
   return {
     frameworks: frameworks,
     statesProcessed: MesosStateStore.getStatesProcessed(),
-    countByHealth: MesosStateStore.getCountByHealth(allFrameworks),
+    countByHealth: getCountByHealth(allFrameworks),
     refreshRate: MesosStateStore.getRefreshRate(),
     totalFrameworks: allFrameworks.length,
     totalFrameworksResources:
@@ -101,6 +99,35 @@ var ServicesPage = React.createClass({
   resetFilter: function () {
     var filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
     this.setState(getMesosServices(filterOptions));
+  },
+
+  getServiceStats: function () {
+    var state = this.state;
+    var filteredLength = state.frameworks.length;
+    var totalLength = state.totalFrameworks;
+
+    var filteredClassSet = React.addons.classSet({
+      "hidden": filteredLength === totalLength
+    });
+
+    var unfilteredClassSet = React.addons.classSet({
+      "hidden": filteredLength !== totalLength
+    });
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div>
+        <h4 className={filteredClassSet}>
+          Showing {filteredLength} of {totalLength} Services
+        </h4>
+        <h4 className={unfilteredClassSet}>
+          {totalLength} Services
+        </h4>
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getServicesPageContent: function () {
