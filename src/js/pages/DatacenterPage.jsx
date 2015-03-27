@@ -6,6 +6,7 @@ var React = require("react/addons");
 var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
 var FilterInputText = require("../components/FilterInputText");
+var FilterHeadline = require("../components/FilterHeadline");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
@@ -71,35 +72,6 @@ var DatacenterPage = React.createClass({
     this.setState(getMesosHosts(filterOptions));
   },
 
-  getHostsStats: function () {
-    var state = this.state;
-    var filteredLength = state.hosts.length;
-    var totalLength = state.allHosts.length;
-
-    var filteredClassSet = React.addons.classSet({
-      "hidden": filteredLength === totalLength
-    });
-
-    var unfilteredClassSet = React.addons.classSet({
-      "hidden": filteredLength !== totalLength
-    });
-
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    return (
-      <div>
-        <h4 className={filteredClassSet}>
-          Showing {filteredLength} of {totalLength} Hosts
-        </h4>
-        <h4 className={unfilteredClassSet}>
-          {totalLength} Hosts
-        </h4>
-      </div>
-    );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-  },
-
   getHostsPageContent: function () {
     var state = this.state;
 
@@ -112,9 +84,13 @@ var DatacenterPage = React.createClass({
           resources={state.totalHostsResources}
           totalResources={state.totalResources}
           refreshRate={state.refreshRate} />
-        {this.getHostsStats()}
+        <FilterHeadline
+          onReset={this.resetFilter}
+          name="Hosts"
+          currentLength={state.hosts.length}
+          totalLength={state.allHosts.length} />
         <FilterInputText
-          searchString={this.state.searchString}
+          searchString={this.state.filterOptions.searchString}
           onSubmit={this.onFilterChange} />
         <HostTable hosts={this.state.hosts} />
       </div>

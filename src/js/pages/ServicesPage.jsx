@@ -6,6 +6,7 @@ var React = require("react/addons");
 var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
 var FilterHealth = require("../components/FilterHealth");
+var FilterHeadline = require("../components/FilterHeadline");
 var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarActions = require("../events/SidebarActions");
@@ -143,18 +144,22 @@ var ServicesPage = React.createClass({
           totalResources={state.totalResources}
           refreshRate={state.refreshRate}
           resourceType="Services" />
-        {this.getServiceStats()}
+        <FilterHeadline
+          onReset={this.resetFilter}
+          name="Services"
+          currentLength={state.frameworks.length}
+          totalLength={state.totalFrameworks} />
         <ul className="list list-unstyled list-inline flush-bottom">
           <li>
             <FilterHealth
               countByHealth={state.countByHealth}
-              healthFilter={state.healthFilter}
+              healthFilter={state.filterOptions.healthFilter}
               onSubmit={this.onChangeHealthFilter}
               servicesLength={state.totalFrameworks} />
           </li>
           <li>
             <FilterInputText
-              searchString={state.searchString}
+              searchString={state.filterOptions.searchString}
               onSubmit={this.onChange} />
           </li>
         </ul>
