@@ -19,7 +19,7 @@ function isStat(prop) {
 
 function getClassName(prop, sortBy, row) {
   var classSet = React.addons.classSet({
-    "align-right": isStat(prop) || prop === "tasks_size",
+    "align-right": isStat(prop) || prop === "tasks_count",
     "hidden-mini fixed-width": isStat(prop),
     "highlight": prop === sortBy.prop,
     "clickable": row == null // this is a header

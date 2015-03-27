@@ -6,6 +6,18 @@
       color: @white;
     }
 
+    a {
+      span {
+        &:last-child {
+          margin-right: @base-spacing-unit;
+        }
+      }
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
     .badge {
       background-color: @white;
     }
@@ -14,14 +26,6 @@
       &::after {
         float: right;
         margin-top: @base-spacing-unit * -0.5;
-      }
-    }
-
-    .dropdown-menuitem {
-      span {
-        &:last-child {
-          margin-right: @base-spacing-unit;
-        }
       }
     }
   }
@@ -34,7 +38,7 @@
     }
   }
 
-  .dropdown-menuitem {
+  a {
     display: flex;
     justify-content: space-between;
     align-items: center;

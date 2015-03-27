@@ -22,7 +22,7 @@ var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
 
 function setHostsToFrameworkCount(frameworks, hosts) {
   return _.map(frameworks, function (framework) {
-    framework.slaves_length = _.foldl(hosts, function (acc, host) {
+    framework.slaves_count = _.foldl(hosts, function (acc, host) {
       if (host.frameworks[framework.id] != null) {
         acc++;
       }
@@ -129,7 +129,7 @@ function getStatesByFramework() {
       var lastFramework = _.clone(_.last(framework));
       return _.extend(lastFramework, {
         used_resources: getStatesByResource(framework, "used_resources"),
-        tasks_size: lastFramework.tasks.length
+        tasks_count: lastFramework.tasks.length
       });
     }, this).value();
 }
@@ -272,7 +272,7 @@ function getStateByHosts () {
       return acc;
     }, hosts)
     .each(function (slave) {
-      slave.tasks_size = _.size(slave.tasks);
+      slave.tasks_count = _.size(slave.tasks);
     })
     .toArray()
     .value();

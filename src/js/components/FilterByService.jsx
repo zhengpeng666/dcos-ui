@@ -49,9 +49,9 @@ var FilterByService = React.createClass({
         value: service.id,
         selected: serviceId === service.id,
         innerContent: (
-          <a className="dropdown-menuitem">
+          <a>
             <span>{service.name}</span>
-            <span className="badge">{service.slaves_length}</span>
+            <span className="badge">{service.slaves_count}</span>
           </a>
         )
       };
@@ -66,7 +66,7 @@ var FilterByService = React.createClass({
     return (
       <Dropdown
         defaultItem={
-          <span className="dropdown-menuitem">Filter by Service</span>
+          <a>Filter by Service</a>
         }
         items={this.getDropdownItems()}
         onChange={this.handleChange} />
