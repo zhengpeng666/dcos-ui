@@ -121,11 +121,14 @@
           background-color: fade(@purple, 10%);
 
           .sidebar-menu-item-icon {
-            .opacity(.4);
+            .opacity(1);
           }
 
           a {
             color: @purple;
+            &:hover .sidebar-menu-item-icon {
+              .opacity(1);
+            }
           }
         }
       }

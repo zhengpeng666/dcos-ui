@@ -19,9 +19,7 @@ var FilterHealth = React.createClass({
 
   propTypes: {
     countByHealth: React.PropTypes.object.isRequired,
-    healthFilter: React.PropTypes.oneOfType(
-      [React.PropTypes.string, React.PropTypes.number]
-    ),
+    healthFilter: React.PropTypes.number,
     onSubmit: React.PropTypes.func,
     servicesLength: React.PropTypes.number.isRequired
   },
@@ -35,31 +33,25 @@ var FilterHealth = React.createClass({
     };
   },
 
-  getInitialState: function () {
-    return {
-      filter: null
-    };
-  },
-
-  handleChange: function (health) {
-    this.setState({filter: health});
-    this.props.onSubmit(health);
-  },
-
   getCountByHealth: function (key) {
     var props = this.props;
+    var count = 0;
     if (key === "ALL") {
-      return props.servicesLength;
+      count = props.servicesLength;
     }
-    return props.countByHealth[HealthTypes[key]];
+    if (props.countByHealth[HealthTypes[key]] != null) {
+      count = props.countByHealth[HealthTypes[key]];
+    }
+
+    return count;
   },
 
   getFilterButtons: function () {
-    var mode = this.state.filter;
+    var mode = this.props.healthFilter;
 
     return _.map(buttonMap, function (value, key) {
       var health = HealthTypes[key];
-      if (typeof health === "undefined") {
+      if (health === undefined) {
         health = null;
       }
       var classSet = React.addons.classSet({
@@ -79,7 +71,7 @@ var FilterHealth = React.createClass({
         <button
             key={key}
             className={classSet}
-            onClick={this.handleChange.bind(this, health)}>
+            onClick={this.props.onSubmit.bind(null, health)}>
             <span className="button-align-content">
               <span className={dotClassSet}></span>
               <span className="label">{value}</span>

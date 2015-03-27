@@ -10,23 +10,15 @@ var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
 var Strings = require("../utils/Strings");
 
-var _interval;
-var _initCalled = false;
 var _frameworkIndexes = [];
 var _frameworkHealth = {};
-var _mesosStates = [];
+var _interval;
+var _initCalled = false;
 var _marathonUrl;
+var _mesosStates = [];
+var _statesProcessed = false;
 
 var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
-
-function countFrameworksByHealth(frameworks, type) {
-  return _.foldl(frameworks, function (acc, framework) {
-    if (framework.health.value === type) {
-      acc++;
-    }
-    return acc;
-  }, 0);
-}
 
 function sumResources(resourceList) {
   return _.foldl(resourceList, function (sumMap, resource) {
@@ -321,7 +313,7 @@ function normalizeFrameworks(frameworks, date) {
 }
 
 function filterByString(objects, key, searchString) {
-  var searchPattern = new RegExp(searchString, "i");
+  var searchPattern = new RegExp(Strings.escapeForRegExp(searchString), "i");
 
   return _.filter(objects, function (obj) {
     return searchPattern.test(obj[key]);
@@ -394,14 +386,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _.last(_mesosStates);
   },
 
-  getCountByHealth: function () {
-    var frameworks = this.getLatest().frameworks;
-    return _.foldl(HealthTypes, function (acc, type) {
-      acc[type] = countFrameworksByHealth(frameworks, type);
-      return acc;
-    }, {});
-  },
-
   getFrameworks: function (filterOptions) {
     filterOptions = filterOptions || {};
     var frameworks = getStatesByFramework();
@@ -444,6 +428,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
 
     return hosts;
+  },
+
+  getStatesProcessed: function () {
+    return _statesProcessed;
   },
 
   getTasks: function () {
@@ -491,6 +479,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     if (_mesosStates.length > Config.historyLength) {
       _mesosStates.shift();
     }
+
+    _statesProcessed = true;
 
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },

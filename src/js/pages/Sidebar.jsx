@@ -9,6 +9,12 @@ var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarStore = require("../stores/SidebarStore");
 
+var MENU_ITEMS = {
+  dashboard: {label: "Dashboard"},
+  services: {label: "Services"},
+  datacenter: {label: "Datacenter"}
+};
+
 function getMesosInfo() {
   return {
     mesosInfo: MesosStateStore.getLatest()
@@ -55,11 +61,36 @@ var Sidebar = React.createClass({
     );
   },
 
-  getItemClassSet: function (routeName) {
-    return React.addons.classSet({
-      "sidebar-menu-item h3": true,
-      "selected": this.isActive(routeName)
-    });
+  getMenuItems: function () {
+    return _.map(MENU_ITEMS, function (val, key) {
+      var isActive = this.isActive(key);
+      var iconClasses = {
+        "sidebar-menu-item-icon icon icon-medium": true,
+        "icon-medium-color": isActive,
+        "icon-medium-black": !isActive
+      };
+
+      iconClasses["icon-" + key] = true;
+
+      var itemClassSet = React.addons.classSet({
+        "sidebar-menu-item h3": true,
+        "selected": isActive
+      });
+      /* jshint trailing:false, quotmark:false, newcap:false */
+      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+      return (
+        <li className={itemClassSet} key={key}>
+          <Link to={key}>
+            <i className={React.addons.classSet(iconClasses)}></i>
+            <span className="sidebar-menu-item-label">
+              {val.label}
+            </span>
+          </Link>
+        </li>
+      );
+      /* jshint trailing:true, quotmark:true, newcap:true */
+      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    }, this);
   },
 
   onChange: function () {
@@ -93,30 +124,7 @@ var Sidebar = React.createClass({
           <nav>
             <div className="container container-fluid container-fluid-narrow">
               <ul className="sidebar-menu list-unstyled">
-                <li className={this.getItemClassSet("dashboard")}>
-                  <Link to="dashboard">
-                    <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
-                    <span className="sidebar-menu-item-label">
-                      Dashboard
-                    </span>
-                  </Link>
-                </li>
-                <li className={this.getItemClassSet("services")}>
-                  <Link to="services">
-                    <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
-                    <span className="sidebar-menu-item-label">
-                      Services
-                    </span>
-                  </Link>
-                </li>
-                <li className={this.getItemClassSet("datacenter")}>
-                  <Link to="datacenter">
-                    <i className="sidebar-menu-item-icon icon icon-medium icon-medium-white"></i>
-                    <span className="sidebar-menu-item-label">
-                      Datacenter
-                    </span>
-                  </Link>
-                </li>
+                {this.getMenuItems()}
               </ul>
             </div>
           </nav>
