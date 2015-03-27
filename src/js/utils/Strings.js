@@ -6,6 +6,10 @@ var Strings = {
     } else {
       return urlStr;
     }
+  },
+
+  escapeForRegExp: function (str) {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
   }
 };
 

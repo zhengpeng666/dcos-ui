@@ -313,7 +313,7 @@ function normalizeFrameworks(frameworks, date) {
 }
 
 function filterByString(objects, key, searchString) {
-  var searchPattern = new RegExp(searchString, "i");
+  var searchPattern = new RegExp(Strings.escapeForRegExp(searchString), "i");
 
   return _.filter(objects, function (obj) {
     return searchPattern.test(obj[key]);
