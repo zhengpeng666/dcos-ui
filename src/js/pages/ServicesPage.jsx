@@ -3,6 +3,7 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
+var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
 var FilterHeadline = require("../components/FilterHeadline");
 var FilterHealth = require("../components/FilterHealth");
@@ -10,6 +11,7 @@ var FilterInputText = require("../components/FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
+var Panel = require("../components/Panel");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 
@@ -31,7 +33,8 @@ function getMesosServices(filterOptions) {
 
   return {
     frameworks: frameworks,
-    countByHealth: getCountByHealth(allFrameworks),
+    statesProcessed: MesosStateStore.getStatesProcessed(),
+    countByHealth: MesosStateStore.getCountByHealth(allFrameworks),
     refreshRate: MesosStateStore.getRefreshRate(),
     totalFrameworks: allFrameworks.length,
     totalFrameworksResources:
@@ -100,11 +103,69 @@ var ServicesPage = React.createClass({
     this.setState(getMesosServices(filterOptions));
   },
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-  render: function () {
+  getServicesPageContent: function () {
     var state = this.state;
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div className="container container-fluid container-pod">
+        <ResourceBarChart
+          data={state.frameworks}
+          resources={state.totalFrameworksResources}
+          totalResources={state.totalResources}
+          refreshRate={state.refreshRate}
+          resourceType="Services" />
+        {this.getServiceStats()}
+        <ul className="list list-unstyled list-inline flush-bottom">
+          <li>
+            <FilterHealth
+              countByHealth={state.countByHealth}
+              healthFilter={state.healthFilter}
+              onSubmit={this.onChangeHealthFilter}
+              servicesLength={state.totalFrameworks} />
+          </li>
+          <li>
+            <FilterInputText
+              searchString={state.searchString}
+              onSubmit={this.onChange} />
+          </li>
+        </ul>
+        <ServiceTable
+          frameworks={state.frameworks}
+          totalResources={state.totalResources} />
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getEmptyServicesPageContent: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <AlertPanel title="No Services Installed">
+        <p>Use the DCOS command line tools to find and install services.</p>
+      </AlertPanel>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getContents: function (isEmpty) {
+    if (isEmpty) {
+      return this.getEmptyServicesPageContent();
+    } else {
+      return this.getServicesPageContent();
+    }
+  },
+
+  render: function () {
+    var state = this.state;
+    var isEmpty = state.statesProcessed && state.totalFrameworks === 0;
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="flex-container-col">
         <div className="page-header">
@@ -119,36 +180,7 @@ var ServicesPage = React.createClass({
           </div>
         </div>
         <div className="page-content container-scrollable">
-          <div className="container container-fluid container-pod">
-            <ResourceBarChart
-              data={state.frameworks}
-              resources={state.totalFrameworksResources}
-              totalResources={state.totalResources}
-              refreshRate={state.refreshRate}
-              resourceType="Services" />
-            <FilterHeadline
-              onReset={this.resetFilter}
-              name="Services"
-              currentLength={state.frameworks.length}
-              totalLength={state.totalFrameworks} />
-            <ul className="list list-unstyled list-inline flush-bottom">
-              <li>
-                <FilterHealth
-                  countByHealth={state.countByHealth}
-                  healthFilter={state.filterOptions.healthFilter}
-                  onSubmit={this.onChangeHealthFilter}
-                  servicesLength={state.totalFrameworks} />
-              </li>
-              <li>
-                <FilterInputText
-                  searchString={state.filterOptions.searchString}
-                  onSubmit={this.onChange} />
-              </li>
-            </ul>
-            <ServiceTable
-              frameworks={state.frameworks}
-              totalResources={state.totalResources} />
-          </div>
+          {this.getContents(isEmpty)}
         </div>
       </div>
     );

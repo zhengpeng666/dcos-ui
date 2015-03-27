@@ -51,7 +51,7 @@ var FilterHealth = React.createClass({
 
     return _.map(buttonMap, function (value, key) {
       var health = HealthTypes[key];
-      if (typeof health === "undefined") {
+      if (health === undefined) {
         health = null;
       }
       var classSet = React.addons.classSet({

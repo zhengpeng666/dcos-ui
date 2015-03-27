@@ -10,12 +10,13 @@ var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
 var Strings = require("../utils/Strings");
 
-var _interval;
-var _initCalled = false;
 var _frameworkIndexes = [];
 var _frameworkHealth = {};
-var _mesosStates = [];
+var _interval;
+var _initCalled = false;
 var _marathonUrl;
+var _mesosStates = [];
+var _statesProcessed = false;
 
 var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
 
@@ -429,6 +430,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return hosts;
   },
 
+  getStatesProcessed: function () {
+    return _statesProcessed;
+  },
+
   getTasks: function () {
     return getTasksByStatus(this.getLatest().frameworks, ["tasks"]);
   },
@@ -474,6 +479,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     if (_mesosStates.length > Config.historyLength) {
       _mesosStates.shift();
     }
+
+    _statesProcessed = true;
 
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },

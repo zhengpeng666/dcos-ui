@@ -3,6 +3,7 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
+var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
 var FilterHeadline = require("../components/FilterHeadline");
 var FilterInputText = require("../components/FilterInputText");
@@ -10,6 +11,7 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
+var Panel = require("../components/Panel");
 var HostTable = require("../components/HostTable");
 
 
@@ -20,6 +22,7 @@ function getMesosHosts(filterOptions) {
   var hosts = MesosStateStore.getHosts(filterOptions);
   return _.extend({
     hosts: hosts,
+    statesProcessed: MesosStateStore.getStatesProcessed(),
     refreshRate: MesosStateStore.getRefreshRate(),
     totalHosts: MesosStateStore.getLatest().slaves.length,
     totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
@@ -70,11 +73,55 @@ var DatacenterPage = React.createClass({
     this.setState(getMesosHosts(filterOptions));
   },
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-  render: function () {
+  getHostsPageContent: function () {
     var state = this.state;
 
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div className="container container-fluid container-pod">
+        <ResourceBarChart
+          data={state.hosts}
+          resources={state.totalHostsResources}
+          totalResources={state.totalResources}
+          refreshRate={state.refreshRate} />
+        {this.getHostsStats()}
+        <FilterInputText
+          searchString={this.state.searchString}
+          onSubmit={this.onFilterChange} />
+        <HostTable hosts={this.state.hosts} />
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getEmptyHostsPageContent: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <AlertPanel title="Empty Datacenter">
+        <p>Your datacenter is looking pretty empty. We don't see any nodes other than your master.</p>
+      </AlertPanel>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  getContents: function (isEmpty) {
+    if (isEmpty) {
+      return this.getEmptyHostsPageContent();
+    } else {
+      return this.getHostsPageContent();
+    }
+  },
+
+  render: function () {
+    var state = this.state;
+    var isEmpty = state.statesProcessed && state.totalHosts === 0;
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="flex-container-col">
         <div className="page-header">
@@ -89,23 +136,7 @@ var DatacenterPage = React.createClass({
           </div>
         </div>
         <div className="page-content container-scrollable">
-          <div className="container container-fluid container-pod">
-            <ResourceBarChart
-              data={state.hosts}
-              resources={state.totalHostsResources}
-              totalResources={state.totalResources}
-              refreshRate={state.refreshRate}
-              resourceType="Nodes" />
-            <FilterHeadline
-              onReset={this.resetFilter}
-              name="Hosts"
-              currentLength={state.hosts.length}
-              totalLength={state.totalHosts} />
-            <FilterInputText
-              searchString={this.state.filterOptions.searchString}
-              onSubmit={this.onFilterChange} />
-            <HostTable hosts={this.state.hosts} />
-          </div>
+         {this.getContents(isEmpty)}
         </div>
       </div>
     );
