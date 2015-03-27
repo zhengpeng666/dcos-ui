@@ -61,34 +61,27 @@ var Sidebar = React.createClass({
     );
   },
 
-  getItemClassSet: function (routeName) {
-    return React.addons.classSet({
-      "sidebar-menu-item h3": true,
-      "selected": this.isActive(routeName)
-    });
-  },
-
-  getIcon: function (routeName) {
-    var isActive = this.isActive(routeName);
-    var iconClasses = {
-      "sidebar-menu-item-icon icon icon-medium": true,
-      "icon-medium-color": isActive,
-      "icon-medium-black": !isActive
-    };
-
-    iconClasses["icon-" + routeName] = true;
-
-    return <i className={React.addons.classSet(iconClasses)}></i>;
-  },
-
   getMenuItems: function () {
     return _.map(MENU_ITEMS, function (val, key) {
+      var isActive = this.isActive(key);
+      var iconClasses = {
+        "sidebar-menu-item-icon icon icon-medium": true,
+        "icon-medium-color": isActive,
+        "icon-medium-black": !isActive
+      };
+
+      iconClasses["icon-" + key] = true;
+
+      var itemClassSet = React.addons.classSet({
+        "sidebar-menu-item h3": true,
+        "selected": isActive
+      });
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
-        <li className={this.getItemClassSet(key)}>
+        <li className={itemClassSet}>
           <Link to={key}>
-            {this.getIcon(key)}
+            <i className={React.addons.classSet(iconClasses)}></i>
             <span className="sidebar-menu-item-label">
               {val.label}
             </span>
