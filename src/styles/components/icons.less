@@ -4,7 +4,7 @@
 @icon-mini-width: 16px;
 @icon-mini-height: 16px;
 @icon-mini-count-horizontal: 3;
-@icon-mini-count-vertical: 4;
+@icon-mini-count-vertical: 5;
 @icon-mini-border-radius: 2px;
 
 @icon-mini-variant-black-offset-horizontal: 0 * @icon-mini-width;
@@ -189,6 +189,19 @@
 
 			&.icon-mini-color {
 				background-position: floor(-@icon-mini-variant-color-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 3);
+			}
+		}
+
+		/* Icon: Close */
+		&.icon-close {
+			background-position: floor(-@icon-mini-variant-black-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 4);
+
+			&.icon-mini-white {
+				background-position: floor(-@icon-mini-variant-white-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 4);
+			}
+
+			&.icon-mini-color {
+				background-position: floor(-@icon-mini-variant-color-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 4);
 			}
 		}
 
