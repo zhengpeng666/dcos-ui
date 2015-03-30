@@ -110,7 +110,7 @@ var Sidebar = React.createClass({
         <div className="sidebar-header">
           <div className="container container-fluid container-fluid-narrow container-pod">
             <div className="sidebar-header-image">
-              <img className="sidebar-header-image-inner" src="http://placehold.it/64x64" />
+              <img className="sidebar-header-image-inner" src="/img/layout/sidebar/sidebar-dcos-icon-medium.png" alt="sidebar header image"/>
             </div>
             <h2 className="sidebar-header-label flush-top text-align-center short-bottom">
               {this.state.mesosInfo.cluster}
@@ -131,6 +131,7 @@ var Sidebar = React.createClass({
         </div>
         <div className="sidebar-footer">
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom">
+            <img src="/img/layout/sidebar/sidebar-logo.png" className="sidebar-footer-image" alt="sidebar footer image" />
             <p className="text-align-center flush-top flush-bottom">
               Mesosphere DCOS v.0.0.1
             </p>
