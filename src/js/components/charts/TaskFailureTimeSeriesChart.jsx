@@ -18,7 +18,7 @@ var TaskFailureTimeSeriesChart = React.createClass({
     return [{
         name: "Failure",
         colorIndex: 2,
-        values: props.data,
+        values: props.data
       }];
   },
 

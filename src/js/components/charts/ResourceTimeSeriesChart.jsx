@@ -29,7 +29,7 @@ var ResourceChart = React.createClass({
     return [{
         name: "Alloc",
         colorIndex: this.props.colorIndex,
-        values: props.allocResources[props.mode],
+        values: props.allocResources[props.mode]
       }];
   },
 

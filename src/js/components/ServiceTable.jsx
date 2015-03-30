@@ -18,14 +18,12 @@ function isStat(prop) {
 }
 
 function getClassName(prop, sortBy, row) {
-  var classSet = React.addons.classSet({
+  return React.addons.classSet({
     "align-right": isStat(prop) || prop === "tasks_count",
     "hidden-mini fixed-width": isStat(prop),
     "highlight": prop === sortBy.prop,
     "clickable": row == null // this is a header
   });
-
-  return classSet;
 }
 
 function sortFunction(prop) {
@@ -209,7 +207,7 @@ var ServicesTable = React.createClass({
         render: this.renderStats,
         sortable: true,
         title: "DISK",
-      },
+      }
     ];
   },
 

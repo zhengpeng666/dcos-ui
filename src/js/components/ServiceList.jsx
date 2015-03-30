@@ -29,7 +29,7 @@ var ServiceList = React.createClass({
   },
 
   getServices: function (services) {
-    var displayServices = _.map(services, function (service) {
+    return _.map(services, function (service) {
       var attributes = {};
       var state = STATES.NA;
       if (service.health != null) {
@@ -59,8 +59,6 @@ var ServiceList = React.createClass({
         }
       };
     });
-
-    return displayServices;
   },
 
   getNoServicesMessage: function () {
