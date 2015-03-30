@@ -8,6 +8,7 @@ var EventTypes = require("../constants/EventTypes");
 var HealthSorting = require("../constants/HealthSorting");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
+var Page = require("../components/Page");
 var Panel = require("../components/Panel");
 var ResourceTimeSeriesChart =
   require("../components/charts/ResourceTimeSeriesChart");
@@ -99,42 +100,44 @@ var Dashboard = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="grid row">
-        <div className="grid-item column-small-6 column-large-4">
-          <Panel title="CPU Allocation">
-            <ResourceTimeSeriesChart
-              allocResources={data.allocResources}
-              totalResources={data.totalResources}
-              mode="cpus" />
-          </Panel>
+      <Page title="Dashboard">
+        <div className="grid row">
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="CPU Allocation">
+              <ResourceTimeSeriesChart
+                allocResources={data.allocResources}
+                totalResources={data.totalResources}
+                mode="cpus" />
+            </Panel>
+          </div>
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="Memory Allocation">
+              <ResourceTimeSeriesChart
+                colorIndex={3}
+                allocResources={data.allocResources}
+                totalResources={data.totalResources}
+                mode="mem" />
+            </Panel>
+          </div>
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="Task Failure Rate">
+              <TaskFailureTimeSeriesChart
+                data={data.failureRate} />
+            </Panel>
+          </div>
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="Services Health">
+              <ServiceList services={this.getServicesList(data.services)} />
+              {this.getViewAllServicesBtn()}
+            </Panel>
+          </div>
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="Tasks">
+              <TasksChart tasks={data.tasks} />
+            </Panel>
+          </div>
         </div>
-        <div className="grid-item column-small-6 column-large-4">
-          <Panel title="Memory Allocation">
-            <ResourceTimeSeriesChart
-              colorIndex={3}
-              allocResources={data.allocResources}
-              totalResources={data.totalResources}
-              mode="mem" />
-          </Panel>
-        </div>
-        <div className="grid-item column-small-6 column-large-4">
-          <Panel title="Task Failure Rate">
-            <TaskFailureTimeSeriesChart
-              data={data.failureRate} />
-          </Panel>
-        </div>
-        <div className="grid-item column-small-6 column-large-4">
-          <Panel title="Services Health">
-            <ServiceList services={this.getServicesList(data.services)} />
-            {this.getViewAllServicesBtn()}
-          </Panel>
-        </div>
-        <div className="grid-item column-small-6 column-large-4">
-          <Panel title="Tasks">
-            <TasksChart tasks={data.tasks} />
-          </Panel>
-        </div>
-      </div>
+      </Page>
     );
   }
 

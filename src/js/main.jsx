@@ -13,21 +13,21 @@ var Redirect = Router.Redirect;
 var NotFoundRoute = Router.NotFoundRoute;
 
 require("./utils/ReactSVG");
-var DashboardPage = require("./pages/DashboardPage");
-var DatacenterPage = require("./pages/DatacenterPage");
+var Dashboard = require("./pages/Dashboard");
+var Datacenter = require("./pages/Datacenter");
 var Index = require("./pages/Index");
-var ServicesPage = require("./pages/ServicesPage");
-var NotFoundPage = require("./pages/NotFoundPage");
+var Services = require("./pages/Services");
+var NotFound = require("./pages/NotFound");
 
 /* jshint trailing:false, quotmark:false, newcap:false */
 /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
 var routes = (
   <Route name="home" path="/" handler={Index}>
-    <Route name="dashboard" path="dashboard/?" handler={DashboardPage} />
-    <Route name="services" path="services/?" handler={ServicesPage} />
-    <Route name="datacenter" path="datacenter/?" handler={DatacenterPage} />
+    <Route name="dashboard" path="dashboard/?" handler={Dashboard} />
+    <Route name="services" path="services/?" handler={Services} />
+    <Route name="datacenter" path="datacenter/?" handler={Datacenter} />
     <Redirect from="/" to="dashboard" />
-    <NotFoundRoute handler={NotFoundPage}/>
+    <NotFoundRoute handler={NotFound}/>
   </Route>
 );
 

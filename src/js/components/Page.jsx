@@ -1,14 +1,18 @@
 /** @jsx React.DOM */
 
+var _ = require("underscore");
 var React = require("react/addons");
-
-var Dashboard = require("../pages/Dashboard");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
 
-var DashboardPage = React.createClass({
+var Page = React.createClass({
 
-  displayName: "DashboardPage",
+  displayName: "Page",
+
+  propTypes: {
+    title: React.PropTypes.string,
+    renderNavigation: React.PropTypes.func
+  },
 
   statics: {
     willTransitionTo: function () {
@@ -16,32 +20,55 @@ var DashboardPage = React.createClass({
     }
   },
 
+  getNavigation: function () {
+    if (_.isFunction(this.props.renderNavigation)) {
+      return this.props.renderNavigation();
+    } else {
+      return <div className="page-header-navigation" />;
+    }
+  },
+
+  getPageContents: function () {
+    return React.Children.map(this.props.children, function (child) {
+      return child;
+    });
+  },
+
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
+    var classes = {
+      "flex-container-col": true
+    };
+    if (this.props.className) {
+      classes[this.props.className] = true;
+    }
+
+    var classSet = React.addons.classSet(classes);
+
+
 
     return (
-      <div className="flex-container-col">
+      <div className={classSet}>
         <div className="page-header">
           <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
             <div className="page-header-context">
               <SidebarToggle />
               <h1 className="page-header-title flush-top flush-bottom">
-                Dashboard
+                {this.props.title}
               </h1>
             </div>
-            <div className="page-header-navigation" />
+            {this.getNavigation()}
           </div>
         </div>
         <div className="page-content container-scrollable">
           <div className="container container-fluid container-pod">
-            <Dashboard />
+            {this.getPageContents()}
           </div>
         </div>
       </div>
     );
   }
-
 });
 
-module.exports = DashboardPage;
+module.exports = Page;
