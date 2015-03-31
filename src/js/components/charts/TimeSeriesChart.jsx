@@ -46,31 +46,53 @@ var TimeSeriesChart = React.createClass({
       xScale: xScale,
       xMouseValue: null,
       yScale: yScale,
-      yMouseValue: null
+      yMouseValue: null,
+      clipPathID: _.uniqueId("clip")
     };
   },
 
   componentDidMount: function () {
     var el = this.getDOMNode();
     var props = this.props;
-    var margin = props.margin;
+
     this.renderAxis(props, this.state.xScale, this.state.yScale);
+    this.createClipPath();
+
+    el.addEventListener("mousemove", this.handleMouseMove);
+    el.addEventListener("mouseout", this.handleMouseOut);
+  },
+
+  componentDidUpdate: function () {
+    this.updateClipPath();
+  },
+
+  createClipPath: function () {
+    var el = this.getDOMNode();
 
     // create clip path for areas and x-axis
     d3.select(el)
       .append("defs")
-        .append("clipPath")
-          .attr("id", "clip")
-        .append("rect")
-          .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")"
-          )
-          .attr("width", props.width - margin.right - margin.left)
-          // includes x-axis as we want to clip that as well
-          .attr("height", props.height - margin.top);
+      .append("clipPath")
+        .attr("id", this.state.clipPathID)
+        .append("rect");
 
-    el.addEventListener("mousemove", this.handleMouseMove);
-    el.addEventListener("mouseout", this.handleMouseOut);
+    this.updateClipPath();
+  },
+
+  updateClipPath: function () {
+    var props = this.props;
+    var margin = props.margin;
+    var width = props.width - margin.right - margin.left;
+    // includes x-axis as we want to clip that as well
+    var height = props.height - margin.top;
+    var transform = "translate(" + margin.left + "," + margin.top + ")";
+
+    d3.select("#" + this.state.clipPathID + " rect")
+      .attr({
+        width: width,
+        height: height,
+        transform: transform
+      });
   },
 
   handleMouseMove: function (e) {
@@ -299,6 +321,8 @@ var TimeSeriesChart = React.createClass({
 
   getAreaList: function () {
     var props = this.props;
+    var clipPath = "url(#" + this.state.clipPathID + ")";
+
     // stack before drawing!
     return _.map(this.state.stack(props.data), function (obj, i) {
       var classes = {
@@ -321,7 +345,7 @@ var TimeSeriesChart = React.createClass({
             position={this.getCirclePosition(obj)}
             cx={props.width - props.margin.right}
             cy={initialPosition} />
-          <g clip-path="url(#clip)">
+          <g clip-path={clipPath}>
             <TimeSeriesArea
               path={this.state.area(obj.values)}
               name={obj.name}
