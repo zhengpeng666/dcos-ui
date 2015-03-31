@@ -40,9 +40,11 @@ var ServiceList = React.createClass({
           case STATES.UNHEALTHY.key:
             attributes["data-behavior"] = "show-tip";
             attributes["data-tip-place"] = "top-left";
-          case STATES.UNHEALTHY.key:
+
+          case STATES.HEALTHY.key:
             attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
             break;
+
           case STATES.UNHEALTHY.key:
             attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
             break;
