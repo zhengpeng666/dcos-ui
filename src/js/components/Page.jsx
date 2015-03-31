@@ -12,7 +12,8 @@ var Page = React.createClass({
 
   propTypes: {
     title: React.PropTypes.string,
-    renderNavigation: React.PropTypes.func
+    renderNavigation: React.PropTypes.func,
+    isLoading: React.PropTypes.bool
   },
 
   statics: {
@@ -23,6 +24,12 @@ var Page = React.createClass({
     willTransitionTo: function () {
       SidebarActions.close();
     }
+  },
+
+  getDefaultProps: function () {
+    return {
+      isLoading: false
+    };
   },
 
   getNavigation: function () {
@@ -43,9 +50,9 @@ var Page = React.createClass({
     });
   },
 
-
   render: function () {
     var classes = {
+      "page": true,
       "flex-container-col": true
     };
     if (this.props.className) {
@@ -71,7 +78,7 @@ var Page = React.createClass({
         </div>
         <div className="page-content container-scrollable">
           <div className="container container-fluid container-pod">
-            {this.getPageContents()}
+            {this.props.children}
           </div>
         </div>
       </div>

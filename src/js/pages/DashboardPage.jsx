@@ -20,10 +20,10 @@ var TasksChart = require("../components/charts/TasksChart");
 function getMesosState() {
   return {
     allocResources: MesosStateStore.getAllocResources(),
+    failureRate: MesosStateStore.getTaskFailureRate(),
     services: MesosStateStore.getLatest().frameworks,
     tasks: MesosStateStore.getTasks(),
-    totalResources: MesosStateStore.getTotalResources(),
-    failureRate: MesosStateStore.getTaskFailureRate()
+    totalResources: MesosStateStore.getTotalResources()
   };
 }
 
