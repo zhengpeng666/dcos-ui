@@ -4,9 +4,10 @@ var _ = require("underscore");
 var Humanize = require("humanize");
 var React = require("react/addons");
 
+var HealthLabels = require("../constants/HealthLabels");
+var HealthSorting = require("../constants/HealthSorting");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
-var HealthLabels = require("../constants/HealthLabels");
 var Maths = require("../utils/Maths");
 var Strings = require("../utils/Strings");
 var Table = require("./Table");
@@ -30,15 +31,22 @@ function getClassName(prop, sortBy, row) {
 function sortFunction(prop) {
   if (isStat(prop)) {
     return function (model) {
-      return _.last(model.used_resources[prop]).value + "-" +
-          model.name.toLowerCase();
-    };
-  } else {
-    return function (model) {
-      var value = model[prop].toString().toLowerCase();
-      return value + "-" + model.hostname.toLowerCase();
+      return _.last(model.used_resources[prop]).value;
     };
   }
+
+  return function (model) {
+    var value = model[prop];
+    if (_.isNumber(value)) {
+      return value;
+    }
+
+    if (prop === "health") {
+      value = HealthSorting[value.key];
+    }
+
+    return value.toString().toLowerCase() + "-" + model.name.toLowerCase();
+  };
 }
 
 var ServicesTable = React.createClass({
@@ -165,7 +173,7 @@ var ServicesTable = React.createClass({
       {
         className: getClassName,
         headerClassName: getClassName,
-        prop: "active",
+        prop: "health",
         render: this.renderHealth,
         sortable: true,
         title: "HEALTH",

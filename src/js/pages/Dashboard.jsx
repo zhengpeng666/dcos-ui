@@ -2,9 +2,10 @@
 
 var _ = require ("underscore");
 var React = require("react/addons");
+var Link = require("react-router").Link;
 
 var EventTypes = require("../constants/EventTypes");
-var Link = require("react-router").Link;
+var HealthSorting = require("../constants/HealthSorting");
 var MesosStateStore = require("../stores/MesosStateStore");
 var Panel = require("../components/Panel");
 var ResourceTimeSeriesChart =
@@ -23,13 +24,6 @@ function getMesosState() {
     failureRate: MesosStateStore.getTaskFailureRate()
   };
 }
-
-var SORT_ORDER = {
-  UNHEALTHY: 0,
-  HEALTHY: 1,
-  IDLE: 2,
-  NA: 3
-};
 
 var Dashboard = React.createClass({
 
@@ -66,7 +60,7 @@ var Dashboard = React.createClass({
 
   getServicesList: function (services) {
     var sortedServices = _.sortBy(services, function (service) {
-      return SORT_ORDER[service.health.key];
+      return HealthSorting[service.health.key];
     });
 
     return _.first(sortedServices, this.props.servicesListLength);
