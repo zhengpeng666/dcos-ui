@@ -1,5 +1,11 @@
 /** @jsx React.DOM */
 
+var overrides = require("./overrides");
+overrides.override();
+
+var Actions = require("./actions/Actions");
+Actions.beginStint();
+
 var React = require("react");
 var Router = require("react-router");
 var Route = Router.Route;
