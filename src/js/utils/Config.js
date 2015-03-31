@@ -4,6 +4,7 @@ var Config = {
   stateRefresh: 2000,
   historyLength: 31,
   environment: "@@ENV",
+  stateLoadDelay: 1500,
   version: "@@VERSION"
 };
 

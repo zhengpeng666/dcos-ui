@@ -70,15 +70,7 @@ var Index = React.createClass({
   },
 
   onStateChange: function () {
-    var state = getMesosState();
-    // if state is processed, stop listening
-    if (state.statesProcessed) {
-      MesosStateStore.removeChangeListener(
-        EventTypes.MESOS_STATE_CHANGE,
-        this.onStateChange
-      );
-    }
-    this.setState(state);
+    this.setState(getMesosState());
   },
 
   getContents: function (isLoading) {
@@ -88,8 +80,10 @@ var Index = React.createClass({
       return (
         <div id="canvas">
           <div className="text-align-center vertical-center">
-            <div className="loader-inner ball-scale" />
-            <p>Loading...</p>
+            <div className="ball-scale">
+              <div />
+            </div>
+            <h4>Loading...</h4>
           </div>
         </div>
       );

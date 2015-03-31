@@ -12,8 +12,9 @@ var Strings = require("../utils/Strings");
 
 var _frameworkIndexes = [];
 var _frameworkHealth = {};
+var _loading;
 var _interval;
-var _initCalled = false;
+var _initCalledAt;
 var _marathonUrl;
 var _mesosStates = [];
 var _statesProcessed = false;
@@ -382,11 +383,12 @@ function stopPolling() {
 var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   init: function () {
-    if (_initCalled) {
+    if (_initCalledAt != null) {
       return;
     }
 
-    _initCalled = true;
+    // log when we started calling
+    _initCalledAt = _.now();
 
     initStates();
     startPolling();
@@ -496,6 +498,29 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
   },
 
+  updateStateProcessed: function () {
+    _statesProcessed = true;
+    this.emitChange(EventTypes.MESOS_STATE_CHANGE);
+  },
+
+  notifyStateProcessed: function () {
+    // skip id state is processed, already loading or init has not been called
+    if (_statesProcessed || _loading != null || _initCalledAt == null) {
+      this.emitChange(EventTypes.MESOS_STATE_CHANGE);
+      return;
+    }
+
+    var msLeftOfDelay = Config.stateLoadDelay - (_.now() - _initCalledAt);
+    if (msLeftOfDelay < 0) {
+      this.updateStateProcessed();
+    } else {
+      _loading = setTimeout(
+        this.updateStateProcessed.bind(this),
+        msLeftOfDelay
+      );
+    }
+  },
+
   processState: function (data) {
     data.date = Date.now();
     data.frameworks = normalizeFrameworks(data.frameworks, data.date);
@@ -510,9 +535,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       _mesosStates.shift();
     }
 
-    _statesProcessed = true;
-
-    this.emitChange(EventTypes.MESOS_STATE_CHANGE);
+    this.notifyStateProcessed();
   },
 
   processMarathonHealth: function (data) {
