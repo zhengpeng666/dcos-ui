@@ -1,9 +1,7 @@
 var _ = require("underscore");
 var md5 = require("MD5");
 
-// TODO: Version should ideally be a global
-var __VESION__ = "0.0.1";
-var version = __VESION__;
+var __VERSION__ = "@@VERSION";
 
 var Actions = {
 
@@ -40,7 +38,7 @@ var Actions = {
     var data = _.extend({
       date: this.createdAt,
       page: this.getActivePage(),
-      appVersion: version,
+      appVersion: __VERSION__,
       stintID: this.stintID
     }, anything);
 

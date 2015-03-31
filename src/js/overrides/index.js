@@ -9,7 +9,7 @@ function overrides () {
   // Override React.createClass so that each component gets
   // the ActionsMixin
   React.createClass = function (specification) {
-    if(specification.mixins == null) {
+    if (specification.mixins == null) {
       specification.mixins = [];
     }
 
