@@ -16,6 +16,7 @@ var removeFile = require("broccoli-file-remover");
 var uglifyJavaScript = require("broccoli-uglify-js");
 var webpackify = require("broccoli-webpack");
 var _ = require("underscore");
+var packageConfig = require("./package.json");
 
 /*
  * configuration
@@ -201,6 +202,10 @@ function createJsTree() {
       {
         match: "ENV", // replaces @@ENV
         replacement: env
+      },
+      {
+        match: "VERSION",
+        replacement: packageConfig.version
       }
     ]
   });

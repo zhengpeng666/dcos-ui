@@ -8,6 +8,7 @@ var State = require("react-router").State;
 var EventTypes = require("../constants/EventTypes");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarStore = require("../stores/SidebarStore");
+var Config = require("../utils/Config");
 
 var MENU_ITEMS = {
   dashboard: {label: "Dashboard"},
@@ -133,7 +134,7 @@ var Sidebar = React.createClass({
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom">
             <img src="/img/layout/sidebar/sidebar-logo.png" className="sidebar-footer-image" alt="sidebar footer image" />
             <p className="text-align-center flush-top flush-bottom">
-              Mesosphere DCOS v.0.0.1
+              Mesosphere DCOS v.{Config.version}
             </p>
           </div>
         </div>
