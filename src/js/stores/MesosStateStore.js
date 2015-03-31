@@ -494,7 +494,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       }
 
       // find the framework based on package name
-      var frameworkName = _.findWhere(_frameworkIndexes, function (name) {
+      var frameworkName = _.find(_frameworkIndexes, function (name) {
         return name.indexOf(app.labels.DCOS_PACKAGE_NAME) > -1;
       });
 
