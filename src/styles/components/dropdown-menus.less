@@ -26,6 +26,7 @@
 
     &.dropdown-toggle {
       display: flex;
+
       &::after {
         align-self: flex-end;
         margin: @base-spacing-unit * -0.5 0 @base-spacing-unit * 0.25 auto;
@@ -47,6 +48,11 @@
 
     span {
       margin-right: @base-spacing-unit;
+      max-width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium * 2);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
       &:last-child {
         margin-right: 0;
       }

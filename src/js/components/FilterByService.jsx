@@ -64,6 +64,7 @@ var FilterByService = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Dropdown caption="Filter by Service"
+          resetText="All Services"
           onChange={this.handleChange}>
         {this.getDropdownItems()}
       </Dropdown>
