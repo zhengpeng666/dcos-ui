@@ -4,9 +4,10 @@ var _ = require("underscore");
 var Humanize = require("humanize");
 var React = require("react/addons");
 
+var HealthLabels = require("../constants/HealthLabels");
+var HealthSorting = require("../constants/HealthSorting");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
-var HealthLabels = require("../constants/HealthLabels");
 var Maths = require("../utils/Maths");
 var Strings = require("../utils/Strings");
 var Table = require("./Table");
@@ -38,6 +39,10 @@ function sortFunction(prop) {
     var value = model[prop];
     if (_.isNumber(value)) {
       return value;
+    }
+
+    if (prop === "health") {
+      value = HealthSorting[value.key];
     }
 
     return value.toString().toLowerCase() + "-" + model.name.toLowerCase();
@@ -168,7 +173,7 @@ var ServicesTable = React.createClass({
       {
         className: getClassName,
         headerClassName: getClassName,
-        prop: "active",
+        prop: "health",
         render: this.renderHealth,
         sortable: true,
         title: "HEALTH",
