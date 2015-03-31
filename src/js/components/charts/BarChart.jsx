@@ -50,7 +50,8 @@ var BarChart = React.createClass({
       rectWidth: 0,
       valuesLength: 0,
       xScale: xScale,
-      yScale: yScale
+      yScale: yScale,
+      clipPathID: _.uniqueId("clip")
     };
   },
 
@@ -58,15 +59,36 @@ var BarChart = React.createClass({
     var props = this.props;
 
     this.renderAxis(props, this.state.xScale, this.state.yScale);
-    d3.select(this.refs.barchart.getDOMNode())
-      .append("defs")
-        .append("clipPath")
-          .attr("id", "clip")
-        .append("rect")
-          .attr("width", props.width - props.margin.left - props.margin.right)
-          .attr("height", props.height + 1); // +1 for the base axis line
-
+    this.createClipPath();
     this.resetXAxis(props);
+  },
+
+  componentDidUpdate: function () {
+    this.updateClipPath();
+  },
+
+  createClipPath: function () {
+    var el = this.getDOMNode();
+
+    d3.select(el)
+      .append("defs")
+      .append("clipPath")
+        .attr("id", this.state.clipPathID)
+        .append("rect");
+
+    this.updateClipPath();
+  },
+
+  updateClipPath: function () {
+    var props = this.props;
+    var width = props.width - props.margin.left - props.margin.right;
+    var height = props.height + 1;  // +1 for the base axis line
+
+    d3.select("#" + this.state.clipPathID + " rect")
+      .attr({
+        width: width,
+        height: height
+      });
   },
 
   getStack: function () {
@@ -251,6 +273,7 @@ var BarChart = React.createClass({
   render: function () {
     var props = this.props;
     var margin = props.margin;
+    var clipPath = "url(#" + this.state.clipPathID + ")";
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -264,7 +287,7 @@ var BarChart = React.createClass({
           <g className="x axis"
             transform={"translate(" + [0, props.height] + ")"}
             ref="xAxis"/>
-          <g className="grid-graph" clip-path="url(#clip)">
+          <g className="grid-graph" clip-path={clipPath}>
             <g ref="yGrid" />
             <g ref="xGrid" />
             {this.getBarList()}
