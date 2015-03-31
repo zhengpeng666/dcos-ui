@@ -62,6 +62,12 @@ var TimeSeriesChart = React.createClass({
     el.addEventListener("mouseout", this.handleMouseOut);
   },
 
+  componentWillUnmount: function () {
+    var el = this.getDOMNode();
+    el.removeEventListener("mousemove", this.handleMouseMove);
+    el.removeEventListener("mouseout", this.handleMouseOut);
+  },
+
   componentDidUpdate: function () {
     this.updateClipPath();
   },
