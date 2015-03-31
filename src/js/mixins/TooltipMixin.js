@@ -36,7 +36,7 @@ var TooltipMixin = {
       this.tips[el.dataset.tipID].hide();
     }
 
-    el.removeEventListener("mouseleave");
+    el.removeEventListener("mouseleave", this.tip_handleMouseLeave);
   },
 
   tip_attachTips: function () {
