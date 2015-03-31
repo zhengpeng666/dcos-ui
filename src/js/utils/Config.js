@@ -8,7 +8,7 @@ var Config = {
 };
 
 // @@ENV gets replaced by Broccoli
-if (Config.version === "development") {
+if (Config.environment === "development") {
   var _ = require("underscore");
   var ConfigDev = require("./Config.dev.js");
   Config = _.extend(Config, ConfigDev);
