@@ -27,12 +27,16 @@ function sortFunction(prop) {
       return _.last(model.used_resources[prop]).value + "-" +
           model.hostname.toLowerCase();
     };
-  } else {
-    return function (model) {
-      var value = model[prop].toString().toLowerCase();
-      return value + "-" + model.hostname.toLowerCase();
-    };
   }
+
+  return function (model) {
+    var value = model[prop];
+    if (_.isNumber(value)) {
+      return value;
+    }
+
+    return value.toString().toLowerCase() + "-" + model.hostname.toLowerCase();
+  };
 }
 
 function getRowAttributes(model) {

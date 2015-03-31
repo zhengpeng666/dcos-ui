@@ -33,12 +33,16 @@ function sortFunction(prop) {
       return _.last(model.used_resources[prop]).value + "-" +
           model.name.toLowerCase();
     };
-  } else {
-    return function (model) {
-      var value = model[prop].toString().toLowerCase();
-      return value + "-" + model.hostname.toLowerCase();
-    };
   }
+
+  return function (model) {
+    var value = model[prop];
+    if (_.isNumber(value)) {
+      return value;
+    }
+
+    return value.toString().toLowerCase() + "-" + model.name.toLowerCase();
+  };
 }
 
 var ServicesTable = React.createClass({
