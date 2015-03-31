@@ -44,7 +44,8 @@ var DialChart = React.createClass({
   shouldComponentUpdate: function (nextProps) {
 
     var slice = this.getSlice(this.props);
-    var arc = this.state.innerArc;
+    var arcs = this.getArcs(this.props);
+    var innerArc = arcs.innerArc;
 
     slice.each(function(d) { this._current = d; });
 
@@ -56,7 +57,7 @@ var DialChart = React.createClass({
       var _this = this;
       return function(t) {
         _this._current = interpolate(t);
-        return arc(_this._current);
+        return innerArc(_this._current);
       };
     });
 
