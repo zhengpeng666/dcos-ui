@@ -12,9 +12,9 @@ var SidebarStore = require("../stores/SidebarStore");
 var Config = require("../utils/Config");
 
 var MENU_ITEMS = {
-  dashboard: {label: "Dashboard"},
-  services: {label: "Services"},
-  datacenter: {label: "Datacenter"}
+  dashboard: {label: "Dashboard", icon: "dashboard"},
+  services: {label: "Services", icon: "services"},
+  nodes: {label: "Nodes", icon: "datacenter"}
 };
 
 function getMesosInfo() {
@@ -61,7 +61,7 @@ var Sidebar = React.createClass({
         "icon-medium-black": !isActive
       };
 
-      iconClasses["icon-" + key] = true;
+      iconClasses["icon-" + val.icon] = true;
 
       var itemClassSet = React.addons.classSet({
         "sidebar-menu-item h3": true,

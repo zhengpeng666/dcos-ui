@@ -35,9 +35,9 @@ var DEFAULT_FILTER_OPTIONS = {
   byServiceFilter: null
 };
 
-var DatacenterPage = React.createClass({
+var Nodes = React.createClass({
 
-  displayName: "Datacenter",
+  displayName: "Nodes",
 
   mixins: [InternalStorageMixin],
 
@@ -105,7 +105,7 @@ var DatacenterPage = React.createClass({
           resourceType="Nodes" />
         <FilterHeadline
           onReset={this.resetFilter}
-          name="Hosts"
+          name="Nodes"
           currentLength={data.hosts.length}
           totalLength={data.allHosts.length} />
         <ul className="list list-unstyled list-inline flush-bottom">
@@ -157,7 +157,7 @@ var DatacenterPage = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <Page title="Datacenter">
+      <Page title="Nodes">
        {this.getContents(isEmpty)}
       </Page>
     );
@@ -165,4 +165,4 @@ var DatacenterPage = React.createClass({
 
 });
 
-module.exports = DatacenterPage;
+module.exports = Nodes;
