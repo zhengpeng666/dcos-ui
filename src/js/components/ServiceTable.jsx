@@ -30,8 +30,7 @@ function getClassName(prop, sortBy, row) {
 function sortFunction(prop) {
   if (isStat(prop)) {
     return function (model) {
-      return _.last(model.used_resources[prop]).value + "-" +
-          model.name.toLowerCase();
+      return _.last(model.used_resources[prop]).value;
     };
   }
 
