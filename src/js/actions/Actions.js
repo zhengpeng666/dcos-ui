@@ -76,6 +76,12 @@ var Actions = {
     this.components[component.id] = component;
   },
 
+  deregisterComponent: function (componentID) {
+    if (this.components[componentID]) {
+      delete this.components[componentID];
+    }
+  },
+
   getComponent: function (componentID) {
     return this.components[componentID];
   },

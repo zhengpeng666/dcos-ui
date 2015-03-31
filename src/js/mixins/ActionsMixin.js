@@ -15,6 +15,10 @@ var ActionsMixin = {
     this.actions_monkeyPatch();
   },
 
+  componentWillUnmount: function () {
+    Actions.deregisterComponent(this.actions_componentID);
+  },
+
   /**
    * Registers component instance in Actions singleton
    * TODO: This may not be useful at all in production
