@@ -13,6 +13,8 @@ var Strings = require("../utils/Strings");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
 
+var healthKey = "health";
+
 function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
 }
@@ -41,7 +43,7 @@ function sortFunction(prop) {
       return value;
     }
 
-    if (prop === "health") {
+    if (prop === healthKey) {
       value = HealthSorting[value.key];
     }
 
@@ -172,7 +174,7 @@ var ServicesTable = React.createClass({
       {
         className: getClassName,
         headerClassName: getClassName,
-        prop: "health",
+        prop: healthKey,
         render: this.renderHealth,
         sortable: true,
         title: "HEALTH",
