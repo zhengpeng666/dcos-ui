@@ -7,47 +7,56 @@ var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
 var FilterInputText = require("../components/FilterInputText");
 var FilterHeadline = require("../components/FilterHeadline");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
 var HostTable = require("../components/HostTable");
 
-var DEFAULT_FILTER_OPTIONS = {searchString: ""};
-
-function getMesosHosts(filterOptions) {
-  filterOptions = filterOptions || _.clone(DEFAULT_FILTER_OPTIONS);
-  var hosts = MesosStateStore.getHosts(filterOptions);
+function getMesosHosts(state) {
+  var filters = _.pick(state, "searchString");
+  var hosts = MesosStateStore.getHosts(filters);
   var allHosts = MesosStateStore.getLatest().slaves;
-  return _.extend({
+  return {
     hosts: hosts,
     statesProcessed: MesosStateStore.getStatesProcessed(),
     refreshRate: MesosStateStore.getRefreshRate(),
     allHosts: allHosts,
     totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
     totalResources: MesosStateStore.getTotalResources()
-  }, {filterOptions: filterOptions});
+  };
 }
+
+var DEFAULT_FILTER_OPTIONS = {
+  searchString: ""
+};
 
 var DatacenterPage = React.createClass({
 
   displayName: "DatacenterPage",
 
+  mixins: [InternalStorageMixin],
+
   getInitialState: function () {
-    return getMesosHosts();
+    return _.clone(DEFAULT_FILTER_OPTIONS);
+  },
+
+  componentWillMount: function () {
+    this.internalStorage_set(getMesosHosts(this.state));
   },
 
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onChange
+      this.onMesosStateChange
     );
   },
 
   componentWillUnmount: function () {
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onChange
+      this.onMesosStateChange
     );
   },
 
@@ -57,22 +66,26 @@ var DatacenterPage = React.createClass({
     }
   },
 
-  onChange: function () {
-    this.setState(getMesosHosts(this.state.filterOptions));
+  onMesosStateChange: function () {
+    this.internalStorage_set(getMesosHosts(this.state));
+    this.forceUpdate();
   },
 
   onFilterChange: function (searchString) {
-    var filterOptions = this.state.filterOptions;
-    filterOptions.searchString = searchString;
-    this.setState(getMesosHosts(filterOptions));
+    var stateChanges = {searchString: searchString};
+
+    this.internalStorage_set(getMesosHosts(stateChanges));
+    this.setState(stateChanges);
   },
 
   resetFilter: function () {
-    var filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
-    this.setState(getMesosHosts(filterOptions));
+    var state = _.clone(DEFAULT_FILTER_OPTIONS);
+    this.internalStorage_set(getMesosHosts(state));
+    this.setState(state);
   },
 
   getHostsPageContent: function () {
+    var data = this.internalStorage_get();
     var state = this.state;
 
     /* jshint trailing:false, quotmark:false, newcap:false */
@@ -80,19 +93,19 @@ var DatacenterPage = React.createClass({
     return (
       <div className="container container-fluid container-pod">
         <ResourceBarChart
-          data={state.hosts}
-          resources={state.totalHostsResources}
-          totalResources={state.totalResources}
-          refreshRate={state.refreshRate} />
+          data={data.hosts}
+          resources={data.totalHostsResources}
+          totalResources={data.totalResources}
+          refreshRate={data.refreshRate} />
         <FilterHeadline
           onReset={this.resetFilter}
           name="Hosts"
-          currentLength={state.hosts.length}
-          totalLength={state.allHosts.length} />
+          currentLength={data.hosts.length}
+          totalLength={data.allHosts.length} />
         <FilterInputText
-          searchString={this.state.filterOptions.searchString}
+          searchString={state.searchString}
           onSubmit={this.onFilterChange} />
-        <HostTable hosts={this.state.hosts} />
+        <HostTable hosts={data.hosts} />
       </div>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
@@ -120,8 +133,8 @@ var DatacenterPage = React.createClass({
   },
 
   render: function () {
-    var state = this.state;
-    var isEmpty = state.statesProcessed && state.allHosts.length === 0;
+    var data = this.internalStorage_get();
+    var isEmpty = data.statesProcessed && data.allHosts.length === 0;
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
