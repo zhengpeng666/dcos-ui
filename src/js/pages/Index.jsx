@@ -25,12 +25,6 @@ var Index = React.createClass({
 
   displayName: "Index",
 
-  getDefaultProps: function () {
-    return {
-      statesProcessed: false
-    };
-  },
-
   getInitialState: function () {
     return getSidebarState();
   },
@@ -70,7 +64,15 @@ var Index = React.createClass({
   },
 
   onStateChange: function () {
-    this.setState(getMesosState());
+    var state = getMesosState();
+    // if state is processed, stop listening
+    if (state.statesProcessed) {
+      MesosStateStore.removeChangeListener(
+        EventTypes.MESOS_STATE_CHANGE,
+        this.onStateChange
+      );
+    }
+    this.setState(state);
   },
 
   getContents: function (isLoading) {
