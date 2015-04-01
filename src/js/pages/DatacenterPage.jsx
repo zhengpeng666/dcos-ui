@@ -82,7 +82,7 @@ var DatacenterPage = React.createClass({
   },
 
   onSearchStringChange: function (searchString) {
-    var stateChanges = {searchString: searchString};
+    var stateChanges = _.extend(this.state, {searchString: searchString});
     this.internalStorage_set(getMesosHosts(stateChanges));
     this.setState(stateChanges);
   },
@@ -91,7 +91,7 @@ var DatacenterPage = React.createClass({
     if (serviceId === "") {
       serviceId = null;
     }
-    var stateChanges = {byServiceFilter: serviceId};
+    var stateChanges = _.extend(this.state, {byServiceFilter: serviceId});
     this.internalStorage_set(getMesosHosts(stateChanges));
     this.setState(stateChanges);
   },
@@ -120,7 +120,7 @@ var DatacenterPage = React.createClass({
             <FilterByService
               byServiceFilter={state.byServiceFilter}
               services={data.services}
-              totalHostsCount={state.allHosts.length}
+              totalHostsCount={data.allHosts.length}
               onChange={this.onByServiceFilterChange} />
           </li>
           <li>
