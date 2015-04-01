@@ -35,9 +35,9 @@ var DEFAULT_FILTER_OPTIONS = {
   byServiceFilter: null
 };
 
-var Nodes = React.createClass({
+var NodesPage = React.createClass({
 
-  displayName: "Nodes",
+  displayName: "NodesPage",
 
   mixins: [InternalStorageMixin],
 
@@ -165,4 +165,4 @@ var Nodes = React.createClass({
 
 });
 
-module.exports = Nodes;
+module.exports = NodesPage;

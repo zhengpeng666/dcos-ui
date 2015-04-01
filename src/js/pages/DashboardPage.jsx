@@ -27,9 +27,9 @@ function getMesosState() {
   };
 }
 
-var Dashboard = React.createClass({
+var DashboardPage = React.createClass({
 
-  displayName: "Dashboard",
+  displayName: "DashboardPage",
 
   mixins: [InternalStorageMixin],
 
@@ -143,4 +143,4 @@ var Dashboard = React.createClass({
 
 });
 
-module.exports = Dashboard;
+module.exports = DashboardPage;
