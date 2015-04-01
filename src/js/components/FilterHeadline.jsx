@@ -46,11 +46,9 @@ var FilterHeadline = React.createClass({
           Showing {filteredLength} of {totalLength} {name}
         </li>
         <li className={anchorClassSet} onClick={this.handleReset}>
-          <small>
-            <a>
-              (Show all)
-            </a>
-          </small>
+          <a className="small">
+            (Show all)
+          </a>
         </li>
         <li className={unfilteredClassSet}>
           {totalLength} {name}
