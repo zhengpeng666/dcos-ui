@@ -35,15 +35,17 @@ var ServiceList = React.createClass({
       if (service.health != null) {
         state = STATES[service.health.key];
 
-        if (service.health.key in [STATES.HEALTHY.key, STATES.UNHEALTHY.key]) {
-            attributes["data-behavior"] = "show-tip";
-            attributes["data-tip-place"] = "top-left";
-        }
+        attributes["data-behavior"] = "show-tip";
+        attributes["data-tip-place"] = "top-left";
 
         if (service.health.key === STATES.HEALTHY.key) {
           attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
         } else if (service.health.key === STATES.UNHEALTHY.key) {
           attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
+        } else if (service.health.key === STATES.IDLE.key) {
+          attributes["data-tip-content"] = HealthTypesDescription.IDLE;
+        } else if (service.health.key === STATES.NA.key) {
+          attributes["data-tip-content"] = HealthTypesDescription.NA;
         }
       }
 

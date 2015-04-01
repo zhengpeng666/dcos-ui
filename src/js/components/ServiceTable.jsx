@@ -109,14 +109,16 @@ var ServicesTable = React.createClass({
     });
 
     var attributes = {};
-    if (model.health.value in [HealthTypes.HEALTHY, HealthTypes.UNHEALTHY]) {
-        attributes["data-behavior"] = "show-tip";
-    }
+    attributes["data-behavior"] = "show-tip";
 
     if (model.health.value === HealthTypes.HEALTHY) {
       attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
     } else if (model.health.value === HealthTypes.UNHEALTHY) {
       attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
+    } else if (model.health.value === HealthTypes.IDLE) {
+      attributes["data-tip-content"] = HealthTypesDescription.IDLE;
+    } else if (model.health.value === HealthTypes.NA) {
+      attributes["data-tip-content"] = HealthTypesDescription.NA;
     }
 
     return React.createElement(
