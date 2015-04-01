@@ -2,6 +2,7 @@
 
 var _ = require("underscore");
 var React = require("react/addons");
+
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
 
