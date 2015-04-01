@@ -8,6 +8,7 @@ var EventTypes = require("../constants/EventTypes");
 var FilterHealth = require("../components/FilterHealth");
 var FilterHeadline = require("../components/FilterHeadline");
 var FilterInputText = require("../components/FilterInputText");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("./SidebarToggle");
@@ -26,8 +27,8 @@ function getCountByHealth(frameworks) {
   }, {});
 }
 
-function getMesosServices(filterOptions) {
-  var frameworks = MesosStateStore.getFrameworks(filterOptions);
+function getMesosServices(state) {
+  var frameworks = MesosStateStore.getFrameworks(state);
   var allFrameworks = MesosStateStore.getLatest().frameworks;
 
   return {
@@ -38,8 +39,7 @@ function getMesosServices(filterOptions) {
     totalFrameworks: allFrameworks.length,
     totalFrameworksResources:
       MesosStateStore.getTotalFrameworksResources(frameworks),
-    totalResources: MesosStateStore.getTotalResources(),
-    filterOptions: filterOptions
+    totalResources: MesosStateStore.getTotalResources()
   };
 }
 
@@ -52,22 +52,25 @@ var ServicesPage = React.createClass({
 
   displayName: "ServicesPage",
 
+  mixins: [InternalStorageMixin],
+
   getInitialState: function () {
-    var filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
-    return getMesosServices(filterOptions);
+    var state = _.clone(DEFAULT_FILTER_OPTIONS);
+    this.internalStorage_set(getMesosServices(state));
+    return state;
   },
 
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onChange
+      this.onMesosStateChange
     );
   },
 
   componentWillUnmount: function () {
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onChange
+      this.onMesosStateChange
     );
   },
 
@@ -77,35 +80,39 @@ var ServicesPage = React.createClass({
     }
   },
 
-  onChange: function (searchString) {
-    var state;
-    if (searchString != null) {
-      var filterOptions = this.state.filterOptions;
-      filterOptions.searchString = searchString;
-      state = getMesosServices(filterOptions);
-    } else {
-      state = getMesosServices(this.state.filterOptions);
-    }
+  onMesosStateChange: function () {
+    this.internalStorage_set(getMesosServices(this.state));
+    this.forceUpdate();
+  },
+
+  handleHealthFilterChange: function (healthFilter) {
+    var state = _.clone(DEFAULT_FILTER_OPTIONS);
+    state.healthFilter = healthFilter;
+
+    this.internalStorage_set(getMesosServices(state));
     this.setState(state);
   },
 
-  onChangeHealthFilter: function (healthFilter) {
-    var filterOptions = this.state.filterOptions;
-    // reset filter on health filter change
-    filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
-    filterOptions.healthFilter = healthFilter;
-    this.setState(getMesosServices(filterOptions));
+  handleSearchStringChange: function (searchString) {
+    var state = this.state;
+
+    state.searchString = searchString;
+    data = getMesosServices(state);
+
+    this.internalStorage_set(data);
+    this.setState(state);
   },
 
   resetFilter: function () {
-    var filterOptions = _.clone(DEFAULT_FILTER_OPTIONS);
-    this.setState(getMesosServices(filterOptions));
+    var state = _.clone(DEFAULT_FILTER_OPTIONS);
+    this.internalStorage_set(getMesosServices(state));
+    this.setState(state);
   },
 
   getServiceStats: function () {
-    var state = this.state;
-    var filteredLength = state.frameworks.length;
-    var totalLength = state.totalFrameworks;
+    var data = this.internalStorage_get();
+    var filteredLength = data.frameworks.length;
+    var totalLength = data.totalFrameworks;
 
     var filteredClassSet = React.addons.classSet({
       "hidden": filteredLength === totalLength
@@ -133,39 +140,40 @@ var ServicesPage = React.createClass({
 
   getServicesPageContent: function () {
     var state = this.state;
+    var data = this.internalStorage_get();
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="container container-fluid container-pod">
         <ResourceBarChart
-          data={state.frameworks}
-          resources={state.totalFrameworksResources}
-          totalResources={state.totalResources}
-          refreshRate={state.refreshRate}
+          data={data.frameworks}
+          resources={data.totalFrameworksResources}
+          totalResources={data.totalResources}
+          refreshRate={data.refreshRate}
           resourceType="Services" />
         <FilterHeadline
           onReset={this.resetFilter}
           name="Services"
-          currentLength={state.frameworks.length}
-          totalLength={state.totalFrameworks} />
+          currentLength={data.frameworks.length}
+          totalLength={data.totalFrameworks} />
         <ul className="list list-unstyled list-inline flush-bottom">
           <li>
             <FilterHealth
-              countByHealth={state.countByHealth}
-              healthFilter={state.filterOptions.healthFilter}
-              onSubmit={this.onChangeHealthFilter}
-              servicesLength={state.totalFrameworks} />
+              countByHealth={data.countByHealth}
+              healthFilter={state.healthFilter}
+              onSubmit={this.handleHealthFilterChange}
+              servicesLength={data.totalFrameworks} />
           </li>
           <li>
             <FilterInputText
-              searchString={state.filterOptions.searchString}
-              onSubmit={this.onChange} />
+              searchString={state.searchString}
+              onSubmit={this.handleSearchStringChange} />
           </li>
         </ul>
         <ServiceTable
-          frameworks={state.frameworks}
-          totalResources={state.totalResources} />
+          frameworks={data.frameworks}
+          totalResources={data.totalResources} />
       </div>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
@@ -193,8 +201,8 @@ var ServicesPage = React.createClass({
   },
 
   render: function () {
-    var state = this.state;
-    var isEmpty = state.statesProcessed && state.totalFrameworks === 0;
+    var data = this.internalStorage_get();
+    var isEmpty = data.statesProcessed && data.totalFrameworks === 0;
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
