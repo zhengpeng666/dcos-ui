@@ -391,7 +391,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     _initCalledAt = _.now();
 
     initStates();
-    startPolling();
   },
 
   getRefreshRate: function () {
@@ -488,6 +487,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
+    startPolling();
   },
 
   removeChangeListener: function (eventName, callback) {
