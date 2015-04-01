@@ -10,6 +10,10 @@ var BarChart = React.createClass({
 
   displayName: "BarChart",
 
+  actions_configuration: {
+    disable: true
+  },
+
   propTypes: {
     data: React.PropTypes.array.isRequired,
     width: React.PropTypes.number.isRequired,

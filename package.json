@@ -16,6 +16,7 @@
     "url": "https://github.com/mesosphere/dcos-ui"
   },
   "dependencies": {
+    "MD5": "^1.2.1",
     "canvas-ui-system": "0.0.7",
     "d3": "^3.5.5",
     "flux": "^2.0.1",

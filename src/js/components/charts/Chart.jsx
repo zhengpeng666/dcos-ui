@@ -9,6 +9,12 @@ var Chart = React.createClass({
 
   displayName: "Chart",
 
+  actions_configuration: {
+    state: {
+      width: {skip: true}
+    }
+  },
+
   propTypes: {
     calcHeight: React.PropTypes.func
   },
