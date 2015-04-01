@@ -6,6 +6,7 @@ var Link = require("react-router").Link;
 var State = require("react-router").State;
 
 var EventTypes = require("../constants/EventTypes");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarStore = require("../stores/SidebarStore");
 var Config = require("../utils/Config");
@@ -22,44 +23,33 @@ function getMesosInfo() {
   };
 }
 
-function getSidebarState() {
-  return {
-    isOpen: SidebarStore.isOpen()
-  };
-}
-
 var Sidebar = React.createClass({
 
   displayName: "Sidebar",
 
-  mixins: [State],
+  mixins: [State, InternalStorageMixin],
 
-  getInitialState: function () {
-    return _.extend(getMesosInfo(), getSidebarState());
+  componentWillMount: function () {
+    this.internalStorage_set(getMesosInfo());
   },
 
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onChange
-    );
-
-    SidebarStore.addChangeListener(
-      EventTypes.SIDEBAR_CHANGE,
-      this.onSidebarChange
+      this.onMesosStateChange
     );
   },
 
   componentWillUnmount: function () {
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onChange
+      this.onMesosStateChange
     );
+  },
 
-    SidebarStore.removeChangeListener(
-      EventTypes.SIDEBAR_CHANGE,
-      this.onSidebarChange
-    );
+  onMesosStateChange: function () {
+    this.internalStorage_set(getMesosInfo());
+    this.forceUpdate();
   },
 
   getMenuItems: function () {
@@ -94,17 +84,10 @@ var Sidebar = React.createClass({
     }, this);
   },
 
-  onChange: function () {
-    this.setState(getMesosInfo());
-  },
-
-  onSidebarChange: function () {
-    this.setState(getSidebarState());
-  },
-
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
+    var data = this.internalStorage_get();
 
     return (
       <div className="sidebar flex-container-col">
@@ -114,10 +97,10 @@ var Sidebar = React.createClass({
               <img className="sidebar-header-image-inner" src="/img/layout/sidebar/sidebar-dcos-icon-medium.png" alt="sidebar header image"/>
             </div>
             <h2 className="sidebar-header-label flush-top text-align-center short-bottom">
-              {this.state.mesosInfo.cluster}
+              {data.mesosInfo.cluster}
             </h2>
             <p className="sidebar-header-sublabel text-align-center flush-bottom">
-              {this.state.mesosInfo.hostname}
+              {data.mesosInfo.hostname}
             </p>
           </div>
         </div>

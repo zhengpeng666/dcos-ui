@@ -6,6 +6,7 @@ var Link = require("react-router").Link;
 
 var EventTypes = require("../constants/EventTypes");
 var HealthSorting = require("../constants/HealthSorting");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var Panel = require("../components/Panel");
 var ResourceTimeSeriesChart =
@@ -29,9 +30,7 @@ var Dashboard = React.createClass({
 
   displayName: "Dashboard",
 
-  getInitialState: function () {
-    return getMesosState();
-  },
+  mixins: [InternalStorageMixin],
 
   getDefaultProps: function () {
     return {
@@ -39,23 +38,27 @@ var Dashboard = React.createClass({
     };
   },
 
+  componentWillMount: function () {
+    this.internalStorage_set(getMesosState());
+  },
+
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onChange
+      this.onMesosStateChange
     );
-    this.onChange();
   },
 
   componentWillUnmount: function () {
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onChange
+      this.onMesosStateChange
     );
   },
 
-  onChange: function () {
-    this.setState(getMesosState());
+  onMesosStateChange: function () {
+    this.internalStorage_set(getMesosState());
+    this.forceUpdate();
   },
 
   getServicesList: function (services) {
@@ -67,7 +70,8 @@ var Dashboard = React.createClass({
   },
 
   getViewAllServicesBtn: function () {
-    var servicesCount = this.state.services.length;
+    var data = this.internalStorage_get();
+    var servicesCount = data.services.length;
     if (!servicesCount) {
       return;
     }
@@ -90,7 +94,7 @@ var Dashboard = React.createClass({
   },
 
   render: function () {
-    var state = this.state;
+    var data = this.internalStorage_get();
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -99,8 +103,8 @@ var Dashboard = React.createClass({
         <div className="grid-item column-small-6 column-large-4">
           <Panel title="CPU Allocation">
             <ResourceTimeSeriesChart
-              allocResources={state.allocResources}
-              totalResources={state.totalResources}
+              allocResources={data.allocResources}
+              totalResources={data.totalResources}
               mode="cpus" />
           </Panel>
         </div>
@@ -108,26 +112,26 @@ var Dashboard = React.createClass({
           <Panel title="Memory Allocation">
             <ResourceTimeSeriesChart
               colorIndex={3}
-              allocResources={state.allocResources}
-              totalResources={state.totalResources}
+              allocResources={data.allocResources}
+              totalResources={data.totalResources}
               mode="mem" />
           </Panel>
         </div>
         <div className="grid-item column-small-6 column-large-4">
           <Panel title="Task Failure Rate">
             <TaskFailureTimeSeriesChart
-              data={state.failureRate} />
+              data={data.failureRate} />
           </Panel>
         </div>
         <div className="grid-item column-small-6 column-large-4">
           <Panel title="Services Health">
-            <ServiceList services={this.getServicesList(this.state.services)} />
+            <ServiceList services={this.getServicesList(data.services)} />
             {this.getViewAllServicesBtn()}
           </Panel>
         </div>
         <div className="grid-item column-small-6 column-large-4">
           <Panel title="Tasks">
-            <TasksChart tasks={state.tasks} />
+            <TasksChart tasks={data.tasks} />
           </Panel>
         </div>
       </div>

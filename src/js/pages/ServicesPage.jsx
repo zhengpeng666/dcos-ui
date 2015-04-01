@@ -56,9 +56,11 @@ var ServicesPage = React.createClass({
   mixins: [InternalStorageMixin],
 
   getInitialState: function () {
-    var state = _.clone(DEFAULT_FILTER_OPTIONS);
-    this.internalStorage_set(getMesosServices(state));
-    return state;
+    return _.clone(DEFAULT_FILTER_OPTIONS);
+  },
+
+  componentWillMount: function () {
+    this.internalStorage_set(getMesosServices(this.state));
   },
 
   componentDidMount: function () {
@@ -87,21 +89,21 @@ var ServicesPage = React.createClass({
   },
 
   handleHealthFilterChange: function (healthFilter) {
-    var state = _.clone(DEFAULT_FILTER_OPTIONS);
-    state.healthFilter = healthFilter;
+    var stateChanges = _.clone(DEFAULT_FILTER_OPTIONS);
+    stateChanges.healthFilter = healthFilter;
 
-    this.internalStorage_set(getMesosServices(state));
-    this.setState(state);
+    this.internalStorage_set(getMesosServices(stateChanges));
+    this.setState(stateChanges);
   },
 
   handleSearchStringChange: function (searchString) {
-    var state = this.state;
-
-    state.searchString = searchString;
-    data = getMesosServices(state);
+    var data = getMesosServices({
+      searchString: searchString,
+      healthFilter: this.state.healthFilter
+    });
 
     this.internalStorage_set(data);
-    this.setState(state);
+    this.setState({searchString: searchString});
   },
 
   resetFilter: function () {
