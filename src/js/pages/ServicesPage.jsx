@@ -38,6 +38,7 @@ function getMesosServices(state) {
 
   return {
     frameworks: frameworks,
+    healthProcessed: MesosStateStore.getHealthProcessed(),
     statesProcessed: MesosStateStore.getStatesProcessed(),
     countByHealth: getCountByHealth(allFrameworks),
     refreshRate: MesosStateStore.getRefreshRate(),
@@ -47,6 +48,11 @@ function getMesosServices(state) {
     totalResources: MesosStateStore.getTotalResources()
   };
 }
+
+var DEFAULT_FILTER_OPTIONS = {
+  searchString: "",
+  healthFilter: null
+};
 
 var ServicesPage = React.createClass({
 
@@ -168,8 +174,8 @@ var ServicesPage = React.createClass({
           </li>
         </ul>
         <ServiceTable
-          frameworks={data.frameworks}
-          totalResources={data.totalResources} />
+          healthProcessed={data.healthProcessed}
+          frameworks={data.frameworks} />
       </div>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */

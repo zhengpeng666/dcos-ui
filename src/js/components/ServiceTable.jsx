@@ -56,7 +56,8 @@ var ServicesTable = React.createClass({
   mixins: [TooltipMixin],
 
   propTypes: {
-    frameworks: React.PropTypes.array.isRequired
+    frameworks: React.PropTypes.array.isRequired,
+    healthProcessed: React.PropTypes.bool.isRequired
   },
 
   handleClick: function (model, context) {
@@ -100,6 +101,16 @@ var ServicesTable = React.createClass({
   },
 
   renderHealth: function (prop, model) {
+    if (!this.props.healthProcessed) {
+      return (
+        <div className="loader-small ball-beat">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      );
+    }
+
     var statusClassSet = React.addons.classSet({
       "collection-item-content-status": true,
       "text-success": model.health.value === HealthTypes.HEALTHY,
