@@ -87,6 +87,5 @@ var Actions = {
   },
 
 };
-window.Actions = Actions;
 
 module.exports = Actions;

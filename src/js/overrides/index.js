@@ -3,7 +3,7 @@ var React = require("react");
 
 var ActionsMixin = require("../mixins/ActionsMixin");
 
-function overrides () {
+function overrides() {
   var originalCreateClass = React.createClass;
 
   // Override React.createClass so that each component gets

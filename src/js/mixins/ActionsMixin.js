@@ -3,8 +3,6 @@ var Actions = require("../actions/Actions");
 
 var ActionsMixin = {
 
-  actions_path: "/",
-
   componentDidMount: function () {
     // Actions disabled for component
     if (this.actions_configuration && this.actions_configuration.disable) {
