@@ -120,6 +120,7 @@ var DatacenterPage = React.createClass({
             <FilterByService
               byServiceFilter={state.byServiceFilter}
               services={data.services}
+              totalHostsCount={state.allHosts.length}
               onChange={this.onByServiceFilterChange} />
           </li>
           <li>

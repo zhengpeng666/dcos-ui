@@ -13,6 +13,7 @@ var FilterByService = React.createClass({
   propTypes: {
     byServiceFilter: React.PropTypes.string,
     services: React.PropTypes.array.isRequired,
+    totalHostsCount: React.PropTypes.number.isRequired,
     onChange: React.PropTypes.func
   },
 
@@ -20,6 +21,7 @@ var FilterByService = React.createClass({
     return {
       byServiceFilter: null,
       services: [],
+      totalHostsCount: 0,
       onChange: _.noop
     };
   },
@@ -49,7 +51,8 @@ var FilterByService = React.createClass({
       return (
         <DropdownItem key={service.id}
             value={service.id}
-            selected={serviceId === service.id}>
+            selected={serviceId === service.id}
+            title={service.name}>
           <span>{service.name}</span>
           <span className="badge">{service.slaves_count}</span>
         </DropdownItem>
@@ -59,12 +62,25 @@ var FilterByService = React.createClass({
     });
   },
 
+  getResetElement: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <DropdownItem key="default" title="All Services">
+        <span>All Services</span>
+        <span className="badge">{this.props.totalHostsCount}</span>
+      </DropdownItem>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
   render: function () {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Dropdown caption="Filter by Service"
-          resetText="All Services"
+          resetElement={this.getResetElement()}
           onChange={this.handleChange}>
         {this.getDropdownItems()}
       </Dropdown>
