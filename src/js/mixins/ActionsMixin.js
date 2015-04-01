@@ -19,7 +19,6 @@ var ActionsMixin = {
 
   /**
    * Registers component instance in Actions singleton
-   * TODO: This may not be useful at all in production
    */
   actions_registerComponent: function () {
     this.actions_componentID = this._rootNodeID + "-" +

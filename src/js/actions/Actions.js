@@ -17,8 +17,8 @@ var Actions = {
     this.timeline = [];
     this.components = {};
 
-    // TODO: Not sure if this belongs here
-    // TODO: We need a way of getting pages
+    // TODO: Not sure if this belongs here (DCOS-698)
+    // TODO: We need a way of getting pages (DCOS-698)
     this.activePage = "services";
 
     this.log({
