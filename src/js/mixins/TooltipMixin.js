@@ -24,7 +24,9 @@ var TooltipMixin = {
     var el = e.target;
 
     if (el.dataset.behavior && el.dataset.behavior === "show-tip") {
-      this.tips[el.dataset.tipID].show();
+      var tip = this.tips[el.dataset.tipID];
+      tip.content(el.dataset.tipContent);
+      tip.show();
       el.addEventListener("mouseleave", this.tip_handleMouseLeave);
     }
   },
@@ -72,7 +74,7 @@ var TooltipMixin = {
       options.place = el.dataset.tipPlace;
     }
 
-    var tip = new Tooltip(el.dataset.tipContent, options);
+    var tip = new Tooltip(undefined, options);
     tip.attach(el);
 
     this.tips[el.dataset.tipID] = tip;
@@ -81,6 +83,11 @@ var TooltipMixin = {
   },
 
   tip_destroyTip: function (tipID) {
+    // Allows us to create a new tip for the element.
+    // Useful when the element has tooltip -> doesn't -> then has it again.
+    var el = this.getDOMNode().querySelector("[data-tip-i-d=" + tipID + "]");
+    delete el.dataset.tipID;
+
     this.tips[tipID].destroy();
     delete this.tips[tipID];
   },
