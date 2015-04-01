@@ -28,7 +28,8 @@ function getCountByHealth(frameworks) {
 }
 
 function getMesosServices(state) {
-  var frameworks = MesosStateStore.getFrameworks(state);
+  var filters = _.pick(state, "searchString", "healthFilter");
+  var frameworks = MesosStateStore.getFrameworks(filters);
   var allFrameworks = MesosStateStore.getLatest().frameworks;
 
   return {
