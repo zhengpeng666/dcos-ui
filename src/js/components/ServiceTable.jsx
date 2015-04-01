@@ -109,16 +109,14 @@ var ServicesTable = React.createClass({
     });
 
     var attributes = {};
-    switch (model.health.value) {
-      case HealthTypes.HEALTHY:
+    if (model.health.value in [HealthTypes.HEALTHY, HealthTypes.UNHEALTHY]) {
         attributes["data-behavior"] = "show-tip";
-        attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
-        break;
+    }
 
-      case HealthTypes.UNHEALTHY:
-        attributes["data-behavior"] = "show-tip";
-        attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
-        break;
+    if (model.health.value === HealthTypes.HEALTHY) {
+      attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
+    } else if (model.health.value === HealthTypes.UNHEALTHY) {
+      attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
     }
 
     return React.createElement(
