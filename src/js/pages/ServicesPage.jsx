@@ -14,11 +14,6 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 
-var DEFAULT_FILTER_OPTIONS = {
-  searchString: "",
-  healthFilter: null
-};
-
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
     if (acc[framework.health.value] === undefined) {
@@ -38,6 +33,7 @@ function getMesosServices(state) {
 
   return {
     frameworks: frameworks,
+    healthProcessed: MesosStateStore.getHealthProcessed(),
     statesProcessed: MesosStateStore.getStatesProcessed(),
     countByHealth: getCountByHealth(allFrameworks),
     refreshRate: MesosStateStore.getRefreshRate(),
@@ -47,6 +43,11 @@ function getMesosServices(state) {
     totalResources: MesosStateStore.getTotalResources()
   };
 }
+
+var DEFAULT_FILTER_OPTIONS = {
+  searchString: "",
+  healthFilter: null
+};
 
 var ServicesPage = React.createClass({
 
@@ -168,8 +169,8 @@ var ServicesPage = React.createClass({
           </li>
         </ul>
         <ServiceTable
-          frameworks={data.frameworks}
-          totalResources={data.totalResources} />
+          healthProcessed={data.healthProcessed}
+          frameworks={data.frameworks} />
       </div>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */

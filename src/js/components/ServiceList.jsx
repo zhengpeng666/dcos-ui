@@ -19,7 +19,8 @@ var ServiceList = React.createClass({
   displayName: "ServiceList",
 
   propTypes: {
-    services: React.PropTypes.array.isRequired
+    services: React.PropTypes.array.isRequired,
+    healthProcessed: React.PropTypes.bool.isRequired
   },
 
   getDefaultProps: function () {
@@ -28,7 +29,7 @@ var ServiceList = React.createClass({
     };
   },
 
-  getServices: function (services) {
+  getServices: function (services, healthProcessed) {
     return _.map(services, function (service) {
       var attributes = {};
       var state = STATES.NA;
@@ -49,10 +50,21 @@ var ServiceList = React.createClass({
         }
       }
 
+      var health = HealthLabels[state.key];
+      if (!healthProcessed) {
+        health = (
+          <div className="loader-small ball-beat">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        );
+      }
+
       return {
         title: {value: service.name},
         health: {
-          value: HealthLabels[state.key],
+          value: health,
           classes: state.classes,
           attributes: attributes,
           textAlign: "right"
@@ -81,7 +93,7 @@ var ServiceList = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <List
-        list={this.getServices(this.props.services)}
+        list={this.getServices(this.props.services, this.props.healthProcessed)}
         order={listOrder} />
     );
     /* jshint trailing:true, quotmark:true, newcap:true */

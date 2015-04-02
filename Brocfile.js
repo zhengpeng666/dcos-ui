@@ -130,7 +130,11 @@ var tasks = {
 
     // concatenate css
     cssTree = concatCSS(cssTree, {
-      inputFiles: ["**/*.css"],
+      inputFiles: [
+        "**/*.css",
+        "!" + dirs.stylesDist + "/" + fileNames.mainStyles + ".css",
+        dirs.stylesDist + "/" + fileNames.mainStyles + ".css"
+      ],
       outputFile: "/" + dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css",
     });
 
