@@ -20,7 +20,7 @@ var FilterHealth = React.createClass({
   propTypes: {
     countByHealth: React.PropTypes.object.isRequired,
     healthFilter: React.PropTypes.number,
-    onSubmit: React.PropTypes.func,
+    handleFilterChange: React.PropTypes.func,
     servicesLength: React.PropTypes.number.isRequired
   },
 
@@ -28,7 +28,7 @@ var FilterHealth = React.createClass({
     return {
       countByHealth: {},
       healthFilter: null,
-      onSubmit: _.noop,
+      handleFilterChange: _.noop,
       servicesLength: 0
     };
   },
@@ -71,7 +71,7 @@ var FilterHealth = React.createClass({
         <button
             key={key}
             className={classSet}
-            onClick={this.props.onSubmit.bind(null, health)}>
+            onClick={this.props.handleFilterChange.bind(null, health)}>
             <span className="button-align-content">
               <span className={dotClassSet}></span>
               <span className="label">{value}</span>

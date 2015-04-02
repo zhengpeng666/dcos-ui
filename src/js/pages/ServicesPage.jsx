@@ -15,6 +15,11 @@ var SidebarToggle = require("./SidebarToggle");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 
+var DEFAULT_FILTER_OPTIONS = {
+  searchString: "",
+  healthFilter: null
+};
+
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
     if (acc[framework.health.value] === undefined) {
@@ -43,11 +48,6 @@ function getMesosServices(state) {
     totalResources: MesosStateStore.getTotalResources()
   };
 }
-
-var DEFAULT_FILTER_OPTIONS = {
-  searchString: "",
-  healthFilter: null
-};
 
 var ServicesPage = React.createClass({
 
@@ -165,13 +165,13 @@ var ServicesPage = React.createClass({
             <FilterHealth
               countByHealth={data.countByHealth}
               healthFilter={state.healthFilter}
-              onSubmit={this.handleHealthFilterChange}
+              handleFilterChange={this.handleHealthFilterChange}
               servicesLength={data.totalFrameworks} />
           </li>
           <li>
             <FilterInputText
               searchString={state.searchString}
-              onSubmit={this.handleSearchStringChange} />
+              handleFilterChange={this.handleSearchStringChange} />
           </li>
         </ul>
         <ServiceTable

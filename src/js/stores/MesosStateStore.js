@@ -20,6 +20,18 @@ var _statesProcessed = false;
 
 var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
 
+function setHostsToFrameworkCount(frameworks, hosts) {
+  return _.map(frameworks, function (framework) {
+    framework.slaves_count = _.foldl(hosts, function (acc, host) {
+      if (host.frameworks[framework.id] != null) {
+        acc++;
+      }
+      return acc;
+    }, 0);
+    return framework;
+  });
+}
+
 function sumResources(resourceList) {
   return _.foldl(resourceList, function (sumMap, resource) {
     _.each(sumMap, function (value, key) {
@@ -117,7 +129,7 @@ function getStatesByFramework() {
       var lastFramework = _.clone(_.last(framework));
       return _.extend(lastFramework, {
         used_resources: getStatesByResource(framework, "used_resources"),
-        tasks_size: lastFramework.tasks.length
+        tasks_count: lastFramework.tasks.length
       });
     }, this).value();
 }
@@ -260,7 +272,7 @@ function getStateByHosts () {
       return acc;
     }, hosts)
     .each(function (slave) {
-      slave.tasks_size = _.size(slave.tasks);
+      slave.tasks_count = _.size(slave.tasks);
     })
     .toArray()
     .value();
@@ -323,6 +335,12 @@ function filterByString(objects, key, searchString) {
 function filterByHealth(objects, healthFilter) {
   return _.filter(objects, function (obj) {
     return obj.health.value === healthFilter;
+  });
+}
+
+function filterHostsByService(hosts, frameworkId) {
+  return _.filter(hosts, function (host) {
+    return host.frameworks[frameworkId] != null;
   });
 }
 
@@ -418,13 +436,25 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return sumHostResources(hosts);
   },
 
+  getFrameworksWithHostsCount: function (hosts) {
+    return setHostsToFrameworkCount(this.getLatest().frameworks, hosts);
+  },
+
   getHosts: function (filterOptions) {
+    filterOptions = filterOptions || {};
     var hosts = getStateByHosts();
-    if (filterOptions && filterOptions.searchString !== "") {
-      hosts = filterByString(hosts,
-        "hostname",
-        filterOptions.searchString
-      );
+
+    if (filterOptions) {
+      if (filterOptions.byServiceFilter != null) {
+        hosts = filterHostsByService(hosts, filterOptions.byServiceFilter);
+      }
+
+      if (filterOptions.searchString !== "") {
+        hosts = filterByString(hosts,
+          "hostname",
+          filterOptions.searchString
+        );
+      }
     }
 
     return hosts;
