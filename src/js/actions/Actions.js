@@ -61,7 +61,7 @@ var Actions = {
     var data = _.extend({
       description: "",
       date: Date.now(),
-      page: this.getActivePage(),
+      page: this.activePage,
       appVersion: Config.version,
       stintID: this.stintID
     }, anything);

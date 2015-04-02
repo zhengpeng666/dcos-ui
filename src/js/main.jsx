@@ -6,7 +6,7 @@ overrides.override();
 var Actions = require("./actions/Actions");
 Actions.initialize();
 
-Actions.log({description: "Stint started.", date: Actions.createAt});
+Actions.log({description: "Stint started.", date: Actions.createdAt});
 global.addEventListener("beforeunload", function () {
   Actions.log({description: "Stint ended."});
 });

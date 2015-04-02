@@ -3,26 +3,21 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
+var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 var DOMUtils = require("../../utils/DOMUtils");
 
 var Chart = React.createClass({
 
   displayName: "Chart",
 
-  actions_configuration: {
-    state: {
-      width: {skip: true}
-    }
-  },
+  mixins: [InternalStorageMixin],
 
   propTypes: {
     calcHeight: React.PropTypes.func
   },
 
-  getInitialState: function () {
-    return {
-      width: null
-    };
+  componentWillMount: function () {
+    this.internalStorage_set({width: null});
   },
 
   componentDidMount: function () {
@@ -37,13 +32,15 @@ var Chart = React.createClass({
   },
 
   updateWidth: function () {
-    this.setState({
+    this.internalStorage_set({
       width: DOMUtils.getComputedWidth(this.getDOMNode())
     });
+    this.forceUpdate();
   },
 
   getChildren: function () {
-    var width = this.state.width;
+    var data = this.internalStorage_get();
+    var width = data.width;
     if (width != null) {
       var calcHeight = this.props.calcHeight;
       var height = width / 2;

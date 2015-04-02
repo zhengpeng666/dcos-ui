@@ -5,14 +5,13 @@ var d3 = require("d3");
 var React = require("react/addons");
 
 var Bar = require("./Bar");
+var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 
 var BarChart = React.createClass({
 
   displayName: "BarChart",
 
-  actions_configuration: {
-    disable: true
-  },
+  mixins: [InternalStorageMixin],
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
@@ -43,27 +42,47 @@ var BarChart = React.createClass({
     };
   },
 
-  getInitialState: function () {
+  componentWillMount: function () {
     var props = this.props;
 
     var xScale = this.getXScale(props);
     var yScale = this.getYScale(props);
-    return {
+
+    var data = {
       stack: this.getStack(),
-      stackedData: [],
-      rectWidth: 0,
-      valuesLength: 0,
       xScale: xScale,
       yScale: yScale,
       clipPathID: _.uniqueId("clip")
     };
+
+    this.internalStorage_set(data);
+
+    // #prepareValues needs data.stack, so we must set that first
+    this.internalStorage_update(this.prepareValues(this.props));
   },
 
   componentDidMount: function () {
+    var data = this.internalStorage_get();
     var props = this.props;
 
-    this.renderAxis(props, this.state.xScale, this.state.yScale);
+    this.renderAxis(props, data.xScale, data.yScale);
     this.createClipPath();
+    this.resetXAxis(props);
+  },
+
+  componentWillReceiveProps: function (props) {
+    var xScale = this.getXScale(props);
+    var yScale = this.getYScale(props);
+    // the d3 axis helper requires a <g> element passed into do its work. This
+    // happens after mount and ends up keeping the axis code outside of react
+    // unfortunately.
+    this.renderAxis(props, xScale, yScale);
+
+    this.internalStorage_update(_.extend(this.prepareValues(props), {
+      xScale: xScale,
+      yScale: yScale
+    }));
+
     this.resetXAxis(props);
   },
 
@@ -72,23 +91,25 @@ var BarChart = React.createClass({
   },
 
   createClipPath: function () {
+    var data = this.internalStorage_get();
     var el = this.getDOMNode();
 
     d3.select(el)
       .append("defs")
       .append("clipPath")
-        .attr("id", this.state.clipPathID)
+        .attr("id", data.clipPathID)
         .append("rect");
 
     this.updateClipPath();
   },
 
   updateClipPath: function () {
+    var data = this.internalStorage_get();
     var props = this.props;
     var width = props.width - props.margin.left - props.margin.right;
     var height = props.height + 1;  // +1 for the base axis line
 
-    d3.select("#" + this.state.clipPathID + " rect")
+    d3.select("#" + data.clipPathID + " rect")
       .attr({
         width: width,
         height: height
@@ -180,7 +201,8 @@ var BarChart = React.createClass({
   },
 
   prepareValues: function (props) {
-    var stackedData = this.state.stack(props.data);
+    var data = this.internalStorage_get();
+    var stackedData = data.stack(props.data);
     var valuesLength = 0;
     var rectWidth = 0;
 
@@ -196,31 +218,12 @@ var BarChart = React.createClass({
     };
   },
 
-  componentWillMount: function () {
-    this.setState(this.prepareValues(this.props));
-  },
-
-  componentWillReceiveProps: function (props) {
-    var xScale = this.getXScale(props);
-    var yScale = this.getYScale(props);
-    // the d3 axis helper requires a <g> element passed into do its work. This
-    // happens after mount and ends up keeping the axis code outside of react
-    // unfortunately.
-    this.renderAxis(props, xScale, yScale);
-
-    this.setState(_.extend(this.prepareValues(props), {
-      xScale: xScale,
-      yScale: yScale
-    }));
-
-    this.resetXAxis(props);
-  },
-
   resetXAxis: function (props) {
+    var data = this.internalStorage_get();
     // here we reset the position of the axis to what it was before the animation started
     // the axis is reset right before we update the bar to the new value/position
     // prevents subsequent animations from animating from 0
-    if (this.state.rectWidth) {
+    if (data.rectWidth) {
       d3.select(this.refs.xAxis.getDOMNode()).interrupt()
         .transition().delay(0)
         .attr("transform", "translate(" + [0, props.height] + ")");
@@ -228,13 +231,13 @@ var BarChart = React.createClass({
   },
 
   getBarList: function () {
+    var data = this.internalStorage_get();
     var props = this.props;
-    var state = this.state;
     var marginLeft = props.margin.left;
     var marginRight = props.margin.right;
     var chartWidth = props.width;
     var y = props.y;
-    var valuesLength = state.valuesLength;
+    var valuesLength = data.valuesLength;
     var posY = _.map(_.range(valuesLength), function () {
       return props.height;
     });
@@ -245,7 +248,7 @@ var BarChart = React.createClass({
       lineClass = "hidden ";
     }
 
-    return _.map(state.stackedData, function (framework) {
+    return _.map(data.stackedData, function (framework) {
       var colorClass = "path-color-" + framework.colorIndex;
       var rectWidth = (chartWidth - marginLeft - marginRight) / (valuesLength - 1);
 
@@ -275,9 +278,10 @@ var BarChart = React.createClass({
   },
 
   render: function () {
+    var data = this.internalStorage_get();
     var props = this.props;
     var margin = props.margin;
-    var clipPath = "url(#" + this.state.clipPathID + ")";
+    var clipPath = "url(#" + data.clipPathID + ")";
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */

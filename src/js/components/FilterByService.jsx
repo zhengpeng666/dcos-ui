@@ -26,25 +26,12 @@ var FilterByService = React.createClass({
     };
   },
 
-  getInitialState: function () {
-    return {
-      filter: this.props.byServiceFilter
-    };
-  },
-
-  componentWillReceiveProps: function (props) {
-    this.setState({
-      filter: props.byServiceFilter
-    });
-  },
-
-  handleChange: function (serviceId) {
-    this.setState({filter: serviceId});
+  handleItemSelection: function (serviceId) {
     this.props.handleFilterChange(serviceId);
   },
 
   getDropdownItems: function () {
-    var serviceId = this.state.filter;
+    var serviceId = this.props.byServiceFilter;
     return _.map(this.props.services, function (service) {
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -81,7 +68,7 @@ var FilterByService = React.createClass({
     return (
       <Dropdown caption="Filter by Service"
           resetElement={this.getResetElement()}
-          handleItemSelection={this.handleChange}>
+          handleItemSelection={this.handleItemSelection}>
         {this.getDropdownItems()}
       </Dropdown>
     );

@@ -42,9 +42,18 @@ var ActionsMixin = {
   },
 
   actions_setStateProxy: function (state) {
+    // Get the diff as that's the only thing we want to log
+    var stateDiff = _.reduce(state, function(memo, value, key) {
+      if (this[key] !== value) {
+        memo[key] = value;
+      }
+
+      return memo;
+    }, {}, this.state);
+
     this.actions_setStateOriginal.apply(this, arguments);
 
-    this.actions_processState(state);
+    this.actions_processState(stateDiff);
   },
 
   actions_getStateConfiguration: function () {

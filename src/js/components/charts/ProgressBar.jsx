@@ -2,9 +2,13 @@
 
 var React = require("react/addons");
 
+var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
+
 var ProgressBar = React.createClass({
 
   displayName: "ProgressBar",
+
+  mixins: [InternalStorageMixin],
 
   propTypes: {
     colorIndex: React.PropTypes.number,
@@ -24,23 +28,22 @@ var ProgressBar = React.createClass({
    * for animation purposes we want to always start at 0
    * then update the values when we receive props.
    **/
-  getInitialState: function () {
-    return {
-      value: 0
-    };
+  componentWillMount: function () {
+    this.internalStorage_set({value: 0});
   },
 
   componentDidMount: function () {
-    this.setState({value: this.props.value});
+    this.internalStorage_set({value: this.props.value});
+    this.forceUpdate();
   },
 
   componentWillReceiveProps: function (nextProps) {
-    this.setState({value: nextProps.value});
+    this.internalStorage_set({value: nextProps.value});
   },
 
   render: function () {
     var props = this.props;
-    var state = this.state;
+    var data = this.internalStorage_get();
 
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -48,7 +51,7 @@ var ProgressBar = React.createClass({
       <div className="progress-bar">
         <div key="bar" ref="bar"
           className={"bar color-" + props.colorIndex}
-          style={{width: state.value + "%"}} />
+          style={{width: data.value + "%"}} />
       </div>
     );
   }

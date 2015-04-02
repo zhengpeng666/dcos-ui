@@ -4,13 +4,16 @@ var _ = require("underscore");
 var d3 = require("d3");
 var React = require("react/addons");
 
-var TimeSeriesArea = require("./TimeSeriesArea");
 var AnimationCircle = require("./AnimationCircle");
+var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 var Maths = require("../../utils/Maths");
+var TimeSeriesArea = require("./TimeSeriesArea");
 
 var TimeSeriesChart = React.createClass({
 
   displayName: "TimeSeriesChart",
+
+  mixins: [InternalStorageMixin],
 
   propTypes: {
     // [{name: "Area Name", values: [{date: some time, y: 0}]}]
@@ -36,11 +39,11 @@ var TimeSeriesChart = React.createClass({
     };
   },
 
-  getInitialState: function () {
+  componentWillMount: function () {
     var xScale = this.getXScale(this.props);
     var yScale = this.getYScale(this.props);
 
-    return {
+    var data = {
       area: this.getArea(xScale, yScale),
       stack: this.getStack(),
       xScale: xScale,
@@ -49,13 +52,16 @@ var TimeSeriesChart = React.createClass({
       yMouseValue: null,
       clipPathID: _.uniqueId("clip")
     };
+
+    this.internalStorage_set(data);
   },
 
   componentDidMount: function () {
+    var data = this.internalStorage_get();
     var el = this.getDOMNode();
     var props = this.props;
 
-    this.renderAxis(props, this.state.xScale, this.state.yScale);
+    this.renderAxis(props, data.xScale, data.yScale);
     this.createClipPath();
 
     el.addEventListener("mousemove", this.handleMouseMove);
@@ -73,19 +79,21 @@ var TimeSeriesChart = React.createClass({
   },
 
   createClipPath: function () {
+    var data = this.internalStorage_get();
     var el = this.getDOMNode();
 
     // create clip path for areas and x-axis
     d3.select(el)
       .append("defs")
       .append("clipPath")
-        .attr("id", this.state.clipPathID)
+        .attr("id", data.clipPathID)
         .append("rect");
 
     this.updateClipPath();
   },
 
   updateClipPath: function () {
+    var data = this.internalStorage_get();
     var props = this.props;
     var margin = props.margin;
     var width = props.width - margin.right - margin.left;
@@ -93,7 +101,7 @@ var TimeSeriesChart = React.createClass({
     var height = props.height - margin.top;
     var transform = "translate(" + margin.left + "," + margin.top + ")";
 
-    d3.select("#" + this.state.clipPathID + " rect")
+    d3.select("#" + data.clipPathID + " rect")
       .attr({
         width: width,
         height: height,
@@ -102,6 +110,7 @@ var TimeSeriesChart = React.createClass({
   },
 
   handleMouseMove: function (e) {
+    var data = this.internalStorage_get();
     var mouse = this.calculateMousePositionInGraph(e);
 
     // This means that mouse is out of bounds
@@ -132,13 +141,13 @@ var TimeSeriesChart = React.createClass({
       .transition()
         .duration(50)
         .style("stroke", "rgba(255,255,255,0.5")
-        .attr("y1", this.state.yScale(firstDataSet.values[index][props.y]))
-        .attr("y2", this.state.yScale(firstDataSet.values[index][props.y]));
+        .attr("y1", data.yScale(firstDataSet.values[index][props.y]))
+        .attr("y2", data.yScale(firstDataSet.values[index][props.y]));
 
     d3.select(this.refs.yAxisCurrent.getDOMNode())
       .transition()
       .duration(50)
-      .attr("y", this.state.yScale(firstDataSet.values[index][props.y]) + 3)
+      .attr("y", data.yScale(firstDataSet.values[index][props.y]) + 3)
       .text(firstDataSet.values[index][props.y] + "%");
 
     // An extra -1 on each because we show the extra data point at the end
@@ -291,7 +300,7 @@ var TimeSeriesChart = React.createClass({
     // happens after mount and ends up keeping the axis code outside of react
     // unfortunately.
     this.renderAxis(props, xScale, yScale);
-    this.setState({
+    this.internalStorage_update({
       area: this.getArea(xScale, yScale),
       xScale: xScale,
       yScale: yScale
@@ -305,42 +314,46 @@ var TimeSeriesChart = React.createClass({
     return (data[l].date - data[l - 1].date) / 1;
   },
 
-  getPosition: function (data) {
-    var firstDataSet = _.first(data);
+  getPosition: function (values) {
+    var data = this.internalStorage_get();
+    var firstDataSet = _.first(values);
     var date = Date.now();
+
     if (firstDataSet != null) {
       date = firstDataSet.date;
     }
-    return this.state.xScale(date);
+
+    return data.xScale(date);
   },
 
   getCirclePosition: function (obj) {
+    var data = this.internalStorage_get();
     var props = this.props;
     var lastestVisibleDataPoint = obj.values[obj.values.length - 2];
+
     // [stay in x-value, most recent y - height of chart]
     return [
       0,
-      this.state.yScale(lastestVisibleDataPoint[props.y]) -
+      data.yScale(lastestVisibleDataPoint[props.y]) -
       props.height + props.margin.top + props.margin.bottom
     ];
   },
 
   getAreaList: function () {
+    var data = this.internalStorage_get();
     var props = this.props;
-    var clipPath = "url(#" + this.state.clipPathID + ")";
+    var clipPath = "url(#" + data.clipPathID + ")";
 
     // stack before drawing!
-    return _.map(this.state.stack(props.data), function (obj, i) {
+    return _.map(data.stack(props.data), function (obj, i) {
       var classes = {
         "area": true
       };
       classes["path-color-" + obj.colorIndex] = true;
 
-      var transitionTime =
-        this.getTransitionTime(obj.values);
+      var transitionTime = this.getTransitionTime(obj.values);
       // y0 of lastest visible obj + account for stroke size
-      var initialPosition =
-        this.state.yScale(obj.values[obj.values.length - 2].y0);
+      var initialPosition = data.yScale(obj.values[obj.values.length - 2].y0);
 
       /* jshint trailing:false, quotmark:false, newcap:false */
       /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -353,7 +366,7 @@ var TimeSeriesChart = React.createClass({
             cy={initialPosition} />
           <g clip-path={clipPath}>
             <TimeSeriesArea
-              path={this.state.area(obj.values)}
+              path={data.area(obj.values)}
               name={obj.name}
               transitionTime={transitionTime}
               position={this.getPosition(obj.values)} />
