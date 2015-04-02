@@ -22,18 +22,39 @@ var FilterInputText = React.createClass({
     this.props.handleFilterChange(this.refs.filterInput.getDOMNode().value);
   },
 
+  clear: function (e) {
+    e.preventDefault();
+    this.props.handleFilterChange("");
+  },
+
   render: function () {
+    var props = this.props;
+    var clearIconClasses = React.addons.classSet({
+      "form-control-group-add-on form-control-group-add-on-append": true,
+      "hidden": props.searchString.length === 0
+    });
+
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="form-group">
-        <input
-          type="text"
-          className="form-control filter-input-text form-control-inverse"
-          placeholder="Filter for..."
-          value={this.props.searchString}
-          onChange={this.handleChange}
-          ref="filterInput" />
+      <div className="form-group filter-input-text-group">
+        <div className="form-control form-control-inverse form-control-group">
+          <span className="form-control-group-add-on form-control-group-add-on-prepend">
+            <i className="icon icon-mini icon-search"></i>
+          </span>
+          <input
+            type="text"
+            className="form-control form-control-inverse filter-input-text"
+            placeholder="Filter for..."
+            value={this.props.searchString}
+            onChange={this.handleChange}
+            ref="filterInput" />
+          <span className={clearIconClasses}>
+            <a href="#" onClick={this.clear}>
+              <i className="icon icon-mini icon-mini-white icon-close"></i>
+            </a>
+          </span>
+        </div>
       </div>
     );
   }
