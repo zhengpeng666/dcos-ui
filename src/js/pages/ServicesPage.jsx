@@ -14,11 +14,6 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 
-var DEFAULT_FILTER_OPTIONS = {
-  searchString: "",
-  healthFilter: null
-};
-
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
     if (acc[framework.health.value] === undefined) {
