@@ -12,7 +12,6 @@ var Strings = require("../utils/Strings");
 
 var _frameworkIndexes = [];
 var _frameworkHealth = {};
-var _healthProcessed = false;
 var _loading;
 var _interval;
 var _initCalledAt;
@@ -466,10 +465,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _statesProcessed;
   },
 
-  getHealthProcessed: function () {
-    return _healthProcessed;
-  },
-
   getTasks: function () {
     return getTasksByStatus(this.getLatest().frameworks, ["tasks"]);
   },
@@ -572,8 +567,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
       return curr;
     }, {});
-
-    _healthProcessed = true;
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
