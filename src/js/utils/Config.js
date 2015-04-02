@@ -1,8 +1,8 @@
 var Config = {
-  isDevelopment: false,
   rootUrl: "http://localhost:5050",
   stateRefresh: 2000,
   historyLength: 31,
+  analyticsKey: "51ybGTeFEFU1xo6u10XMDrr6kATFyRyh",
   environment: "@@ENV",
   stateLoadDelay: 1500,
   version: "@@VERSION"

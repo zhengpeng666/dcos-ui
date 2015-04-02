@@ -1,49 +1,68 @@
 var _ = require("underscore");
 var md5 = require("MD5");
+var RouterLocation = require("react-router").HashLocation;
 
-var __VERSION__ = "@@VERSION";
+var Config = require("../utils/Config");
+var analyticsLoad = require("../vendor/analytics");
+
+if (Config.analyticsKey) {
+  analyticsLoad(Config.analyticsKey);
+}
 
 var Actions = {
 
-  beginStint: function (options) {
-    this.options = _.extend({
-      syncTime: 30000,
-      server: null
-    }, options);
+  /**
+   * A hash of active components
+   */
+  components: {},
 
+  initialize: function () {
     this.createdAt = Date.now();
+    this.lastLogDate = this.createdAt;
     this.stintID = md5("session_" + this.createdAt);
 
-    this.timeline = [];
-    this.components = {};
+    this.setActivePage(this.getActivePage());
 
-    // TODO: Not sure if this belongs here (DCOS-698)
-    // TODO: We need a way of getting pages (DCOS-698)
-    this.activePage = "services";
-
-    this.log({
-      description: "Stint started."
+    RouterLocation.addChangeListener(function (data) {
+      Actions.setActivePage(data.path);
     });
   },
 
+  setActivePage: function (path) {
+    if (path[path.length - 1] === "/") {
+      path = path.substring(0, path.length - 1);
+    }
+
+    this.activePage = path;
+    global.analytics.page({path: path});
+  },
+
   getActivePage: function () {
-    return this.activePage;
+    return RouterLocation.getCurrentPath();
   },
 
   /**
    * Logs arbitriary data
    */
   log: function (anything) {
+    if (!Config.analyticsKey) {
+      return;
+    }
+
     // Populates with basic data that all logs need
     var data = _.extend({
-      date: this.createdAt,
+      description: "",
+      date: Date.now(),
       page: this.getActivePage(),
-      appVersion: __VERSION__,
+      appVersion: Config.version,
       stintID: this.stintID
     }, anything);
 
-    // Push to timeline
-    this.timeline.push(data);
+    data.duration = data.date - this.lastLogDate;
+    this.lastLogDate = data.date;
+
+    // this.maybeBeginTransmissions();
+    global.analytics.track(data.description, data);
   },
 
   /**
@@ -55,8 +74,7 @@ var Actions = {
       replayable: true,
       description: description,
       componentID: componentID,
-      data: data,
-      date: Date.now()
+      data: data
     });
   },
 
@@ -68,7 +86,7 @@ var Actions = {
     this.logAction(messages.shift(), data, componentID);
 
     messages.forEach(function (message) {
-      this.logAction(message, data, componentID);
+      this.log({description: message});
     }, this);
   },
 
