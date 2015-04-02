@@ -42,7 +42,7 @@ var Index = React.createClass({
 
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onStateChange
+      this.onMesosStateChange
     );
   },
 
@@ -55,7 +55,7 @@ var Index = React.createClass({
 
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onStateChange
+      this.onMesosStateChange
     );
   },
 
@@ -64,13 +64,13 @@ var Index = React.createClass({
     this.forceUpdate();
   },
 
-  onStateChange: function () {
+  onMesosStateChange: function () {
     var state = getMesosState();
     // if state is processed, stop listening
     if (state.statesProcessed) {
       MesosStateStore.removeChangeListener(
         EventTypes.MESOS_STATE_CHANGE,
-        this.onStateChange
+        this.onMesosStateChange
       );
     }
 
