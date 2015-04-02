@@ -61,7 +61,6 @@ var Actions = {
     data.duration = data.date - this.lastLogDate;
     this.lastLogDate = data.date;
 
-    // this.maybeBeginTransmissions();
     global.analytics.track(data.description, data);
   },
 
