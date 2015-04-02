@@ -4,7 +4,12 @@ var overrides = require("./overrides");
 overrides.override();
 
 var Actions = require("./actions/Actions");
-Actions.beginStint();
+Actions.initialize();
+
+Actions.log({description: "Stint started.", date: Actions.createAt});
+global.addEventListener("beforeunload", function () {
+  Actions.log({description: "Stint ended."});
+});
 
 var React = require("react");
 var Router = require("react-router");
