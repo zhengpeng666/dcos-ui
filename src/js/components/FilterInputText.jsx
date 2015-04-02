@@ -8,7 +8,7 @@ var FilterInputText = React.createClass({
 
   propTypes: {
     searchString: React.PropTypes.string.isRequired,
-    onChange: React.PropTypes.func.isRequired
+    handleFilterChange: React.PropTypes.func.isRequired
   },
 
   getDefaultProps: function () {
@@ -19,7 +19,7 @@ var FilterInputText = React.createClass({
 
   handleChange: function (e) {
     e.preventDefault();
-    this.props.onChange(this.refs.filterInput.getDOMNode().value);
+    this.props.handleFilterChange(this.refs.filterInput.getDOMNode().value);
   },
 
   render: function () {

@@ -165,13 +165,13 @@ var ServicesPage = React.createClass({
             <FilterHealth
               countByHealth={data.countByHealth}
               healthFilter={state.healthFilter}
-              onChange={this.handleHealthFilterChange}
+              handleFilterChange={this.handleHealthFilterChange}
               servicesLength={data.totalFrameworks} />
           </li>
           <li>
             <FilterInputText
               searchString={state.searchString}
-              onChange={this.handleSearchStringChange} />
+              handleFilterChange={this.handleSearchStringChange} />
           </li>
         </ul>
         <ServiceTable

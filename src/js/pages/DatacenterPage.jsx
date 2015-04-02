@@ -81,13 +81,13 @@ var DatacenterPage = React.createClass({
     this.setState(state);
   },
 
-  onSearchStringChange: function (searchString) {
+  handleSearchStringChange: function (searchString) {
     var stateChanges = _.extend(this.state, {searchString: searchString});
     this.internalStorage_set(getMesosHosts(stateChanges));
     this.setState(stateChanges);
   },
 
-  onByServiceFilterChange: function (serviceId) {
+  handleByServiceFilterChange: function (serviceId) {
     if (serviceId === "") {
       serviceId = null;
     }
@@ -121,12 +121,12 @@ var DatacenterPage = React.createClass({
               byServiceFilter={state.byServiceFilter}
               services={data.services}
               totalHostsCount={data.allHosts.length}
-              onChange={this.onByServiceFilterChange} />
+              handleFilterChange={this.handleByServiceFilterChange} />
           </li>
           <li>
             <FilterInputText
               searchString={state.searchString}
-              onChange={this.onSearchStringChange} />
+              handleFilterChange={this.handleSearchStringChange} />
           </li>
         </ul>
         <HostTable hosts={data.hosts} />

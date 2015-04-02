@@ -14,7 +14,7 @@ var FilterByService = React.createClass({
     byServiceFilter: React.PropTypes.string,
     services: React.PropTypes.array.isRequired,
     totalHostsCount: React.PropTypes.number.isRequired,
-    onChange: React.PropTypes.func
+    handleFilterChange: React.PropTypes.func
   },
 
   getDefaultProps: function () {
@@ -22,7 +22,7 @@ var FilterByService = React.createClass({
       byServiceFilter: null,
       services: [],
       totalHostsCount: 0,
-      onChange: _.noop
+      handleFilterChange: _.noop
     };
   },
 
@@ -40,7 +40,7 @@ var FilterByService = React.createClass({
 
   handleChange: function (serviceId) {
     this.setState({filter: serviceId});
-    this.props.onChange(serviceId);
+    this.props.handleFilterChange(serviceId);
   },
 
   getDropdownItems: function () {
@@ -81,7 +81,7 @@ var FilterByService = React.createClass({
     return (
       <Dropdown caption="Filter by Service"
           resetElement={this.getResetElement()}
-          onChange={this.handleChange}>
+          handleItemSelection={this.handleChange}>
         {this.getDropdownItems()}
       </Dropdown>
     );
