@@ -5,10 +5,10 @@
   .border-radius(@icon-medium-border-radius);
 
   .panel-heading {
+    display: flex;
+    border-bottom: 1px solid @border-color-inverse;
     padding: @base-spacing-unit / 2;
     line-height: @heading-h3-text-line-height;
-    border-bottom: 1px solid @border-color-inverse;
-    display: flex;
 
     .panel-title {
       text-align: center;
@@ -29,7 +29,7 @@
     }
 
     &.panel-heading-large {
-      padding: @base-spacing-unit;
+      padding: @base-spacing-unit @base-spacing-unit 0;
       border: 0;
     }
   }

@@ -67,7 +67,7 @@ var tasks = {
 
     return mergeTrees(
       [jscsTree, hintTree, jsTree],
-      { overwrite: true }
+      {overwrite: true}
     );
   },
 
@@ -103,38 +103,40 @@ var tasks = {
   },
 
   css: function (masterTree) {
-    removeFile(dirs.styles, {
-      srcFile: dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css"
-    });
 
     // create tree for less (pick all less and css files needed)
     var cssTree = pickFiles(dirs.styles, {
       srcDir: "./",
-      files: ["**/*.less"],
+      files: ["**/*.less", "**/*.css"],
       destDir: dirs.stylesDist
     });
 
+    // remove old compiled file, from ealier build
+    removeFile(cssTree, {
+      srcFile: dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css"
+    });
+
     // compile main less to css
-    cssTree = less(
+    var lessTree = less(
       cssTree,
       fileNames.mainStyles + ".less",
       fileNames.mainStylesDist + ".css",
       {}
     );
 
-    cssTree = autoprefixer(cssTree);
+    lessTree = autoprefixer(lessTree);
+
+    cssTree = mergeTrees([cssTree, lessTree], {overwrite: true});
 
     // concatenate css
     cssTree = concatCSS(cssTree, {
-      inputFiles: [
-        "**/*.css",
-      ],
+      inputFiles: ["**/*.css"],
       outputFile: "/" + dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css",
     });
 
     return mergeTrees(
       [masterTree, cssTree],
-      { overwrite: true }
+      {overwrite: true}
     );
   },
 
@@ -152,7 +154,7 @@ var tasks = {
 
     return mergeTrees(
       [masterTree, indexTree],
-      { overwrite: true }
+      {overwrite: true}
     );
   },
 
@@ -165,7 +167,7 @@ var tasks = {
 
     return mergeTrees(
       [masterTree, imgTree],
-      { overwrite: true }
+      {overwrite: true}
     );
   },
 

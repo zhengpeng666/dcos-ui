@@ -129,10 +129,10 @@ var ResourceBarChart = React.createClass({
 
     return (
       <div>
-        <h3>
+        <h3 className="flush-top">
           {headline}
         </h3>
-        <p>
+        <p className="flush-bottom">
           {this.props.data.length + " Total " + this.props.resourceType}
         </p>
       </div>
