@@ -14,7 +14,7 @@ var NotFoundRoute = Router.NotFoundRoute;
 
 require("./utils/ReactSVG");
 var DashboardPage = require("./pages/DashboardPage");
-var DatacenterPage = require("./pages/DatacenterPage");
+var NodesPage = require("./pages/NodesPage");
 var Index = require("./pages/Index");
 var ServicesPage = require("./pages/ServicesPage");
 var NotFoundPage = require("./pages/NotFoundPage");
@@ -25,7 +25,7 @@ var routes = (
   <Route name="home" path="/" handler={Index}>
     <Route name="dashboard" path="dashboard/?" handler={DashboardPage} />
     <Route name="services" path="services/?" handler={ServicesPage} />
-    <Route name="datacenter" path="datacenter/?" handler={DatacenterPage} />
+    <Route name="nodes" path="nodes/?" handler={NodesPage} />
     <Redirect from="/" to="dashboard" />
     <NotFoundRoute handler={NotFoundPage}/>
   </Route>

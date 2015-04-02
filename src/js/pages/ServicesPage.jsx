@@ -9,9 +9,8 @@ var FilterHealth = require("../components/FilterHealth");
 var FilterHeadline = require("../components/FilterHeadline");
 var FilterInputText = require("../components/FilterInputText");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var Page = require("../components/Page");
 var MesosStateStore = require("../stores/MesosStateStore");
-var SidebarActions = require("../events/SidebarActions");
-var SidebarToggle = require("./SidebarToggle");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 
@@ -75,12 +74,6 @@ var ServicesPage = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange
     );
-  },
-
-  statics: {
-    willTransitionTo: function () {
-      SidebarActions.close();
-    }
   },
 
   onMesosStateChange: function () {
@@ -148,7 +141,7 @@ var ServicesPage = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="container container-fluid container-pod">
+      <div>
         <ResourceBarChart
           data={data.frameworks}
           resources={data.totalFrameworksResources}
@@ -210,22 +203,9 @@ var ServicesPage = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="flex-container-col">
-        <div className="page-header">
-          <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
-            <div className="page-header-context">
-              <SidebarToggle />
-              <h1 className="page-header-title flush-top flush-bottom">
-                Services
-              </h1>
-            </div>
-            <div className="page-header-navigation" />
-          </div>
-        </div>
-        <div className="page-content container-scrollable">
-          {this.getContents(isEmpty)}
-        </div>
-      </div>
+      <Page title="Services">
+        {this.getContents(isEmpty)}
+      </Page>
     );
   }
 

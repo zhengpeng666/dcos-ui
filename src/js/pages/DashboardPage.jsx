@@ -1,44 +1,143 @@
 /** @jsx React.DOM */
 
+var _ = require ("underscore");
 var React = require("react/addons");
+var Link = require("react-router").Link;
 
-var Dashboard = require("../pages/Dashboard");
-var SidebarActions = require("../events/SidebarActions");
-var SidebarToggle = require("./SidebarToggle");
+var EventTypes = require("../constants/EventTypes");
+var HealthSorting = require("../constants/HealthSorting");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var MesosStateStore = require("../stores/MesosStateStore");
+var Page = require("../components/Page");
+var Panel = require("../components/Panel");
+var ResourceTimeSeriesChart =
+  require("../components/charts/ResourceTimeSeriesChart");
+var TaskFailureTimeSeriesChart =
+  require("../components/charts/TaskFailureTimeSeriesChart");
+var ServiceList = require("../components/ServiceList");
+var TasksChart = require("../components/charts/TasksChart");
+
+function getMesosState() {
+  return {
+    allocResources: MesosStateStore.getAllocResources(),
+    services: MesosStateStore.getLatest().frameworks,
+    tasks: MesosStateStore.getTasks(),
+    totalResources: MesosStateStore.getTotalResources(),
+    failureRate: MesosStateStore.getTaskFailureRate()
+  };
+}
 
 var DashboardPage = React.createClass({
 
   displayName: "DashboardPage",
 
-  statics: {
-    willTransitionTo: function () {
-      SidebarActions.close();
-    }
+  mixins: [InternalStorageMixin],
+
+  getDefaultProps: function () {
+    return {
+      servicesListLength: 5
+    };
   },
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-  render: function () {
+  componentWillMount: function () {
+    this.internalStorage_set(getMesosState());
+  },
 
+  componentDidMount: function () {
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onMesosStateChange
+    );
+  },
+
+  componentWillUnmount: function () {
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onMesosStateChange
+    );
+  },
+
+  onMesosStateChange: function () {
+    this.internalStorage_set(getMesosState());
+    this.forceUpdate();
+  },
+
+  getServicesList: function (services) {
+    var sortedServices = _.sortBy(services, function (service) {
+      return HealthSorting[service.health.key];
+    });
+
+    return _.first(sortedServices, this.props.servicesListLength);
+  },
+
+  getViewAllServicesBtn: function () {
+    var data = this.internalStorage_get();
+    var servicesCount = data.services.length;
+    if (!servicesCount) {
+      return;
+    }
+
+    var textContent = "View all ";
+    if (servicesCount > this.props.servicesListLength) {
+      textContent += servicesCount + " ";
+    }
+    textContent += "Services >";
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="flex-container-col">
-        <div className="page-header">
-          <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
-            <div className="page-header-context">
-              <SidebarToggle />
-              <h1 className="page-header-title flush-top flush-bottom">
-                Dashboard
-              </h1>
-            </div>
-            <div className="page-header-navigation" />
+      <Link to="services" className="button button-wide more-button">
+        {textContent}
+      </Link>
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    );
+  },
+
+  render: function () {
+    var data = this.internalStorage_get();
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <Page title="Dashboard">
+        <div className="grid row">
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="CPU Allocation">
+              <ResourceTimeSeriesChart
+                allocResources={data.allocResources}
+                totalResources={data.totalResources}
+                mode="cpus" />
+            </Panel>
+          </div>
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="Memory Allocation">
+              <ResourceTimeSeriesChart
+                colorIndex={3}
+                allocResources={data.allocResources}
+                totalResources={data.totalResources}
+                mode="mem" />
+            </Panel>
+          </div>
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="Task Failure Rate">
+              <TaskFailureTimeSeriesChart
+                data={data.failureRate} />
+            </Panel>
+          </div>
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="Services Health">
+              <ServiceList services={this.getServicesList(data.services)} />
+              {this.getViewAllServicesBtn()}
+            </Panel>
+          </div>
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="Tasks">
+              <TasksChart tasks={data.tasks} />
+            </Panel>
           </div>
         </div>
-        <div className="page-content container-scrollable">
-          <div className="container container-fluid container-pod">
-            <Dashboard />
-          </div>
-        </div>
-      </div>
+      </Page>
     );
   }
 

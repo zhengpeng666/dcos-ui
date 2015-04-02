@@ -4,7 +4,7 @@ var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
 var EventTypes = require("../constants/EventTypes");
-var Sidebar = require("./Sidebar");
+var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
 var MesosStateStore = require("../stores/MesosStateStore");

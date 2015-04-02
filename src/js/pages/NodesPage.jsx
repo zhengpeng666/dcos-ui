@@ -9,10 +9,9 @@ var FilterByService = require("../components/FilterByService");
 var FilterInputText = require("../components/FilterInputText");
 var FilterHeadline = require("../components/FilterHeadline");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var Page = require("../components/Page");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
-var SidebarActions = require("../events/SidebarActions");
-var SidebarToggle = require("./SidebarToggle");
 var HostTable = require("../components/HostTable");
 
 function getMesosHosts(state) {
@@ -36,9 +35,9 @@ var DEFAULT_FILTER_OPTIONS = {
   byServiceFilter: null
 };
 
-var DatacenterPage = React.createClass({
+var NodesPage = React.createClass({
 
-  displayName: "DatacenterPage",
+  displayName: "NodesPage",
 
   mixins: [InternalStorageMixin],
 
@@ -62,12 +61,6 @@ var DatacenterPage = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange
     );
-  },
-
-  statics: {
-    willTransitionTo: function () {
-      SidebarActions.close();
-    }
   },
 
   onMesosStateChange: function () {
@@ -103,7 +96,7 @@ var DatacenterPage = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="container container-fluid container-pod">
+      <div>
         <ResourceBarChart
           data={data.hosts}
           resources={data.totalHostsResources}
@@ -112,7 +105,7 @@ var DatacenterPage = React.createClass({
           resourceType="Nodes" />
         <FilterHeadline
           onReset={this.resetFilter}
-          name="Hosts"
+          name="Nodes"
           currentLength={data.hosts.length}
           totalLength={data.allHosts.length} />
         <ul className="list list-unstyled list-inline flush-bottom">
@@ -164,25 +157,12 @@ var DatacenterPage = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="flex-container-col">
-        <div className="page-header">
-          <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
-            <div className="page-header-context">
-              <SidebarToggle />
-              <h1 className="page-header-title flush-top flush-bottom">
-                Datacenter
-              </h1>
-            </div>
-            <div className="page-header-navigation" />
-          </div>
-        </div>
-        <div className="page-content container-scrollable">
-          {this.getContents(isEmpty)}
-        </div>
-      </div>
+      <Page title="Nodes">
+       {this.getContents(isEmpty)}
+      </Page>
     );
   }
 
 });
 
-module.exports = DatacenterPage;
+module.exports = NodesPage;
