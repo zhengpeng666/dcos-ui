@@ -28,7 +28,15 @@ var Actions = {
     });
   },
 
+  canLog: function () {
+    return Config.analyticsKey;
+  },
+
   setActivePage: function (path) {
+    if (!this.canLog()) {
+      return;
+    }
+
     if (path[path.length - 1] === "/") {
       path = path.substring(0, path.length - 1);
     }
@@ -45,7 +53,7 @@ var Actions = {
    * Logs arbitriary data
    */
   log: function (anything) {
-    if (!Config.analyticsKey) {
+    if (!this.canLog()) {
       return;
     }
 
