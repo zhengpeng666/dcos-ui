@@ -59,11 +59,25 @@ var LoginModal = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="button-collection button-collection-align-horizontal-center flush-bottom">
-        <button className="button button-success button-large button-wide-below-screen-mini"
+        <button className="button button-primary button-large button-wide-below-screen-mini"
             onClick={this.handleIdentify.bind(null, this.state.email)}>
-          Let's go
+          Try Mesosphere DCOS
         </button>
       </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
+  renderSubHeader: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <p className="text-align-center inverse">
+        Thanks for your participation in the Mesosphere Early Access Program.
+        Your feedback means a lot to us. Please provide an email below that
+        we can use to respond to your comments and suggestions.
+      </p>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
@@ -86,26 +100,21 @@ var LoginModal = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <Modal titleText="Welcome to Mesosphere DCOS"
+      <Modal titleText="Mesosphere DCOS Early Access"
+          renderSubHeader={this.renderSubHeader}
           renderFooter={this.renderModalFooter}
           show={data.show}
           showCloseButton={false}>
-        <p>
-          In order for us to help you through the experience, please enter
-          your name and email address.
-        </p>
         <form className="flush-bottom"
             onSubmit={this.handleIdentify.bind(null, this.state.email)}>
           <div className={emailClassSet}>
-            <label className="inverse">
-              Email address
-            </label>
             <input className="form-control flush-bottom"
               type="email"
               onChange={this.handleEmailChange}
+              placeholder="Email address"
               value={this.state.email} />
             <p className={emailHelpBlock}>
-              Please enter an email address for us here.
+              Please provide a valid email address (e.g. email@domain.com).
             </p>
           </div>
         </form>
