@@ -92,7 +92,7 @@ var ActionsMixin = {
       var keyConfig = this.actions_getStateConfigurationForKey(key);
 
       if (keyConfig && typeof keyConfig === "function") {
-        description = keyConfig(value);
+        description = keyConfig.call(this, value);
       } else {
         description = "Changed: " + key +
           " to value: " + JSON.stringify(value);
