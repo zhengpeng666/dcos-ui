@@ -78,6 +78,27 @@ var Index = React.createClass({
     this.forceUpdate();
   },
 
+  getLoader: function (isLoading) {
+    if (!isLoading) {
+      return;
+    }
+
+    var loadingClassSet = React.addons.classSet({
+      "text-align-center": true,
+      "vertical-center": true,
+      "hidden": !isLoading
+    });
+
+    return (
+      <div className={loadingClassSet}>
+        <div className="ball-scale">
+          <div />
+        </div>
+        <h4>Loading...</h4>
+      </div>
+    );
+  },
+
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
@@ -88,20 +109,9 @@ var Index = React.createClass({
       "canvas-sidebar-open": data.isOpen
     });
 
-    var loadingClassSet = React.addons.classSet({
-      "text-align-center": true,
-      "vertical-center": true,
-      "hidden": !isLoading
-    });
-
     return (
       <div id="canvas" className={classSet}>
-        <div className={loadingClassSet}>
-          <div className="ball-scale">
-            <div />
-          </div>
-          <h4>Loading...</h4>
-        </div>
+        {this.getLoader(isLoading)}
         <Sidebar />
         <RouteHandler />
       </div>
