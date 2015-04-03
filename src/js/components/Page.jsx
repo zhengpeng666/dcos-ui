@@ -44,12 +44,6 @@ var Page = React.createClass({
     }
   },
 
-  getPageContents: function () {
-    return React.Children.map(this.props.children, function (child) {
-      return child;
-    });
-  },
-
   render: function () {
     var classes = {
       "page": true,

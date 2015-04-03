@@ -42,7 +42,7 @@ var Index = React.createClass({
 
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onStateChange
+      this.onMesosStateChange
     );
   },
 
@@ -55,7 +55,7 @@ var Index = React.createClass({
 
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
-      this.onStateChange
+      this.onMesosStateChange
     );
   },
 
@@ -64,50 +64,18 @@ var Index = React.createClass({
     this.forceUpdate();
   },
 
-  onStateChange: function () {
+  onMesosStateChange: function () {
     var state = getMesosState();
     // if state is processed, stop listening
     if (state.statesProcessed) {
       MesosStateStore.removeChangeListener(
         EventTypes.MESOS_STATE_CHANGE,
-        this.onStateChange
+        this.onMesosStateChange
       );
     }
 
     this.internalStorage_update(state);
     this.forceUpdate();
-  },
-
-  getContents: function (isLoading) {
-    var data = this.internalStorage_get();
-
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-    if (isLoading) {
-      return (
-        <div id="canvas">
-          <div className="text-align-center vertical-center">
-            <div className="ball-scale">
-              <div />
-            </div>
-            <h4>Loading...</h4>
-          </div>
-        </div>
-      );
-    }
-
-    var classSet = React.addons.classSet({
-      "canvas-sidebar-open": data.isOpen
-    });
-
-    return (
-      <div id="canvas" className={classSet}>
-        <Sidebar />
-        <RouteHandler />
-      </div>
-    );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   /* jshint trailing:false, quotmark:false, newcap:false */
@@ -116,9 +84,26 @@ var Index = React.createClass({
     var data = this.internalStorage_get();
     var isLoading = !data.statesProcessed;
 
+    var classSet = React.addons.classSet({
+      "canvas-sidebar-open": data.isOpen
+    });
+
+    var loadingClassSet = React.addons.classSet({
+      "text-align-center": true,
+      "vertical-center": true,
+      "hidden": !isLoading
+    });
+
     return (
-      <div>
-        {this.getContents(isLoading)}
+      <div id="canvas" className={classSet}>
+        <div className={loadingClassSet}>
+          <div className="ball-scale">
+            <div />
+          </div>
+          <h4>Loading...</h4>
+        </div>
+        <Sidebar />
+        <RouteHandler />
       </div>
     );
   }
