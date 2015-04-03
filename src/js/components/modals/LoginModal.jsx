@@ -1,12 +1,11 @@
 /** @jsx React.DOM */
 
-var _ = require("underscore");
 var React = require("react");
 
 var Actions = require("../../actions/Actions");
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 var Modal = require("../../components/Modal");
-var Regex = require("../../utils/Regex");
+var Validator = require("../../utils/Validator");
 
 var LoginModal = React.createClass({
 
@@ -41,7 +40,7 @@ var LoginModal = React.createClass({
 
   handleIdentify: function (email) {
     email = email.toLowerCase();
-    if (_.isEmpty(email) || !Regex.email.test(email)) {
+    if (!Validator.isEmail(email)) {
       this.internalStorage_update({emailHasError: true});
       this.forceUpdate();
 
