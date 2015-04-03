@@ -52,7 +52,7 @@ var Actions = {
   getIdentitiy: function (callback) {
     global.analytics.ready(function () {
       var identity = global.analytics.user().traits();
-      if (_.keys(identity).length > 0) {
+      if (Object.keys(identity).length > 0) {
         callback(identity);
         // we need to identify to trigger intercom
         callback(identity);
