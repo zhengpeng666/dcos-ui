@@ -29,11 +29,11 @@ var Actions = {
   },
 
   canLog: function () {
-    return Config.analyticsKey;
+    return !!Config.analyticsKey;
   },
 
   setActivePage: function (path) {
-    if (!this.canLog()) {
+    if (this.canLog() === false) {
       return;
     }
 
@@ -53,12 +53,12 @@ var Actions = {
    * Logs arbitriary data
    */
   log: function (anything) {
-    if (!this.canLog()) {
+    if (this.canLog() === false) {
       return;
     }
 
     // Populates with basic data that all logs need
-    var data = _.extend({
+    var log = _.extend({
       description: "",
       date: Date.now(),
       page: this.activePage,
@@ -66,15 +66,15 @@ var Actions = {
       stintID: this.stintID
     }, anything);
 
-    if (data.data && data.componentID) {
-      var id = data.page + data.componentID + JSON.stringify(data.data);
-      data.uniqueEventID = md5(id);
+    if (log.data && log.componentID) {
+      var id = log.page + log.componentID + JSON.stringify(log.data);
+      log.uniqueEventID = md5(id);
     }
 
-    data.duration = data.date - this.lastLogDate;
-    this.lastLogDate = data.date;
+    log.duration = log.date - this.lastLogDate;
+    this.lastLogDate = log.date;
 
-    global.analytics.track(data.description, data);
+    global.analytics.track(log.description, log);
   },
 
   /**
