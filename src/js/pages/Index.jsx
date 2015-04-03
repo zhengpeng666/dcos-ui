@@ -78,7 +78,7 @@ var Index = React.createClass({
     this.forceUpdate();
   },
 
-  getLoader: function (isLoading) {
+  getLoadingScreen: function (isLoading) {
     if (!isLoading) {
       return;
     }
@@ -110,7 +110,7 @@ var Index = React.createClass({
 
     return (
       <div id="canvas" className={classSet}>
-        {this.getLoader(isLoading)}
+        {this.getLoadingScreen(isLoading)}
         <Sidebar />
         <RouteHandler />
       </div>
