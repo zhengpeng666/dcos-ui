@@ -95,17 +95,15 @@ var Index = React.createClass({
     });
 
     return (
-      <div>
-        <div id="canvas" className={classSet}>
-          <div className={loadingClassSet}>
-            <div className="ball-scale">
-              <div />
-            </div>
-            <h4>Loading...</h4>
+      <div id="canvas" className={classSet}>
+        <div className={loadingClassSet}>
+          <div className="ball-scale">
+            <div />
           </div>
-          <Sidebar />
-          <RouteHandler />
+          <h4>Loading...</h4>
         </div>
+        <Sidebar />
+        <RouteHandler />
       </div>
     );
   }
