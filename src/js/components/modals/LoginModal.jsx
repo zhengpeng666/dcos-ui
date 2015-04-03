@@ -2,7 +2,6 @@
 
 var React = require("react");
 
-var Actions = require("../../actions/Actions");
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 var Modal = require("../../components/Modal");
 var Validator = require("../../utils/Validator");
@@ -11,47 +10,38 @@ var LoginModal = React.createClass({
 
   displayName: "LoginModal",
 
+  propTypes: {
+    onLogin: React.PropTypes.func.isRequired
+  },
+
   mixins: [InternalStorageMixin],
 
   getInitialState: function () {
     return {
-      email: ""
+      show: false
     };
   },
 
   componentWillMount: function () {
     this.internalStorage_set({
-      show: false,
-      emailHasError: false
+      emailHasError: false,
+      email: ""
     });
-
-    Actions.getIdentitiy(function (identity) {
-      // dismiss or show modal dependent on identity
-      var show = identity == null;
-      this.internalStorage_update({show: show});
-      this.forceUpdate();
-    }.bind(this));
   },
 
-  handleEmailChange: function (event) {
-    event.preventDefault();
-    this.setState({email: event.target.value});
-  },
-
-  handleIdentify: function (email) {
-    email = email.toLowerCase();
+  handleSubmit: function () {
+    var email = this.refs.email.getDOMNode().value.toLowerCase();
     if (!Validator.isEmail(email)) {
-      this.internalStorage_update({emailHasError: true});
+      this.internalStorage_update({
+        emailHasError: true,
+        email: email
+      });
       this.forceUpdate();
 
       return;
     }
 
-    Actions.identify({email: email}, function () {
-      // dismiss modal
-      this.internalStorage_update({show: false});
-      this.forceUpdate();
-    }.bind(this));
+    this.props.onLogin(email);
   },
 
   getFooter: function () {
@@ -60,7 +50,7 @@ var LoginModal = React.createClass({
     return (
       <div className="button-collection button-collection-align-horizontal-center flush-bottom">
         <button className="button button-primary button-large button-wide-below-screen-mini"
-            onClick={this.handleIdentify.bind(null, this.state.email)}>
+            onClick={this.handleSubmit}>
           Try Mesosphere DCOS
         </button>
       </div>
@@ -101,18 +91,16 @@ var LoginModal = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Modal titleText="Mesosphere DCOS Early Access"
-          subHeader={this.getSubHeader}
-          footer={this.getFooter}
-          show={data.show}
+          subHeader={this.getSubHeader()}
+          footer={this.getFooter(data.email)}
           showCloseButton={false}>
         <form className="flush-bottom"
-            onSubmit={this.handleIdentify.bind(null, this.state.email)}>
+            onSubmit={this.handleSubmit}>
           <div className={emailClassSet}>
             <input className="form-control flush-bottom"
               type="email"
-              onChange={this.handleEmailChange}
               placeholder="Email address"
-              value={this.state.email} />
+              ref="email" />
             <p className={emailHelpBlock}>
               Please provide a valid email address (e.g. email@domain.com).
             </p>
