@@ -49,6 +49,22 @@ var Actions = {
     return RouterLocation.getCurrentPath();
   },
 
+  getIdentitiy: function (callback) {
+    global.analytics.ready(function () {
+      var identity = global.analytics.user().traits();
+      if (identity.email != null) {
+        callback(identity);
+        global.analytics.identify(identity);
+      } else {
+        callback();
+      }
+    });
+  },
+
+  identify: function (info, callback) {
+    global.analytics.identify(info, callback);
+  },
+
   /**
    * Logs arbitriary data
    */

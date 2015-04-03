@@ -6,6 +6,7 @@ var RouteHandler = require("react-router").RouteHandler;
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
+var LoginModal = require("../components/modals/LoginModal");
 var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
@@ -36,7 +37,7 @@ var Index = React.createClass({
   componentDidMount: function () {
     SidebarStore.addChangeListener(
       EventTypes.SIDEBAR_CHANGE,
-      this.onChange
+      this.onSideBarChange
     );
     window.addEventListener("resize", SidebarActions.close);
 
@@ -49,7 +50,7 @@ var Index = React.createClass({
   componentWillUnmount: function () {
     SidebarStore.removeChangeListener(
       EventTypes.SIDEBAR_CHANGE,
-      this.onChange
+      this.onSideBarChange
     );
     window.removeEventListener("resize", SidebarActions.close);
 
@@ -59,7 +60,7 @@ var Index = React.createClass({
     );
   },
 
-  onChange: function () {
+  onSideBarChange: function () {
     this.internalStorage_set(getSidebarState());
     this.forceUpdate();
   },
@@ -102,10 +103,10 @@ var Index = React.createClass({
     var classSet = React.addons.classSet({
       "canvas-sidebar-open": data.isOpen
     });
-
     return (
       <div id="canvas" className={classSet}>
         {this.getLoadingScreen(isLoading)}
+        <LoginModal />
         <Sidebar />
         <RouteHandler />
       </div>
