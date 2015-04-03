@@ -1,20 +1,30 @@
 /** @jsx React.DOM */
 
-var _ = require("underscore");
 var React = require("react");
 
 var Modal = React.createClass({
 
   displayName: "Modal",
 
+  propTypes: {
+    closeText: React.PropTypes.string,
+    footer: React.PropTypes.object,
+    showCloseButton: React.PropTypes.bool,
+    subHeader: React.PropTypes.object,
+    titleText: React.PropTypes.string,
+  },
+
   getDefaultProps: function () {
     return {
+      closeText: "Close",
       show: false,
       showCloseButton: true,
-      closeText: "Close",
-      titleText: "",
-      renderFooter: _.noop
+      titleText: ""
     };
+  },
+
+  componentDidMount: function () {
+    this.forceUpdate();
   },
 
   getCloseButton: function () {
@@ -38,17 +48,14 @@ var Modal = React.createClass({
 
     var backdropClassSet = React.addons.classSet({
       "fade": true,
-      "hidden": !this.props.show,
-      "in": this.props.show,
+      "in": this.isMounted(),
       "modal-backdrop": true
     });
 
     var modalClassSet = React.addons.classSet({
       "fade": true,
       "flex-container-col": true,
-      "hidden": !this.props.show,
-      "in": this.props.show,
-      "inverse": true,
+      "in": this.isMounted(),
       "modal": true
     });
 
@@ -58,9 +65,10 @@ var Modal = React.createClass({
           {this.getCloseButton()}
           <div className="modal-header">
             <div className="container container-pod container-pod-short">
-              <h2 className="modal-header-title text-align-center flush-top flush-bottom">
+              <h2 className="modal-header-title text-align-center flush-top inverse">
                 {this.props.titleText}
               </h2>
+              {this.props.subHeader}
             </div>
           </div>
           <div className="modal-content container-scrollable">
@@ -70,7 +78,7 @@ var Modal = React.createClass({
           </div>
           <div className="modal-footer">
             <div className="container container-pod container-pod-short">
-              {this.props.renderFooter()}
+              {this.props.footer}
             </div>
           </div>
         </div>
