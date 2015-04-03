@@ -66,6 +66,11 @@ var Actions = {
       stintID: this.stintID
     }, anything);
 
+    if (data.data && data.componentID) {
+      var id = data.page + data.componentID + JSON.stringify(data.data);
+      data.uniqueEventID = md5(id);
+    }
+
     data.duration = data.date - this.lastLogDate;
     this.lastLogDate = data.date;
 
