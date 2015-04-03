@@ -54,6 +54,7 @@ var Actions = {
       var identity = global.analytics.user().traits();
       if (identity.email != null) {
         callback(identity);
+        // we need to identify to trigger intercom
         global.analytics.identify(identity);
       } else {
         callback();
