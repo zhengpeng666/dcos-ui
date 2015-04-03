@@ -41,6 +41,18 @@ var NodesPage = React.createClass({
 
   mixins: [InternalStorageMixin],
 
+  actions_configuration: {
+    state: {
+      byServiceFilter: function (value) {
+        if (value) {
+          return "Removed service filter.";
+        } else {
+          return "Changed service filter.";
+        }
+      }
+    }
+  },
+
   getInitialState: function () {
     return _.clone(DEFAULT_FILTER_OPTIONS);
   },
