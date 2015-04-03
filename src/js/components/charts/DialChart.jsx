@@ -5,10 +5,13 @@ var d3 = require("d3");
 var React = require("react/addons");
 
 var DialSlice = require("./DialSlice");
+var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 
 var DialChart = React.createClass({
 
   displayName: "DialChart",
+
+  mixins: [InternalStorageMixin],
 
   propTypes: {
     // [{colorIndex: 0, name: "Some Name", value: 4}]
@@ -27,22 +30,18 @@ var DialChart = React.createClass({
     };
   },
 
-  getInitialState: function() {
+  componentWillMount: function () {
     var value = this.props.value;
-    return _.extend({
+    var data = _.extend({
       pie: d3.layout.pie()
         .sort(null)
         .value(function(d) { return d[value]; })
     }, this.getArcs(this.props));
-  },
 
-  getSlice: function(props) {
-    return d3.select(this.getDOMNode()).selectAll("path")
-      .data(this.state.pie(props.data));
+    this.internalStorage_set(data);
   },
 
   shouldComponentUpdate: function (nextProps) {
-
     var slice = this.getSlice(this.props);
     var arcs = this.getArcs(this.props);
     var innerArc = arcs.innerArc;
@@ -64,6 +63,12 @@ var DialChart = React.createClass({
     return true;
   },
 
+  getSlice: function(props) {
+    var data = this.internalStorage_get();
+    return d3.select(this.getDOMNode()).selectAll("path")
+      .data(data.pie(props.data));
+  },
+
   getArcs: function(props) {
     var radius = props.width / 2;
     return {
@@ -83,8 +88,9 @@ var DialChart = React.createClass({
   },
 
   getWedges: function () {
-    var innerArc = this.state.innerArc;
-    var pie = this.state.pie;
+    var data = this.internalStorage_get();
+    var innerArc = data.innerArc;
+    var pie = data.pie;
 
     return _.map(pie(this.props.data), function (element, i) {
       /* jshint trailing:false, quotmark:false, newcap:false */

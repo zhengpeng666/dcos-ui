@@ -2,9 +2,10 @@
 
 var React = require("react");
 
+var EventTypes = require("../constants/EventTypes");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
-var EventTypes = require("../constants/EventTypes");
 
 function getSidebarState() {
   return {
@@ -16,32 +17,37 @@ var SidebarToggle = React.createClass({
 
   displayName: "SidebarToggle",
 
-  getInitialState: function () {
-    return getSidebarState();
+  mixins: [InternalStorageMixin],
+
+  componentWillMount: function () {
+    this.internalStorage_set(getSidebarState());
   },
 
   componentDidMount: function () {
     SidebarStore.addChangeListener(
       EventTypes.SIDEBAR_CHANGE,
-      this.onChange
+      this.onSidebarStateChange
     );
   },
 
   componentWillUnmount: function () {
     SidebarStore.removeChangeListener(
       EventTypes.SIDEBAR_CHANGE,
-      this.onChange
+      this.onSidebarStateChange
     );
   },
 
-  onChange: function () {
-    this.setState(getSidebarState());
+  onSidebarStateChange: function () {
+    this.internalStorage_set(getSidebarState());
+    this.forceUpdate();
   },
 
   onClick: function (e) {
+    var data = this.internalStorage_get();
+
     e.preventDefault();
-    var isOpen = this.state.isOpen;
-    if (isOpen) {
+
+    if (data.isOpen) {
       SidebarActions.close();
     } else {
       SidebarActions.open();

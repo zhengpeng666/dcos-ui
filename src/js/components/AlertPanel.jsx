@@ -2,32 +2,35 @@
 
 var React = require("react/addons");
 
-var Panel = require("./Panel");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var DOMUtils = require("../utils/DOMUtils");
+var Panel = require("./Panel");
 
 var AlertPanel = React.createClass({
 
   displayName: "AlertPanel",
 
+  mixins: [InternalStorageMixin],
+
   propTypes: {
     title: React.PropTypes.string
   },
 
-  getInitialState: function () {
-    return {
-      height: 0
-    };
+  componentWillMount: function () {
+    this.internalStorage_set({height: 0});
   },
 
   componentDidMount: function () {
     var panel = this.refs.panel.getDOMNode();
     var width = DOMUtils.getComputedWidth(panel);
-    this.setState({height: width});
+    this.internalStorage_set({height: width});
+    this.forceUpdate();
   },
 
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
+    var data = this.internalStorage_get();
     var classes = {
       "container container-fluid container-pod": true
     };
@@ -41,7 +44,7 @@ var AlertPanel = React.createClass({
       <div className={classSet}>
         <div className="column-small-offset-2 column-small-8 column-medium-offset-3 column-medium-6 column-large-offset-4 column-large-4">
           <Panel ref="panel"
-            style={{height: this.state.height}}
+            style={{height: data.height}}
             className="vertical-center text-align-center">
             <h2>
               {this.props.title}

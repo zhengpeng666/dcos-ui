@@ -86,7 +86,9 @@ var TooltipMixin = {
     // Allows us to create a new tip for the element.
     // Useful when the element has tooltip -> doesn't -> then has it again.
     var el = this.getDOMNode().querySelector("[data-tip-i-d=" + tipID + "]");
-    delete el.dataset.tipID;
+    if (el && el.dataset) {
+      delete el.dataset.tipID;
+    }
 
     this.tips[tipID].destroy();
     delete this.tips[tipID];

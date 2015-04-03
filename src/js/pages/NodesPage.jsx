@@ -75,18 +75,25 @@ var NodesPage = React.createClass({
   },
 
   handleSearchStringChange: function (searchString) {
-    var stateChanges = _.extend(this.state, {searchString: searchString});
+    var stateChanges = _.extend({}, this.state, {
+      searchString: searchString
+    });
+
     this.internalStorage_set(getMesosHosts(stateChanges));
-    this.setState(stateChanges);
+    this.setState({searchString: searchString});
   },
 
-  handleByServiceFilterChange: function (serviceId) {
-    if (serviceId === "") {
-      serviceId = null;
+  handleByServiceFilterChange: function (byServiceFilter) {
+    if (byServiceFilter === "") {
+      byServiceFilter = null;
     }
-    var stateChanges = _.extend(this.state, {byServiceFilter: serviceId});
+
+    var stateChanges = _.extend({}, this.state, {
+      byServiceFilter: byServiceFilter
+    });
+
     this.internalStorage_set(getMesosHosts(stateChanges));
-    this.setState(stateChanges);
+    this.setState({byServiceFilter: byServiceFilter});
   },
 
   getHostsPageContent: function () {

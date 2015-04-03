@@ -4,10 +4,11 @@ var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
 var EventTypes = require("../constants/EventTypes");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var MesosStateStore = require("../stores/MesosStateStore");
 var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
-var MesosStateStore = require("../stores/MesosStateStore");
 
 function getMesosState() {
   return {
@@ -25,11 +26,10 @@ var Index = React.createClass({
 
   displayName: "Index",
 
-  getInitialState: function () {
-    return getSidebarState();
-  },
+  mixins: [InternalStorageMixin],
 
   componentWillMount: function () {
+    this.internalStorage_set(getSidebarState());
     MesosStateStore.init();
   },
 
@@ -60,7 +60,8 @@ var Index = React.createClass({
   },
 
   onChange: function () {
-    this.setState(getSidebarState());
+    this.internalStorage_set(getSidebarState());
+    this.forceUpdate();
   },
 
   onStateChange: function () {
@@ -72,10 +73,14 @@ var Index = React.createClass({
         this.onStateChange
       );
     }
-    this.setState(state);
+
+    this.internalStorage_update(state);
+    this.forceUpdate();
   },
 
   getContents: function (isLoading) {
+    var data = this.internalStorage_get();
+
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     if (isLoading) {
@@ -92,7 +97,7 @@ var Index = React.createClass({
     }
 
     var classSet = React.addons.classSet({
-      "canvas-sidebar-open": this.state.isOpen
+      "canvas-sidebar-open": data.isOpen
     });
 
     return (
@@ -108,7 +113,8 @@ var Index = React.createClass({
   /* jshint trailing:false, quotmark:false, newcap:false */
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
-    var isLoading = !this.state.statesProcessed;
+    var data = this.internalStorage_get();
+    var isLoading = !data.statesProcessed;
 
     return (
       <div>
