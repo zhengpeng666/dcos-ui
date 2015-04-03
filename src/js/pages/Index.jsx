@@ -83,13 +83,8 @@ var Index = React.createClass({
       return;
     }
 
-    var loadingClassSet = React.addons.classSet({
-      "text-align-center": true,
-      "vertical-center": true
-    });
-
     return (
-      <div className={loadingClassSet}>
+      <div className="text-align-center vertical-center">
         <div className="ball-scale">
           <div />
         </div>
