@@ -103,6 +103,7 @@ var Index = React.createClass({
     var classSet = React.addons.classSet({
       "canvas-sidebar-open": data.isOpen
     });
+
     return (
       <div id="canvas" className={classSet}>
         {this.getLoadingScreen(isLoading)}

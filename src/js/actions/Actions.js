@@ -55,6 +55,7 @@ var Actions = {
       if (_.keys(identity).length > 0) {
         callback(identity);
         // we need to identify to trigger intercom
+        callback(identity);
         global.analytics.identify(identity);
       } else {
         callback();
