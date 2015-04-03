@@ -54,7 +54,7 @@ var LoginModal = React.createClass({
     }.bind(this));
   },
 
-  renderModalFooter: function () {
+  getFooter: function () {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
@@ -69,7 +69,7 @@ var LoginModal = React.createClass({
     /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
-  renderSubHeader: function () {
+  getSubHeader: function () {
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
@@ -101,8 +101,8 @@ var LoginModal = React.createClass({
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Modal titleText="Mesosphere DCOS Early Access"
-          renderSubHeader={this.renderSubHeader}
-          renderFooter={this.renderModalFooter}
+          subHeader={this.getSubHeader}
+          footer={this.getFooter}
           show={data.show}
           showCloseButton={false}>
         <form className="flush-bottom"
