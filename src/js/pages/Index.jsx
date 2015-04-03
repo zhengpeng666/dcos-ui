@@ -85,8 +85,7 @@ var Index = React.createClass({
 
     var loadingClassSet = React.addons.classSet({
       "text-align-center": true,
-      "vertical-center": true,
-      "hidden": !isLoading
+      "vertical-center": true
     });
 
     return (
