@@ -3,11 +3,6 @@ var md5 = require("MD5");
 var RouterLocation = require("react-router").HashLocation;
 
 var Config = require("../utils/Config");
-var analyticsLoad = require("../vendor/analytics");
-
-if (Config.analyticsKey) {
-  analyticsLoad(Config.analyticsKey);
-}
 
 var Actions = {
 
@@ -29,7 +24,7 @@ var Actions = {
   },
 
   canLog: function () {
-    return !!Config.analyticsKey;
+    return global.analytics.initialized;
   },
 
   setActivePage: function (path) {

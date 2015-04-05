@@ -153,7 +153,19 @@ var tasks = {
     var indexTree = pickFiles(dirs.src, {
       srcDir: "./",
       destDir: "",
-      files: ["*.html"],
+      files: ["index.html"],
+    });
+
+    indexTree = replace(indexTree, {
+      files: ["index.html"],
+      patterns: [
+        {
+          match: "ANALYTICS_KEY",  // replaces @@ANALYTICS_KEY
+          replacement: env === "production" ?
+            "51ybGTeFEFU1xo6u10XMDrr6kATFyRyh" :
+            "39uhSEOoRHMw6cMR6st9tYXDbAL3JSaP"
+        }
+      ]
     });
 
     return mergeTrees(
