@@ -1,5 +1,4 @@
 var Config = {
-  analyticsKey: "51ybGTeFEFU1xo6u10XMDrr6kATFyRyh",
   environment: "@@ENV",
   historyLength: 31,
   rootUrl: "http://localhost:5050",

@@ -37,5 +37,5 @@ var routes = (
 );
 
 Router.run(routes, function (Handler, state) {
-  React.render(<Handler state={state} />, document.body);
+  React.render(<Handler state={state} />, document.getElementById("application"));
 });
