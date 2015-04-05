@@ -1,5 +1,6 @@
-.modal.fade.in {
+.modal {
   top: 25%;
+  display: block;
 
   &.inverse {
     color: @modal-inverse-text-color;
@@ -23,11 +24,13 @@
   cursor: default;
 }
 
-.modal-intro-enter {
+.modal-enter {
   opacity: 0.01;
-  transition: opacity .5s ease-in;
+  transform: translate(0, -25%);
+  transition: transform .5s ease-in, opacity .5s ease-in;
 }
 
-.modal-intro-enter.modal-intro-enter-active {
+.modal-enter.modal-enter-active {
+  transform: translate(0, 0);
   opacity: 1;
 }

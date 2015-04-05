@@ -116,7 +116,7 @@ var Index = React.createClass({
     );
   },
 
-  getLoginModal: function (isReady, hasIdentity) {
+  getLoginModal: function (hasIdentity) {
     if (hasIdentity) {
       return;
     }
@@ -144,7 +144,7 @@ var Index = React.createClass({
     return (
       <div id="canvas" className={classSet}>
         {this.getLoadingScreen(isReady)}
-        {this.getLoginModal(isReady, this.state.hasIdentity)}
+        {this.getLoginModal(this.state.hasIdentity)}
         <Sidebar />
         <RouteHandler />
       </div>
