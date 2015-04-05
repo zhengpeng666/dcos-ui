@@ -44,21 +44,8 @@ var Actions = {
     return RouterLocation.getCurrentPath();
   },
 
-  getIdentitiy: function (callback) {
-    global.analytics.ready(function () {
-      var identity = global.analytics.user().traits();
-      if (Object.keys(identity).length > 0) {
-        // we need to identify to trigger intercom
-        callback(identity);
-        global.analytics.identify(identity);
-      } else {
-        callback();
-      }
-    });
-  },
-
-  identify: function (info, callback) {
-    global.analytics.identify(info, callback);
+  identify: function (info) {
+    global.analytics.identify(info);
   },
 
   /**
