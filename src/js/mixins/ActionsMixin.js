@@ -44,6 +44,10 @@ var ActionsMixin = {
   actions_setStateProxy: function (state) {
     // Get the diff as that's the only thing we want to log
     var stateDiff = _.reduce(state, function (memo, value, key) {
+      if (key === "children") {
+        return memo;
+      }
+
       if (this[key] !== value) {
         memo[key] = value;
       }
