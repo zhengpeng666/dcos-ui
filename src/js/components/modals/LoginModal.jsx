@@ -29,13 +29,17 @@ var LoginModal = React.createClass({
     });
   },
 
-  handleSubmit: function () {
+  handleSubmit: function (e) {
+    e.preventDefault();
+
     var email = this.refs.email.getDOMNode().value.toLowerCase();
+
     if (!Validator.isEmail(email)) {
       this.internalStorage_update({
         emailHasError: true,
         email: email
       });
+
       this.forceUpdate();
 
       return;
