@@ -69,8 +69,8 @@ var LoginModal = React.createClass({
     return (
       <p className="text-align-center inverse">
         Thanks for your participation in the Mesosphere Early Access Program.
-        Your feedback means a lot to us. Please provide an email below that
-        we can use to respond to your comments and suggestions.
+        Your feedback means a lot to us. Please provide an email address below
+        that we can use to respond to your comments and suggestions.
       </p>
     );
     /* jshint trailing:true, quotmark:true, newcap:true */
