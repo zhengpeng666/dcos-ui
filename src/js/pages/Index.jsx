@@ -120,29 +120,63 @@ var Index = React.createClass({
     this.setState({hasIdentity: true});
   },
 
+  getErrorMsg: function () {
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+    return (
+      <div className="column-small-10 column-small-offset-1 column-medium-8 column-medium-offset-2">
+        <h3>
+          Cannot Connection With The Server
+        </h3>
+        <p className="text-align-center">
+          We have been notified of the issue, but would love to know more.
+          Talk with us by clicking the bubble in the lower-right of your screen.
+          You can also join us on our&nbsp;
+          <a href="https://mesosphere.slack.com/messages/dcos-eap-public"
+              target="_blank">
+            Slack channel
+          </a> or send us an email at&nbsp;
+          <a href="mailto:support@mesosphere.io">
+            support@mesosphere.io
+          </a>.
+        </p>
+      </div>
+    );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+  },
+
   getLoadingScreen: function (isReady) {
     if (isReady) {
       return;
     }
-
+    var hasLoadingError = this.state.mesosStateErrorCount >= 3;
     var errorMsg = null;
-    if (this.state.mesosStateErrorCount >= 3) {
-      errorMsg = (
-        <h2 className="text-danger">
-          There's a connection error with the server.
-        </h2>
-      );
+    if (hasLoadingError) {
+      errorMsg = this.getErrorMsg();
     }
 
+    var loadingClassSet = React.addons.classSet({
+      "hidden": hasLoadingError
+    });
+
+    /* jshint trailing:false, quotmark:false, newcap:false */
+    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="text-align-center vertical-center">
-        <div className="ball-scale">
-          <div />
+      <div className="container text-align-center vertical-center">
+        <div className="row">
+          <div className={loadingClassSet}>
+            <div className="ball-scale">
+              <div />
+            </div>
+            <h4>Loading...</h4>
+          </div>
+          {errorMsg}
         </div>
-        <h4>Loading...</h4>
-        {errorMsg}
       </div>
     );
+    /* jshint trailing:true, quotmark:true, newcap:true */
+    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getLoginModal: function (hasIdentity) {
