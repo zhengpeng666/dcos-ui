@@ -4,6 +4,7 @@ var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
 var Actions = require("../actions/Actions");
+var LocalStorageUtil = require("../utils/LocalStorageUtil");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
@@ -32,8 +33,7 @@ var Index = React.createClass({
 
   getInitialState: function () {
     return {
-      hasIdentity: false,
-      identityUpdated: false
+      hasIdentity: false
     };
   },
 
@@ -41,13 +41,13 @@ var Index = React.createClass({
     this.internalStorage_set(getSidebarState());
     MesosStateStore.init();
 
-    Actions.getIdentitiy(function (identity) {
-      // dismiss or show modal dependent on identity
+    var email = LocalStorageUtil.get("email");
+    if (email != null) {
+      Actions.identify({email: email});
       this.setState({
-        hasIdentity: identity != null && !!identity.email,
-        identityUpdated: true
+        hasIdentity: true
       });
-    }.bind(this));
+    }
   },
 
   componentDidMount: function () {
@@ -96,9 +96,9 @@ var Index = React.createClass({
   },
 
   onLogin: function (email) {
-    Actions.identify({email: email}, function () {
-      this.setState({hasIdentity: true});
-    }.bind(this));
+    LocalStorageUtil.set("email", email);
+    Actions.identify({email: email});
+    this.setState({hasIdentity: true});
   },
 
   getLoadingScreen: function (isReady) {
@@ -116,8 +116,8 @@ var Index = React.createClass({
     );
   },
 
-  getLoginModal: function (isReady, hasIdentity) {
-    if (!isReady || hasIdentity) {
+  getLoginModal: function (hasIdentity) {
+    if (hasIdentity) {
       return;
     }
 
@@ -135,7 +135,7 @@ var Index = React.createClass({
   /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     var data = this.internalStorage_get();
-    var isReady = data.statesProcessed && this.state.identityUpdated;
+    var isReady = data.statesProcessed;
 
     var classSet = React.addons.classSet({
       "canvas-sidebar-open": data.isOpen
@@ -144,7 +144,7 @@ var Index = React.createClass({
     return (
       <div id="canvas" className={classSet}>
         {this.getLoadingScreen(isReady)}
-        {this.getLoginModal(isReady, this.state.hasIdentity)}
+        {this.getLoginModal(this.state.hasIdentity)}
         <Sidebar />
         <RouteHandler />
       </div>
