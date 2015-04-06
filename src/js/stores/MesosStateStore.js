@@ -212,7 +212,9 @@ function getFailureRate (mesosState, taskTypes) {
         return memo;
       }
 
-      var finalState = _.last(status);
+      var finalState = _.max(status, function (state) {
+        return state.timestamp;
+      });
 
       if (!memo[finalState.state]) {
         memo[finalState.state] = 0;
