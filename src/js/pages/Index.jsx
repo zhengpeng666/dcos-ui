@@ -124,7 +124,7 @@ var Index = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <div className="column-small-10 column-small-offset-1 column-medium-8 column-medium-offset-2">
+      <div className="column-small-8 column-small-offset-2 column-medium-6 column-medium-offset-3">
         <h3>
           Cannot Connection With The Server
         </h3>
