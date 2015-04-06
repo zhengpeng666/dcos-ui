@@ -10,6 +10,9 @@ var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
 var Strings = require("../utils/Strings");
 
+var _failureRates = [];
+var _prevMesosStatusesMap = {};
+
 var _frameworkIndexes = [];
 var _frameworkHealth = {};
 var _healthProcessed = false;
@@ -181,33 +184,72 @@ function getTasksByStatus(frameworks, taskTypes) {
   return _.values(data);
 }
 
-function getAllFailureRates (list, taskTypes) {
-  return _.map(list, function (state) {
-    var statuses = getTasksByStatus(state.frameworks, taskTypes);
-    var data = {
-      date: state.date,
-      states: {}
-    };
+// Caluculate a failure rate
+function getFailureRate (mesosState, taskTypes) {
+  var newMesosStatusesMap = {};
+  var statuses = getTasksByStatus(mesosState.frameworks, taskTypes);
+  var failed = successful = 0;
+  var diff = {};
 
-    statuses.forEach(function (status) {
-      data.states[status.state] = status.tasks.length;
-    });
+  statuses.forEach(function (status) {
+    // Map task statuses to statuses hash map
+    _.foldl(status.tasks, function (memo, task) {
+      memo[task.id] = task.statuses;
+      return memo;
+    }, newMesosStatusesMap);
+  });
+
+  // Only compute diff if we have previous data
+  if (Object.keys(_prevMesosStatusesMap).length) {
+    // Find diff
+    diff = _.foldl(newMesosStatusesMap, function (memo, status, key) {
+      if (status.length === 0) {
+        return memo;
+      }
+
+      // This assumes the previous status is equal to the current one
+      if (this[key] && status.length === this[key].length) {
+        return memo;
+      }
+
+      var finalState = _.max(status, function (state) {
+        return state.timestamp;
+      });
+
+      if (!memo[finalState.state]) {
+        memo[finalState.state] = 0;
+      }
+
+      memo[finalState.state]++;
+
+      return memo;
+    }, {}, _prevMesosStatusesMap);
 
     // refs: https://github.com/apache/mesos/blob/master/include/mesos/mesos.proto
-    var successful = (data.states.TASK_STAGING || 0) +
-      (data.states.TASK_STARTING || 0) +
-      (data.states.TASK_RUNNING || 0) +
-      (data.states.TASK_FINISHED || 0);
-    var failed = (data.states.TASK_FAILED || 0) +
-      (data.states.TASK_KILLED || 0) +
-      (data.states.TASK_LOST || 0) +
-      (data.states.TASK_ERROR || 0);
+    successful = (diff.TASK_STAGING || 0) +
+      (diff.TASK_STARTING || 0) +
+      (diff.TASK_RUNNING || 0) +
+      (diff.TASK_FINISHED || 0);
+    failed = (diff.TASK_FAILED || 0) +
+      (diff.TASK_KILLED || 0) +
+      (diff.TASK_LOST || 0) +
+      (diff.TASK_ERROR || 0);
+  }
 
-    return {
-      date: data.date,
-      rate: failed / (successful + failed) * 100 | 0
-    };
-  });
+  // Set for next request
+  _prevMesosStatusesMap = newMesosStatusesMap;
+
+  return {
+    date: mesosState.date,
+    rate: (failed / (failed + successful)) * 100 | 0
+  };
+}
+
+function getAllFailureRates (list, taskTypes) {
+  var failureRate = getFailureRate(_.last(list), taskTypes);
+  _failureRates.push(failureRate);
+  _failureRates.shift();
+  return _failureRates;
 }
 
 // [{
@@ -356,6 +398,13 @@ function initStates() {
       slaves: [],
       used_resources: {cpus: 0, mem: 0, disk: 0},
       total_resources: {cpus: 0, mem: 0, disk: 0}
+    };
+  });
+
+  _failureRates = _.map(_.range(-Config.historyLength, 0), function (i) {
+    return {
+      date: currentDate + (i * Config.stateRefresh),
+      rate: 0
     };
   });
 }
