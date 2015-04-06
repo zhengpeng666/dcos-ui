@@ -543,6 +543,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     this.notifyStateProcessed();
   },
 
+  processStateError: function () {
+    this.emitChange(EventTypes.MESOS_STATE_REQUEST_ERROR);
+  },
+
   processMarathonHealth: function (data) {
     _frameworkHealth = _.foldl(data.apps, function (curr, app) {
       if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK !== "true" ||
@@ -588,7 +592,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         MesosStateStore.processState(action.data);
         break;
       case ActionTypes.REQUEST_MESOS_STATE_ERROR:
-        // TODO (ml): handle mesos state fetch error
+        MesosStateStore.processStateError();
         break;
       case ActionTypes.REQUEST_MARATHON_HEALTH_SUCCESS:
         MesosStateStore.processMarathonHealth(action.data);

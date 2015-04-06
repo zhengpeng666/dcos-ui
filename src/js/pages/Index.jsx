@@ -33,7 +33,8 @@ var Index = React.createClass({
 
   getInitialState: function () {
     return {
-      hasIdentity: false
+      hasIdentity: false,
+      mesosStateErrorCount: 0
     };
   },
 
@@ -57,9 +58,29 @@ var Index = React.createClass({
     );
     window.addEventListener("resize", SidebarActions.close);
 
+    this.addMesosStateListeners();
+  },
+
+  addMesosStateListeners: function () {
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange
+    );
+
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_REQUEST_ERROR,
+      this.onMesosStateError
+    );
+  },
+
+  removeMesosStateListeners: function () {
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onMesosStateChange
+    );
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_REQUEST_ERROR,
+      this.onMesosStateError
     );
   },
 
@@ -70,10 +91,7 @@ var Index = React.createClass({
     );
     window.removeEventListener("resize", SidebarActions.close);
 
-    MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
-      this.onMesosStateChange
-    );
+    this.removeMesosStateListeners();
   },
 
   onSideBarChange: function () {
@@ -85,14 +103,15 @@ var Index = React.createClass({
     var state = getMesosState();
     // if state is processed, stop listening
     if (state.statesProcessed) {
-      MesosStateStore.removeChangeListener(
-        EventTypes.MESOS_STATE_CHANGE,
-        this.onMesosStateChange
-      );
+      this.removeMesosStateListeners();
     }
 
     this.internalStorage_update(state);
-    this.forceUpdate();
+    this.setState({mesosStateErrorCount: 0});
+  },
+
+  onMesosStateError: function () {
+    this.setState({mesosStateErrorCount: ++this.state.mesosStateErrorCount});
   },
 
   onLogin: function (email) {
@@ -106,12 +125,22 @@ var Index = React.createClass({
       return;
     }
 
+    var errorMsg = null;
+    if (this.state.mesosStateErrorCount >= 3) {
+      errorMsg = (
+        <h2 className="text-danger">
+          There's a connection error with the server.
+        </h2>
+      );
+    }
+
     return (
       <div className="text-align-center vertical-center">
         <div className="ball-scale">
           <div />
         </div>
         <h4>Loading...</h4>
+        {errorMsg}
       </div>
     );
   },
