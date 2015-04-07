@@ -4,7 +4,8 @@
   }
 
   .button div {
-    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium) - @base-spacing-unit * 1.25;
+    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
+      - @base-spacing-unit * 1.25;
   }
 
   .button div, .dropdown-menu .dropdown-menu-list a {
@@ -51,6 +52,8 @@
   }
 
   .dropdown-menu {
+    margin-top: @base-spacing-unit * 0.5 + @button-border-width * 2;
+
     &.inverse {
       li:hover {
         .badge {
