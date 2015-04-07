@@ -3,6 +3,10 @@
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium);
   }
 
+  .button div {
+    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium) - @base-spacing-unit * 1.25;
+  }
+
   .button div, .dropdown-menu .dropdown-menu-list a {
     display: flex;
     justify-content: space-between;
