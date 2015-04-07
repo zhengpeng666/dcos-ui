@@ -3,12 +3,12 @@
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium);
   }
 
-  .button div {
+  .button-container {
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
       - @base-spacing-unit * 1.25;
   }
 
-  .button div, .dropdown-menu .dropdown-menu-list a {
+  .button-container, .dropdown-menu .dropdown-menu-list a {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -43,7 +43,7 @@
         margin: @base-spacing-unit * -0.5 0 @base-spacing-unit * 0.25 auto;
       }
 
-      div {
+      .button-container {
         span:last-child {
             margin-right: @base-spacing-unit;
         }
