@@ -22,7 +22,7 @@ var FilterInputText = React.createClass({
     this.props.handleFilterChange(this.refs.filterInput.getDOMNode().value);
   },
 
-  clear: function (e) {
+  handleClearInput: function (e) {
     e.preventDefault();
     this.props.handleFilterChange("");
   },
@@ -50,7 +50,7 @@ var FilterInputText = React.createClass({
             onChange={this.handleChange}
             ref="filterInput" />
           <span className={clearIconClasses}>
-            <a href="#" onClick={this.clear}>
+            <a href="#" onClick={this.handleClearInput}>
               <i className="icon icon-mini icon-mini-white icon-close"></i>
             </a>
           </span>
