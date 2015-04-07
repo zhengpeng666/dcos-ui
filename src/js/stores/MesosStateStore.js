@@ -188,7 +188,8 @@ function getTasksByStatus(frameworks, taskTypes) {
 function getFailureRate (mesosState, taskTypes) {
   var newMesosStatusesMap = {};
   var statuses = getTasksByStatus(mesosState.frameworks, taskTypes);
-  var failed = successful = 0;
+  var failed = 0;
+  var successful = 0;
   var diff = {};
 
   statuses.forEach(function (status) {
