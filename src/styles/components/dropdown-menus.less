@@ -6,6 +6,7 @@
   .button-container {
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
       - @base-spacing-unit * 1.25;
+    overflow: hidden;
   }
 
   .button-container, .dropdown-menu .dropdown-menu-list a {
@@ -13,6 +14,7 @@
     justify-content: space-between;
     align-items: center;
     flex-grow: 1;
+    flex-shrink: 0;
 
     span {
       margin-right: @base-spacing-unit;
