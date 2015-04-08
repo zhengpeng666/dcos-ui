@@ -74,7 +74,7 @@ var tasks = {
   webpack: function (masterTree) {
     // transform merge module dependencies into one file
     return webpackify(masterTree, {
-      entry: "./" + fileNames.mainJs + ".jsx",
+      entry: "./" + fileNames.mainJs + ".js",
       output: {
         // library: "Test",
         filename: dirs.jsDist + "/" + fileNames.mainJsDist + ".js"
@@ -82,15 +82,14 @@ var tasks = {
       module: {
         loaders: [
           {
-            // tell webpack to use jsx-loader for all *.jsx files
-            test: /\.jsx$/,
+            test: /\.js$/,
             loader: "jsx-loader?harmony",
             exclude: /node_modules/
           }
         ]
       },
       resolve: {
-        extensions: ["", ".js", ".jsx"]
+        extensions: ["", ".js"]
       }
     });
   },
@@ -202,12 +201,11 @@ var tasks = {
  * basic pre-processing before actual build
  */
 function createJsTree() {
-  // create tree for .js and .jsx
+  // create tree for .js
   var jsTree = pickFiles(dirs.js, {
     srcDir: "./",
     destDir: "",
     files: [
-      "**/*.jsx",
       "**/*.js"
     ]
   });
