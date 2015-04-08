@@ -126,7 +126,7 @@ var Index = React.createClass({
     return (
       <div className="column-small-8 column-small-offset-2 column-medium-6 column-medium-offset-3">
         <h3>
-          Cannot Connection With The Server
+          Cannot Connect With The Server
         </h3>
         <p className="text-align-center">
           We have been notified of the issue, but would love to know more.
