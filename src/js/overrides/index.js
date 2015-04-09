@@ -1,4 +1,3 @@
-
 var React = require("react");
 
 var ActionsMixin = require("../mixins/ActionsMixin");

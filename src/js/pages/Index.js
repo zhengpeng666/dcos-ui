@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
@@ -122,8 +120,6 @@ var Index = React.createClass({
   },
 
   getErrorMsg: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="column-small-8 column-small-offset-2 column-medium-6 column-medium-offset-3">
         <h3>
@@ -143,13 +139,11 @@ var Index = React.createClass({
         </p>
       </div>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getLoadingScreen: function (isReady) {
     if (isReady) {
-      return;
+      return null;
     }
     var hasLoadingError = this.state.mesosStateErrorCount >= 3;
     var errorMsg = null;
@@ -161,8 +155,6 @@ var Index = React.createClass({
       "hidden": hasLoadingError
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="container text-align-center vertical-center">
         <div className="row">
@@ -176,27 +168,18 @@ var Index = React.createClass({
         </div>
       </div>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getLoginModal: function (hasIdentity) {
     if (hasIdentity || Config.disableLoginModal) {
-      return;
+      return null;
     }
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <LoginModal onLogin={this.onLogin} />
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-
   },
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;

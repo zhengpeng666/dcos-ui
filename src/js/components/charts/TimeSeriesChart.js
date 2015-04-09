@@ -267,11 +267,6 @@ var TimeSeriesChart = React.createClass({
 
   renderAxis: function (props, xScale, yScale) {
     var margin = props.margin;
-    var length = props.width;
-    var firstDataSet = _.first(props.data);
-    if (firstDataSet != null) {
-      length = firstDataSet.values.length;
-    }
 
     var yAxis = d3.svg.axis()
       .scale(yScale)
@@ -393,7 +388,7 @@ var TimeSeriesChart = React.createClass({
           className="background"
           x={position + "px"}
           y={margin.top}
-          height={props.height - margin.bottom - margin.top  - margin.top}
+          height={props.height - margin.bottom - margin.top - margin.top}
           width={width} />
       );
       /* jshint trailing:true, quotmark:true, newcap:true */
@@ -403,7 +398,7 @@ var TimeSeriesChart = React.createClass({
 
   render: function () {
     var props = this.props;
-    var height = props.height - props.margin.bottom  - props.margin.top;
+    var height = props.height - props.margin.bottom - props.margin.top;
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (

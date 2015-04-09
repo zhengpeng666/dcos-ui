@@ -64,7 +64,7 @@ var ServicesPage = React.createClass({
           return "Filtered health to default";
         }
 
-        var key = _.findKey(HealthTypes, function (healthValue, healthKey) {
+        var key = _.findKey(HealthTypes, function (healthValue) {
           if (healthValue === this.value) {
             return true;
           }

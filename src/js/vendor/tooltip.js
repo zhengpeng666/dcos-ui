@@ -1,5 +1,4 @@
-/* jshint ignore:start */
-/* jscs:disable */
+/*eslint-disable */
 
 /*!
  * tooltip 0.1.0 - 18th Dec 2013
@@ -1162,4 +1161,4 @@ if (typeof exports == "object") {
   this["Tooltip"] = require("tooltip");
 }})();
 
-/* jshint ignore:end */
+/*eslint-enable */

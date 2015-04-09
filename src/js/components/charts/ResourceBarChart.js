@@ -94,7 +94,7 @@ var ResourceBarChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <Chart calcHeight={function (w) { return w/WIDTH_HEIGHT_RATIO; }}>
+      <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}>
         <BarChart
           data={this.getData()}
           maxY={this.getMaxY()}

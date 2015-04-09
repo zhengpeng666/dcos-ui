@@ -30,7 +30,7 @@ var TaskFailureTimeSeriesChart = React.createClass({
     /* jshint trailing:false, quotmark:false, newcap:false */
     /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
-      <Chart calcHeight={function (w) { return w/2; }}>
+      <Chart calcHeight={function (w) { return w / 2; }}>
         <TimeSeriesChart
           data={this.getData(props)}
           maxY={100}

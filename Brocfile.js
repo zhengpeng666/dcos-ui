@@ -5,9 +5,8 @@ var chalk = require("chalk");
 var cleanCSS = require("broccoli-clean-css");
 var concatCSS = require("broccoli-concat");
 var env = require("broccoli-env").getEnv();
+var eslint = require("broccoli-lint-eslint");
 var fs = require("fs");
-var jscs = require("broccoli-jscs");
-var jsHintTree = require("broccoli-jshint");
 var less = require("broccoli-less-single");
 var mergeTrees = require("broccoli-merge-trees");
 var pickFiles = require("broccoli-static-compiler");
@@ -45,30 +44,8 @@ var fileNames = {
  */
 var tasks = {
 
-  jsHint: function (jsTree) {
-    // run jscs on compiled js
-    var jscsTree = jscs(jsTree, {
-      disableTestGenerator: true,
-      enabled: true,
-      jshintrcPath: dirs.js + "/.jscsrc"
-    });
-
-    // run jshint on compiled js
-    var hintTree = jsHintTree(jsTree , {
-      disableTestGenerator: true,
-      jshintrcPath: dirs.js + "/.jshintrc"
-    });
-
-    // hack to strip test files from jshint tree
-    hintTree = pickFiles(hintTree, {
-      srcDir: "./",
-      files: []
-    });
-
-    return mergeTrees(
-      [jscsTree, hintTree, jsTree],
-      {overwrite: true}
-    );
+  eslint: function (tree) {
+    return eslint(tree, {config: '.eslintrc'});
   },
 
   webpack: function (masterTree) {
@@ -245,7 +222,7 @@ if (env === "development") {
 /*
  * Start the build
  */
-var buildTree = _.compose(tasks.jsHint, createJsTree);
+var buildTree = _.compose(tasks.eslint, createJsTree);
 
 // export BROCCOLI_ENV={default : "development" | "production"}
 if (env === "development" || env === "production" ) {
