@@ -25,9 +25,9 @@
     "space-before-blocks": [2 "always"],
     // "space-before-function-paren": [2, {
     //   "anonymous": "always", "named": "never"
-    // }],
+    // }], TODO: DCOS-914
     "spaced-line-comment": [2, "always"],
-    // "max-len": [2, 80, 4],
+    // "max-len": [2, 80, 4], TODO: DCOS-914
     "valid-jsdoc": [2, {
       "requireReturn": false,
       "requireParamDescription": false
