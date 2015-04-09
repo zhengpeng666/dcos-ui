@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var _ = require ("underscore");
+var _ = require("underscore");
 var React = require("react/addons");
 var Link = require("react-router").Link;
 
@@ -75,7 +75,7 @@ var DashboardPage = React.createClass({
     var data = this.internalStorage_get();
     var servicesCount = data.services.length;
     if (!servicesCount) {
-      return;
+      return null;
     }
 
     var textContent = "View all ";
@@ -84,14 +84,10 @@ var DashboardPage = React.createClass({
     }
     textContent += "Services >";
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Link to="services" className="button button-wide more-button">
         {textContent}
       </Link>
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     );
   },
 

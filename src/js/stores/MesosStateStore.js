@@ -634,7 +634,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   dispatcherIndex: AppDispatcher.register(function (payload) {
     var source = payload.source;
     if (source !== ActionTypes.SERVER_ACTION) {
-      return;
+      return false;
     }
 
     var action = payload.action;

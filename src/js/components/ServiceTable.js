@@ -74,8 +74,6 @@ var ServicesTable = React.createClass({
   },
 
   renderHeadline: function (prop, model) {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     if (model.webui_url.length === 0) {
       return (
         <span className="h5 flush-top flush-bottom headline">
@@ -96,8 +94,6 @@ var ServicesTable = React.createClass({
         </a>
        </span>
      );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   renderHealth: function (prop, model) {
@@ -139,7 +135,6 @@ var ServicesTable = React.createClass({
     );
   },
 
-
   renderTask: function (prop, model) {
     return (
       <span>
@@ -151,19 +146,15 @@ var ServicesTable = React.createClass({
 
   renderStats: function (prop, model) {
     var value = Maths.round(_.last(model.used_resources[prop]).value, 2);
-    if(prop !== "cpus") {
+    if (prop !== "cpus") {
       value = Humanize.filesize(value * 1024 * 1024, 1024, 1);
     }
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <span>
         {value}
       </span>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getDefaultProps: function () {
@@ -180,7 +171,7 @@ var ServicesTable = React.createClass({
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        title: "SERVICE NAME",
+        title: "SERVICE NAME"
       },
       {
         className: getClassName,
@@ -188,7 +179,7 @@ var ServicesTable = React.createClass({
         prop: healthKey,
         render: this.renderHealth,
         sortable: true,
-        title: "HEALTH",
+        title: "HEALTH"
       },
       {
         className: getClassName,
@@ -196,7 +187,7 @@ var ServicesTable = React.createClass({
         prop: "tasks_count",
         render: this.renderTask,
         sortable: true,
-        title: "TASKS",
+        title: "TASKS"
       },
       {
         className: getClassName,
@@ -204,7 +195,7 @@ var ServicesTable = React.createClass({
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        title: "CPU",
+        title: "CPU"
       },
       {
         className: getClassName,
@@ -212,7 +203,7 @@ var ServicesTable = React.createClass({
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        title: "MEM",
+        title: "MEM"
       },
       {
         className: getClassName,
@@ -220,15 +211,12 @@ var ServicesTable = React.createClass({
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        title: "DISK",
+        title: "DISK"
       }
     ];
   },
 
   render: function () {
-
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Table
         className="table inverse table-borderless-outer table-borderless-inner-columns"

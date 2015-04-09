@@ -8,7 +8,6 @@ var State = require("react-router").State;
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
-var SidebarStore = require("../stores/SidebarStore");
 var Config = require("../utils/Config");
 
 var MENU_ITEMS = {
@@ -67,8 +66,7 @@ var Sidebar = React.createClass({
         "sidebar-menu-item h3": true,
         "selected": isActive
       });
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+
       return (
         <li className={itemClassSet} key={key}>
           <Link to={key}>
@@ -79,13 +77,10 @@ var Sidebar = React.createClass({
           </Link>
         </li>
       );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+
     }, this);
   },
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     var data = this.internalStorage_get();
 

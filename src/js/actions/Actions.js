@@ -50,6 +50,7 @@ var Actions = {
 
   /**
    * Logs arbitriary data
+   * @param  {Mixed} anything
    */
   log: function (anything) {
     if (this.canLog() === false) {
@@ -79,6 +80,10 @@ var Actions = {
   /**
    * Logs a replayable action
    * Replayable actions are possible by watching state changes
+   *
+   * @param  {String} description
+   * @param  {Object} data
+   * @param  {Number} componentID
    */
   logAction: function (description, data, componentID) {
     this.log({
@@ -92,6 +97,10 @@ var Actions = {
   /**
    * Will log the first message with all the data to replay
    * Will log subsequent messages without data to replay
+   *
+   * @param  {Array} messages
+   * @param  {Object} data
+   * @param  {Number} componentID
    */
   logBatchAction: function (messages, data, componentID) {
     this.logAction(messages.shift(), data, componentID);
@@ -113,7 +122,7 @@ var Actions = {
 
   getComponent: function (componentID) {
     return this.components[componentID];
-  },
+  }
 
 };
 
