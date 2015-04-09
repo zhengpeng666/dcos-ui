@@ -4,6 +4,7 @@ var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
 var Actions = require("../actions/Actions");
+var Config = require("../utils/Config");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
@@ -180,7 +181,7 @@ var Index = React.createClass({
   },
 
   getLoginModal: function (hasIdentity) {
-    if (hasIdentity) {
+    if (hasIdentity || Config.disableLoginModal) {
       return;
     }
 
