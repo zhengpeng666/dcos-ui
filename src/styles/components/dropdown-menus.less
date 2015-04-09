@@ -6,6 +6,8 @@
   .button-container {
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
       - @base-spacing-unit * 1.25;
+    /* This is for IE10, ẃhat avoid overflow long text,
+    because flexbox isn't working and isn't setting the width of the elements */
     overflow: hidden;
   }
 
