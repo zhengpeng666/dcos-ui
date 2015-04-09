@@ -65,8 +65,6 @@ var FilterHealth = React.createClass({
         "success": HealthTypes.HEALTHY === health
       });
 
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <button
             key={key}
@@ -79,14 +77,10 @@ var FilterHealth = React.createClass({
             </span>
         </button>
       );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }, this);
   },
 
   render: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="button-group">
         {this.getFilterButtons()}

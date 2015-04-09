@@ -74,30 +74,22 @@ var ServiceList = React.createClass({
   },
 
   getNoServicesMessage: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="text-align-center vertical-center">
         <h2>No Services Running</h2>
         <p>Use the DCOS command line tools to find and install services.</p>
       </div>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getList: function () {
     var listOrder = ["title", "health"];
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <List
         list={this.getServices(this.props.services, this.props.healthProcessed)}
         order={listOrder} />
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getContent: function () {

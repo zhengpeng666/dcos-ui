@@ -38,8 +38,6 @@ var FilterHeadline = React.createClass({
       "hidden": filteredLength === totalLength
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <ul className="list-unstyled list-inline inverse">
         <li className={filteredClassSet}>

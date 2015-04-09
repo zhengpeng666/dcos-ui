@@ -36,11 +36,7 @@ var Page = React.createClass({
     if (_.isFunction(this.props.renderNavigation)) {
       return this.props.renderNavigation();
     } else {
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
-      return <div className="page-header-navigation" />;
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+      return (<div className="page-header-navigation" />);
     }
   },
 
@@ -55,8 +51,6 @@ var Page = React.createClass({
 
     var classSet = React.addons.classSet(classes);
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className={classSet}>
         <div className="page-header">

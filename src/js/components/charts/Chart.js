@@ -67,9 +67,6 @@ var Chart = React.createClass({
   },
 
   render: function () {
-
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         {this.getChildren()}

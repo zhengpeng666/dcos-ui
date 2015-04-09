@@ -32,8 +32,6 @@ var Panel = React.createClass({
     });
   },
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     var classes = {
       "panel": true

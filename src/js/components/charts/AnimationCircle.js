@@ -39,8 +39,6 @@ var AnitmationCircle = React.createClass({
   render: function () {
     var r = this.props.r;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <circle r={r} cx={this.props.cx} cy={this.props.cy} />
     );

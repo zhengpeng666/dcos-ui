@@ -27,8 +27,6 @@ var TaskFailureTimeSeriesChart = React.createClass({
   },
 
   getChart: function (props) {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Chart calcHeight={function (w) { return w / 2; }}>
         <TimeSeriesChart
@@ -37,15 +35,11 @@ var TaskFailureTimeSeriesChart = React.createClass({
           y="rate" />
       </Chart>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   render: function () {
     var props = this.props;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="chart">
         <div className="row text-align-center">

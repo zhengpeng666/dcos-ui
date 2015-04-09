@@ -258,8 +258,6 @@ var BarChart = React.createClass({
         var posX = chartWidth - marginLeft - marginRight - rectWidth * (valuesLength - 1 - j);
         posY[j] -= rectHeight;
 
-        /* jshint trailing:false, quotmark:false, newcap:false */
-        /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
         return (
           <Bar
             posX={posX}
@@ -271,8 +269,6 @@ var BarChart = React.createClass({
             transitionDuration={props.transition.duration}
             lineClass={lineClass + colorClass} />
         );
-        /* jshint trailing:true, quotmark:true, newcap:true */
-        /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       });
     });
   },
@@ -283,8 +279,6 @@ var BarChart = React.createClass({
     var margin = props.margin;
     var clipPath = "url(#" + data.clipPathID + ")";
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <svg height={props.height + margin.bottom}
           width={props.width}

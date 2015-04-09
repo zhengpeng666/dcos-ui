@@ -112,8 +112,6 @@ var NodesPage = React.createClass({
     var data = this.internalStorage_get();
     var state = this.state;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <ResourceBarChart
@@ -144,21 +142,15 @@ var NodesPage = React.createClass({
         <HostTable hosts={data.hosts} />
       </div>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getEmptyHostsPageContent: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <AlertPanel title="Empty Datacenter">
         <p>Your datacenter is looking pretty empty.
         We don't see any nodes other than your master.</p>
       </AlertPanel>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getContents: function (isEmpty) {
@@ -173,8 +165,6 @@ var NodesPage = React.createClass({
     var data = this.internalStorage_get();
     var isEmpty = data.statesProcessed && data.allHosts.length === 0;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Page title="Nodes">
        {this.getContents(isEmpty)}

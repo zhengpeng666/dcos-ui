@@ -50,8 +50,7 @@ var ResourceChart = React.createClass({
 
   getChart: function () {
     var props = this.props;
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+
     return (
       <Chart calcHeight={function (w) { return w / 2; }}>
         <TimeSeriesChart
@@ -60,8 +59,6 @@ var ResourceChart = React.createClass({
           y="percentage" />
       </Chart>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   render: function () {
@@ -69,8 +66,6 @@ var ResourceChart = React.createClass({
     var allocResources = props.allocResources[props.mode];
     var totalResources = props.totalResources[props.mode];
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="chart">
         <div className="row text-align-center">

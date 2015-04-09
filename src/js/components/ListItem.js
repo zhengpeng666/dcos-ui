@@ -32,8 +32,6 @@ var ListItem = React.createClass({
     });
   },
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     return (
       <li className="list-item">

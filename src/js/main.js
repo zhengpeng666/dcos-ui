@@ -24,8 +24,6 @@ var Index = require("./pages/Index");
 var ServicesPage = require("./pages/ServicesPage");
 var NotFoundPage = require("./pages/NotFoundPage");
 
-/* jshint trailing:false, quotmark:false, newcap:false */
-/* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
 var routes = (
   <Route name="home" path="/" handler={Index}>
     <Route name="dashboard" path="dashboard/?" handler={DashboardPage} />

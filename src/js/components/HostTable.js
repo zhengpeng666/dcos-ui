@@ -59,28 +59,20 @@ var HostTable = React.createClass({
   },
 
   renderHeadline: function (prop, model) {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <span className="h5 flush-top flush-bottom headline">
         {model[prop]}
       </span>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   renderTask: function (prop, model) {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <span>
         {model[prop]}
         <span className="visible-mini-inline"> Tasks</span>
       </span>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   renderStats: function (prop, model) {
@@ -90,8 +82,6 @@ var HostTable = React.createClass({
       disk: 3
     };
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     var value = _.last(model.used_resources[prop]).percentage;
     return (
       <span>
@@ -99,8 +89,6 @@ var HostTable = React.createClass({
           colorIndex={colorMapping[prop]} /> {value}%
       </span>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getColumns: function () {
@@ -150,8 +138,6 @@ var HostTable = React.createClass({
 
   render: function () {
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Table
         className="table inverse table-borderless-outer table-borderless-inner-columns"

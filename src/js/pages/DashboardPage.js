@@ -94,8 +94,6 @@ var DashboardPage = React.createClass({
   render: function () {
     var data = this.internalStorage_get();
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Page title="Dashboard">
         <div className="grid row">

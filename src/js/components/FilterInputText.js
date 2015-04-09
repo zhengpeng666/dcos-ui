@@ -34,8 +34,6 @@ var FilterInputText = React.createClass({
       "hidden": props.searchString.length === 0
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="form-group filter-input-text-group">
         <div className="form-control form-control-inverse form-control-group">
