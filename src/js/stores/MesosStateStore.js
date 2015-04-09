@@ -631,6 +631,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     _healthProcessed = true;
   },
 
+  processMarathonHealthError: function () {
+    _healthProcessed = true;
+  },
+
   dispatcherIndex: AppDispatcher.register(function (payload) {
     var source = payload.source;
     if (source !== ActionTypes.SERVER_ACTION) {
@@ -649,6 +653,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         MesosStateStore.processMarathonHealth(action.data);
         break;
       case ActionTypes.REQUEST_MARATHON_HEALTH_ERROR:
+        MesosStateStore.processMarathonHealthError();
         // TODO (ml): handle marathon health fetch error
         break;
     }
