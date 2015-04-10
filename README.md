@@ -68,9 +68,31 @@ If you want to add a new npm package to 'node_modules':
   1. Installing SublimeLinter is straightforward using Sublime Package Manager,
   see [instructions](http://sublimelinter.readthedocs.org/en/latest/installation.html#installing-via-pc)
 
-  2. SublimeLinter-jshint needs a global jshint in your system,
-  see [instructions](https://github.com/SublimeLinter/SublimeLinter-jshint#linter-installation)
+  2. SublimeLinter-eslint needs a global eslint in your system,
+  see [instructions](https://github.com/roadhump/SublimeLinter-eslint#sublimelinter-eslint)
 
-  3. SublimeLinter-jsxhint needs a global jsxhint in your system,
-  as well as JavaScript (JSX) bundle inside Packages/JavaScript,
-  see [instructions](https://github.com/SublimeLinter/SublimeLinter-jsxhint#linter-installation)
+3. Syntax Highlihgting for files containing JSX
+
+  1. Install sublime-react using Sublime Package Manager,
+  see [instructions](https://github.com/reactjs/sublime-react)
+
+  2. Installing ApplySyntax using Sublime Package Manager,
+  see [instructions](https://github.com/facelessuser/ApplySyntax)
+
+  3. Open up the user configuration file for ApplySyntax: `Sublime Text` ->
+  `Preferences` -> `Package Settings` -> `ApplySyntax` -> `Settings - User`
+
+  4. Replace the contents with this:
+  ```
+  {
+      // Put your custom syntax rules here:
+      "syntaxes": [
+          {
+              "name": "ReactJS/syntax/jsx/tmLanguage/JavaScript (JSX)",
+              "rules": [
+                  {"first_line": "^\\/\\*\\*\\s@jsx\\sReact\\.DOM\\s\\*\\/"}
+              ]
+          }
+      ]
+  }
+  ```
