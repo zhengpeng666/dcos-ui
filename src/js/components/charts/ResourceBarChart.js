@@ -75,8 +75,7 @@ var ResourceBarChart = React.createClass({
         "button button-stroke button-inverse": true,
         "active": mode === key
       });
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+
       return (
         <button
             key={key}
@@ -85,14 +84,10 @@ var ResourceBarChart = React.createClass({
           {info.label}
         </button>
       );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }, this);
   },
 
   getBarChart: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}>
         <BarChart
@@ -103,13 +98,9 @@ var ResourceBarChart = React.createClass({
           refreshRate={this.props.refreshRate} />
       </Chart>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getLegend: function (info) {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <ul className="legend list-unstyled list-inline inverse">
         <li className="legend-item">
@@ -120,8 +111,6 @@ var ResourceBarChart = React.createClass({
         </li>
       </ul>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getHeadline: function (info) {
@@ -141,8 +130,7 @@ var ResourceBarChart = React.createClass({
 
   render: function () {
     var info = infoMap[this.state.resourceMode];
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+
     return (
       <div className="chart panel">
         <div className="panel-heading panel-heading-large">

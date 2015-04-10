@@ -350,8 +350,6 @@ var TimeSeriesChart = React.createClass({
       // y0 of lastest visible obj + account for stroke size
       var initialPosition = data.yScale(obj.values[obj.values.length - 2].y0);
 
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <g className={React.addons.classSet(classes)} key={i}>
           <AnimationCircle
@@ -368,8 +366,6 @@ var TimeSeriesChart = React.createClass({
           </g>
         </g>
       );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     }, this);
   },
 
@@ -381,8 +377,7 @@ var TimeSeriesChart = React.createClass({
       // indent with margin, start one width length in
       // and add two times width per step
       var position = margin.left + width + i * 2 * width;
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+
       return (
         <rect key={i}
           className="background"
@@ -391,16 +386,13 @@ var TimeSeriesChart = React.createClass({
           height={props.height - margin.bottom - margin.top - margin.top}
           width={width} />
       );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     });
   },
 
   render: function () {
     var props = this.props;
     var height = props.height - props.margin.bottom - props.margin.top;
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+
     return (
       <svg height={props.height} width={props.width}>
         {this.getStripes(4)}

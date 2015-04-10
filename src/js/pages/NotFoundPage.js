@@ -10,8 +10,6 @@ var NotFoundPage = React.createClass({
 
   displayName: "NotFoundPage",
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     return (
       <Page title="Page Not Found">

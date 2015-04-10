@@ -45,8 +45,6 @@ var ProgressBar = React.createClass({
     var props = this.props;
     var data = this.internalStorage_get();
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="progress-bar">
         <div key="bar" ref="bar"

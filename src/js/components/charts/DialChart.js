@@ -93,22 +93,16 @@ var DialChart = React.createClass({
     var pie = data.pie;
 
     return _.map(pie(this.props.data), function (element, i) {
-      /* jshint trailing:false, quotmark:false, newcap:false */
-      /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
       return (
         <DialSlice
           key={i}
           colorIndex={element.data.colorIndex || i}
           path={innerArc(element)} />
       );
-      /* jshint trailing:true, quotmark:true, newcap:true */
-      /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     });
   },
 
   render: function() {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <svg height={this.props.height} width={this.props.width}>
         <g transform={this.getPosition()}>

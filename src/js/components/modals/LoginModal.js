@@ -49,8 +49,6 @@ var LoginModal = React.createClass({
   },
 
   getFooter: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div className="button-collection button-collection-align-horizontal-center flush-bottom">
         <button className="button button-primary button-large button-wide-below-screen-mini"
@@ -59,13 +57,9 @@ var LoginModal = React.createClass({
         </button>
       </div>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getSubHeader: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <p className="text-align-center inverse">
         Thanks for your participation in the Mesosphere Early Access Program.
@@ -73,8 +67,6 @@ var LoginModal = React.createClass({
         that we can use to respond to your comments and suggestions.
       </p>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   render: function () {
@@ -91,8 +83,6 @@ var LoginModal = React.createClass({
       "hidden": !data.emailHasError
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Modal titleText="Mesosphere DCOS Early Access"
           subHeader={this.getSubHeader()}

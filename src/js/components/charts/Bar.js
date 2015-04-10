@@ -59,8 +59,6 @@ var Bar = React.createClass({
     var colorClass = props.colorClass;
     var lineClass = props.lineClass;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <g className="bar"
           transform={"translate(" + [posX, 0] + ")"}>

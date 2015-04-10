@@ -27,8 +27,6 @@ var AlertPanel = React.createClass({
     this.forceUpdate();
   },
 
-  /* jshint trailing:false, quotmark:false, newcap:false */
-  /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   render: function () {
     var data = this.internalStorage_get();
     var classes = {

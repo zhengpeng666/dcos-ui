@@ -32,9 +32,6 @@ var TimeSeriesArea = React.createClass({
   },
 
   render: function () {
-
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <path d={this.props.path} />
     );

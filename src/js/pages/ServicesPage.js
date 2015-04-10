@@ -139,8 +139,6 @@ var ServicesPage = React.createClass({
       "hidden": filteredLength !== totalLength
     });
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <h4 className={filteredClassSet}>
@@ -151,16 +149,12 @@ var ServicesPage = React.createClass({
         </h4>
       </div>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getServicesPageContent: function () {
     var state = this.state;
     var data = this.internalStorage_get();
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <div>
         <ResourceBarChart
@@ -193,20 +187,14 @@ var ServicesPage = React.createClass({
           frameworks={data.frameworks} />
       </div>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getEmptyServicesPageContent: function () {
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <AlertPanel title="No Services Installed">
         <p>Use the DCOS command line tools to find and install services.</p>
       </AlertPanel>
     );
-    /* jshint trailing:true, quotmark:true, newcap:true */
-    /* jscs:enable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
   },
 
   getContents: function (isEmpty) {
@@ -221,8 +209,6 @@ var ServicesPage = React.createClass({
     var data = this.internalStorage_get();
     var isEmpty = data.statesProcessed && data.totalFrameworks === 0;
 
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
     return (
       <Page title="Services">
         {this.getContents(isEmpty)}

@@ -111,8 +111,7 @@ var TasksChart = React.createClass({
 
   render: function() {
     var tasks = this.getTasks();
-    /* jshint trailing:false, quotmark:false, newcap:false */
-    /* jscs:disable disallowTrailingWhitespace, validateQuoteMarks, maximumLineLength */
+
     return (
       <div className="chart">
         <div className="row">
