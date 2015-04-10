@@ -1,7 +1,7 @@
 var Maths = {
-  round: function (value, decimalPlaces) {
-    decimalPlaces = decimalPlaces || 0;
-    var factor = Math.pow(10, decimalPlaces);
+  round: function (value, precision) {
+    precision = precision || 0;
+    var factor = Math.pow(10, precision);
     return Math.round(value * factor) / factor;
   },
 

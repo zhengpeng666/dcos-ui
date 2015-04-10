@@ -48,6 +48,7 @@
     "chalk": "^1.0.0",
     "eslint": "^0.18.0",
     "eslint-plugin-react": "^2.1.0",
+    "jest-cli": "^0.4.0",
     "jsx-loader": "^0.12.2",
     "npm-shrinkwrap": "^5.3.0"
   },
@@ -56,6 +57,31 @@
     "clean": "rm -rf dist tmp",
     "dist": "export BROCCOLI_ENV=\"production\" && npm run clean && npm run build",
     "serve": "export BROCCOLI_ENV=\"development\" && broccoli serve",
-    "shrinkwrap": "npm-shrinkwrap --dev"
+    "shrinkwrap": "npm-shrinkwrap --dev",
+    "test": "jest"
+  },
+  "jest": {
+    "globals": {
+      "__DEV__": true
+    },
+    "scriptPreprocessor": "jest/preprocessor.js",
+    "modulePathIgnorePatterns": [
+      "/tmp/",
+      "/node_modules/",
+      "/.module-cache/"
+    ],
+    "unmockedModulePathPatterns": [
+      "MD5",
+      "d3",
+      "flux",
+      "react",
+      "react-router",
+      "react-tools",
+      "underscore"
+    ],
+    "testPathIgnorePatterns": [
+      "/tmp/",
+      "/node_modules/"
+    ]
   }
 }
