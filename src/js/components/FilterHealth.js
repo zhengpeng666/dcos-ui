@@ -70,11 +70,11 @@ var FilterHealth = React.createClass({
             key={key}
             className={classSet}
             onClick={this.props.handleFilterChange.bind(null, health)}>
-            <span className="button-align-content">
-              <span className={dotClassSet}></span>
-              <span className="label">{value}</span>
-              <span className="badge">{this.getCountByHealth(key)}</span>
-            </span>
+          <span className="button-align-content">
+            <span className={dotClassSet}></span>
+            <span className="label">{value}</span>
+            <span className="badge">{this.getCountByHealth(key)}</span>
+          </span>
         </button>
       );
     }, this);
