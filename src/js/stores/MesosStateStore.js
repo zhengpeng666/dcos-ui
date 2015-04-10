@@ -654,7 +654,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         break;
       case ActionTypes.REQUEST_MARATHON_HEALTH_ERROR:
         MesosStateStore.processMarathonHealthError();
-        // TODO (ml): handle marathon health fetch error
         break;
     }
 
