@@ -3,8 +3,6 @@
   .border-radius(@table-header-border-radius);
   display: inline-block;
   overflow: hidden;
-  margin-right: @progress-bar-height * 0.5;
-  margin-bottom: @progress-bar-height * 0.5;
   line-height: @body-text-line-height;
   width: @progress-bar-width;
   height: @progress-bar-height;
@@ -28,4 +26,11 @@
       background-color: @pink;
     }
   }
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: @base-spacing-unit * 0.5;
 }
