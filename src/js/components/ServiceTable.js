@@ -4,11 +4,14 @@ var _ = require("underscore");
 var Humanize = require("humanize");
 var React = require("react/addons");
 
+var EventTypes = require("../constants/EventTypes");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthSorting = require("../constants/HealthSorting");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var Maths = require("../utils/Maths");
+var MesosStateStore = require("../stores/MesosStateStore");
 var Strings = require("../utils/Strings");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
@@ -49,15 +52,47 @@ function sortFunction(prop) {
   };
 }
 
+function getHealthStatus() {
+  return {
+    healthProcessed: MesosStateStore.getHealthProcessed()
+  };
+}
+
 var ServicesTable = React.createClass({
 
   displayName: "ServicesTable",
 
-  mixins: [TooltipMixin],
+  mixins: [TooltipMixin, InternalStorageMixin],
 
   propTypes: {
-    frameworks: React.PropTypes.array.isRequired,
-    healthProcessed: React.PropTypes.bool.isRequired
+    frameworks: React.PropTypes.array.isRequired
+  },
+
+  componentDidMount: function () {
+    MesosStateStore.addChangeListener(
+      EventTypes.MARATHON_HEALTH_CHANGE,
+      this.onMarathonHealthChange
+    );
+    MesosStateStore.addChangeListener(
+      EventTypes.MARATHON_HEALTH_REQUEST_ERROR,
+      this.onMarathonHealthChange
+    );
+  },
+
+  componentWillUnmount: function () {
+    MesosStateStore.removeChangeListener(
+      EventTypes.MARATHON_HEALTH_REQUEST_ERROR,
+      this.onMarathonHealthChange
+    );
+    MesosStateStore.removeChangeListener(
+      EventTypes.MARATHON_HEALTH_CHANGE,
+      this.onMarathonHealthChange
+    );
+  },
+
+  onMarathonHealthChange: function () {
+    this.internalStorage_set(getHealthStatus());
+    this.forceUpdate();
   },
 
   handleClick: function (model, context) {
@@ -97,7 +132,9 @@ var ServicesTable = React.createClass({
   },
 
   renderHealth: function (prop, model) {
-    if (!this.props.healthProcessed) {
+    var data = this.internalStorage_get();
+
+    if (!data.healthProcessed) {
       return (
         <div className="loader-small ball-beat">
           <div></div>
