@@ -84,7 +84,7 @@ var HostTable = React.createClass({
 
     var value = _.last(model.used_resources[prop]).percentage;
     return (
-      <span className="space-between">
+      <span className="spread-content">
         <ProgressBar value={value}
           colorIndex={colorMapping[prop]} /> <span>{value}%</span>
       </span>
