@@ -12,6 +12,17 @@
     "react"
   ],
 
+  "globals": {
+    "jest": true,
+    "describe": true,
+    "it": true,
+    "expect": true,
+    "before",
+    "beforeEach",
+    "after",
+    "afterEach",
+  },
+
   "rules": {
     "quotes": [2, "double"],
     "indent": [2, 2],
