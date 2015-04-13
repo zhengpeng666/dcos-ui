@@ -5,6 +5,7 @@
 
   "env": {
     "browser": true,
+    "jasmine": true,
     "node": true
   },
 
@@ -14,13 +15,6 @@
 
   "globals": {
     "jest": true,
-    "describe": true,
-    "it": true,
-    "expect": true,
-    "before",
-    "beforeEach",
-    "after",
-    "afterEach",
   },
 
   "rules": {
