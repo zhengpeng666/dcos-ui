@@ -4,7 +4,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
-jest.dontMock('../TaskFailureTimeSeriesChart');
+jest.dontMock("../TaskFailureTimeSeriesChart");
 var TaskFailureTimeSeriesChart = require("../TaskFailureTimeSeriesChart");
 
 describe("TaskFailureTimeSeriesChart", function () {

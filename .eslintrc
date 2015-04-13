@@ -5,12 +5,17 @@
 
   "env": {
     "browser": true,
+    "jasmine": true,
     "node": true
   },
 
   "plugins": [
     "react"
   ],
+
+  "globals": {
+    "jest": true,
+  },
 
   "rules": {
     "quotes": [2, "double"],
