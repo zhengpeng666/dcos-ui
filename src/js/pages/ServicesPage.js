@@ -88,9 +88,25 @@ var ServicesPage = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange
     );
+    MesosStateStore.addChangeListener(
+      EventTypes.MARATHON_HEALTH_CHANGE,
+      this.onMesosStateChange
+    );
+    MesosStateStore.addChangeListener(
+      EventTypes.MARATHON_HEALTH_REQUEST_ERROR,
+      this.onMesosStateChange
+    );
   },
 
   componentWillUnmount: function () {
+    MesosStateStore.removeChangeListener(
+      EventTypes.MARATHON_HEALTH_REQUEST_ERROR,
+      this.onMesosStateChange
+    );
+    MesosStateStore.removeChangeListener(
+      EventTypes.MARATHON_HEALTH_CHANGE,
+      this.onMesosStateChange
+    );
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange

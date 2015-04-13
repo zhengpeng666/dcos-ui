@@ -629,10 +629,14 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }, {});
 
     _healthProcessed = true;
+
+    this.emitChange(EventTypes.MARATHON_HEALTH_CHANGE);
   },
 
   processMarathonHealthError: function () {
     _healthProcessed = true;
+
+    this.emitChange(EventTypes.MARATHON_HEALTH_REQUEST_ERROR);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
