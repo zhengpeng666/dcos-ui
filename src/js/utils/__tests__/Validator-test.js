@@ -15,7 +15,6 @@ describe("Validator", function () {
       expect(Validator.isEmail("\"Abc@def\"@example.com")).toBe(true);
       expect(Validator.isEmail("user+mailbox/department=shipping@example.com")).toBe(true);
       expect(Validator.isEmail("\"Joe.\\Blow\"@example.com")).toBe(true);
-      expect(Validator.isEmail("\"Fred Bloggs\"@example.com")).toBe(true);
     });
 
     it("should have an @", function () {
@@ -49,6 +48,12 @@ describe("Validator", function () {
       expect(Validator.isEmail("user@foobar.hamburg")).toBe(true);
       expect(Validator.isEmail("user@foobar.københavn")).toBe(true);
       expect(Validator.isEmail("test@asdf.com.asd.fasd.f.asdf.asd.fa.xn--sdf-x68do18h")).toBe(true);
+    });
+
+    it("shouldn't have whitespaces", function () {
+      expect(Validator.isEmail("\"Fred Bloggs\"@example.com")).toBe(false);
+      expect(Validator.isEmail("user@f o o.om")).toBe(false);
+      expect(Validator.isEmail("  user  @foo.com")).toBe(false);
     });
 
   });
