@@ -232,7 +232,6 @@ function getFailureRate (mesosState, taskTypes) {
       (diff.TASK_RUNNING || 0) +
       (diff.TASK_FINISHED || 0);
     failed = (diff.TASK_FAILED || 0) +
-      (diff.TASK_KILLED || 0) +
       (diff.TASK_LOST || 0) +
       (diff.TASK_ERROR || 0);
   }
