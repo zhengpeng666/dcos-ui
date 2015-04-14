@@ -80,8 +80,6 @@
       "react-router",
       "react-tools",
       "underscore",
-      "fs",
-      "path",
       "jasmine-reporters"
     ],
     "testPathIgnorePatterns": [
