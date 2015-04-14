@@ -12,7 +12,7 @@ describe("Validator", function () {
       expect(Validator.isEmail("user@foo.bar")).toBe(true);
       expect(Validator.isEmail("Abc.123@example.com")).toBe(true);
       expect(Validator.isEmail("!#$%&'*+-/=?^_`.{|}~@example.com")).toBe(true);
-      expect(Validator.isEmail("\"Abc@def\"@example.com")).toBe(true);
+      expect(Validator.isEmail("\"Abc@def\"@example.com")).toBe(false);
       expect(Validator.isEmail("user+mailbox/department=shipping@example.com")).toBe(true);
       expect(Validator.isEmail("\"Joe.\\Blow\"@example.com")).toBe(true);
     });
