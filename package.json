@@ -67,6 +67,7 @@
     },
     "scriptPreprocessor": "jest/preprocessor.js",
     "setupTestFrameworkScriptFile": "jest/setupTestFramework.js",
+    "setupEnvScriptFile": "jest/setupEnv.js",
     "modulePathIgnorePatterns": [
       "/tmp/",
       "/node_modules/",
