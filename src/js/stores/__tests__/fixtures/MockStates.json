@@ -1,0 +1,98 @@
+{
+  "oneTaskRunning": {
+    "frameworks": [
+      {
+        "name": "Framework 1",
+        "used_resources": {"cpus": 0},
+        "tasks": [
+          {
+            "id": "task1",
+            "state": "TASK_RUNNING",
+            "statuses": [
+              {
+                "timestamp": 1,
+                "state": "TASK_RUNNING"
+              }
+            ]
+          }
+        ],
+        "completed_tasks": []
+      }
+    ]
+  },
+  "oneTaskFinished": {
+    "frameworks": [
+      {
+        "name": "Framework 1",
+        "used_resources": {"cpus": 0},
+        "tasks": [],
+        "completed_tasks": [
+          {
+            "id": "task1",
+            "state": "TASK_FINISHED",
+            "statuses": [
+              {
+                "timestamp": 1,
+                "state": "TASK_RUNNING"
+              },
+              {
+                "timestamp": 2,
+                "state": "TASK_FINISHED"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "oneTaskFailed": {
+    "frameworks": [
+      {
+        "name": "Framework 1",
+        "used_resources": {"cpus": 0},
+        "tasks": [],
+        "completed_tasks": [
+          {
+            "id": "task1",
+            "state": "TASK_FAILED",
+            "statuses": [
+              {
+                "timestamp": 1,
+                "state": "TASK_RUNNING"
+              },
+              {
+                "timestamp": 2,
+                "state": "TASK_FAILED"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "oneTaskKilled": {
+    "frameworks": [
+      {
+        "name": "Framework 1",
+        "used_resources": {"cpus": 0},
+        "tasks": [],
+        "completed_tasks": [
+          {
+            "id": "task1",
+            "state": "TASK_KILLED",
+            "statuses": [
+              {
+                "timestamp": 1,
+                "state": "TASK_RUNNING"
+              },
+              {
+                "timestamp": 2,
+                "state": "TASK_KILLED"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
