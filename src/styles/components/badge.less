@@ -31,3 +31,26 @@
     background-color: @text-success-color;
   }
 }
+
+.badge-container {
+  display: flex;
+
+  :first-child {
+    margin-right: @base-spacing-unit;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    text-align: left;
+  }
+
+  .badge {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+}
+
+.inverse .badge-container .badge,
+.badge-container.inverse .badge {
+  background-color: @white;
+}

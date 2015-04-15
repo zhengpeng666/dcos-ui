@@ -1,46 +1,20 @@
 .dropdown {
   > .dropdown-toggle {
+    display: flex;
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
       - @base-spacing-unit * 1.25;
     /* This is for IE10, what avoid overflow long text,
     because flexbox isn't working and isn't setting the width of the elements */
     overflow: hidden;
 
-    .badge {
-      margin-right: 0.5 * @base-spacing-unit;
-    }
-
     &:after {
       // size of triangle is 6px
       margin-top: 0.5 * @base-spacing-unit - 3px;
       margin-left: auto;
     }
-  }
 
-  > .dropdown-toggle,
-  a {
-    display: flex;
-
-    > span {
-      display: flex;
-
-      :first-child {
-        margin-right: @base-spacing-unit;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        flex-grow: 1;
-        text-align: left;
-      }
+    > :last-child {
+      margin-right: 0.25 * @base-spacing-unit;
     }
-
-    .badge {
-      margin-left: auto;
-      flex-shrink: 0;
-    }
-  }
-
-  .dropdown-menu .inverse li:hover .badge {
-    background-color: @white;
   }
 }

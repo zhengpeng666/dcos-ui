@@ -58,7 +58,7 @@ var FilterByService = React.createClass({
 
     return _.map(items, function (service) {
       return (
-        <span key={service.id}>
+        <span key={service.id} className="badge-container">
           <span>{service.name}</span>
           <span className="badge">{service.slaves_count}</span>
         </span>
