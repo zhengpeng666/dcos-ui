@@ -40,4 +40,9 @@
 
 .filter-input-text-group {
   width: (@base-spacing-unit * 9);
+
+  // Hide native clear button in IE10+
+  ::-ms-clear {
+    display: none;
+  }
 }
