@@ -1,6 +1,6 @@
 jasmine.VERBOSE = true;
 
 var jasmineEnv = jasmine.getEnv();
-var SpecReporter = require("jasmine-spec-reporter");
+var TeamCityReporter = require("../node_modules/jasmine-reporters/src/jasmine.teamcity_reporter");
 
-jasmineEnv.addReporter(new SpecReporter());
+jasmineEnv.addReporter(new jasmine.TeamcityReporter());
