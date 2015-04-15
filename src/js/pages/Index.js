@@ -106,11 +106,7 @@ var Index = React.createClass({
     }
 
     this.internalStorage_update(state);
-
-    // Reset count as we've just received a successful response
-    if (this.state.mesosStateErrorCount > 0) {
-      this.setState({mesosStateErrorCount: 0});
-    }
+    this.setState({mesosStateErrorCount: 0});
   },
 
   onMesosStateError: function () {
