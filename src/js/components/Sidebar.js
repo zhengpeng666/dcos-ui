@@ -49,6 +49,13 @@ var Sidebar = React.createClass({
   onMesosStateChange: function () {
     this.internalStorage_set(getMesosInfo());
     this.forceUpdate();
+
+    // Datacenter info won't change often
+    // so let's not constantly update
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onMesosStateChange
+    );
   },
 
   getMenuItems: function () {
