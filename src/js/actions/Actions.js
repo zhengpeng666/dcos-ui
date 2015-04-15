@@ -50,7 +50,7 @@ var Actions = {
 
   /**
    * Logs arbitriary data
-   * @param  {Mixed} anything
+   * @param  {Object} anything
    */
   log: function (anything) {
     if (this.canLog() === false) {
@@ -66,22 +66,44 @@ var Actions = {
       stintID: this.stintID
     }, anything);
 
+    log = this.prepareLog(log);
+
+    global.analytics.track(log.description, log);
+  },
+
+  /**
+   * Normalizes and prepares log object
+   *
+   * @param {Object} log
+   * @return {Object} Formatted log
+   */
+  prepareLog: function (log) {
+    // Create a unique event id if we have enough properties
+    // to consider this even unique
     if (log.data && log.componentID) {
       var id = log.page + log.componentID + JSON.stringify(log.data);
       log.uniqueEventID = md5(id);
     }
 
+    // If the description is an array then prepend the current page
+    // this assumes that we want a unique description for the log
+    if (_.isArray(log.description)) {
+      log.description.unshift(this.activePage.replace(/^\//, ""));
+      log.description = log.description.join(".");
+    }
+
+    // Calculate the time since the last event
     log.duration = log.date - this.lastLogDate;
     this.lastLogDate = log.date;
 
-    global.analytics.track(log.description, log);
+    return log;
   },
 
   /**
    * Logs a replayable action
    * Replayable actions are possible by watching state changes
    *
-   * @param  {String} description
+   * @param  {Array} description
    * @param  {Object} data
    * @param  {Number} componentID
    */

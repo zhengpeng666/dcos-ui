@@ -12,7 +12,10 @@ function overrides() {
       specification.mixins = [];
     }
 
-    specification.mixins.push(ActionsMixin);
+    // We don't want to log actions from the router
+    if (specification.displayName !== "Router") {
+      specification.mixins.push(ActionsMixin);
+    }
 
     return originalCreateClass.call(null, specification);
   };

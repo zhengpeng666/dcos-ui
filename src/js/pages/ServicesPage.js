@@ -57,24 +57,6 @@ var ServicesPage = React.createClass({
 
   mixins: [InternalStorageMixin],
 
-  actions_configuration: {
-    state: {
-      healthFilter: function (value) {
-        if (value == null) {
-          return "Filtered health to default";
-        }
-
-        var key = _.findKey(HealthTypes, function (healthValue) {
-          if (healthValue === this.value) {
-            return true;
-          }
-        }, {value: value});
-
-        return "Filtered health to: " + HealthLabels[key];
-      }
-    }
-  },
-
   getInitialState: function () {
     return _.clone(DEFAULT_FILTER_OPTIONS);
   },
