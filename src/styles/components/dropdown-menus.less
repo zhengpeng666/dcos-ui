@@ -1,10 +1,6 @@
 .dropdown {
   > .dropdown-toggle {
     display: flex;
-    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
-      - @base-spacing-unit * 1.25;
-    /* This is for IE10, what avoid overflow long text,
-    because flexbox isn't working and isn't setting the width of the elements */
     overflow: hidden;
 
     &:after {
@@ -16,5 +12,15 @@
     > :last-child {
       margin-right: 0.25 * @base-spacing-unit;
     }
+  }
+
+  > .dropdown-menu,
+  > .dropdown-toggle {
+    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium);
+  }
+
+  > .dropdown-toggle > :first-child {
+    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
+      - @base-spacing-unit * 1.25;
   }
 }
