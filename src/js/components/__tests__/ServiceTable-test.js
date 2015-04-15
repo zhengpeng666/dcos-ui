@@ -1,6 +1,5 @@
 /** @jsx React.DOM */
 
-jest.dontMock("../Table");
 jest.dontMock("../ServiceTable");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../stores/MesosStateStore");
@@ -24,28 +23,34 @@ describe("ServiceTable", function () {
     table = TestUtils.renderIntoDocument(
       <ServiceTable frameworks={frameworks} />
     );
+    expect(table).toBeDefined();
   });
 
-  it("should have as many loader as frameworks", function () {
-    var loader = TestUtils.scryRenderedDOMComponentsWithClass(
-      table, "loader-small"
-    );
+  it("renderHealth() should have loaders on all frameworks", function () {
+    frameworks.slice(0).forEach(function (row) {
+      var healthlabel = TestUtils.renderIntoDocument(
+        table.renderHealth(null, row)
+      );
 
-    expect(frameworks.length).toEqual(loader.length);
+      TestUtils.findRenderedDOMComponentWithClass(
+        healthlabel, "loader-small"
+      );
+    });
   });
 
   it("should have health error processed", function () {
+    expect(MesosStateStore.getHealthProcessed()).toBe(false);
     MesosStateStore.processMarathonHealthError();
     expect(MesosStateStore.getHealthProcessed()).toBe(true);
   });
 
-  it("should have N/A health status on all frameworks", function () {
-    var status = TestUtils.scryRenderedDOMComponentsWithClass(
-      table, "collection-item-content-status"
-    );
-
-    status.forEach(function (state) {
-      expect(state.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
+  it("renderHealth() should have N/A health status on all frameworks",
+      function () {
+    frameworks.slice(0).forEach(function (row) {
+      var healthlabel = TestUtils.renderIntoDocument(
+        table.renderHealth(null, row)
+      );
+      expect(healthlabel.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
     });
   });
 });
