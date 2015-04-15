@@ -9,10 +9,11 @@ var TestUtils = React.addons.TestUtils;
 var ProgressBar = require("../ProgressBar");
 
 describe("ProgressBar", function () {
-  var value=66;
+  var value = 66;
+  var progressbar;
 
   it("has same style width as given percentage value", function () {
-    var progressbar = TestUtils.renderIntoDocument(
+    progressbar = TestUtils.renderIntoDocument(
       <ProgressBar value={value} />
     );
 
@@ -23,8 +24,19 @@ describe("ProgressBar", function () {
     expect(bar.getDOMNode().style.width).toEqual(value + "%");
   });
 
+  it("will recieve new property for percentage value", function () {
+    var updatedvalue = 88;
+    progressbar.setProps({value: updatedvalue});
+
+    var bar = TestUtils.findRenderedDOMComponentWithClass(
+      progressbar, "bar"
+    );
+
+    expect(bar.getDOMNode().style.width).toEqual(updatedvalue + "%");
+  });
+
   it("has correct color index", function () {
-    var colorIndex=2;
+    var colorIndex = 2;
 
     var progressbar = TestUtils.renderIntoDocument(
       <ProgressBar colorIndex={colorIndex}
