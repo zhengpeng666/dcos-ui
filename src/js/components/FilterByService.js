@@ -4,7 +4,6 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var Dropdown = require("./Dropdown");
-var DropdownItem = require("./DropdownItem");
 
 var FilterByService = React.createClass({
 
@@ -26,41 +25,56 @@ var FilterByService = React.createClass({
     };
   },
 
-  handleItemSelection: function (serviceId) {
-    this.props.handleFilterChange(serviceId);
+  handleItemSelection: function (service) {
+    if (service.id.length > 0 && service.id !== "default") {
+      this.props.handleFilterChange(service.id);
+    }
+  },
+
+  renderItem: function (service) {
+    return (
+      <span key={service.id}>
+        <span>{service.name}</span>
+        <span className="badge">{service.slaves_count}</span>
+      </span>
+    );
   },
 
   getDropdownItems: function () {
-    var serviceId = this.props.byServiceFilter;
+    // var serviceId = this.props.byServiceFilter;
+            // value={service.id}
+            // selected={serviceId === service.id}
+            // title={service.name}
     return _.map(this.props.services, function (service) {
-      return (
-        <DropdownItem key={service.id}
-            value={service.id}
-            selected={serviceId === service.id}
-            title={service.name}>
-          <span>{service.name}</span>
-          <span className="badge">{service.slaves_count}</span>
-        </DropdownItem>
-      );
-    });
+      return {
+        id: service.id,
+        name: service.name,
+        render: this.renderItem.bind(null, service)
+      };
+    }, this);
   },
 
   getResetElement: function () {
     return (
-      <DropdownItem key="default" title="All Services">
+      <span key="default" title="All Services">
         <span>All Services</span>
         <span className="badge">{this.props.totalHostsCount}</span>
-      </DropdownItem>
+      </span>
     );
   },
 
   render: function () {
+    var resetElement = {
+      id: "default",
+      name: "All Services",
+      render: this.getResetElement
+    };
+
     return (
       <Dropdown caption="Filter by Service"
-          resetElement={this.getResetElement()}
-          handleItemSelection={this.handleItemSelection}>
-        {this.getDropdownItems()}
-      </Dropdown>
+        resetElement={resetElement}
+        handleItemSelection={this.handleItemSelection}
+        items={this.getDropdownItems()} />
     );
   }
 });

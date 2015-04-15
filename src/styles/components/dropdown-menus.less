@@ -1,69 +1,46 @@
 .dropdown {
-  .dropdown-menu, .button {
-    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium);
-  }
-
-  .button-container {
+  > .dropdown-toggle {
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
       - @base-spacing-unit * 1.25;
-    /* This is for IE10, ẃhat avoid overflow long text,
+    /* This is for IE10, what avoid overflow long text,
     because flexbox isn't working and isn't setting the width of the elements */
     overflow: hidden;
+
+    .badge {
+      margin-right: 0.5 * @base-spacing-unit;
+    }
+
+    &:after {
+      // size of triangle is 6px
+      margin-top: 0.5 * @base-spacing-unit - 3px;
+      margin-left: auto;
+    }
   }
 
-  .button-container, .dropdown-menu .dropdown-menu-list a {
+  > .dropdown-toggle,
+  a {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-grow: 1;
-    flex-shrink: 0;
 
-    span {
-      margin-right: @base-spacing-unit * 2;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+    > span {
+      display: flex;
 
-      &:last-child {
-        margin-right: 0;
+      :first-child {
+        margin-right: @base-spacing-unit;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        flex-grow: 1;
+        text-align: left;
       }
     }
 
     .badge {
+      margin-left: auto;
       flex-shrink: 0;
     }
   }
 
-  .button {
-    &.button-inverse {
-      .badge {
-        background-color: @white;
-      }
-    }
-
-    &.dropdown-toggle {
-      &::after {
-        float: right;
-        margin: @base-spacing-unit * -0.5 0 @base-spacing-unit * 0.25 auto;
-      }
-
-      .button-container {
-        span:last-child {
-            margin-right: @base-spacing-unit;
-        }
-      }
-    }
-  }
-
-  .dropdown-menu {
-    margin-top: @base-spacing-unit * 0.5 + @button-border-width * 2;
-
-    &.inverse {
-      li:hover {
-        .badge {
-          background-color: @white;
-        }
-      }
-    }
+  .dropdown-menu .inverse li:hover .badge {
+    background-color: @white;
   }
 }
