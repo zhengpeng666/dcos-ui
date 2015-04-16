@@ -17,24 +17,32 @@ describe("Actions", function () {
 
     beforeEach(function () {
       spyOn(global.analytics, "track");
-
-      Actions._prepareLog_bak = Actions.prepareLog;
-      spyOn(Actions, "prepareLog").andReturn({description: "foo"});
     });
 
     afterEach(function () {
-      Actions.prepareLog = Actions._prepareLog_bak;
       global.analytics.track = _.noop;
-    });
-
-    it("calls #prepareLog", function () {
-      Actions.log({description: "foo"});
-      expect(Actions.prepareLog.calls.length).toEqual(1);
     });
 
     it("calls analytics#track", function () {
       Actions.log({description: "foo"});
       expect(global.analytics.track.calls.length).toEqual(1);
+    });
+
+    it("calls analytics#track with correct description", function () {
+      Actions.log({description: "foo"});
+      expect(global.analytics.track.calls[0].args[0]).toEqual("foo");
+    });
+
+    it("calls analytics#track with correct log", function () {
+      Actions.log({description: "foo"});
+
+      var args = global.analytics.track.calls[0].args[1];
+      expect(args.appVersion).toBeDefined();
+      expect(args.date).toBeDefined();
+      expect(args.description).toEqual("foo");
+      expect(args.duration).toBeDefined();
+      expect(args.page).toBeDefined();
+      expect(args.stintID).toBeDefined();
     });
 
   });
