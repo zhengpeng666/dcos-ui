@@ -20,7 +20,7 @@ var FilterByService = React.createClass({
 
   getDefaultProps: function () {
     return {
-      byServiceFilter: null,
+      byServiceFilter: defaultKey,
       services: [],
       totalHostsCount: 0,
       handleFilterChange: _.noop
@@ -66,11 +66,18 @@ var FilterByService = React.createClass({
     });
   },
 
-  render: function () {
+  getSelectedKey: function (key) {
+    if (key == null) {
+      return defaultKey;
+    }
 
+    return key;
+  },
+
+  render: function () {
     return (
       <Dropdown
-        defaultKey={defaultKey}
+        selectedKey={this.getSelectedKey(this.props.byServiceFilter)}
         handleItemSelection={this.handleItemSelection}
         getCurrentItem={this.getCurrentItem}>
         {this.getDropdownItems()}
