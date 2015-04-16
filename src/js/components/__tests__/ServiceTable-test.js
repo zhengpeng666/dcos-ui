@@ -3,6 +3,7 @@
 jest.dontMock("../ServiceTable");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../stores/MesosStateStore");
+jest.dontMock("../../stores/__tests__/fixtures/state.json");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
@@ -11,8 +12,12 @@ var MesosStateStore = require("../../stores/MesosStateStore");
 var ServiceTable = require("../ServiceTable");
 var HealthLabels = require("../../constants/HealthLabels");
 
+// That is a single snapshot from
+// http://srv5.hw.ca1.mesosphere.com:5050/master/state.json
+var stateJSON = require("../../stores/__tests__/fixtures/state.json");
+
 MesosStateStore.init();
-MesosStateStore.processState(this.__stateJSON__);
+MesosStateStore.processState(stateJSON);
 
 describe("ServiceTable", function () {
   var table;
