@@ -79,8 +79,10 @@ If you want to add a new npm package to 'node_modules':
 
 3. Syntax Highlihgting for files containing JSX
 
-  1. Install sublime-react using Sublime Package Manager,
-  see [instructions](https://github.com/reactjs/sublime-react)
+  1. Install Babel using Sublime Package Manager,
+  see [instructions](https://github.com/babel/babel-sublime)
+  From here you can decide to use Babel for all .js files. See their
+  docs for that. If you don't want to do that, continue reading.
 
   2. Installing ApplySyntax using Sublime Package Manager,
   see [instructions](https://github.com/facelessuser/ApplySyntax)
@@ -94,7 +96,7 @@ If you want to add a new npm package to 'node_modules':
       // Put your custom syntax rules here:
       "syntaxes": [
           {
-              "name": "ReactJS/syntax/jsx/tmLanguage/JavaScript (JSX)",
+              "name": "Babel/JavaScript (Babel)",
               "rules": [
                   {"first_line": "^\\/\\*\\*\\s@jsx\\sReact\\.DOM\\s\\*\\/"}
               ]
