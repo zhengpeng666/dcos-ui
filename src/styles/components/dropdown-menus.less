@@ -1,17 +1,17 @@
 .dropdown {
-  > .dropdown-toggle {
+  /* This is for IE10, ẃhat avoid overflow long text,
+  because flexbox isn't working and isn't setting the width of the elements */
+  overflow: hidden;
+
+  > .dropdown-menu {
+    margin-top: @base-spacing-unit * 0.5 + @button-border-width * 2;
+  }
+
+  > .dropdown-toggle:after {
     display: flex;
-    overflow: hidden;
-
-    &:after {
-      // size of triangle is 6px
-      margin-top: 0.5 * @base-spacing-unit - 3px;
-      margin-left: auto;
-    }
-
-    > :last-child {
-      margin-right: 0.25 * @base-spacing-unit;
-    }
+    margin-top: -0.5 * @base-spacing-unit;
+    margin-left: auto;
+    margin-bottom: 0.25 * @base-spacing-unit;
   }
 
   > .dropdown-menu,
@@ -21,6 +21,6 @@
 
   > .dropdown-toggle > :first-child {
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
-      - @base-spacing-unit * 1.25;
+      - @base-spacing-unit * 2;
   }
 }
