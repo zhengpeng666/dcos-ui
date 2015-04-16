@@ -23,7 +23,7 @@ var TooltipMixin = {
   tip_handleContainerMouseMove: function (e) {
     var el = e.target;
 
-    if (el.dataset.behavior && el.dataset.behavior === "show-tip") {
+    if (el.dataset && el.dataset.behavior && el.dataset.behavior === "show-tip") {
       var tip = this.tips[el.dataset.tipID];
       tip.content(el.dataset.tipContent);
       tip.show();
@@ -34,7 +34,7 @@ var TooltipMixin = {
   tip_handleMouseLeave: function (e) {
     var el = e.target;
 
-    if (this.tips[el.dataset.tipID]) {
+    if (el.dataset && this.tips[el.dataset.tipID]) {
       this.tips[el.dataset.tipID].hide();
     }
 
@@ -50,10 +50,12 @@ var TooltipMixin = {
 
     for (var i = selected.length - 1; i >= 0; i--) {
       el = selected[i];
-      if (el.dataset.tipID) {
-        found.push(el.dataset.tipID);
-      } else if (el.dataset.tipContent) {
-        newTips.push(this.tip_createTipForElement(el));
+      if (el.dataset) {
+        if (el.dataset.tipID) {
+          found.push(el.dataset.tipID);
+        } else if (el.dataset.tipContent) {
+          newTips.push(this.tip_createTipForElement(el));
+        }
       }
     }
 
@@ -68,18 +70,20 @@ var TooltipMixin = {
   },
 
   tip_createTipForElement: function (el) {
-    el.dataset.tipID = _.uniqueId("tooltip");
-    var options = {};
-    if (el.dataset.tipPlace) {
-      options.place = el.dataset.tipPlace;
+    if (el.dataset) {
+      el.dataset.tipID = _.uniqueId("tooltip");
+      var options = {};
+      if (el.dataset.tipPlace) {
+        options.place = el.dataset.tipPlace;
+      }
+
+      var tip = new Tooltip(undefined, options);
+      tip.attach(el);
+
+      this.tips[el.dataset.tipID] = tip;
+
+      return el.dataset.tipID;
     }
-
-    var tip = new Tooltip(undefined, options);
-    tip.attach(el);
-
-    this.tips[el.dataset.tipID] = tip;
-
-    return el.dataset.tipID;
   },
 
   tip_destroyTip: function (tipID) {
