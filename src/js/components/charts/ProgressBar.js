@@ -12,14 +12,12 @@ var ProgressBar = React.createClass({
 
   propTypes: {
     colorIndex: React.PropTypes.number,
-    max: React.PropTypes.number,
     value: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
     return {
       colorIndex: 1,
-      max: 100,
       value: 0
     };
   },
