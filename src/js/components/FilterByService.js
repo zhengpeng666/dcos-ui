@@ -63,7 +63,7 @@ var FilterByService = React.createClass({
           <span className="badge">{service.slaves_count}</span>
         </span>
       );
-    }, this);
+    });
   },
 
   render: function () {
