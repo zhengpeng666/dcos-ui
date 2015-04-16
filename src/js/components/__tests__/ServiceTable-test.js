@@ -20,49 +20,41 @@ MesosStateStore.init();
 MesosStateStore.processState(stateJSON);
 
 describe("ServiceTable", function () {
-  var table;
 
   beforeEach(function () {
-    this.frameworks = MesosStateStore.getFrameworks();
-  });
-
-  it("should initialize component with frameworks", function () {
-    table = TestUtils.renderIntoDocument(
-      <ServiceTable frameworks={this.frameworks} />
+    this.table = TestUtils.renderIntoDocument(
+      <ServiceTable frameworks={MesosStateStore.getFrameworks()} />
     );
-    expect(table).toBeDefined();
+    this.frameworks = MesosStateStore.getFrameworks();
   });
 
   describe("#renderHealth", function () {
     it("should have loaders on all frameworks", function () {
+      expect(MesosStateStore.getHealthProcessed()).toBe(false);
+
       this.frameworks.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(
-          table.renderHealth(null, row)
+          this.table.renderHealth(null, row)
         );
 
         var fn = TestUtils.findRenderedDOMComponentWithClass.bind(TestUtils,
           healthlabel, "loader-small"
         );
         expect(fn).not.toThrow();
-      });
+      }.bind(this));
     });
-  });
 
-  it("should have health error processed", function () {
-    expect(MesosStateStore.getHealthProcessed()).toBe(false);
-    MesosStateStore.processMarathonHealthError();
-    expect(MesosStateStore.getHealthProcessed()).toBe(true);
-  });
-
-  describe("#renderHealth", function () {
     it("should have N/A health status on all frameworks",
         function () {
+      MesosStateStore.processMarathonHealthError();
+      expect(MesosStateStore.getHealthProcessed()).toBe(true);
+
       this.frameworks.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(
-          table.renderHealth(null, row)
+          this.table.renderHealth(null, row)
         );
         expect(healthlabel.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
-      });
+      }.bind(this));
     });
   });
 
