@@ -3,7 +3,7 @@ var HealthTypesDescription = {
     "You should look into them immediately.",
   HEALTHY: "This service is operating normally.",
   IDLE: "This service has no running tasks.",
-  NA: "No health checks are setup for this service."
+  NA: "No health checks are set up for this service."
 };
 
 module.exports = HealthTypesDescription;
