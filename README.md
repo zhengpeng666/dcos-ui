@@ -23,7 +23,13 @@
   npm run serve
   ```
 
-5. Build the assets
+5. Run the tests
+
+  ```sh
+  npm test
+  ```
+
+6. Build the assets
 
   ```sh
   npm run dist
