@@ -9,43 +9,36 @@ var TestUtils = React.addons.TestUtils;
 var ProgressBar = require("../ProgressBar");
 
 describe("ProgressBar", function () {
-  var value = 66;
-  var progressbar;
+
+  beforeEach(function () {
+    this.progressbar = TestUtils.renderIntoDocument(
+      <ProgressBar colorIndex={2} value={66} />
+    );
+  });
 
   it("has same style width as given percentage value", function () {
-    progressbar = TestUtils.renderIntoDocument(
-      <ProgressBar value={value} />
-    );
-
     var bar = TestUtils.findRenderedDOMComponentWithClass(
-      progressbar, "bar"
+      this.progressbar, "bar"
     );
 
-    expect(bar.getDOMNode().style.width).toEqual(value + "%");
+    expect(bar.getDOMNode().style.width).toEqual("66%");
   });
 
   it("will recieve new property for percentage value", function () {
-    var updatedvalue = 88;
-    progressbar.setProps({value: updatedvalue});
+    this.progressbar.setProps({value: 88});
 
     var bar = TestUtils.findRenderedDOMComponentWithClass(
-      progressbar, "bar"
+      this.progressbar, "bar"
     );
 
-    expect(bar.getDOMNode().style.width).toEqual(updatedvalue + "%");
+    expect(bar.getDOMNode().style.width).toEqual("88%");
   });
 
   it("has correct color index", function () {
-    var colorIndex = 2;
-
-    var progressbar = TestUtils.renderIntoDocument(
-      <ProgressBar colorIndex={colorIndex}
-        value={value} />
+    var fn = TestUtils.findRenderedDOMComponentWithClass.bind(TestUtils,
+      this.progressbar, "color-2"
     );
-
-    TestUtils.findRenderedDOMComponentWithClass(
-      progressbar, "color-" + colorIndex
-    );
+    expect(fn).not.toThrow();
   });
 
 });
