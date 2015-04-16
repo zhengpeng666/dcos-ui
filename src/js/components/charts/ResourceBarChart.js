@@ -114,7 +114,7 @@ var ResourceBarChart = React.createClass({
   },
 
   getHeadline: function (info) {
-    var headline = info.label + " Allocation Per Second";
+    var headline = info.label + " Allocation Rate";
 
     return (
       <div>
