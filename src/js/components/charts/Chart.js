@@ -32,10 +32,14 @@ var Chart = React.createClass({
   },
 
   updateWidth: function () {
-    this.internalStorage_set({
-      width: DOMUtils.getComputedWidth(this.getDOMNode())
-    });
-    this.forceUpdate();
+    var newWidth = DOMUtils.getComputedWidth(this.getDOMNode());
+
+    if (this.internalStorage_get().width !== newWidth) {
+      this.internalStorage_set({
+        width: newWidth
+      });
+      this.forceUpdate();
+    }
   },
 
   getChildren: function () {
