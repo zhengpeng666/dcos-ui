@@ -15,26 +15,31 @@ MesosStateStore.init();
 MesosStateStore.processState(this.__stateJSON__);
 
 describe("ServiceTable", function () {
-  var frameworks;
   var table;
 
+  beforeEach(function () {
+    this.frameworks = MesosStateStore.getFrameworks();
+  });
+
   it("should initialize component with frameworks", function () {
-    frameworks = MesosStateStore.getFrameworks();
     table = TestUtils.renderIntoDocument(
-      <ServiceTable frameworks={frameworks} />
+      <ServiceTable frameworks={this.frameworks} />
     );
     expect(table).toBeDefined();
   });
 
-  it("renderHealth() should have loaders on all frameworks", function () {
-    frameworks.slice(0).forEach(function (row) {
-      var healthlabel = TestUtils.renderIntoDocument(
-        table.renderHealth(null, row)
-      );
+  describe("#renderHealth", function () {
+    it("should have loaders on all frameworks", function () {
+      this.frameworks.slice(0).forEach(function (row) {
+        var healthlabel = TestUtils.renderIntoDocument(
+          table.renderHealth(null, row)
+        );
 
-      TestUtils.findRenderedDOMComponentWithClass(
-        healthlabel, "loader-small"
-      );
+        var fn = TestUtils.findRenderedDOMComponentWithClass.bind(TestUtils,
+          healthlabel, "loader-small"
+        );
+        expect(fn).not.toThrow();
+      });
     });
   });
 
@@ -44,13 +49,16 @@ describe("ServiceTable", function () {
     expect(MesosStateStore.getHealthProcessed()).toBe(true);
   });
 
-  it("renderHealth() should have N/A health status on all frameworks",
-      function () {
-    frameworks.slice(0).forEach(function (row) {
-      var healthlabel = TestUtils.renderIntoDocument(
-        table.renderHealth(null, row)
-      );
-      expect(healthlabel.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
+  describe("#renderHealth", function () {
+    it("should have N/A health status on all frameworks",
+        function () {
+      this.frameworks.slice(0).forEach(function (row) {
+        var healthlabel = TestUtils.renderIntoDocument(
+          table.renderHealth(null, row)
+        );
+        expect(healthlabel.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
+      });
     });
   });
+
 });
