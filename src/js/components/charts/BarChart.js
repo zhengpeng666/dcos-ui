@@ -135,6 +135,14 @@ var BarChart = React.createClass({
       .domain([timeAgo, 0]);
   },
 
+  formatXAxis: function (d) {
+    if (parseInt(Math.abs(d)) > 0) {
+      return d + "s";
+    } else {
+      return d;
+    }
+  },
+
   getYScale: function (props) {
     return d3.scale.linear()
       .domain([0, props.maxY])
@@ -165,6 +173,7 @@ var BarChart = React.createClass({
       var xAxis = d3.svg.axis()
         .scale(xScale)
         .ticks(xTicks)
+        .tickFormat(this.formatXAxis)
         .orient("bottom");
       d3.select(this.refs.xAxis.getDOMNode()).interrupt()
         .attr("class", "x axis")
