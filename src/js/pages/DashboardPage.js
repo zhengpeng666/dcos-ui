@@ -22,6 +22,7 @@ function getMesosState() {
     allocResources: MesosStateStore.getAllocResources(),
     failureRate: MesosStateStore.getTaskFailureRate(),
     healthProcessed: MesosStateStore.getHealthProcessed(),
+    refreshRate: MesosStateStore.getRefreshRate(),
     services: MesosStateStore.getLatest().frameworks,
     tasks: MesosStateStore.getTasks(),
     totalResources: MesosStateStore.getTotalResources()
@@ -102,7 +103,8 @@ var DashboardPage = React.createClass({
               <ResourceTimeSeriesChart
                 allocResources={data.allocResources}
                 totalResources={data.totalResources}
-                mode="cpus" />
+                mode="cpus"
+                refreshRate={data.refreshRate} />
             </Panel>
           </div>
           <div className="grid-item column-small-6 column-large-4">
@@ -111,13 +113,15 @@ var DashboardPage = React.createClass({
                 colorIndex={3}
                 allocResources={data.allocResources}
                 totalResources={data.totalResources}
-                mode="mem" />
+                mode="mem"
+                refreshRate={data.refreshRate} />
             </Panel>
           </div>
           <div className="grid-item column-small-6 column-large-4">
             <Panel title="Task Failure Rate">
               <TaskFailureTimeSeriesChart
-                data={data.failureRate} />
+                data={data.failureRate}
+                refreshRate={data.refreshRate} />
             </Panel>
           </div>
           <div className="grid-item column-small-6 column-large-4">

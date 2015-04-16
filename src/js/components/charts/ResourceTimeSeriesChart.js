@@ -15,7 +15,8 @@ var ResourceChart = React.createClass({
     colorIndex: React.PropTypes.number.isRequired,
     allocResources: React.PropTypes.object.isRequired,
     totalResources: React.PropTypes.object.isRequired,
-    mode: React.PropTypes.string
+    mode: React.PropTypes.string,
+    refreshRate: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
@@ -56,7 +57,8 @@ var ResourceChart = React.createClass({
         <TimeSeriesChart
           data={this.getData()}
           maxY={this.getLatestPercent(props.totalResources[props.mode])}
-          y="percentage" />
+          y="percentage"
+          refreshRate={props.refreshRate} />
       </Chart>
     );
   },

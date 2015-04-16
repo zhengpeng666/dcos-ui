@@ -11,7 +11,8 @@ var TaskFailureTimeSeriesChart = React.createClass({
   displayName: "ResourceChart",
 
   propTypes: {
-    data: React.PropTypes.array.isRequired
+    data: React.PropTypes.array.isRequired,
+    refreshRate: React.PropTypes.number.isRequired
   },
 
   getData: function (props) {
@@ -32,7 +33,8 @@ var TaskFailureTimeSeriesChart = React.createClass({
         <TimeSeriesChart
           data={this.getData(props)}
           maxY={100}
-          y="rate" />
+          y="rate"
+          refreshRate={props.refreshRate} />
       </Chart>
     );
   },

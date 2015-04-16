@@ -5,6 +5,7 @@ var d3 = require("d3");
 var React = require("react/addons");
 
 var AnimationCircle = require("./AnimationCircle");
+var ChartMixin = require("../../mixins/ChartMixin");
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 var Maths = require("../../utils/Maths");
 var TimeSeriesArea = require("./TimeSeriesArea");
@@ -13,7 +14,7 @@ var TimeSeriesChart = React.createClass({
 
   displayName: "TimeSeriesChart",
 
-  mixins: [InternalStorageMixin],
+  mixins: [ChartMixin, InternalStorageMixin],
 
   propTypes: {
     // [{name: "Area Name", values: [{date: some time, y: 0}]}]
@@ -22,7 +23,8 @@ var TimeSeriesChart = React.createClass({
     ticksY: React.PropTypes.number,
     y: React.PropTypes.string,
     width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
+    height: React.PropTypes.number.isRequired,
+    refreshRate: React.PropTypes.number.isRequired
   },
 
   getDefaultProps: function () {
@@ -35,18 +37,21 @@ var TimeSeriesChart = React.createClass({
         left: 45,
         bottom: 25,
         right: 5
-      }
+      },
+      refreshRate: 0
     };
   },
 
   componentWillMount: function () {
     var xScale = this.getXScale(this.props);
+    var xTimeScale = this.getXTimeScale(this.props);
     var yScale = this.getYScale(this.props);
 
     var data = {
-      area: this.getArea(xScale, yScale),
+      area: this.getArea(xTimeScale, yScale),
       stack: this.getStack(),
       xScale: xScale,
+      xTimeScale: xTimeScale,
       xMouseValue: null,
       yScale: yScale,
       yMouseValue: null,
@@ -120,6 +125,7 @@ var TimeSeriesChart = React.createClass({
 
     var props = this.props;
     var margin = props.margin;
+    var domain = this.internalStorage_get().xScale.domain();
 
     var firstDataSet = _.first(props.data);
     // 6 - how many data points we don't show
@@ -150,26 +156,29 @@ var TimeSeriesChart = React.createClass({
       .attr("y", data.yScale(firstDataSet.values[index][props.y]) + 3)
       .text(firstDataSet.values[index][props.y] + "%");
 
-    // An extra -1 on each because we show the extra data point at the end
+    // An extra -2 on each because we show the extra data point at the end
     var mappedValue = Maths.mapValue(index, {
-      min: firstDataSet.values.length - 1,
-      max: 0
+      min: firstDataSet.values.length - 2,
+      max: 5
     });
     var value = Maths.unmapValue(mappedValue, {
-      min: 0,
-      max: firstDataSet.values.length - 1
+      min: Math.abs(domain[1]),
+      max: Math.abs(domain[0])
     });
+    value = Math.round(value);
 
     var characterWidth = 7;
     var xPosition = mouse.x - value.toString().length * characterWidth;
-    if (value <= 1) {
-      xPosition -= characterWidth;
+    if (value === 0) {
+      xPosition += characterWidth / 2;
+    } else {
+      value = "-" + value + "s";
     }
     d3.select(this.refs.xAxisCurrent.getDOMNode())
       .transition()
       .duration(50)
       .attr("x", xPosition)
-      .text("-" + value + "s");
+      .text(value);
   },
 
   calculateMousePositionInGraph: function (e) {
@@ -212,10 +221,10 @@ var TimeSeriesChart = React.createClass({
       .text("");
   },
 
-  getArea: function (xScale, yScale) {
+  getArea: function (xTimeScale, yScale) {
     var y = this.props.y;
     return d3.svg.area()
-      .x(function (d) { return xScale(d.date); })
+      .x(function (d) { return xTimeScale(d.date); })
       .y0(function (d) { return yScale(d.y0); })
       .y1(function (d) { return yScale(d.y0 + d[y]); })
       .interpolate("monotone");
@@ -227,7 +236,14 @@ var TimeSeriesChart = React.createClass({
       .x(function (d) { return d.date; });
   },
 
-  getXScale: function (props) {
+  getXTickValues: function (xScale) {
+    var domain = xScale.domain();
+    var mean = Maths.mean(domain);
+
+    return [domain[0], mean, domain[domain.length - 1]];
+  },
+
+  getXTimeScale: function (props) {
     var date = Date.now();
     var dateDelta = Date.now();
 
@@ -267,6 +283,19 @@ var TimeSeriesChart = React.createClass({
 
   renderAxis: function (props, xScale, yScale) {
     var margin = props.margin;
+    var firstDataSet = _.first(props.data);
+
+    if (firstDataSet != null) {
+      var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .tickValues(this.getXTickValues(xScale))
+        .tickFormat(this.formatXAxis)
+        .orient("bottom");
+      var height = props.height - margin.bottom - margin.top;
+      d3.select(this.refs.xAxis.getDOMNode()).interrupt()
+        .attr("transform", "translate(" + margin.left + "," + height + ")")
+        .call(xAxis);
+    }
 
     var yAxis = d3.svg.axis()
       .scale(yScale)
@@ -290,13 +319,15 @@ var TimeSeriesChart = React.createClass({
 
   componentWillReceiveProps: function (props) {
     var xScale = this.getXScale(props);
+    var xTimeScale = this.getXTimeScale(props);
     var yScale = this.getYScale(props);
     // the d3 axis helper requires a <g> element passed into do its work. This
     // happens after mount and ends up keeping the axis code outside of react
     // unfortunately.
     this.renderAxis(props, xScale, yScale);
     this.internalStorage_update({
-      area: this.getArea(xScale, yScale),
+      area: this.getArea(xTimeScale, yScale),
+      xTimeScale: xTimeScale,
       xScale: xScale,
       yScale: yScale
     });
@@ -318,7 +349,7 @@ var TimeSeriesChart = React.createClass({
       date = firstDataSet.date;
     }
 
-    return data.xScale(date);
+    return data.xTimeScale(date);
   },
 
   getCirclePosition: function (obj) {
@@ -391,13 +422,15 @@ var TimeSeriesChart = React.createClass({
 
   render: function () {
     var props = this.props;
-    var height = props.height - props.margin.bottom - props.margin.top;
+    var margin = props.margin;
+    var height = props.height - (margin.bottom * 1.25) - margin.top;
 
     return (
       <svg height={props.height} width={props.width}>
         {this.getStripes(4)}
         <g className="bars grid-graph" ref="grid" />
         <g className="y axis" ref="yAxis" />
+        <g className="x axis" ref="xAxis"/>
         <g className="y axis">
           <text className="current-value shadow" ref="yAxisCurrent"
             style={{textAnchor: "end"}}

@@ -1,8 +1,27 @@
 var Maths = {
+
   round: function (value, precision) {
     precision = precision || 0;
     var factor = Math.pow(10, precision);
     return Math.round(value * factor) / factor;
+  },
+
+  sum: function (array) {
+    var sum = 0;
+
+    array.forEach(function (value) {
+      if (Array.isArray(value)) {
+        sum += this.sum(value);
+      } else {
+        sum += value;
+      }
+    }, this);
+
+    return sum;
+  },
+
+  mean: function (array) {
+    return Maths.sum(array) / array.length;
   },
 
   /**
