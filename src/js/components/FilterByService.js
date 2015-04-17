@@ -38,7 +38,9 @@ var FilterByService = React.createClass({
   getCurrentItem: function (key, children) {
     if (key === defaultKey) {
       return (
-        <span>Filter by Service</span>
+        <span className="badge-container">
+          <span>Filter by Service</span>
+        </span>
       );
     }
 
