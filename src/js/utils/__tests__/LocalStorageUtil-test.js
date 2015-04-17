@@ -15,6 +15,13 @@ describe("LocalStorageUtil", function () {
       expect(LocalStorageUtil.get("foo")).toEqual("bar");
     });
 
+    it("does not mutate", function () {
+      global.localStorage.setItem("foo", "bar");
+      LocalStorageUtil.get("foo");
+
+      expect(LocalStorageUtil.get("foo")).toEqual("bar");
+    });
+
   });
 
   describe("#set", function () {
