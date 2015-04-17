@@ -11,15 +11,17 @@ jest.dontMock("./fixtures/MockFrameworks");
 var Dropdown = require("../Dropdown");
 var MockFrameworks = require("./fixtures/MockFrameworks");
 
-function getSelectedItem(key) {
-  var child = _.find(MockFrameworks.frameworks, function (item) {
-    return item.id === key;
-  });
-
+function selectedRender(obj) {
   return (
-    <span className="name">
-      {child.id}
+    <span className="id">
+      {obj.id}
     </span>
+  );
+}
+
+function itemRender(obj) {
+  return (
+    <span className="name">{obj.name}</span>
   );
 }
 
@@ -29,9 +31,9 @@ function getToggleButton(dropdown) {
   );
 }
 
-function getNameInToggleButton(button) {
+function getIdInToggleButton(button) {
   return TestUtils.findRenderedDOMComponentWithClass(
-    button, "name"
+    button, "id"
   );
 }
 
@@ -49,23 +51,26 @@ describe("Dropdown", function () {
 
   beforeEach(function () {
     this.items = _.map(MockFrameworks.frameworks, function (service) {
-      return (
-        <span key={service.id}>
-          <span className="name">{service.name}</span>
-        </span>
-      );
+      return {
+        id: service.id,
+        name: service.name,
+        render: itemRender,
+        selectedRender: selectedRender,
+        slaves_count: service.slaves_count
+      };
     });
 
-    this.selectedKey = MockFrameworks.frameworks[0].id;
+    this.selectedId = MockFrameworks.frameworks[0].id;
 
-    this.handleKeySelection = function (key) {
-      this.selectedKey = key;
+    this.handleItemSelection = function (item) {
+      this.selectedId = item.id;
     };
 
     this.getDropdown = function () {
       return TestUtils.renderIntoDocument(
-        <Dropdown selectedKey={this.selectedKey}
-          handleItemSelection={this.handleKeySelection}
+        <Dropdown
+          selectedId={this.selectedId}
+          handleItemSelection={this.handleItemSelection}
           items={this.items} />
       );
     };
@@ -75,10 +80,10 @@ describe("Dropdown", function () {
 
     var dropdown = this.getDropdown();
     var button = getToggleButton(dropdown);
-    var name = getNameInToggleButton(button);
+    var id = getIdInToggleButton(button);
 
-    expect(name.getDOMNode().textContent)
-      .toEqual(MockFrameworks.frameworks[0].name);
+    expect(id.getDOMNode().textContent)
+      .toEqual(MockFrameworks.frameworks[0].id);
   });
 
   it("should display all items in the list", function () {
@@ -101,35 +106,34 @@ describe("Dropdown", function () {
     var items = getItemsInList(dropdown);
     React.addons.TestUtils.Simulate.click(items[2]);
 
-    var name = getNameInToggleButton(button);
+    var id = getIdInToggleButton(button);
 
-    expect(name.getDOMNode().textContent)
-      .toEqual(MockFrameworks.frameworks[2].name);
+    expect(id.getDOMNode().textContent)
+      .toEqual(MockFrameworks.frameworks[2].id);
   });
 
   it("should use custom render when specified", function () {
     var dropdown = TestUtils.renderIntoDocument(
-      <Dropdown selectedKey={this.selectedKey}
-        handleItemSelection={this.handleKeySelection}
-        getSelectedItem={getSelectedItem}
+      <Dropdown selectedId={this.selectedId}
+        handleItemSelection={this.handleItemSelection}
         items={this.items} />
     );
 
     var button = getToggleButton(dropdown);
-    var name = getNameInToggleButton(button);
+    var id = getIdInToggleButton(button);
 
-    expect(name.getDOMNode().textContent)
+    expect(id.getDOMNode().textContent)
       .toEqual(MockFrameworks.frameworks[0].id);
   });
 
   it("should render correctly with another selected key", function () {
-    this.selectedKey = MockFrameworks.frameworks[3].id;
+    this.selectedId = MockFrameworks.frameworks[3].id;
 
     var dropdown = this.getDropdown();
     var button = getToggleButton(dropdown);
-    var name = getNameInToggleButton(button);
+    var id = getIdInToggleButton(button);
 
-    expect(name.getDOMNode().textContent)
-      .toEqual(MockFrameworks.frameworks[3].name);
+    expect(id.getDOMNode().textContent)
+      .toEqual(MockFrameworks.frameworks[3].id);
   });
 });
