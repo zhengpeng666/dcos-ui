@@ -1,7 +1,10 @@
 .dropdown {
-  /* This is for IE10, ẃhat avoid overflow long text,
-  because flexbox isn't working and isn't setting the width of the elements */
-  overflow: hidden;
+  > .button {
+    /* This is for IE10, ẃhat avoid overflow long text,
+    because flexbox isn't working and isn't setting the width of the elements */
+    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium);
+    overflow: hidden;
+  }
 
   > .dropdown-menu {
     margin-top: @base-spacing-unit * 0.5 + @button-border-width * 2;
