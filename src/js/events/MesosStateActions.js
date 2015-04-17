@@ -3,7 +3,7 @@ var $ = require("jquery");
 
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
-var Config = require("../utils/Config");
+var Config = require("../config/Config");
 
 function request(url, type, data, options) {
   options = _.extend({

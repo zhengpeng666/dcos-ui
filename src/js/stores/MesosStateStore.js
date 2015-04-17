@@ -3,7 +3,7 @@ var EventEmitter = require("events").EventEmitter;
 
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
-var Config = require("../utils/Config");
+var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
 var HealthTypes = require("../constants/HealthTypes");
 var Maths = require("../utils/Maths");

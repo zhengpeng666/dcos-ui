@@ -210,11 +210,11 @@ function createJsTree() {
 if (env === "development") {
   try {
     // Query the entry
-    fs.lstatSync("src/js/utils/Config.dev.js");
+    fs.lstatSync("src/js/config/Config.dev.js");
   }
   catch (err) {
-    err.message = chalk.red("Please copy 'src/js/utils/Config.template.js' " +
-      "to 'src/js/utils/Config.dev.js' and make necessary changes " +
+    err.message = chalk.red("Please copy 'src/js/config/Config.template.js' " +
+      "to 'src/js/config/Config.dev.js' and make necessary changes " +
       "to start working on assets.");
     throw err;
   }

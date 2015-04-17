@@ -8,7 +8,7 @@ var State = require("react-router").State;
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
-var Config = require("../utils/Config");
+var Config = require("../config/Config");
 
 var MENU_ITEMS = {
   dashboard: {label: "Dashboard", icon: "dashboard"},
