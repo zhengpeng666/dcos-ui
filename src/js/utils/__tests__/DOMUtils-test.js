@@ -66,4 +66,18 @@ describe("DOMUtils", function () {
     expect(width).toEqual(100);
   });
 
+  it("does not calculate unnecessary properties", function () {
+    this.style.push(
+      "padding-top: 1px",
+      "padding-bottom: 1px",
+      "border-top-width: 1px",
+      "border-bottom-width: 1px"
+    );
+    document.body.innerHTML = buildElement(this.style);
+    document.querySelector("div").offsetWidth = 100;
+
+    var width = DOMUtils.getComputedWidth(document.querySelector("div"));
+    expect(width).toEqual(100);
+  });
+
 });
