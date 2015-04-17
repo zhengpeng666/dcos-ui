@@ -1,14 +1,11 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
-var React = require("react/addons");
-var TestUtils = React.addons.TestUtils;
 
-jest.dontMock("../BarChart");
-jest.dontMock("../../../mixins/InternalStorageMixin");
-var BarChart = require("../BarChart");
+jest.dontMock("../ChartMixin");
+var ChartMixin = require("../ChartMixin");
 
-describe("BarChart", function () {
+describe("ChartMixin", function () {
 
   beforeEach(function () {
     var now = Date.now();
@@ -25,35 +22,37 @@ describe("BarChart", function () {
         })
     }];
 
-    this.instance = TestUtils.renderIntoDocument(
-      <BarChart data={data}
-        width={0}
-        height={0}
-        refreshRate={interval}
-        />
-    );
+    this.props = {
+      data: data,
+      margin: {
+        left: 0,
+        right: 0
+      },
+      refreshRate: interval,
+      width: 0
+    };
   });
 
   describe("#formatXAxis", function () {
 
     it("should parse strings to numbers", function () {
-      expect(this.instance.formatXAxis("0")).toEqual("0");
+      expect(ChartMixin.formatXAxis("0")).toEqual("0");
     });
 
     it("should parse numbers", function () {
-      expect(this.instance.formatXAxis(3)).toEqual("3s");
+      expect(ChartMixin.formatXAxis(3)).toEqual("3s");
     });
 
     it("should not format zeros", function () {
-      expect(this.instance.formatXAxis("0")).toEqual("0");
+      expect(ChartMixin.formatXAxis(0)).toEqual(0);
     });
 
     it("should format positive numbers", function () {
-      expect(this.instance.formatXAxis(3)).toEqual("3s");
+      expect(ChartMixin.formatXAxis(3)).toEqual("3s");
     });
 
     it("should format negative numbers", function () {
-      expect(this.instance.formatXAxis(-3)).toEqual("-3s");
+      expect(ChartMixin.formatXAxis(-3)).toEqual("-3s");
     });
 
   });
@@ -61,16 +60,12 @@ describe("BarChart", function () {
   describe("#getXScale", function () {
 
     it("should build the correct amount of ticks", function () {
-      var props = this.instance.props;
-      var xScale = this.instance.getXScale(props);
-
+      var xScale = ChartMixin.getXScale(this.props);
       expect(xScale.ticks(4)).toEqual([-60, -40, -20, 0]);
     });
 
     it("should have the correct domain range", function () {
-      var props = this.instance.props;
-      var xScale = this.instance.getXScale(props);
-
+      var xScale = ChartMixin.getXScale(this.props);
       expect(xScale.domain()).toEqual([-60, 0]);
     });
 

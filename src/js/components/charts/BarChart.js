@@ -5,13 +5,14 @@ var d3 = require("d3");
 var React = require("react/addons");
 
 var Bar = require("./Bar");
+var ChartMixin = require("../../mixins/ChartMixin");
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 
 var BarChart = React.createClass({
 
   displayName: "BarChart",
 
-  mixins: [InternalStorageMixin],
+  mixins: [ChartMixin, InternalStorageMixin],
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
@@ -120,27 +121,6 @@ var BarChart = React.createClass({
     return d3.layout.stack()
       .values(function (d) { return d.values; })
       .x(function (d) { return d.date; });
-  },
-
-  getXScale: function (props) {
-    var length = props.width;
-    var firstDataSet = _.first(props.data);
-    if (firstDataSet != null) {
-      length = firstDataSet.values.length;
-    }
-
-    var timeAgo = -(length - 1) * (props.refreshRate / 1000);
-    return d3.scale.linear()
-      .range([0, props.width - props.margin.left - props.margin.right])
-      .domain([timeAgo, 0]);
-  },
-
-  formatXAxis: function (d) {
-    if (parseInt(Math.abs(d)) > 0) {
-      return d + "s";
-    } else {
-      return d;
-    }
   },
 
   getYScale: function (props) {

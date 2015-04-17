@@ -25,7 +25,8 @@ describe("TaskFailureTimeSeriesChart", function () {
 
   it("should display the last failure rate", function () {
     var chart = TestUtils.renderIntoDocument(
-      <TaskFailureTimeSeriesChart data={this.data} />
+      <TaskFailureTimeSeriesChart data={this.data}
+        refreshRate={0} />
     );
 
     // Verify that percentage is set correctly
@@ -38,7 +39,8 @@ describe("TaskFailureTimeSeriesChart", function () {
 
   it("should describe the last failure rate", function () {
     var chart = TestUtils.renderIntoDocument(
-      <TaskFailureTimeSeriesChart data={this.data} />
+      <TaskFailureTimeSeriesChart data={this.data}
+        refreshRate={0} />
     );
 
     // Verify that percentage is set correctly
