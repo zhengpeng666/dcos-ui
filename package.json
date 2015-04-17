@@ -56,7 +56,7 @@
   "scripts": {
     "build": "broccoli build dist",
     "clean": "rm -rf dist tmp",
-    "dist": "export BROCCOLI_ENV=\"production\" && npm run clean && npm run build",
+    "dist": "export BROCCOLI_ENV=\"production\" && npm test && npm run clean && npm run build",
     "serve": "export BROCCOLI_ENV=\"development\" && broccoli serve",
     "shrinkwrap": "npm-shrinkwrap --dev",
     "test": "jest"
