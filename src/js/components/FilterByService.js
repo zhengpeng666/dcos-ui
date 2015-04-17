@@ -35,46 +35,41 @@ var FilterByService = React.createClass({
     }
   },
 
-  selectedRender: function () {
+  itemHtml: function(service) {
     return (
       <span className="badge-container">
-        <span>Filter by Service</span>
-      </span>
-    );
-  },
-
-  itemRender: function(obj) {
-    return (
-      <span className="badge-container">
-        <span>{obj.name}</span>
-        <span className="badge">{obj.slaves_count}</span>
+        <span>{service.name}</span>
+        <span className="badge">{service.slaves_count}</span>
       </span>
     );
   },
 
   getDropdownItems: function () {
-    var items = [
-      {
-        id: defaultId,
-        name: "All Services",
-        slaves_count: this.props.totalHostsCount
-      }
-    ].concat(this.props.services);
+    var items = [{
+      id: defaultId,
+      name: "All Services",
+      slaves_count: this.props.totalHostsCount
+    }].concat(this.props.services);
 
-    var itemRender = this.itemRender;
     return _.map(items, function (service) {
-      var selectedRender;
-      if (service.id === defaultId) {
-        selectedRender = this.selectedRender;
-      }
+      var itemHtml = this.itemHtml(service);
 
-      return {
+      var item = {
         id: service.id,
         name: service.name,
-        render: itemRender,
-        selectedRender: selectedRender,
+        html: itemHtml,
         slaves_count: service.slaves_count
       };
+
+      if (service.id === defaultId) {
+        item.selectedHtml = (
+          <span className="badge-container">
+            <span>Filter by Service</span>
+          </span>
+        );
+      }
+
+      return item;
     }, this);
   },
 
@@ -90,7 +85,7 @@ var FilterByService = React.createClass({
     return (
       <Dropdown
         selectedId={this.getSelectedId(this.props.byServiceFilter)}
-        handleItemSelection={this.handleItemSelection}
+        onItemSelection={this.handleItemSelection}
         items={this.getDropdownItems()} />
     );
   }

@@ -11,7 +11,7 @@ jest.dontMock("./fixtures/MockFrameworks");
 var Dropdown = require("../Dropdown");
 var MockFrameworks = require("./fixtures/MockFrameworks");
 
-function selectedRender(obj) {
+function selectedHtml(obj) {
   return (
     <span className="id">
       {obj.id}
@@ -19,7 +19,7 @@ function selectedRender(obj) {
   );
 }
 
-function itemRender(obj) {
+function itemHtml(obj) {
   return (
     <span className="name">{obj.name}</span>
   );
@@ -54,8 +54,8 @@ describe("Dropdown", function () {
       return {
         id: service.id,
         name: service.name,
-        render: itemRender,
-        selectedRender: selectedRender,
+        html: itemHtml(service),
+        selectedHtml: selectedHtml(service),
         slaves_count: service.slaves_count
       };
     });
@@ -70,7 +70,7 @@ describe("Dropdown", function () {
       return TestUtils.renderIntoDocument(
         <Dropdown
           selectedId={this.selectedId}
-          handleItemSelection={this.handleItemSelection}
+          onItemSelection={this.handleItemSelection}
           items={this.items} />
       );
     };
@@ -115,7 +115,7 @@ describe("Dropdown", function () {
   it("should use custom render when specified", function () {
     var dropdown = TestUtils.renderIntoDocument(
       <Dropdown selectedId={this.selectedId}
-        handleItemSelection={this.handleItemSelection}
+        onItemSelection={this.handleItemSelection}
         items={this.items} />
     );
 
