@@ -44,7 +44,7 @@ describe("ChartMixin", function () {
     });
 
     it("should not format zeros", function () {
-      expect(ChartMixin.formatXAxis("0")).toEqual("0");
+      expect(ChartMixin.formatXAxis(0)).toEqual(0);
     });
 
     it("should format positive numbers", function () {
