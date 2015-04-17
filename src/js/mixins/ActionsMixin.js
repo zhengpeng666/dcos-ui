@@ -92,19 +92,21 @@ var ActionsMixin = {
     }
 
     var messages = _.map(state, function (value, key) {
-      var description;
+      var description = [];
       var keyConfig = this.actions_getStateConfigurationForKey(key);
 
+      // Build a unique description
+      description.push(this.constructor.displayName, key);
+
+      // Append custom description if there's one
       if (keyConfig && typeof keyConfig === "function") {
-        description = keyConfig.call(this, value);
-      } else {
-        description = "Changed: " + key +
-          " to value: " + JSON.stringify(value);
+        description.push(keyConfig.call(this, value));
       }
 
       return description;
     }, this);
 
+    messages = _.values(messages);
     Actions.logBatchAction(messages, state, this.actions_componentID);
   }
 };
