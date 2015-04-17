@@ -11,7 +11,7 @@ jest.dontMock("./fixtures/MockFrameworks");
 var Dropdown = require("../Dropdown");
 var MockFrameworks = require("./fixtures/MockFrameworks");
 
-function getCurrentItem(key) {
+function getSelectedItem(key) {
   var child = _.find(MockFrameworks.frameworks, function (item) {
     return item.id === key;
   });
@@ -61,17 +61,19 @@ describe("Dropdown", function () {
     this.handleKeySelection = function (key) {
       this.selectedKey = key;
     };
+
+    this.getDropdown = function () {
+      return TestUtils.renderIntoDocument(
+        <Dropdown selectedKey={this.selectedKey}
+          handleItemSelection={this.handleKeySelection}
+          items={this.items} />
+      );
+    };
   });
 
   it("should display the first item as default item", function () {
 
-    var dropdown = TestUtils.renderIntoDocument(
-      <Dropdown selectedKey={this.selectedKey}
-        handleItemSelection={this.handleKeySelection}>
-        {this.items}
-      </Dropdown>
-    );
-
+    var dropdown = this.getDropdown();
     var button = getToggleButton(dropdown);
     var name = getNameInToggleButton(button);
 
@@ -81,13 +83,7 @@ describe("Dropdown", function () {
 
   it("should display all items in the list", function () {
 
-    var dropdown = TestUtils.renderIntoDocument(
-      <Dropdown selectedKey={this.selectedKey}
-        handleItemSelection={this.handleKeySelection}>
-        {this.items}
-      </Dropdown>
-    );
-
+    var dropdown = this.getDropdown();
     var button = getToggleButton(dropdown);
     React.addons.TestUtils.Simulate.click(button);
 
@@ -97,13 +93,8 @@ describe("Dropdown", function () {
   });
 
   it("should display 3rd item, after 3rd item is clicked", function () {
-    var dropdown = TestUtils.renderIntoDocument(
-      <Dropdown selectedKey={this.selectedKey}
-        handleItemSelection={this.handleKeySelection}>
-        {this.items}
-      </Dropdown>
-    );
 
+    var dropdown = this.getDropdown();
     var button = getToggleButton(dropdown);
     React.addons.TestUtils.Simulate.click(button);
 
@@ -120,9 +111,8 @@ describe("Dropdown", function () {
     var dropdown = TestUtils.renderIntoDocument(
       <Dropdown selectedKey={this.selectedKey}
         handleItemSelection={this.handleKeySelection}
-        getCurrentItem={getCurrentItem}>
-        {this.items}
-      </Dropdown>
+        getSelectedItem={getSelectedItem}
+        items={this.items} />
     );
 
     var button = getToggleButton(dropdown);
@@ -135,13 +125,7 @@ describe("Dropdown", function () {
   it("should render correctly with another selected key", function () {
     this.selectedKey = MockFrameworks.frameworks[3].id;
 
-    var dropdown = TestUtils.renderIntoDocument(
-      <Dropdown selectedKey={this.selectedKey}
-        handleItemSelection={this.handleKeySelection}>
-        {this.items}
-      </Dropdown>
-    );
-
+    var dropdown = this.getDropdown();
     var button = getToggleButton(dropdown);
     var name = getNameInToggleButton(button);
 

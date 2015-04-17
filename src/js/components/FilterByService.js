@@ -35,7 +35,7 @@ var FilterByService = React.createClass({
     }
   },
 
-  getCurrentItem: function (key, children) {
+  getSelectedItem: function (key, children) {
     if (key === defaultKey) {
       return (
         <span className="badge-container">
@@ -81,9 +81,8 @@ var FilterByService = React.createClass({
       <Dropdown
         selectedKey={this.getSelectedKey(this.props.byServiceFilter)}
         handleItemSelection={this.handleItemSelection}
-        getCurrentItem={this.getCurrentItem}>
-        {this.getDropdownItems()}
-      </Dropdown>
+        getSelectedItem={this.getSelectedItem}
+        items={this.getDropdownItems()} />
     );
   }
 });
