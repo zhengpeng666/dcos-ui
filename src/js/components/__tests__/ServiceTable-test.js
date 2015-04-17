@@ -21,14 +21,14 @@ MesosStateStore.processState(stateJSON);
 
 describe("ServiceTable", function () {
 
-  beforeEach(function () {
-    this.table = TestUtils.renderIntoDocument(
-      <ServiceTable frameworks={MesosStateStore.getFrameworks()} />
-    );
-    this.frameworks = MesosStateStore.getFrameworks();
-  });
-
   describe("#renderHealth", function () {
+    beforeEach(function () {
+      this.frameworks = MesosStateStore.getFrameworks();
+      this.table = TestUtils.renderIntoDocument(
+        <ServiceTable frameworks={this.frameworks} />
+      );
+    });
+
     it("should have loaders on all frameworks", function () {
       expect(MesosStateStore.getHealthProcessed()).toBe(false);
 
