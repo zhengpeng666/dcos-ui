@@ -4,9 +4,9 @@ var _ = require("underscore");
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
-jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../Dropdown");
 jest.dontMock("./fixtures/MockFrameworks");
+jest.dontMock("../../mixins/InternalStorageMixin");
 
 var Dropdown = require("../Dropdown");
 var MockFrameworks = require("./fixtures/MockFrameworks");
@@ -42,8 +42,8 @@ function getItemsInList(dropdown) {
     dropdown, "dropdown-menu"
   );
 
-  return TestUtils.scryRenderedDOMComponentsWithClass(
-    list, "name"
+  return TestUtils.scryRenderedDOMComponentsWithTag(
+    list, "li"
   );
 }
 
@@ -66,20 +66,16 @@ describe("Dropdown", function () {
       this.selectedId = item.id;
     };
 
-    this.getDropdown = function () {
-      return TestUtils.renderIntoDocument(
-        <Dropdown
-          selectedId={this.selectedId}
-          onItemSelection={this.handleItemSelection}
-          items={this.items} />
-      );
-    };
+    this.dropdown = TestUtils.renderIntoDocument(
+      <Dropdown
+        selectedId={this.selectedId}
+        onItemSelection={this.handleItemSelection}
+        items={this.items} />
+    );
   });
 
   it("should display the first item as default item", function () {
-
-    var dropdown = this.getDropdown();
-    var button = getToggleButton(dropdown);
+    var button = getToggleButton(this.dropdown);
     var id = getIdInToggleButton(button);
 
     expect(id.getDOMNode().textContent)
@@ -87,23 +83,19 @@ describe("Dropdown", function () {
   });
 
   it("should display all items in the list", function () {
-
-    var dropdown = this.getDropdown();
-    var button = getToggleButton(dropdown);
+    var button = getToggleButton(this.dropdown);
     React.addons.TestUtils.Simulate.click(button);
 
-    var items = getItemsInList(dropdown);
+    var items = getItemsInList(this.dropdown);
 
     expect(items.length).toEqual(5);
   });
 
   it("should display 3rd item, after 3rd item is clicked", function () {
-
-    var dropdown = this.getDropdown();
-    var button = getToggleButton(dropdown);
+    var button = getToggleButton(this.dropdown);
     React.addons.TestUtils.Simulate.click(button);
 
-    var items = getItemsInList(dropdown);
+    var items = getItemsInList(this.dropdown);
     React.addons.TestUtils.Simulate.click(items[2]);
 
     var id = getIdInToggleButton(button);
@@ -126,10 +118,14 @@ describe("Dropdown", function () {
       .toEqual(MockFrameworks.frameworks[0].id);
   });
 
-  it("should render correctly with another selected key", function () {
+  it("should render correctly with another selected id", function () {
     this.selectedId = MockFrameworks.frameworks[3].id;
-
-    var dropdown = this.getDropdown();
+    var dropdown = TestUtils.renderIntoDocument(
+      <Dropdown
+        selectedId={this.selectedId}
+        onItemSelection={this.handleItemSelection}
+        items={this.items} />
+    );
     var button = getToggleButton(dropdown);
     var id = getIdInToggleButton(button);
 
