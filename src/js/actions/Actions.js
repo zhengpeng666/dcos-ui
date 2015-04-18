@@ -11,6 +11,8 @@ var Actions = {
    */
   components: {},
 
+  activePage: "",
+
   initialize: function () {
     this.createdAt = Date.now();
     this.lastLogDate = this.createdAt;
