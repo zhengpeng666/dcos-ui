@@ -84,6 +84,7 @@ var FilterByService = React.createClass({
   render: function () {
     return (
       <Dropdown
+        analyticsName={this.constructor.displayName}
         selectedId={this.getSelectedId(this.props.byServiceFilter)}
         onItemSelection={this.handleItemSelection}
         items={this.getDropdownItems()} />
