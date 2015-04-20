@@ -121,7 +121,7 @@ var ServicesTable = React.createClass({
     return (
       <span className="h5 flush-top flush-bottom">
         <a ref={model.id}
-            href={Strings.ipToHostName(model.webui_url)}
+            href={Strings.ipToHostAddress(model.webui_url)}
             className="headline">
           <i className="icon icon-small icon-small-white border-radius"></i>
           {model[prop]}
