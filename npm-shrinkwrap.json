@@ -4370,6 +4370,10 @@
         }
       }
     },
+    "localStorage": {
+      "version": "1.0.3",
+      "resolved": "https://registry.npmjs.org/localStorage/-/localStorage-1.0.3.tgz"
+    },
     "npm-shrinkwrap": {
       "version": "5.3.0",
       "resolved": "https://registry.npmjs.org/npm-shrinkwrap/-/npm-shrinkwrap-5.3.0.tgz",
