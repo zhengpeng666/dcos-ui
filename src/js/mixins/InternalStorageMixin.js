@@ -14,6 +14,10 @@ var InternalStorageMixin = {
   },
 
   internalStorage_update: function (diff) {
+    if (!_.isObject(this.internalStorage_data)) {
+      throw new Error("Can only update internalStorage_data if that is of type Object or Array.");
+    }
+
     this.internalStorage_data = _.extend(this.internalStorage_get(), diff);
   },
 
