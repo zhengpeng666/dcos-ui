@@ -16,6 +16,7 @@ var DialChart = React.createClass({
   propTypes: {
     // [{colorIndex: 0, name: "Some Name", value: 4}]
     data: React.PropTypes.array.isRequired,
+    slices: React.PropTypes.array,
     duration: React.PropTypes.number,
     unit: React.PropTypes.number,
     label: React.PropTypes.string,
@@ -26,6 +27,7 @@ var DialChart = React.createClass({
     return {
       duration: 1000,
       label: "",
+      slices: [],
       value: "value"
     };
   },
@@ -63,10 +65,25 @@ var DialChart = React.createClass({
     return true;
   },
 
+  getNormalizedData: function (slices, data) {
+    var sliceNames = _.pluck(slices, "name");
+    var dataSliceNames = _.pluck(data, "name");
+    var allNames = _.union(sliceNames, dataSliceNames);
+
+    return _.map(allNames, function(name) {
+      if (_.contains(dataSliceNames, name)) {
+        return _.findWhere(data, {name: name});
+      } else {
+        return _.findWhere(slices, {name: name});
+      }
+    });
+  },
+
   getSlice: function(props) {
     var data = this.internalStorage_get();
+    var normalizedData = this.getNormalizedData(props.slices, props.data);
     return d3.select(this.getDOMNode()).selectAll("path")
-      .data(data.pie(props.data));
+      .data(data.pie(normalizedData));
   },
 
   getArcs: function(props) {
@@ -91,8 +108,9 @@ var DialChart = React.createClass({
     var data = this.internalStorage_get();
     var innerArc = data.innerArc;
     var pie = data.pie;
+    var normalizedData = this.getNormalizedData(this.props.slices, this.props.data);
 
-    return _.map(pie(this.props.data), function (element, i) {
+    return _.map(pie(normalizedData), function (element, i) {
       return (
         <DialSlice
           key={i}
