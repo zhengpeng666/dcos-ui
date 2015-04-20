@@ -12,7 +12,7 @@
 
 3. Setup project configuration
 
-  1. Copy `src/js/utils/Config.template.js` to `src/js/utils/Config.dev.js`
+  1. Copy `src/js/config/Config.template.js` to `src/js/config/Config.dev.js`
 
   2. Override variables in `Config.dev.js` to reflect
   your local development configuration
