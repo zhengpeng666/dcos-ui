@@ -25,12 +25,6 @@ function itemHtml(obj) {
   );
 }
 
-function getToggleButton(dropdown) {
-  return TestUtils.findRenderedDOMComponentWithClass(
-    dropdown, "dropdown-toggle"
-  );
-}
-
 function getIdInToggleButton(button) {
   return TestUtils.findRenderedDOMComponentWithClass(
     button, "id"
@@ -72,19 +66,21 @@ describe("Dropdown", function () {
         onItemSelection={this.handleItemSelection}
         items={this.items} />
     );
+
+    this.toggleButton = TestUtils.findRenderedDOMComponentWithClass(
+      this.dropdown, "dropdown-toggle"
+    );
   });
 
   it("should display the first item as default item", function () {
-    var button = getToggleButton(this.dropdown);
-    var id = getIdInToggleButton(button);
+    var id = getIdInToggleButton(this.toggleButton);
 
     expect(id.getDOMNode().textContent)
       .toEqual(MockFrameworks.frameworks[0].id);
   });
 
   it("should display all items in the list", function () {
-    var button = getToggleButton(this.dropdown);
-    React.addons.TestUtils.Simulate.click(button);
+    React.addons.TestUtils.Simulate.click(this.toggleButton);
 
     var items = getItemsInList(this.dropdown);
 
@@ -92,30 +88,15 @@ describe("Dropdown", function () {
   });
 
   it("should display 3rd item, after 3rd item is clicked", function () {
-    var button = getToggleButton(this.dropdown);
-    React.addons.TestUtils.Simulate.click(button);
+    React.addons.TestUtils.Simulate.click(this.toggleButton);
 
     var items = getItemsInList(this.dropdown);
     React.addons.TestUtils.Simulate.click(items[2]);
 
-    var id = getIdInToggleButton(button);
+    var id = getIdInToggleButton(this.toggleButton);
 
     expect(id.getDOMNode().textContent)
       .toEqual(MockFrameworks.frameworks[2].id);
-  });
-
-  it("should use custom render when specified", function () {
-    var dropdown = TestUtils.renderIntoDocument(
-      <Dropdown selectedId={this.selectedId}
-        onItemSelection={this.handleItemSelection}
-        items={this.items} />
-    );
-
-    var button = getToggleButton(dropdown);
-    var id = getIdInToggleButton(button);
-
-    expect(id.getDOMNode().textContent)
-      .toEqual(MockFrameworks.frameworks[0].id);
   });
 
   it("should render correctly with another selected id", function () {
@@ -126,8 +107,12 @@ describe("Dropdown", function () {
         onItemSelection={this.handleItemSelection}
         items={this.items} />
     );
-    var button = getToggleButton(dropdown);
-    var id = getIdInToggleButton(button);
+
+    var toggleButton = TestUtils.findRenderedDOMComponentWithClass(
+      dropdown, "dropdown-toggle"
+    );
+
+    var id = getIdInToggleButton(toggleButton);
 
     expect(id.getDOMNode().textContent)
       .toEqual(MockFrameworks.frameworks[3].id);
