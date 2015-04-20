@@ -3,40 +3,40 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
-var DropdownItem = require("./DropdownItem");
-
 var Dropdown = React.createClass({
 
   displayName: "Dropdown",
 
-  actions_configuration: {
+  propTypes: {
+    analyticsName: React.PropTypes.string,
+    items: React.PropTypes.arrayOf(
+      React.PropTypes.shape({
+        id: React.PropTypes.oneOfType([
+          React.PropTypes.string,
+          React.PropTypes.number
+        ]).isRequired,
+        html: React.PropTypes.object.isRequired,
+        selectedHtml: React.PropTypes.object
+      })
+    ).isRequired,
+    onItemSelection: React.PropTypes.func.isRequired,
+    selectedId: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number
+    ])
+  },
+
+   actions_configuration: {
     state: {
-      open: function (isOpen) {
-        if (isOpen) {
-          return this.props.caption.replace(/\s+/g, "");
-        } else {
-          return this.props.caption.replace(/\s+/g, "");
-        }
+      isOpen: function () {
+        return this.props.analyticsName.replace(/\s+/g, "");
       }
     }
   },
 
-  propTypes: {
-    caption: React.PropTypes.string,
-    resetElement: React.PropTypes.object,
-    handleItemSelection: React.PropTypes.func.isRequired
-  },
-
-  getDefaultProps: function () {
-    return {
-      caption: "Dropdown",
-      resetElement: <DropdownItem key="default">Show all</DropdownItem>
-    };
-  },
-
   getInitialState: function () {
     return {
-      open: false
+      isOpen: false
     };
   },
 
@@ -50,60 +50,55 @@ var Dropdown = React.createClass({
 
   handleButtonBlur: function () {
     if (!this.preventBlur) {
-      this.setState({open: false});
+      this.setState({isOpen: false});
     }
   },
 
   handleMenuToggle: function () {
     this.setState({
-      open: !this.state.open
+      isOpen: !this.state.isOpen
     });
   },
 
-  itemClicked: function (item) {
-    var selected = this.getSelectedItem();
-    var value = item.props.value;
+  handleItemClick: function (obj) {
+    this.props.onItemSelection(obj);
 
-    if (value !== selected.props.value) {
-      this.props.handleItemSelection(value);
-    }
-
-    this.setState({open: false});
+    this.setState({
+      isOpen: false
+    });
   },
 
-  getItems: function () {
-    var items = _.clone(this.props.children);
-    items.unshift(this.props.resetElement);
+  getSelectedHtml: function (id, items) {
+    var obj = _.find(items, function (item) {
+      return item.id === id;
+    });
 
+    if (obj.selectedHtml != null) {
+      return obj.selectedHtml;
+    }
+
+    return obj.html;
+  },
+
+  renderItems: function (items) {
     return _.map(items, function (item) {
       return (
         <li className="clickable"
-            key={item.props.value}
-            onClick={this.itemClicked.bind(this, item)}>
-          {item}
+          key={item.id}
+          onClick={this.handleItemClick.bind(this, item)}>
+          <a>
+            {item.html}
+          </a>
         </li>
       );
     }, this);
   },
 
-  getSelectedItem: function () {
-    var props = this.props;
-
-    var selectedItem = _.find(props.children, function (item) {
-      return item.props.selected;
-    });
-
-    if (!selectedItem) {
-      selectedItem = (<DropdownItem>{props.caption}</DropdownItem>);
-    }
-
-    return selectedItem;
-  },
-
   render: function () {
+    var items = this.props.items;
     var dropdownClassSet = React.addons.classSet({
       "dropdown": true,
-      "open": this.state.open
+      "open": this.state.isOpen
     });
 
     return (
@@ -113,13 +108,13 @@ var Dropdown = React.createClass({
             ref="button"
             onClick={this.handleMenuToggle}
             onBlur={this.handleButtonBlur}>
-          {this.getSelectedItem()}
+          {this.getSelectedHtml(this.props.selectedId, items)}
         </button>
         <span className="dropdown-menu inverse" role="menu"
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}>
           <ul className="dropdown-menu-list">
-            {this.getItems()}
+            {this.renderItems(items)}
           </ul>
         </span>
       </span>

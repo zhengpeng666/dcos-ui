@@ -4,7 +4,8 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var Dropdown = require("./Dropdown");
-var DropdownItem = require("./DropdownItem");
+
+var defaultId = "default";
 
 var FilterByService = React.createClass({
 
@@ -19,48 +20,74 @@ var FilterByService = React.createClass({
 
   getDefaultProps: function () {
     return {
-      byServiceFilter: null,
+      byServiceFilter: defaultId,
       services: [],
       totalHostsCount: 0,
       handleFilterChange: _.noop
     };
   },
 
-  handleItemSelection: function (serviceId) {
-    this.props.handleFilterChange(serviceId);
+  handleItemSelection: function (obj) {
+    if (obj.id === defaultId) {
+      this.props.handleFilterChange(null);
+    } else {
+      this.props.handleFilterChange(obj.id);
+    }
+  },
+
+  itemHtml: function(service) {
+    return (
+      <span className="badge-container">
+        <span>{service.name}</span>
+        <span className="badge">{service.slaves_count}</span>
+      </span>
+    );
   },
 
   getDropdownItems: function () {
-    var serviceId = this.props.byServiceFilter;
-    return _.map(this.props.services, function (service) {
-      return (
-        <DropdownItem key={service.id}
-            value={service.id}
-            selected={serviceId === service.id}
-            title={service.name}>
-          <span>{service.name}</span>
-          <span className="badge">{service.slaves_count}</span>
-        </DropdownItem>
-      );
-    });
+    var items = [{
+      id: defaultId,
+      name: "All Services",
+      slaves_count: this.props.totalHostsCount
+    }].concat(this.props.services);
+
+    return _.map(items, function (service) {
+      var itemHtml = this.itemHtml(service);
+
+      var item = {
+        id: service.id,
+        name: service.name,
+        html: itemHtml,
+        slaves_count: service.slaves_count
+      };
+
+      if (service.id === defaultId) {
+        item.selectedHtml = (
+          <span className="badge-container">
+            <span>Filter by Service</span>
+          </span>
+        );
+      }
+
+      return item;
+    }, this);
   },
 
-  getResetElement: function () {
-    return (
-      <DropdownItem key="default" title="All Services">
-        <span>All Services</span>
-        <span className="badge">{this.props.totalHostsCount}</span>
-      </DropdownItem>
-    );
+  getSelectedId: function (id) {
+    if (id == null) {
+      return defaultId;
+    }
+
+    return id;
   },
 
   render: function () {
     return (
-      <Dropdown caption="Filter by Service"
-          resetElement={this.getResetElement()}
-          handleItemSelection={this.handleItemSelection}>
-        {this.getDropdownItems()}
-      </Dropdown>
+      <Dropdown
+        analyticsName={this.constructor.displayName}
+        selectedId={this.getSelectedId(this.props.byServiceFilter)}
+        onItemSelection={this.handleItemSelection}
+        items={this.getDropdownItems()} />
     );
   }
 });
