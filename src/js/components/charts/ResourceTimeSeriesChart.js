@@ -6,10 +6,11 @@ var Humanize = require("humanize");
 
 var Chart = require("./Chart");
 var TimeSeriesChart = require("./TimeSeriesChart");
+var TimeSeriesLabel = require("./TimeSeriesLabel");
 
-var ResourceChart = React.createClass({
+var ResourceTimeSeriesChart = React.createClass({
 
-  displayName: "ResourceChart",
+  displayName: "ResourceTimeSeriesChart",
 
   propTypes: {
     colorIndex: React.PropTypes.number.isRequired,
@@ -70,19 +71,14 @@ var ResourceChart = React.createClass({
 
     return (
       <div className="chart">
-        <div className="text-align-center">
-          <p className="h1-jumbo unit">
-            {this.getLatestPercent(allocResources)}
-            <sup>%</sup>
-          </p>
-          <p className={"h4 unit-label path-color-" + this.props.colorIndex}>
-            {this.getHeadline(allocResources, totalResources)}
-          </p>
-        </div>
+        <TimeSeriesLabel colorIndex={this.props.colorIndex}
+          currentValue={this.getLatestPercent(allocResources)}
+          subHeading={this.getHeadline(allocResources, totalResources)} />
+
         {this.getChart()}
       </div>
     );
   }
 });
 
-module.exports = ResourceChart;
+module.exports = ResourceTimeSeriesChart;

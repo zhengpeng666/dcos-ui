@@ -64,7 +64,12 @@ var DashboardPage = React.createClass({
     this.forceUpdate();
   },
 
-  getServicesList: function (services) {
+  getServicesList: function (_services) {
+    // Pick out only the data we need.
+    var services = _.map(_services, function (service) {
+      return _.pick(service, "name", "health");
+    });
+
     var sortedServices = _.sortBy(services, function (service) {
       return HealthSorting[service.health.key];
     });
