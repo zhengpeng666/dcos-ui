@@ -445,6 +445,24 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     initStates();
   },
 
+  reset: function () {
+    _failureRates = [];
+    _prevMesosStatusesMap = {};
+
+    _frameworkNames = [];
+    _frameworkIDs = [];
+    _frameworkHealth = {};
+    _healthProcessed = false;
+    _loading = undefined;
+    _interval = undefined;
+    _initCalledAt = undefined;
+    _marathonUrl = undefined;
+    _mesosStates = [];
+    _statesProcessed = false;
+
+    NA_HEALTH = {key: "NA", value: HealthTypes.NA};
+  },
+
   getRefreshRate: function () {
     return Config.stateRefresh;
   },
