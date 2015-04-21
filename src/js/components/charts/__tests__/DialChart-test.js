@@ -69,7 +69,7 @@ describe("DialChart", function () {
       expect(label.getDOMNode().textContent).toEqual("Items");
     });
 
-    it("when no data is present, it renders empty slices to the DOM", function () {
+    it("when no data is present, it renders a single 'empty' slice to the DOM", function () {
       this.instance.setProps({
         slices: [ { name: "TASK_1" }, { name: "TASK_2" } ],
         data: []
@@ -77,7 +77,7 @@ describe("DialChart", function () {
       var slices = TestUtils.scryRenderedDOMComponentsWithClass(
         this.instance, "arc"
       );
-      expect(slices.length).toEqual(2);
+      expect(slices.length).toEqual(1);
     });
 
     it("renders a slice for each category of tasks", function () {
