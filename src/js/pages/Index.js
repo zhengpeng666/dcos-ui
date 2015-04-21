@@ -168,7 +168,6 @@ var Index = React.createClass({
             <div className="ball-scale">
               <div />
             </div>
-            <h4>Loading...</h4>
           </div>
           {errorMsg}
         </div>
