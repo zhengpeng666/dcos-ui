@@ -44,7 +44,7 @@ var TaskFailureTimeSeriesChart = React.createClass({
 
     return (
       <div className="chart">
-        <div className="row text-align-center">
+        <div className="text-align-center">
           <div className="column-small-12">
             <p className="h1-jumbo unit">
               {this.getLatestPercent(props.data)}
