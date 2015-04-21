@@ -99,10 +99,10 @@ var Sidebar = React.createClass({
             <div className="sidebar-header-image">
               <img className="sidebar-header-image-inner" src="/img/layout/sidebar/sidebar-dcos-icon-medium.png" alt="sidebar header image"/>
             </div>
-            <h2 className="sidebar-header-label flush-top text-align-center short-bottom">
+            <h2 className="sidebar-header-label flush-top text-align-center text-overflow short-bottom" title={data.mesosInfo.cluster}>
               {data.mesosInfo.cluster}
             </h2>
-            <p className="sidebar-header-sublabel text-align-center flush-bottom">
+            <p className="sidebar-header-sublabel text-align-center text-overflow flush-bottom" title={data.mesosInfo.hostname}>
               {data.mesosInfo.hostname}
             </p>
           </div>
