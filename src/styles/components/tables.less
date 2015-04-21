@@ -1,39 +1,125 @@
-& when (@table-enabled) {
-  & when (@table-cell-default-inverse-enabled) {
+& when (@table-enabled) and (@table-cell-default-inverse-enabled) {
+  .table {
+    // create row-hover style
+    &.inverse {
+      & tbody {
+        td {
+          .cell-link {
+            padding:
+              @table-cell-padding-vertical
+              @table-cell-padding-horizontal;
+            margin:
+              -@table-cell-padding-vertical
+              -@table-cell-padding-horizontal;
+            display: block;
+          }
+        }
+      }
+
+      .headline {
+        color: @white;
+      }
+    }
+
+    .align-right {
+      text-align: right;
+    }
+    .icon {
+      margin-right: @base-spacing-unit * 0.25;
+    }
+    .fixed-width {
+      width: @grid-gutter-width-screen-large * 2;
+    }
+  }
+}
+
+& when (@table-enabled) and (@screen-mini-enabled)
+  and (@table-cell-default-inverse-enabled) {
+
+  @_horizontal: floor(@table-cell-padding-horizontal * @table-cell-padding-horizontal-scale-screen-mini);
+  @_vertical: floor(@table-cell-padding-vertical * @table-cell-padding-vertical-scale-screen-mini);
+
+  @media (min-width: @screen-mini) {
     .table {
       // create row-hover style
       &.inverse {
         & tbody {
-          > tr.row-hover:hover {
-            > th,
-            > td {
-              .table-cell-style-variant('table-cell', 'default-inverse-hover');
-              cursor: pointer;
-              &.highlight {
-                .table-cell-style-variant('table-cell', 'default-inverse-highlight-hover');
-              }
-
-              &.disabled {
-                .opacity(@table-cell-default-disabled-opacity);
-                .table-cell-style-variant('table-cell', 'default-inverse-disabled-hover');
-              }
+          td {
+            .cell-link {
+              padding: @_vertical @_horizontal;
+              margin: -@_vertical -@_horizontal;
             }
           }
         }
+      }
+    }
+  }
+}
 
-        .headline {
-          color: @white;
+& when (@table-enabled) and (@screen-small-enabled)
+  and (@table-cell-default-inverse-enabled) {
+
+  @_horizontal: floor(@table-cell-padding-horizontal * @table-cell-padding-horizontal-scale-screen-small);
+  @_vertical: floor(@table-cell-padding-vertical * @table-cell-padding-vertical-scale-screen-small);
+
+  @media (min-width: @screen-small) {
+    .table {
+      // create row-hover style
+      &.inverse {
+        & tbody {
+          td {
+            .cell-link {
+              padding: @_vertical @_horizontal;
+              margin: -@_vertical -@_horizontal;
+            }
+          }
         }
       }
+    }
+  }
+}
 
-      .align-right {
-        text-align: right;
+& when (@table-enabled) and (@screen-medium-enabled)
+  and (@table-cell-default-inverse-enabled) {
+
+  @_horizontal: floor(@table-cell-padding-horizontal * @table-cell-padding-horizontal-scale-screen-medium);
+  @_vertical: floor(@table-cell-padding-vertical * @table-cell-padding-vertical-scale-screen-medium);
+
+  @media (min-width: @screen-medium) {
+    .table {
+      // create row-hover style
+      &.inverse {
+        & tbody {
+          td {
+            .cell-link {
+              padding: @_vertical @_horizontal;
+              margin: -@_vertical -@_horizontal;
+            }
+          }
+        }
       }
-      .icon {
-        margin-right: @base-spacing-unit * 0.25;
-      }
-      .fixed-width {
-        width: @grid-gutter-width-screen-large * 2;
+    }
+  }
+}
+
+& when (@table-enabled) and (@screen-large-enabled)
+  and (@table-cell-default-inverse-enabled) {
+
+  @_horizontal: floor(@table-cell-padding-horizontal * @table-cell-padding-horizontal-scale-screen-large);
+  @_vertical: floor(@table-cell-padding-vertical * @table-cell-padding-vertical-scale-screen-large);
+
+  @media (min-width: @screen-large) {
+    .table {
+      // create row-hover style
+      &.inverse {
+        & tbody {
+          td {
+            .cell-link {
+              padding: @_vertical @_horizontal;
+              margin: -@_vertical -@_horizontal;
+            }
+          }
+        }
       }
     }
   }
