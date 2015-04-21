@@ -70,7 +70,7 @@ var ResourceChart = React.createClass({
 
     return (
       <div className="chart">
-        <div className="row text-align-center">
+        <div className="text-align-center">
           <p className="h1-jumbo unit">
             {this.getLatestPercent(allocResources)}
             <sup>%</sup>
