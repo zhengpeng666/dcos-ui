@@ -7,6 +7,11 @@ var React = require("react/addons");
 var DialSlice = require("./DialSlice");
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 
+// the data to render a single grey circle
+function getEmptyState () {
+  return [{ colorIndex: 6, value: 1 }];
+}
+
 var DialChart = React.createClass({
 
   displayName: "DialChart",
@@ -70,6 +75,10 @@ var DialChart = React.createClass({
     var dataSliceNames = _.pluck(data, "name");
     var allNames = _.union(sliceNames, dataSliceNames);
 
+    if (this.isEmpty(data)) {
+      return getEmptyState();
+    }
+
     return _.map(allNames, function(name) {
       if (_.contains(dataSliceNames, name)) {
         return _.findWhere(data, {name: name});
@@ -77,6 +86,13 @@ var DialChart = React.createClass({
         return _.findWhere(slices, {name: name});
       }
     });
+  },
+
+  isEmpty: function (data) {
+    var sumOfData = _.foldl(data, function (memo, datum) {
+      return memo + datum.value;
+    }, 0);
+    return sumOfData === 0;
   },
 
   getSlice: function(props) {

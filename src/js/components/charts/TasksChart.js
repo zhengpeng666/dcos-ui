@@ -14,7 +14,6 @@ var taskInfo = {
 
 function getStateWithNoData() {
   return {
-    dialChartData: [{colorIndex: 6, value: 1}],
     tasksData: [
       {name: "TASK_RUNNING", value: 0, colorIndex: 4},
       {name: "TASK_STAGING", value: 0, colorIndex: 1}

@@ -21,13 +21,14 @@ describe("DialChart", function () {
 
   describe("#getNormalizedData", function () {
 
-    it("returns an empty item for each slice when no data is present", function () {
+    it("returns a single-member grey set when no data is present", function () {
       var normalizedData = this.instance.getNormalizedData([
-          { name: "TASK_1", value: 0 }, { name: "TASK_2", value: 0 }
+          { name: "TASK_1", value: 0 },
+          { name: "TASK_2", value: 0 }
         ], []
       );
       expect(normalizedData).toEqual([
-        { name: "TASK_1", value: 0 }, { name: "TASK_2", value: 0 }
+        { colorIndex: 6, value: 1 }
       ]);
     });
 
