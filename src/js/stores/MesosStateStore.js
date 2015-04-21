@@ -13,7 +13,8 @@ var Strings = require("../utils/Strings");
 var _failureRates = [];
 var _prevMesosStatusesMap = {};
 
-var _frameworkIndexes = [];
+var _frameworkNames = [];
+var _frameworkIDs = [];
 var _frameworkHealth = {};
 var _healthProcessed = false;
 var _loading;
@@ -350,15 +351,16 @@ function fillFramework(id, name, colorIndex) {
 function normalizeFrameworks(frameworks, date) {
   return _.map(frameworks, function (framework) {
     framework.date = date;
-    var index = _.indexOf(_frameworkIndexes, framework.name);
+    var index = _.indexOf(_frameworkIDs, framework.id);
     if (framework.name.toLowerCase().indexOf("marathon") > -1 &&
         framework.webui_url != null) {
       _marathonUrl = Strings.ipToHostAddress(framework.webui_url);
     }
     // this is a new framework, fill in 0s for all the previous datapoints
     if (index === -1) {
-      _frameworkIndexes.push(framework.name);
-      index = _frameworkIndexes.length - 1;
+      _frameworkIDs.push(framework.id);
+      _frameworkNames.push(framework.name);
+      index = _frameworkIDs.length - 1;
       fillFramework(framework.id, framework.name, index);
     }
     // set color index after discovering and assigning index framework
@@ -606,7 +608,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       }
 
       // find the framework based on package name
-      var frameworkName = _.find(_frameworkIndexes, function (name) {
+      var frameworkName = _.find(_frameworkNames, function (name) {
         return name.indexOf(app.labels.DCOS_PACKAGE_NAME) > -1;
       });
 
