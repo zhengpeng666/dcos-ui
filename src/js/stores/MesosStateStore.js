@@ -627,7 +627,17 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
       // find the framework based on package name
       var frameworkName = _.find(_frameworkNames, function (name) {
-        return name.indexOf(app.labels.DCOS_PACKAGE_NAME) > -1;
+        if (name.length) {
+          name = name.toLowerCase();
+        }
+
+        var packageName = app.labels.DCOS_PACKAGE_NAME;
+
+        if (packageName.length) {
+          packageName = packageName.toLowerCase();
+        }
+
+        return name.indexOf(packageName) > -1;
       });
 
       if (frameworkName == null) {
