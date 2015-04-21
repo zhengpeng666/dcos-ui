@@ -95,19 +95,6 @@ var ServicesTable = React.createClass({
     this.forceUpdate();
   },
 
-  handleClick: function (model, context) {
-    if (model.webui_url.length > 0 && context.refs[model.id] != null) {
-      context.refs[model.id].getDOMNode().click();
-    }
-  },
-
-  getRowAttributes: function (model, context) {
-    return {
-      onClick: this.handleClick.bind(null, model, context),
-      className: model.webui_url.length > 0 ? "row-hover" : ""
-    };
-  },
-
   renderHeadline: function (prop, model) {
     if (model.webui_url.length === 0) {
       return (
@@ -119,14 +106,14 @@ var ServicesTable = React.createClass({
     }
 
     return (
-      <span className="h5 flush-top flush-bottom">
-        <a ref={model.id}
-            href={Strings.ipToHostAddress(model.webui_url)}
-            className="headline">
-          <i className="icon icon-small icon-small-white border-radius"></i>
-          {model[prop]}
-        </a>
-       </span>
+      <a ref={model.id}
+          href={Strings.ipToHostAddress(model.webui_url)}
+          className="h5 headline cell-link">
+          <span className="flush-top flush-bottom">
+            <i className="icon icon-small icon-small-white border-radius"></i>
+            {model[prop]}
+          </span>
+      </a>
      );
   },
 
@@ -258,7 +245,6 @@ var ServicesTable = React.createClass({
         className="table inverse table-borderless-outer table-borderless-inner-columns"
         columns={this.getColumns()}
         data={this.props.frameworks.slice(0)}
-        buildRowOptions={this.getRowAttributes}
         keys={["id"]}
         sortBy={{prop: "name", order: "desc"}}
         sortFunc={sortFunction} />
