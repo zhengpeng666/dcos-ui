@@ -118,7 +118,7 @@ var ResourceBarChart = React.createClass({
 
     return (
       <div>
-        <h3 className="flush-top">
+        <h3 className="flush-top flush-bottom">
           {headline}
         </h3>
         <p className="flush-bottom">
