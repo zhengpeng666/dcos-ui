@@ -42,6 +42,7 @@
     "react/display-name": true,
     "react/jsx-quotes": [2, "double"],
     "react/jsx-no-undef": true,
+    "react/jsx-uses-vars": true,
     "react/no-multi-comp": true,
     "react/self-closing-comp": true,
     "react/wrap-multilines": true
