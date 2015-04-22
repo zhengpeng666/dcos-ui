@@ -15,11 +15,13 @@ var TimeSeriesArea = React.createClass({
   },
 
   componentDidMount: function () {
+    var props = this.props;
+
     d3.select(this.getDOMNode())
       .transition()
-      .duration(this.props.transitionTime)
+      .duration(props.transitionTime)
       .ease("linear")
-      .attr("transform", "translate(" + this.props.position + ")");
+      .attr("transform", "translate(" + props.position + ")");
   },
 
   componentWillReceiveProps: function (props) {
