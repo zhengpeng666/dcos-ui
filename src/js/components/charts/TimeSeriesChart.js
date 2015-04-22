@@ -24,7 +24,8 @@ var TimeSeriesChart = React.createClass({
     y: React.PropTypes.string,
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
-    refreshRate: React.PropTypes.number.isRequired
+    refreshRate: React.PropTypes.number.isRequired,
+    strokeOffset: React.PropTypes.number
   },
 
   getDefaultProps: function () {
@@ -38,7 +39,8 @@ var TimeSeriesChart = React.createClass({
         bottom: 25,
         right: 5
       },
-      refreshRate: 0
+      refreshRate: 0,
+      strokeOffset: 2
     };
   },
 
@@ -103,7 +105,7 @@ var TimeSeriesChart = React.createClass({
     var margin = props.margin;
     var width = props.width - margin.right - margin.left;
     // includes x-axis as we want to clip that as well
-    var height = props.height - margin.top;
+    var height = props.height - margin.top - margin.top - margin.bottom;
     var transform = "translate(" + margin.left + "," + margin.top + ")";
 
     d3.select("#" + data.clipPathID + " rect")
@@ -222,10 +224,12 @@ var TimeSeriesChart = React.createClass({
   },
 
   getArea: function (xTimeScale, yScale) {
-    var y = this.props.y;
+    var props = this.props;
+    var y = props.y;
+
     return d3.svg.area()
       .x(function (d) { return xTimeScale(d.date); })
-      .y0(function (d) { return yScale(d.y0); })
+      .y0(function (d) { return yScale(d.y0 - props.strokeOffset); })
       .y1(function (d) { return yScale(d.y0 + d[y]); })
       .interpolate("monotone");
   },
@@ -264,6 +268,7 @@ var TimeSeriesChart = React.createClass({
 
   getYScale: function (props) {
     var margin = props.margin;
+
     return d3.scale.linear()
       // give a little space in the top for the number
       .range([props.height - margin.bottom - margin.top, margin.top])
