@@ -91,7 +91,7 @@ var tasks = {
     // create tree for less (pick all less and css files needed)
     var cssTree = pickFiles(dirs.styles, {
       srcDir: "./",
-      files: ["**/*.less", "**/*.css"],
+      files: ["**/*.less"],
       destDir: dirs.stylesDist
     });
 
@@ -110,22 +110,9 @@ var tasks = {
 
     lessTree = autoprefixer(lessTree);
 
-    cssTree = mergeTrees([cssTree, lessTree], {overwrite: true});
+    cssTree = mergeTrees([masterTree, lessTree], {overwrite: true});
 
-    // concatenate css
-    cssTree = concatCSS(cssTree, {
-      inputFiles: [
-        "**/*.css",
-        "!" + dirs.stylesDist + "/" + fileNames.mainStyles + ".css",
-        dirs.stylesDist + "/" + fileNames.mainStyles + ".css"
-      ],
-      outputFile: "/" + dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css",
-    });
-
-    return mergeTrees(
-      [masterTree, cssTree],
-      {overwrite: true}
-    );
+    return cssTree;
   },
 
   minifyCSS: function (masterTree) {
