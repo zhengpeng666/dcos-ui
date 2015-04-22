@@ -322,14 +322,19 @@ var TimeSeriesChart = React.createClass({
       );
   },
 
-  componentWillReceiveProps: function (props) {
-    var xScale = this.getXScale(props);
-    var xTimeScale = this.getXTimeScale(props);
-    var yScale = this.getYScale(props);
-    // the d3 axis helper requires a <g> element passed into do its work. This
+  componentWillReceiveProps: function (nextProps) {
+    var xScale = this.getXScale(nextProps);
+    var xTimeScale = this.getXTimeScale(nextProps);
+    var yScale = this.getYScale(nextProps);
+
+    // The d3 axis helper requires a <g> element passed into do its work. This
     // happens after mount and ends up keeping the axis code outside of react
     // unfortunately.
-    this.renderAxis(props, xScale, yScale);
+    // Only update axis when they need updating.
+    if (!_.isEqual(_.omit(nextProps, "data"), _.omit(this.props, "data"))) {
+      this.renderAxis(nextProps, xScale, yScale);
+    }
+
     this.internalStorage_update({
       area: this.getArea(xTimeScale, yScale),
       xTimeScale: xTimeScale,

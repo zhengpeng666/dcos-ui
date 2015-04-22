@@ -29,6 +29,10 @@ var ServiceList = React.createClass({
     };
   },
 
+  shouldComponentUpdate: function (nextProps) {
+    return !_.isEqual(this.props, nextProps);
+  },
+
   getServices: function (services, healthProcessed) {
     return _.map(services, function (service) {
       var attributes = {};

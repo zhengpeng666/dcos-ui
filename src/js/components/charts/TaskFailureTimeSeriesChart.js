@@ -5,6 +5,7 @@ var React = require("react/addons");
 
 var Chart = require("./Chart");
 var TimeSeriesChart = require("./TimeSeriesChart");
+var TimeSeriesLabel = require("./TimeSeriesLabel");
 
 var TaskFailureTimeSeriesChart = React.createClass({
 
@@ -44,17 +45,10 @@ var TaskFailureTimeSeriesChart = React.createClass({
 
     return (
       <div className="chart">
-        <div className="text-align-center">
-          <div className="column-small-12">
-            <p className="h1-jumbo unit">
-              {this.getLatestPercent(props.data)}
-              <sup>%</sup>
-            </p>
-            <p className="h4 unit-label path-color-2">
-              Current Failure Rate
-            </p>
-          </div>
-        </div>
+        <TimeSeriesLabel colorIndex={2}
+          currentValue={this.getLatestPercent(props.data)}
+          subHeading={"Current Failure Rate"} />
+
         {this.getChart(props)}
       </div>
     );

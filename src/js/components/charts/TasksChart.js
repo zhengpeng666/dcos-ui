@@ -31,6 +31,14 @@ var TasksChart = React.createClass({
     tasks: React.PropTypes.array.isRequired
   },
 
+  shouldComponentUpdate: function (nextProps) {
+    var previousTasks = this.getTasks(this.props.tasks);
+    var newTasks = this.getTasks(nextProps.tasks);
+
+    // If equal, do not update
+    return !_.isEqual(previousTasks, newTasks);
+  },
+
   getTaskInfo: function (tasks) {
     if (tasks.length === 0) {
       tasks = getStateWithNoData().tasksData;
@@ -70,10 +78,10 @@ var TasksChart = React.createClass({
     }, 0);
   },
 
-  getTasks: function () {
+  getTasks: function (tasks) {
     var keys = _.keys(taskInfo);
     var starting = 0;
-    return _.chain(this.props.tasks)
+    return _.chain(tasks)
       .filter(function (task) {
         // save starting tasks for use later
         if (task.state === "TASK_STARTING") {
@@ -110,7 +118,7 @@ var TasksChart = React.createClass({
   },
 
   render: function() {
-    var tasks = this.getTasks();
+    var tasks = this.getTasks(this.props.tasks);
 
     return (
       <div className="chart">
