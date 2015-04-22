@@ -3,16 +3,36 @@ var _ = require("underscore");
 jest.dontMock("../../config/Config");
 jest.dontMock("../MesosStateStore");
 jest.dontMock("./fixtures/MockStates");
+jest.dontMock("./fixtures/MockAppHealth");
+jest.dontMock("./fixtures/MockAppMetadata");
+jest.dontMock("./fixtures/MockParsedAppMetadata");
 
 var Config = require("../../config/Config");
 var MesosStateStore = require("../MesosStateStore");
 var MockStates = require("./fixtures/MockStates");
+var MockAppHealth = require("./fixtures/MockAppHealth");
+var MockAppMetadata = require("./fixtures/MockAppMetadata");
+var MockParsedAppMetadata = require("./fixtures/MockParsedAppMetadata");
+
+function getFrameworkAfterProcess(apps) {
+  MesosStateStore.processMarathonApps(apps);
+  MesosStateStore.processState(MockStates.oneTaskRunning);
+  var frameworks = MesosStateStore.getFrameworks();
+  return _.find(frameworks, function (fwk) {
+    return fwk.name === MockStates.oneTaskRunning.frameworks[0].name;
+  });
+}
+
+// mock global string decoder
+global.atob = function () {
+  return MockAppMetadata.decodedString;
+};
 
 describe("Mesos State Store", function () {
+    // Avoid repeatedly calling init.
+  var initMesosStateStoreOnce = _.once(MesosStateStore.init);
 
   describe("#getTaskFailureRate", function () {
-    // Avoid repeatedly calling init.
-    var initMesosStateStoreOnce = _.once(MesosStateStore.init);
 
     beforeEach(function() {
       initMesosStateStoreOnce();
@@ -43,7 +63,78 @@ describe("Mesos State Store", function () {
       var taskFailureRate = MesosStateStore.getTaskFailureRate();
       expect(_.last(taskFailureRate).rate).toEqual(0);
     });
+  });
 
+  describe("#getFrameworkHealth", function () {
+
+    beforeEach(function() {
+      initMesosStateStoreOnce();
+    });
+
+    it("should return NA health when app has no health check", function () {
+      var framework = getFrameworkAfterProcess(MockAppHealth.hasNoHealthy);
+      expect(framework.health.key).toEqual("NA");
+    });
+
+    it("should return idle when app has no running tasks", function () {
+      var framework = getFrameworkAfterProcess(MockAppHealth.hasNoRunningTasks);
+      expect(framework.health.key).toEqual("IDLE");
+    });
+
+    it("should return unhealthy when app has only unhealthy tasks",
+      function () {
+        var framework = getFrameworkAfterProcess(MockAppHealth.hasOnlyUnhealth);
+        expect(framework.health.key).toEqual("UNHEALTHY");
+      }
+    );
+
+    it("should return unhealthy when app has both healthy and unhealthy tasks",
+      function () {
+        var framework = getFrameworkAfterProcess(MockAppHealth.hasOnlyUnhealth);
+        expect(framework.health.key).toEqual("UNHEALTHY");
+      }
+    );
+
+    it("should return healthy when app has healthy and no unhealthy tasks",
+      function () {
+        var framework = getFrameworkAfterProcess(MockAppHealth.hasHealth);
+        expect(framework.health.key).toEqual("HEALTHY");
+      }
+    );
+  });
+
+  describe("#parseMetadata", function () {
+    beforeEach(function() {
+      initMesosStateStoreOnce();
+    });
+
+    it("should parse metadata correctly", function () {
+      var result = MesosStateStore.parseMetadata(
+        MockAppMetadata.encodedString
+      );
+      expect(result).toEqual(MockParsedAppMetadata);
+    });
+  });
+
+  describe("#getFrameworkImages", function () {
+
+    beforeEach(function() {
+      initMesosStateStoreOnce();
+    });
+
+    it("should return parsed images when app has metadata with images",
+      function () {
+        var framework = getFrameworkAfterProcess(MockAppHealth.hasMetadata);
+        expect(framework.images).toEqual(MockParsedAppMetadata.images);
+      }
+    );
+
+    it("should return default images when app has metadata with images",
+      function () {
+        var framework = getFrameworkAfterProcess(MockAppHealth.hasHealth);
+        expect(framework.images).toEqual(MesosStateStore.NA_IMAGES);
+      }
+    );
   });
 
   describe("#getFrameworks", function () {
