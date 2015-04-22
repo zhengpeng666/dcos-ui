@@ -25,7 +25,7 @@ describe("DashboardPage", function () {
 
     it("should pick out name,health keys only", function () {
       var services = [
-        {name: "foo", health: {key: "bar"}}
+        {name: "foo", health: {key: "bar"}, bar: "baz"}
       ];
       var list = this.instance.getServicesList(services);
       expect(list).toEqual([{name: "foo", health: {key: "bar"}}]);
