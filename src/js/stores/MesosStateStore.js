@@ -143,7 +143,6 @@ function getStatesByFramework() {
 // [{
 //   state: "TASK_RUNNING",
 //   tasks: [{
-//     executor_id: 0,
 //     framework_id: "askdfjaalsjf",
 //     id: "askdfja",
 //     name: "datanode",
@@ -310,6 +309,10 @@ function getStateByHosts () {
     .flatten()
     .foldl(function (acc, v) {
       acc[v.slave_id].tasks[v.id] = v;
+
+      // Find framework for given task by matching
+      // framework.id to task.framework_id
+      // This seems extremely wasteful. We can probably optimize here
       acc[v.slave_id].frameworks[v.framework_id] = _.find(data.frameworks,
           function (framework) {
         return v.framework_id === framework.id;
