@@ -56,7 +56,15 @@ var tasks = {
         // library: "Test",
         filename: dirs.jsDist + "/" + fileNames.mainJsDist + ".js"
       },
+      devtool: "source-map",
       module: {
+        preLoaders: [
+          {
+            test: /\.js$/,
+            loader: "source-map-loader",
+            exclude: /node_modules/
+          }
+        ],
         loaders: [
           {
             test: /\.js$/,
