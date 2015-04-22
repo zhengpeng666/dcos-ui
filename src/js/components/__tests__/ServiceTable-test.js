@@ -30,7 +30,7 @@ describe("ServiceTable", function () {
     });
 
     it("should have loaders on all frameworks", function () {
-      expect(MesosStateStore.getAppsProcessed()).toBe(false);
+      expect(MesosStateStore.isAppsProcessed()).toBe(false);
 
       this.frameworks.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(
@@ -47,7 +47,7 @@ describe("ServiceTable", function () {
     it("should have N/A health status on all frameworks",
         function () {
       MesosStateStore.processMarathonAppsError();
-      expect(MesosStateStore.getAppsProcessed()).toBe(true);
+      expect(MesosStateStore.isAppsProcessed()).toBe(true);
 
       this.frameworks.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(

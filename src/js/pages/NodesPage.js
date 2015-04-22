@@ -21,7 +21,7 @@ function getMesosHosts(state) {
 
   return {
     hosts: hosts,
-    statesProcessed: MesosStateStore.getStatesProcessed(),
+    statesProcessed: MesosStateStore.isStatesProcessed(),
     services: MesosStateStore.getFrameworksWithHostsCount(allHosts),
     refreshRate: MesosStateStore.getRefreshRate(),
     allHosts: allHosts,

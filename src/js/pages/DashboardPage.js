@@ -21,7 +21,7 @@ function getMesosState() {
   return {
     allocResources: MesosStateStore.getAllocResources(),
     failureRate: MesosStateStore.getTaskFailureRate(),
-    appsProcessed: MesosStateStore.getAppsProcessed(),
+    appsProcessed: MesosStateStore.isAppsProcessed(),
     refreshRate: MesosStateStore.getRefreshRate(),
     services: MesosStateStore.getLatest().frameworks,
     tasks: MesosStateStore.getTasks(),

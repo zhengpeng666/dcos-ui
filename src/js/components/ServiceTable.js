@@ -54,7 +54,7 @@ function sortFunction(prop) {
 
 function getHealthStatus() {
   return {
-    appsProcessed: MesosStateStore.getAppsProcessed()
+    appsProcessed: MesosStateStore.isAppsProcessed()
   };
 }
 

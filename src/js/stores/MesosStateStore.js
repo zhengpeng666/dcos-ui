@@ -449,10 +449,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     _failureRates = [];
     _prevMesosStatusesMap = {};
 
+    _appsProcessed = false;
     _frameworkNames = [];
     _frameworkIDs = [];
     _frameworkHealth = {};
-    _healthProcessed = false;
     _loading = undefined;
     _interval = undefined;
     _initCalledAt = undefined;
@@ -527,11 +527,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return hosts;
   },
 
-  getStatesProcessed: function () {
+  isStatesProcessed: function () {
     return _statesProcessed;
   },
 
-  getAppsProcessed: function () {
+  isAppsProcessed: function () {
     return _appsProcessed;
   },
 
