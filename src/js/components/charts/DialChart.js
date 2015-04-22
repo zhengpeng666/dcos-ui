@@ -56,16 +56,28 @@ var DialChart = React.createClass({
     slice.each(function(d) { this._current = d; });
 
     slice = this.getSlice(nextProps);
-    slice.transition()
+    slice
+      .each(function (d) {
+        if (d.value > 0) {
+          d3.select(this)
+            .style("visibility", "inherit");
+        }
+      }).transition()
       .duration(nextProps.duration)
       .attrTween("d", function (d) {
-      var interpolate = d3.interpolate(this._current, d);
-      var _this = this;
-      return function(t) {
-        _this._current = interpolate(t);
-        return innerArc(_this._current);
-      };
-    });
+        var interpolate = d3.interpolate(this._current, d);
+        var _this = this;
+        return function (t) {
+          _this._current = interpolate(t);
+          return innerArc(_this._current);
+        };
+      }).each("end", function (d) {
+        console.log(d.value);
+        if (d.value === 0) {
+          d3.select(this)
+            .style("visibility", "hidden");
+        }
+      });
 
     return true;
   },
