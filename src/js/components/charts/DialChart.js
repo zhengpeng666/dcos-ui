@@ -109,7 +109,7 @@ var DialChart = React.createClass({
           <g className="slices">
             {this.getWedges()}
           </g>
-          <g text-anchor="middle">
+          <g textAnchor="middle">
             <text className="h1-jumbo unit">
               {this.props.unit}
             </text>
