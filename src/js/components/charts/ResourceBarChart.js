@@ -72,7 +72,7 @@ var ResourceBarChart = React.createClass({
 
     return _.map(infoMap, function (info, key) {
       var classSet = React.addons.classSet({
-        "button button-stroke button-inverse": true,
+        "button button-small button-stroke button-inverse": true,
         "active": mode === key
       });
 

@@ -35,14 +35,14 @@ var FilterInputText = React.createClass({
     });
 
     return (
-      <div className="form-group filter-input-text-group">
-        <div className="form-control form-control-inverse form-control-group">
+      <div className="form-group form-group-small filter-input-text-group">
+        <div className="form-control form-control-small form-control-inverse form-control-group">
           <span className="form-control-group-add-on form-control-group-add-on-prepend">
             <i className="icon icon-mini icon-search"></i>
           </span>
           <input
             type="text"
-            className="form-control form-control-inverse filter-input-text"
+            className="form-control form-control-small form-control-inverse filter-input-text"
             placeholder="Filter for..."
             value={this.props.searchString}
             onChange={this.handleChange}
