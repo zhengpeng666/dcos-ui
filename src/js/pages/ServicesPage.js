@@ -33,7 +33,6 @@ function getMesosServices(state) {
 
   return {
     frameworks: frameworks,
-    healthProcessed: MesosStateStore.getHealthProcessed(),
     statesProcessed: MesosStateStore.getStatesProcessed(),
     countByHealth: getCountByHealth(allFrameworks),
     refreshRate: MesosStateStore.getRefreshRate(),
