@@ -99,7 +99,8 @@ var ServicesTable = React.createClass({
     if (model.webui_url.length === 0) {
       return (
         <span className="h5 flush-top flush-bottom headline">
-          <i className="icon icon-small icon-small-white border-radius"></i>
+          <img className="icon icon-small border-radius"
+            src={model.images["icon-small"]} />
           {model[prop]}
         </span>
       );
@@ -110,7 +111,8 @@ var ServicesTable = React.createClass({
           href={Strings.ipToHostAddress(model.webui_url)}
           className="h5 headline cell-link">
           <span className="flush-top flush-bottom">
-            <i className="icon icon-small icon-small-white border-radius"></i>
+            <img className="icon icon-small border-radius"
+            src={model.images["icon-small"]} />
             {model[prop]}
           </span>
       </a>

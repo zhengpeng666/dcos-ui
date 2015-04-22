@@ -16,6 +16,7 @@ var _prevMesosStatusesMap = {};
 var _appsProcessed = false;
 var _frameworkNames = [];
 var _frameworkIDs = [];
+var _frameworkImages = {};
 var _frameworkHealth = {};
 var _loading;
 var _interval;
@@ -25,6 +26,11 @@ var _mesosStates = [];
 var _statesProcessed = false;
 
 var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
+var NA_IMAGES = {
+  "icon-small": "/img/services/icon-service-default-small@2x.png",
+  "icon-medium": "/img/services/icon-service-default-medium@2x.png",
+  "icon-large": "/img/services/icon-service-default-large@2x.png"
+};
 
 function setHostsToFrameworkCount(frameworks, hosts) {
   return _.map(frameworks, function (framework) {
@@ -333,8 +339,7 @@ function fillFramework(id, name, colorIndex) {
       colorIndex: colorIndex,
       resources: {cpus: 0, mem: 0, disk: 0},
       used_resources: {cpus: 0, mem: 0, disk: 0},
-      tasks: [],
-      health: NA_HEALTH
+      tasks: []
     });
   });
 }
@@ -366,8 +371,51 @@ function normalizeFrameworks(frameworks, date) {
     // set color index after discovering and assigning index framework
     framework.colorIndex = index;
     framework.health = _frameworkHealth[framework.name] || NA_HEALTH;
+    framework.images = _frameworkImages[framework.name] || NA_IMAGES;
+
     return framework;
   });
+}
+
+function getFrameworkHealth(app) {
+  if (app.healthChecks == null || app.healthChecks.length === 0) {
+    return null;
+  }
+
+  var health = {key: "IDLE", value: HealthTypes.IDLE};
+  if (app.tasksRunning > 0 && app.tasksHealthy === app.tasksRunning) {
+    health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
+  }
+  if (app.tasksUnhealthy > 0) {
+    health = {key: "UNHEALTHY", value: HealthTypes.UNHEALTHY};
+  }
+
+  return health;
+}
+
+function parseMetadata(b64Data) {
+  // extract content of the DCOS_PACKAGE_METADATA label
+  var dataAsJsonString = global.atob(b64Data);
+  return JSON.parse(dataAsJsonString);
+}
+
+function getFrameworkImages(app) {
+  if (app.labels == null ||
+    app.labels.DCOS_PACKAGE_METADATA == null ||
+    app.labels.DCOS_PACKAGE_METADATA.length === 0) {
+    return null;
+  }
+
+  var metadata = parseMetadata(app.labels.DCOS_PACKAGE_METADATA);
+
+  if (metadata.images == null ||
+      metadata.images["icon-small"].length === 0 ||
+      metadata.images["icon-medium"].length === 0 ||
+      metadata.images["icon-large"].length === 0) {
+    return NA_IMAGES;
+  }
+
+  return metadata.images;
 }
 
 function filterByString(objects, key, searchString) {
@@ -613,11 +661,9 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   processMarathonApps: function (data) {
-    _frameworkHealth = _.foldl(data.apps, function (curr, app) {
+    var frameworkData = _.foldl(data.apps, function (curr, app) {
       if (!(app.labels.DCOS_PACKAGE_IS_FRAMEWORK &&
-          app.labels.DCOS_PACKAGE_IS_FRAMEWORK.toLowerCase() === "true") ||
-          app.healthChecks == null ||
-          app.healthChecks.length === 0) {
+          app.labels.DCOS_PACKAGE_IS_FRAMEWORK.toLowerCase() === "true")) {
         return curr;
       }
 
@@ -640,18 +686,14 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         return curr;
       }
 
-      var health = {key: "IDLE", value: HealthTypes.IDLE};
-      if (app.tasksHealthy === app.tasksRunning) {
-        health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
-      }
-      if (app.tasksUnhealthy > 0) {
-        health = {key: "UNHEALTHY", value: HealthTypes.UNHEALTHY};
-      }
-
-      curr[frameworkName] = health;
+      curr.health[frameworkName] = getFrameworkHealth(app);
+      curr.images[frameworkName] = getFrameworkImages(app);
 
       return curr;
-    }, {});
+    }, {health: {}, images: {}});
+
+    _frameworkHealth = frameworkData.health;
+    _frameworkImages = frameworkData.images;
 
     _appsProcessed = true;
 
@@ -692,3 +734,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 });
 
 module.exports = MesosStateStore;
+
+// TODO (DCOS-1148): wrap this in a check for when we are running tests
+module.exports.parseMetadata = parseMetadata;
+module.exports.getFrameworkImages = getFrameworkImages;
+module.exports.NA_IMAGES = NA_IMAGES;
