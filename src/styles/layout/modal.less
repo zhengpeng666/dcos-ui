@@ -1,6 +1,19 @@
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
 .modal {
-  top: 25%;
-  display: block;
+  position: static;
+  margin: @base-spacing-unit;
+
+  .modal-content {
+    .border-radius(0);
+  }
 
   &.inverse {
     color: @modal-inverse-text-color;
