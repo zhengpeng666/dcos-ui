@@ -13,10 +13,10 @@ var Strings = require("../utils/Strings");
 var _failureRates = [];
 var _prevMesosStatusesMap = {};
 
+var _appsProcessed = false;
 var _frameworkNames = [];
 var _frameworkIDs = [];
 var _frameworkHealth = {};
-var _healthProcessed = false;
 var _loading;
 var _interval;
 var _initCalledAt;
@@ -186,7 +186,7 @@ function getTasksByStatus(frameworks, taskTypes) {
 }
 
 // Caluculate a failure rate
-function getFailureRate (mesosState, taskTypes) {
+function getFailureRate(mesosState, taskTypes) {
   var newMesosStatusesMap = {};
   var statuses = getTasksByStatus(mesosState.frameworks, taskTypes);
   var failed = 0;
@@ -246,7 +246,7 @@ function getFailureRate (mesosState, taskTypes) {
   };
 }
 
-function getAllFailureRates (list, taskTypes) {
+function getAllFailureRates(list, taskTypes) {
   var failureRate = getFailureRate(_.last(list), taskTypes);
   _failureRates.push(failureRate);
   _failureRates.shift();
@@ -258,7 +258,7 @@ function getAllFailureRates (list, taskTypes) {
 //   disk: [{date: request time, value: absolute, percentage: value}]
 //   mem: [{date: request time, value: absolute, percentage: value}]
 // }]
-function getHostResourcesBySlave (slave) {
+function getHostResourcesBySlave(slave) {
   return _.foldl(_mesosStates, function (usedResources, state) {
     var tasks = _.chain(state.frameworks)
       .pluck("tasks")
@@ -292,7 +292,7 @@ function getHostResourcesBySlave (slave) {
 //  frameworks: {},
 //  used_resources: []
 // }]
-function getStateByHosts () {
+function getStateByHosts() {
   var data = _.last(_mesosStates);
 
   var hosts = _.foldl(data.slaves, function (acc, v) {
@@ -449,10 +449,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     _failureRates = [];
     _prevMesosStatusesMap = {};
 
+    _appsProcessed = false;
     _frameworkNames = [];
     _frameworkIDs = [];
     _frameworkHealth = {};
-    _healthProcessed = false;
     _loading = undefined;
     _interval = undefined;
     _initCalledAt = undefined;
@@ -495,10 +495,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return frameworks;
   },
 
-  getFrameworkHealth: function () {
-    return _.values(_frameworkHealth);
-  },
-
   getTotalFrameworksResources: function (frameworks) {
     return sumFrameworkResources(frameworks);
   },
@@ -531,12 +527,12 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return hosts;
   },
 
-  getStatesProcessed: function () {
+  isStatesProcessed: function () {
     return _statesProcessed;
   },
 
-  getHealthProcessed: function () {
-    return _healthProcessed;
+  isAppsProcessed: function () {
+    return _appsProcessed;
   },
 
   getTasks: function () {
@@ -616,7 +612,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     this.emitChange(EventTypes.MESOS_STATE_REQUEST_ERROR);
   },
 
-  processMarathonHealth: function (data) {
+  processMarathonApps: function (data) {
     _frameworkHealth = _.foldl(data.apps, function (curr, app) {
       if (!(app.labels.DCOS_PACKAGE_IS_FRAMEWORK &&
           app.labels.DCOS_PACKAGE_IS_FRAMEWORK.toLowerCase() === "true") ||
@@ -657,15 +653,15 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       return curr;
     }, {});
 
-    _healthProcessed = true;
+    _appsProcessed = true;
 
-    this.emitChange(EventTypes.MARATHON_HEALTH_CHANGE);
+    this.emitChange(EventTypes.MARATHON_APPS_CHANGE);
   },
 
-  processMarathonHealthError: function () {
-    _healthProcessed = true;
+  processMarathonAppsError: function () {
+    _appsProcessed = true;
 
-    this.emitChange(EventTypes.MARATHON_HEALTH_REQUEST_ERROR);
+    this.emitChange(EventTypes.MARATHON_APPS_REQUEST_ERROR);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -682,11 +678,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       case ActionTypes.REQUEST_MESOS_STATE_ERROR:
         MesosStateStore.processStateError();
         break;
-      case ActionTypes.REQUEST_MARATHON_HEALTH_SUCCESS:
-        MesosStateStore.processMarathonHealth(action.data);
+      case ActionTypes.REQUEST_MARATHON_APPS_SUCCESS:
+        MesosStateStore.processMarathonApps(action.data);
         break;
-      case ActionTypes.REQUEST_MARATHON_HEALTH_ERROR:
-        MesosStateStore.processMarathonHealthError();
+      case ActionTypes.REQUEST_MARATHON_APPS_ERROR:
+        MesosStateStore.processMarathonAppsError();
         break;
     }
 

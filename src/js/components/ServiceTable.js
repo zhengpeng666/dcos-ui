@@ -54,7 +54,7 @@ function sortFunction(prop) {
 
 function getHealthStatus() {
   return {
-    healthProcessed: MesosStateStore.getHealthProcessed()
+    appsProcessed: MesosStateStore.isAppsProcessed()
   };
 }
 
@@ -70,22 +70,22 @@ var ServicesTable = React.createClass({
 
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
-      EventTypes.MARATHON_HEALTH_CHANGE,
+      EventTypes.MARATHON_APPS_CHANGE,
       this.onMarathonHealthChange
     );
     MesosStateStore.addChangeListener(
-      EventTypes.MARATHON_HEALTH_REQUEST_ERROR,
+      EventTypes.MARATHON_APPS_REQUEST_ERROR,
       this.onMarathonHealthChange
     );
   },
 
   componentWillUnmount: function () {
     MesosStateStore.removeChangeListener(
-      EventTypes.MARATHON_HEALTH_REQUEST_ERROR,
+      EventTypes.MARATHON_APPS_REQUEST_ERROR,
       this.onMarathonHealthChange
     );
     MesosStateStore.removeChangeListener(
-      EventTypes.MARATHON_HEALTH_CHANGE,
+      EventTypes.MARATHON_APPS_CHANGE,
       this.onMarathonHealthChange
     );
   },
@@ -120,7 +120,7 @@ var ServicesTable = React.createClass({
   renderHealth: function (prop, model) {
     var data = this.internalStorage_get();
 
-    if (!data.healthProcessed) {
+    if (!data.appsProcessed) {
       return (
         <div className="loader-small ball-beat">
           <div></div>

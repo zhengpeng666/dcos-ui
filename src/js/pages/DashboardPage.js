@@ -21,7 +21,7 @@ function getMesosState() {
   return {
     allocResources: MesosStateStore.getAllocResources(),
     failureRate: MesosStateStore.getTaskFailureRate(),
-    healthProcessed: MesosStateStore.getHealthProcessed(),
+    appsProcessed: MesosStateStore.isAppsProcessed(),
     refreshRate: MesosStateStore.getRefreshRate(),
     services: MesosStateStore.getLatest().frameworks,
     tasks: MesosStateStore.getTasks(),
@@ -132,7 +132,7 @@ var DashboardPage = React.createClass({
           <div className="grid-item column-small-6 column-large-4">
             <Panel title="Services Health">
               <ServiceList
-                healthProcessed={data.healthProcessed}
+                healthProcessed={data.appsProcessed}
                 services={this.getServicesList(data.services)} />
               {this.getViewAllServicesBtn()}
             </Panel>

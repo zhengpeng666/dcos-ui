@@ -50,13 +50,13 @@ var MesosStateActions = {
       dataType: "json",
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_MARATHON_HEALTH_SUCCESS,
+          type: ActionTypes.REQUEST_MARATHON_APPS_SUCCESS,
           data: response
         });
       },
       error: function (e) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_MARATHON_HEALTH_ERROR,
+          type: ActionTypes.REQUEST_MARATHON_APPS_ERROR,
           data: e.message
         });
       }
