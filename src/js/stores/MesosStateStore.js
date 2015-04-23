@@ -383,11 +383,10 @@ function getFrameworkHealth(app) {
   }
 
   var health = {key: "IDLE", value: HealthTypes.IDLE};
-  if (app.tasksRunning > 0 && app.tasksHealthy === app.tasksRunning) {
-    health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
-  }
   if (app.tasksUnhealthy > 0) {
     health = {key: "UNHEALTHY", value: HealthTypes.UNHEALTHY};
+  } else if (app.tasksRunning > 0 && app.tasksHealthy === app.tasksRunning) {
+    health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
   }
 
   return health;
