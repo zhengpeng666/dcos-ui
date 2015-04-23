@@ -25,7 +25,7 @@ describe("TooltipMixin", function () {
       }, TooltipMixin);
     });
 
-    it("should attach tips", function () {
+    it("should call #tip_attachTips", function () {
       this.instance.tip_attachTips = jasmine.createSpy();
       this.instance.componentDidMount();
       expect(this.instance.tip_attachTips).toHaveBeenCalled();
@@ -50,7 +50,7 @@ describe("TooltipMixin", function () {
       this.instance = _.extend({}, TooltipMixin);
     });
 
-    it("should reattach tips", function () {
+    it("should should call #tip_attachTips", function () {
       this.instance.tip_attachTips = jasmine.createSpy();
       this.instance.componentDidUpdate();
       expect(this.instance.tip_attachTips).toHaveBeenCalled();
@@ -64,7 +64,7 @@ describe("TooltipMixin", function () {
       this.instance = _.extend({}, TooltipMixin);
     });
 
-    it("should destroy tips", function () {
+    it("should call #tip_destroyAllTips", function () {
       this.instance.tip_destroyAllTips = jasmine.createSpy();
       this.instance.componentWillUnmount();
       expect(this.instance.tip_destroyAllTips).toHaveBeenCalled();
