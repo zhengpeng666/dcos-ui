@@ -72,7 +72,6 @@ var DialChart = React.createClass({
           return innerArc(_this._current);
         };
       }).each("end", function (d) {
-        console.log(d.value);
         if (d.value === 0) {
           d3.select(this)
             .style("visibility", "hidden");
