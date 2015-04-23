@@ -37,6 +37,8 @@ var ServiceList = React.createClass({
     return _.map(services, function (service) {
       var attributes = {};
       var state = STATES.NA;
+      var title = service.name;
+
       if (service.health != null) {
         state = STATES[service.health.key];
 
@@ -65,8 +67,18 @@ var ServiceList = React.createClass({
         );
       }
 
+      if (service.webui_url && service.webui_url.length > 0) {
+        title = (
+          <a href={service.webui_url} className="h3">
+            {service.name}
+          </a>
+        );
+      }
+
       return {
-        title: {value: service.name},
+        title: {
+          value: title
+        },
         health: {
           value: health,
           classes: state.classes,
@@ -90,9 +102,11 @@ var ServiceList = React.createClass({
     var listOrder = ["title", "health"];
 
     return (
-      <List
-        list={this.getServices(this.props.services, this.props.healthProcessed)}
-        order={listOrder} />
+      <div className="service-list-component">
+        <List
+          list={this.getServices(this.props.services, this.props.healthProcessed)}
+          order={listOrder} />
+      </div>
     );
   },
 

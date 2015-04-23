@@ -32,4 +32,34 @@ describe("ServiceList", function () {
 
   });
 
+  describe("#getServices", function () {
+
+    beforeEach(function () {
+      var services = [{name: "foo"}];
+      this.instance = TestUtils.renderIntoDocument(
+        <ServiceList services={services} healthProcessed={false} />
+      );
+    });
+
+    it("returns title as the value to display", function () {
+      var services = [{
+        name: "foo"
+      }];
+      var result = this.instance.getServices(services, false);
+
+      expect(result[0].title.value).toEqual("foo");
+    });
+
+    it("returns title as a link", function () {
+      var services = [{
+        name: "foo",
+        webui_url: "bar"
+      }];
+      var result = this.instance.getServices(services, false);
+
+      expect(TestUtils.isElement(result[0].title.value)).toBe(true);
+    });
+
+  });
+
 });
