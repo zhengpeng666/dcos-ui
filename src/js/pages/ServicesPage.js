@@ -163,7 +163,7 @@ var ServicesPage = React.createClass({
           </li>
         </ul>
         <ServiceTable
-          frameworks={data.frameworks}
+          services={data.frameworks}
           healthProcessed={data.appsProcessed} />
       </div>
     );

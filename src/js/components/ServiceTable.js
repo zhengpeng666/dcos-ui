@@ -56,7 +56,7 @@ var ServicesTable = React.createClass({
   mixins: [TooltipMixin],
 
   propTypes: {
-    frameworks: React.PropTypes.array.isRequired,
+    services: React.PropTypes.array.isRequired,
     healthProcessed: React.PropTypes.bool.isRequired
   },
 
@@ -146,7 +146,7 @@ var ServicesTable = React.createClass({
 
   getDefaultProps: function () {
     return {
-      frameworks: []
+      services: []
     };
   },
 
@@ -208,7 +208,7 @@ var ServicesTable = React.createClass({
       <Table
         className="table inverse table-borderless-outer table-borderless-inner-columns"
         columns={this.getColumns()}
-        data={this.props.frameworks.slice(0)}
+        data={this.props.services.slice(0)}
         keys={["id"]}
         sortBy={{prop: "name", order: "desc"}}
         sortFunc={sortFunction} />
