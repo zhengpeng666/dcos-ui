@@ -47,6 +47,8 @@ var LoginModal = React.createClass({
       return;
     }
 
+    // clear store
+    global.chmln.store.clear();
     // setup with user infor for their tracking
     global.chmln.setup({
       uid: Actions.getStintID(),
