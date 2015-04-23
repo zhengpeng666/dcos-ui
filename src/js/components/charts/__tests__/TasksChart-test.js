@@ -10,6 +10,41 @@ var TasksChart = require("../TasksChart");
 
 describe("TasksChart", function () {
 
+  describe("#getTaskInfo", function () {
+
+    beforeEach(function () {
+      this.instance = TestUtils.renderIntoDocument(
+        <TasksChart tasks={[]} />
+      );
+    });
+
+    it("renders two task info labels when there is no data", function () {
+      var unitsRow = TestUtils.scryRenderedDOMComponentsWithClass(
+        this.instance, "row"
+      )[1];
+      var taskLabels = TestUtils.scryRenderedDOMComponentsWithClass(
+        unitsRow, "unit"
+      );
+      expect(taskLabels.length).toEqual(2);
+    });
+
+    it("renders two task info labels when there is only data for one", function () {
+      this.instance.setProps({
+        tasks: [
+          {state: "TASK_RUNNING", tasks: [{ id: "task1", name: "Task 1" }]}
+        ]
+      });
+      var unitsRow = TestUtils.scryRenderedDOMComponentsWithClass(
+        this.instance, "row"
+      )[1];
+      var taskLabels = TestUtils.scryRenderedDOMComponentsWithClass(
+        unitsRow, "unit"
+      );
+      expect(taskLabels.length).toEqual(2);
+    });
+
+  });
+
   describe("#shouldComponentUpdate", function () {
 
     beforeEach(function () {
