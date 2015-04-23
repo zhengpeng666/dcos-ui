@@ -66,11 +66,10 @@ var DialChart = React.createClass({
       .duration(nextProps.duration)
       .attrTween("d", function (d) {
         var interpolate = d3.interpolate(this._current, d);
-        var _this = this;
         return function (t) {
-          _this._current = interpolate(t);
-          return innerArc(_this._current);
-        };
+          this._current = interpolate(t);
+          return innerArc(this._current);
+        }.bind(this);
       }).each("end", function (d) {
         if (d.value === 0) {
           d3.select(this)
