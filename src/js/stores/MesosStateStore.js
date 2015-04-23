@@ -395,8 +395,12 @@ function getFrameworkHealth(app) {
 
 function parseMetadata(b64Data) {
   // extract content of the DCOS_PACKAGE_METADATA label
-  var dataAsJsonString = global.atob(b64Data);
-  return JSON.parse(dataAsJsonString);
+  try {
+    var dataAsJsonString = global.atob(b64Data);
+    return JSON.parse(dataAsJsonString);
+  } catch (error) {
+    return {};
+  }
 }
 
 function getFrameworkImages(app) {
