@@ -19,29 +19,35 @@ var stateJSON = require("../../stores/__tests__/fixtures/state.json");
 MesosStateStore.init();
 MesosStateStore.processState(stateJSON);
 
+function getTable(isAppsProcessed) {
+  return TestUtils.renderIntoDocument(
+    <ServiceTable services={this.frameworks}
+      healthProcessed={isAppsProcessed} />
+  );
+}
+
 describe("ServiceTable", function () {
 
   describe("#renderHealth", function () {
     beforeEach(function () {
       this.frameworks = MesosStateStore.getFrameworks();
-      this.table = TestUtils.renderIntoDocument(
-        <ServiceTable frameworks={this.frameworks} />
-      );
     });
 
     it("should have loaders on all frameworks", function () {
       expect(MesosStateStore.isAppsProcessed()).toBe(false);
 
+      var table = getTable(MesosStateStore.isAppsProcessed());
+
       this.frameworks.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(
-          this.table.renderHealth(null, row)
+          table.renderHealth(null, row)
         );
 
         var fn = TestUtils.findRenderedDOMComponentWithClass.bind(TestUtils,
           healthlabel, "loader-small"
         );
         expect(fn).not.toThrow();
-      }.bind(this));
+      });
     });
 
     it("should have N/A health status on all frameworks",
@@ -49,12 +55,14 @@ describe("ServiceTable", function () {
       MesosStateStore.processMarathonAppsError();
       expect(MesosStateStore.isAppsProcessed()).toBe(true);
 
+      var table = getTable(MesosStateStore.isAppsProcessed());
+
       this.frameworks.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(
-          this.table.renderHealth(null, row)
+          table.renderHealth(null, row)
         );
         expect(healthlabel.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
-      }.bind(this));
+      });
     });
   });
 

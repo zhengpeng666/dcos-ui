@@ -4,14 +4,11 @@ var _ = require("underscore");
 var Humanize = require("humanize");
 var React = require("react/addons");
 
-var EventTypes = require("../constants/EventTypes");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthSorting = require("../constants/HealthSorting");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var Maths = require("../utils/Maths");
-var MesosStateStore = require("../stores/MesosStateStore");
 var Strings = require("../utils/Strings");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
@@ -52,54 +49,23 @@ function sortFunction(prop) {
   };
 }
 
-function getHealthStatus() {
-  return {
-    appsProcessed: MesosStateStore.isAppsProcessed()
-  };
-}
-
 var ServicesTable = React.createClass({
 
   displayName: "ServicesTable",
 
-  mixins: [TooltipMixin, InternalStorageMixin],
+  mixins: [TooltipMixin],
 
   propTypes: {
-    frameworks: React.PropTypes.array.isRequired
-  },
-
-  componentDidMount: function () {
-    MesosStateStore.addChangeListener(
-      EventTypes.MARATHON_APPS_CHANGE,
-      this.onMarathonHealthChange
-    );
-    MesosStateStore.addChangeListener(
-      EventTypes.MARATHON_APPS_REQUEST_ERROR,
-      this.onMarathonHealthChange
-    );
-  },
-
-  componentWillUnmount: function () {
-    MesosStateStore.removeChangeListener(
-      EventTypes.MARATHON_APPS_REQUEST_ERROR,
-      this.onMarathonHealthChange
-    );
-    MesosStateStore.removeChangeListener(
-      EventTypes.MARATHON_APPS_CHANGE,
-      this.onMarathonHealthChange
-    );
-  },
-
-  onMarathonHealthChange: function () {
-    this.internalStorage_set(getHealthStatus());
-    this.forceUpdate();
+    services: React.PropTypes.array.isRequired,
+    healthProcessed: React.PropTypes.bool.isRequired
   },
 
   renderHeadline: function (prop, model) {
     if (model.webui_url.length === 0) {
       return (
         <span className="h5 flush-top flush-bottom headline">
-          <i className="icon icon-small icon-small-white border-radius"></i>
+          <img className="icon icon-small border-radius"
+            src={model.images["icon-small"]} />
           {model[prop]}
         </span>
       );
@@ -110,7 +76,8 @@ var ServicesTable = React.createClass({
           href={Strings.ipToHostAddress(model.webui_url)}
           className="h5 headline cell-link">
           <span className="flush-top flush-bottom">
-            <i className="icon icon-small icon-small-white border-radius"></i>
+            <img className="icon icon-small border-radius"
+            src={model.images["icon-small"]} />
             {model[prop]}
           </span>
       </a>
@@ -118,9 +85,7 @@ var ServicesTable = React.createClass({
   },
 
   renderHealth: function (prop, model) {
-    var data = this.internalStorage_get();
-
-    if (!data.appsProcessed) {
+    if (!this.props.healthProcessed) {
       return (
         <div className="loader-small ball-beat">
           <div></div>
@@ -131,7 +96,6 @@ var ServicesTable = React.createClass({
     }
 
     var statusClassSet = React.addons.classSet({
-      "collection-item-content-status": true,
       "text-success": model.health.value === HealthTypes.HEALTHY,
       "text-danger": model.health.value === HealthTypes.UNHEALTHY,
       "text-warning": model.health.value === HealthTypes.IDLE,
@@ -182,7 +146,7 @@ var ServicesTable = React.createClass({
 
   getDefaultProps: function () {
     return {
-      frameworks: []
+      services: []
     };
   },
 
@@ -244,7 +208,7 @@ var ServicesTable = React.createClass({
       <Table
         className="table inverse table-borderless-outer table-borderless-inner-columns"
         columns={this.getColumns()}
-        data={this.props.frameworks.slice(0)}
+        data={this.props.services.slice(0)}
         keys={["id"]}
         sortBy={{prop: "name", order: "desc"}}
         sortFunc={sortFunction} />
