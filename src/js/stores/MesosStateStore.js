@@ -666,8 +666,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   processMarathonApps: function (data) {
     var frameworkData = _.foldl(data.apps, function (curr, app) {
-      if (!(app.labels.DCOS_PACKAGE_IS_FRAMEWORK &&
-          app.labels.DCOS_PACKAGE_IS_FRAMEWORK.toLowerCase() === "true")) {
+      if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK == null ||
+          app.labels.DCOS_PACKAGE_IS_FRAMEWORK.toLowerCase() !== "true") {
         return curr;
       }
 
