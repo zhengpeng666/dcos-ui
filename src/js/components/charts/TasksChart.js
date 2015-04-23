@@ -12,14 +12,11 @@ var taskInfo = {
   "TASK_STAGING": {label: "Tasks staging", colorIndex: 1}
 };
 
-function getStateWithNoData() {
-  return {
-    dialChartData: [{colorIndex: 6, value: 1}],
-    tasksData: [
-      {name: "TASK_RUNNING", value: 0},
-      {name: "TASK_STAGING", value: 0}
-    ]
-  };
+function getEmptyTaskData() {
+  return [
+    {name: "TASK_RUNNING", value: 0, colorIndex: 4},
+    {name: "TASK_STAGING", value: 0, colorIndex: 1}
+  ];
 }
 
 var TasksChart = React.createClass({
@@ -41,7 +38,7 @@ var TasksChart = React.createClass({
 
   getTaskInfo: function (tasks) {
     if (tasks.length === 0) {
-      tasks = getStateWithNoData().tasksData;
+      tasks = getEmptyTaskData();
     }
 
     var numberOfTasks = tasks.length;
@@ -106,13 +103,14 @@ var TasksChart = React.createClass({
     var total = this.getTotal(tasks);
 
     if (tasks.length === 0) {
-      tasks = getStateWithNoData().dialChartData;
+      tasks = getEmptyTaskData();
     }
 
     return (
       <DialChart
         data={tasks}
         label={"Total Tasks"}
+        slices={getEmptyTaskData()}
         unit={total} />
     );
   },

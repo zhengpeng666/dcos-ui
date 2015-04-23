@@ -7,6 +7,11 @@ var React = require("react/addons");
 var DialSlice = require("./DialSlice");
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 
+// the data to render a single grey circle
+function getEmptyState () {
+  return [{ colorIndex: 6, value: 1 }];
+}
+
 var DialChart = React.createClass({
 
   displayName: "DialChart",
@@ -16,6 +21,7 @@ var DialChart = React.createClass({
   propTypes: {
     // [{colorIndex: 0, name: "Some Name", value: 4}]
     data: React.PropTypes.array.isRequired,
+    slices: React.PropTypes.array,
     duration: React.PropTypes.number,
     unit: React.PropTypes.number,
     label: React.PropTypes.string,
@@ -26,6 +32,7 @@ var DialChart = React.createClass({
     return {
       duration: 1000,
       label: "",
+      slices: [],
       value: "value"
     };
   },
@@ -49,24 +56,60 @@ var DialChart = React.createClass({
     slice.each(function(d) { this._current = d; });
 
     slice = this.getSlice(nextProps);
-    slice.transition()
+    slice
+      .each(function (d) {
+        if (d.value > 0) {
+          d3.select(this)
+            .style("visibility", "inherit");
+        }
+      }).transition()
       .duration(nextProps.duration)
       .attrTween("d", function (d) {
-      var interpolate = d3.interpolate(this._current, d);
-      var _this = this;
-      return function(t) {
-        _this._current = interpolate(t);
-        return innerArc(_this._current);
-      };
-    });
+        var interpolate = d3.interpolate(this._current, d);
+        return function (t) {
+          this._current = interpolate(t);
+          return innerArc(this._current);
+        }.bind(this);
+      }).each("end", function (d) {
+        if (d.value === 0) {
+          d3.select(this)
+            .style("visibility", "hidden");
+        }
+      });
 
     return true;
   },
 
+  getNormalizedData: function (slices, data) {
+    var sliceNames = _.pluck(slices, "name");
+    var dataSliceNames = _.pluck(data, "name");
+    var allNames = _.union(sliceNames, dataSliceNames);
+
+    if (this.isEmpty(data)) {
+      return getEmptyState();
+    }
+
+    return _.map(allNames, function(name) {
+      if (_.contains(dataSliceNames, name)) {
+        return _.findWhere(data, {name: name});
+      } else {
+        return _.findWhere(slices, {name: name});
+      }
+    });
+  },
+
+  isEmpty: function (data) {
+    var sumOfData = _.foldl(data, function (memo, datum) {
+      return memo + datum.value;
+    }, 0);
+    return sumOfData === 0;
+  },
+
   getSlice: function(props) {
     var data = this.internalStorage_get();
+    var normalizedData = this.getNormalizedData(props.slices, props.data);
     return d3.select(this.getDOMNode()).selectAll("path")
-      .data(data.pie(props.data));
+      .data(data.pie(normalizedData));
   },
 
   getArcs: function(props) {
@@ -91,8 +134,9 @@ var DialChart = React.createClass({
     var data = this.internalStorage_get();
     var innerArc = data.innerArc;
     var pie = data.pie;
+    var normalizedData = this.getNormalizedData(this.props.slices, this.props.data);
 
-    return _.map(pie(this.props.data), function (element, i) {
+    return _.map(pie(normalizedData), function (element, i) {
       return (
         <DialSlice
           key={i}
