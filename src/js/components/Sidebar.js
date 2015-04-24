@@ -7,6 +7,7 @@ var State = require("react-router").State;
 
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var TooltipMixin = require("../mixins/TooltipMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var Config = require("../config/Config");
 
@@ -26,7 +27,7 @@ var Sidebar = React.createClass({
 
   displayName: "Sidebar",
 
-  mixins: [State, InternalStorageMixin],
+  mixins: [State, InternalStorageMixin, TooltipMixin],
 
   componentWillMount: function () {
     this.internalStorage_set(getMesosInfo());
@@ -117,11 +118,24 @@ var Sidebar = React.createClass({
           </nav>
         </div>
         <div className="sidebar-footer">
-          <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom">
+          <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom logo-container">
             <img src="/img/layout/sidebar/sidebar-logo.png" className="sidebar-footer-image" alt="sidebar footer image" />
             <p className="text-align-center flush-top flush-bottom">
-              Mesosphere DCOS v.{Config.version}
+              <span className="company-name">Mesosphere </span>
+              <span className="app-name">DCOS </span>
+              <span className="version-number">v.{Config.version}</span>
             </p>
+          </div>
+          <div className="icon-buttons">
+            <button className="button button-smallbutton-link" data-behavior="show-tip" data-tip-content="Install Command Line Tools" data-tip-place="top-right">
+              <i className="icon icon-cli icon-medium"></i>
+            </button>
+            <button className="button button-smallbutton-link" data-behavior="show-tip" data-tip-content="Talk with us">
+              <i className="icon icon-chat icon-medium"></i>
+            </button>
+            <button className="button button-smallbutton-link" data-behavior="show-tip" data-tip-content="Start Tour">
+              <i className="icon icon-tour icon-medium"></i>
+            </button>
           </div>
         </div>
       </div>
