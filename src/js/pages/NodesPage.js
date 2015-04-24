@@ -13,6 +13,7 @@ var Page = require("../components/Page");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var HostTable = require("../components/HostTable");
+var SidebarActions = require("../events/SidebarActions");
 
 function getMesosHosts(state) {
   var filters = _.pick(state, "searchString", "byServiceFilter");
@@ -40,6 +41,17 @@ var NodesPage = React.createClass({
   displayName: "NodesPage",
 
   mixins: [InternalStorageMixin],
+
+  statics: {
+    // Static life cycle method from react router, that will be called
+    // "when a handler is about to render", i.e. on route change:
+    // https://github.com/rackt/react-router/
+    // blob/master/docs/api/components/RouteHandler.md
+    willTransitionTo: function () {
+
+      SidebarActions.close();
+    }
+  },
 
   getInitialState: function () {
     return _.clone(DEFAULT_FILTER_OPTIONS);

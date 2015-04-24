@@ -3,7 +3,6 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
-var SidebarActions = require("../events/SidebarActions");
 var SidebarToggle = require("../components/SidebarToggle");
 
 var Page = React.createClass({
@@ -14,16 +13,6 @@ var Page = React.createClass({
     title: React.PropTypes.string,
     renderNavigation: React.PropTypes.func,
     isLoading: React.PropTypes.bool
-  },
-
-  statics: {
-    // Static life cycle method from react router, that will be called
-    // "when a handler is about to render", i.e. on route change:
-    // https://github.com/rackt/react-router/
-    // blob/master/docs/api/components/RouteHandler.md
-    willTransitionTo: function () {
-      SidebarActions.close();
-    }
   },
 
   getDefaultProps: function () {

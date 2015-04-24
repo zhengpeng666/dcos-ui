@@ -16,6 +16,7 @@ var TaskFailureTimeSeriesChart =
   require("../components/charts/TaskFailureTimeSeriesChart");
 var ServiceList = require("../components/ServiceList");
 var TasksChart = require("../components/charts/TasksChart");
+var SidebarActions = require("../events/SidebarActions");
 
 function getMesosState() {
   return {
@@ -34,6 +35,17 @@ var DashboardPage = React.createClass({
   displayName: "DashboardPage",
 
   mixins: [InternalStorageMixin],
+
+  statics: {
+    // Static life cycle method from react router, that will be called
+    // "when a handler is about to render", i.e. on route change:
+    // https://github.com/rackt/react-router/
+    // blob/master/docs/api/components/RouteHandler.md
+    willTransitionTo: function () {
+
+      SidebarActions.close();
+    }
+  },
 
   getDefaultProps: function () {
     return {
