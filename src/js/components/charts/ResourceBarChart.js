@@ -101,15 +101,18 @@ var ResourceBarChart = React.createClass({
   },
 
   getLegend: function (info) {
+    var classSet = React.addons.classSet({
+      "button button-small button-stroke button-inverse": true,
+      "disabled": true
+    });
+
     return (
-      <ul className="legend list-unstyled list-inline inverse">
-        <li className="legend-item">
+      <div className="button-group legend">
+        <button className={classSet}>
           <span className={"line path-color-" + info.colorIndex}></span>
-          <strong>
-            {info.label} Allocated
-          </strong>
-        </li>
-      </ul>
+          <span>{info.label} Allocated</span>
+        </button>
+      </div>
     );
   },
 
