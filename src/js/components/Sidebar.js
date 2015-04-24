@@ -7,6 +7,7 @@ var State = require("react-router").State;
 
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var TooltipMixin = require("../mixins/TooltipMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var Config = require("../config/Config");
 
@@ -26,7 +27,7 @@ var Sidebar = React.createClass({
 
   displayName: "Sidebar",
 
-  mixins: [State, InternalStorageMixin],
+  mixins: [State, InternalStorageMixin, TooltipMixin],
 
   componentWillMount: function () {
     this.internalStorage_set(getMesosInfo());
@@ -122,6 +123,17 @@ var Sidebar = React.createClass({
             <p className="text-align-center flush-top flush-bottom">
               Mesosphere DCOS v.{Config.version}
             </p>
+          </div>
+          <div className="icon-buttons">
+            <button className="button button-smallbutton-link" data-behavior="show-tip" data-tip-content="Install Command Line Tools" data-tip-place="top-right">
+              <i className="icon icon-cli icon-medium"></i>
+            </button>
+            <button className="button button-smallbutton-link" data-behavior="show-tip" data-tip-content="Talk with us">
+              <i className="icon icon-chat icon-medium"></i>
+            </button>
+            <button className="button button-smallbutton-link" data-behavior="show-tip" data-tip-content="Start Tour">
+              <i className="icon icon-tour icon-medium"></i>
+            </button>
           </div>
         </div>
       </div>

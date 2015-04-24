@@ -57,6 +57,34 @@
       margin: 0 auto (@base-spacing-unit * 0.5);
       .opacity(0.10);
     }
+
+    .icon-buttons {
+      display: flex;
+      flex-direction: row;
+
+      button {
+        background-color: transparent;
+        border-top: 1px solid ~`color_lightness("@{black}", 90)`;
+        border-right: 1px solid ~`color_lightness("@{black}", 90)`;
+        border-bottom-width: 0;
+        border-left-width: 0;
+        border-radius: 0;
+        flex-grow: 1;
+
+        .icon {
+          opacity: 0.7;
+          transition: opacity 500ms;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+
+        &:last-child {
+          border-right-width: 0;
+        }
+      }
+    }
   }
 
   /* Sidebar Navigation */
