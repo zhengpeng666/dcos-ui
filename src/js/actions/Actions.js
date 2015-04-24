@@ -46,6 +46,10 @@ var Actions = {
     return RouterLocation.getCurrentPath();
   },
 
+  getStintID: function () {
+    return this.stintID;
+  },
+
   identify: function (info) {
     global.analytics.identify(info);
   },
