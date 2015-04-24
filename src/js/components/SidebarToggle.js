@@ -57,7 +57,7 @@ var SidebarToggle = React.createClass({
   render: function () {
     return (
       <div className="page-header-sidebar-toggle" onClick={this.onClick}>
-        <i className="page-header-sidebar-toggle-icon icon icon-medium icon-medium-white"></i>
+        <i className="page-header-sidebar-toggle-icon icon icon-mini icon-mini-white icon-list"></i>
         <span className="page-header-sidebar-toggle-label">
           Show/Hide Sidebar
         </span>
