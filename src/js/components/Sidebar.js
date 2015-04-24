@@ -121,7 +121,9 @@ var Sidebar = React.createClass({
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom">
             <img src="/img/layout/sidebar/sidebar-logo.png" className="sidebar-footer-image" alt="sidebar footer image" />
             <p className="text-align-center flush-top flush-bottom">
-              Mesosphere DCOS v.{Config.version}
+              <span className="company-name">Mesosphere </span>
+              <span className="app-name">DCOS </span>
+              <span className="version-number">v.{Config.version}</span>
             </p>
           </div>
           <div className="icon-buttons">

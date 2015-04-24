@@ -302,6 +302,39 @@
           }
         }
       }
+
+
+      /* Sidebar Footer */
+      .sidebar-footer {
+
+        .company-name {
+          display: none;
+        }
+
+        .sidebar-footer-image {
+          width: 40px;
+        }
+
+        .icon-buttons {
+          display: flex;
+          flex-direction: column;
+
+          button {
+
+            padding-left: 15px;
+            padding-right: 15px;
+            background-color: transparent;
+            border-top-width: 0;
+            border-right-width: 0;
+            border-bottom: 1px solid ~`color_lightness("@{black}", 90)`;
+            border-left-width: 0;
+
+            &:last-child {
+              border-bottom-width: 0;
+            }
+          }
+        }
+      }
     }
   }
 }
