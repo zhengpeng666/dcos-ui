@@ -50,21 +50,13 @@ var tasks = {
 
   webpack: function (masterTree) {
     // transform merge module dependencies into one file
-    return webpackify(masterTree, {
+    var options = {
       entry: "./" + fileNames.mainJs + ".js",
       output: {
         // library: "Test",
         filename: dirs.jsDist + "/" + fileNames.mainJsDist + ".js"
       },
-      devtool: "source-map",
       module: {
-        preLoaders: [
-          {
-            test: /\.js$/,
-            loader: "source-map-loader",
-            exclude: /node_modules/
-          }
-        ],
         loaders: [
           {
             test: /\.js$/,
@@ -76,7 +68,21 @@ var tasks = {
       resolve: {
         extensions: ["", ".js"]
       }
-    });
+    };
+
+    // Extend options with source mapping
+    if (env === "development") {
+      options.devtool = "source-map";
+      options.module.preLoaders = [
+        {
+          test: /\.js$/,
+          loader: "source-map-loader",
+          exclude: /node_modules/
+        }
+      ];
+    }
+
+    return webpackify(masterTree, options);
   },
 
   minifyJs: function (masterTree) {
