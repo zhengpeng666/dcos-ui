@@ -62,9 +62,9 @@ var HostTimeSeriesChart = React.createClass({
         <TimeSeriesChart
           data={this.getData(props)}
           maxY={this.getMaxY()}
+          refreshRate={props.refreshRate}
           y="slavesCount"
-          yFormat={ValueTypes.ABSOLUTE}
-          refreshRate={props.refreshRate} />
+          yFormat={ValueTypes.ABSOLUTE} />
       </Chart>
     );
   },
@@ -74,10 +74,11 @@ var HostTimeSeriesChart = React.createClass({
 
     return (
       <div className="chart">
-        <TimeSeriesLabel colorIndex={4}
-          y="slavesCount"
+        <TimeSeriesLabel
+          colorIndex={4}
           currentValue={this.getLatest(props.data)}
-          subHeading={"Connected Nodes"} />
+          subHeading={"Connected Nodes"}
+          y="slavesCount" />
         {this.getChart(props)}
       </div>
     );
