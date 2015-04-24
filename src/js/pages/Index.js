@@ -94,7 +94,7 @@ var Index = React.createClass({
   },
 
   onSideBarChange: function () {
-    this.internalStorage_set(getSidebarState());
+    this.internalStorage_update(getSidebarState());
     this.forceUpdate();
   },
 
