@@ -159,4 +159,28 @@ describe("Mesos State Store", function () {
 
   });
 
+  describe("#getActiveHostsCount", function () {
+
+    beforeEach(function() {
+      MesosStateStore.reset();
+      MesosStateStore.init();
+      MesosStateStore.processState(MockStates.activatedSlaves[0]);
+      MesosStateStore.processState(MockStates.activatedSlaves[1]);
+      MesosStateStore.processState(MockStates.activatedSlaves[2]);
+      this.activeHostsCount = MesosStateStore.getActiveHostsCount();
+    });
+
+    it("should have same length as history length", function () {
+      expect(Config.historyLength).toBe(this.activeHostsCount.length);
+    });
+
+    it("should have correct number of active slaves in series", function () {
+      expect(this.activeHostsCount.pop().slavesCount).toBe(7);
+      expect(this.activeHostsCount.pop().slavesCount).toBe(4);
+      expect(this.activeHostsCount.pop().slavesCount).toBe(6);
+      expect(this.activeHostsCount.pop().slavesCount).toBe(0);
+    });
+
+  });
+
 });
