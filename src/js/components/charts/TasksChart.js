@@ -41,23 +41,25 @@ var TasksChart = React.createClass({
       tasks = getEmptyTaskData();
     }
 
-    var numberOfTasks = tasks.length;
-    var leftover = numberOfTasks % tasksPerRow;
+    var numberOfTasks = _.size(taskInfo);
 
-    return _.map(tasks, function (task, i) {
-      var info = taskInfo[task.name];
+    return _.map(taskInfo, function (info, key) {
+      var task = _.findWhere(tasks, {name: key});
+      if (task === undefined) {
+        task = { value: 0 };
+      }
       var classes = {
         "text-align-center": true
       };
       // equalize columns for units
-      if (i < numberOfTasks - leftover) {
+      if (numberOfTasks > tasksPerRow) {
         classes["column-small-4"] = true;
       } else {
-        classes["column-small-" + 12 / leftover] = true;
+        classes["column-small-" + 12 / numberOfTasks] = true;
       }
       var classSet = React.addons.classSet(classes);
       return (
-        <div key={i} className={classSet}>
+        <div key={key} className={classSet}>
           <p className="h1 unit">
             {task.value}
           </p>
