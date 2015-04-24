@@ -6,6 +6,7 @@ var Link = require("react-router").Link;
 
 var EventTypes = require("../constants/EventTypes");
 var HealthSorting = require("../constants/HealthSorting");
+var HostTimeSeriesChart = require("../components/charts/HostTimeSeriesChart");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var Page = require("../components/Page");
@@ -20,8 +21,9 @@ var TasksChart = require("../components/charts/TasksChart");
 function getMesosState() {
   return {
     allocResources: MesosStateStore.getAllocResources(),
-    failureRate: MesosStateStore.getTaskFailureRate(),
     appsProcessed: MesosStateStore.isAppsProcessed(),
+    failureRate: MesosStateStore.getTaskFailureRate(),
+    hostsCount: MesosStateStore.getActiveHostsCount(),
     refreshRate: MesosStateStore.getRefreshRate(),
     services: MesosStateStore.getLatest().frameworks,
     tasks: MesosStateStore.getTasks(),
@@ -140,6 +142,13 @@ var DashboardPage = React.createClass({
           <div className="grid-item column-small-6 column-large-4">
             <Panel title="Tasks">
               <TasksChart tasks={data.tasks} />
+            </Panel>
+          </div>
+          <div className="grid-item column-small-6 column-large-4">
+            <Panel title="Nodes">
+              <HostTimeSeriesChart
+                data={data.hostsCount}
+                refreshRate={data.refreshRate} />
             </Panel>
           </div>
         </div>

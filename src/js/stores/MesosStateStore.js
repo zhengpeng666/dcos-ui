@@ -392,6 +392,20 @@ function getFrameworkHealth(app) {
   return health;
 }
 
+function activeHostsCountOverTime() {
+  return _.map(_mesosStates, function (state) {
+    return {
+      date: state.date,
+      slavesCount: _.foldl(state.slaves, function (count, slave) {
+        if (slave.active) {
+          count++;
+        }
+        return count;
+      }, 0)
+    };
+  });
+}
+
 function parseMetadata(b64Data) {
   // extract content of the DCOS_PACKAGE_METADATA label
   try {
@@ -576,6 +590,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
 
     return hosts;
+  },
+
+  getActiveHostsCount: function () {
+    return activeHostsCountOverTime();
   },
 
   isStatesProcessed: function () {
