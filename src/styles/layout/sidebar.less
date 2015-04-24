@@ -307,6 +307,10 @@
       /* Sidebar Footer */
       .sidebar-footer {
 
+        .logo-container {
+          margin-left: 12px;
+        }
+
         .company-name {
           display: none;
         }
@@ -316,16 +320,12 @@
         }
 
         .icon-buttons {
-          display: flex;
           flex-direction: column;
 
           button {
-
             padding-left: 15px;
             padding-right: 15px;
-            background-color: transparent;
             border-top-width: 0;
-            border-right-width: 0;
             border-bottom: 1px solid ~`color_lightness("@{black}", 90)`;
             border-left-width: 0;
 
@@ -394,6 +394,38 @@
           }
         }
       }
+
+      .sidebar-footer {
+
+        .logo-container {
+          margin-left: @grid-gutter-width-screen-medium * 0.5;
+        }
+
+        .company-name {
+          display: inline;
+        }
+
+        .sidebar-footer-image {
+          width: initial;
+        }
+
+        .icon-buttons {
+          flex-direction: row;
+
+          button {
+            padding-left: 28px;
+            padding-right: 28px;
+            border-top-width: 1px;
+            border-right-width: 1px;
+            border-bottom-width: 0;
+            border-left-width: 0;
+
+            &:last-child {
+              border-right-width: 0;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -439,6 +471,12 @@
               padding: (@base-spacing-unit-screen-large * 0.25) (@base-spacing-unit-screen-large * 0.5);
             }
           }
+        }
+      }
+
+      .sidebar-footer {
+        .logo-container {
+          margin-left: @grid-gutter-width-screen-large * 0.5;
         }
       }
     }
