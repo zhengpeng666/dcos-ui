@@ -397,7 +397,7 @@ function activeHostsCountOverTime() {
   return _.map(_mesosStates, function (state) {
     return {
       date: state.date,
-      slavesCount: state.activated_slaves
+      slavesCount: state.activated_slaves || 0
     };
   });
 }
