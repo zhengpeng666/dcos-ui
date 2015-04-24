@@ -167,6 +167,7 @@ describe("Mesos State Store", function () {
       MesosStateStore.processState(MockStates.activatedSlaves[0]);
       MesosStateStore.processState(MockStates.activatedSlaves[1]);
       MesosStateStore.processState(MockStates.activatedSlaves[2]);
+      MesosStateStore.processState(MockStates.activatedSlaves[3]);
       this.activeHostsCount = MesosStateStore.getActiveHostsCount();
     });
 
@@ -174,11 +175,15 @@ describe("Mesos State Store", function () {
       expect(Config.historyLength).toBe(this.activeHostsCount.length);
     });
 
+    it("should default to 0 if active slaves is undefined", function () {
+      expect(this.activeHostsCount.pop().slavesCount).toBe(0);
+    });
+
     it("should have correct number of active slaves in series", function () {
+      this.activeHostsCount.pop();
       expect(this.activeHostsCount.pop().slavesCount).toBe(7);
       expect(this.activeHostsCount.pop().slavesCount).toBe(4);
       expect(this.activeHostsCount.pop().slavesCount).toBe(6);
-      expect(this.activeHostsCount.pop().slavesCount).toBe(0);
     });
 
   });

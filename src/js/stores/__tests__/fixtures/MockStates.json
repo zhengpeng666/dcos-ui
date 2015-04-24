@@ -151,6 +151,17 @@
           "tasks": []
         }
       ]
+    },
+    {
+      "activated_slaves": null,
+      "frameworks": [
+        {
+          "name": "Framework 1",
+          "id": "1-1",
+          "used_resources": {"cpus": 0},
+          "tasks": []
+        }
+      ]
     }
   ]
 }
