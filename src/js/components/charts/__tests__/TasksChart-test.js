@@ -19,9 +19,10 @@ describe("TasksChart", function () {
     });
 
     it("renders two task info labels when there is no data", function () {
-      var unitsRow = TestUtils.scryRenderedDOMComponentsWithClass(
+      var rows = TestUtils.scryRenderedDOMComponentsWithClass(
         this.instance, "row"
-      )[1];
+      );
+      var unitsRow = _.last(rows);
       var taskLabels = TestUtils.scryRenderedDOMComponentsWithClass(
         unitsRow, "unit"
       );
@@ -34,9 +35,10 @@ describe("TasksChart", function () {
           {state: "TASK_RUNNING", tasks: [{ id: "task1", name: "Task 1" }]}
         ]
       });
-      var unitsRow = TestUtils.scryRenderedDOMComponentsWithClass(
+      var rows = TestUtils.scryRenderedDOMComponentsWithClass(
         this.instance, "row"
-      )[1];
+      );
+      var unitsRow = _.last(rows);
       var taskLabels = TestUtils.scryRenderedDOMComponentsWithClass(
         unitsRow, "unit"
       );

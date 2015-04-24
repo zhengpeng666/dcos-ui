@@ -42,22 +42,20 @@ var TasksChart = React.createClass({
     }
 
     var numberOfTasks = _.size(taskInfo);
-    var leftover = numberOfTasks % tasksPerRow;
 
     return _.map(taskInfo, function (info, key) {
       var task = _.findWhere(tasks, {name: key});
       if (task === undefined) {
         task = { value: 0 };
       }
-      var taskCount = _.size(taskInfo);
       var classes = {
         "text-align-center": true
       };
       // equalize columns for units
-      if (taskCount < numberOfTasks - leftover) {
+      if (numberOfTasks > tasksPerRow) {
         classes["column-small-4"] = true;
       } else {
-        classes["column-small-" + 12 / taskCount] = true;
+        classes["column-small-" + 12 / numberOfTasks] = true;
       }
       var classSet = React.addons.classSet(classes);
       return (
