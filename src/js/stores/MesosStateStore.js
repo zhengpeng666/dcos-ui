@@ -331,6 +331,7 @@ function getStateByHosts() {
 
 function fillFramework(id, name, colorIndex) {
   _.each(_mesosStates, function (state) {
+    state.activated_slaves = 0;
     state.frameworks.push({
       active: false,
       id: id,
@@ -396,12 +397,7 @@ function activeHostsCountOverTime() {
   return _.map(_mesosStates, function (state) {
     return {
       date: state.date,
-      slavesCount: _.foldl(state.slaves, function (count, slave) {
-        if (slave.active) {
-          count++;
-        }
-        return count;
-      }, 0)
+      slavesCount: state.activated_slaves
     };
   });
 }
