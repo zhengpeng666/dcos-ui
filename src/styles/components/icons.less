@@ -4,7 +4,7 @@
 @icon-mini-width: 16px;
 @icon-mini-height: 16px;
 @icon-mini-count-horizontal: 3;
-@icon-mini-count-vertical: 5;
+@icon-mini-count-vertical: 6;
 @icon-mini-border-radius: 2px;
 
 @icon-mini-variant-black-offset-horizontal: 0 * @icon-mini-width;
@@ -52,7 +52,7 @@
 @icon-medium-width: 32px;
 @icon-medium-height: 32px;
 @icon-medium-count-horizontal: 3;
-@icon-medium-count-vertical: 7;
+@icon-medium-count-vertical: 8;
 @icon-medium-border-radius: 5px;
 
 @icon-medium-variant-black-offset-horizontal: 0 * @icon-medium-width;
@@ -205,6 +205,19 @@
       }
     }
 
+    /* Icon: Alert */
+    &.icon-alert {
+      background-position: floor(-@icon-mini-variant-black-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 5);
+
+      &.icon-mini-white {
+        background-position: floor(-@icon-mini-variant-white-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 5);
+      }
+
+      &.icon-mini-color {
+        background-position: floor(-@icon-mini-variant-color-offset-horizontal * @icon-mini-scale) -(floor(@icon-mini-height * @icon-mini-scale) * 5);
+      }
+    }
+
     &.border-radius {
       .border-radius(@icon-mini-border-radius);
     }
@@ -334,6 +347,23 @@
 
       &.icon-medium-color {
         background-position: floor(-@icon-medium-variant-color-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 6);
+      }
+    }
+
+    &.border-radius {
+      .border-radius(@icon-medium-border-radius);
+    }
+
+    /* Icon: Menu */
+    &.icon-menu {
+      background-position: floor(-@icon-medium-variant-black-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 7);
+
+      &.icon-medium-white {
+        background-position: floor(-@icon-medium-variant-white-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 7);
+      }
+
+      &.icon-medium-color {
+        background-position: floor(-@icon-medium-variant-color-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 7);
       }
     }
 
