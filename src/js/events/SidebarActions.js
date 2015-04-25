@@ -22,6 +22,13 @@ var SidebarActions = {
       type: ActionTypes.REQUEST_CLI_INSTRUCTIONS,
       data: false
     });
+  },
+
+  startTour: function () {
+    AppDispatcher.handleSidebarAction({
+      type: ActionTypes.REQUEST_TOUR_START,
+      data: false
+    });
   }
 
 };

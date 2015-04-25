@@ -35,7 +35,8 @@ var Index = React.createClass({
     return {
       hasIdentity: false,
       mesosStateErrorCount: 0,
-      showingCliModal: false
+      showingCliModal: false,
+      showingTourModal: false
     };
   },
 
@@ -60,6 +61,10 @@ var Index = React.createClass({
 
     SidebarStore.addChangeListener(
       EventTypes.SHOW_CLI_INSTRUCTIONS, this.onShowCli
+    );
+
+    SidebarStore.addChangeListener(
+      EventTypes.SHOW_TOUR, this.onTourStart
     );
 
     this.addMesosStateListeners();
@@ -93,6 +98,10 @@ var Index = React.createClass({
       EventTypes.SHOW_CLI_INSTRUCTIONS, this.onShowCli
     );
 
+    SidebarStore.removeChangeListener(
+      EventTypes.SHOW_TOUR, this.onTourStart
+    );
+
     this.removeMesosStateListeners();
   },
 
@@ -103,6 +112,10 @@ var Index = React.createClass({
 
   onShowCli: function () {
     this.setState({showingCliModal: true});
+  },
+
+  onTourStart: function () {
+    this.setState({showingTourModal: true});
   },
 
   onMesosStateChange: function () {
@@ -192,21 +205,73 @@ var Index = React.createClass({
     );
   },
 
+  getCliModalOptions: function () {
+    return {
+      onCloseClickFn: function () {
+          this.setState({showingCliModal: false});
+        }.bind(this),
+      title: "Install Mesosphere DCOS CLI",
+      subHeaderContent: "Nam quid possumus facere melius? Haec quo modo conveniant, non sane intellego. An est aliquid, quod te sua sponte delectet? Duo Reges: constructio interrete. Egone quaeris, inquit, quid sentiam? Haec bene dicuntur, nec ego repugno, sed inter sese ipsa pugnant.",
+      showFooter: false
+    };
+  },
+
+  getTourModalOptions: function () {
+    var beginTour = function () {
+      onCloseClickFn();
+      // Awful hack.
+      document.getElementById("start-tour").click();
+    };
+
+    var onCloseClickFn = function () {
+      this.setState({showingTourModal: false});
+    }.bind(this);
+
+    return {
+      onCloseClickFn: onCloseClickFn,
+      title: "Welcome to the Mesosphere DCOS",
+      subHeaderContent: "In order to get started, you'll need to install our command-line tool by copying the snippet below. After that, you can take our tour which will guide you through installing a web-app and continuous integration pipeline.",
+      showFooter: true,
+      footer: (
+        <div className="tour-start-modal-footer">
+          <div className="row text-align-center">
+            <button className="button button-primary" onClick={beginTour}>
+              Start The Tour
+            </button>
+          </div>
+          <div className="row text-align-center">
+            <a onClick={onCloseClickFn} className="clickable skip-tour">{"No thanks, I'll skip the tour."}</a>
+            </div>
+        </div>
+      )
+    };
+  },
+
   getCliInstallModal: function (showModal) {
     if (showModal === false) {
       return null;
     }
 
-    var onCloseClickFn = function () {
-      this.setState({showingCliModal: false});
-    }.bind(this);
+    var options;
 
-    return (<CliInstallModal onClose={onCloseClickFn} />);
+    if (this.state.showingCliModal) {
+      options = this.getCliModalOptions();
+    } else if (this.state.showingTourModal) {
+      options = this.getTourModalOptions();
+    }
+
+    return (
+      <CliInstallModal onClose={options.onCloseClickFn}
+      title={options.title} subHeaderContent={options.subHeaderContent}
+      showFooter={options.showFooter} footer={options.footer} />
+    );
   },
 
   render: function () {
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
+    var showCliModal = this.state.showingCliModal ||
+      this.state.showingTourModal;
 
     var classSet = React.addons.classSet({
       "canvas-sidebar-open": data.isOpen
@@ -214,13 +279,14 @@ var Index = React.createClass({
 
     return (
       <div>
+        <a id="start-tour"></a>
         <div id="canvas" className={classSet}>
           {this.getLoadingScreen(isReady)}
           <Sidebar />
           <RouteHandler />
         </div>
         {this.getLoginModal(this.state.hasIdentity)}
-        {this.getCliInstallModal(this.state.showingCliModal)}
+        {this.getCliInstallModal(showCliModal)}
       </div>
     );
   }
