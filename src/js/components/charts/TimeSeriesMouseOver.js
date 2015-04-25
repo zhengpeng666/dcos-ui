@@ -11,6 +11,8 @@ var TimeSeriesMouseOver = React.createClass({
   displayName: "TimeSeriesMouseOver",
 
   propTypes: {
+    y: React.PropTypes.string.isRequired,
+    getBoundingBox: React.PropTypes.func.isRequired,
     data: React.PropTypes.array.isRequired,
     height: React.PropTypes.number.isRequired,
     margin: React.PropTypes.object.isRequired,
@@ -35,31 +37,21 @@ var TimeSeriesMouseOver = React.createClass({
   },
 
   calculateMousePositionInGraph: function (e) {
-    var props = this.props;
-    var el = props.parent.getDOMNode();
-    var elPosition = el.getBoundingClientRect();
-
-    var margin = props.margin;
-    var containerPositions = {
-      top: elPosition.top + margin.top,
-      right: elPosition.left + props.width - margin.right,
-      bottom: elPosition.top + props.height - margin.bottom,
-      left: elPosition.left + margin.left
-    };
+    var boundingBox = this.props.getBoundingBox();
     var mouse = {
       x: e.clientX || e.pageX,
       y: e.clientY || e.pageY
     };
 
-    if (mouse.x < containerPositions.left ||
-      mouse.y < containerPositions.top ||
-      mouse.x > containerPositions.right ||
-      mouse.y > containerPositions.bottom) {
+    if (mouse.x < boundingBox.left ||
+      mouse.y < boundingBox.top ||
+      mouse.x > boundingBox.right ||
+      mouse.y > boundingBox.bottom) {
       return false;
     }
 
-    mouse.x -= containerPositions.left;
-    mouse.y -= containerPositions.top;
+    mouse.x -= boundingBox.left;
+    mouse.y -= boundingBox.top;
 
     return mouse;
   },

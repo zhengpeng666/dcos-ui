@@ -56,12 +56,12 @@ var TimeSeriesChart = React.createClass({
     var yScale = this.getYScale(this.props);
 
     var data = {
+      clipPathID: _.uniqueId("clip"),
       area: this.getArea(xTimeScale, yScale),
       stack: this.getStack(),
       xScale: xScale,
       xTimeScale: xTimeScale,
-      yScale: yScale,
-      clipPathID: _.uniqueId("clip")
+      yScale: yScale
     };
 
     this.internalStorage_set(data);
@@ -314,6 +314,19 @@ var TimeSeriesChart = React.createClass({
     }, this);
   },
 
+  getBoundingBox: function (props) {
+    var el = this.getDOMNode();
+    var elPosition = el.getBoundingClientRect();
+
+    var margin = props.margin;
+    return {
+      top: elPosition.top + margin.top,
+      right: elPosition.left + props.width - margin.right,
+      bottom: elPosition.top + props.height - margin.bottom,
+      left: elPosition.left + margin.left
+    };
+  },
+
   render: function () {
     var data = this.internalStorage_get();
     var props = this.props;
@@ -336,6 +349,7 @@ var TimeSeriesChart = React.createClass({
         {this.getAreaList()}
         <TimeSeriesMouseOver
           data={props.data}
+          getBoundingBox={this.getBoundingBox.bind(null, props)}
           height={props.height}
           margin={props.margin}
           parent={this}
