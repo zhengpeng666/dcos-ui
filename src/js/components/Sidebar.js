@@ -62,8 +62,7 @@ var Sidebar = React.createClass({
     this.removeMesosStateListener();
   },
 
-  openCliInstructions: function (e) {
-    e.preventDefault();
+  handleShowCliInstructions: function () {
     SidebarActions.openCliInstructions();
   },
 
@@ -137,7 +136,7 @@ var Sidebar = React.createClass({
             <button className="button button-smallbutton-link"
               data-behavior="show-tip" data-tip-place="top-right"
               data-tip-content="Install Command Line Tools"
-              onClick={this.openCliInstructions}>
+              onClick={this.handleShowCliInstructions}>
                 <i className="icon icon-cli icon-medium"></i>
             </button>
             <button className="button button-smallbutton-link"
