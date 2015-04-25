@@ -59,8 +59,14 @@ var HostTable = React.createClass({
   },
 
   renderHeadline: function (prop, model) {
+    var alert = null;
+    if (model.active === false) {
+      alert = <i className="icon icon-mini icon-mini-white icon-alert" />;
+    }
+
     return (
       <span className="h5 flush-top flush-bottom headline">
+        {alert}
         {model[prop]}
       </span>
     );

@@ -5,10 +5,22 @@ var React = require("react/addons");
 
 var AlertPanel = require("../components/AlertPanel");
 var Page = require("../components/Page");
+var SidebarActions = require("../events/SidebarActions");
 
 var NotFoundPage = React.createClass({
 
   displayName: "NotFoundPage",
+
+  statics: {
+    // Static life cycle method from react router, that will be called
+    // "when a handler is about to render", i.e. on route change:
+    // https://github.com/rackt/react-router/
+    // blob/master/docs/api/components/RouteHandler.md
+    willTransitionTo: function () {
+
+      SidebarActions.close();
+    }
+  },
 
   render: function () {
     return (

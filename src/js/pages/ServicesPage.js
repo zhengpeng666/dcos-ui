@@ -13,6 +13,7 @@ var Page = require("../components/Page");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
+var SidebarActions = require("../events/SidebarActions");
 
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
@@ -54,6 +55,17 @@ var ServicesPage = React.createClass({
   displayName: "ServicesPage",
 
   mixins: [InternalStorageMixin],
+
+  statics: {
+    // Static life cycle method from react router, that will be called
+    // "when a handler is about to render", i.e. on route change:
+    // https://github.com/rackt/react-router/
+    // blob/master/docs/api/components/RouteHandler.md
+    willTransitionTo: function () {
+
+      SidebarActions.close();
+    }
+  },
 
   getInitialState: function () {
     return _.clone(DEFAULT_FILTER_OPTIONS);

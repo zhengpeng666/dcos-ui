@@ -2,7 +2,7 @@
   .table {
     // create row-hover style
     &.inverse {
-      & tbody {
+      tbody {
         td {
           .cell-link {
             padding:
@@ -24,9 +24,20 @@
     .align-right {
       text-align: right;
     }
-    .icon {
-      margin-right: @base-spacing-unit * 0.25;
+
+    tr {
+      > td,
+      > th {
+        .icon {
+          vertical-align: middle;
+          margin-right: @base-spacing-unit * 0.25;
+        }
+        span {
+            vertical-align: middle;
+        }
+      }
     }
+
     .fixed-width {
       width: @grid-gutter-width-screen-large * 2;
     }
