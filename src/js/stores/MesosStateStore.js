@@ -27,9 +27,9 @@ var _statesProcessed = false;
 
 var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
 var NA_IMAGES = {
-  "icon-small": "/img/services/icon-service-default-small@2x.png",
-  "icon-medium": "/img/services/icon-service-default-medium@2x.png",
-  "icon-large": "/img/services/icon-service-default-large@2x.png"
+  "icon-small": "./img/services/icon-service-default-small@2x.png",
+  "icon-medium": "./img/services/icon-service-default-medium@2x.png",
+  "icon-large": "./img/services/icon-service-default-large@2x.png"
 };
 
 function setHostsToFrameworkCount(frameworks, hosts) {
