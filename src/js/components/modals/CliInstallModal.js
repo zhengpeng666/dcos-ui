@@ -65,11 +65,11 @@ var CliInstructionsModal = React.createClass({
     var instructions = this.getCliInstructions();
     return (
       <div className="install-cli-modal-content">
-        <h4>You will need:</h4>
+        <h4 className="flush-top">You will need:</h4>
         {instructions.requirements}
         <h4 className="snippet-description">Copy and paste into your terminal:</h4>
-        <div className="snippet-wrapper">
-          <pre className="mute flush-bottom prettyprinted">{instructions.cliSnippet}</pre>
+        <div className="flush-top snippet-wrapper">
+          <pre className="mute prettyprint flush-bottom prettyprinted">{instructions.cliSnippet}</pre>
         </div>
       </div>
     );
