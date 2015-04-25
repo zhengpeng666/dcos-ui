@@ -3352,6 +3352,10 @@
         }
       }
     },
+    "browser-info": {
+      "version": "0.0.2",
+      "resolved": "https://registry.npmjs.org/browser-info/-/browser-info-0.0.2.tgz"
+    },
     "canvas-ui-system": {
       "version": "0.1.1",
       "resolved": "https://registry.npmjs.org/canvas-ui-system/-/canvas-ui-system-0.1.1.tgz"

@@ -11,6 +11,8 @@ var TooltipMixin = require("../mixins/TooltipMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var Config = require("../config/Config");
 
+var SidebarActions = require("../events/SidebarActions");
+
 var MENU_ITEMS = {
   dashboard: {label: "Dashboard", icon: "dashboard"},
   services: {label: "Services", icon: "services"},
@@ -58,6 +60,11 @@ var Sidebar = React.createClass({
     // Datacenter info won't change often
     // so let's not constantly update
     this.removeMesosStateListener();
+  },
+
+  openCliInstructions: function (e) {
+    e.preventDefault();
+    SidebarActions.openCliInstructions();
   },
 
   getMenuItems: function () {
@@ -127,14 +134,20 @@ var Sidebar = React.createClass({
             </p>
           </div>
           <div className="icon-buttons">
-            <button className="button button-smallbutton-link" data-behavior="show-tip" data-tip-content="Install Command Line Tools" data-tip-place="top-right">
-              <i className="icon icon-cli icon-medium"></i>
+            <button className="button button-smallbutton-link"
+              data-behavior="show-tip" data-tip-place="top-right"
+              data-tip-content="Install Command Line Tools"
+              onClick={this.openCliInstructions}>
+                <i className="icon icon-cli icon-medium"></i>
             </button>
-            <button className="button button-smallbutton-link" data-behavior="show-tip" data-tip-content="Talk with us">
-              <i className="icon icon-chat icon-medium"></i>
+            <button className="button button-smallbutton-link"
+              data-behavior="show-tip" data-tip-content="Talk with us"
+              >
+                <i className="icon icon-chat icon-medium"></i>
             </button>
-            <button className="button button-smallbutton-link" data-behavior="show-tip" data-tip-content="Start Tour">
-              <i className="icon icon-tour icon-medium"></i>
+            <button className="button button-smallbutton-link"
+              data-behavior="show-tip" data-tip-content="Start Tour">
+                <i className="icon icon-tour icon-medium"></i>
             </button>
           </div>
         </div>

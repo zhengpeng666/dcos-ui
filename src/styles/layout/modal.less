@@ -9,9 +9,15 @@
 
 .modal {
   position: static;
+  margin: 0;
 
-  .modal-content {
+  ::last-child {
     .border-radius(0);
+  }
+
+  pre {
+    background-color: @modal-inverse-header-background-color;
+    overflow-x: scroll;
   }
 
   &.inverse {
@@ -24,6 +30,7 @@
 
     .modal-content {
       background-color: @modal-inverse-content-background-color;
+
     }
 
     .modal-footer {
@@ -45,4 +52,49 @@
 .modal-enter.modal-enter-active {
   transform: translate(0, 0);
   opacity: 1;
+}
+
+
+// Modal specific styles
+.install-cli-modal-content {
+  h4 {
+    color: @black;
+  }
+
+  .snippet-description {
+    margin-top: @container-pod-short-padding-vertical-screen-large;
+  }
+}
+
+
+& when (@screen-mini-enabled) {
+  @media (min-width: @screen-mini) {
+    .snippet-description {
+      margin-top: @container-pod-short-padding-vertical-screen-mini;
+    }
+  }
+}
+
+& when (@screen-small-enabled) {
+  @media (min-width: @screen-small) {
+    .snippet-description {
+      margin-top: @container-pod-short-padding-vertical-screen-small;
+    }
+  }
+}
+
+& when (@screen-medium-enabled) {
+  @media (min-width: @screen-medium) {
+    .snippet-description {
+      margin-top: @container-pod-short-padding-vertical-screen-medium;
+    }
+  }
+}
+
+& when (@screen-large-enabled) {
+  @media (min-width: @screen-large) {
+    .snippet-description {
+      margin-top: @container-pod-short-padding-vertical-screen-large;
+    }
+  }
 }
