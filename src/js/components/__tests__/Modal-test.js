@@ -30,7 +30,7 @@ describe("Modal", function () {
 
   describe("#getFooter", function () {
 
-    it("shouldn't call the callback after initialization", function () {
+    it("should not return a footer when its disabled", function () {
       var instance = TestUtils.renderIntoDocument(
         <Modal showFooter={false} />
       );
@@ -38,7 +38,7 @@ describe("Modal", function () {
       expect(instance.getFooter()).toEqual(null);
     });
 
-    it("should call the callback when the backdrop is clicked", function () {
+    it("should return content for the footer when enabled", function () {
       var instance = TestUtils.renderIntoDocument(
         <Modal showFooter={true} />
       );

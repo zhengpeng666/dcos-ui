@@ -32,13 +32,23 @@ var CliInstructionsModal = React.createClass({
     var requirements = "";
     var cliSnippet = "";
 
-    var pythonInstructions = (<li>{"Python 2.7.9 or 3.4 or later, which includes the 'pip' package installer."}</li>);
-    var gitInstructions = (<li>{"The '"}<a href="http://git-scm.com/" target="_blank">git</a>{"' version control application."}</li>);
+    var pythonInstructions = (
+      <li>
+        Python 2.7.9 or 3.4 or later, which includes the 'pip' package installer.
+      </li>
+    );
+    var gitInstructions = (
+      <li>
+      The <a href="http://git-scm.com/" target="_blank">git</a> version control application.
+      </li>
+    );
 
     if (OS === "Windows") {
       requirements = (
         <ul>
-          <li>{"A command-line environment, such as Terminal or Windows Powershell."}</li>
+          <li>
+            A command-line environment, such as Terminal or Windows Powershell.
+          </li>
           {pythonInstructions}
           {gitInstructions}
         </ul>
@@ -47,7 +57,7 @@ var CliInstructionsModal = React.createClass({
     } else {
       requirements = (
         <ul>
-          <li>{"A command-line environment, such as Terminal."}</li>
+          <li>A command-line environment, such as Terminal.</li>
           {pythonInstructions}
           {gitInstructions}
         </ul>
