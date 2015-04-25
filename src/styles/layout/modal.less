@@ -15,11 +15,6 @@
     .border-radius(0);
   }
 
-  pre {
-    background-color: @modal-inverse-header-background-color;
-    overflow-x: scroll;
-  }
-
   &.inverse {
     color: @modal-inverse-text-color;
     background-color: @modal-inverse-background-color;
@@ -63,6 +58,19 @@
 
   .snippet-description {
     margin-top: @container-pod-short-padding-vertical-screen-large;
+  }
+
+  .snippet-wrapper {
+    border: 1px solid ~`color_lightness("@{gray}", 80)`;
+    border-radius: 5px;
+    overflow: hidden;
+
+    pre {
+      background-color: ~`color_lightness("@{modal-header-background-color}", 40)`;
+      color: ~`color_lightness("@{black}", 40)`;
+      padding: 10px;
+      overflow-x: scroll;
+    }
   }
 }
 

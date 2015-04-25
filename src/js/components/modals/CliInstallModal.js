@@ -68,7 +68,9 @@ var CliInstructionsModal = React.createClass({
         <h4>You will need:</h4>
         {instructions.requirements}
         <h4 className="snippet-description">Copy and paste into your terminal:</h4>
-        <pre className="prettyprint flush-bottom prettyprinted">{instructions.cliSnippet}</pre>
+        <div className="snippet-wrapper">
+          <pre className="mute flush-bottom prettyprinted">{instructions.cliSnippet}</pre>
+        </div>
       </div>
     );
   },
