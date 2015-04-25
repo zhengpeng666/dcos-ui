@@ -2,6 +2,7 @@ var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
 
 var SidebarActions = {
+
   open: function () {
     AppDispatcher.handleSidebarAction({
       type: ActionTypes.REQUEST_SIDEBAR_OPEN,
@@ -14,7 +15,15 @@ var SidebarActions = {
       type: ActionTypes.REQUEST_SIDEBAR_CLOSE,
       data: false
     });
+  },
+
+  openCliInstructions: function () {
+    AppDispatcher.handleSidebarAction({
+      type: ActionTypes.REQUEST_CLI_INSTRUCTIONS,
+      data: false
+    });
   }
+
 };
 
 module.exports = SidebarActions;

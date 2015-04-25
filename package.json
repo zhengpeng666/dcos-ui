@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "MD5": "^1.2.1",
+    "browser-info": "0.0.2",
     "canvas-ui-system": "^0.1.1",
     "d3": "^3.5.5",
     "flux": "^2.0.1",
@@ -77,6 +78,7 @@
     ],
     "unmockedModulePathPatterns": [
       "MD5",
+      "browser-info",
       "d3",
       "flux",
       "localStorage",

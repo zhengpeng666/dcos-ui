@@ -32,20 +32,21 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
     }
 
     var action = payload.action;
-    var oldIsOpen = _isOpen;
 
     switch (action.type) {
       case ActionTypes.REQUEST_SIDEBAR_OPEN:
-        _isOpen = action.data;
-        break;
       case ActionTypes.REQUEST_SIDEBAR_CLOSE:
+        var oldIsOpen = _isOpen;
         _isOpen = action.data;
-        break;
-    }
 
-    // only emitting on change
-    if (oldIsOpen !== _isOpen) {
-      SidebarStore.emitChange(EventTypes.SIDEBAR_CHANGE);
+        // only emitting on change
+        if (oldIsOpen !== _isOpen) {
+          SidebarStore.emitChange(EventTypes.SIDEBAR_CHANGE);
+        }
+        break;
+      case ActionTypes.REQUEST_CLI_INSTRUCTIONS:
+        SidebarStore.emitChange(EventTypes.SHOW_CLI_INSTRUCTIONS);
+        break;
     }
 
     return true;

@@ -8,6 +8,7 @@ var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var LoginModal = require("../components/modals/LoginModal");
+var CliInstallModal = require("../components/modals/CliInstallModal");
 var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
@@ -33,7 +34,8 @@ var Index = React.createClass({
   getInitialState: function () {
     return {
       hasIdentity: false,
-      mesosStateErrorCount: 0
+      mesosStateErrorCount: 0,
+      showingCliModal: false
     };
   },
 
@@ -52,43 +54,44 @@ var Index = React.createClass({
 
   componentDidMount: function () {
     SidebarStore.addChangeListener(
-      EventTypes.SIDEBAR_CHANGE,
-      this.onSideBarChange
+      EventTypes.SIDEBAR_CHANGE, this.onSideBarChange
     );
     window.addEventListener("resize", SidebarActions.close);
+
+    SidebarStore.addChangeListener(
+      EventTypes.SHOW_CLI_INSTRUCTIONS, this.onShowCli
+    );
 
     this.addMesosStateListeners();
   },
 
   addMesosStateListeners: function () {
     MesosStateStore.addChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
-      this.onMesosStateChange
+      EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
     );
-
     MesosStateStore.addChangeListener(
-      EventTypes.MESOS_STATE_REQUEST_ERROR,
-      this.onMesosStateError
+      EventTypes.MESOS_STATE_REQUEST_ERROR, this.onMesosStateError
     );
   },
 
   removeMesosStateListeners: function () {
     MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
-      this.onMesosStateChange
+      EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
     );
     MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_REQUEST_ERROR,
-      this.onMesosStateError
+      EventTypes.MESOS_STATE_REQUEST_ERROR, this.onMesosStateError
     );
   },
 
   componentWillUnmount: function () {
     SidebarStore.removeChangeListener(
-      EventTypes.SIDEBAR_CHANGE,
-      this.onSideBarChange
+      EventTypes.SIDEBAR_CHANGE, this.onSideBarChange
     );
     window.removeEventListener("resize", SidebarActions.close);
+
+    SidebarStore.removeChangeListener(
+      EventTypes.SHOW_CLI_INSTRUCTIONS, this.onShowCli
+    );
 
     this.removeMesosStateListeners();
   },
@@ -96,6 +99,10 @@ var Index = React.createClass({
   onSideBarChange: function () {
     this.internalStorage_update(getSidebarState());
     this.forceUpdate();
+  },
+
+  onShowCli: function () {
+    this.setState({showingCliModal: true});
   },
 
   onMesosStateChange: function () {
@@ -185,6 +192,18 @@ var Index = React.createClass({
     );
   },
 
+  getCliInstallModal: function (showModal) {
+    if (showModal === false) {
+      return null;
+    }
+
+    var onCloseClickFn = function () {
+      this.setState({showingCliModal: false});
+    }.bind(this);
+
+    return (<CliInstallModal onClose={onCloseClickFn} />);
+  },
+
   render: function () {
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
@@ -194,11 +213,14 @@ var Index = React.createClass({
     });
 
     return (
-      <div id="canvas" className={classSet}>
-        {this.getLoadingScreen(isReady)}
+      <div>
+        <div id="canvas" className={classSet}>
+          {this.getLoadingScreen(isReady)}
+          <Sidebar />
+          <RouteHandler />
+        </div>
         {this.getLoginModal(this.state.hasIdentity)}
-        <Sidebar />
-        <RouteHandler />
+        {this.getCliInstallModal(this.state.showingCliModal)}
       </div>
     );
   }

@@ -9,8 +9,9 @@
 
 .modal {
   position: static;
+  margin: 0;
 
-  .modal-content {
+  ::last-child {
     .border-radius(0);
   }
 
@@ -24,6 +25,7 @@
 
     .modal-content {
       background-color: @modal-inverse-content-background-color;
+
     }
 
     .modal-footer {
@@ -46,3 +48,25 @@
   transform: translate(0, 0);
   opacity: 1;
 }
+
+
+// Modal specific styles
+.install-cli-modal-content {
+  h4 {
+    color: @black;
+  }
+
+  .snippet-wrapper {
+    border: 1px solid ~`color_lightness("@{gray}", 80)`;
+    border-radius: 5px;
+    overflow: hidden;
+
+    pre {
+      background-color: ~`color_lightness("@{modal-header-background-color}", 40)`;
+      color: ~`color_lightness("@{black}", 40)`;
+      padding: 10px;
+      overflow-x: scroll;
+    }
+  }
+}
+
