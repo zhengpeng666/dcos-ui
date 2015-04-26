@@ -54,6 +54,8 @@
 }
 
 
+
+
 // Modal specific styles
 .install-cli-modal-content {
   h4 {
@@ -74,6 +76,7 @@
   }
 }
 
+
 .tour-start-modal-footer {
   .skip-tour {
     color: ~`color_lightness("@{gray}", 50)`;
@@ -83,6 +86,65 @@
 
     &:hover {
       color: ~`color_lightness("@{gray}", 20)`;
+    }
+  }
+}
+
+
+& when (@screen-mini-enabled) {
+  @media (min-width: @screen-mini) {
+    .version-modal {
+      .modal {
+        width: 500px;
+
+        .modal-content {
+          pre {
+            max-height: 500px;
+          }
+        }
+      }
+    }
+  }
+}
+
+& when (@screen-small-enabled) {
+  @media (min-width: @screen-small) {
+    .version-modal {
+      .modal {
+        width: 700px;
+
+        .modal-content {
+          pre {
+            max-height: 500px;
+          }
+        }
+      }
+    }
+  }
+}
+
+& when (@screen-medium-enabled) {
+  @media (min-width: @screen-medium) {
+    .version-modal {
+      .modal {
+        width: 800px;
+
+        .modal-content {
+          pre {
+            max-height: 600px;
+          }
+        }
+      }
+    }
+  }
+}
+
+& when (@screen-large-enabled) {
+  @media (min-width: @screen-large) {
+    .version-modal {
+      .modal {
+        width: 1000px;
+      }
     }
   }
 }
