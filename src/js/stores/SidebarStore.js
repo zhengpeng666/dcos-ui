@@ -50,6 +50,9 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
       case ActionTypes.REQUEST_TOUR_START:
         SidebarStore.emitChange(EventTypes.SHOW_TOUR);
         break;
+      case ActionTypes.REQUEST_INTERCOM:
+        SidebarStore.emitChange(EventTypes.SHOW_INTERCOM);
+        break;
     }
 
     return true;
