@@ -55,9 +55,12 @@ var CliInstructionsModal = React.createClass({
           </li>
           {pythonInstructions}
           {gitInstructions}
+          <li>
+            Download: <a href="https://raw.githubusercontent.com/mesosphere/install-scripts/master/dcos-cli/install-dcos-windows.ps1" target="_blank">install-dcos-windows.ps1</a>
+          </li>
         </ul>
       );
-      cliSnippet = ".\install-dcos-windows.ps1 <install_dir> " + hostname + "";
+      cliSnippet = ".\\install-dcos-windows.ps1 . " + hostname + "";
     } else {
       requirements = (
         <ul>
@@ -66,7 +69,7 @@ var CliInstructionsModal = React.createClass({
           {gitInstructions}
         </ul>
       );
-      cliSnippet = "mkdir dcos && \\\n cd dcos && \\\n curl -s https://raw.githubusercontent.com/mesosphere/install-scripts/master/dcos-cli/install-dcos-cli-ea2.sh \\\n | bash -s -- . " + hostname + " && \\\n source ./bin/env-setup";
+      cliSnippet = "mkdir dcos && cd dcos\ncurl -O https://downloads.mesosphere.io/dcos-cli/install.sh\nsh ./install.sh . " + hostname + "\nsource ./bin/env-setup && dcos package update";
     }
 
     return {
