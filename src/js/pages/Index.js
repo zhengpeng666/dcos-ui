@@ -244,7 +244,7 @@ var Index = React.createClass({
           this.setState({showingCliModal: false});
         }.bind(this),
       title: "Install Mesosphere DCOS CLI",
-      subHeaderContent: "Nam quid possumus facere melius? Haec quo modo conveniant, non sane intellego. An est aliquid, quod te sua sponte delectet? Duo Reges: constructio interrete. Egone quaeris, inquit, quid sentiam? Haec bene dicuntur, nec ego repugno, sed inter sese ipsa pugnant.",
+      subHeaderContent: "The best way to interact with your DCOS is to install our command-line tool, which gives you a convenient interface for launching and managing your datacenter applications remotely.",
       showFooter: false
     };
   },
