@@ -47,6 +47,9 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
       case ActionTypes.REQUEST_CLI_INSTRUCTIONS:
         SidebarStore.emitChange(EventTypes.SHOW_CLI_INSTRUCTIONS);
         break;
+      case ActionTypes.REQUEST_TOUR_START:
+        SidebarStore.emitChange(EventTypes.SHOW_TOUR);
+        break;
     }
 
     return true;

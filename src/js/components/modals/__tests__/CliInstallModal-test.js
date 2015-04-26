@@ -14,7 +14,11 @@ describe("CliInstallModal", function () {
     beforeEach(function () {
       this.callback = jasmine.createSpy();
       this.instance = TestUtils.renderIntoDocument(
-        <CliInstallModal onClose={this.callback} />
+        <CliInstallModal
+          onClose={this.callback}
+          showFooter={false}
+          title=""
+          subHeaderContent="" />
       );
     });
 
@@ -32,7 +36,11 @@ describe("CliInstallModal", function () {
   describe("#getCliInstructions", function () {
     beforeEach(function () {
       this.instance = TestUtils.renderIntoDocument(
-        <CliInstallModal onClose={function () {}} />
+        <CliInstallModal
+          onClose={function () {}}
+          showFooter={false}
+          title=""
+          subHeaderContent="" />
       );
     });
 

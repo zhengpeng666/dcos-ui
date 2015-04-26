@@ -66,6 +66,10 @@ var Sidebar = React.createClass({
     SidebarActions.openCliInstructions();
   },
 
+  handleStartTour: function () {
+    SidebarActions.startTour();
+  },
+
   getMenuItems: function () {
     return _.map(MENU_ITEMS, function (val, key) {
       var isActive = this.isActive(key);
@@ -134,18 +138,21 @@ var Sidebar = React.createClass({
           </div>
           <div className="icon-buttons">
             <button className="button button-smallbutton-link"
-              data-behavior="show-tip" data-tip-place="top-right"
+              data-behavior="show-tip"
+              data-tip-place="top-right"
               data-tip-content="Install Command Line Tools"
               onClick={this.handleShowCliInstructions}>
                 <i className="icon icon-cli icon-medium"></i>
             </button>
             <button className="button button-smallbutton-link"
-              data-behavior="show-tip" data-tip-content="Talk with us"
-              >
-                <i className="icon icon-chat icon-medium"></i>
+                data-behavior="show-tip"
+                data-tip-content="Talk with us">
+              <i className="icon icon-chat icon-medium"></i>
             </button>
             <button className="button button-smallbutton-link"
-              data-behavior="show-tip" data-tip-content="Start Tour">
+              data-behavior="show-tip"
+              data-tip-content="Start Tour"
+              onClick={this.handleStartTour}>
                 <i className="icon icon-tour icon-medium"></i>
             </button>
           </div>

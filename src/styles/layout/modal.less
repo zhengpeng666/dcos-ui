@@ -11,8 +11,12 @@
   position: static;
   margin: 0;
 
-  ::last-child {
-    .border-radius(0);
+  .modal-content {
+    border-radius: 0;
+  }
+
+  > :last-child {
+    border-radius: 0px 0px 10px 10px;
   }
 
   &.inverse {
@@ -70,3 +74,15 @@
   }
 }
 
+.tour-start-modal-footer {
+  .skip-tour {
+    color: ~`color_lightness("@{gray}", 50)`;
+    display: block;
+    margin-top: 10px;
+    text-decoration: underline;
+
+    &:hover {
+      color: ~`color_lightness("@{gray}", 20)`;
+    }
+  }
+}

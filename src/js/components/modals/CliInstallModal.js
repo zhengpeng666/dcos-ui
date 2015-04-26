@@ -10,6 +10,10 @@ var CliInstructionsModal = React.createClass({
   displayName: "CliInstructionsModal",
 
   propTypes: {
+    title: React.PropTypes.string.isRequired,
+    subHeaderContent: React.PropTypes.string.isRequired,
+    showFooter: React.PropTypes.bool.isRequired,
+    footer: React.PropTypes.node,
     onClose: React.PropTypes.func.isRequired,
     additionalContent: React.PropTypes.element
   },
@@ -21,7 +25,7 @@ var CliInstructionsModal = React.createClass({
   getSubHeader: function () {
     return (
       <p className="text-align-center inverse">
-        {"Nam quid possumus facere melius? Haec quo modo conveniant, non sane intellego. An est aliquid, quod te sua sponte delectet? Duo Reges: constructio interrete. Egone quaeris, inquit, quid sentiam? Haec bene dicuntur, nec ego repugno, sed inter sese ipsa pugnant."}
+        {this.props.subHeaderContent}
       </p>
     );
   },
@@ -87,11 +91,12 @@ var CliInstructionsModal = React.createClass({
 
   render: function () {
     return (
-      <Modal titleText="Install Mesosphere DCOS CLI"
+      <Modal titleText={this.props.title}
           subHeader={this.getSubHeader()}
           showCloseButton={false}
-          showFooter={false}
-          onClose={this.onClose}>
+          showFooter={this.props.showFooter}
+          onClose={this.onClose}
+          footer={this.props.footer}>
         {this.getContent()}
       </Modal>
     );
