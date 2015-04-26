@@ -11,17 +11,16 @@ var TimeSeriesMouseOver = React.createClass({
   displayName: "TimeSeriesMouseOver",
 
   propTypes: {
-    y: React.PropTypes.string.isRequired,
-    getBoundingBox: React.PropTypes.func.isRequired,
     data: React.PropTypes.array.isRequired,
+    getBoundingBox: React.PropTypes.func.isRequired,
     height: React.PropTypes.number.isRequired,
     margin: React.PropTypes.object.isRequired,
+    parent: React.PropTypes.object.isRequired,
     width: React.PropTypes.number.isRequired,
     xScale: React.PropTypes.func.isRequired,
     y: React.PropTypes.string.isRequired,
     yCaption: React.PropTypes.string.isRequired,
     yScale: React.PropTypes.func.isRequired
-
   },
 
   componentDidMount: function () {

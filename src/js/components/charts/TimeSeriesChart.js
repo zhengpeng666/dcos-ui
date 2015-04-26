@@ -75,12 +75,6 @@ var TimeSeriesChart = React.createClass({
     this.createClipPath();
   },
 
-  componentWillUnmount: function () {
-    var el = this.getDOMNode();
-    el.removeEventListener("mousemove", this.handleMouseMove);
-    el.removeEventListener("mouseout", this.handleMouseOut);
-  },
-
   componentDidUpdate: function () {
     this.updateClipPath();
   },
@@ -345,7 +339,7 @@ var TimeSeriesChart = React.createClass({
           width={props.width} />
         <g className="bars grid-graph" ref="grid" />
         <g className="y axis" ref="yAxis" />
-        <g className="x axis" ref="xAxis"/>
+        <g className="x axis" ref="xAxis" />
         {this.getAreaList()}
         <TimeSeriesMouseOver
           data={props.data}
