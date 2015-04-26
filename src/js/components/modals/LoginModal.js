@@ -2,8 +2,6 @@
 
 var React = require("react");
 
-var Actions = require("../../actions/Actions");
-var Config = require("../../config/Config");
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 var Modal = require("../../components/Modal");
 var Validator = require("../../utils/Validator");
@@ -46,14 +44,6 @@ var LoginModal = React.createClass({
 
       return;
     }
-
-    // clear store
-    global.chmln.store.clear();
-    // setup with user infor for their tracking
-    global.chmln.setup({
-      uid: Actions.getStintID(),
-      version: Config.version
-    });
 
     this.props.onLogin(email);
   },

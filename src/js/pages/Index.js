@@ -36,6 +36,7 @@ var Index = React.createClass({
     return {
       hasIdentity: false,
       mesosStateErrorCount: 0,
+      tourSetup: false,
       showingCliModal: false,
       showingTourModal: false,
       intercomLoaded: true,
@@ -171,7 +172,10 @@ var Index = React.createClass({
   onLogin: function (email) {
     LocalStorageUtil.set("email", email);
     Actions.identify({email: email});
-    this.setState({hasIdentity: true});
+    this.setState({
+      hasIdentity: true,
+      showingTourModal: true
+    });
   },
 
   getErrorMsg: function () {
@@ -252,9 +256,19 @@ var Index = React.createClass({
 
     var beginTour = function () {
       onCloseClickFn();
-      // Awful hack.
-      document.getElementById("start-tour").click();
-    };
+
+      if (this.state.tourSetup === false) {
+        // setup with user infor for their tracking
+        global.chmln.setup({
+          uid: Actions.getStintID(),
+          version: Config.version
+        });
+        this.setState({tourSetup: true});
+      } else {
+        // Awful hack.
+        document.getElementById("start-tour").click();
+      }
+    }.bind(this);
 
     return {
       onCloseClickFn: onCloseClickFn,
