@@ -217,15 +217,15 @@ var Index = React.createClass({
   },
 
   getTourModalOptions: function () {
+    var onCloseClickFn = function () {
+      this.setState({showingTourModal: false});
+    }.bind(this);
+
     var beginTour = function () {
       onCloseClickFn();
       // Awful hack.
       document.getElementById("start-tour").click();
     };
-
-    var onCloseClickFn = function () {
-      this.setState({showingTourModal: false});
-    }.bind(this);
 
     return {
       onCloseClickFn: onCloseClickFn,
@@ -240,8 +240,10 @@ var Index = React.createClass({
             </button>
           </div>
           <div className="row text-align-center">
-            <a onClick={onCloseClickFn} className="clickable skip-tour">{"No thanks, I'll skip the tour."}</a>
-            </div>
+            <a onClick={onCloseClickFn} className="clickable skip-tour">
+              {"No thanks, I'll skip the tour."}
+            </a>
+          </div>
         </div>
       )
     };
@@ -261,9 +263,12 @@ var Index = React.createClass({
     }
 
     return (
-      <CliInstallModal onClose={options.onCloseClickFn}
-      title={options.title} subHeaderContent={options.subHeaderContent}
-      showFooter={options.showFooter} footer={options.footer} />
+      <CliInstallModal
+        onClose={options.onCloseClickFn}
+        title={options.title}
+        subHeaderContent={options.subHeaderContent}
+        showFooter={options.showFooter}
+        footer={options.footer} />
     );
   },
 
