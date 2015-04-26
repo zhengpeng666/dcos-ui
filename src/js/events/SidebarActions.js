@@ -29,6 +29,13 @@ var SidebarActions = {
       type: ActionTypes.REQUEST_TOUR_START,
       data: false
     });
+  },
+
+  openIntercom: function () {
+    AppDispatcher.handleSidebarAction({
+      type: ActionTypes.REQUEST_INTERCOM,
+      data: false
+    });
   }
 
 };

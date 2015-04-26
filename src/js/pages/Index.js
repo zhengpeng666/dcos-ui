@@ -7,6 +7,7 @@ var LocalStorageUtil = require("../utils/LocalStorageUtil");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
+var ErrorModal = require("../components/modals/ErrorModal");
 var LoginModal = require("../components/modals/LoginModal");
 var CliInstallModal = require("../components/modals/CliInstallModal");
 var Sidebar = require("../components/Sidebar");
@@ -36,7 +37,10 @@ var Index = React.createClass({
       hasIdentity: false,
       mesosStateErrorCount: 0,
       showingCliModal: false,
-      showingTourModal: false
+      showingTourModal: false,
+      intercomLoaded: true,
+      showErrorModal: false,
+      modalErrorMsg: ""
     };
   },
 
@@ -65,6 +69,10 @@ var Index = React.createClass({
 
     SidebarStore.addChangeListener(
       EventTypes.SHOW_TOUR, this.onTourStart
+    );
+
+    SidebarStore.addChangeListener(
+      EventTypes.SHOW_INTERCOM, this.onShowIntercom
     );
 
     this.addMesosStateListeners();
@@ -102,6 +110,10 @@ var Index = React.createClass({
       EventTypes.SHOW_TOUR, this.onTourStart
     );
 
+    SidebarStore.removeChangeListener(
+      EventTypes.SHOW_INTERCOM, this.onShowIntercom
+    );
+
     this.removeMesosStateListeners();
   },
 
@@ -116,6 +128,23 @@ var Index = React.createClass({
 
   onTourStart: function () {
     this.setState({showingTourModal: true});
+  },
+
+  onShowIntercom: function () {
+    var intercom = global.Intercom;
+    if (intercom) {
+      intercom("show");
+    } else {
+      this.setState({
+        showErrorModal: true,
+        intercomLoaded: false,
+        modalErrorMsg: (
+          <p className="text-align-center flush-bottom">
+            We are unable to communicate with Intercom.io. It is possible that you have a browser plugin or extension that is blocking communication. If so, please disabled and try again.
+          </p>
+        )
+      });
+    }
   },
 
   onMesosStateChange: function () {
@@ -272,11 +301,26 @@ var Index = React.createClass({
     );
   },
 
+  getErrorModal: function (show) {
+    if (show === false) {
+      return null;
+    }
+
+    var onCloseClickFn = function () {
+      this.setState({showErrorModal: false});
+    }.bind(this);
+
+    return (<ErrorModal onClose={onCloseClickFn}
+      errorMsg={this.state.modalErrorMsg} />);
+  },
+
   render: function () {
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
     var showCliModal = this.state.showingCliModal ||
       this.state.showingTourModal;
+    var showErrorModal = this.state.showErrorModal &&
+      !this.state.intercomLoaded;
 
     var classSet = React.addons.classSet({
       "canvas-sidebar-open": data.isOpen
@@ -292,6 +336,7 @@ var Index = React.createClass({
         </div>
         {this.getLoginModal(this.state.hasIdentity)}
         {this.getCliInstallModal(showCliModal)}
+        {this.getErrorModal(showErrorModal)}
       </div>
     );
   }
