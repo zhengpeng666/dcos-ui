@@ -19,7 +19,7 @@ var ErrorModal = React.createClass({
 
   render: function () {
     return (
-      <Modal titleText="Looks Like Somethings Wrong"
+      <Modal titleText="Looks Like Something is Wrong"
           subHeader=""
           showCloseButton={false}
           showFooter={false}
