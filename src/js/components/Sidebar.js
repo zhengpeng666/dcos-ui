@@ -63,15 +63,23 @@ var Sidebar = React.createClass({
   },
 
   handleShowCliInstructions: function () {
+    SidebarActions.close();
     SidebarActions.openCliInstructions();
   },
 
   handleStartTour: function () {
+    SidebarActions.close();
     SidebarActions.startTour();
   },
 
   handleOpenIntercom: function () {
+    SidebarActions.close();
     SidebarActions.openIntercom();
+  },
+
+  handleVersionClick: function () {
+    SidebarActions.close();
+    SidebarActions.showVersions();
   },
 
   getMenuItems: function () {
@@ -135,9 +143,11 @@ var Sidebar = React.createClass({
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom logo-container">
             <img src="./img/layout/sidebar/sidebar-logo.png" className="sidebar-footer-image" alt="sidebar footer image" />
             <p className="text-align-center flush-top flush-bottom">
-              <span className="company-name">Mesosphere </span>
-              <span className="app-name">DCOS </span>
-              <span className="version-number">v.{Config.version}</span>
+              <span className="clickable" onClick={this.handleVersionClick}>
+                <span className="company-name">Mesosphere </span>
+                <span className="app-name">DCOS </span>
+                <span className="version-number">v.{Config.version}</span>
+              </span>
             </p>
           </div>
           <div className="icon-buttons">

@@ -13,6 +13,7 @@ var CliInstallModal = require("../components/modals/CliInstallModal");
 var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
+var VersionsModal = require("../components/modals/VersionsModal");
 
 function getMesosState() {
   return {
@@ -39,7 +40,7 @@ var Index = React.createClass({
       tourSetup: false,
       showingCliModal: false,
       showingTourModal: false,
-      intercomLoaded: true,
+      showingVersionsModal: false,
       showErrorModal: false,
       modalErrorMsg: ""
     };
@@ -74,6 +75,14 @@ var Index = React.createClass({
 
     SidebarStore.addChangeListener(
       EventTypes.SHOW_INTERCOM, this.onShowIntercom
+    );
+
+    SidebarStore.addChangeListener(
+      EventTypes.SHOW_VERSIONS_SUCCESS, this.onShowVersionsSuccess
+    );
+
+    SidebarStore.addChangeListener(
+      EventTypes.SHOW_VERSIONS_ERROR, this.onShowVersionsError
     );
 
     this.addMesosStateListeners();
@@ -115,6 +124,14 @@ var Index = React.createClass({
       EventTypes.SHOW_INTERCOM, this.onShowIntercom
     );
 
+    SidebarStore.removeChangeListener(
+      EventTypes.SHOW_VERSIONS_SUCCESS, this.onShowVersionsSuccess
+    );
+
+    SidebarStore.removeChangeListener(
+      EventTypes.SHOW_VERSIONS_ERROR, this.onShowVersionsError
+    );
+
     this.removeMesosStateListeners();
   },
 
@@ -138,7 +155,6 @@ var Index = React.createClass({
     } else {
       this.setState({
         showErrorModal: true,
-        intercomLoaded: false,
         modalErrorMsg: (
           <p className="text-align-center flush-bottom">
             We are unable to communicate with Intercom.io. It is possible that you have a browser plugin or extension that is blocking communication. If so, please disabled and try again.
@@ -146,6 +162,21 @@ var Index = React.createClass({
         )
       });
     }
+  },
+
+  onShowVersionsSuccess: function () {
+    this.setState({showingVersionsModal: true});
+  },
+
+  onShowVersionsError: function () {
+    this.setState({
+      showErrorModal: true,
+      modalErrorMsg: (
+        <p className="text-align-center flush-bottom">
+          We are unable to retreive the version DCOS versions. Please try again.
+        </p>
+      )
+    });
   },
 
   onMesosStateChange: function () {
@@ -315,6 +346,21 @@ var Index = React.createClass({
     );
   },
 
+  getVersionsModal: function (showModal) {
+    if (showModal === false) {
+      return null;
+    }
+
+    var onCloseClickFn = function () {
+      this.setState({showingVersionsModal: false});
+    }.bind(this);
+
+    var versions = SidebarStore.getVersions();
+    return (
+      <VersionsModal onClose={onCloseClickFn} versionDump={versions} />
+    );
+  },
+
   getErrorModal: function (show) {
     if (show === false) {
       return null;
@@ -333,8 +379,6 @@ var Index = React.createClass({
     var isReady = data.statesProcessed;
     var showCliModal = this.state.showingCliModal ||
       this.state.showingTourModal;
-    var showErrorModal = this.state.showErrorModal &&
-      !this.state.intercomLoaded;
 
     var classSet = React.addons.classSet({
       "canvas-sidebar-open": data.isOpen
@@ -350,7 +394,8 @@ var Index = React.createClass({
         </div>
         {this.getLoginModal(this.state.hasIdentity)}
         {this.getCliInstallModal(showCliModal)}
-        {this.getErrorModal(showErrorModal)}
+        {this.getVersionsModal(this.state.showingVersionsModal)}
+        {this.getErrorModal(this.state.showErrorModal)}
       </div>
     );
   }

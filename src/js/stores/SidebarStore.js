@@ -6,11 +6,16 @@ var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
 
 var _isOpen = false;
+var _versions = {};
 
 var SidebarStore = _.extend({}, EventEmitter.prototype, {
 
   isOpen: function () {
     return _isOpen;
+  },
+
+  getVersions: function () {
+    return _versions;
   },
 
   emitChange: function (eventName) {
@@ -52,6 +57,13 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
         break;
       case ActionTypes.REQUEST_INTERCOM:
         SidebarStore.emitChange(EventTypes.SHOW_INTERCOM);
+        break;
+      case ActionTypes.REQUEST_VERSIONS_SUCCESS:
+        _versions = action.data;
+        SidebarStore.emitChange(EventTypes.SHOW_VERSIONS_SUCCESS);
+        break;
+      case ActionTypes.REQUEST_VERSIONS_ERROR:
+        SidebarStore.emitChange(EventTypes.SHOW_VERSIONS_ERROR);
         break;
     }
 
