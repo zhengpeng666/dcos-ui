@@ -24,14 +24,13 @@ var VersionsModal = React.createClass({
 
   render: function () {
     return (
-      <div className="version-modal">
-        <Modal titleText="DCOS Info"
-            showCloseButton={false}
-            showFooter={false}
-            onClose={this.onClose}>
-          {this.getContent()}
-        </Modal>
-      </div>
+      <Modal titleText="DCOS Info"
+          showCloseButton={false}
+          showFooter={false}
+          size="large"
+          onClose={this.onClose}>
+        {this.getContent()}
+      </Modal>
     );
   }
 });

@@ -69,6 +69,7 @@
 
     pre {
       background-color: ~`color_lightness("@{modal-header-background-color}", 40)`;
+      border-radius: 5px;
       color: ~`color_lightness("@{black}", 40)`;
       padding: 10px;
       overflow-x: auto;
@@ -93,14 +94,12 @@
 
 & when (@screen-mini-enabled) {
   @media (min-width: @screen-mini) {
-    .version-modal {
-      .modal {
-        width: 500px;
+    .modal.modal-large {
+      width: 500px;
 
-        .modal-content {
-          pre {
-            max-height: 500px;
-          }
+      .modal-content {
+        pre {
+          max-height: 500px;
         }
       }
     }
@@ -109,14 +108,12 @@
 
 & when (@screen-small-enabled) {
   @media (min-width: @screen-small) {
-    .version-modal {
-      .modal {
-        width: 700px;
+    .modal.modal-large {
+      width: 700px;
 
-        .modal-content {
-          pre {
-            max-height: 500px;
-          }
+      .modal-content {
+        pre {
+          max-height: 500px;
         }
       }
     }
@@ -125,14 +122,12 @@
 
 & when (@screen-medium-enabled) {
   @media (min-width: @screen-medium) {
-    .version-modal {
-      .modal {
-        width: 800px;
+    .modal.modal-large {
+      width: 800px;
 
-        .modal-content {
-          pre {
-            max-height: 600px;
-          }
+      .modal-content {
+        pre {
+          max-height: 600px;
         }
       }
     }
@@ -141,10 +136,8 @@
 
 & when (@screen-large-enabled) {
   @media (min-width: @screen-large) {
-    .version-modal {
-      .modal {
-        width: 1000px;
-      }
+    .modal.modal-large {
+      width: 1000px;
     }
   }
 }
