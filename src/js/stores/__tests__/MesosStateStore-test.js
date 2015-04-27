@@ -164,26 +164,36 @@ describe("Mesos State Store", function () {
     beforeEach(function() {
       MesosStateStore.reset();
       MesosStateStore.init();
-      MesosStateStore.processState(MockStates.activatedSlaves[0]);
-      MesosStateStore.processState(MockStates.activatedSlaves[1]);
-      MesosStateStore.processState(MockStates.activatedSlaves[2]);
-      MesosStateStore.processState(MockStates.activatedSlaves[3]);
-      this.activeHostsCount = MesosStateStore.getActiveHostsCount();
     });
 
     it("should have same length as history length", function () {
-      expect(Config.historyLength).toBe(this.activeHostsCount.length);
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      var activeHostsCount = MesosStateStore.getActiveHostsCount();
+      expect(Config.historyLength).toBe(activeHostsCount.length);
     });
 
     it("should default to 0 if active slaves is undefined", function () {
-      expect(this.activeHostsCount.pop().slavesCount).toBe(0);
+      MesosStateStore.processState(MockStates.frameworksWithNoActivatedSlaves);
+      var activeHostsCount = MesosStateStore.getActiveHostsCount();
+      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(0);
+    });
+
+    it("should reflect number of active slaves after processing", function () {
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      var activeHostsCount = MesosStateStore.getActiveHostsCount();
+      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(4);
     });
 
     it("should have correct number of active slaves in series", function () {
-      this.activeHostsCount.pop();
-      expect(this.activeHostsCount.pop().slavesCount).toBe(7);
-      expect(this.activeHostsCount.pop().slavesCount).toBe(4);
-      expect(this.activeHostsCount.pop().slavesCount).toBe(6);
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processState(MockStates.frameworksWithNoActivatedSlaves);
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      var activeHostsCount = MesosStateStore.getActiveHostsCount();
+      expect(activeHostsCount[activeHostsCount.length - 3].slavesCount).toBe(4);
+      expect(activeHostsCount[activeHostsCount.length - 2].slavesCount).toBe(0);
+      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(4);
     });
 
   });
