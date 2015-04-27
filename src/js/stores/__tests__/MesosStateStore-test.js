@@ -166,6 +166,11 @@ describe("Mesos State Store", function () {
       MesosStateStore.init();
     });
 
+    it("should be prefilled with 0", function () {
+      var activeHostsCount = MesosStateStore.getActiveHostsCount();
+      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(0);
+    });
+
     it("should have same length as history length", function () {
       MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
       MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
