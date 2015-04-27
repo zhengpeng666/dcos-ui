@@ -3,13 +3,12 @@ var assetRev = require("broccoli-asset-rev");
 var autoprefixer = require("broccoli-autoprefixer");
 var chalk = require("chalk");
 var cleanCSS = require("broccoli-clean-css");
-var concatCSS = require("broccoli-concat");
 var env = require("broccoli-env").getEnv();
 var eslint = require("broccoli-lint-eslint");
 var fs = require("fs");
 var less = require("broccoli-less-single");
 var mergeTrees = require("broccoli-merge-trees");
-var pickFiles = require("broccoli-static-compiler");
+var funnel = require("broccoli-funnel");
 var replace = require("broccoli-replace");
 var removeFile = require("broccoli-file-remover");
 var uglifyJavaScript = require("broccoli-uglify-js");
@@ -19,14 +18,14 @@ var packageConfig = require("./package.json");
 
 /*
  * configuration
- * (use "." for root of dir)
+ * (use "" for root of dir)
  */
 var dirs = {
   src: "src",
   js: "src/js",
-  jsDist: ".",
+  jsDist: "",
   styles: "src/styles",
-  stylesDist: ".",
+  stylesDist: "",
   img: "src/img",
   imgDist: "img"
 };
@@ -45,15 +44,14 @@ var fileNames = {
 var tasks = {
 
   eslint: function (tree) {
-    return eslint(tree, {config: '.eslintrc'});
+    return eslint(tree, {config: ".eslintrc"});
   },
 
   webpack: function (masterTree) {
     // transform merge module dependencies into one file
     var options = {
-      entry: "./" + fileNames.mainJs + ".js",
+      entry: "./" + dirs.js + "/" + fileNames.mainJs + ".js",
       output: {
-        // library: "Test",
         filename: dirs.jsDist + "/" + fileNames.mainJsDist + ".js"
       },
       module: {
@@ -95,9 +93,8 @@ var tasks = {
   css: function (masterTree) {
 
     // create tree for less (pick all less and css files needed)
-    var cssTree = pickFiles(dirs.styles, {
-      srcDir: "./",
-      files: ["**/*.less"],
+    var cssTree = funnel(dirs.styles, {
+      include: ["**/*.less"],
       destDir: dirs.stylesDist
     });
 
@@ -110,7 +107,7 @@ var tasks = {
     var lessTree = less(
       cssTree,
       fileNames.mainStyles + ".less",
-      fileNames.mainStylesDist + ".css",
+      dirs.stylesDist + "/" + fileNames.mainStylesDist + ".css",
       {}
     );
 
@@ -127,10 +124,8 @@ var tasks = {
 
   index: function (masterTree) {
     // create tree for index
-    var indexTree = pickFiles(dirs.src, {
-      srcDir: "./",
-      destDir: "",
-      files: ["index.html"],
+    var indexTree = funnel(dirs.src, {
+      files: ["index.html"]
     });
 
     indexTree = replace(indexTree, {
@@ -153,9 +148,9 @@ var tasks = {
 
   img: function (masterTree) {
     // create tree for image files
-    var imgTree = pickFiles(dirs.img, {
-      srcDir: "./",
-      destDir: dirs.imgDist,
+    var imgTree = funnel(dirs.img, {
+      exclude: [new RegExp(/_export/)],
+      destDir: dirs.imgDist
     });
 
     return mergeTrees(
@@ -180,12 +175,9 @@ var tasks = {
  */
 function createJsTree() {
   // create tree for .js
-  var jsTree = pickFiles(dirs.js, {
-    srcDir: "./",
-    destDir: "",
-    files: [
-      "**/*.js"
-    ]
+  var jsTree = funnel(dirs.js, {
+    include: ["**/*.js"],
+    destDir: dirs.js
   });
 
   // replace @@ENV in js code with current BROCCOLI_ENV environment variable
