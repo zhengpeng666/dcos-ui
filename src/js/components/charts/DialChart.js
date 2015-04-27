@@ -81,21 +81,15 @@ var DialChart = React.createClass({
   },
 
   getNormalizedData: function (slices, data) {
-    var sliceNames = _.pluck(slices, "name");
-    var dataSliceNames = _.pluck(data, "name");
-    var allNames = _.union(sliceNames, dataSliceNames);
-
     if (this.isEmpty(data)) {
       return getEmptyState();
     }
 
-    return _.map(allNames, function(name) {
-      if (_.contains(dataSliceNames, name)) {
-        return _.findWhere(data, {name: name});
-      } else {
-        return _.findWhere(slices, {name: name});
-      }
-    });
+    // Zero-length defaults are populated with actual data if available
+    return _.chain(_.indexBy(slices, "name"))
+      .extend(_.indexBy(data, "name"))
+      .values()
+      .value();
   },
 
   isEmpty: function (data) {
