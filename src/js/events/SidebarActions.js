@@ -48,7 +48,14 @@ var SidebarActions = {
 
   openIntercom: function () {
     AppDispatcher.handleSidebarAction({
-      type: ActionTypes.REQUEST_INTERCOM,
+      type: ActionTypes.REQUEST_INTERCOM_OPEN,
+      data: true
+    });
+  },
+
+  closeIntercom: function () {
+    AppDispatcher.handleSidebarAction({
+      type: ActionTypes.REQUEST_INTERCOM_CLOSE,
       data: false
     });
   },

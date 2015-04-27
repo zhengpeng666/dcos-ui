@@ -10,8 +10,8 @@ var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var TooltipMixin = require("../mixins/TooltipMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var Config = require("../config/Config");
-
 var SidebarActions = require("../events/SidebarActions");
+var SidebarStore = require("../stores/SidebarStore");
 
 var MENU_ITEMS = {
   dashboard: {label: "Dashboard", icon: "dashboard"},
@@ -72,9 +72,12 @@ var Sidebar = React.createClass({
     SidebarActions.startTour();
   },
 
-  handleOpenIntercom: function () {
-    SidebarActions.close();
-    SidebarActions.openIntercom();
+  handleToggleIntercom: function () {
+    if (SidebarStore.isIntercomOpen()) {
+      SidebarActions.closeIntercom();
+    } else {
+      SidebarActions.openIntercom();
+    }
   },
 
   handleVersionClick: function () {
@@ -161,7 +164,7 @@ var Sidebar = React.createClass({
             <button className="button button-smallbutton-link"
               data-behavior="show-tip"
               data-tip-content="Talk with us"
-              onClick={this.handleOpenIntercom}>
+              onClick={this.handleToggleIntercom}>
                 <i className="icon icon-chat icon-medium clickable"></i>
             </button>
             <button className="button button-smallbutton-link"

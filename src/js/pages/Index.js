@@ -1,3 +1,5 @@
+/** @jsx React.DOM */
+
 var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
@@ -74,7 +76,7 @@ var Index = React.createClass({
     );
 
     SidebarStore.addChangeListener(
-      EventTypes.SHOW_INTERCOM, this.onShowIntercom
+      EventTypes.INTERCOM_CHANGE, this.onIntercomChange
     );
 
     SidebarStore.addChangeListener(
@@ -121,7 +123,7 @@ var Index = React.createClass({
     );
 
     SidebarStore.removeChangeListener(
-      EventTypes.SHOW_INTERCOM, this.onShowIntercom
+      EventTypes.INTERCOM_CHANGE, this.onIntercomChange
     );
 
     SidebarStore.removeChangeListener(
@@ -148,11 +150,9 @@ var Index = React.createClass({
     this.setState({showingTourModal: true});
   },
 
-  onShowIntercom: function () {
+  onIntercomChange: function () {
     var intercom = global.Intercom;
-    if (intercom) {
-      intercom("show");
-    } else {
+    if (intercom == null) {
       this.setState({
         showErrorModal: true,
         modalErrorMsg: (
@@ -161,6 +161,15 @@ var Index = React.createClass({
           </p>
         )
       });
+
+      return;
+    }
+
+    var shouldOpen = SidebarStore.isIntercomOpen();
+    if (shouldOpen) {
+      intercom("show");
+    } else {
+      intercom("hide");
     }
   },
 
@@ -197,7 +206,7 @@ var Index = React.createClass({
   },
 
   onMesosStateError: function () {
-    this.setState({mesosStateErrorCount: ++this.state.mesosStateErrorCount});
+    this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
   },
 
   onLogin: function (email) {
@@ -216,9 +225,9 @@ var Index = React.createClass({
           Cannot Connect With The Server
         </h3>
         <p className="text-align-center">
-          We have been notified of the issue, but would love to know more.
-          Talk with us by clicking the bubble in the lower-right of your screen.
-          You can also join us on our&nbsp;
+          {"We have been notified of the issue, but would love to know more. Talk with us using "}
+          <a className="clickable" onClick={SidebarActions.openIntercom}>Intercom</a>
+          {". You can also join us on our "}
           <a href="https://mesosphere.slack.com/messages/dcos-eap-public"
               target="_blank">
             Slack channel
@@ -235,6 +244,7 @@ var Index = React.createClass({
     if (isReady) {
       return null;
     }
+
     var hasLoadingError = this.state.mesosStateErrorCount >= 3;
     var errorMsg = null;
     if (hasLoadingError) {
