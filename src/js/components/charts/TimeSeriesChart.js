@@ -9,6 +9,7 @@ var ChartMixin = require("../../mixins/ChartMixin");
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 var Maths = require("../../utils/Maths");
 var TimeSeriesArea = require("./TimeSeriesArea");
+var ValueTypes = require("../../constants/ValueTypes");
 
 var TimeSeriesChart = React.createClass({
 
@@ -22,6 +23,7 @@ var TimeSeriesChart = React.createClass({
     maxY: React.PropTypes.number,
     ticksY: React.PropTypes.number,
     y: React.PropTypes.string,
+    yFormat: React.PropTypes.string,
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
     refreshRate: React.PropTypes.number.isRequired,
@@ -33,6 +35,7 @@ var TimeSeriesChart = React.createClass({
       maxY: 10,
       ticksY: 3,
       y: "y",
+      yFormat: ValueTypes.PERCENTAGE,
       margin: {
         top: 10,
         left: 45,
@@ -128,6 +131,10 @@ var TimeSeriesChart = React.createClass({
     var props = this.props;
     var margin = props.margin;
     var domain = this.internalStorage_get().xScale.domain();
+    var yCaption = "%";
+    if (props.yFormat === ValueTypes.ABSOLUTE) {
+      yCaption = "";
+    }
 
     var firstDataSet = _.first(props.data);
     // 6 - how many data points we don't show
@@ -156,7 +163,7 @@ var TimeSeriesChart = React.createClass({
       .transition()
       .duration(50)
       .attr("y", data.yScale(firstDataSet.values[index][props.y]) + 3)
-      .text(firstDataSet.values[index][props.y] + "%");
+      .text(firstDataSet.values[index][props.y] + yCaption);
 
     // An extra -2 on each because we show the extra data point at the end
     var mappedValue = Maths.mapValue(index, {
@@ -276,13 +283,24 @@ var TimeSeriesChart = React.createClass({
   },
 
   formatYAxis: function (ticks, maxY) {
-    var formatPercent = d3.scale.linear().tickFormat(ticks, ".0%");
+    if (this.props.yFormat === ValueTypes.PERCENTAGE) {
+      var formatPercent = d3.scale.linear().tickFormat(ticks, ".0%");
+
+      return function (d) {
+        if (d >= maxY) {
+          return "100%";
+        }
+
+        return formatPercent(d / maxY);
+      };
+    }
+
     return function (d) {
-      var a = formatPercent(d / maxY);
       if (d >= maxY) {
-        a = "100%";
+        return maxY;
       }
-      return a;
+
+      return d;
     };
   },
 

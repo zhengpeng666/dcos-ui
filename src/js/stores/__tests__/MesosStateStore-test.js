@@ -159,4 +159,48 @@ describe("Mesos State Store", function () {
 
   });
 
+  describe("#getActiveHostsCount", function () {
+
+    beforeEach(function() {
+      MesosStateStore.reset();
+      MesosStateStore.init();
+    });
+
+    it("should be prefilled with 0", function () {
+      var activeHostsCount = MesosStateStore.getActiveHostsCount();
+      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(0);
+    });
+
+    it("should have same length as history length", function () {
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      var activeHostsCount = MesosStateStore.getActiveHostsCount();
+      expect(Config.historyLength).toBe(activeHostsCount.length);
+    });
+
+    it("should default to 0 if active slaves is undefined", function () {
+      MesosStateStore.processState(MockStates.frameworksWithNoActivatedSlaves);
+      var activeHostsCount = MesosStateStore.getActiveHostsCount();
+      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(0);
+    });
+
+    it("should reflect number of active slaves after processing", function () {
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      var activeHostsCount = MesosStateStore.getActiveHostsCount();
+      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(4);
+    });
+
+    it("should have correct number of active slaves in series", function () {
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processState(MockStates.frameworksWithNoActivatedSlaves);
+      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      var activeHostsCount = MesosStateStore.getActiveHostsCount();
+      expect(activeHostsCount[activeHostsCount.length - 3].slavesCount).toBe(4);
+      expect(activeHostsCount[activeHostsCount.length - 2].slavesCount).toBe(0);
+      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(4);
+    });
+
+  });
+
 });

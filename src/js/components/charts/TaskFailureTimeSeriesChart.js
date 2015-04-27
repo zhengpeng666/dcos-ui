@@ -9,7 +9,7 @@ var TimeSeriesLabel = require("./TimeSeriesLabel");
 
 var TaskFailureTimeSeriesChart = React.createClass({
 
-  displayName: "ResourceChart",
+  displayName: "TaskFailureTimeSeriesChart",
 
   propTypes: {
     data: React.PropTypes.array.isRequired,

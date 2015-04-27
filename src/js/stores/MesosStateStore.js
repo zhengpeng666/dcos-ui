@@ -334,6 +334,7 @@ function getStateByHosts() {
 
 function fillFramework(id, name, colorIndex) {
   _.each(_mesosStates, function (state) {
+    state.activated_slaves = 0;
     state.frameworks.push({
       active: false,
       id: id,
@@ -393,6 +394,15 @@ function getFrameworkHealth(app) {
   }
 
   return health;
+}
+
+function activeHostsCountOverTime() {
+  return _.map(_mesosStates, function (state) {
+    return {
+      date: state.date,
+      slavesCount: state.activated_slaves || 0
+    };
+  });
 }
 
 function parseMetadata(b64Data) {
@@ -579,6 +589,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
 
     return hosts;
+  },
+
+  getActiveHostsCount: function () {
+    return activeHostsCountOverTime();
   },
 
   isStatesProcessed: function () {
