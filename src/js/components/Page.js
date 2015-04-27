@@ -11,21 +11,14 @@ var Page = React.createClass({
 
   propTypes: {
     title: React.PropTypes.string,
-    renderNavigation: React.PropTypes.func,
-    isLoading: React.PropTypes.bool
-  },
-
-  getDefaultProps: function () {
-    return {
-      isLoading: false
-    };
+    renderNavigation: React.PropTypes.func
   },
 
   getNavigation: function () {
     if (_.isFunction(this.props.renderNavigation)) {
       return this.props.renderNavigation();
     } else {
-      return (<div className="page-header-navigation" />);
+      return <div className="page-header-navigation" />;
     }
   },
 
