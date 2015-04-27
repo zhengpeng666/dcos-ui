@@ -46,6 +46,29 @@ describe("DialChart", function () {
 
   });
 
+  describe("#isEmpty", function () {
+
+    it("returns true if there is no data", function () {
+      var empty = this.instance.isEmpty([]);
+      expect(empty).toBe(true);
+    });
+
+    it("returns true if the data sums to 0", function () {
+      var empty = this.instance.isEmpty([
+        { value: 0 }, { value: 0 }, { value: 0 }
+      ]);
+      expect(empty).toBe(true);
+    });
+
+    it("returns false if the data sums to more than 0", function () {
+      var empty = this.instance.isEmpty([
+        { value: 0 }, { value: 1 }, { value: 0 }
+      ]);
+      expect(empty).toBe(false);
+    });
+
+  });
+
   describe("#render", function () {
 
     beforeEach(function () {
