@@ -61,6 +61,11 @@ var tasks = {
             loader: "jsx-loader?harmony",
             exclude: /node_modules/
           }
+        ],
+        postLoaders: [
+          {
+            loader: "transform?envify"
+          }
         ]
       },
       resolve: {
