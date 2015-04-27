@@ -15,24 +15,21 @@ var TimeSeriesMouseOver = React.createClass({
     getBoundingBox: React.PropTypes.func.isRequired,
     height: React.PropTypes.number.isRequired,
     margin: React.PropTypes.object.isRequired,
-    parent: React.PropTypes.object.isRequired,
     width: React.PropTypes.number.isRequired,
     xScale: React.PropTypes.func.isRequired,
     y: React.PropTypes.string.isRequired,
     yCaption: React.PropTypes.string.isRequired,
-    yScale: React.PropTypes.func.isRequired
+    yScale: React.PropTypes.func.isRequired,
+    addMouseHandler: React.PropTypes.func.isRequired,
+    removeMouseHandler: React.PropTypes.func.isRequired
   },
 
   componentDidMount: function () {
-    var el = this.props.parent.getDOMNode();
-    el.addEventListener("mousemove", this.handleMouseMove);
-    el.addEventListener("mouseout", this.handleMouseOut);
+    this.props.addMouseHandler(this.handleMouseMove, this.handleMouseOut);
   },
 
   componentWillUnmount: function () {
-    var el = this.props.parent.getDOMNode();
-    el.removeEventListener("mousemove", this.handleMouseMove);
-    el.removeEventListener("mouseout", this.handleMouseOut);
+    this.props.removeMouseHandler(this.handleMouseMove, this.handleMouseOut);
   },
 
   calculateMousePositionInGraph: function (e) {

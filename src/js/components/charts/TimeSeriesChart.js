@@ -321,6 +321,18 @@ var TimeSeriesChart = React.createClass({
     };
   },
 
+  addMouseHandler: function (handleMouseMove, handleMouseOut) {
+    var el = this.getDOMNode();
+    el.addEventListener("mousemove", handleMouseMove);
+    el.addEventListener("mouseout", handleMouseOut);
+  },
+
+  removeMouseHandler: function (handleMouseMove, handleMouseOut) {
+    var el = this.getDOMNode();
+    el.removeEventListener("mousemove", handleMouseMove);
+    el.removeEventListener("mouseout", handleMouseOut);
+  },
+
   render: function () {
     var data = this.internalStorage_get();
     var props = this.props;
@@ -342,16 +354,17 @@ var TimeSeriesChart = React.createClass({
         <g className="x axis" ref="xAxis" />
         {this.getAreaList()}
         <TimeSeriesMouseOver
+          addMouseHandler={this.addMouseHandler}
           data={props.data}
           getBoundingBox={this.getBoundingBox.bind(null, props)}
           height={props.height}
           margin={props.margin}
-          parent={this}
           width={props.width}
           xScale={data.xScale}
           y={props.y}
           yCaption={yCaption}
-          yScale={data.yScale} />
+          yScale={data.yScale}
+          removeMouseHandler={this.removeMouseHandler} />
       </svg>
     );
   }
