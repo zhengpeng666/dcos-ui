@@ -283,24 +283,24 @@ var TimeSeriesChart = React.createClass({
   },
 
   formatYAxis: function (ticks, maxY) {
-    if (this.props.yFormat === ValueTypes.ABSOLUTE) {
+    if (this.props.yFormat === ValueTypes.PERCENTAGE) {
+      var formatPercent = d3.scale.linear().tickFormat(ticks, ".0%");
+
       return function (d) {
         if (d >= maxY) {
-          return maxY;
+          return "100%";
         }
 
-        return d;
+        return formatPercent(d / maxY);
       };
     }
 
-    var formatPercent = d3.scale.linear().tickFormat(ticks, ".0%");
-
     return function (d) {
       if (d >= maxY) {
-        return "100%";
+        return maxY;
       }
 
-      return formatPercent(d / maxY);
+      return d;
     };
   },
 
