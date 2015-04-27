@@ -3452,6 +3452,40 @@
       "version": "3.5.5",
       "resolved": "http://registry.npmjs.org/d3/-/d3-3.5.5.tgz"
     },
+    "envify": {
+      "version": "3.4.0",
+      "resolved": "http://registry.npmjs.org/envify/-/envify-3.4.0.tgz",
+      "dependencies": {
+        "jstransform": {
+          "version": "10.1.0",
+          "resolved": "http://registry.npmjs.org/jstransform/-/jstransform-10.1.0.tgz",
+          "dependencies": {
+            "base62": {
+              "version": "0.1.1",
+              "resolved": "http://registry.npmjs.org/base62/-/base62-0.1.1.tgz"
+            },
+            "esprima-fb": {
+              "version": "13001.1001.0-dev-harmony-fb",
+              "resolved": "http://registry.npmjs.org/esprima-fb/-/esprima-fb-13001.1001.0-dev-harmony-fb.tgz"
+            },
+            "source-map": {
+              "version": "0.1.31",
+              "resolved": "http://registry.npmjs.org/source-map/-/source-map-0.1.31.tgz",
+              "dependencies": {
+                "amdefine": {
+                  "version": "0.1.0",
+                  "resolved": "http://registry.npmjs.org/amdefine/-/amdefine-0.1.0.tgz"
+                }
+              }
+            }
+          }
+        },
+        "through": {
+          "version": "2.3.7",
+          "resolved": "http://registry.npmjs.org/through/-/through-2.3.7.tgz"
+        }
+      }
+    },
     "eslint": {
       "version": "0.18.0",
       "resolved": "https://registry.npmjs.org/eslint/-/eslint-0.18.0.tgz",
@@ -5315,6 +5349,10 @@
           }
         }
       }
+    },
+    "transform-loader": {
+      "version": "0.2.2",
+      "resolved": "http://registry.npmjs.org/transform-loader/-/transform-loader-0.2.2.tgz"
     },
     "underscore": {
       "version": "1.8.2",
