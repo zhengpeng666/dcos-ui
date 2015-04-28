@@ -1,42 +1,46 @@
 .qtip.docent-triggered_tooltip {
-  .docent-step-wrap .docent-tooltip-cta {
-    h4 {
-      color: @black;
-    }
-
-    pre {
-      background-color: ~`color_lightness("@{modal-header-background-color}", 40)`;
-      border-radius: 5px;
-      color: ~`color_lightness("@{black}", 40)`;
-      padding: 10px;
-      overflow-x: auto;
-      word-wrap: normal;
-    }
-
-    // Back button
-    .docent-tooltip-back-link {
-      &:hover {
-        color: ~`color_lightness("#000", 30)`;
+  .docent-step-wrap {
+    .docent-tooltip-cta {
+      h4 {
+        color: @black;
       }
-    }
 
-    // Next button
-    .docent-tooltip-cta-actions {
-      button {
-        margin-right: 0px;
-        outline: none;
+      pre {
+        background-color: ~`color_lightness("@{modal-header-background-color}", 40)`;
+        border-radius: 5px;
+        color: ~`color_lightness("@{black}", 40)`;
+        padding: 10px;
+        overflow-x: auto;
+        word-wrap: normal;
+      }
 
+      // Back button
+      .docent-tooltip-back-link {
         &:hover {
-          background-color: ~`color_lightness("@{purple}", -5)`;
+          color: ~`color_lightness("#000", 30)`;
+        }
+      }
+
+      // Next button
+      .docent-tooltip-cta-actions {
+        button {
+          margin-right: 0px;
+          outline: none;
+
+          &:hover {
+            background-color: ~`color_lightness("@{purple}", -5)`;
+          }
         }
       }
     }
 
-    .chmln-step-last {
-      .docent-tooltip-cta-actions {
-        button {
-          background-color: @green;
-          color: @white;
+    &.chmln-step-last {
+      .docent-tooltip-cta {
+        .docent-tooltip-cta-actions {
+          button {
+            background-color: @green;
+            color: @white;
+          }
         }
       }
     }
