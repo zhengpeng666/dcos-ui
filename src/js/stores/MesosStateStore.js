@@ -192,45 +192,36 @@ function getTasksByStatus(frameworks, taskTypes) {
 
 // Caluculate a failure rate
 function getFailureRate(mesosState, taskTypes) {
-  var newMesosStatusesMap = {};
-  var statuses = getTasksByStatus(mesosState.frameworks, taskTypes);
+  var newMesosStatusesMap = {
+    TASK_STAGING: 0,
+    TASK_STARTING: 0,
+    TASK_RUNNING: 0,
+    TASK_FINISHED: 0,
+    TASK_FAILED: 0,
+    TASK_LOST: 0,
+    TASK_ERROR: 0
+  };
   var failed = 0;
   var successful = 0;
   var diff = {};
 
-  statuses.forEach(function (status) {
+  mesosState.frameworks.forEach(function (framework) {
     // Map task statuses to statuses hash map
-    _.foldl(status.tasks, function (memo, task) {
-      memo[task.id] = task.statuses;
+    _.foldl(newMesosStatusesMap, function (memo, count, type) {
+      if (framework[type]) {
+        memo[type] += framework[type];
+      }
+
       return memo;
     }, newMesosStatusesMap);
   });
 
   // Only compute diff if we have previous data
-  if (Object.keys(_prevMesosStatusesMap).length) {
-    // Find diff
-    diff = _.foldl(newMesosStatusesMap, function (memo, status, key) {
-      if (status.length === 0) {
-        return memo;
-      }
-
-      // This assumes the previous status is equal to the current one
-      if (this[key] && status.length === this[key].length) {
-        return memo;
-      }
-
-      var finalState = _.max(status, function (state) {
-        return state.timestamp;
-      });
-
-      if (!memo[finalState.state]) {
-        memo[finalState.state] = 0;
-      }
-
-      memo[finalState.state]++;
-
-      return memo;
-    }, {}, _prevMesosStatusesMap);
+  var prevKeys = Object.keys(_prevMesosStatusesMap);
+  if (prevKeys.length) {
+    prevKeys.forEach(function (key) {
+      diff[key] = newMesosStatusesMap[key] - _prevMesosStatusesMap[key];
+    });
 
     // refs: https://github.com/apache/mesos/blob/master/include/mesos/mesos.proto
     successful = (diff.TASK_STAGING || 0) +
@@ -251,8 +242,8 @@ function getFailureRate(mesosState, taskTypes) {
   };
 }
 
-function getAllFailureRates(list, taskTypes) {
-  var failureRate = getFailureRate(_.last(list), taskTypes);
+function getAllFailureRates(list) {
+  var failureRate = getFailureRate(_.last(list));
   _failureRates.push(failureRate);
   _failureRates.shift();
   return _failureRates;
@@ -620,7 +611,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getTaskFailureRate: function () {
-    return getAllFailureRates(_mesosStates, ["tasks", "completed_tasks"]);
+    return getAllFailureRates(_mesosStates);
   },
 
   getTotalResources: function () {
