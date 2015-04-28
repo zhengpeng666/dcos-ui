@@ -45,12 +45,12 @@ function setHostsToFrameworkCount(frameworks, hosts) {
 }
 
 function sumResources(resourceList) {
-  return _.foldl(resourceList, function (sumMap, resource) {
-    _.each(sumMap, function (value, key) {
-      sumMap[key] = value + resource[key];
+  return _.foldl(resourceList, function (memo, resource) {
+    _.each(memo, function (value, key) {
+      memo[key] = value + resource[key];
     });
 
-    return sumMap;
+    return memo;
   }, {cpus: 0, mem: 0, disk: 0});
 }
 
@@ -332,19 +332,31 @@ function getStateByHosts() {
     .value();
 }
 
-function fillFramework(id, name, colorIndex) {
+function addFrameworkToPreviousStates(_framework, colorIndex) {
   _.each(_mesosStates, function (state) {
-    state.activated_slaves = 0;
-    state.frameworks.push({
-      active: false,
-      id: id,
-      name: name,
+    // We could optimize here by moving this line out of the `each`
+    // this would mean that all states have the same instance of
+    // the object
+    var framework = _.clone(_framework);
+
+    _.extend(framework, {
       date: state.date,
       colorIndex: colorIndex,
-      resources: {cpus: 0, mem: 0, disk: 0},
-      used_resources: {cpus: 0, mem: 0, disk: 0},
-      tasks: []
+      slave_ids: [],
+      offered_resources: {cpus: 0, disk: 0, mem: 0},
+      used_resources: {cpus: 0, disk: 0, mem: 0},
+      TASK_ERROR: 0,
+      TASK_FAILED: 0,
+      TASK_FINISHED: 0,
+      TASK_KILLED: 0,
+      TASK_LOST: 0,
+      TASK_RUNNING: 0,
+      TASK_STAGING: 0,
+      TASK_STARTING: 0
     });
+
+    state.activated_slaves = 0;
+    state.frameworks.push(framework);
   });
 }
 
@@ -370,7 +382,7 @@ function normalizeFrameworks(frameworks, date) {
       _frameworkIDs.push(framework.id);
       _frameworkNames.push(framework.name);
       index = _frameworkIDs.length - 1;
-      fillFramework(framework.id, framework.name, index);
+      addFrameworkToPreviousStates(framework, index);
     }
     // set color index after discovering and assigning index framework
     framework.colorIndex = index;
@@ -504,7 +516,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
 
     // log when we started calling
-    _initCalledAt = _.now();
+    _initCalledAt = Date.now();
 
     initStates();
   },
@@ -648,7 +660,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       return;
     }
 
-    var msLeftOfDelay = Config.stateLoadDelay - (_.now() - _initCalledAt);
+    var msLeftOfDelay = Config.stateLoadDelay - (Date.now() - _initCalledAt);
     if (msLeftOfDelay < 0) {
       this.updateStateProcessed();
     } else {
@@ -662,13 +674,14 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   processState: function (data) {
     data.date = Date.now();
     data.frameworks = normalizeFrameworks(data.frameworks, data.date);
-    data.total_resources = sumResources(
-      _.pluck(data.slaves, "resources")
-    );
+    data.total_resources = sumResources(_.pluck(data.slaves, "resources"));
     data.used_resources = sumResources(
       _.pluck(data.frameworks, "used_resources")
     );
+
+    // Add new snapshot
     _mesosStates.push(data);
+    // Remove oldest snapshot when we have more than we should
     if (_mesosStates.length > Config.historyLength) {
       _mesosStates.shift();
     }
