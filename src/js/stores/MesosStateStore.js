@@ -346,9 +346,13 @@ function addFrameworkToPreviousStates(_framework, colorIndex) {
       TASK_STARTING: 0
     });
 
-    state.activated_slaves = 0;
+    state.activate_slaves = 0;
     state.frameworks.push(framework);
   });
+}
+
+function getActiveSlaves(slaves) {
+  return _.where(slaves, {active: true});
 }
 
 // [{
@@ -403,7 +407,7 @@ function activeHostsCountOverTime() {
   return _.map(_mesosStates, function (state) {
     return {
       date: state.date,
-      slavesCount: state.activated_slaves || 0
+      slavesCount: state.activate_slaves || 0
     };
   });
 }
@@ -669,6 +673,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     data.used_resources = sumResources(
       _.pluck(data.frameworks, "used_resources")
     );
+    data.activate_slaves = getActiveSlaves(data.slaves).length;
 
     // Add new snapshot
     _mesosStates.push(data);
