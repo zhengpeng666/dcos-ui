@@ -86,10 +86,10 @@ var DialChart = React.createClass({
     }
 
     // Zero-length defaults are populated with actual data if available
-    return _.chain(_.indexBy(slices, "name"))
-      .extend(_.indexBy(data, "name"))
-      .values()
-      .value();
+    var namedSlices = _.indexBy(slices, "name");
+    var namedData = _.indexBy(slices, "name");
+    var normalizedNamedData = _.extend(namedSlices, namedData);
+    return _.values(normalizedNamedData);
   },
 
   isEmpty: function (data) {
