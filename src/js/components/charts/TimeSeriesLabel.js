@@ -42,13 +42,13 @@ var TimeSeriesLabel = React.createClass({
 
     return (
       <div className="text-align-center">
-        <p className="h1-jumbo unit">
+        <span className="h1-jumbo unit">
           {props.currentValue}
           <sup className={percentageClassSet}>%</sup>
-        </p>
-        <p className={"h4 unit-label path-color-" + props.colorIndex}>
+        </span>
+        <span className={"h4 unit-label tall-bottom path-color-" + props.colorIndex}>
           {props.subHeading}
-        </p>
+        </span>
       </div>
     );
   }
