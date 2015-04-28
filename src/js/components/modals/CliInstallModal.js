@@ -46,6 +46,11 @@ var CliInstructionsModal = React.createClass({
       The <a href="http://git-scm.com/" target="_blank">git</a> version control application.
       </li>
     );
+    var jqInstructions = (
+      <li>
+      Install <a href="http://stedolan.github.io/jq/download/" target="_blank">jq</a>.
+      </li>
+    );
 
     if (OS === "Windows") {
       requirements = (
@@ -55,6 +60,7 @@ var CliInstructionsModal = React.createClass({
           </li>
           {pythonInstructions}
           {gitInstructions}
+          {jqInstructions}
           <li>
             Download: <a href="https://raw.githubusercontent.com/mesosphere/install-scripts/master/dcos-cli/install-dcos-windows.ps1" target="_blank">install-dcos-windows.ps1</a>
           </li>
@@ -67,9 +73,10 @@ var CliInstructionsModal = React.createClass({
           <li>A command-line environment, such as Terminal.</li>
           {pythonInstructions}
           {gitInstructions}
+          {jqInstructions}
         </ul>
       );
-      cliSnippet = "mkdir dcos && cd dcos\ncurl -O https://downloads.mesosphere.io/dcos-cli/install.sh\nsh ./install.sh . " + hostname + "\nsource ./bin/env-setup && dcos package update";
+      cliSnippet = "mkdir dcos && cd dcos && \\\n  curl -O https://downloads.mesosphere.io/dcos-cli/install.sh && \\\n  sh ./install.sh . HOSTNAME && \\\n  source ./bin/env-setup";
     }
 
     return {

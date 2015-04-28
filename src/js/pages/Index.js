@@ -274,8 +274,8 @@ var Index = React.createClass({
       onCloseClickFn: function () {
           this.setState({showingCliModal: false});
         }.bind(this),
-      title: "Install Mesosphere DCOS CLI",
-      subHeaderContent: "The best way to interact with your DCOS is to install our command-line tool, which gives you a convenient interface for launching and managing your datacenter applications remotely.",
+      title: "Welcome to the Mesosphere DCOS!",
+      subHeaderContent: "This brief tutorial walks you through the basics of the Mesosphere DCOS. It includes using the DCOS Dashboard, installing a service from the package repository, deploying and scaling an app using Marathon, and performing continuous integration using Jenkins. This tutorial should take about 10 minutes to complete.",
       showFooter: false
     };
   },
