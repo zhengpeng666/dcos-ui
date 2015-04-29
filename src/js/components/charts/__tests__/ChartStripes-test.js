@@ -49,4 +49,35 @@ describe("ChartStripes", function () {
     });
   });
 
+  it("should update to parameter change accordingly", function () {
+    var stripes = TestUtils.scryRenderedDOMComponentsWithClass(
+      this.instance, "background"
+    );
+    expect(stripes.length).toEqual(6);
+
+    this.instance = TestUtils.renderIntoDocument(
+      <svg>
+        <ChartStripes
+          count={5}
+          height={4}
+          width={300} />
+      </svg>
+    );
+
+    stripes = TestUtils.scryRenderedDOMComponentsWithClass(
+      this.instance, "background"
+    );
+    expect(stripes.length).toEqual(5);
+
+    _.each(stripes, function (stripe) {
+      expect(parseInt(stripe.getDOMNode().attributes.width.value, 10))
+        .toEqual(30);
+    });
+
+    _.each(stripes, function (stripe, i) {
+      expect(parseInt(stripe.getDOMNode().attributes.x.value, 10))
+        .toEqual(30 + i * 60);
+    });
+  });
+
 });
