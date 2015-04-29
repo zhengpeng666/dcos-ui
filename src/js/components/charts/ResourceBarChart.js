@@ -15,8 +15,8 @@ var ResourceBarChart = React.createClass({
   displayName: "ResourceBarChart",
 
   propTypes: {
-    data: React.PropTypes.array.isRequired,
     onResourceSelectionChange: React.PropTypes.func.isRequired,
+    itemCount: React.PropTypes.number.isRequired,
     resources: React.PropTypes.object.isRequired,
     refreshRate: React.PropTypes.number.isRequired,
     resourceType: React.PropTypes.string,
@@ -26,7 +26,7 @@ var ResourceBarChart = React.createClass({
 
   getDefaultProps: function () {
     return {
-      data: [],
+      itemCount: 0,
       totalResources: {},
       y: "percentage",
       refreshRate: 0,
@@ -37,7 +37,7 @@ var ResourceBarChart = React.createClass({
   getData: function () {
     var props = this.props;
 
-    if (props.data.length === 0) {
+    if (props.itemCount === 0) {
       return [];
     }
 
@@ -117,7 +117,7 @@ var ResourceBarChart = React.createClass({
           {headline}
         </h3>
         <p className="flush-bottom">
-          {this.props.data.length + " Total " + this.props.resourceType}
+          {this.props.itemCount + " Total " + this.props.resourceType}
         </p>
       </div>
     );
