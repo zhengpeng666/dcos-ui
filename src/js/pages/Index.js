@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var _ = require("underscore");
 var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
@@ -31,6 +32,12 @@ function getSidebarState() {
   };
 }
 
+function getIntercomState() {
+  return {
+    shouldIntercomOpen: IntercomStore.isOpen()
+  };
+}
+
 var Index = React.createClass({
 
   displayName: "Index",
@@ -38,7 +45,7 @@ var Index = React.createClass({
   mixins: [InternalStorageMixin],
 
   getInitialState: function () {
-    return {
+    var state = {
       hasIdentity: false,
       mesosStateErrorCount: 0,
       tourSetup: false,
@@ -48,6 +55,8 @@ var Index = React.createClass({
       showErrorModal: false,
       modalErrorMsg: ""
     };
+
+    return _.extend(state, getIntercomState());
   },
 
   componentWillMount: function () {
@@ -93,6 +102,10 @@ var Index = React.createClass({
     );
 
     this.addMesosStateListeners();
+  },
+
+  shouldComponentUpdate: function (nextProps, nextState) {
+    return !_.isEqual(this.state, nextState);
   },
 
   addMesosStateListeners: function () {
@@ -169,13 +182,7 @@ var Index = React.createClass({
 
       return;
     }
-
-    var shouldOpen = IntercomStore.isOpen();
-    if (shouldOpen) {
-      intercom("show");
-    } else {
-      intercom("hide");
-    }
+    this.setState(getIntercomState());
   },
 
   onShowVersionsSuccess: function () {
@@ -389,6 +396,17 @@ var Index = React.createClass({
       errorMsg={this.state.modalErrorMsg} />);
   },
 
+  renderIntercom: function () {
+    var intercom = global.Intercom;
+    if (intercom != null) {
+      if (this.state.shouldIntercomOpen) {
+        intercom("show");
+      } else {
+        intercom("hide");
+      }
+    }
+  },
+
   render: function () {
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
@@ -398,6 +416,8 @@ var Index = React.createClass({
     var classSet = React.addons.classSet({
       "canvas-sidebar-open": data.isOpen
     });
+
+    this.renderIntercom();
 
     return (
       <div>

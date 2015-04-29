@@ -10,20 +10,14 @@ var _isOpen = false;
 var IntercomStore = _.extend({}, EventEmitter.prototype, {
 
   init: function () {
-    // make sure to hide Intercom on load
     var intercom = global.Intercom;
     if (intercom != null) {
-      this._close();
+      // make sure to hide Intercom on load
+      intercom("hide");
 
       // register events
-      intercom("onHide", function() {
-        _isOpen = false;
-        this.emitChange(EventTypes.INTERCOM_CHANGE);
-      }.bind(this));
-      intercom("onShow", function() {
-        _isOpen = true;
-        this.emitChange(EventTypes.INTERCOM_CHANGE);
-      }.bind(this));
+      intercom("onHide", this._handleCallback.bind(this, false));
+      intercom("onShow", this._handleCallback.bind(this, true));
     }
   },
 
@@ -31,18 +25,16 @@ var IntercomStore = _.extend({}, EventEmitter.prototype, {
     return _isOpen;
   },
 
-  _close: function () {
-    var intercom = global.Intercom;
-    if (intercom != null) {
-      intercom("hide");
+  _handleCallback: function (value) {
+    // only handle change if there is one
+    if (_isOpen !== value) {
+      this._handleChange(value);
     }
   },
 
-  _open: function () {
-    var intercom = global.Intercom;
-    if (intercom != null) {
-      intercom("show");
-    }
+  _handleChange: function (value) {
+    _isOpen = value;
+    IntercomStore.emitChange(EventTypes.INTERCOM_CHANGE);
   },
 
   emitChange: function (eventName) {
@@ -67,10 +59,8 @@ var IntercomStore = _.extend({}, EventEmitter.prototype, {
 
     switch (action.type) {
       case ActionTypes.REQUEST_INTERCOM_CLOSE:
-        IntercomStore._close();
-        break;
       case ActionTypes.REQUEST_INTERCOM_OPEN:
-        IntercomStore._open();
+        IntercomStore._handleChange(action.data);
         break;
     }
 
