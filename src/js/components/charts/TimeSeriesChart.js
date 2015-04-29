@@ -27,8 +27,7 @@ var TimeSeriesChart = React.createClass({
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
     margin: React.PropTypes.object.isRequired,
-    refreshRate: React.PropTypes.number.isRequired,
-    strokeOffset: React.PropTypes.number
+    refreshRate: React.PropTypes.number.isRequired
   },
 
   mixins: [ChartMixin, InternalStorageMixin],
@@ -45,8 +44,7 @@ var TimeSeriesChart = React.createClass({
         bottom: 25,
         right: 5
       },
-      refreshRate: 0,
-      strokeOffset: 2
+      refreshRate: 0
     };
   },
 
@@ -58,10 +56,10 @@ var TimeSeriesChart = React.createClass({
     var data = {
       clipPathID: _.uniqueId("clip"),
       area: this.getArea(xTimeScale, yScale),
-      stack: this.getStack(),
       xScale: xScale,
       xTimeScale: xTimeScale,
-      yScale: yScale
+      yScale: yScale,
+      valueLine: this.getValueLine(xTimeScale, yScale)
     };
 
     this.internalStorage_set(data);
@@ -95,36 +93,31 @@ var TimeSeriesChart = React.createClass({
 
   updateClipPath: function () {
     var data = this.internalStorage_get();
-    var props = this.props;
-    var margin = props.margin;
-    var width = props.width - margin.right - margin.left;
-    // includes x-axis as we want to clip that as well
-    var height = props.height - margin.top - margin.top - margin.bottom;
-    var transform = "translate(" + margin.left + "," + margin.top + ")";
 
     d3.select("#" + data.clipPathID + " rect")
       .attr({
-        width: width,
-        height: height,
-        transform: transform
+        width: this.getWidth(this.props),
+        height: this.getHeight(this.props)
       });
   },
 
   getArea: function (xTimeScale, yScale) {
-    var props = this.props;
-    var y = props.y;
+    var y = this.props.y;
 
     return d3.svg.area()
       .x(function (d) { return xTimeScale(d.date); })
-      .y0(function (d) { return yScale(d.y0 - props.strokeOffset); })
-      .y1(function (d) { return yScale(d.y0 + d[y]); })
+      .y0(function () { return yScale(0); })
+      .y1(function (d) { return yScale(d[y]); })
       .interpolate("monotone");
   },
 
-  getStack: function () {
-    return d3.layout.stack()
-      .values(function (d) { return d.values; })
-      .x(function (d) { return d.date; });
+  getValueLine: function (xTimeScale, yScale) {
+    var y = this.props.y;
+
+    return d3.svg.line()
+      .x(function (d) { return xTimeScale(d.date); })
+      .y(function (d) { return yScale(d[y]); })
+      .interpolate("monotone");
   },
 
   getXTickValues: function (xScale) {
@@ -141,30 +134,38 @@ var TimeSeriesChart = React.createClass({
     var firstDataSet = _.first(props.data);
     if (firstDataSet != null) {
       var values = firstDataSet.values;
-      // [first date - 1, last date - 1]
-      // ristrict x domain to have extra point outside of graph area,
+      // [first date, last date - 1]
+      // Ristrict x domain to have one extra point outside of graph area,
       // since we are animating the graph in from right
-      date = values[1].date;
-      dateDelta = values[values.length - 2 - 1].date;
+      date = _.first(values).date;
+      dateDelta = values[values.length - 2].date;
     }
 
     return d3.time.scale()
-      .range([0, props.width - props.margin.right])
+      .range([0, this.getWidth(props)])
       .domain([date, dateDelta]);
   },
 
   getYScale: function (props) {
-    var margin = props.margin;
-
     return d3.scale.linear()
       // give a little space in the top for the number
-      .range([props.height - margin.bottom - margin.top, margin.top])
+      .range([this.getHeight(props), 0])
       .domain([0, props.maxY]);
+  },
+
+  getYCaption: function () {
+    if (this.props.yFormat === ValueTypes.PERCENTAGE) {
+      return "%";
+    }
+    return "";
   },
 
   formatYAxis: function (ticks, maxY) {
     if (this.props.yFormat === ValueTypes.PERCENTAGE) {
-      var formatPercent = d3.scale.linear().tickFormat(ticks, ".0%");
+      var formatPercent = d3.scale.linear().tickFormat(
+        ticks,
+        ".0" + this.getYCaption()
+      );
 
       return function (d) {
         if (d >= maxY) {
@@ -185,7 +186,6 @@ var TimeSeriesChart = React.createClass({
   },
 
   renderAxis: function (props, xScale, yScale) {
-    var margin = props.margin;
     var firstDataSet = _.first(props.data);
 
     if (firstDataSet != null) {
@@ -194,9 +194,8 @@ var TimeSeriesChart = React.createClass({
         .tickValues(this.getXTickValues(xScale))
         .tickFormat(this.formatXAxis)
         .orient("bottom");
-      var height = props.height - margin.bottom - margin.top;
       d3.select(this.refs.xAxis.getDOMNode()).interrupt()
-        .attr("transform", "translate(" + margin.left + "," + height + ")")
+        .attr("transform", "translate(0," + this.getHeight(props) + ")")
         .call(xAxis);
     }
 
@@ -206,16 +205,14 @@ var TimeSeriesChart = React.createClass({
       .tickFormat(this.formatYAxis(props.ticksY, props.maxY))
       .orient("left");
     d3.select(this.refs.yAxis.getDOMNode())
-      .attr("transform", "translate(" + margin.left + ",0)")
       .call(yAxis);
 
     d3.select(this.refs.grid.getDOMNode())
-      .attr("transform", "translate(" + margin.left + ",0)")
       .call(
         d3.svg.axis().scale(yScale)
           .orient("left")
           .ticks(props.ticksY)
-          .tickSize(-props.width + margin.left + margin.right, 0, 0)
+          .tickSize(-this.getWidth(props), 0, 0)
           .tickFormat("")
       );
   },
@@ -235,6 +232,7 @@ var TimeSeriesChart = React.createClass({
 
     this.internalStorage_update({
       area: this.getArea(xTimeScale, yScale),
+      valueLine: this.getValueLine(xTimeScale, yScale),
       xTimeScale: xTimeScale,
       xScale: xScale,
       yScale: yScale
@@ -248,7 +246,7 @@ var TimeSeriesChart = React.createClass({
     return (data[l].date - data[l - 1].date) / 1;
   },
 
-  getPosition: function (values) {
+  getNewXPosition: function (values, transitionTime) {
     var data = this.internalStorage_get();
     var firstDataSet = _.first(values);
     var date = Date.now();
@@ -257,62 +255,59 @@ var TimeSeriesChart = React.createClass({
       date = firstDataSet.date;
     }
 
-    return data.xTimeScale(date);
+    // add transition time since we are moving towards new pos
+    return data.xTimeScale(date + transitionTime);
   },
 
-  getCirclePosition: function (obj) {
+  getNewYPosition: function (obj, props) {
     var data = this.internalStorage_get();
-    var props = this.props;
-    var lastestVisibleDataPoint = obj.values[obj.values.length - 2];
+    var lastestDataPoint = _.last(obj.values);
 
-    // [stay in x-value, most recent y - height of chart]
-    return [
-      0,
-      data.yScale(lastestVisibleDataPoint[props.y]) -
-      props.height + props.margin.top + props.margin.bottom
-    ];
+    // most recent y - height of chart
+    return data.yScale(lastestDataPoint[props.y]) - this.getHeight(props);
   },
 
-  getAreaList: function () {
-    var data = this.internalStorage_get();
-    var props = this.props;
-    var clipPath = "url(#" + data.clipPathID + ")";
-
-    // stack before drawing!
-    return _.map(data.stack(props.data), function (obj, i) {
-      var classes = {
-        "area": true
-      };
-      classes["path-color-" + obj.colorIndex] = true;
-
+  getAreaList: function (store, data) {
+    return _.map(data, function (obj, i) {
       var transitionTime = this.getTransitionTime(obj.values);
-      // y0 of lastest visible obj + account for stroke size
-      var initialPosition = data.yScale(obj.values[obj.values.length - 2].y0);
 
       return (
-        <g className={React.addons.classSet(classes)} key={i}>
-          <AnimationCircle
-            transitionTime={transitionTime}
-            position={this.getCirclePosition(obj)}
-            cx={props.width - props.margin.right}
-            cy={initialPosition} />
-          <g clip-path={clipPath}>
-            <TimeSeriesArea
-              path={data.area(obj.values)}
-              name={obj.name}
-              transitionTime={transitionTime}
-              position={this.getPosition(obj.values)} />
-          </g>
-        </g>
+        <TimeSeriesArea
+          className={"path-color-" + obj.colorIndex}
+          key={i}
+          line={store.valueLine(obj.values)}
+          path={store.area(obj.values)}
+          position={[-this.getNewXPosition(obj.values, transitionTime), 0]}
+          transitionTime={transitionTime} />
       );
     }, this);
   },
 
-  getBoundingBox: function (props) {
+  getCircleList: function () {
+    var props = this.props;
+
+    return _.map(props.data, function (obj, i) {
+      var transitionTime = this.getTransitionTime(obj.values);
+
+      return (
+        <AnimationCircle
+          className={"arc path-color-" + obj.colorIndex}
+          cx={this.getWidth(props)}
+          cy={this.getHeight(props)}
+          key={i}
+          position={[0, this.getNewYPosition(obj, props)]}
+          transitionTime={transitionTime} />
+      );
+    }, this);
+  },
+
+  getBoundingBox: function () {
     var el = this.getDOMNode();
     var elPosition = el.getBoundingClientRect();
 
+    var props = this.props;
     var margin = props.margin;
+
     return {
       top: elPosition.top + margin.top,
       right: elPosition.left + props.width - margin.right,
@@ -334,37 +329,39 @@ var TimeSeriesChart = React.createClass({
   },
 
   render: function () {
-    var data = this.internalStorage_get();
+    var store = this.internalStorage_get();
     var props = this.props;
     var margin = props.margin;
-    var yCaption = "";
-    if (props.yFormat === ValueTypes.PERCENTAGE) {
-      yCaption = "%";
-    }
+    var height = this.getHeight(props);
+    var width = this.getWidth(props);
+    var clipPath = "url(#" + store.clipPathID + ")";
 
     return (
       <svg height={props.height} width={props.width}>
-        <ChartStripes
-          count={4}
-          height={props.height}
-          margin={props.margin}
-          width={props.width} />
-        <g className="bars grid-graph" ref="grid" />
-        <g className="y axis" ref="yAxis" />
-        <g className="x axis" ref="xAxis" />
-        {this.getAreaList()}
-        <TimeSeriesMouseOver
-          addMouseHandler={this.addMouseHandler}
-          data={props.data}
-          getBoundingBox={this.getBoundingBox.bind(null, props)}
-          height={props.height}
-          margin={props.margin}
-          width={props.width}
-          xScale={data.xScale}
-          y={props.y}
-          yCaption={yCaption}
-          yScale={data.yScale}
-          removeMouseHandler={this.removeMouseHandler} />
+        <g transform={"translate(" + margin.left + "," + margin.top + ")"}>
+          <ChartStripes
+            count={4}
+            height={height}
+            width={width} />
+          <g clip-path={clipPath}>
+            {this.getAreaList(store, props.data)}
+          </g>
+          <g className="bars grid-graph" ref="grid" />
+          <g className="y axis" ref="yAxis" />
+          <g className="x axis" ref="xAxis" />
+          <TimeSeriesMouseOver
+            addMouseHandler={this.addMouseHandler}
+            data={props.data}
+            getBoundingBox={this.getBoundingBox}
+            height={height}
+            removeMouseHandler={this.removeMouseHandler}
+            width={width}
+            xScale={store.xScale}
+            y={props.y}
+            yCaption={this.getYCaption()}
+            yScale={store.yScale} />
+          {this.getCircleList()}
+        </g>
       </svg>
     );
   }

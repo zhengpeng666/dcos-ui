@@ -11,9 +11,22 @@ var ChartMixin = {
     }
 
     var timeAgo = -(length - 1) * (props.refreshRate / 1000);
+
     return d3.scale.linear()
-      .range([0, props.width - props.margin.left - props.margin.right])
+      .range([0, this.getWidth(props)])
       .domain([timeAgo, 0]);
+  },
+
+  // Only used by TimeSeriesChart, but is meant to be re-used elsewhere
+  getHeight: function (props) {
+    var margin = props.margin;
+    return props.height - margin.top - margin.bottom;
+  },
+
+  // Only used by TimeSeriesChart, but is meant to be re-used elsewhere
+  getWidth: function (props) {
+    var margin = props.margin;
+    return props.width - margin.left - margin.right;
   },
 
   formatXAxis: function (d) {

@@ -24,16 +24,6 @@
     text-shadow: 0px 0px 10px fade(@white, 6%);
   }
 
-  .area path {
-    stroke-width: 2px;
-    fill-opacity: 0.3;
-  }
-
-  .arc path {
-    stroke-width: 4px;
-    stroke: @panel-background-color;
-  }
-
   .arc,
   .area,
   .bar rect {
@@ -70,6 +60,48 @@
     &.path-color-6 {
       stroke: @body-text-mute-color;
       fill: @body-text-mute-color;
+    }
+  }
+
+  .area {
+    fill-opacity: 0.3;
+    stroke-width: 0;
+  }
+
+  .arc path {
+    stroke-width: 4px;
+    stroke: @panel-background-color;
+  }
+
+  .line {
+    stroke-width: 2px;
+    fill: none;
+    &.path-color-0 {
+      stroke: @purple;
+    }
+
+    &.path-color-1 {
+      stroke: @yellow;
+    }
+
+    &.path-color-2 {
+      stroke: @red;
+    }
+
+    &.path-color-3 {
+      stroke: @blue;
+    }
+
+    &.path-color-4 {
+      stroke: @green;
+    }
+
+    &.path-color-5 {
+      stroke: @orchid;
+    }
+
+    &.path-color-6 {
+      stroke: @body-text-mute-color;
     }
   }
 

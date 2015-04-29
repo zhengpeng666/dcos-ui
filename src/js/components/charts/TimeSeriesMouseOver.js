@@ -14,11 +14,9 @@ var TimeSeriesMouseOver = React.createClass({
     data: React.PropTypes.array.isRequired,
     getBoundingBox: React.PropTypes.func.isRequired,
     height: React.PropTypes.number.isRequired,
-    margin: React.PropTypes.object.isRequired,
     width: React.PropTypes.number.isRequired,
     xScale: React.PropTypes.func.isRequired,
     y: React.PropTypes.string.isRequired,
-    yCaption: React.PropTypes.string.isRequired,
     yScale: React.PropTypes.func.isRequired,
     addMouseHandler: React.PropTypes.func.isRequired,
     removeMouseHandler: React.PropTypes.func.isRequired
@@ -61,24 +59,23 @@ var TimeSeriesMouseOver = React.createClass({
     }
 
     var props = this.props;
-    var margin = props.margin;
     var domain = props.xScale.domain();
 
     var firstDataSet = _.first(props.data);
-    // 6 - how many data points we don't show
-    var hiddenDataPoints = 6;
+    // how many data points we don't show
+    var hiddenDataPoints = 1;
     // find the data point at the given mouse position
     var index = mouse.x *
       (firstDataSet.values.length - hiddenDataPoints - 1) /
-      (props.width - margin.right - margin.left);
-    index = Math.round(index + hiddenDataPoints - 1);
+      (props.width);
+    index = Math.round(index + hiddenDataPoints);
 
     d3.select(this.refs.xMousePosition.getDOMNode())
       .transition()
         .duration(50)
         .style("stroke", "rgba(255,255,255,0.5")
-        .attr("x1", mouse.x + margin.left)
-        .attr("x2", mouse.x + margin.left);
+        .attr("x1", mouse.x)
+        .attr("x2", mouse.x);
 
     d3.select(this.refs.yMousePosition.getDOMNode())
       .transition()
@@ -90,13 +87,13 @@ var TimeSeriesMouseOver = React.createClass({
     d3.select(this.refs.yAxisCurrent.getDOMNode())
       .transition()
       .duration(50)
-      .attr("y", props.yScale(firstDataSet.values[index][props.y]) + 3)
+      .attr("y", props.yScale(firstDataSet.values[index][props.y]))
       .text(firstDataSet.values[index][props.y] + props.yCaption);
 
     // An extra -2 on each because we show the extra data point at the end
     var mappedValue = Maths.mapValue(index, {
-      min: firstDataSet.values.length - 2,
-      max: 5
+      min: firstDataSet.values.length - hiddenDataPoints,
+      max: 1
     });
     var value = Maths.unmapValue(mappedValue, {
       min: Math.abs(domain[1]),
@@ -130,28 +127,31 @@ var TimeSeriesMouseOver = React.createClass({
   },
 
   render: function () {
-    var margin = this.props.margin;
-    var height = this.props.height - (margin.bottom * 1.25) - margin.top;
+    var height = this.props.height;
 
+    // dy=.71em, y=9 and x=-9, dy=.32em are magic numbers from looking at
+    // d3.js text values
     return (
       <g>
         <g className="x axis">
           <text className="current-value" ref="xAxisCurrent"
-            y={margin.bottom}
-            transform={"translate(" + margin.left + "," + height + ")"}>
+            dy=".71em"
+            y="9"
+            transform={"translate(0," + height + ")"}>
           </text>
         </g>
         <g className="y axis">
           <text className="current-value shadow" ref="yAxisCurrent"
             style={{textAnchor: "end"}}
-            transform={"translate(" + (margin.left - 9) + ",0)"}>
+            dy=".32em"
+            x="-9">
           </text>
         </g>
         <line ref="xMousePosition"
-          y1={margin.top}
-          y2={this.props.height - margin.bottom - margin.top} />
+          y1={0}
+          y2={height} />
         <line ref="yMousePosition"
-          x1={margin.left}
+          x1={0}
           x2={this.props.width} />
       </g>
     );
