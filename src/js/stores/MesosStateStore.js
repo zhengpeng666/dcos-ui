@@ -32,7 +32,7 @@ var NA_IMAGES = {
   "icon-large": "./img/services/icon-service-default-large@2x.png"
 };
 
-function setHostsToFrameworkCount(frameworks, hosts) {
+function setHostsToFrameworkCount(frameworks) {
   return _.map(frameworks, function (framework) {
     framework.slaves_count = framework.slave_ids.length;
     return framework;
@@ -175,6 +175,7 @@ function getFailureRate(mesosState) {
   });
 
   // Only compute diff if we have previous data
+
   var prevKeys = Object.keys(_prevMesosStatusesMap);
   if (prevKeys.length) {
     prevKeys.forEach(function (key) {
@@ -238,6 +239,8 @@ function getStatesByFramework() {
 function getHostResourcesBySlave(slave) {
   return _.foldl(_mesosStates, function (memo, state) {
     var foundSlave = _.findWhere(state.slaves, {id: slave.id});
+    var resources;
+
     if (foundSlave && foundSlave.used_resources) {
       resources = foundSlave.used_resources;
     } else {

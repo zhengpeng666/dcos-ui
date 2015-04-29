@@ -14,7 +14,7 @@ describe("TasksChart", function () {
 
     beforeEach(function () {
       this.instance = TestUtils.renderIntoDocument(
-        <TasksChart tasks={[]} />
+        <TasksChart tasks={{}} />
       );
     });
 
@@ -30,11 +30,7 @@ describe("TasksChart", function () {
     });
 
     it("renders two task info labels when there is only data for one", function () {
-      this.instance.setProps({
-        tasks: [
-          {state: "TASK_RUNNING", tasks: [{ id: "task1", name: "Task 1" }]}
-        ]
-      });
+      this.instance.setProps({tasks: {TASK_RUNNING: 1}});
       var rows = TestUtils.scryRenderedDOMComponentsWithClass(
         this.instance, "row"
       );
@@ -50,9 +46,7 @@ describe("TasksChart", function () {
   describe("#shouldComponentUpdate", function () {
 
     beforeEach(function () {
-      this.tasks = [
-        {state: "TASK_RUNNING", tasks: [{id: "foo", name: "datanode"}]}
-      ];
+      this.tasks = {TASK_RUNNING: 0};
 
       this.instance = TestUtils.renderIntoDocument(
         <TasksChart tasks={this.tasks} />
@@ -60,7 +54,7 @@ describe("TasksChart", function () {
     });
 
     it("should allow update", function () {
-      this.tasks.push(_.clone(_.first(this.tasks)));
+      this.tasks.TASK_STAGING = 1;
       var shouldUpdate = this.instance.shouldComponentUpdate(this.tasks);
       expect(shouldUpdate).toEqual(true);
     });

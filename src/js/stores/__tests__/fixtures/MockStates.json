@@ -4,19 +4,7 @@
       {
         "name": "Framework 1",
         "used_resources": {"cpus": 0},
-        "tasks": [
-          {
-            "id": "task1",
-            "state": "TASK_RUNNING",
-            "statuses": [
-              {
-                "timestamp": 1,
-                "state": "TASK_RUNNING"
-              }
-            ]
-          }
-        ],
-        "completed_tasks": []
+        "TASK_RUNNING": 1
       }
     ]
   },
@@ -25,23 +13,7 @@
       {
         "name": "Framework 1",
         "used_resources": {"cpus": 0},
-        "tasks": [],
-        "completed_tasks": [
-          {
-            "id": "task1",
-            "state": "TASK_FINISHED",
-            "statuses": [
-              {
-                "timestamp": 1,
-                "state": "TASK_RUNNING"
-              },
-              {
-                "timestamp": 2,
-                "state": "TASK_FINISHED"
-              }
-            ]
-          }
-        ]
+        "TASK_FINISHED": 1
       }
     ]
   },
@@ -50,23 +22,8 @@
       {
         "name": "Framework 1",
         "used_resources": {"cpus": 0},
-        "tasks": [],
-        "completed_tasks": [
-          {
-            "id": "task1",
-            "state": "TASK_FAILED",
-            "statuses": [
-              {
-                "timestamp": 1,
-                "state": "TASK_RUNNING"
-              },
-              {
-                "timestamp": 2,
-                "state": "TASK_FAILED"
-              }
-            ]
-          }
-        ]
+        "TASK_RUNNING": 1,
+        "TASK_FAILED": 1
       }
     ]
   },
@@ -75,23 +32,7 @@
       {
         "name": "Framework 1",
         "used_resources": {"cpus": 0},
-        "tasks": [],
-        "completed_tasks": [
-          {
-            "id": "task1",
-            "state": "TASK_KILLED",
-            "statuses": [
-              {
-                "timestamp": 1,
-                "state": "TASK_RUNNING"
-              },
-              {
-                "timestamp": 2,
-                "state": "TASK_KILLED"
-              }
-            ]
-          }
-        ]
+        "TASK_KILLED": 1
       }
     ]
   },
@@ -119,24 +60,34 @@
     "total_resources": {"cpus": 0}
   },
   "frameworksWithActivatedSlaves": {
-    "activated_slaves": 4,
     "frameworks": [
       {
         "name": "Framework 1",
         "id": "1-1",
-        "used_resources": {"cpus": 0},
-        "tasks": []
+        "used_resources": {"cpus": 0}
+      }
+    ],
+    "slaves": [
+      {
+        "name": "Slave 1",
+        "resources": {"cpus": 0},
+        "active": true
       }
     ]
   },
   "frameworksWithNoActivatedSlaves": {
-    "activated_slaves": null,
     "frameworks": [
       {
         "name": "Framework 1",
         "id": "1-1",
-        "used_resources": {"cpus": 0},
-        "tasks": []
+        "used_resources": {"cpus": 0}
+      }
+    ],
+    "slaves": [
+      {
+        "name": "Slave 1",
+        "resources": {"cpus": 0},
+        "active": false
       }
     ]
   }

@@ -78,13 +78,7 @@ var TasksChart = React.createClass({
 
   getTasks: function (_tasks) {
     var validTasks = Object.keys(taskInfo);
-    var tasks = _.reduce(_tasks, function (memo, value, key) {
-      if (_.contains(validTasks, key)) {
-        memo[key] = value;
-      }
-
-      return memo;
-    }, {});
+    var tasks = _.pick(_tasks, validTasks);
 
     return _.map(tasks, function (value, key) {
       return {colorIndex: taskInfo[key].colorIndex, name: key, value: value};
