@@ -165,13 +165,11 @@ function getFailureRate(mesosState) {
 
   mesosState.frameworks.forEach(function (framework) {
     // Map task statuses to statuses hash map
-    _.foldl(newMesosStatusesMap, function (memo, count, type) {
+    _.each(newMesosStatusesMap, function (count, type) {
       if (framework[type]) {
-        memo[type] += framework[type];
+        newMesosStatusesMap[type] += framework[type];
       }
-
-      return memo;
-    }, newMesosStatusesMap);
+    });
   });
 
   // Only compute diff if we have previous data
