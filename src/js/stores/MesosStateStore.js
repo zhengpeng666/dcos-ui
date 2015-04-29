@@ -123,75 +123,38 @@ function getStatesByResource(list, resourcesKey) {
   }, values);
 }
 
-// [{
-//   colorIndex: 0,
-//   name: "Marathon",
-//   cpus: [{date: request time, y: value}]
-//   disk: [{date: request time, y: value}]
-//   mem: [{date: request time, y: value}]
-// }]
-function getStatesByFramework() {
-  return _.chain(_mesosStates)
-    .pluck("frameworks")
-    .flatten()
-    .groupBy(function (framework) {
-      return framework.id;
-    })
-    .map(function (framework) {
-      var lastFramework = _.clone(_.last(framework));
-      return _.extend(lastFramework, {
-        used_resources: getStatesByResource(framework, "used_resources"),
-        tasks_count: lastFramework.tasks.length
-      });
-    }, this).value();
-}
-
-// [{
-//   state: "TASK_RUNNING",
-//   tasks: [{
-//     framework_id: "askdfjaalsjf",
-//     id: "askdfja",
-//     name: "datanode",
-//     resources: {mem: 0, cpus: 0, disk: 0},
-//     state: "TASK_RUNNING"
-//   }, ...]
-// }]
-function getTasksByStatus(frameworks, taskTypes) {
-  if (!taskTypes || frameworks.length === 0) {
+function getFrameworksTaskTotals(frameworks) {
+  if (frameworks.length === 0) {
     return [];
   }
 
+  var tasks = {
+    TASK_STAGING: 0,
+    TASK_STARTING: 0,
+    TASK_RUNNING: 0,
+    TASK_FINISHED: 0,
+    TASK_FAILED: 0,
+    TASK_LOST: 0,
+    TASK_ERROR: 0
+  };
+  var taskTypes = Object.keys(tasks);
+
   // Loop through all frameworks
-  var data = _.foldl(frameworks, function (types, framework) {
-    // Loop through the requested taskTypes
+  _.each(frameworks, function (framework) {
     taskTypes.forEach(function (taskType) {
-      if (framework[taskType] == null ||
-        framework[taskType].length === 0) {
-        return types;
+      if (!framework[taskType]) {
+        return;
       }
 
-      // Loop through tasks in for the task type
-      framework[taskType].forEach(function (task) {
-        var state = task.state;
-        if (types[state] == null) {
-          types[state] = {
-            state: state,
-            tasks: []
-          };
-        }
-
-        types[state].tasks.push(task);
-      });
+      tasks[taskType] += framework[taskType];
     });
+  });
 
-    return types;
-  }, {});
-
-  return _.values(data);
+  return tasks;
 }
 
 // Caluculate a failure rate
-function getFailureRate(mesosState, taskTypes) {
+function getFailureRate(mesosState) {
   var newMesosStatusesMap = {
     TASK_STAGING: 0,
     TASK_STARTING: 0,
@@ -247,6 +210,29 @@ function getAllFailureRates(list) {
   _failureRates.push(failureRate);
   _failureRates.shift();
   return _failureRates;
+}
+
+// [{
+//   colorIndex: 0,
+//   name: "Marathon",
+//   cpus: [{date: request time, y: value}]
+//   disk: [{date: request time, y: value}]
+//   mem: [{date: request time, y: value}]
+// }]
+function getStatesByFramework() {
+  return _.chain(_mesosStates)
+    .pluck("frameworks")
+    .flatten()
+    .groupBy(function (framework) {
+      return framework.id;
+    })
+    .map(function (framework) {
+      var lastFramework = _.clone(_.last(framework));
+      return _.extend(lastFramework, {
+        used_resources: getStatesByResource(framework, "used_resources"),
+        tasks_count: getFrameworksTaskTotals([lastFramework]).TASK_RUNNING
+      });
+    }, this).value();
 }
 
 // [{
@@ -610,8 +596,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _appsProcessed;
   },
 
-  getTasks: function () {
-    return getTasksByStatus(this.getLatest().frameworks, ["tasks"]);
+  getTaskTotals: function () {
+    return getFrameworksTaskTotals(this.getLatest().frameworks);
   },
 
   getTaskFailureRate: function () {

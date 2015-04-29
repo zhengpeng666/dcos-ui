@@ -27,7 +27,7 @@ function getMesosState() {
     hostsCount: MesosStateStore.getActiveHostsCount(),
     refreshRate: MesosStateStore.getRefreshRate(),
     services: MesosStateStore.getLatest().frameworks,
-    tasks: MesosStateStore.getTasks(),
+    tasks: MesosStateStore.getTaskTotals(),
     totalResources: MesosStateStore.getTotalResources()
   };
 }
