@@ -34,12 +34,7 @@ var NA_IMAGES = {
 
 function setHostsToFrameworkCount(frameworks, hosts) {
   return _.map(frameworks, function (framework) {
-    framework.slaves_count = _.foldl(hosts, function (acc, host) {
-      if (host.frameworks[framework.id] != null) {
-        acc++;
-      }
-      return acc;
-    }, 0);
+    framework.slaves_count = framework.slave_ids.length;
     return framework;
   });
 }
@@ -84,8 +79,8 @@ function sumFrameworkResources(frameworks) {
 //   mem: [{date: request time, value: value, percentage: value}]
 // }]
 function sumHostResources(hosts) {
-  return _.foldl(hosts, function (sumMap, host) {
-    _.each(sumMap, function (value, key) {
+  return _.foldl(hosts, function (memo, host) {
+    _.each(memo, function (value, key) {
       var values = host.used_resources[key];
       _.each(values, function (val, i) {
         var max = Math.max(1, _mesosStates[i].total_resources[key]);
@@ -98,7 +93,7 @@ function sumHostResources(hosts) {
       });
     });
 
-    return sumMap;
+    return memo;
   }, {cpus: [], mem: [], disk: []});
 }
 
@@ -241,19 +236,16 @@ function getStatesByFramework() {
 //   mem: [{date: request time, value: absolute, percentage: value}]
 // }]
 function getHostResourcesBySlave(slave) {
-  return _.foldl(_mesosStates, function (usedResources, state) {
-    var tasks = _.chain(state.frameworks)
-      .pluck("tasks")
-      .flatten()
-      .groupBy(function (task) {
-        return task.slave_id;
-      })
-      .value();
-
-    var resources = sumResources(_.pluck(tasks[slave.id], "resources"));
+  return _.foldl(_mesosStates, function (memo, state) {
+    var foundSlave = _.findWhere(state.slaves, {id: slave.id});
+    if (foundSlave && foundSlave.used_resources) {
+      resources = foundSlave.used_resources;
+    } else {
+      resources = {cpus: 0, mem: 0, disk: 0};
+    }
 
     _.each(resources, function (resourceVal, resourceKey) {
-      usedResources[resourceKey].push({
+      memo[resourceKey].push({
         date: state.date,
         value: resourceVal,
         percentage:
@@ -262,7 +254,7 @@ function getHostResourcesBySlave(slave) {
           )
       });
     });
-    return usedResources;
+    return memo;
   }, {cpus: [], mem: [], disk: []});
 }
 
@@ -278,35 +270,13 @@ function getStateByHosts() {
   var data = _.last(_mesosStates);
 
   var hosts = _.foldl(data.slaves, function (acc, v) {
-    acc[v.id] = v;
-    acc[v.id].tasks = {};
-    acc[v.id].frameworks = {};
+    acc[v.id] = _.clone(v);
     acc[v.id].used_resources = getHostResourcesBySlave(v);
+    acc[v.id].tasks_count = v.framework_ids.length;
     return acc;
   }, {});
 
-  return _.chain(data.frameworks)
-    .map(function (fw) {
-      return fw.tasks;
-    })
-    .flatten()
-    .foldl(function (acc, v) {
-      acc[v.slave_id].tasks[v.id] = v;
-
-      // Find framework for given task by matching
-      // framework.id to task.framework_id
-      // This seems extremely wasteful. We can probably optimize here
-      acc[v.slave_id].frameworks[v.framework_id] = _.find(data.frameworks,
-          function (framework) {
-        return v.framework_id === framework.id;
-      });
-      return acc;
-    }, hosts)
-    .each(function (slave) {
-      slave.tasks_count = _.size(slave.tasks);
-    })
-    .toArray()
-    .value();
+  return _.values(hosts);
 }
 
 function addFrameworkToPreviousStates(_framework, colorIndex) {
@@ -443,7 +413,7 @@ function filterByHealth(objects, healthFilter) {
 
 function filterHostsByService(hosts, frameworkId) {
   return _.filter(hosts, function (host) {
-    return host.frameworks[frameworkId] != null;
+    return _.contains(host.framework_ids, frameworkId);
   });
 }
 
