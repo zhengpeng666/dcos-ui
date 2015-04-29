@@ -6,16 +6,16 @@ var React = require("react/addons");
 
 var AnimationCircle = require("./AnimationCircle");
 var ChartMixin = require("../../mixins/ChartMixin");
+var ChartStripes = require("./ChartStripes");
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 var Maths = require("../../utils/Maths");
 var TimeSeriesArea = require("./TimeSeriesArea");
+var TimeSeriesMouseOver = require("./TimeSeriesMouseOver");
 var ValueTypes = require("../../constants/ValueTypes");
 
 var TimeSeriesChart = React.createClass({
 
   displayName: "TimeSeriesChart",
-
-  mixins: [ChartMixin, InternalStorageMixin],
 
   propTypes: {
     // [{name: "Area Name", values: [{date: some time, y: 0}]}]
@@ -26,9 +26,12 @@ var TimeSeriesChart = React.createClass({
     yFormat: React.PropTypes.string,
     width: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
+    margin: React.PropTypes.object.isRequired,
     refreshRate: React.PropTypes.number.isRequired,
     strokeOffset: React.PropTypes.number
   },
+
+  mixins: [ChartMixin, InternalStorageMixin],
 
   getDefaultProps: function () {
     return {
@@ -53,14 +56,12 @@ var TimeSeriesChart = React.createClass({
     var yScale = this.getYScale(this.props);
 
     var data = {
+      clipPathID: _.uniqueId("clip"),
       area: this.getArea(xTimeScale, yScale),
       stack: this.getStack(),
       xScale: xScale,
       xTimeScale: xTimeScale,
-      xMouseValue: null,
-      yScale: yScale,
-      yMouseValue: null,
-      clipPathID: _.uniqueId("clip")
+      yScale: yScale
     };
 
     this.internalStorage_set(data);
@@ -68,20 +69,10 @@ var TimeSeriesChart = React.createClass({
 
   componentDidMount: function () {
     var data = this.internalStorage_get();
-    var el = this.getDOMNode();
     var props = this.props;
 
     this.renderAxis(props, data.xScale, data.yScale);
     this.createClipPath();
-
-    el.addEventListener("mousemove", this.handleMouseMove);
-    el.addEventListener("mouseout", this.handleMouseOut);
-  },
-
-  componentWillUnmount: function () {
-    var el = this.getDOMNode();
-    el.removeEventListener("mousemove", this.handleMouseMove);
-    el.removeEventListener("mouseout", this.handleMouseOut);
   },
 
   componentDidUpdate: function () {
@@ -117,117 +108,6 @@ var TimeSeriesChart = React.createClass({
         height: height,
         transform: transform
       });
-  },
-
-  handleMouseMove: function (e) {
-    var data = this.internalStorage_get();
-    var mouse = this.calculateMousePositionInGraph(e);
-
-    // This means that mouse is out of bounds
-    if (mouse === false) {
-      return;
-    }
-
-    var props = this.props;
-    var margin = props.margin;
-    var domain = this.internalStorage_get().xScale.domain();
-    var yCaption = "%";
-    if (props.yFormat === ValueTypes.ABSOLUTE) {
-      yCaption = "";
-    }
-
-    var firstDataSet = _.first(props.data);
-    // 6 - how many data points we don't show
-    var hiddenDataPoints = 6;
-    // find the data point at the given mouse position
-    var index = mouse.x *
-      (firstDataSet.values.length - hiddenDataPoints - 1) /
-      (props.width - margin.right - margin.left);
-    index = Math.round(index + hiddenDataPoints - 1);
-
-    d3.select(this.refs.xMousePosition.getDOMNode())
-      .transition()
-        .duration(50)
-        .style("stroke", "rgba(255,255,255,0.5")
-        .attr("x1", mouse.x + margin.left)
-        .attr("x2", mouse.x + margin.left);
-
-    d3.select(this.refs.yMousePosition.getDOMNode())
-      .transition()
-        .duration(50)
-        .style("stroke", "rgba(255,255,255,0.5")
-        .attr("y1", data.yScale(firstDataSet.values[index][props.y]))
-        .attr("y2", data.yScale(firstDataSet.values[index][props.y]));
-
-    d3.select(this.refs.yAxisCurrent.getDOMNode())
-      .transition()
-      .duration(50)
-      .attr("y", data.yScale(firstDataSet.values[index][props.y]) + 3)
-      .text(firstDataSet.values[index][props.y] + yCaption);
-
-    // An extra -2 on each because we show the extra data point at the end
-    var mappedValue = Maths.mapValue(index, {
-      min: firstDataSet.values.length - 2,
-      max: 5
-    });
-    var value = Maths.unmapValue(mappedValue, {
-      min: Math.abs(domain[1]),
-      max: Math.abs(domain[0])
-    });
-    value = Math.round(value);
-
-    var characterWidth = 7;
-    var xPosition = mouse.x - value.toString().length * characterWidth;
-    if (value === 0) {
-      xPosition += characterWidth / 2;
-    } else {
-      value = "-" + value + "s";
-    }
-    d3.select(this.refs.xAxisCurrent.getDOMNode())
-      .transition()
-      .duration(50)
-      .attr("x", xPosition)
-      .text(value);
-  },
-
-  calculateMousePositionInGraph: function (e) {
-    var el = this.getDOMNode();
-    var props = this.props;
-    var margin = props.margin;
-    var elPosition = el.getBoundingClientRect();
-    var containerPositions = {
-      top: elPosition.top + margin.top,
-      right: elPosition.left + props.width - margin.right,
-      bottom: elPosition.top + props.height - margin.bottom,
-      left: elPosition.left + margin.left
-    };
-    var mouse = {
-      x: e.clientX || e.pageX,
-      y: e.clientY || e.pageY
-    };
-
-    if (mouse.x < containerPositions.left ||
-      mouse.y < containerPositions.top ||
-      mouse.x > containerPositions.right ||
-      mouse.y > containerPositions.bottom) {
-      return false;
-    }
-
-    mouse.x -= containerPositions.left;
-    mouse.y -= containerPositions.top;
-
-    return mouse;
-  },
-
-  handleMouseOut: function () {
-    d3.select(this.refs.yMousePosition.getDOMNode()).interrupt()
-      .style("stroke", "rgba(255,255,255,0");
-    d3.select(this.refs.xMousePosition.getDOMNode()).interrupt()
-      .style("stroke", "rgba(255,255,255,0");
-    d3.select(this.refs.xAxisCurrent.getDOMNode())
-      .text("");
-    d3.select(this.refs.yAxisCurrent.getDOMNode())
-      .text("");
   },
 
   getArea: function (xTimeScale, yScale) {
@@ -428,55 +308,63 @@ var TimeSeriesChart = React.createClass({
     }, this);
   },
 
-  getStripes: function (number) {
-    var props = this.props;
-    var margin = props.margin;
-    var width = (props.width - margin.left - margin.right) / (2 * number);
-    return _.map(_.range(0, number), function (i) {
-      // indent with margin, start one width length in
-      // and add two times width per step
-      var position = margin.left + width + i * 2 * width;
+  getBoundingBox: function (props) {
+    var el = this.getDOMNode();
+    var elPosition = el.getBoundingClientRect();
 
-      return (
-        <rect key={i}
-          className="background"
-          x={position + "px"}
-          y={margin.top}
-          height={props.height - margin.bottom - margin.top - margin.top}
-          width={width} />
-      );
-    });
+    var margin = props.margin;
+    return {
+      top: elPosition.top + margin.top,
+      right: elPosition.left + props.width - margin.right,
+      bottom: elPosition.top + props.height - margin.bottom,
+      left: elPosition.left + margin.left
+    };
+  },
+
+  addMouseHandler: function (handleMouseMove, handleMouseOut) {
+    var el = this.getDOMNode();
+    el.addEventListener("mousemove", handleMouseMove);
+    el.addEventListener("mouseout", handleMouseOut);
+  },
+
+  removeMouseHandler: function (handleMouseMove, handleMouseOut) {
+    var el = this.getDOMNode();
+    el.removeEventListener("mousemove", handleMouseMove);
+    el.removeEventListener("mouseout", handleMouseOut);
   },
 
   render: function () {
+    var data = this.internalStorage_get();
     var props = this.props;
     var margin = props.margin;
-    var height = props.height - (margin.bottom * 1.25) - margin.top;
+    var yCaption = "";
+    if (props.yFormat === ValueTypes.PERCENTAGE) {
+      yCaption = "%";
+    }
 
     return (
       <svg height={props.height} width={props.width}>
-        {this.getStripes(4)}
+        <ChartStripes
+          count={4}
+          height={props.height}
+          margin={props.margin}
+          width={props.width} />
         <g className="bars grid-graph" ref="grid" />
         <g className="y axis" ref="yAxis" />
-        <g className="x axis" ref="xAxis"/>
-        <g className="y axis">
-          <text className="current-value shadow" ref="yAxisCurrent"
-            style={{textAnchor: "end"}}
-            transform={"translate(" + (props.margin.left - 9) + ",0)"}></text>
-        </g>
+        <g className="x axis" ref="xAxis" />
         {this.getAreaList()}
-        <g className="x axis">
-          <text className="current-value" ref="xAxisCurrent"
-            y={props.margin.bottom}
-            transform={"translate(" + props.margin.left + "," + height + ")"}>
-            </text>
-        </g>
-        <line ref="xMousePosition"
-          y1={props.margin.top}
-          y2={props.height - props.margin.bottom - props.margin.top} />
-        <line ref="yMousePosition"
-          x1={props.margin.left}
-          x2={props.width} />
+        <TimeSeriesMouseOver
+          addMouseHandler={this.addMouseHandler}
+          data={props.data}
+          getBoundingBox={this.getBoundingBox.bind(null, props)}
+          height={props.height}
+          margin={props.margin}
+          width={props.width}
+          xScale={data.xScale}
+          y={props.y}
+          yCaption={yCaption}
+          yScale={data.yScale}
+          removeMouseHandler={this.removeMouseHandler} />
       </svg>
     );
   }
