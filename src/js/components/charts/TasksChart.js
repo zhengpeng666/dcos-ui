@@ -13,10 +13,9 @@ var taskInfo = {
 };
 
 function getEmptyTaskData() {
-  return [
-    {name: "TASK_RUNNING", value: 0, colorIndex: 4},
-    {name: "TASK_STAGING", value: 0, colorIndex: 1}
-  ];
+  return _.map(taskInfo, function(val, key) {
+    return {name: key, colorIndex: val.colorIndex, value: 0};
+  });
 }
 
 var TasksChart = React.createClass({
