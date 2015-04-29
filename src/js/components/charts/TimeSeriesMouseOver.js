@@ -91,9 +91,14 @@ var TimeSeriesMouseOver = React.createClass({
       .text(firstDataSet.values[index][props.y] + props.yCaption);
 
     // An extra -2 on each because we show the extra data point at the end
-    var mappedValue = Maths.mapValue(index, {
+
+    var _index = mouse.x *
+      (firstDataSet.values.length - hiddenDataPoints) /
+      (props.width);
+
+    var mappedValue = Maths.mapValue(Math.round(_index), {
       min: firstDataSet.values.length - hiddenDataPoints,
-      max: 1
+      max: 0
     });
     var value = Maths.unmapValue(mappedValue, {
       min: Math.abs(domain[1]),
