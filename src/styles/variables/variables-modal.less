@@ -7,3 +7,33 @@
 @modal-inverse-header-background-color: @canvas-pod-dark-background-color;
 @modal-inverse-content-background-color:~`color_lightness("@{neutral}", -20)`;
 @modal-inverse-footer-background-color: @canvas-pod-dark-background-color;
+
+
+/* -----------------------------------------------------------------------------
+Modal Grid
+----------------------------------------------------------------------------- */
+
+@modal-grid-columns-count:                                                      12;
+
+@modal-grid-gutter-width:                                                       @modal-grid-container-gutter-width * 0.5;
+@modal-grid-container-gutter-width:                                             @grid-container-fluid-gutter-width * 1.0;
+
+// Mini Screen (Phone)
+
+@modal-grid-gutter-width-screen-mini:                                           @modal-grid-container-gutter-width-screen-mini * 0.5;
+@modal-grid-container-gutter-width-screen-mini:                                 @grid-container-fluid-gutter-width-screen-mini * 1.0;
+
+// Small Screen (Tablet)
+
+@modal-grid-gutter-width-screen-small:                                          @modal-grid-container-gutter-width-screen-small * 0.5;
+@modal-grid-container-gutter-width-screen-small:                                @grid-container-fluid-gutter-width-screen-small * 0.5;
+
+// Medium Screen (Laptop)
+
+@modal-grid-gutter-width-screen-medium:                                         @modal-grid-container-gutter-width-screen-medium * 0.5;
+@modal-grid-container-gutter-width-screen-medium:                               @grid-container-fluid-gutter-width-screen-medium * 0.5;
+
+// Large Screen (Desktop)
+
+@modal-grid-gutter-width-screen-large:                                          @modal-grid-container-gutter-width-screen-large * 0.5;
+@modal-grid-container-gutter-width-screen-large:                                @grid-container-fluid-gutter-width-screen-large * 0.5;

@@ -98,7 +98,7 @@
 
     .sidebar-menu {
       padding: 0px;
-      margin: 0px -(@grid-gutter-width * 0.5);
+      margin: 0px -(@grid-container-fluid-gutter-width * 1.0);
 
       .sidebar-menu-item {
         color: ~`color_lightness("@{neutral}", 50)`;
@@ -111,8 +111,8 @@
           background: rgba(255, 255, 255, 0.05);
           position: absolute;
           bottom: 0px;
-          left: (@grid-gutter-width * 0.25);
-          right: (@grid-gutter-width * 0.25);
+          left: (@grid-container-fluid-gutter-width * 0.5);
+          right: (@grid-container-fluid-gutter-width * 0.5);
         }
 
         &:last-child {
@@ -122,14 +122,14 @@
         }
 
         .sidebar-menu-item-icon {
-          margin-right: (@base-spacing-unit * 0.25);
+          margin-right: (@base-spacing-unit * 0.5);
           .opacity(0.40);
         }
 
         a {
           color: ~`color_lightness("@{neutral}", 50)`;
           display: block;
-          padding: (@base-spacing-unit * 0.5) (@grid-gutter-width * 0.5);
+          padding: (@base-spacing-unit * 0.5) (@grid-container-fluid-gutter-width * 1.0);
 
           &:hover {
             text-decoration: none;
@@ -208,24 +208,25 @@
       /* Sidebar Navigation */
       .sidebar-content {
         .sidebar-menu {
-          margin: 0px -(@grid-gutter-width-screen-mini * 0.5);
+          margin: 0px -(@grid-container-fluid-gutter-width * 1.0);
 
           .sidebar-menu-item {
             &:after {
-              left: (@grid-gutter-width-screen-mini * 0.25);
-              right: (@grid-gutter-width-screen-mini * 0.25);
+              left: (@grid-container-fluid-gutter-width * 0.5);
+              right: (@grid-container-fluid-gutter-width * 0.5);
             }
 
             .sidebar-menu-item-icon {
-              margin-right: (@base-spacing-unit-screen-mini * 0.25);
+              margin-right: (@base-spacing-unit-screen-mini * 0.5);
             }
 
             a {
-              padding: (@base-spacing-unit-screen-mini * 0.5) (@grid-gutter-width-screen-mini * 0.5);
+              padding: (@base-spacing-unit-screen-mini * 0.5) (@grid-container-fluid-gutter-width * 1.0);
             }
           }
         }
       }
+
     }
 
     .canvas-sidebar-open {
@@ -372,24 +373,24 @@
       /* Sidebar Navigation */
       .sidebar-content {
         .sidebar-menu {
-          margin: 0px -(@base-spacing-unit-screen-medium * 0.5);
+          margin: 0px -(@grid-container-fluid-gutter-width-screen-medium * 0.5);
 
           .sidebar-menu-item {
             &:after {
-              left: (@base-spacing-unit-screen-medium * 0.25);
-              right: (@base-spacing-unit-screen-medium * 0.25);
+              left: (@grid-container-fluid-gutter-width-screen-medium * 0.25);
+              right: (@grid-container-fluid-gutter-width-screen-medium * 0.25);
             }
 
             .sidebar-menu-item-icon {
               margin-right: (@base-spacing-unit-screen-medium * 0.25);
             }
-
+            
             .sidebar-menu-item-label {
               display: inline-block;
             }
 
             a {
-              padding: (@base-spacing-unit-screen-medium * 0.25) (@base-spacing-unit-screen-medium * 0.5);
+              padding: (@base-spacing-unit-screen-medium * 0.25) (@grid-container-fluid-gutter-width-screen-medium * 0.5);
             }
           }
         }
@@ -455,12 +456,12 @@
       /* Sidebar Navigation */
       .sidebar-content {
         .sidebar-menu {
-          margin: 0px -(@base-spacing-unit-screen-large * 0.5);
+          margin: 0px -(@grid-container-fluid-gutter-width-screen-large * 0.5);
 
           .sidebar-menu-item {
             &:after {
-              left: (@base-spacing-unit-screen-large * 0.25);
-              right: (@base-spacing-unit-screen-large * 0.25);
+              left: (@grid-container-fluid-gutter-width-screen-large * 0.25);
+              right: (@grid-container-fluid-gutter-width-screen-large * 0.25);
             }
 
             .sidebar-menu-item-icon {
@@ -468,7 +469,7 @@
             }
 
             a {
-              padding: (@base-spacing-unit-screen-large * 0.25) (@base-spacing-unit-screen-large * 0.5);
+              padding: (@base-spacing-unit-screen-large * 0.25) (@grid-container-fluid-gutter-width-screen-large * 0.5);
             }
           }
         }
