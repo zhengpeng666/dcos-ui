@@ -6,7 +6,6 @@ var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
 
 var _isOpen = false;
-var _isIntercomOpen = false;
 var _versions = {};
 
 var SidebarStore = _.extend({}, EventEmitter.prototype, {
@@ -17,10 +16,6 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
 
   getVersions: function () {
     return _versions;
-  },
-
-  isIntercomOpen: function () {
-    return _isIntercomOpen;
   },
 
   emitChange: function (eventName) {
@@ -59,11 +54,6 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
         break;
       case ActionTypes.REQUEST_TOUR_START:
         SidebarStore.emitChange(EventTypes.SHOW_TOUR);
-        break;
-      case ActionTypes.REQUEST_INTERCOM_CLOSE:
-      case ActionTypes.REQUEST_INTERCOM_OPEN:
-        _isIntercomOpen = action.data;
-        SidebarStore.emitChange(EventTypes.INTERCOM_CHANGE);
         break;
       case ActionTypes.REQUEST_VERSIONS_SUCCESS:
         _versions = action.data;

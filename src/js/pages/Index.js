@@ -8,6 +8,8 @@ var Config = require("../config/Config");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var IntercomActions = require("../events/IntercomActions");
+var IntercomStore = require("../stores/IntercomStore");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ErrorModal = require("../components/modals/ErrorModal");
 var LoginModal = require("../components/modals/LoginModal");
@@ -54,7 +56,10 @@ var Index = React.createClass({
 
     var email = LocalStorageUtil.get("email");
     if (email != null) {
-      Actions.identify({email: email});
+      Actions.identify({email: email}, function () {
+        IntercomStore.init();
+      });
+
       this.setState({
         hasIdentity: true
       });
@@ -75,7 +80,7 @@ var Index = React.createClass({
       EventTypes.SHOW_TOUR, this.onTourStart
     );
 
-    SidebarStore.addChangeListener(
+    IntercomStore.addChangeListener(
       EventTypes.INTERCOM_CHANGE, this.onIntercomChange
     );
 
@@ -122,7 +127,7 @@ var Index = React.createClass({
       EventTypes.SHOW_TOUR, this.onTourStart
     );
 
-    SidebarStore.removeChangeListener(
+    IntercomStore.removeChangeListener(
       EventTypes.INTERCOM_CHANGE, this.onIntercomChange
     );
 
@@ -165,7 +170,7 @@ var Index = React.createClass({
       return;
     }
 
-    var shouldOpen = SidebarStore.isIntercomOpen();
+    var shouldOpen = IntercomStore.isOpen();
     if (shouldOpen) {
       intercom("show");
     } else {
@@ -226,7 +231,7 @@ var Index = React.createClass({
         </h3>
         <p className="text-align-center">
           {"We have been notified of the issue, but would love to know more. Talk with us using "}
-          <a className="clickable" onClick={SidebarActions.openIntercom}>Intercom</a>
+          <a className="clickable" onClick={IntercomActions.open}>Intercom</a>
           {". You can also join us on our "}
           <a href="https://mesosphere.slack.com/messages/dcos-eap-public"
               target="_blank">

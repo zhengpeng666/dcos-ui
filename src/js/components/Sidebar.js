@@ -5,13 +5,14 @@ var React = require("react/addons");
 var Link = require("react-router").Link;
 var State = require("react-router").State;
 
-var EventTypes = require("../constants/EventTypes");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var TooltipMixin = require("../mixins/TooltipMixin");
-var MesosStateStore = require("../stores/MesosStateStore");
 var Config = require("../config/Config");
+var EventTypes = require("../constants/EventTypes");
+var IntercomActions = require("../events/IntercomActions");
+var IntercomStore = require("../stores/IntercomStore");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var MesosStateStore = require("../stores/MesosStateStore");
 var SidebarActions = require("../events/SidebarActions");
-var SidebarStore = require("../stores/SidebarStore");
+var TooltipMixin = require("../mixins/TooltipMixin");
 
 var MENU_ITEMS = {
   dashboard: {label: "Dashboard", icon: "dashboard"},
@@ -25,6 +26,12 @@ function getMesosInfo() {
   };
 }
 
+function getIntercomState() {
+  return {
+    isIntercomOpen: IntercomStore.isOpen()
+  };
+}
+
 var Sidebar = React.createClass({
 
   displayName: "Sidebar",
@@ -32,7 +39,8 @@ var Sidebar = React.createClass({
   mixins: [State, InternalStorageMixin, TooltipMixin],
 
   componentWillMount: function () {
-    this.internalStorage_set(getMesosInfo());
+    var state = _.extend(getMesosInfo(), getIntercomState());
+    this.internalStorage_set(state);
   },
 
   componentDidMount: function () {
@@ -40,10 +48,19 @@ var Sidebar = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange
     );
+    IntercomStore.addChangeListener(
+      EventTypes.INTERCOM_CHANGE,
+      this.onIntercomChange
+    );
   },
 
   componentWillUnmount: function () {
     this.removeMesosStateListener();
+
+    IntercomStore.removeChangeListener(
+      EventTypes.INTERCOM_CHANGE,
+      this.onIntercomChange
+    );
   },
 
   removeMesosStateListener: function () {
@@ -54,12 +71,17 @@ var Sidebar = React.createClass({
   },
 
   onMesosStateChange: function () {
-    this.internalStorage_set(getMesosInfo());
+    this.internalStorage_update(getMesosInfo());
     this.forceUpdate();
 
     // Datacenter info won't change often
     // so let's not constantly update
     this.removeMesosStateListener();
+  },
+
+  onIntercomChange: function () {
+    this.internalStorage_update(getIntercomState());
+    this.forceUpdate();
   },
 
   handleShowCliInstructions: function () {
@@ -73,10 +95,11 @@ var Sidebar = React.createClass({
   },
 
   handleToggleIntercom: function () {
-    if (SidebarStore.isIntercomOpen()) {
-      SidebarActions.closeIntercom();
+    var data = this.internalStorage_get();
+    if (data.isIntercomOpen) {
+      IntercomActions.close();
     } else {
-      SidebarActions.openIntercom();
+      IntercomActions.open();
     }
   },
 
@@ -117,6 +140,14 @@ var Sidebar = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
+
+    var chatIconClassSet = React.addons.classSet({
+      "clickable": true,
+      "icon": true,
+      "icon-chat": true,
+      "icon-medium": true,
+      "icon-medium-color": data.isIntercomOpen
+    });
 
     return (
       <div className="sidebar flex-container-col">
@@ -165,7 +196,7 @@ var Sidebar = React.createClass({
               data-behavior="show-tip"
               data-tip-content="Talk with us"
               onClick={this.handleToggleIntercom}>
-                <i className="icon icon-chat icon-medium clickable"></i>
+                <i className={chatIconClassSet}></i>
             </button>
             <button className="button button-smallbutton-link"
               data-behavior="show-tip"

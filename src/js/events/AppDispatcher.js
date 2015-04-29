@@ -25,6 +25,17 @@ var AppDispatcher = _.extend(new Dispatcher(), {
       source: ActionTypes.SIDEBAR_ACTION,
       action: action
     });
+  },
+
+  handleIntercomAction: function (action) {
+    if (!action.type) {
+      console.warn("Empty action.type: you likely mistyped the action.");
+    }
+
+    this.dispatch({
+      source: ActionTypes.INTERCOM_ACTION,
+      action: action
+    });
   }
 });
 

@@ -46,20 +46,6 @@ var SidebarActions = {
     });
   },
 
-  openIntercom: function () {
-    AppDispatcher.handleSidebarAction({
-      type: ActionTypes.REQUEST_INTERCOM_OPEN,
-      data: true
-    });
-  },
-
-  closeIntercom: function () {
-    AppDispatcher.handleSidebarAction({
-      type: ActionTypes.REQUEST_INTERCOM_CLOSE,
-      data: false
-    });
-  },
-
   showVersions: function () {
     var host = Config.rootUrl.replace(/:[0-9]{0,4}$/, "");
     var url = host + "/pkgpanda/active.buildinfo.full.json";
