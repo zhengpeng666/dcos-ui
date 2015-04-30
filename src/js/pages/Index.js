@@ -213,15 +213,6 @@ var Index = React.createClass({
     this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
   },
 
-  onLogin: function (email) {
-    LocalStorageUtil.set("email", email);
-    Actions.identify({email: email});
-    this.setState({
-      hasIdentity: true,
-      showingTourModal: true
-    });
-  },
-
   getErrorMsg: function () {
     return (
       <div className="column-small-8 column-small-offset-2 column-medium-6 column-medium-offset-3">
@@ -273,10 +264,25 @@ var Index = React.createClass({
     );
   },
 
+  onLogin: function (email) {
+    LocalStorageUtil.set("email", email);
+    Actions.identify({email: email});
+    this.setState({
+      hasIdentity: true,
+      showingTourModal: true
+    });
+  },
+
   getLoginModal: function (hasIdentity) {
     if (hasIdentity || Config.disableLoginModal) {
       return null;
     }
+
+    Actions.logFakePageView({
+      title: "Signup Modal",
+      path: "/v/beta-signup-modal-form",
+      referrer: "https://mesosphere.com/"
+    });
 
     return (
       <LoginModal onLogin={this.onLogin} />
@@ -301,6 +307,12 @@ var Index = React.createClass({
 
     var beginTour = function () {
       onCloseClickFn();
+
+      Actions.logFakePageView({
+        title: "Tour start",
+        path: "/v/tour-start",
+        referrer: "https://mesosphere.com/"
+      });
 
       if (this.state.tourSetup === false) {
         // setup with user infor for their tracking
@@ -345,8 +357,20 @@ var Index = React.createClass({
     var options;
 
     if (this.state.showingCliModal) {
+      Actions.logFakePageView({
+        title: "CLI instructions",
+        path: "/v/cli-instructions",
+        referrer: "https://mesosphere.com/"
+      });
+
       options = this.getCliModalOptions();
     } else if (this.state.showingTourModal) {
+      Actions.logFakePageView({
+        title: "Tour prompt",
+        path: "/v/tour-prompt",
+        referrer: "https://mesosphere.com/"
+      });
+
       options = this.getTourModalOptions();
     }
 
