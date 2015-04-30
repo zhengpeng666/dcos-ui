@@ -4,7 +4,6 @@ var $ = require("jquery");
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
 var Config = require("../config/Config");
-var TimeScales = require("../constants/TimeScales");
 
 function request(url, type, data, options) {
   options = _.extend({
