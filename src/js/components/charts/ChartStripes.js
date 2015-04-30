@@ -10,25 +10,23 @@ var ChartStripes = React.createClass({
   propTypes: {
     count: React.PropTypes.number.isRequired,
     height: React.PropTypes.number.isRequired,
-    margin: React.PropTypes.object.isRequired,
     width: React.PropTypes.number.isRequired
   },
 
   getStripes: function (props) {
     var count = props.count;
-    var margin = props.margin;
-    var width = (props.width - margin.left - margin.right) / (2 * count);
+    var width = props.width / (2 * count);
     return _.map(_.range(0, count), function (i) {
       // indent with margin, start one width length in
       // and add two times width per step
-      var position = margin.left + width + i * 2 * width;
+      var position = width + i * 2 * width;
 
       return (
         <rect key={i}
           className="background"
           x={position + "px"}
-          y={margin.top}
-          height={props.height - margin.bottom - margin.top - margin.top}
+          y={0}
+          height={props.height}
           width={width} />
       );
     });

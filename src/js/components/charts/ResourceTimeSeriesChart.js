@@ -29,10 +29,10 @@ var ResourceTimeSeriesChart = React.createClass({
   getData: function () {
     var props = this.props;
     return [{
-        name: "Alloc",
-        colorIndex: this.props.colorIndex,
-        values: props.allocResources[props.mode]
-      }];
+      name: "Alloc",
+      colorIndex: this.props.colorIndex,
+      values: props.allocResources[props.mode]
+    }];
   },
 
   getLatestPercent: function (values) {
@@ -57,7 +57,7 @@ var ResourceTimeSeriesChart = React.createClass({
       <Chart calcHeight={function (w) { return w / 2; }}>
         <TimeSeriesChart
           data={this.getData()}
-          maxY={this.getLatestPercent(props.totalResources[props.mode])}
+          maxY={100}
           y="percentage"
           refreshRate={props.refreshRate} />
       </Chart>
