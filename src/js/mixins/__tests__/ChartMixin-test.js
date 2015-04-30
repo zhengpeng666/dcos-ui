@@ -87,13 +87,38 @@ describe("ChartMixin", function () {
       expect(height).toEqual(0);
     });
 
+    it("should return NaN when given a NaN argument", function () {
+      var height = ChartMixin.getHeight({
+        margin: {
+          top: 10,
+          bottom: NaN
+        },
+        height: 100
+      });
+      expect(isNaN(height)).toEqual(true);
+    });
+
+    it("should return a number when given a null argument", function () {
+      var height = ChartMixin.getHeight({
+        margin: {
+          top: null,
+          bottom: 10
+        },
+        height: 100
+      });
+      expect(height).toEqual(90);
+    });
+
     it("yields positive view height given node height > margins", function () {
       var height = ChartMixin.getHeight({
         margin: {
           top: 10,
-          bottom: 12
+          right: 11,
+          bottom: 12,
+          left: 9
         },
-        height: 31
+        height: 31,
+        width: 4
       });
 
       expect(height).toEqual(9);
@@ -121,12 +146,37 @@ describe("ChartMixin", function () {
       expect(width).toEqual(0);
     });
 
-    it("yields positive view width given node width > margins", function () {
+    it("should return NaN when given NaN argument", function () {
       var width = ChartMixin.getWidth({
         margin: {
           left: 9,
+          right: NaN
+        },
+        width: 10
+      });
+      expect(isNaN(width)).toEqual(true);
+    });
+
+    it("should return a number when given a null argument", function () {
+      var width = ChartMixin.getWidth({
+        margin: {
+          left: 9,
+          right: 10
+        },
+        width: null
+      });
+      expect(width).toEqual(-19);
+    });
+
+    it("yields positive view width given node width > margins", function () {
+      var width = ChartMixin.getWidth({
+        margin: {
+          top: 8,
+          left: 9,
+          bottom: 13,
           right: 21
         },
+        height: 31,
         width: 55
       });
 
