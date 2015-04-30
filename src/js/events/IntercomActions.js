@@ -1,7 +1,7 @@
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
 
-var SidebarActions = {
+var IntercomActions = {
 
   open: function () {
     AppDispatcher.handleIntercomAction({
@@ -18,4 +18,4 @@ var SidebarActions = {
   }
 };
 
-module.exports = SidebarActions;
+module.exports = IntercomActions;
