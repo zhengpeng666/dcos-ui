@@ -53,16 +53,14 @@ var TimeSeriesChart = React.createClass({
     var xTimeScale = this.getXTimeScale(this.props);
     var yScale = this.getYScale(this.props);
 
-    var data = {
+    this.internalStorage_set({
       clipPathID: _.uniqueId("clip"),
       area: this.getArea(xTimeScale, yScale),
       xScale: xScale,
       xTimeScale: xTimeScale,
       yScale: yScale,
       valueLine: this.getValueLine(xTimeScale, yScale)
-    };
-
-    this.internalStorage_set(data);
+    });
   },
 
   componentDidMount: function () {
