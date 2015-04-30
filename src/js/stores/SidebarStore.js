@@ -39,8 +39,8 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
     var action = payload.action;
 
     switch (action.type) {
-      case ActionTypes.REQUEST_SIDEBAR_OPEN:
       case ActionTypes.REQUEST_SIDEBAR_CLOSE:
+      case ActionTypes.REQUEST_SIDEBAR_OPEN:
         var oldIsOpen = _isOpen;
         _isOpen = action.data;
 
@@ -54,9 +54,6 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
         break;
       case ActionTypes.REQUEST_TOUR_START:
         SidebarStore.emitChange(EventTypes.SHOW_TOUR);
-        break;
-      case ActionTypes.REQUEST_INTERCOM:
-        SidebarStore.emitChange(EventTypes.SHOW_INTERCOM);
         break;
       case ActionTypes.REQUEST_VERSIONS_SUCCESS:
         _versions = action.data;

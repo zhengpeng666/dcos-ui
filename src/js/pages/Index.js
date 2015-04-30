@@ -1,3 +1,6 @@
+/** @jsx React.DOM */
+
+var _ = require("underscore");
 var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
@@ -6,6 +9,8 @@ var Config = require("../config/Config");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var IntercomActions = require("../events/IntercomActions");
+var IntercomStore = require("../stores/IntercomStore");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ErrorModal = require("../components/modals/ErrorModal");
 var LoginModal = require("../components/modals/LoginModal");
@@ -35,6 +40,7 @@ var Index = React.createClass({
 
   getInitialState: function () {
     return {
+      showIntercom: IntercomStore.isOpen(),
       hasIdentity: false,
       mesosStateErrorCount: 0,
       tourSetup: false,
@@ -52,7 +58,10 @@ var Index = React.createClass({
 
     var email = LocalStorageUtil.get("email");
     if (email != null) {
-      Actions.identify({email: email});
+      Actions.identify({email: email}, function () {
+        IntercomStore.init();
+      });
+
       this.setState({
         hasIdentity: true
       });
@@ -73,8 +82,8 @@ var Index = React.createClass({
       EventTypes.SHOW_TOUR, this.onTourStart
     );
 
-    SidebarStore.addChangeListener(
-      EventTypes.SHOW_INTERCOM, this.onShowIntercom
+    IntercomStore.addChangeListener(
+      EventTypes.INTERCOM_CHANGE, this.onIntercomChange
     );
 
     SidebarStore.addChangeListener(
@@ -86,6 +95,10 @@ var Index = React.createClass({
     );
 
     this.addMesosStateListeners();
+  },
+
+  shouldComponentUpdate: function (nextProps, nextState) {
+    return !_.isEqual(this.state, nextState);
   },
 
   addMesosStateListeners: function () {
@@ -120,8 +133,8 @@ var Index = React.createClass({
       EventTypes.SHOW_TOUR, this.onTourStart
     );
 
-    SidebarStore.removeChangeListener(
-      EventTypes.SHOW_INTERCOM, this.onShowIntercom
+    IntercomStore.removeChangeListener(
+      EventTypes.INTERCOM_CHANGE, this.onIntercomChange
     );
 
     SidebarStore.removeChangeListener(
@@ -148,10 +161,10 @@ var Index = React.createClass({
     this.setState({showingTourModal: true});
   },
 
-  onShowIntercom: function () {
+  onIntercomChange: function () {
     var intercom = global.Intercom;
-    if (intercom) {
-      intercom("show");
+    if (intercom != null) {
+      this.setState({showIntercom: IntercomStore.isOpen()});
     } else {
       this.setState({
         showErrorModal: true,
@@ -197,7 +210,7 @@ var Index = React.createClass({
   },
 
   onMesosStateError: function () {
-    this.setState({mesosStateErrorCount: ++this.state.mesosStateErrorCount});
+    this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
   },
 
   onLogin: function (email) {
@@ -216,9 +229,9 @@ var Index = React.createClass({
           Cannot Connect With The Server
         </h3>
         <p className="text-align-center">
-          We have been notified of the issue, but would love to know more.
-          Talk with us by clicking the bubble in the lower-right of your screen.
-          You can also join us on our&nbsp;
+          {"We have been notified of the issue, but would love to know more. Talk with us using "}
+          <a className="clickable" onClick={IntercomActions.open}>Intercom</a>
+          {". You can also join us on our "}
           <a href="https://mesosphere.slack.com/messages/dcos-eap-public"
               target="_blank">
             Slack channel
@@ -235,6 +248,7 @@ var Index = React.createClass({
     if (isReady) {
       return null;
     }
+
     var hasLoadingError = this.state.mesosStateErrorCount >= 3;
     var errorMsg = null;
     if (hasLoadingError) {
@@ -374,6 +388,17 @@ var Index = React.createClass({
       errorMsg={this.state.modalErrorMsg} />);
   },
 
+  renderIntercom: function () {
+    var intercom = global.Intercom;
+    if (intercom != null) {
+      if (this.state.showIntercom) {
+        intercom("show");
+      } else {
+        intercom("hide");
+      }
+    }
+  },
+
   render: function () {
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
@@ -383,6 +408,8 @@ var Index = React.createClass({
     var classSet = React.addons.classSet({
       "canvas-sidebar-open": data.isOpen
     });
+
+    this.renderIntercom();
 
     return (
       <div>
