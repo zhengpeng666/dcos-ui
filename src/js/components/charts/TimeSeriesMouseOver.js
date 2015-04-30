@@ -11,15 +11,16 @@ var TimeSeriesMouseOver = React.createClass({
   displayName: "TimeSeriesMouseOver",
 
   propTypes: {
+    addMouseHandler: React.PropTypes.func.isRequired,
     data: React.PropTypes.array.isRequired,
     getBoundingBox: React.PropTypes.func.isRequired,
     height: React.PropTypes.number.isRequired,
+    removeMouseHandler: React.PropTypes.func.isRequired,
     width: React.PropTypes.number.isRequired,
     xScale: React.PropTypes.func.isRequired,
     y: React.PropTypes.string.isRequired,
     yScale: React.PropTypes.func.isRequired,
-    addMouseHandler: React.PropTypes.func.isRequired,
-    removeMouseHandler: React.PropTypes.func.isRequired
+    yCaption: React.PropTypes.string.isRequired
   },
 
   componentDidMount: function () {
@@ -93,7 +94,7 @@ var TimeSeriesMouseOver = React.createClass({
     // An extra -2 on each because we show the extra data point at the end
 
     var _index = mouse.x *
-      (firstDataSet.values.length - hiddenDataPoints) /
+      (firstDataSet.values.length - 1) /
       (props.width);
 
     var mappedValue = Maths.mapValue(Math.round(_index), {

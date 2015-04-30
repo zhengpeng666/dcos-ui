@@ -11,14 +11,14 @@ var AnitmationCircle = React.createClass({
     className: React.PropTypes.string,
     transitionTime: React.PropTypes.number.isRequired,
     position: React.PropTypes.array.isRequired,
-    r: React.PropTypes.number,
+    radius: React.PropTypes.number,
     cx: React.PropTypes.number,
     cy: React.PropTypes.number
   },
 
   getDefaultProps: function () {
     return {
-      r: 4,
+      radius: 4,
       cx: 0,
       cy: 0
     };
@@ -39,11 +39,11 @@ var AnitmationCircle = React.createClass({
 
   render: function () {
     var props = this.props;
-    var r = props.r;
+    var radius = props.radius;
     var className = props.className;
 
     return (
-      <circle className={className} r={r} cx={props.cx} cy={props.cy} />
+      <circle className={className} r={radius} cx={props.cx} cy={props.cy} />
     );
   }
 });
