@@ -32,12 +32,6 @@ function getSidebarState() {
   };
 }
 
-function getIntercomState() {
-  return {
-    shouldIntercomOpen: IntercomStore.isOpen()
-  };
-}
-
 var Index = React.createClass({
 
   displayName: "Index",
@@ -45,7 +39,8 @@ var Index = React.createClass({
   mixins: [InternalStorageMixin],
 
   getInitialState: function () {
-    var state = {
+    return {
+      showIntercom: IntercomStore.isOpen(),
       hasIdentity: false,
       mesosStateErrorCount: 0,
       tourSetup: false,
@@ -55,8 +50,6 @@ var Index = React.createClass({
       showErrorModal: false,
       modalErrorMsg: ""
     };
-
-    return _.extend(state, getIntercomState());
   },
 
   componentWillMount: function () {
@@ -179,10 +172,9 @@ var Index = React.createClass({
           </p>
         )
       });
-
-      return;
+    } else {
+      this.setState({showIntercom: IntercomStore.isOpen()});
     }
-    this.setState(getIntercomState());
   },
 
   onShowVersionsSuccess: function () {
@@ -399,7 +391,7 @@ var Index = React.createClass({
   renderIntercom: function () {
     var intercom = global.Intercom;
     if (intercom != null) {
-      if (this.state.shouldIntercomOpen) {
+      if (this.state.showIntercom) {
         intercom("show");
       } else {
         intercom("hide");

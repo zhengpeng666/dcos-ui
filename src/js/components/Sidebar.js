@@ -20,18 +20,6 @@ var MENU_ITEMS = {
   nodes: {label: "Nodes", icon: "datacenter"}
 };
 
-function getMesosInfo() {
-  return {
-    mesosInfo: MesosStateStore.getLatest()
-  };
-}
-
-function getIntercomState() {
-  return {
-    isIntercomOpen: IntercomStore.isOpen()
-  };
-}
-
 var Sidebar = React.createClass({
 
   displayName: "Sidebar",
@@ -39,8 +27,10 @@ var Sidebar = React.createClass({
   mixins: [State, InternalStorageMixin, TooltipMixin],
 
   componentWillMount: function () {
-    var state = _.extend(getMesosInfo(), getIntercomState());
-    this.internalStorage_set(state);
+    this.internalStorage_set({
+      showIntercom: IntercomStore.isOpen(),
+      mesosInfo: MesosStateStore.getLatest()
+    });
   },
 
   componentDidMount: function () {
@@ -71,7 +61,7 @@ var Sidebar = React.createClass({
   },
 
   onMesosStateChange: function () {
-    this.internalStorage_update(getMesosInfo());
+    this.internalStorage_update({mesosInfo: MesosStateStore.getLatest()});
     this.forceUpdate();
 
     // Datacenter info won't change often
@@ -80,7 +70,7 @@ var Sidebar = React.createClass({
   },
 
   onIntercomChange: function () {
-    this.internalStorage_update(getIntercomState());
+    this.internalStorage_update({showIntercom: IntercomStore.isOpen()});
     this.forceUpdate();
   },
 
@@ -96,7 +86,7 @@ var Sidebar = React.createClass({
 
   handleToggleIntercom: function () {
     var data = this.internalStorage_get();
-    if (data.isIntercomOpen) {
+    if (data.showIntercom) {
       IntercomActions.close();
     } else {
       IntercomActions.open();
@@ -146,7 +136,7 @@ var Sidebar = React.createClass({
       "icon": true,
       "icon-chat": true,
       "icon-medium": true,
-      "icon-medium-color": data.isIntercomOpen
+      "icon-medium-color": data.showIntercom
     });
 
     return (
