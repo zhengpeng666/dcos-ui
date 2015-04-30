@@ -251,7 +251,7 @@ var Index = React.createClass({
     });
 
     return (
-      <div className="container text-align-center vertical-center">
+      <div className="text-align-center vertical-center">
         <div className="row">
           <div className={loadingClassSet}>
             <div className="ball-scale">

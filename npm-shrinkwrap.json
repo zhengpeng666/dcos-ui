@@ -3404,7 +3404,7 @@
     },
     "canvas-ui-system": {
       "version": "0.1.1",
-      "resolved": "https://registry.npmjs.org/canvas-ui-system/-/canvas-ui-system-0.1.1.tgz"
+      "resolved": "https://registry.npmjs.org/canvas-ui-system/-/canvas-ui-system-0.1.2.tgz"
     },
     "chalk": {
       "version": "1.0.0",

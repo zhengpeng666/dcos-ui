@@ -146,7 +146,7 @@ var Sidebar = React.createClass({
             <div className="sidebar-header-image">
               <img className="sidebar-header-image-inner" src="./img/layout/sidebar/sidebar-dcos-icon-medium.png" alt="sidebar header image"/>
             </div>
-            <h2 className="sidebar-header-label flush-top text-align-center text-overflow short-bottom" title={data.mesosInfo.cluster}>
+            <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={data.mesosInfo.cluster}>
               {data.mesosInfo.cluster}
             </h2>
             <p className="sidebar-header-sublabel text-align-center text-overflow flush-bottom" title={data.mesosInfo.hostname}>
@@ -166,7 +166,7 @@ var Sidebar = React.createClass({
         <div className="sidebar-footer">
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom logo-container">
             <img src="./img/layout/sidebar/sidebar-logo.png" className="sidebar-footer-image" alt="sidebar footer image" />
-            <p className="text-align-center flush-top flush-bottom">
+            <p className="text-align-center small flush-top flush-bottom">
               <span className="clickable" onClick={this.handleVersionClick}>
                 <span className="company-name">Mesosphere </span>
                 <span className="app-name">DCOS </span>
