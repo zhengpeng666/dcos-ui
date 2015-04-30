@@ -163,7 +163,9 @@ var Index = React.createClass({
 
   onIntercomChange: function () {
     var intercom = global.Intercom;
-    if (intercom == null) {
+    if (intercom != null) {
+      this.setState({showIntercom: IntercomStore.isOpen()});
+    } else {
       this.setState({
         showErrorModal: true,
         modalErrorMsg: (
@@ -172,8 +174,6 @@ var Index = React.createClass({
           </p>
         )
       });
-    } else {
-      this.setState({showIntercom: IntercomStore.isOpen()});
     }
   },
 
