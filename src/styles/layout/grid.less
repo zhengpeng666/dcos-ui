@@ -32,44 +32,11 @@
 }
 
 
-
-/* Container */
-
-.container {
-
-  margin-left: @grid-container-fluid-gutter-width;
-  margin-right: @grid-container-fluid-gutter-width;
-
-  &.container-fluid.container-fluid-narrow {
-
-    margin-left: @grid-container-fluid-gutter-width * 1.0;
-    margin-right: @grid-container-fluid-gutter-width * 1.0;
-
-  }
-
-}
-
 /* Screen Size: Mini (@screen-mini) and above */
 
 & when (@screen-mini-enabled) {
 
 	@media (min-width: @screen-mini) {
-
-		/* Container */
-
-    .container {
-
-      margin-left: @grid-container-fluid-gutter-width-screen-mini;
-      margin-right: @grid-container-fluid-gutter-width-screen-mini;
-
-      &.container-fluid.container-fluid-narrow {
-
-        margin-left: @grid-container-fluid-gutter-width-screen-mini * 0.5;
-        margin-right: @grid-container-fluid-gutter-width-screen-mini * 0.5;
-
-      }
-
-    }
 
 	}
 
@@ -91,22 +58,6 @@
       }
     }
 
-		/* Container */
-
-    .container {
-
-      margin-left: @grid-container-fluid-gutter-width-screen-small;
-      margin-right: @grid-container-fluid-gutter-width-screen-small;
-
-      &.container-fluid.container-fluid-narrow {
-
-        margin-left: @grid-container-fluid-gutter-width-screen-small * 0.5;
-        margin-right: @grid-container-fluid-gutter-width-screen-small * 0.5;
-
-      }
-
-    }
-
 	}
 
 }
@@ -119,22 +70,6 @@
 
 	@media (min-width: @screen-medium) {
 
-		/* Container */
-
-    .container {
-
-      margin-left: @grid-container-fluid-gutter-width-screen-medium;
-      margin-right: @grid-container-fluid-gutter-width-screen-medium;
-
-      &.container-fluid.container-fluid-narrow {
-
-        margin-left: @grid-container-fluid-gutter-width-screen-medium * 0.5;
-        margin-right: @grid-container-fluid-gutter-width-screen-medium * 0.5;
-
-      }
-
-    }
-
 	}
 
 }
@@ -146,22 +81,6 @@
 & when (@screen-large-enabled) {
 
 	@media (min-width: @screen-large) {
-
-    /* Container */
-
-    .container {
-
-      margin-left: @grid-container-fluid-gutter-width-screen-large;
-      margin-right: @grid-container-fluid-gutter-width-screen-large;
-
-      &.container-fluid.container-fluid-narrow {
-
-        margin-left: @grid-container-fluid-gutter-width-screen-large * 0.5;
-        margin-right: @grid-container-fluid-gutter-width-screen-large * 0.5;
-
-      }
-
-    }
 
 	}
 
