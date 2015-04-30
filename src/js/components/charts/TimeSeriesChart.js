@@ -262,11 +262,14 @@ var TimeSeriesChart = React.createClass({
     return yScale(lastestDataPoint[y]) - height;
   },
 
-  getAreaList: function (data, xTimeScale, area, valueLine) {
+  getAreaList: function (props, yScale, xTimeScale) {
+    var area = this.getArea(props.y, xTimeScale, yScale);
+    var valueLine = this.getValueLine(xTimeScale, yScale);
 
-    return _.map(data, function (obj, i) {
+    return _.map(props.data, function (obj, i) {
       var transitionTime = this.getTransitionTime(obj.values);
       var nextY = this.getNextXPosition(obj.values, xTimeScale, transitionTime);
+
       return (
         <TimeSeriesArea
           className={"path-color-" + obj.colorIndex}
@@ -279,10 +282,10 @@ var TimeSeriesChart = React.createClass({
     }, this);
   },
 
-  getCircleList: function (data, y, yScale, width, height) {
-    return _.map(data, function (obj, i) {
+  getCircleList: function (props, yScale, width, height) {
+    return _.map(props.data, function (obj, i) {
       var transitionTime = this.getTransitionTime(obj.values);
-      var nextX = this.getNextYPosition(obj, y, yScale, height);
+      var nextX = this.getNextYPosition(obj, props.y, yScale, height);
 
       return (
         <AnimationCircle
@@ -334,10 +337,7 @@ var TimeSeriesChart = React.createClass({
     var xScale = this.getXScale(props.data, width, props.refreshRate);
     var xTimeScale = this.getXTimeScale(props.data, width);
     var yScale = this.getYScale(height, props.maxY);
-
     var clipPath = "url(#" + store.clipPathID + ")";
-    var area = this.getArea(props.y, xTimeScale, yScale);
-    var valueLine = this.getValueLine(xTimeScale, yScale);
 
     return (
       <svg height={props.height} width={props.width}>
@@ -347,7 +347,7 @@ var TimeSeriesChart = React.createClass({
             height={height}
             width={width} />
           <g clip-path={clipPath}>
-            {this.getAreaList(props.data, xTimeScale, area, valueLine)}
+            {this.getAreaList(props, yScale, xTimeScale)}
           </g>
           <g className="bars grid-graph" ref="grid" />
           <g className="y axis" ref="yAxis" />
@@ -363,7 +363,7 @@ var TimeSeriesChart = React.createClass({
             y={props.y}
             yCaption={this.getYCaption(props.yFormat)}
             yScale={yScale} />
-          {this.getCircleList(props.data, props.y, yScale, width, height)}
+          {this.getCircleList(props, yScale, width, height)}
         </g>
       </svg>
     );
