@@ -9,10 +9,10 @@ var TimeSeriesArea = React.createClass({
 
   propTypes: {
     className: React.PropTypes.string,
-    path: React.PropTypes.string.isRequired,
     line: React.PropTypes.string.isRequired,
-    transitionTime: React.PropTypes.number.isRequired,
-    position: React.PropTypes.array.isRequired
+    path: React.PropTypes.string.isRequired,
+    position: React.PropTypes.array.isRequired,
+    transitionTime: React.PropTypes.number.isRequired
   },
 
   componentDidMount: function () {
@@ -35,10 +35,12 @@ var TimeSeriesArea = React.createClass({
   },
 
   render: function () {
+    var className = this.props.className;
+
     return (
       <g>
-        <path className={"area " + this.props.className} d={this.props.path} />
-        <path className={"line " + this.props.className} d={this.props.line} />
+        <path className={"area " + className} d={this.props.path} />
+        <path className={"line " + className} d={this.props.line} />
       </g>
     );
   }
