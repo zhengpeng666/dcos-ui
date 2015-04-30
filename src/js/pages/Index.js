@@ -344,8 +344,8 @@ var Index = React.createClass({
 
     if (this.state.showingCliModal) {
       Actions.logFakePageView({
-        title: "Analytics instructions",
-        path: "/v/analytics-instructions",
+        title: "CLI instructions",
+        path: "/v/cli-instructions",
         referrer: "https://mesosphere.com/"
       });
 
