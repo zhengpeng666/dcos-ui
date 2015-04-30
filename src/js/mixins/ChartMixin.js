@@ -3,17 +3,17 @@ var d3 = require("d3");
 
 var ChartMixin = {
 
-  getXScale: function (props) {
-    var length = props.width;
-    var firstDataSet = _.first(props.data);
+  getXScale: function (data, width, refreshRate) {
+    var length = width;
+    var firstDataSet = _.first(data);
     if (firstDataSet != null) {
       length = firstDataSet.values.length;
     }
 
-    var timeAgo = -(length - 1) * (props.refreshRate / 1000);
+    var timeAgo = -(length - 1) * (refreshRate / 1000);
 
     return d3.scale.linear()
-      .range([0, this.getWidth(props)])
+      .range([0, width])
       .domain([timeAgo, 0]);
   },
 

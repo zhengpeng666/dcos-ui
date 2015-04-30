@@ -46,7 +46,8 @@ var BarChart = React.createClass({
   componentWillMount: function () {
     var props = this.props;
 
-    var xScale = this.getXScale(props);
+    var width = this.getWidth(props);
+    var xScale = this.getXScale(props.data, width, props.refreshRate);
     var yScale = this.getYScale(props);
 
     var data = {
@@ -72,7 +73,8 @@ var BarChart = React.createClass({
   },
 
   componentWillReceiveProps: function (props) {
-    var xScale = this.getXScale(props);
+    var width = this.getWidth(props);
+    var xScale = this.getXScale(props.data, width, props.refreshRate);
     var yScale = this.getYScale(props);
     // the d3 axis helper requires a <g> element passed into do its work. This
     // happens after mount and ends up keeping the axis code outside of react

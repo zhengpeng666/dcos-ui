@@ -63,12 +63,18 @@ describe("ChartMixin", function () {
   describe("#getXScale", function () {
 
     it("should build the correct amount of ticks", function () {
-      var xScale = ChartMixin.getXScale(this.props);
+      var props = this.props;
+      var xScale = ChartMixin.getXScale(
+        props.data, props.width, props.refreshRate
+      );
       expect(xScale.ticks(4)).toEqual([-60, -40, -20, 0]);
     });
 
     it("should have the correct domain range", function () {
-      var xScale = ChartMixin.getXScale(this.props);
+      var props = this.props;
+      var xScale = ChartMixin.getXScale(
+        props.data, props.width, props.refreshRate
+      );
       expect(xScale.domain()).toEqual([-60, 0]);
     });
 
