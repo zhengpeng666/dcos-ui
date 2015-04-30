@@ -9,9 +9,7 @@ var TimeSeriesArea = React.createClass({
 
   propTypes: {
     className: React.PropTypes.string,
-    // "M-22.179096201829775,200C-18.48258016819148,200..."
     path: React.PropTypes.string.isRequired,
-    // "M-22.179096201829775,200C-18.48258016819148,200..."
     line: React.PropTypes.string.isRequired,
     transitionTime: React.PropTypes.number.isRequired,
     position: React.PropTypes.array.isRequired
