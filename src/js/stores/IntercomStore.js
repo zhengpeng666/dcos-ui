@@ -16,8 +16,8 @@ var IntercomStore = _.extend({}, EventEmitter.prototype, {
       intercom("hide");
 
       // register events
-      intercom("onHide", this._handleCallback.bind(this, false));
-      intercom("onShow", this._handleCallback.bind(this, true));
+      intercom("onHide", this.handleCallback.bind(this, false));
+      intercom("onShow", this.handleCallback.bind(this, true));
     }
   },
 
@@ -25,14 +25,14 @@ var IntercomStore = _.extend({}, EventEmitter.prototype, {
     return _isOpen;
   },
 
-  _handleCallback: function (value) {
+  handleCallback: function (value) {
     // only handle change if there is one
     if (_isOpen !== value) {
-      this._handleChange(value);
+      this.handleChange(value);
     }
   },
 
-  _handleChange: function (value) {
+  handleChange: function (value) {
     _isOpen = value;
     IntercomStore.emitChange(EventTypes.INTERCOM_CHANGE);
   },
@@ -60,7 +60,7 @@ var IntercomStore = _.extend({}, EventEmitter.prototype, {
     switch (action.type) {
       case ActionTypes.REQUEST_INTERCOM_CLOSE:
       case ActionTypes.REQUEST_INTERCOM_OPEN:
-        IntercomStore._handleChange(action.data);
+        IntercomStore.handleChange(action.data);
         break;
     }
 
