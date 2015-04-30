@@ -9,6 +9,7 @@ var HealthTypes = require("../constants/HealthTypes");
 var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
 var Strings = require("../utils/Strings");
+var TimeScales = require("../constants/TimeScales");
 
 var _failureRates = [];
 var _prevMesosStatusesMap = {};
@@ -414,14 +415,18 @@ function initStates() {
   });
 }
 
-function fetchData() {
-  MesosStateActions.fetch();
+function fetchData(timeScale) {
+  MesosStateActions.fetch(timeScale);
   MesosStateActions.fetchMarathonHealth();
 }
 
 function startPolling() {
   if (_interval == null) {
-    fetchData();
+    var timeScale;
+    if (!_statesProcessed) {
+      timeScale = TimeScales.MINUTE;
+    }
+    fetchData(timeScale);
     _interval = setInterval(fetchData, Config.stateRefresh);
   }
 }
@@ -431,6 +436,17 @@ function stopPolling() {
     clearInterval(_interval);
     _interval = null;
   }
+}
+
+function addTimestampsToData(data, timeStep) {
+  var length = data.length;
+  var timeNow = new Date().getTime() - timeStep;
+
+  return _.map(data, function (datum, i) {
+    var timeDelta = (-length + i) * timeStep;
+    datum.date = timeNow + timeDelta;
+    return datum;
+  });
 }
 
 var MesosStateStore = _.extend({}, EventEmitter.prototype, {
@@ -596,7 +612,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   processState: function (data) {
-    data.date = Date.now();
+    if (data.date == null) {
+      data.date = Date.now();
+    }
+
     data.frameworks = normalizeFrameworks(data.frameworks, data.date);
     data.total_resources = sumResources(_.pluck(data.slaves, "resources"));
     data.used_resources = sumResources(
@@ -675,7 +694,13 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       case ActionTypes.REQUEST_MESOS_STATE_SUCCESS:
         MesosStateStore.processState(action.data);
         break;
+      case ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS:
+        // Multiply Config.stateRefresh in order to use larger time slices
+        var data = addTimestampsToData(action.data, Config.stateRefresh);
+        _.each(data, MesosStateStore.processState.bind(MesosStateStore));
+        break;
       case ActionTypes.REQUEST_MESOS_STATE_ERROR:
+      case ActionTypes.REQUEST_MESOS_HISTORY_ERROR:
         MesosStateStore.processStateError();
         break;
       case ActionTypes.REQUEST_MARATHON_APPS_SUCCESS:

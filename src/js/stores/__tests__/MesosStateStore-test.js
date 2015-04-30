@@ -1,5 +1,7 @@
 var _ = require("underscore");
 
+jest.dontMock("../../events/AppDispatcher");
+jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../../config/Config");
 jest.dontMock("../MesosStateStore");
 jest.dontMock("./fixtures/MockStates");
@@ -7,6 +9,8 @@ jest.dontMock("./fixtures/MockAppHealth");
 jest.dontMock("./fixtures/MockAppMetadata");
 jest.dontMock("./fixtures/MockParsedAppMetadata");
 
+var AppDispatcher = require("../../events/AppDispatcher");
+var ActionTypes = require("../../constants/ActionTypes");
 var Config = require("../../config/Config");
 var MesosStateStore = require("../MesosStateStore");
 var MockStates = require("./fixtures/MockStates");
@@ -187,6 +191,32 @@ describe("Mesos State Store", function () {
       expect(activeHostsCount[activeHostsCount.length - 3].slavesCount).toBe(1);
       expect(activeHostsCount[activeHostsCount.length - 2].slavesCount).toBe(0);
       expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(1);
+    });
+
+  });
+
+  describe("timestamps", function () {
+
+    beforeEach(function () {
+      Config.stateRefresh = 3333;
+      AppDispatcher.handleServerAction({
+        type: ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS,
+        data: [ { name: "a" }, { name: "b" }, { name: "c" } ]
+      });
+    });
+
+    it("adds timestamps to each item", function () {
+      var mostRecentState = _.last(MesosStateStore.getAll());
+      expect(mostRecentState.name).toEqual("c");
+      expect(mostRecentState.date).toBeDefined();
+    });
+
+    it("sets the timestamp by the configured step", function () {
+      var twoMostRecentStates = _.last(MesosStateStore.getAll(), 2);
+      var mostRecentState = _.last(twoMostRecentStates);
+      var secondMostRecentState = _.first(twoMostRecentStates);
+      var stateTimeDelta = mostRecentState.date - secondMostRecentState.date;
+      expect(stateTimeDelta).toEqual(3333);
     });
 
   });
