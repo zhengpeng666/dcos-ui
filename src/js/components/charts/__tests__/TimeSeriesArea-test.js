@@ -60,11 +60,11 @@ describe("TimeSeriesArea", function () {
     );
   });
 
-  it("should a path according to first data set", function () {
+  it("should render a path according to first data set", function () {
     checkPath(this.area, this.props);
   });
 
-  it("should a path according to second data set", function () {
+  it("should render a path according to second data set", function () {
     var values = MockTimeSeriesData.secondSet;
     var area = this.areaDef(values);
     var valueLine = this.valueLineDef(values);
