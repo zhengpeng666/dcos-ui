@@ -20,7 +20,7 @@ describe("ChartStripes", function () {
     );
   });
 
-  it("should display the correct bumber of stripes", function () {
+  it("should display the correct number of stripes", function () {
     var stripes = TestUtils.scryRenderedDOMComponentsWithClass(
       this.instance, "background"
     );
