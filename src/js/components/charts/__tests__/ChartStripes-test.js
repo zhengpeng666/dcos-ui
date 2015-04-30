@@ -11,12 +11,10 @@ describe("ChartStripes", function () {
 
   beforeEach(function () {
     this.instance = TestUtils.renderIntoDocument(
-      <svg>
-        <ChartStripes
-          count={6}
-          height={10}
-          width={300} />
-      </svg>
+      <ChartStripes
+        count={6}
+        height={10}
+        width={300} />
     );
   });
 
@@ -55,14 +53,7 @@ describe("ChartStripes", function () {
     );
     expect(stripes.length).toEqual(6);
 
-    this.instance = TestUtils.renderIntoDocument(
-      <svg>
-        <ChartStripes
-          count={5}
-          height={4}
-          width={300} />
-      </svg>
-    );
+    this.instance.setProps({count: 5});
 
     stripes = TestUtils.scryRenderedDOMComponentsWithClass(
       this.instance, "background"

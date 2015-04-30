@@ -52,13 +52,11 @@ describe("TimeSeriesArea", function () {
     this.valueLine = this.valueLineDef(this.props.values);
 
     this.instance = TestUtils.renderIntoDocument(
-      <svg>
-        <TimeSeriesArea
-          line={this.valueLine}
-          path={this.area}
-          position={[-10, 0]}
-          transitionTime={10} />
-      </svg>
+      <TimeSeriesArea
+        line={this.valueLine}
+        path={this.area}
+        position={[-10, 0]}
+        transitionTime={10} />
     );
   });
 
@@ -72,13 +70,11 @@ describe("TimeSeriesArea", function () {
     var valueLine = this.valueLineDef(values);
 
     this.instance = TestUtils.renderIntoDocument(
-      <svg>
-        <TimeSeriesArea
-          line={valueLine}
-          path={area}
-          position={[-10, 0]}
-          transitionTime={10} />
-      </svg>
+      <TimeSeriesArea
+        line={valueLine}
+        path={area}
+        position={[-10, 0]}
+        transitionTime={10} />
     );
 
     checkPath(this.area, this.props);
@@ -90,15 +86,13 @@ describe("TimeSeriesArea", function () {
     var area = this.areaDef(values);
     var valueLine = this.valueLineDef(values);
 
-    this.instance = TestUtils.renderIntoDocument(
-      <svg>
-        <TimeSeriesArea
-          line={valueLine}
-          path={area}
-          position={[-10, 0]}
-          transitionTime={10} />
-      </svg>
-    );
+    var props = {
+      line: valueLine,
+      path: area,
+      position: [-10, 0],
+      transitionTime: 10
+    };
+    this.instance.setProps(props);
 
     checkPath(this.area, this.props);
   });
