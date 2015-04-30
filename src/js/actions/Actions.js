@@ -13,6 +13,8 @@ var Actions = {
 
   activePage: "",
 
+  previousFakePageLog: "",
+
   initialize: function () {
     this.createdAt = Date.now();
     this.lastLogDate = this.createdAt;
@@ -27,6 +29,15 @@ var Actions = {
 
   canLog: function () {
     return global.analytics.initialized;
+  },
+
+  logFakePageView: function (fakePageLog) {
+    if (_.isEqual(this.previousFakePageLog, fakePageLog)) {
+      return;
+    }
+
+    global.analytics.page(fakePageLog);
+    this.previousFakePageLog = fakePageLog;
   },
 
   setActivePage: function (path) {
