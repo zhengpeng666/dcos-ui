@@ -98,7 +98,8 @@ var Index = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
-    return !_.isEqual(this.state, nextState);
+    return !(_.isEqual(this.props, nextProps) &&
+        _.isEqual(this.state, nextState));
   },
 
   addMesosStateListeners: function () {
