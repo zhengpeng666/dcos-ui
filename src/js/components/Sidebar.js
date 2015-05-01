@@ -70,7 +70,6 @@ var Sidebar = React.createClass({
   },
 
   onIntercomChange: function () {
-    SidebarActions.close();
     this.internalStorage_update({showIntercom: IntercomStore.isOpen()});
     this.forceUpdate();
   },
@@ -91,6 +90,7 @@ var Sidebar = React.createClass({
       IntercomActions.close();
     } else {
       IntercomActions.open();
+      SidebarActions.close();
     }
   },
 
