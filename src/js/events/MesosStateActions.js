@@ -18,7 +18,7 @@ function request(url, type, data, options) {
 
 var MesosStateActions = {
   fetch: function () {
-    var url = Config.rootUrl + "/master/state-summary?jsonp=?";
+    var url = Config.rootUrl + "/master/state.json?jsonp=?";
 
     request(url, "GET", null, {
         contentType: "application/json; charset=utf-8",
