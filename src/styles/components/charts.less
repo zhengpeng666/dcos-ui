@@ -1,4 +1,6 @@
 .chart {
+  transform: translateZ(0);
+
   svg .background {
     fill: fade(@neutral, 80%);
   }
@@ -145,6 +147,17 @@
         stroke: @neutral;
         stroke-dasharray: 4,4;
       }
+    }
+  }
+
+  .timeseries-chart {
+    position: relative;
+
+    .moving-elements {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translateZ(0);
     }
   }
 
