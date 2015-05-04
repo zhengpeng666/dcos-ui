@@ -24,7 +24,7 @@ var CliInstructionsModal = React.createClass({
 
   getSubHeader: function () {
     return (
-      <p className="text-align-center inverse">
+      <p className="text-align-center inverse flush-bottom">
         {this.props.subHeaderContent}
       </p>
     );
@@ -41,14 +41,9 @@ var CliInstructionsModal = React.createClass({
         Python 2.7.9 or 3.4 or later, which includes the 'pip' package installer.
       </li>
     );
-    var gitInstructions = (
+    var installRequirements = (
       <li>
-      The <a href="http://git-scm.com/" target="_blank">git</a> version control application.
-      </li>
-    );
-    var jqInstructions = (
-      <li>
-      Install <a href="http://stedolan.github.io/jq/download/" target="_blank">jq</a>.
+      Install the following <a href="https://virtualenv.pypa.io/en/latest/installation.html" target="_blank">virtualenv</a>, <a href="http://git-scm.com/" target="_blank">git</a>, and <a href="http://stedolan.github.io/jq/download/" target="_blank">jq</a>.
       </li>
     );
 
@@ -59,8 +54,7 @@ var CliInstructionsModal = React.createClass({
             A command-line environment, such as Terminal or Windows Powershell.
           </li>
           {pythonInstructions}
-          {gitInstructions}
-          {jqInstructions}
+          {installRequirements}
           <li>
             Download: <a href="https://raw.githubusercontent.com/mesosphere/install-scripts/master/dcos-cli/install-dcos-windows.ps1" target="_blank">install-dcos-windows.ps1</a>
           </li>
@@ -72,8 +66,7 @@ var CliInstructionsModal = React.createClass({
         <ul>
           <li>A command-line environment, such as Terminal.</li>
           {pythonInstructions}
-          {gitInstructions}
-          {jqInstructions}
+          {installRequirements}
         </ul>
       );
       cliSnippet = "mkdir dcos && cd dcos && \\\n  curl -O https://downloads.mesosphere.io/dcos-cli/install.sh && \\\n  bash ./install.sh . " + hostname + " && \\\n  source ./bin/env-setup";
@@ -89,7 +82,7 @@ var CliInstructionsModal = React.createClass({
     var instructions = this.getCliInstructions();
     return (
       <div className="install-cli-modal-content">
-        <h4 className="flush-top">You will need:</h4>
+        <h4 className="flush-top">Prerequisites:</h4>
         {instructions.requirements}
         <h4 className="snippet-description">Copy and paste into your terminal:</h4>
         <div className="flush-top snippet-wrapper">

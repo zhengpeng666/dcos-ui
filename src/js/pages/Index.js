@@ -296,7 +296,7 @@ var Index = React.createClass({
           this.setState({showingCliModal: false});
         }.bind(this),
       title: "Welcome to the Mesosphere DCOS!",
-      subHeaderContent: "This brief tutorial walks you through the basics of the Mesosphere DCOS. It includes using the DCOS Dashboard, installing a service from the package repository, deploying and scaling an app using Marathon, and performing continuous integration using Jenkins. This tutorial should take about 10 minutes to complete.",
+      subHeaderContent: "This tutorial walks you through using the DCOS Dashboard, including installing a service, deploying and scaling an app, and performing continuous integration. It should take about 10 minutes to complete.",
       showFooter: false
     };
   },
@@ -331,7 +331,7 @@ var Index = React.createClass({
     return {
       onCloseClickFn: onCloseClickFn,
       title: "Welcome to the Mesosphere DCOS",
-      subHeaderContent: "In order to get started, you'll need to install our command-line tool by copying the snippet below. After that, you can take our tour which will guide you through installing a web-app and continuous integration pipeline.",
+      subHeaderContent: "In order to get started, you'll need to install our command-line tool by copying the snippet below. After that, you'll take our tour which will guide you through installing a web-app and continuous integration pipeline.",
       showFooter: true,
       footer: (
         <div className="tour-start-modal-footer">
