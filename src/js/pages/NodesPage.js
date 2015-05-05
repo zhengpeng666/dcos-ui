@@ -62,10 +62,6 @@ var NodesPage = React.createClass({
     this.internalStorage_set(getMesosHosts(this.state));
   },
 
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
