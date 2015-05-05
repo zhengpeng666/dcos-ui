@@ -60,10 +60,10 @@
       margin-bottom: @grid-gutter-width;
 
       .panel-heading {
-        padding: @base-spacing-unit-screen-mini / 2;
+        padding: (@base-spacing-unit-screen-mini * 0.5) (@base-spacing-unit-screen-mini * 1);
       }
       .panel-content {
-        padding: @base-spacing-unit-screen-mini;
+        padding: @base-spacing-unit-screen-mini * 1;
       }
 
     }
@@ -94,10 +94,10 @@
       margin-bottom: @grid-gutter-width-screen-small;
 
       .panel-heading {
-        padding: @base-spacing-unit-screen-small / 2;
+        padding: (@base-spacing-unit-screen-small * 0.33) (@base-spacing-unit-screen-small * 0.66);
       }
       .panel-content {
-        padding: @base-spacing-unit-screen-small;
+        padding: @base-spacing-unit-screen-small * 0.66;
       }
 
     }
@@ -128,10 +128,10 @@
       margin-bottom: @grid-gutter-width-screen-medium;
 
       .panel-heading {
-        padding: @base-spacing-unit-screen-medium / 4;
+        padding: (@base-spacing-unit-screen-medium * 0.25) (@base-spacing-unit-screen-medium * 0.5);
       }
       .panel-content {
-        padding: @base-spacing-unit-screen-medium / 2.6;
+        padding: @base-spacing-unit-screen-medium * 0.5;
       }
 
     }
@@ -156,16 +156,18 @@
   ----------------------------------------------------------------------------- */
 
   @media (min-width: @screen-large) {
-
+    .sidebar {
+      background: white !important;
+    }
     .panel {
 
       margin-bottom: @grid-gutter-width-screen-large;
 
       .panel-heading {
-        padding: @base-spacing-unit-screen-large / 4;
+        padding: (@base-spacing-unit-screen-large * 0.2) (@base-spacing-unit-screen-large * 0.4);
       }
       .panel-content {
-        padding: @base-spacing-unit-screen-large / 2.6;
+        padding: @base-spacing-unit-screen-large * 0.4;
       }
 
     }
