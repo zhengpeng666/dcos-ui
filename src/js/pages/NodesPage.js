@@ -2,6 +2,8 @@
 
 var _ = require("underscore");
 var React = require("react/addons");
+var RouteHandler = require("react-router").RouteHandler;
+var Link = require("react-router").Link;
 
 var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
@@ -12,7 +14,6 @@ var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var Page = require("../components/Page");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
-var HostTable = require("../components/HostTable");
 var SidebarActions = require("../events/SidebarActions");
 
 function getMesosHosts(state) {
@@ -59,6 +60,10 @@ var NodesPage = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set(getMesosHosts(this.state));
+  },
+
+  contextTypes: {
+    router: React.PropTypes.func
   },
 
   componentDidMount: function () {
@@ -108,6 +113,33 @@ var NodesPage = React.createClass({
     this.setState({byServiceFilter: byServiceFilter});
   },
 
+  getViewTypeRadioButtons: function () {
+    var routeHandler = <RouteHandler />;
+    var routeName = routeHandler._context.getRouteAtDepth(2).name;
+    var buttonClasses = {
+      "button button-small button-stroke button-inverse": true
+    };
+
+    var listClassSet = React.addons.classSet(_.extend({
+      "active": routeName === "nodes-list"
+    }, buttonClasses));
+
+    var gridClassSet = React.addons.classSet(_.extend({
+      "active": routeName === "nodes-grid"
+    }, buttonClasses));
+
+    return (
+      <div className="button-group">
+        <Link className={listClassSet} to="nodes-list">
+          <span className=""></span>List
+        </Link>
+        <Link className={gridClassSet} to="nodes-grid">
+          <span className=""></span>Grid
+        </Link>
+      </div>
+    );
+  },
+
   getHostsPageContent: function () {
     var data = this.internalStorage_get();
     var state = this.state;
@@ -138,8 +170,11 @@ var NodesPage = React.createClass({
               searchString={state.searchString}
               handleFilterChange={this.handleSearchStringChange} />
           </li>
+          <li className="list-item-aligned-right">
+            {this.getViewTypeRadioButtons()}
+          </li>
         </ul>
-        <HostTable hosts={data.hosts} />
+        <RouteHandler data={data} />
       </div>
     );
   },
