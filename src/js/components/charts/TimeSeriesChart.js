@@ -64,11 +64,13 @@ var TimeSeriesChart = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps) {
+    var props = this.props;
+
     // The d3 axis helper requires a <g> element passed into do its work. This
     // happens after mount and ends up keeping the axis code outside of react
     // unfortunately.
     // If non `data` props change then we need to update the whole graph
-    if (!_.isEqual(_.omit(this.props, "data"), _.omit(nextProps, "data"))) {
+    if (!_.isEqual(_.omit(props, "data"), _.omit(nextProps, "data"))) {
       var height = this.getHeight(nextProps);
       var width = this.getWidth(nextProps);
 
@@ -77,11 +79,11 @@ var TimeSeriesChart = React.createClass({
     }
 
     // This won't be scalable if we decide to stack graphs
-    var prevVal = _.first(this.props.data).values;
+    var prevVal = _.first(props.data).values;
     var nextVal = _.first(nextProps.data).values;
 
-    var prevY = _.pluck(prevVal, this.props.y);
-    var nextY = _.pluck(nextVal, this.props.y);
+    var prevY = _.pluck(prevVal, props.y);
+    var nextY = _.pluck(nextVal, props.y);
 
     return !_.isEqual(prevY, nextY);
   },
