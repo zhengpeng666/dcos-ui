@@ -63,6 +63,31 @@ var TimeSeriesChart = React.createClass({
     this.createClipPath(width, height);
   },
 
+  shouldComponentUpdate: function (nextProps) {
+    var props = this.props;
+
+    // The d3 axis helper requires a <g> element passed into do its work. This
+    // happens after mount and ends up keeping the axis code outside of react
+    // unfortunately.
+    // If non `data` props change then we need to update the whole graph
+    if (!_.isEqual(_.omit(props, "data"), _.omit(nextProps, "data"))) {
+      var height = this.getHeight(nextProps);
+      var width = this.getWidth(nextProps);
+
+      this.renderAxis(nextProps, width, height);
+      return true;
+    }
+
+    // This won't be scalable if we decide to stack graphs
+    var prevVal = _.first(props.data).values;
+    var nextVal = _.first(nextProps.data).values;
+
+    var prevY = _.pluck(prevVal, props.y);
+    var nextY = _.pluck(nextVal, props.y);
+
+    return !_.isEqual(prevY, nextY);
+  },
+
   componentDidUpdate: function () {
     var props = this.props;
     var height = this.getHeight(props);
@@ -73,7 +98,7 @@ var TimeSeriesChart = React.createClass({
 
   createClipPath: function (width, height) {
     var data = this.internalStorage_get();
-    var el = this.getDOMNode();
+    var el = this.refs.movingEls.getDOMNode();
 
     // create clip path for areas and x-axis
     d3.select(el)
@@ -185,18 +210,15 @@ var TimeSeriesChart = React.createClass({
   renderAxis: function (props, width, height) {
     var xScale = this.getXScale(props.data, width, props.refreshRate);
     var yScale = this.getYScale(height, props.maxY);
-    var firstDataSet = _.first(props.data);
 
-    if (firstDataSet != null) {
-      var xAxis = d3.svg.axis()
-        .scale(xScale)
-        .tickValues(this.getXTickValues(xScale))
-        .tickFormat(this.formatXAxis)
-        .orient("bottom");
-      d3.select(this.refs.xAxis.getDOMNode()).interrupt()
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-    }
+    var xAxis = d3.svg.axis()
+      .scale(xScale)
+      .tickValues(this.getXTickValues(xScale))
+      .tickFormat(this.formatXAxis)
+      .orient("bottom");
+    d3.select(this.refs.xAxis.getDOMNode()).interrupt()
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
 
     var yAxis = d3.svg.axis()
       .scale(yScale)
@@ -214,20 +236,6 @@ var TimeSeriesChart = React.createClass({
           .tickSize(-width, 0, 0)
           .tickFormat("")
       );
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-
-    // The d3 axis helper requires a <g> element passed into do its work. This
-    // happens after mount and ends up keeping the axis code outside of react
-    // unfortunately.
-    // Only update axis when they need updating.
-    if (!_.isEqual(_.omit(nextProps, "data"), _.omit(this.props, "data"))) {
-      var height = this.getHeight(nextProps);
-      var width = this.getWidth(nextProps);
-
-      this.renderAxis(nextProps, width, height);
-    }
   },
 
   getTransitionTime: function (data) {
@@ -340,32 +348,39 @@ var TimeSeriesChart = React.createClass({
     var clipPath = "url(#" + store.clipPathID + ")";
 
     return (
-      <svg height={props.height} width={props.width}>
-        <g transform={"translate(" + margin.left + "," + margin.top + ")"}>
-          <ChartStripes
-            count={4}
-            height={height}
-            width={width} />
-          <g clip-path={clipPath}>
-            {this.getAreaList(props, yScale, xTimeScale)}
+      <div className="timeseries-chart">
+        <svg height={props.height} width={props.width}>
+          <g transform={"translate(" + margin.left + "," + margin.top + ")"}>
+            <ChartStripes
+              count={4}
+              height={height}
+              width={width} />
+            <g className="bars grid-graph" ref="grid" />
+            <g className="y axis" ref="yAxis" />
+            <g className="x axis" ref="xAxis" />
+            <TimeSeriesMouseOver
+              addMouseHandler={this.addMouseHandler}
+              data={props.data}
+              getBoundingBox={this.getBoundingBox(props)}
+              height={height}
+              removeMouseHandler={this.removeMouseHandler}
+              width={width}
+              xScale={xScale}
+              y={props.y}
+              yCaption={this.getYCaption(props.yFormat)}
+              yScale={yScale} />
           </g>
-          <g className="bars grid-graph" ref="grid" />
-          <g className="y axis" ref="yAxis" />
-          <g className="x axis" ref="xAxis" />
-          <TimeSeriesMouseOver
-            addMouseHandler={this.addMouseHandler}
-            data={props.data}
-            getBoundingBox={this.getBoundingBox(props)}
-            height={height}
-            removeMouseHandler={this.removeMouseHandler}
-            width={width}
-            xScale={xScale}
-            y={props.y}
-            yCaption={this.getYCaption(props.yFormat)}
-            yScale={yScale} />
-          {this.getCircleList(props, yScale, width, height)}
-        </g>
-      </svg>
+        </svg>
+
+        <svg height={props.height} width={props.width} ref="movingEls" className="moving-elements">
+          <g transform={"translate(" + margin.left + "," + margin.top + ")"}>
+            <g clip-path={clipPath}>
+              {this.getAreaList(props, yScale, xTimeScale)}
+            </g>
+            {this.getCircleList(props, yScale, width, height)}
+          </g>
+        </svg>
+      </div>
     );
   }
 });
