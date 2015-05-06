@@ -16,6 +16,8 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
 
+var NODES_DISPLAY_LIMIT = 300;
+
 function getMesosHosts(state) {
   var filters = _.pick(state, "searchString", "byServiceFilter");
   var hosts = MesosStateStore.getHosts(filters);
@@ -147,8 +149,10 @@ var NodesPage = React.createClass({
     var state = this.state;
 
     var routeHandlerInstance = React.createElement(RouteHandler,
-      _.extend({selectedResource: this.state.selectedResource}, data)
+      _.extend({selectedResource: this.state.selectedResource}, {hosts: _.first(data.hosts, NODES_DISPLAY_LIMIT)})
     );
+
+    var currentLength = _.min([data.hosts.length, NODES_DISPLAY_LIMIT]);
 
     return (
       <div>
@@ -163,7 +167,7 @@ var NodesPage = React.createClass({
         <FilterHeadline
           onReset={this.resetFilter}
           name="Nodes"
-          currentLength={data.hosts.length}
+          currentLength={currentLength}
           totalLength={data.allHosts.length} />
         <ul className="list list-unstyled list-inline flush-bottom">
           <li>
