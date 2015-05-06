@@ -69,7 +69,7 @@ var CliInstructionsModal = React.createClass({
           {installRequirements}
         </ul>
       );
-      cliSnippet = "mkdir dcos && cd dcos && \\\n  curl -O https://downloads.mesosphere.io/dcos-cli/install.sh && \\\n  bash ./install.sh . " + hostname + " && \\\n  source ./bin/env-setup";
+      cliSnippet = "mkdir -p dcos && cd dcos && \\\n  curl -O https://downloads.mesosphere.io/dcos-cli/install.sh && \\\n  bash ./install.sh . " + hostname + " && \\\n  source ./bin/env-setup";
     }
 
     return {
