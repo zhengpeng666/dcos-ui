@@ -20,7 +20,33 @@ var NodesGridView = React.createClass({
     selectedResource: React.PropTypes.string.isRequired
   },
 
-  getData: function (resourceConfig, percentage) {
+  getDialConfig: function (active, resource, resourceConfig) {
+    if (active) {
+      return {
+        data: this.getActiveSliceData(resourceConfig, resource.percentage),
+        description: [
+          <span className="unit" key={"unit"}>
+            <span>{resource.percentage}</span>
+            <sup>{"%"}</sup>
+          </span>,
+          <span className="unit-label text-muted" key={"unit-label"}>
+            {resourceConfig.label}
+          </span>
+        ]
+      };
+    } else {
+      return {
+        data: this.getInactiveSliceData(),
+        description: (
+          <span className="error">
+            <i className="icon icon-medium icon-medium-white icon-alert"/>
+          </span>
+        )
+      };
+    }
+  },
+
+  getActiveSliceData: function (resourceConfig, percentage) {
     return [
       {
         colorIndex: resourceConfig.colorIndex,
@@ -35,7 +61,7 @@ var NodesGridView = React.createClass({
     ];
   },
 
-  getErrorData: function () {
+  getInactiveSliceData: function () {
     return [
       {
         colorIndex: colors.error,
@@ -45,44 +71,22 @@ var NodesGridView = React.createClass({
     ];
   },
 
-  /**
-   * TODOS:
-   * - Add services?
-   * - Handle different screen sizes
-   * - Optimize rendering
-   * - Fix display on small size
-   */
-
   getDials: function () {
     var resourceConfig = ResourceTypes[this.props.selectedResource];
 
     return _.map(this.props.hosts, function (host) {
-      var last = _.last(host.used_resources[this.props.selectedResource]);
-      var percentage = last.percentage;
-      var unit = percentage + "%";
-      var errorIcon;
-      var data;
-
-      if (host.active) {
-        data = this.getData(resourceConfig, percentage);
-      } else {
-        data = this.getErrorData();
-        errorIcon = (
-          <span className="error">
-            <i className="icon icon-medium icon-medium-white icon-alert"/>
-          </span>
-        );
-      }
+      var resource = _.last(host.used_resources[this.props.selectedResource]);
+      var config = this.getDialConfig(host.active, resource, resourceConfig);
 
       return (
         <div className="nodes-grid-item" key={host.id}>
           <div className="chart">
             <Chart calcHeight={function (w) { return w; }}>
-              <DialChart data={data}
-                  label={resourceConfig.label}
-                  value="percentage"
-                  unit={unit}>
-                {errorIcon}
+              <DialChart data={config.data}
+                  value="percentage">
+                <div className="description">
+                  {config.description}
+                </div>
               </DialChart>
             </Chart>
           </div>

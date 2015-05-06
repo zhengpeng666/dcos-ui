@@ -23,15 +23,12 @@ var DialChart = React.createClass({
     data: React.PropTypes.array.isRequired,
     slices: React.PropTypes.array,
     duration: React.PropTypes.number,
-    unit: React.PropTypes.node,
-    label: React.PropTypes.string,
     value: React.PropTypes.string
   },
 
   getDefaultProps: function () {
     return {
       duration: 1000,
-      label: "",
       slices: [],
       value: "value"
     };
@@ -138,28 +135,6 @@ var DialChart = React.createClass({
     });
   },
 
-  getDescription: function () {
-    var props = this.props;
-    var children = props.children;
-
-    if (children == null) {
-      children = [
-        <span className="unit" key={_.uniqueId()}>
-          {props.unit}
-        </span>,
-        <span className="unit-label text-muted" key={_.uniqueId()}>
-          {props.label}
-        </span>
-      ];
-    }
-
-    return (
-      <div className="description">
-        {children}
-      </div>
-    );
-  },
-
   render: function() {
     return (
       <div className="chart-dialchart" height={this.props.height} width={this.props.width}>
@@ -169,7 +144,7 @@ var DialChart = React.createClass({
               {this.getWedges()}
             </g>
             <g textAnchor="middle">
-              {this.getDescription()}
+              {this.props.children}
             </g>
           </g>
         </svg>

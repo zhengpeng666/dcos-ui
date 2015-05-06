@@ -149,10 +149,13 @@ var NodesPage = React.createClass({
     var state = this.state;
 
     var routeHandlerInstance = React.createElement(RouteHandler,
-      _.extend({selectedResource: this.state.selectedResource}, {hosts: _.first(data.hosts, NODES_DISPLAY_LIMIT)})
+      _.extend({
+        selectedResource: this.state.selectedResource,
+        hosts: _.first(data.hosts, NODES_DISPLAY_LIMIT)
+      })
     );
 
-    var currentLength = _.min([data.hosts.length, NODES_DISPLAY_LIMIT]);
+    var currentLength = Math.min(data.hosts.length, NODES_DISPLAY_LIMIT);
 
     return (
       <div>
