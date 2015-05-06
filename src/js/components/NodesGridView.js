@@ -75,7 +75,7 @@ var NodesGridView = React.createClass({
       }
 
       return (
-        <div className="column-mini-2 column-small-2 column-medium-2 column-large-1" key={host.id}>
+        <div className="nodes-grid-item" key={host.id}>
           <div className="chart">
             <Chart calcHeight={function (w) { return w; }}>
               <DialChart data={data}

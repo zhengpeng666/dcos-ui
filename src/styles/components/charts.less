@@ -272,6 +272,15 @@
 
 }
 
+.nodes-grid-item {
+  width: @base-spacing-unit * 5;
+  padding: @base-spacing-unit * 0.5;
+  display: inline-block;
+  .arc path {
+    stroke-width: 1px;
+    stroke: @panel-background-color;
+  }
+}
 
 // Chart specific styles
 .chart-dialchart {
@@ -303,3 +312,4 @@
     }
   }
 }
+
