@@ -19,9 +19,9 @@ var Panel = React.createClass({
 
     return (
       <div className="panel-heading text-align-center">
-        <h3 className="panel-title">
+        <h4 className="panel-title">
           {title}
-        </h3>
+        </h4>
       </div>
     );
   },
