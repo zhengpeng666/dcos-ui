@@ -68,7 +68,7 @@ var ServicesPage = React.createClass({
   },
 
   getInitialState: function () {
-    return _.clone(DEFAULT_FILTER_OPTIONS);
+    return _.extend({selectedResource: "cpus"}, DEFAULT_FILTER_OPTIONS);
   },
 
   componentWillMount: function () {
@@ -100,6 +100,12 @@ var ServicesPage = React.createClass({
 
     this.internalStorage_set(getMesosServices(stateChanges));
     this.setState(stateChanges);
+  },
+
+  onResourceSelectionChange: function (selectedResource) {
+    if (this.state.selectedResource !== selectedResource) {
+      this.setState({selectedResource: selectedResource});
+    }
   },
 
   handleSearchStringChange: function (searchString) {
@@ -154,7 +160,9 @@ var ServicesPage = React.createClass({
           resources={data.totalFrameworksResources}
           totalResources={data.totalResources}
           refreshRate={data.refreshRate}
-          resourceType="Services" />
+          resourceType="Services"
+          selectedResource={this.state.selectedResource}
+          onResourceSelectionChange={this.onResourceSelectionChange} />
         <FilterHeadline
           onReset={this.resetFilter}
           name="Services"
