@@ -52,7 +52,7 @@
 @icon-medium-width: 32px;
 @icon-medium-height: 32px;
 @icon-medium-count-horizontal: 3;
-@icon-medium-count-vertical: 8;
+@icon-medium-count-vertical: 9;
 @icon-medium-border-radius: 5px;
 
 @icon-medium-variant-black-offset-horizontal: 0 * @icon-medium-width;
@@ -350,10 +350,6 @@
       }
     }
 
-    &.border-radius {
-      .border-radius(@icon-medium-border-radius);
-    }
-
     /* Icon: Menu */
     &.icon-menu {
       background-position: floor(-@icon-medium-variant-black-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 7);
@@ -364,6 +360,19 @@
 
       &.icon-medium-color {
         background-position: floor(-@icon-medium-variant-color-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 7);
+      }
+    }
+
+    /* Icon: Alert */
+    &.icon-alert {
+      background-position: floor(-@icon-medium-variant-black-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 8);
+
+      &.icon-medium-white {
+        background-position: floor(-@icon-medium-variant-white-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 8);
+      }
+
+      &.icon-medium-color {
+        background-position: floor(-@icon-medium-variant-color-offset-horizontal * @icon-medium-scale) -(floor(@icon-medium-height * @icon-medium-scale) * 8);
       }
     }
 
