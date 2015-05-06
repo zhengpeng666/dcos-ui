@@ -39,178 +39,66 @@
   }
 }
 
-
-
-
-
 & when (@screen-mini-enabled) {
-
-  /* -----------------------------------------------------------------------------
-  --------------------------------------------------------------------------------
-
-  Screen Size: Mini (@screen-mini) and above
-
-  --------------------------------------------------------------------------------
-  ----------------------------------------------------------------------------- */
-
   @media (min-width: @screen-mini) {
-
     .panel {
-
       margin-bottom: @grid-gutter-width;
 
       .panel-heading {
         padding: (@base-spacing-unit-screen-mini * 0.5) (@base-spacing-unit-screen-mini * 1);
       }
+
       .panel-content {
         padding: @base-spacing-unit-screen-mini * 1;
       }
-
     }
-
   }
-
 }
 
-
-
-
-
-
 & when (@screen-small-enabled) {
-
-  /* -----------------------------------------------------------------------------
-  --------------------------------------------------------------------------------
-
-  Screen Size: Small (@screen-small) and above
-
-  --------------------------------------------------------------------------------
-  ----------------------------------------------------------------------------- */
-
   @media (min-width: @screen-small) {
-
     .panel {
-
       margin-bottom: @grid-gutter-width-screen-small;
 
       .panel-heading {
         padding: (@base-spacing-unit-screen-small * 0.25) (@base-spacing-unit-screen-small * 0.5);
       }
+
       .panel-content {
         padding: @base-spacing-unit-screen-small * 0.5;
       }
-
     }
-
   }
-
 }
 
-
-
-
-
-
 & when (@screen-medium-enabled) {
-
-  /* -----------------------------------------------------------------------------
-  --------------------------------------------------------------------------------
-
-  Screen Size: Medium (@screen-medium) and above
-
-  --------------------------------------------------------------------------------
-  ----------------------------------------------------------------------------- */
-
   @media (min-width: @screen-medium) {
-
     .panel {
-
       margin-bottom: @grid-gutter-width-screen-medium;
 
       .panel-heading {
         padding: (@base-spacing-unit-screen-medium * 0.25) (@base-spacing-unit-screen-medium * 0.5);
       }
+
       .panel-content {
         padding: @base-spacing-unit-screen-medium * 0.5;
       }
-
     }
-
   }
-
 }
 
-
-
-
-
-
 & when (@screen-large-enabled) {
-
-  /* -----------------------------------------------------------------------------
-  --------------------------------------------------------------------------------
-
-  Screen Size: Large (@screen-large) and above
-
-  --------------------------------------------------------------------------------
-  ----------------------------------------------------------------------------- */
-
   @media (min-width: @screen-large) {
     .panel {
-
       margin-bottom: @grid-gutter-width-screen-large;
 
       .panel-heading {
         padding: (@base-spacing-unit-screen-large * 0.25) (@base-spacing-unit-screen-large * 0.5);
       }
+
       .panel-content {
         padding: @base-spacing-unit-screen-large * 0.5;
       }
-
     }
-
   }
-
-}
-
-
-
-
-
-
-& when (@screen-resolution-2x-enabled) {
-
-  /* -----------------------------------------------------------------------------
-  --------------------------------------------------------------------------------
-
-  Screen Resolution: 2x
-
-  --------------------------------------------------------------------------------
-  ----------------------------------------------------------------------------- */
-
-  @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-
-  }
-
-}
-
-
-
-
-
-
-& when (@screen-resolution-3x-enabled) {
-
-  /* -----------------------------------------------------------------------------
-  --------------------------------------------------------------------------------
-
-  Screen Resolution: 3x
-
-  --------------------------------------------------------------------------------
-  ----------------------------------------------------------------------------- */
-
-  @media only screen and (-webkit-min-device-pixel-ratio: 3) {
-
-  }
-
 }
