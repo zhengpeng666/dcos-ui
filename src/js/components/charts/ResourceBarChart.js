@@ -5,15 +5,10 @@ var React = require("react/addons");
 
 var Chart = require("./Chart");
 var BarChart = require("./BarChart");
+var ResourceTypes = require("../../constants/ResourceTypes");
 
 // number to fit design of width vs. height ratio
 var WIDTH_HEIGHT_RATIO = 4.5;
-
-var infoMap = {
-  cpus: {label: "CPU", colorIndex: 0},
-  mem: {label: "Memory", colorIndex: 3},
-  disk: {label: "Disk", colorIndex: 5}
-};
 
 var ResourceBarChart = React.createClass({
 
@@ -21,10 +16,12 @@ var ResourceBarChart = React.createClass({
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
+    onResourceSelectionChange: React.PropTypes.func.isRequired,
     resources: React.PropTypes.object.isRequired,
-    totalResources: React.PropTypes.object.isRequired,
     refreshRate: React.PropTypes.number.isRequired,
-    resourceType: React.PropTypes.string
+    resourceType: React.PropTypes.string,
+    selectedResource: React.PropTypes.string.isRequired,
+    totalResources: React.PropTypes.object.isRequired
   },
 
   getDefaultProps: function () {
@@ -37,12 +34,6 @@ var ResourceBarChart = React.createClass({
     };
   },
 
-  getInitialState: function () {
-    return {
-      resourceMode: "cpus"
-    };
-  },
-
   getData: function () {
     var props = this.props;
 
@@ -50,37 +41,38 @@ var ResourceBarChart = React.createClass({
       return [];
     }
 
+    var selectedResource = this.props.selectedResource;
     return [{
         id: "used_resources",
-        name: this.state.resourceMode + " allocated",
-        colorIndex: infoMap[this.state.resourceMode].colorIndex,
-        values: props.resources[this.state.resourceMode]
+        name: selectedResource + " allocated",
+        colorIndex: ResourceTypes[selectedResource].colorIndex,
+        values: props.resources[selectedResource]
     }];
   },
 
   getMaxY: function () {
     var props = this.props;
-    return _.last(props.totalResources[this.state.resourceMode])[props.y];
+    return _.last(props.totalResources[this.props.selectedResource])[props.y];
   },
 
-  changeMode: function (mode) {
-    this.setState({resourceMode: mode});
+  handleSelectedResourceChange: function (selectedResource) {
+    this.props.onResourceSelectionChange(selectedResource);
   },
 
   getModeButtons: function () {
-    var mode = this.state.resourceMode;
+    var selectedResource = this.props.selectedResource;
 
-    return _.map(infoMap, function (info, key) {
+    return _.map(ResourceTypes, function (info, key) {
       var classSet = React.addons.classSet({
         "button button-small button-stroke button-inverse": true,
-        "active": mode === key
+        "active": selectedResource === key
       });
 
       return (
         <button
             key={key}
             className={classSet + " path-color-" + info.colorIndex}
-            onClick={this.changeMode.bind(this, key)}>
+            onClick={this.handleSelectedResourceChange.bind(this, key)}>
           {info.label}
         </button>
       );
@@ -132,7 +124,7 @@ var ResourceBarChart = React.createClass({
   },
 
   render: function () {
-    var info = infoMap[this.state.resourceMode];
+    var info = ResourceTypes[this.props.selectedResource];
 
     return (
       <div className="chart panel">

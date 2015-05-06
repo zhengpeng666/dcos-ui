@@ -55,7 +55,7 @@ var NodesPage = React.createClass({
   },
 
   getInitialState: function () {
-    return _.clone(DEFAULT_FILTER_OPTIONS);
+    return _.extend({selectedResource: "cpus"}, DEFAULT_FILTER_OPTIONS);
   },
 
   componentWillMount: function () {
@@ -109,6 +109,12 @@ var NodesPage = React.createClass({
     this.setState({byServiceFilter: byServiceFilter});
   },
 
+  onResourceSelectionChange: function (selectedResource) {
+    if (this.state.selectedResource !== selectedResource) {
+      this.setState({selectedResource: selectedResource});
+    }
+  },
+
   getViewTypeRadioButtons: function () {
     var routeHandler = <RouteHandler />;
     var routeName = routeHandler._context.getRouteAtDepth(2).name;
@@ -140,6 +146,10 @@ var NodesPage = React.createClass({
     var data = this.internalStorage_get();
     var state = this.state;
 
+    var routeHandlerInstance = React.createElement(RouteHandler,
+      _.extend({selectedResource: this.state.selectedResource}, data)
+    );
+
     return (
       <div>
         <ResourceBarChart
@@ -147,7 +157,9 @@ var NodesPage = React.createClass({
           resources={data.totalHostsResources}
           totalResources={data.totalResources}
           refreshRate={data.refreshRate}
-          resourceType="Nodes" />
+          resourceType="Nodes"
+          selectedResource={this.state.selectedResource}
+          onResourceSelectionChange={this.onResourceSelectionChange} />
         <FilterHeadline
           onReset={this.resetFilter}
           name="Nodes"
@@ -170,7 +182,7 @@ var NodesPage = React.createClass({
             {this.getViewTypeRadioButtons()}
           </li>
         </ul>
-        <RouteHandler data={data} />
+        {routeHandlerInstance}
       </div>
     );
   },

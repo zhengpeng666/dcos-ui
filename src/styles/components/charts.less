@@ -257,3 +257,45 @@
   }
 
 }
+
+
+// Remove stroke when dials are in small containers
+.column-mini-1, .column-mini-2,
+.column-small-1, .column-small-2,
+.column-medium-1, .column-medium-2,
+.column-large-1 {
+
+  .arc path {
+    stroke-width: 1px;
+    stroke: @panel-background-color;
+  }
+
+}
+
+
+// Chart specific styles
+.chart-dialchart {
+  position: relative;
+
+  .description {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+
+    .unit {
+      color: @white;
+      font-size: 20px;
+      margin-bottom: @base-spacing-unit * 0.25 !important;
+    }
+
+    .unit-label {
+      font-size: 12px;
+    }
+  }
+}

@@ -7,7 +7,7 @@ var HostTable = require("../components/HostTable");
 var NodesListView = React.createClass({
   render: function () {
     return (
-      <HostTable hosts={this.props.data.hosts} />
+      <HostTable hosts={this.props.hosts} />
     );
   }
 });

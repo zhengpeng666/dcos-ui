@@ -23,7 +23,7 @@ var DialChart = React.createClass({
     data: React.PropTypes.array.isRequired,
     slices: React.PropTypes.array,
     duration: React.PropTypes.number,
-    unit: React.PropTypes.number,
+    unit: React.PropTypes.node,
     label: React.PropTypes.string,
     value: React.PropTypes.string
   },
@@ -48,7 +48,7 @@ var DialChart = React.createClass({
     this.internalStorage_set(data);
   },
 
-  shouldComponentUpdate: function (nextProps) {
+  componentWillUpdate: function (nextProps) {
     var slice = this.getSlice(this.props);
     var arcs = this.getArcs(this.props);
     var innerArc = arcs.innerArc;
@@ -76,8 +76,6 @@ var DialChart = React.createClass({
             .style("visibility", "hidden");
         }
       });
-
-    return true;
   },
 
   getNormalizedData: function (slices, data) {
@@ -142,21 +140,25 @@ var DialChart = React.createClass({
 
   render: function() {
     return (
-      <svg height={this.props.height} width={this.props.width}>
-        <g transform={this.getPosition()}>
-          <g className="slices">
-            {this.getWedges()}
+      <div className="chart-dialchart" height={this.props.height} width={this.props.width}>
+        <svg height={this.props.height} width={this.props.width}>
+          <g transform={this.getPosition()}>
+            <g className="slices">
+              {this.getWedges()}
+            </g>
+            <g textAnchor="middle">
+            </g>
           </g>
-          <g textAnchor="middle">
-            <text className="h1-jumbo unit">
-              {this.props.unit}
-            </text>
-            <text className="h4 unit-label text-muted" dy="2em">
-              {this.props.label}
-            </text>
-          </g>
-        </g>
-      </svg>
+        </svg>
+        <div className="description">
+          <span className="unit">
+            {this.props.unit}
+          </span>
+          <span className="unit-label text-muted">
+            {this.props.label}
+          </span>
+        </div>
+      </div>
     );
   }
 
