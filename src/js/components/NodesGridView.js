@@ -26,8 +26,7 @@ var NodesGridView = React.createClass({
         data: this.getActiveSliceData(resourceConfig, resource.percentage),
         description: [
           <span className="unit" key={"unit"}>
-            <span>{resource.percentage}</span>
-            <sup>{"%"}</sup>
+            {resource.percentage}%
           </span>,
           <span className="unit-label text-muted" key={"unit-label"}>
             {resourceConfig.label}
@@ -97,7 +96,7 @@ var NodesGridView = React.createClass({
 
   render: function () {
     return (
-      <div className="row">
+      <div className="nodes-grid">
       {this.getDials()}
       </div>
     );
