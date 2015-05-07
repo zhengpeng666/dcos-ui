@@ -74,4 +74,31 @@ describe("TasksChart", function () {
 
   });
 
+  describe("#getDialChartChildren", function () {
+
+    beforeEach(function () {
+      var parent = TestUtils.renderIntoDocument(
+        <TasksChart tasks={[]} />
+      );
+      this.instance = TestUtils.renderIntoDocument(
+        parent.getDialChartChildren(100)
+      );
+    });
+
+    it("renders its unit", function () {
+      var unit = TestUtils.findRenderedDOMComponentWithClass(
+        this.instance, "unit"
+      );
+      expect(unit.getDOMNode().textContent).toEqual("100");
+    });
+
+    it("renders its label", function () {
+      var label = TestUtils.findRenderedDOMComponentWithClass(
+        this.instance, "unit-label"
+      );
+      expect(label.getDOMNode().textContent).toEqual("Total Tasks");
+    });
+
+  });
+
 });

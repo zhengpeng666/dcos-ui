@@ -111,11 +111,17 @@ var TasksChart = React.createClass({
       <DialChart
         data={tasks}
         slices={getEmptyTaskData()}>
-        <div className="description">
-          <span className="h1-jumbo flush-top unit">{total}</span>
-          <span className="h4 unit-label text-muted">{"Total Tasks"}</span>
-        </div>
+        {this.getDialChartChildren(total)}
       </DialChart>
+    );
+  },
+
+  getDialChartChildren: function(total) {
+    return (
+      <div className="description">
+        <span className="h1-jumbo flush-top unit">{total}</span>
+        <span className="h4 unit-label text-muted">{"Total Tasks"}</span>
+      </div>
     );
   },
 
