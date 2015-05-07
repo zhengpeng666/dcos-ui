@@ -94,10 +94,19 @@ var NodesGridView = React.createClass({
     }, this);
   },
 
+  // Zero-height spacer items force dial charts in the last line of the flex layout
+  // not to spread themselves across the line.
+  getSpacers: function () {
+    return _.times(30, function () {
+      return <div className="nodes-grid-spacer"></div>;
+    });
+  },
+
   render: function () {
     return (
       <div className="nodes-grid">
-      {this.getDials()}
+        {this.getDials()}
+        {this.getSpacers()}
       </div>
     );
   }
