@@ -139,10 +139,8 @@ var DialChart = React.createClass({
     return (
       <div className="chart-dialchart" height={this.props.height} width={this.props.width}>
         <svg height={this.props.height} width={this.props.width}>
-          <g transform={this.getPosition()}>
-            <g className="slices">
-              {this.getWedges()}
-            </g>
+          <g transform={this.getPosition()} className="slices">
+            {this.getWedges()}
           </g>
         </svg>
         {this.props.children}
