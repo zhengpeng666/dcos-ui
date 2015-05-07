@@ -17,7 +17,7 @@ var ListItem = React.createClass({
       var propertyData = object[property];
       var styles = _.omit(propertyData, "value", "classes", "attributes");
 
-      var classes = {h3: true, "flush-top": true, "flush-bottom": true};
+      var classes = {"h3 flush-top flush-bottom": true};
       if (propertyData.classes) {
         _.extend(classes, propertyData.classes);
       }
