@@ -36,15 +36,15 @@ describe("NodesGridView", function () {
     });
 
     it("returns different configurations depending on the active paramter", function () {
-        var config1 = this.instance.getDialConfig(
-          true, {percentage: 50}, this.resourceType
-        );
+      var config1 = this.instance.getDialConfig(
+        true, {percentage: 50}, this.resourceType
+      );
 
-        var config2 = this.instance.getDialConfig(
-          false, {percentage: 50}, this.resourceType
-        );
+      var config2 = this.instance.getDialConfig(
+        false, {percentage: 50}, this.resourceType
+      );
 
-        expect(_.isEqual(config1, config2)).toEqual(false);
+      expect(_.isEqual(config1, config2)).toEqual(false);
     });
 
   });
