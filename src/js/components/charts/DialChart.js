@@ -143,11 +143,9 @@ var DialChart = React.createClass({
             <g className="slices">
               {this.getWedges()}
             </g>
-            <g textAnchor="middle">
-              {this.props.children}
-            </g>
           </g>
         </svg>
+        {this.props.children}
       </div>
     );
   }
