@@ -2,8 +2,10 @@
 
 var _ = require("underscore");
 var React = require("react/addons");
-var RouteHandler = require("react-router").RouteHandler;
-var Link = require("react-router").Link;
+var Router = require("react-router");
+var RouteHandler = Router.RouteHandler;
+var RouterLocation = Router.HashLocation;
+var Link = Router.Link;
 
 var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
@@ -118,28 +120,22 @@ var NodesPage = React.createClass({
   },
 
   getViewTypeRadioButtons: function () {
-    var routeHandler = <RouteHandler />;
-    var routeName = routeHandler._context.getRouteAtDepth(2).name;
     var buttonClasses = {
       "button button-small button-stroke button-inverse": true
     };
 
     var listClassSet = React.addons.classSet(_.extend({
-      "active": routeName === "nodes-list"
+      "active": /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath())
     }, buttonClasses));
 
     var gridClassSet = React.addons.classSet(_.extend({
-      "active": routeName === "nodes-grid"
+      "active": /\/nodes\/grid\/?/i.test(RouterLocation.getCurrentPath())
     }, buttonClasses));
 
     return (
       <div className="button-group">
-        <Link className={listClassSet} to="nodes-list">
-          <span className=""></span>List
-        </Link>
-        <Link className={gridClassSet} to="nodes-grid">
-          <span className=""></span>Grid
-        </Link>
+        <Link className={listClassSet} to="nodes-list">List</Link>
+        <Link className={gridClassSet} to="nodes-grid">Grid</Link>
       </div>
     );
   },
@@ -147,14 +143,7 @@ var NodesPage = React.createClass({
   getHostsPageContent: function () {
     var data = this.internalStorage_get();
     var state = this.state;
-
-    var routeHandlerInstance = React.createElement(RouteHandler,
-      _.extend({
-        selectedResource: this.state.selectedResource,
-        hosts: _.first(data.hosts, NODES_DISPLAY_LIMIT)
-      })
-    );
-
+    var hostList = _.first(data.hosts, NODES_DISPLAY_LIMIT);
     var currentLength = Math.min(data.hosts.length, NODES_DISPLAY_LIMIT);
 
     return (
@@ -189,7 +178,9 @@ var NodesPage = React.createClass({
             {this.getViewTypeRadioButtons()}
           </li>
         </ul>
-        {routeHandlerInstance}
+        <RouteHandler
+          selectedResource={this.state.selectedResource}
+          hosts={hostList} />
       </div>
     );
   },

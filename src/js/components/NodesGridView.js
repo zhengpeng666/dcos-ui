@@ -20,31 +20,6 @@ var NodesGridView = React.createClass({
     selectedResource: React.PropTypes.string.isRequired
   },
 
-  getDialConfig: function (active, resource, resourceConfig) {
-    if (active) {
-      return {
-        data: this.getActiveSliceData(resourceConfig, resource.percentage),
-        description: [
-          <span className="unit" key={"unit"}>
-            {resource.percentage}%
-          </span>,
-          <span className="unit-label text-muted" key={"unit-label"}>
-            {resourceConfig.label}
-          </span>
-        ]
-      };
-    } else {
-      return {
-        data: this.getInactiveSliceData(),
-        description: (
-          <span className="error">
-            <i className="icon icon-medium icon-medium-white icon-alert"/>
-          </span>
-        )
-      };
-    }
-  },
-
   getActiveSliceData: function (resourceConfig, percentage) {
     return [
       {
@@ -68,6 +43,31 @@ var NodesGridView = React.createClass({
         percentage: 100
       }
     ];
+  },
+
+  getDialConfig: function (active, resource, resourceConfig) {
+    if (active) {
+      return {
+        data: this.getActiveSliceData(resourceConfig, resource.percentage),
+        description: [
+          <span className="unit" key={"unit"}>
+            {resource.percentage}%
+          </span>,
+          <span className="unit-label text-muted" key={"unit-label"}>
+            {resourceConfig.label}
+          </span>
+        ]
+      };
+    } else {
+      return {
+        data: this.getInactiveSliceData(),
+        description: (
+          <span className="error">
+            <i className="icon icon-medium icon-medium-white icon-alert"/>
+          </span>
+        )
+      };
+    }
   },
 
   getDials: function () {
@@ -97,8 +97,8 @@ var NodesGridView = React.createClass({
   // Zero-height spacer items force dial charts in the last line of the flex layout
   // not to spread themselves across the line.
   getSpacers: function () {
-    return _.times(30, function () {
-      return <div className="nodes-grid-spacer"></div>;
+    return _.times(30, function (n) {
+      return <div className="nodes-grid-spacer" key={n}></div>;
     });
   },
 
