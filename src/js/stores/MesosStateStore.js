@@ -440,7 +440,7 @@ function stopPolling() {
 
 function addTimestampsToData(data, timeStep) {
   var length = data.length;
-  var timeNow = new Date().getTime() - timeStep;
+  var timeNow = Date.now() - timeStep;
 
   return _.map(data, function (datum, i) {
     var timeDelta = (-length + i) * timeStep;
@@ -611,8 +611,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
   },
 
-  processState: function (data) {
-    if (data.date == null) {
+  processState: function (data, options) {
+    options = _.defaults({}, options, {silent: false});
+
+    if (typeof data.date !== "number") {
       data.date = Date.now();
     }
 
@@ -630,7 +632,17 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       _mesosStates.shift();
     }
 
-    this.notifyStateProcessed();
+    if (options.silent === false) {
+      this.notifyStateProcessed();
+    }
+  },
+
+  processBulkState: function (data) {
+    // Multiply Config.stateRefresh in order to use larger time slices
+    data = addTimestampsToData(data, Config.stateRefresh);
+    _.each(data, function (datum) {
+      MesosStateStore.processState(datum, {silent: true});
+    });
   },
 
   processStateError: function () {
@@ -695,9 +707,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         MesosStateStore.processState(action.data);
         break;
       case ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS:
-        // Multiply Config.stateRefresh in order to use larger time slices
-        var data = addTimestampsToData(action.data, Config.stateRefresh);
-        _.each(data, MesosStateStore.processState.bind(MesosStateStore));
+        MesosStateStore.processBulkState(action.data);
         break;
       case ActionTypes.REQUEST_MESOS_STATE_ERROR:
       case ActionTypes.REQUEST_MESOS_HISTORY_ERROR:
