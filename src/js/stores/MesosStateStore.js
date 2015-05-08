@@ -9,6 +9,7 @@ var HealthTypes = require("../constants/HealthTypes");
 var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
 var Strings = require("../utils/Strings");
+var TimeScales = require("../constants/TimeScales");
 
 var _failureRates = [];
 var _prevMesosStatusesMap = {};
@@ -54,8 +55,8 @@ function sumResources(resourceList) {
 //   mem: [{date: request time, value: value, percentage: value}]
 // }]
 function sumFrameworkResources(frameworks) {
-  return _.foldl(frameworks, function (sumMap, framework) {
-    _.each(sumMap, function (value, key) {
+  return _.foldl(frameworks, function (memo, framework) {
+    _.each(memo, function (value, key) {
       var values = framework.used_resources[key];
       _.each(values, function (val, i) {
         if (value[i] == null) {
@@ -68,7 +69,7 @@ function sumFrameworkResources(frameworks) {
       });
     });
 
-    return sumMap;
+    return memo;
   }, {cpus: [], mem: [], disk: []});
 }
 
@@ -414,14 +415,18 @@ function initStates() {
   });
 }
 
-function fetchData() {
-  MesosStateActions.fetch();
+function fetchData(timeScale) {
+  MesosStateActions.fetch(timeScale);
   MesosStateActions.fetchMarathonHealth();
 }
 
 function startPolling() {
   if (_interval == null) {
-    fetchData();
+    var timeScale;
+    if (!_statesProcessed) {
+      timeScale = TimeScales.MINUTE;
+    }
+    fetchData(timeScale);
     _interval = setInterval(fetchData, Config.stateRefresh);
   }
 }
@@ -431,6 +436,17 @@ function stopPolling() {
     clearInterval(_interval);
     _interval = null;
   }
+}
+
+function addTimestampsToData(data, timeStep) {
+  var length = data.length;
+  var timeNow = Date.now() - timeStep;
+
+  return _.map(data, function (datum, i) {
+    var timeDelta = (-length + i) * timeStep;
+    datum.date = timeNow + timeDelta;
+    return datum;
+  });
 }
 
 var MesosStateStore = _.extend({}, EventEmitter.prototype, {
@@ -595,8 +611,13 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
   },
 
-  processState: function (data) {
-    data.date = Date.now();
+  processState: function (data, options) {
+    options = _.defaults({}, options, {silent: false});
+
+    if (typeof data.date !== "number") {
+      data.date = Date.now();
+    }
+
     data.frameworks = normalizeFrameworks(data.frameworks, data.date);
     data.total_resources = sumResources(_.pluck(data.slaves, "resources"));
     data.used_resources = sumResources(
@@ -611,7 +632,17 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       _mesosStates.shift();
     }
 
-    this.notifyStateProcessed();
+    if (options.silent === false) {
+      this.notifyStateProcessed();
+    }
+  },
+
+  processBulkState: function (data) {
+    // Multiply Config.stateRefresh in order to use larger time slices
+    data = addTimestampsToData(data, Config.stateRefresh);
+    _.each(data, function (datum) {
+      MesosStateStore.processState(datum, {silent: true});
+    });
   },
 
   processStateError: function () {
@@ -675,7 +706,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       case ActionTypes.REQUEST_MESOS_STATE_SUCCESS:
         MesosStateStore.processState(action.data);
         break;
+      case ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS:
+        MesosStateStore.processBulkState(action.data);
+        break;
       case ActionTypes.REQUEST_MESOS_STATE_ERROR:
+      case ActionTypes.REQUEST_MESOS_HISTORY_ERROR:
         MesosStateStore.processStateError();
         break;
       case ActionTypes.REQUEST_MARATHON_APPS_SUCCESS:

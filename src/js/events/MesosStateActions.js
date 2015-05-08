@@ -18,21 +18,31 @@ function request(url, type, data, options) {
 
 var MesosStateActions = {
 
-  fetch: function () {
-    var url = Config.rootUrl + "/mesos/master/state-summary?jsonp=?";
+  fetch: function (timeScale) {
+    var successType = ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS;
+    var errorType = ActionTypes.REQUEST_MESOS_HISTORY_ERROR;
+
+    if (timeScale == null) {
+      timeScale = "last";
+      successType = ActionTypes.REQUEST_MESOS_STATE_SUCCESS;
+      errorType = ActionTypes.REQUEST_MESOS_STATE_ERROR;
+    }
+
+    var url = Config.historyServer +
+      "/dcos-history-service/history/" + timeScale;
 
     request(url, "GET", null, {
         contentType: "application/json; charset=utf-8",
-        dataType: "jsonp",
+        dataType: "json",
         success: function (response) {
           AppDispatcher.handleServerAction({
-            type: ActionTypes.REQUEST_MESOS_STATE_SUCCESS,
+            type: successType,
             data: response
           });
         },
         error: function (e) {
           AppDispatcher.handleServerAction({
-            type: ActionTypes.REQUEST_MESOS_STATE_ERROR,
+            type: errorType,
             data: e.message
           });
         }
