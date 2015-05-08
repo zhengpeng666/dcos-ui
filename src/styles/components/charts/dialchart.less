@@ -1,0 +1,64 @@
+.chart-dialchart {
+  position: relative;
+
+  .description {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+  }
+}
+
+
+
+/**********************************/
+/*  Specific to Nodes Grid View   */
+/**********************************/
+.nodes-grid {
+  margin-left: -(ceil(@base-spacing-unit * 0.3333));
+  margin-right: -(ceil(@base-spacing-unit * 0.3333));
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+
+  .nodes-grid-item {
+    margin: ceil(@base-spacing-unit * 0.3333);
+    width: ceil(@base-spacing-unit * 3.33);
+
+    .chart-dialchart {
+      // Remove stroke when dials are in small containers
+      .arc path {
+        stroke-width: 1px;
+        stroke: @panel-background-color;
+      }
+
+      .unit {
+        color: @white;
+        font-size: 16px;
+      }
+
+      .unit-label {
+        font-size: 11px;
+      }
+
+      .error {
+        margin-bottom: @base-spacing-unit * 0.5 !important;
+      }
+    }
+  }
+
+  .nodes-grid-spacer {
+    height: 0;
+    margin-bottom: 0;
+    margin-left: ceil(@base-spacing-unit * 0.3333);
+    margin-right: ceil(@base-spacing-unit * 0.3333);
+    margin-top: 0;
+    overflow: hidden;
+    width: ceil(@base-spacing-unit * 3.33);
+  }
+}

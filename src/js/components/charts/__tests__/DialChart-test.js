@@ -78,20 +78,6 @@ describe("DialChart", function () {
       ]});
     });
 
-    it("renders its unit", function () {
-      var unit = TestUtils.findRenderedDOMComponentWithClass(
-        this.instance, "unit"
-      );
-      expect(unit.getDOMNode().textContent).toEqual("100");
-    });
-
-    it("renders its label", function () {
-      var label = TestUtils.findRenderedDOMComponentWithClass(
-        this.instance, "unit-label"
-      );
-      expect(label.getDOMNode().textContent).toEqual("Items");
-    });
-
     it("when no data is present, it renders a single 'empty' slice to the DOM", function () {
       this.instance.setProps({
         slices: [ { name: "TASK_1" }, { name: "TASK_2" } ],

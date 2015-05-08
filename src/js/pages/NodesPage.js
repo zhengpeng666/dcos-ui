@@ -2,6 +2,10 @@
 
 var _ = require("underscore");
 var React = require("react/addons");
+var Router = require("react-router");
+var RouteHandler = Router.RouteHandler;
+var RouterLocation = Router.HashLocation;
+var Link = Router.Link;
 
 var AlertPanel = require("../components/AlertPanel");
 var EventTypes = require("../constants/EventTypes");
@@ -12,8 +16,9 @@ var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var Page = require("../components/Page");
 var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
-var HostTable = require("../components/HostTable");
 var SidebarActions = require("../events/SidebarActions");
+
+var NODES_DISPLAY_LIMIT = 300;
 
 function getMesosHosts(state) {
   var filters = _.pick(state, "searchString", "byServiceFilter");
@@ -54,7 +59,7 @@ var NodesPage = React.createClass({
   },
 
   getInitialState: function () {
-    return _.clone(DEFAULT_FILTER_OPTIONS);
+    return _.extend({selectedResource: "cpus"}, DEFAULT_FILTER_OPTIONS);
   },
 
   componentWillMount: function () {
@@ -108,9 +113,38 @@ var NodesPage = React.createClass({
     this.setState({byServiceFilter: byServiceFilter});
   },
 
+  onResourceSelectionChange: function (selectedResource) {
+    if (this.state.selectedResource !== selectedResource) {
+      this.setState({selectedResource: selectedResource});
+    }
+  },
+
+  getViewTypeRadioButtons: function () {
+    var buttonClasses = {
+      "button button-small button-stroke button-inverse": true
+    };
+
+    var listClassSet = React.addons.classSet(_.extend({
+      "active": /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath())
+    }, buttonClasses));
+
+    var gridClassSet = React.addons.classSet(_.extend({
+      "active": /\/nodes\/grid\/?/i.test(RouterLocation.getCurrentPath())
+    }, buttonClasses));
+
+    return (
+      <div className="button-group">
+        <Link className={listClassSet} to="nodes-list">List</Link>
+        <Link className={gridClassSet} to="nodes-grid">Grid</Link>
+      </div>
+    );
+  },
+
   getHostsPageContent: function () {
     var data = this.internalStorage_get();
     var state = this.state;
+    var hostList = _.first(data.hosts, NODES_DISPLAY_LIMIT);
+    var currentLength = Math.min(data.hosts.length, NODES_DISPLAY_LIMIT);
 
     return (
       <div>
@@ -119,11 +153,13 @@ var NodesPage = React.createClass({
           resources={data.totalHostsResources}
           totalResources={data.totalResources}
           refreshRate={data.refreshRate}
-          resourceType="Nodes" />
+          resourceType="Nodes"
+          selectedResource={this.state.selectedResource}
+          onResourceSelectionChange={this.onResourceSelectionChange} />
         <FilterHeadline
           onReset={this.resetFilter}
           name="Nodes"
-          currentLength={data.hosts.length}
+          currentLength={currentLength}
           totalLength={data.allHosts.length} />
         <ul className="list list-unstyled list-inline flush-bottom">
           <li>
@@ -138,8 +174,13 @@ var NodesPage = React.createClass({
               searchString={state.searchString}
               handleFilterChange={this.handleSearchStringChange} />
           </li>
+          <li className="list-item-aligned-right">
+            {this.getViewTypeRadioButtons()}
+          </li>
         </ul>
-        <HostTable hosts={data.hosts} />
+        <RouteHandler
+          selectedResource={this.state.selectedResource}
+          hosts={hostList} />
       </div>
     );
   },

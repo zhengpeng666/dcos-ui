@@ -110,9 +110,18 @@ var TasksChart = React.createClass({
     return (
       <DialChart
         data={tasks}
-        label={"Total Tasks"}
-        slices={getEmptyTaskData()}
-        unit={total} />
+        slices={getEmptyTaskData()}>
+        {this.getDialChartChildren(total)}
+      </DialChart>
+    );
+  },
+
+  getDialChartChildren: function(total) {
+    return (
+      <div className="description">
+        <span className="h1-jumbo flush-top unit">{total}</span>
+        <span className="h4 unit-label text-muted">{"Total Tasks"}</span>
+      </div>
     );
   },
 
