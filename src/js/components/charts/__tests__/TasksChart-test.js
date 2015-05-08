@@ -72,7 +72,7 @@ describe("TasksChart", function () {
 
     beforeEach(function () {
       var parent = TestUtils.renderIntoDocument(
-        <TasksChart tasks={[]} />
+        <TasksChart tasks={{}} />
       );
       this.instance = TestUtils.renderIntoDocument(
         parent.getDialChartChildren(100)
