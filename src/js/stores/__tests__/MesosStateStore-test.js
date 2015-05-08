@@ -28,14 +28,13 @@ global.atob = function () {
   return MockAppMetadata.decodedString;
 };
 
+MesosStateStore.init();
+
 describe("Mesos State Store", function () {
-    // Avoid repeatedly calling init.
-  var initMesosStateStoreOnce = _.once(MesosStateStore.init);
 
   describe("#getTaskFailureRate", function () {
 
     beforeEach(function() {
-      initMesosStateStoreOnce();
       MesosStateStore.processState(MockStates.oneTaskRunning);
       // Necessary because _prevMesosStatesMap is only set by getFailureRate.
       MesosStateStore.getTaskFailureRate();
@@ -66,10 +65,6 @@ describe("Mesos State Store", function () {
   });
 
   describe("#getFrameworkHealth", function () {
-
-    beforeEach(function() {
-      initMesosStateStoreOnce();
-    });
 
     it("should return NA health when app has no health check", function () {
       var framework = getFrameworkAfterProcess(MockAppHealth.hasNoHealthy);
@@ -104,9 +99,6 @@ describe("Mesos State Store", function () {
   });
 
   describe("#parseMetadata", function () {
-    beforeEach(function() {
-      initMesosStateStoreOnce();
-    });
 
     it("should parse metadata correctly", function () {
       var result = MesosStateStore.parseMetadata(
@@ -117,10 +109,6 @@ describe("Mesos State Store", function () {
   });
 
   describe("#getFrameworkImages", function () {
-
-    beforeEach(function() {
-      initMesosStateStoreOnce();
-    });
 
     it("should return parsed images when app has metadata with images",
       function () {
@@ -188,7 +176,7 @@ describe("Mesos State Store", function () {
     it("should reflect number of active slaves after processing", function () {
       MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
       var activeHostsCount = MesosStateStore.getActiveHostsCount();
-      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(4);
+      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(1);
     });
 
     it("should have correct number of active slaves in series", function () {
@@ -196,9 +184,9 @@ describe("Mesos State Store", function () {
       MesosStateStore.processState(MockStates.frameworksWithNoActivatedSlaves);
       MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
       var activeHostsCount = MesosStateStore.getActiveHostsCount();
-      expect(activeHostsCount[activeHostsCount.length - 3].slavesCount).toBe(4);
+      expect(activeHostsCount[activeHostsCount.length - 3].slavesCount).toBe(1);
       expect(activeHostsCount[activeHostsCount.length - 2].slavesCount).toBe(0);
-      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(4);
+      expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(1);
     });
 
   });

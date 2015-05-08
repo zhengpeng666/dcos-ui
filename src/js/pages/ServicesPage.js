@@ -156,7 +156,7 @@ var ServicesPage = React.createClass({
     return (
       <div>
         <ResourceBarChart
-          data={data.frameworks}
+          itemCount={data.frameworks.length}
           resources={data.totalFrameworksResources}
           totalResources={data.totalResources}
           refreshRate={data.refreshRate}

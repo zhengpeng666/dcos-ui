@@ -1,7 +1,8 @@
 var Config = {
   environment: "@@ENV",
   historyLength: 31,
-  rootUrl: "http://localhost:5050",
+  rootUrl: "",
+  historyServer: "",
   stateLoadDelay: 1500,
   stateRefresh: 2000,
   version: "@@VERSION"

@@ -23,8 +23,8 @@ var TasksChart = React.createClass({
   displayName: "TasksChart",
 
   propTypes: {
-    // [{state: "TASK_RUNNING", tasks: [{id: "askdfja", name: "datanode"}]}]
-    tasks: React.PropTypes.array.isRequired
+    // {TASK_RUNNING: 0, TASK_STAGING: 4}
+    tasks: React.PropTypes.object.isRequired
   },
 
   shouldComponentUpdate: function (nextProps) {
@@ -76,28 +76,13 @@ var TasksChart = React.createClass({
     }, 0);
   },
 
-  getTasks: function (tasks) {
-    var keys = _.keys(taskInfo);
-    var starting = 0;
-    return _.chain(tasks)
-      .filter(function (task) {
-        // save starting tasks for use later
-        if (task.state === "TASK_STARTING") {
-          starting = task.tasks.length;
-        }
-        return _.contains(keys, task.state);
-      })
-      .sortBy("state")
-      .map(function (task) {
-        var value = task.tasks.length;
-        var info = taskInfo[task.state];
-        // add starting to staging
-        if (task.state === "TASK_STAGING") {
-          value = starting + task.tasks.length;
-        }
-        return {colorIndex: info.colorIndex, name: task.state, value: value};
-      }
-    ).value();
+  getTasks: function (_tasks) {
+    var validTasks = Object.keys(taskInfo);
+    var tasks = _.pick(_tasks, validTasks);
+
+    return _.map(tasks, function (value, key) {
+      return {colorIndex: taskInfo[key].colorIndex, name: key, value: value};
+    });
   },
 
   getDialChart: function (tasks) {

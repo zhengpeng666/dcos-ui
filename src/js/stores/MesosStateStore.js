@@ -21,7 +21,6 @@ var _frameworkHealth = {};
 var _loading;
 var _interval;
 var _initCalledAt;
-var _marathonUrl;
 var _mesosStates = [];
 var _statesProcessed = false;
 
@@ -32,25 +31,20 @@ var NA_IMAGES = {
   "icon-large": "./img/services/icon-service-default-large@2x.png"
 };
 
-function setHostsToFrameworkCount(frameworks, hosts) {
+function setHostsToFrameworkCount(frameworks) {
   return _.map(frameworks, function (framework) {
-    framework.slaves_count = _.foldl(hosts, function (acc, host) {
-      if (host.frameworks[framework.id] != null) {
-        acc++;
-      }
-      return acc;
-    }, 0);
+    framework.slaves_count = framework.slave_ids.length;
     return framework;
   });
 }
 
 function sumResources(resourceList) {
-  return _.foldl(resourceList, function (sumMap, resource) {
-    _.each(sumMap, function (value, key) {
-      sumMap[key] = value + resource[key];
+  return _.foldl(resourceList, function (memo, resource) {
+    _.each(memo, function (value, key) {
+      memo[key] = value + resource[key];
     });
 
-    return sumMap;
+    return memo;
   }, {cpus: 0, mem: 0, disk: 0});
 }
 
@@ -84,8 +78,8 @@ function sumFrameworkResources(frameworks) {
 //   mem: [{date: request time, value: value, percentage: value}]
 // }]
 function sumHostResources(hosts) {
-  return _.foldl(hosts, function (sumMap, host) {
-    _.each(sumMap, function (value, key) {
+  return _.foldl(hosts, function (memo, host) {
+    _.each(memo, function (value, key) {
       var values = host.used_resources[key];
       _.each(values, function (val, i) {
         var max = Math.max(1, _mesosStates[i].total_resources[key]);
@@ -98,7 +92,7 @@ function sumHostResources(hosts) {
       });
     });
 
-    return sumMap;
+    return memo;
   }, {cpus: [], mem: [], disk: []});
 }
 
@@ -123,114 +117,49 @@ function getStatesByResource(list, resourcesKey) {
   }, values);
 }
 
-// [{
-//   colorIndex: 0,
-//   name: "Marathon",
-//   cpus: [{date: request time, y: value}]
-//   disk: [{date: request time, y: value}]
-//   mem: [{date: request time, y: value}]
-// }]
-function getStatesByFramework() {
-  return _.chain(_mesosStates)
-    .pluck("frameworks")
-    .flatten()
-    .groupBy(function (framework) {
-      return framework.id;
-    })
-    .map(function (framework) {
-      var lastFramework = _.clone(_.last(framework));
-      return _.extend(lastFramework, {
-        used_resources: getStatesByResource(framework, "used_resources"),
-        tasks_count: lastFramework.tasks.length
-      });
-    }, this).value();
-}
-
-// [{
-//   state: "TASK_RUNNING",
-//   tasks: [{
-//     framework_id: "askdfjaalsjf",
-//     id: "askdfja",
-//     name: "datanode",
-//     resources: {mem: 0, cpus: 0, disk: 0},
-//     state: "TASK_RUNNING"
-//   }, ...]
-// }]
-function getTasksByStatus(frameworks, taskTypes) {
-  if (!taskTypes || frameworks.length === 0) {
-    return [];
+function getFrameworksTaskTotals(frameworks) {
+  if (frameworks.length === 0) {
+    return {};
   }
 
+  var tasks = {
+    TASK_STAGING: 0,
+    TASK_STARTING: 0,
+    TASK_RUNNING: 0,
+    TASK_FINISHED: 0,
+    TASK_FAILED: 0,
+    TASK_LOST: 0,
+    TASK_ERROR: 0
+  };
+  var taskTypes = Object.keys(tasks);
+
   // Loop through all frameworks
-  var data = _.foldl(frameworks, function (types, framework) {
-    // Loop through the requested taskTypes
+  frameworks.forEach(function (framework) {
     taskTypes.forEach(function (taskType) {
-      if (framework[taskType] == null ||
-        framework[taskType].length === 0) {
-        return types;
+      if (framework[taskType]) {
+        tasks[taskType] += framework[taskType];
       }
-
-      // Loop through tasks in for the task type
-      framework[taskType].forEach(function (task) {
-        var state = task.state;
-        if (types[state] == null) {
-          types[state] = {
-            state: state,
-            tasks: []
-          };
-        }
-
-        types[state].tasks.push(task);
-      });
     });
+  });
 
-    return types;
-  }, {});
-
-  return _.values(data);
+  return tasks;
 }
 
 // Caluculate a failure rate
-function getFailureRate(mesosState, taskTypes) {
-  var newMesosStatusesMap = {};
-  var statuses = getTasksByStatus(mesosState.frameworks, taskTypes);
+function getFailureRate(mesosState) {
   var failed = 0;
   var successful = 0;
   var diff = {};
 
-  statuses.forEach(function (status) {
-    // Map task statuses to statuses hash map
-    _.foldl(status.tasks, function (memo, task) {
-      memo[task.id] = task.statuses;
-      return memo;
-    }, newMesosStatusesMap);
-  });
+  var newMesosStatusesMap = getFrameworksTaskTotals(mesosState.frameworks);
 
   // Only compute diff if we have previous data
-  if (Object.keys(_prevMesosStatusesMap).length) {
-    // Find diff
-    diff = _.foldl(newMesosStatusesMap, function (memo, status, key) {
-      if (status.length === 0) {
-        return memo;
-      }
 
-      // This assumes the previous status is equal to the current one
-      if (this[key] && status.length === this[key].length) {
-        return memo;
-      }
-
-      var finalState = _.max(status, function (state) {
-        return state.timestamp;
-      });
-
-      if (!memo[finalState.state]) {
-        memo[finalState.state] = 0;
-      }
-
-      memo[finalState.state]++;
-
-      return memo;
-    }, {}, _prevMesosStatusesMap);
+  var keys = Object.keys(newMesosStatusesMap);
+  if (keys.length) {
+    keys.forEach(function (key) {
+      diff[key] = newMesosStatusesMap[key] - (_prevMesosStatusesMap[key] || 0);
+    });
 
     // refs: https://github.com/apache/mesos/blob/master/include/mesos/mesos.proto
     successful = (diff.TASK_STAGING || 0) +
@@ -251,11 +180,33 @@ function getFailureRate(mesosState, taskTypes) {
   };
 }
 
-function getAllFailureRates(list, taskTypes) {
-  var failureRate = getFailureRate(_.last(list), taskTypes);
+function getAllFailureRates(list) {
+  var failureRate = getFailureRate(_.last(list));
   _failureRates.push(failureRate);
   _failureRates.shift();
   return _failureRates;
+}
+
+// [{
+//   colorIndex: 0,
+//   name: "Marathon",
+//   cpus: [{date: request time, y: value}]
+//   disk: [{date: request time, y: value}]
+//   mem: [{date: request time, y: value}]
+// }]
+function getStatesByFramework() {
+  return _.chain(_mesosStates)
+    .pluck("frameworks")
+    .flatten()
+    .groupBy(function (framework) {
+      return framework.id;
+    })
+    .map(function (framework) {
+      var lastFramework = _.clone(_.last(framework));
+      return _.extend(lastFramework, {
+        used_resources: getStatesByResource(framework, "used_resources")
+      });
+    }, this).value();
 }
 
 // [{
@@ -264,19 +215,18 @@ function getAllFailureRates(list, taskTypes) {
 //   mem: [{date: request time, value: absolute, percentage: value}]
 // }]
 function getHostResourcesBySlave(slave) {
-  return _.foldl(_mesosStates, function (usedResources, state) {
-    var tasks = _.chain(state.frameworks)
-      .pluck("tasks")
-      .flatten()
-      .groupBy(function (task) {
-        return task.slave_id;
-      })
-      .value();
+  return _.foldl(_mesosStates, function (memo, state) {
+    var foundSlave = _.findWhere(state.slaves, {id: slave.id});
+    var resources;
 
-    var resources = sumResources(_.pluck(tasks[slave.id], "resources"));
+    if (foundSlave && foundSlave.used_resources) {
+      resources = _.pick(foundSlave.used_resources, "cpus", "mem", "disk");
+    } else {
+      resources = {cpus: 0, mem: 0, disk: 0};
+    }
 
     _.each(resources, function (resourceVal, resourceKey) {
-      usedResources[resourceKey].push({
+      memo[resourceKey].push({
         date: state.date,
         value: resourceVal,
         percentage:
@@ -285,7 +235,7 @@ function getHostResourcesBySlave(slave) {
           )
       });
     });
-    return usedResources;
+    return memo;
   }, {cpus: [], mem: [], disk: []});
 }
 
@@ -300,52 +250,43 @@ function getHostResourcesBySlave(slave) {
 function getStateByHosts() {
   var data = _.last(_mesosStates);
 
-  var hosts = _.foldl(data.slaves, function (acc, v) {
-    acc[v.id] = v;
-    acc[v.id].tasks = {};
-    acc[v.id].frameworks = {};
-    acc[v.id].used_resources = getHostResourcesBySlave(v);
-    return acc;
-  }, {});
+  return _.map(data.slaves, function (slave) {
+    var _return = _.clone(slave);
+    _return.used_resources = getHostResourcesBySlave(slave);
 
-  return _.chain(data.frameworks)
-    .map(function (fw) {
-      return fw.tasks;
-    })
-    .flatten()
-    .foldl(function (acc, v) {
-      acc[v.slave_id].tasks[v.id] = v;
-
-      // Find framework for given task by matching
-      // framework.id to task.framework_id
-      // This seems extremely wasteful. We can probably optimize here
-      acc[v.slave_id].frameworks[v.framework_id] = _.find(data.frameworks,
-          function (framework) {
-        return v.framework_id === framework.id;
-      });
-      return acc;
-    }, hosts)
-    .each(function (slave) {
-      slave.tasks_count = _.size(slave.tasks);
-    })
-    .toArray()
-    .value();
+    return _return;
+  });
 }
 
-function fillFramework(id, name, colorIndex) {
+function addFrameworkToPreviousStates(_framework, colorIndex) {
   _.each(_mesosStates, function (state) {
-    state.activated_slaves = 0;
-    state.frameworks.push({
-      active: false,
-      id: id,
-      name: name,
+    // We could optimize here by moving this line out of the `each`
+    // this would mean that all states have the same instance of
+    // the object
+    var framework = _.clone(_framework);
+
+    _.extend(framework, {
       date: state.date,
       colorIndex: colorIndex,
-      resources: {cpus: 0, mem: 0, disk: 0},
-      used_resources: {cpus: 0, mem: 0, disk: 0},
-      tasks: []
+      slave_ids: [],
+      offered_resources: {cpus: 0, disk: 0, mem: 0},
+      used_resources: {cpus: 0, disk: 0, mem: 0},
+      TASK_ERROR: 0,
+      TASK_FAILED: 0,
+      TASK_FINISHED: 0,
+      TASK_KILLED: 0,
+      TASK_LOST: 0,
+      TASK_RUNNING: 0,
+      TASK_STAGING: 0,
+      TASK_STARTING: 0
     });
+
+    state.frameworks.push(framework);
   });
+}
+
+function getActiveSlaves(slaves) {
+  return _.where(slaves, {active: true});
 }
 
 // [{
@@ -359,18 +300,15 @@ function fillFramework(id, name, colorIndex) {
 // ]}]
 function normalizeFrameworks(frameworks, date) {
   return _.map(frameworks, function (framework) {
-    framework.date = date;
     var index = _.indexOf(_frameworkIDs, framework.id);
-    if (framework.name.toLowerCase().indexOf("marathon") > -1 &&
-        framework.webui_url != null) {
-      _marathonUrl = Strings.ipToHostAddress(framework.webui_url);
-    }
+    framework.date = date;
+
     // this is a new framework, fill in 0s for all the previous datapoints
     if (index === -1) {
       _frameworkIDs.push(framework.id);
       _frameworkNames.push(framework.name);
       index = _frameworkIDs.length - 1;
-      fillFramework(framework.id, framework.name, index);
+      addFrameworkToPreviousStates(framework, index);
     }
     // set color index after discovering and assigning index framework
     framework.colorIndex = index;
@@ -400,7 +338,7 @@ function activeHostsCountOverTime() {
   return _.map(_mesosStates, function (state) {
     return {
       date: state.date,
-      slavesCount: state.activated_slaves || 0
+      slavesCount: state.active_slaves || 0
     };
   });
 }
@@ -450,7 +388,7 @@ function filterByHealth(objects, healthFilter) {
 
 function filterHostsByService(hosts, frameworkId) {
   return _.filter(hosts, function (host) {
-    return host.frameworks[frameworkId] != null;
+    return _.contains(host.framework_ids, frameworkId);
   });
 }
 
@@ -463,7 +401,8 @@ function initStates() {
       frameworks: [],
       slaves: [],
       used_resources: {cpus: 0, mem: 0, disk: 0},
-      total_resources: {cpus: 0, mem: 0, disk: 0}
+      total_resources: {cpus: 0, mem: 0, disk: 0},
+      active_slaves: 0
     };
   });
 
@@ -476,10 +415,8 @@ function initStates() {
 }
 
 function fetchData() {
-  if (!_.isEmpty(_marathonUrl)) {
-    MesosStateActions.fetchMarathonHealth(_marathonUrl);
-  }
   MesosStateActions.fetch();
+  MesosStateActions.fetchMarathonHealth();
 }
 
 function startPolling() {
@@ -504,7 +441,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
 
     // log when we started calling
-    _initCalledAt = _.now();
+    _initCalledAt = Date.now();
 
     initStates();
   },
@@ -520,7 +457,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     _loading = undefined;
     _interval = undefined;
     _initCalledAt = undefined;
-    _marathonUrl = undefined;
     _mesosStates = [];
     _statesProcessed = false;
 
@@ -603,12 +539,12 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     return _appsProcessed;
   },
 
-  getTasks: function () {
-    return getTasksByStatus(this.getLatest().frameworks, ["tasks"]);
+  getTaskTotals: function () {
+    return getFrameworksTaskTotals(this.getLatest().frameworks);
   },
 
   getTaskFailureRate: function () {
-    return getAllFailureRates(_mesosStates, ["tasks", "completed_tasks"]);
+    return getAllFailureRates(_mesosStates);
   },
 
   getTotalResources: function () {
@@ -648,7 +584,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       return;
     }
 
-    var msLeftOfDelay = Config.stateLoadDelay - (_.now() - _initCalledAt);
+    var msLeftOfDelay = Config.stateLoadDelay - (Date.now() - _initCalledAt);
     if (msLeftOfDelay < 0) {
       this.updateStateProcessed();
     } else {
@@ -662,13 +598,15 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   processState: function (data) {
     data.date = Date.now();
     data.frameworks = normalizeFrameworks(data.frameworks, data.date);
-    data.total_resources = sumResources(
-      _.pluck(data.slaves, "resources")
-    );
+    data.total_resources = sumResources(_.pluck(data.slaves, "resources"));
     data.used_resources = sumResources(
       _.pluck(data.frameworks, "used_resources")
     );
+    data.active_slaves = getActiveSlaves(data.slaves).length;
+
+    // Add new snapshot
     _mesosStates.push(data);
+    // Remove oldest snapshot when we have more than we should
     if (_mesosStates.length > Config.historyLength) {
       _mesosStates.shift();
     }

@@ -149,7 +149,7 @@ var NodesPage = React.createClass({
     return (
       <div>
         <ResourceBarChart
-          data={data.hosts}
+          itemCount={data.hosts.length}
           resources={data.totalHostsResources}
           totalResources={data.totalResources}
           refreshRate={data.refreshRate}
