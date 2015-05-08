@@ -92,6 +92,10 @@
     flex: 1 1 auto;
     height: 0;
 
+    &.container-scrollable {
+      overflow-x: hidden;
+    }
+
     > nav {
       width: 100%;
     }
@@ -384,7 +388,7 @@
             .sidebar-menu-item-icon {
               margin-right: (@base-spacing-unit-screen-medium * 0.25);
             }
-            
+
             .sidebar-menu-item-label {
               display: inline-block;
             }
