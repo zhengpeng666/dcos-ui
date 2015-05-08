@@ -69,7 +69,7 @@ function sumFrameworkResources(frameworks) {
     });
 
     return sumMap;
-  }, {cpus: [], mem: [], disk: [], ports: []});
+  }, {cpus: [], mem: [], disk: []});
 }
 
 // [{
@@ -93,7 +93,7 @@ function sumHostResources(hosts) {
     });
 
     return memo;
-  }, {cpus: [], mem: [], disk: [], ports: []});
+  }, {cpus: [], mem: [], disk: []});
 }
 
 // [{
@@ -204,8 +204,7 @@ function getStatesByFramework() {
     .map(function (framework) {
       var lastFramework = _.clone(_.last(framework));
       return _.extend(lastFramework, {
-        used_resources: getStatesByResource(framework, "used_resources"),
-        tasks_count: lastFramework.TASK_RUNNING
+        used_resources: getStatesByResource(framework, "used_resources")
       });
     }, this).value();
 }
@@ -221,7 +220,7 @@ function getHostResourcesBySlave(slave) {
     var resources;
 
     if (foundSlave && foundSlave.used_resources) {
-      resources = foundSlave.used_resources;
+      resources = _.pick(foundSlave.used_resources, "cpus", "mem", "disk");
     } else {
       resources = {cpus: 0, mem: 0, disk: 0};
     }
@@ -237,7 +236,7 @@ function getHostResourcesBySlave(slave) {
       });
     });
     return memo;
-  }, {cpus: [], mem: [], disk: [], ports: []});
+  }, {cpus: [], mem: [], disk: []});
 }
 
 // [{
@@ -251,14 +250,12 @@ function getHostResourcesBySlave(slave) {
 function getStateByHosts() {
   var data = _.last(_mesosStates);
 
-  var hosts = _.foldl(data.slaves, function (acc, v) {
-    acc[v.id] = _.clone(v);
-    acc[v.id].used_resources = getHostResourcesBySlave(v);
-    acc[v.id].tasks_count = v.framework_ids.length;
-    return acc;
-  }, {});
+  return _.map(data.slaves, function (slave) {
+    var _return = _.clone(slave);
+    _return.used_resources = getHostResourcesBySlave(slave);
 
-  return _.values(hosts);
+    return _return;
+  });
 }
 
 function addFrameworkToPreviousStates(_framework, colorIndex) {

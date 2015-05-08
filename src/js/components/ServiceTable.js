@@ -21,7 +21,7 @@ function isStat(prop) {
 
 function getClassName(prop, sortBy, row) {
   return React.addons.classSet({
-    "align-right": isStat(prop) || prop === "tasks_count",
+    "align-right": isStat(prop) || prop === "TASK_RUNNING",
     "hidden-mini fixed-width": isStat(prop),
     "highlight": prop === sortBy.prop,
     "clickable": row == null // this is a header
@@ -171,7 +171,7 @@ var ServicesTable = React.createClass({
       {
         className: getClassName,
         headerClassName: getClassName,
-        prop: "tasks_count",
+        prop: "TASK_RUNNING",
         render: this.renderTask,
         sortable: true,
         title: "TASKS"
