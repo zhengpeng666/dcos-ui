@@ -17,8 +17,9 @@ function request(url, type, data, options) {
 }
 
 var MesosStateActions = {
+
   fetch: function () {
-    var url = Config.rootUrl + "/master/state.json?jsonp=?";
+    var url = Config.rootUrl + "/mesos/master/state-summary?jsonp=?";
 
     request(url, "GET", null, {
         contentType: "application/json; charset=utf-8",
@@ -38,8 +39,8 @@ var MesosStateActions = {
     });
   },
 
-  fetchMarathonHealth: function (rootUrl) {
-    var url = rootUrl + "/v2/apps";
+  fetchMarathonHealth: function () {
+    var url = Config.rootUrl + "/marathon/v2/apps";
 
     request(url, "GET", null, {
       contentType: "application/json; charset=utf-8",

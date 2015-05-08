@@ -21,7 +21,6 @@ var _frameworkHealth = {};
 var _loading;
 var _interval;
 var _initCalledAt;
-var _marathonUrl;
 var _mesosStates = [];
 var _statesProcessed = false;
 
@@ -70,7 +69,7 @@ function sumFrameworkResources(frameworks) {
     });
 
     return sumMap;
-  }, {cpus: [], mem: [], disk: []});
+  }, {cpus: [], mem: [], disk: [], ports: []});
 }
 
 // [{
@@ -94,7 +93,7 @@ function sumHostResources(hosts) {
     });
 
     return memo;
-  }, {cpus: [], mem: [], disk: []});
+  }, {cpus: [], mem: [], disk: [], ports: []});
 }
 
 // [{
@@ -238,7 +237,7 @@ function getHostResourcesBySlave(slave) {
       });
     });
     return memo;
-  }, {cpus: [], mem: [], disk: []});
+  }, {cpus: [], mem: [], disk: [], ports: []});
 }
 
 // [{
@@ -304,12 +303,9 @@ function getActiveSlaves(slaves) {
 // ]}]
 function normalizeFrameworks(frameworks, date) {
   return _.map(frameworks, function (framework) {
-    framework.date = date;
     var index = _.indexOf(_frameworkIDs, framework.id);
-    if (framework.name.toLowerCase().indexOf("marathon") > -1 &&
-        framework.webui_url != null) {
-      _marathonUrl = Strings.ipToHostAddress(framework.webui_url);
-    }
+    framework.date = date;
+
     // this is a new framework, fill in 0s for all the previous datapoints
     if (index === -1) {
       _frameworkIDs.push(framework.id);
@@ -422,10 +418,8 @@ function initStates() {
 }
 
 function fetchData() {
-  if (!_.isEmpty(_marathonUrl)) {
-    MesosStateActions.fetchMarathonHealth(_marathonUrl);
-  }
   MesosStateActions.fetch();
+  MesosStateActions.fetchMarathonHealth();
 }
 
 function startPolling() {
@@ -466,7 +460,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     _loading = undefined;
     _interval = undefined;
     _initCalledAt = undefined;
-    _marathonUrl = undefined;
     _mesosStates = [];
     _statesProcessed = false;
 
