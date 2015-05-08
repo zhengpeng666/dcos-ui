@@ -55,8 +55,8 @@ function sumResources(resourceList) {
 //   mem: [{date: request time, value: value, percentage: value}]
 // }]
 function sumFrameworkResources(frameworks) {
-  return _.foldl(frameworks, function (sumMap, framework) {
-    _.each(sumMap, function (value, key) {
+  return _.foldl(frameworks, function (memo, framework) {
+    _.each(memo, function (value, key) {
       var values = framework.used_resources[key];
       _.each(values, function (val, i) {
         if (value[i] == null) {
@@ -69,8 +69,8 @@ function sumFrameworkResources(frameworks) {
       });
     });
 
-    return sumMap;
-  }, {cpus: [], mem: [], disk: [], ports: []});
+    return memo;
+  }, {cpus: [], mem: [], disk: []});
 }
 
 // [{
