@@ -70,7 +70,7 @@ function sumFrameworkResources(frameworks) {
     });
 
     return sumMap;
-  }, {cpus: [], mem: [], disk: []});
+  }, {cpus: [], mem: [], disk: [], ports: []});
 }
 
 // [{

@@ -1,4 +1,3 @@
-var _ = require("underscore");
 var $ = require("jquery");
 
 jest.dontMock("../../config/Config");

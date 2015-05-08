@@ -28,7 +28,8 @@ var MesosStateActions = {
       errorType = ActionTypes.REQUEST_MESOS_STATE_ERROR;
     }
 
-    var url = Config.historyServer + "/history/" + timeScale;
+    var url = Config.historyServer +
+      "/dcos-history-service/history/" + timeScale;
 
     request(url, "GET", null, {
         contentType: "application/json; charset=utf-8",
