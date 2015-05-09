@@ -4,6 +4,7 @@ var _ = require("underscore");
 var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
+var AnimatedLogo = require("../components/AnimatedLogo");
 var Actions = require("../actions/Actions");
 var Config = require("../config/Config");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
@@ -255,9 +256,7 @@ var Index = React.createClass({
       <div className="text-align-center vertical-center">
         <div className="row">
           <div className={loadingClassSet}>
-            <div className="ball-scale">
-              <div />
-            </div>
+            <AnimatedLogo speed={500} scale={0.2} />
           </div>
           {errorMsg}
         </div>
