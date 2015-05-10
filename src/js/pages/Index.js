@@ -237,8 +237,8 @@ var Index = React.createClass({
     );
   },
 
-  getLoadingScreen: function (isReady) {
-    if (isReady) {
+  getLoadingScreen: function (showLoading) {
+    if (!showLoading) {
       return null;
     }
 
@@ -439,7 +439,7 @@ var Index = React.createClass({
       <div>
         <a id="start-tour"></a>
         <div id="canvas" className={classSet}>
-          {this.getLoadingScreen(isReady)}
+          {this.getLoadingScreen(!isReady)}
           <Sidebar />
           <RouteHandler />
         </div>

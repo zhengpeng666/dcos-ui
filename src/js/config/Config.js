@@ -3,7 +3,7 @@ var Config = {
   historyLength: 31,
   rootUrl: "",
   historyServer: "",
-  stateLoadDelay: 1500,
+  stateLoadDelay: 3000,
   stateRefresh: 2000,
   version: "@@VERSION"
 };
