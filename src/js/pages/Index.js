@@ -256,7 +256,7 @@ var Index = React.createClass({
       <div className="text-align-center vertical-center">
         <div className="row">
           <div className={loadingClassSet}>
-            <AnimatedLogo speed={500} scale={0.2} />
+            <AnimatedLogo speed={500} scale={0.16} />
           </div>
           {errorMsg}
         </div>
