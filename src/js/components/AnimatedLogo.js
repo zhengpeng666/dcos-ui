@@ -17,6 +17,13 @@ var AnimatedLogo = React.createClass({
 
   mixins: [InternalStorageMixin],
 
+  getDefaultProps: function () {
+    return {
+      speed: 1000,
+      scale: 1
+    };
+  },
+
   componentWillMount: function () {
     this.internalStorage_set({
       logoGradientID: _.uniqueId("logoGradient"),
