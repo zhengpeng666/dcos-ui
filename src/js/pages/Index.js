@@ -4,6 +4,7 @@ var _ = require("underscore");
 var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
+var AnimatedLogo = require("../components/AnimatedLogo");
 var Actions = require("../actions/Actions");
 var Config = require("../config/Config");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
@@ -236,8 +237,8 @@ var Index = React.createClass({
     );
   },
 
-  getLoadingScreen: function (isReady) {
-    if (isReady) {
+  getLoadingScreen: function (showLoading) {
+    if (!showLoading) {
       return null;
     }
 
@@ -255,9 +256,7 @@ var Index = React.createClass({
       <div className="text-align-center vertical-center">
         <div className="row">
           <div className={loadingClassSet}>
-            <div className="ball-scale">
-              <div />
-            </div>
+            <AnimatedLogo speed={500} scale={0.16} />
           </div>
           {errorMsg}
         </div>
@@ -440,7 +439,7 @@ var Index = React.createClass({
       <div>
         <a id="start-tour"></a>
         <div id="canvas" className={classSet}>
-          {this.getLoadingScreen(isReady)}
+          {this.getLoadingScreen(!isReady)}
           <Sidebar />
           <RouteHandler />
         </div>
