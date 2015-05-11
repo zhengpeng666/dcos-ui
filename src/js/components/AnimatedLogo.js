@@ -104,14 +104,21 @@ var AnimatedLogo = React.createClass({
       }
 
       return data.calcBrezierLine([
-        [20, 25], [190, constant],
-          [190 + 5, constant + 5], [190 + 25, constant - 20],
+        [20, 25],
+        [190, constant],
+        // Curve coordinates
+        [190 + 5, constant + 5],
+        [190 + 25, constant - 20],
 
-        [378 + 5, pad], [378, 15],
-          [378, pad],
+        [378 + 5, pad],
+        [378, 15],
+        // Curve coordinates
+        [378, pad],
 
-        [35, pad], [pad, pad],
-          [20, 28]
+        [35, pad],
+        [pad, pad],
+        // Curve coordinates
+        [20, 28]
       ]);
     } else if (position === "left") {
       if (!constant) {
@@ -119,14 +126,19 @@ var AnimatedLogo = React.createClass({
       }
 
       return data.calcBrezierLine([
-        [pad, 25], [pad, constant],
-          [pad, constant],
+        [pad, 25],
+        [pad, constant],
+        // Curve coordinates
+        [pad, constant],
 
         [378, 15],
-          [378, pad],
+        // Curve coordinates
+        [378, pad],
 
         [25, pad],
-          [pad, pad], [pad, 30]
+        // Curve coordinates
+        [pad, pad],
+        [pad, 30]
       ]);
     } else if (position === "right") {
       if (!constant) {
@@ -134,14 +146,19 @@ var AnimatedLogo = React.createClass({
       }
 
       return data.calcBrezierLine([
-        [383, 25], [383, constant],
-          [383, constant],
+        [383, 25],
+        [383, constant],
+        // Curve coordinates
+        [383, constant],
 
         [15, 15],
-          [pad, pad],
+        // Curve coordinates
+        [pad, pad],
 
         [358, pad],
-          [383, pad], [383, 30]
+        // Curve coordinates
+        [383, pad],
+        [383, 30]
       ]);
     }
   },
