@@ -113,7 +113,6 @@ describe("Mesos State Store", function () {
   });
 
   describe("#getFrameworkImages", function () {
-
     it("should return parsed images when app has metadata with images",
       function () {
         var framework = getFrameworkAfterProcess(MockAppHealth.hasMetadata);
@@ -125,6 +124,22 @@ describe("Mesos State Store", function () {
       function () {
         var framework = getFrameworkAfterProcess(MockAppHealth.hasHealth);
         expect(framework.images).toEqual(MesosStateStore.NA_IMAGES);
+      }
+    );
+  });
+
+  describe("#normalizeFramworks", function () {
+    it("should expose Marathon images if framework has marathon in name",
+      function () {
+        MesosStateStore.reset();
+        MesosStateStore.init();
+        MesosStateStore.processState(MockStates.frameworksWithMarathonName);
+
+        var frameworks = MesosStateStore.getFrameworks();
+
+        expect(frameworks[0].images).toEqual(MesosStateStore.MARATHON_IMAGES);
+        expect(frameworks[1].images).toEqual(MesosStateStore.MARATHON_IMAGES);
+        expect(frameworks[2].images).toEqual(MesosStateStore.NA_IMAGES);
       }
     );
   });
