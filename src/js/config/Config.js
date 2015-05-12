@@ -17,4 +17,9 @@ if (Config.environment === "development") {
   Config = _.extend(Config, ConfigDev);
 }
 
+Config.setOverrides = function (overrides) {
+  this.rootUrl = overrides.rootUrl || this.rootUrl;
+  this.historyServer = overrides.historyServer || this.historyServer;
+};
+
 module.exports = Config;
