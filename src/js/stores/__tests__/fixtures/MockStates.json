@@ -90,5 +90,28 @@
         "active": false
       }
     ]
+  },
+  "frameworksWithMarathonName": {
+    "frameworks": [
+      {
+        "name": "marathon",
+        "id": "1-1",
+        "used_resources": {"cpus": 0},
+        "tasks": []
+      },
+      {
+        "name": "marathon-secondary",
+        "id": "1-2",
+        "used_resources": {"cpus": 0},
+        "tasks": []
+      },
+      {
+        "name": "Framework 2",
+        "id": "2-1",
+        "used_resources": {"cpus": 0},
+        "tasks": []
+      }
+    ],
+    "total_resources": {"cpus": 0}
   }
 }

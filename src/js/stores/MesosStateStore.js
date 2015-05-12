@@ -31,6 +31,11 @@ var NA_IMAGES = {
   "icon-medium": "./img/services/icon-service-default-medium@2x.png",
   "icon-large": "./img/services/icon-service-default-large@2x.png"
 };
+var MARATHON_IMAGES = {
+  "icon-small": "./img/services/icon-service-marathon-small@2x.png",
+  "icon-medium": "./img/services/icon-service-marathon-medium@2x.png",
+  "icon-large": "./img/services/icon-service-marathon-large@2x.png"
+};
 
 function setHostsToFrameworkCount(frameworks) {
   return _.map(frameworks, function (framework) {
@@ -314,7 +319,16 @@ function normalizeFrameworks(frameworks, date) {
     // set color index after discovering and assigning index framework
     framework.colorIndex = index;
     framework.health = _frameworkHealth[framework.name] || NA_HEALTH;
-    framework.images = _frameworkImages[framework.name] || NA_IMAGES;
+
+    framework.images = _frameworkImages[framework.name];
+
+    if (framework.images == null) {
+      if (framework.name.search(/marathon/i) > -1) {
+        framework.images = MARATHON_IMAGES;
+      } else {
+        framework.images = NA_IMAGES;
+      }
+    }
 
     return framework;
   });
@@ -732,3 +746,4 @@ module.exports = MesosStateStore;
 module.exports.parseMetadata = parseMetadata;
 module.exports.getFrameworkImages = getFrameworkImages;
 module.exports.NA_IMAGES = NA_IMAGES;
+module.exports.MARATHON_IMAGES = MARATHON_IMAGES;
