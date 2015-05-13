@@ -59,7 +59,7 @@ var Index = React.createClass({
 
     var email = LocalStorageUtil.get("email");
     if (email != null) {
-      Actions.identify({email: email}, function () {
+      Actions.identify(email, function () {
         IntercomStore.init();
       });
 
@@ -266,7 +266,7 @@ var Index = React.createClass({
 
   onLogin: function (email) {
     LocalStorageUtil.set("email", email);
-    Actions.identify({email: email});
+    Actions.identify(email);
     this.setState({
       hasIdentity: true,
       showingTourModal: true
