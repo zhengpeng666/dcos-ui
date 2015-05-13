@@ -162,9 +162,11 @@ function getFailureRate(mesosState) {
   // Only compute diff if we have previous data
 
   var keys = Object.keys(newMesosStatusesMap);
-  if (keys.length) {
+  // Ignore the first difference, since the first number of accumulated failed
+  // tasks will be will consist the base case for calulating the difference
+  if (_prevMesosStatusesMap != null && keys.length) {
     keys.forEach(function (key) {
-      diff[key] = newMesosStatusesMap[key] - (_prevMesosStatusesMap[key] || 0);
+      diff[key] = newMesosStatusesMap[key] - _prevMesosStatusesMap[key];
     });
 
     // refs: https://github.com/apache/mesos/blob/master/include/mesos/mesos.proto
@@ -186,11 +188,10 @@ function getFailureRate(mesosState) {
   };
 }
 
-function getAllFailureRates(list) {
-  var failureRate = getFailureRate(_.last(list));
+function processFailureRate(mesosState) {
+  var failureRate = getFailureRate(mesosState);
   _failureRates.push(failureRate);
   _failureRates.shift();
-  return _failureRates;
 }
 
 // [{
@@ -574,7 +575,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getTaskFailureRate: function () {
-    return getAllFailureRates(_mesosStates);
+    // Need clone, modifying in place will not trigger new props into components
+    return _.clone(_failureRates);
   },
 
   getTotalResources: function () {
@@ -608,7 +610,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   notifyStateProcessed: function () {
-    // skip id state is processed, already loading or init has not been called
+    // skip if state is processed, already loading or init has not been called
     if (_statesProcessed || _loading != null || _initCalledAt == null) {
       this.emitChange(EventTypes.MESOS_STATE_CHANGE);
       return;
@@ -638,6 +640,8 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       _.pluck(data.frameworks, "used_resources")
     );
     data.active_slaves = getActiveSlaves(data.slaves).length;
+
+    processFailureRate(data);
 
     // Add new snapshot
     _mesosStates.push(data);
