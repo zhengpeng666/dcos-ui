@@ -68,14 +68,14 @@ var NodesPage = React.createClass({
 
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
+      EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
   },
 
   componentWillUnmount: function () {
     MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
+      EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
   },

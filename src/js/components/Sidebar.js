@@ -35,7 +35,7 @@ var Sidebar = React.createClass({
 
   componentDidMount: function () {
     MesosStateStore.addChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
+      EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
     IntercomStore.addChangeListener(
@@ -55,7 +55,7 @@ var Sidebar = React.createClass({
 
   removeMesosStateListener: function () {
     MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
+      EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
   },

@@ -430,7 +430,7 @@ function initStates() {
 }
 
 function fetchData(timeScale) {
-  MesosStateActions.fetch(timeScale);
+  MesosStateActions.fetchSummary(timeScale);
   MesosStateActions.fetchMarathonHealth();
 }
 
@@ -596,21 +596,21 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
-    if (eventName === EventTypes.MESOS_STATE_CHANGE &&
-      _.isEmpty(this.listeners(EventTypes.MESOS_STATE_CHANGE))) {
+    if (eventName === EventTypes.MESOS_SUMMARY_CHANGE &&
+      _.isEmpty(this.listeners(EventTypes.MESOS_SUMMARY_CHANGE))) {
       stopPolling();
     }
   },
 
   updateStateProcessed: function () {
     _statesProcessed = true;
-    this.emitChange(EventTypes.MESOS_STATE_CHANGE);
+    this.emitChange(EventTypes.MESOS_SUMMARY_CHANGE);
   },
 
   notifyStateProcessed: function () {
     // skip id state is processed, already loading or init has not been called
     if (_statesProcessed || _loading != null || _initCalledAt == null) {
-      this.emitChange(EventTypes.MESOS_STATE_CHANGE);
+      this.emitChange(EventTypes.MESOS_SUMMARY_CHANGE);
       return;
     }
 
@@ -717,13 +717,13 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
     var action = payload.action;
     switch (action.type) {
-      case ActionTypes.REQUEST_MESOS_STATE_SUCCESS:
+      case ActionTypes.REQUEST_MESOS_SUMMARY_SUCCESS:
         MesosStateStore.processState(action.data);
         break;
       case ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS:
         MesosStateStore.processBulkState(action.data);
         break;
-      case ActionTypes.REQUEST_MESOS_STATE_ERROR:
+      case ActionTypes.REQUEST_MESOS_SUMMARY_ERROR:
       case ActionTypes.REQUEST_MESOS_HISTORY_ERROR:
         MesosStateStore.processStateError();
         break;
