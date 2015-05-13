@@ -481,7 +481,12 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     // log when we started calling
     _initCalledAt = Date.now();
 
+    startMesosSummaryPoll();
     initStates();
+  },
+
+  unmount: function () {
+    stopMesosSummaryPoll();
   },
 
   reset: function () {
@@ -599,18 +604,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
-
-    if (eventName === EventTypes.MESOS_SUMMARY_CHANGE) {
-      startMesosSummaryPoll();
-    }
   },
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
-    if (eventName === EventTypes.MESOS_SUMMARY_CHANGE &&
-      _.isEmpty(this.listeners(EventTypes.MESOS_SUMMARY_CHANGE))) {
-      stopMesosSummaryPoll();
-    }
   },
 
   updateStateProcessed: function () {

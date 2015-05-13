@@ -148,6 +148,8 @@ var Index = React.createClass({
     );
 
     this.removeMesosStateListeners();
+
+    MesosStateStore.unmount();
   },
 
   onSideBarChange: function () {
