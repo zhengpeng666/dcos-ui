@@ -20,7 +20,7 @@ var _frameworkIDs = [];
 var _frameworkImages = {};
 var _frameworkHealth = {};
 var _loading;
-var _interval;
+var _intervals = {};
 var _initCalledAt;
 var _mesosStates = [];
 var _statesProcessed = false;
@@ -434,21 +434,21 @@ function fetchData(timeScale) {
   MesosStateActions.fetchMarathonHealth();
 }
 
-function startPolling() {
-  if (_interval == null) {
+function startMesosSummaryPoll() {
+  if (_intervals.summary == null) {
     var timeScale;
     if (!_statesProcessed) {
       timeScale = TimeScales.MINUTE;
     }
     fetchData(timeScale);
-    _interval = setInterval(fetchData, Config.stateRefresh);
+    _intervals.summary = setInterval(fetchData, Config.stateRefresh);
   }
 }
 
-function stopPolling() {
-  if (_interval != null) {
-    clearInterval(_interval);
-    _interval = null;
+function stopMesosSummaryPoll() {
+  if (_intervals.summary != null) {
+    clearInterval(_intervals.summary);
+    _intervals.summary = null;
   }
 }
 
@@ -485,7 +485,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     _frameworkIDs = [];
     _frameworkHealth = {};
     _loading = undefined;
-    _interval = undefined;
+    _intervals = {};
     _initCalledAt = undefined;
     _mesosStates = [];
     _statesProcessed = false;
@@ -591,14 +591,17 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
-    startPolling();
+
+    if (eventName === EventTypes.MESOS_SUMMARY_CHANGE) {
+      startMesosSummaryPoll();
+    }
   },
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
     if (eventName === EventTypes.MESOS_SUMMARY_CHANGE &&
       _.isEmpty(this.listeners(EventTypes.MESOS_SUMMARY_CHANGE))) {
-      stopPolling();
+      stopMesosSummaryPoll();
     }
   },
 
