@@ -180,7 +180,8 @@ var NodesPage = React.createClass({
         </ul>
         <RouteHandler
           selectedResource={this.state.selectedResource}
-          hosts={hostList} />
+          hosts={hostList}
+          services={data.services} />
       </div>
     );
   },
