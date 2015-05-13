@@ -575,9 +575,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getTaskFailureRate: function () {
-    // Need clone, modifying in place will make update components check for
-    // change in the same array, in stead of two different references
-    return _.clone(_failureRates);
+    return _failureRates;
   },
 
   getTotalResources: function () {
