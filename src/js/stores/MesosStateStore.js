@@ -54,39 +54,30 @@ function sumResources(resourceList) {
   }, {cpus: 0, mem: 0, disk: 0});
 }
 
-// [{
-//   cpus: [{date: request time, value: value, percentage: value}]
-//   disk: [{date: request time, value: value, percentage: value}]
-//   mem: [{date: request time, value: value, percentage: value}]
-// }]
-function sumFrameworkResources(frameworks) {
-  return _.foldl(frameworks, function (memo, framework) {
+/*
+ * @param {Array} List of elements with a resources object,
+ * each holding an array of time steps (states by element)
+ * @return {Object} Each resource in the object holds a list of
+ * time steps with summed resources of the provided list
+ * {
+ *   cpus: [
+ *     {date: request time, value: total cpus, percentage: of total_resources},
+ *     ...
+ *   ],
+ *   disk: [
+ *     {date: request time, value: total disk, percentage: of total_resources},
+ *     ...
+ *   ]
+ *   mem: [
+ *     {date: request time, value: total mem, percentage: of total_resources},
+ *     ...
+ *   ]
+ * }
+ */
+function sumListResources(list, resourcesKey) {
+  return _.foldl(list, function (memo, element) {
     _.each(memo, function (value, key) {
-      var values = framework.used_resources[key];
-      _.each(values, function (val, i) {
-        if (value[i] == null) {
-          value.push({date: val.date});
-          value[i].value = 0;
-          value[i].percentage = 0;
-        }
-        value[i].value += val.value;
-        value[i].percentage += val.percentage;
-      });
-    });
-
-    return memo;
-  }, {cpus: [], mem: [], disk: []});
-}
-
-// [{
-//   cpus: [{date: request time, value: value, percentage: value}]
-//   disk: [{date: request time, value: value, percentage: value}]
-//   mem: [{date: request time, value: value, percentage: value}]
-// }]
-function sumHostResources(hosts) {
-  return _.foldl(hosts, function (memo, host) {
-    _.each(memo, function (value, key) {
-      var values = host.used_resources[key];
+      var values = element[resourcesKey][key];
       _.each(values, function (val, i) {
         var max = Math.max(1, _mesosStates[i].total_resources[key]);
         if (value[i] == null) {
@@ -96,30 +87,46 @@ function sumHostResources(hosts) {
         value[i].value += val.value;
         value[i].percentage = Maths.round(100 * value[i].value / max);
       });
+
     });
 
     return memo;
   }, {cpus: [], mem: [], disk: []});
 }
 
-// [{
-//   cpus: [{date: request time, y: value}]
-//   disk: [{date: request time, y: value}]
-//   mem: [{date: request time, y: value}]
-// }]
+/*
+ * @param {Array} List of time steps with a resources object,
+ * each holding a resource value of that time step (elements by state)
+ * @return {Object} each resource in the object holds a list of
+ * time steps with resources of the provided list
+ * {
+ *   cpus: [
+ *     {date: request time, value: cpus, percentage: of total_resources},
+ *     ...
+ *   ],
+ *   disk: [
+ *     {date: request time, value: disk, percentage: of total_resources},
+ *     ...
+ *   ]
+ *   mem: [
+ *     {date: request time, value: mem, percentage: of total_resources},
+ *     ...
+ *   ]
+ * }
+ */
 function getStatesByResource(list, resourcesKey) {
-  var values = {"cpus": [], "disk": [], "mem": []};
-  return _.foldl(values, function (acc, arr, r) {
-    _.each(list, function (v, i) {
-      var value = v[resourcesKey][r];
+  var values = {cpus: [], disk: [], mem: []};
+  return _.foldl(values, function (memo, arr, r) {
+    _.each(list, function (state, i) {
+      var value = state[resourcesKey][r];
       var max = Math.max(1, _mesosStates[i].total_resources[r]);
-      acc[r].push({
-        date: v.date,
+      memo[r].push({
+        date: state.date,
         value: Maths.round(value, 2),
         percentage: Maths.round(100 * value / max)
       });
     });
-    return acc;
+    return memo;
   }, values);
 }
 
@@ -527,11 +534,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   getTotalFrameworksResources: function (frameworks) {
-    return sumFrameworkResources(frameworks);
+    return sumListResources(frameworks, "used_resources");
   },
 
   getTotalHostsResources: function (hosts) {
-    return sumHostResources(hosts);
+    return sumListResources(hosts, "used_resources");
   },
 
   getFrameworksWithHostsCount: function (hosts) {
@@ -636,6 +643,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       data.date = Date.now();
     }
 
+    data.frameworks = _.map(data.frameworks, function (fw) {
+      fw.used_resources.cpus = _.random(0, 2);
+      return fw;
+    });
     data.frameworks = normalizeFrameworks(data.frameworks, data.date);
     data.total_resources = sumResources(_.pluck(data.slaves, "resources"));
     data.used_resources = sumResources(
