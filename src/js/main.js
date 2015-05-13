@@ -18,6 +18,7 @@ var Redirect = Router.Redirect;
 var NotFoundRoute = Router.NotFoundRoute;
 
 require("./utils/ReactSVG");
+var Config = require("./config/Config");
 var DashboardPage = require("./pages/DashboardPage");
 var NodesPage = require("./pages/NodesPage");
 var NodesListView = require("./components/NodesListView");
@@ -41,5 +42,6 @@ var routes = (
 );
 
 Router.run(routes, function (Handler, state) {
+  Config.setOverrides(state.query);
   React.render(<Handler state={state} />, document.getElementById("application"));
 });
