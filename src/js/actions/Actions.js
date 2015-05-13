@@ -61,8 +61,8 @@ var Actions = {
     return this.stintID;
   },
 
-  identify: function (info, callback) {
-    global.analytics.identify(info, callback);
+  identify: function () {
+    global.analytics.identify.apply(global.analytics, arguments);
   },
 
   /**
