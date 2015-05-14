@@ -20,7 +20,7 @@ var MockParsedAppMetadata = require("./fixtures/MockParsedAppMetadata");
 
 function getFrameworkAfterProcess(apps) {
   MesosStateStore.processMarathonApps(apps);
-  MesosStateStore.processState(MockStates.oneTaskRunning);
+  MesosStateStore.processSummary(MockStates.oneTaskRunning);
   var frameworks = MesosStateStore.getFrameworks();
   return _.find(frameworks, function (fwk) {
     return fwk.name === MockStates.oneTaskRunning.frameworks[0].name;
@@ -39,7 +39,7 @@ describe("Mesos State Store", function () {
   describe("#getTaskFailureRate", function () {
 
     beforeEach(function() {
-      MesosStateStore.processState(MockStates.oneTaskRunning);
+      MesosStateStore.processSummary(MockStates.oneTaskRunning);
       // Necessary because _prevMesosStatesMap is only set by getFailureRate.
       MesosStateStore.getTaskFailureRate();
     });
@@ -50,19 +50,19 @@ describe("Mesos State Store", function () {
     });
 
     it("is 0% when one task finishes", function () {
-      MesosStateStore.processState(MockStates.oneTaskFinished);
+      MesosStateStore.processSummary(MockStates.oneTaskFinished);
       var taskFailureRate = MesosStateStore.getTaskFailureRate();
       expect(_.last(taskFailureRate).rate).toEqual(0);
     });
 
     it("is 100% when one task fails", function () {
-      MesosStateStore.processState(MockStates.oneTaskFailed);
+      MesosStateStore.processSummary(MockStates.oneTaskFailed);
       var taskFailureRate = MesosStateStore.getTaskFailureRate();
       expect(_.last(taskFailureRate).rate).toEqual(100);
     });
 
     it("is 0% when one task is killed", function () {
-      MesosStateStore.processState(MockStates.oneTaskKilled);
+      MesosStateStore.processSummary(MockStates.oneTaskKilled);
       var taskFailureRate = MesosStateStore.getTaskFailureRate();
       expect(_.last(taskFailureRate).rate).toEqual(0);
     });
@@ -133,7 +133,7 @@ describe("Mesos State Store", function () {
       function () {
         MesosStateStore.reset();
         MesosStateStore.init();
-        MesosStateStore.processState(MockStates.frameworksWithMarathonName);
+        MesosStateStore.processSummary(MockStates.frameworksWithMarathonName);
 
         var frameworks = MesosStateStore.getFrameworks();
 
@@ -149,7 +149,7 @@ describe("Mesos State Store", function () {
     beforeEach(function() {
       MesosStateStore.reset();
       MesosStateStore.init();
-      MesosStateStore.processState(MockStates.frameworksWithSameName);
+      MesosStateStore.processSummary(MockStates.frameworksWithSameName);
       this.frameworks = MesosStateStore.getFrameworks();
     });
 
@@ -179,29 +179,29 @@ describe("Mesos State Store", function () {
     });
 
     it("should have same length as history length", function () {
-      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
-      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
-      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processSummary(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processSummary(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processSummary(MockStates.frameworksWithActivatedSlaves);
       var activeHostsCount = MesosStateStore.getActiveHostsCount();
       expect(Config.historyLength).toBe(activeHostsCount.length);
     });
 
     it("should default to 0 if active slaves is undefined", function () {
-      MesosStateStore.processState(MockStates.frameworksWithNoActivatedSlaves);
+      MesosStateStore.processSummary(MockStates.frameworksWithNoActivatedSlaves);
       var activeHostsCount = MesosStateStore.getActiveHostsCount();
       expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(0);
     });
 
     it("should reflect number of active slaves after processing", function () {
-      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processSummary(MockStates.frameworksWithActivatedSlaves);
       var activeHostsCount = MesosStateStore.getActiveHostsCount();
       expect(activeHostsCount[activeHostsCount.length - 1].slavesCount).toBe(1);
     });
 
     it("should have correct number of active slaves in series", function () {
-      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
-      MesosStateStore.processState(MockStates.frameworksWithNoActivatedSlaves);
-      MesosStateStore.processState(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processSummary(MockStates.frameworksWithActivatedSlaves);
+      MesosStateStore.processSummary(MockStates.frameworksWithNoActivatedSlaves);
+      MesosStateStore.processSummary(MockStates.frameworksWithActivatedSlaves);
       var activeHostsCount = MesosStateStore.getActiveHostsCount();
       expect(activeHostsCount[activeHostsCount.length - 3].slavesCount).toBe(1);
       expect(activeHostsCount[activeHostsCount.length - 2].slavesCount).toBe(0);
