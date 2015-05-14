@@ -18,14 +18,14 @@ function request(url, type, data, options) {
 
 var MesosStateActions = {
 
-  fetch: function (timeScale) {
+  fetchSummary: function (timeScale) {
     var successType = ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS;
     var errorType = ActionTypes.REQUEST_MESOS_HISTORY_ERROR;
 
     if (timeScale == null) {
       timeScale = "last";
-      successType = ActionTypes.REQUEST_MESOS_STATE_SUCCESS;
-      errorType = ActionTypes.REQUEST_MESOS_STATE_ERROR;
+      successType = ActionTypes.REQUEST_MESOS_SUMMARY_SUCCESS;
+      errorType = ActionTypes.REQUEST_MESOS_SUMMARY_ERROR;
     }
 
     var url = Config.historyServer +
