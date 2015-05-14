@@ -23,7 +23,9 @@ function getMesosState() {
   return {
     allocResources: MesosStateStore.getAllocResources(),
     appsProcessed: MesosStateStore.isAppsProcessed(),
-    failureRate: MesosStateStore.getTaskFailureRate(),
+    // Need clone, modifying in place will make update components check for
+    // change in the same array, in stead of two different references
+    failureRate: _.clone(MesosStateStore.getTaskFailureRate()),
     hostsCount: MesosStateStore.getActiveHostsCount(),
     refreshRate: MesosStateStore.getRefreshRate(),
     services: MesosStateStore.getLatest().frameworks,
