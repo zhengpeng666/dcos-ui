@@ -3,8 +3,10 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
-var NodesGridDials = require("./NodesGridDials");
+var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var MesosStateStore = require("../stores/MesosStateStore");
+var NodesGridDials = require("./NodesGridDials");
 
 var NodesGridView = React.createClass({
 
@@ -22,7 +24,22 @@ var NodesGridView = React.createClass({
   },
 
   componentWillMount: function () {
-    this.internalStorage_set({serviceColors: {}});
+    this.internalStorage_set({
+      serviceColors: {},
+      resourcesByFramework: {}
+    });
+
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onMesosStateChange
+    );
+  },
+
+  componentWillUnmount: function () {
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onMesosStateChange
+    );
   },
 
   componentWillReceiveProps: function (props) {
@@ -31,6 +48,39 @@ var NodesGridView = React.createClass({
 
     if (!_.isEqual(Object.keys(serviceColors), ids)) {
       this.computeServiceColors(props.services);
+    }
+  },
+
+  onMesosStateChange: function () {
+    var state = MesosStateStore.getLastMesosState();
+    this.calculateResourcesByFramework(state);
+  },
+
+  calculateResourcesByFramework: function (state) {
+    var resourcesByFramework = this.internalStorage_get().resourcesByFramework;
+
+    var slaves = _.foldl(state.frameworks, function (memo, framework) {
+      _.each(framework.tasks, function (task) {
+        if (memo[task.slave_id] == null) {
+          memo[task.slave_id] = {};
+        }
+
+        var resources = _.pick(task.resources, "cpus", "disk", "mem");
+        if (memo[task.slave_id][task.framework_id] == null) {
+          memo[task.slave_id][task.framework_id] = resources;
+        } else {
+          // Aggregates used resources from each executor
+          _.each(resources, function (value, key) {
+            memo[task.slave_id][task.framework_id][key] += value;
+          });
+        }
+      });
+
+      return memo;
+    }, {});
+
+    if (!_.isEqual(resourcesByFramework, slaves)) {
+      this.internalStorage_update({resourcesByFramework: slaves});
     }
   },
 
@@ -47,7 +97,6 @@ var NodesGridView = React.createClass({
       colors[service.id] = Math.min(service.colorIndex, 8);
     });
 
-    console.log(colors);
     this.internalStorage_update({serviceColors: colors});
   },
 
@@ -100,6 +149,7 @@ var NodesGridView = React.createClass({
           hosts={props.hosts}
           selectedResource={props.selectedResource}
           serviceColors={data.serviceColors}
+          resourcesByFramework={data.resourcesByFramework}
           showServices={state.showServices} />
       </div>
     );

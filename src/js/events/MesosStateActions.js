@@ -49,6 +49,27 @@ var MesosStateActions = {
     });
   },
 
+  fetchState: function () {
+    var url = Config.historyServer + "/mesos/master/state.json?jsonp=?";
+
+    request(url, "GET", null, {
+        contentType: "application/json; charset=utf-8",
+        dataType: "jsonp",
+        success: function (response) {
+          AppDispatcher.handleServerAction({
+            type: ActionTypes.REQUEST_MESOS_STATE_SUCCESS,
+            data: response
+          });
+        },
+        error: function (e) {
+          AppDispatcher.handleServerAction({
+            type: ActionTypes.REQUEST_MESOS_STATE_SUCCESS,
+            data: e.message
+          });
+        }
+    });
+  },
+
   fetchMarathonHealth: function () {
     var url = Config.rootUrl + "/marathon/v2/apps";
 

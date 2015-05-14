@@ -9,32 +9,66 @@ var ResourceTypes = require("../constants/ResourceTypes");
 
 var colors = {
   error: 2,
-  unused: 6
+  unused: 8
 };
 
 var NodesGridDials = React.createClass({
 
   propTypes: {
-    serviceColors: React.PropTypes.object.isRequired,
-    showServices: React.PropTypes.bool.isRequired,
     hosts: React.PropTypes.array.isRequired,
     // enum: ["cpus", "mem", "disk"]
-    selectedResource: React.PropTypes.string.isRequired
+    selectedResource: React.PropTypes.string.isRequired,
+    serviceColors: React.PropTypes.object.isRequired,
+    showServices: React.PropTypes.bool.isRequired,
+    resourcesByFramework: React.PropTypes.object.isRequired
   },
 
-  getActiveSliceData: function (resourceConfig, percentage) {
-    return [
-      {
+  getActiveSliceData: function (host) {
+    var config = [];
+    var usedPercentage = 0;
+    var props = this.props;
+
+    if (props.showServices) {
+      var resourcesByFramework = props.resourcesByFramework[host.id];
+
+      if (resourcesByFramework) {
+        _.each(resourcesByFramework, function (fwkResources, fwkId) {
+          var percentage = fwkResources[props.selectedResource] * 100;
+          percentage /= host.resources[props.selectedResource];
+          usedPercentage += percentage;
+
+          config.push({
+            colorIndex: props.serviceColors[fwkId],
+            name: fwkId,
+            percentage: percentage
+          });
+        });
+      }
+    } else {
+      var resourceConfig = ResourceTypes[props.selectedResource];
+      usedPercentage = _.last(
+        host.used_resources[props.selectedResource]
+      ).percentage;
+
+      config.push({
         colorIndex: resourceConfig.colorIndex,
         name: resourceConfig.label,
-        percentage: percentage
-      },
-      {
-        colorIndex: colors.unused,
-        name: "Unused",
-        percentage: 100 - percentage
-      }
-    ];
+        percentage: usedPercentage
+      });
+    }
+
+    usedPercentage = Math.round(usedPercentage);
+
+    config.push({
+      colorIndex: colors.unused,
+      name: "Unused",
+      percentage: 100 - usedPercentage
+    });
+
+    return {
+      data: config,
+      usedPercentage: usedPercentage
+    };
   },
 
   getInactiveSliceData: function () {
@@ -47,13 +81,16 @@ var NodesGridDials = React.createClass({
     ];
   },
 
-  getDialConfig: function (active, resource, resourceConfig) {
-    if (active) {
+  getDialConfig: function (host) {
+    var resourceConfig = ResourceTypes[this.props.selectedResource];
+
+    if (host.active) {
+      var slideData = this.getActiveSliceData(host);
       return {
-        data: this.getActiveSliceData(resourceConfig, resource.percentage),
+        data: slideData.data,
         description: [
           <span className="unit" key={"unit"}>
-            {resource.percentage}%
+            {slideData.usedPercentage}%
           </span>,
           <span className="unit-label text-muted" key={"unit-label"}>
             {resourceConfig.label}
@@ -73,11 +110,8 @@ var NodesGridDials = React.createClass({
   },
 
   getDials: function () {
-    var resourceConfig = ResourceTypes[this.props.selectedResource];
-
     return _.map(this.props.hosts, function (host) {
-      var resource = _.last(host.used_resources[this.props.selectedResource]);
-      var config = this.getDialConfig(host.active, resource, resourceConfig);
+      var config = this.getDialConfig(host);
 
       return (
         <div className="nodes-grid-dials-item" key={host.id}>

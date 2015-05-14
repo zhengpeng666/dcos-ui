@@ -13,8 +13,8 @@ var FilterByService = require("../components/FilterByService");
 var FilterInputText = require("../components/FilterInputText");
 var FilterHeadline = require("../components/FilterHeadline");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var Page = require("../components/Page");
 var MesosStateStore = require("../stores/MesosStateStore");
+var Page = require("../components/Page");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
 
