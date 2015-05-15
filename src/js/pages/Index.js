@@ -6,16 +6,16 @@ var RouteHandler = require("react-router").RouteHandler;
 
 var AnimatedLogo = require("../components/AnimatedLogo");
 var Actions = require("../actions/Actions");
+var CliInstallModal = require("../components/modals/CliInstallModal");
 var Config = require("../config/Config");
-var LocalStorageUtil = require("../utils/LocalStorageUtil");
+var ErrorModal = require("../components/modals/ErrorModal");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var IntercomActions = require("../events/IntercomActions");
 var IntercomStore = require("../stores/IntercomStore");
-var MesosStateStore = require("../stores/MesosStateStore");
-var ErrorModal = require("../components/modals/ErrorModal");
+var LocalStorageUtil = require("../utils/LocalStorageUtil");
 var LoginModal = require("../components/modals/LoginModal");
-var CliInstallModal = require("../components/modals/CliInstallModal");
+var MesosStateStore = require("../stores/MesosStateStore");
+var RequestErrorMsg = require("../components/RequestErrorMsg");
 var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
@@ -43,7 +43,7 @@ var Index = React.createClass({
     return {
       showIntercom: IntercomStore.isOpen(),
       hasIdentity: false,
-      mesosStateErrorCount: 0,
+      mesosSummaryErrorCount: 0,
       tourSetup: false,
       showingCliModal: false,
       showingTourModal: false,
@@ -105,19 +105,19 @@ var Index = React.createClass({
 
   addMesosStateListeners: function () {
     MesosStateStore.addChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosStateChange
+      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
     MesosStateStore.addChangeListener(
-      EventTypes.MESOS_STATE_REQUEST_ERROR, this.onMesosStateError
+      EventTypes.MESOS_SUMMARY_REQUEST_ERROR, this.onMesosSummaryError
     );
   },
 
   removeMesosStateListeners: function () {
     MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosStateChange
+      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
     MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_REQUEST_ERROR, this.onMesosStateError
+      EventTypes.MESOS_SUMMARY_REQUEST_ERROR, this.onMesosSummaryError
     );
   },
 
@@ -196,7 +196,7 @@ var Index = React.createClass({
     });
   },
 
-  onMesosStateChange: function () {
+  onMesosSummaryChange: function () {
     var state = getMesosState();
     // if state is processed, stop listening
     if (state.statesProcessed) {
@@ -206,37 +206,17 @@ var Index = React.createClass({
     this.internalStorage_update(state);
 
     // Reset count as we've just received a successful response
-    if (this.state.mesosStateErrorCount > 0) {
-      this.setState({mesosStateErrorCount: 0});
+    if (this.state.mesosSummaryErrorCount > 0) {
+      this.setState({mesosSummaryErrorCount: 0});
     } else {
       this.forceUpdate();
     }
   },
 
-  onMesosStateError: function () {
-    this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
-  },
-
-  getErrorMsg: function () {
-    return (
-      <div className="column-small-8 column-small-offset-2 column-medium-6 column-medium-offset-3">
-        <h3>
-          Cannot Connect With The Server
-        </h3>
-        <p className="text-align-center">
-          {"We have been notified of the issue, but would love to know more. Talk with us using "}
-          <a className="clickable" onClick={IntercomActions.open}>Intercom</a>
-          {". You can also join us on our "}
-          <a href="https://mesosphere.slack.com/messages/dcos-eap-public"
-              target="_blank">
-            Slack channel
-          </a> or send us an email at&nbsp;
-          <a href="mailto:support@mesosphere.io">
-            support@mesosphere.io
-          </a>.
-        </p>
-      </div>
-    );
+  onMesosSummaryError: function () {
+    this.setState({
+      mesosSummaryErrorCount: this.state.mesosSummaryErrorCount + 1
+    });
   },
 
   getLoadingScreen: function (showLoading) {
@@ -244,10 +224,10 @@ var Index = React.createClass({
       return null;
     }
 
-    var hasLoadingError = this.state.mesosStateErrorCount >= 3;
+    var hasLoadingError = this.state.mesosSummaryErrorCount >= 3;
     var errorMsg = null;
     if (hasLoadingError) {
-      errorMsg = this.getErrorMsg();
+      errorMsg = <RequestErrorMsg />;
     }
 
     var loadingClassSet = React.addons.classSet({

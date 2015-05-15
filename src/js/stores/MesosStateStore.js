@@ -514,6 +514,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     _frameworkNames = [];
     _frameworkIDs = [];
     _frameworkHealth = {};
+    _lastMesosState = {};
     _loading = undefined;
     _intervals = {};
     _initCalledAt = undefined;
@@ -585,6 +586,30 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
 
     return hosts;
+  },
+
+  getHostResourcesByFramework: function () {
+    var state = this.getLastMesosState();
+
+    return _.foldl(state.frameworks, function (memo, framework) {
+      _.each(framework.tasks, function (task) {
+        if (memo[task.slave_id] == null) {
+          memo[task.slave_id] = {};
+        }
+
+        var resources = _.pick(task.resources, "cpus", "disk", "mem");
+        if (memo[task.slave_id][task.framework_id] == null) {
+          memo[task.slave_id][task.framework_id] = resources;
+        } else {
+          // Aggregates used resources from each executor
+          _.each(resources, function (value, key) {
+            memo[task.slave_id][task.framework_id][key] += value;
+          });
+        }
+      });
+
+      return memo;
+    }, {});
   },
 
   getLastMesosState: function () {
@@ -700,7 +725,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   processSummaryError: function () {
-    this.emitChange(EventTypes.MESOS_STATE_REQUEST_ERROR);
+    this.emitChange(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
   },
 
   processMarathonApps: function (data) {
@@ -749,9 +774,13 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     this.emitChange(EventTypes.MARATHON_APPS_REQUEST_ERROR);
   },
 
-  processState: function (data) {
+  processStateSuccess: function (data) {
     _lastMesosState = data;
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
+  },
+
+  processStateError: function () {
+    this.emitChange(EventTypes.MESOS_STATE_REQUEST_ERROR);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -773,7 +802,10 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         MesosStateStore.processSummaryError();
         break;
       case ActionTypes.REQUEST_MESOS_STATE_SUCCESS:
-        MesosStateStore.processState(action.data);
+        MesosStateStore.processStateSuccess(action.data);
+        break;
+      case ActionTypes.REQUEST_MESOS_STATE_ERROR:
+        MesosStateStore.processStateError();
         break;
       case ActionTypes.REQUEST_MARATHON_APPS_SUCCESS:
         MesosStateStore.processMarathonApps(action.data);

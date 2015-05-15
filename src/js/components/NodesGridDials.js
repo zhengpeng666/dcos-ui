@@ -23,51 +23,68 @@ var NodesGridDials = React.createClass({
     resourcesByFramework: React.PropTypes.object.isRequired
   },
 
-  getActiveSliceData: function (host) {
+  getServiceSlicesConfig: function (host) {
     var config = [];
-    var usedPercentage = 0;
+    var props = this.props;
+    var resourcesByFramework = props.resourcesByFramework[host.id];
+
+    if (!resourcesByFramework) {
+      return config;
+    }
+
+    _.each(resourcesByFramework, function (fwkResources, fwkId) {
+      var percentage = fwkResources[props.selectedResource] * 100;
+      percentage /= host.resources[props.selectedResource];
+
+      config.push({
+        colorIndex: props.serviceColors[fwkId],
+        name: fwkId,
+        percentage: percentage
+      });
+    });
+
+    return config;
+  },
+
+  getUsedSliceConfig: function (host) {
+    var props = this.props;
+    var resourceConfig = ResourceTypes[props.selectedResource];
+    var percentage = _.last(
+      host.used_resources[props.selectedResource]
+    ).percentage;
+
+    return [{
+      colorIndex: resourceConfig.colorIndex,
+      name: resourceConfig.label,
+      percentage: percentage
+    }];
+  },
+
+  getActiveSliceData: function (host) {
+    var config;
     var props = this.props;
 
     if (props.showServices) {
-      var resourcesByFramework = props.resourcesByFramework[host.id];
-
-      if (resourcesByFramework) {
-        _.each(resourcesByFramework, function (fwkResources, fwkId) {
-          var percentage = fwkResources[props.selectedResource] * 100;
-          percentage /= host.resources[props.selectedResource];
-          usedPercentage += percentage;
-
-          config.push({
-            colorIndex: props.serviceColors[fwkId],
-            name: fwkId,
-            percentage: percentage
-          });
-        });
-      }
+      config = this.getServiceSlicesConfig(host);
     } else {
-      var resourceConfig = ResourceTypes[props.selectedResource];
-      usedPercentage = _.last(
-        host.used_resources[props.selectedResource]
-      ).percentage;
-
-      config.push({
-        colorIndex: resourceConfig.colorIndex,
-        name: resourceConfig.label,
-        percentage: usedPercentage
-      });
+      config = this.getUsedSliceConfig(host);
     }
 
-    usedPercentage = Math.round(usedPercentage);
+    var percentage = _.reduce(config, function (memo, slice) {
+      memo += slice.percentage;
+      return memo;
+    }, 0);
+    percentage = Math.round(percentage);
 
     config.push({
       colorIndex: colors.unused,
       name: "Unused",
-      percentage: 100 - usedPercentage
+      percentage: 100 - percentage
     });
 
     return {
       data: config,
-      usedPercentage: usedPercentage
+      usedPercentage: percentage
     };
   },
 

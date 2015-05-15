@@ -63,7 +63,7 @@ var MesosStateActions = {
         },
         error: function (e) {
           AppDispatcher.handleServerAction({
-            type: ActionTypes.REQUEST_MESOS_STATE_SUCCESS,
+            type: ActionTypes.REQUEST_MESOS_STATE_ERROR,
             data: e.message
           });
         }

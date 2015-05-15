@@ -7,6 +7,7 @@ var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var NodesGridDials = require("./NodesGridDials");
+var RequestErrorMsg = require("./RequestErrorMsg");
 
 var NodesGridView = React.createClass({
 
@@ -19,7 +20,8 @@ var NodesGridView = React.createClass({
 
   getInitialState: function () {
     return {
-      showServices: false
+      showServices: false,
+      mesosStateErrorCount: 0
     };
   },
 
@@ -33,12 +35,22 @@ var NodesGridView = React.createClass({
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange
     );
+
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_REQUEST_ERROR,
+      this.onMesosStateRequestError
+    );
   },
 
   componentWillUnmount: function () {
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange
+    );
+
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_REQUEST_ERROR,
+      this.onMesosStateRequestError
     );
   },
 
@@ -52,36 +64,16 @@ var NodesGridView = React.createClass({
   },
 
   onMesosStateChange: function () {
-    var state = MesosStateStore.getLastMesosState();
-    this.calculateResourcesByFramework(state);
-  },
-
-  calculateResourcesByFramework: function (state) {
     var resourcesByFramework = this.internalStorage_get().resourcesByFramework;
-
-    var slaves = _.foldl(state.frameworks, function (memo, framework) {
-      _.each(framework.tasks, function (task) {
-        if (memo[task.slave_id] == null) {
-          memo[task.slave_id] = {};
-        }
-
-        var resources = _.pick(task.resources, "cpus", "disk", "mem");
-        if (memo[task.slave_id][task.framework_id] == null) {
-          memo[task.slave_id][task.framework_id] = resources;
-        } else {
-          // Aggregates used resources from each executor
-          _.each(resources, function (value, key) {
-            memo[task.slave_id][task.framework_id][key] += value;
-          });
-        }
-      });
-
-      return memo;
-    }, {});
+    var slaves = MesosStateStore.getHostResourcesByFramework();
 
     if (!_.isEqual(resourcesByFramework, slaves)) {
       this.internalStorage_update({resourcesByFramework: slaves});
     }
+  },
+
+  onMesosStateRequestError: function () {
+    this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
   },
 
   handleShowServices: function (e) {
@@ -98,6 +90,35 @@ var NodesGridView = React.createClass({
     });
 
     this.internalStorage_update({serviceColors: colors});
+  },
+
+  hasLoadingError: function () {
+    return this.state.mesosStateErrorCount >= 3;
+  },
+
+  getLoadingScreen: function () {
+    var hasLoadingError = this.hasLoadingError();
+    var errorMsg = null;
+    if (hasLoadingError) {
+      errorMsg = <RequestErrorMsg />;
+    }
+
+    var loadingClassSet = React.addons.classSet({
+      "hidden": hasLoadingError
+    });
+
+    return (
+      <div className="text-align-center vertical-center">
+        <div className="row">
+          <div className={loadingClassSet}>
+            <div className="ball-scale">
+              <div />
+            </div>
+          </div>
+          {errorMsg}
+        </div>
+      </div>
+    );
   },
 
   getServices: function (props) {
@@ -120,7 +141,7 @@ var NodesGridView = React.createClass({
     );
   },
 
-  render: function () {
+  getNodesGrid: function () {
     var data = this.internalStorage_get();
     var props = this.props;
     var state = this.state;
@@ -153,6 +174,17 @@ var NodesGridView = React.createClass({
           showServices={state.showServices} />
       </div>
     );
+  },
+
+  render: function () {
+    var showLoading = this.hasLoadingError() ||
+      Object.keys(MesosStateStore.getLastMesosState()).length === 0;
+
+    if (showLoading) {
+      return this.getLoadingScreen();
+    } else {
+      return this.getNodesGrid();
+    }
   }
 
 });
