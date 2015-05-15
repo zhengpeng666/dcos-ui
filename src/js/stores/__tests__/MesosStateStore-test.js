@@ -236,4 +236,36 @@ describe("Mesos State Store", function () {
 
   });
 
+  describe("#processMarathonApps", function () {
+    beforeEach(function() {
+      MesosStateStore.reset();
+      MesosStateStore.init();
+    });
+
+    it("should set Marathon health to idle with no apps", function () {
+      MesosStateStore.processMarathonApps({apps: []});
+      MesosStateStore.processState(MockStates.frameworksWithMarathonName);
+      this.frameworks = MesosStateStore.getFrameworks();
+      expect(this.frameworks[0].health.key).toEqual("IDLE");
+    });
+
+    it("should set Marathon health to healthy with some apps", function () {
+      MesosStateStore.processMarathonApps(MockAppHealth.hasNoHealthy);
+      MesosStateStore.processState(MockStates.frameworksWithMarathonName);
+      this.frameworks = MesosStateStore.getFrameworks();
+      expect(this.frameworks[0].health.key).toEqual("HEALTHY");
+    });
+
+    it("should have Marathon health NA if processMarathonApps is not called",
+      function () {
+        MesosStateStore.processMarathonApps = jasmine.createSpy();
+        expect(MesosStateStore.processMarathonApps).not.toHaveBeenCalled();
+        MesosStateStore.processState(MockStates.frameworksWithMarathonName);
+        this.frameworks = MesosStateStore.getFrameworks();
+        expect(this.frameworks[0].health.key).toEqual("NA");
+      }
+    );
+
+  });
+
 });
