@@ -1,0 +1,81 @@
+
+.nodes-grid {
+  display: flex;
+  flex-direction: row;
+
+  .nodes-grid-legend {
+    border-right: 1px solid @neutral;
+    display: flex;
+    flex-direction: column;
+    flex-basis: 225px;
+    margin-right: 25px;
+    transition: opacity .5s;
+
+    &.disabled {
+      opacity: 0.5;
+    }
+
+    .show-services-label {
+      color: @white;
+      user-select: none;
+
+      input {
+        margin-right: 8px;
+        outline: none;
+      }
+    }
+
+    .nodes-grid-service-list {
+      width: 225px;
+
+      .service-legend-color {
+        background-color: @white;
+        border-radius: 4px;
+        display: inline-block;
+        margin-right: 8px;
+        height: 8px;
+        width: 8px;
+
+        &.service-color-0 {
+          background-color: @purple;
+        }
+
+        &.service-color-1 {
+          background-color: @blue;
+        }
+
+        &.service-color-2 {
+          background-color: @red;
+        }
+
+        &.service-color-3 {
+          background-color: @orange;
+        }
+
+        &.service-color-4 {
+          background-color: @yellow;
+        }
+
+        &.service-color-5 {
+          background-color: @green;
+        }
+
+        &.service-color-6 {
+          background-color: @pink;
+        }
+
+        &.service-color-7 {
+          background-color: @cyan;
+        }
+
+        &.service-color-8 {
+          background-color: @body-text-mute-color;
+        }
+      }
+
+      a {
+        color: @white;
+      }
+    }
+  }
+}

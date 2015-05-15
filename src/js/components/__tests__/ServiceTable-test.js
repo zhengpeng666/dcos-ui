@@ -17,7 +17,7 @@ var HealthLabels = require("../../constants/HealthLabels");
 var stateJSON = require("../../stores/__tests__/fixtures/state.json");
 
 MesosStateStore.init();
-MesosStateStore.processState(stateJSON);
+MesosStateStore.processSummary(stateJSON);
 
 function getTable(isAppsProcessed) {
   return TestUtils.renderIntoDocument(

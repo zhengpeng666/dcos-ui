@@ -3,112 +3,188 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
-var Chart = require("./charts/Chart");
-var DialChart = require("./charts/DialChart");
-var ResourceTypes = require("../constants/ResourceTypes");
-
-var colors = {
-  error: 2,
-  unused: 6
-};
+var EventTypes = require("../constants/EventTypes");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var MesosStateStore = require("../stores/MesosStateStore");
+var NodesGridDials = require("./NodesGridDials");
+var RequestErrorMsg = require("./RequestErrorMsg");
 
 var NodesGridView = React.createClass({
 
   propTypes: {
     hosts: React.PropTypes.array.isRequired,
-    // enum: ["cpus", "mem", "disk"]
     selectedResource: React.PropTypes.string.isRequired
   },
 
-  getActiveSliceData: function (resourceConfig, percentage) {
-    return [
-      {
-        colorIndex: resourceConfig.colorIndex,
-        name: resourceConfig.label,
-        percentage: percentage
-      },
-      {
-        colorIndex: colors.unused,
-        name: "Unused",
-        percentage: 100 - percentage
-      }
-    ];
+  mixins: [InternalStorageMixin],
+
+  getInitialState: function () {
+    return {
+      showServices: false,
+      mesosStateErrorCount: 0
+    };
   },
 
-  getInactiveSliceData: function () {
-    return [
-      {
-        colorIndex: colors.error,
-        name: "Error",
-        percentage: 100
-      }
-    ];
+  componentWillMount: function () {
+    this.internalStorage_set({
+      serviceColors: {},
+      resourcesByFramework: {}
+    });
+
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onMesosStateChange
+    );
+
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_REQUEST_ERROR,
+      this.onMesosStateRequestError
+    );
   },
 
-  getDialConfig: function (active, resource, resourceConfig) {
-    if (active) {
-      return {
-        data: this.getActiveSliceData(resourceConfig, resource.percentage),
-        description: [
-          <span className="unit" key={"unit"}>
-            {resource.percentage}%
-          </span>,
-          <span className="unit-label text-muted" key={"unit-label"}>
-            {resourceConfig.label}
-          </span>
-        ]
-      };
-    } else {
-      return {
-        data: this.getInactiveSliceData(),
-        description: (
-          <span className="error">
-            <i className="icon icon-medium icon-medium-white icon-alert"/>
-          </span>
-        )
-      };
+  componentWillUnmount: function () {
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_CHANGE,
+      this.onMesosStateChange
+    );
+
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_REQUEST_ERROR,
+      this.onMesosStateRequestError
+    );
+  },
+
+  componentWillReceiveProps: function (props) {
+    var ids = _.pluck(props.services, "id");
+    var serviceColors = this.internalStorage_get().serviceColors;
+
+    if (!_.isEqual(Object.keys(serviceColors), ids)) {
+      this.computeServiceColors(props.services);
     }
   },
 
-  getDials: function () {
-    var resourceConfig = ResourceTypes[this.props.selectedResource];
+  onMesosStateChange: function () {
+    var resourcesByFramework = this.internalStorage_get().resourcesByFramework;
+    var slaves = MesosStateStore.getHostResourcesByFramework();
 
-    return _.map(this.props.hosts, function (host) {
-      var resource = _.last(host.used_resources[this.props.selectedResource]);
-      var config = this.getDialConfig(host.active, resource, resourceConfig);
-
-      return (
-        <div className="nodes-grid-item" key={host.id}>
-          <div className="chart">
-            <Chart calcHeight={function (w) { return w; }}>
-              <DialChart data={config.data}
-                  value="percentage">
-                <div className="description">
-                  {config.description}
-                </div>
-              </DialChart>
-            </Chart>
-          </div>
-        </div>
-      );
-    }, this);
+    if (!_.isEqual(resourcesByFramework, slaves)) {
+      this.internalStorage_update({resourcesByFramework: slaves});
+    }
   },
 
-  // Zero-height spacer items force dial charts in the last line of the flex layout
-  // not to spread themselves across the line.
-  getSpacers: function () {
-    return _.times(30, function (n) {
-      return <div className="nodes-grid-spacer" key={n}></div>;
+  onMesosStateRequestError: function () {
+    this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
+  },
+
+  handleShowServices: function (e) {
+    this.setState({showServices: e.currentTarget.checked});
+  },
+
+  computeServiceColors: function (services) {
+    // {service.id: colorIndex}
+    var colors = {};
+
+    services.forEach(function (service) {
+      // Drop all others into the same "other" color
+      colors[service.id] = Math.min(service.colorIndex, 8);
     });
+
+    this.internalStorage_update({serviceColors: colors});
+  },
+
+  hasLoadingError: function () {
+    return this.state.mesosStateErrorCount >= 3;
+  },
+
+  getLoadingScreen: function () {
+    var hasLoadingError = this.hasLoadingError();
+    var errorMsg = null;
+    if (hasLoadingError) {
+      errorMsg = <RequestErrorMsg />;
+    }
+
+    var loadingClassSet = React.addons.classSet({
+      "hidden": hasLoadingError
+    });
+
+    return (
+      <div className="text-align-center vertical-center">
+        <div className="row">
+          <div className={loadingClassSet}>
+            <div className="ball-scale">
+              <div />
+            </div>
+          </div>
+          {errorMsg}
+        </div>
+      </div>
+    );
+  },
+
+  getServices: function (props) {
+    var items = _.map(props.services, function (service) {
+      // Drop all others into the same "other" color
+      var index = Math.min(service.colorIndex, 8);
+      var className = "service-legend-color service-color-" + index;
+      return (
+        <li key={service.id}>
+          <span className={className}></span>
+          <a className="clickable">{service.name}</a>
+        </li>
+      );
+    });
+
+    return (
+      <ul className="list list-unstyled nodes-grid-service-list">
+      {items}
+      </ul>
+    );
+  },
+
+  getNodesGrid: function () {
+    var data = this.internalStorage_get();
+    var props = this.props;
+    var state = this.state;
+
+    var classSet = React.addons.classSet({
+      "nodes-grid-legend": true,
+      "disabled": !state.showServices
+    });
+
+    return (
+      <div className="nodes-grid">
+
+        <div className={classSet}>
+          <label className="show-services-label">
+            <input type="checkbox"
+              name="nodes-grid-show-services"
+              checked={state.showServices}
+              onChange={this.handleShowServices} />
+            Show Services by Share
+          </label>
+
+          {this.getServices(props)}
+        </div>
+
+        <NodesGridDials
+          hosts={props.hosts}
+          selectedResource={props.selectedResource}
+          serviceColors={data.serviceColors}
+          resourcesByFramework={data.resourcesByFramework}
+          showServices={state.showServices} />
+      </div>
+    );
   },
 
   render: function () {
-    return (
-      <div className="nodes-grid">
-        {this.getDials()}
-        {this.getSpacers()}
-      </div>
-    );
+    var showLoading = this.hasLoadingError() ||
+      Object.keys(MesosStateStore.getLastMesosState()).length === 0;
+
+    if (showLoading) {
+      return this.getLoadingScreen();
+    } else {
+      return this.getNodesGrid();
+    }
   }
 
 });

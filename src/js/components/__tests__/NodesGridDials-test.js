@@ -1,13 +1,13 @@
 /** @jsx React.DOM */
 
 jest.dontMock("../../constants/ResourceTypes");
-jest.dontMock("../NodesGridView");
+jest.dontMock("../NodesGridDials");
 
 var _ = require("underscore");
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
-var NodesGridView = require("../NodesGridView");
+var NodesGridDials = require("../NodesGridDials");
 var ResourceTypes = require("../../constants/ResourceTypes");
 
 var host = {
@@ -20,77 +20,72 @@ var host = {
   }
 };
 
-describe("NodesGridView", function () {
+describe("NodesGridDials", function () {
 
   beforeEach(function () {
     this.hosts = [_.clone(host)];
     this.instance = TestUtils.renderIntoDocument(
-      <NodesGridView hosts={this.hosts} selectedResource="cpus" />
+      <NodesGridDials
+        hosts={this.hosts}
+        selectedResource="cpus"
+        serviceColors={{}}
+        showServices={false}
+        resourcesByFramework={{}} />
     );
-  });
-
-  describe("#getDialConfig", function () {
-
-    beforeEach(function () {
-      this.resourceType = ResourceTypes.cpus;
-    });
-
-    it("returns different configurations depending on the active paramter", function () {
-      var config1 = this.instance.getDialConfig(
-        true, {percentage: 50}, this.resourceType
-      );
-
-      var config2 = this.instance.getDialConfig(
-        false, {percentage: 50}, this.resourceType
-      );
-
-      expect(_.isEqual(config1, config2)).toEqual(false);
-    });
-
   });
 
   describe("#getActiveSliceData", function () {
 
     beforeEach(function () {
       this.resourceType = ResourceTypes.cpus;
-      this.activeSlices = this.instance.getActiveSliceData(
-        this.resourceType, 50
-      );
+      this.activeSlices = this.instance.getActiveSliceData(this.hosts[0]);
+    });
+
+    it("returns an object", function () {
+      expect(typeof this.activeSlices).toEqual("object");
+    });
+
+    it("contains a data property which is an array", function () {
+      expect(_.isArray(this.activeSlices.data)).toEqual(true);
+    });
+
+    it("contains a usedPercentage property which is a number", function () {
+      expect(_.isNumber(this.activeSlices.usedPercentage)).toEqual(true);
     });
 
     it("contains a slice for the used resource", function () {
-      var slice = _.findWhere(this.activeSlices, {
+      var slice = _.findWhere(this.activeSlices.data, {
         name: this.resourceType.label
       });
       expect(typeof slice).toEqual("object");
     });
 
     it("the used slice uses the correct color", function () {
-      var slice = _.findWhere(this.activeSlices, {
+      var slice = _.findWhere(this.activeSlices.data, {
         name: this.resourceType.label
       });
       expect(slice.colorIndex).toEqual(this.resourceType.colorIndex);
     });
 
     it("the used slice contains the correct percentage", function () {
-      var slice = _.findWhere(this.activeSlices, {
+      var slice = _.findWhere(this.activeSlices.data, {
         name: this.resourceType.label
       });
       expect(slice.percentage).toEqual(50);
     });
 
     it("contains an unused resources slice", function () {
-      var slice = _.findWhere(this.activeSlices, {name: "Unused"});
+      var slice = _.findWhere(this.activeSlices.data, {name: "Unused"});
       expect(typeof slice).toEqual("object");
     });
 
     it("the color for the unused slice should be gray", function () {
-      var slice = _.findWhere(this.activeSlices, {name: "Unused"});
-      expect(slice.colorIndex).toEqual(6);
+      var slice = _.findWhere(this.activeSlices.data, {name: "Unused"});
+      expect(slice.colorIndex).toEqual(8);
     });
 
     it("the percentage of the unused slice should be the remaining of the passed percentage", function () {
-      var slice = _.findWhere(this.activeSlices, {name: "Unused"});
+      var slice = _.findWhere(this.activeSlices.data, {name: "Unused"});
       expect(slice.percentage).toEqual(50);
     });
 
@@ -110,6 +105,26 @@ describe("NodesGridView", function () {
 
   });
 
+  describe("#getDialConfig", function () {
+
+    beforeEach(function () {
+      this.resourceType = ResourceTypes.cpus;
+    });
+
+    it("returns different configurations depending on the active paramter", function () {
+      var _host = this.hosts[0];
+
+      _host.active = true;
+      var config1 = this.instance.getDialConfig(_host);
+
+      _host.active = false;
+      var config2 = this.instance.getDialConfig(_host);
+
+      expect(_.isEqual(config1, config2)).toEqual(false);
+    });
+
+  });
+
   describe("#render", function () {
 
     it("render one chart", function () {
@@ -125,7 +140,12 @@ describe("NodesGridView", function () {
       _host.id = "bar";
       this.hosts.push(_host);
       this.instance = TestUtils.renderIntoDocument(
-        <NodesGridView hosts={this.hosts} selectedResource="cpus" />
+        <NodesGridDials
+          hosts={this.hosts}
+          selectedResource="cpus"
+          serviceColors={{}}
+          showServices={false}
+          resourcesByFramework={{}} />
       );
 
       var elements = TestUtils.scryRenderedDOMComponentsWithClass(

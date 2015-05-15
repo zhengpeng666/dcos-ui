@@ -19,14 +19,14 @@
 /**********************************/
 /*  Specific to Nodes Grid View   */
 /**********************************/
-.nodes-grid {
+.nodes-grid-dials {
   margin-left: -(ceil(@base-spacing-unit * 0.3333));
   margin-right: -(ceil(@base-spacing-unit * 0.3333));
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
 
-  .nodes-grid-item {
+  .nodes-grid-dials-item {
     margin: ceil(@base-spacing-unit * 0.3333);
     width: ceil(@base-spacing-unit * 3.33);
 
@@ -35,6 +35,53 @@
       .arc path {
         stroke-width: 1px;
         stroke: @panel-background-color;
+      }
+
+      .arc {
+        &.path-color-0 {
+          stroke: @purple;
+          fill: @purple;
+        }
+
+        &.path-color-1 {
+          stroke: @blue;
+          fill: @blue;
+        }
+
+        &.path-color-2 {
+          stroke: @red;
+          fill: @red;
+        }
+
+        &.path-color-3 {
+          stroke: @orange;
+          fill: @orange;
+        }
+
+        &.path-color-4 {
+          stroke: @yellow;
+          fill: @yellow;
+        }
+
+        &.path-color-5 {
+          stroke: @green;
+          fill: @green;
+        }
+
+        &.path-color-6 {
+          stroke: @pink;
+          fill: @pink;
+        }
+
+        &.path-color-7 {
+          stroke: @cyan;
+          fill: @cyan;
+        }
+
+        &.path-color-8 {
+          stroke: @body-text-mute-color;
+          fill: @body-text-mute-color;
+        }
       }
 
       .unit {
@@ -52,7 +99,7 @@
     }
   }
 
-  .nodes-grid-spacer {
+  .nodes-grid-dials-spacer {
     height: 0;
     margin-bottom: 0;
     margin-left: ceil(@base-spacing-unit * 0.3333);
