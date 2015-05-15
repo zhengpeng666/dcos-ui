@@ -244,14 +244,14 @@ describe("Mesos State Store", function () {
 
     it("should set Marathon health to idle with no apps", function () {
       MesosStateStore.processMarathonApps({apps: []});
-      MesosStateStore.processState(MockStates.frameworksWithMarathonName);
+      MesosStateStore.processSummary(MockStates.frameworksWithMarathonName);
       this.frameworks = MesosStateStore.getFrameworks();
       expect(this.frameworks[0].health.key).toEqual("IDLE");
     });
 
     it("should set Marathon health to healthy with some apps", function () {
       MesosStateStore.processMarathonApps(MockAppHealth.hasNoHealthy);
-      MesosStateStore.processState(MockStates.frameworksWithMarathonName);
+      MesosStateStore.processSummary(MockStates.frameworksWithMarathonName);
       this.frameworks = MesosStateStore.getFrameworks();
       expect(this.frameworks[0].health.key).toEqual("HEALTHY");
     });
@@ -260,7 +260,7 @@ describe("Mesos State Store", function () {
       function () {
         MesosStateStore.processMarathonApps = jasmine.createSpy();
         expect(MesosStateStore.processMarathonApps).not.toHaveBeenCalled();
-        MesosStateStore.processState(MockStates.frameworksWithMarathonName);
+        MesosStateStore.processSummary(MockStates.frameworksWithMarathonName);
         this.frameworks = MesosStateStore.getFrameworks();
         expect(this.frameworks[0].health.key).toEqual("NA");
       }
