@@ -761,6 +761,18 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       return curr;
     }, {health: {}, images: {}});
 
+    // Specific health check for Marathon
+    // We are setting the "marathon" key here, since we can safely assume,
+    // it to be "marathon" (we control it).
+    // This means that no other framework should be named "marathon".
+    frameworkData.health.marathon = getFrameworkHealth({
+      // Make sure health check has a result
+      healthChecks: [{}],
+      // Marathon is healthy if this request returned apps
+      tasksHealthy: data.apps.length,
+      tasksRunning: data.apps.length
+    });
+
     _frameworkHealth = frameworkData.health;
     _frameworkImages = frameworkData.images;
 
