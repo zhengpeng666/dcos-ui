@@ -61,6 +61,7 @@ var MesosStateActions = {
         });
       },
       error: function (e) {
+        registerServerError(e.message, errorType);
         AppDispatcher.handleServerAction({
           type: errorType,
           data: e.message
@@ -113,22 +114,7 @@ var MesosStateActions = {
         });
       }
     });
-  },
-
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    var source = payload.source;
-    var action = payload.action;
-
-    if (source !== ActionTypes.SERVER_ACTION) {
-      return false;
-    }
-    if (action.type === ActionTypes.REQUEST_MESOS_HISTORY_ERROR) {
-      registerServerError(action.data, action.type);
-    }
-    if (action.type === ActionTypes.REQUEST_MESOS_STATE_ERROR) {
-      registerServerError(action.data, action.type);
-    }
-  })
+  }
 
 };
 

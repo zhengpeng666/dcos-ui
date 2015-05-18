@@ -53,57 +53,52 @@ describe("Mesos State Actions", function () {
       expect($.ajax.mostRecentCall.args[0].url).toEqual("http://historyserver/dcos-history-service/history/day");
     });
 
-    it("detects errors on the history server", function () {
-      spyOn(AppDispatcher, "handleServerAction");
-      $.ajax.andCallFake(function (req) {
-        req.error({});
-      });
-      MesosStateActions.fetch(TimeScales.MINUTE);
-      expect(AppDispatcher.handleServerAction).toHaveBeenCalled();
-      expect(AppDispatcher.handleServerAction.mostRecentCall.args[0].type)
-        .toEqual(ActionTypes.REQUEST_MESOS_HISTORY_ERROR);
-    });
+    describe("When the history server is offline", function () {
 
-    it("falls back to the Mesos endpoint if the history service is offline on initial fetch", function () {
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_MESOS_HISTORY_ERROR
+      beforeEach(function () {
+        spyOn(AppDispatcher, "handleServerAction");
+        $.ajax.andCallFake(function (req) {
+          req.error({ message: "Guru Meditation" });
+        });
       });
-      MesosStateActions.fetch();
-      expect($.ajax).toHaveBeenCalled();
-      expect($.ajax.mostRecentCall.args[0].url).toContain("http://mesosserver/mesos/master/state-summary");
-    });
 
-    it("falls back to the Mesos endpoint if the history service goes offline", function () {
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_MESOS_STATE_ERROR
+      it("detects errors on the history server", function () {
+        MesosStateActions.fetch(TimeScales.MINUTE);
+        expect(AppDispatcher.handleServerAction).toHaveBeenCalled();
+        expect(AppDispatcher.handleServerAction.mostRecentCall.args[0].type)
+          .toEqual(ActionTypes.REQUEST_MESOS_HISTORY_ERROR);
       });
-      MesosStateActions.fetch();
-      expect($.ajax).toHaveBeenCalled();
-      expect($.ajax.mostRecentCall.args[0].url).toContain("http://mesosserver/mesos/master/state-summary");
-    });
 
-    it("registers history server errors with analytics", function () {
-      spyOn(Actions, "log");
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_MESOS_HISTORY_ERROR,
-        data: "Guru Meditation"
+      it("falls back to the Mesos endpoint if the history service is offline on initial fetch", function () {
+        MesosStateActions.fetch(TimeScales.MINUTE);
+        expect($.ajax).toHaveBeenCalled();
+        expect($.ajax.mostRecentCall.args[0].url).toContain("http://mesosserver/mesos/master/state-summary");
       });
-      expect(Actions.log).toHaveBeenCalled();
-      expect(Actions.log.mostRecentCall.args[0].description).toEqual("Server error");
-      expect(Actions.log.mostRecentCall.args[0].type).toEqual(ActionTypes.REQUEST_MESOS_HISTORY_ERROR);
-      expect(Actions.log.mostRecentCall.args[0].error).toEqual("Guru Meditation");
-    });
 
-    it("registers mesos server errors with analytics", function () {
-      spyOn(Actions, "log");
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_MESOS_STATE_ERROR,
-        data: "Guru Meditation"
+      it("falls back to the Mesos endpoint if the history service goes offline", function () {
+        MesosStateActions.fetch();
+        expect($.ajax).toHaveBeenCalled();
+        expect($.ajax.mostRecentCall.args[0].url).toContain("http://mesosserver/mesos/master/state-summary");
       });
-      expect(Actions.log).toHaveBeenCalled();
-      expect(Actions.log.mostRecentCall.args[0].description).toEqual("Server error");
-      expect(Actions.log.mostRecentCall.args[0].type).toEqual(ActionTypes.REQUEST_MESOS_STATE_ERROR);
-      expect(Actions.log.mostRecentCall.args[0].error).toEqual("Guru Meditation");
+
+      it("registers history server errors with analytics", function () {
+        spyOn(Actions, "log");
+        MesosStateActions.fetch(TimeScales.MINUTE);
+        expect(Actions.log).toHaveBeenCalled();
+        expect(Actions.log.mostRecentCall.args[0].description).toEqual("Server error");
+        expect(Actions.log.mostRecentCall.args[0].type).toEqual(ActionTypes.REQUEST_MESOS_HISTORY_ERROR);
+        expect(Actions.log.mostRecentCall.args[0].error).toEqual("Guru Meditation");
+      });
+
+      it("registers mesos server errors with analytics", function () {
+        spyOn(Actions, "log");
+        MesosStateActions.fetch();
+        expect(Actions.log).toHaveBeenCalled();
+        expect(Actions.log.mostRecentCall.args[0].description).toEqual("Server error");
+        expect(Actions.log.mostRecentCall.args[0].type).toEqual(ActionTypes.REQUEST_MESOS_STATE_ERROR);
+        expect(Actions.log.mostRecentCall.args[0].error).toEqual("Guru Meditation");
+      });
+
     });
 
   });
