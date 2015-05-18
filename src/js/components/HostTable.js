@@ -146,7 +146,7 @@ var HostTable = React.createClass({
 
     return (
       <Table
-        className="table inverse table-borderless-outer table-borderless-inner-columns"
+        className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
         columns={this.getColumns()}
         data={this.props.hosts.slice(0)}
         keys={["id"]}
