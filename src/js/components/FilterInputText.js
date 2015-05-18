@@ -43,7 +43,7 @@ var FilterInputText = React.createClass({
           <input
             type="text"
             className="form-control form-control-small form-control-inverse filter-input-text"
-            placeholder="Filter for..."
+            placeholder="Filter"
             value={this.props.searchString}
             onChange={this.handleChange}
             ref="filterInput" />
