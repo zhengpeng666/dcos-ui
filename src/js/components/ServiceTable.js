@@ -23,6 +23,7 @@ function getClassName(prop, sortBy, row) {
   return React.addons.classSet({
     "align-right": isStat(prop) || prop === "TASK_RUNNING",
     "hidden-mini fixed-width": isStat(prop),
+    "fixed-width": prop === "TASK_RUNNING",
     "highlight": prop === sortBy.prop,
     "clickable": row == null // this is a header
   });
