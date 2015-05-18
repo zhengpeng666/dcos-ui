@@ -730,24 +730,25 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
   processMarathonApps: function (data) {
     var frameworkData = _.foldl(data.apps, function (curr, app) {
-      if (app.labels.DCOS_PACKAGE_IS_FRAMEWORK == null ||
-          app.labels.DCOS_PACKAGE_IS_FRAMEWORK.toLowerCase() !== "true") {
+      if (app.labels.DCOS_PACKAGE_FRAMEWORK_NAME == null) {
         return curr;
+      }
+
+      var packageName = app.labels.DCOS_PACKAGE_FRAMEWORK_NAME;
+      // use insensitive check
+      if (packageName.length) {
+        packageName = packageName.toLowerCase();
       }
 
       // find the framework based on package name
       var frameworkName = _.find(_frameworkNames, function (name) {
+        // use insensitive check
         if (name.length) {
           name = name.toLowerCase();
         }
 
-        var packageName = app.labels.DCOS_PACKAGE_NAME;
-
-        if (packageName.length) {
-          packageName = packageName.toLowerCase();
-        }
-
-        return name.indexOf(packageName) > -1;
+        // match exactly (case insensitive)
+        return name === packageName;
       });
 
       if (frameworkName == null) {
@@ -759,6 +760,18 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 
       return curr;
     }, {health: {}, images: {}});
+
+    // Specific health check for Marathon
+    // We are setting the "marathon" key here, since we can safely assume,
+    // it to be "marathon" (we control it).
+    // This means that no other framework should be named "marathon".
+    frameworkData.health.marathon = getFrameworkHealth({
+      // Make sure health check has a result
+      healthChecks: [{}],
+      // Marathon is healthy if this request returned apps
+      tasksHealthy: data.apps.length,
+      tasksRunning: data.apps.length
+    });
 
     _frameworkHealth = frameworkData.health;
     _frameworkImages = frameworkData.images;
