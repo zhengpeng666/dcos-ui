@@ -276,8 +276,7 @@ var Index = React.createClass({
       onCloseClickFn: function () {
           this.setState({showingCliModal: false});
         }.bind(this),
-      title: "Welcome to the Mesosphere DCOS!",
-      subHeaderContent: "This tutorial walks you through using the DCOS Dashboard, including installing a service, deploying and scaling an app, and performing continuous integration. It should take about 10 minutes to complete.",
+      title: "Install the DCOS CLI",
       showFooter: false
     };
   },

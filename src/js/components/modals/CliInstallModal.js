@@ -23,6 +23,10 @@ var CliInstructionsModal = React.createClass({
   },
 
   getSubHeader: function () {
+    if (!this.props.subHeaderContent) {
+      return false;
+    }
+
     return (
       <p className="text-align-center inverse flush-bottom">
         {this.props.subHeaderContent}
@@ -56,7 +60,7 @@ var CliInstructionsModal = React.createClass({
           {pythonInstructions}
           {installRequirements}
           <li>
-            Download: <a href="https://raw.githubusercontent.com/mesosphere/install-scripts/master/dcos-cli/install-dcos-windows.ps1" target="_blank">install-dcos-windows.ps1</a>
+            Download: <a href="https://downloads.mesosphere.io/dcos-cli/install.ps1" target="_blank">install-dcos-windows.ps1</a>
           </li>
         </ul>
       );
