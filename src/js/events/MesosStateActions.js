@@ -1,9 +1,31 @@
 var _ = require("underscore");
 var $ = require("jquery");
 
+var Actions = require("../actions/Actions");
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
 var Config = require("../config/Config");
+
+var _historyServiceOnline = true;
+
+function getStateUrl(timeScale) {
+  timeScale = timeScale || "last";
+  if (_historyServiceOnline) {
+    return Config.historyServer +
+      "/dcos-history-service/history/" + timeScale;
+  } else {
+    return Config.rootUrl + "/mesos/master/state-summary";
+  }
+}
+
+function registerServerError(message, type) {
+  _historyServiceOnline = false;
+  Actions.log({
+    description: "Server error",
+    type: type,
+    error: message
+  });
+}
 
 function request(url, type, data, options) {
   options = _.extend({
@@ -23,29 +45,28 @@ var MesosStateActions = {
     var errorType = ActionTypes.REQUEST_MESOS_HISTORY_ERROR;
 
     if (timeScale == null) {
-      timeScale = "last";
       successType = ActionTypes.REQUEST_MESOS_SUMMARY_SUCCESS;
       errorType = ActionTypes.REQUEST_MESOS_SUMMARY_ERROR;
     }
 
-    var url = Config.historyServer +
-      "/dcos-history-service/history/" + timeScale;
+    var url = getStateUrl(timeScale);
 
     request(url, "GET", null, {
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-          AppDispatcher.handleServerAction({
-            type: successType,
-            data: response
-          });
-        },
-        error: function (e) {
-          AppDispatcher.handleServerAction({
-            type: errorType,
-            data: e.message
-          });
-        }
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: successType,
+          data: response
+        });
+      },
+      error: function (e) {
+        registerServerError(e.message, errorType);
+        AppDispatcher.handleServerAction({
+          type: errorType,
+          data: e.message
+        });
+      }
     });
   },
 
@@ -94,6 +115,7 @@ var MesosStateActions = {
       }
     });
   }
+
 };
 
 module.exports = MesosStateActions;
