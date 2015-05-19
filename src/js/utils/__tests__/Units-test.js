@@ -58,23 +58,23 @@ describe("Units", function () {
     });
 
     // Special tests
-    it("should return 0 B", function () {
+    it("should return '0 B' for vales of zero", function () {
       expect(Units.filesize(0, 0)).toBe("0 B");
     });
 
-    it("has 0 decimals", function () {
+    it("does not show decimals if set to 0", function () {
       var size = (this.baseSize + 352) * 1024;
       var filesize = Units.filesize(size, 0, 1024);
       expect(filesize).toBe("1 MiB");
     });
 
-    it("has 3 decimals by 4 decimals defined", function () {
+    it("trims trailing zeroes from the mantissa", function () {
       var size = (this.baseSize + 102) * 1024;
       var filesize = Units.filesize(size, 4);
       expect(filesize).toBe("0.877 MiB");
     });
 
-    it("has 4 decimals", function () {
+    it("shows decimals places to the specified accuracy", function () {
       var size = (this.baseSize + 116) * 1024;
       var filesize = Units.filesize(size, 4);
       expect(filesize).toBe("0.8906 MiB");
