@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
-var Humanize = require("humanize");
 var React = require("react/addons");
 
 var HealthLabels = require("../constants/HealthLabels");
@@ -12,6 +11,7 @@ var Maths = require("../utils/Maths");
 var Strings = require("../utils/Strings");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
+var Units = require("../utils/Units");
 
 var healthKey = "health";
 
@@ -136,7 +136,7 @@ var ServicesTable = React.createClass({
   renderStats: function (prop, model) {
     var value = Maths.round(_.last(model.used_resources[prop]).value, 2);
     if (prop !== "cpus") {
-      value = Humanize.filesize(value * 1024 * 1024, 1024, 1);
+      value = Units.filesize(value * 1024 * 1024, 1);
     }
 
     return (
