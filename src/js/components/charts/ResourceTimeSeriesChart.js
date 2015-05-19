@@ -2,7 +2,7 @@
 
 var _ = require("underscore");
 var React = require("react/addons");
-var Humanize = require("humanize");
+var Units = require("../../utils/Units");
 
 var Chart = require("./Chart");
 var TimeSeriesChart = require("./TimeSeriesChart");
@@ -45,8 +45,8 @@ var ResourceTimeSeriesChart = React.createClass({
     if (this.props.mode === "cpus") {
       return value + " of " + totalValue + " Shares";
     } else {
-      return Humanize.filesize(value * 1024 * 1024, 1024, 0) + " of " +
-        Humanize.filesize(totalValue * 1024 * 1024, 1024, 0);
+      return Units.filesize(value * 1024 * 1024, 0) + " of " +
+        Units.filesize(totalValue * 1024 * 1024, 0);
     }
   },
 
