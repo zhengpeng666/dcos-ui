@@ -1,4 +1,4 @@
-var Strings = {
+var Units = {
   filesize: function (size, decimals, threshold, multiplier, units) {
     size = size || 0;
     if (decimals == null) {
@@ -41,4 +41,4 @@ var Strings = {
   }
 };
 
-module.exports = Strings;
+module.exports = Units;
