@@ -3770,10 +3770,6 @@
       "version": "2.0.1",
       "resolved": "http://registry.npmjs.org/flux/-/flux-2.0.1.tgz"
     },
-    "humanize": {
-      "version": "0.0.9",
-      "resolved": "http://registry.npmjs.org/humanize/-/humanize-0.0.9.tgz"
-    },
     "jasmine-reporters": {
       "version": "1.0.1",
       "resolved": "https://registry.npmjs.org/jasmine-reporters/-/jasmine-reporters-1.0.1.tgz",
