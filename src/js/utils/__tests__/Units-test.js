@@ -86,6 +86,12 @@ describe("Units", function () {
       expect(filesize).toBe("0.8 GB");
     });
 
+    it("has correct amount of 0 digits", function () {
+      var size = 1000 * 1024;
+      var filesize = Units.filesize(size, 2, 1024);
+      expect(filesize).toBe("1000 KiB");
+    });
+
   });
 
 });

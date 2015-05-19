@@ -31,13 +31,10 @@ var Units = {
 
     // This removes unnecessary 0 or . chars at the end of the string/decimals
     if (filesize.indexOf(".") > -1) {
-      filesize = filesize.replace(/0*$/, "");
-      filesize = filesize.replace(/\.$/, "");
+      filesize = filesize.replace(/\.?0*$/, "");
     }
 
-    filesize += " " + units[unitIndex];
-
-    return filesize;
+    return filesize + " " + units[unitIndex];
   }
 };
 
