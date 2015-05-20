@@ -120,7 +120,7 @@ var DashboardPage = React.createClass({
     return (
       <Page title="Dashboard">
         <div className="grid row">
-          <div className="grid-item column-small-6 column-large-4">
+          <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="CPU Allocation">
               <ResourceTimeSeriesChart
                 allocResources={data.allocResources}
@@ -129,7 +129,7 @@ var DashboardPage = React.createClass({
                 refreshRate={data.refreshRate} />
             </Panel>
           </div>
-          <div className="grid-item column-small-6 column-large-4">
+          <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="Memory Allocation">
               <ResourceTimeSeriesChart
                 colorIndex={3}
@@ -139,14 +139,14 @@ var DashboardPage = React.createClass({
                 refreshRate={data.refreshRate} />
             </Panel>
           </div>
-          <div className="grid-item column-small-6 column-large-4">
+          <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="Task Failure Rate">
               <TaskFailureTimeSeriesChart
                 data={data.failureRate}
                 refreshRate={data.refreshRate} />
             </Panel>
           </div>
-          <div className="grid-item column-small-6 column-large-4">
+          <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="Services Health">
               <ServiceList
                 healthProcessed={data.appsProcessed}
@@ -154,12 +154,12 @@ var DashboardPage = React.createClass({
               {this.getViewAllServicesBtn()}
             </Panel>
           </div>
-          <div className="grid-item column-small-6 column-large-4">
+          <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="Tasks">
               <TasksChart tasks={data.tasks} />
             </Panel>
           </div>
-          <div className="grid-item column-small-6 column-large-4">
+          <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="Nodes">
               <HostTimeSeriesChart
                 data={data.hostsCount}
