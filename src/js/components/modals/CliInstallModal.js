@@ -11,7 +11,7 @@ var CliInstructionsModal = React.createClass({
 
   propTypes: {
     title: React.PropTypes.string.isRequired,
-    subHeaderContent: React.PropTypes.string.isRequired,
+    subHeaderContent: React.PropTypes.string,
     showFooter: React.PropTypes.bool.isRequired,
     footer: React.PropTypes.node,
     onClose: React.PropTypes.func.isRequired,
