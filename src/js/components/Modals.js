@@ -21,10 +21,7 @@ var Modals = React.createClass({
 
   propTypes: {
     showErrorModal: React.PropTypes.bool,
-    modalErrorMsg: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.object
-    ])
+    modalErrorMsg: React.PropTypes.node
   },
 
   getDefaultProps: function () {
