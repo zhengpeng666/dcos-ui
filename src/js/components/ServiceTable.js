@@ -3,6 +3,7 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
+var Cluster = require("../utils/Cluster");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthSorting = require("../constants/HealthSorting");
 var HealthTypes = require("../constants/HealthTypes");
@@ -73,7 +74,7 @@ var ServicesTable = React.createClass({
 
     return (
       <a ref={model.id}
-          href={"/service/" + model.name + "/"}
+          href={Cluster.getServiceLink(model.name + "/")}
           target="_blank"
           className="h5 headline cell-link">
         <span className="flush-top flush-bottom">
