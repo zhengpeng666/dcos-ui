@@ -73,7 +73,7 @@ var ServicesTable = React.createClass({
 
     return (
       <a ref={model.id}
-          href={"/service/" + model.id + "/"}
+          href={"/service/" + model.name + "/"}
           target="_blank"
           className="h5 headline cell-link">
         <span className="flush-top flush-bottom">
