@@ -70,7 +70,7 @@ var ServiceList = React.createClass({
 
       if (service.webui_url && service.webui_url.length > 0) {
         title = (
-          <a href={Cluster.getServiceLink(service.name + "/")}
+          <a href={Cluster.getServiceLink(service.name)}
             className="h3 flush-top flush-bottom"
             target="_blank">
             {service.name}

@@ -74,7 +74,7 @@ var ServicesTable = React.createClass({
 
     return (
       <a ref={model.id}
-          href={Cluster.getServiceLink(model.name + "/")}
+          href={Cluster.getServiceLink(model.name)}
           target="_blank"
           className="h5 headline cell-link">
         <span className="flush-top flush-bottom">
