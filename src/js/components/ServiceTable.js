@@ -3,12 +3,12 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
+var Cluster = require("../utils/Cluster");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthSorting = require("../constants/HealthSorting");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var Maths = require("../utils/Maths");
-var Strings = require("../utils/Strings");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
@@ -74,14 +74,14 @@ var ServicesTable = React.createClass({
 
     return (
       <a ref={model.id}
-          href={Strings.ipToHostAddress(model.webui_url)}
+          href={Cluster.getServiceLink(model.name)}
           target="_blank"
           className="h5 headline cell-link">
-          <span className="flush-top flush-bottom">
-            <img className="icon icon-small border-radius"
-            src={model.images["icon-small"]} />
-            {model[prop]}
-          </span>
+        <span className="flush-top flush-bottom">
+          <img className="icon icon-small border-radius"
+          src={model.images["icon-small"]} />
+          {model[prop]}
+        </span>
       </a>
      );
   },
