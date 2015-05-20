@@ -79,8 +79,13 @@
         }
 
         &.path-color-8 {
-          stroke: @body-text-mute-color;
-          fill: @body-text-mute-color;
+          stroke: ~`color_lightness("@{neutral}", 40)`;
+          fill: ~`color_lightness("@{neutral}", 40)`;
+        }
+
+        &.path-color-unused {
+          stroke: ~`color_lightness("@{neutral}", 5)`;
+          fill: ~`color_lightness("@{neutral}", 5)`;
         }
       }
 

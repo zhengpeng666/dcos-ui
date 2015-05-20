@@ -9,6 +9,9 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var NodesGridDials = require("./NodesGridDials");
 var RequestErrorMsg = require("./RequestErrorMsg");
 
+var MAX_SERVICES_TO_SHOW = 8;
+var OTHER_SERVICES_COLOR = 8;
+
 var NodesGridView = React.createClass({
 
   propTypes: {
@@ -20,8 +23,9 @@ var NodesGridView = React.createClass({
 
   getInitialState: function () {
     return {
-      showServices: false,
-      mesosStateErrorCount: 0
+      hiddenServices: [],
+      mesosStateErrorCount: 0,
+      showServices: false
     };
   },
 
@@ -54,18 +58,29 @@ var NodesGridView = React.createClass({
     );
   },
 
+  /**
+   * Updates metadata on services when services are added/removed
+   *
+   * @param  {Object} props
+   */
   componentWillReceiveProps: function (props) {
     var ids = _.pluck(props.services, "id");
     var serviceColors = this.internalStorage_get().serviceColors;
 
     if (!_.isEqual(Object.keys(serviceColors), ids)) {
       this.computeServiceColors(props.services);
+      this.computeShownServices(props.services);
     }
   },
 
   onMesosStateChange: function () {
-    var resourcesByFramework = this.internalStorage_get().resourcesByFramework;
-    var slaves = MesosStateStore.getHostResourcesByFramework();
+    var data = this.internalStorage_get();
+    var resourcesByFramework = data.resourcesByFramework;
+    // Maps the usage of each service per node
+    // This can change at anytime. This info is only available in state.json
+    var slaves = MesosStateStore.getHostResourcesByFramework(
+      data.hiddenServices
+    );
 
     if (!_.isEqual(resourcesByFramework, slaves)) {
       this.internalStorage_update({resourcesByFramework: slaves});
@@ -76,20 +91,33 @@ var NodesGridView = React.createClass({
     this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
   },
 
-  handleShowServices: function (e) {
-    this.setState({showServices: e.currentTarget.checked});
-  },
-
   computeServiceColors: function (services) {
     // {service.id: colorIndex}
     var colors = {};
 
     services.forEach(function (service) {
       // Drop all others into the same "other" color
-      colors[service.id] = Math.min(service.colorIndex, 8);
+      if (service.colorIndex < MAX_SERVICES_TO_SHOW) {
+        colors[service.id] = service.colorIndex;
+      } else {
+        colors.other = OTHER_SERVICES_COLOR;
+      }
     });
 
     this.internalStorage_update({serviceColors: colors});
+  },
+
+  computeShownServices: function (services) {
+    var hidden = _.map(services.slice(MAX_SERVICES_TO_SHOW),
+      function (service) {
+      return service.id;
+    });
+
+    this.internalStorage_update({hiddenServices: hidden});
+  },
+
+  handleShowServices: function (e) {
+    this.setState({showServices: e.currentTarget.checked});
   },
 
   hasLoadingError: function () {
@@ -121,18 +149,30 @@ var NodesGridView = React.createClass({
     );
   },
 
-  getServices: function (props) {
-    var items = _.map(props.services, function (service) {
-      // Drop all others into the same "other" color
-      var index = Math.min(service.colorIndex, 8);
-      var className = "service-legend-color service-color-" + index;
+  getServicesList: function (props) {
+    var items = _.map(props.services.slice(0, MAX_SERVICES_TO_SHOW),
+      function (service) {
+      var className = "service-legend-color service-color-" +
+        service.colorIndex;
+
       return (
         <li key={service.id}>
           <span className={className}></span>
-          <a className="clickable">{service.name}</a>
+          <span>{service.name}</span>
         </li>
       );
     });
+
+    if (props.services.length > MAX_SERVICES_TO_SHOW) {
+      var classNameOther = "service-legend-color service-color-" +
+        OTHER_SERVICES_COLOR;
+      items.push(
+        <li key="other">
+          <span className={classNameOther}></span>
+          <span>Other</span>
+        </li>
+      );
+    }
 
     return (
       <ul className="list list-unstyled nodes-grid-service-list">
@@ -163,7 +203,7 @@ var NodesGridView = React.createClass({
             Show Services by Share
           </label>
 
-          {this.getServices(props)}
+          {this.getServicesList(props)}
         </div>
 
         <NodesGridDials
