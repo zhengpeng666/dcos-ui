@@ -60,7 +60,7 @@ var CliInstructionsModal = React.createClass({
           </li>
         </ul>
       );
-      cliSnippet = ".\\install-dcos-windows.ps1 . " + hostname;
+      cliSnippet = ".\\install-dcos-windows.ps1 . https://" + hostname;
     } else {
       requirements = (
         <ul>
@@ -69,7 +69,7 @@ var CliInstructionsModal = React.createClass({
           {installRequirements}
         </ul>
       );
-      cliSnippet = "mkdir -p dcos && cd dcos && \\\n  curl -O https://downloads.mesosphere.io/dcos-cli/install.sh && \\\n  bash ./install.sh . " + hostname + " && \\\n  source ./bin/env-setup";
+      cliSnippet = "mkdir -p dcos && cd dcos && \\\n  curl -O https://downloads.mesosphere.io/dcos-cli/install.sh && \\\n  bash ./install.sh . https://" + hostname + " && \\\n  source ./bin/env-setup";
     }
 
     return {
