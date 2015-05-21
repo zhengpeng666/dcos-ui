@@ -26,6 +26,7 @@
     }
 
     .nodes-grid-service-list {
+      color: @white;
       width: 225px;
 
       .service-legend-color {
@@ -69,7 +70,11 @@
         }
 
         &.service-color-8 {
-          background-color: @body-text-mute-color;
+          background-color:  ~`color_lightness("@{neutral}", 40)`;
+        }
+
+        &.service-color-unused {
+          background-color:  ~`color_lightness("@{neutral}", 5)`;
         }
       }
 

@@ -9,7 +9,7 @@ var ResourceTypes = require("../constants/ResourceTypes");
 
 var colors = {
   error: 2,
-  unused: 8
+  unused: "unused"
 };
 
 var NodesGridDials = React.createClass({

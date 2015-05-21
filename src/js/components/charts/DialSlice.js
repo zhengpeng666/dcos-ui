@@ -7,7 +7,7 @@ var DialSlice = React.createClass({
   displayName: "DialSlice",
 
   propTypes: {
-    colorIndex: React.PropTypes.number,
+    colorIndex: React.PropTypes.node,
     path: React.PropTypes.string.isRequired
   },
 

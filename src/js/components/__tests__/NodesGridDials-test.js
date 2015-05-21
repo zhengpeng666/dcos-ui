@@ -81,7 +81,7 @@ describe("NodesGridDials", function () {
 
     it("the color for the unused slice should be gray", function () {
       var slice = _.findWhere(this.activeSlices.data, {name: "Unused"});
-      expect(slice.colorIndex).toEqual(8);
+      expect(slice.colorIndex).toEqual("unused");
     });
 
     it("the percentage of the unused slice should be the remaining of the passed percentage", function () {
