@@ -1,48 +1,22 @@
-/* Forms */
-
-.placeholder-color(@color) {
-  &::-webkit-input-placeholder {
-     color: @color;
-  }
-
-  &:-moz-placeholder { /* Firefox 18- */
-     color: @color;
-  }
-
-  &::-moz-placeholder {  /* Firefox 19+ */
-     color: @color;
-  }
-
-  &:-ms-input-placeholder {
-     color: @color;
-  }
-}
-
-.form-control {
-  margin-bottom: @base-spacing-unit;
-
-  &.form-control-inverse {
-    .border-radius(@icon-medium-border-radius);
-
-    &, &:hover, &:active, &:focus {
-      background-color: transparent;
-      border: 0;
-      box-shadow: 0 0 0 1px @neutral;
-      color: ~`color_lightness("@{neutral}", 40)`;
-      .placeholder-color(~`color_lightness("@{neutral}", 40)`);
-    }
-  }
-}
-
 .filter-input-text {
   width: @base-spacing-unit * 6;
 }
 
 .filter-input-text-group {
-  width: (@base-spacing-unit * 9);
+  width: @base-spacing-unit * 9;
 
   // Hide native clear button in IE10+
   ::-ms-clear {
     display: none;
+  }
+
+  .icon-mini-white {
+    &.icon-search {
+      .opacity(.2);
+
+      &.active {
+        .opacity(1);
+      }
+    }
   }
 }

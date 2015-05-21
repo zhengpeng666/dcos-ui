@@ -17,6 +17,12 @@ var FilterInputText = React.createClass({
     };
   },
 
+  getInitialState: function () {
+    return {
+      focus: false
+    };
+  },
+
   handleChange: function (e) {
     e.preventDefault();
     this.props.handleFilterChange(this.refs.filterInput.getDOMNode().value);
@@ -27,6 +33,18 @@ var FilterInputText = React.createClass({
     this.props.handleFilterChange("");
   },
 
+  handleBlur: function () {
+    this.setState({
+      focus: false
+    });
+  },
+
+  handleFocus: function () {
+    this.setState({
+      focus: true
+    });
+  },
+
   render: function () {
     var props = this.props;
     var clearIconClasses = React.addons.classSet({
@@ -34,18 +52,25 @@ var FilterInputText = React.createClass({
       "hidden": props.searchString.length === 0
     });
 
+    var iconSearchClasses = React.addons.classSet({
+      "icon icon-mini icon-mini-white icon-search": true,
+      "active": this.state.focus
+    });
+
     return (
       <div className="form-group form-group-small filter-input-text-group">
         <div className="form-control form-control-small form-control-inverse form-control-group">
           <span className="form-control-group-add-on form-control-group-add-on-prepend">
-            <i className="icon icon-mini icon-search"></i>
+            <i className={iconSearchClasses}></i>
           </span>
           <input
             type="text"
             className="form-control form-control-small form-control-inverse filter-input-text"
             placeholder="Filter"
             value={this.props.searchString}
+            onBlur={this.handleBlur}
             onChange={this.handleChange}
+            onFocus={this.handleFocus}
             ref="filterInput" />
           <span className={clearIconClasses}>
             <a href="#" onClick={this.handleClearInput}>
