@@ -119,6 +119,8 @@ var ResourceBarChart = React.createClass({
           <div className="panel-title">
             {this.getHeadline(info)}
           </div>
+          <div className="panel-options-right fixed-width">
+          </div>
         </div>
         <div className="panel-content" ref="panelContent">
           {this.getBarChart()}
