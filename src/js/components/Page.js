@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var GeminiScrollbar = require("react-gemini-scrollbar");
 var React = require("react/addons");
 
 var SidebarToggle = require("../components/SidebarToggle");
@@ -47,9 +48,11 @@ var Page = React.createClass({
           </div>
         </div>
         <div className="page-content container-scrollable">
-          <div className="container container-fluid container-pod">
-            {this.props.children}
-          </div>
+          <GeminiScrollbar autoshow={true}>
+            <div className="container container-fluid container-pod">
+              {this.props.children}
+            </div>
+          </GeminiScrollbar>
         </div>
       </div>
     );

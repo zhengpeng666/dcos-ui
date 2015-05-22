@@ -1,8 +1,9 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
-var React = require("react/addons");
+var GeminiScrollbar = require("react-gemini-scrollbar");
 var Link = require("react-router").Link;
+var React = require("react/addons");
 var State = require("react-router").State;
 
 var Config = require("../config/Config");
@@ -156,13 +157,15 @@ var Sidebar = React.createClass({
           </div>
         </div>
         <div className="sidebar-content container-scrollable">
-          <nav>
-            <div className="container container-fluid container-fluid-narrow">
-              <ul className="sidebar-menu list-unstyled">
-                {this.getMenuItems()}
-              </ul>
-            </div>
-          </nav>
+          <GeminiScrollbar autoshow={true} className="dark">
+            <nav>
+              <div className="container container-fluid container-fluid-narrow">
+                <ul className="sidebar-menu list-unstyled">
+                  {this.getMenuItems()}
+                </ul>
+              </div>
+            </nav>
+          </GeminiScrollbar>
         </div>
         <div className="sidebar-footer">
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom logo-container">
