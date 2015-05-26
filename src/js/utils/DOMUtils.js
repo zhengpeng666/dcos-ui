@@ -4,6 +4,7 @@ var DOMUtils = {
   getComputedWidth: function (obj) {
     return DOMUtils.getComputedDimensions(obj).width;
   },
+
   getComputedDimensions: function (obj) {
     var compstyle;
     if (typeof window.getComputedStyle === "undefined") {
@@ -26,12 +27,32 @@ var DOMUtils = {
       computeInnerBound,
       obj.offsetWidth
     );
+
     var height = _.foldl(
       ["paddingTop", "paddingBottom", "borderTopWidth", "borderBottomWidth"],
       computeInnerBound,
       obj.offsetHeight
     );
-    return { width: width, height: height };
+
+    return {
+      width: width,
+      height: height
+    };
+  },
+
+  whichTransitionEvent: function (el) {
+    var transitions = {
+      "transition": "transitionend",
+      "OTransition": "oTransitionEnd",
+      "MozTransition": "transitionend",
+      "WebkitTransition": "webkitTransitionEnd"
+    };
+
+    for (var t in transitions){
+      if (el.style[t] !== undefined) {
+        return transitions[t];
+      }
+    }
   }
 };
 
