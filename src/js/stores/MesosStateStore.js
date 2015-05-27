@@ -293,7 +293,6 @@ function addFrameworkToPreviousStates(_framework, colorIndex) {
     _.extend(framework, {
       date: state.date,
       colorIndex: colorIndex,
-      slave_ids: [],
       offered_resources: {cpus: 0, disk: 0, mem: 0},
       used_resources: {cpus: 0, disk: 0, mem: 0},
       TASK_ERROR: 0,
