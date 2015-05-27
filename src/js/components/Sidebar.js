@@ -184,7 +184,7 @@ var Sidebar = React.createClass({
             <button className="button button-smallbutton-link"
               data-behavior="show-tip"
               data-tip-place="top-right"
-              data-tip-content="Install Command Line Tools"
+              data-tip-content="Install the Command Line"
               onClick={this.handleShowCliInstructions}>
                 <i className="icon icon-cli icon-medium clickable"></i>
             </button>
