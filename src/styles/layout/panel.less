@@ -29,7 +29,7 @@
 
       /* Hacky - please remove after panel-options-right is filled with content */
       &.fixed-width {
-        width: @base-spacing-unit * 7.5;
+        display: none;
       }
     }
 
@@ -51,6 +51,14 @@
 
       .panel-heading {
         padding: (@base-spacing-unit-screen-mini * 0.5) (@base-spacing-unit-screen-mini * 1);
+
+        .panel-options-right {
+          /* Hacky - please remove after panel-options-right is filled with content */
+          &.fixed-width {
+            display: block;
+            width: @base-spacing-unit * 3.5;
+          }
+        }
       }
 
       .panel-content {
@@ -71,6 +79,7 @@
        .panel-options-right {
           /* Hacky - please remove after panel-options-right is filled with content */
           &.fixed-width {
+            display: block;
             width: @base-spacing-unit * 8.1;
           }
         }
@@ -94,6 +103,7 @@
         .panel-options-right {
           /* Hacky - please remove after panel-options-right is filled with content */
           &.fixed-width {
+            display: block;
             width: @base-spacing-unit * 8.8;
           }
         }
