@@ -37,6 +37,11 @@
   .panel-content {
     padding: @base-spacing-unit;
   }
+  &.dashboard-panel {
+    .panel-content {
+      height: (@base-spacing-unit * 14) - @heading-h4-text-font-size;
+    }
+  }
 }
 
 & when (@screen-mini-enabled) {

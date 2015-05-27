@@ -75,6 +75,7 @@ var ResourceTimeSeriesChart = React.createClass({
           currentValue={this.getLatestPercent(allocResources)}
           subHeading={this.getHeadline(allocResources, totalResources)} />
         {this.getChart()}
+        <div className="timeseries-selector" />
       </div>
     );
   }
