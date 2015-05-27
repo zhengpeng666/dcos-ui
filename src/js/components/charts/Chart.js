@@ -32,12 +32,11 @@ var Chart = React.createClass({
   },
 
   updateWidth: function () {
-    var newWidth = DOMUtils.getComputedWidth(this.getDOMNode());
+    var dimensions = DOMUtils.getComputedDimensions(this.getDOMNode());
+    var data = this.internalStorage_get();
 
-    if (this.internalStorage_get().width !== newWidth) {
-      this.internalStorage_set({
-        width: newWidth
-      });
+    if (data.width !== dimensions.width || data.height !== dimensions.height) {
+      this.internalStorage_set(dimensions);
       this.forceUpdate();
     }
   },
@@ -45,9 +44,10 @@ var Chart = React.createClass({
   getChildren: function () {
     var data = this.internalStorage_get();
     var width = data.width;
+    var height = data.height;
     if (width != null) {
       var calcHeight = this.props.calcHeight;
-      var height = width / 2;
+
       if (_.isFunction(calcHeight)) {
         height = calcHeight(width);
       }

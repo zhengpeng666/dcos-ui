@@ -101,8 +101,13 @@ var DialChart = React.createClass({
       .data(data.pie(normalizedData));
   },
 
+  getRadius: function(props) {
+    var smallSide = _.min([props.width, props.height]);
+    return smallSide / 2;
+  },
+
   getArcs: function(props) {
-    var radius = props.width / 2;
+    var radius = this.getRadius(props);
     return {
       innerArc: d3.svg.arc()
         .outerRadius(radius * 0.9)

@@ -1,5 +1,15 @@
 .service-list-component {
+  display: flex;
+
  .list {
+
+   display: flex;
+   flex-direction: column;
+
+   .list-item:first-child {
+     padding-top: 0;
+   }
+
   a:hover {
     color: @white;
   }
