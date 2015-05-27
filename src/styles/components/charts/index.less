@@ -1,6 +1,13 @@
 .chart {
   transform: translateZ(0);
 
+  display: flex;
+  flex-direction: column;
+
+  .chart-chart {
+    flex-grow: 1;
+  }
+
   svg .background {
     fill: fade(@neutral, 80%);
   }

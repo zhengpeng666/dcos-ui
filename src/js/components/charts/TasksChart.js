@@ -115,13 +115,9 @@ var TasksChart = React.createClass({
 
     return (
       <div className="chart">
-        <div className="row">
-          <div className="column-small-offset-1 column-small-10">
-            <Chart calcHeight={function (w) { return w; }}>
-              {this.getDialChart(tasks)}
-            </Chart>
-          </div>
-        </div>
+        <Chart calcHeight={function (w) { return w; }}>
+          {this.getDialChart(tasks)}
+        </Chart>
         <div className="row">
           {this.getTaskInfo(tasks)}
         </div>
