@@ -39,8 +39,18 @@ var MARATHON_IMAGES = {
 };
 
 function setHostsToFrameworkCount(frameworks) {
+  var slaves = _.last(_mesosStates).slaves;
+
   return _.map(frameworks, function (framework) {
-    framework.slaves_count = framework.slave_ids.length;
+    framework.slaves_count = _.reduce(slaves, function (count, slave) {
+      if (_.find(framework.tasks, function (task) {
+        return task.slave_id === slave.id;
+      })) {
+        count++;
+      }
+      return count;
+    }, 0);
+
     return framework;
   });
 }
