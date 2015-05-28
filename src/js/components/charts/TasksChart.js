@@ -59,7 +59,7 @@ var TasksChart = React.createClass({
       var classSet = React.addons.classSet(classes);
       return (
         <div key={key} className={classSet}>
-          <p className="h1 unit">
+          <p className="h1 unit flush-top">
             {task.value}
           </p>
           <p className={"unit-label path-color-" + info.colorIndex}>
@@ -115,13 +115,9 @@ var TasksChart = React.createClass({
 
     return (
       <div className="chart">
-        <div className="row">
-          <div className="column-small-offset-1 column-small-10">
-            <Chart calcHeight={function (w) { return w; }}>
-              {this.getDialChart(tasks)}
-            </Chart>
-          </div>
-        </div>
+        <Chart>
+          {this.getDialChart(tasks)}
+        </Chart>
         <div className="row">
           {this.getTaskInfo(tasks)}
         </div>

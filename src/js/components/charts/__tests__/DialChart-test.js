@@ -109,4 +109,23 @@ describe("DialChart", function () {
 
   });
 
+  describe("#getRadius", function () {
+
+    it("uses the width of its container when no height is set", function () {
+      var r = this.instance.getRadius({ width: 100 });
+      expect(r).toEqual(50);
+    });
+
+    it("uses the width of its container when both are available and w < h", function () {
+      var r = this.instance.getRadius({ width: 100, height: 120 });
+      expect(r).toEqual(50);
+    });
+
+    it("uses the height of its container when both are available and h < w", function () {
+      var r = this.instance.getRadius({ width: 120, height: 100 });
+      expect(r).toEqual(50);
+    });
+
+  });
+
 });

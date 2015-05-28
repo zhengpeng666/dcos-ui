@@ -58,7 +58,7 @@ var HostTimeSeriesChart = React.createClass({
 
   getChart: function (props) {
     return (
-      <Chart calcHeight={function (w) { return w / 2; }}>
+      <Chart>
         <TimeSeriesChart
           data={this.getData(props)}
           maxY={this.getMaxY()}
@@ -80,6 +80,7 @@ var HostTimeSeriesChart = React.createClass({
           subHeading={"Connected Nodes"}
           y="slavesCount" />
         {this.getChart(props)}
+        <div className="timeseries-selector" />
       </div>
     );
   }

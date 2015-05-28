@@ -54,7 +54,7 @@ var ResourceTimeSeriesChart = React.createClass({
     var props = this.props;
 
     return (
-      <Chart calcHeight={function (w) { return w / 2; }}>
+      <Chart>
         <TimeSeriesChart
           data={this.getData()}
           maxY={100}
@@ -75,6 +75,7 @@ var ResourceTimeSeriesChart = React.createClass({
           currentValue={this.getLatestPercent(allocResources)}
           subHeading={this.getHeadline(allocResources, totalResources)} />
         {this.getChart()}
+        <div className="timeseries-selector" />
       </div>
     );
   }

@@ -42,6 +42,11 @@
   .panel-content {
     padding: @base-spacing-unit;
   }
+  &.dashboard-panel {
+    .panel-content {
+      height: (@base-spacing-unit * 14) - @heading-h4-text-font-size;
+    }
+  }
 }
 
 & when (@screen-mini-enabled) {
@@ -63,6 +68,11 @@
 
       .panel-content {
         padding: @base-spacing-unit-screen-mini * 1;
+      }
+      &.dashboard-panel {
+        .panel-content {
+          height: (@base-spacing-unit-screen-mini * 17) - @heading-h4-text-font-size-scale-screen-mini;
+        }
       }
     }
   }
@@ -87,6 +97,11 @@
 
       .panel-content {
         padding: @base-spacing-unit-screen-small * 0.5;
+      }
+      &.dashboard-panel {
+        .panel-content {
+          height: (@base-spacing-unit-screen-small * 10) - @heading-h4-text-font-size-scale-screen-small;
+        }
       }
     }
   }
@@ -113,6 +128,11 @@
       .panel-content {
         padding: @base-spacing-unit-screen-medium * 0.5;
       }
+      &.dashboard-panel {
+        .panel-content {
+          height: (@base-spacing-unit-screen-medium * 7.5) - @heading-h4-text-font-size-scale-screen-medium;
+        }
+      }
     }
   }
 }
@@ -128,6 +148,32 @@
 
       .panel-content {
         padding: @base-spacing-unit-screen-large * 0.5;
+      }
+      &.dashboard-panel {
+        .panel-content {
+          height: (@base-spacing-unit-screen-large * 5.5) - @heading-h4-text-font-size-scale-screen-large;
+        }
+      }
+    }
+  }
+}
+
+& when (@screen-x-large-enabled) {
+  @media (min-width: @screen-x-large) {
+    .panel {
+      margin-bottom: @grid-gutter-width-screen-x-large;
+
+      .panel-heading {
+        padding: (@base-spacing-unit-screen-x-large * 0.25) (@base-spacing-unit-screen-x-large * 0.5);
+      }
+
+      .panel-content {
+        padding: @base-spacing-unit-screen-x-large * 0.5;
+      }
+      &.dashboard-panel {
+        .panel-content {
+          height: (@base-spacing-unit-screen-x-large * 5) - @heading-h4-text-font-size-scale-screen-large;
+        }
       }
     }
   }
