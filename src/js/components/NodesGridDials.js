@@ -50,10 +50,17 @@ var NodesGridDials = React.createClass({
     var props = this.props;
     var resourceConfig = ResourceTypes[props.selectedResource];
     var serviceSlices = this.getServiceSlicesConfig(host);
+    var percentage;
 
-    var percentage = _.foldl(serviceSlices, function (memo, slice) {
-      return memo + slice.percentage;
-    }, 0);
+    if (serviceSlices.length > 0) {
+      percentage = _.foldl(serviceSlices, function (memo, slice) {
+        return memo + slice.percentage;
+      }, 0);
+    } else {
+      percentage = _.last(
+        host.used_resources[props.selectedResource]
+      ).percentage;
+    }
 
     return [{
       colorIndex: resourceConfig.colorIndex,
