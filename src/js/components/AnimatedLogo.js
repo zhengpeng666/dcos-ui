@@ -182,8 +182,8 @@ var AnimatedLogo = React.createClass({
 
     var scaleFunction = "scale(" + props.scale + ")";
     var svgStyle = {
-      "-ms-transform": scaleFunction,
-      "-webkit-transform": scaleFunction,
+      msTransform: scaleFunction,
+      WebkitTransform: scaleFunction,
       transform: scaleFunction
     };
     var gradientStyles = this.getGradientStyles();
