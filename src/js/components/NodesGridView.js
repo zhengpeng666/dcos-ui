@@ -195,13 +195,13 @@ var NodesGridView = React.createClass({
       <div className="nodes-grid">
 
         <div className={classSet}>
-          <label className="show-services-label">
+          <h5 className="show-services-label flush-top">
             <input type="checkbox"
               name="nodes-grid-show-services"
               checked={state.showServices}
               onChange={this.handleShowServices} />
             Show Services by Share
-          </label>
+          </h5>
 
           {this.getServicesList(props)}
         </div>
