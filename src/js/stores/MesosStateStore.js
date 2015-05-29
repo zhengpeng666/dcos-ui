@@ -705,6 +705,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       data.date = Date.now();
     }
 
+    data.slaves = data.slaves || [];
     data.frameworks = normalizeFrameworks(data.frameworks, data.date);
     data.total_resources = sumResources(_.pluck(data.slaves, "resources"));
     data.used_resources = sumResources(
