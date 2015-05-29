@@ -39,18 +39,11 @@ var MARATHON_IMAGES = {
 };
 
 function setHostsToFrameworkCount(frameworks) {
-  var slaves = _.last(_mesosStates).slaves;
-
   return _.map(frameworks, function (framework) {
-    framework.slaves_count = _.reduce(slaves, function (count, slave) {
-      if (_.find(framework.tasks, function (task) {
-        return task.slave_id === slave.id;
-      })) {
-        count++;
-      }
-      return count;
-    }, 0);
-
+    if (framework.slave_ids == null) {
+      framework.slave_ids = [];
+    }
+    framework.slaves_count = framework.slave_ids.length;
     return framework;
   });
 }
@@ -293,6 +286,7 @@ function addFrameworkToPreviousStates(_framework, colorIndex) {
     _.extend(framework, {
       date: state.date,
       colorIndex: colorIndex,
+      slave_ids: [],
       offered_resources: {cpus: 0, disk: 0, mem: 0},
       used_resources: {cpus: 0, disk: 0, mem: 0},
       TASK_ERROR: 0,
