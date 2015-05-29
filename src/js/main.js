@@ -21,7 +21,7 @@ require("./utils/ReactSVG");
 var Config = require("./config/Config");
 var DashboardPage = require("./pages/DashboardPage");
 var NodesPage = require("./pages/NodesPage");
-var NodesListView = require("./components/NodesListView");
+var HostTable = require("./components/HostTable");
 var NodesGridView = require("./components/NodesGridView");
 var Index = require("./pages/Index");
 var ServicesPage = require("./pages/ServicesPage");
@@ -32,7 +32,7 @@ var routes = (
     <Route name="dashboard" path="dashboard/?" handler={DashboardPage} />
     <Route name="services" path="services/?" handler={ServicesPage} />
     <Route name="nodes" path="nodes/?" handler={NodesPage}>
-      <Route name="nodes-list" path="list/?" handler={NodesListView} />
+      <Route name="nodes-list" path="list/?" handler={HostTable} />
       <Route name="nodes-grid" path="grid/?" handler={NodesGridView} />
       <Redirect from="/nodes/?" to="nodes-list" />
     </Route>
