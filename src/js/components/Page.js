@@ -47,13 +47,11 @@ var Page = React.createClass({
             {this.getNavigation()}
           </div>
         </div>
-        <div className="page-content container-scrollable">
-          <GeminiScrollbar autoshow={true}>
-            <div className="container container-fluid container-pod">
-              {this.props.children}
-            </div>
-          </GeminiScrollbar>
-        </div>
+        <GeminiScrollbar autoshow={true} className="page-content container-scrollable inverse">
+          <div className="container container-fluid container-pod">
+            {this.props.children}
+          </div>
+        </GeminiScrollbar>
       </div>
     );
   }
