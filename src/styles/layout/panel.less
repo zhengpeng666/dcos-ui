@@ -46,6 +46,8 @@
     .panel-content {
       height: (@base-spacing-unit * 14) - @heading-h4-text-font-size;
     }
+    // Fixes a Safari flex issue where panels overflow the column on resize
+    width: 100%;
   }
 }
 
