@@ -49,9 +49,18 @@ var NodesGridDials = React.createClass({
   getUsedSliceConfig: function (host) {
     var props = this.props;
     var resourceConfig = ResourceTypes[props.selectedResource];
-    var percentage = _.last(
-      host.used_resources[props.selectedResource]
-    ).percentage;
+    var serviceSlices = this.getServiceSlicesConfig(host);
+    var percentage;
+
+    if (serviceSlices.length > 0) {
+      percentage = _.foldl(serviceSlices, function (memo, slice) {
+        return memo + slice.percentage;
+      }, 0);
+    } else {
+      percentage = _.last(
+        host.used_resources[props.selectedResource]
+      ).percentage;
+    }
 
     return [{
       colorIndex: resourceConfig.colorIndex,
@@ -102,12 +111,12 @@ var NodesGridDials = React.createClass({
     var resourceConfig = ResourceTypes[this.props.selectedResource];
 
     if (host.active) {
-      var slideData = this.getActiveSliceData(host);
+      var sliceData = this.getActiveSliceData(host);
       return {
-        data: slideData.data,
+        data: sliceData.data,
         description: [
           <span className="unit" key={"unit"}>
-            {slideData.usedPercentage}%
+            {sliceData.usedPercentage}%
           </span>,
           <span className="unit-label text-muted" key={"unit-label"}>
             {resourceConfig.label}

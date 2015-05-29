@@ -26,11 +26,11 @@ function getMesosHosts(state) {
   var allHosts = MesosStateStore.getLatest().slaves;
 
   return {
-    hosts: hosts,
-    statesProcessed: MesosStateStore.isStatesProcessed(),
-    services: MesosStateStore.getFrameworksWithHostsCount(allHosts),
-    refreshRate: MesosStateStore.getRefreshRate(),
     allHosts: allHosts,
+    hosts: hosts,
+    refreshRate: MesosStateStore.getRefreshRate(),
+    services: MesosStateStore.getFrameworksWithHostsCount(allHosts),
+    statesProcessed: MesosStateStore.isStatesProcessed(),
     totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
     totalResources: MesosStateStore.getTotalResources()
   };
@@ -181,6 +181,7 @@ var NodesPage = React.createClass({
         <RouteHandler
           selectedResource={this.state.selectedResource}
           hosts={hostList}
+          serviceFilter={state.byServiceFilter}
           services={data.services} />
       </div>
     );
