@@ -53,6 +53,17 @@
   opacity: 1;
 }
 
+.modal-leave {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
+.modal-leave.modal-leave-active {
+  opacity: 0.01;
+  transform: translate(0, -25%);
+  transition: transform .5s ease-in, opacity .5s ease-in;
+}
+
 
 // Modal specific styles
 .install-cli-modal-content {

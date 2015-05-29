@@ -3,13 +3,17 @@
 var React = require("react");
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 
+var DOMUtils = require("../utils/DOMUtils");
+
 var Modal = React.createClass({
 
   displayName: "Modal",
 
   propTypes: {
+    closeByBackdropClick: React.PropTypes.bool,
     closeText: React.PropTypes.string,
     footer: React.PropTypes.object,
+    shouldClose: React.PropTypes.bool,
     showCloseButton: React.PropTypes.bool,
     showFooter: React.PropTypes.bool,
     size: React.PropTypes.string,
@@ -20,12 +24,20 @@ var Modal = React.createClass({
 
   getDefaultProps: function () {
     return {
+      closeByBackdropClick: true,
       closeText: "Close",
       showCloseButton: true,
       titleText: "",
       size: "",
+      shouldClose: false,
       subHeader: "",
       onClose: function () {}
+    };
+  },
+
+  getInitialState: function () {
+    return {
+      closing: false
     };
   },
 
@@ -33,8 +45,39 @@ var Modal = React.createClass({
     this.forceUpdate();
   },
 
+  componentWillReceiveProps: function (nextProps) {
+    if (nextProps.shouldClose && !this.props.shouldClose) {
+      this.closeModal();
+    }
+  },
+
+  componentWillUnmount: function () {
+    var modalElement = this.refs.modal.getDOMNode();
+    var transitionEvent = DOMUtils.whichTransitionEvent(modalElement);
+    modalElement.removeEventListener(transitionEvent, this.props.onClose);
+  },
+
+  shouldComponentUpdate: function (nextProps) {
+    return nextProps.shouldClose === this.props.shouldClose;
+  },
+
   handleBackdropClick: function () {
-    this.props.onClose();
+    if (this.props.closeByBackdropClick) {
+      this.closeModal();
+    }
+  },
+
+  closeModal: function () {
+    var modalElement = this.refs.modal.getDOMNode();
+    var transitionEvent = DOMUtils.whichTransitionEvent(modalElement);
+
+    if (transitionEvent == null) {
+      this.props.onClose();
+    } else {
+      modalElement.addEventListener(transitionEvent, this.props.onClose);
+    }
+
+    this.setState({closing: true});
   },
 
   getCloseButton: function () {
@@ -67,7 +110,7 @@ var Modal = React.createClass({
   },
 
   getModal: function (isMounted) {
-    if (!isMounted) {
+    if (!isMounted || this.state.closing) {
       return null;
     }
 
@@ -85,7 +128,7 @@ var Modal = React.createClass({
     });
 
     return (
-      <div className={modalClassSet} >
+      <div className={modalClassSet}>
         {this.getCloseButton()}
         <div className="modal-header">
           <div className="container container-pod container-pod-short">
@@ -109,13 +152,13 @@ var Modal = React.createClass({
     var isMounted = this.isMounted();
     var backdropClassSet = React.addons.classSet({
       "fade": true,
-      "in": isMounted,
+      "in": isMounted && !this.state.closing,
       "modal-backdrop": true
     });
 
     return (
       <div className="modal-container container-scrollable">
-        <CSSTransitionGroup transitionName="modal" component="div">
+        <CSSTransitionGroup transitionName="modal" ref="modal" component="div">
           {this.getModal(isMounted)}
         </CSSTransitionGroup>
         <div className={backdropClassSet} onClick={this.handleBackdropClick}>

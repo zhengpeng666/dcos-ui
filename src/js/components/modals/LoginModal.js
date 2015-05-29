@@ -18,7 +18,7 @@ var LoginModal = React.createClass({
 
   getInitialState: function () {
     return {
-      show: false
+      closing: false
     };
   },
 
@@ -45,7 +45,11 @@ var LoginModal = React.createClass({
       return;
     }
 
-    this.props.onLogin(email);
+    this.setState({closing: true});
+  },
+
+  onClose: function () {
+    this.props.onLogin(this.internalStorage_get().email);
   },
 
   getFooter: function () {
@@ -83,10 +87,13 @@ var LoginModal = React.createClass({
     });
 
     return (
-      <Modal titleText="Mesosphere DCOS"
+      <Modal closeByBackdropClick={false}
+          titleText="Mesosphere DCOS"
           subHeader={this.getSubHeader()}
           footer={this.getFooter(data.email)}
-          showCloseButton={false}>
+          showCloseButton={false}
+          shouldClose={this.state.closing}
+          onClose={this.onClose}>
         <form className="flush-bottom"
             onSubmit={this.handleSubmit}>
           <div className={emailClassSet}>
