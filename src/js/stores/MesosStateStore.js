@@ -40,6 +40,9 @@ var MARATHON_IMAGES = {
 
 function setHostsToFrameworkCount(frameworks) {
   return _.map(frameworks, function (framework) {
+    if (framework.slave_ids == null) {
+      framework.slave_ids = [];
+    }
     framework.slaves_count = framework.slave_ids.length;
     return framework;
   });
