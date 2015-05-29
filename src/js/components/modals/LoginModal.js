@@ -18,7 +18,7 @@ var LoginModal = React.createClass({
 
   getInitialState: function () {
     return {
-      show: true
+      closing: false
     };
   },
 
@@ -45,7 +45,7 @@ var LoginModal = React.createClass({
       return;
     }
 
-    this.setState({show: false});
+    this.setState({closing: true});
   },
 
   onClose: function () {
@@ -92,7 +92,7 @@ var LoginModal = React.createClass({
           subHeader={this.getSubHeader()}
           footer={this.getFooter(data.email)}
           showCloseButton={false}
-          show={this.state.show}
+          shouldClose={this.state.closing}
           onClose={this.onClose}>
         <form className="flush-bottom"
             onSubmit={this.handleSubmit}>
