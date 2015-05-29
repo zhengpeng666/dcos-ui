@@ -6,21 +6,25 @@
   .nodes-grid-legend {
     border-right: 1px solid @neutral;
     display: flex;
+    flex-shrink: 0;
     flex-direction: column;
+    margin-right: @base-spacing-unit;
     flex-basis: 225px;
-    margin-right: 25px;
     transition: opacity .5s;
 
-    &.disabled {
+    &.disabled .nodes-grid-service-list {
       opacity: 0.5;
     }
 
     .show-services-label {
       color: @white;
       user-select: none;
+      border-bottom: 1px solid @neutral;
+      padding-bottom: @base-spacing-unit / 1.5;
+      margin-right: @base-spacing-unit;
 
       input {
-        margin-right: 8px;
+        margin-right: @base-spacing-unit / 3;
         outline: none;
       }
     }
@@ -28,14 +32,19 @@
     .nodes-grid-service-list {
       color: @white;
       width: 225px;
+      margin-right: @base-spacing-unit;
+
+      > li {
+        line-height: 1.2 * @base-spacing-unit;
+      }
 
       .service-legend-color {
         background-color: @white;
         border-radius: 4px;
         display: inline-block;
-        margin-right: 8px;
-        height: 8px;
-        width: 8px;
+        margin-right: @base-spacing-unit / 3;
+        height: @base-spacing-unit / 3;
+        width: @base-spacing-unit / 3;
 
         &.service-color-0 {
           background-color: @purple;
