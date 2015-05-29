@@ -23,7 +23,7 @@ var NODES_DISPLAY_LIMIT = 300;
 function getMesosHosts(state) {
   var filters = _.pick(state, "searchString", "byServiceFilter");
   var hosts = MesosStateStore.getHosts(filters);
-  var allHosts = MesosStateStore.getLatest().slaves || [];
+  var allHosts = MesosStateStore.getLatest().slaves;
 
   return {
     hosts: hosts,
