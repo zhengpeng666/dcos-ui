@@ -27,9 +27,12 @@ html, body {
 }
 
 .container-scrollable {
-  flex: 1 1 auto;
-  height: 0;
+  flex: 8;
   overflow-y: auto;
+  overflow-x: hidden;
+  > .gm-scrollbar-container {
+    height: 100%;
+  }
 }
 
 #canvas {

@@ -156,17 +156,15 @@ var Sidebar = React.createClass({
             </p>
           </div>
         </div>
-        <div className="sidebar-content container-scrollable">
-          <GeminiScrollbar autoshow={true} className="dark">
-            <nav>
-              <div className="container container-fluid container-fluid-narrow">
-                <ul className="sidebar-menu list-unstyled">
-                  {this.getMenuItems()}
-                </ul>
-              </div>
-            </nav>
-          </GeminiScrollbar>
-        </div>
+        <GeminiScrollbar autoshow={true} className="sidebar-content container-scrollable">
+          <nav>
+            <div className="container container-fluid container-fluid-narrow">
+              <ul className="sidebar-menu list-unstyled">
+                {this.getMenuItems()}
+              </ul>
+            </div>
+          </nav>
+        </GeminiScrollbar>
         <div className="sidebar-footer">
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom logo-container">
             <img src="./img/layout/sidebar/sidebar-logo.png" className="sidebar-footer-image" alt="sidebar footer image" />
