@@ -180,7 +180,12 @@ var AnimatedLogo = React.createClass({
     var data = this.internalStorage_get();
     var props = this.props;
 
-    var svgStyle = {transform: "scale(" + props.scale + ")"};
+    var scaleFunction = "scale(" + props.scale + ")";
+    var svgStyle = {
+      "-ms-transform": scaleFunction,
+      "-webkit-transform": scaleFunction,
+      transform: scaleFunction
+    };
     var gradientStyles = this.getGradientStyles();
 
     var strokeID = "url(#" + data.logoGradientID + ")";
