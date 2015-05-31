@@ -5,6 +5,7 @@ var GeminiScrollbar = require("react-gemini-scrollbar");
 var Link = require("react-router").Link;
 var React = require("react/addons");
 var State = require("react-router").State;
+var ReactZeroClipboard = require("react-zeroclipboard");
 
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
@@ -151,8 +152,14 @@ var Sidebar = React.createClass({
             <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={data.mesosInfo.cluster}>
               {data.mesosInfo.cluster}
             </h2>
-            <p className="sidebar-header-sublabel text-align-center text-overflow flush-bottom" title={data.mesosInfo.hostname}>
-              {data.mesosInfo.hostname}
+            <p className="sidebar-header-sublabel text-align-center text-overflow flush-bottom"
+                title={data.mesosInfo.hostname}>
+              <ReactZeroClipboard text={data.mesosInfo.hostname}>
+               <button className="button button-small button-link button-primary">
+                  {data.mesosInfo.hostname}
+                </button>
+                <i className="icon icon-mini icon-mini-color icon-clipboard clickable" />
+              </ReactZeroClipboard>
             </p>
           </div>
         </div>
@@ -172,7 +179,7 @@ var Sidebar = React.createClass({
               <small>
                 <span className="clickable" onClick={this.handleVersionClick}>
                   <span className="company-name">Mesosphere </span>
-                  <span className="app-name">DCOS </span>
+                  <span className="app-name">DCOS Interface </span>
                   <span className="version-number">v.{Config.version}</span>
                 </span>
               </small>
