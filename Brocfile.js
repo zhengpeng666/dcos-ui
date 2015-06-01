@@ -164,6 +164,17 @@ var tasks = {
     );
   },
 
+  swf: function (masterTree) {
+    var swfTree = funnel(dirs.src, {
+      files: ["ZeroClipboard.swf"]
+    });
+
+    return mergeTrees(
+      [masterTree, swfTree],
+      {overwrite: true}
+    );
+  },
+
   md5: function (masterTree) {
     // add md5 checksums to filenames
     return assetRev(masterTree, {
@@ -226,6 +237,7 @@ var buildTree = _.compose(tasks.eslint, createJsTree);
 if (env === "development" || env === "production" ) {
   // add steps used in both development and production
   buildTree = _.compose(
+    tasks.swf,
     tasks.img,
     tasks.index,
     tasks.css,
@@ -237,6 +249,7 @@ if (env === "development" || env === "production" ) {
 if (env === "production") {
   // add steps that are exclusively used in production
   buildTree = _.compose(
+    tasks.swf,
     tasks.md5,
     tasks.minifyCSS,
     tasks.minifyJs,

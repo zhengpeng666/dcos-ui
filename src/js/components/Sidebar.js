@@ -5,6 +5,8 @@ var GeminiScrollbar = require("react-gemini-scrollbar");
 var Link = require("react-router").Link;
 var React = require("react/addons");
 var State = require("react-router").State;
+var ZeroClipboard = require("zeroclipboard");
+global.ZeroClipboard = ZeroClipboard;
 var ReactZeroClipboard = require("react-zeroclipboard");
 
 var Config = require("../config/Config");
