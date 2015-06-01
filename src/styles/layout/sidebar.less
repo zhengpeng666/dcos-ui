@@ -45,6 +45,30 @@
     .sidebar-header-label {
       color: @black;
     }
+
+    .sidebar-header-sublabel {
+      .icon-clipboard {
+        visibility: hidden;
+        opacity: 0.5;
+      }
+      .hostname {
+        padding: @base-spacing-unit * 0.25;
+        // compensate for the icon on the right
+        padding-left: @base-spacing-unit;
+        color: @purple;
+      }
+      .zeroclipboard-is-hover {
+        .icon-clipboard {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+      &.hover {
+        .icon-clipboard {
+          visibility: visible;
+        }
+      }
+    }
   }
 
   /* Sidebar Footer */

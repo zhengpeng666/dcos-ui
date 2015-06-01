@@ -30,6 +30,13 @@ var Sidebar = React.createClass({
 
   mixins: [State, InternalStorageMixin, TooltipMixin],
 
+  getInitialState: function () {
+    return {
+      mouseOverHostname: false,
+      mouseOverCopyIcon: false
+    };
+  },
+
   componentWillMount: function () {
     this.internalStorage_set({
       showIntercom: IntercomStore.isOpen(),
@@ -103,6 +110,28 @@ var Sidebar = React.createClass({
     SidebarActions.showVersions();
   },
 
+  handleMouseOverHostname: function () {
+    this.setState({mouseOverHostname: true});
+  },
+
+  handleMouseOutHostname: function () {
+    this.setState({mouseOverHostname: false});
+  },
+
+  handleMouseOverCopyIcon: function () {
+    this.setState({mouseOverCopyIcon: true});
+    this.showToolTip("Copy to clipboard");
+  },
+
+  handleMouseOutCopyIcon: function () {
+    this.setState({mouseOverCopyIcon: false});
+    this.hideToolTip();
+  },
+
+  handleCopy: function () {
+    this.showToolTip("Copied!");
+  },
+
   getMenuItems: function () {
     return _.map(MENU_ITEMS, function (val, key) {
       var isActive = this.isActive(key);
@@ -133,6 +162,24 @@ var Sidebar = React.createClass({
     }, this);
   },
 
+  showToolTip: function(text) {
+    this.hideToolTip();
+    var copyButton = this.refs.copyButton.getDOMNode();
+    this.tip_createTipForElement(copyButton);
+    var tipID = copyButton.dataset.tipID;
+    var tip = this.tips[tipID];
+    tip.content(text).show();
+    this.internalStorage_update({tipID: tipID});
+  },
+
+   hideToolTip: function() {
+     var data = this.internalStorage_get();
+     if (data.tipID) {
+       this.tip_destroyTip(data.tipID);
+       this.internalStorage_update({tipID: null});
+     }
+  },
+
   render: function () {
     var data = this.internalStorage_get();
 
@@ -142,6 +189,16 @@ var Sidebar = React.createClass({
       "icon-chat": true,
       "icon-medium": true,
       "icon-medium-color": data.showIntercom
+    });
+
+    var hostnameClassSet = React.addons.classSet({
+      "sidebar-header-sublabel text-align-center text-overflow flush-bottom": true,
+      "hover": this.state.mouseOverHostname
+    });
+
+    var copyIconClassSet = React.addons.classSet({
+      "icon icon-mini icon-clipboard clickable": true,
+      "icon-mini-color": this.state.mouseOverCopyIcon
     });
 
     return (
@@ -154,14 +211,25 @@ var Sidebar = React.createClass({
             <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={data.mesosInfo.cluster}>
               {data.mesosInfo.cluster}
             </h2>
-            <p className="sidebar-header-sublabel text-align-center text-overflow flush-bottom"
-                title={data.mesosInfo.hostname}>
-              <ReactZeroClipboard text={data.mesosInfo.hostname}>
-               <button className="button button-small button-link button-primary">
-                  {data.mesosInfo.hostname}
-                </button>
-                <i className="icon icon-mini icon-mini-color icon-clipboard clickable" />
-              </ReactZeroClipboard>
+            <p className={hostnameClassSet}
+               title={data.mesosInfo.hostname}
+               onMouseOver={this.handleMouseOverHostname}
+               onMouseOut={this.handleMouseOutHostname}>
+              <span className="hostname">
+                {data.mesosInfo.hostname}
+              </span>
+              <span className="copy-button"
+                    data-behavior="show-tip"
+                    data-tip-place="bottom"
+                    onMouseOver={this.handleMouseOverCopyIcon}
+                    onMouseOut={this.handleMouseOutCopyIcon}
+                    ref="copyButton">
+                <ReactZeroClipboard
+                  text={data.mesosInfo.hostname}
+                  onAfterCopy={this.handleCopy}>
+                  <i className={copyIconClassSet} />
+                </ReactZeroClipboard>
+              </span>
             </p>
           </div>
         </div>
