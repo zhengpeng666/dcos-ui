@@ -173,11 +173,11 @@ var Sidebar = React.createClass({
   },
 
    hideToolTip: function() {
-     var data = this.internalStorage_get();
-     if (data.tipID) {
-       this.tip_destroyTip(data.tipID);
-       this.internalStorage_update({tipID: null});
-     }
+    var data = this.internalStorage_get();
+    if (data.tipID) {
+      this.tip_destroyTip(data.tipID);
+      this.internalStorage_update({tipID: null});
+    }
   },
 
   render: function () {
