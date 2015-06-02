@@ -178,8 +178,8 @@ var tasks = {
   md5: function (masterTree) {
     // add md5 checksums to filenames
     return assetRev(masterTree, {
-      extensions: ["js", "css", "png", "jpg", "gif"],
-      replaceExtensions: ["html", "js", "css"]
+      extensions: ["js", "css", "png", "jpg", "gif", "swf"],
+      replaceExtensions: ["html", "js", "css", "swf"]
     });
   }
   // https://github.com/bguiz/broccoli-sprite
@@ -249,7 +249,6 @@ if (env === "development" || env === "production" ) {
 if (env === "production") {
   // add steps that are exclusively used in production
   buildTree = _.compose(
-    tasks.swf,
     tasks.md5,
     tasks.minifyCSS,
     tasks.minifyJs,
