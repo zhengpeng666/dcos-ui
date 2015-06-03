@@ -63,6 +63,9 @@ var Actions = {
 
   identify: function () {
     global.analytics.identify.apply(global.analytics, arguments);
+    this.log({
+      description: "Logged in"
+    });
   },
 
   /**
@@ -76,10 +79,11 @@ var Actions = {
 
     // Populates with basic data that all logs need
     var log = _.extend({
+      appVersion: Config.version,
       description: "",
       date: Date.now(),
+      EXTERNAL_ELB: global.location.hostname,
       page: this.activePage,
-      appVersion: Config.version,
       stintID: this.stintID
     }, anything);
 
