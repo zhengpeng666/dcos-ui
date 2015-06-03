@@ -80,6 +80,30 @@ var HostTable = React.createClass({
     );
   },
 
+  renderHeader: function (prop, order, sortBy) {
+    var title = propToTitle[prop];
+    var caret = {};
+    var caretClassSet = React.addons.classSet({
+      "caret": true,
+      "dropup": order === "desc",
+      "invisible": prop !== sortBy.prop
+    });
+
+    if (isStat(prop) || prop === "TASK_RUNNING") {
+      caret.before = <span className={caretClassSet} />;
+    } else {
+      caret.after = <span className={caretClassSet} />;
+    }
+
+    return (
+      <span>
+        {caret.before}
+        {title}
+        {caret.after}
+      </span>
+    );
+  },
+
   renderTask: function (prop, model) {
     return (
       <span>
@@ -105,33 +129,6 @@ var HostTable = React.createClass({
     );
   },
 
-  renderHeader: function (prop, order, sortBy) {
-    var title = propToTitle[prop];
-    var beforeCaret = null;
-    var afterCaret = null;
-
-    if (prop === sortBy.prop) {
-      var caretClassSet = React.addons.classSet({
-        "caret": true,
-        "dropup": order === "desc"
-      });
-
-      if (isStat(prop) || prop === "TASK_RUNNING") {
-        beforeCaret = <span className={caretClassSet} aria-hiddin="true" />;
-      } else {
-        afterCaret = <span className={caretClassSet} aria-hiddin="true" />;
-      }
-    }
-
-    return (
-      <span>
-        {beforeCaret}
-        {title}
-        {afterCaret}
-      </span>
-    );
-  },
-
   getColumns: function () {
     return [
       {
@@ -140,7 +137,7 @@ var HostTable = React.createClass({
         prop: "hostname",
         render: this.renderHeadline,
         sortable: true,
-        title: this.renderHeader
+        header: this.renderHeader
       },
       {
         className: getClassName,
@@ -148,7 +145,7 @@ var HostTable = React.createClass({
         prop: "TASK_RUNNING",
         render: this.renderTask,
         sortable: true,
-        title: this.renderHeader
+        header: this.renderHeader
       },
       {
         className: getClassName,
@@ -156,7 +153,7 @@ var HostTable = React.createClass({
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        title: this.renderHeader
+        header: this.renderHeader
       },
       {
         className: getClassName,
@@ -164,7 +161,7 @@ var HostTable = React.createClass({
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        title: this.renderHeader
+        header: this.renderHeader
       },
       {
         className: getClassName,
@@ -172,7 +169,7 @@ var HostTable = React.createClass({
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        title: this.renderHeader
+        header: this.renderHeader
       }
     ];
   },
