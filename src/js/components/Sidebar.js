@@ -34,16 +34,6 @@ var Sidebar = React.createClass({
 
   mixins: [State, InternalStorageMixin, TooltipMixin],
 
-  actions_configuration: {
-    mouseOverCopyIcon: {skip: true}
-  },
-
-  getInitialState: function () {
-    return {
-      mouseOverCopyIcon: false
-    };
-  },
-
   componentWillMount: function () {
     this.internalStorage_set({
       showIntercom: IntercomStore.isOpen(),
@@ -118,12 +108,10 @@ var Sidebar = React.createClass({
   },
 
   handleMouseOverCopyIcon: function () {
-    this.setState({mouseOverCopyIcon: true});
     this.showToolTip("Copy to clipboard");
   },
 
   handleMouseOutCopyIcon: function () {
-    this.setState({mouseOverCopyIcon: false});
     this.hideToolTip();
   },
 
@@ -186,11 +174,6 @@ var Sidebar = React.createClass({
       "icon-medium-color": data.showIntercom
     });
 
-    var copyIconClassSet = React.addons.classSet({
-      "icon icon-mini icon-clipboard clickable": true,
-      "icon-mini-color": this.state.mouseOverCopyIcon
-    });
-
     return (
       <div className="sidebar flex-container-col">
         <div className="sidebar-header">
@@ -201,12 +184,12 @@ var Sidebar = React.createClass({
             <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={data.mesosInfo.cluster}>
               {data.mesosInfo.cluster}
             </h2>
-            <p className="sidebar-header-sublabel flush-bottom"
+            <div className="sidebar-header-sublabel flush-bottom"
                title={data.mesosInfo.hostname}>
               <span className="hostname text-align-center text-overflow">
                 {data.mesosInfo.hostname}
               </span>
-              <span data-behavior="show-tip"
+              <div data-behavior="show-tip"
                     data-tip-place="bottom"
                     onMouseOver={this.handleMouseOverCopyIcon}
                     onMouseOut={this.handleMouseOutCopyIcon}
@@ -214,10 +197,10 @@ var Sidebar = React.createClass({
                 <ReactZeroClipboard
                   text={data.mesosInfo.hostname}
                   onAfterCopy={this.handleCopy}>
-                  <i className={copyIconClassSet} />
+                  <i className="icon icon-mini icon-clipboard icon-mini-color clickable" />
                 </ReactZeroClipboard>
-              </span>
-            </p>
+              </div>
+            </div>
           </div>
         </div>
         <GeminiScrollbar autoshow={true} className="sidebar-content container-scrollable">
