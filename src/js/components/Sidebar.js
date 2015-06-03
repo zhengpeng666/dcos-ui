@@ -206,8 +206,7 @@ var Sidebar = React.createClass({
               <span className="hostname text-align-center text-overflow">
                 {data.mesosInfo.hostname}
               </span>
-              <span className="copy-button"
-                    data-behavior="show-tip"
+              <span data-behavior="show-tip"
                     data-tip-place="bottom"
                     onMouseOver={this.handleMouseOverCopyIcon}
                     onMouseOut={this.handleMouseOutCopyIcon}
