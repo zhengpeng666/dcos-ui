@@ -240,7 +240,7 @@ var ServicesTable = React.createClass({
     return (
       <colgroup>
         <col />
-        <col style={{width: "105px"}} />
+        <col style={{width: "14%"}} />
         <col style={{width: "100px"}} />
         <col style={{width: "100px"}} />
         <col style={{width: "100px"}} />
