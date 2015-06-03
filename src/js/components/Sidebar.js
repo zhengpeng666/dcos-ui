@@ -35,7 +35,8 @@ var Sidebar = React.createClass({
   mixins: [State, InternalStorageMixin, TooltipMixin],
 
   actions_configuration: {
-    headers: {skip: true}
+    mouseOverHostname: {skip: true},
+    mouseOverCopyIcon: {skip: true}
   },
 
   getInitialState: function () {
