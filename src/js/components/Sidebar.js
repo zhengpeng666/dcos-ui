@@ -108,15 +108,16 @@ var Sidebar = React.createClass({
   },
 
   handleMouseOverCopyIcon: function () {
-    this.showToolTip("Copy to clipboard");
+    var el = this.refs.copyButton.getDOMNode();
+    var tip = this.tip_showTip(el);
   },
 
   handleMouseOutCopyIcon: function () {
-    this.hideToolTip();
+    this.tip_hideTip(this.refs.copyButton.getDOMNode());
   },
 
   handleCopy: function () {
-    this.showToolTip("Copied!");
+    this.tip_updateTipContent(this.refs.copyButton.getDOMNode(), "Copied!");
     Actions.log({description: "Copied hostname from sidebar"});
   },
 
@@ -150,19 +151,6 @@ var Sidebar = React.createClass({
     }, this);
   },
 
-  showToolTip: function(text) {
-    var tip = this.tip_showCustomTip({
-      target: this.refs.copyButton.getDOMNode(),
-      content: text
-    });
-    this.internalStorage_update({tip: tip});
-  },
-
-  hideToolTip: function () {
-    var tip = this.internalStorage_get().tip;
-    this.tip_hideCustomTip(tip);
-  },
-
   render: function () {
     var data = this.internalStorage_get();
 
@@ -191,6 +179,7 @@ var Sidebar = React.createClass({
               </span>
               <div data-behavior="show-tip"
                     data-tip-place="bottom"
+                    data-tip-content="Copy to clipboard"
                     onMouseOver={this.handleMouseOverCopyIcon}
                     onMouseOut={this.handleMouseOutCopyIcon}
                     ref="copyButton">

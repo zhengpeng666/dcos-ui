@@ -24,21 +24,14 @@ var TooltipMixin = {
     var el = e.target;
 
     if (el.dataset && el.dataset.behavior && el.dataset.behavior === "show-tip") {
-      var tip = this.tips[el.dataset.tipID];
-      tip.content(el.dataset.tipContent);
-      tip.show();
+      this.tip_showTip(el);
       el.addEventListener("mouseleave", this.tip_handleMouseLeave);
     }
   },
 
   tip_handleMouseLeave: function (e) {
     var el = e.target;
-
-    if (el.dataset && this.tips[el.dataset.tipID]) {
-      this.tips[el.dataset.tipID].hide();
-    }
-
-    el.removeEventListener("mouseleave", this.tip_handleMouseLeave);
+    this.tip_hideTip(el);
   },
 
   tip_attachTips: function () {
@@ -86,6 +79,30 @@ var TooltipMixin = {
     }
   },
 
+  /******************/
+  /*   PUBLIC API   */
+  /******************/
+
+  tip_showTip: function (el) {
+    this.tip_updateTipContent(el);
+
+    var tip = this.tips[el.dataset.tipID];
+    tip.show();
+  },
+
+  tip_hideTip: function (el) {
+    if (el.dataset && this.tips[el.dataset.tipID]) {
+      this.tips[el.dataset.tipID].hide();
+    }
+
+    el.removeEventListener("mouseleave", this.tip_handleMouseLeave);
+  },
+
+  tip_updateTipContent: function (el, content) {
+    var tip = this.tips[el.dataset.tipID];
+    tip.content(content || el.dataset.tipContent);
+  },
+
   tip_destroyTip: function (tipID) {
     // Allows us to create a new tip for the element.
     // Useful when the element has tooltip -> doesn't -> then has it again.
@@ -105,22 +122,8 @@ var TooltipMixin = {
     }
 
     this.tips = {};
-  },
-
-  tip_showCustomTip: function (options) {
-    this.tip_hideCustomTip(options);
-    var tipID = this.tip_createTipForElement(options.target);
-    var tip = this.tips[tipID];
-    tip.content(options.content).show();
-    return _.extend({id: tipID}, options);
-  },
-
-  tip_hideCustomTip: function (options) {
-    var tipID = options.id || options.target.dataset.tipID;
-    if (tipID != null) {
-      this.tip_destroyTip(tipID);
-    }
   }
+
 };
 
 module.exports = TooltipMixin;
