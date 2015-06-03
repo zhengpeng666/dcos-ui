@@ -163,21 +163,16 @@ var Sidebar = React.createClass({
   },
 
   showToolTip: function(text) {
-    this.hideToolTip();
-    var copyButton = this.refs.copyButton.getDOMNode();
-    this.tip_createTipForElement(copyButton);
-    var tipID = copyButton.dataset.tipID;
-    var tip = this.tips[tipID];
-    tip.content(text).show();
-    this.internalStorage_update({tipID: tipID});
+    var tip = this.tip_showCustomTip({
+      target: this.refs.copyButton.getDOMNode(),
+      content: text
+    });
+    this.internalStorage_update({tip: tip});
   },
 
-   hideToolTip: function() {
-    var data = this.internalStorage_get();
-    if (data.tipID) {
-      this.tip_destroyTip(data.tipID);
-      this.internalStorage_update({tipID: null});
-    }
+  hideToolTip: function () {
+    var tip = this.internalStorage_get().tip;
+    this.tip_hideCustomTip(tip);
   },
 
   render: function () {

@@ -105,6 +105,21 @@ var TooltipMixin = {
     }
 
     this.tips = {};
+  },
+
+  tip_showCustomTip: function (options) {
+    this.tip_hideCustomTip(options);
+    var tipID = this.tip_createTipForElement(options.target);
+    var tip = this.tips[tipID];
+    tip.content(options.content).show();
+    return _.extend({id: tipID}, options);
+  },
+
+  tip_hideCustomTip: function (options) {
+    var tipID = options.id || options.target.dataset.id;
+    if (tipID != null) {
+      this.tip_destroyTip(tipID);
+    }
   }
 };
 

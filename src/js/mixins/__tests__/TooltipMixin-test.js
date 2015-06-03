@@ -4,14 +4,6 @@ var _ = require("underscore");
 var TooltipMixin = require("../TooltipMixin");
 var Tooltip = require("../../vendor/tooltip");
 
-Tooltip = function () {
-  var tip = new Tooltip();
-  tip.attach = jasmine.spy();
-  tip.content = jasmine.spy();
-  tip.show = jasmine.spy();
-  return tip;
-};
-
 describe("TooltipMixin", function () {
 
   describe("#componentDidMount", function () {
@@ -68,6 +60,61 @@ describe("TooltipMixin", function () {
       this.instance.tip_destroyAllTips = jasmine.createSpy();
       this.instance.componentWillUnmount();
       expect(this.instance.tip_destroyAllTips).toHaveBeenCalled();
+    });
+
+  });
+
+  describe("#tip_showCustomTip", function () {
+
+    beforeEach(function () {
+      this.instance = _.extend({}, TooltipMixin);
+      this.instance.tips = { tip1: new Tooltip() };
+      this.el = jasmine.createSpyObj("DOMElement", ["dataset"]);
+      spyOn(this.instance, "tip_createTipForElement").andReturn("tip1");
+      spyOn(this.instance.tips.tip1, "content").andReturn(this.instance.tips.tip1);
+      spyOn(this.instance.tips.tip1, "show").andReturn(this.instance.tips.tip1);
+    });
+
+    it("should hide any existing tooltip on the specified target", function () {
+      spyOn(this.instance, "tip_hideCustomTip");
+      this.instance.tip_showCustomTip({ target: this.el });
+      expect(this.instance.tip_hideCustomTip).toHaveBeenCalledWith({ target: this.el });
+    });
+
+    it("should create a new tooltip with the specified target", function () {
+      this.instance.tip_showCustomTip({ target: this.el });
+      expect(this.instance.tip_createTipForElement).toHaveBeenCalledWith(this.el);
+    });
+
+    it("should set the specified text in the tooltip", function () {
+      this.instance.tip_showCustomTip({ target: this.el, content: "specified text" });
+      expect(this.instance.tips.tip1.content).toHaveBeenCalledWith("specified text");
+    });
+
+    it("should show the newly created tooltip immediately", function() {
+      this.instance.tip_showCustomTip({ target: this.el });
+      expect(this.instance.tips.tip1.show).toHaveBeenCalled();
+    });
+
+  });
+
+  describe("#tip_hideCustomTip", function () {
+
+    beforeEach(function () {
+      this.instance = _.extend({}, TooltipMixin);
+      this.el = jasmine.createSpyObj("DOMElement", ["dataset"]);
+      this.el.dataset = { id: "tip1" };
+      spyOn(this.instance, "tip_destroyTip");
+    });
+
+    it("should destroy the tip with the specified ID, if present", function () {
+      this.instance.tip_hideCustomTip({ id: "tipID" });
+      expect(this.instance.tip_destroyTip).toHaveBeenCalledWith("tipID");
+    });
+
+    it("should destroy the tip belonging to the specified target, if ID is not present", function () {
+      this.instance.tip_hideCustomTip({ target: this.el });
+      expect(this.instance.tip_destroyTip).toHaveBeenCalledWith("tip1");
     });
 
   });
