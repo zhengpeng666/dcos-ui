@@ -45,6 +45,7 @@ var LoginModal = React.createClass({
       return;
     }
 
+    this.internalStorage_update({email: email});
     this.setState({closing: true});
   },
 
