@@ -75,11 +75,6 @@ var Sidebar = React.createClass({
     this.forceUpdate();
   },
 
-  handleShowCliInstructions: function () {
-    SidebarActions.close();
-    SidebarActions.openCliInstructions();
-  },
-
   handleStartTour: function () {
     SidebarActions.close();
     SidebarActions.startTour();
@@ -179,13 +174,14 @@ var Sidebar = React.createClass({
             </p>
           </div>
           <div className="icon-buttons">
-            <button className="button button-smallbutton-link"
+            <a className="button button-smallbutton-link"
+              href="http://docs.mesosphere.com/"
+              target="_blank"
               data-behavior="show-tip"
               data-tip-place="top-right"
-              data-tip-content="Install the Command Line"
-              onClick={this.handleShowCliInstructions}>
-                <i className="icon icon-cli icon-medium clickable"></i>
-            </button>
+              data-tip-content="Documentation">
+                <i className="icon icon-documents icon-medium clickable"></i>
+            </a>
             <button className="button button-smallbutton-link"
               data-behavior="show-tip"
               data-tip-content="Talk with us"
@@ -194,7 +190,8 @@ var Sidebar = React.createClass({
             </button>
             <button className="button button-smallbutton-link"
               data-behavior="show-tip"
-              data-tip-content="Start Tour"
+              data-tip-place="top-left"
+              data-tip-content="Install CLI and Take Tour"
               onClick={this.handleStartTour}>
                 <i className="icon icon-tour icon-medium clickable"></i>
             </button>
