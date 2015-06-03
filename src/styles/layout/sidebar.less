@@ -49,6 +49,13 @@
     .sidebar-header-sublabel {
       display: flex;
       justify-content: center;
+
+      &:hover {
+        .icon-clipboard {
+          visibility: visible;
+        }
+      }
+
       .icon-clipboard {
         visibility: hidden;
         opacity: 0.5;
@@ -63,11 +70,6 @@
         .icon-clipboard {
           visibility: visible;
           opacity: 1;
-        }
-      }
-      &.hover {
-        .icon-clipboard {
-          visibility: visible;
         }
       }
     }

@@ -35,13 +35,11 @@ var Sidebar = React.createClass({
   mixins: [State, InternalStorageMixin, TooltipMixin],
 
   actions_configuration: {
-    mouseOverHostname: {skip: true},
     mouseOverCopyIcon: {skip: true}
   },
 
   getInitialState: function () {
     return {
-      mouseOverHostname: false,
       mouseOverCopyIcon: false
     };
   },
@@ -119,14 +117,6 @@ var Sidebar = React.createClass({
     SidebarActions.showVersions();
   },
 
-  handleMouseOverHostname: function () {
-    this.setState({mouseOverHostname: true});
-  },
-
-  handleMouseOutHostname: function () {
-    this.setState({mouseOverHostname: false});
-  },
-
   handleMouseOverCopyIcon: function () {
     this.setState({mouseOverCopyIcon: true});
     this.showToolTip("Copy to clipboard");
@@ -196,11 +186,6 @@ var Sidebar = React.createClass({
       "icon-medium-color": data.showIntercom
     });
 
-    var hostnameClassSet = React.addons.classSet({
-      "sidebar-header-sublabel flush-bottom": true,
-      "hover": this.state.mouseOverHostname
-    });
-
     var copyIconClassSet = React.addons.classSet({
       "icon icon-mini icon-clipboard clickable": true,
       "icon-mini-color": this.state.mouseOverCopyIcon
@@ -216,10 +201,8 @@ var Sidebar = React.createClass({
             <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={data.mesosInfo.cluster}>
               {data.mesosInfo.cluster}
             </h2>
-            <p className={hostnameClassSet}
-               title={data.mesosInfo.hostname}
-               onMouseOver={this.handleMouseOverHostname}
-               onMouseOut={this.handleMouseOutHostname}>
+            <p className="sidebar-header-sublabel flush-bottom"
+               title={data.mesosInfo.hostname}>
               <span className="hostname text-align-center text-overflow">
                 {data.mesosInfo.hostname}
               </span>
