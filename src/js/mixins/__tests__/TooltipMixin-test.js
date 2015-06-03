@@ -2,15 +2,6 @@ jest.dontMock("../TooltipMixin");
 
 var _ = require("underscore");
 var TooltipMixin = require("../TooltipMixin");
-var Tooltip = require("../../vendor/tooltip");
-
-Tooltip = function () {
-  var tip = new Tooltip();
-  tip.attach = jasmine.spy();
-  tip.content = jasmine.spy();
-  tip.show = jasmine.spy();
-  return tip;
-};
 
 describe("TooltipMixin", function () {
 
@@ -68,6 +59,68 @@ describe("TooltipMixin", function () {
       this.instance.tip_destroyAllTips = jasmine.createSpy();
       this.instance.componentWillUnmount();
       expect(this.instance.tip_destroyAllTips).toHaveBeenCalled();
+    });
+
+  });
+
+  describe("#tip_showTip", function () {
+
+    beforeEach(function () {
+      this.instance = _.extend({}, TooltipMixin);
+      this.instance.tips = { tip1: {show: jasmine.createSpy(), content: jasmine.createSpy()} };
+      this.el = jasmine.createSpyObj("DOMElement", ["dataset"]);
+      this.el.dataset.tipID = "tip1";
+      this.el.dataset.tipContent = "Default text";
+    });
+
+    it("should not show tip before called", function() {
+      expect(this.instance.tips.tip1.show).not.toHaveBeenCalled();
+    });
+
+    it("should show the newly created tooltip immediately", function() {
+      this.instance.tip_showTip(this.el);
+      expect(this.instance.tips.tip1.show).toHaveBeenCalled();
+    });
+
+    it("should have the default text when show is called", function () {
+      this.instance.tip_showTip(this.el);
+      expect(this.instance.tips.tip1.content).toHaveBeenCalledWith("Default text");
+    });
+
+  });
+
+  describe("#tip_updateTipContent", function () {
+
+    beforeEach(function () {
+      this.instance = _.extend({}, TooltipMixin);
+      this.instance.tips = { tip1: {content: jasmine.createSpy()} };
+      this.el = jasmine.createSpyObj("DOMElement", ["dataset"]);
+      this.el.dataset.tipID = "tip1";
+    });
+
+    it("should update the specified text in the tooltip", function () {
+      this.instance.tip_updateTipContent(this.el, "specified text");
+      expect(this.instance.tips.tip1.content).toHaveBeenCalledWith("specified text");
+    });
+  });
+
+  describe("#tip_hideTip", function () {
+
+    beforeEach(function () {
+      this.instance = _.extend({}, TooltipMixin);
+      this.instance.tips = { tip1: {hide: jasmine.createSpy(), content: jasmine.createSpy()} };
+      this.el = jasmine.createSpyObj("DOMElement", ["dataset"]);
+      this.el.removeEventListener = jasmine.createSpy();
+      this.el.dataset.tipID = "tip1";
+    });
+
+    it("should not hide tip before called", function() {
+      expect(this.instance.tips.tip1.hide).not.toHaveBeenCalled();
+    });
+
+    it("should hide the tooltip immediately", function() {
+      this.instance.tip_hideTip(this.el);
+      expect(this.instance.tips.tip1.hide).toHaveBeenCalled();
     });
 
   });

@@ -6,6 +6,13 @@ var Link = require("react-router").Link;
 var React = require("react/addons");
 var State = require("react-router").State;
 
+// ReactZeroClipboard injects ZeroClipboard from a third-party server unless
+// global.ZeroClipboard is already defined:
+var ZeroClipboard = require("zeroclipboard");
+global.ZeroClipboard = ZeroClipboard;
+var ReactZeroClipboard = require("react-zeroclipboard");
+
+var Actions = require("../actions/Actions");
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
 var IntercomActions = require("../events/IntercomActions");
@@ -95,6 +102,20 @@ var Sidebar = React.createClass({
     SidebarActions.showVersions();
   },
 
+  handleMouseOverCopyIcon: function () {
+    var el = this.refs.copyButton.getDOMNode();
+    this.tip_showTip(el);
+  },
+
+  handleMouseOutCopyIcon: function () {
+    this.tip_hideTip(this.refs.copyButton.getDOMNode());
+  },
+
+  handleCopy: function () {
+    this.tip_updateTipContent(this.refs.copyButton.getDOMNode(), "Copied!");
+    Actions.log({description: "Copied hostname from sidebar"});
+  },
+
   getMenuItems: function () {
     return _.map(MENU_ITEMS, function (val, key) {
       var isActive = this.isActive(key);
@@ -146,9 +167,24 @@ var Sidebar = React.createClass({
             <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={data.mesosInfo.cluster}>
               {data.mesosInfo.cluster}
             </h2>
-            <p className="sidebar-header-sublabel text-align-center text-overflow flush-bottom" title={data.mesosInfo.hostname}>
-              {data.mesosInfo.hostname}
-            </p>
+            <div className="sidebar-header-sublabel flush-bottom"
+               title={data.mesosInfo.hostname}>
+              <span className="hostname text-align-center text-overflow">
+                {data.mesosInfo.hostname}
+              </span>
+              <div data-behavior="show-tip"
+                    data-tip-place="bottom"
+                    data-tip-content="Copy to clipboard"
+                    onMouseOver={this.handleMouseOverCopyIcon}
+                    onMouseOut={this.handleMouseOutCopyIcon}
+                    ref="copyButton">
+                <ReactZeroClipboard
+                  text={data.mesosInfo.hostname}
+                  onAfterCopy={this.handleCopy}>
+                  <i className="icon icon-mini icon-clipboard icon-mini-color clickable" />
+                </ReactZeroClipboard>
+              </div>
+            </div>
           </div>
         </div>
         <GeminiScrollbar autoshow={true} className="sidebar-content container-scrollable">

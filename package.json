@@ -26,7 +26,9 @@
     "react-gemini-scrollbar": "^1.1.1",
     "react-router": "^0.12.4",
     "react-tools": "^0.12.2",
-    "underscore": "^1.7.0"
+    "react-zeroclipboard": "^0.4.1",
+    "underscore": "^1.7.0",
+    "zeroclipboard": "^2.2.0"
   },
   "devDependencies": {
     "broccoli": "^0.13.2",

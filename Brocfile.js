@@ -164,11 +164,22 @@ var tasks = {
     );
   },
 
+  swf: function (masterTree) {
+    var swfTree = funnel(dirs.src, {
+      files: ["ZeroClipboard.swf"]
+    });
+
+    return mergeTrees(
+      [masterTree, swfTree],
+      {overwrite: true}
+    );
+  },
+
   md5: function (masterTree) {
     // add md5 checksums to filenames
     return assetRev(masterTree, {
-      extensions: ["js", "css", "png", "jpg", "gif"],
-      replaceExtensions: ["html", "js", "css"]
+      extensions: ["js", "css", "png", "jpg", "gif", "swf"],
+      replaceExtensions: ["html", "js", "css", "swf"]
     });
   }
   // https://github.com/bguiz/broccoli-sprite
@@ -226,6 +237,7 @@ var buildTree = _.compose(tasks.eslint, createJsTree);
 if (env === "development" || env === "production" ) {
   // add steps used in both development and production
   buildTree = _.compose(
+    tasks.swf,
     tasks.img,
     tasks.index,
     tasks.css,

@@ -45,6 +45,34 @@
     .sidebar-header-label {
       color: @black;
     }
+
+    .sidebar-header-sublabel {
+      display: flex;
+      justify-content: center;
+
+      &:hover {
+        .icon-clipboard {
+          visibility: visible;
+        }
+      }
+
+      .icon-clipboard {
+        visibility: hidden;
+        opacity: 0.5;
+      }
+      .hostname {
+        padding: @base-spacing-unit * 0.1 @base-spacing-unit * 0.25;
+        // compensate for the icon on the right
+        padding-left: @base-spacing-unit;
+        color: @purple;
+      }
+      .zeroclipboard-is-hover {
+        .icon-clipboard {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+    }
   }
 
   /* Sidebar Footer */
@@ -364,7 +392,7 @@
         }
 
         .sidebar-header-sublabel {
-          display: block;
+          display: flex;
         }
       }
 
