@@ -187,7 +187,7 @@ var Sidebar = React.createClass({
     });
 
     var hostnameClassSet = React.addons.classSet({
-      "sidebar-header-sublabel text-align-center text-overflow flush-bottom": true,
+      "sidebar-header-sublabel flush-bottom": true,
       "hover": this.state.mouseOverHostname
     });
 
@@ -210,7 +210,7 @@ var Sidebar = React.createClass({
                title={data.mesosInfo.hostname}
                onMouseOver={this.handleMouseOverHostname}
                onMouseOut={this.handleMouseOutHostname}>
-              <span className="hostname">
+              <span className="hostname text-align-center text-overflow">
                 {data.mesosInfo.hostname}
               </span>
               <span className="copy-button"
