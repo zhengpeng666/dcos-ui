@@ -10,6 +10,14 @@ function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
 }
 
+var propToTitle = {
+  hostname: "HOSTNAME",
+  "TASK_RUNNING": "TASKS",
+  cpus: "CPU",
+  mem: "MEM",
+  disk: "DISK"
+};
+
 function getClassName(prop, sortBy, row) {
   return React.addons.classSet({
     "align-right": isStat(prop) || prop === "TASK_RUNNING",
@@ -97,6 +105,33 @@ var HostTable = React.createClass({
     );
   },
 
+  renderHeader: function (prop, order, sortBy) {
+    var title = propToTitle[prop];
+    var beforeCaret = null;
+    var afterCaret = null;
+
+    if (prop === sortBy.prop) {
+      var caretClassSet = React.addons.classSet({
+        "caret": true,
+        "dropup": order === "desc"
+      });
+
+      if (isStat(prop) || prop === "TASK_RUNNING") {
+        beforeCaret = <span className={caretClassSet} aria-hiddin="true" />;
+      } else {
+        afterCaret = <span className={caretClassSet} aria-hiddin="true" />;
+      }
+    }
+
+    return (
+      <span>
+        {beforeCaret}
+        {title}
+        {afterCaret}
+      </span>
+    );
+  },
+
   getColumns: function () {
     return [
       {
@@ -105,7 +140,7 @@ var HostTable = React.createClass({
         prop: "hostname",
         render: this.renderHeadline,
         sortable: true,
-        title: "HOSTNAME"
+        title: this.renderHeader
       },
       {
         className: getClassName,
@@ -113,7 +148,7 @@ var HostTable = React.createClass({
         prop: "TASK_RUNNING",
         render: this.renderTask,
         sortable: true,
-        title: "TASKS"
+        title: this.renderHeader
       },
       {
         className: getClassName,
@@ -121,7 +156,7 @@ var HostTable = React.createClass({
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        title: "CPU"
+        title: this.renderHeader
       },
       {
         className: getClassName,
@@ -129,7 +164,7 @@ var HostTable = React.createClass({
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        title: "MEM"
+        title: this.renderHeader
       },
       {
         className: getClassName,
@@ -137,7 +172,7 @@ var HostTable = React.createClass({
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        title: "DISK"
+        title: this.renderHeader
       }
     ];
   },

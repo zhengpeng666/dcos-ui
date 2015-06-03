@@ -14,6 +14,14 @@ var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
 
 var healthKey = "health";
+var propToTitle = {
+  name: "SERVICE NAME",
+  health: "HEALTH",
+  "TASK_RUNNING": "TASKS",
+  cpus: "CPU",
+  mem: "MEM",
+  disk: "DISK"
+};
 
 function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
@@ -151,6 +159,31 @@ var ServicesTable = React.createClass({
     };
   },
 
+  renderHeader: function (prop, order, sortBy) {
+    var title = propToTitle[prop];
+    var beforeCaret = null;
+    var afterCaret = null;
+    var caretClassSet = React.addons.classSet({
+      "caret": true,
+      "dropup": order === "desc",
+      "invisible": prop !== sortBy.prop
+    });
+
+    if (isStat(prop) || prop === "TASK_RUNNING") {
+      beforeCaret = <span className={caretClassSet} />;
+    } else {
+      afterCaret = <span className={caretClassSet} />;
+    }
+
+    return (
+      <span>
+        {beforeCaret}
+        {title}
+        {afterCaret}
+      </span>
+    );
+  },
+
   getColumns: function () {
     return [
       {
@@ -159,7 +192,7 @@ var ServicesTable = React.createClass({
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        title: "SERVICE NAME"
+        title: this.renderHeader
       },
       {
         className: getClassName,
@@ -167,7 +200,7 @@ var ServicesTable = React.createClass({
         prop: healthKey,
         render: this.renderHealth,
         sortable: true,
-        title: "HEALTH"
+        title: this.renderHeader
       },
       {
         className: getClassName,
@@ -175,7 +208,7 @@ var ServicesTable = React.createClass({
         prop: "TASK_RUNNING",
         render: this.renderTask,
         sortable: true,
-        title: "TASKS"
+        title: this.renderHeader
       },
       {
         className: getClassName,
@@ -183,7 +216,7 @@ var ServicesTable = React.createClass({
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        title: "CPU"
+        title: this.renderHeader
       },
       {
         className: getClassName,
@@ -191,7 +224,7 @@ var ServicesTable = React.createClass({
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        title: "MEM"
+        title: this.renderHeader
       },
       {
         className: getClassName,
@@ -199,7 +232,7 @@ var ServicesTable = React.createClass({
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        title: "DISK"
+        title: this.renderHeader
       }
     ];
   },
@@ -208,7 +241,7 @@ var ServicesTable = React.createClass({
     return (
       <colgroup>
         <col />
-        <col style={{width: "100px"}} />
+        <col style={{width: "105px"}} />
         <col style={{width: "100px"}} />
         <col style={{width: "100px"}} />
         <col style={{width: "100px"}} />
