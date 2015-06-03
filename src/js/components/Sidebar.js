@@ -5,10 +5,14 @@ var GeminiScrollbar = require("react-gemini-scrollbar");
 var Link = require("react-router").Link;
 var React = require("react/addons");
 var State = require("react-router").State;
+
+// ReactZeroClipboard injects ZeroClipboard from a third-party server unless
+// global.ZeroClipboard is already defined:
 var ZeroClipboard = require("zeroclipboard");
 global.ZeroClipboard = ZeroClipboard;
 var ReactZeroClipboard = require("react-zeroclipboard");
 
+var Actions = require("../actions/Actions");
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
 var IntercomActions = require("../events/IntercomActions");
@@ -29,6 +33,10 @@ var Sidebar = React.createClass({
   displayName: "Sidebar",
 
   mixins: [State, InternalStorageMixin, TooltipMixin],
+
+  actions_configuration: {
+    headers: {skip: true}
+  },
 
   getInitialState: function () {
     return {
@@ -130,6 +138,7 @@ var Sidebar = React.createClass({
 
   handleCopy: function () {
     this.showToolTip("Copied!");
+    Actions.log({description: "Copied hostname from sidebar"});
   },
 
   getMenuItems: function () {
