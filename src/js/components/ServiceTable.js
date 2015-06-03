@@ -22,8 +22,7 @@ function isStat(prop) {
 function getClassName(prop, sortBy, row) {
   return React.addons.classSet({
     "align-right": isStat(prop) || prop === "TASK_RUNNING",
-    "hidden-mini fixed-width": isStat(prop),
-    "fixed-width": prop === "TASK_RUNNING",
+    "hidden-mini": isStat(prop),
     "highlight": prop === sortBy.prop,
     "clickable": row == null // this is a header
   });
@@ -205,11 +204,25 @@ var ServicesTable = React.createClass({
     ];
   },
 
+  getColGroup: function () {
+    return (
+      <colgroup>
+        <col />
+        <col style={{width: "100px"}} />
+        <col style={{width: "100px"}} />
+        <col style={{width: "100px"}} />
+        <col style={{width: "100px"}} />
+        <col style={{width: "100px"}} />
+      </colgroup>
+    );
+  },
+
   render: function () {
     return (
       <Table
         className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
         columns={this.getColumns()}
+        colGroup={this.getColGroup()}
         data={this.props.services.slice(0)}
         keys={["id"]}
         sortBy={{prop: "name", order: "desc"}}
