@@ -103,7 +103,7 @@ describe("TooltipMixin", function () {
     beforeEach(function () {
       this.instance = _.extend({}, TooltipMixin);
       this.el = jasmine.createSpyObj("DOMElement", ["dataset"]);
-      this.el.dataset = { id: "tip1" };
+      this.el.dataset = { tipID: "tip1" };
       spyOn(this.instance, "tip_destroyTip");
     });
 

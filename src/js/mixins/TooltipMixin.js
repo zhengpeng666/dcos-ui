@@ -116,7 +116,7 @@ var TooltipMixin = {
   },
 
   tip_hideCustomTip: function (options) {
-    var tipID = options.id || options.target.dataset.id;
+    var tipID = options.id || options.target.dataset.tipID;
     if (tipID != null) {
       this.tip_destroyTip(tipID);
     }
