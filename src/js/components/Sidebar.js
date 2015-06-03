@@ -109,7 +109,7 @@ var Sidebar = React.createClass({
 
   handleMouseOverCopyIcon: function () {
     var el = this.refs.copyButton.getDOMNode();
-    var tip = this.tip_showTip(el);
+    this.tip_showTip(el);
   },
 
   handleMouseOutCopyIcon: function () {

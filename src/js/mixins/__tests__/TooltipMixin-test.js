@@ -2,7 +2,6 @@ jest.dontMock("../TooltipMixin");
 
 var _ = require("underscore");
 var TooltipMixin = require("../TooltipMixin");
-var Tooltip = require("../../vendor/tooltip");
 
 describe("TooltipMixin", function () {
 
