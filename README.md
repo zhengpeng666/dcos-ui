@@ -1,5 +1,9 @@
 ### DCOS UI
 
+#### Requirements
+
+Node 0.10.x is **required** as versions 0.11 and 0.12 introduced compatibility issues with Jest as reported [here](https://github.com/facebook/jest/issues/243). We suggest using [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n) to keep multiple Node versions on your system.
+
 #### Working on assets
 
 1. Install [NPM](https://npmjs.org/)
