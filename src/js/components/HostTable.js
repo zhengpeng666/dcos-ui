@@ -5,52 +5,7 @@ var React = require("react/addons");
 
 var Table = require("./Table");
 var ProgressBar = require("./charts/ProgressBar");
-
-function isStat(prop) {
-  return _.contains(["cpus", "mem", "disk"], prop);
-}
-
-var propToTitle = {
-  hostname: "HOSTNAME",
-  "TASK_RUNNING": "TASKS",
-  cpus: "CPU",
-  mem: "MEM",
-  disk: "DISK"
-};
-
-function getClassName(prop, sortBy, row) {
-  return React.addons.classSet({
-    "align-right": isStat(prop) || prop === "TASK_RUNNING",
-    "hidden-mini": isStat(prop),
-    "highlight": prop === sortBy.prop,
-    "clickable": row == null // this is a header
-  });
-}
-
-function sortFunction(prop) {
-  if (isStat(prop)) {
-    return function (model) {
-      return _.last(model.used_resources[prop]).value;
-    };
-  }
-
-  return function (model) {
-    var value = model[prop];
-    if (_.isNumber(value)) {
-      return value;
-    }
-
-    return value.toString().toLowerCase() + "-" + model.hostname.toLowerCase();
-  };
-}
-
-function getRowAttributes(model) {
-  return {
-    className: React.addons.classSet({
-      "danger": model.active === false
-    })
-  };
-}
+var ResourceTableUtil = require("../utils/ResourceTableUtil");
 
 var HostTable = React.createClass({
 
@@ -80,42 +35,6 @@ var HostTable = React.createClass({
     );
   },
 
-  renderHeader: function (prop, order, sortBy) {
-    var title = propToTitle[prop];
-    var caret = {
-      before: null,
-      after: null
-    };
-    var caretClassSet = React.addons.classSet({
-      "caret": true,
-      "dropup": order === "desc",
-      "invisible": prop !== sortBy.prop
-    });
-
-    if (isStat(prop) || prop === "TASK_RUNNING") {
-      caret.before = <span className={caretClassSet} />;
-    } else {
-      caret.after = <span className={caretClassSet} />;
-    }
-
-    return (
-      <span>
-        {caret.before}
-        {title}
-        {caret.after}
-      </span>
-    );
-  },
-
-  renderTask: function (prop, model) {
-    return (
-      <span>
-        {model[prop]}
-        <span className="visible-mini-inline"> Tasks</span>
-      </span>
-    );
-  },
-
   renderStats: function (prop, model) {
     var colorMapping = {
       cpus: 1,
@@ -135,44 +54,44 @@ var HostTable = React.createClass({
   getColumns: function () {
     return [
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
         prop: "hostname",
         render: this.renderHeadline,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
         prop: "TASK_RUNNING",
-        render: this.renderTask,
+        render: ResourceTableUtil.renderTask,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       }
     ];
   },
@@ -189,6 +108,14 @@ var HostTable = React.createClass({
     );
   },
 
+  getRowAttributes: function (model) {
+    return {
+      className: React.addons.classSet({
+        "danger": model.active === false
+      })
+    };
+  },
+
   render: function () {
 
     return (
@@ -199,8 +126,8 @@ var HostTable = React.createClass({
         data={this.props.hosts.slice(0)}
         keys={["id"]}
         sortBy={{ prop: "hostname", order: "desc" }}
-        sortFunc={sortFunction}
-        buildRowOptions={getRowAttributes} />
+        sortFunc={ResourceTableUtil.getSortFunction("hostname")}
+        buildRowOptions={this.getRowAttributes} />
     );
   }
 });

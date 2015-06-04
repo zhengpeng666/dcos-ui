@@ -5,57 +5,13 @@ var React = require("react/addons");
 
 var Cluster = require("../utils/Cluster");
 var HealthLabels = require("../constants/HealthLabels");
-var HealthSorting = require("../constants/HealthSorting");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var Maths = require("../utils/Maths");
+var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
-
-var healthKey = "health";
-var propToTitle = {
-  name: "SERVICE NAME",
-  health: "HEALTH",
-  "TASK_RUNNING": "TASKS",
-  cpus: "CPU",
-  mem: "MEM",
-  disk: "DISK"
-};
-
-function isStat(prop) {
-  return _.contains(["cpus", "mem", "disk"], prop);
-}
-
-function getClassName(prop, sortBy, row) {
-  return React.addons.classSet({
-    "align-right": isStat(prop) || prop === "TASK_RUNNING",
-    "hidden-mini": isStat(prop),
-    "highlight": prop === sortBy.prop,
-    "clickable": row == null // this is a header
-  });
-}
-
-function sortFunction(prop) {
-  if (isStat(prop)) {
-    return function (model) {
-      return _.last(model.used_resources[prop]).value;
-    };
-  }
-
-  return function (model) {
-    var value = model[prop];
-    if (_.isNumber(value)) {
-      return value;
-    }
-
-    if (prop === healthKey) {
-      value = HealthSorting[value.key];
-    }
-
-    return value.toString().toLowerCase() + "-" + model.name.toLowerCase();
-  };
-}
 
 var ServicesTable = React.createClass({
 
@@ -99,33 +55,6 @@ var ServicesTable = React.createClass({
      );
   },
 
-  renderHeader: function (prop, order, sortBy) {
-    var title = propToTitle[prop];
-    var caret = {
-      before: null,
-      after: null
-    };
-    var caretClassSet = React.addons.classSet({
-      "caret": true,
-      "dropup": order === "desc",
-      "invisible": prop !== sortBy.prop
-    });
-
-    if (isStat(prop) || prop === "TASK_RUNNING") {
-      caret.before = <span className={caretClassSet} />;
-    } else {
-      caret.after = <span className={caretClassSet} />;
-    }
-
-    return (
-      <span>
-        {caret.before}
-        {title}
-        {caret.after}
-      </span>
-    );
-  },
-
   renderHealth: function (prop, model) {
     if (!this.props.healthProcessed) {
       return (
@@ -164,15 +93,6 @@ var ServicesTable = React.createClass({
     );
   },
 
-  renderTask: function (prop, model) {
-    return (
-      <span>
-        {model[prop]}
-        <span className="visible-mini-inline"> Tasks</span>
-      </span>
-    );
-  },
-
   renderStats: function (prop, model) {
     var value = Maths.round(_.last(model.used_resources[prop]).value, 2);
     if (prop !== "cpus") {
@@ -189,52 +109,52 @@ var ServicesTable = React.createClass({
   getColumns: function () {
     return [
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
-        prop: healthKey,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
+        prop: "health",
         render: this.renderHealth,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
         prop: "TASK_RUNNING",
-        render: this.renderTask,
+        render: ResourceTableUtil.renderTask,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className: ResourceTableUtil.getClassName,
+        headerClassName: ResourceTableUtil.getClassName,
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        header: this.renderHeader
+        header: ResourceTableUtil.renderHeader
       }
     ];
   },
@@ -261,7 +181,7 @@ var ServicesTable = React.createClass({
         data={this.props.services.slice(0)}
         keys={["id"]}
         sortBy={{prop: "name", order: "desc"}}
-        sortFunc={sortFunction} />
+        sortFunc={ResourceTableUtil.getSortFunction("name")} />
     );
   }
 });
