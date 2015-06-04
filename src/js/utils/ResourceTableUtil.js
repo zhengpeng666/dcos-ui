@@ -18,13 +18,27 @@ var TableUtil = {
     });
   },
 
-  renderTask: function (prop, model) {
-    return (
-      <span>
-        {model[prop]}
-        <span className="visible-mini-inline"> Tasks</span>
-      </span>
-    );
+  getSortFunction: function (title) {
+    return function (prop) {
+      if (isStat(prop)) {
+        return function (model) {
+          return _.last(model.used_resources[prop]).value;
+        };
+      }
+
+      return function (model) {
+        var value = model[prop];
+        if (_.isNumber(value)) {
+          return value;
+        }
+
+        if (prop === "health") {
+          value = HealthSorting[value.key];
+        }
+
+        return value.toString().toLowerCase() + "-" + model[title].toLowerCase();
+      };
+    };
   },
 
   renderHeader: function (prop, order, sortBy) {
@@ -54,27 +68,13 @@ var TableUtil = {
     );
   },
 
-  getSortFunction: function (title) {
-    return function (prop) {
-      if (isStat(prop)) {
-        return function (model) {
-          return _.last(model.used_resources[prop]).value;
-        };
-      }
-
-      return function (model) {
-        var value = model[prop];
-        if (_.isNumber(value)) {
-          return value;
-        }
-
-        if (prop === "health") {
-          value = HealthSorting[value.key];
-        }
-
-        return value.toString().toLowerCase() + "-" + model[title].toLowerCase();
-      };
-    };
+  renderTask: function (prop, model) {
+    return (
+      <span>
+        {model[prop]}
+        <span className="visible-mini-inline"> Tasks</span>
+      </span>
+    );
   }
 };
 
