@@ -36,7 +36,7 @@ function getCellClass(ref, row, sortBy) {
 }
 
 function getHeaderRef(headers, c, index) {
-  headers[index] = c.title;
+  headers[index] = c.header;
   return headers[index];
 }
 
@@ -75,24 +75,28 @@ function buildSortProps(col, sortBy, handleSort) {
     },
     tabIndex: 0,
     "aria-sort": order,
-    "aria-label": col.title + ": activate to sort column " + nextOrder
+    "aria-label": col.header + ": activate to sort column " + nextOrder
   };
 }
 
 function getHeaders(columns, headers, sortBy, handleSort) {
   return _.map(columns, function (col, index) {
-    var sortProps, order;
+    var sortProps, order, header;
     // Only add sorting events if the column has a property and is sortable.
     if (col.sortable !== false && "prop" in col) {
       sortProps = buildSortProps(col, sortBy, handleSort);
       order = sortProps["aria-sort"];
     }
 
-    var caretClassSet = React.addons.classSet({
-      "caret": true,
-      "dropup": order === "desc",
-      "invisible": col.prop !== sortBy.prop
-    });
+    if (_.isFunction(col.header)) {
+      header = col.header(col.prop, order, sortBy);
+    } else {
+      header = React.createElement(
+        "span",
+        null,
+        col.header
+      );
+    }
 
     // need react functions here, because we are extending props
     return React.createElement(
@@ -102,15 +106,7 @@ function getHeaders(columns, headers, sortBy, handleSort) {
         ref: getHeaderRef(headers, headers, col, index),
         key: index
       }, sortProps),
-      React.createElement(
-        "span",
-        null,
-        col.title
-      ),
-      React.createElement(
-        "span",
-        {className: caretClassSet, "aria-hidden": "true"}
-      )
+      header
     );
   });
 }
@@ -189,13 +185,19 @@ var Table = React.createClass({
         prop: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         render: PropTypes.func,
         sortable: PropTypes.bool,
-        title: PropTypes.string.isRequired,
+        header: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.func
+        ]).isRequired,
         width: PropTypes.oneOfType([
           PropTypes.string,
           PropTypes.number
         ])
       })
     ).isRequired,
+
+    // optional colgroup component
+    colGroup: PropTypes.object,
 
     // data to display in the table
     // make sure to clone if data, cannot be modified!
@@ -277,6 +279,7 @@ var Table = React.createClass({
 
     return (
       <table className={this.props.className}>
+        {this.props.colGroup}
         <thead>
           <tr>
             {getHeaders(columns, this.state.headers, sortBy, this.handleSort)}
