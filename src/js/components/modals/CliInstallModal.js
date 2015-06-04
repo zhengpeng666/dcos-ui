@@ -47,7 +47,7 @@ var CliInstructionsModal = React.createClass({
     );
     var installRequirements = (
       <li>
-      Install <a href="http://curl.haxx.se/download.html" target="_blank">curl</a><a href="https://pip.pypa.io/en/latest/installing.html#install-pip" target="_blank">pip</a>, and <a href="https://virtualenv.pypa.io/en/latest/installation.html" target="_blank">virtualenv</a>.
+      Install <a href="http://curl.haxx.se/download.html" target="_blank">curl</a>, <a href="https://pip.pypa.io/en/latest/installing.html#install-pip" target="_blank">pip</a>, and <a href="https://virtualenv.pypa.io/en/latest/installation.html" target="_blank">virtualenv</a>.
       </li>
     );
 
