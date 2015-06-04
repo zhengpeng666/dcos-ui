@@ -82,7 +82,10 @@ var HostTable = React.createClass({
 
   renderHeader: function (prop, order, sortBy) {
     var title = propToTitle[prop];
-    var caret = {};
+    var caret = {
+      before: null,
+      after: null
+    };
     var caretClassSet = React.addons.classSet({
       "caret": true,
       "dropup": order === "desc",
