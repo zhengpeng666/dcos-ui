@@ -132,6 +132,34 @@ var Sidebar = React.createClass({
     Actions.log({description: "Copied hostname from sidebar"});
   },
 
+  getHostName: function (data) {
+    if (data.metadata.PUBLIC_IPV4 == null ||
+        data.metadata.PUBLIC_IPV4.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="sidebar-header-sublabel flush-bottom"
+         title={data.metadata.PUBLIC_IPV4}>
+        <span className="hostname text-align-center text-overflow">
+          {data.metadata.PUBLIC_IPV4}
+        </span>
+        <div data-behavior="show-tip"
+              data-tip-place="bottom"
+              data-tip-content="Copy to clipboard"
+              onMouseOver={this.handleMouseOverCopyIcon}
+              onMouseOut={this.handleMouseOutCopyIcon}
+              ref="copyButton">
+          <ReactZeroClipboard
+            text={data.metadata.PUBLIC_IPV4}
+            onAfterCopy={this.handleCopy}>
+            <i className="icon icon-mini icon-clipboard icon-mini-color clickable" />
+          </ReactZeroClipboard>
+        </div>
+      </div>
+    );
+  },
+
   getMenuItems: function () {
     return _.map(MENU_ITEMS, function (val, key) {
       var isActive = this.isActive(key);
@@ -173,11 +201,6 @@ var Sidebar = React.createClass({
       "icon-medium-color": data.showIntercom
     });
 
-    var hostnameClassSet = React.addons.classSet({
-      "sidebar-header-sublabel flush-bottom": true,
-      "hidden": data.metadata.PUBLIC_IPV4 == null || data.metadata.PUBLIC_IPV4.length === 0
-    });
-
     return (
       <div className="sidebar flex-container-col">
         <div className="sidebar-header">
@@ -188,24 +211,7 @@ var Sidebar = React.createClass({
             <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={data.mesosInfo.cluster}>
               {data.mesosInfo.cluster}
             </h2>
-            <div className={hostnameClassSet}
-               title={data.metadata.PUBLIC_IPV4}>
-              <span className="hostname text-align-center text-overflow">
-                {data.metadata.PUBLIC_IPV4}
-              </span>
-              <div data-behavior="show-tip"
-                    data-tip-place="bottom"
-                    data-tip-content="Copy to clipboard"
-                    onMouseOver={this.handleMouseOverCopyIcon}
-                    onMouseOut={this.handleMouseOutCopyIcon}
-                    ref="copyButton">
-                <ReactZeroClipboard
-                  text={data.metadata.PUBLIC_IPV4}
-                  onAfterCopy={this.handleCopy}>
-                  <i className="icon icon-mini icon-clipboard icon-mini-color clickable" />
-                </ReactZeroClipboard>
-              </div>
-            </div>
+            {this.getHostName(data)}
           </div>
         </div>
         <GeminiScrollbar autoshow={true} className="sidebar-content container-scrollable">
