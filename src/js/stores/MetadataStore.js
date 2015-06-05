@@ -3,9 +3,8 @@ var EventEmitter = require("events").EventEmitter;
 
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
-var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
-var MetadataActions = require("../events/MetadataActions")
+var MetadataActions = require("../events/MetadataActions");
 
 var _metadata = {};
 
@@ -31,6 +30,9 @@ var MetadataStore = _.extend({}, EventEmitter.prototype, {
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
     var source = payload.source;
+    if (source !== ActionTypes.SERVER_ACTION) {
+      return false;
+    }
 
     var action = payload.action;
 

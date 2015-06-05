@@ -1,7 +1,5 @@
-var _ = require("underscore");
 var $ = require("jquery");
 
-var Actions = require("../actions/Actions");
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
 var Config = require("../config/Config");
