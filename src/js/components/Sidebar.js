@@ -19,6 +19,7 @@ var IntercomActions = require("../events/IntercomActions");
 var IntercomStore = require("../stores/IntercomStore");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
+var MetadataStore = require("../stores/MetadataStore");
 var SidebarActions = require("../events/SidebarActions");
 var TooltipMixin = require("../mixins/TooltipMixin");
 
@@ -35,9 +36,12 @@ var Sidebar = React.createClass({
   mixins: [State, InternalStorageMixin, TooltipMixin],
 
   componentWillMount: function () {
+    MetadataStore.fetch();
+
     this.internalStorage_set({
       showIntercom: IntercomStore.isOpen(),
-      mesosInfo: MesosStateStore.getLatest()
+      mesosInfo: MesosStateStore.getLatest(),
+      metadata: MetadataStore.getAll()
     });
   },
 
@@ -45,6 +49,10 @@ var Sidebar = React.createClass({
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
+    );
+    MetadataStore.addChangeListener(
+      EventTypes.METADATA_CHANGE,
+      this.onMetadataChange
     );
     IntercomStore.addChangeListener(
       EventTypes.INTERCOM_CHANGE,
@@ -55,6 +63,10 @@ var Sidebar = React.createClass({
   componentWillUnmount: function () {
     this.removeMesosStateListener();
 
+    MetadataStore.removeChangeListener(
+      EventTypes.METADATA_CHANGE,
+      this.onMetadataChange
+    );
     IntercomStore.removeChangeListener(
       EventTypes.INTERCOM_CHANGE,
       this.onIntercomChange
@@ -75,6 +87,10 @@ var Sidebar = React.createClass({
     // Datacenter info won't change often
     // so let's not constantly update
     this.removeMesosStateListener();
+  },
+
+  onMetadataChange: function () {
+    this.internalStorage_update({metadata: MetadataStore.getAll()});
   },
 
   onIntercomChange: function () {
@@ -157,6 +173,11 @@ var Sidebar = React.createClass({
       "icon-medium-color": data.showIntercom
     });
 
+    var hostnameClassSet = React.addons.classSet({
+      "sidebar-header-sublabel flush-bottom": true,
+      "hidden": data.metadata.PUBLIC_IPV4 == null || data.metadata.PUBLIC_IPV4.length === 0
+    });
+
     return (
       <div className="sidebar flex-container-col">
         <div className="sidebar-header">
@@ -167,10 +188,10 @@ var Sidebar = React.createClass({
             <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={data.mesosInfo.cluster}>
               {data.mesosInfo.cluster}
             </h2>
-            <div className="sidebar-header-sublabel flush-bottom"
-               title={data.mesosInfo.hostname}>
+            <div className={hostnameClassSet}
+               title={data.metadata.PUBLIC_IPV4}>
               <span className="hostname text-align-center text-overflow">
-                {data.mesosInfo.hostname}
+                {data.metadata.PUBLIC_IPV4}
               </span>
               <div data-behavior="show-tip"
                     data-tip-place="bottom"
@@ -179,7 +200,7 @@ var Sidebar = React.createClass({
                     onMouseOut={this.handleMouseOutCopyIcon}
                     ref="copyButton">
                 <ReactZeroClipboard
-                  text={data.mesosInfo.hostname}
+                  text={data.metadata.PUBLIC_IPV4}
                   onAfterCopy={this.handleCopy}>
                   <i className="icon icon-mini icon-clipboard icon-mini-color clickable" />
                 </ReactZeroClipboard>
