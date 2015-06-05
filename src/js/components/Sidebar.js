@@ -133,7 +133,8 @@ var Sidebar = React.createClass({
   },
 
   getHostName: function (data) {
-    if (data.metadata.PUBLIC_IPV4 == null ||
+    if (!_.isObject(data.metadata) ||
+        data.metadata.PUBLIC_IPV4 == null ||
         data.metadata.PUBLIC_IPV4.length === 0) {
       return null;
     }
