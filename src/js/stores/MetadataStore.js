@@ -4,13 +4,10 @@ var EventEmitter = require("events").EventEmitter;
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
-var MetadataActions = require("../events/MetadataActions");
 
 var _metadata = {};
 
 var MetadataStore = _.extend({}, EventEmitter.prototype, {
-
-  fetch: MetadataActions.fetch,
 
   getAll: function () {
     return _metadata;

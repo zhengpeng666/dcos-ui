@@ -19,6 +19,7 @@ var IntercomActions = require("../events/IntercomActions");
 var IntercomStore = require("../stores/IntercomStore");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
+var MetadataActions = require("../events/MetadataActions");
 var MetadataStore = require("../stores/MetadataStore");
 var SidebarActions = require("../events/SidebarActions");
 var TooltipMixin = require("../mixins/TooltipMixin");
@@ -36,7 +37,7 @@ var Sidebar = React.createClass({
   mixins: [State, InternalStorageMixin, TooltipMixin],
 
   componentWillMount: function () {
-    MetadataStore.fetch();
+    MetadataActions.fetch();
 
     this.internalStorage_set({
       showIntercom: IntercomStore.isOpen(),
