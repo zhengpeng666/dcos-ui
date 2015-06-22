@@ -8,16 +8,16 @@ var MetadataActions = {
 
   fetch: function () {
     $.ajax({
-        url: Config.rootUrl + "/metadata",
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-          AppDispatcher.handleServerAction({
-            type: ActionTypes.REQUEST_METADATA,
-            data: response
-          });
-        }
+      url: Config.rootUrl + "/metadata",
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      type: "GET",
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_METADATA,
+          data: response
+        });
+      }
     });
   }
 
