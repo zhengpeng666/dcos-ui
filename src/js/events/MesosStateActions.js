@@ -1,10 +1,8 @@
-var _ = require("underscore");
-var $ = require("jquery");
-
 var Actions = require("../actions/Actions");
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
 var Config = require("../config/Config");
+var RequestUtil = require("../utils/RequestUtil");
 
 var _historyServiceOnline = true;
 
@@ -40,12 +38,8 @@ var MesosStateActions = {
 
     var url = getStateUrl(timeScale);
 
-    $.ajax({
+    RequestUtil.json({
       url: url,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      timeout: Config.stateRefresh,
-      type: "GET",
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: successType,
@@ -65,12 +59,8 @@ var MesosStateActions = {
   fetchState: function () {
     var url = Config.historyServer + "/mesos/master/state.json";
 
-    $.ajax({
+    RequestUtil.json({
       url: url,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      timeout: Config.stateRefresh,
-      type: "GET",
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_MESOS_STATE_SUCCESS,
@@ -89,12 +79,8 @@ var MesosStateActions = {
   fetchMarathonHealth: function () {
     var url = Config.rootUrl + "/marathon/v2/apps";
 
-    $.ajax({
+    RequestUtil.json({
       url: url,
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      timeout: Config.stateRefresh,
-      type: "GET",
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_MARATHON_APPS_SUCCESS,

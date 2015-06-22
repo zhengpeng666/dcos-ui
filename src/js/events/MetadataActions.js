@@ -1,18 +1,13 @@
-var $ = require("jquery");
-
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
 var Config = require("../config/Config");
+var RequestUtil = require("../utils/RequestUtil");
 
 var MetadataActions = {
 
   fetch: function () {
-    $.ajax({
+    RequestUtil.json({
       url: Config.rootUrl + "/metadata",
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      timeout: Config.stateRefresh,
-      type: "GET",
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_METADATA,
