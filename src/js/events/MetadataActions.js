@@ -11,6 +11,7 @@ var MetadataActions = {
       url: Config.rootUrl + "/metadata",
       contentType: "application/json; charset=utf-8",
       dataType: "json",
+      timeout: Config.stateRefresh,
       type: "GET",
       success: function (response) {
         AppDispatcher.handleServerAction({

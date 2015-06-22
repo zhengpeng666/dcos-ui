@@ -42,6 +42,7 @@ var SidebarActions = {
       url: url,
       contentType: "application/json; charset=utf-8",
       dataType: "json",
+      timeout: Config.stateRefresh,
       type: "GET",
       success: function (response) {
         AppDispatcher.handleSidebarAction({
