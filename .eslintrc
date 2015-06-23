@@ -15,6 +15,7 @@
 
   "globals": {
     "jest": true,
+    "ActiveXObject": true
   },
 
   "rules": {

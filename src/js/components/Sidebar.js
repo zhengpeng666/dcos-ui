@@ -140,12 +140,16 @@ var Sidebar = React.createClass({
       return null;
     }
 
-    return (
-      <div className="sidebar-header-sublabel flush-bottom"
-         title={data.metadata.PUBLIC_IPV4}>
-        <span className="hostname text-align-center text-overflow">
-          {data.metadata.PUBLIC_IPV4}
-        </span>
+    var hasFlash = false;
+    var flashButton = null;
+    try {
+      hasFlash = Boolean(new ActiveXObject("ShockwaveFlash.ShockwaveFlash"));
+    } catch(exception) {
+      hasFlash = navigator.mimeTypes["application/x-shockwave-flash"] != null;
+    }
+
+    if (hasFlash) {
+      flashButton = (
         <div data-behavior="show-tip"
               data-tip-place="bottom"
               data-tip-content="Copy to clipboard"
@@ -158,6 +162,16 @@ var Sidebar = React.createClass({
             <i className="icon icon-mini icon-clipboard icon-mini-color clickable" />
           </ReactZeroClipboard>
         </div>
+      );
+    }
+
+    return (
+      <div className="sidebar-header-sublabel flush-bottom"
+         title={data.metadata.PUBLIC_IPV4}>
+        <span className="hostname text-align-center text-overflow">
+          {data.metadata.PUBLIC_IPV4}
+        </span>
+        {flashButton}
       </div>
     );
   },
