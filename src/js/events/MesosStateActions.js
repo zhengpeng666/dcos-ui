@@ -1,10 +1,8 @@
-var _ = require("underscore");
-var $ = require("jquery");
-
 var Actions = require("../actions/Actions");
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
 var Config = require("../config/Config");
+var RequestUtil = require("../utils/RequestUtil");
 
 var _historyServiceOnline = true;
 
@@ -27,17 +25,6 @@ function registerServerError(message, type) {
   });
 }
 
-function request(url, type, data, options) {
-  options = _.extend({
-    url: url,
-    dataType: "json",
-    type: type
-  }, options);
-
-  // make request
-  $.ajax(options);
-}
-
 var MesosStateActions = {
 
   fetchSummary: function (timeScale) {
@@ -51,9 +38,8 @@ var MesosStateActions = {
 
     var url = getStateUrl(timeScale);
 
-    request(url, "GET", null, {
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
+    RequestUtil.json({
+      url: url,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: successType,
@@ -71,36 +57,30 @@ var MesosStateActions = {
   },
 
   fetchState: function () {
-    var url = Config.historyServer + "/mesos/master/state.json?jsonp=?";
+    var url = Config.historyServer + "/mesos/master/state.json";
 
-    request(url, "GET", null, {
-        contentType: "application/json; charset=utf-8",
-        dataType: "jsonp",
-        success: function (response) {
-          AppDispatcher.handleServerAction({
-            type: ActionTypes.REQUEST_MESOS_STATE_SUCCESS,
-            data: response
-          });
-        },
-        error: function (e) {
-          AppDispatcher.handleServerAction({
-            type: ActionTypes.REQUEST_MESOS_STATE_ERROR,
-            data: e.message
-          });
-        }
+    RequestUtil.json({
+      url: url,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_MESOS_STATE_SUCCESS,
+          data: response
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_MESOS_STATE_ERROR,
+          data: e.message
+        });
+      }
     });
   },
 
   fetchMarathonHealth: function () {
     var url = Config.rootUrl + "/marathon/v2/apps";
 
-    request(url, "GET", null, {
-      contentType: "application/json; charset=utf-8",
-      crossDomain: true,
-      xhrFields: {
-        withCredentials: false
-      },
-      dataType: "json",
+    RequestUtil.json({
+      url: url,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_MARATHON_APPS_SUCCESS,

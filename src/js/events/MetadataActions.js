@@ -1,23 +1,19 @@
-var $ = require("jquery");
-
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
 var Config = require("../config/Config");
+var RequestUtil = require("../utils/RequestUtil");
 
 var MetadataActions = {
 
   fetch: function () {
-    $.ajax({
-        url: Config.rootUrl + "/metadata",
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-          AppDispatcher.handleServerAction({
-            type: ActionTypes.REQUEST_METADATA,
-            data: response
-          });
-        }
+    RequestUtil.json({
+      url: Config.rootUrl + "/metadata",
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_METADATA,
+          data: response
+        });
+      }
     });
   }
 

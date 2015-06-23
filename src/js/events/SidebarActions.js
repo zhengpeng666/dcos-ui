@@ -1,20 +1,7 @@
-var _ = require("underscore");
-var $ = require("jquery");
-
 var ActionTypes = require("../constants/ActionTypes");
 var AppDispatcher = require("./AppDispatcher");
 var Config = require("../config/Config");
-
-function request(url, type, options) {
-  options = _.extend({
-    url: url,
-    dataType: "json",
-    type: type
-  }, options);
-
-  // make request
-  $.ajax(options);
-}
+var RequestUtil = require("../utils/RequestUtil");
 
 var SidebarActions = {
 
@@ -50,7 +37,8 @@ var SidebarActions = {
     var host = Config.rootUrl.replace(/:[0-9]{0,4}$/, "");
     var url = host + "/pkgpanda/active.buildinfo.full.json";
 
-    request(url, "GET", {
+    RequestUtil.json({
+      url: url,
       success: function (response) {
         AppDispatcher.handleSidebarAction({
           type: ActionTypes.REQUEST_VERSIONS_SUCCESS,
