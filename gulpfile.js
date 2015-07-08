@@ -20,7 +20,7 @@ var webpack = require("webpack");
 
 var packageInfo = require("./package");
 
-var sourcemapsEnabled = process.env.GULP_ENV === "development" &&
+var sourcemapsEnabled = process.env.NODE_ENV === "development" &&
   !process.env.DISABLE_SOURCE_MAP ||
   process.env.DISABLE_SOURCE_MAP === "false";
 
@@ -101,7 +101,7 @@ gulp.task("index", function () {
   return gulp.src(dirs.src + "/" + files.index)
     .pipe(replace(
       "@@ANALYTICS_KEY",
-      process.env.GULP_ENV === "production" ?
+      process.env.NODE_ENV === "production" ?
         "51ybGTeFEFU1xo6u10XMDrr6kATFyRyh" :
         "39uhSEOoRHMw6cMR6st9tYXDbAL3JSaP"
     ))
@@ -138,6 +138,13 @@ gulp.task("minify-js", ["webpack"], function () {
     .pipe(gulp.dest(dirs.dist + "/" + dirs.jsDist));
 });
 
+gulp.task("replace-js-strings", ["webpack"], function() {
+  return gulp.src(dirs.dist + "/**/*.?(js|jsx)")
+    .pipe(replace("@@VERSION", packageInfo.version))
+    .pipe(replace("@@ENV", process.env.NODE_ENV))
+    .pipe(gulp.dest(dirs.dist));
+});
+
 gulp.task("swf", function() {
   return gulp.src(dirs.src + "/**/*.swf")
     .pipe(gulp.dest(dirs.dist));
@@ -145,7 +152,7 @@ gulp.task("swf", function() {
 
 gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/*", ["less"]);
-  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["eslint", "webpack"]);
+  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["webpack"]);
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
 });
 
@@ -172,16 +179,7 @@ gulp.task("webpack", ["eslint"], function (callback) {
   });
 });
 
-var tasks = [
-  "eslint",
-  "images",
-  "swf",
-  "less",
-  "webpack",
-  "index"
-];
-
-gulp.task("default", tasks);
+gulp.task("default", ["eslint", "webpack", "replace-js-strings", "less", "images", "swf", "index"]);
 
 gulp.task("build", ["default"]);
 
