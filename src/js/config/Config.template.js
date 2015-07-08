@@ -2,8 +2,8 @@
 var ConfigDev = {
   analyticsKey: "39uhSEOoRHMw6cMR6st9tYXDbAL3JSaP",
   disableLoginModal: false,
-  rootUrl: "http://localhost:5080",
-  historyServer: "http://localhost:5080"
+  rootUrl: "http://dcos.local",
+  historyServer: "http://dcos.local"
 };
 
 module.exports = ConfigDev;
