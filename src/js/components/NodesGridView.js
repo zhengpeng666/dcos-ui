@@ -14,6 +14,8 @@ var OTHER_SERVICES_COLOR = 8;
 
 var NodesGridView = React.createClass({
 
+  displayName: "NodesGridView",
+
   propTypes: {
     hosts: React.PropTypes.array.isRequired,
     selectedResource: React.PropTypes.string.isRequired,

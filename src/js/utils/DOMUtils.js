@@ -48,7 +48,7 @@ var DOMUtils = {
       "WebkitTransition": "webkitTransitionEnd"
     };
 
-    for (var t in transitions){
+    for (var t in transitions) {
       if (el.style[t] !== undefined) {
         return transitions[t];
       }
