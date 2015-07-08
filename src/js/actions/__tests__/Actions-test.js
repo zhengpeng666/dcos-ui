@@ -43,6 +43,7 @@ describe("Actions", function () {
       expect(args.duration).toBeDefined();
       expect(args.page).toBeDefined();
       expect(args.stintID).toBeDefined();
+      expect(args.uiVersion).toBeDefined();
     });
 
   });
