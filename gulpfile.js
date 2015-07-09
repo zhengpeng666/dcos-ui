@@ -7,12 +7,10 @@ var fs = require("fs");
 var gulp = require("gulp");
 var gulpif = require("gulp-if");
 var gutil = require("gulp-util");
-var header = require("gulp-header");
 var imagemin = require("gulp-imagemin");
 var less = require("gulp-less");
 var minifyCSS = require("gulp-minify-css");
 var packageConfig = require("./package.json");
-var path = require("path");
 var replace = require("gulp-replace");
 var sourcemaps = require("gulp-sourcemaps");
 var uglify = require("gulp-uglify");
@@ -20,13 +18,11 @@ var webpack = require("webpack");
 
 var packageInfo = require("./package");
 
-var sourcemapsEnabled = process.env.NODE_ENV === "development" &&
-  !process.env.DISABLE_SOURCE_MAP ||
-  process.env.DISABLE_SOURCE_MAP === "false";
+var sourcemapsEnabled = process.env.NODE_ENV === "development";
 
 var dirs = {
   src: "src",
-  dist: "./build",
+  dist: "./dist",
   js: "src/js",
   jsDist: "",
   styles: "src/styles",
@@ -126,15 +122,12 @@ gulp.task("minify-css", ["less"], function () {
     .pipe(gulp.dest(dirs.dist + "/" + dirs.stylesDist));
 });
 
-gulp.task("minify-js", ["webpack"], function () {
-  var banner = "/**\n" +
-    " * <%= pkg.name %> - <%= pkg.description %>\n" +
-    " * @version v<%= pkg.version %>\n" +
-    " */\n";
-
+gulp.task("minify-js", ["replace-js-strings"], function () {
   return gulp.src(dirs.dist + "/" + dirs.jsDist + "/" + files.mainJs + ".js")
-    .pipe(uglify())
-    .pipe(header(banner, { pkg : packageInfo } ))
+    .pipe(uglify({
+      mangle: true,
+      compress: true
+    }))
     .pipe(gulp.dest(dirs.dist + "/" + dirs.jsDist));
 });
 
@@ -180,8 +173,6 @@ gulp.task("webpack", ["eslint"], function (callback) {
 });
 
 gulp.task("default", ["eslint", "webpack", "replace-js-strings", "less", "images", "swf", "index"]);
-
-gulp.task("build", ["default"]);
 
 gulp.task("dist", ["default", "minify-css", "minify-js"]);
 

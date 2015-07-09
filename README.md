@@ -11,7 +11,7 @@ Node 0.10.x is **required** as versions 0.11 and 0.12 introduced compatibility i
 
   ```sh
   npm install
-  npm install -g broccoli-cli
+  npm install -g gulp
   ```
 
 3. Setup project configuration
