@@ -84,7 +84,8 @@ var Actions = {
       date: Date.now(),
       EXTERNAL_ELB: global.location.hostname,
       page: this.activePage,
-      stintID: this.stintID
+      stintID: this.stintID,
+      uiVersion: "@@VERSION"
     }, anything);
 
     log = this.prepareLog(log);
