@@ -149,7 +149,7 @@ gulp.task("swf", function() {
 });
 
 gulp.task("watch", function () {
-  gulp.watch(dirs.styles + "/*", ["less"]);
+  gulp.watch(dirs.styles + "/**/*.less", ["less"]);
   gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["webpack", "replace-js-strings"]);
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
 });
