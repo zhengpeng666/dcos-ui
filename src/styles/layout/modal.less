@@ -5,10 +5,12 @@
   height: 100%;
   width: 100%;
   position: absolute;
+  z-index: 1500;
 }
 
 .modal {
-  position: static;
+  left: auto;
+  position: relative;
   margin: 0;
 
   .modal-content {
@@ -45,7 +47,7 @@
 .modal-enter {
   opacity: 0.01;
   transform: translate(0, -25%);
-  transition: transform .5s ease-in, opacity .5s ease-in;
+  transition: transform .25s ease-in, opacity .25s ease-in;
 }
 
 .modal-enter.modal-enter-active {
