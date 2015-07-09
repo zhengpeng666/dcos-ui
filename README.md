@@ -1,45 +1,82 @@
-### DCOS UI
+# DCOS UI
 
-#### Requirements
+## Requirements
 
 Node 0.10.x is **required** as versions 0.11 and 0.12 introduced compatibility issues with Jest as reported [here](https://github.com/facebook/jest/issues/243). We suggest using [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n) to keep multiple Node versions on your system.
 
-#### Working on assets
+## Working on assets
 
-1. Install [NPM](https://npmjs.org/)
-2. Install dev dependencies
+To work efficently on DCOS-UI you will need to setup 3 different environemtns.
+* [DCOS Image](#dcos-image)
+* [DCOS UI](#dcos-ui)
+* [DCOS UI Proxy](#dcos-ui-proxy)
+
+### DCOS Image
+
+The DCOS Image will create a virtual machine on your computer. This machine will contain a small version of a DCOS cluster. In short, it'll have a Mesos master, slave, marathon along with other packages that are needed for DCOS to operate.
+
+1. Clone the [dcos-image](https://github.com/mesosphere/dcos-image) repository
+2. Install any requirements located [here](https://github.com/mesosphere/dcos-image/tree/master/gen)
+3. `$ cd gen`
+4. `$ ./gen.py vagrant dcos00`
+5. `$ cd providers/cluster/dcos00`
+6. `$ vagrant up`
+
+### DCOS UI
+
+This repository contains the DCOS UI application. The application gathers data from endpoints located on the DCOS Image.
+
+1. Clone this repository
+2. Install [NPM](https://npmjs.org/)
+3. Install dev dependencies
 
   ```sh
   npm install
   npm install -g broccoli-cli
   ```
 
-3. Setup project configuration
+4. Setup project configuration
 
   1. Copy `src/js/config/Config.template.js` to `src/js/config/Config.dev.js`
 
   2. Override variables in `Config.dev.js` to reflect
   your local development configuration
 
-4. Run development environment
+5. Run development environment
 
   ```sh
   npm run serve
   ```
 
-5. Run the tests
+6. Run the tests
 
   ```sh
   npm test
   ```
 
-6. Build the assets
+7. Build the assets
 
   ```sh
   npm run dist
   ```
 
-#### Adding npm package dependencies to package.json
+### DCOS UI Proxy
+
+This is a simple Vagrant machine which acts as a proxy.
+Since the assets for DCOS UI application needs to make requests to endpoints located on the DCOS Image which resides on a different domain, this will normally cause CORS problems due to browser security policies.
+This vagrant machine solves this problem by proxying both requests through the same domain.
+
+1. Go to Google Drive and browse to the following directory `Engineering/Frontend/Vagrant Machines`
+2. Download the `dcos-ui` file
+3. `$ vagrant box add dcos-ui file:///PATH/dcos-ui` (replace PATH with the path to the dcos-ui file you just downloaded)
+4. `$ mkdir vagrant-dcos-ui`
+5. `$ vagrant init dcos-ui`
+6. `$ vagrant up`
+7. Create an entry in your `/etc/hosts` file of `192.168.50.5 dcos.local`
+6. Go to http://dcos.local
+
+
+## Adding npm package dependencies to package.json
 
 If you want to add a new npm package to 'node_modules':
 
@@ -57,7 +94,7 @@ If you want to add a new npm package to 'node_modules':
 
 3. Commit to repository
 
-#### Development Setup (Sublime Text)
+## Development Setup (Sublime Text)
 
 1. Add the following to your Sublime Text User Settings:
 
