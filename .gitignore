@@ -1,7 +1,6 @@
 .DS_Store
 *.iml
 .idea/*
-build/*
 !dist/
 dist/*
 npm-debug.log

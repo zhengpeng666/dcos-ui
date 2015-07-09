@@ -18,7 +18,7 @@ var webpack = require("webpack");
 
 var packageInfo = require("./package");
 
-var sourcemapsEnabled = process.env.NODE_ENV === "development";
+var development = process.env.NODE_ENV === "development";
 
 var dirs = {
   src: "src",
@@ -36,7 +36,7 @@ var files = {
   mainJsDist: "main",
   mainLess: "main",
   mainCssDist: "main",
-  index: "index.html"
+  html: "index.html"
 };
 
 var webpackConfig = {
@@ -65,8 +65,13 @@ var webpackConfig = {
 
 gulp.task("browsersync", function () {
   browserSync.init({
+    open: false,
+    port: 4200,
     server: {
       baseDir: dirs.dist
+    },
+    socket: {
+      domain: "localhost:4200"
     }
   });
 });
@@ -93,8 +98,8 @@ gulp.task("images", function () {
     .pipe(gulp.dest(dirs.dist + "/" + dirs.imgDist));
 });
 
-gulp.task("index", function () {  
-  return gulp.src(dirs.src + "/" + files.index)
+gulp.task("html", function () {
+  return gulp.src(dirs.src + "/" + files.html)
     .pipe(replace(
       "@@ANALYTICS_KEY",
       process.env.NODE_ENV === "production" ?
@@ -106,14 +111,14 @@ gulp.task("index", function () {
 
 gulp.task("less", function () {
   return gulp.src(dirs.styles + "/" + files.mainLess + ".less")
-    .pipe(gulpif(sourcemapsEnabled, sourcemaps.init()))
+    .pipe(gulpif(development, sourcemaps.init()))
     .pipe(less({
       paths: [dirs.styles] // @import paths
     }))
     .pipe(autoprefixer())
-    .pipe(gulpif(sourcemapsEnabled, sourcemaps.write()))
+    .pipe(gulpif(development, sourcemaps.write()))
     .pipe(gulp.dest(dirs.dist + "/" + dirs.stylesDist))
-    .pipe(browserSync.stream());
+    .pipe(gulpif(development, browserSync.stream()));
 });
 
 gulp.task("minify-css", ["less"], function () {
@@ -145,14 +150,14 @@ gulp.task("swf", function() {
 
 gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/*", ["less"]);
-  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["webpack"]);
+  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["webpack", "replace-js-strings"]);
   gulp.watch(dirs.img + "/**/*.*", ["images"]);
 });
 
 // Use webpack to compile jsx into js,
 gulp.task("webpack", ["eslint"], function (callback) {
   // Extend options with source mapping
-  if (sourcemapsEnabled) {
+  if (development) {
     webpackConfig.devtool = "source-map";
     webpackConfig.module.preLoaders = [
       {
@@ -167,12 +172,14 @@ gulp.task("webpack", ["eslint"], function (callback) {
     if (err) {
       throw new gutil.PluginError("webpack", err);
     }
-    browserSync.reload();
+    if (development) {
+      browserSync.reload();
+    }
     callback();
   });
 });
 
-gulp.task("default", ["eslint", "webpack", "replace-js-strings", "less", "images", "swf", "index"]);
+gulp.task("default", ["eslint", "webpack", "replace-js-strings", "less", "images", "swf", "html"]);
 
 gulp.task("dist", ["default", "minify-css", "minify-js"]);
 
