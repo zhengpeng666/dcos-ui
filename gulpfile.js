@@ -94,6 +94,7 @@ gulp.task("images", function () {
 });
 
 gulp.task("index", function () {
+  console.log(process.env.NODE_ENV);
   return gulp.src(dirs.src + "/" + files.index)
     .pipe(replace(
       "@@ANALYTICS_KEY",
