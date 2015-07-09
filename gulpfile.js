@@ -93,8 +93,7 @@ gulp.task("images", function () {
     .pipe(gulp.dest(dirs.dist + "/" + dirs.imgDist));
 });
 
-gulp.task("index", function () {
-  console.log(process.env.NODE_ENV);
+gulp.task("index", function () {  
   return gulp.src(dirs.src + "/" + files.index)
     .pipe(replace(
       "@@ANALYTICS_KEY",
