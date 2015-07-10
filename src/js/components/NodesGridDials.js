@@ -14,6 +14,8 @@ var colors = {
 
 var NodesGridDials = React.createClass({
 
+  displayName: "NodesGridDials",
+
   propTypes: {
     hosts: React.PropTypes.array.isRequired,
     // enum: ["cpus", "mem", "disk"]

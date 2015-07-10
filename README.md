@@ -32,7 +32,7 @@ This repository contains the DCOS UI application. The application gathers data f
 
   ```sh
   npm install
-  npm install -g broccoli-cli
+  npm install -g gulp
   ```
 
 4. Setup project configuration
