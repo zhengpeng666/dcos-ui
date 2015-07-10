@@ -18,12 +18,14 @@
   },
 
   "rules": {
+    "eqeqeq": [2, "smart"],
     "quotes": [2, "double"],
     "indent": [2, 2],
     "camelcase": [2, {"properties": "never"}],
+    // "camelcase": [2, {"properties": "always"}], This causes errors with mixin properties
     "strict": [2, "never"], // <-- fix
     "no-mixed-spaces-and-tabs": 2,
-    "no-trailing-spaces": 2,
+    "no-trailing-spaces": [2, { "skipBlankLines": false }],
     "no-underscore-dangle": 0,
     "no-multiple-empty-lines": [2, {"max": 1}],
     "space-after-keywords": [2, "always"],
@@ -49,6 +51,7 @@
     "react/no-did-update-set-state": 2,
     "react/no-multi-comp": 2,
     "react/prop-types": 0,
+    // "react/prop-types": 2, This causes errors with many
     "react/react-in-jsx-scope": 2,
     "react/self-closing-comp": 2,
     "react/wrap-multilines": 2
