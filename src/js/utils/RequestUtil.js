@@ -13,6 +13,37 @@ var RequestUtil = {
     }, options);
 
     $.ajax(options);
+  },
+
+  debounceOnError: function(interval, promiseFn, context) {
+    var rejectionCount = 0;
+    var timeUntilNextCall = 0;
+
+    function resolveFn() {
+      rejectionCount = 0;
+      timeUntilNextCall = 0;
+    }
+
+    function rejectFn() {
+      rejectionCount++;
+      var delay = 0;
+      // only delay if after 3 requests have failed
+      if (rejectionCount > 2) {
+        delay = rejectionCount;
+      }
+
+      timeUntilNextCall = Date.now() + (delay * interval);
+    }
+
+    var callback = promiseFn(resolveFn, rejectFn);
+
+    return function () {
+      if (Date.now() < timeUntilNextCall) {
+        return;
+      }
+
+      callback.apply(context, arguments);
+    };
   }
 };
 
