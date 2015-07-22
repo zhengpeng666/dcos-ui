@@ -8,11 +8,12 @@ var RequestUtil = require("../../utils/RequestUtil");
 
 describe("RequestUtil", function () {
 
-  beforeEach(function () {
-    spyOn($, "ajax");
-  });
-
   describe("#json", function () {
+
+    beforeEach(function () {
+      spyOn($, "ajax");
+    });
+
     it("Should not make a request before called", function () {
       expect($.ajax).not.toHaveBeenCalled();
     });
