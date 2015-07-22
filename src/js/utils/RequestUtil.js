@@ -15,7 +15,12 @@ var RequestUtil = {
     $.ajax(options);
   },
 
-  debounceOnError: function(interval, promiseFn, context) {
+  debounceOnError: function(interval, promiseFn, options) {
+    options = options || {};
+
+    if (!_.isNumber(options.delayAfterCount)) {
+      options.delayAfterCount = 0;
+    }
     var rejectionCount = 0;
     var timeUntilNextCall = 0;
 
@@ -27,8 +32,8 @@ var RequestUtil = {
     function rejectFn() {
       rejectionCount++;
       var delay = 0;
-      // only delay if after 3 requests have failed
-      if (rejectionCount > 2) {
+      // only delay if after delayAfterCount requests have failed
+      if (rejectionCount >= options.delayAfterCount) {
         delay = rejectionCount;
       }
 
@@ -42,7 +47,7 @@ var RequestUtil = {
         return;
       }
 
-      callback.apply(context, arguments);
+      callback.apply(options.context, arguments);
     };
   }
 };

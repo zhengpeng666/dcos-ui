@@ -60,7 +60,8 @@ var MesosStateActions = {
           }
         });
       };
-    }
+    },
+    {delayAfterCount: 3}
   ),
 
   fetchState: RequestUtil.debounceOnError(
@@ -87,7 +88,8 @@ var MesosStateActions = {
           }
         });
       };
-    }
+    },
+    {delayAfterCount: 3}
   ),
 
   fetchMarathonHealth: RequestUtil.debounceOnError(
@@ -114,7 +116,8 @@ var MesosStateActions = {
           }
         });
       };
-    }
+    },
+    {delayAfterCount: 3}
   )
 };
 
