@@ -44,4 +44,87 @@ describe("RequestUtil", function () {
 
   });
 
+  describe("#debounceOnError", function () {
+    var successFn;
+    var errorFn;
+
+    beforeEach(function () {
+      successFn = jest.genMockFunction();
+      errorFn = jest.genMockFunction();
+
+      spyOn($, "ajax").andCallFake(
+        function (options) {
+          // Trigger error for url "failRequest"
+          if (/failRequest/.test(options.url)) {
+            options.error();
+          }
+
+          // Trigger success for url "successRequest"
+          if (/successRequest/.test(options.url)) {
+            options.success();
+          }
+        }
+      );
+
+      this.request = RequestUtil.debounceOnError(
+        10,
+        function(resolve, reject) {
+          return function (url) {
+            RequestUtil.json({
+              url: url,
+              success: function () {
+                successFn();
+                resolve();
+              },
+              error: function () {
+                errorFn();
+                reject();
+              }
+            });
+          };
+        }
+      );
+
+    });
+
+    it("should not debounce on the first 3 errors", function () {
+      this.request("failRequest");
+      this.request("failRequest");
+      this.request("failRequest");
+      expect(errorFn.mock.calls.length).toEqual(3);
+    });
+
+    it("should debounce on more than 3 errors", function () {
+      // These will all be called
+      this.request("failRequest");
+      this.request("failRequest");
+      this.request("failRequest");
+      // These will all be debounced
+      this.request("failRequest");
+      this.request("failRequest");
+      this.request("failRequest");
+      this.request("failRequest");
+      expect(errorFn.mock.calls.length).toEqual(3);
+    });
+
+    it("should reset debouncing after success call", function () {
+      // These will all be called
+      this.request("failRequest");
+      this.request("failRequest");
+      // These will all be called
+      this.request("successRequest");
+      this.request("failRequest");
+      this.request("failRequest");
+      this.request("failRequest");
+      // This will be debounced
+      this.request("failRequest");
+      this.request("failRequest");
+      this.request("failRequest");
+      this.request("failRequest");
+      expect(errorFn.mock.calls.length).toEqual(5);
+      expect(successFn.mock.calls.length).toEqual(1);
+    });
+
+  });
+
 });
