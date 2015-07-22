@@ -133,6 +133,34 @@ var Sidebar = React.createClass({
     Actions.log({description: "Copied hostname from sidebar"});
   },
 
+  getFlashButton: function (content) {
+    var hasFlash = false;
+    try {
+      hasFlash = Boolean(new ActiveXObject("ShockwaveFlash.ShockwaveFlash"));
+    } catch(exception) {
+      hasFlash = navigator.mimeTypes["application/x-shockwave-flash"] != null;
+    }
+
+    if (hasFlash) {
+      return (
+        <div data-behavior="show-tip"
+              data-tip-place="bottom"
+              data-tip-content="Copy to clipboard"
+              onMouseOver={this.handleMouseOverCopyIcon}
+              onMouseOut={this.handleMouseOutCopyIcon}
+              ref="copyButton">
+          <ReactZeroClipboard
+            text={content}
+            onAfterCopy={this.handleCopy}>
+            <i className="icon icon-mini icon-clipboard icon-mini-color clickable" />
+          </ReactZeroClipboard>
+        </div>
+      );
+    }
+
+    return null;
+  },
+
   getHostName: function (data) {
     if (!_.isObject(data.metadata) ||
         data.metadata.PUBLIC_IPV4 == null ||
@@ -146,18 +174,7 @@ var Sidebar = React.createClass({
         <span className="hostname text-align-center text-overflow">
           {data.metadata.PUBLIC_IPV4}
         </span>
-        <div data-behavior="show-tip"
-              data-tip-place="bottom"
-              data-tip-content="Copy to clipboard"
-              onMouseOver={this.handleMouseOverCopyIcon}
-              onMouseOut={this.handleMouseOutCopyIcon}
-              ref="copyButton">
-          <ReactZeroClipboard
-            text={data.metadata.PUBLIC_IPV4}
-            onAfterCopy={this.handleCopy}>
-            <i className="icon icon-mini icon-clipboard icon-mini-color clickable" />
-          </ReactZeroClipboard>
-        </div>
+        {this.getFlashButton(data.metadata.PUBLIC_IPV4)}
       </div>
     );
   },

@@ -63,7 +63,7 @@
       .hostname {
         padding: @base-spacing-unit * 0.1 @base-spacing-unit * 0.25;
         // compensate for the icon on the right
-        padding-left: @base-spacing-unit;
+        margin-left: @base-spacing-unit;
         color: @purple;
       }
       .zeroclipboard-is-hover {
@@ -71,6 +71,11 @@
           visibility: visible;
           opacity: 1;
         }
+      }
+
+      :last-child {
+        // override icon compensation if hostname is only child
+        margin-left: 0;
       }
     }
   }
