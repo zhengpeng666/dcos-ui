@@ -133,15 +133,8 @@ var Sidebar = React.createClass({
     Actions.log({description: "Copied hostname from sidebar"});
   },
 
-  getHostName: function (data) {
-    if (!_.isObject(data.metadata) ||
-        data.metadata.PUBLIC_IPV4 == null ||
-        data.metadata.PUBLIC_IPV4.length === 0) {
-      return null;
-    }
-
+  getFlashButton: function (content) {
     var hasFlash = false;
-    var flashButton = null;
     try {
       hasFlash = Boolean(new ActiveXObject("ShockwaveFlash.ShockwaveFlash"));
     } catch(exception) {
@@ -149,7 +142,7 @@ var Sidebar = React.createClass({
     }
 
     if (hasFlash) {
-      flashButton = (
+      return (
         <div data-behavior="show-tip"
               data-tip-place="bottom"
               data-tip-content="Copy to clipboard"
@@ -157,12 +150,22 @@ var Sidebar = React.createClass({
               onMouseOut={this.handleMouseOutCopyIcon}
               ref="copyButton">
           <ReactZeroClipboard
-            text={data.metadata.PUBLIC_IPV4}
+            text={content}
             onAfterCopy={this.handleCopy}>
             <i className="icon icon-mini icon-clipboard icon-mini-color clickable" />
           </ReactZeroClipboard>
         </div>
       );
+    }
+
+    return null;
+  },
+
+  getHostName: function (data) {
+    if (!_.isObject(data.metadata) ||
+        data.metadata.PUBLIC_IPV4 == null ||
+        data.metadata.PUBLIC_IPV4.length === 0) {
+      return null;
     }
 
     return (
@@ -171,7 +174,7 @@ var Sidebar = React.createClass({
         <span className="hostname text-align-center text-overflow">
           {data.metadata.PUBLIC_IPV4}
         </span>
-        {flashButton}
+        {this.getFlashButton(data.metadata.PUBLIC_IPV4)}
       </div>
     );
   },
