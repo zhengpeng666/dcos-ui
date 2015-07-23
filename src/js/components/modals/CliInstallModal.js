@@ -60,11 +60,11 @@ var CliInstructionsModal = React.createClass({
           {pythonInstructions}
           {installRequirements}
           <li>
-            Download: <a href="https://downloads.mesosphere.io/dcos-cli/install.ps1" target="_blank">install-dcos-windows.ps1</a>
+            Download: <a href="https://downloads.mesosphere.io/dcos-cli/install.ps1" target="_blank">install.ps1</a>
           </li>
         </ul>
       );
-      cliSnippet = ".\\install-dcos-windows.ps1 . http://" + hostname;
+      cliSnippet = ".\\install.ps1 . http://" + hostname;
     } else {
       requirements = (
         <ul>
