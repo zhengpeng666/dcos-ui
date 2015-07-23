@@ -198,7 +198,7 @@ var ServicesTable = React.createClass({
           </span>
         </div>
 
-        <a href={Cluster.getServiceLink(this.state.serviceName).replace(/dcos.local/, "172.17.8.101")}
+        <a href={Cluster.getServiceLink(this.state.serviceName)}
           target="_blank"
           style={newWindowButtonStyle}>
           Open in a New Window >

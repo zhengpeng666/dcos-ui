@@ -48,7 +48,7 @@ var ServiceOverlay = React.createClass({
     iframe.style.width = "100%";
     iframe.style["min-height"] = DOMUtils.getComputedDimensions(overlay).height + "px";
     iframe.style.border = 0;
-    iframe.src = Cluster.getServiceLink(this.props.serviceName).replace(/dcos.local/, "172.17.8.101");
+    iframe.src = Cluster.getServiceLink(this.props.serviceName);
 
     overlay.appendChild(iframe);
   },
