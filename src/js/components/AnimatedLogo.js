@@ -29,8 +29,8 @@ var AnimatedLogo = React.createClass({
       logoGradientID: _.uniqueId("logoGradient"),
       intervalID: null,
       calcBrezierLine: d3.svg.line()
-        .x(function(d) { return d[0]; })
-        .y(function(d) { return d[1]; })
+        .x(function (d) { return d[0]; })
+        .y(function (d) { return d[1]; })
         .interpolate("basis")
     });
   },

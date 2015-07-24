@@ -185,7 +185,7 @@ var NodesGridView = React.createClass({
     );
   },
 
-  getFilteredResourcesByFramework: function() {
+  getFilteredResourcesByFramework: function () {
     var resourcesByFramework = this.internalStorage_get().resourcesByFramework;
     var serviceFilter = this.props.serviceFilter;
 

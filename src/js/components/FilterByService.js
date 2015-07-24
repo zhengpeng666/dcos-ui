@@ -35,7 +35,7 @@ var FilterByService = React.createClass({
     }
   },
 
-  itemHtml: function(service) {
+  itemHtml: function (service) {
     return (
       <span className="badge-container">
         <span>{service.name}</span>

@@ -73,11 +73,11 @@ describe("TooltipMixin", function () {
       this.el.dataset.tipContent = "Default text";
     });
 
-    it("should not show tip before called", function() {
+    it("should not show tip before called", function () {
       expect(this.instance.tips.tip1.show).not.toHaveBeenCalled();
     });
 
-    it("should show the newly created tooltip immediately", function() {
+    it("should show the newly created tooltip immediately", function () {
       this.instance.tip_showTip(this.el);
       expect(this.instance.tips.tip1.show).toHaveBeenCalled();
     });
@@ -114,11 +114,11 @@ describe("TooltipMixin", function () {
       this.el.dataset.tipID = "tip1";
     });
 
-    it("should not hide tip before called", function() {
+    it("should not hide tip before called", function () {
       expect(this.instance.tips.tip1.hide).not.toHaveBeenCalled();
     });
 
-    it("should hide the tooltip immediately", function() {
+    it("should hide the tooltip immediately", function () {
       this.instance.tip_hideTip(this.el);
       expect(this.instance.tips.tip1.hide).toHaveBeenCalled();
     });

@@ -7,7 +7,7 @@
  * Licensed under the MIT license.
  * http://opensource.org/licenses/MIT
  */
-;(function(){
+;(function (){
 
 /**
  * Require the given path.
@@ -75,7 +75,7 @@ require.aliases = {};
  * @api private
  */
 
-require.resolve = function(path) {
+require.resolve = function (path) {
   if (path.charAt(0) === '/') path = path.slice(1);
 
   var paths = [
@@ -102,7 +102,7 @@ require.resolve = function(path) {
  * @api private
  */
 
-require.normalize = function(curr, path) {
+require.normalize = function (curr, path) {
   var segs = [];
 
   if ('.' != path.charAt(0)) return path;
@@ -129,7 +129,7 @@ require.normalize = function(curr, path) {
  * @api private
  */
 
-require.register = function(path, definition) {
+require.register = function (path, definition) {
   require.modules[path] = definition;
 };
 
@@ -141,7 +141,7 @@ require.register = function(path, definition) {
  * @api private
  */
 
-require.alias = function(from, to) {
+require.alias = function (from, to) {
   if (!require.modules.hasOwnProperty(from)) {
     throw new Error('Failed to alias "' + from + '", it does not exist');
   }
@@ -156,7 +156,7 @@ require.alias = function(from, to) {
  * @api private
  */
 
-require.relative = function(parent) {
+require.relative = function (parent) {
   var p = require.normalize(parent, '..');
 
   /**
@@ -184,7 +184,7 @@ require.relative = function(parent) {
    * Resolve relative to the parent.
    */
 
-  localRequire.resolve = function(path) {
+  localRequire.resolve = function (path) {
     var c = path.charAt(0);
     if ('/' == c) return path.slice(1);
     if ('.' == c) return require.normalize(p, path);
@@ -203,7 +203,7 @@ require.relative = function(parent) {
    * Check if module is defined at `path`.
    */
 
-  localRequire.exists = function(path) {
+  localRequire.exists = function (path) {
     return require.modules.hasOwnProperty(localRequire.resolve(path));
   };
 

@@ -112,7 +112,7 @@ function getHeaders(columns, headers, sortBy, handleSort) {
 }
 
 function getRowColumns(row, sortBy, columns) {
-  return _.map(columns, function(col, i) {
+  return _.map(columns, function (col, i) {
     return (
       <td key={i} className={getCellClass(col, row, sortBy)}>
         {getCellValue(col, row, sortBy)}
