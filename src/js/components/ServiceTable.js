@@ -137,62 +137,17 @@ var ServicesTable = React.createClass({
   },
 
   getServiceNavbar: function () {
-    var navStyles = {
-      width: "100%",
-      height: "80px",
-      background: "#9351e5",
-      position: "relative",
-      "font-size": "16px"
-    };
-
-    var backButtonStyle = {
-      "text-align": "center",
-      "padding-top": "30px",
-      "padding-bottom": "30px",
-      color: "white",
-      height: "100%",
-      width: "150px",
-      cursor: "pointer",
-      float: "left"
-    };
-
-    var newWindowButtonStyle = {
-      "padding-top": "30px",
-      "padding-bottom": "30px",
-      right: "0px",
-      top: "0px",
-      position: "absolute",
-      width: "250px",
-      color: "white"
-    };
-
-    var centerInfoStyle = {
-      "text-align": "center",
-      width: "400px",
-      "margin-left": "auto",
-      "margin-right": "auto",
-      color: "white",
-      "padding-top": "20px"
-    };
-
-    var subHeaderStyle = {
-      opacity: "0.5",
-      "text-transform": "capitalize",
-      "font-size": "14px"
-    };
-
     return (
-      <div style={navStyles}>
+      <div className="overlay-nav">
         <div
-          style={backButtonStyle}
+          className="overlay-back-button"
           onClick={this.closeService}>
           Back
         </div>
 
-        <div
-          style={centerInfoStyle}>
+        <div className="overlay-header">
           {this.state.serviceName}<br/>
-          <span style={subHeaderStyle}>
+          <span className="overlay-subheader">
             {this.state.serviceHealth}
             {" (" + this.state.serviceTasks + ")"}
           </span>
@@ -200,7 +155,7 @@ var ServicesTable = React.createClass({
 
         <a href={Cluster.getServiceLink(this.state.serviceName)}
           target="_blank"
-          style={newWindowButtonStyle}>
+          className="overlay-new-window-button">
           Open in a New Window >
         </a>
       </div>
