@@ -38,6 +38,7 @@ var files = {
 };
 
 var webpackConfig = {
+  devtool: "source-map",
   entry: "./" + dirs.js + "/" + files.mainJs + ".js",
   output: {
     filename: dirs.dist + "/" + files.mainJsDist + ".js"
@@ -47,6 +48,13 @@ var webpackConfig = {
       {
         test: /\.js$/,
         loader: "jsx-loader?harmony",
+        exclude: /node_modules/
+      }
+    ],
+    preLoaders: [
+      {
+        test: /\.js$/,
+        loader: "source-map-loader",
         exclude: /node_modules/
       }
     ],
@@ -154,17 +162,6 @@ gulp.task("watch", function () {
 
 // Use webpack to compile jsx into js,
 gulp.task("webpack", ["eslint"], function (callback) {
-  // Extend options with source mapping
-  if (development) {
-    webpackConfig.devtool = "source-map";
-    webpackConfig.module.preLoaders = [
-      {
-        test: /\.js$/,
-        loader: "source-map-loader",
-        exclude: /node_modules/
-      }
-    ];
-  }
   // run webpack
   webpack(webpackConfig, function (err, stats) {
     if (err) {
