@@ -187,7 +187,7 @@ var NodesGridView = React.createClass({
       );
     });
 
-    if (activeServices > MAX_SERVICES_TO_SHOW) {
+    if (activeServices.length > MAX_SERVICES_TO_SHOW) {
       var classNameOther = "service-legend-color service-color-" +
         OTHER_SERVICES_COLOR;
       items.push(
