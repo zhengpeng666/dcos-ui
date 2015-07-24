@@ -153,10 +153,10 @@ var NodesGridView = React.createClass({
     );
   },
 
-  getActiveServiceIds: function(hosts) {
+  getActiveServiceIds: function (hosts) {
     return _.unique(
       _.flatten(
-        hosts.map(function(host) {
+        hosts.map(function (host) {
           return host.framework_ids;
         })
       )
@@ -168,13 +168,13 @@ var NodesGridView = React.createClass({
     var activeServiceIds = this.getActiveServiceIds(props.hosts);
 
     // Filter out inactive services
-    var items = _.filter(props.services, function(service) {
+    var items = _.filter(props.services, function (service) {
       return activeServiceIds.indexOf(service.id) !== -1;
     })
     // Limit to max amount
     .slice(0, MAX_SERVICES_TO_SHOW)
     // Return view definition
-    .map(function(service) {
+    .map(function (service) {
       var className = "service-legend-color service-color-" +
         service.colorIndex;
 
@@ -205,7 +205,7 @@ var NodesGridView = React.createClass({
     );
   },
 
-  getFilteredResourcesByFramework: function() {
+  getFilteredResourcesByFramework: function () {
     var resourcesByFramework = this.internalStorage_get().resourcesByFramework;
     var serviceFilter = this.props.serviceFilter;
 
