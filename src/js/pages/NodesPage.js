@@ -121,24 +121,15 @@ var NodesPage = React.createClass({
 
   getFilterInputText: function() {
     var isVisible = /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath());
-    var style;
 
-    if (isVisible) {
-      style = {
-        visibility: "visible"
-      };
-    } else {
-      style = {
-        visibility: "hidden"
-      };
+    if (!isVisible) {
+      return null;
     }
 
     return (
-      <div style={style}>
-        <FilterInputText
+      <FilterInputText
           searchString={this.state.searchString}
           handleFilterChange={this.handleSearchStringChange} />
-      </div>
     );
   },
 
@@ -186,11 +177,13 @@ var NodesPage = React.createClass({
           totalLength={data.allHosts.length} />
         <ul className="list list-unstyled list-inline flush-bottom">
           <li>
-            <FilterByService
-              byServiceFilter={state.byServiceFilter}
-              services={data.services}
-              totalHostsCount={data.allHosts.length}
-              handleFilterChange={this.handleByServiceFilterChange} />
+            <div className="form-group">
+              <FilterByService
+                byServiceFilter={state.byServiceFilter}
+                services={data.services}
+                totalHostsCount={data.allHosts.length}
+                handleFilterChange={this.handleByServiceFilterChange} />
+            </div>
           </li>
           <li>
             {this.getFilterInputText()}
