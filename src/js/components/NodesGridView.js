@@ -154,13 +154,15 @@ var NodesGridView = React.createClass({
   },
 
   getActiveServiceIds: function (hosts) {
-    return _.unique(
-      _.flatten(
-        hosts.map(function (host) {
-          return host.framework_ids;
-        })
-      )
-    );
+    var frameworkIDs = {};
+
+    hosts.forEach(function (host) {
+      host.framework_ids.forEach(function (id) {
+        frameworkIDs[id] = true;
+      });
+    });
+
+    return Object.keys(frameworkIDs);
   },
 
   getServicesList: function (props) {
