@@ -177,6 +177,7 @@ var NodesGridView = React.createClass({
     .map(function(service) {
       var className = "service-legend-color service-color-" +
         service.colorIndex;
+
       return (
         <li key={service.id}>
           <span className={className}></span>
