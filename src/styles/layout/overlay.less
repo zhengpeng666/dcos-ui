@@ -1,43 +1,46 @@
-.overlay-nav {
-  width: 100%;
-  height: 80px;
-  background: #9351e5;
-  position: relative;
-  font-size: 16px;
-}
-
-.overlay-back-button {
-  text-align: center;
-  padding-top: 30px;
-  padding-bottom: 30px;
-  color: white;
-  height: 100%;
-  width: 150px;
-  cursor: pointer;
-  float: left;
-}
-
-.overlay-new-window-button {
-  padding-top: 30px;
-  padding-bottom: 30px;
-  right: 0px;
-  top: 0px;
+.service-overlay {
   position: absolute;
-  width: 250px;
-  color: white;
-}
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
 
-.overlay-header {
-  text-align: center;
-  width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-  color: white;
-  padding-top: 20px;
-}
+  .overlay-back-button {
+    float: left;
+  }
 
-.overlay-subheader {
-  opacity: 0.5;
-  text-transform: capitalize;
-  font-size: 14px;
+  .overlay-frame {
+    border: 0;
+    width: 100%;
+  }
+
+  .overlay-header {
+    width: 400px;
+    left: 50%;
+    margin-left: -200px;
+    color: @white;
+    position: absolute;
+    top: 15px;
+  }
+
+  .overlay-nav {
+    width: 100%;
+    height: 80px;
+    background: @purple;
+    position: relative;
+  }
+
+  .overlay-nav-button {
+    padding: 10px;
+    margin: 20px;
+  }
+
+  .overlay-new-window-button {
+    float: right;
+  }
+
+  .overlay-subheader {
+    opacity: 0.5;
+    text-transform: capitalize;
+    font-size: 14px;
+  }
 }

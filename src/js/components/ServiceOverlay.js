@@ -1,7 +1,13 @@
+
+var _ = require("underscore");
 var React = require("react");
+
 var PropTypes = React.PropTypes;
 var Cluster = require("../utils/Cluster");
 var DOMUtils = require("../utils/DOMUtils");
+var ServiceOverlayNav = require("./ServiceOverlayNav");
+var Frame = require("./Frame");
+var HealthLabels = require("../constants/HealthLabels");
 
 var ServiceOverlay = React.createClass({
 
@@ -9,62 +15,65 @@ var ServiceOverlay = React.createClass({
 
   propTypes: {
     shouldOpen: PropTypes.bool,
-    shouldClose: PropTypes.bool,
     serviceUrl: PropTypes.string
   },
 
   getDefaultProps: function () {
     return {
-      shouldOpen: false,
-      shouldClose: false
+      shouldOpen: false
     };
   },
 
-  closeService: function () {
-    var overlay = document.getElementById("service-overlay");
-    if (overlay) {
-      overlay.parentElement.removeChild(overlay);
+  shouldComponentUpdate: function (nextProps) {
+    return !_.isEqual(this.props, nextProps);
+  },
+
+  componentDidUpdate: function () {
+    if (this.props.shouldOpen) {
+      this.renderService();
     }
   },
 
-  renderService: function (children) {
+  closeService: function () {
+    if (this.overlay) {
+      React.unmountComponentAtNode(this.overlay);
+      document.body.removeChild(this.overlay);
+    }
+  },
+
+  renderService: function () {
     // Create a new div and append to body in order
     // to always be full screen.
-    var overlay = document.createElement("div");
-    overlay.id = "service-overlay";
-    overlay.style.position = "absolute";
-    overlay.style.width = "100%";
-    overlay.style.height = "100%";
-    overlay.style["z-index"] = 2000;
+    this.overlay = document.createElement("div");
+    this.overlay.className = "service-overlay";
+    document.body.appendChild(this.overlay);
 
-    document.body.appendChild(overlay);
+    var iframeStyle = {
+      minHeight: DOMUtils.getComputedDimensions(this.overlay).height + "px"
+    };
+
+    var service = this.props.service;
 
     React.render(
-      children,
-      overlay
+      <div>
+        <ServiceOverlayNav
+          className="overlay-nav"
+          onBackClick={this.closeService}
+          serviceName={service.name}
+          serviceHealth={HealthLabels[service.health.key]}
+          serviceTasks={service.TASK_RUNNING} />
+
+        <Frame
+          src={Cluster.getServiceLink(service.name)}
+          style={iframeStyle}
+          className="overlay-frame" />
+      </div>,
+      this.overlay
     );
-
-    var iframe = document.createElement("iframe");
-    iframe.style.width = "100%";
-    iframe.style["min-height"] = DOMUtils.getComputedDimensions(overlay).height + "px";
-    iframe.style.border = 0;
-    iframe.src = Cluster.getServiceLink(this.props.serviceName);
-
-    overlay.appendChild(iframe);
   },
 
   render: function () {
-    if (this.props.shouldOpen) {
-      this.renderService(this.props.children);
-    } else if (this.props.shouldClose) {
-      this.closeService();
-    }
-
-    // Return a plain div when not activated
-    return (
-      <div>
-      </div>
-    );
+    return null;
   }
 });
 

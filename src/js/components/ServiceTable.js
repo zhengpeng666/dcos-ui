@@ -32,30 +32,19 @@ var ServicesTable = React.createClass({
 
   getInitialState: function () {
     return {
-      openService: false
+      service: false
     };
   },
 
   openService: function (service, event) {
     event.preventDefault();
 
-    // Render the overlay and set opened to true after
+    // Render the overlay and set service to false
     // in order to make sure only one iframe gets created.
     this.setState({
-      serviceId: service.id,
-      serviceName: service.name,
-      serviceHealth: HealthLabels[service.health.key],
-      serviceTasks: service.TASK_RUNNING
+      service: service
     }, function () {
-      this.setState({opened: true});
-    });
-  },
-
-  closeService: function () {
-    // Setting closing to false in the callback
-    // forces the overlay to only close once.
-    this.setState({serviceId: false, closing: true}, function () {
-      this.setState({opened: false, closing: false});
+      this.setState({service: false});
     });
   },
 
@@ -133,32 +122,6 @@ var ServicesTable = React.createClass({
       <span>
         {value}
       </span>
-    );
-  },
-
-  getServiceNavbar: function () {
-    return (
-      <div className="overlay-nav">
-        <div
-          className="overlay-back-button"
-          onClick={this.closeService}>
-          Back
-        </div>
-
-        <div className="overlay-header">
-          {this.state.serviceName}<br/>
-          <span className="overlay-subheader">
-            {this.state.serviceHealth}
-            {" (" + this.state.serviceTasks + ")"}
-          </span>
-        </div>
-
-        <a href={Cluster.getServiceLink(this.state.serviceName)}
-          target="_blank"
-          className="overlay-new-window-button">
-          Open in a New Window >
-        </a>
-      </div>
     );
   },
 
@@ -241,11 +204,8 @@ var ServicesTable = React.createClass({
           sortFunc={ResourceTableUtil.getSortFunction("name")} />
 
         <ServiceOverlay
-          serviceName={this.state.serviceName}
-          shouldOpen={this.state.serviceId && !this.state.opened}
-          shouldClose={this.state.closing}>
-          {this.getServiceNavbar()}
-        </ServiceOverlay>
+          service={this.state.service}
+          shouldOpen={!!this.state.service} />
       </div>
     );
   }
