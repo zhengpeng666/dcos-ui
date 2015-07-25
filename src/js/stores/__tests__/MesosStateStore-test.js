@@ -3,6 +3,7 @@ var _ = require("underscore");
 jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../../config/Config");
+jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../MesosStateStore");
 jest.dontMock("./fixtures/MockStates");
 jest.dontMock("./fixtures/MockAppHealth");

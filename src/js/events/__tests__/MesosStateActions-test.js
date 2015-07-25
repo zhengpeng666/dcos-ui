@@ -63,6 +63,14 @@ describe("Mesos State Actions", function () {
         });
       });
 
+      afterEach(function () {
+        // Clean up debouncing
+        RequestUtil.json.andCallFake(function (req) {
+          req.success();
+        });
+        MesosStateActions.fetchSummary();
+      });
+
       it("detects errors on the history server", function () {
         MesosStateActions.fetchSummary(TimeScales.MINUTE);
         expect(AppDispatcher.handleServerAction).toHaveBeenCalled();
