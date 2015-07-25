@@ -1,10 +1,10 @@
 var _ = require("underscore");
 var React = require("react");
 
-var Cluster = require("../utils/Cluster");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var List = require("./List");
+var ServiceOverlay = require("./ServiceOverlay");
 
 var STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
@@ -28,8 +28,21 @@ var ServiceList = React.createClass({
     };
   },
 
+  getInitialState: function () {
+    return {
+      service: false
+    };
+  },
+
   shouldComponentUpdate: function (nextProps) {
     return !_.isEqual(this.props, nextProps);
+  },
+
+  openService: function (service, event) {
+    event.preventDefault();
+
+    this.setState({service: service});
+    this.forceUpdate();
   },
 
   getServices: function (services, healthProcessed) {
@@ -68,7 +81,8 @@ var ServiceList = React.createClass({
 
       if (service.webui_url && service.webui_url.length > 0) {
         title = (
-          <a href={Cluster.getServiceLink(service.name)}
+          <a href="#"
+            onClick={this.openService.bind(this, service)}
             className="h3 flush-top flush-bottom"
             target="_blank">
             {service.name}
@@ -87,7 +101,7 @@ var ServiceList = React.createClass({
           textAlign: "right"
         }
       };
-    });
+    }.bind(this));
   },
 
   getNoServicesMessage: function () {
@@ -120,7 +134,14 @@ var ServiceList = React.createClass({
   },
 
   render: function () {
-    return this.getContent();
+    return (
+      <div>
+        {this.getContent()}
+        <ServiceOverlay
+          service={this.state.service}
+          shouldOpen={!!this.state.service} />
+      </div>
+    );
   }
 });
 
