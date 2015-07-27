@@ -14,6 +14,8 @@ MesosStateStore.getLatest = function () {
   return {frameworks: []};
 };
 
+MesosStateStore.componentWillMount = function () {};
+
 describe("NodesGridView", function () {
 
   describe("#getActiveServiceIds", function () {
