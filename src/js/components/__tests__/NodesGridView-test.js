@@ -14,7 +14,7 @@ MesosStateStore.getLatest = function () {
   return {frameworks: []};
 };
 
-MesosStateStore.componentWillMount = function () {};
+MesosStateStore.addChangeListener = function () {};
 
 describe("NodesGridView", function () {
 
