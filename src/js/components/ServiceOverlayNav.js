@@ -6,6 +6,8 @@ var ServiceOverlayNav = React.createClass({
   displayName: "ServiceOverlayNav",
 
   render: function () {
+    var taskCount = this.props.serviceTasks || "N/A";
+
     return (
       <div className="overlay-nav">
         <span
@@ -18,7 +20,7 @@ var ServiceOverlayNav = React.createClass({
           {this.props.serviceName}
           <div className="overlay-subheader flush-bottom text-align-center">
             {this.props.serviceHealth}
-            {" (" + (this.props.serviceTasks || "N/A") + ")"}
+            {" (" + taskCount + ")"}
           </div>
         </h3>
 

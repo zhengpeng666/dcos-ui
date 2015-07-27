@@ -41,7 +41,13 @@ var ServiceList = React.createClass({
   openService: function (service, event) {
     event.preventDefault();
 
-    this.setState({service: service});
+    // Render the overlay and set service to false
+    // in order to make sure only one iframe gets created.
+    this.setState({
+      service: service
+    }, function () {
+      this.setState({service: false});
+    });
     this.forceUpdate();
   },
 
@@ -134,6 +140,8 @@ var ServiceList = React.createClass({
   },
 
   render: function () {
+    console.log(this.state.service);
+
     return (
       <div>
         {this.getContent()}

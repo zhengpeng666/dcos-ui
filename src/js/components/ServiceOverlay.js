@@ -24,10 +24,6 @@ var ServiceOverlay = React.createClass({
     };
   },
 
-  shouldComponentUpdate: function (nextProps) {
-    return !_.isEqual(this.props, nextProps);
-  },
-
   componentDidUpdate: function () {
     if (this.props.shouldOpen) {
       this.renderService();
