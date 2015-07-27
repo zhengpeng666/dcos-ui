@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
@@ -36,7 +37,7 @@ var AlertPanel = React.createClass({
       classes[this.props.className] = true;
     }
 
-    var classSet = React.addons.classSet(classes);
+    var classSet = classNames(classes);
 
     return (
       <div className={classSet}>

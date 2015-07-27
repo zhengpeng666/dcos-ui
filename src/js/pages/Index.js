@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
@@ -162,7 +163,7 @@ var Index = React.createClass({
       errorMsg = <RequestErrorMsg />;
     }
 
-    var loadingClassSet = React.addons.classSet({
+    var loadingClassSet = classNames({
       "hidden": hasLoadingError
     });
 
@@ -193,7 +194,7 @@ var Index = React.createClass({
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
 
-    var classSet = React.addons.classSet({
+    var classSet = classNames({
       "canvas-sidebar-open": data.isOpen
     });
 

@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var Chart = require("./Chart");
@@ -63,7 +64,7 @@ var ResourceBarChart = React.createClass({
     var selectedResource = this.props.selectedResource;
 
     return _.map(ResourceTypes, function (info, key) {
-      var classSet = React.addons.classSet({
+      var classSet = classNames({
         "button button-small button-stroke button-inverse": true,
         "active": selectedResource === key
       });

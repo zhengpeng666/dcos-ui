@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var Table = require("./Table");
@@ -110,7 +111,7 @@ var HostTable = React.createClass({
 
   getRowAttributes: function (model) {
     return {
-      className: React.addons.classSet({
+      className: classNames({
         "danger": model.active === false
       })
     };

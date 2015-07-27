@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var FilterInputText = React.createClass({
@@ -47,12 +48,12 @@ var FilterInputText = React.createClass({
 
   render: function () {
     var props = this.props;
-    var clearIconClasses = React.addons.classSet({
+    var clearIconClasses = classNames({
       "form-control-group-add-on form-control-group-add-on-append": true,
       "hidden": props.searchString.length === 0
     });
 
-    var iconSearchClasses = React.addons.classSet({
+    var iconSearchClasses = classNames({
       "icon icon-mini icon-mini-white icon-search": true,
       "active": this.state.focus
     });

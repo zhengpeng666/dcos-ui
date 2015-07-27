@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 var Router = require("react-router");
 var RouteHandler = Router.RouteHandler;
@@ -124,11 +125,11 @@ var NodesPage = React.createClass({
       "button button-small button-stroke button-inverse": true
     };
 
-    var listClassSet = React.addons.classSet(_.extend({
+    var listClassSet = classNames(_.extend({
       "active": /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath())
     }, buttonClasses));
 
-    var gridClassSet = React.addons.classSet(_.extend({
+    var gridClassSet = classNames(_.extend({
       "active": /\/nodes\/grid\/?/i.test(RouterLocation.getCurrentPath())
     }, buttonClasses));
 

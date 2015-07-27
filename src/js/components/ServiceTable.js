@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var Cluster = require("../utils/Cluster");
@@ -66,7 +67,7 @@ var ServicesTable = React.createClass({
       );
     }
 
-    var statusClassSet = React.addons.classSet({
+    var statusClassSet = classNames({
       "text-success": model.health.value === HealthTypes.HEALTHY,
       "text-danger": model.health.value === HealthTypes.UNHEALTHY,
       "text-warning": model.health.value === HealthTypes.IDLE,

@@ -1,4 +1,5 @@
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var HealthSorting = require("../constants/HealthSorting");
@@ -10,7 +11,7 @@ function isStat(prop) {
 
 var TableUtil = {
   getClassName: function (prop, sortBy, row) {
-    return React.addons.classSet({
+    return classNames({
       "align-right": isStat(prop) || prop === "TASK_RUNNING",
       "hidden-mini": isStat(prop),
       "highlight": prop === sortBy.prop,
@@ -47,7 +48,7 @@ var TableUtil = {
       before: null,
       after: null
     };
-    var caretClassSet = React.addons.classSet({
+    var caretClassSet = classNames({
       "caret": true,
       "dropup": order === "desc",
       "invisible": prop !== sortBy.prop

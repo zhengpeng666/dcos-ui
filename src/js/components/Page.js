@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var GeminiScrollbar = require("react-gemini-scrollbar");
 var React = require("react/addons");
 
@@ -32,7 +33,7 @@ var Page = React.createClass({
       classes[this.props.className] = true;
     }
 
-    var classSet = React.addons.classSet(classes);
+    var classSet = classNames(classes);
 
     return (
       <div className={classSet}>

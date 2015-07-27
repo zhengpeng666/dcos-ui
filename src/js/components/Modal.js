@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react");
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -114,12 +115,12 @@ var Modal = React.createClass({
       return null;
     }
 
-    var modalClassSet = React.addons.classSet({
+    var modalClassSet = classNames({
       "modal": true,
       "modal-large": this.props.size === "large"
     });
 
-    var titleClassSet = React.addons.classSet({
+    var titleClassSet = classNames({
       "modal-header-title": true,
       "text-align-center": true,
       "flush-top": true,
@@ -150,7 +151,7 @@ var Modal = React.createClass({
 
   render: function () {
     var isMounted = this.isMounted();
-    var backdropClassSet = React.addons.classSet({
+    var backdropClassSet = classNames({
       "fade": true,
       "in": isMounted && !this.state.closing,
       "modal-backdrop": true
