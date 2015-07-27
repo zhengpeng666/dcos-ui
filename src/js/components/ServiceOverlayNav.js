@@ -6,7 +6,7 @@ var ServiceOverlayNav = React.createClass({
   displayName: "ServiceOverlayNav",
 
   render: function () {
-    var taskCount = this.props.serviceTasks || "N/A";
+    var taskCount = typeof this.props.serviceTasks === "number" ? this.props.serviceTasks : "N/A";
 
     return (
       <div className="overlay-nav">

@@ -61,10 +61,9 @@ var ServicesTable = React.createClass({
 
     return (
       <a ref={model.id}
-          onClick={this.openService.bind(this, model)}
-          target="_blank"
-          className="h5 headline cell-link"
-          href="#">
+        onClick={this.openService.bind(this, model)}
+        target="_blank"
+        className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
           <img className="icon icon-small border-radius"
           src={model.images["icon-small"]} />
