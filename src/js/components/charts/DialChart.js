@@ -8,7 +8,7 @@ var DialSlice = require("./DialSlice");
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 
 // the data to render a single grey circle
-function getEmptyState () {
+function getEmptyState() {
   return [{ colorIndex: 6, value: 1 }];
 }
 
@@ -39,7 +39,7 @@ var DialChart = React.createClass({
     var data = _.extend({
       pie: d3.layout.pie()
         .sort(null)
-        .value(function(d) { return d[value]; })
+        .value(function (d) { return d[value]; })
     }, this.getArcs(this.props));
 
     this.internalStorage_set(data);
@@ -50,7 +50,7 @@ var DialChart = React.createClass({
     var arcs = this.getArcs(this.props);
     var innerArc = arcs.innerArc;
 
-    slice.each(function(d) { this._current = d; });
+    slice.each(function (d) { this._current = d; });
 
     slice = this.getSlice(nextProps);
     slice
@@ -94,19 +94,19 @@ var DialChart = React.createClass({
     return sumOfData === 0;
   },
 
-  getSlice: function(props) {
+  getSlice: function (props) {
     var data = this.internalStorage_get();
     var normalizedData = this.getNormalizedData(props.slices, props.data);
     return d3.select(this.getDOMNode()).selectAll("path")
       .data(data.pie(normalizedData));
   },
 
-  getRadius: function(props) {
+  getRadius: function (props) {
     var smallSide = _.min([props.width, props.height]);
     return smallSide / 2;
   },
 
-  getArcs: function(props) {
+  getArcs: function (props) {
     var radius = this.getRadius(props);
     return {
       innerArc: d3.svg.arc()
@@ -119,7 +119,7 @@ var DialChart = React.createClass({
     };
   },
 
-  getPosition: function() {
+  getPosition: function () {
     return "translate(" +
       this.props.width / 2 + "," + this.props.height / 2 + ")";
   },
@@ -140,7 +140,7 @@ var DialChart = React.createClass({
     });
   },
 
-  render: function() {
+  render: function () {
     return (
       <div className="chart-dialchart" height={this.props.height} width={this.props.width}>
         <svg height={this.props.height} width={this.props.width}>

@@ -143,14 +143,14 @@ gulp.task("minify-js", ["replace-js-strings"], function () {
     .pipe(gulp.dest(dirs.dist + "/" + dirs.jsDist));
 });
 
-gulp.task("replace-js-strings", ["webpack"], function() {
+gulp.task("replace-js-strings", ["webpack"], function () {
   return gulp.src(dirs.dist + "/**/*.?(js|jsx)")
     .pipe(replace("@@VERSION", packageInfo.version))
     .pipe(replace("@@ENV", process.env.NODE_ENV))
     .pipe(gulp.dest(dirs.dist));
 });
 
-gulp.task("swf", function() {
+gulp.task("swf", function () {
   return gulp.src(dirs.src + "/**/*.swf")
     .pipe(gulp.dest(dirs.dist));
 });
@@ -164,7 +164,7 @@ gulp.task("watch", function () {
 // Use webpack to compile jsx into js,
 gulp.task("webpack", ["eslint"], function (callback) {
   // run webpack
-  webpack(webpackConfig, function (err, stats) {
+  webpack(webpackConfig, function (err) {
     if (err) {
       throw new gutil.PluginError("webpack", err);
     }

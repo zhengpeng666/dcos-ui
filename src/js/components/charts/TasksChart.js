@@ -14,7 +14,7 @@ var taskInfo = {
 };
 
 function getEmptyTaskData() {
-  return _.map(taskInfo, function(val, key) {
+  return _.map(taskInfo, function (val, key) {
     return {name: key, colorIndex: val.colorIndex, value: 0};
   });
 }
@@ -72,7 +72,7 @@ var TasksChart = React.createClass({
   },
 
   getTotal: function (tasks) {
-    return _.reduce(tasks, function(acc, task) {
+    return _.reduce(tasks, function (acc, task) {
       return acc + task.value;
     }, 0);
   },
@@ -102,7 +102,7 @@ var TasksChart = React.createClass({
     );
   },
 
-  getDialChartChildren: function(total) {
+  getDialChartChildren: function (total) {
     return (
       <div className="description">
         <span className="h1-jumbo flush-top unit">{total}</span>
@@ -111,7 +111,7 @@ var TasksChart = React.createClass({
     );
   },
 
-  render: function() {
+  render: function () {
     var tasks = this.getTasks(this.props.tasks);
 
     return (

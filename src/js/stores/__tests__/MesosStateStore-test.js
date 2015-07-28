@@ -39,7 +39,7 @@ describe("Mesos State Store", function () {
 
   describe("#getTaskFailureRate", function () {
 
-    beforeEach(function() {
+    beforeEach(function () {
       MesosStateStore.processSummary(MockStates.oneTaskRunning);
       // Necessary because _prevMesosStatesMap is only set by getFailureRate.
       MesosStateStore.getTaskFailureRate();
@@ -147,7 +147,7 @@ describe("Mesos State Store", function () {
 
   describe("#getFrameworks", function () {
 
-    beforeEach(function() {
+    beforeEach(function () {
       MesosStateStore.reset();
       MesosStateStore.init();
       MesosStateStore.processSummary(MockStates.frameworksWithSameName);
@@ -160,7 +160,7 @@ describe("Mesos State Store", function () {
     });
 
     it("should have same resources length as history length", function () {
-      this.frameworks.forEach(function(framework) {
+      this.frameworks.forEach(function (framework) {
         expect(Config.historyLength).toBe(framework.used_resources.cpus.length);
       });
     });
@@ -169,7 +169,7 @@ describe("Mesos State Store", function () {
 
   describe("#getActiveHostsCount", function () {
 
-    beforeEach(function() {
+    beforeEach(function () {
       MesosStateStore.reset();
       MesosStateStore.init();
     });
@@ -238,7 +238,7 @@ describe("Mesos State Store", function () {
   });
 
   describe("#processMarathonApps", function () {
-    beforeEach(function() {
+    beforeEach(function () {
       MesosStateStore.reset();
       MesosStateStore.init();
     });

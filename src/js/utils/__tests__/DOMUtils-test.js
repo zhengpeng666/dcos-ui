@@ -5,7 +5,7 @@ var DOMUtils = require("../DOMUtils");
 describe("DOMUtils", function () {
 
   describe("#getComputedWidth", function () {
-    function buildElement (style) {
+    function buildElement(style) {
       return "<div style=\"" + style.join(";") + "\"></div>";
     }
 
