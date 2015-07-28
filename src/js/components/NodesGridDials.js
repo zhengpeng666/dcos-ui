@@ -4,6 +4,7 @@ var React = require("react/addons");
 var Chart = require("./charts/Chart");
 var DialChart = require("./charts/DialChart");
 var ResourceTypes = require("../constants/ResourceTypes");
+var TooltipMixin = require("../mixins/TooltipMixin");
 
 var colors = {
   error: 2,
@@ -13,6 +14,8 @@ var colors = {
 var NodesGridDials = React.createClass({
 
   displayName: "NodesGridDials",
+
+  mixins: [TooltipMixin],
 
   propTypes: {
     hosts: React.PropTypes.array.isRequired,
@@ -138,6 +141,24 @@ var NodesGridDials = React.createClass({
   getDials: function () {
     return _.map(this.props.hosts, function (host) {
       var config = this.getDialConfig(host);
+      var description;
+
+      if (host.active) {
+        description = (
+          <div className="description">
+            {config.description}
+          </div>
+        );
+      } else {
+        description = (
+          <div className="description"
+            data-behavior="show-tip"
+            data-tip-place="top"
+            data-tip-content="Connection to node lost">
+            {config.description}
+          </div>
+        );
+      }
 
       return (
         <div className="nodes-grid-dials-item" key={host.id}>
@@ -145,9 +166,7 @@ var NodesGridDials = React.createClass({
             <Chart calcHeight={function (w) { return w; }}>
               <DialChart data={config.data}
                   value="percentage">
-                <div className="description">
-                  {config.description}
-                </div>
+                  {description}
               </DialChart>
             </Chart>
           </div>
