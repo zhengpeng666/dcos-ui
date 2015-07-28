@@ -1,6 +1,8 @@
 var _ = require("underscore");
 var classNames = require("classnames");
+/*eslint-disable no-unused-vars*/
 var React = require("react/addons");
+/*eslint-enable no-unused-vars*/
 
 var HealthSorting = require("../constants/HealthSorting");
 var TableHeaderLabels = require("../constants/TableHeaderLabels");
