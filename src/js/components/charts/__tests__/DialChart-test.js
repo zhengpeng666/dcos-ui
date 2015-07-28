@@ -6,6 +6,7 @@ var TestUtils = React.addons.TestUtils;
 jest.dontMock("../DialChart");
 jest.dontMock("../DialSlice");
 jest.dontMock("../../../mixins/InternalStorageMixin");
+jest.dontMock("classnames");
 var DialChart = require("../DialChart");
 
 describe("DialChart", function () {

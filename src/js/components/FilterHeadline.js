@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react");
 
 var FilterHeadline = React.createClass({
@@ -23,17 +24,17 @@ var FilterHeadline = React.createClass({
     var filteredLength = this.props.currentLength;
     var totalLength = this.props.totalLength;
 
-    var filteredClassSet = React.addons.classSet({
+    var filteredClassSet = classNames({
       "h4": true,
       "hidden": filteredLength === totalLength
     });
 
-    var unfilteredClassSet = React.addons.classSet({
+    var unfilteredClassSet = classNames({
       "h4": true,
       "hidden": filteredLength !== totalLength
     });
 
-    var anchorClassSet = React.addons.classSet({
+    var anchorClassSet = classNames({
       "h4 clickable": true,
       "hidden": filteredLength === totalLength
     });

@@ -1,5 +1,8 @@
 var _ = require("underscore");
+var classNames = require("classnames");
+/*eslint-disable no-unused-vars*/
 var React = require("react/addons");
+/*eslint-enable no-unused-vars*/
 
 var HealthSorting = require("../constants/HealthSorting");
 var TableHeaderLabels = require("../constants/TableHeaderLabels");
@@ -10,7 +13,7 @@ function isStat(prop) {
 
 var TableUtil = {
   getClassName: function (prop, sortBy, row) {
-    return React.addons.classSet({
+    return classNames({
       "align-right": isStat(prop) || prop === "TASK_RUNNING",
       "hidden-mini": isStat(prop),
       "highlight": prop === sortBy.prop,
@@ -47,7 +50,7 @@ var TableUtil = {
       before: null,
       after: null
     };
-    var caretClassSet = React.addons.classSet({
+    var caretClassSet = classNames({
       "caret": true,
       "dropup": order === "desc",
       "invisible": prop !== sortBy.prop

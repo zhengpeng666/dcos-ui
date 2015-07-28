@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var GeminiScrollbar = require("react-gemini-scrollbar");
 var Link = require("react-router").Link;
 var React = require("react/addons");
@@ -190,7 +191,7 @@ var Sidebar = React.createClass({
 
       iconClasses["icon-" + val.icon] = true;
 
-      var itemClassSet = React.addons.classSet({
+      var itemClassSet = classNames({
         "sidebar-menu-item h3": true,
         "selected": isActive
       });
@@ -198,7 +199,7 @@ var Sidebar = React.createClass({
       return (
         <li className={itemClassSet} key={key}>
           <Link to={key}>
-            <i className={React.addons.classSet(iconClasses)}></i>
+            <i className={classNames(iconClasses)}></i>
             <span className="sidebar-menu-item-label">
               {val.label}
             </span>
@@ -212,7 +213,7 @@ var Sidebar = React.createClass({
   render: function () {
     var data = this.internalStorage_get();
 
-    var chatIconClassSet = React.addons.classSet({
+    var chatIconClassSet = classNames({
       "clickable": true,
       "icon": true,
       "icon-chat": true,

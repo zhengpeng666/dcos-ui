@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var DialSlice = React.createClass({
@@ -18,7 +19,7 @@ var DialSlice = React.createClass({
     if (this.props.colorIndex != null) {
       classes["path-color-" + this.props.colorIndex] = true;
     }
-    var classSet = React.addons.classSet(classes);
+    var classSet = classNames(classes);
     return (
       <g className={classSet}>
         <path d={this.props.path} />

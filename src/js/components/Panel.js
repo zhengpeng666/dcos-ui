@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var Panel = React.createClass({
@@ -40,7 +41,7 @@ var Panel = React.createClass({
       classes[this.props.className] = true;
     }
 
-    var classSet = React.addons.classSet(classes);
+    var classSet = classNames(classes);
 
     return (
       <div className={classSet} style={this.props.style}>

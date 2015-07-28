@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var AlertPanel = require("../components/AlertPanel");
@@ -129,11 +130,11 @@ var ServicesPage = React.createClass({
     var filteredLength = data.frameworks.length;
     var totalLength = data.totalFrameworks;
 
-    var filteredClassSet = React.addons.classSet({
+    var filteredClassSet = classNames({
       "hidden": filteredLength === totalLength
     });
 
-    var unfilteredClassSet = React.addons.classSet({
+    var unfilteredClassSet = classNames({
       "hidden": filteredLength !== totalLength
     });
 

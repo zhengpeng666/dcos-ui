@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
@@ -135,7 +136,7 @@ var NodesGridView = React.createClass({
       errorMsg = <RequestErrorMsg />;
     }
 
-    var loadingClassSet = React.addons.classSet({
+    var loadingClassSet = classNames({
       "hidden": hasLoadingError
     });
 
@@ -203,7 +204,7 @@ var NodesGridView = React.createClass({
     var props = this.props;
     var state = this.state;
 
-    var classSet = React.addons.classSet({
+    var classSet = classNames({
       "nodes-grid-legend": true,
       "disabled": !state.showServices
     });

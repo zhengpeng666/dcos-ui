@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var HealthLabels = require("../constants/HealthLabels");
@@ -55,12 +56,12 @@ var FilterHealth = React.createClass({
       if (health === undefined) {
         health = null;
       }
-      var classSet = React.addons.classSet({
+      var classSet = classNames({
         "button button-small button-stroke button-inverse": true,
         "active": mode === health
       });
 
-      var dotClassSet = React.addons.classSet({
+      var dotClassSet = classNames({
         "dot": _.contains([
           HealthTypes.UNHEALTHY,
           HealthTypes.HEALTHY,

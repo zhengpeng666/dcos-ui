@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var ValueTypes = require("../../constants/ValueTypes");
@@ -36,7 +37,7 @@ var TimeSeriesLabel = React.createClass({
   render: function () {
     var props = this.props;
 
-    var percentageClassSet = React.addons.classSet({
+    var percentageClassSet = classNames({
       "hidden": props.y !== ValueTypes.PERCENTAGE
     });
 

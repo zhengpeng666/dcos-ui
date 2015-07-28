@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var _ = require("underscore");
+var classNames = require("classnames");
 var React = require("react/addons");
 
 var Chart = require("./Chart");
@@ -56,7 +57,7 @@ var TasksChart = React.createClass({
       } else {
         classes["column-small-" + 12 / numberOfTasks] = true;
       }
-      var classSet = React.addons.classSet(classes);
+      var classSet = classNames(classes);
       return (
         <div key={key} className={classSet}>
           <p className="h1 unit flush-top">
