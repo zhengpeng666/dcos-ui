@@ -1,10 +1,7 @@
-
-var _ = require("underscore");
 var React = require("react");
 
 var PropTypes = React.PropTypes;
 var Cluster = require("../utils/Cluster");
-var DOMUtils = require("../utils/DOMUtils");
 var ServiceOverlayNav = require("./ServiceOverlayNav");
 var Frame = require("./Frame");
 var HealthLabels = require("../constants/HealthLabels");
@@ -44,10 +41,6 @@ var ServiceOverlay = React.createClass({
     this.overlay.className = "service-overlay";
     document.body.appendChild(this.overlay);
 
-    var iframeStyle = {
-      minHeight: DOMUtils.getComputedDimensions(this.overlay).height + "px"
-    };
-
     var service = this.props.service;
 
     React.render(
@@ -61,7 +54,6 @@ var ServiceOverlay = React.createClass({
 
         <Frame
           src={Cluster.getServiceLink(service.name)}
-          style={iframeStyle}
           className="overlay-frame" />
       </div>,
       this.overlay

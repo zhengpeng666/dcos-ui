@@ -4,7 +4,6 @@ var React = require("react");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var List = require("./List");
-var ServiceOverlay = require("./ServiceOverlay");
 
 var STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
@@ -28,27 +27,16 @@ var ServiceList = React.createClass({
     };
   },
 
-  getInitialState: function () {
-    return {
-      service: false
-    };
-  },
-
   shouldComponentUpdate: function (nextProps) {
     return !_.isEqual(this.props, nextProps);
   },
 
   openService: function (service, event) {
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
 
-    // Render the overlay and set service to false
-    // in order to make sure only one iframe gets created.
-    this.setState({
-      service: service
-    }, function () {
-      this.setState({service: false});
-    });
-    this.forceUpdate();
+    this.props.onOpen(service);
   },
 
   getServices: function (services, healthProcessed) {
@@ -140,14 +128,9 @@ var ServiceList = React.createClass({
   },
 
   render: function () {
-    console.log(this.state.service);
-
     return (
       <div>
         {this.getContent()}
-        <ServiceOverlay
-          service={this.state.service}
-          shouldOpen={!!this.state.service} />
       </div>
     );
   }

@@ -6,7 +6,10 @@ var Frame = React.createClass({
 
   getDefaultProps: function () {
     return {
-      onReady: function () {}
+      onReady: function () {},
+      style: {},
+      className: "",
+      src: ""
     };
   },
 

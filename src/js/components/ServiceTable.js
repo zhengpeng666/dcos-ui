@@ -10,8 +10,6 @@ var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
-var ServiceOverlay = require("./ServiceOverlay");
-var Cluster = require("../utils/Cluster");
 
 var ServicesTable = React.createClass({
 
@@ -30,22 +28,12 @@ var ServicesTable = React.createClass({
     };
   },
 
-  getInitialState: function () {
-    return {
-      service: false
-    };
-  },
+  openService: function (model, event) {
+    if (event) {
+      event.preventDefault();
+    }
 
-  openService: function (service, event) {
-    event.preventDefault();
-
-    // Render the overlay and set service to false
-    // in order to make sure only one iframe gets created.
-    this.setState({
-      service: service
-    }, function () {
-      this.setState({service: false});
-    });
+    this.props.onOpen(model);
   },
 
   renderHeadline: function (prop, model) {
@@ -192,20 +180,14 @@ var ServicesTable = React.createClass({
 
   render: function () {
     return (
-      <div>
-        <Table
-          className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
-          columns={this.getColumns()}
-          colGroup={this.getColGroup()}
-          data={this.props.services.slice(0)}
-          keys={["id"]}
-          sortBy={{prop: "name", order: "desc"}}
-          sortFunc={ResourceTableUtil.getSortFunction("name")} />
-
-        <ServiceOverlay
-          service={this.state.service}
-          shouldOpen={!!this.state.service} />
-      </div>
+      <Table
+        className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
+        columns={this.getColumns()}
+        colGroup={this.getColGroup()}
+        data={this.props.services.slice(0)}
+        keys={["id"]}
+        sortBy={{prop: "name", order: "desc"}}
+        sortFunc={ResourceTableUtil.getSortFunction("name")} />
     );
   }
 });

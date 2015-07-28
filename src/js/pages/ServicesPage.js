@@ -13,6 +13,7 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 var SidebarActions = require("../events/SidebarActions");
+var ServiceOverlay = require("../components/ServiceOverlay");
 
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
@@ -117,6 +118,16 @@ var ServicesPage = React.createClass({
     this.setState({searchString: searchString});
   },
 
+  openService: function (service) {
+    // Render the overlay and set service to false
+    // in order to make sure only one iframe gets created.
+    this.setState({
+      openedService: service
+    }, function () {
+      this.setState({openedService: false});
+    });
+  },
+
   resetFilter: function () {
     var state = _.clone(DEFAULT_FILTER_OPTIONS);
     this.internalStorage_set(getMesosServices(state));
@@ -183,7 +194,11 @@ var ServicesPage = React.createClass({
         </ul>
         <ServiceTable
           services={data.frameworks}
-          healthProcessed={data.appsProcessed} />
+          healthProcessed={data.appsProcessed}
+          onOpen={this.openService} />
+        <ServiceOverlay
+          service={this.state.openedService}
+          shouldOpen={!!this.state.openedService} />
       </div>
     );
   },
