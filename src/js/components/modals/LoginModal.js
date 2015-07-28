@@ -1,5 +1,6 @@
 /** @jsx React.DOM */
 
+var classNames = require("classnames");
 var React = require("react");
 
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
@@ -76,13 +77,13 @@ var LoginModal = React.createClass({
   render: function () {
     var data = this.internalStorage_get();
 
-    var emailClassSet = React.addons.classSet({
+    var emailClassSet = classNames({
       "form-group": true,
       "flush-bottom": true,
       "form-group-error": data.emailHasError
     });
 
-    var emailHelpBlock = React.addons.classSet({
+    var emailHelpBlock = classNames({
       "form-help-block": true,
       "hidden": !data.emailHasError
     });
