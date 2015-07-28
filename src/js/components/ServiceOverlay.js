@@ -29,6 +29,7 @@ var ServiceOverlay = React.createClass({
 
   closeService: function () {
     if (this.overlay) {
+      // Remove the div that we created at the root of the do
       React.unmountComponentAtNode(this.overlay);
       document.body.removeChild(this.overlay);
     }
