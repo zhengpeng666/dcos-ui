@@ -128,10 +128,6 @@ var Modals = React.createClass({
   },
 
   getLoginModal: function (hasIdentity) {
-    if (hasIdentity || Config.disableLoginModal) {
-      return null;
-    }
-
     Actions.logFakePageView({
       title: "Signup Modal",
       path: "/v/beta-signup-modal-form",
@@ -139,7 +135,7 @@ var Modals = React.createClass({
     });
 
     return (
-      <LoginModal onLogin={this.onLogin} />
+      <LoginModal onLogin={this.onLogin} open={!hasIdentity && !Config.disableLoginModal} />
     );
   },
 
@@ -203,10 +199,6 @@ var Modals = React.createClass({
   },
 
   getCliInstallModal: function (showModal) {
-    if (showModal === false) {
-      return null;
-    }
-
     var options;
 
     if (this.state.showingCliModal) {
@@ -225,6 +217,14 @@ var Modals = React.createClass({
       });
 
       options = this.getTourModalOptions();
+    } else {
+      options = {
+        onCloseClickFn: function () {},
+        title: "",
+        subHeaderContent: "",
+        showFooter: true,
+        footer: {}
+      };
     }
 
     return (
@@ -233,36 +233,29 @@ var Modals = React.createClass({
         title={options.title}
         subHeaderContent={options.subHeaderContent}
         showFooter={options.showFooter}
-        footer={options.footer} />
+        footer={options.footer}
+        open={showModal} />
     );
   },
 
   getVersionsModal: function (showModal) {
-    if (showModal === false) {
-      return null;
-    }
-
     var onCloseClickFn = function () {
       this.setState({showingVersionsModal: false});
     }.bind(this);
 
     var versions = SidebarStore.getVersions();
     return (
-      <VersionsModal onClose={onCloseClickFn} versionDump={versions} />
+      <VersionsModal onClose={onCloseClickFn} versionDump={versions} open={showModal} />
     );
   },
 
   getErrorModal: function (show) {
-    if (show === false) {
-      return null;
-    }
-
     var onCloseClickFn = function () {
       this.setState({showErrorModal: false});
     }.bind(this);
 
     return (<ErrorModal onClose={onCloseClickFn}
-      errorMsg={this.state.modalErrorMsg} />);
+      errorMsg={this.state.modalErrorMsg} open={show} />);
   },
 
   render: function () {

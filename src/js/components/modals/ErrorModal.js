@@ -21,7 +21,8 @@ var ErrorModal = React.createClass({
           subHeader=""
           showCloseButton={false}
           showFooter={false}
-          onClose={this.onClose}>
+          onClose={this.onClose}
+          open={this.props.open}>
         {this.props.errorMsg}
       </Modal>
     );

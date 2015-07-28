@@ -1,7 +1,7 @@
 var browserInfo = require("browser-info");
 var React = require("react");
 
-var Modal = require("../../components/Modal");
+var Modal = require("../Modal");
 
 var CliInstructionsModal = React.createClass({
 
@@ -101,7 +101,8 @@ var CliInstructionsModal = React.createClass({
           showCloseButton={false}
           showFooter={this.props.showFooter}
           onClose={this.onClose}
-          footer={this.props.footer}>
+          footer={this.props.footer}
+          open={this.props.open}>
         {this.getContent()}
       </Modal>
     );

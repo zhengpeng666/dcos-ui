@@ -13,7 +13,6 @@ var Modal = React.createClass({
     closeByBackdropClick: React.PropTypes.bool,
     closeText: React.PropTypes.string,
     footer: React.PropTypes.object,
-    shouldClose: React.PropTypes.bool,
     showCloseButton: React.PropTypes.bool,
     showFooter: React.PropTypes.bool,
     size: React.PropTypes.string,
@@ -29,16 +28,9 @@ var Modal = React.createClass({
       showCloseButton: true,
       titleText: "",
       size: "",
-      shouldClose: false,
       subHeader: "",
       maxHeightPercentage: 0.6,
       onClose: function () {}
-    };
-  },
-
-  getInitialState: function () {
-    return {
-      closing: false
     };
   },
 
@@ -58,12 +50,6 @@ var Modal = React.createClass({
     }
   },
 
-  componentWillReceiveProps: function (nextProps) {
-    if (nextProps.shouldClose && !this.props.shouldClose) {
-      this.closeModal();
-    }
-  },
-
   componentWillUnmount: function () {
     var modalElement = this.refs.modal.getDOMNode();
     var transitionEvent = DOMUtils.whichTransitionEvent(modalElement);
@@ -72,7 +58,7 @@ var Modal = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps) {
-    return nextProps.shouldClose === this.props.shouldClose;
+    return nextProps.open !== this.props.open;
   },
 
   handleWindowResize: function () {
@@ -86,16 +72,7 @@ var Modal = React.createClass({
   },
 
   closeModal: function () {
-    var modalElement = this.refs.modal.getDOMNode();
-    var transitionEvent = DOMUtils.whichTransitionEvent(modalElement);
-
-    if (transitionEvent == null) {
-      this.props.onClose();
-    } else {
-      modalElement.addEventListener(transitionEvent, this.props.onClose);
-    }
-
-    this.setState({closing: true});
+    this.props.onClose();
   },
 
   getInnerContainerHeightInfo: function () {
@@ -178,11 +155,17 @@ var Modal = React.createClass({
   },
 
   getModal: function (isMounted) {
-    if (!isMounted || this.state.closing) {
+    if (!isMounted || !this.props.open) {
       return null;
     }
 
-    var modalClassSet = classNames({
+    var backdropClassSet = React.addons.classSet({
+      "fade": true,
+      "in": isMounted && this.props.open,
+      "modal-backdrop": true
+    });
+
+    var modalClassSet = React.addons.classSet({
       "modal": true,
       "modal-large": this.props.size === "large"
     });
@@ -211,42 +194,35 @@ var Modal = React.createClass({
     };
 
     return (
-      <div className={modalClassSet}>
-        {this.getCloseButton()}
-        <div className="modal-header">
-          <div className="container container-pod container-pod-short">
-            <h2 className={titleClassSet}>
-              {this.props.titleText}
-            </h2>
-            {this.props.subHeader}
+      <div className="modal-container">
+        <div className={modalClassSet}>
+          {this.getCloseButton()}
+          <div className="modal-header">
+            <div className="container container-pod container-pod-short">
+              <h2 className={titleClassSet}>
+                {this.props.titleText}
+              </h2>
+              {this.props.subHeader}
+            </div>
           </div>
         </div>
         <div className="modal-content" style={modalStyle}>
           <div ref="innerContainer" className="modal-content-inner container container-pod container-pod-short" style={modalStyle}>
             {this.getModalContent(useScrollbar, innerHeight)}
           </div>
+          {this.getFooter()}
         </div>
-        {this.getFooter()}
+        <div className={backdropClassSet} onClick={this.handleBackdropClick}>
+        </div>
       </div>
     );
   },
 
   render: function () {
-    var isMounted = this.isMounted();
-    var backdropClassSet = classNames({
-      "fade": true,
-      "in": isMounted && !this.state.closing,
-      "modal-backdrop": true
-    });
-
     return (
-      <div className="modal-container container-scrollable">
-        <CSSTransitionGroup transitionName="modal" transitionAppear={true} ref="modal" component="div">
-          {this.getModal(isMounted)}
-        </CSSTransitionGroup>
-        <div className={backdropClassSet} onClick={this.handleBackdropClick}>
-        </div>
-      </div>
+      <CSSTransitionGroup transitionName="modal" ref="modal" component="div">
+        {this.getModal()}
+      </CSSTransitionGroup>
     );
   }
 });

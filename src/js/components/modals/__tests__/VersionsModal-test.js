@@ -32,7 +32,7 @@ describe("VersionsModal", function () {
     beforeEach(function () {
       var data = {foo: "bar"};
       this.instance = TestUtils.renderIntoDocument(
-        <VersionsModal onClose={function () {}} versionDump={data} />
+        <VersionsModal onClose={function () {}} versionDump={data} open={true}/>
       );
     });
 
