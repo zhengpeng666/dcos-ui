@@ -63,6 +63,7 @@ var webpackConfig = {
 
 gulp.task("browsersync", function () {
   browserSync.init({
+    online: true,
     open: false,
     port: 4200,
     server: {
@@ -114,7 +115,7 @@ gulp.task("less", function () {
       paths: [dirs.styles] // @import paths
     }))
     .pipe(autoprefixer())
-    .pipe(gulpif(development, sourcemaps.write()))
+    .pipe(gulpif(development, sourcemaps.write(".")))
     .pipe(gulp.dest(dirs.dist + "/" + dirs.stylesDist))
     .pipe(gulpif(development, browserSync.stream()));
 });
