@@ -54,7 +54,7 @@ describe("ServiceTable", function () {
 
     it("should have N/A health status on all frameworks",
         function () {
-      MesosStateStore.processMarathonAppsError();
+      MesosStateStore.onMarathonAppsError();
       expect(MesosStateStore.isAppsProcessed()).toBe(true);
 
       var table = getTable(MesosStateStore.isAppsProcessed());

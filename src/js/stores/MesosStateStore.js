@@ -6,8 +6,10 @@ var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
 var HealthTypes = require("../constants/HealthTypes");
+var MarathonStore = require("./MarathonStore");
 var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
+var ServiceImages = require("../constants/ServiceImages");
 var Strings = require("../utils/Strings");
 var TimeScales = require("../constants/TimeScales");
 
@@ -27,16 +29,6 @@ var _lastMesosState = {};
 var _statesProcessed = false;
 
 var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
-var NA_IMAGES = {
-  "icon-small": "./img/services/icon-service-default-small@2x.png",
-  "icon-medium": "./img/services/icon-service-default-medium@2x.png",
-  "icon-large": "./img/services/icon-service-default-large@2x.png"
-};
-var MARATHON_IMAGES = {
-  "icon-small": "./img/services/icon-service-marathon-small@2x.png",
-  "icon-medium": "./img/services/icon-service-marathon-medium@2x.png",
-  "icon-large": "./img/services/icon-service-marathon-large@2x.png"
-};
 
 function setHostsToFrameworkCount(frameworks) {
   return _.map(frameworks, function (framework) {
@@ -335,30 +327,11 @@ function normalizeFrameworks(frameworks, date) {
     framework.images = _frameworkImages[framework.name];
 
     if (framework.images == null) {
-      if (framework.name.search(/marathon/i) > -1) {
-        framework.images = MARATHON_IMAGES;
-      } else {
-        framework.images = NA_IMAGES;
-      }
+      framework.images = ServiceImages.NA_IMAGES;
     }
 
     return framework;
   });
-}
-
-function getFrameworkHealth(app) {
-  if (app.healthChecks == null || app.healthChecks.length === 0) {
-    return null;
-  }
-
-  var health = {key: "IDLE", value: HealthTypes.IDLE};
-  if (app.tasksUnhealthy > 0) {
-    health = {key: "UNHEALTHY", value: HealthTypes.UNHEALTHY};
-  } else if (app.tasksRunning > 0 && app.tasksHealthy === app.tasksRunning) {
-    health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
-  }
-
-  return health;
 }
 
 function activeHostsCountOverTime() {
@@ -368,35 +341,6 @@ function activeHostsCountOverTime() {
       slavesCount: state.active_slaves || 0
     };
   });
-}
-
-function parseMetadata(b64Data) {
-  // extract content of the DCOS_PACKAGE_METADATA label
-  try {
-    var dataAsJsonString = global.atob(b64Data);
-    return JSON.parse(dataAsJsonString);
-  } catch (error) {
-    return {};
-  }
-}
-
-function getFrameworkImages(app) {
-  if (app.labels == null ||
-    app.labels.DCOS_PACKAGE_METADATA == null ||
-    app.labels.DCOS_PACKAGE_METADATA.length === 0) {
-    return null;
-  }
-
-  var metadata = parseMetadata(app.labels.DCOS_PACKAGE_METADATA);
-
-  if (metadata.images == null ||
-      metadata.images["icon-small"].length === 0 ||
-      metadata.images["icon-medium"].length === 0 ||
-      metadata.images["icon-large"].length === 0) {
-    return NA_IMAGES;
-  }
-
-  return metadata.images;
 }
 
 function filterByString(objects, key, searchString) {
@@ -443,7 +387,6 @@ function initStates() {
 
 function fetchData(timeScale) {
   MesosStateActions.fetchSummary(timeScale);
-  MesosStateActions.fetchMarathonHealth();
 }
 
 function startMesosSummaryPoll() {
@@ -502,11 +445,23 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     _initCalledAt = Date.now();
 
     startMesosSummaryPoll();
+    MarathonStore.addChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonAppsChange
+    );
+    MarathonStore.addChangeListener(
+      EventTypes.MARATHON_APPS_ERROR, this.onMarathonAppsError
+    );
     initStates();
   },
 
   unmount: function () {
     stopMesosSummaryPoll();
+    MarathonStore.removeChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonAppsChange
+    );
+    MarathonStore.removeChangeListener(
+      EventTypes.MARATHON_APPS_ERROR, this.onMarathonAppsError
+    );
   },
 
   reset: function () {
@@ -742,63 +697,41 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     this.emitChange(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
   },
 
-  processMarathonApps: function (data) {
-    var frameworkData = _.foldl(data.apps, function (curr, app) {
-      if (app.labels.DCOS_PACKAGE_FRAMEWORK_NAME == null) {
-        return curr;
-      }
-
-      var packageName = app.labels.DCOS_PACKAGE_FRAMEWORK_NAME;
-      // use insensitive check
-      if (packageName.length) {
-        packageName = packageName.toLowerCase();
-      }
-
-      // find the framework based on package name
+  onMarathonAppsChange: function (apps) {
+    var frameworkData = _.foldl(apps, function (curr, app, packageName) {
+      // Find the framework based on package name
       var frameworkName = _.find(_frameworkNames, function (name) {
-        // use insensitive check
+        // Use insensitive check
         if (name.length) {
           name = name.toLowerCase();
         }
 
-        // match exactly (case insensitive)
+        // Match exactly (case insensitive)
         return name === packageName;
       });
+
+      if (packageName === "marathon") {
+        frameworkName = packageName;
+      }
 
       if (frameworkName == null) {
         return curr;
       }
 
-      curr.health[frameworkName] = getFrameworkHealth(app);
-      curr.images[frameworkName] = getFrameworkImages(app);
+      curr.health[frameworkName] = app.health;
+      curr.images[frameworkName] = app.images;
 
       return curr;
     }, {health: {}, images: {}});
-
-    // Specific health check for Marathon
-    // We are setting the "marathon" key here, since we can safely assume,
-    // it to be "marathon" (we control it).
-    // This means that no other framework should be named "marathon".
-    frameworkData.health.marathon = getFrameworkHealth({
-      // Make sure health check has a result
-      healthChecks: [{}],
-      // Marathon is healthy if this request returned apps
-      tasksHealthy: data.apps.length,
-      tasksRunning: data.apps.length
-    });
 
     _frameworkHealth = frameworkData.health;
     _frameworkImages = frameworkData.images;
 
     _appsProcessed = true;
-
-    this.emitChange(EventTypes.MARATHON_APPS_CHANGE);
   },
 
-  processMarathonAppsError: function () {
+  onMarathonAppsError: function () {
     _appsProcessed = true;
-
-    this.emitChange(EventTypes.MARATHON_APPS_REQUEST_ERROR);
   },
 
   processStateSuccess: function (data) {
@@ -811,8 +744,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
-    var source = payload.source;
-    if (source !== ActionTypes.SERVER_ACTION) {
+    if (payload.source !== ActionTypes.SERVER_ACTION) {
       return false;
     }
 
@@ -834,12 +766,6 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
       case ActionTypes.REQUEST_MESOS_STATE_ERROR:
         MesosStateStore.processStateError();
         break;
-      case ActionTypes.REQUEST_MARATHON_APPS_SUCCESS:
-        MesosStateStore.processMarathonApps(action.data);
-        break;
-      case ActionTypes.REQUEST_MARATHON_APPS_ERROR:
-        MesosStateStore.processMarathonAppsError();
-        break;
     }
 
     return true;
@@ -848,9 +774,3 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
 });
 
 module.exports = MesosStateStore;
-
-// TODO (DCOS-1148): wrap this in a check for when we are running tests
-module.exports.parseMetadata = parseMetadata;
-module.exports.getFrameworkImages = getFrameworkImages;
-module.exports.NA_IMAGES = NA_IMAGES;
-module.exports.MARATHON_IMAGES = MARATHON_IMAGES;

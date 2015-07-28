@@ -90,35 +90,8 @@ var MesosStateActions = {
       };
     },
     {delayAfterCount: 3}
-  ),
-
-  fetchMarathonHealth: RequestUtil.debounceOnError(
-    Config.stateRefresh,
-    function (resolve, reject) {
-      return function () {
-        var url = Config.rootUrl + "/marathon/v2/apps";
-
-        RequestUtil.json({
-          url: url,
-          success: function (response) {
-            AppDispatcher.handleServerAction({
-              type: ActionTypes.REQUEST_MARATHON_APPS_SUCCESS,
-              data: response
-            });
-            resolve();
-          },
-          error: function (e) {
-            AppDispatcher.handleServerAction({
-              type: ActionTypes.REQUEST_MARATHON_APPS_ERROR,
-              data: e.message
-            });
-            reject();
-          }
-        });
-      };
-    },
-    {delayAfterCount: 3}
   )
+
 };
 
 module.exports = MesosStateActions;
