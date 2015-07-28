@@ -19,8 +19,7 @@ var ServiceOverlayNav = React.createClass({
         <h3 className="flush-top text-align-center inverse overlay-header">
           {this.props.serviceName}
           <div className="overlay-subheader flush-bottom text-align-center">
-            {this.props.serviceHealth}
-            {" (" + taskCount + ")"}
+            {this.props.serviceHealth + ` (${taskCount})`}
           </div>
         </h3>
 
