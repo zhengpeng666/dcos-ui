@@ -15,7 +15,7 @@ var RequestUtil = {
     $.ajax(options);
   },
 
-  debounceOnError: function(interval, promiseFn, options) {
+  debounceOnError: function (interval, promiseFn, options) {
     options = options || {};
 
     if (!_.isNumber(options.delayAfterCount)) {

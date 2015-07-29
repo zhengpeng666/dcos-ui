@@ -69,7 +69,7 @@ describe("RequestUtil", function () {
 
       this.request = RequestUtil.debounceOnError(
         10,
-        function(resolve, reject) {
+        function (resolve, reject) {
           return function (url) {
             RequestUtil.json({
               url: url,

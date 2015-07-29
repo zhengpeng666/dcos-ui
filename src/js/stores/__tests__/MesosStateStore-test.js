@@ -192,7 +192,7 @@ describe("Mesos State Store", function () {
   });
 
   describe("#onMarathonAppsChange", function () {
-    beforeEach(function() {
+    beforeEach(function () {
       MesosStateStore.reset();
       MesosStateStore.init();
     });
