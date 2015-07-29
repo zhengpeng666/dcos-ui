@@ -1,5 +1,4 @@
 var _ = require("underscore");
-var React = require("react");
 
 jest.dontMock("../../actions/Actions");
 jest.dontMock("../ActionsMixin");
