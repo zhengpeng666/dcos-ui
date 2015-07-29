@@ -154,9 +154,30 @@ var NodesGridView = React.createClass({
     );
   },
 
+  getActiveServiceIds: function (hosts) {
+    var frameworkIDs = {};
+
+    hosts.forEach(function (host) {
+      host.framework_ids.forEach(function (id) {
+        frameworkIDs[id] = true;
+      });
+    });
+
+    return Object.keys(frameworkIDs);
+  },
+
   getServicesList: function (props) {
-    var items = _.map(props.services.slice(0, MAX_SERVICES_TO_SHOW),
-      function (service) {
+    // Return a list of unique service IDs from the selected hosts.
+    var activeServiceIds = this.getActiveServiceIds(props.hosts);
+
+    // Filter out inactive services
+    var items = _.filter(props.services, function (service) {
+      return activeServiceIds.indexOf(service.id) !== -1;
+    })
+    // Limit to max amount
+    .slice(0, MAX_SERVICES_TO_SHOW)
+    // Return view definition
+    .map(function (service) {
       var className = "service-legend-color service-color-" +
         service.colorIndex;
 
@@ -168,7 +189,8 @@ var NodesGridView = React.createClass({
       );
     });
 
-    if (props.services.length > MAX_SERVICES_TO_SHOW) {
+    // Add "Others" node to the list
+    if (activeServiceIds.length > MAX_SERVICES_TO_SHOW) {
       var classNameOther = "service-legend-color service-color-" +
         OTHER_SERVICES_COLOR;
       items.push(

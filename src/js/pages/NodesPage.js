@@ -120,7 +120,21 @@ var NodesPage = React.createClass({
     }
   },
 
-  getViewTypeRadioButtons: function () {
+  getFilterInputText: function() {
+    var isVisible = /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath());
+
+    if (!isVisible) {
+      return null;
+    }
+
+    return (
+      <FilterInputText
+          searchString={this.state.searchString}
+          handleFilterChange={this.handleSearchStringChange} />
+    );
+  },
+
+  getViewTypeRadioButtons: function (resetFilter) {
     var buttonClasses = {
       "button button-small button-stroke button-inverse": true
     };
@@ -135,8 +149,8 @@ var NodesPage = React.createClass({
 
     return (
       <div className="button-group">
-        <Link className={listClassSet} to="nodes-list">List</Link>
-        <Link className={gridClassSet} to="nodes-grid">Grid</Link>
+        <Link className={listClassSet} onClick={resetFilter} to="nodes-list">List</Link>
+        <Link className={gridClassSet} onClick={resetFilter} to="nodes-grid">Grid</Link>
       </div>
     );
   },
@@ -164,25 +178,24 @@ var NodesPage = React.createClass({
           totalLength={data.allHosts.length} />
         <ul className="list list-unstyled list-inline flush-bottom">
           <li>
-            <FilterByService
-              byServiceFilter={state.byServiceFilter}
-              services={data.services}
-              totalHostsCount={data.allHosts.length}
-              handleFilterChange={this.handleByServiceFilterChange} />
+            <div className="form-group">
+              <FilterByService
+                byServiceFilter={state.byServiceFilter}
+                services={data.services}
+                totalHostsCount={data.allHosts.length}
+                handleFilterChange={this.handleByServiceFilterChange} />
+            </div>
           </li>
           <li>
-            <FilterInputText
-              searchString={state.searchString}
-              handleFilterChange={this.handleSearchStringChange} />
+            {this.getFilterInputText()}
           </li>
           <li className="list-item-aligned-right">
-            {this.getViewTypeRadioButtons()}
+            {this.getViewTypeRadioButtons(this.resetFilter)}
           </li>
         </ul>
         <RouteHandler
           selectedResource={this.state.selectedResource}
           hosts={hostList}
-          serviceFilter={state.byServiceFilter}
           services={data.services} />
       </div>
     );
