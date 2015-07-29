@@ -141,23 +141,14 @@ var NodesGridDials = React.createClass({
   getDials: function () {
     return _.map(this.props.hosts, function (host) {
       var config = this.getDialConfig(host);
-      var description;
+      var tooltipProps = {};
 
-      if (host.active) {
-        description = (
-          <div className="description">
-            {config.description}
-          </div>
-        );
-      } else {
-        description = (
-          <div className="description"
-            data-behavior="show-tip"
-            data-tip-place="top"
-            data-tip-content="Connection to node lost">
-            {config.description}
-          </div>
-        );
+      if (!host.active) {
+        tooltipProps = {
+          "data-behavior": "show-tip",
+          "data-tip-place": "top",
+          "data-tip-content": "Connection to node lost"
+        };
       }
 
       return (
@@ -166,7 +157,9 @@ var NodesGridDials = React.createClass({
             <Chart calcHeight={function (w) { return w; }}>
               <DialChart data={config.data}
                   value="percentage">
-                  {description}
+                  <div {...tooltipProps} className="description">
+                    {config.description}
+                  </div>
               </DialChart>
             </Chart>
           </div>
