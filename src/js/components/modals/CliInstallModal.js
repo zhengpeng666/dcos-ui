@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var browserInfo = require("browser-info");
 var React = require("react");
 

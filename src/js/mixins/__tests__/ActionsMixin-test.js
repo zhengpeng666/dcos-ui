@@ -1,4 +1,5 @@
 var _ = require("underscore");
+var React = require("react");
 
 jest.dontMock("../../actions/Actions");
 jest.dontMock("../ActionsMixin");
@@ -121,7 +122,8 @@ describe("ActionsMixin", function () {
 
     beforeEach(function () {
       this.instance = _.extend({
-        setState: jasmine.createSpy()
+        setState: jasmine.createSpy(),
+        state: {}
       }, ActionsMixin);
       this.instance.constructor.displayName = "FakeInstance";
     });
@@ -159,7 +161,8 @@ describe("ActionsMixin", function () {
 
     beforeEach(function () {
       this.instance = _.extend({
-        setState: jasmine.createSpy()
+        setState: jasmine.createSpy(),
+        state: {}
       }, ActionsMixin);
       this.instance.constructor.displayName = "FakeInstance";
 

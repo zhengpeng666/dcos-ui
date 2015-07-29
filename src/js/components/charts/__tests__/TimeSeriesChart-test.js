@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 jest.dontMock("../TimeSeriesChart");
 jest.dontMock("../../../mixins/ChartMixin");
 jest.dontMock("../../../mixins/InternalStorageMixin");

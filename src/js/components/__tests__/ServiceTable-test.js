@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 jest.dontMock("../ServiceTable");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../stores/MesosStateStore");
@@ -23,7 +21,7 @@ MesosStateStore.processSummary(stateJSON);
 
 function getTable(isAppsProcessed) {
   return TestUtils.renderIntoDocument(
-    <ServiceTable services={this.frameworks}
+    <ServiceTable services={MesosStateStore.getFrameworks()}
       healthProcessed={isAppsProcessed} />
   );
 }
@@ -31,6 +29,7 @@ function getTable(isAppsProcessed) {
 describe("ServiceTable", function () {
 
   describe("#renderHealth", function () {
+
     beforeEach(function () {
       this.frameworks = MesosStateStore.getFrameworks();
     });

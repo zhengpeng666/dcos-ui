@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 jest.dontMock("../Modal");
 
 var React = require("react/addons");

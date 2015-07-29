@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 jest.dontMock("../../constants/ResourceTypes");
 jest.dontMock("../NodesGridDials");
 
