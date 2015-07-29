@@ -27,6 +27,8 @@ var Frame = React.createClass({
     if (doc.readyState === "complete") {
       this.props.onReady();
     } else {
+      // If iframe is not done loading, continue to
+      // check until it completes, then call onReady.
       setTimeout(this.renderFrameContents, 0);
     }
   },
