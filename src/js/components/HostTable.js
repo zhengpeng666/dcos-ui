@@ -26,14 +26,16 @@ var HostTable = React.createClass({
   renderHeadline: function (prop, model) {
     var label = model[prop];
 
-    if (model.active === false) {
+    if (!model.active === false) {
       label = (
         <span className="headline-tooltip"
           data-behavior="show-tip"
           data-tip-place="top"
           data-tip-content="Connection to node lost">
           <i className="icon icon-mini icon-mini-white icon-alert" />
-          {label}
+          <span className="headline-label">
+            {label}
+          </span>
         </span>
       );
     }
