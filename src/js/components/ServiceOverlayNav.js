@@ -9,7 +9,7 @@ var ServiceOverlayNav = React.createClass({
     var taskCount = typeof this.props.serviceTasks === "number" ? this.props.serviceTasks : "N/A";
 
     return (
-      <div className="overlay-nav">
+      <div className="container container-fluid flush-left flush-right overlay-nav">
         <span
           className="button button-link overlay-back-button overlay-nav-button"
           onClick={this.props.onBackClick}>
