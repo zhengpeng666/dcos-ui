@@ -157,9 +157,9 @@ var NodesGridDials = React.createClass({
             <Chart calcHeight={function (w) { return w; }}>
               <DialChart data={config.data}
                   value="percentage">
-                  <div {...tooltipProps} className="description">
-                    {config.description}
-                  </div>
+                <div {...tooltipProps} className="description">
+                  {config.description}
+                </div>
               </DialChart>
             </Chart>
           </div>
