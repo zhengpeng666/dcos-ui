@@ -19,7 +19,11 @@ var VersionsModal = React.createClass({
 
   getContent: function () {
     var string = JSON.stringify(this.props.versionDump, null, 2);
-    return (<pre>{string}</pre>);
+    return (
+      <div className="versions-modal-content">
+        <pre>{string}</pre>
+      </div>
+    );
   },
 
   render: function () {

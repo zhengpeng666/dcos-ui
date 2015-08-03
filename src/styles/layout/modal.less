@@ -88,6 +88,13 @@
   }
 }
 
+.versions-modal-content {
+  // This is necessary because Gemini scrollbars break with pre
+  // if the user has 'Show scroll bars' set to 'When scrolling' on Mac.
+  pre {
+    overflow: visible;
+  }
+}
 
 .tour-start-modal-footer {
   .skip-tour {

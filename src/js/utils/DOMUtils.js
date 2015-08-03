@@ -40,6 +40,19 @@ var DOMUtils = {
     };
   },
 
+  getPageHeight: function () {
+    var body = document.body;
+    var html = document.documentElement;
+
+    return Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+  },
+
   whichTransitionEvent: function (el) {
     var transitions = {
       "transition": "transitionend",
