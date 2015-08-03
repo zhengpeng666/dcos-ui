@@ -99,6 +99,9 @@
         font-size: 11px;
       }
 
+      // The pointer-events property is necessary for the tooltip to render
+      // consistently when multiple mouseover events are fired. For some
+      // reason, without this property, the tooltip renders inconsistently.
       .error {
         margin-bottom: @base-spacing-unit * 0.5 !important;
         pointer-events: none;

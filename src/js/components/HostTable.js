@@ -45,9 +45,7 @@ var HostTable = React.createClass({
           data-tip-content="Connection to node lost">
         <span className="headline-label">
           <i className="icon icon-mini icon-mini-white icon-alert" />
-          <span className="headline-label">
-            {label}
-          </span>
+          {label}
         </span>
       </span>
     );
