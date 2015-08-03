@@ -152,13 +152,13 @@ var Modal = React.createClass({
       return null;
     }
 
-    var backdropClassSet = React.addons.classSet({
+    var backdropClassSet = classNames({
       "fade": true,
       "in": isMounted && this.props.open,
       "modal-backdrop": true
     });
 
-    var modalClassSet = React.addons.classSet({
+    var modalClassSet = classNames({
       "modal": true,
       "modal-large": this.props.size === "large"
     });

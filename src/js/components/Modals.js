@@ -135,7 +135,9 @@ var Modals = React.createClass({
     });
 
     return (
-      <LoginModal onLogin={this.onLogin} open={!hasIdentity && !Config.disableLoginModal} />
+      <LoginModal
+        onLogin={this.onLogin}
+        open={!hasIdentity && !Config.disableLoginModal} />
     );
   },
 
@@ -199,7 +201,13 @@ var Modals = React.createClass({
   },
 
   getCliInstallModal: function (showModal) {
-    var options;
+    var options = {
+      onCloseClickFn: function () {},
+      title: "",
+      subHeaderContent: "",
+      showFooter: true,
+      footer: {}
+    };
 
     if (this.state.showingCliModal) {
       Actions.logFakePageView({
@@ -217,14 +225,6 @@ var Modals = React.createClass({
       });
 
       options = this.getTourModalOptions();
-    } else {
-      options = {
-        onCloseClickFn: function () {},
-        title: "",
-        subHeaderContent: "",
-        showFooter: true,
-        footer: {}
-      };
     }
 
     return (
@@ -245,7 +245,10 @@ var Modals = React.createClass({
 
     var versions = SidebarStore.getVersions();
     return (
-      <VersionsModal onClose={onCloseClickFn} versionDump={versions} open={showModal} />
+      <VersionsModal
+        onClose={onCloseClickFn}
+        versionDump={versions}
+        open={showModal} />
     );
   },
 
@@ -253,9 +256,18 @@ var Modals = React.createClass({
     var onCloseClickFn = function () {
       this.setState({showErrorModal: false});
     }.bind(this);
+    
+    var errorMsg = null;
+    if (this.state.modalErrorMsg) {
+      errorMsg = this.state.modalErrorMsg;
+    }
 
-    return (<ErrorModal onClose={onCloseClickFn}
-      errorMsg={this.state.modalErrorMsg} open={show} />);
+    return (
+      <ErrorModal
+        onClose={onCloseClickFn}
+        errorMsg={errorMsg}
+        open={show} />
+    );
   },
 
   render: function () {
