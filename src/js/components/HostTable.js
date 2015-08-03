@@ -25,28 +25,24 @@ var HostTable = React.createClass({
 
   renderHeadline: function (prop, model) {
     var label = model[prop];
-    var tooltipProps = {};
 
-    if (!model.active) {
-      tooltipProps = {
-        "data-behavior": "show-tip",
-        "data-tip-place": "top",
-        "data-tip-content": "Connection to node lost"
-      };
-
-      label = (
-        <span {...tooltipProps} className="headline-tooltip">
-          <i className="icon icon-mini icon-mini-white icon-alert" />
-          <span className="headline-label">
-            {label}
-          </span>
+    if (model.active) {
+      return (
+        <span className="h5 flush-top flush-bottom headline">
+          {label}
         </span>
       );
     }
 
     return (
-      <span className="h5 flush-top flush-bottom headline">
-        {label}
+      <span className="headline-tooltip"
+          data-behavior="show-tip"
+          data-tip-place="top"
+          data-tip-content="Connection to node lost">
+        <i className="icon icon-mini icon-mini-white icon-alert" />
+        <span className="headline-label">
+          {label}
+        </span>
       </span>
     );
   },
