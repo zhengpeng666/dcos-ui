@@ -29,7 +29,7 @@ var ServicesTable = React.createClass({
   },
 
   openService: function (model, event) {
-    if (event) {
+    if (event != null) {
       event.preventDefault();
     }
 

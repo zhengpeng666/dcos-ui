@@ -119,12 +119,14 @@ var ServicesPage = React.createClass({
   },
 
   openService: function (service) {
-    // Render the overlay and set service to false
-    // in order to make sure only one iframe gets created.
     this.setState({
       openedService: service
-    }, function () {
-      this.setState({openedService: false});
+    });
+  },
+
+  onServiceClose: function () {
+    this.setState({
+      openedService: null
     });
   },
 
@@ -198,7 +200,8 @@ var ServicesPage = React.createClass({
           onOpen={this.openService} />
         <ServiceOverlay
           service={this.state.openedService}
-          shouldOpen={!!this.state.openedService} />
+          shouldOpen={!!this.state.openedService}
+          onServiceClose={this.onServiceClose} />
       </div>
     );
   },

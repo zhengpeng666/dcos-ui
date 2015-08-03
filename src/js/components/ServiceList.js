@@ -32,7 +32,7 @@ var ServiceList = React.createClass({
   },
 
   openService: function (service, event) {
-    if (event) {
+    if (event != null) {
       event.preventDefault();
     }
 

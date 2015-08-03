@@ -12,7 +12,8 @@ var ServiceOverlay = React.createClass({
 
   propTypes: {
     shouldOpen: PropTypes.bool,
-    serviceUrl: PropTypes.string
+    serviceUrl: PropTypes.string,
+    onServiceClose: PropTypes.func
   },
 
   getDefaultProps: function () {
@@ -22,8 +23,9 @@ var ServiceOverlay = React.createClass({
   },
 
   componentDidUpdate: function () {
-    if (this.props.shouldOpen) {
+    if (this.props.shouldOpen && !this.overlay && this.props.service !== this.previousService) {
       this.renderService();
+      this.previousService = this.props.service;
     }
   },
 
@@ -32,6 +34,9 @@ var ServiceOverlay = React.createClass({
       // Remove the div that we created at the root of the dom.
       React.unmountComponentAtNode(this.overlay);
       document.body.removeChild(this.overlay);
+      this.overlay = null;
+      this.previousService = null;
+      this.props.onServiceClose();
     }
   },
 
