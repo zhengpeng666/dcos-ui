@@ -18,6 +18,7 @@ var Modal = React.createClass({
     size: React.PropTypes.string,
     subHeader: React.PropTypes.node,
     titleText: React.PropTypes.string,
+    open: React.PropTypes.bool,
     onClose: React.PropTypes.func
   },
 
@@ -30,6 +31,7 @@ var Modal = React.createClass({
       size: "",
       subHeader: "",
       maxHeightPercentage: 0.6,
+      open: false,
       onClose: function () {}
     };
   },
@@ -48,13 +50,6 @@ var Modal = React.createClass({
       this.forceUpdate();
       this.rerendered = true;
     }
-  },
-
-  componentWillUnmount: function () {
-    var modalElement = this.refs.modal.getDOMNode();
-    var transitionEvent = DOMUtils.whichTransitionEvent(modalElement);
-    modalElement.removeEventListener(transitionEvent, this.props.onClose);
-    window.removeEventListener("resize", this.handleWindowResize);
   },
 
   shouldComponentUpdate: function (nextProps) {
