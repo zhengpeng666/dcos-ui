@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var _ = require("underscore");
 var classNames = require("classnames");
 var GeminiScrollbar = require("react-gemini-scrollbar");

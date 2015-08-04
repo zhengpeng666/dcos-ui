@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var Link = require("react-router").Link;
 var React = require("react/addons");
 

@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var overrides = require("./overrides");
 overrides.override();
 

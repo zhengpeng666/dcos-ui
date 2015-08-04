@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
@@ -120,7 +118,7 @@ var NodesPage = React.createClass({
     }
   },
 
-  getFilterInputText: function() {
+  getFilterInputText: function () {
     var isVisible = /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath());
 
     if (!isVisible) {

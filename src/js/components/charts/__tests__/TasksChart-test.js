@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 jest.dontMock("../TasksChart");
 
 var _ = require("underscore");

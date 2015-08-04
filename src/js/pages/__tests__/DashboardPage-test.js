@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 jest.dontMock("../DashboardPage");
 jest.dontMock("../../mixins/InternalStorageMixin");
 

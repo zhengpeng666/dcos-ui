@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 jest.dontMock("../ServiceList");
 
 var React = require("react/addons");

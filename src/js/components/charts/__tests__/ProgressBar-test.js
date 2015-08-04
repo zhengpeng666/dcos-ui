@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 jest.dontMock("../ProgressBar");
 jest.dontMock("../../../mixins/InternalStorageMixin");
 

@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 jest.dontMock("../Modal");
 jest.dontMock("../../utils/DOMUtils");
 

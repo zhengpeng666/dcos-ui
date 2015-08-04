@@ -47,8 +47,7 @@ var webpackConfig = {
     loaders: [
       {
         test: /\.js$/,
-        loader: "jsx-loader?harmony",
-        exclude: /node_modules/
+        loader: "babel-loader"
       }
     ],
     preLoaders: [

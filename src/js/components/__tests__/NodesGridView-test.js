@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 jest.dontMock("../NodesGridView");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../stores/MesosStateStore");
