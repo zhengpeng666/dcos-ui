@@ -2,6 +2,7 @@ var classNames = require("classnames");
 var React = require("react");
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var GeminiScrollbar = require("react-gemini-scrollbar");
+var DOMUtils = require("../utils/DOMUtils");
 
 var Modal = React.createClass({
 
@@ -44,9 +45,9 @@ var Modal = React.createClass({
     // We render once in order to compute content height,
     // then we rerender to make modal fit the screen, if needed.
     // Set rerendered to true to only do this once.
-    if (!this.rerendered) {
-      this.forceUpdate();
+    if (!this.rerendered && this.props.open) {
       this.rerendered = true;
+      this.forceUpdate();
     }
   },
 
@@ -65,6 +66,7 @@ var Modal = React.createClass({
   },
 
   closeModal: function () {
+    this.rerendered = false;
     this.props.onClose();
   },
 
@@ -147,14 +149,14 @@ var Modal = React.createClass({
     );
   },
 
-  getModal: function (isMounted) {
-    if (!isMounted || !this.props.open) {
+  getModal: function () {
+    if (!this.props.open) {
       return null;
     }
 
     var backdropClassSet = classNames({
       "fade": true,
-      "in": isMounted && this.props.open,
+      "in": this.props.open,
       "modal-backdrop": true
     });
 
@@ -198,10 +200,10 @@ var Modal = React.createClass({
               {this.props.subHeader}
             </div>
           </div>
-        </div>
-        <div className="modal-content" style={modalStyle}>
-          <div ref="innerContainer" className="modal-content-inner container container-pod container-pod-short" style={modalStyle}>
-            {this.getModalContent(useScrollbar, innerHeight)}
+          <div className="modal-content" style={modalStyle}>
+            <div ref="innerContainer" className="modal-content-inner container container-pod container-pod-short" style={modalStyle}>
+              {this.getModalContent(useScrollbar, innerHeight)}
+            </div>
           </div>
           {this.getFooter()}
         </div>
