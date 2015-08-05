@@ -15,10 +15,10 @@
 
 @button-primary-background-color: @purple;
 
-@button-primary-hover-background-color: ~`color_lightness("@{purple}", -10)`;
+@button-primary-hover-background-color: color-lighten(@purple, -10);
 
-@button-primary-active-text-color: ~`color_lightness("@{purple}", 80)`;
+@button-primary-active-text-color: color-lighten(@purple, 80);
 
-@button-primary-active-background-color: ~`color_lightness("@{purple}", -20)`;
+@button-primary-active-background-color: color-lighten(@purple, -20);
 
 @button-border-width: 1px;

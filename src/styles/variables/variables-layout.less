@@ -101,13 +101,13 @@ Spacing Unit
 @z-index-header: 1000;
 
 /* body */
-@body-background-color: ~`color_lightness("@{neutral}", -30)`;//#232937
+@body-background-color: color-lighten(@neutral, -30);//#232937
 
 /* canvas */
-@canvas-background-color: ~`color_lightness("@{neutral}", -30)`;
+@canvas-background-color: color-lighten(@neutral, -30);
 
 /* canvas pod */
-@canvas-pod-light-background-color: ~`color_lightness("@{neutral}", 90)`;
+@canvas-pod-light-background-color: color-lighten(@neutral, 90);
 
 /* borders */
 @border-color: rgba(255, 255, 255, 0.1);

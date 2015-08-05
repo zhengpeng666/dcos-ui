@@ -33,7 +33,7 @@
         display: block;
         width: 64px;
         height: 64px;
-        background: ~`color_lightness("@{neutral}", 80)`;
+        background: color-lighten(@neutral, 80);
         .border-radius(50%);
         overflow: hidden;
         margin-right: auto;
@@ -97,8 +97,8 @@
 
       .button {
         background-color: transparent;
-        border-top: 1px solid ~`color_lightness("@{black}", 90)`;
-        border-right: 1px solid ~`color_lightness("@{black}", 90)`;
+        border-top: 1px solid color-lighten(@black, 90);
+        border-right: 1px solid color-lighten(@black, 90);
         border-bottom-width: 0;
         border-left-width: 0;
         border-radius: 0;
@@ -132,7 +132,7 @@
       margin: 0px -(@grid-container-fluid-gutter-width * 1.0);
 
       .sidebar-menu-item {
-        color: ~`color_lightness("@{neutral}", 50)`;
+        color: color-lighten(@neutral, 50);
         margin: 0px;
         position: relative;
 
@@ -158,13 +158,13 @@
         }
 
         a {
-          color: ~`color_lightness("@{neutral}", 50)`;
+          color: color-lighten(@neutral, 50);
           display: block;
           padding: (@base-spacing-unit * 0.5) (@grid-container-fluid-gutter-width * 1.0);
 
           &:hover {
             text-decoration: none;
-            color: ~`color_lightness("@{neutral}", 30)`;
+            color: color-lighten(@neutral, 30);
 
             .sidebar-menu-item-icon {
               .opacity(0.80);
@@ -173,7 +173,7 @@
 
           &:active {
             text-decoration: none;
-            color: ~`color_lightness("@{neutral}", 50)`;
+            color: color-lighten(@neutral, 50);
 
             .sidebar-menu-item-icon {
               .opacity(0.60);
@@ -358,7 +358,7 @@
             padding-left: 15px;
             padding-right: 15px;
             border-top-width: 0;
-            border-bottom: 1px solid ~`color_lightness("@{black}", 90)`;
+            border-bottom: 1px solid color-lighten(@black, 90);
             border-left-width: 0;
 
             &:last-child {

@@ -70,7 +70,7 @@
           padding-bottom: @container-pod-short-padding-vertical * 0.5;
           margin: 0px;
           margin-right: @base-spacing-unit * 0.5;
-          color: ~`color_lightness("@{neutral}", 40)`;
+          color: color-lighten(@neutral, 40);
 
           &:after {
             content: '';
@@ -92,11 +92,11 @@
             color: inherit;
 
             &:hover {
-              color: ~`color_lightness("@{neutral}", 60)`;
+              color: color-lighten(@neutral, 60);
             }
 
             &:active {
-              color: ~`color_lightness("@{neutral}", 80)`;
+              color: color-lighten(@neutral, 80);
             }
           }
 

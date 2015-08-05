@@ -78,14 +78,14 @@
   }
 
   .snippet-wrapper {
-    border: 1px solid ~`color_lightness("@{gray}", 80)`;
+    border: 1px solid color-lighten(@gray, 80);
     border-radius: 5px;
     overflow: hidden;
 
     pre {
-      background-color: ~`color_lightness("@{modal-header-background-color}", 40)`;
+      background-color: @modal-header-background-color;
       border-radius: 5px;
-      color: ~`color_lightness("@{black}", 40)`;
+      color: color-lighten(@black, 40);
       padding: 10px;
       overflow-x: auto;
     }
@@ -102,13 +102,13 @@
 
 .tour-start-modal-footer {
   .skip-tour {
-    color: ~`color_lightness("@{gray}", 50)`;
+    color: color-lighten(@gray, 50);
     display: block;
     margin-top: 10px;
     text-decoration: underline;
 
     &:hover {
-      color: ~`color_lightness("@{gray}", 20)`;
+      color: color-lighten(@gray, 20);
     }
   }
 }
