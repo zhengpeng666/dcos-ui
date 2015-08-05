@@ -1,6 +1,7 @@
 // dependencies
 var autoprefixer = require("gulp-autoprefixer");
 var browserSync = require("browser-sync");
+var colorLighten = require("less-color-lighten");
 var connect = require("gulp-connect");
 var eslint = require("gulp-eslint");
 var gulp = require("gulp");
@@ -119,7 +120,8 @@ gulp.task("less", function () {
   return gulp.src(dirs.styles + "/" + files.mainLess + ".less")
     .pipe(gulpif(development, sourcemaps.init()))
     .pipe(less({
-      paths: [dirs.styles] // @import paths
+      paths: [dirs.styles], // @import paths
+      plugins: [colorLighten]
     }))
     .pipe(autoprefixer())
     .pipe(gulpif(development, sourcemaps.write(".")))
