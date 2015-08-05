@@ -42,6 +42,11 @@
 
 .modal-backdrop {
   cursor: default;
+  
+  // Since the backdrop will be inside of the modal-container now,
+  // and the container transitions by moving 25% above bottom,
+  // this will ensure that the backdrop doesn't get cut off.
+  bottom: -25%;
 }
 
 .modal-enter {
@@ -65,7 +70,6 @@
   transform: translate(0, -25%);
   transition: transform .5s ease-in, opacity .5s ease-in;
 }
-
 
 // Modal specific styles
 .install-cli-modal-content {

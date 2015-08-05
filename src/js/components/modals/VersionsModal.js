@@ -30,7 +30,8 @@ var VersionsModal = React.createClass({
           showCloseButton={false}
           showFooter={false}
           size="large"
-          onClose={this.onClose}>
+          onClose={this.onClose}
+          open={this.props.open}>
         {this.getContent()}
       </Modal>
     );
