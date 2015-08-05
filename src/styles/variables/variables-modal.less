@@ -1,3 +1,199 @@
+/*
+ * Original varaibles
+ */
+
+
+// Modal Transitions
+@modal-transition-in:  e('opacity 0.3s linear, top 0.3s ease-out');
+@modal-transition-in-top:  50%;
+@modal-transition-out: e('opacity 0.3s linear, top 0.3s ease-out');
+@modal-transition-out-top: 35%;
+@modal-background-color: @white;
+@modal-background-gradient-color-top:  none;
+@modal-background-gradient-color-bottom: none;
+@modal-border-radius:  10px;
+@modal-border-width: 0px;
+@modal-border-color: none;
+@modal-border-top-width: @modal-border-width;
+@modal-border-top-color: @modal-border-color;
+@modal-border-right-width: @modal-border-width;
+@modal-border-right-color: @modal-border-color;
+@modal-border-bottom-width:  @modal-border-width;
+@modal-border-bottom-color:  @modal-border-color;
+@modal-border-left-width:  @modal-border-width;
+@modal-border-left-color:  @modal-border-color;
+@modal-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1), 0px 5px 5px 0px rgba(0, 0, 0, 0.1);
+
+// Modal Header Styling
+@modal-header-background-color:  @canvas-pod-light-background-color;
+@modal-header-background-gradient-color-top: none;
+@modal-header-background-gradient-color-bottom:  none;
+@modal-header-border-width:  0px;
+@modal-header-border-color:  none;
+@modal-header-border-top-width:  @modal-header-border-width;
+@modal-header-border-top-color:  @modal-header-border-color;
+@modal-header-border-right-width:  @modal-header-border-width;
+@modal-header-border-right-color:  @modal-header-border-color;
+@modal-header-border-bottom-width: @modal-header-border-width;
+@modal-header-border-bottom-color: @modal-header-border-color;
+@modal-header-border-left-width: @modal-header-border-width;
+@modal-header-border-left-color: @modal-header-border-color;
+@modal-header-shadow:  none;
+
+// Modal Content Styling
+@modal-content-background-color: @white;
+@modal-content-background-gradient-color-top:  none;
+@modal-content-background-gradient-color-bottom: none;
+@modal-content-border-width: 0px;
+@modal-content-border-color: none;
+@modal-content-border-top-width: @modal-content-border-width;
+@modal-content-border-top-color: @modal-content-border-color;
+@modal-content-border-right-width: @modal-content-border-width;
+@modal-content-border-right-color: @modal-content-border-color;
+@modal-content-border-bottom-width:  @modal-content-border-width;
+@modal-content-border-bottom-color:  @modal-content-border-color;
+@modal-content-border-left-width:  @modal-content-border-width;
+@modal-content-border-left-color:  @modal-content-border-color;
+@modal-content-shadow: 0px -1px 0px 0px rgba(0, 0, 0, 0.1);
+
+// Modal Footer Styling
+@modal-footer-background-color:  @canvas-pod-light-background-color;
+@modal-footer-background-gradient-color-top: none;
+@modal-footer-background-gradient-color-bottom:  none;
+@modal-footer-border-width:  0px;
+@modal-footer-border-color:  none;
+@modal-footer-border-top-width:  @modal-footer-border-width;
+@modal-footer-border-top-color:  @modal-footer-border-color;
+@modal-footer-border-right-width:  @modal-footer-border-width;
+@modal-footer-border-right-color:  @modal-footer-border-color;
+@modal-footer-border-bottom-width: @modal-footer-border-width;
+@modal-footer-border-bottom-color: @modal-footer-border-color;
+@modal-footer-border-left-width: @modal-footer-border-width;
+@modal-footer-border-left-color: @modal-footer-border-color;
+@modal-footer-shadow:  0px -1px 0px 0px rgba(0, 0, 0, 0.1);
+
+// Modal Widths
+@modal-width:  auto;
+@modal-width-screen-mini:  @screen-mini - (2 * @modal-margin-horizontal-screen-small);
+@modal-width-screen-small: 550px;
+@modal-width-screen-medium:  600px;
+@modal-width-screen-large: 700px;
+
+// Modal Margins
+@modal-margin-horizontal:  @base-spacing-unit * 0.5;
+@modal-margin-horizontal-screen-mini:  @base-spacing-unit * 0.5;
+@modal-margin-horizontal-screen-small: @base-spacing-unit-screen-small * 0.5;
+@modal-margin-horizontal-screen-medium:  @base-spacing-unit-screen-medium * 0.5;
+@modal-margin-horizontal-screen-large: @base-spacing-unit-screen-large * 0.5;
+
+// Modal Grid
+@modal-grid-columns-count: 12;
+@modal-grid-gutter-width:  @modal-grid-container-gutter-width * 0.5;
+@modal-grid-container-gutter-width:  @grid-gutter-width * 1.0;
+
+// Mini Screen (Phone)
+@modal-grid-gutter-width-screen-mini:  @modal-grid-container-gutter-width-screen-mini * 0.5;
+@modal-grid-container-gutter-width-screen-mini:  @grid-gutter-width-screen-mini * 1.0;
+
+// Small Screen (Tablet)
+@modal-grid-gutter-width-screen-small: @modal-grid-container-gutter-width-screen-small * 0.5;
+@modal-grid-container-gutter-width-screen-small: @grid-gutter-width-screen-small * 1.0;
+
+// Medium Screen (Laptop)
+@modal-grid-gutter-width-screen-medium:  @modal-grid-container-gutter-width-screen-medium * 0.5;
+@modal-grid-container-gutter-width-screen-medium:  @grid-gutter-width-screen-medium * 1.0;
+
+// Large Screen (Desktop)
+@modal-grid-gutter-width-screen-large: @modal-grid-container-gutter-width-screen-large * 0.5;
+@modal-grid-container-gutter-width-screen-large: @grid-gutter-width-screen-large * 1.0;
+
+// Modal Close Styling
+@modal-close-border-radius:  100px;
+@modal-close-background-color: @button-primary-background-color;
+@modal-close-background-gradient-color-top:  @button-primary-background-gradient-color-top;
+@modal-close-background-gradient-color-bottom: @button-primary-background-gradient-color-bottom;
+@modal-close-border-width: @button-primary-border-width;
+@modal-close-border-color: @button-primary-border-color;
+@modal-close-border-top-width: @modal-close-border-width;
+@modal-close-border-top-color: @modal-close-border-color;
+@modal-close-border-right-width: @modal-close-border-width;
+@modal-close-border-right-color: @modal-close-border-color;
+@modal-close-border-bottom-width:  @modal-close-border-width;
+@modal-close-border-bottom-color:  @modal-close-border-color;
+@modal-close-border-left-width:  @modal-close-border-width;
+@modal-close-border-left-color:  @modal-close-border-color;
+@modal-close-shadow: @button-primary-shadow;
+
+// Hover
+@modal-close-hover-background-color: @button-primary-hover-background-color;
+@modal-close-hover-background-gradient-color-top:  @button-primary-hover-background-gradient-color-top;
+@modal-close-hover-background-gradient-color-bottom: @button-primary-hover-background-gradient-color-bottom;
+@modal-close-hover-border-width: @button-primary-hover-border-width;
+@modal-close-hover-border-color: @button-primary-hover-border-color;
+@modal-close-hover-border-top-width: @modal-close-hover-border-width;
+@modal-close-hover-border-top-color: @modal-close-hover-border-color;
+@modal-close-hover-border-right-width: @modal-close-hover-border-width;
+@modal-close-hover-border-right-color: @modal-close-hover-border-color;
+@modal-close-hover-border-bottom-width:  @modal-close-hover-border-width;
+@modal-close-hover-border-bottom-color:  @modal-close-hover-border-color;
+@modal-close-hover-border-left-width:  @modal-close-hover-border-width;
+@modal-close-hover-border-left-color:  @modal-close-hover-border-color;
+@modal-close-hover-shadow: @button-primary-hover-shadow;
+
+// Active
+@modal-close-active-background-color:  @button-primary-active-background-color;
+@modal-close-active-background-gradient-color-top: @button-primary-active-background-gradient-color-top;
+@modal-close-active-background-gradient-color-bottom:  @button-primary-active-background-gradient-color-bottom;
+@modal-close-active-border-width:  @button-primary-active-border-width;
+@modal-close-active-border-color:  @button-primary-active-border-color;
+@modal-close-active-border-top-width:  @modal-close-active-border-width;
+@modal-close-active-border-top-color:  @modal-close-active-border-color;
+@modal-close-active-border-right-width:  @modal-close-active-border-width;
+@modal-close-active-border-right-color:  @modal-close-active-border-color;
+@modal-close-active-border-bottom-width: @modal-close-active-border-width;
+@modal-close-active-border-bottom-color: @modal-close-active-border-color;
+@modal-close-active-border-left-width: @modal-close-active-border-width;
+@modal-close-active-border-left-color: @modal-close-active-border-color;
+@modal-close-active-shadow:  @button-primary-active-shadow;
+
+// Modal Close Size
+@modal-close-width:  @button-height;
+@modal-close-height: @button-height;
+@modal-close-width-screen-mini:  @button-height * @button-height-scale-screen-mini;
+@modal-close-height-screen-mini: @button-height * @button-height-scale-screen-mini;
+@modal-close-width-screen-small: @button-height * @button-height-scale-screen-small;
+@modal-close-height-screen-small:  @button-height * @button-height-scale-screen-small;
+@modal-close-width-screen-medium:  @button-height * @button-height-scale-screen-medium;
+@modal-close-height-screen-medium: @button-height * @button-height-scale-screen-medium;
+@modal-close-width-screen-large: @button-height * @button-height-scale-screen-large;
+@modal-close-height-screen-large:  @button-height * @button-height-scale-screen-large;
+
+// Modal Close Position
+@modal-close-position-horizontal:  -(@modal-close-width / 2);
+@modal-close-position-vertical:  -(@modal-close-height / 2);
+@modal-close-position-horizontal-screen-mini:  -(@modal-close-width-screen-mini / 2);
+@modal-close-position-vertical-screen-mini:  -(@modal-close-height-screen-mini / 2);
+@modal-close-position-horizontal-screen-small: -(@modal-close-width-screen-small / 2);
+@modal-close-position-vertical-screen-small: -(@modal-close-height-screen-small / 2);
+@modal-close-position-horizontal-screen-medium:  -(@modal-close-width-screen-medium / 2);
+@modal-close-position-vertical-screen-medium:  -(@modal-close-height-screen-medium / 2);
+@modal-close-position-horizontal-screen-large: -(@modal-close-width-screen-large / 2);
+@modal-close-position-vertical-screen-large: -(@modal-close-height-screen-large / 2);
+
+// Modal Backdrop Styling
+@modal-backdrop-background-color:  @canvas-pod-dark-background-color;
+
+// Modal Backdrop Transitions
+@modal-backdrop-transition-in: e('opacity 2.0s linear');
+@modal-backdrop-transition-in-opacity: 0.30;
+@modal-backdrop-transition-out:  e('opacity 0.3s linear');
+@modal-backdrop-transition-out-opacity:  0.0;
+
+
+/*
+ * Override variables
+ */
+
 @modal-width-screen-small: 500px;
 @modal-width-screen-medium: 500px;
 @modal-width-screen-large: 500px;
@@ -8,32 +204,23 @@
 @modal-inverse-content-background-color:color-lighten(@neutral, -20);
 @modal-inverse-footer-background-color: @canvas-pod-dark-background-color;
 
-
-/* -----------------------------------------------------------------------------
-Modal Grid
------------------------------------------------------------------------------ */
-
-@modal-grid-columns-count:                                                      12;
-
-@modal-grid-gutter-width:                                                       @modal-grid-container-gutter-width * 0.5;
-@modal-grid-container-gutter-width:                                             @grid-container-fluid-gutter-width * 1.0;
+// Modal Grid
+@modal-grid-columns-count: 12;
+@modal-grid-gutter-width: @modal-grid-container-gutter-width * 0.5;
+@modal-grid-container-gutter-width: @grid-container-fluid-gutter-width * 1.0;
 
 // Mini Screen (Phone)
-
-@modal-grid-gutter-width-screen-mini:                                           @modal-grid-container-gutter-width-screen-mini * 0.5;
-@modal-grid-container-gutter-width-screen-mini:                                 @grid-container-fluid-gutter-width-screen-mini * 1.0;
+@modal-grid-gutter-width-screen-mini: @modal-grid-container-gutter-width-screen-mini * 0.5;
+@modal-grid-container-gutter-width-screen-mini: @grid-container-fluid-gutter-width-screen-mini * 1.0;
 
 // Small Screen (Tablet)
-
-@modal-grid-gutter-width-screen-small:                                          @modal-grid-container-gutter-width-screen-small * 0.5;
-@modal-grid-container-gutter-width-screen-small:                                @grid-container-fluid-gutter-width-screen-small * 0.5;
+@modal-grid-gutter-width-screen-small: @modal-grid-container-gutter-width-screen-small * 0.5;
+@modal-grid-container-gutter-width-screen-small: @grid-container-fluid-gutter-width-screen-small * 0.5;
 
 // Medium Screen (Laptop)
-
-@modal-grid-gutter-width-screen-medium:                                         @modal-grid-container-gutter-width-screen-medium * 0.5;
-@modal-grid-container-gutter-width-screen-medium:                               @grid-container-fluid-gutter-width-screen-medium * 0.5;
+@modal-grid-gutter-width-screen-medium: @modal-grid-container-gutter-width-screen-medium * 0.5;
+@modal-grid-container-gutter-width-screen-medium: @grid-container-fluid-gutter-width-screen-medium * 0.5;
 
 // Large Screen (Desktop)
-
-@modal-grid-gutter-width-screen-large:                                          @modal-grid-container-gutter-width-screen-large * 0.5;
-@modal-grid-container-gutter-width-screen-large:                                @grid-container-fluid-gutter-width-screen-large * 0.5;
+@modal-grid-gutter-width-screen-large: @modal-grid-container-gutter-width-screen-large * 0.5;
+@modal-grid-container-gutter-width-screen-large: @grid-container-fluid-gutter-width-screen-large * 0.5;
