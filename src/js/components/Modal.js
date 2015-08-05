@@ -51,6 +51,10 @@ var Modal = React.createClass({
     }
   },
 
+  componentWillUnmount: function () {
+    window.removeEventListener("resize", this.handleWindowResize);
+  },
+
   shouldComponentUpdate: function (nextProps) {
     return nextProps.open !== this.props.open;
   },
