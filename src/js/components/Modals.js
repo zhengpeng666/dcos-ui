@@ -143,7 +143,7 @@ var Modals = React.createClass({
 
   getCliModalOptions: function () {
     return {
-      onCloseClickFn: function () {
+      onClose: function () {
           this.setState({showingCliModal: false});
         }.bind(this),
       title: "Install the DCOS CLI",
@@ -152,12 +152,12 @@ var Modals = React.createClass({
   },
 
   getTourModalOptions: function () {
-    var onCloseClickFn = function () {
+    var onClose = function () {
       this.setState({showingTourModal: false});
     }.bind(this);
 
     var beginTour = function () {
-      onCloseClickFn();
+      onClose();
 
       Actions.logFakePageView({
         title: "Tour start",
@@ -179,7 +179,7 @@ var Modals = React.createClass({
     }.bind(this);
 
     return {
-      onCloseClickFn: onCloseClickFn,
+      onClose: onClose,
       title: "Welcome to the Mesosphere DCOS",
       subHeaderContent: "In order to get started, you'll need to install our command-line tool by copying the snippet below. After that, you'll take our tour which will guide you through installing a web-app and continuous integration pipeline.",
       showFooter: true,
@@ -191,7 +191,7 @@ var Modals = React.createClass({
             </button>
           </div>
           <div className="row text-align-center">
-            <a onClick={onCloseClickFn} className="clickable skip-tour">
+            <a onClick={onClose} className="clickable skip-tour">
               {"No thanks, I'll skip the tour."}
             </a>
           </div>
@@ -202,7 +202,7 @@ var Modals = React.createClass({
 
   getCliInstallModal: function (showModal) {
     var options = {
-      onCloseClickFn: function () {},
+      onClose: function () {},
       title: "",
       subHeaderContent: "",
       showFooter: true,
@@ -228,35 +228,29 @@ var Modals = React.createClass({
     }
 
     return (
-      <CliInstallModal
-        onClose={options.onCloseClickFn}
-        title={options.title}
-        subHeaderContent={options.subHeaderContent}
-        showFooter={options.showFooter}
-        footer={options.footer}
-        open={showModal} />
+      <CliInstallModal open={showModal} {...options} />
     );
   },
 
   getVersionsModal: function (showModal) {
-    var onCloseClickFn = function () {
+    var onClose = function () {
       this.setState({showingVersionsModal: false});
     }.bind(this);
 
     var versions = SidebarStore.getVersions();
     return (
       <VersionsModal
-        onClose={onCloseClickFn}
+        onClose={onClose}
         versionDump={versions}
         open={showModal} />
     );
   },
 
   getErrorModal: function (show) {
-    var onCloseClickFn = function () {
+    var onClose = function () {
       this.setState({showErrorModal: false});
     }.bind(this);
-    
+
     var errorMsg = null;
     if (this.state.modalErrorMsg) {
       errorMsg = this.state.modalErrorMsg;
@@ -264,7 +258,7 @@ var Modals = React.createClass({
 
     return (
       <ErrorModal
-        onClose={onCloseClickFn}
+        onClose={onClose}
         errorMsg={errorMsg}
         open={show} />
     );
