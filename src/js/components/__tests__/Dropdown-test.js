@@ -52,16 +52,13 @@ describe("Dropdown", function () {
       };
     });
 
+    this.onItemSelection = function () {};
     this.selectedId = MockFrameworks.frameworks[0].id;
-
-    this.handleItemSelection = function (item) {
-      this.selectedId = item.id;
-    };
 
     this.dropdown = TestUtils.renderIntoDocument(
       <Dropdown
         selectedId={this.selectedId}
-        onItemSelection={this.handleItemSelection}
+        onItemSelection={this.onItemSelection}
         items={this.items} />
     );
 
@@ -90,7 +87,7 @@ describe("Dropdown", function () {
     var dropdown = TestUtils.renderIntoDocument(
       <Dropdown
         selectedId={this.selectedId}
-        onItemSelection={this.handleItemSelection}
+        onItemSelection={this.onItemSelection}
         items={this.items} />
     );
 
