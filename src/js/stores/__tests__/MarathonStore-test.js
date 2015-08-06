@@ -94,7 +94,9 @@ describe("MarathonStore", function () {
     });
 
     it("should return null if the requested image doesn't exist", function () {
-      var image = MarathonStore.getImageSizeFromMetadata({}, "large");
+      var image = MarathonStore.getImageSizeFromMetadata(
+        this.metadata, "large"
+      );
       expect(image).toEqual(null);
     });
 
