@@ -5,10 +5,13 @@ var React = require("react/addons");
 var Table = require("./Table");
 var ProgressBar = require("./charts/ProgressBar");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
+var TooltipMixin = require("../mixins/TooltipMixin");
 
 var HostTable = React.createClass({
 
   displayName: "HostTable",
+
+  mixins: [TooltipMixin],
 
   propTypes: {
     hosts: React.PropTypes.array.isRequired
@@ -21,15 +24,29 @@ var HostTable = React.createClass({
   },
 
   renderHeadline: function (prop, model) {
-    var alert = null;
-    if (model.active === false) {
-      alert = <i className="icon icon-mini icon-mini-white icon-alert" />;
+    var label = model[prop];
+    var classSet = classNames({
+      "h5 flush-top flush-bottom headline": true,
+      "headline-tooltip": !model.active
+    });
+
+    if (model.active) {
+      return (
+        <span className={classSet}>
+          {label}
+        </span>
+      );
     }
 
     return (
-      <span className="h5 flush-top flush-bottom headline">
-        {alert}
-        {model[prop]}
+      <span className={classSet}
+          data-behavior="show-tip"
+          data-tip-place="top"
+          data-tip-content="Connection to node lost">
+        <span className="headline-label">
+          <i className="icon icon-mini icon-mini-white icon-alert" />
+          {label}
+        </span>
       </span>
     );
   },
@@ -116,7 +133,6 @@ var HostTable = React.createClass({
   },
 
   render: function () {
-
     return (
       <Table
         className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"

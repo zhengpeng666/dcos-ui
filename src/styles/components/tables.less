@@ -19,10 +19,19 @@
       .headline {
         color: @white;
       }
-    }
 
-    .align-right {
-      text-align: right;
+      // This property is necessary for the tooltip to appear centered above
+      // the string of text, as opposed to the entire table cell.
+      .headline-tooltip {
+        display: inline-block;
+      }
+
+      // This property is necessary for the tooltip to render consistently when
+      // multiple mouseover events are fired. For some reason, without this
+      // property, the tooltip renders inconsistently.
+      .headline-label {
+        pointer-events: none;
+      }
     }
 
     tr {
