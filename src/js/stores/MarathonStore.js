@@ -53,16 +53,6 @@ var MarathonStore = _.extend({}, EventEmitter.prototype, {
     }
   },
 
-  getImageSizeFromMetadata: function (metadata, size) {
-    if (metadata.images == null ||
-      metadata.images[`icon-${size}`] == null ||
-      metadata.images[`icon-${size}`].length === 0) {
-      return null;
-    }
-
-    return metadata.images[`icon-${size}`];
-  },
-
   getFrameworkImages: function (app) {
     if (app.labels == null ||
       app.labels.DCOS_PACKAGE_METADATA == null ||
@@ -72,9 +62,10 @@ var MarathonStore = _.extend({}, EventEmitter.prototype, {
 
     var metadata = this.parseMetadata(app.labels.DCOS_PACKAGE_METADATA);
 
-    if (this.getImageSizeFromMetadata(metadata, "small") == null ||
-        this.getImageSizeFromMetadata(metadata, "medium") == null ||
-        this.getImageSizeFromMetadata(metadata, "large") == null) {
+    if (metadata.images == null ||
+        metadata.images["icon-small"].length === 0 ||
+        metadata.images["icon-medium"].length === 0 ||
+        metadata.images["icon-large"].length === 0) {
       return ServiceImages.NA_IMAGES;
     }
 

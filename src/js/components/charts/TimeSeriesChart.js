@@ -22,8 +22,11 @@ var TimeSeriesChart = React.createClass({
     ticksY: React.PropTypes.number,
     y: React.PropTypes.string,
     yFormat: React.PropTypes.string,
-    width: React.PropTypes.number, // isRequired but normally set by <Chart>
-    height: React.PropTypes.number, // isRequired but normally set by <Chart>
+    // `height` and `width` are required if this
+    // module isn't used as a child of the `Chart` component
+    // Otherwise Chart will automatically calculate this.
+    height: React.PropTypes.number,
+    width: React.PropTypes.number,
     margin: React.PropTypes.object.isRequired,
     refreshRate: React.PropTypes.number.isRequired
   },

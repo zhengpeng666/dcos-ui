@@ -14,8 +14,11 @@ var BarChart = React.createClass({
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
-    width: React.PropTypes.number, // isRequired but normally set by <Chart>
-    height: React.PropTypes.number, // isRequired but normally set by <Chart>
+    // `height` and `width` are required if this
+    // module isn't used as a child of the `Chart` component
+    // Otherwise Chart will automatically calculate this.
+    height: React.PropTypes.number,
+    width: React.PropTypes.number,
     peakline: React.PropTypes.bool,
     y: React.PropTypes.string,
     refreshRate: React.PropTypes.number.isRequired
