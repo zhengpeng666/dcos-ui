@@ -14,8 +14,8 @@ var BarChart = React.createClass({
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
+    width: React.PropTypes.number, // isRequired but normally set by <Chart>
+    height: React.PropTypes.number, // isRequired but normally set by <Chart>
     peakline: React.PropTypes.bool,
     y: React.PropTypes.string,
     refreshRate: React.PropTypes.number.isRequired
@@ -278,7 +278,7 @@ var BarChart = React.createClass({
           <g className="x axis"
             transform={"translate(" + [0, props.height] + ")"}
             ref="xAxis"/>
-          <g className="grid-graph" clip-path={clipPath}>
+          <g className="grid-graph" clipPath={clipPath}>
             <g ref="yGrid" />
             <g ref="xGrid" />
             {this.getBarList()}
