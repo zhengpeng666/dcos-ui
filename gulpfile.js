@@ -157,7 +157,7 @@ gulp.task("swf", function () {
 gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/**/*.less", ["less"]);
   gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["webpack", "replace-js-strings"]);
-  gulp.watch(dirs.img + "/**/*.*", ["images"]);
+  gulp.watch(dirs.img + "/**/*", ["images"]);
 });
 
 // Use webpack to compile jsx into js,
