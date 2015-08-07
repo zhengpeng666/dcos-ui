@@ -242,7 +242,7 @@ var Sidebar = React.createClass({
           </nav>
         </GeminiScrollbar>
         <div className="sidebar-footer">
-          <div className="container container-fluid container-fluid-narrow container-pod container-pod-short-bottom logo-container">
+          <div className="container container-fluid container-fluid-narrow container-pod container-pod-short logo-container">
             <img src="./img/layout/sidebar/sidebar-logo.png" className="sidebar-footer-image" alt="sidebar footer image" />
             <p className="text-align-center flush-top flush-bottom mute">
               <small>
@@ -255,7 +255,7 @@ var Sidebar = React.createClass({
             </p>
           </div>
           <div className="icon-buttons">
-            <a className="button button-smallbutton-link"
+            <a className="button button-link"
               href="http://docs.mesosphere.com/"
               target="_blank"
               data-behavior="show-tip"
@@ -263,13 +263,13 @@ var Sidebar = React.createClass({
               data-tip-content="Documentation">
                 <i className="icon icon-documents icon-medium clickable"></i>
             </a>
-            <button className="button button-smallbutton-link"
+            <button className="button button-link"
               data-behavior="show-tip"
               data-tip-content="Talk with us"
               onClick={this.handleToggleIntercom}>
                 <i className={chatIconClassSet}></i>
             </button>
-            <button className="button button-smallbutton-link"
+            <button className="button button-link"
               data-behavior="show-tip"
               data-tip-place="top-left"
               data-tip-content="Install CLI and Take Tour"

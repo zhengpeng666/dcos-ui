@@ -1,3 +1,386 @@
+/*
+ * Original styles
+ */
+
+.modal {
+  position: fixed;
+  top: auto;
+  left: @modal-margin-horizontal;
+  right: @modal-margin-horizontal;
+  display: block;
+  width: @modal-width;
+  margin: 0px;
+  z-index: @z-index-modal + 1;
+  background-color: @modal-background-color;
+  #gradient > .vertical(@modal-background-gradient-color-top, @modal-background-gradient-color-bottom);
+  .border-radius(@modal-border-radius);
+  border-width: @modal-border-width;
+  border-top-width: @modal-border-top-width;
+  border-top-color: @modal-border-top-color;
+  border-right-width: @modal-border-right-width;
+  border-right-color: @modal-border-right-color;
+  border-bottom-width: @modal-border-bottom-width;
+  border-bottom-color: @modal-border-bottom-color;
+  border-left-width: @modal-border-left-width;
+  border-left-color: @modal-border-left-color;
+  .box-shadow(@modal-shadow);
+
+  &:hover,
+  &:focus,
+  &:active {
+    outline: 0;
+  }
+
+  &.fade {
+    .opacity(0);
+    top: @modal-transition-out-top;
+    .transition(@modal-transition-out);
+  }
+
+  &.fade.in {
+    .opacity(100);
+    top: @modal-transition-in-top;
+    .transition(@modal-transition-in);
+  }
+
+  .container {
+    width: auto;
+    margin-left: @modal-grid-container-gutter-width;
+    margin-right: @modal-grid-container-gutter-width;
+  }
+
+  .row {
+    margin-left: -@modal-grid-gutter-width;
+    margin-right: -@modal-grid-gutter-width;
+
+    [class^="column-"] {
+      padding-left: @modal-grid-gutter-width;
+      padding-right: @modal-grid-gutter-width;
+    }
+  }
+
+  .column-overflow {
+    margin-top: @modal-grid-container-gutter-width;
+
+    &.column-overflow-short {
+      margin-top: @modal-grid-container-gutter-width;
+    }
+
+    &.column-overflow-tall {
+      margin-top: @modal-grid-container-gutter-width;
+    }
+  }
+
+  .modal-close {
+    cursor: pointer;
+    display: block;
+    width: @modal-close-width;
+    height: @modal-close-height;
+    z-index: @z-index-modal + 5;
+    line-height: 1px;
+    position: absolute !important;
+    top: @modal-close-position-vertical;
+    right: @modal-close-position-horizontal;
+    .border-radius(@modal-close-border-radius);
+    background-color: @modal-close-background-color;
+    #gradient > .vertical(@modal-close-background-gradient-color-top, @modal-close-background-gradient-color-bottom);
+    border-width: @modal-close-border-width;
+    border-top-width: @modal-close-border-top-width;
+    border-top-color: @modal-close-border-top-color;
+    border-right-width: @modal-close-border-right-width;
+    border-right-color: @modal-close-border-right-color;
+    border-bottom-width: @modal-close-border-bottom-width;
+    border-bottom-color: @modal-close-border-bottom-color;
+    border-left-width: @modal-close-border-left-width;
+    border-left-color: @modal-close-border-left-color;
+    .box-shadow(@modal-close-shadow);
+
+    &:hover {
+      background-color: @modal-close-hover-background-color;
+      #gradient > .vertical(@modal-close-hover-background-gradient-color-top, @modal-close-hover-background-gradient-color-bottom);
+      border-width: @modal-close-hover-border-width;
+      border-top-width: @modal-close-hover-border-top-width;
+      border-top-color: @modal-close-hover-border-top-color;
+      border-right-width: @modal-close-hover-border-right-width;
+      border-right-color: @modal-close-hover-border-right-color;
+      border-bottom-width: @modal-close-hover-border-bottom-width;
+      border-bottom-color: @modal-close-hover-border-bottom-color;
+      border-left-width: @modal-close-hover-border-left-width;
+      border-left-color: @modal-close-hover-border-left-color;
+      .box-shadow(@modal-close-hover-shadow);
+    }
+
+    &:active {
+      background-color: @modal-close-active-background-color;
+      #gradient > .vertical(@modal-close-active-background-gradient-color-top, @modal-close-active-background-gradient-color-bottom);
+      border-width: @modal-close-active-border-width;
+      border-top-width: @modal-close-active-border-top-width;
+      border-top-color: @modal-close-active-border-top-color;
+      border-right-width: @modal-close-active-border-right-width;
+      border-right-color: @modal-close-active-border-right-color;
+      border-bottom-width: @modal-close-active-border-bottom-width;
+      border-bottom-color: @modal-close-active-border-bottom-color;
+      border-left-width: @modal-close-active-border-left-width;
+      border-left-color: @modal-close-active-border-left-color;
+      .box-shadow(@modal-close-active-shadow);
+    }
+
+    .modal-close-title {
+      display: none;
+    }
+
+    .modal-close-icon {
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      .translate(-50%, -50%);
+    }
+  }
+
+  .modal-header {
+    display: block;
+    position: relative;
+    z-index: @z-index-modal + 2;
+    background-color: @modal-header-background-color;
+    #gradient > .vertical(@modal-header-background-gradient-color-top, @modal-header-background-gradient-color-bottom);
+    border-width: @modal-header-border-width;
+    border-top-width: @modal-header-border-top-width;
+    border-top-color: @modal-header-border-top-color;
+    border-right-width: @modal-header-border-right-width;
+    border-right-color: @modal-header-border-right-color;
+    border-bottom-width: @modal-header-border-bottom-width;
+    border-bottom-color: @modal-header-border-bottom-color;
+    border-left-width: @modal-header-border-left-width;
+    border-left-color: @modal-header-border-left-color;
+    .box-shadow(@modal-header-shadow);
+    .border-radius(@modal-border-radius @modal-border-radius 0px 0px);
+
+    + .modal-content {
+      .box-shadow(@modal-content-shadow);
+      .border-top-left-radius(0px);
+      .border-top-right-radius(0px);
+    }
+  }
+
+  .modal-content {
+    .clearfix();
+    display: block;
+    position: relative;
+    z-index: @z-index-modal + 3;
+    height: 100%;
+    background-color: @modal-content-background-color;
+    #gradient > .vertical(@modal-content-background-gradient-color-top, @modal-content-background-gradient-color-bottom);
+    border-width: @modal-content-border-width;
+    border-top-width: @modal-content-border-top-width;
+    border-top-color: @modal-content-border-top-color;
+    border-right-width: @modal-content-border-right-width;
+    border-right-color: @modal-content-border-right-color;
+    border-bottom-width: @modal-content-border-bottom-width;
+    border-bottom-color: @modal-content-border-bottom-color;
+    border-left-width: @modal-content-border-left-width;
+    border-left-color: @modal-content-border-left-color;
+    .border-radius(@modal-border-radius);
+
+    + .modal-footer {
+      .box-shadow(@modal-footer-shadow);
+    }
+  }
+
+  .modal-footer {
+    display: block;
+    position: relative;
+    z-index: @z-index-modal + 4;
+    background-color: @modal-footer-background-color;
+    #gradient > .vertical(@modal-footer-background-gradient-color-top, @modal-footer-background-gradient-color-bottom);
+    border-width: @modal-footer-border-width;
+    border-top-width: @modal-footer-border-top-width;
+    border-top-color: @modal-footer-border-top-color;
+    border-right-width: @modal-footer-border-right-width;
+    border-right-color: @modal-footer-border-right-color;
+    border-bottom-width: @modal-footer-border-bottom-width;
+    border-bottom-color: @modal-footer-border-bottom-color;
+    border-left-width: @modal-footer-border-left-width;
+    border-left-color: @modal-footer-border-left-color;
+    .border-radius(0px 0px @modal-border-radius @modal-border-radius);
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  cursor: pointer;
+  z-index: @z-index-modal;
+  background-color: @modal-backdrop-background-color;
+  .opacity(@modal-backdrop-transition-out-opacity);
+
+  &.fade {
+    .opacity(@modal-backdrop-transition-out-opacity);
+    .transition(@modal-backdrop-transition-out);
+
+    &.in {
+      .opacity(@modal-backdrop-transition-in-opacity);
+      .transition(@modal-backdrop-transition-in);
+    }
+  }
+}
+
+& when (@screen-mini-enabled) {
+  @media (min-width: @screen-mini) {
+    .modal {
+      left: 50%;
+      right: auto;
+      width: @modal-width-screen-mini;
+      margin: 0px 0px 0px (-1 * @modal-width-screen-mini * 0.5);
+
+      .container {
+        margin-left: @modal-grid-container-gutter-width-screen-mini;
+        margin-right: @modal-grid-container-gutter-width-screen-mini;
+      }
+
+      .row {
+        margin-left: -@modal-grid-gutter-width-screen-mini;
+        margin-right: -@modal-grid-gutter-width-screen-mini;
+        [class^="column-"] {
+          padding-left: @modal-grid-gutter-width-screen-mini;
+          padding-right: @modal-grid-gutter-width-screen-mini;
+        }
+      }
+
+      .column-overflow {
+        &[class*="column-mini-"] {
+          margin-top: 0px;
+        }
+      }
+
+      .modal-close {
+        width: @modal-close-width-screen-mini;
+        height: @modal-close-height-screen-mini;
+        top: @modal-close-position-vertical-screen-mini;
+        right: @modal-close-position-horizontal-screen-mini;
+      }
+    }
+  }
+}
+
+& when (@screen-small-enabled) {
+  @media (min-width: @screen-small) {
+    .modal {
+      width: @modal-width-screen-small;
+      margin: 0px 0px 0px (-1 * @modal-width-screen-small * 0.5);
+
+      .container {
+        margin-left: @modal-grid-container-gutter-width-screen-small;
+        margin-right: @modal-grid-container-gutter-width-screen-small;
+      }
+
+      .row {
+        margin-left: -@modal-grid-gutter-width-screen-small;
+        margin-right: -@modal-grid-gutter-width-screen-small;
+
+        [class^="column-"] {
+          padding-left: @modal-grid-gutter-width-screen-small;
+          padding-right: @modal-grid-gutter-width-screen-small;
+        }
+      }
+
+      .column-overflow {
+        &[class*="column-small-"] {
+          margin-top: 0px;
+        }
+      }
+
+      .modal-close {
+        width: @modal-close-width-screen-small;
+        height: @modal-close-height-screen-small;
+        top: @modal-close-position-vertical-screen-small;
+        right: @modal-close-position-horizontal-screen-small;
+      }
+    }
+  }
+}
+
+& when (@screen-medium-enabled) {
+  @media (min-width: @screen-medium) {
+    .modal {
+      width: @modal-width-screen-medium;
+      margin: 0px 0px 0px (-1 * @modal-width-screen-medium * 0.5);
+
+      .container {
+        margin-left: @modal-grid-container-gutter-width-screen-medium;
+        margin-right: @modal-grid-container-gutter-width-screen-medium;
+      }
+
+      .row {
+        margin-left: -@modal-grid-gutter-width-screen-medium;
+        margin-right: -@modal-grid-gutter-width-screen-medium;
+
+        [class^="column-"] {
+          padding-left: @modal-grid-gutter-width-screen-medium;
+          padding-right: @modal-grid-gutter-width-screen-medium;
+        }
+      }
+
+      [class^="column-"].column-overflow {
+        &[class^="column-medium-"] {
+          margin-top: 0px;
+        }
+      }
+
+      .modal-close {
+        width: @modal-close-width-screen-medium;
+        height: @modal-close-height-screen-medium;
+        top: @modal-close-position-vertical-screen-medium;
+        right: @modal-close-position-horizontal-screen-medium;
+      }
+    }
+  }
+}
+
+/*
+ * Override styles
+ */
+
+& when (@screen-large-enabled) {
+  @media (min-width: @screen-large) {
+    .modal {
+      width: @modal-width-screen-large;
+      margin: 0px 0px 0px (-1 * @modal-width-screen-large * 0.5);
+
+      .container {
+        margin-left: @modal-grid-container-gutter-width-screen-large;
+        margin-right: @modal-grid-container-gutter-width-screen-large;
+      }
+
+      .row {
+        margin-left: -@modal-grid-gutter-width-screen-large;
+        margin-right: -@modal-grid-gutter-width-screen-large;
+
+        [class^="column-"] {
+          padding-left: @modal-grid-gutter-width-screen-large;
+          padding-right: @modal-grid-gutter-width-screen-large;
+        }
+      }
+
+      [class^="column-"].column-overflow {
+        &[class^="column-large-"] {
+          margin-top: 0px;
+        }
+      }
+
+      .modal-close {
+        width: @modal-close-width-screen-large;
+        height: @modal-close-height-screen-large;
+        top: @modal-close-position-vertical-screen-large;
+        right: @modal-close-position-horizontal-screen-large;
+      }
+    }
+  }
+}
+
 .modal-container {
   display: flex;
   justify-content: center;
@@ -42,7 +425,7 @@
 
 .modal-backdrop {
   cursor: default;
-  
+
   // Since the backdrop will be inside of the modal-container now,
   // and the container transitions by moving 25% above bottom,
   // this will ensure that the backdrop doesn't get cut off.
@@ -78,14 +461,14 @@
   }
 
   .snippet-wrapper {
-    border: 1px solid ~`color_lightness("@{gray}", 80)`;
+    border: 1px solid color-lighten(@gray, 80);
     border-radius: 5px;
     overflow: hidden;
 
     pre {
-      background-color: ~`color_lightness("@{modal-header-background-color}", 40)`;
+      background-color: @modal-header-background-color;
       border-radius: 5px;
-      color: ~`color_lightness("@{black}", 40)`;
+      color: color-lighten(@black, 40);
       padding: 10px;
       overflow-x: auto;
     }
@@ -102,13 +485,13 @@
 
 .tour-start-modal-footer {
   .skip-tour {
-    color: ~`color_lightness("@{gray}", 50)`;
+    color: color-lighten(@gray, 50);
     display: block;
     margin-top: 10px;
     text-decoration: underline;
 
     &:hover {
-      color: ~`color_lightness("@{gray}", 20)`;
+      color: color-lighten(@gray, 20);
     }
   }
 }

@@ -80,13 +80,13 @@
         }
 
         &.path-color-8 {
-          stroke: ~`color_lightness("@{neutral}", 40)`;
-          fill: ~`color_lightness("@{neutral}", 40)`;
+          stroke: color-lighten(@neutral, 40);
+          fill: color-lighten(@neutral, 40);
         }
 
         &.path-color-unused {
-          stroke: ~`color_lightness("@{neutral}", 5)`;
-          fill: ~`color_lightness("@{neutral}", 5)`;
+          stroke: color-lighten(@neutral, 5);
+          fill: color-lighten(@neutral, 5);
         }
       }
 

@@ -2199,8 +2199,8 @@
       }
     },
     "canvas-ui-system": {
-      "version": "0.1.2",
-      "resolved": "https://registry.npmjs.org/canvas-ui-system/-/canvas-ui-system-0.1.2.tgz"
+      "version": "0.1.5",
+      "resolved": "http://registry.npmjs.org/canvas-ui-system/-/canvas-ui-system-0.1.5.tgz"
     },
     "chalk": {
       "version": "1.0.0",
@@ -12419,6 +12419,10 @@
           }
         }
       }
+    },
+    "less-color-lighten": {
+      "version": "0.0.1",
+      "resolved": "https://registry.npmjs.org/less-color-lighten/-/less-color-lighten-0.0.1.tgz"
     },
     "localStorage": {
       "version": "1.0.3",

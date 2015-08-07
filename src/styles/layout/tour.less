@@ -6,9 +6,9 @@
       }
 
       pre {
-        background-color: ~`color_lightness("@{modal-header-background-color}", 40)`;
+        background-color: @modal-header-background-color;
         border-radius: 5px;
-        color: ~`color_lightness("@{black}", 40)`;
+        color: color-lighten(@black, 40);
         padding: 10px;
         overflow-x: auto;
         word-wrap: normal;
@@ -17,7 +17,7 @@
       // Back button
       .docent-tooltip-back-link {
         &:hover {
-          color: ~`color_lightness("#000", 30)`;
+          color: color-lighten(@black, 30);
         }
       }
 
@@ -28,7 +28,7 @@
           outline: none;
 
           &:hover {
-            background-color: ~`color_lightness("@{purple}", -5)`;
+            background-color: color-lighten(@purple, -5);
           }
         }
       }
