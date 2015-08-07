@@ -28,7 +28,7 @@
 @icon-small-width: 24px;
 @icon-small-height: 24px;
 @icon-small-count-horizontal: 3;
-@icon-small-count-vertical: 1;
+@icon-small-count-vertical: 3;
 @icon-small-border-radius: 4px;
 
 @icon-small-variant-black-offset-horizontal: 0 * @icon-small-width;
@@ -270,6 +270,32 @@
 
     &.icon-small-color {
       background-position: floor(-@icon-small-variant-color-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 0);
+    }
+
+    /* Icon: Back */
+    &.icon-back {
+      background-position: floor(-@icon-small-variant-black-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 1);
+
+      &.icon-small-white {
+        background-position: floor(-@icon-small-variant-white-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 1);
+      }
+
+      &.icon-small-color {
+        background-position: floor(-@icon-small-variant-color-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 1);
+      }
+    }
+
+    /* Icon: New Window */
+    &.icon-new-window {
+      background-position: floor(-@icon-small-variant-black-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 2);
+
+      &.icon-small-white {
+        background-position: floor(-@icon-small-variant-white-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 2);
+      }
+
+      &.icon-small-color {
+        background-position: floor(-@icon-small-variant-color-offset-horizontal * @icon-small-scale) -(floor(@icon-small-height * @icon-small-scale) * 2);
+      }
     }
 
     &.border-radius {
