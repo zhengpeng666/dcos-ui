@@ -23,7 +23,7 @@ function itemHtml(obj) {
   );
 }
 
-function getIdInToggleButton(button) {
+function getIDInToggleButton(button) {
   return TestUtils.findRenderedDOMComponentWithClass(
     button, "id"
   );
@@ -52,16 +52,13 @@ describe("Dropdown", function () {
       };
     });
 
+    this.onItemSelection = function () {};
     this.selectedId = MockFrameworks.frameworks[0].id;
-
-    this.handleItemSelection = function (item) {
-      this.selectedId = item.id;
-    };
 
     this.dropdown = TestUtils.renderIntoDocument(
       <Dropdown
         selectedId={this.selectedId}
-        onItemSelection={this.handleItemSelection}
+        onItemSelection={this.onItemSelection}
         items={this.items} />
     );
 
@@ -71,7 +68,7 @@ describe("Dropdown", function () {
   });
 
   it("should display the first item as default item", function () {
-    var id = getIdInToggleButton(this.toggleButton);
+    var id = getIDInToggleButton(this.toggleButton);
 
     expect(id.getDOMNode().textContent)
       .toEqual(MockFrameworks.frameworks[0].id);
@@ -85,24 +82,12 @@ describe("Dropdown", function () {
     expect(items.length).toEqual(5);
   });
 
-  it("should display 3rd item, after 3rd item is clicked", function () {
-    React.addons.TestUtils.Simulate.click(this.toggleButton);
-
-    var items = getItemsInList(this.dropdown);
-    React.addons.TestUtils.Simulate.click(items[2]);
-
-    var id = getIdInToggleButton(this.toggleButton);
-
-    expect(id.getDOMNode().textContent)
-      .toEqual(MockFrameworks.frameworks[2].id);
-  });
-
   it("should render correctly with another selected id", function () {
     this.selectedId = MockFrameworks.frameworks[3].id;
     var dropdown = TestUtils.renderIntoDocument(
       <Dropdown
         selectedId={this.selectedId}
-        onItemSelection={this.handleItemSelection}
+        onItemSelection={this.onItemSelection}
         items={this.items} />
     );
 
@@ -110,7 +95,7 @@ describe("Dropdown", function () {
       dropdown, "dropdown-toggle"
     );
 
-    var id = getIdInToggleButton(toggleButton);
+    var id = getIDInToggleButton(toggleButton);
 
     expect(id.getDOMNode().textContent)
       .toEqual(MockFrameworks.frameworks[3].id);

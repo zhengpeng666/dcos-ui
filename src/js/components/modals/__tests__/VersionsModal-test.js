@@ -47,7 +47,7 @@ describe("VersionsModal", function () {
       var tag = TestUtils.findRenderedDOMComponentWithTag(
         this.instance, "pre"
       );
-      expect(tag.getDOMNode().innerHTML).toEqual("{\n  \"foo\": \"bar\"\n}");
+      expect(tag.getDOMNode().innerHTML).toEqual("\n{\n  \"foo\": \"bar\"\n}");
     });
 
   });
