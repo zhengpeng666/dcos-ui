@@ -57,6 +57,7 @@ describe("MarathonStore", function () {
         expect(health.key).toEqual("HEALTHY");
       }
     );
+
   });
 
   describe("#parseMetadata", function () {
@@ -67,9 +68,54 @@ describe("MarathonStore", function () {
       );
       expect(result).toEqual(MockParsedAppMetadata);
     });
+
+  });
+
+  describe("#getImageSizeFromMetadata", function () {
+
+    beforeEach(function () {
+      this.metadata = {
+        images: {
+          "icon-medium": "foo.png"
+        }
+      };
+    });
+
+    it("should find the requested size of image", function () {
+      var image = MarathonStore.getImageSizeFromMetadata(
+        this.metadata, "medium"
+      );
+      expect(image).toEqual("foo.png");
+    });
+
+    it("should return null if there are no images", function () {
+      var image = MarathonStore.getImageSizeFromMetadata({}, "medium");
+      expect(image).toEqual(null);
+    });
+
+    it("should return null if the requested image doesn't exist", function () {
+      var image = MarathonStore.getImageSizeFromMetadata(
+        this.metadata, "large"
+      );
+      expect(image).toEqual(null);
+    });
+
+    it("should return null if the value for the requested image has no length",
+      function () {
+        var images = {
+          images: {
+            "icon-large": ""
+          }
+        };
+
+        var image = MarathonStore.getImageSizeFromMetadata(images, "large");
+        expect(image).toEqual(null);
+      });
+
   });
 
   describe("#getFrameworkImages", function () {
+
     it("should return parsed images when app has metadata with images",
       function () {
         var images = MarathonStore.getFrameworkImages(
@@ -87,6 +133,7 @@ describe("MarathonStore", function () {
         expect(images).toEqual(MarathonStore.NA_IMAGES);
       }
     );
+
   });
 
   describe("#processMarathonApps", function () {
