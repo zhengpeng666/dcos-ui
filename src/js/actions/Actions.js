@@ -82,7 +82,7 @@ var Actions = {
       appVersion: Config.version,
       description: "",
       date: Date.now(),
-      EXTERNAL_ELB: global.location.hostname,
+      DCOS_HOSTNAME: global.location.hostname,
       page: this.activePage,
       stintID: this.stintID,
       uiVersion: "@@VERSION"
