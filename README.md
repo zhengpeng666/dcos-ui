@@ -15,12 +15,11 @@ To work efficently on DCOS-UI you will need to setup 3 different environemtns.
 
 The DCOS Image will create a virtual machine on your computer. This machine will contain a small version of a DCOS cluster. In short, it'll have a Mesos master, slave, marathon along with other packages that are needed for DCOS to operate.
 
-1. Clone the [dcos-image](https://github.com/mesosphere/dcos-image) repository
-2. Install any requirements located [here](https://github.com/mesosphere/dcos-image/tree/master/gen)
-3. `$ cd gen`
-4. `$ ./gen.py vagrant dcos00`
-5. `$ cd providers/cluster/dcos00`
-6. `$ vagrant up`
+1. `$ mkdir vagrant-dcos-image && cd vagrant-dcos-image`
+2. `$ curl https://downloads.mesosphere.io/dcos/testing/continuous/make_dcos_vagrant.sh > make_dcos_vagrant.sh`
+3. `$ chmod +x make_dcos_vagrant.sh`
+4. `$ ./make_dcos_vagrant.sh`
+5. `$ vagrant up`
 
 ### DCOS UI
 
