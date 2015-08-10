@@ -13,6 +13,7 @@ var ServiceOverlayNav = React.createClass({
         <span
           className="button button-link overlay-back-button overlay-nav-button"
           onClick={this.props.onBackClick}>
+          <i className="icon icon-small icon-back icon-small-white"></i>
           Back
         </span>
 
@@ -27,6 +28,7 @@ var ServiceOverlayNav = React.createClass({
           target="_blank"
           className="button button-link text-align-right overlay-new-window-button overlay-nav-button">
           Open in a New Window
+          <i className="icon icon-small icon-new-window icon-small-white"></i>
         </a>
       </div>
     );
