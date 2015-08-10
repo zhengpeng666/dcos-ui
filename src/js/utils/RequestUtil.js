@@ -16,28 +16,30 @@ var RequestUtil = {
   },
 
   debounceOnError: function (interval, promiseFn, options) {
+    var rejectionCount = 0;
+    var timeUntilNextCall = 0;
+    var currentInterval = interval;
     options = options || {};
 
     if (!_.isNumber(options.delayAfterCount)) {
       options.delayAfterCount = 0;
     }
-    var rejectionCount = 0;
-    var timeUntilNextCall = 0;
 
     function resolveFn() {
       rejectionCount = 0;
       timeUntilNextCall = 0;
+      currentInterval = interval;
     }
 
     function rejectFn() {
       rejectionCount++;
-      var delay = 0;
-      // only delay if after delayAfterCount requests have failed
-      if (rejectionCount >= options.delayAfterCount) {
-        delay = rejectionCount;
-      }
 
-      timeUntilNextCall = Date.now() + (delay * interval);
+      // Only delay if after delayAfterCount requests have failed
+      if (rejectionCount >= options.delayAfterCount) {
+        // Exponentially increase the time till the next call
+        currentInterval *= 2;
+        timeUntilNextCall = Date.now() + currentInterval;
+      }
     }
 
     var callback = promiseFn(resolveFn, rejectFn);

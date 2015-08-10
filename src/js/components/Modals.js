@@ -128,16 +128,20 @@ var Modals = React.createClass({
   },
 
   getLoginModal: function (hasIdentity) {
-    Actions.logFakePageView({
-      title: "Signup Modal",
-      path: "/v/beta-signup-modal-form",
-      referrer: "https://mesosphere.com/"
-    });
+    const isOpen = (!hasIdentity && !Config.disableLoginModal);
+
+    if (isOpen) {
+      Actions.logFakePageView({
+        title: "Signup Modal",
+        path: "/v/beta-signup-modal-form",
+        referrer: "https://mesosphere.com/"
+      });
+    }
 
     return (
       <LoginModal
         onLogin={this.onLogin}
-        open={!hasIdentity && !Config.disableLoginModal} />
+        open={isOpen} />
     );
   },
 
