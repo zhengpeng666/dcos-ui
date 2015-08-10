@@ -15,12 +15,6 @@ var LoginModal = React.createClass({
 
   mixins: [InternalStorageMixin],
 
-  getInitialState: function () {
-    return {
-      closing: false
-    };
-  },
-
   componentWillMount: function () {
     this.internalStorage_set({
       emailHasError: false,
@@ -44,12 +38,7 @@ var LoginModal = React.createClass({
       return;
     }
 
-    this.internalStorage_update({email: email});
-    this.setState({closing: true});
-  },
-
-  onClose: function () {
-    this.props.onLogin(this.internalStorage_get().email);
+    this.props.onLogin(email);
   },
 
   getFooter: function () {
@@ -92,7 +81,6 @@ var LoginModal = React.createClass({
           subHeader={this.getSubHeader()}
           footer={this.getFooter(data.email)}
           showCloseButton={false}
-          shouldClose={this.state.closing}
           onClose={this.onClose}
           open={this.props.open}>
         <form className="flush-bottom"
