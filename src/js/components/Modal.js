@@ -56,6 +56,8 @@ var Modal = React.createClass({
   componentDidUpdate: function () {
     if (this.refs.innerContainer) {
       this.innerContainerDOMNode = this.refs.innerContainer.getDOMNode();
+    } else {
+      this.innerContainerDOMNode = null;
     }
 
     // We render once in order to compute content height,
@@ -82,6 +84,7 @@ var Modal = React.createClass({
   },
 
   closeModal: function () {
+    this.refs.innerContainer = null;
     this.props.onClose();
   },
 
