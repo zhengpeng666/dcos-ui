@@ -87,9 +87,11 @@ var DashboardPage = React.createClass({
   },
 
   onServiceClose: function () {
-    this.setState({
-      openedService: null
-    });
+    if (this.isMounted()) {
+      this.setState({
+        openedService: null
+      });
+    }
   },
 
   onMesosStateChange: function () {
