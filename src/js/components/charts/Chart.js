@@ -15,17 +15,16 @@ var Chart = React.createClass({
   },
 
   componentWillMount: function () {
+    this.updateWidth = _.throttle(this.updateWidth, 500);
     this.internalStorage_set({width: null});
   },
 
   componentDidMount: function () {
     this.updateWidth();
-    window.addEventListener("focus", this.updateWidth);
     window.addEventListener("resize", this.updateWidth);
   },
 
   componentWillUnmount: function () {
-    window.removeEventListener("focus", this.updateWidth);
     window.removeEventListener("resize", this.updateWidth);
   },
 

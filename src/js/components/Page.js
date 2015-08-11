@@ -14,12 +14,24 @@ var Page = React.createClass({
     renderNavigation: React.PropTypes.func
   },
 
+  componentDidMount: function () {
+    this.rendered = true;
+  },
+
   getNavigation: function () {
     if (_.isFunction(this.props.renderNavigation)) {
       return this.props.renderNavigation();
     } else {
       return <div className="page-header-navigation" />;
     }
+  },
+
+  getChildren: function () {
+    if (this.rendered) {
+      return this.props.children;
+    }
+
+    return null;
   },
 
   render: function () {
@@ -48,7 +60,7 @@ var Page = React.createClass({
         </div>
         <GeminiScrollbar autoshow={true} className="page-content container-scrollable inverse">
           <div className="container container-fluid container-pod">
-            {this.props.children}
+            {this.getChildren()}
           </div>
         </GeminiScrollbar>
       </div>
