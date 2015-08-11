@@ -67,7 +67,8 @@ var webpackConfig = {
   },
   resolve: {
     extensions: ["", ".js"]
-  }
+  },
+  watch: true
 };
 
 gulp.task("browsersync", function () {
@@ -162,7 +163,7 @@ gulp.task("swf", function () {
 
 gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/**/*.less", ["less"]);
-  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["webpack", "eslint", "replace-js-strings"]);
+  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["eslint"]);
   gulp.watch(dirs.img + "/**/*", ["images"]);
 });
 
@@ -173,8 +174,12 @@ gulp.task("webpack", function (callback) {
     if (err) {
       throw new gutil.PluginError("webpack", err);
     }
-    callback();
+
+    if (development) {
+      browserSync.reload();
+    }
   });
+  callback();
 });
 
 gulp.task("default", ["webpack", "eslint", "replace-js-strings", "less", "images", "swf", "html"]);
