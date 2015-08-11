@@ -50,7 +50,7 @@ var ServiceOverlay = React.createClass({
     var service = this.props.service;
 
     React.render(
-      <div>
+      <div className="overlay-container">
         <ServiceOverlayNav
           className="overlay-nav"
           onBackClick={this.closeService}

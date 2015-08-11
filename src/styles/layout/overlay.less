@@ -5,15 +5,11 @@
   z-index: 2000;
   background: @white;
 
-  > div {
+  > .overlay-container {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     height: 100%;
-  }
-
-  .overlay-back-button {
-    float: left;
   }
 
   .overlay-frame {
@@ -22,41 +18,37 @@
     flex: 3 3 100%;
   }
 
-  .overlay-header {
-    width: 400px;
-    left: 50%;
-    margin-left: -200px;
-    color: @white;
-    position: absolute;
-    top: 12px;
-  }
-
   .overlay-nav {
     background: @purple;
-  }
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 
-  .overlay-nav-button {
-    padding: 10px;
-    margin: 20px;
+    .overlay-header {
+      flex: 1;
+      color: @white;
 
-    &:hover {
-      .icon-small {
-        opacity: 0.8;
+      .overlay-subheader {
+        color: color_lighten(@purple, 50);
+        text-transform: capitalize;
       }
     }
-  }
 
-  .icon-small {
-    opacity: 0.5;
-    margin: 5px;
-  }
+    .overlay-button-container {
+      flex: 1;
+    }
 
-  .overlay-new-window-button {
-    float: right;
-  }
+    .overlay-nav-button {
+      .icon-small {
+        opacity: 0.5;
+        margin: @base-spacing-unit * 0.5;
+      }
 
-  .overlay-subheader {
-    color: ~`color_lightness("@{purple}", 50)`;
-    text-transform: capitalize;
+      &:hover {
+        .icon-small {
+          opacity: 0.8;
+        }
+      }
+    }
   }
 }
