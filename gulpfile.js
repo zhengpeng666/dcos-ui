@@ -48,7 +48,8 @@ var webpackConfig = {
     loaders: [
       {
         test: /\.js$/,
-        loader: "babel-loader"
+        loader: "babel-loader",
+        exclude: /node_modules/
       }
     ],
     preLoaders: [
@@ -144,7 +145,10 @@ gulp.task("minify-js", ["replace-js-strings"], function () {
     .pipe(gulp.dest(dirs.dist + "/" + dirs.jsDist));
 });
 
-gulp.task("replace-js-strings", ["webpack"], function () {
+gulp.task("replace-js-strings", ["webpack", "eslint"], function () {
+  if (development) {
+    browserSync.reload();
+  }
   return gulp.src(dirs.dist + "/**/*.?(js|jsx)")
     .pipe(replace("@@VERSION", packageInfo.version))
     .pipe(replace("@@ENV", process.env.NODE_ENV))
@@ -158,25 +162,22 @@ gulp.task("swf", function () {
 
 gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/**/*.less", ["less"]);
-  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["webpack", "replace-js-strings"]);
+  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["webpack", "eslint", "replace-js-strings"]);
   gulp.watch(dirs.img + "/**/*", ["images"]);
 });
 
 // Use webpack to compile jsx into js,
-gulp.task("webpack", ["eslint"], function (callback) {
+gulp.task("webpack", function (callback) {
   // run webpack
   webpack(webpackConfig, function (err) {
     if (err) {
       throw new gutil.PluginError("webpack", err);
     }
-    if (development) {
-      browserSync.reload();
-    }
     callback();
   });
 });
 
-gulp.task("default", ["eslint", "webpack", "replace-js-strings", "less", "images", "swf", "html"]);
+gulp.task("default", ["webpack", "eslint", "replace-js-strings", "less", "images", "swf", "html"]);
 
 gulp.task("dist", ["default", "minify-css", "minify-js"]);
 
