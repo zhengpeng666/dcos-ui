@@ -189,7 +189,7 @@ var DashboardPage = React.createClass({
 
         <ServiceOverlay
           service={state.openedService}
-          shouldOpen={!!state.openedService} 
+          shouldOpen={!!state.openedService}
           onServiceClose={this.onServiceClose}/>
       </Page>
     );
