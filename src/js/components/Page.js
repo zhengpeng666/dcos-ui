@@ -15,7 +15,15 @@ var Page = React.createClass({
   },
 
   componentDidMount: function () {
-    this.rendered = true;
+    this.setState({
+      rendered: true
+    });
+  },
+
+  getInitialState: function() {
+    return {
+      rendered: false
+    }
   },
 
   getNavigation: function () {
@@ -27,7 +35,7 @@ var Page = React.createClass({
   },
 
   getChildren: function () {
-    if (this.rendered) {
+    if (this.state.rendered) {
       return this.props.children;
     }
 
