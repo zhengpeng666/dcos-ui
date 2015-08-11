@@ -29,7 +29,7 @@
       color: @white;
 
       .overlay-subheader {
-        color: color_lighten(@purple, 50);
+        color: color-lighten(@purple, 50);
         text-transform: capitalize;
       }
     }
@@ -39,14 +39,14 @@
     }
 
     .overlay-nav-button {
-      .icon-small {
-        opacity: 0.5;
+      .icon {
+        opacity: 0.7;
         margin: @base-spacing-unit * 0.5;
       }
 
       &:hover {
-        .icon-small {
-          opacity: 0.8;
+        .icon {
+          opacity: 1;
         }
       }
     }
