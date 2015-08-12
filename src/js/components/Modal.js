@@ -84,6 +84,9 @@ var Modal = React.createClass({
   },
 
   closeModal: function () {
+    // We set this to false to essentially do a reset
+    // everytime the modal closes. If we don't, the modal will
+    // calculate height of old elements.
     this.refs.innerContainer = null;
     this.props.onClose();
   },
