@@ -39,7 +39,7 @@ var files = {
 };
 
 var webpackConfig = {
-  devtool: "source-map",
+  devtool: "eval-source-map",
   entry: "./" + dirs.js + "/" + files.mainJs + ".js",
   output: {
     filename: dirs.dist + "/" + files.mainJsDist + ".js"
@@ -68,7 +68,8 @@ var webpackConfig = {
   resolve: {
     extensions: ["", ".js"]
   },
-  watch: true
+  watch: true,
+  cache: true
 };
 
 gulp.task("browsersync", function () {
@@ -146,10 +147,13 @@ gulp.task("minify-js", ["replace-js-strings"], function () {
     .pipe(gulp.dest(dirs.dist + "/" + dirs.jsDist));
 });
 
-gulp.task("replace-js-strings", ["webpack", "eslint"], function () {
+gulp.task("reload", ["replace-js-strings"], function () {
   if (development) {
     browserSync.reload();
   }
+});
+
+gulp.task("replace-js-strings", function () {
   return gulp.src(dirs.dist + "/**/*.?(js|jsx)")
     .pipe(replace("@@VERSION", packageInfo.version))
     .pipe(replace("@@ENV", process.env.NODE_ENV))
@@ -163,23 +167,34 @@ gulp.task("swf", function () {
 
 gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/**/*.less", ["less"]);
-  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["eslint"]);
+  gulp.watch(dirs.dist + "/**/main.js", ["replace-js-strings", "eslint", "reload"]);
   gulp.watch(dirs.img + "/**/*", ["images"]);
 });
 
 // Use webpack to compile jsx into js,
 gulp.task("webpack", function (callback) {
+  var firstRun = true;
+
   // run webpack
-  webpack(webpackConfig, function (err) {
+  webpack(webpackConfig, function (err, stats) {
     if (err) {
       throw new gutil.PluginError("webpack", err);
     }
 
-    if (development) {
-      browserSync.reload();
+    // gives the duraction of webpack's compile
+    gutil.log("[webpack]", stats.toString({
+      children: false,
+      chunks: false,
+      colors: true,
+      modules: false,
+      timing: true
+    }));
+
+    if (firstRun) {
+      callback();
+      firstRun = false;
     }
   });
-  callback();
 });
 
 gulp.task("default", ["webpack", "eslint", "replace-js-strings", "less", "images", "swf", "html"]);
