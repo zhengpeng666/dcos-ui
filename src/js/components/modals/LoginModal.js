@@ -77,14 +77,14 @@ var LoginModal = React.createClass({
 
     return (
       <Modal closeByBackdropClick={false}
-          titleText="Mesosphere DCOS"
-          subHeader={this.getSubHeader()}
-          footer={this.getFooter(data.email)}
-          showCloseButton={false}
-          onClose={this.onClose}
-          open={this.props.open}>
+        modalClassName="login-modal"
+        titleText="Mesosphere DCOS"
+        subHeader={this.getSubHeader()}
+        footer={this.getFooter()}
+        showCloseButton={false}
+        open={this.props.open}>
         <form className="flush-bottom"
-            onSubmit={this.handleSubmit}>
+          onSubmit={this.handleSubmit}>
           <div className={emailClassSet}>
             <input className="form-control flush-bottom"
               type="email"

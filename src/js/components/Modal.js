@@ -10,7 +10,7 @@ var Modal = React.createClass({
 
   innerContainerDOMNode: false,
 
-  rerendered: false,
+  useScrollbar: false,
 
   propTypes: {
     closeByBackdropClick: React.PropTypes.bool,
@@ -49,6 +49,10 @@ var Modal = React.createClass({
     window.addEventListener("resize", this.handleWindowResize);
   },
 
+  componentWillReceiveProps: function () {
+    this.useScrollbar = false;
+  },
+
   componentDidUpdate: function () {
     if (this.refs.innerContainer) {
       this.innerContainerDOMNode = this.refs.innerContainer.getDOMNode();
@@ -57,18 +61,14 @@ var Modal = React.createClass({
     // We render once in order to compute content height,
     // then we rerender to make modal fit the screen, if needed.
     // Set rerendered to true to only do this once.
-    if (!this.rerendered && this.props.open) {
-      this.rerendered = true;
+    if (this.useScrollbar === false && this.props.open) {
+      this.useScrollbar = true;
       this.forceUpdate();
     }
   },
 
   componentWillUnmount: function () {
     window.removeEventListener("resize", this.handleWindowResize);
-  },
-
-  shouldComponentUpdate: function (nextProps) {
-    return nextProps.open !== this.props.open;
   },
 
   handleWindowResize: function () {
@@ -82,7 +82,6 @@ var Modal = React.createClass({
   },
 
   closeModal: function () {
-    this.rerendered = false;
     this.props.onClose();
   },
 
@@ -180,7 +179,7 @@ var Modal = React.createClass({
     var modalClassSet = classNames({
       "modal": true,
       "modal-large": this.props.size === "large"
-    });
+    }, this.props.modalClassName);
 
     var titleClassSet = classNames({
       "modal-header-title": true,
@@ -193,17 +192,19 @@ var Modal = React.createClass({
     var heightInfo = this.getInnerContainerHeightInfo();
     var maxHeight = null;
     var innerHeight = null;
-    var useScrollbar = false;
 
     if (heightInfo !== null) {
-      useScrollbar = true;
       innerHeight = heightInfo.innerHeight;
       maxHeight = heightInfo.maxHeight;
     }
 
-    var modalStyle = {
-      height: maxHeight
-    };
+    var modalStyle = {};
+
+    if (this.useScrollbar) {
+      modalStyle = {
+        height: maxHeight
+      };
+    }
 
     return (
       <div className="modal-container">
@@ -219,7 +220,7 @@ var Modal = React.createClass({
           </div>
           <div className="modal-content" style={modalStyle}>
             <div ref="innerContainer" className="modal-content-inner container container-pod container-pod-short" style={modalStyle}>
-              {this.getModalContent(useScrollbar, innerHeight)}
+              {this.getModalContent(this.useScrollbar, innerHeight)}
             </div>
           </div>
           {this.getFooter()}
