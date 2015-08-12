@@ -26,7 +26,7 @@ var TooltipMixin = require("../mixins/TooltipMixin");
 var MENU_ITEMS = {
   dashboard: {label: "Dashboard", icon: "dashboard"},
   services: {label: "Services", icon: "services"},
-  nodes: {label: "Nodes", icon: "datacenter"}
+  "nodes-list": {label: "Nodes", icon: "datacenter"}
 };
 
 var Sidebar = React.createClass({
