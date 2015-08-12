@@ -3,15 +3,25 @@ var classNames = require("classnames");
 var GeminiScrollbar = require("react-gemini-scrollbar");
 var React = require("react/addons");
 
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var SidebarToggle = require("../components/SidebarToggle");
 
 var Page = React.createClass({
 
   displayName: "Page",
 
+  mixins: [InternalStorageMixin],
+
   propTypes: {
     title: React.PropTypes.string,
     renderNavigation: React.PropTypes.func
+  },
+
+  componentDidMount: function () {
+    this.internalStorage_set({
+      rendered: true
+    });
+    this.forceUpdate();
   },
 
   getNavigation: function () {
@@ -20,6 +30,14 @@ var Page = React.createClass({
     } else {
       return <div className="page-header-navigation" />;
     }
+  },
+
+  getChildren: function () {
+    var data = this.internalStorage_get();
+    if (data.rendered === true) {
+      return this.props.children;
+    }
+    return null;
   },
 
   render: function () {
@@ -48,7 +66,7 @@ var Page = React.createClass({
         </div>
         <GeminiScrollbar autoshow={true} className="page-content container-scrollable inverse">
           <div className="container container-fluid container-pod">
-            {this.props.children}
+            {this.getChildren()}
           </div>
         </GeminiScrollbar>
       </div>
