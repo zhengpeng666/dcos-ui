@@ -14,16 +14,16 @@ var Page = React.createClass({
     renderNavigation: React.PropTypes.func
   },
 
-  componentDidMount: function () {
-    this.setState({
-      rendered: true
-    });
-  },
-
   getInitialState: function() {
     return {
       rendered: false
     }
+  },
+
+  componentDidMount: function () {
+    this.setState({
+      rendered: true
+    });
   },
 
   getNavigation: function () {
