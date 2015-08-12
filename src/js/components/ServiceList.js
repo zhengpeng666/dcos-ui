@@ -4,6 +4,7 @@ var React = require("react");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var List = require("./List");
+var ServiceOverlay = require("../components/ServiceOverlay");
 
 var STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
@@ -27,16 +28,31 @@ var ServiceList = React.createClass({
     };
   },
 
+  getInitialState: function () {
+    return {
+      openedService: null
+    };
+  },
+
   shouldComponentUpdate: function (nextProps) {
     return !_.isEqual(this.props, nextProps);
   },
 
   openService: function (service, event) {
-    if (event != null) {
-      event.preventDefault();
-    }
+    event.preventDefault();
+    this.setState({
+      openedService: service
+    });
+    this.forceUpdate();
+  },
 
-    this.props.onOpen(service);
+  onServiceClose: function () {
+    if (this.isMounted()) {
+      this.setState({
+        openedService: null
+      });
+      this.forceUpdate();
+    }
   },
 
   getServices: function (services, healthProcessed) {
@@ -95,7 +111,7 @@ var ServiceList = React.createClass({
           textAlign: "right"
         }
       };
-    }.bind(this));
+    }, this);
   },
 
   getNoServicesMessage: function () {
@@ -131,6 +147,10 @@ var ServiceList = React.createClass({
     return (
       <div>
         {this.getContent()}
+        <ServiceOverlay
+          service={this.state.openedService}
+          shouldOpen={!!this.state.openedService}
+          onServiceClose={this.onServiceClose} />
       </div>
     );
   }

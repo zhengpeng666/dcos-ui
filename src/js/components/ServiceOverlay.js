@@ -1,9 +1,7 @@
 var React = require("react");
-
 var PropTypes = React.PropTypes;
+
 var Cluster = require("../utils/Cluster");
-var ServiceOverlayNav = require("./ServiceOverlayNav");
-var Frame = require("./Frame");
 var HealthLabels = require("../constants/HealthLabels");
 
 var ServiceOverlay = React.createClass({
@@ -11,21 +9,25 @@ var ServiceOverlay = React.createClass({
   displayName: "ServiceOverlay",
 
   propTypes: {
-    shouldOpen: PropTypes.bool,
-    serviceUrl: PropTypes.string,
-    onServiceClose: PropTypes.func
+    onServiceClose: PropTypes.func,
+    shouldOpen: PropTypes.bool
   },
 
   getDefaultProps: function () {
     return {
+      onServiceClose: function () {},
       shouldOpen: false
     };
   },
 
+  shouldComponentUpdate: function (nextProps) {
+    var shouldOpen = nextProps.shouldOpen && !this.props.shouldOpen;
+    return shouldOpen && this.props.service !== nextProps.service;
+  },
+
   componentDidUpdate: function () {
-    if (this.props.shouldOpen && !this.overlay && this.props.service !== this.previousService) {
+    if (this.props.shouldOpen) {
       this.renderService();
-      this.previousService = this.props.service;
     }
   },
 
@@ -35,9 +37,52 @@ var ServiceOverlay = React.createClass({
       React.unmountComponentAtNode(this.overlay);
       document.body.removeChild(this.overlay);
       this.overlay = null;
-      this.previousService = null;
       this.props.onServiceClose();
     }
+  },
+
+  getServiceNav: function () {
+    var service = this.props.service;
+    var serviceHealth = HealthLabels[service.health.key];
+    var taskCount = "N/A";
+
+    if (typeof service.TASK_RUNNING === "number") {
+      taskCount = service.TASK_RUNNING;
+    }
+
+    return (
+      <div className="container container-fluid flush-left flush-right overlay-nav">
+        <div className="overlay-button-container">
+          <span
+            className="button button-link button-inverse overlay-nav-button"
+            onClick={this.closeService}>
+            <i className="icon icon-small icon-back icon-small-white"></i>
+            Back
+          </span>
+        </div>
+
+        <h2 className="text-align-center inverse overlay-header">
+          {service.name}
+          <div className="h4 overlay-subheader flush-top text-align-center">
+            {serviceHealth + " (" + taskCount + ")"}
+          </div>
+        </h2>
+
+        <div className="overlay-button-container text-align-right">
+          <a href={Cluster.getServiceLink(service.name)}
+            target="_blank"
+            className="button button-link
+              button-inverse
+              text-align-right
+              overlay-nav-button
+              overlay-new-window-button"
+            >
+            Open in a New Window
+            <i className="icon icon-small icon-new-window icon-small-white"></i>
+          </a>
+        </div>
+      </div>
+    );
   },
 
   renderService: function () {
@@ -47,19 +92,11 @@ var ServiceOverlay = React.createClass({
     this.overlay.className = "service-overlay";
     document.body.appendChild(this.overlay);
 
-    var service = this.props.service;
-
     React.render(
       <div className="overlay-container">
-        <ServiceOverlayNav
-          className="overlay-nav"
-          onBackClick={this.closeService}
-          serviceName={service.name}
-          serviceHealth={HealthLabels[service.health.key]}
-          serviceTasks={service.TASK_RUNNING} />
-
-        <Frame
-          src={Cluster.getServiceLink(service.name)}
+        {this.getServiceNav()}
+        <iframe
+          src={Cluster.getServiceLink(this.props.service.name)}
           className="overlay-frame" />
       </div>,
       this.overlay

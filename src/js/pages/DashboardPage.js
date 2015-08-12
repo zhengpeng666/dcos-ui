@@ -16,7 +16,6 @@ var TaskFailureTimeSeriesChart =
 var ServiceList = require("../components/ServiceList");
 var TasksChart = require("../components/charts/TasksChart");
 var SidebarActions = require("../events/SidebarActions");
-var ServiceOverlay = require("../components/ServiceOverlay");
 
 function getMesosState() {
   return {
@@ -56,12 +55,6 @@ var DashboardPage = React.createClass({
     };
   },
 
-  getInitialState: function () {
-    return {
-      openedService: false
-    };
-  },
-
   componentWillMount: function () {
     this.internalStorage_set(getMesosState());
   },
@@ -78,20 +71,6 @@ var DashboardPage = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
-  },
-
-  openService: function (service) {
-    this.setState({
-      openedService: service
-    });
-  },
-
-  onServiceClose: function () {
-    if (this.isMounted()) {
-      this.setState({
-        openedService: null
-      });
-    }
   },
 
   onMesosStateChange: function () {
@@ -135,7 +114,6 @@ var DashboardPage = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-    var state = this.state;
 
     return (
       <Page title="Dashboard">
@@ -170,8 +148,7 @@ var DashboardPage = React.createClass({
             <Panel title="Services Health" className="dashboard-panel">
               <ServiceList
                 healthProcessed={data.appsProcessed}
-                services={this.getServicesList(data.services)}
-                onOpen={this.openService} />
+                services={this.getServicesList(data.services)} />
               {this.getViewAllServicesBtn()}
             </Panel>
           </div>
@@ -188,11 +165,6 @@ var DashboardPage = React.createClass({
             </Panel>
           </div>
         </div>
-
-        <ServiceOverlay
-          service={state.openedService}
-          shouldOpen={!!state.openedService}
-          onServiceClose={this.onServiceClose}/>
       </Page>
     );
   }

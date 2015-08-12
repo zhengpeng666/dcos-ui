@@ -7,6 +7,7 @@ var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var Maths = require("../utils/Maths");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
+var ServiceOverlay = require("../components/ServiceOverlay");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
@@ -28,12 +29,25 @@ var ServicesTable = React.createClass({
     };
   },
 
-  openService: function (model, event) {
-    if (event != null) {
-      event.preventDefault();
-    }
+  getInitialState: function () {
+    return {
+      openedService: null
+    };
+  },
 
-    this.props.onOpen(model);
+  openService: function (service, event) {
+    event.preventDefault();
+    this.setState({
+      openedService: service
+    });
+  },
+
+  onServiceClose: function () {
+    if (this.isMounted()) {
+      this.setState({
+        openedService: null
+      });
+    }
   },
 
   renderHeadline: function (prop, model) {
@@ -180,14 +194,20 @@ var ServicesTable = React.createClass({
 
   render: function () {
     return (
-      <Table
-        className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
-        columns={this.getColumns()}
-        colGroup={this.getColGroup()}
-        data={this.props.services.slice(0)}
-        keys={["id"]}
-        sortBy={{prop: "name", order: "desc"}}
-        sortFunc={ResourceTableUtil.getSortFunction("name")} />
+      <div>
+        <Table
+          className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
+          columns={this.getColumns()}
+          colGroup={this.getColGroup()}
+          data={this.props.services.slice(0)}
+          keys={["id"]}
+          sortBy={{prop: "name", order: "desc"}}
+          sortFunc={ResourceTableUtil.getSortFunction("name")} />
+        <ServiceOverlay
+          service={this.state.openedService}
+          shouldOpen={!!this.state.openedService}
+          onServiceClose={this.onServiceClose} />
+      </div>
     );
   }
 });
