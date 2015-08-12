@@ -48,8 +48,7 @@ var webpackConfig = {
     loaders: [
       {
         test: /\.js$/,
-        loader: "babel-loader",
-        exclude: /node_modules/
+        loader: "babel-loader?cacheDirectory"
       }
     ],
     preLoaders: [
@@ -61,15 +60,14 @@ var webpackConfig = {
     ],
     postLoaders: [
       {
-        loader: "transform?envify"
+        loader: "transform/cacheable?envify"
       }
     ]
   },
   resolve: {
     extensions: ["", ".js"]
   },
-  watch: true,
-  cache: true
+  watch: true
 };
 
 gulp.task("browsersync", function () {
@@ -93,11 +91,12 @@ gulp.task("connect:server", function () {
   });
 });
 
-gulp.task("eslint", function () {
+var eslintFn = function () {
   return gulp.src([dirs.js + "/**/*.?(js|jsx)"])
     .pipe(eslint())
     .pipe(eslint.formatEach("stylish", process.stderr));
-});
+};
+gulp.task("eslint", eslintFn);
 
 gulp.task("images", function () {
   return gulp.src([dirs.img + "/**/*.*", "!" + dirs.img + "/**/_exports/**/*.*"])
@@ -153,7 +152,7 @@ gulp.task("reload", ["replace-js-strings"], function () {
   }
 });
 
-gulp.task("replace-js-strings", function () {
+gulp.task("replace-js-strings", ["webpack"], function () {
   return gulp.src(dirs.dist + "/**/*.?(js|jsx)")
     .pipe(replace("@@VERSION", packageInfo.version))
     .pipe(replace("@@ENV", process.env.NODE_ENV))
@@ -167,21 +166,28 @@ gulp.task("swf", function () {
 
 gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/**/*.less", ["less"]);
-  gulp.watch(dirs.dist + "/**/main.js", ["replace-js-strings", "eslint", "reload"]);
   gulp.watch(dirs.img + "/**/*", ["images"]);
+  // Why aren't we watching any JS files? Because we use webpack's
+  // internal watch, which is faster due to caching.
 });
 
-// Use webpack to compile jsx into js,
+var replaceJsStringsFn = function (callback) {
+  gulp.src(dirs.dist + "/**/*.?(js|jsx)")
+    .pipe(replace("@@VERSION", packageInfo.version))
+    .pipe(replace("@@ENV", process.env.NODE_ENV))
+    .pipe(gulp.dest(dirs.dist))
+    .on('end', callback);
+};
+
+// Use webpack to compile jsx into js.
 gulp.task("webpack", function (callback) {
   var firstRun = true;
 
-  // run webpack
   webpack(webpackConfig, function (err, stats) {
     if (err) {
       throw new gutil.PluginError("webpack", err);
     }
 
-    // gives the duraction of webpack's compile
     gutil.log("[webpack]", stats.toString({
       children: false,
       chunks: false,
@@ -191,13 +197,22 @@ gulp.task("webpack", function (callback) {
     }));
 
     if (firstRun) {
-      callback();
+      // this runs on initial gulp webpack load
       firstRun = false;
+      callback();
+    } else {
+      // this runs after webpack's internal watch rebuild
+      replaceJsStringsFn(function () {
+        // eslintFn();
+        if (development) {
+          browserSync.reload();
+        }
+      });
     }
   });
 });
 
-gulp.task("default", ["webpack", "eslint", "replace-js-strings", "less", "images", "swf", "html"]);
+gulp.task("default", ["webpack", "eslint", "replace-js-strings", "less", "images", "swf", "html", "reload"]);
 
 gulp.task("dist", ["default", "minify-css", "minify-js"]);
 
