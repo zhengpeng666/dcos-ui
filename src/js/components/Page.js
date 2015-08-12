@@ -16,7 +16,7 @@ var Page = React.createClass({
     title: React.PropTypes.string,
     renderNavigation: React.PropTypes.func
   },
-  
+
   componentDidMount: function () {
     this.internalStorage_set({
       rendered: true
