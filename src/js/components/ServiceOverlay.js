@@ -5,7 +5,7 @@ const PropTypes = React.PropTypes;
 import Cluster from "../utils/Cluster";
 import HealthLabels from "../constants/HealthLabels";
 
-const methodsToBind = ["closeService"];
+const methodsToBind = ["handleServiceClose"];
 
 export default class ServiceOverlay extends React.Component {
 
@@ -28,7 +28,7 @@ export default class ServiceOverlay extends React.Component {
     }
   }
 
-  closeService() {
+  handleServiceClose() {
     if (this.overlayEl) {
       // Remove the div that we created at the root of the dom.
       React.unmountComponentAtNode(this.overlayEl);
@@ -52,7 +52,7 @@ export default class ServiceOverlay extends React.Component {
         <div className="overlay-button-container">
           <span
             className="button button-link button-inverse overlay-nav-button"
-            onClick={this.closeService}>
+            onClick={this.handleServiceClose}>
             <i className="icon icon-small icon-back icon-small-white"></i>
             <span className="short-top">Back</span>
           </span>
