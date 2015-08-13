@@ -57,6 +57,9 @@ var Modal = React.createClass({
     if (this.refs.innerContainer) {
       this.innerContainerDOMNode = this.refs.innerContainer.getDOMNode();
     } else {
+      // We set this to null to essentially do a reset
+      // everytime the modal closes. If we don't, the modal will
+      // calculate height of old elements.
       this.innerContainerDOMNode = null;
     }
 
