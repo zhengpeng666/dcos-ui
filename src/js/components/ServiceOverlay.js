@@ -1,4 +1,5 @@
 import React from "react/addons";
+import _ from "underscore";
 const PropTypes = React.PropTypes;
 
 import Cluster from "../utils/Cluster";
@@ -28,11 +29,11 @@ export default class ServiceOverlay extends React.Component {
   }
 
   closeService() {
-    if (this.overlay) {
+    if (this.overlayEl) {
       // Remove the div that we created at the root of the dom.
-      React.unmountComponentAtNode(this.overlay);
-      document.body.removeChild(this.overlay);
-      this.overlay = null;
+      React.unmountComponentAtNode(this.overlayEl);
+      document.body.removeChild(this.overlayEl);
+      this.overlayEl = null;
       this.props.onServiceClose();
     }
   }
@@ -42,7 +43,7 @@ export default class ServiceOverlay extends React.Component {
     let serviceHealth = HealthLabels[service.health.key];
     let taskCount = "N/A";
 
-    if (typeof service.TASK_RUNNING === "number") {
+    if (_.isNumber(service.TASK_RUNNING)) {
       taskCount = service.TASK_RUNNING;
     }
 
@@ -84,9 +85,9 @@ export default class ServiceOverlay extends React.Component {
   renderService() {
     // Create a new div and append to body in order
     // to always be full screen.
-    this.overlay = document.createElement("div");
-    this.overlay.className = "service-overlay";
-    document.body.appendChild(this.overlay);
+    this.overlayEl = document.createElement("div");
+    this.overlayEl.className = "service-overlay";
+    document.body.appendChild(this.overlayEl);
 
     React.render(
       <div className="overlay-container">
@@ -95,7 +96,7 @@ export default class ServiceOverlay extends React.Component {
           src={Cluster.getServiceLink(this.props.service.name)}
           className="overlay-frame" />
       </div>,
-      this.overlay
+      this.overlayEl
     );
   }
 

@@ -35,14 +35,12 @@ var ServicesTable = React.createClass({
     };
   },
 
-  openService: function (service, event) {
+  handleServiceOpen: function (openedService, event) {
     event.preventDefault();
-    this.setState({
-      openedService: service
-    });
+    this.setState({openedService});
   },
 
-  onServiceClose: function () {
+  handleServiceClose: function () {
     if (this.isMounted()) {
       this.setState({
         openedService: null
@@ -63,7 +61,7 @@ var ServicesTable = React.createClass({
 
     return (
       <a ref={model.id}
-        onClick={this.openService.bind(this, model)}
+        onClick={this.handleServiceOpen.bind(this, model)}
         target="_blank"
         className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
@@ -206,7 +204,7 @@ var ServicesTable = React.createClass({
         <ServiceOverlay
           service={this.state.openedService}
           shouldOpen={!!this.state.openedService}
-          onServiceClose={this.onServiceClose} />
+          onServiceClose={this.handleServiceClose} />
       </div>
     );
   }

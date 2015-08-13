@@ -34,24 +34,21 @@ var ServiceList = React.createClass({
     };
   },
 
-  shouldComponentUpdate: function (nextProps) {
-    return !_.isEqual(this.props, nextProps);
+  shouldComponentUpdate: function (nextProps, nextState) {
+    return !_.isEqual(this.props, nextProps) ||
+      !_.isEqual(this.state, nextState);
   },
 
-  openService: function (service, event) {
+  handleServiceOpen: function (openedService, event) {
     event.preventDefault();
-    this.setState({
-      openedService: service
-    });
-    this.forceUpdate();
+    this.setState({openedService});
   },
 
-  onServiceClose: function () {
+  handleServiceClose: function () {
     if (this.isMounted()) {
       this.setState({
         openedService: null
       });
-      this.forceUpdate();
     }
   },
 
@@ -92,7 +89,7 @@ var ServiceList = React.createClass({
       if (service.webui_url && service.webui_url.length > 0) {
         title = (
           <a href="#"
-            onClick={this.openService.bind(this, service)}
+            onClick={this.handleServiceOpen.bind(this, service)}
             className="h3 flush-top flush-bottom"
             target="_blank">
             {service.name}
@@ -150,7 +147,7 @@ var ServiceList = React.createClass({
         <ServiceOverlay
           service={this.state.openedService}
           shouldOpen={!!this.state.openedService}
-          onServiceClose={this.onServiceClose} />
+          onServiceClose={this.handleServiceClose} />
       </div>
     );
   }
