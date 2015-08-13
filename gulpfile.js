@@ -39,10 +39,12 @@ var files = {
 };
 
 var webpackDevtool = "source-map";
+var webpackWatch = false;
 if (development) {
   // eval-source-map is the same thing as source-map,
   // except with caching. Don't use in production.
   webpackDevtool = "eval-source-map";
+  webpackWatch = true;
 }
 
 var webpackConfig = {
@@ -74,7 +76,7 @@ var webpackConfig = {
   resolve: {
     extensions: ["", ".js"]
   },
-  watch: true
+  watch: webpackWatch
 };
 
 gulp.task("browsersync", function () {
