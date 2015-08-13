@@ -38,8 +38,15 @@ var files = {
   html: "index.html"
 };
 
+var webpackDevtool = "source-map";
+if (development) {
+  // eval-source-map is the same thing as source-map,
+  // except with caching. Don't use in production.
+  webpackDevtool = "eval-source-map";
+}
+
 var webpackConfig = {
-  devtool: "eval-source-map",
+  devtool: webpackDevtool,
   entry: "./" + dirs.js + "/" + files.mainJs + ".js",
   output: {
     filename: dirs.dist + "/" + files.mainJsDist + ".js"
@@ -91,6 +98,7 @@ gulp.task("connect:server", function () {
   });
 });
 
+// Create a function so we can use it inside of webpack's watch function.
 var eslintFn = function () {
   return gulp.src([dirs.js + "/**/*.?(js|jsx)"])
     .pipe(eslint())
@@ -168,9 +176,10 @@ gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/**/*.less", ["less"]);
   gulp.watch(dirs.img + "/**/*", ["images"]);
   // Why aren't we watching any JS files? Because we use webpack's
-  // internal watch, which is faster due to caching.
+  // internal watch, which is faster due to insane caching.
 });
 
+// Create a function so we can use it inside of webpack's watch function.
 var replaceJsStringsFn = function (callback) {
   gulp.src(dirs.dist + "/**/*.?(js|jsx)")
     .pipe(replace("@@VERSION", packageInfo.version))
@@ -197,13 +206,13 @@ gulp.task("webpack", function (callback) {
     }));
 
     if (firstRun) {
-      // this runs on initial gulp webpack load
+      // This runs on initial gulp webpack load.
       firstRun = false;
       callback();
     } else {
-      // this runs after webpack's internal watch rebuild
+      // This runs after webpack's internal watch rebuild.
+      eslintFn();
       replaceJsStringsFn(function () {
-        // eslintFn();
         if (development) {
           browserSync.reload();
         }
