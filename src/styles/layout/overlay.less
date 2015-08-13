@@ -39,15 +39,23 @@
     }
 
     .overlay-nav-button {
+      display: flex;
+      align-items: center;
+
       .opacity(0.70);
 
       .icon {
         margin: @base-spacing-unit * 0.5;
       }
 
+
       &:hover {
         .opacity(1);
       }
+    }
+
+    .overlay-new-window-button {
+      flex-direction: row-reverse;
     }
   }
 }

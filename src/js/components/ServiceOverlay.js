@@ -73,8 +73,8 @@ export default class ServiceOverlay extends React.Component {
               overlay-nav-button
               overlay-new-window-button"
             >
-            Open in a New Window
             <i className="icon icon-small icon-new-window icon-small-white"></i>
+            Open in a New Window
           </a>
         </div>
       </div>
