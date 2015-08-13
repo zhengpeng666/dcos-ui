@@ -42,10 +42,6 @@ var Modal = React.createClass({
   componentDidMount: function () {
     this.forceUpdate();
 
-    if (this.refs.innerContainer) {
-      this.innerContainerDOMNode = this.refs.innerContainer.getDOMNode();
-    }
-
     window.addEventListener("resize", this.handleWindowResize);
   },
 
@@ -54,13 +50,9 @@ var Modal = React.createClass({
   },
 
   componentDidUpdate: function () {
-    if (this.refs.innerContainer) {
+    // Set DOM node for height calculation when we want to open after close
+    if (this.innerContainerDOMNode == null && this.props.open) {
       this.innerContainerDOMNode = this.refs.innerContainer.getDOMNode();
-    } else {
-      // We set this to null to essentially do a reset
-      // everytime the modal closes. If we don't, the modal will
-      // calculate height of old elements.
-      this.innerContainerDOMNode = null;
     }
 
     // We render once in order to compute content height,
@@ -87,10 +79,8 @@ var Modal = React.createClass({
   },
 
   closeModal: function () {
-    // We set this to false to essentially do a reset
-    // everytime the modal closes. If we don't, the modal will
-    // calculate height of old elements.
-    this.refs.innerContainer = null;
+    // Reset DOM node to prevent calculation of height of old elements
+    this.innerContainerDOMNode = null;
     this.props.onClose();
   },
 
