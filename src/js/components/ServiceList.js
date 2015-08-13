@@ -35,8 +35,10 @@ var ServiceList = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
-    return !_.isEqual(this.props, nextProps) ||
-      !_.isEqual(this.state, nextState);
+    var changedState =
+      nextState !== undefined && !_.isEqual(this.state, nextState);
+
+    return !_.isEqual(this.props, nextProps) || changedState;
   },
 
   handleServiceOpen: function (openedService, event) {
