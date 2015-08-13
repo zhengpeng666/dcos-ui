@@ -197,7 +197,6 @@ var Index = React.createClass({
     });
 
     this.renderIntercom();
-    isReady = true;
 
     return (
       <div>

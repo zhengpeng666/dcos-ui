@@ -113,5 +113,3 @@ ServiceOverlay.defaultProps = {
   onServiceClose: function () {},
   shouldOpen: false
 };
-
-module.exports = ServiceOverlay;
