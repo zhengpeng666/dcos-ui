@@ -25,7 +25,7 @@
     align-items: center;
 
     .overlay-header {
-      flex: 1;
+      flex: 3;
       color: @white;
 
       .overlay-subheader {
@@ -45,7 +45,16 @@
       .opacity(0.70);
 
       .icon {
-        margin: @base-spacing-unit * 0.5;
+        margin-right: @base-spacing-unit * 0.5;
+      }
+
+      .overlay-short-top {
+        margin-top: 1px;
+      }
+
+      &.overlay-new-window-button .icon {
+        margin-left: @base-spacing-unit * 0.5;
+        margin-right: 0;
       }
 
 

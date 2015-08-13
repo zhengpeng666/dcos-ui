@@ -53,7 +53,7 @@ export default class ServiceOverlay extends React.Component {
             className="button button-link button-inverse overlay-nav-button"
             onClick={this.closeService}>
             <i className="icon icon-small icon-back icon-small-white"></i>
-            Back
+            <span className="short-top">Back</span>
           </span>
         </div>
 
@@ -74,7 +74,7 @@ export default class ServiceOverlay extends React.Component {
               overlay-new-window-button"
             >
             <i className="icon icon-small icon-new-window icon-small-white"></i>
-            Open in a New Window
+            <span className="short-top">Open in a New Window</span>
           </a>
         </div>
       </div>
