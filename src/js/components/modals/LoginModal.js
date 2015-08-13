@@ -15,12 +15,6 @@ var LoginModal = React.createClass({
 
   mixins: [InternalStorageMixin],
 
-  getInitialState: function () {
-    return {
-      closing: false
-    };
-  },
-
   componentWillMount: function () {
     this.internalStorage_set({
       emailHasError: false,
@@ -44,12 +38,7 @@ var LoginModal = React.createClass({
       return;
     }
 
-    this.internalStorage_update({email: email});
-    this.setState({closing: true});
-  },
-
-  onClose: function () {
-    this.props.onLogin(this.internalStorage_get().email);
+    this.props.onLogin(email);
   },
 
   getFooter: function () {
@@ -88,15 +77,14 @@ var LoginModal = React.createClass({
 
     return (
       <Modal closeByBackdropClick={false}
-          titleText="Mesosphere DCOS"
-          subHeader={this.getSubHeader()}
-          footer={this.getFooter(data.email)}
-          showCloseButton={false}
-          shouldClose={this.state.closing}
-          onClose={this.onClose}
-          open={this.props.open}>
+        modalClassName="login-modal"
+        titleText="Mesosphere DCOS"
+        subHeader={this.getSubHeader()}
+        footer={this.getFooter()}
+        showCloseButton={false}
+        open={this.props.open}>
         <form className="flush-bottom"
-            onSubmit={this.handleSubmit}>
+          onSubmit={this.handleSubmit}>
           <div className={emailClassSet}>
             <input className="form-control flush-bottom"
               type="email"
