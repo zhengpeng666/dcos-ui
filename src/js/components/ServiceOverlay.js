@@ -49,7 +49,7 @@ export default class ServiceOverlay extends React.Component {
 
     return (
       <div className="container container-fluid flush-left flush-right overlay-nav">
-        <div className="overlay-button-container">
+        <div>
           <span
             className="button button-link button-inverse overlay-nav-button"
             onClick={this.handleServiceClose}>
@@ -65,15 +65,14 @@ export default class ServiceOverlay extends React.Component {
           </div>
         </h2>
 
-        <div className="overlay-button-container text-align-right">
+        <div>
           <a href={Cluster.getServiceLink(service.name)}
             target="_blank"
             title="Open in a new window"
             className="button button-link
               button-inverse
               text-align-right
-              overlay-nav-button
-              overlay-new-window-button"
+              overlay-nav-button"
             >
             <i className="icon icon-small icon-new-window icon-small-white"></i>
             <span className="overlay-short-top">Open in a New Window</span>
