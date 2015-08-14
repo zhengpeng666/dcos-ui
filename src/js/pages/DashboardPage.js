@@ -20,10 +20,10 @@ var SidebarActions = require("../events/SidebarActions");
 function getMesosState() {
   return {
     allocResources: MesosStateStore.getAllocResources(),
-    appsProcessed: MesosStateStore.isAppsProcessed(),
+    appsProcessed: MesosStateStore.get("appsProcessed"),
     // Need clone, modifying in place will make update components check for
     // change in the same array, in stead of two different references
-    failureRate: _.clone(MesosStateStore.getTaskFailureRate()),
+    taskFailureRate: _.clone(MesosStateStore.get("taskFailureRate")),
     hostsCount: MesosStateStore.getActiveHostsCount(),
     refreshRate: MesosStateStore.getRefreshRate(),
     services: MesosStateStore.getLatest().frameworks,
@@ -140,7 +140,7 @@ var DashboardPage = React.createClass({
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="Task Failure Rate" className="dashboard-panel">
               <TaskFailureTimeSeriesChart
-                data={data.failureRate}
+                data={data.taskFailureRate}
                 refreshRate={data.refreshRate} />
             </Panel>
           </div>

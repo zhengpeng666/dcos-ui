@@ -18,7 +18,7 @@ var SidebarStore = require("../stores/SidebarStore");
 
 function getMesosState() {
   return {
-    statesProcessed: MesosStateStore.isStatesProcessed()
+    statesProcessed: MesosStateStore.get("statesProcessed")
   };
 }
 
