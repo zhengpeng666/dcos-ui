@@ -42,10 +42,6 @@ var Modal = React.createClass({
   componentDidMount: function () {
     this.forceUpdate();
 
-    if (this.refs.innerContainer) {
-      this.innerContainerDOMNode = this.refs.innerContainer.getDOMNode();
-    }
-
     window.addEventListener("resize", this.handleWindowResize);
   },
 
@@ -54,7 +50,8 @@ var Modal = React.createClass({
   },
 
   componentDidUpdate: function () {
-    if (this.refs.innerContainer) {
+    // Set DOM node for height calculation when we want to open after close
+    if (this.innerContainerDOMNode == null && this.props.open) {
       this.innerContainerDOMNode = this.refs.innerContainer.getDOMNode();
     }
 
@@ -82,6 +79,8 @@ var Modal = React.createClass({
   },
 
   closeModal: function () {
+    // Reset DOM node to prevent calculation of height of old elements
+    this.innerContainerDOMNode = null;
     this.props.onClose();
   },
 
