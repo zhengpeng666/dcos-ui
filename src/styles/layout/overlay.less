@@ -67,3 +67,50 @@
     }
   }
 }
+
+& when (@screen-mini-enabled) {
+  @media (max-width: @screen-mini) {
+    .service-overlay .overlay-nav .overlay-nav-button {
+      padding: 0;
+      justify-content: center;
+
+      .overlay-short-top {
+        display: none;
+      }
+
+      .icon {
+        margin: 0;
+      }
+    }
+  }
+}
+
+& when (@screen-mini-enabled) {
+  @media (min-width: @screen-mini) {
+    .service-overlay .overlay-nav {
+
+      .overlay-button-container {
+        flex: 2;
+      }
+
+      .overlay-header {
+        flex: 1;
+      }
+    }
+  }
+}
+
+& when (@screen-small-enabled) {
+  @media (min-width: @screen-small) {
+    .service-overlay .overlay-nav {
+
+      .overlay-header {
+        flex: 1;
+      }
+
+      .overlay-button-container {
+        flex: 1;
+      }
+    }
+  }
+}
