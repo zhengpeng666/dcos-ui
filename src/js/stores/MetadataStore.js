@@ -1,16 +1,25 @@
 var _ = require("underscore");
-var EventEmitter = require("events").EventEmitter;
 
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var Stores = require("../utils/Stores");
 
-var _metadata = {};
+var MetadataStore = Stores.createStore({
 
-var MetadataStore = _.extend({}, EventEmitter.prototype, {
+  init: function () {
+    this.internalStorage_set({metadata: {}});
+  },
 
-  getAll: function () {
-    return _metadata;
+  mixins: [InternalStorageMixin],
+
+  get: function (key) {
+    return this.internalStorage_get()[key];
+  },
+
+  set: function (data) {
+    this.internalStorage_update(data);
   },
 
   emitChange: function (eventName) {
@@ -35,11 +44,12 @@ var MetadataStore = _.extend({}, EventEmitter.prototype, {
 
     switch (action.type) {
       case ActionTypes.REQUEST_METADATA:
-        var oldMetadata = _metadata;
-        _metadata = action.data;
+        var oldMetadata = MetadataStore.get("metadata");
+        var metadata = action.data;
 
         // only emitting on change
-        if (!_.isEqual(oldMetadata, _metadata)) {
+        if (!_.isEqual(oldMetadata, metadata)) {
+          MetadataStore.set({metadata});
           MetadataStore.emitChange(EventTypes.METADATA_CHANGE);
         }
         break;

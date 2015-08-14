@@ -36,12 +36,13 @@ var Sidebar = React.createClass({
   mixins: [State, InternalStorageMixin, TooltipMixin],
 
   componentWillMount: function () {
+    MetadataStore.init();
     MetadataActions.fetch();
 
     this.internalStorage_set({
       showIntercom: IntercomStore.get("isOpen"),
       mesosInfo: MesosStateStore.getLatest(),
-      metadata: MetadataStore.getAll()
+      metadata: MetadataStore.get("metadata")
     });
   },
 
@@ -90,7 +91,7 @@ var Sidebar = React.createClass({
   },
 
   onMetadataChange: function () {
-    this.internalStorage_update({metadata: MetadataStore.getAll()});
+    this.internalStorage_update({metadata: MetadataStore.get("metadata")});
   },
 
   onIntercomChange: function () {
