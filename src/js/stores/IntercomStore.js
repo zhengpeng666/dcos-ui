@@ -1,15 +1,16 @@
-var _ = require("underscore");
-var EventEmitter = require("events").EventEmitter;
-
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var Stores = require("../utils/Stores");
 
-var _isOpen = false;
+var IntercomStore = Stores.createStore({
 
-var IntercomStore = _.extend({}, EventEmitter.prototype, {
+  mixins: [InternalStorageMixin],
 
   init: function () {
+    this.internalStorage_set({isOpen: false});
+
     var intercom = global.Intercom;
     if (intercom != null) {
       // make sure to hide Intercom on load
@@ -21,20 +22,24 @@ var IntercomStore = _.extend({}, EventEmitter.prototype, {
     }
   },
 
-  isOpen: function () {
-    return _isOpen;
+  get: function (key) {
+    return this.internalStorage_get()[key];
+  },
+
+  set: function (data) {
+    this.internalStorage_update(data);
   },
 
   handleCallback: function (value) {
     // only handle change if there is one
-    if (_isOpen !== value) {
+    if (this.get("isOpen") !== value) {
       this.handleChange(value);
     }
   },
 
   handleChange: function (value) {
-    _isOpen = value;
-    IntercomStore.emitChange(EventTypes.INTERCOM_CHANGE);
+    this.set({isOpen: value});
+    this.emitChange(EventTypes.INTERCOM_CHANGE);
   },
 
   emitChange: function (eventName) {

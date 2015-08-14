@@ -39,7 +39,7 @@ var Sidebar = React.createClass({
     MetadataActions.fetch();
 
     this.internalStorage_set({
-      showIntercom: IntercomStore.isOpen(),
+      showIntercom: IntercomStore.get("isOpen"),
       mesosInfo: MesosStateStore.getLatest(),
       metadata: MetadataStore.getAll()
     });
@@ -94,7 +94,7 @@ var Sidebar = React.createClass({
   },
 
   onIntercomChange: function () {
-    this.internalStorage_update({showIntercom: IntercomStore.isOpen()});
+    this.internalStorage_update({showIntercom: IntercomStore.get("isOpen")});
     this.forceUpdate();
   },
 
