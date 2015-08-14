@@ -101,7 +101,7 @@ gulp.task("connect:server", function () {
 });
 
 // Create a function so we can use it inside of webpack's watch function.
-var eslintFn = function () {
+function eslintFn () {
   return gulp.src([dirs.js + "/**/*.?(js|jsx)"])
     .pipe(eslint())
     .pipe(eslint.formatEach("stylish", process.stderr));
@@ -182,7 +182,7 @@ gulp.task("watch", function () {
 });
 
 // Create a function so we can use it inside of webpack's watch function.
-var replaceJsStringsFn = function (callback) {
+function replaceJsStringsFn (callback) {
   gulp.src(dirs.dist + "/**/*.?(js|jsx)")
     .pipe(replace("@@VERSION", packageInfo.version))
     .pipe(replace("@@ENV", process.env.NODE_ENV))
@@ -192,7 +192,7 @@ var replaceJsStringsFn = function (callback) {
 
 // Use webpack to compile jsx into js.
 gulp.task("webpack", function (callback) {
-  var firstRun = true;
+  var isFirstRun = true;
 
   webpack(webpackConfig, function (err, stats) {
     if (err) {
@@ -207,9 +207,9 @@ gulp.task("webpack", function (callback) {
       timing: true
     }));
 
-    if (firstRun) {
+    if (isFirstRun) {
       // This runs on initial gulp webpack load.
-      firstRun = false;
+      isFirstRun = false;
       callback();
     } else {
       // This runs after webpack's internal watch rebuild.
