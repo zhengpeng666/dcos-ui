@@ -35,8 +35,11 @@ function sumResources(resourceList) {
 }
 
 /*
- * @param {Array} List of elements with a resources object,
- * each holding an array of time steps (states by element)
+ * @param {Array} List of time steps with a total_resources object,
+ * each holding a resource value of that time step (elements by state)
+ * @param {Array} List of time steps with a resources object,
+ * each holding a resource value of that time step (elements by state)
+ * @param {String} The key to look up the resources object
  * @return {Object} Each resource in the object holds a list of
  * time steps with summed resources of the provided list
  * {
@@ -75,8 +78,11 @@ function sumListResources(basisList, list, resourcesKey) {
 }
 
 /*
+ * @param {Array} List of time steps with a total_resources object,
+ * each holding a resource value of that time step (elements by state)
  * @param {Array} List of time steps with a resources object,
  * each holding a resource value of that time step (elements by state)
+ * @param {String} The key to look up the resources object
  * @return {Object} each resource in the object holds a list of
  * time steps with resources of the provided list
  * {
@@ -169,15 +175,19 @@ function getFailureRate(mesosState, prevMesosStatusesMap, newMesosStatusesMap) {
   };
 }
 
-// [{
-//   colorIndex: 0,
-//   name: "Marathon",
-//   cpus: [{date: request time, y: value}]
-//   disk: [{date: request time, y: value}]
-//   mem: [{date: request time, y: value}]
-// }]
-function getStatesByFramework() {
-  return _.chain(_mesosStates)
+/* @return {Array} List of frameworks with color and name details, etc.
+ * Each framework has its on set of resources. See getStatesByResource for
+ * more information.
+ * [{
+ *   colorIndex: 0,
+ *   name: "Marathon",
+ *   used_resorces: {
+ *     cpus: [...],
+ *     disk: [...],
+ *     mem: [...],
+ *   }
+ * }, ...]
+ */
 function getStatesByFramework(mesosStates) {
   return _.chain(mesosStates)
     .pluck("frameworks")
@@ -202,13 +212,26 @@ function getStatesByFramework(mesosStates) {
     .value();
 }
 
-// [{
-//   cpus: [{date: request time, value: absolute, percentage: value}]
-//   disk: [{date: request time, value: absolute, percentage: value}]
-//   mem: [{date: request time, value: absolute, percentage: value}]
-// }]
-function getHostResourcesBySlave(slave) {
-  return _.foldl(_mesosStates, function (memo, state) {
+/*
+ * @param {Array} List of time steps with a total_resources object,
+ * each holding a resource value of that time step (elements by state)
+ * @param {Object} The slave object to calculate resources from
+ * @return {Object} Calculated resources for the given slave
+ * {
+ *   cpus: [
+ *     {date: request time, value: cpus, percentage: of total_resources},
+ *     ...
+ *   ],
+ *   disk: [
+ *     {date: request time, value: disk, percentage: of total_resources},
+ *     ...
+ *   ]
+ *   mem: [
+ *     {date: request time, value: mem, percentage: of total_resources},
+ *     ...
+ *   ]
+ * }
+ */
 function getHostResourcesBySlave(mesosStates, slave) {
   return _.foldl(mesosStates, function (memo, state) {
     var foundSlave = _.findWhere(state.slaves, {id: slave.id});
@@ -234,18 +257,17 @@ function getHostResourcesBySlave(mesosStates, slave) {
   }, {cpus: [], mem: [], disk: []});
 }
 
-// [{
-//  ...
-//  id: "",
-//  hostname: "",
-//  tasks: {},
-//  frameworks: {},
-//  used_resources: []
-// }]
-function getStateByHosts() {
-  var data = _.last(_mesosStates);
-
-  return _.map(data.slaves, function (slave) {
+/*
+ * @return (Array) List of hosts with resources as time steps
+ * [{
+ *  ...
+ *  id: "",
+ *  hostname: "",
+ *  tasks: {},
+ *  frameworks: {},
+ *  used_resources: {cpus: [], mem: [], disk: []}
+ * }]
+ */
 function getStateByHosts(mesosStates) {
   return _.map(_.last(mesosStates).slaves, function (slave) {
     var _return = _.clone(slave);
