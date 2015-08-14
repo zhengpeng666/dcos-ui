@@ -4,6 +4,7 @@ jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../stores/MesosStateStore");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../stores/__tests__/fixtures/state.json");
+jest.dontMock("../../utils/Stores");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
@@ -35,9 +36,9 @@ describe("ServiceTable", function () {
     });
 
     it("should have loaders on all frameworks", function () {
-      expect(MesosStateStore.isAppsProcessed()).toBe(false);
+      expect(MesosStateStore.get("appsProcessed")).toBe(false);
 
-      var table = getTable(MesosStateStore.isAppsProcessed());
+      var table = getTable(MesosStateStore.get("appsProcessed"));
 
       this.frameworks.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(
@@ -54,9 +55,9 @@ describe("ServiceTable", function () {
     it("should have N/A health status on all frameworks",
         function () {
       MesosStateStore.onMarathonAppsError();
-      expect(MesosStateStore.isAppsProcessed()).toBe(true);
+      expect(MesosStateStore.get("appsProcessed")).toBe(true);
 
-      var table = getTable(MesosStateStore.isAppsProcessed());
+      var table = getTable(MesosStateStore.get("appsProcessed"));
 
       this.frameworks.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(

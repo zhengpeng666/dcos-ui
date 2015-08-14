@@ -1,6 +1,7 @@
 jest.dontMock("../NodesGridView");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../stores/MesosStateStore");
+jest.dontMock("../../utils/Stores");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
@@ -8,9 +9,7 @@ var TestUtils = React.addons.TestUtils;
 var NodesGridView = require("../NodesGridView");
 var MesosStateStore = require("../../stores/MesosStateStore");
 
-MesosStateStore.getLatest = function () {
-  return {frameworks: []};
-};
+MesosStateStore.set({lastMesosState: {frameworks: []}});
 
 MesosStateStore.addChangeListener = function () {};
 

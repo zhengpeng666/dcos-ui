@@ -1,5 +1,6 @@
 jest.dontMock("../DashboardPage");
 jest.dontMock("../../mixins/InternalStorageMixin");
+jest.dontMock("../../utils/Stores");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
