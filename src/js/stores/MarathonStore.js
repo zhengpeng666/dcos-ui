@@ -1,12 +1,13 @@
 var _ = require("underscore");
+
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
-var EventEmitter = require("events").EventEmitter;
 var HealthTypes = require("../constants/HealthTypes");
 var MarathonActions = require("../events/MarathonActions");
 var ServiceImages = require("../constants/ServiceImages");
+var Stores = require("../utils/Stores");
 
 var requestInterval = null;
 
@@ -26,7 +27,7 @@ function stopPolling() {
   }
 }
 
-var MarathonStore = _.extend({}, EventEmitter.prototype, {
+var MarathonStore = Stores.createStore({
 
   getFrameworkHealth: function (app) {
     if (app.healthChecks == null || app.healthChecks.length === 0) {
