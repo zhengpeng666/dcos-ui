@@ -241,7 +241,7 @@ var Modals = React.createClass({
       this.setState({showingVersionsModal: false});
     }.bind(this);
 
-    var versions = SidebarStore.getVersions();
+    var versions = SidebarStore.get("versions");
     return (
       <VersionsModal
         onClose={onClose}

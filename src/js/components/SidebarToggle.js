@@ -7,7 +7,7 @@ var SidebarStore = require("../stores/SidebarStore");
 
 function getSidebarState() {
   return {
-    isOpen: SidebarStore.isOpen()
+    isOpen: SidebarStore.get("isOpen")
   };
 }
 

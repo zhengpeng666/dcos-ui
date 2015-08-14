@@ -24,7 +24,7 @@ function getMesosState() {
 
 function getSidebarState() {
   return {
-    isOpen: SidebarStore.isOpen()
+    isOpen: SidebarStore.get("isOpen")
   };
 }
 
@@ -44,8 +44,9 @@ var Index = React.createClass({
   },
 
   componentWillMount: function () {
-    this.internalStorage_set(getSidebarState());
     MesosStateStore.init();
+    SidebarStore.init();
+    this.internalStorage_set(getSidebarState());
 
     var email = LocalStorageUtil.get("email");
     if (email != null) {
