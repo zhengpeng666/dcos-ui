@@ -38,8 +38,17 @@ var files = {
   html: "index.html"
 };
 
+var webpackDevtool = "source-map";
+var webpackWatch = false;
+if (development) {
+  // eval-source-map is the same thing as source-map,
+  // except with caching. Don't use in production.
+  webpackDevtool = "eval-source-map";
+  webpackWatch = true;
+}
+
 var webpackConfig = {
-  devtool: "source-map",
+  devtool: webpackDevtool,
   entry: "./" + dirs.js + "/" + files.mainJs + ".js",
   output: {
     filename: dirs.dist + "/" + files.mainJsDist + ".js"
@@ -48,7 +57,7 @@ var webpackConfig = {
     loaders: [
       {
         test: /\.js$/,
-        loader: "babel-loader"
+        loader: "babel-loader?cacheDirectory"
       }
     ],
     preLoaders: [
@@ -60,13 +69,14 @@ var webpackConfig = {
     ],
     postLoaders: [
       {
-        loader: "transform?envify"
+        loader: "transform/cacheable?envify"
       }
     ]
   },
   resolve: {
     extensions: ["", ".js"]
-  }
+  },
+  watch: webpackWatch
 };
 
 gulp.task("browsersync", function () {
@@ -90,11 +100,13 @@ gulp.task("connect:server", function () {
   });
 });
 
-gulp.task("eslint", function () {
+// Create a function so we can use it inside of webpack's watch function.
+function eslintFn () {
   return gulp.src([dirs.js + "/**/*.?(js|jsx)"])
     .pipe(eslint())
     .pipe(eslint.formatEach("stylish", process.stderr));
-});
+};
+gulp.task("eslint", eslintFn);
 
 gulp.task("images", function () {
   return gulp.src([dirs.img + "/**/*.*", "!" + dirs.img + "/**/_exports/**/*.*"])
@@ -144,6 +156,12 @@ gulp.task("minify-js", ["replace-js-strings"], function () {
     .pipe(gulp.dest(dirs.dist + "/" + dirs.jsDist));
 });
 
+gulp.task("reload", ["replace-js-strings"], function () {
+  if (development) {
+    browserSync.reload();
+  }
+});
+
 gulp.task("replace-js-strings", ["webpack"], function () {
   return gulp.src(dirs.dist + "/**/*.?(js|jsx)")
     .pipe(replace("@@VERSION", packageInfo.version))
@@ -158,25 +176,54 @@ gulp.task("swf", function () {
 
 gulp.task("watch", function () {
   gulp.watch(dirs.styles + "/**/*.less", ["less"]);
-  gulp.watch(dirs.js + "/**/*.?(js|jsx)", ["webpack", "replace-js-strings"]);
   gulp.watch(dirs.img + "/**/*", ["images"]);
+  // Why aren't we watching any JS files? Because we use webpack's
+  // internal watch, which is faster due to insane caching.
 });
 
-// Use webpack to compile jsx into js,
-gulp.task("webpack", ["eslint"], function (callback) {
-  // run webpack
-  webpack(webpackConfig, function (err) {
+// Create a function so we can use it inside of webpack's watch function.
+function replaceJsStringsFn (callback) {
+  gulp.src(dirs.dist + "/**/*.?(js|jsx)")
+    .pipe(replace("@@VERSION", packageInfo.version))
+    .pipe(replace("@@ENV", process.env.NODE_ENV))
+    .pipe(gulp.dest(dirs.dist))
+    .on('end', callback);
+};
+
+// Use webpack to compile jsx into js.
+gulp.task("webpack", function (callback) {
+  var isFirstRun = true;
+
+  webpack(webpackConfig, function (err, stats) {
     if (err) {
       throw new gutil.PluginError("webpack", err);
     }
-    if (development) {
-      browserSync.reload();
+
+    gutil.log("[webpack]", stats.toString({
+      children: false,
+      chunks: false,
+      colors: true,
+      modules: false,
+      timing: true
+    }));
+
+    if (isFirstRun) {
+      // This runs on initial gulp webpack load.
+      isFirstRun = false;
+      callback();
+    } else {
+      // This runs after webpack's internal watch rebuild.
+      eslintFn();
+      replaceJsStringsFn(function () {
+        if (development) {
+          browserSync.reload();
+        }
+      });
     }
-    callback();
   });
 });
 
-gulp.task("default", ["eslint", "webpack", "replace-js-strings", "less", "images", "swf", "html"]);
+gulp.task("default", ["webpack", "eslint", "replace-js-strings", "less", "images", "swf", "html", "reload"]);
 
 gulp.task("dist", ["default", "minify-css", "minify-js"]);
 
