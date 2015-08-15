@@ -3,14 +3,32 @@ import _ from "underscore";
 const PropTypes = React.PropTypes;
 
 import Cluster from "../utils/Cluster";
+import EventTypes from "../constants/EventTypes";
 import HealthLabels from "../constants/HealthLabels";
 import StringUtil from "../utils/StringUtil";
+import MesosStateStore from "../stores/MesosStateStore";
 
-const methodsToBind = ["handleServiceClose"];
+function getServiceFromName(name) {
+  let services = MesosStateStore.getLatest().frameworks;
+  let foundService = null;
+
+  services.forEach(function (service) {
+    if (service.name === name) {
+      foundService = service;
+    }
+  });
+
+  return foundService;
+}
 
 export default class ServiceOverlay extends React.Component {
 
   constructor() {
+    const methodsToBind = [
+      "handleServiceClose",
+      "onMesosSummaryChange",
+      "removeMesosStateListeners"
+    ];
     super();
 
     methodsToBind.forEach(function (method) {
@@ -19,28 +37,85 @@ export default class ServiceOverlay extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    let shouldOpen = nextProps.shouldOpen && !this.props.shouldOpen;
-    return shouldOpen && this.props.service !== nextProps.service;
+    var currentService = this.props.params.servicename;
+    var nextService = nextProps.params.servicename;
+
+    if (nextService && currentService !== nextService) {
+      this.service = getServiceFromName(nextService);
+
+      if (this.overlayEl) {
+        this.removeOverlay();
+      }
+
+      this.renderService();
+    }
+
+    return false;
   }
 
-  componentDidUpdate() {
-    if (this.props.shouldOpen) {
-      this.renderService();
+  componentDidMount() {
+    if (MesosStateStore.isStatesProcessed()) {
+      this.findAndRenderService();
+    } else {
+      this.addMesosStateListeners();
     }
   }
 
-  handleServiceClose() {
+  componentWillUnmount() {
     if (this.overlayEl) {
       // Remove the div that we created at the root of the dom.
-      React.unmountComponentAtNode(this.overlayEl);
-      document.body.removeChild(this.overlayEl);
+      this.removeOverlay();
       this.overlayEl = null;
       this.props.onServiceClose();
     }
   }
 
+  addMesosStateListeners() {
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
+    );
+  }
+
+  removeMesosStateListeners() {
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
+    );
+  }
+
+  onMesosSummaryChange() {
+    var state = MesosStateStore.isStatesProcessed();
+
+    if (state) {
+      this.removeMesosStateListeners();
+      this.findAndRenderService();
+    }
+  }
+
+  removeOverlay() {
+    React.unmountComponentAtNode(this.overlayEl);
+    document.body.removeChild(this.overlayEl);
+  }
+
+  handleServiceClose() {
+    window.history.back();
+  }
+
+  findAndRenderService() {
+    let serviceName = this.props.params.servicename;
+
+    if (serviceName) {
+      this.service = getServiceFromName(serviceName);
+
+      if (this.service) {
+        this.renderService();
+      } else {
+        location.hash = "#/services/";
+      }
+    }
+  }
+
   getServiceNav() {
-    let service = this.props.service;
+    let service = this.service;
     let serviceHealth = HealthLabels[service.health.key];
     let taskCount = "";
 
@@ -99,7 +174,7 @@ export default class ServiceOverlay extends React.Component {
       <div className="overlay-container">
         {this.getServiceNav()}
         <iframe
-          src={Cluster.getServiceLink(this.props.service.name)}
+          src={Cluster.getServiceLink(this.service.name)}
           className="overlay-frame" />
       </div>,
       this.overlayEl

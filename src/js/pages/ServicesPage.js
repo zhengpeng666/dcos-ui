@@ -13,6 +13,7 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 var SidebarActions = require("../events/SidebarActions");
+var RouteHandler = require("react-router").RouteHandler;
 
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
@@ -211,6 +212,7 @@ var ServicesPage = React.createClass({
     return (
       <Page title="Services">
         {this.getContents(isEmpty)}
+        <RouteHandler />
       </Page>
     );
   }

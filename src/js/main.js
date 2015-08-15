@@ -24,11 +24,14 @@ var NodesGridView = require("./components/NodesGridView");
 var Index = require("./pages/Index");
 var ServicesPage = require("./pages/ServicesPage");
 var NotFoundPage = require("./pages/NotFoundPage");
+var ServiceOverlay = require("./components/ServiceOverlay");
 
 var routes = (
   <Route name="home" path="/" handler={Index}>
     <Route name="dashboard" path="dashboard/?" handler={DashboardPage} />
-    <Route name="services" path="services/?" handler={ServicesPage} />
+    <Route name="services" path="services/?" handler={ServicesPage}>
+      <Route name="service-ui" path="ui/:servicename" handler={ServiceOverlay} />
+    </Route>
     <Route name="nodes" path="nodes/?" handler={NodesPage}>
       <Route name="nodes-list" path="list/?" handler={HostTable} />
       <Route name="nodes-grid" path="grid/?" handler={NodesGridView} />

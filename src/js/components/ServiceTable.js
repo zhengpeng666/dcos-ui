@@ -1,5 +1,6 @@
 var _ = require("underscore");
 var classNames = require("classnames");
+var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var HealthLabels = require("../constants/HealthLabels");
@@ -7,7 +8,6 @@ var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var Maths = require("../utils/Maths");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
-var ServiceOverlay = require("../components/ServiceOverlay");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
@@ -29,25 +29,6 @@ var ServicesTable = React.createClass({
     };
   },
 
-  getInitialState: function () {
-    return {
-      openedService: null
-    };
-  },
-
-  handleServiceOpen: function (openedService, event) {
-    event.preventDefault();
-    this.setState({openedService});
-  },
-
-  handleServiceClose: function () {
-    if (this.isMounted()) {
-      this.setState({
-        openedService: null
-      });
-    }
-  },
-
   renderHeadline: function (prop, model) {
     if (model.webui_url.length === 0) {
       return (
@@ -60,16 +41,15 @@ var ServicesTable = React.createClass({
     }
 
     return (
-      <a ref={model.id}
-        onClick={this.handleServiceOpen.bind(this, model)}
-        target="_blank"
+      <Link to="service-ui"
+        params={{servicename: model.name}}
         className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
           <img className="icon icon-small border-radius"
           src={model.images["icon-small"]} />
           {model[prop]}
         </span>
-      </a>
+      </Link>
     );
   },
 
@@ -201,10 +181,6 @@ var ServicesTable = React.createClass({
           keys={["id"]}
           sortBy={{prop: "name", order: "desc"}}
           sortFunc={ResourceTableUtil.getSortFunction("name")} />
-        <ServiceOverlay
-          service={this.state.openedService}
-          shouldOpen={!!this.state.openedService}
-          onServiceClose={this.handleServiceClose} />
       </div>
     );
   }
