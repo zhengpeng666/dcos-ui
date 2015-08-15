@@ -41,13 +41,10 @@ export default class ServiceOverlay extends React.Component {
     var nextService = nextProps.params.servicename;
 
     if (nextService && currentService !== nextService) {
-      this.service = getServiceFromName(nextService);
-
       if (this.overlayEl) {
         this.removeOverlay();
       }
-
-      this.renderService();
+      this.findAndRenderService(nextService);
     }
 
     return false;
@@ -65,7 +62,6 @@ export default class ServiceOverlay extends React.Component {
     if (this.overlayEl) {
       // Remove the div that we created at the root of the dom.
       this.removeOverlay();
-      this.overlayEl = null;
       this.props.onServiceClose();
     }
   }
@@ -94,14 +90,15 @@ export default class ServiceOverlay extends React.Component {
   removeOverlay() {
     React.unmountComponentAtNode(this.overlayEl);
     document.body.removeChild(this.overlayEl);
+    this.overlayEl = null;
   }
 
   handleServiceClose() {
     window.history.back();
   }
 
-  findAndRenderService() {
-    let serviceName = this.props.params.servicename;
+  findAndRenderService(name) {
+    let serviceName = name || this.props.params.servicename;
 
     if (serviceName) {
       this.service = getServiceFromName(serviceName);
