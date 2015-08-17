@@ -1,6 +1,8 @@
 import React from "react/addons";
+import Router from "react-router";
 import _ from "underscore";
 const PropTypes = React.PropTypes;
+
 
 import Cluster from "../utils/Cluster";
 import EventTypes from "../constants/EventTypes";
@@ -94,7 +96,7 @@ export default class ServiceOverlay extends React.Component {
   }
 
   handleServiceClose() {
-    window.history.back();
+    Router.History.back();
   }
 
   findAndRenderService(name) {
@@ -106,6 +108,9 @@ export default class ServiceOverlay extends React.Component {
       if (this.service) {
         this.renderService();
       } else {
+        // Didn't find any services that match. Fallback to ServicesPage.
+        // This is here until we find a way to use the react-router Navigation
+        // mixin.
         location.hash = "#/services/";
       }
     }
