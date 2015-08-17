@@ -57,12 +57,13 @@ function sumResources(resourceList) {
  *   ]
  * }
  */
-function sumListResources(basisList, list, resourcesKey) {
+function sumListResources(list, resourcesKey) {
+  var mesosStates = MesosStateStore.get("mesosStates");
   return _.foldl(list, function (memo, element) {
     _.each(memo, function (value, key) {
       var values = element[resourcesKey][key];
       _.each(values, function (val, i) {
-        var max = Math.max(1, basisList[i].total_resources[key]);
+        var max = Math.max(1, mesosStates[i].total_resources[key]);
         if (value[i] == null) {
           value.push({date: val.date});
           value[i].value = 0;
@@ -100,12 +101,13 @@ function sumListResources(basisList, list, resourcesKey) {
  *   ]
  * }
  */
-function getStatesByResource(basisList, list, resourcesKey) {
+function getStatesByResource(list, resourcesKey) {
+  var mesosStates = MesosStateStore.get("mesosStates");
   var values = {cpus: [], disk: [], mem: []};
   return _.foldl(values, function (memo, arr, r) {
     _.each(list, function (state, i) {
       var value = state[resourcesKey][r];
-      var max = Math.max(1, basisList[i].total_resources[r]);
+      var max = Math.max(1, mesosStates[i].total_resources[r]);
       memo[r].push({
         date: state.date,
         value: Maths.round(value, 2),
@@ -145,7 +147,9 @@ function getFrameworksTaskTotals(frameworks) {
 }
 
 // Caluculate a failure rate
-function getFailureRate(mesosState, prevMesosStatusesMap, newMesosStatusesMap) {
+function getFailureRate(mesosState, prevMesosState) {
+  var prevMesosStatusesMap = getFrameworksTaskTotals(prevMesosState.frameworks);
+  var newMesosStatusesMap = getFrameworksTaskTotals(mesosState.frameworks);
   var failed = 0;
   var successful = 0;
   var diff = {};
@@ -188,7 +192,8 @@ function getFailureRate(mesosState, prevMesosStatusesMap, newMesosStatusesMap) {
  *   }
  * }, ...]
  */
-function getStatesByFramework(mesosStates) {
+function getStatesByFramework() {
+  var mesosStates = MesosStateStore.get("mesosStates");
   return _.chain(mesosStates)
     .pluck("frameworks")
     .flatten()
@@ -200,22 +205,16 @@ function getStatesByFramework(mesosStates) {
 
       return _.extend(
         lastFramework,
-        {
-          used_resources: getStatesByResource(
-            mesosStates,
-            framework,
-            "used_resources"
-          )
-        }
+        {used_resources: getStatesByResource(framework, "used_resources")}
       );
     })
     .value();
 }
 
-/*
- * @param {Array} List of time steps with a total_resources object,
+/**
+ * @param {Array} mesosStates of time steps with a total_resources object,
  * each holding a resource value of that time step (elements by state)
- * @param {Object} The slave object to calculate resources from
+ * @param {Object} slave object to calculate resources from
  * @return {Object} Calculated resources for the given slave
  * {
  *   cpus: [
@@ -268,7 +267,8 @@ function getHostResourcesBySlave(mesosStates, slave) {
  *  used_resources: {cpus: [], mem: [], disk: []}
  * }]
  */
-function getStateByHosts(mesosStates) {
+function getStateByHosts() {
+  var mesosStates = MesosStateStore.get("mesosStates");
   return _.map(_.last(mesosStates).slaves, function (slave) {
     var _return = _.clone(slave);
     _return.used_resources = getHostResourcesBySlave(mesosStates, slave);
@@ -461,7 +461,7 @@ var MesosStateStore = Store.createStore({
 
   getFrameworks: function (filterOptions) {
     filterOptions = filterOptions || {};
-    var frameworks = getStatesByFramework(this.get("mesosStates"));
+    var frameworks = getStatesByFramework();
 
     if (filterOptions) {
       if (filterOptions.healthFilter != null) {
@@ -480,15 +480,11 @@ var MesosStateStore = Store.createStore({
   },
 
   getTotalFrameworksResources: function (frameworks) {
-    return sumListResources(
-      this.get("mesosStates"),
-      frameworks,
-      "used_resources"
-    );
+    return sumListResources(frameworks, "used_resources");
   },
 
   getTotalHostsResources: function (hosts) {
-    return sumListResources(this.get("mesosStates"), hosts, "used_resources");
+    return sumListResources(hosts, "used_resources");
   },
 
   getFrameworksWithHostsCount: function (hosts) {
@@ -497,7 +493,7 @@ var MesosStateStore = Store.createStore({
 
   getHosts: function (filterOptions) {
     filterOptions = filterOptions || {};
-    var hosts = getStateByHosts(this.get("mesosStates"));
+    var hosts = getStateByHosts();
 
     if (filterOptions) {
       if (filterOptions.byServiceFilter != null) {
@@ -564,12 +560,12 @@ var MesosStateStore = Store.createStore({
 
   getTotalResources: function () {
     var mesosStates = this.get("mesosStates");
-    return getStatesByResource(mesosStates, mesosStates, "total_resources");
+    return getStatesByResource(mesosStates, "total_resources");
   },
 
   getAllocResources: function () {
     var mesosStates = this.get("mesosStates");
-    return getStatesByResource(mesosStates, mesosStates, "used_resources");
+    return getStatesByResource(mesosStates, "used_resources");
   },
 
   emitChange: function (eventName) {
@@ -674,16 +670,7 @@ var MesosStateStore = Store.createStore({
   },
 
   processFailureRate: function (mesosState) {
-    var prevMesosStatusesMap = this.get("prevMesosStatusesMap");
-    var newMesosStatusesMap = getFrameworksTaskTotals(mesosState.frameworks);
-    var currentFailureRate = getFailureRate(
-      mesosState,
-      prevMesosStatusesMap,
-      newMesosStatusesMap
-    );
-
-    // Set for next request
-    this.set({prevMesosStatusesMap: newMesosStatusesMap});
+    var currentFailureRate = getFailureRate(mesosState, this.getLatest());
 
     var taskFailureRate = this.get("taskFailureRate");
     taskFailureRate.push(currentFailureRate);
