@@ -1,13 +1,14 @@
 import React from "react/addons";
-const PropTypes = React.PropTypes;
 import Router from "react-router";
 import _ from "underscore";
 
 import Cluster from "../utils/Cluster";
 import EventTypes from "../constants/EventTypes";
 import HealthLabels from "../constants/HealthLabels";
-import StringUtil from "../utils/StringUtil";
 import MesosStateStore from "../stores/MesosStateStore";
+import StringUtil from "../utils/StringUtil";
+
+const PropTypes = React.PropTypes;
 
 function getServiceFromName(name) {
   let services = MesosStateStore.getLatest().frameworks;
