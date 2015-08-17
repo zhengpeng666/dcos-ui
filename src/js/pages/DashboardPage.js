@@ -81,7 +81,7 @@ var DashboardPage = React.createClass({
   getServicesList: function (_services) {
     // Pick out only the data we need.
     var services = _.map(_services, function (service) {
-      return _.pick(service, "name", "health", "webui_url");
+      return _.pick(service, "name", "health", "webui_url", "TASK_RUNNING");
     });
 
     var sortedServices = _.sortBy(services, function (service) {

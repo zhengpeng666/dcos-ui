@@ -1,10 +1,10 @@
 var _ = require("underscore");
 var React = require("react");
 
-var Cluster = require("../utils/Cluster");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var List = require("./List");
+var ServiceOverlay = require("../components/ServiceOverlay");
 
 var STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
@@ -28,8 +28,30 @@ var ServiceList = React.createClass({
     };
   },
 
-  shouldComponentUpdate: function (nextProps) {
-    return !_.isEqual(this.props, nextProps);
+  getInitialState: function () {
+    return {
+      openedService: null
+    };
+  },
+
+  shouldComponentUpdate: function (nextProps, nextState) {
+    var changedState =
+      nextState !== undefined && !_.isEqual(this.state, nextState);
+
+    return !_.isEqual(this.props, nextProps) || changedState;
+  },
+
+  handleServiceOpen: function (openedService, event) {
+    event.preventDefault();
+    this.setState({openedService});
+  },
+
+  handleServiceClose: function () {
+    if (this.isMounted()) {
+      this.setState({
+        openedService: null
+      });
+    }
   },
 
   getServices: function (services, healthProcessed) {
@@ -68,7 +90,8 @@ var ServiceList = React.createClass({
 
       if (service.webui_url && service.webui_url.length > 0) {
         title = (
-          <a href={Cluster.getServiceLink(service.name)}
+          <a href="#"
+            onClick={this.handleServiceOpen.bind(this, service)}
             className="h3 flush-top flush-bottom"
             target="_blank">
             {service.name}
@@ -87,7 +110,7 @@ var ServiceList = React.createClass({
           textAlign: "right"
         }
       };
-    });
+    }, this);
   },
 
   getNoServicesMessage: function () {
@@ -120,7 +143,15 @@ var ServiceList = React.createClass({
   },
 
   render: function () {
-    return this.getContent();
+    return (
+      <div>
+        {this.getContent()}
+        <ServiceOverlay
+          service={this.state.openedService}
+          shouldOpen={!!this.state.openedService}
+          onServiceClose={this.handleServiceClose} />
+      </div>
+    );
   }
 });
 

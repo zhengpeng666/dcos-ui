@@ -1,4 +1,5 @@
 jest.dontMock("../ServiceList");
+jest.dontMock("../ServiceOverlay");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
