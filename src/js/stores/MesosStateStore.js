@@ -34,14 +34,12 @@ function sumResources(resourceList) {
   }, {cpus: 0, mem: 0, disk: 0});
 }
 
-/*
- * @param {Array} List of time steps with a total_resources object,
+/**
+ * @param {Array} list of time steps with a resources object,
  * each holding a resource value of that time step (elements by state)
- * @param {Array} List of time steps with a resources object,
- * each holding a resource value of that time step (elements by state)
- * @param {String} The key to look up the resources object
+ * @param {String} resourcesKey to look up the resources object
  * @return {Object} Each resource in the object holds a list of
- * time steps with summed resources of the provided list
+ *   time steps with summed resources of the provided list
  * {
  *   cpus: [
  *     {date: request time, value: total cpus, percentage: of total_resources},
@@ -78,12 +76,10 @@ function sumListResources(list, resourcesKey) {
   }, {cpus: [], mem: [], disk: []});
 }
 
-/*
- * @param {Array} List of time steps with a total_resources object,
+/**
+ * @param {Array} list of time steps with a resources object,
  * each holding a resource value of that time step (elements by state)
- * @param {Array} List of time steps with a resources object,
- * each holding a resource value of that time step (elements by state)
- * @param {String} The key to look up the resources object
+ * @param {String} resourcesKey to look up the resources object
  * @return {Object} each resource in the object holds a list of
  * time steps with resources of the provided list
  * {
@@ -179,7 +175,8 @@ function getFailureRate(mesosState, prevMesosState) {
   };
 }
 
-/* @return {Array} List of frameworks with color and name details, etc.
+/**
+ * @return {Array} List of frameworks with color and name details, etc.
  * Each framework has its on set of resources. See getStatesByResource for
  * more information.
  * [{
@@ -256,8 +253,8 @@ function getHostResourcesBySlave(mesosStates, slave) {
   }, {cpus: [], mem: [], disk: []});
 }
 
-/*
- * @return (Array) List of hosts with resources as time steps
+/**
+ * @return {Array} List of hosts with resources as time steps
  * [{
  *  ...
  *  id: "",
@@ -618,10 +615,10 @@ var MesosStateStore = Store.createStore({
     }
   },
 
-  /*
-   * @param (Array) List of frameworks to normalize
-   * @param (Date) Time step for the current data
-   * @return (Array) List of frameworks with normalized data
+  /**
+   * @param {Array} frameworks to normalize
+   * @param {Date} date Time step for the current data
+   * @return {Array} List of frameworks with normalized data
    * [{
    *   frameworks:[{
    *     colorIndex: 0,
