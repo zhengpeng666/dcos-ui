@@ -2,9 +2,9 @@ var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var Stores = require("../utils/Stores");
+var Store = require("../utils/Store");
 
-var SidebarStore = Stores.createStore({
+var SidebarStore = Store.createStore({
 
   mixins: [InternalStorageMixin],
 

@@ -10,7 +10,7 @@ jest.dontMock("./fixtures/MockMarathonApps");
 jest.dontMock("./fixtures/MockAppMetadata");
 jest.dontMock("./fixtures/MockParsedAppMetadata");
 jest.dontMock("../../utils/RequestUtil");
-jest.dontMock("../../utils/Stores");
+jest.dontMock("../../utils/Store");
 
 var AppDispatcher = require("../../events/AppDispatcher");
 var ActionTypes = require("../../constants/ActionTypes");

@@ -10,7 +10,7 @@ var MarathonStore = require("./MarathonStore");
 var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
 var ServiceImages = require("../constants/ServiceImages");
-var Stores = require("../utils/Stores");
+var Store = require("../utils/Store");
 var StringUtil = require("../utils/StringUtil");
 var TimeScales = require("../constants/TimeScales");
 
@@ -402,7 +402,7 @@ function addTimestampsToData(data, timeStep) {
   });
 }
 
-var MesosStateStore = Stores.createStore({
+var MesosStateStore = Store.createStore({
 
   mixins: [InternalStorageMixin],
 

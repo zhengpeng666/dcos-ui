@@ -7,7 +7,7 @@ var EventTypes = require("../constants/EventTypes");
 var HealthTypes = require("../constants/HealthTypes");
 var MarathonActions = require("../events/MarathonActions");
 var ServiceImages = require("../constants/ServiceImages");
-var Stores = require("../utils/Stores");
+var Store = require("../utils/Store");
 
 var requestInterval = null;
 
@@ -27,7 +27,7 @@ function stopPolling() {
   }
 }
 
-var MarathonStore = Stores.createStore({
+var MarathonStore = Store.createStore({
 
   getFrameworkHealth: function (app) {
     if (app.healthChecks == null || app.healthChecks.length === 0) {

@@ -4,9 +4,9 @@ var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var Stores = require("../utils/Stores");
+var Store = require("../utils/Store");
 
-var MetadataStore = Stores.createStore({
+var MetadataStore = Store.createStore({
 
   init: function () {
     this.internalStorage_set({metadata: {}});
