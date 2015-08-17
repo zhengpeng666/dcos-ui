@@ -28,6 +28,7 @@ export default class ServiceOverlay extends React.Component {
     const methodsToBind = [
       "handleServiceClose",
       "onMesosSummaryChange",
+      "onPopState",
       "removeMesosStateListeners"
     ];
     super();
@@ -98,6 +99,11 @@ export default class ServiceOverlay extends React.Component {
     Router.History.back();
   }
 
+  onPopState() {
+    this.context.router.transitionTo("services");
+    window.removeEventListener('popstate', this.onPopState);
+  }
+
   findAndRenderService(name) {
     let serviceName = name || this.props.params.servicename;
 
@@ -107,8 +113,13 @@ export default class ServiceOverlay extends React.Component {
       if (this.service) {
         this.renderService();
       } else {
-        // Didn't find any services that match. Fallback to ServicesPage.
-        window.location.hash = "#/services/";
+        // Did not find a service.
+        // We do this in order to not break the user's back button.
+        // if we go to /services/ui/nonExistantService and redirect to /services
+        // and the user presses back, they'll be stuck in a loop.
+        // Doing this prevents that.
+        window.addEventListener('popstate', this.onPopState);
+        Router.History.back();
       }
     }
   }
@@ -193,4 +204,8 @@ ServiceOverlay.propTypes = {
 ServiceOverlay.defaultProps = {
   onServiceClose: function () {},
   shouldOpen: false
+};
+
+ServiceOverlay.contextTypes = {
+  router: React.PropTypes.func
 };
