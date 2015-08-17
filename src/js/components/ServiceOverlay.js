@@ -4,6 +4,7 @@ const PropTypes = React.PropTypes;
 
 import Cluster from "../utils/Cluster";
 import HealthLabels from "../constants/HealthLabels";
+import StringUtil from "../utils/Strings";
 
 const methodsToBind = ["handleServiceClose"];
 
@@ -41,10 +42,15 @@ export default class ServiceOverlay extends React.Component {
   getServiceNav() {
     let service = this.props.service;
     let serviceHealth = HealthLabels[service.health.key];
-    let taskCount = "N/A";
+    let taskCount = "Tasks N/A";
 
     if (_.isNumber(service.TASK_RUNNING)) {
-      taskCount = service.TASK_RUNNING;
+      var pluralized = StringUtil.pluralize("task", service.TASK_RUNNING);
+      taskCount = service.TASK_RUNNING + " " + pluralized;
+    }
+
+    if (serviceHealth === "N/A") {
+      serviceHealth = "Health N/A";
     }
 
     return (
