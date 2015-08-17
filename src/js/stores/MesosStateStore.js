@@ -10,7 +10,7 @@ var MarathonStore = require("./MarathonStore");
 var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
 var ServiceImages = require("../constants/ServiceImages");
-var Strings = require("../utils/Strings");
+var StringUtil = require("../utils/StringUtil");
 var TimeScales = require("../constants/TimeScales");
 
 var _failureRates = [];
@@ -344,7 +344,7 @@ function activeHostsCountOverTime() {
 }
 
 function filterByString(objects, key, searchString) {
-  var searchPattern = new RegExp(Strings.escapeForRegExp(searchString), "i");
+  var searchPattern = new RegExp(StringUtil.escapeForRegExp(searchString), "i");
 
   return _.filter(objects, function (obj) {
     return searchPattern.test(obj[key]);

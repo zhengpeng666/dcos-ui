@@ -3,7 +3,7 @@ var Strings = {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
   },
 
-  pluralize: function(string, arity) {
+  pluralize: function (string, arity) {
     if (arity == null) {
       arity = 2;
     }
@@ -12,7 +12,7 @@ var Strings = {
       return "";
     }
 
-    arity = parseInt(arity, 10);
+    arity = parseInt(arity.length, 10);
 
     if (arity !== 1) {
       string = string.replace(/y$/, "ie") + "s";
