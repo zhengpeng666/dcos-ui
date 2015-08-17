@@ -3,18 +3,16 @@ var _ = require("underscore");
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
-var GetSetInternalStorageMixin =
-  require("../mixins/GetSetInternalStorageMixin");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var GetSetMixin = require("../mixins/GetSetMixin");
 var Store = require("../utils/Store");
 
 var MetadataStore = Store.createStore({
 
   init: function () {
-    this.internalStorage_set({metadata: {}});
+    this.set({metadata: {}});
   },
 
-  mixins: [InternalStorageMixin, GetSetInternalStorageMixin],
+  mixins: [GetSetMixin],
 
   emitChange: function (eventName) {
     this.emit(eventName);

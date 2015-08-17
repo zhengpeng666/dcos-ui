@@ -3,9 +3,8 @@ var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 jest.dontMock("../Dropdown");
-jest.dontMock("../../mixins/GetSetInternalStorageMixin");
+jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("./fixtures/MockFrameworks");
-jest.dontMock("../../mixins/InternalStorageMixin");
 
 var Dropdown = require("../Dropdown");
 var MockFrameworks = require("./fixtures/MockFrameworks");

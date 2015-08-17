@@ -4,10 +4,8 @@ var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
-var GetSetInternalStorageMixin =
-  require("../mixins/GetSetInternalStorageMixin");
 var HealthTypes = require("../constants/HealthTypes");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var GetSetMixin = require("../mixins/GetSetMixin");
 var MarathonStore = require("./MarathonStore");
 var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
@@ -406,7 +404,7 @@ function addTimestampsToData(data, timeStep) {
 
 var MesosStateStore = Store.createStore({
 
-  mixins: [InternalStorageMixin, GetSetInternalStorageMixin],
+  mixins: [GetSetMixin],
 
   init: function () {
 
@@ -414,7 +412,7 @@ var MesosStateStore = Store.createStore({
       return;
     }
 
-    this.internalStorage_set({
+    this.set({
       appsProcessed: false,
       frameworkIDs: [],
       frameworkHealth: {},

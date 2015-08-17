@@ -1,6 +1,6 @@
-jest.dontMock("../../mixins/GetSetInternalStorageMixin");
-jest.dontMock("../NodesGridView");
+jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../mixins/InternalStorageMixin");
+jest.dontMock("../NodesGridView");
 jest.dontMock("../../stores/MesosStateStore");
 jest.dontMock("../../utils/Store");
 
