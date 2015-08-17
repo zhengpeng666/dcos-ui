@@ -35,6 +35,9 @@ function sumResources(resourceList) {
 }
 
 /**
+ * This function will create a single object of states with the sum of
+ * resources in actual value and percentage of each step in the given list.
+ *
  * @param {Array} list of time steps with a resources object,
  * each holding a resource value of that time step (elements by state)
  * @param {String} resourcesKey to look up the resources object
@@ -77,6 +80,9 @@ function sumListResources(list, resourcesKey) {
 }
 
 /**
+ * This function will transpose a list of states into an object of resources
+ * with an equal list of steps for each resource
+ *
  * @param {Array} list of time steps with a resources object,
  * each holding a resource value of that time step (elements by state)
  * @param {String} resourcesKey to look up the resources object
@@ -176,6 +182,9 @@ function getFailureRate(mesosState, prevMesosState) {
 }
 
 /**
+ * This function will create a list of frameworks with an object of used
+ * resources. Each resource holds a list of steps equal to the mesos states
+ *
  * @return {Array} List of frameworks with color and name details, etc.
  * Each framework has its on set of resources. See getStatesByResource for
  * more information.
@@ -209,6 +218,9 @@ function getStatesByFramework() {
 }
 
 /**
+ * Given mesos states and a slave, this function will create an object of used
+ * resources. Each resource holds a list of steps equal to the mesos states
+ *
  * @param {Array} mesosStates of time steps with a total_resources object,
  * each holding a resource value of that time step (elements by state)
  * @param {Object} slave object to calculate resources from
@@ -254,6 +266,9 @@ function getHostResourcesBySlave(mesosStates, slave) {
 }
 
 /**
+ * This function will create a list of hosts with an object of used
+ * resources. Each resource holds a list of steps equal to the mesos states
+ *
  * @return {Array} List of hosts with resources as time steps
  * [{
  *  ...
@@ -615,6 +630,9 @@ var MesosStateStore = Store.createStore({
   },
 
   /**
+   * This function will normalize a given framwork list adding necessary
+   * information to the frameworks and mesos states
+   *
    * @param {Array} frameworks to normalize
    * @param {Date} date Time step for the current data
    * @return {Array} List of frameworks with normalized data
