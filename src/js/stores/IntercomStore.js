@@ -29,8 +29,8 @@ var IntercomStore = Store.createStore({
     }
   },
 
-  handleChange: function (value) {
-    this.set({isOpen: value});
+  handleChange: function (isOpen) {
+    this.set({isOpen});
     this.emitChange(EventTypes.INTERCOM_CHANGE);
   },
 
