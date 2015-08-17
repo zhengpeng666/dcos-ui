@@ -4,6 +4,7 @@ jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../../config/Config");
 jest.dontMock("../../mixins/InternalStorageMixin");
+jest.dontMock("../../mixins/GetSetInternalStorageMixin");
 jest.dontMock("../MesosStateStore");
 jest.dontMock("./fixtures/MockStates");
 jest.dontMock("./fixtures/MockMarathonApps");

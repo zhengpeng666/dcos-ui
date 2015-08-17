@@ -4,6 +4,7 @@ var TestUtils = React.addons.TestUtils;
 
 jest.dontMock("../Dropdown");
 jest.dontMock("../FilterByService");
+jest.dontMock("../../mixins/GetSetInternalStorageMixin");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("./fixtures/MockFrameworks");
 

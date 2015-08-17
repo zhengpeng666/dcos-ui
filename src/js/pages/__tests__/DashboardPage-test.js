@@ -1,4 +1,5 @@
 jest.dontMock("../DashboardPage");
+jest.dontMock("../../mixins/GetSetInternalStorageMixin");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../utils/Store");
 

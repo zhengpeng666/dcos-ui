@@ -1,26 +1,20 @@
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
+var GetSetInternalStorageMixin =
+  require("../mixins/GetSetInternalStorageMixin");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var Store = require("../utils/Store");
 
 var SidebarStore = Store.createStore({
 
-  mixins: [InternalStorageMixin],
+  mixins: [InternalStorageMixin, GetSetInternalStorageMixin],
 
   init: function () {
     this.internalStorage_set({
       isOpen: false,
       versions: {}
     });
-  },
-
-  get: function (key) {
-    return this.internalStorage_get()[key];
-  },
-
-  set: function (data) {
-    this.internalStorage_update(data);
   },
 
   emitChange: function (eventName) {

@@ -1,5 +1,6 @@
 jest.dontMock("../ServiceOverlay");
 jest.dontMock("../ServiceTable");
+jest.dontMock("../../mixins/GetSetInternalStorageMixin");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../stores/MesosStateStore");
 jest.dontMock("../../utils/RequestUtil");
