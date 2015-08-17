@@ -3,7 +3,6 @@ import Router from "react-router";
 import _ from "underscore";
 const PropTypes = React.PropTypes;
 
-
 import Cluster from "../utils/Cluster";
 import EventTypes from "../constants/EventTypes";
 import HealthLabels from "../constants/HealthLabels";
