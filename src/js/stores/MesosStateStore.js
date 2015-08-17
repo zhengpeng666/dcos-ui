@@ -431,11 +431,14 @@ var MesosStateStore = Store.createStore({
     });
 
     startMesosSummaryPoll(this.get("intervals"), this.get("statesProcessed"));
+    this.onMarathonAppsChange = this.onMarathonAppsChange.bind(this);
+    this.onMarathonAppsError = this.onMarathonAppsError.bind(this);
+
     MarathonStore.addChangeListener(
-      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonAppsChange.bind(this)
+      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonAppsChange
     );
     MarathonStore.addChangeListener(
-      EventTypes.MARATHON_APPS_ERROR, this.onMarathonAppsError.bind(this)
+      EventTypes.MARATHON_APPS_ERROR, this.onMarathonAppsError
     );
 
   },
@@ -443,10 +446,10 @@ var MesosStateStore = Store.createStore({
   unmount: function () {
     stopMesosSummaryPoll(this.get("intervals"));
     MarathonStore.removeChangeListener(
-      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonAppsChange.bind(this)
+      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonAppsChange
     );
     MarathonStore.removeChangeListener(
-      EventTypes.MARATHON_APPS_ERROR, this.onMarathonAppsError.bind(this)
+      EventTypes.MARATHON_APPS_ERROR, this.onMarathonAppsError
     );
   },
 
