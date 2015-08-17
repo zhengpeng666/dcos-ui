@@ -1,7 +1,7 @@
 import React from "react/addons";
+const PropTypes = React.PropTypes;
 import Router from "react-router";
 import _ from "underscore";
-const PropTypes = React.PropTypes;
 
 import Cluster from "../utils/Cluster";
 import EventTypes from "../constants/EventTypes";
@@ -61,7 +61,6 @@ export default class ServiceOverlay extends React.Component {
 
   componentWillUnmount() {
     if (this.overlayEl) {
-      // Remove the div that we created at the root of the dom.
       this.removeOverlay();
       this.props.onServiceClose();
     }
@@ -89,6 +88,7 @@ export default class ServiceOverlay extends React.Component {
   }
 
   removeOverlay() {
+    // Remove the div that we created at the root of the dom.
     React.unmountComponentAtNode(this.overlayEl);
     document.body.removeChild(this.overlayEl);
     this.overlayEl = null;
@@ -108,9 +108,7 @@ export default class ServiceOverlay extends React.Component {
         this.renderService();
       } else {
         // Didn't find any services that match. Fallback to ServicesPage.
-        // This is here until we find a way to use the react-router Navigation
-        // mixin.
-        location.hash = "#/services/";
+        window.location.hash = "#/services/";
       }
     }
   }
