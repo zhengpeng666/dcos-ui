@@ -16,32 +16,22 @@ describe("StringUtil", function () {
 
   describe("#pluralize", function () {
 
-    it("adds an 's' if there is more than one", function () {
-      var items = [1, 2, 3];
-      var pluralized = StringUtil.pluralize("item", items);
-
-      expect(pluralized).toEqual("items");
+    it("pluralizes if there's more than one item", function () {
+      expect(StringUtil.pluralize("item", 2)).toEqual("items");
     });
 
-    it("adds an 's' if there are no items", function () {
-      var items = [];
-      var pluralized = StringUtil.pluralize("item", items);
-
-      expect(pluralized).toEqual("items");
-    })
-
-    it("does not add an 's' if there is a single item", function () {
-      var item = [1];
-      var pluralized = StringUtil.pluralize("item", item);
-
-      expect(pluralized).toEqual("item");
+    it("pluralizes if there's no items", function () {
+      expect(StringUtil.pluralize("item", 0)).toEqual("items");
     });
 
-    it("replaces 'y' with 'ie' if the word ends with a 'y'", function () {
-      var butterfly = ["many", "butterflies"];
-      var pluralized = StringUtil.pluralize("butterfly", butterfly);
-
-      expect(pluralized).toEqual("butterflies");
+    it("doesn't pluralize if there's a single item", function () {
+      expect(StringUtil.pluralize("item", 1)).toEqual("item");
     });
+
+    it("correctly pluralizes if a word ends with a 'y'", function () {
+      expect(StringUtil.pluralize("butterfly", 2)).toEqual("butterflies");
+    });
+
   });
+
 });

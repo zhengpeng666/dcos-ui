@@ -1,4 +1,4 @@
-var Strings = {
+const StringUtil = {
   escapeForRegExp: function (str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
   },
@@ -12,7 +12,7 @@ var Strings = {
       return "";
     }
 
-    arity = parseInt(arity.length, 10);
+    arity = parseInt(arity, 10);
 
     if (arity !== 1) {
       string = string.replace(/y$/, "ie") + "s";
@@ -22,4 +22,4 @@ var Strings = {
   }
 };
 
-module.exports = Strings;
+module.exports = StringUtil;
