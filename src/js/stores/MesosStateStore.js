@@ -601,8 +601,7 @@ var MesosStateStore = Store.createStore({
       return;
     }
 
-    var msLeftOfDelay = Config.stateLoadDelay -
-      (Date.now() - initCalledAt);
+    var msLeftOfDelay = Config.stateLoadDelay - (Date.now() - initCalledAt);
     if (msLeftOfDelay < 0) {
       this.updateStateProcessed();
     } else {
