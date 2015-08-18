@@ -602,7 +602,7 @@ var MesosStateStore = Store.createStore({
   },
 
   updateStateProcessed: function () {
-    this.set({"statesProcessed": true});
+    this.set({statesProcessed: true});
     this.emitChange(EventTypes.MESOS_SUMMARY_CHANGE);
   },
 
@@ -771,7 +771,7 @@ var MesosStateStore = Store.createStore({
   },
 
   onMarathonAppsError: function () {
-    this.set({"appsProcessed": true});
+    this.set({appsProcessed: true});
   },
 
   processStateSuccess: function (data) {
