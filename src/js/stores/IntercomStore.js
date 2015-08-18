@@ -17,25 +17,17 @@ var IntercomStore = Store.createStore({
       intercom("hide");
 
       // register events
-      intercom("onHide", this.handleCallback.bind(this, false));
-      intercom("onShow", this.handleCallback.bind(this, true));
-    }
-  },
-
-  handleCallback: function (value) {
-    // only handle change if there is one
-    if (this.get("isOpen") !== value) {
-      this.handleChange(value);
+      intercom("onHide", this.handleChange.bind(this, false));
+      intercom("onShow", this.handleChange.bind(this, true));
     }
   },
 
   handleChange: function (isOpen) {
-    this.set({isOpen});
-    this.emitChange(EventTypes.INTERCOM_CHANGE);
-  },
-
-  emitChange: function (eventName) {
-    this.emit(eventName);
+    // only handle change if there is one
+    if (this.get("isOpen") !== isOpen) {
+      this.set({isOpen});
+      this.emit(EventTypes.INTERCOM_CHANGE);
+    }
   },
 
   addChangeListener: function (eventName, callback) {

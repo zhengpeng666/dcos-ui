@@ -40,7 +40,6 @@ var Sidebar = React.createClass({
     MetadataActions.fetch();
 
     this.internalStorage_set({
-      showIntercom: IntercomStore.get("isOpen"),
       mesosInfo: MesosStateStore.getLatest(),
       metadata: MetadataStore.get("metadata")
     });
@@ -95,7 +94,6 @@ var Sidebar = React.createClass({
   },
 
   onIntercomChange: function () {
-    this.internalStorage_update({showIntercom: IntercomStore.get("isOpen")});
     this.forceUpdate();
   },
 
@@ -105,8 +103,7 @@ var Sidebar = React.createClass({
   },
 
   handleToggleIntercom: function () {
-    var data = this.internalStorage_get();
-    if (data.showIntercom) {
+    if (IntercomStore.get("isOpen")) {
       IntercomActions.close();
     } else {
       IntercomActions.open();
@@ -217,7 +214,7 @@ var Sidebar = React.createClass({
       "icon": true,
       "icon-chat": true,
       "icon-medium": true,
-      "icon-medium-color": data.showIntercom
+      "icon-medium-color": IntercomStore.get("isOpen")
     });
 
     return (
