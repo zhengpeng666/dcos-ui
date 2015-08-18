@@ -107,17 +107,18 @@ export default class ServiceOverlay extends React.Component {
   findAndRenderService(serviceName) {
     this.service = getServiceFromName(serviceName);
 
-    if (this.service) {
-      this.renderService();
-    } else {
-      // Did not find a service.
+    // Did not find a service.
+    if (!this.service) {
       // We do this in order to not break the user's back button.
       // If we go to /services/ui/unknown-service and redirect to /services
       // and the user presses back, they'll be stuck in a loop.
       // Doing this prevents that.
       window.addEventListener("popstate", this.onPopState);
       Router.History.back();
+      return;
     }
+
+    this.renderService();
   }
 
   getServiceNav() {
