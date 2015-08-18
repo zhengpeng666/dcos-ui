@@ -42,7 +42,7 @@ var ServicesTable = React.createClass({
 
     return (
       <Link to="service-ui"
-        params={{servicename: model.name}}
+        params={{serviceName: model.name}}
         className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
           <img className="icon icon-small border-radius"

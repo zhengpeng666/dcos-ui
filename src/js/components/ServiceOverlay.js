@@ -40,8 +40,8 @@ export default class ServiceOverlay extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    var currentService = this.props.params.servicename;
-    var nextService = nextProps.params.servicename;
+    var currentService = this.props.params.serviceName;
+    var nextService = nextProps.params.serviceName;
 
     if (nextService && currentService !== nextService) {
       if (this.overlayEl) {
@@ -55,7 +55,7 @@ export default class ServiceOverlay extends React.Component {
 
   componentDidMount() {
     if (MesosStateStore.isStatesProcessed()) {
-      this.findAndRenderService();
+      this.findAndRenderService(this.props.params.serviceName);
     } else {
       this.addMesosStateListeners();
     }
@@ -81,11 +81,10 @@ export default class ServiceOverlay extends React.Component {
   }
 
   onMesosSummaryChange() {
-    var state = MesosStateStore.isStatesProcessed();
-
-    if (state) {
+    if (MesosStateStore.isStatesProcessed()) {
+      // Once we have the data we need (frameworks), stop listening for changes.
       this.removeMesosStateListeners();
-      this.findAndRenderService();
+      this.findAndRenderService(this.props.params.serviceName);
     }
   }
 
@@ -105,23 +104,19 @@ export default class ServiceOverlay extends React.Component {
     this.context.router.transitionTo("services");
   }
 
-  findAndRenderService(name) {
-    let serviceName = name || this.props.params.servicename;
+  findAndRenderService(serviceName) {
+    this.service = getServiceFromName(serviceName);
 
-    if (serviceName) {
-      this.service = getServiceFromName(serviceName);
-
-      if (this.service) {
-        this.renderService();
-      } else {
-        // Did not find a service.
-        // We do this in order to not break the user's back button.
-        // If we go to /services/ui/unknown-service and redirect to /services
-        // and the user presses back, they'll be stuck in a loop.
-        // Doing this prevents that.
-        window.addEventListener("popstate", this.onPopState);
-        Router.History.back();
-      }
+    if (this.service) {
+      this.renderService();
+    } else {
+      // Did not find a service.
+      // We do this in order to not break the user's back button.
+      // If we go to /services/ui/unknown-service and redirect to /services
+      // and the user presses back, they'll be stuck in a loop.
+      // Doing this prevents that.
+      window.addEventListener("popstate", this.onPopState);
+      Router.History.back();
     }
   }
 

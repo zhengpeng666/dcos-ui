@@ -30,7 +30,7 @@ var routes = (
   <Route name="home" path="/" handler={Index}>
     <Route name="dashboard" path="dashboard/?" handler={DashboardPage} />
     <Route name="services" path="services/?" handler={ServicesPage}>
-      <Route name="service-ui" path="ui/:servicename" handler={ServiceOverlay} />
+      <Route name="service-ui" path="ui/:serviceName" handler={ServiceOverlay} />
     </Route>
     <Route name="nodes" path="nodes/?" handler={NodesPage}>
       <Route name="nodes-list" path="list/?" handler={HostTable} />

@@ -78,7 +78,7 @@ var ServiceList = React.createClass({
       if (service.webui_url && service.webui_url.length > 0) {
         title = (
           <Link to="service-ui"
-            params={{servicename: service.name}}
+            params={{serviceName: service.name}}
             className="h3 flush-top flush-bottom">
             {service.name}
           </Link>
