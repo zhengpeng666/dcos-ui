@@ -10,8 +10,6 @@ var TestUtils = React.addons.TestUtils;
 var NodesGridView = require("../NodesGridView");
 var MesosStateStore = require("../../stores/MesosStateStore");
 
-MesosStateStore.set({lastMesosState: {frameworks: []}});
-
 MesosStateStore.addChangeListener = function () {};
 
 describe("NodesGridView", function () {
@@ -19,6 +17,7 @@ describe("NodesGridView", function () {
   describe("#getActiveServiceIds", function () {
 
     beforeEach(function () {
+      MesosStateStore.processStateSuccess({frameworks: []});
       this.hosts = [
         {
           name: "foo",
