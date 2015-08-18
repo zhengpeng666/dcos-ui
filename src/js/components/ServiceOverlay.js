@@ -12,15 +12,10 @@ const PropTypes = React.PropTypes;
 
 function getServiceFromName(name) {
   let services = MesosStateStore.getLatest().frameworks;
-  let foundService = null;
 
-  services.forEach(function (service) {
-    if (service.name === name) {
-      foundService = service;
-    }
+  return _.find(services, function (service) {
+    return service.name === name;
   });
-
-  return foundService;
 }
 
 export default class ServiceOverlay extends React.Component {
@@ -40,13 +35,11 @@ export default class ServiceOverlay extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    var currentService = this.props.params.serviceName;
-    var nextService = nextProps.params.serviceName;
+    let currentService = this.props.params.serviceName;
+    let nextService = nextProps.params.serviceName;
 
     if (nextService && currentService !== nextService) {
-      if (this.overlayEl) {
-        this.removeOverlay();
-      }
+      this.removeOverlay();
       this.findAndRenderService(nextService);
     }
 
@@ -89,6 +82,10 @@ export default class ServiceOverlay extends React.Component {
   }
 
   removeOverlay() {
+    if (!this.overlayEl) {
+      return;
+    }
+
     // Remove the div that we created at the root of the dom.
     React.unmountComponentAtNode(this.overlayEl);
     document.body.removeChild(this.overlayEl);
@@ -127,7 +124,7 @@ export default class ServiceOverlay extends React.Component {
     let taskCount = "";
 
     if (_.isNumber(service.TASK_RUNNING)) {
-      var pluralized = StringUtil.pluralize("task", service.TASK_RUNNING);
+      let pluralized = StringUtil.pluralize("task", service.TASK_RUNNING);
       taskCount = ` (${service.TASK_RUNNING} ${pluralized})`;
     }
 
