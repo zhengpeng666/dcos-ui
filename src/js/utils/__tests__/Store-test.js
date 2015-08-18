@@ -11,7 +11,6 @@ var EventEmitterProps = [
   "addListener",
   "emit",
   "listeners",
-  "mixins",
   "on",
   "once",
   "removeAllListeners",
@@ -56,6 +55,7 @@ describe("Store", function () {
         if (EventEmitterProps[index] == null) {
           expect(
             key === "get" ||
+            key === "getSet_data" ||
             key === "set" ||
             key === "mixins"
           ).toEqual(true);
