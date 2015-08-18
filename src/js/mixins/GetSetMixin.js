@@ -13,8 +13,8 @@ var GetSetMixin = {
   },
 
   set: function (data) {
-    if (!_.isObject(this.getSet_data)) {
-      throw new Error("Can only update getSet_data if that is of type Object.");
+    if (!_.isObject(data)) {
+      throw new Error("Can only update getSet_data with data of type Object.");
     }
 
     _.extend(this.getSet_data, data);
