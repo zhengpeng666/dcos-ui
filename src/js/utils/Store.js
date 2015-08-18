@@ -2,7 +2,7 @@ var _ = require("underscore");
 var EventEmitter = require("events").EventEmitter;
 
 const Store = {
-  createStore: function (store) {
+  createStore: function (store = {}) {
     if (store.mixins == null) {
       store.mixins = [];
     }
