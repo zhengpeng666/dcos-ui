@@ -118,8 +118,7 @@ export default class ServiceOverlay extends React.Component {
     this.renderService();
   }
 
-  getServiceNav() {
-    let service = this.service;
+  getServiceNav(service) {
     let serviceHealth = HealthLabels[service.health.key];
     let taskCount = "";
 
@@ -173,12 +172,13 @@ export default class ServiceOverlay extends React.Component {
     this.overlayEl = document.createElement("div");
     this.overlayEl.className = "service-overlay";
     document.body.appendChild(this.overlayEl);
+    let service = this.service;
 
     React.render(
       <div className="overlay-container">
-        {this.getServiceNav()}
+        {this.getServiceNav(service)}
         <iframe
-          src={Cluster.getServiceLink(this.service.name)}
+          src={Cluster.getServiceLink(service.name)}
           className="overlay-frame" />
       </div>,
       this.overlayEl
