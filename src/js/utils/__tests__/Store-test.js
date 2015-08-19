@@ -15,6 +15,24 @@ describe("Store", function () {
       });
     });
 
+    it("should bind mixin function properties to store context", function () {
+      var someFunction = function () {};
+      var newStore = Store.createStore({
+        mixins: [{someFunction}]
+      });
+
+      expect(newStore.someFunction).not.toEqual(someFunction);
+    });
+
+    it("should clone mixin non-function properties to store context", function () {
+      var someObject = {};
+      var newStore = Store.createStore({
+        mixins: [{someObject}]
+      });
+
+      expect(newStore.someObject === someObject).not.toEqual(true);
+    });
+
     it("should return a store if given store is undefined", function () {
       var newStore = Store.createStore();
 
