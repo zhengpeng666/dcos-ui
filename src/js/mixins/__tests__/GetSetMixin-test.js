@@ -19,33 +19,47 @@ describe("GetSetMixin", function () {
       expect(this.instance.get({})).toEqual(undefined);
     });
 
+    it("returns null if property hasn't been defined", function () {
+      expect(this.instance.get("foo")).toEqual(null);
+    });
+
     it("should return the correct value given a key", function () {
       var instance = this.instance;
       instance.set({someProperty: "someValue"});
       expect(this.instance.get("someProperty")).toEqual("someValue");
     });
 
+    it("should allow for default state values", function () {
+      var instance = _.extend({
+        getSet_data: {
+          foo: "bar"
+        }
+      }, GetSetMixin);
+
+      expect(instance.get("foo")).toEqual("bar");
+    });
+
   });
 
   describe("#set", function () {
 
-    it("should throw an error when trying to set with a non-object", function () {
-      var instance = this.instance;
-      var fn = instance.set.bind(instance, null);
-
+    it("throws an error when called with a non-object", function () {
+      var fn = this.instance.set.bind(this.instance, null);
       expect(fn).toThrow();
     });
 
-    it("should only set the given properties", function () {
-      var instance = this.instance;
+    it("throws an error when called with an array-like object", function () {
+      var fn = this.instance.set.bind(this.instance, null);
+      expect(fn).toThrow();
+    });
 
-      instance.set({a: 1, b: 2, c: 3});
+    it("overrides previously set values", function () {
+      this.instance.set({foo: 1, bar: 2, baz: 3});
+      this.instance.set({foo: "foo", bar: "bar"});
 
-      instance.set({a: "a", b: "b"});
-
-      expect(instance.get("a")).toEqual("a");
-      expect(instance.get("b")).toEqual("b");
-      expect(instance.get("c")).toEqual(3);
+      expect(this.instance.get("foo")).toEqual("foo");
+      expect(this.instance.get("bar")).toEqual("bar");
+      expect(this.instance.get("baz")).toEqual(3);
     });
 
   });

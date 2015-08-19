@@ -12,7 +12,7 @@ var FilterByService = require("../components/FilterByService");
 var FilterInputText = require("../components/FilterInputText");
 var FilterHeadline = require("../components/FilterHeadline");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var MesosStateStore = require("../stores/MesosStateStore");
+var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var Page = require("../components/Page");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
@@ -21,17 +21,17 @@ var NODES_DISPLAY_LIMIT = 300;
 
 function getMesosHosts(state) {
   var filters = _.pick(state, "searchString", "byServiceFilter");
-  var hosts = MesosStateStore.getHosts(filters);
-  var allHosts = MesosStateStore.getLatest().slaves;
+  var hosts = MesosSummaryStore.getHosts(filters);
+  var allHosts = MesosSummaryStore.getLatest().slaves;
 
   return {
     allHosts: allHosts,
     hosts: hosts,
-    refreshRate: MesosStateStore.getRefreshRate(),
-    services: MesosStateStore.getFrameworksWithHostsCount(allHosts),
-    statesProcessed: MesosStateStore.get("statesProcessed"),
-    totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
-    totalResources: MesosStateStore.getTotalResources()
+    refreshRate: MesosSummaryStore.getRefreshRate(),
+    services: MesosSummaryStore.getFrameworksWithHostsCount(allHosts),
+    statesProcessed: MesosSummaryStore.get("statesProcessed"),
+    totalHostsResources: MesosSummaryStore.getTotalHostsResources(hosts),
+    totalResources: MesosSummaryStore.getTotalResources()
   };
 }
 
@@ -66,14 +66,14 @@ var NodesPage = React.createClass({
   },
 
   componentDidMount: function () {
-    MesosStateStore.addChangeListener(
+    MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
   },
 
   componentWillUnmount: function () {
-    MesosStateStore.removeChangeListener(
+    MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );

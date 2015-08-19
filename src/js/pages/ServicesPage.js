@@ -9,7 +9,7 @@ var FilterHeadline = require("../components/FilterHeadline");
 var FilterInputText = require("../components/FilterInputText");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var Page = require("../components/Page");
-var MesosStateStore = require("../stores/MesosStateStore");
+var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 var SidebarActions = require("../events/SidebarActions");
@@ -29,19 +29,19 @@ function getCountByHealth(frameworks) {
 
 function getMesosServices(state) {
   var filters = _.pick(state, "searchString", "healthFilter");
-  var frameworks = MesosStateStore.getFrameworks(filters);
-  var allFrameworks = MesosStateStore.getLatest().frameworks;
+  var frameworks = MesosSummaryStore.getFrameworks(filters);
+  var allFrameworks = MesosSummaryStore.getLatest().frameworks;
 
   return {
-    appsProcessed: MesosStateStore.get("appsProcessed"),
+    appsProcessed: MesosSummaryStore.get("appsProcessed"),
     frameworks: frameworks,
-    statesProcessed: MesosStateStore.get("statesProcessed"),
+    statesProcessed: MesosSummaryStore.get("statesProcessed"),
     countByHealth: getCountByHealth(allFrameworks),
-    refreshRate: MesosStateStore.getRefreshRate(),
+    refreshRate: MesosSummaryStore.getRefreshRate(),
     totalFrameworks: allFrameworks.length,
     totalFrameworksResources:
-      MesosStateStore.getTotalFrameworksResources(frameworks),
-    totalResources: MesosStateStore.getTotalResources()
+      MesosSummaryStore.getTotalFrameworksResources(frameworks),
+    totalResources: MesosSummaryStore.getTotalResources()
   };
 }
 
@@ -76,14 +76,14 @@ var ServicesPage = React.createClass({
   },
 
   componentDidMount: function () {
-    MesosStateStore.addChangeListener(
+    MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
   },
 
   componentWillUnmount: function () {
-    MesosStateStore.removeChangeListener(
+    MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );

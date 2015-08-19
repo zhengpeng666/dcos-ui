@@ -9,7 +9,7 @@ var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var IntercomStore = require("../stores/IntercomStore");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
-var MesosStateStore = require("../stores/MesosStateStore");
+var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var Modals = require("../components/Modals");
 var RequestErrorMsg = require("../components/RequestErrorMsg");
 var Sidebar = require("../components/Sidebar");
@@ -18,7 +18,7 @@ var SidebarStore = require("../stores/SidebarStore");
 
 function getMesosState() {
   return {
-    statesProcessed: MesosStateStore.get("statesProcessed")
+    statesProcessed: MesosSummaryStore.get("statesProcessed")
   };
 }
 
@@ -44,7 +44,7 @@ var Index = React.createClass({
   },
 
   componentWillMount: function () {
-    MesosStateStore.init();
+    MesosSummaryStore.init();
     SidebarStore.init();
     this.internalStorage_set(getSidebarState());
 
@@ -75,19 +75,19 @@ var Index = React.createClass({
   },
 
   addMesosStateListeners: function () {
-    MesosStateStore.addChangeListener(
+    MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
-    MesosStateStore.addChangeListener(
+    MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_REQUEST_ERROR, this.onMesosSummaryError
     );
   },
 
   removeMesosStateListeners: function () {
-    MesosStateStore.removeChangeListener(
+    MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
-    MesosStateStore.removeChangeListener(
+    MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_REQUEST_ERROR, this.onMesosSummaryError
     );
   },
@@ -104,7 +104,7 @@ var Index = React.createClass({
 
     this.removeMesosStateListeners();
 
-    MesosStateStore.unmount();
+    MesosSummaryStore.unmount();
   },
 
   onSideBarChange: function () {
