@@ -1,16 +1,32 @@
 import React from "react/addons";
+import Router from "react-router";
 import _ from "underscore";
-const PropTypes = React.PropTypes;
 
 import Cluster from "../utils/Cluster";
+import EventTypes from "../constants/EventTypes";
 import HealthLabels from "../constants/HealthLabels";
+import MesosStateStore from "../stores/MesosStateStore";
 import StringUtil from "../utils/StringUtil";
 
-const methodsToBind = ["handleServiceClose"];
+const PropTypes = React.PropTypes;
+
+function getServiceFromName(name) {
+  let services = MesosStateStore.getLatest().frameworks;
+
+  return _.find(services, function (service) {
+    return service.name === name;
+  });
+}
 
 export default class ServiceOverlay extends React.Component {
 
   constructor() {
+    const methodsToBind = [
+      "handleServiceClose",
+      "onMesosSummaryChange",
+      "onPopState",
+      "removeMesosStateListeners"
+    ];
     super();
 
     methodsToBind.forEach(function (method) {
@@ -19,33 +35,95 @@ export default class ServiceOverlay extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    let shouldOpen = nextProps.shouldOpen && !this.props.shouldOpen;
-    return shouldOpen && this.props.service !== nextProps.service;
+    let currentService = this.props.params.serviceName;
+    let nextService = nextProps.params.serviceName;
+
+    if (nextService && currentService !== nextService) {
+      this.removeOverlay();
+      this.findAndRenderService(nextService);
+    }
+
+    return false;
   }
 
-  componentDidUpdate() {
-    if (this.props.shouldOpen) {
-      this.renderService();
+  componentDidMount() {
+    if (MesosStateStore.isStatesProcessed()) {
+      this.findAndRenderService(this.props.params.serviceName);
+    } else {
+      this.addMesosStateListeners();
     }
   }
 
-  handleServiceClose() {
+  componentWillUnmount() {
     if (this.overlayEl) {
-      // Remove the div that we created at the root of the dom.
-      React.unmountComponentAtNode(this.overlayEl);
-      document.body.removeChild(this.overlayEl);
-      this.overlayEl = null;
+      this.removeOverlay();
       this.props.onServiceClose();
     }
   }
 
-  getServiceNav() {
-    let service = this.props.service;
+  addMesosStateListeners() {
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
+    );
+  }
+
+  removeMesosStateListeners() {
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
+    );
+  }
+
+  onMesosSummaryChange() {
+    if (MesosStateStore.isStatesProcessed()) {
+      // Once we have the data we need (frameworks), stop listening for changes.
+      this.removeMesosStateListeners();
+      this.findAndRenderService(this.props.params.serviceName);
+    }
+  }
+
+  removeOverlay() {
+    if (!this.overlayEl) {
+      return;
+    }
+
+    // Remove the div that we created at the root of the dom.
+    React.unmountComponentAtNode(this.overlayEl);
+    document.body.removeChild(this.overlayEl);
+    this.overlayEl = null;
+  }
+
+  handleServiceClose() {
+    Router.History.back();
+  }
+
+  onPopState() {
+    window.removeEventListener("popstate", this.onPopState);
+    this.context.router.transitionTo("services");
+  }
+
+  findAndRenderService(serviceName) {
+    this.service = getServiceFromName(serviceName);
+
+    // Did not find a service.
+    if (!this.service) {
+      // We do this in order to not break the user's back button.
+      // If we go to /services/ui/unknown-service and redirect to /services
+      // and the user presses back, they'll be stuck in a loop.
+      // Doing this prevents that.
+      window.addEventListener("popstate", this.onPopState);
+      Router.History.back();
+      return;
+    }
+
+    this.renderService();
+  }
+
+  getServiceNav(service) {
     let serviceHealth = HealthLabels[service.health.key];
     let taskCount = "";
 
     if (_.isNumber(service.TASK_RUNNING)) {
-      var pluralized = StringUtil.pluralize("task", service.TASK_RUNNING);
+      let pluralized = StringUtil.pluralize("task", service.TASK_RUNNING);
       taskCount = ` (${service.TASK_RUNNING} ${pluralized})`;
     }
 
@@ -94,12 +172,13 @@ export default class ServiceOverlay extends React.Component {
     this.overlayEl = document.createElement("div");
     this.overlayEl.className = "service-overlay";
     document.body.appendChild(this.overlayEl);
+    let service = this.service;
 
     React.render(
       <div className="overlay-container">
-        {this.getServiceNav()}
+        {this.getServiceNav(service)}
         <iframe
-          src={Cluster.getServiceLink(this.props.service.name)}
+          src={Cluster.getServiceLink(service.name)}
           className="overlay-frame" />
       </div>,
       this.overlayEl
@@ -119,4 +198,8 @@ ServiceOverlay.propTypes = {
 ServiceOverlay.defaultProps = {
   onServiceClose: function () {},
   shouldOpen: false
+};
+
+ServiceOverlay.contextTypes = {
+  router: React.PropTypes.func
 };

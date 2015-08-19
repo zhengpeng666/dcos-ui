@@ -1,10 +1,10 @@
 var _ = require("underscore");
+var Link = require("react-router").Link;
 var React = require("react");
 
 var HealthLabels = require("../constants/HealthLabels");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var List = require("./List");
-var ServiceOverlay = require("../components/ServiceOverlay");
 
 var STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
@@ -39,19 +39,6 @@ var ServiceList = React.createClass({
       nextState !== undefined && !_.isEqual(this.state, nextState);
 
     return !_.isEqual(this.props, nextProps) || changedState;
-  },
-
-  handleServiceOpen: function (openedService, event) {
-    event.preventDefault();
-    this.setState({openedService});
-  },
-
-  handleServiceClose: function () {
-    if (this.isMounted()) {
-      this.setState({
-        openedService: null
-      });
-    }
   },
 
   getServices: function (services, healthProcessed) {
@@ -90,12 +77,11 @@ var ServiceList = React.createClass({
 
       if (service.webui_url && service.webui_url.length > 0) {
         title = (
-          <a href="#"
-            onClick={this.handleServiceOpen.bind(this, service)}
-            className="h3 flush-top flush-bottom"
-            target="_blank">
+          <Link to="service-ui"
+            params={{serviceName: service.name}}
+            className="h3 flush-top flush-bottom">
             {service.name}
-          </a>
+          </Link>
         );
       }
 
@@ -146,10 +132,6 @@ var ServiceList = React.createClass({
     return (
       <div>
         {this.getContent()}
-        <ServiceOverlay
-          service={this.state.openedService}
-          shouldOpen={!!this.state.openedService}
-          onServiceClose={this.handleServiceClose} />
       </div>
     );
   }

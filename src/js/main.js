@@ -18,17 +18,20 @@ var NotFoundRoute = Router.NotFoundRoute;
 require("./utils/ReactSVG");
 var Config = require("./config/Config");
 var DashboardPage = require("./pages/DashboardPage");
-var NodesPage = require("./pages/NodesPage");
 var HostTable = require("./components/HostTable");
-var NodesGridView = require("./components/NodesGridView");
 var Index = require("./pages/Index");
-var ServicesPage = require("./pages/ServicesPage");
+var NodesPage = require("./pages/NodesPage");
+var NodesGridView = require("./components/NodesGridView");
 var NotFoundPage = require("./pages/NotFoundPage");
+var ServiceOverlay = require("./components/ServiceOverlay");
+var ServicesPage = require("./pages/ServicesPage");
 
 var routes = (
   <Route name="home" path="/" handler={Index}>
     <Route name="dashboard" path="dashboard/?" handler={DashboardPage} />
-    <Route name="services" path="services/?" handler={ServicesPage} />
+    <Route name="services" path="services/?" handler={ServicesPage}>
+      <Route name="service-ui" path="ui/:serviceName" handler={ServiceOverlay} />
+    </Route>
     <Route name="nodes" path="nodes/?" handler={NodesPage}>
       <Route name="nodes-list" path="list/?" handler={HostTable} />
       <Route name="nodes-grid" path="grid/?" handler={NodesGridView} />
