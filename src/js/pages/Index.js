@@ -18,13 +18,13 @@ var SidebarStore = require("../stores/SidebarStore");
 
 function getMesosState() {
   return {
-    statesProcessed: MesosStateStore.isStatesProcessed()
+    statesProcessed: MesosStateStore.get("statesProcessed")
   };
 }
 
 function getSidebarState() {
   return {
-    isOpen: SidebarStore.isOpen()
+    isOpen: SidebarStore.get("isOpen")
   };
 }
 
@@ -36,7 +36,7 @@ var Index = React.createClass({
 
   getInitialState: function () {
     return {
-      showIntercom: IntercomStore.isOpen(),
+      showIntercom: IntercomStore.get("isOpen"),
       mesosSummaryErrorCount: 0,
       showErrorModal: false,
       modalErrorMsg: ""
@@ -44,8 +44,9 @@ var Index = React.createClass({
   },
 
   componentWillMount: function () {
-    this.internalStorage_set(getSidebarState());
     MesosStateStore.init();
+    SidebarStore.init();
+    this.internalStorage_set(getSidebarState());
 
     var email = LocalStorageUtil.get("email");
     if (email != null) {
@@ -114,7 +115,7 @@ var Index = React.createClass({
   handleIntercomChange: function () {
     var intercom = global.Intercom;
     if (intercom != null) {
-      this.setState({showIntercom: IntercomStore.isOpen()});
+      this.setState({showIntercom: IntercomStore.get("isOpen")});
     } else {
       this.setState({
         showErrorModal: true,

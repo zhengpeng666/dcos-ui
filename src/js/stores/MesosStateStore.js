@@ -1,34 +1,21 @@
 var _ = require("underscore");
-var EventEmitter = require("events").EventEmitter;
 
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
 var HealthTypes = require("../constants/HealthTypes");
+var GetSetMixin = require("../mixins/GetSetMixin");
 var MarathonStore = require("./MarathonStore");
 var Maths = require("../utils/Maths");
 var MesosStateActions = require("../events/MesosStateActions");
 var ServiceImages = require("../constants/ServiceImages");
+var Store = require("../utils/Store");
 var StringUtil = require("../utils/StringUtil");
 var TimeScales = require("../constants/TimeScales");
 
-var _failureRates = [];
-var _prevMesosStatusesMap = {};
-
-var _appsProcessed = false;
-var _frameworkNames = [];
-var _frameworkIDs = [];
-var _frameworkImages = {};
-var _frameworkHealth = {};
-var _loading;
-var _intervals = {};
-var _initCalledAt;
-var _mesosStates = [];
-var _lastMesosState = {};
-var _statesProcessed = false;
-
-var NA_HEALTH = {key: "NA", value: HealthTypes.NA};
+var summaryInterval = null;
+var stateInterval = null;
 
 function setHostsToFrameworkCount(frameworks) {
   return _.map(frameworks, function (framework) {
@@ -50,11 +37,15 @@ function sumResources(resourceList) {
   }, {cpus: 0, mem: 0, disk: 0});
 }
 
-/*
- * @param {Array} List of elements with a resources object,
- * each holding an array of time steps (states by element)
+/**
+ * This function will create a single object of states with the sum of
+ * resources in actual value and percentage of each step in the given list.
+ *
+ * @param {Array} list of time steps with a resources object,
+ * each holding a resource value of that time step (elements by state)
+ * @param {String} resourcesKey to look up the resources object
  * @return {Object} Each resource in the object holds a list of
- * time steps with summed resources of the provided list
+ *   time steps with summed resources of the provided list
  * {
  *   cpus: [
  *     {date: request time, value: total cpus, percentage: of total_resources},
@@ -71,11 +62,12 @@ function sumResources(resourceList) {
  * }
  */
 function sumListResources(list, resourcesKey) {
+  var mesosStates = MesosStateStore.get("mesosStates");
   return _.foldl(list, function (memo, element) {
     _.each(memo, function (value, key) {
       var values = element[resourcesKey][key];
       _.each(values, function (val, i) {
-        var max = Math.max(1, _mesosStates[i].total_resources[key]);
+        var max = Math.max(1, mesosStates[i].total_resources[key]);
         if (value[i] == null) {
           value.push({date: val.date});
           value[i].value = 0;
@@ -90,9 +82,13 @@ function sumListResources(list, resourcesKey) {
   }, {cpus: [], mem: [], disk: []});
 }
 
-/*
- * @param {Array} List of time steps with a resources object,
+/**
+ * This function will transpose a list of states into an object of resources
+ * with an equal list of steps for each resource
+ *
+ * @param {Array} list of time steps with a resources object,
  * each holding a resource value of that time step (elements by state)
+ * @param {String} resourcesKey to look up the resources object
  * @return {Object} each resource in the object holds a list of
  * time steps with resources of the provided list
  * {
@@ -111,11 +107,12 @@ function sumListResources(list, resourcesKey) {
  * }
  */
 function getStatesByResource(list, resourcesKey) {
+  var mesosStates = MesosStateStore.get("mesosStates");
   var values = {cpus: [], disk: [], mem: []};
   return _.foldl(values, function (memo, arr, r) {
     _.each(list, function (state, i) {
       var value = state[resourcesKey][r];
-      var max = Math.max(1, _mesosStates[i].total_resources[r]);
+      var max = Math.max(1, mesosStates[i].total_resources[r]);
       memo[r].push({
         date: state.date,
         value: Maths.round(value, 2),
@@ -155,21 +152,20 @@ function getFrameworksTaskTotals(frameworks) {
 }
 
 // Caluculate a failure rate
-function getFailureRate(mesosState) {
+function getFailureRate(mesosState, prevMesosState) {
+  var prevMesosStatusesMap = getFrameworksTaskTotals(prevMesosState.frameworks);
+  var newMesosStatusesMap = getFrameworksTaskTotals(mesosState.frameworks);
   var failed = 0;
   var successful = 0;
   var diff = {};
 
-  var newMesosStatusesMap = getFrameworksTaskTotals(mesosState.frameworks);
-
   // Only compute diff if we have previous data
-
   var keys = Object.keys(newMesosStatusesMap);
   // Ignore the first difference, since the first number of accumulated failed
   // tasks will be will consist the base case for calulating the difference
-  if (_prevMesosStatusesMap != null && keys.length) {
+  if (prevMesosStatusesMap != null && keys.length) {
     keys.forEach(function (key) {
-      diff[key] = newMesosStatusesMap[key] - _prevMesosStatusesMap[key];
+      diff[key] = newMesosStatusesMap[key] - prevMesosStatusesMap[key];
     });
 
     // refs: https://github.com/apache/mesos/blob/master/include/mesos/mesos.proto
@@ -182,30 +178,32 @@ function getFailureRate(mesosState) {
       (diff.TASK_ERROR || 0);
   }
 
-  // Set for next request
-  _prevMesosStatusesMap = newMesosStatusesMap;
-
   return {
     date: mesosState.date,
     rate: (failed / (failed + successful)) * 100 | 0
   };
 }
 
-function processFailureRate(mesosState) {
-  var failureRate = getFailureRate(mesosState);
-  _failureRates.push(failureRate);
-  _failureRates.shift();
-}
-
-// [{
-//   colorIndex: 0,
-//   name: "Marathon",
-//   cpus: [{date: request time, y: value}]
-//   disk: [{date: request time, y: value}]
-//   mem: [{date: request time, y: value}]
-// }]
+/**
+ * This function will create a list of frameworks with an object of used
+ * resources. Each resource holds a list of steps equal to the mesos states
+ *
+ * @return {Array} List of frameworks with color and name details, etc.
+ * Each framework has its on set of resources. See getStatesByResource for
+ * more information.
+ * [{
+ *   colorIndex: 0,
+ *   name: "Marathon",
+ *   used_resorces: {
+ *     cpus: [...],
+ *     disk: [...],
+ *     mem: [...],
+ *   }
+ * }, ...]
+ */
 function getStatesByFramework() {
-  return _.chain(_mesosStates)
+  var mesosStates = MesosStateStore.get("mesosStates");
+  return _.chain(mesosStates)
     .pluck("frameworks")
     .flatten()
     .groupBy(function (framework) {
@@ -213,19 +211,40 @@ function getStatesByFramework() {
     })
     .map(function (framework) {
       var lastFramework = _.clone(_.last(framework));
-      return _.extend(lastFramework, {
-        used_resources: getStatesByResource(framework, "used_resources")
-      });
-    }, this).value();
+
+      return _.extend(
+        lastFramework,
+        {used_resources: getStatesByResource(framework, "used_resources")}
+      );
+    })
+    .value();
 }
 
-// [{
-//   cpus: [{date: request time, value: absolute, percentage: value}]
-//   disk: [{date: request time, value: absolute, percentage: value}]
-//   mem: [{date: request time, value: absolute, percentage: value}]
-// }]
-function getHostResourcesBySlave(slave) {
-  return _.foldl(_mesosStates, function (memo, state) {
+/**
+ * Given mesos states and a slave, this function will create an object of used
+ * resources. Each resource holds a list of steps equal to the mesos states
+ *
+ * @param {Array} mesosStates of time steps with a total_resources object,
+ * each holding a resource value of that time step (elements by state)
+ * @param {Object} slave object to calculate resources from
+ * @return {Object} Calculated resources for the given slave
+ * {
+ *   cpus: [
+ *     {date: request time, value: cpus, percentage: of total_resources},
+ *     ...
+ *   ],
+ *   disk: [
+ *     {date: request time, value: disk, percentage: of total_resources},
+ *     ...
+ *   ]
+ *   mem: [
+ *     {date: request time, value: mem, percentage: of total_resources},
+ *     ...
+ *   ]
+ * }
+ */
+function getHostResourcesBySlave(mesosStates, slave) {
+  return _.foldl(mesosStates, function (memo, state) {
     var foundSlave = _.findWhere(state.slaves, {id: slave.id});
     var resources;
 
@@ -249,27 +268,32 @@ function getHostResourcesBySlave(slave) {
   }, {cpus: [], mem: [], disk: []});
 }
 
-// [{
-//  ...
-//  id: "",
-//  hostname: "",
-//  tasks: {},
-//  frameworks: {},
-//  used_resources: []
-// }]
+/**
+ * This function will create a list of hosts with an object of used
+ * resources. Each resource holds a list of steps equal to the mesos states
+ *
+ * @return {Array} List of hosts with resources as time steps
+ * [{
+ *  ...
+ *  id: "",
+ *  hostname: "",
+ *  tasks: {},
+ *  frameworks: {},
+ *  used_resources: {cpus: [], mem: [], disk: []}
+ * }]
+ */
 function getStateByHosts() {
-  var data = _.last(_mesosStates);
-
-  return _.map(data.slaves, function (slave) {
+  var mesosStates = MesosStateStore.get("mesosStates");
+  return _.map(_.last(mesosStates).slaves, function (slave) {
     var _return = _.clone(slave);
-    _return.used_resources = getHostResourcesBySlave(slave);
+    _return.used_resources = getHostResourcesBySlave(mesosStates, slave);
 
     return _return;
   });
 }
 
-function addFrameworkToPreviousStates(_framework, colorIndex) {
-  _.each(_mesosStates, function (state) {
+function addFrameworkToPreviousStates(mesosStates, _framework, colorIndex) {
+  _.each(mesosStates, function (state) {
     // We could optimize here by moving this line out of the `each`
     // this would mean that all states have the same instance of
     // the object
@@ -299,50 +323,6 @@ function getActiveSlaves(slaves) {
   return _.where(slaves, {active: true});
 }
 
-// [{
-//   frameworks:[{
-//     colorIndex: 0,
-//     date: request time,
-//     name: "Marathon",
-//     resources: {...},
-//     ...
-//   }]
-// ]}]
-function normalizeFrameworks(frameworks, date) {
-  return _.map(frameworks, function (framework) {
-    var index = _.indexOf(_frameworkIDs, framework.id);
-    framework.date = date;
-
-    // this is a new framework, fill in 0s for all the previous datapoints
-    if (index === -1) {
-      _frameworkIDs.push(framework.id);
-      _frameworkNames.push(framework.name);
-      index = _frameworkIDs.length - 1;
-      addFrameworkToPreviousStates(framework, index);
-    }
-    // set color index after discovering and assigning index framework
-    framework.colorIndex = index;
-    framework.health = _frameworkHealth[framework.name] || NA_HEALTH;
-
-    framework.images = _frameworkImages[framework.name];
-
-    if (framework.images == null) {
-      framework.images = ServiceImages.NA_IMAGES;
-    }
-
-    return framework;
-  });
-}
-
-function activeHostsCountOverTime() {
-  return _.map(_mesosStates, function (state) {
-    return {
-      date: state.date,
-      slavesCount: state.active_slaves || 0
-    };
-  });
-}
-
 function filterByString(objects, key, searchString) {
   var searchPattern = new RegExp(StringUtil.escapeForRegExp(searchString), "i");
 
@@ -363,10 +343,10 @@ function filterHostsByService(hosts, frameworkId) {
   });
 }
 
-function initStates() {
+function getInitialStates() {
   var currentDate = Date.now();
   // reverse date range!!!
-  _mesosStates = _.map(_.range(-Config.historyLength, 0), function (i) {
+  return _.map(_.range(-Config.historyLength, 0), function (i) {
     return {
       date: currentDate + (i * Config.stateRefresh),
       frameworks: [],
@@ -376,8 +356,11 @@ function initStates() {
       active_slaves: 0
     };
   });
+}
 
-  _failureRates = _.map(_.range(-Config.historyLength, 0), function (i) {
+function getInitialTaskFailureRates() {
+  var currentDate = Date.now();
+  return _.map(_.range(-Config.historyLength, 0), function (i) {
     return {
       date: currentDate + (i * Config.stateRefresh),
       rate: 0
@@ -390,36 +373,36 @@ function fetchData(timeScale) {
 }
 
 function startMesosSummaryPoll() {
-  if (_intervals.summary == null) {
+  if (summaryInterval == null) {
     var timeScale;
-    if (!_statesProcessed) {
+    if (!MesosStateStore.get("statesProcessed")) {
       timeScale = TimeScales.MINUTE;
     }
     fetchData(timeScale);
-    _intervals.summary = setInterval(fetchData, Config.stateRefresh);
+    summaryInterval = setInterval(fetchData, Config.stateRefresh);
   }
 }
 
 function stopMesosSummaryPoll() {
-  if (_intervals.summary != null) {
-    clearInterval(_intervals.summary);
-    _intervals.summary = null;
+  if (summaryInterval != null) {
+    clearInterval(summaryInterval);
+    summaryInterval = null;
   }
 }
 
 function startMesosStatePoll() {
-  if (_intervals.state == null) {
+  if (stateInterval == null) {
     MesosStateActions.fetchState();
-    _intervals.state = setInterval(
+    stateInterval = setInterval(
       MesosStateActions.fetchState, Config.stateRefresh
     );
   }
 }
 
 function stopMesosStatePoll() {
-  if (_intervals.state != null) {
-    clearInterval(_intervals.state);
-    _intervals.state = null;
+  if (stateInterval != null) {
+    clearInterval(stateInterval);
+    stateInterval = null;
   }
 }
 
@@ -434,24 +417,42 @@ function addTimestampsToData(data, timeStep) {
   });
 }
 
-var MesosStateStore = _.extend({}, EventEmitter.prototype, {
+var MesosStateStore = Store.createStore({
+
+  mixins: [GetSetMixin],
 
   init: function () {
-    if (_initCalledAt != null) {
+
+    if (this.get("initCalledAt") != null) {
       return;
     }
 
-    // log when we started calling
-    _initCalledAt = Date.now();
+    this.set({
+      appsProcessed: false,
+      frameworkIDs: [],
+      frameworkHealth: {},
+      frameworkImages: {},
+      frameworkNames: [],
+      initCalledAt: Date.now(), // log when we started calling
+      lastMesosState: {},
+      loading: null,
+      mesosStates: getInitialStates(),
+      prevMesosStatusesMap: {},
+      statesProcessed: false,
+      taskFailureRate: getInitialTaskFailureRates()
+    });
 
     startMesosSummaryPoll();
+    this.onMarathonAppsChange = this.onMarathonAppsChange.bind(this);
+    this.onMarathonAppsError = this.onMarathonAppsError.bind(this);
+
     MarathonStore.addChangeListener(
       EventTypes.MARATHON_APPS_CHANGE, this.onMarathonAppsChange
     );
     MarathonStore.addChangeListener(
       EventTypes.MARATHON_APPS_ERROR, this.onMarathonAppsError
     );
-    initStates();
+
   },
 
   unmount: function () {
@@ -464,34 +465,12 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     );
   },
 
-  reset: function () {
-    _failureRates = [];
-    _prevMesosStatusesMap = {};
-
-    _appsProcessed = false;
-    _frameworkNames = [];
-    _frameworkIDs = [];
-    _frameworkHealth = {};
-    _lastMesosState = {};
-    _loading = undefined;
-    _intervals = {};
-    _initCalledAt = undefined;
-    _mesosStates = [];
-    _statesProcessed = false;
-
-    NA_HEALTH = {key: "NA", value: HealthTypes.NA};
-  },
-
   getRefreshRate: function () {
     return Config.stateRefresh;
   },
 
-  getAll: function () {
-    return _mesosStates;
-  },
-
   getLatest: function () {
-    return _.last(_mesosStates);
+    return _.last(this.get("mesosStates"));
   },
 
   getFrameworks: function (filterOptions) {
@@ -552,7 +531,7 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
    * @returns {Object} A map of frameworks running on host
    */
   getHostResourcesByFramework: function (filter) {
-    var state = this.getLastMesosState();
+    var state = this.get("lastMesosState");
 
     return _.foldl(state.frameworks, function (memo, framework) {
       _.each(framework.tasks, function (task) {
@@ -580,36 +559,27 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }, {});
   },
 
-  getLastMesosState: function () {
-    return _lastMesosState;
-  },
-
   getActiveHostsCount: function () {
-    return activeHostsCountOverTime();
-  },
-
-  isStatesProcessed: function () {
-    return _statesProcessed;
-  },
-
-  isAppsProcessed: function () {
-    return _appsProcessed;
+    return _.map(this.get("mesosStates"), function (state) {
+      return {
+        date: state.date,
+        slavesCount: state.active_slaves || 0
+      };
+    });
   },
 
   getTaskTotals: function () {
     return getFrameworksTaskTotals(this.getLatest().frameworks);
   },
 
-  getTaskFailureRate: function () {
-    return _failureRates;
-  },
-
   getTotalResources: function () {
-    return getStatesByResource(_mesosStates, "total_resources");
+    var mesosStates = this.get("mesosStates");
+    return getStatesByResource(mesosStates, "total_resources");
   },
 
   getAllocResources: function () {
-    return getStatesByResource(_mesosStates, "used_resources");
+    var mesosStates = this.get("mesosStates");
+    return getStatesByResource(mesosStates, "used_resources");
   },
 
   emitChange: function (eventName) {
@@ -634,26 +604,94 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   updateStateProcessed: function () {
-    _statesProcessed = true;
+    this.set({statesProcessed: true});
     this.emitChange(EventTypes.MESOS_SUMMARY_CHANGE);
   },
 
   notifySummaryProcessed: function () {
+    var initCalledAt = this.get("initCalledAt");
     // skip if state is processed, already loading or init has not been called
-    if (_statesProcessed || _loading != null || _initCalledAt == null) {
+    if (this.get("statesProcessed") ||
+        this.get("loading") != null ||
+        initCalledAt == null) {
       this.emitChange(EventTypes.MESOS_SUMMARY_CHANGE);
       return;
     }
 
-    var msLeftOfDelay = Config.stateLoadDelay - (Date.now() - _initCalledAt);
+    var msLeftOfDelay = Config.stateLoadDelay - (Date.now() - initCalledAt);
     if (msLeftOfDelay < 0) {
       this.updateStateProcessed();
     } else {
-      _loading = setTimeout(
-        this.updateStateProcessed.bind(this),
-        msLeftOfDelay
-      );
+      this.set({
+        loading: setTimeout(
+          this.updateStateProcessed.bind(this),
+          msLeftOfDelay
+        )
+      });
     }
+  },
+
+  /**
+   * This function will normalize a given framwork list adding necessary
+   * information to the frameworks and mesos states
+   *
+   * @param {Array} frameworks to normalize
+   * @param {Date} date Time step for the current data
+   * @return {Array} List of frameworks with normalized data
+   * [{
+   *   frameworks:[{
+   *     colorIndex: 0,
+   *     date: request time,
+   *     name: "Marathon",
+   *     resources: {...},
+   *     ...
+   *   }]
+   * ]}]
+   */
+  normalizeFrameworks: function (frameworks, date) {
+    var frameworkIDs = this.get("frameworkIDs");
+    var frameworkHealth = this.get("frameworkHealth");
+    var frameworkImages = this.get("frameworkImages");
+    var frameworkNames = this.get("frameworkNames");
+    var mesosStates = this.get("mesosStates");
+
+    var normalizedFrameworks = _.map(frameworks, function (framework) {
+      var index = _.indexOf(frameworkIDs, framework.id);
+      framework.date = date;
+
+      // this is a new framework, fill in 0s for all the previous datapoints
+      if (index === -1) {
+        frameworkIDs.push(framework.id);
+        frameworkNames.push(framework.name);
+        index = frameworkIDs.length - 1;
+        addFrameworkToPreviousStates(mesosStates, framework, index);
+      }
+      // set color index after discovering and assigning index framework
+      framework.colorIndex = index;
+      framework.health = frameworkHealth[framework.name] ||
+        {key: "NA", value: HealthTypes.NA};
+      framework.images = frameworkImages[framework.name];
+
+      if (framework.images == null) {
+        framework.images = ServiceImages.NA_IMAGES;
+      }
+
+      return framework;
+    });
+
+    // Update our ID and name lists
+    this.set({frameworkIDs, frameworkNames});
+
+    return normalizedFrameworks;
+  },
+
+  processFailureRate: function (mesosState) {
+    var currentFailureRate = getFailureRate(mesosState, this.getLatest());
+
+    var taskFailureRate = this.get("taskFailureRate");
+    taskFailureRate.push(currentFailureRate);
+    taskFailureRate.shift();
+    return taskFailureRate;
   },
 
   processSummary: function (data, options) {
@@ -664,21 +702,24 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
     }
 
     data.slaves = data.slaves || [];
-    data.frameworks = normalizeFrameworks(data.frameworks, data.date);
+    data.frameworks = this.normalizeFrameworks(data.frameworks, data.date);
     data.total_resources = sumResources(_.pluck(data.slaves, "resources"));
     data.used_resources = sumResources(
       _.pluck(data.frameworks, "used_resources")
     );
     data.active_slaves = getActiveSlaves(data.slaves).length;
 
-    processFailureRate(data);
+    var taskFailureRate = this.processFailureRate(data);
+    this.set({taskFailureRate});
 
     // Add new snapshot
-    _mesosStates.push(data);
+    var mesosStates = this.get("mesosStates");
+    mesosStates.push(data);
     // Remove oldest snapshot when we have more than we should
-    if (_mesosStates.length > Config.historyLength) {
-      _mesosStates.shift();
+    if (mesosStates.length > Config.historyLength) {
+      mesosStates.shift();
     }
+    this.set({mesosStates});
 
     if (options.silent === false) {
       this.notifySummaryProcessed();
@@ -698,9 +739,11 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
   },
 
   onMarathonAppsChange: function (apps) {
-    var frameworkData = _.foldl(apps, function (curr, app, packageName) {
+    var frameworkNames = this.get("frameworkNames");
+
+    var marathonData = _.foldl(apps, function (curr, app, packageName) {
       // Find the framework based on package name
-      var frameworkName = _.find(_frameworkNames, function (name) {
+      var frameworkName = _.find(frameworkNames, function (name) {
         // Use insensitive check
         if (name.length) {
           name = name.toLowerCase();
@@ -718,24 +761,23 @@ var MesosStateStore = _.extend({}, EventEmitter.prototype, {
         return curr;
       }
 
-      curr.health[frameworkName] = app.health;
-      curr.images[frameworkName] = app.images;
+      curr.frameworkHealth[frameworkName] = app.health;
+      curr.frameworkImages[frameworkName] = app.images;
 
       return curr;
-    }, {health: {}, images: {}});
+    }, {frameworkHealth: {}, frameworkImages: {}});
 
-    _frameworkHealth = frameworkData.health;
-    _frameworkImages = frameworkData.images;
+    marathonData.appsProcessed = true;
 
-    _appsProcessed = true;
+    this.set(marathonData);
   },
 
   onMarathonAppsError: function () {
-    _appsProcessed = true;
+    this.set({appsProcessed: true});
   },
 
   processStateSuccess: function (data) {
-    _lastMesosState = data;
+    this.set({lastMesosState: data});
     this.emitChange(EventTypes.MESOS_STATE_CHANGE);
   },
 

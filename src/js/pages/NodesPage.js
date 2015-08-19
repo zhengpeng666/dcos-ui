@@ -29,7 +29,7 @@ function getMesosHosts(state) {
     hosts: hosts,
     refreshRate: MesosStateStore.getRefreshRate(),
     services: MesosStateStore.getFrameworksWithHostsCount(allHosts),
-    statesProcessed: MesosStateStore.isStatesProcessed(),
+    statesProcessed: MesosStateStore.get("statesProcessed"),
     totalHostsResources: MesosStateStore.getTotalHostsResources(hosts),
     totalResources: MesosStateStore.getTotalResources()
   };

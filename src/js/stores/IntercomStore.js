@@ -1,44 +1,33 @@
-var _ = require("underscore");
-var EventEmitter = require("events").EventEmitter;
-
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
+var GetSetMixin = require("../mixins/GetSetMixin");
+var Store = require("../utils/Store");
 
-var _isOpen = false;
+var IntercomStore = Store.createStore({
 
-var IntercomStore = _.extend({}, EventEmitter.prototype, {
+  mixins: [GetSetMixin],
 
   init: function () {
+    this.set({isOpen: false});
+
     var intercom = global.Intercom;
     if (intercom != null) {
       // make sure to hide Intercom on load
       intercom("hide");
 
       // register events
-      intercom("onHide", this.handleCallback.bind(this, false));
-      intercom("onShow", this.handleCallback.bind(this, true));
+      intercom("onHide", this.handleChange.bind(this, false));
+      intercom("onShow", this.handleChange.bind(this, true));
     }
   },
 
-  isOpen: function () {
-    return _isOpen;
-  },
-
-  handleCallback: function (value) {
+  handleChange: function (isOpen) {
     // only handle change if there is one
-    if (_isOpen !== value) {
-      this.handleChange(value);
+    if (this.get("isOpen") !== isOpen) {
+      this.set({isOpen});
+      this.emit(EventTypes.INTERCOM_CHANGE);
     }
-  },
-
-  handleChange: function (value) {
-    _isOpen = value;
-    IntercomStore.emitChange(EventTypes.INTERCOM_CHANGE);
-  },
-
-  emitChange: function (eventName) {
-    this.emit(eventName);
   },
 
   addChangeListener: function (eventName, callback) {

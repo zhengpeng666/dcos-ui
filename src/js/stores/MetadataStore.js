@@ -1,17 +1,18 @@
 var _ = require("underscore");
-var EventEmitter = require("events").EventEmitter;
 
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
+var GetSetMixin = require("../mixins/GetSetMixin");
+var Store = require("../utils/Store");
 
-var _metadata = {};
+var MetadataStore = Store.createStore({
 
-var MetadataStore = _.extend({}, EventEmitter.prototype, {
-
-  getAll: function () {
-    return _metadata;
+  init: function () {
+    this.set({metadata: {}});
   },
+
+  mixins: [GetSetMixin],
 
   emitChange: function (eventName) {
     this.emit(eventName);
@@ -35,11 +36,12 @@ var MetadataStore = _.extend({}, EventEmitter.prototype, {
 
     switch (action.type) {
       case ActionTypes.REQUEST_METADATA:
-        var oldMetadata = _metadata;
-        _metadata = action.data;
+        var oldMetadata = MetadataStore.get("metadata");
+        var metadata = action.data;
 
         // only emitting on change
-        if (!_.isEqual(oldMetadata, _metadata)) {
+        if (!_.isEqual(oldMetadata, metadata)) {
+          MetadataStore.set({metadata});
           MetadataStore.emitChange(EventTypes.METADATA_CHANGE);
         }
         break;

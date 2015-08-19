@@ -2,6 +2,7 @@ jest.dontMock("../MarathonStore");
 jest.dontMock("./fixtures/MockAppMetadata");
 jest.dontMock("./fixtures/MockMarathonResponse");
 jest.dontMock("./fixtures/MockParsedAppMetadata");
+jest.dontMock("../../utils/Store");
 
 var MarathonStore = require("../MarathonStore");
 var MockAppMetadata = require("./fixtures/MockAppMetadata");

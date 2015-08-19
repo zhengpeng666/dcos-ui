@@ -1,16 +1,14 @@
-jest.dontMock("../NodesGridView");
+jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../mixins/InternalStorageMixin");
+jest.dontMock("../NodesGridView");
 jest.dontMock("../../stores/MesosStateStore");
+jest.dontMock("../../utils/Store");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var NodesGridView = require("../NodesGridView");
 var MesosStateStore = require("../../stores/MesosStateStore");
-
-MesosStateStore.getLatest = function () {
-  return {frameworks: []};
-};
 
 MesosStateStore.addChangeListener = function () {};
 
@@ -19,6 +17,7 @@ describe("NodesGridView", function () {
   describe("#getActiveServiceIds", function () {
 
     beforeEach(function () {
+      MesosStateStore.processStateSuccess({frameworks: []});
       this.hosts = [
         {
           name: "foo",

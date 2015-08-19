@@ -32,9 +32,9 @@ function getMesosServices(state) {
   var allFrameworks = MesosStateStore.getLatest().frameworks;
 
   return {
-    appsProcessed: MesosStateStore.isAppsProcessed(),
+    appsProcessed: MesosStateStore.get("appsProcessed"),
     frameworks: frameworks,
-    statesProcessed: MesosStateStore.isStatesProcessed(),
+    statesProcessed: MesosStateStore.get("statesProcessed"),
     countByHealth: getCountByHealth(allFrameworks),
     refreshRate: MesosStateStore.getRefreshRate(),
     totalFrameworks: allFrameworks.length,

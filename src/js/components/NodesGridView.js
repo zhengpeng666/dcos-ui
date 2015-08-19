@@ -256,7 +256,7 @@ var NodesGridView = React.createClass({
 
   render: function () {
     var showLoading = this.hasLoadingError() ||
-      Object.keys(MesosStateStore.getLastMesosState()).length === 0;
+      Object.keys(MesosStateStore.get("lastMesosState")).length === 0;
 
     if (showLoading) {
       return this.getLoadingScreen();

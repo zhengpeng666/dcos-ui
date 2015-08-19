@@ -1,21 +1,18 @@
-var _ = require("underscore");
-var EventEmitter = require("events").EventEmitter;
-
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
+var GetSetMixin = require("../mixins/GetSetMixin");
+var Store = require("../utils/Store");
 
-var _isOpen = false;
-var _versions = {};
+var SidebarStore = Store.createStore({
 
-var SidebarStore = _.extend({}, EventEmitter.prototype, {
+  mixins: [GetSetMixin],
 
-  isOpen: function () {
-    return _isOpen;
-  },
-
-  getVersions: function () {
-    return _versions;
+  init: function () {
+    this.set({
+      isOpen: false,
+      versions: {}
+    });
   },
 
   emitChange: function (eventName) {
@@ -41,11 +38,12 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
     switch (action.type) {
       case ActionTypes.REQUEST_SIDEBAR_CLOSE:
       case ActionTypes.REQUEST_SIDEBAR_OPEN:
-        var oldIsOpen = _isOpen;
-        _isOpen = action.data;
+        var oldIsOpen = SidebarStore.get("isOpen");
+        var isOpen = action.data;
 
         // only emitting on change
-        if (oldIsOpen !== _isOpen) {
+        if (oldIsOpen !== isOpen) {
+          SidebarStore.set({isOpen});
           SidebarStore.emitChange(EventTypes.SIDEBAR_CHANGE);
         }
         break;
@@ -56,7 +54,7 @@ var SidebarStore = _.extend({}, EventEmitter.prototype, {
         SidebarStore.emitChange(EventTypes.SHOW_TOUR);
         break;
       case ActionTypes.REQUEST_VERSIONS_SUCCESS:
-        _versions = action.data;
+        SidebarStore.set({versions: action.data});
         SidebarStore.emitChange(EventTypes.SHOW_VERSIONS_SUCCESS);
         break;
       case ActionTypes.REQUEST_VERSIONS_ERROR:

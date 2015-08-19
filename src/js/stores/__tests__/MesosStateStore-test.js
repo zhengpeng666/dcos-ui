@@ -3,12 +3,14 @@ var _ = require("underscore");
 jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../../config/Config");
-jest.dontMock("../../utils/RequestUtil");
+jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../MesosStateStore");
 jest.dontMock("./fixtures/MockStates");
 jest.dontMock("./fixtures/MockMarathonApps");
 jest.dontMock("./fixtures/MockAppMetadata");
 jest.dontMock("./fixtures/MockParsedAppMetadata");
+jest.dontMock("../../utils/RequestUtil");
+jest.dontMock("../../utils/Store");
 
 var AppDispatcher = require("../../events/AppDispatcher");
 var ActionTypes = require("../../constants/ActionTypes");
@@ -34,30 +36,30 @@ describe("Mesos State Store", function () {
 
     beforeEach(function () {
       MesosStateStore.processSummary(MockStates.oneTaskRunning);
-      // Necessary because _prevMesosStatesMap is only set by getFailureRate.
-      MesosStateStore.getTaskFailureRate();
+      // Necessary because prevMesosStatesMap is only set by getFailureRate.
+      MesosStateStore.get("taskFailureRates");
     });
 
     it("is 0% initially", function () {
-      var taskFailureRate = MesosStateStore.getTaskFailureRate();
+      var taskFailureRate = MesosStateStore.get("taskFailureRate");
       expect(_.last(taskFailureRate).rate).toEqual(0);
     });
 
     it("is 0% when one task finishes", function () {
       MesosStateStore.processSummary(MockStates.oneTaskFinished);
-      var taskFailureRate = MesosStateStore.getTaskFailureRate();
+      var taskFailureRate = MesosStateStore.get("taskFailureRate");
       expect(_.last(taskFailureRate).rate).toEqual(0);
     });
 
     it("is 100% when one task fails", function () {
       MesosStateStore.processSummary(MockStates.oneTaskFailed);
-      var taskFailureRate = MesosStateStore.getTaskFailureRate();
+      var taskFailureRate = MesosStateStore.get("taskFailureRate");
       expect(_.last(taskFailureRate).rate).toEqual(100);
     });
 
     it("is 0% when one task is killed", function () {
       MesosStateStore.processSummary(MockStates.oneTaskKilled);
-      var taskFailureRate = MesosStateStore.getTaskFailureRate();
+      var taskFailureRate = MesosStateStore.get("taskFailureRate");
       expect(_.last(taskFailureRate).rate).toEqual(0);
     });
   });
@@ -102,7 +104,7 @@ describe("Mesos State Store", function () {
   describe("#getFrameworks", function () {
 
     beforeEach(function () {
-      MesosStateStore.reset();
+      MesosStateStore.set({initCalledAt: null});
       MesosStateStore.init();
       MesosStateStore.processSummary(MockStates.frameworksWithSameName);
       this.frameworks = MesosStateStore.getFrameworks();
@@ -124,7 +126,7 @@ describe("Mesos State Store", function () {
   describe("#getActiveHostsCount", function () {
 
     beforeEach(function () {
-      MesosStateStore.reset();
+      MesosStateStore.set({initCalledAt: null});
       MesosStateStore.init();
     });
 
@@ -176,13 +178,13 @@ describe("Mesos State Store", function () {
     });
 
     it("adds timestamps to each item", function () {
-      var mostRecentState = _.last(MesosStateStore.getAll());
+      var mostRecentState = _.last(MesosStateStore.get("mesosStates"));
       expect(mostRecentState.name).toEqual("c");
       expect(mostRecentState.date).toBeDefined();
     });
 
     it("sets the timestamp by the configured step", function () {
-      var twoMostRecentStates = _.last(MesosStateStore.getAll(), 2);
+      var twoMostRecentStates = _.last(MesosStateStore.get("mesosStates"), 2);
       var mostRecentState = _.last(twoMostRecentStates);
       var secondMostRecentState = _.first(twoMostRecentStates);
       var stateTimeDelta = mostRecentState.date - secondMostRecentState.date;
@@ -193,7 +195,7 @@ describe("Mesos State Store", function () {
 
   describe("#onMarathonAppsChange", function () {
     beforeEach(function () {
-      MesosStateStore.reset();
+      MesosStateStore.set({initCalledAt: null});
       MesosStateStore.init();
     });
 
