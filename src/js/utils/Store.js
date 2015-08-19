@@ -1,10 +1,10 @@
-var _ = require("underscore");
-var EventEmitter = require("events").EventEmitter;
+const _ = require("underscore");
+const EventEmitter = require("events").EventEmitter;
 
 function mixInto(target, source) {
   Object.keys(source).forEach(function (key) {
 
-    var toCopy = source[key];
+    let toCopy = source[key];
     if (_.isFunction(toCopy)) {
       // Bind the function from the source to target and assign it to the target
       target[key] = toCopy.bind(target);
@@ -17,8 +17,8 @@ function mixInto(target, source) {
 
 const Store = {
   createStore: function (store = {}) {
-    var mixins = store.mixins || [];
-    mixins = mixins.map(function (mixin) {
+    let mixins = store.mixins || [];
+    mixins.forEach(function (mixin) {
       mixInto(store, mixin);
     });
 
