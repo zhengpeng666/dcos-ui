@@ -14,6 +14,9 @@ var Store = require("../utils/Store");
 var StringUtil = require("../utils/StringUtil");
 var TimeScales = require("../constants/TimeScales");
 
+var summaryInterval = null;
+var stateInterval = null;
+
 function setHostsToFrameworkCount(frameworks) {
   return _.map(frameworks, function (framework) {
     if (framework.slave_ids == null) {
@@ -369,37 +372,37 @@ function fetchData(timeScale) {
   MesosStateActions.fetchSummary(timeScale);
 }
 
-function startMesosSummaryPoll(interval) {
-  if (interval == null) {
+function startMesosSummaryPoll() {
+  if (summaryInterval == null) {
     var timeScale;
     if (!MesosStateStore.get("statesProcessed")) {
       timeScale = TimeScales.MINUTE;
     }
     fetchData(timeScale);
-    interval = setInterval(fetchData, Config.stateRefresh);
+    summaryInterval = setInterval(fetchData, Config.stateRefresh);
   }
 }
 
-function stopMesosSummaryPoll(interval) {
-  if (interval != null) {
-    clearInterval(interval);
-    interval = null;
+function stopMesosSummaryPoll() {
+  if (summaryInterval != null) {
+    clearInterval(summaryInterval);
+    summaryInterval = null;
   }
 }
 
-function startMesosStatePoll(interval) {
-  if (interval == null) {
+function startMesosStatePoll() {
+  if (stateInterval == null) {
     MesosStateActions.fetchState();
-    interval = setInterval(
+    stateInterval = setInterval(
       MesosStateActions.fetchState, Config.stateRefresh
     );
   }
 }
 
-function stopMesosStatePoll(interval) {
-  if (interval != null) {
-    clearInterval(interval);
-    interval = null;
+function stopMesosStatePoll() {
+  if (stateInterval != null) {
+    clearInterval(stateInterval);
+    stateInterval = null;
   }
 }
 
@@ -431,7 +434,6 @@ var MesosStateStore = Store.createStore({
       frameworkImages: {},
       frameworkNames: [],
       initCalledAt: Date.now(), // log when we started calling
-      intervals: {},
       lastMesosState: {},
       loading: null,
       mesosStates: getInitialStates(),
@@ -440,7 +442,7 @@ var MesosStateStore = Store.createStore({
       taskFailureRate: getInitialTaskFailureRates()
     });
 
-    startMesosSummaryPoll(this.get("intervals").summary);
+    startMesosSummaryPoll();
     this.onMarathonAppsChange = this.onMarathonAppsChange.bind(this);
     this.onMarathonAppsError = this.onMarathonAppsError.bind(this);
 
@@ -454,7 +456,7 @@ var MesosStateStore = Store.createStore({
   },
 
   unmount: function () {
-    stopMesosSummaryPoll(this.get("intervals").summary);
+    stopMesosSummaryPoll();
     MarathonStore.removeChangeListener(
       EventTypes.MARATHON_APPS_CHANGE, this.onMarathonAppsChange
     );
@@ -588,7 +590,7 @@ var MesosStateStore = Store.createStore({
     this.on(eventName, callback);
 
     if (eventName === EventTypes.MESOS_STATE_CHANGE) {
-      startMesosStatePoll(this.get("intervals").state);
+      startMesosStatePoll();
     }
   },
 
@@ -597,7 +599,7 @@ var MesosStateStore = Store.createStore({
 
     if (eventName === EventTypes.MESOS_STATE_CHANGE &&
       _.isEmpty(this.listeners(EventTypes.MESOS_STATE_CHANGE))) {
-      stopMesosStatePoll(this.get("intervals").state);
+      stopMesosStatePoll();
     }
   },
 
