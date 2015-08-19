@@ -47,7 +47,7 @@ export default class ServiceOverlay extends React.Component {
   }
 
   componentDidMount() {
-    if (MesosStateStore.isStatesProcessed()) {
+    if (MesosStateStore.get("statesProcessed")) {
       this.findAndRenderService(this.props.params.serviceName);
     } else {
       this.addMesosStateListeners();
@@ -74,7 +74,7 @@ export default class ServiceOverlay extends React.Component {
   }
 
   onMesosSummaryChange() {
-    if (MesosStateStore.isStatesProcessed()) {
+    if (MesosStateStore.get("statesProcessed")) {
       // Once we have the data we need (frameworks), stop listening for changes.
       this.removeMesosStateListeners();
       this.findAndRenderService(this.props.params.serviceName);
