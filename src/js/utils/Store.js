@@ -3,10 +3,6 @@ var EventEmitter = require("events").EventEmitter;
 
 function mixInto(target, source) {
   Object.keys(source).forEach(function (key) {
-    // Pass if property is already defined
-    if (target[key] != null) {
-      return;
-    }
 
     var toCopy = source[key];
     if (_.isFunction(toCopy)) {

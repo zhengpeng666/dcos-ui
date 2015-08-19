@@ -57,13 +57,13 @@ describe("Store", function () {
       expect(newStore.anotherProperty).toEqual("anotherValue");
     });
 
-    it("should let store take preceedence over mixins", function () {
+    it("should let mixins take preceedence over store", function () {
       var newStore = Store.createStore({
         someProperty: "someValue",
         mixins: [{someProperty: "anotherValue"}]
       });
 
-      expect(newStore.someProperty).toEqual("someValue");
+      expect(newStore.someProperty).toEqual("anotherValue");
     });
 
     it("should let mixins take preceedence over EventEmitter", function () {
