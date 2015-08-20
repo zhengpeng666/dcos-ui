@@ -416,7 +416,7 @@ var MesosSummaryStore = Store.createStore({
         frameworks = MesosStateUtil.filterByHealth(frameworks, filterOptions.healthFilter);
       }
 
-      if (filterOptions.searchString !== "") {
+      if (filterOptions.searchString != null) {
         frameworks = StringUtil.filterByString(frameworks,
           "name",
           filterOptions.searchString
