@@ -561,6 +561,8 @@ var MesosSummaryStore = Store.createStore({
         frameworkNames.push(framework.name);
         index = frameworkIDs.length - 1;
       }
+      // set color index after discovering and assigning index framework
+      framework.colorIndex = index;
 
       return framework;
     });
