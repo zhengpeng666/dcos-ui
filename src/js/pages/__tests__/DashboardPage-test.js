@@ -7,9 +7,9 @@ var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var DashboardPage = require("../DashboardPage");
-var MesosStateStore = require("../../stores/MesosStateStore");
+var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 
-MesosStateStore.getLatest = function () {
+MesosSummaryStore.getLatest = function () {
   return {frameworks: []};
 };
 

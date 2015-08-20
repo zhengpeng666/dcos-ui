@@ -6,7 +6,7 @@ var EventTypes = require("../constants/EventTypes");
 var HealthSorting = require("../constants/HealthSorting");
 var HostTimeSeriesChart = require("../components/charts/HostTimeSeriesChart");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var MesosStateStore = require("../stores/MesosStateStore");
+var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var Page = require("../components/Page");
 var Panel = require("../components/Panel");
 var ResourceTimeSeriesChart =
@@ -19,16 +19,16 @@ var SidebarActions = require("../events/SidebarActions");
 
 function getMesosState() {
   return {
-    allocResources: MesosStateStore.getAllocResources(),
-    appsProcessed: MesosStateStore.get("appsProcessed"),
+    allocResources: MesosSummaryStore.getAllocResources(),
+    appsProcessed: MesosSummaryStore.get("appsProcessed"),
     // Need clone, modifying in place will make update components check for
     // change in the same array, in stead of two different references
-    taskFailureRate: _.clone(MesosStateStore.get("taskFailureRate")),
-    hostsCount: MesosStateStore.getActiveHostsCount(),
-    refreshRate: MesosStateStore.getRefreshRate(),
-    services: MesosStateStore.getLatest().frameworks,
-    tasks: MesosStateStore.getTaskTotals(),
-    totalResources: MesosStateStore.getTotalResources()
+    taskFailureRate: _.clone(MesosSummaryStore.get("taskFailureRate")),
+    hostsCount: MesosSummaryStore.getActiveHostsCount(),
+    refreshRate: MesosSummaryStore.getRefreshRate(),
+    services: MesosSummaryStore.getLatest().frameworks,
+    tasks: MesosSummaryStore.getTaskTotals(),
+    totalResources: MesosSummaryStore.getTotalResources()
   };
 }
 
@@ -60,14 +60,14 @@ var DashboardPage = React.createClass({
   },
 
   componentDidMount: function () {
-    MesosStateStore.addChangeListener(
+    MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
   },
 
   componentWillUnmount: function () {
-    MesosStateStore.removeChangeListener(
+    MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );

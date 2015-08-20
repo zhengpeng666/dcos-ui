@@ -17,7 +17,7 @@ var EventTypes = require("../constants/EventTypes");
 var IntercomActions = require("../events/IntercomActions");
 var IntercomStore = require("../stores/IntercomStore");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var MesosStateStore = require("../stores/MesosStateStore");
+var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var MetadataActions = require("../events/MetadataActions");
 var MetadataStore = require("../stores/MetadataStore");
 var SidebarActions = require("../events/SidebarActions");
@@ -40,13 +40,13 @@ var Sidebar = React.createClass({
     MetadataActions.fetch();
 
     this.internalStorage_set({
-      mesosInfo: MesosStateStore.getLatest(),
+      mesosInfo: MesosSummaryStore.getLatest(),
       metadata: MetadataStore.get("metadata")
     });
   },
 
   componentDidMount: function () {
-    MesosStateStore.addChangeListener(
+    MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
@@ -74,14 +74,14 @@ var Sidebar = React.createClass({
   },
 
   removeMesosStateListener: function () {
-    MesosStateStore.removeChangeListener(
+    MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
   },
 
   onMesosStateChange: function () {
-    this.internalStorage_update({mesosInfo: MesosStateStore.getLatest()});
+    this.internalStorage_update({mesosInfo: MesosSummaryStore.getLatest()});
     this.forceUpdate();
 
     // Datacenter info won't change often

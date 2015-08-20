@@ -5,13 +5,13 @@ import _ from "underscore";
 import Cluster from "../utils/Cluster";
 import EventTypes from "../constants/EventTypes";
 import HealthLabels from "../constants/HealthLabels";
-import MesosStateStore from "../stores/MesosStateStore";
+import MesosSummaryStore from "../stores/MesosSummaryStore";
 import StringUtil from "../utils/StringUtil";
 
 const PropTypes = React.PropTypes;
 
 function getServiceFromName(name) {
-  let services = MesosStateStore.getLatest().frameworks;
+  let services = MesosSummaryStore.getLatest().frameworks;
 
   return _.find(services, function (service) {
     return service.name === name;
@@ -47,7 +47,7 @@ export default class ServiceOverlay extends React.Component {
   }
 
   componentDidMount() {
-    if (MesosStateStore.get("statesProcessed")) {
+    if (MesosSummaryStore.get("statesProcessed")) {
       this.findAndRenderService(this.props.params.serviceName);
     } else {
       this.addMesosStateListeners();
@@ -62,19 +62,19 @@ export default class ServiceOverlay extends React.Component {
   }
 
   addMesosStateListeners() {
-    MesosStateStore.addChangeListener(
+    MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
   }
 
   removeMesosStateListeners() {
-    MesosStateStore.removeChangeListener(
+    MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
   }
 
   onMesosSummaryChange() {
-    if (MesosStateStore.get("statesProcessed")) {
+    if (MesosSummaryStore.get("statesProcessed")) {
       // Once we have the data we need (frameworks), stop listening for changes.
       this.removeMesosStateListeners();
       this.findAndRenderService(this.props.params.serviceName);
