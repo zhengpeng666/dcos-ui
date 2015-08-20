@@ -8,7 +8,7 @@ var Modal = React.createClass({
 
   displayName: "Modal",
 
-  innerContainerDOMNode: false,
+  innerContainerDOMNode: null,
 
   useScrollbar: false,
 
