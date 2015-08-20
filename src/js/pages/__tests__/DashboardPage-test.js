@@ -93,20 +93,20 @@ describe("DashboardPage", function () {
 
   describe("mounting", function () {
     beforeEach(function () {
-      MesosStateStore.get = jasmine.createSpy();
-      MesosStateStore.addChangeListener = jasmine.createSpy();
+      MesosSummaryStore.get = jasmine.createSpy();
+      MesosSummaryStore.addChangeListener = jasmine.createSpy();
 
       this.instance = TestUtils.renderIntoDocument(
         <DashboardPage servicesListLength={5}/>
       );
     });
 
-    it("should #get from MesosStateStore", function () {
-      expect(MesosStateStore.get).toHaveBeenCalled();
+    it("should #get from MesosSummaryStore", function () {
+      expect(MesosSummaryStore.get).toHaveBeenCalled();
     });
 
-    it("should listen for changes from MesosStateStore", function () {
-      expect(MesosStateStore.addChangeListener).toHaveBeenCalled();
+    it("should listen for changes from MesosSummaryStore", function () {
+      expect(MesosSummaryStore.addChangeListener).toHaveBeenCalled();
     });
   });
 });
