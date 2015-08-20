@@ -90,4 +90,23 @@ describe("DashboardPage", function () {
       expect(list[3].health.key).toEqual("NA");
     });
   });
+
+  describe("mounting", function () {
+    beforeEach(function () {
+      MesosStateStore.get = jasmine.createSpy();
+      MesosStateStore.addChangeListener = jasmine.createSpy();
+
+      this.instance = TestUtils.renderIntoDocument(
+        <DashboardPage servicesListLength={5}/>
+      );
+    });
+
+    it("should #get from MesosStateStore", function () {
+      expect(MesosStateStore.get).toHaveBeenCalled();
+    });
+
+    it("should listen for changes from MesosStateStore", function () {
+      expect(MesosStateStore.addChangeListener).toHaveBeenCalled();
+    });
+  });
 });
