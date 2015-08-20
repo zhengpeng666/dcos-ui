@@ -1,8 +1,24 @@
 var _ = require("underscore");
 
+var MarathonStore = require("../stores/MarathonStore");
 var MesosStateStore = require("../stores/MesosStateStore");
 
 const MesosStateUtil = {
+
+  filterByHealth: function (objects, healthFilter) {
+    let marathonApps = MarathonStore.getApps();
+
+    return _.filter(objects, function (obj) {
+      let currentApp = marathonApps[obj.name.toLowerCase()];
+      return currentApp.health.value === healthFilter;
+    });
+  },
+
+  filterHostsByService: function (hosts, frameworkId) {
+    return _.filter(hosts, function (host) {
+      return _.contains(host.framework_ids, frameworkId);
+    });
+  },
 
   /**
    * @param  {Array} filter Allows us to filter by framework id

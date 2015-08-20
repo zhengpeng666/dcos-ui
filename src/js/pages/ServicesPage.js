@@ -9,6 +9,7 @@ var FilterHeadline = require("../components/FilterHeadline");
 var FilterInputText = require("../components/FilterInputText");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var Page = require("../components/Page");
+var MarathonStore = require("../stores/MarathonStore");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
@@ -16,13 +17,15 @@ var SidebarActions = require("../events/SidebarActions");
 var RouteHandler = require("react-router").RouteHandler;
 
 function getCountByHealth(frameworks) {
-  return _.foldl(frameworks, function (acc, framework) {
-    if (acc[framework.health.value] === undefined) {
-      acc[framework.health.value] = 1;
-    } else {
-      acc[framework.health.value]++;
-    }
+  let marathonApps = MarathonStore.getApps();
 
+  return _.foldl(frameworks, function (acc, framework) {
+    let currentApp = marathonApps[framework.name.toLowerCase()];
+    if (acc[currentApp.health.value] === undefined) {
+      acc[currentApp.health.value] = 1;
+    } else {
+      acc[currentApp.health.value]++;
+    }
     return acc;
   }, {});
 }

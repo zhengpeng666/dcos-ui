@@ -6,6 +6,7 @@ var EventTypes = require("../constants/EventTypes");
 var HealthSorting = require("../constants/HealthSorting");
 var HostTimeSeriesChart = require("../components/charts/HostTimeSeriesChart");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var MarathonStore = require("../stores/MarathonStore");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var Page = require("../components/Page");
 var Panel = require("../components/Panel");
@@ -25,6 +26,7 @@ function getMesosState() {
     // change in the same array, in stead of two different references
     taskFailureRate: _.clone(MesosSummaryStore.get("taskFailureRate")),
     hostsCount: MesosSummaryStore.getActiveHostsCount(),
+    marathonApps: MarathonStore.getApps(),
     refreshRate: MesosSummaryStore.getRefreshRate(),
     services: MesosSummaryStore.getLatest().frameworks,
     tasks: MesosSummaryStore.getTaskTotals(),
@@ -69,11 +71,19 @@ var DashboardPage = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
+    MarathonStore.addChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE,
+      this.onMesosStateChange
+    );
   },
 
   componentWillUnmount: function () {
     MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
+      this.onMesosStateChange
+    );
+    MarathonStore.removeChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE,
       this.onMesosStateChange
     );
   },
@@ -84,17 +94,16 @@ var DashboardPage = React.createClass({
   },
 
   getServicesList: function (_services) {
+    let marathonApps = this.internalStorage_get().marathonApps;
     // Pick out only the data we need.
-    var services = _.map(_services, function (service) {
-      return _.pick(service, "name", "health", "webui_url", "TASK_RUNNING", "id");
+    let services = _.map(_services, function (service) {
+      return _.pick(service, "name", "webui_url", "TASK_RUNNING", "id");
     });
 
-    var sortedServices = _.sortBy(services, function (service) {
-      if (service.health == null) {
-        return HealthSorting.NA;
-      }
-
-      return HealthSorting[service.health.key];
+    let sortedServices = _.sortBy(services, function (service) {
+      let currentApp = marathonApps[service.name.toLowerCase()];
+      let health = currentApp.health;
+      return HealthSorting[health.key];
     });
 
     return _.first(sortedServices, this.props.servicesListLength);
@@ -157,7 +166,9 @@ var DashboardPage = React.createClass({
             <Panel title="Services Health" className="dashboard-panel">
               <ServiceList
                 healthProcessed={data.appsProcessed}
-                services={this.getServicesList(data.services)} />
+                marathonApps={data.marathonApps}
+                services={this.getServicesList(data.services)}
+                 />
               {this.getViewAllServicesBtn()}
             </Panel>
           </div>

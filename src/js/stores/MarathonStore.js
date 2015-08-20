@@ -29,6 +29,10 @@ function stopPolling() {
 
 var MarathonStore = Store.createStore({
 
+  getApps: function () {
+    return this.apps;
+  },
+
   getFrameworkHealth: function (app) {
     if (app.healthChecks == null || app.healthChecks.length === 0) {
       return null;

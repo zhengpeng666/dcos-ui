@@ -3,9 +3,12 @@ var classNames = require("classnames");
 var Link = require("react-router").Link;
 var React = require("react/addons");
 
+var EventTypes = require("../constants/EventTypes");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var MarathonStore = require("../stores/MarathonStore");
 var Maths = require("../utils/Maths");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var Table = require("./Table");
@@ -16,11 +19,31 @@ var ServicesTable = React.createClass({
 
   displayName: "ServicesTable",
 
-  mixins: [TooltipMixin],
+  mixins: [InternalStorageMixin, TooltipMixin],
 
   propTypes: {
     services: React.PropTypes.array.isRequired,
     healthProcessed: React.PropTypes.bool.isRequired
+  },
+
+  componentWillMount: function () {
+    this.internalStorage_set({
+      marathonApps: MarathonStore.getApps()
+    });
+  },
+
+  componentDidMount: function () {
+    MarathonStore.addChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE,
+      this.onMarathonAppsChange
+    );
+  },
+
+  componentWillUnmount: function () {
+    MarathonStore.removeChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE,
+      this.onMarathonAppsChange
+    );
   },
 
   getDefaultProps: function () {
@@ -29,12 +52,23 @@ var ServicesTable = React.createClass({
     };
   },
 
+  onMarathonAppsChange: function () {
+    this.internalStorage_set({
+      marathonApps: MarathonStore.getApps()
+    });
+    this.forceUpdate();
+  },
+
   renderHeadline: function (prop, model) {
+    let marathonApps = this.internalStorage_get().marathonApps;
+    let currentApp = marathonApps[model.name.toLowerCase()];
+    let images = currentApp.images;
+
     if (model.webui_url.length === 0) {
       return (
         <span className="h5 flush-top flush-bottom headline">
           <img className="icon icon-small border-radius"
-            src={model.images["icon-small"]} />
+            src={images["icon-small"]} />
           {model[prop]}
         </span>
       );
@@ -46,7 +80,7 @@ var ServicesTable = React.createClass({
         className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
           <img className="icon icon-small border-radius"
-          src={model.images["icon-small"]} />
+          src={images["icon-small"]} />
           {model[prop]}
         </span>
       </Link>
@@ -54,6 +88,11 @@ var ServicesTable = React.createClass({
   },
 
   renderHealth: function (prop, model) {
+
+    let marathonApps = this.internalStorage_get().marathonApps;
+    let currentApp = marathonApps[model.name.toLowerCase()];
+    let health = currentApp.health;
+
     if (!this.props.healthProcessed) {
       return (
         <div className="loader-small ball-beat">
@@ -64,30 +103,30 @@ var ServicesTable = React.createClass({
       );
     }
 
-    var statusClassSet = classNames({
-      "text-success": model.health.value === HealthTypes.HEALTHY,
-      "text-danger": model.health.value === HealthTypes.UNHEALTHY,
-      "text-warning": model.health.value === HealthTypes.IDLE,
-      "text-mute": model.health.value === HealthTypes.NA
+    let statusClassSet = classNames({
+      "text-success": health.value === HealthTypes.HEALTHY,
+      "text-danger": health.value === HealthTypes.UNHEALTHY,
+      "text-warning": health.value === HealthTypes.IDLE,
+      "text-mute": health.value === HealthTypes.NA
     });
 
-    var attributes = {};
+    let attributes = {};
     attributes["data-behavior"] = "show-tip";
 
-    if (model.health.value === HealthTypes.HEALTHY) {
+    if (health.value === HealthTypes.HEALTHY) {
       attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
-    } else if (model.health.value === HealthTypes.UNHEALTHY) {
+    } else if (health.value === HealthTypes.UNHEALTHY) {
       attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
-    } else if (model.health.value === HealthTypes.IDLE) {
+    } else if (health.value === HealthTypes.IDLE) {
       attributes["data-tip-content"] = HealthTypesDescription.IDLE;
-    } else if (model.health.value === HealthTypes.NA) {
+    } else if (health.value === HealthTypes.NA) {
       attributes["data-tip-content"] = HealthTypesDescription.NA;
     }
 
     return React.createElement(
       "span",
       _.extend({className: statusClassSet}, attributes),
-      HealthLabels[model.health.key]
+      HealthLabels[health.key]
     );
   },
 
@@ -171,6 +210,7 @@ var ServicesTable = React.createClass({
   },
 
   render: function () {
+    let marathonApps = this.internalStorage_get().marathonApps;
     return (
       <div>
         <Table
@@ -180,7 +220,7 @@ var ServicesTable = React.createClass({
           data={this.props.services.slice(0)}
           keys={["id"]}
           sortBy={{prop: "name", order: "desc"}}
-          sortFunc={ResourceTableUtil.getSortFunction("name")} />
+          sortFunc={ResourceTableUtil.getSortFunction("name", {marathonApps})} />
       </div>
     );
   }

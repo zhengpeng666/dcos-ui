@@ -21,7 +21,7 @@ var TableUtil = {
     });
   },
 
-  getSortFunction: function (title) {
+  getSortFunction: function (title, options = {}) {
     return function (prop) {
       if (isStat(prop)) {
         return function (model) {
@@ -30,13 +30,15 @@ var TableUtil = {
       }
 
       return function (model) {
-        var value = model[prop];
-        if (_.isNumber(value)) {
-          return value;
-        }
+        let value = model[prop];
 
         if (prop === "health") {
-          value = HealthSorting[value.key];
+          let health = options.marathonApps[model.name.toLowerCase()];
+          value = HealthSorting[health.key];
+        }
+
+        if (_.isNumber(value)) {
+          return value;
         }
 
         return value.toString().toLowerCase() + "-" + model[title].toLowerCase();
