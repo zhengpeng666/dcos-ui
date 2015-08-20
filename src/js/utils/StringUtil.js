@@ -1,3 +1,5 @@
+var _ = require("underscore");
+
 const StringUtil = {
   filterByString: function (objects, key, searchString) {
     var searchPattern = new RegExp(StringUtil.escapeForRegExp(searchString), "i");
