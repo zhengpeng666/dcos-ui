@@ -294,14 +294,6 @@ function getActiveSlaves(slaves) {
   return _.where(slaves, {active: true});
 }
 
-function filterByString(objects, key, searchString) {
-  var searchPattern = new RegExp(StringUtil.escapeForRegExp(searchString), "i");
-
-  return _.filter(objects, function (obj) {
-    return searchPattern.test(obj[key]);
-  });
-}
-
 function getInitialStates() {
   var currentDate = Date.now();
   // reverse date range!!!
@@ -425,7 +417,7 @@ var MesosSummaryStore = Store.createStore({
       }
 
       if (filterOptions.searchString !== "") {
-        frameworks = MesosStateUtil.filterByString(frameworks,
+        frameworks = StringUtil.filterByString(frameworks,
           "name",
           filterOptions.searchString
         );
@@ -457,7 +449,7 @@ var MesosSummaryStore = Store.createStore({
       }
 
       if (filterOptions.searchString !== "") {
-        hosts = filterByString(hosts,
+        hosts = StringUtil.filterByString(hosts,
           "hostname",
           filterOptions.searchString
         );
