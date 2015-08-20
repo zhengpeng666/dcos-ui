@@ -5,7 +5,6 @@ var React = require("react/addons");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
-var MesosStateUtil = require("../utils/MesosStateUtil");
 var NodesGridDials = require("./NodesGridDials");
 var RequestErrorMsg = require("./RequestErrorMsg");
 
@@ -82,7 +81,7 @@ var NodesGridView = React.createClass({
     var resourcesByFramework = data.resourcesByFramework;
     // Maps the usage of each service per node
     // This can change at anytime. This info is only available in state.json
-    var slaves = MesosStateUtil.getHostResourcesByFramework(
+    var slaves = MesosStateStore.getHostResourcesByFramework(
       data.hiddenServices
     );
 

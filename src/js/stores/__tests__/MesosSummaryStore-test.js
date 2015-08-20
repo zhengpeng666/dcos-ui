@@ -8,7 +8,7 @@ jest.dontMock("../MesosSummaryStore");
 jest.dontMock("./fixtures/MockStates");
 jest.dontMock("./fixtures/MockAppMetadata");
 jest.dontMock("./fixtures/MockParsedAppMetadata");
-jest.dontMock("../../utils/MesosStateUtil");
+jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/StringUtil");
