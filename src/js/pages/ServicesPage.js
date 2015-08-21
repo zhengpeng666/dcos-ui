@@ -20,13 +20,17 @@ function getCountByHealth(frameworks) {
   let marathonApps = MarathonStore.getApps();
 
   return _.foldl(frameworks, function (acc, framework) {
-    let currentApp = marathonApps[framework.name.toLowerCase()];
-    if (acc[currentApp.health.value] === undefined) {
-      acc[currentApp.health.value] = 1;
+    if (marathonApps && marathonApps[framework.name.toLowerCase()]) {
+      let currentApp = marathonApps[framework.name.toLowerCase()];
+      if (acc[currentApp.health.value] === undefined) {
+        acc[currentApp.health.value] = 1;
+      } else {
+        acc[currentApp.health.value]++;
+      }
+      return acc;
     } else {
-      acc[currentApp.health.value]++;
+      return {};
     }
-    return acc;
   }, {});
 }
 

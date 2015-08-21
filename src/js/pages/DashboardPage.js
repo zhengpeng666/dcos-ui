@@ -4,6 +4,7 @@ var Link = require("react-router").Link;
 
 var EventTypes = require("../constants/EventTypes");
 var HealthSorting = require("../constants/HealthSorting");
+var HealthTypes = require("../constants/HealthTypes");
 var HostTimeSeriesChart = require("../components/charts/HostTimeSeriesChart");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MarathonStore = require("../stores/MarathonStore");
@@ -101,9 +102,16 @@ var DashboardPage = React.createClass({
     });
 
     let sortedServices = _.sortBy(services, function (service) {
-      let currentApp = marathonApps[service.name.toLowerCase()];
-      let health = currentApp.health;
-      return HealthSorting[health.key];
+      let appHealth = {
+        key: "NA",
+        value: HealthTypes.NA
+      };
+
+      if (marathonApps && marathonApps[service.name.toLowerCase()]) {
+        appHealth = marathonApps[service.name.toLowerCase()].health;
+      }
+
+      return HealthSorting[appHealth.key];
     });
 
     return _.first(sortedServices, this.props.servicesListLength);

@@ -1,19 +1,20 @@
-var _ = require("underscore");
-var Link = require("react-router").Link;
-var React = require("react");
+let _ = require("underscore");
+let Link = require("react-router").Link;
+let React = require("react");
 
-var HealthLabels = require("../constants/HealthLabels");
-var HealthTypesDescription = require("../constants/HealthTypesDescription");
-var List = require("./List");
+let HealthLabels = require("../constants/HealthLabels");
+let HealthTypes = require("../constants/HealthTypes");
+let HealthTypesDescription = require("../constants/HealthTypesDescription");
+let List = require("./List");
 
-var STATES = {
+let STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
   HEALTHY: {key: "HEALTHY", classes: {"text-success": true}},
   IDLE: {key: "IDLE", classes: {"text-warning": true}},
   NA: {key: "NA", classes: {"text-mute": true}}
 };
 
-var ServiceList = React.createClass({
+let ServiceList = React.createClass({
 
   displayName: "ServiceList",
 
@@ -43,30 +44,37 @@ var ServiceList = React.createClass({
 
   getServices: function (services, healthProcessed) {
     return _.map(services, function (service) {
+      let appHealth = {
+        key: "NA",
+        value: HealthTypes.NA
+      };
       let attributes = {};
-      let currentApp = this.props.marathonApps[service.name.toLowerCase()];
-      let health = currentApp.health;
       let state = STATES.NA;
       let title = service.name;
 
-      if (health != null) {
-        state = STATES[health.key];
+      if (this.props.marathonApps &&
+        this.props.marathonApps[service.name.toLowerCase()]) {
+        appHealth = this.props.marathonApps[service.name.toLowerCase()].health;
+      }
+
+      if (appHealth != null) {
+        state = STATES[appHealth.key];
 
         attributes["data-behavior"] = "show-tip";
         attributes["data-tip-place"] = "top-left";
 
-        if (health.key === STATES.HEALTHY.key) {
+        if (appHealth.key === STATES.HEALTHY.key) {
           attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
-        } else if (health.key === STATES.UNHEALTHY.key) {
+        } else if (appHealth.key === STATES.UNHEALTHY.key) {
           attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
-        } else if (health.key === STATES.IDLE.key) {
+        } else if (appHealth.key === STATES.IDLE.key) {
           attributes["data-tip-content"] = HealthTypesDescription.IDLE;
-        } else if (health.key === STATES.NA.key) {
+        } else if (appHealth.key === STATES.NA.key) {
           attributes["data-tip-content"] = HealthTypesDescription.NA;
         }
       }
 
-      var healthLabel = HealthLabels[state.key];
+      let healthLabel = HealthLabels[state.key];
       if (!healthProcessed) {
         healthLabel = (
           <div className="loader-small ball-beat">

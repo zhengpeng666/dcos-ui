@@ -51,15 +51,26 @@ var ServicesTable = React.createClass({
 
   renderHeadline: function (prop, model) {
     let marathonApps = MarathonStore.getApps();
-    let currentApp = marathonApps[model.name.toLowerCase()];
-    let images = currentApp.images;
+    let currentApp = null;
+    let appImages = null;
+    let imageTag = null;
+
+    if (marathonApps && marathonApps[model.name.toLowerCase()]) {
+      currentApp = marathonApps[model.name.toLowerCase()];
+      appImages = currentApp.images;
+    }
+
+    if (appImages) {
+      imageTag = (
+        <img className="icon icon-small border-radius"
+          src={appImages["icon-small"]} />
+      );
+    }
 
     if (model.webui_url.length === 0) {
       return (
         <span className="h5 flush-top flush-bottom headline">
-          <img className="icon icon-small border-radius"
-            src={images["icon-small"]} />
-          {model[prop]}
+          {imageTag} {model[prop]}
         </span>
       );
     }
@@ -69,9 +80,7 @@ var ServicesTable = React.createClass({
         params={{serviceName: model.name}}
         className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
-          <img className="icon icon-small border-radius"
-          src={images["icon-small"]} />
-          {model[prop]}
+          {imageTag} {model[prop]}
         </span>
       </Link>
     );
@@ -79,8 +88,16 @@ var ServicesTable = React.createClass({
 
   renderHealth: function (prop, model) {
     let marathonApps = MarathonStore.getApps();
-    let currentApp = marathonApps[model.name.toLowerCase()];
-    let health = currentApp.health;
+    let currentApp = null;
+    let appHealth = {
+      key: "NA",
+      value: HealthTypes.NA
+    };
+
+    if (marathonApps && marathonApps[model.name.toLowerCase()]) {
+      currentApp = marathonApps[model.name.toLowerCase()];
+      appHealth = currentApp.health;
+    }
 
     if (!this.props.healthProcessed) {
       return (
@@ -93,30 +110,31 @@ var ServicesTable = React.createClass({
     }
 
     let statusClassSet = classNames({
-      "text-success": health.value === HealthTypes.HEALTHY,
-      "text-danger": health.value === HealthTypes.UNHEALTHY,
-      "text-warning": health.value === HealthTypes.IDLE,
-      "text-mute": health.value === HealthTypes.NA
+      "text-success": appHealth.value === HealthTypes.HEALTHY,
+      "text-danger": appHealth.value === HealthTypes.UNHEALTHY,
+      "text-warning": appHealth.value === HealthTypes.IDLE,
+      "text-mute": appHealth.value === HealthTypes.NA
     });
 
     let attributes = {};
     attributes["data-behavior"] = "show-tip";
 
-    if (health.value === HealthTypes.HEALTHY) {
+    if (appHealth.value === HealthTypes.HEALTHY) {
       attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
-    } else if (health.value === HealthTypes.UNHEALTHY) {
+    } else if (appHealth.value === HealthTypes.UNHEALTHY) {
       attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
-    } else if (health.value === HealthTypes.IDLE) {
+    } else if (appHealth.value === HealthTypes.IDLE) {
       attributes["data-tip-content"] = HealthTypesDescription.IDLE;
-    } else if (health.value === HealthTypes.NA) {
+    } else if (appHealth.value === HealthTypes.NA) {
       attributes["data-tip-content"] = HealthTypesDescription.NA;
     }
 
     return React.createElement(
       "span",
       _.extend({className: statusClassSet}, attributes),
-      HealthLabels[health.key]
+      HealthLabels[appHealth.key]
     );
+
   },
 
   renderStats: function (prop, model) {

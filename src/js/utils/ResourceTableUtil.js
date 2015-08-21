@@ -1,11 +1,12 @@
-var _ = require("underscore");
-var classNames = require("classnames");
+let _ = require("underscore");
+let classNames = require("classnames");
 /*eslint-disable no-unused-vars*/
-var React = require("react/addons");
+let React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
-var HealthSorting = require("../constants/HealthSorting");
-var TableHeaderLabels = require("../constants/TableHeaderLabels");
+let HealthSorting = require("../constants/HealthSorting");
+let HealthTypes = require("../constants/HealthTypes");
+let TableHeaderLabels = require("../constants/TableHeaderLabels");
 
 function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
@@ -33,7 +34,13 @@ var TableUtil = {
         let value = model[prop];
 
         if (prop === "health") {
-          let health = options.marathonApps[model.name.toLowerCase()];
+          let health = {
+            key: "NA",
+            value: HealthTypes.NA
+          };
+          if (options.marathonApps && options.marathonApps[model.name.toLowerCase()]) {
+            health = options.marathonApps[model.name.toLowerCase()].health;
+          }
           value = HealthSorting[health.key];
         }
 

@@ -9,8 +9,12 @@ const MesosStateUtil = {
     let marathonApps = MarathonStore.getApps();
 
     return _.filter(objects, function (obj) {
-      let currentApp = marathonApps[obj.name.toLowerCase()];
-      return currentApp.health.value === healthFilter;
+      if (marathonApps && marathonApps[obj.name.toLowerCase()]) {
+        let currentApp = marathonApps[obj.name.toLowerCase()];
+        return currentApp.health.value === healthFilter;
+      } else {
+        return false;
+      }
     });
   },
 

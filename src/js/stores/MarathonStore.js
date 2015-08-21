@@ -30,7 +30,7 @@ function stopPolling() {
 var MarathonStore = Store.createStore({
 
   getApps: function () {
-    return this.apps;
+    return this.apps || null;
   },
 
   getFrameworkHealth: function (app) {
