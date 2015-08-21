@@ -22,6 +22,17 @@ describe("DashboardPage", function () {
       this.instance = TestUtils.renderIntoDocument(
         <DashboardPage servicesListLength={5}/>
       );
+      this.instance.internalStorage_get = function () {
+        return {
+          marathonApps: {
+            foo: {
+              health: {
+                key: 1
+              }
+            }
+          }
+        };
+      };
     });
 
     it("gets list of services", function () {
@@ -32,13 +43,25 @@ describe("DashboardPage", function () {
       expect(list).toEqual([{name: "foo", health: {key: "bar"}}]);
     });
 
-    it("should pick out name,health keys only", function () {
-      var services = [
-        {name: "foo", health: {key: "bar"}, bar: "baz"}
-      ];
+    it("should pick out name, webui_url," +
+      "TASK_RUNNING, and id keys only", function () {
+      var services = [{
+        name: "foo",
+        health: {key: "bar"},
+        webui_url: "qux",
+        TASK_RUNNING: "baz",
+        id: "quux",
+        corge: "grault"
+      }];
 
       var list = this.instance.getServicesList(services);
-      expect(list).toEqual([{name: "foo", health: {key: "bar"}}]);
+
+      expect(list).toEqual([{
+        name: "foo",
+        webui_url: "qux",
+        TASK_RUNNING: "baz",
+        id: "quux"
+      }]);
     });
 
     it("handles services with missing health", function () {

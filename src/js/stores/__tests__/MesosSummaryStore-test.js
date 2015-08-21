@@ -6,27 +6,18 @@ jest.dontMock("../../config/Config");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../MesosSummaryStore");
 jest.dontMock("./fixtures/MockStates");
-jest.dontMock("./fixtures/MockMarathonApps");
 jest.dontMock("./fixtures/MockAppMetadata");
 jest.dontMock("./fixtures/MockParsedAppMetadata");
+jest.dontMock("../../utils/MesosStateUtil");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../utils/Store");
+jest.dontMock("../../utils/StringUtil");
 
 var AppDispatcher = require("../../events/AppDispatcher");
 var ActionTypes = require("../../constants/ActionTypes");
 var Config = require("../../config/Config");
 var MesosSummaryStore = require("../MesosSummaryStore");
 var MockStates = require("./fixtures/MockStates");
-var MockMarathonApps = require("./fixtures/MockMarathonApps");
-
-function getFrameworkAfterProcess(apps) {
-  MesosSummaryStore.onMarathonAppsChange(apps);
-  MesosSummaryStore.processSummary(MockStates.oneTaskRunning);
-  var frameworks = MesosSummaryStore.getFrameworks();
-  return _.find(frameworks, function (fwk) {
-    return fwk.name === MockStates.oneTaskRunning.frameworks[0].name;
-  });
-}
 
 MesosSummaryStore.init();
 
@@ -62,43 +53,6 @@ describe("Mesos State Store", function () {
       var taskFailureRate = MesosSummaryStore.get("taskFailureRate");
       expect(_.last(taskFailureRate).rate).toEqual(0);
     });
-  });
-
-  describe("#getFrameworkHealth", function () {
-
-    it("should return NA health when app has no health check", function () {
-      var framework = getFrameworkAfterProcess(MockMarathonApps.hasNoHealthy);
-      expect(framework.health.key).toEqual("NA");
-    });
-
-    it("should return idle when app has no running tasks", function () {
-      var framework = getFrameworkAfterProcess(MockMarathonApps.hasNoRunningTasks);
-      expect(framework.health.key).toEqual("IDLE");
-    });
-
-    it("should return unhealthy when app has only unhealthy tasks",
-      function () {
-        var framework = getFrameworkAfterProcess(MockMarathonApps.hasOnlyUnhealth);
-        expect(framework.health.key).toEqual("UNHEALTHY");
-      }
-    );
-
-    it("should return unhealthy when app has both healthy and unhealthy tasks",
-      function () {
-        var framework = getFrameworkAfterProcess(
-          MockMarathonApps.hasUnhealthAndHealth
-        );
-        expect(framework.health.key).toEqual("UNHEALTHY");
-      }
-    );
-
-    it("should return healthy when app has healthy and no unhealthy tasks",
-      function () {
-        var framework = getFrameworkAfterProcess(MockMarathonApps.hasHealth);
-        expect(framework.health.key).toEqual("HEALTHY");
-      }
-    );
-
   });
 
   describe("#getFrameworks", function () {
@@ -190,42 +144,6 @@ describe("Mesos State Store", function () {
       var stateTimeDelta = mostRecentState.date - secondMostRecentState.date;
       expect(stateTimeDelta).toEqual(3333);
     });
-
-  });
-
-  describe("#onMarathonAppsChange", function () {
-    beforeEach(function () {
-      MesosSummaryStore.set({initCalledAt: null});
-      MesosSummaryStore.init();
-    });
-
-    it("should set Marathon health to idle with no apps", function () {
-      MesosSummaryStore.onMarathonAppsChange({
-        marathon: {health: {key: "IDLE"}}
-      });
-      MesosSummaryStore.processSummary(MockStates.frameworksWithMarathonName);
-      this.frameworks = MesosSummaryStore.getFrameworks();
-      expect(this.frameworks[0].health.key).toEqual("IDLE");
-    });
-
-    it("should set Marathon health to healthy with some apps", function () {
-      MesosSummaryStore.onMarathonAppsChange({
-        marathon: {health: {key: "HEALTHY"}}
-      });
-      MesosSummaryStore.processSummary(MockStates.frameworksWithMarathonName);
-      this.frameworks = MesosSummaryStore.getFrameworks();
-      expect(this.frameworks[0].health.key).toEqual("HEALTHY");
-    });
-
-    it("should have Marathon health NA if onMarathonAppsChange is not called",
-      function () {
-        MesosSummaryStore.onMarathonAppsChange = jasmine.createSpy();
-        expect(MesosSummaryStore.onMarathonAppsChange).not.toHaveBeenCalled();
-        MesosSummaryStore.processSummary(MockStates.frameworksWithMarathonName);
-        this.frameworks = MesosSummaryStore.getFrameworks();
-        expect(this.frameworks[0].health.key).toEqual("NA");
-      }
-    );
 
   });
 
