@@ -29,6 +29,14 @@ function stopPolling() {
 
 var MarathonStore = Store.createStore({
 
+  addChangeListener: function (eventName, callback) {
+    this.on(eventName, callback);
+
+    if (eventName === EventTypes.MARATHON_APPS_CHANGE) {
+      startPolling();
+    }
+  },
+
   getApps: function () {
     return this.apps || null;
   },
@@ -48,14 +56,29 @@ var MarathonStore = Store.createStore({
     return health;
   },
 
-  parseMetadata: function (b64Data) {
-    // extract content of the DCOS_PACKAGE_METADATA label
-    try {
-      var dataAsJsonString = global.atob(b64Data);
-      return JSON.parse(dataAsJsonString);
-    } catch (error) {
-      return {};
+  getHealthByName: function (name) {
+    let appName = name.toLowerCase();
+    let appHealth = {
+      key: "NA",
+      value: HealthTypes.NA
+    };
+
+    if (this.apps && this.apps[appName]) {
+      appHealth = this.apps[appName].health;
     }
+
+    return appHealth;
+  },
+
+  getImagesByName: function (name) {
+    let appName = name.toLowerCase();
+    let appImages = null;
+
+    if (this.apps && this.apps[appName]) {
+      appImages = this.apps[appName].images;
+    }
+
+    return appImages;
   },
 
   getImageSizeFromMetadata: function (metadata, size) {
@@ -84,22 +107,6 @@ var MarathonStore = Store.createStore({
     }
 
     return metadata.images;
-  },
-
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-
-    if (eventName === EventTypes.MARATHON_APPS_CHANGE) {
-      startPolling();
-    }
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
-
-    if (_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE))) {
-      stopPolling();
-    }
   },
 
   processMarathonApps: function (data) {
@@ -144,6 +151,24 @@ var MarathonStore = Store.createStore({
 
   processMarathonAppsError: function () {
     this.emit(EventTypes.MARATHON_APPS_ERROR);
+  },
+
+  parseMetadata: function (b64Data) {
+    // extract content of the DCOS_PACKAGE_METADATA label
+    try {
+      var dataAsJsonString = global.atob(b64Data);
+      return JSON.parse(dataAsJsonString);
+    } catch (error) {
+      return {};
+    }
+  },
+
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
+
+    if (_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE))) {
+      stopPolling();
+    }
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {

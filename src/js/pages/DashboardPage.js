@@ -4,7 +4,6 @@ var Link = require("react-router").Link;
 
 var EventTypes = require("../constants/EventTypes");
 var HealthSorting = require("../constants/HealthSorting");
-var HealthTypes = require("../constants/HealthTypes");
 var HostTimeSeriesChart = require("../components/charts/HostTimeSeriesChart");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MarathonStore = require("../stores/MarathonStore");
@@ -95,23 +94,18 @@ var DashboardPage = React.createClass({
   },
 
   getServicesList: function (_services) {
-    let marathonApps = this.internalStorage_get().marathonApps;
     // Pick out only the data we need.
     let services = _.map(_services, function (service) {
       return _.pick(service, "name", "webui_url", "TASK_RUNNING", "id");
     });
 
     let sortedServices = _.sortBy(services, function (service) {
-      let appHealth = {
-        key: "NA",
-        value: HealthTypes.NA
-      };
-
-      if (marathonApps && marathonApps[service.name.toLowerCase()]) {
-        appHealth = marathonApps[service.name.toLowerCase()].health;
+      let health = MarathonStore.getHealthByName(service.name);
+      if (health && health.key) {
+        return HealthSorting[health.key];
+      } else {
+        return 0;
       }
-
-      return HealthSorting[appHealth.key];
     });
 
     return _.first(sortedServices, this.props.servicesListLength);
@@ -175,8 +169,7 @@ var DashboardPage = React.createClass({
               <ServiceList
                 healthProcessed={data.appsProcessed}
                 marathonApps={data.marathonApps}
-                services={this.getServicesList(data.services)}
-                 />
+                services={this.getServicesList(data.services)} />
               {this.getViewAllServicesBtn()}
             </Panel>
           </div>

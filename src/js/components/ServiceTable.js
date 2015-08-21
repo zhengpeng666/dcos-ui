@@ -50,15 +50,8 @@ var ServicesTable = React.createClass({
   },
 
   renderHeadline: function (prop, model) {
-    let marathonApps = MarathonStore.getApps();
-    let currentApp = null;
-    let appImages = null;
+    let appImages = MarathonStore.getImagesByName(model.name);
     let imageTag = null;
-
-    if (marathonApps && marathonApps[model.name.toLowerCase()]) {
-      currentApp = marathonApps[model.name.toLowerCase()];
-      appImages = currentApp.images;
-    }
 
     if (appImages) {
       imageTag = (
@@ -87,17 +80,7 @@ var ServicesTable = React.createClass({
   },
 
   renderHealth: function (prop, model) {
-    let marathonApps = MarathonStore.getApps();
-    let currentApp = null;
-    let appHealth = {
-      key: "NA",
-      value: HealthTypes.NA
-    };
-
-    if (marathonApps && marathonApps[model.name.toLowerCase()]) {
-      currentApp = marathonApps[model.name.toLowerCase()];
-      appHealth = currentApp.health;
-    }
+    let appHealth = MarathonStore.getHealthByName(model.name);
 
     if (!this.props.healthProcessed) {
       return (

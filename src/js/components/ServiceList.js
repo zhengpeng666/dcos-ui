@@ -3,7 +3,6 @@ let Link = require("react-router").Link;
 let React = require("react");
 
 let HealthLabels = require("../constants/HealthLabels");
-let HealthTypes = require("../constants/HealthTypes");
 let HealthTypesDescription = require("../constants/HealthTypesDescription");
 let List = require("./List");
 
@@ -44,18 +43,12 @@ let ServiceList = React.createClass({
 
   getServices: function (services, healthProcessed) {
     return _.map(services, function (service) {
-      let appHealth = {
-        key: "NA",
-        value: HealthTypes.NA
-      };
+      let appHealth = this.props.marathonApps[
+        service.name.toLowerCase()
+      ].health;
       let attributes = {};
       let state = STATES.NA;
       let title = service.name;
-
-      if (this.props.marathonApps &&
-        this.props.marathonApps[service.name.toLowerCase()]) {
-        appHealth = this.props.marathonApps[service.name.toLowerCase()].health;
-      }
 
       if (appHealth != null) {
         state = STATES[appHealth.key];

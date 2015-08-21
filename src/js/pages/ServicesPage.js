@@ -17,20 +17,14 @@ var SidebarActions = require("../events/SidebarActions");
 var RouteHandler = require("react-router").RouteHandler;
 
 function getCountByHealth(frameworks) {
-  let marathonApps = MarathonStore.getApps();
-
   return _.foldl(frameworks, function (acc, framework) {
-    if (marathonApps && marathonApps[framework.name.toLowerCase()]) {
-      let currentApp = marathonApps[framework.name.toLowerCase()];
-      if (acc[currentApp.health.value] === undefined) {
-        acc[currentApp.health.value] = 1;
-      } else {
-        acc[currentApp.health.value]++;
-      }
-      return acc;
+    let appHealth = MarathonStore.getHealthByName(framework.name);
+    if (acc[appHealth.value] === undefined) {
+      acc[appHealth.value] = 1;
     } else {
-      return {};
+      acc[appHealth.value]++;
     }
+    return acc;
   }, {});
 }
 

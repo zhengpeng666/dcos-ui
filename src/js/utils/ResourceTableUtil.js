@@ -5,7 +5,7 @@ let React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
 let HealthSorting = require("../constants/HealthSorting");
-let HealthTypes = require("../constants/HealthTypes");
+let MarathonStore = require("../stores/MarathonStore");
 let TableHeaderLabels = require("../constants/TableHeaderLabels");
 
 function isStat(prop) {
@@ -22,7 +22,7 @@ var TableUtil = {
     });
   },
 
-  getSortFunction: function (title, options = {}) {
+  getSortFunction: function (title) {
     return function (prop) {
       if (isStat(prop)) {
         return function (model) {
@@ -34,13 +34,7 @@ var TableUtil = {
         let value = model[prop];
 
         if (prop === "health") {
-          let health = {
-            key: "NA",
-            value: HealthTypes.NA
-          };
-          if (options.marathonApps && options.marathonApps[model.name.toLowerCase()]) {
-            health = options.marathonApps[model.name.toLowerCase()].health;
-          }
+          let health = MarathonStore.getHealthByName(model.name);
           value = HealthSorting[health.key];
         }
 

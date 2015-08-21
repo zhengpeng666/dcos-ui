@@ -6,15 +6,9 @@ var MesosStateStore = require("../stores/MesosStateStore");
 const MesosStateUtil = {
 
   filterByHealth: function (objects, healthFilter) {
-    let marathonApps = MarathonStore.getApps();
-
     return _.filter(objects, function (obj) {
-      if (marathonApps && marathonApps[obj.name.toLowerCase()]) {
-        let currentApp = marathonApps[obj.name.toLowerCase()];
-        return currentApp.health.value === healthFilter;
-      } else {
-        return false;
-      }
+      let appHealth = MarathonStore.getHealthByName(obj.name);
+      return appHealth.value === healthFilter;
     });
   },
 
