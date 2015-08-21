@@ -70,10 +70,9 @@ describe("Modal", function () {
   describe("rerender functionality", function () {
     it("should render twice when opening", function () {
       var instance = TestUtils.renderIntoDocument(
-        <Modal open={true} />
+        <Modal open={false} />
       );
 
-      instance.setProps({open: false});
       spyOn(instance, "render").andCallThrough();
       instance.setProps({open: true});
 
