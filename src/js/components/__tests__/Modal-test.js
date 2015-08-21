@@ -97,7 +97,7 @@ describe("Modal", function () {
       );
 
       instance.setProps({open: true}, function () {
-        expect(TestUtils.isElement(instance.innerContainerDOMNode));
+        expect(!!instance.innerContainerDOMNode).toEqual(true);
       });
     });
 
