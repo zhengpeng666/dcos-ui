@@ -45,7 +45,70 @@ describe("Modal", function () {
       var footer = instance.getFooter();
       expect(TestUtils.isElement(footer)).toEqual(true);
     });
-
   });
 
+  describe("#getModal", function () {
+    it("should return null if modal is not open", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <Modal open={false} />
+      );
+
+      var modal = instance.getModal();
+      expect(modal).toEqual(null);
+    });
+
+    it("should return something if modal is open", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <Modal open={true} />
+      );
+
+      var modal = instance.getModal();
+      expect(TestUtils.isElement(modal)).toEqual(true);
+    });
+  });
+
+  describe("rerender functionality", function () {
+    it("should render twice when opening", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <Modal open={true} />
+      );
+
+      instance.setProps({open: false});
+      spyOn(instance, "render").andCallThrough();
+      instance.setProps({open: true});
+
+      expect(instance.render.callCount).toEqual(2);
+    });
+
+    it("should render once if not open", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <Modal open={true} />
+      );
+
+      spyOn(instance, "render").andCallThrough();
+      instance.setProps({open: false});
+      expect(instance.render.callCount).toEqual(1);
+    });
+  });
+
+  describe("#innerContainerDOMNode", function () {
+    it("should be set after opening", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <Modal open={false} />
+      );
+
+      instance.setProps({open: true}, function () {
+        expect(TestUtils.isElement(instance.innerContainerDOMNode));
+      });
+    });
+
+    it("should be set to null after closing", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <Modal open={true} />
+      );
+
+      instance.closeModal();
+      expect(instance.innerContainerDOMNode).toEqual(null);
+    });
+  });
 });
