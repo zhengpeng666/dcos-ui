@@ -1,7 +1,6 @@
 jest.dontMock("../ServiceOverlay");
 jest.dontMock("../ServiceTable");
 jest.dontMock("../../mixins/GetSetMixin");
-// jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../stores/__tests__/fixtures/state.json");
@@ -22,11 +21,9 @@ MesosSummaryStore.init();
 MesosSummaryStore.processSummary(stateJSON);
 
 function getTable(isAppsProcessed) {
-  var marathonApps = [{name: "foo", health: {value: 1, key: "HEALTHY"}}];
   return TestUtils.renderIntoDocument(
     <ServiceTable services={MesosSummaryStore.getFrameworks()}
-      healthProcessed={isAppsProcessed}
-      marathonApps={marathonApps} />
+      healthProcessed={isAppsProcessed} />
   );
 }
 
@@ -67,7 +64,9 @@ describe("ServiceTable", function () {
         );
         expect(healthlabel.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
       });
+
     });
+
   });
 
 });
