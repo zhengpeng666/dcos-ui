@@ -7,7 +7,6 @@ var EventTypes = require("../constants/EventTypes");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MarathonStore = require("../stores/MarathonStore");
 var Maths = require("../utils/Maths");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
@@ -19,17 +18,11 @@ var ServicesTable = React.createClass({
 
   displayName: "ServicesTable",
 
-  mixins: [InternalStorageMixin, TooltipMixin],
+  mixins: [TooltipMixin],
 
   propTypes: {
     services: React.PropTypes.array.isRequired,
     healthProcessed: React.PropTypes.bool.isRequired
-  },
-
-  componentWillMount: function () {
-    this.internalStorage_set({
-      marathonApps: MarathonStore.getApps()
-    });
   },
 
   componentDidMount: function () {
@@ -53,14 +46,11 @@ var ServicesTable = React.createClass({
   },
 
   onMarathonAppsChange: function () {
-    this.internalStorage_set({
-      marathonApps: MarathonStore.getApps()
-    });
     this.forceUpdate();
   },
 
   renderHeadline: function (prop, model) {
-    let marathonApps = this.internalStorage_get().marathonApps;
+    let marathonApps = MarathonStore.getApps();
     let currentApp = marathonApps[model.name.toLowerCase()];
     let images = currentApp.images;
 
@@ -88,8 +78,7 @@ var ServicesTable = React.createClass({
   },
 
   renderHealth: function (prop, model) {
-
-    let marathonApps = this.internalStorage_get().marathonApps;
+    let marathonApps = MarathonStore.getApps();
     let currentApp = marathonApps[model.name.toLowerCase()];
     let health = currentApp.health;
 
@@ -210,7 +199,7 @@ var ServicesTable = React.createClass({
   },
 
   render: function () {
-    let marathonApps = this.internalStorage_get().marathonApps;
+    let marathonApps = MarathonStore.getApps();
     return (
       <div>
         <Table
