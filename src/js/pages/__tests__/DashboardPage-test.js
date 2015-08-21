@@ -91,22 +91,48 @@ describe("DashboardPage", function () {
     });
   });
 
-  describe("mounting", function () {
+  describe("getting data from the Store", function () {
     beforeEach(function () {
-      MesosSummaryStore.get = jasmine.createSpy();
-      MesosSummaryStore.addChangeListener = jasmine.createSpy();
+      // Get the listener to fake a summary change.
+      MesosSummaryStore.addChangeListener = function (event, listener) {
+        this.mesosStateListener = listener;
+      }.bind(this);
+    });
+
+    it("should update on summary change from MesosSummaryStore", function () {
+      // Mock all the return values from the Store.
+      var mockedFunctions = {
+        getAllocResources: {mocked: "data"},
+        get: {mocked: "data"},
+        getActiveHostsCount: {mocked: "data"},
+        getRefreshRate: {mocked: "data"},
+        getLatest: {frameworks: [{health: "HEALTHY"}], mocked: "data"},
+        getTaskTotals: {mocked: "data"},
+        getTotalResources: {mocked: "data"}
+      };
+
+      for (var key in mockedFunctions) {
+        MesosSummaryStore[key] = function (data) {
+          return data;
+        }.bind(MesosSummaryStore, mockedFunctions[key]);
+      }
 
       this.instance = TestUtils.renderIntoDocument(
-        <DashboardPage servicesListLength={5}/>
+        <DashboardPage/>
       );
-    });
 
-    it("should #get from MesosSummaryStore", function () {
-      expect(MesosSummaryStore.get).toHaveBeenCalled();
-    });
+      // Trigger the event listener. Pretend like the summary has changed.
+      this.mesosStateListener();
 
-    it("should listen for changes from MesosSummaryStore", function () {
-      expect(MesosSummaryStore.addChangeListener).toHaveBeenCalled();
+      // Make sure the storage gets the same data.
+      var internalStorage = this.instance.internalStorage_get();
+      for (var key in internalStorage) {
+        if (key === "services") {
+          expect(internalStorage[key][0].health).toEqual("HEALTHY");
+        } else {
+          expect(internalStorage[key].mocked).toEqual("data");
+        }
+      }
     });
   });
 });
