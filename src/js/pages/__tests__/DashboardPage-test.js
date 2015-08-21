@@ -99,7 +99,7 @@ describe("DashboardPage", function () {
       }.bind(this);
     });
 
-    it("should update on summary change from MesosSummaryStore", function () {
+    it("should save the summary to internal storage", function () {
       // Mock all the return values from the Store.
       var mockedFunctions = {
         getAllocResources: {mocked: "data"},
