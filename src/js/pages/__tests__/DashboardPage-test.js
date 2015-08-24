@@ -23,12 +23,38 @@ describe("DashboardPage", function () {
       );
     });
 
+    it("gets list of services", function () {
+      var services = [
+        {name: "foo", health: {key: "bar"}}
+      ];
+      var list = this.instance.getServicesList(services);
+      expect(list).toEqual([{name: "foo", health: {key: "bar"}}]);
+    });
+
     it("should pick out name,health keys only", function () {
       var services = [
         {name: "foo", health: {key: "bar"}, bar: "baz"}
       ];
       var list = this.instance.getServicesList(services);
       expect(list).toEqual([{name: "foo", health: {key: "bar"}}]);
+    });
+
+    it("handles services with missing health", function () {
+      var services = [
+        {name: "foo"}
+      ];
+      var list = this.instance.getServicesList(services);
+      expect(list).toEqual([{name: "foo"}]);
+    });
+
+    it("sorts services by health", function () {
+      var services = [
+        {name: "bar", health: {key: "HEALTHY"}},
+        {name: "foo", health: {key: "UNHEALTHY"}}
+      ];
+      var list = this.instance.getServicesList(services);
+      expect(list[0].name).toEqual("foo");
+      expect(list[1].name).toEqual("bar");
     });
 
   });
