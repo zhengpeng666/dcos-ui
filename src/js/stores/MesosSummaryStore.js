@@ -8,6 +8,7 @@ var GetSetMixin = require("../mixins/GetSetMixin");
 var MarathonStore = require("./MarathonStore");
 var MesosSummaryUtil = require("../utils/MesosSummaryUtil");
 var MesosSummaryActions = require("../events/MesosSummaryActions");
+var StringUtil = require("../utils/StringUtil");
 var Store = require("../utils/Store");
 var TimeScales = require("../constants/TimeScales");
 

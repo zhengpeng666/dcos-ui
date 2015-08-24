@@ -2,7 +2,6 @@ var _ = require("underscore");
 
 var Config = require("../config/Config");
 var Maths = require("../utils/Maths");
-var StringUtil = require("../utils/StringUtil");
 
 const MesosSummaryUtil = {
 
