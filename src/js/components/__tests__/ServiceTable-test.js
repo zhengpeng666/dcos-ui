@@ -5,6 +5,7 @@ jest.dontMock("../../stores/MarathonStore");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/RequestUtil");
+jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../stores/__tests__/fixtures/state.json");
 jest.dontMock("../../utils/Store");
 
