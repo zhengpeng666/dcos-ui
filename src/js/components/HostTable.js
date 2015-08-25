@@ -13,6 +13,14 @@ var HostTable = React.createClass({
 
   mixins: [TooltipMixin],
 
+  statics: {
+    routeConfig: {
+      label: "Nodes",
+      icon: "datacenter",
+      matches: /^\/nodes/
+    }
+  },
+
   propTypes: {
     hosts: React.PropTypes.array.isRequired
   },

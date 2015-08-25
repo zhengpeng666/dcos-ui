@@ -23,17 +23,15 @@ var MetadataStore = require("../stores/MetadataStore");
 var SidebarActions = require("../events/SidebarActions");
 var TooltipMixin = require("../mixins/TooltipMixin");
 
-var MENU_ITEMS = {
-  dashboard: {label: "Dashboard", icon: "dashboard"},
-  services: {label: "Services", icon: "services"},
-  "nodes-list": {label: "Nodes", icon: "datacenter"}
-};
-
 var Sidebar = React.createClass({
 
   displayName: "Sidebar",
 
   mixins: [State, InternalStorageMixin, TooltipMixin],
+
+  contextTypes: {
+    router: React.PropTypes.func
+  },
 
   componentWillMount: function () {
     MetadataStore.init();
@@ -177,15 +175,21 @@ var Sidebar = React.createClass({
   },
 
   getMenuItems: function () {
-    return _.map(MENU_ITEMS, function (val, key) {
-      var isActive = this.isActive(key);
+    const menuItems = ["dashboard", "services", "nodes-list"];
+    let currentPath = this.context.router.getLocation().getCurrentPath();
+
+    return _.map(menuItems, function (routeKey) {
+      var route = this.context.router.namedRoutes[routeKey];
+
+      // Figure out if current route is active
+      var isActive = route.handler.routeConfig.matches.test(currentPath);
       var iconClasses = {
         "sidebar-menu-item-icon icon icon-medium": true,
         "icon-medium-color": isActive,
         "icon-medium-black": !isActive
       };
 
-      iconClasses["icon-" + val.icon] = true;
+      iconClasses[`icon-${route.handler.routeConfig.icon}`] = true;
 
       var itemClassSet = classNames({
         "sidebar-menu-item h3": true,
@@ -193,11 +197,11 @@ var Sidebar = React.createClass({
       });
 
       return (
-        <li className={itemClassSet} key={key}>
-          <Link to={key}>
+        <li className={itemClassSet} key={route.name}>
+          <Link to={route.name}>
             <i className={classNames(iconClasses)}></i>
             <span className="sidebar-menu-item-label">
-              {val.label}
+              {route.handler.routeConfig.label}
             </span>
           </Link>
         </li>
