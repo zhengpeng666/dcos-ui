@@ -1,18 +1,21 @@
-let _ = require("underscore");
-let classNames = require("classnames");
-let React = require("react/addons");
+const _ = require("underscore");
+const classNames = require("classnames");
+const React = require("react/addons");
 
-let Config = require("../../config/Config");
-let Chart = require("./Chart");
-let BarChart = require("./BarChart");
-let ResourceTypes = require("../../constants/ResourceTypes");
+const BarChart = require("./BarChart");
+const Config = require("../../config/Config");
+const Chart = require("./Chart");
+const InternalStorageMixin = require("../../mixins/InternalStorageMixin");
+const ResourceTypes = require("../../constants/ResourceTypes");
 
 // number to fit design of width vs. height ratio
-let WIDTH_HEIGHT_RATIO = 4.5;
+const WIDTH_HEIGHT_RATIO = 4.5;
 
 let ResourceBarChart = React.createClass({
 
   displayName: "ResourceBarChart",
+
+  mixins: [InternalStorageMixin],
 
   propTypes: {
     onResourceSelectionChange: React.PropTypes.func.isRequired,
@@ -35,23 +38,23 @@ let ResourceBarChart = React.createClass({
   },
 
   getData: function () {
-    let props = this.props;
+    let currentResources = this.props.resources;
+    let fullResources = {};
 
-    _.each(_.keys(props.resources), function (key) {
-      let resources = props.resources[key];
+    Object.keys(currentResources).forEach(function (key) {
+      fullResources[key] = _.clone(currentResources[key]);
 
-      while (resources.length < Config.historyLength) {
-        resources.unshift({
+      while (fullResources[key].length < Config.historyLength) {
+        fullResources[key].unshift({
           date: 0,
           percentage: 0,
           value: 0
         });
       }
 
-      props.resources[key] = resources;
     });
 
-    if (props.itemCount === 0) {
+    if (this.props.itemCount === 0) {
       return [];
     }
 
@@ -60,7 +63,7 @@ let ResourceBarChart = React.createClass({
         id: "used_resources",
         name: selectedResource + " allocated",
         colorIndex: ResourceTypes[selectedResource].colorIndex,
-        values: props.resources[selectedResource]
+        values: fullResources[selectedResource]
     }];
   },
 
