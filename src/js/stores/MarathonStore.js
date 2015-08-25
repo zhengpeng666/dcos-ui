@@ -29,6 +29,8 @@ function stopPolling() {
 
 var MarathonStore = Store.createStore({
 
+  apps: {},
+
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
 
@@ -38,7 +40,7 @@ var MarathonStore = Store.createStore({
   },
 
   getApps: function () {
-    return this.apps || null;
+    return this.apps;
   },
 
   getFrameworkHealth: function (app) {
@@ -63,7 +65,7 @@ var MarathonStore = Store.createStore({
       value: HealthTypes.NA
     };
 
-    if (this.apps && this.apps[appName]) {
+    if (this.apps[appName]) {
       appHealth = this.apps[appName].health;
     }
 
@@ -74,7 +76,7 @@ var MarathonStore = Store.createStore({
     let appName = name.toLowerCase();
     let appImages = null;
 
-    if (this.apps && this.apps[appName]) {
+    if (this.apps[appName]) {
       appImages = this.apps[appName].images;
     }
 
