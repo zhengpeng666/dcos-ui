@@ -7,7 +7,7 @@ const MesosStateUtil = {
 
   filterByHealth: function (objects, healthFilter) {
     return _.filter(objects, function (obj) {
-      let appHealth = MarathonStore.getHealthByName(obj.name);
+      let appHealth = MarathonStore.getServiceHealth(obj.name);
       return appHealth.value === healthFilter;
     });
   },

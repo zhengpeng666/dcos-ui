@@ -120,7 +120,7 @@ export default class ServiceOverlay extends React.Component {
   }
 
   getServiceNav(service) {
-    let appHealth = MarathonStore.getHealthByName(service.name);
+    let appHealth = MarathonStore.getServiceHealth(service.name);
     let serviceHealth = HealthLabels[appHealth.key];
     let taskCount = "";
 

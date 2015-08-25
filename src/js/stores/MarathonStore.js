@@ -56,7 +56,7 @@ var MarathonStore = Store.createStore({
     return health;
   },
 
-  getHealthByName: function (name) {
+  getServiceHealth: function (name) {
     let appName = name.toLowerCase();
     let appHealth = {
       key: "NA",
@@ -70,7 +70,7 @@ var MarathonStore = Store.createStore({
     return appHealth;
   },
 
-  getImagesByName: function (name) {
+  getServiceImages: function (name) {
     let appName = name.toLowerCase();
     let appImages = null;
 

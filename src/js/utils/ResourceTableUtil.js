@@ -34,7 +34,7 @@ var TableUtil = {
         let value = model[prop];
 
         if (prop === "health") {
-          let health = MarathonStore.getHealthByName(model.name);
+          let health = MarathonStore.getServiceHealth(model.name);
           value = HealthSorting[health.key];
         }
 

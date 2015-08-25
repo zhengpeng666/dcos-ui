@@ -50,7 +50,7 @@ var ServicesTable = React.createClass({
   },
 
   renderHeadline: function (prop, model) {
-    let appImages = MarathonStore.getImagesByName(model.name);
+    let appImages = MarathonStore.getServiceImages(model.name);
     let imageTag = null;
 
     if (appImages) {
@@ -80,7 +80,7 @@ var ServicesTable = React.createClass({
   },
 
   renderHealth: function (prop, model) {
-    let appHealth = MarathonStore.getHealthByName(model.name);
+    let appHealth = MarathonStore.getServiceHealth(model.name);
 
     if (!this.props.healthProcessed) {
       return (

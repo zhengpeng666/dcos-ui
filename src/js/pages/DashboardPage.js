@@ -100,7 +100,7 @@ var DashboardPage = React.createClass({
     });
 
     let sortedServices = _.sortBy(services, function (service) {
-      let health = MarathonStore.getHealthByName(service.name);
+      let health = MarathonStore.getServiceHealth(service.name);
       if (health && health.key) {
         return HealthSorting[health.key];
       } else {

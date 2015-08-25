@@ -18,7 +18,7 @@ var RouteHandler = require("react-router").RouteHandler;
 
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
-    let appHealth = MarathonStore.getHealthByName(framework.name);
+    let appHealth = MarathonStore.getServiceHealth(framework.name);
     if (acc[appHealth.value] === undefined) {
       acc[appHealth.value] = 1;
     } else {
