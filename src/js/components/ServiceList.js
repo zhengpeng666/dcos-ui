@@ -1,12 +1,12 @@
-let _ = require("underscore");
-let Link = require("react-router").Link;
-let React = require("react");
+const _ = require("underscore");
+const Link = require("react-router").Link;
+const React = require("react");
 
-let HealthLabels = require("../constants/HealthLabels");
-let HealthTypesDescription = require("../constants/HealthTypesDescription");
-let List = require("./List");
+const HealthLabels = require("../constants/HealthLabels");
+const HealthTypesDescription = require("../constants/HealthTypesDescription");
+const List = require("./List");
 
-let STATES = {
+const STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
   HEALTHY: {key: "HEALTHY", classes: {"text-success": true}},
   IDLE: {key: "IDLE", classes: {"text-warning": true}},

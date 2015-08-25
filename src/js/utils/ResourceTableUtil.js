@@ -1,12 +1,12 @@
-let _ = require("underscore");
-let classNames = require("classnames");
+const _ = require("underscore");
+const classNames = require("classnames");
 /*eslint-disable no-unused-vars*/
-let React = require("react/addons");
+const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
-let HealthSorting = require("../constants/HealthSorting");
-let MarathonStore = require("../stores/MarathonStore");
-let TableHeaderLabels = require("../constants/TableHeaderLabels");
+const HealthSorting = require("../constants/HealthSorting");
+const MarathonStore = require("../stores/MarathonStore");
+const TableHeaderLabels = require("../constants/TableHeaderLabels");
 
 function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
