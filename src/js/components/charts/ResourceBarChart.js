@@ -45,7 +45,12 @@ let ResourceBarChart = React.createClass({
     Object.keys(currentResources).forEach(function (key) {
       fullResources[key] = _.clone(currentResources[key]);
 
-      while (fullResources[key].length < Config.historyLength) {
+      for (
+        let resourceLength = fullResources[key].length,
+          historyLength = Config.historyLength;
+        resourceLength < historyLength;
+        resourceLength++
+      ) {
         fullResources[key].unshift({
           date: 0,
           percentage: 0,
