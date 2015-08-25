@@ -38,7 +38,8 @@ let ResourceBarChart = React.createClass({
   },
 
   getData: function () {
-    let currentResources = this.props.resources;
+    let props = props;
+    let currentResources = props.resources;
     let fullResources = {};
 
     Object.keys(currentResources).forEach(function (key) {
@@ -54,11 +55,11 @@ let ResourceBarChart = React.createClass({
 
     });
 
-    if (this.props.itemCount === 0) {
+    if (props.itemCount === 0) {
       return [];
     }
 
-    let selectedResource = this.props.selectedResource;
+    let selectedResource = props.selectedResource;
     return [{
         id: "used_resources",
         name: selectedResource + " allocated",
