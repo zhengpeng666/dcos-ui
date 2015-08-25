@@ -1,7 +1,7 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
-var Dropdown = require("./Dropdown");
+var Dropdown = require("reactjs-components/src/Dropdown/Dropdown");
 
 var defaultId = "default";
 
@@ -82,8 +82,11 @@ var FilterByService = React.createClass({
   render: function () {
     return (
       <Dropdown
-        analyticsName={this.constructor.displayName}
-        selectedId={this.getSelectedId(this.props.byServiceFilter)}
+        buttonClassName="button button-small button-inverse dropdown-toggle"
+        dropdownMenuClassName="dropdown-menu inverse"
+        dropdownMenuListClassName="dropdown-menu-list"
+        wrapperClassName="dropdown"
+        selectedID={this.getSelectedId(this.props.byServiceFilter)}
         onItemSelection={this.handleItemSelection}
         items={this.getDropdownItems()} />
     );
