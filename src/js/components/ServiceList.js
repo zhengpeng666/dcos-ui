@@ -5,6 +5,7 @@ const React = require("react");
 const HealthLabels = require("../constants/HealthLabels");
 const HealthTypesDescription = require("../constants/HealthTypesDescription");
 const List = require("./List");
+const MarathonStore = require("../stores/MarathonStore");
 
 const STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
@@ -43,9 +44,7 @@ let ServiceList = React.createClass({
 
   getServices: function (services, healthProcessed) {
     return _.map(services, function (service) {
-      let appHealth = this.props.marathonApps[
-        service.name.toLowerCase()
-      ].health;
+      let appHealth = MarathonStore.getServiceHealth(service.name);
       let attributes = {};
       let state = STATES.NA;
       let title = service.name;
