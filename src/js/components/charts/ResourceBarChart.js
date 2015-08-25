@@ -38,7 +38,7 @@ let ResourceBarChart = React.createClass({
   },
 
   getData: function () {
-    let props = props;
+    let props = this.props;
     let currentResources = props.resources;
     let fullResources = {};
 
