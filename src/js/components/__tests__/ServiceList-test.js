@@ -1,5 +1,6 @@
 jest.dontMock("../ServiceList");
 jest.dontMock("../ServiceOverlay");
+jest.dontMock("../../utils/Store");
 jest.dontMock("../../stores/MarathonStore");
 
 var React = require("react/addons");
@@ -13,12 +14,10 @@ describe("ServiceList", function () {
 
     beforeEach(function () {
       var services = [{name: "foo"}];
-      var marathonApps = {foo: {health: {value: 1, key: "HEALTHY"}}};
       this.instance = TestUtils.renderIntoDocument(
         <ServiceList
           services={services}
-          healthProcessed={false}
-          marathonApps={marathonApps} />
+          healthProcessed={false} />
       );
     });
 
@@ -40,12 +39,10 @@ describe("ServiceList", function () {
 
     beforeEach(function () {
       var services = [{name: "foo"}];
-      var marathonApps = {foo: {health: {value: 1, key: "HEALTHY"}}};
       this.instance = TestUtils.renderIntoDocument(
         <ServiceList
           services={services}
-          healthProcessed={false}
-          marathonApps={marathonApps} />
+          healthProcessed={false} />
       );
     });
 
