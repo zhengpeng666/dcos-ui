@@ -26,7 +26,7 @@ function getMesosState() {
     // change in the same array, in stead of two different references
     taskFailureRate: _.clone(MesosSummaryStore.get("taskFailureRate")),
     hostsCount: MesosSummaryStore.getActiveHostsCount(),
-    marathonApps: MarathonStore.getApps(),
+    marathonApps: MarathonStore.get("apps"),
     refreshRate: MesosSummaryStore.getRefreshRate(),
     services: MesosSummaryStore.getLatest().frameworks,
     tasks: MesosSummaryStore.getTaskTotals(),

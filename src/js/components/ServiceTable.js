@@ -200,7 +200,7 @@ var ServicesTable = React.createClass({
   },
 
   render: function () {
-    let marathonApps = MarathonStore.getApps();
+    let marathonApps = MarathonStore.get("apps");
     return (
       <div>
         <Table

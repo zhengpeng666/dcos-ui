@@ -4,6 +4,7 @@ var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
+var GetSetMixin = require("../mixins/GetSetMixin");
 var HealthTypes = require("../constants/HealthTypes");
 var MarathonActions = require("../events/MarathonActions");
 var ServiceImages = require("../constants/ServiceImages");
@@ -29,7 +30,7 @@ function stopPolling() {
 
 var MarathonStore = Store.createStore({
 
-  apps: {},
+  mixins: [GetSetMixin],
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
@@ -45,10 +46,6 @@ var MarathonStore = Store.createStore({
     if (_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE))) {
       stopPolling();
     }
-  },
-
-  getApps: function () {
-    return this.apps;
   },
 
   getFrameworkHealth: function (app) {
@@ -73,8 +70,8 @@ var MarathonStore = Store.createStore({
       value: HealthTypes.NA
     };
 
-    if (this.apps[appName]) {
-      appHealth = this.apps[appName].health;
+    if (this.get("apps")[appName]) {
+      appHealth = this.get("apps")[appName].health;
     }
 
     return appHealth;
@@ -84,8 +81,8 @@ var MarathonStore = Store.createStore({
     let appName = name.toLowerCase();
     let appImages = null;
 
-    if (this.apps[appName]) {
-      appImages = this.apps[appName].images;
+    if (this.get("apps")[appName]) {
+      appImages = this.get("apps")[appName].images;
     }
 
     return appImages;
@@ -154,9 +151,9 @@ var MarathonStore = Store.createStore({
       images: ServiceImages.MARATHON_IMAGES
     };
 
-    this.apps = apps;
+    this.set({apps});
 
-    this.emit(EventTypes.MARATHON_APPS_CHANGE, this.apps);
+    this.emit(EventTypes.MARATHON_APPS_CHANGE, this.get("apps"));
   },
 
   processMarathonAppsError: function () {
