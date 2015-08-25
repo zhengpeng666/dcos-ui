@@ -39,6 +39,14 @@ var MarathonStore = Store.createStore({
     }
   },
 
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
+
+    if (_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE))) {
+      stopPolling();
+    }
+  },
+
   getApps: function () {
     return this.apps;
   },
@@ -162,14 +170,6 @@ var MarathonStore = Store.createStore({
       return JSON.parse(dataAsJsonString);
     } catch (error) {
       return {};
-    }
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
-
-    if (_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE))) {
-      stopPolling();
     }
   },
 
