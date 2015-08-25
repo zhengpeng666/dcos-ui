@@ -39,12 +39,17 @@ var DashboardPage = React.createClass({
   mixins: [InternalStorageMixin],
 
   statics: {
+    routeConfig: {
+      label: "Dashboard",
+      icon: "dashboard",
+      matches: /^\/dashboard/
+    },
+
     // Static life cycle method from react router, that will be called
     // "when a handler is about to render", i.e. on route change:
     // https://github.com/rackt/react-router/
     // blob/master/docs/api/components/RouteHandler.md
     willTransitionTo: function () {
-
       SidebarActions.close();
     }
   },

@@ -57,12 +57,17 @@ var ServicesPage = React.createClass({
   mixins: [InternalStorageMixin],
 
   statics: {
+    routeConfig: {
+      label: "Services",
+      icon: "services",
+      matches: /^\/services/
+    },
+
     // Static life cycle method from react router, that will be called
     // "when a handler is about to render", i.e. on route change:
     // https://github.com/rackt/react-router/
     // blob/master/docs/api/components/RouteHandler.md
     willTransitionTo: function () {
-
       SidebarActions.close();
     }
   },
