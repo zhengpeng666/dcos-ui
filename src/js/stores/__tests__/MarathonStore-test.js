@@ -1,3 +1,4 @@
+jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../MarathonStore");
 jest.dontMock("./fixtures/MockAppMetadata");
 jest.dontMock("./fixtures/MockMarathonResponse");
@@ -140,15 +141,17 @@ describe("MarathonStore", function () {
   describe("#processMarathonApps", function () {
 
     it("should set Marathon health to idle with no apps", function () {
-      MarathonStore.processMarathonApps({apps: []});
-      expect(MarathonStore.apps.marathon.health.key).toEqual("IDLE");
+      MarathonStore.processMarathonApps({apps: {}});
+      var marathonApps = MarathonStore.get("apps");
+      expect(marathonApps.marathon.health.key).toEqual("IDLE");
     });
 
     it("should set Marathon health to healthy with some apps", function () {
       MarathonStore.processMarathonApps(
         MockMarathonResponse.hasOnlyUnhealth
       );
-      expect(MarathonStore.apps.marathon.health.key).toEqual("HEALTHY");
+      var marathonApps = MarathonStore.get("apps");
+      expect(marathonApps.marathon.health.key).toEqual("HEALTHY");
     });
 
   });
