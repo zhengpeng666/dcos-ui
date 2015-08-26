@@ -59,8 +59,6 @@ describe("DashboardPage", function () {
       expect(list[1].name).toEqual("bar");
     });
 
-  });
-
     it("should not return more services than servicesListLength", function () {
       var services = [
         {name: "foo", health: {key: "bar"}},
@@ -89,5 +87,7 @@ describe("DashboardPage", function () {
       expect(list[2].health.key).toEqual("IDLE");
       expect(list[3].health.key).toEqual("NA");
     });
+
   });
+
 });
