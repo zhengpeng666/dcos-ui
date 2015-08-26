@@ -109,7 +109,7 @@ var DashboardPage = React.createClass({
       if (health && health.key) {
         return HealthSorting[health.key];
       } else {
-        return 0;
+        return HealthSorting.NA;
       }
     });
 
