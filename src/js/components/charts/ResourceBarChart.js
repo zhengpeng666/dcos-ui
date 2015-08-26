@@ -42,6 +42,9 @@ let ResourceBarChart = React.createClass({
     let currentResources = props.resources;
     let fullResources = {};
 
+    // loop through the provided resources. if the number of historical states
+    // provided is less than Config.historyLength defines, we fill in zeros
+    // at the beginnig of the array until length matches Config.historyLength
     Object.keys(currentResources).forEach(function (key) {
       fullResources[key] = _.clone(currentResources[key]);
 
