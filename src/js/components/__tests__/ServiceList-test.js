@@ -1,3 +1,4 @@
+jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../ServiceList");
 jest.dontMock("../ServiceOverlay");
 jest.dontMock("../../utils/Store");
