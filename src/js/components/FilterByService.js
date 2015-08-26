@@ -1,7 +1,7 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
-var Dropdown = require("reactjs-components/src/Dropdown/Dropdown");
+var Dropdown = require("reactjs-components").Dropdown;
 
 var defaultId = "default";
 
@@ -97,6 +97,7 @@ var FilterByService = React.createClass({
         buttonClassName="button button-small button-inverse dropdown-toggle"
         dropdownMenuClassName="dropdown-menu inverse"
         dropdownMenuListClassName="dropdown-menu-list"
+        dropdownMenuListItemClassName="clickable"
         wrapperClassName="dropdown"
         selectedID={this.getSelectedId(this.props.byServiceFilter)}
         onItemSelection={this.handleItemSelection}
