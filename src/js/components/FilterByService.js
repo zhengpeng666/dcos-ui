@@ -33,12 +33,22 @@ var FilterByService = React.createClass({
     }
   },
 
-  itemHtml: function (service) {
-    return (
+  itemHtml: function (service, selected) {
+    var html = (
       <span className="badge-container">
         <span>{service.name}</span>
         <span className="badge">{service.slaves_count}</span>
       </span>
+    );
+
+    if (selected) {
+      return html;
+    }
+
+    return (
+      <a>
+        {html}
+      </a>
     );
   },
 
@@ -51,11 +61,13 @@ var FilterByService = React.createClass({
 
     return _.map(items, function (service) {
       var itemHtml = this.itemHtml(service);
+      var selectedHtml = this.itemHtml(service, true);
 
       var item = {
         id: service.id,
         name: service.name,
         html: itemHtml,
+        selectedHtml: selectedHtml,
         slaves_count: service.slaves_count
       };
 
