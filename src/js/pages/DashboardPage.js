@@ -90,6 +90,10 @@ var DashboardPage = React.createClass({
     });
 
     var sortedServices = _.sortBy(services, function (service) {
+      if (service.health == null) {
+        return HealthSorting.NA;
+      }
+
       return HealthSorting[service.health.key];
     });
 
