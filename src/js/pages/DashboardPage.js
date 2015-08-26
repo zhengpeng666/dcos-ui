@@ -73,7 +73,7 @@ var DashboardPage = React.createClass({
     );
     MarathonStore.addChangeListener(
       EventTypes.MARATHON_APPS_CHANGE,
-      this.onMesosStateChange
+      this.onMarathonStateChange
     );
   },
 
@@ -84,8 +84,13 @@ var DashboardPage = React.createClass({
     );
     MarathonStore.removeChangeListener(
       EventTypes.MARATHON_APPS_CHANGE,
-      this.onMesosStateChange
+      this.onMarathonStateChange
     );
+  },
+
+  onMarathonStateChange: function () {
+    this.internalStorage_set(getMesosState());
+    this.forceUpdate();
   },
 
   onMesosStateChange: function () {
