@@ -26,7 +26,6 @@ function getMesosState() {
     // change in the same array, in stead of two different references
     taskFailureRate: _.clone(MesosSummaryStore.get("taskFailureRate")),
     hostsCount: MesosSummaryStore.getActiveHostsCount(),
-    marathonApps: MarathonStore.get("apps"),
     refreshRate: MesosSummaryStore.getRefreshRate(),
     services: MesosSummaryStore.getLatest().frameworks,
     tasks: MesosSummaryStore.getTaskTotals(),
@@ -89,7 +88,6 @@ var DashboardPage = React.createClass({
   },
 
   onMarathonStateChange: function () {
-    this.internalStorage_set(getMesosState());
     this.forceUpdate();
   },
 
@@ -173,7 +171,7 @@ var DashboardPage = React.createClass({
             <Panel title="Services Health" className="dashboard-panel">
               <ServiceList
                 healthProcessed={data.appsProcessed}
-                marathonApps={data.marathonApps}
+                marathonApps={MarathonStore.get("apps")}
                 services={this.getServicesList(data.services)} />
               {this.getViewAllServicesBtn()}
             </Panel>

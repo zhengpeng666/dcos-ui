@@ -3,7 +3,6 @@ const classNames = require("classnames");
 const React = require("react/addons");
 
 const BarChart = require("./BarChart");
-const Config = require("../../config/Config");
 const Chart = require("./Chart");
 const InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 const ResourceTypes = require("../../constants/ResourceTypes");
@@ -39,29 +38,6 @@ let ResourceBarChart = React.createClass({
 
   getData: function () {
     let props = this.props;
-    let currentResources = props.resources;
-    let fullResources = {};
-
-    // loop through the provided resources. if the number of historical states
-    // provided is less than Config.historyLength defines, we fill in zeros
-    // at the beginnig of the array until length matches Config.historyLength
-    Object.keys(currentResources).forEach(function (key) {
-      fullResources[key] = _.clone(currentResources[key]);
-
-      for (
-        let resourceLength = fullResources[key].length,
-          historyLength = Config.historyLength;
-        resourceLength < historyLength;
-        resourceLength++
-      ) {
-        fullResources[key].unshift({
-          date: 0,
-          percentage: 0,
-          value: 0
-        });
-      }
-
-    });
 
     if (props.itemCount === 0) {
       return [];
@@ -72,7 +48,7 @@ let ResourceBarChart = React.createClass({
         id: "used_resources",
         name: selectedResource + " allocated",
         colorIndex: ResourceTypes[selectedResource].colorIndex,
-        values: fullResources[selectedResource]
+        values: props.resources[selectedResource]
     }];
   },
 

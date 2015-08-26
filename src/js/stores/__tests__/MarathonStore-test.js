@@ -1,3 +1,4 @@
+jest.dontMock("../../constants/HealthLabels");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../MarathonStore");
 jest.dontMock("./fixtures/MockAppMetadata");
@@ -5,6 +6,7 @@ jest.dontMock("./fixtures/MockMarathonResponse");
 jest.dontMock("./fixtures/MockParsedAppMetadata");
 jest.dontMock("../../utils/Store");
 
+var HealthLabels = require("../../constants/HealthLabels");
 var MarathonStore = require("../MarathonStore");
 var MockAppMetadata = require("./fixtures/MockAppMetadata");
 var MockMarathonResponse = require("./fixtures/MockMarathonResponse");
@@ -135,6 +137,45 @@ describe("MarathonStore", function () {
         expect(images).toEqual(MarathonStore.NA_IMAGES);
       }
     );
+
+  });
+
+  describe("#getServiceHealth", function () {
+
+    it("returns NA when health is not available", function () {
+      var health = MarathonStore.getServiceHealth("foo");
+      expect(HealthLabels[health.key]).toEqual(HealthLabels.NA);
+    });
+
+    it("returns health for service", function () {
+      MarathonStore.processMarathonApps(MockMarathonResponse.hasHealth);
+      var health = MarathonStore.getServiceHealth("Framework 1");
+      expect(HealthLabels[health.key]).toEqual(HealthLabels.HEALTHY);
+    });
+
+  });
+
+  describe("#getServiceImages", function () {
+
+    it("returns null when app is not found", function () {
+      var images = MarathonStore.getServiceImages("foo");
+      expect(images).toEqual(null);
+    });
+
+    it("returns an object when services are found", function () {
+      MarathonStore.processMarathonApps(MockMarathonResponse.hasMetadata);
+      var images = MarathonStore.getServiceImages("Framework 1");
+      expect(images).toEqual(jasmine.any(Object));
+    });
+
+    it("returns three sizes of images when services are found", function () {
+      MarathonStore.processMarathonApps(MockMarathonResponse.hasMetadata);
+      var images = MarathonStore.getServiceImages("Framework 1");
+      var keys = Object.keys(images);
+      expect(keys).toContain("icon-large");
+      expect(keys).toContain("icon-medium");
+      expect(keys).toContain("icon-small");
+    });
 
   });
 

@@ -290,6 +290,33 @@ function getStateByHosts() {
   });
 }
 
+function addFrameworkToPreviousStates(mesosStates, _framework, colorIndex) {
+  _.each(mesosStates, function (state) {
+    // We could optimize here by moving this line out of the `each`
+    // this would mean that all states have the same instance of
+    // the object
+    var framework = _.clone(_framework);
+
+    _.extend(framework, {
+      date: state.date,
+      colorIndex: colorIndex,
+      slave_ids: [],
+      offered_resources: {cpus: 0, disk: 0, mem: 0},
+      used_resources: {cpus: 0, disk: 0, mem: 0},
+      TASK_ERROR: 0,
+      TASK_FAILED: 0,
+      TASK_FINISHED: 0,
+      TASK_KILLED: 0,
+      TASK_LOST: 0,
+      TASK_RUNNING: 0,
+      TASK_STAGING: 0,
+      TASK_STARTING: 0
+    });
+
+    state.frameworks.push(framework);
+  });
+}
+
 function getActiveSlaves(slaves) {
   return _.where(slaves, {active: true});
 }
@@ -408,7 +435,6 @@ var MesosSummaryStore = Store.createStore({
   },
 
   getFrameworks: function (filterOptions) {
-    filterOptions = filterOptions || {};
     var frameworks = getStatesByFramework();
 
     if (filterOptions) {
@@ -416,7 +442,7 @@ var MesosSummaryStore = Store.createStore({
         frameworks = MesosStateUtil.filterByHealth(frameworks, filterOptions.healthFilter);
       }
 
-      if (filterOptions.searchString != null) {
+      if (filterOptions.searchString && filterOptions.searchString !== "") {
         frameworks = StringUtil.filterByString(frameworks,
           "name",
           filterOptions.searchString
@@ -440,7 +466,6 @@ var MesosSummaryStore = Store.createStore({
   },
 
   getHosts: function (filterOptions) {
-    filterOptions = filterOptions || {};
     var hosts = getStateByHosts();
 
     if (filterOptions) {
@@ -448,7 +473,7 @@ var MesosSummaryStore = Store.createStore({
         hosts = MesosStateUtil.filterHostsByService(hosts, filterOptions.byServiceFilter);
       }
 
-      if (filterOptions.searchString !== "") {
+      if (filterOptions.searchString && filterOptions.searchString !== "") {
         hosts = StringUtil.filterByString(hosts,
           "hostname",
           filterOptions.searchString
@@ -542,16 +567,18 @@ var MesosSummaryStore = Store.createStore({
   normalizeFrameworks: function (frameworks, date) {
     var frameworkIDs = this.get("frameworkIDs");
     var frameworkNames = this.get("frameworkNames");
+    var mesosStates = this.get("mesosStates");
 
     var normalizedFrameworks = _.map(frameworks, function (framework) {
       var index = _.indexOf(frameworkIDs, framework.id);
       framework.date = date;
 
-      // if this is a new framework, add it to the IDs and names arrays
+      // this is a new framework, fill in 0s for all the previous datapoints
       if (index === -1) {
         frameworkIDs.push(framework.id);
         frameworkNames.push(framework.name);
         index = frameworkIDs.length - 1;
+        addFrameworkToPreviousStates(mesosStates, framework, index);
       }
       // set color index after discovering and assigning index framework
       framework.colorIndex = index;

@@ -69,6 +69,12 @@ describe("Mesos State Store", function () {
         .toBe(this.frameworks.length);
     });
 
+    it("should have same resources length as history length", function () {
+      this.frameworks.forEach(function (framework) {
+        expect(Config.historyLength).toBe(framework.used_resources.cpus.length);
+      });
+    });
+
   });
 
   describe("#getActiveHostsCount", function () {
