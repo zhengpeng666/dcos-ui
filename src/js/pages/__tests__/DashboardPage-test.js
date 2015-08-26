@@ -2,6 +2,7 @@ jest.dontMock("../DashboardPage");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../utils/Store");
+jest.dontMock("../../constants/HealthSorting");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
@@ -15,11 +16,11 @@ MesosSummaryStore.getLatest = function () {
 
 describe("DashboardPage", function () {
 
-  describe("#getComputedWidth", function () {
+  describe("#getServicesList", function () {
 
     beforeEach(function () {
       this.instance = TestUtils.renderIntoDocument(
-        <DashboardPage />
+        <DashboardPage servicesListLength={5}/>
       );
     });
 
@@ -35,6 +36,7 @@ describe("DashboardPage", function () {
       var services = [
         {name: "foo", health: {key: "bar"}, bar: "baz"}
       ];
+
       var list = this.instance.getServicesList(services);
       expect(list).toEqual([{name: "foo", health: {key: "bar"}}]);
     });
@@ -59,4 +61,33 @@ describe("DashboardPage", function () {
 
   });
 
+    it("should not return more services than servicesListLength", function () {
+      var services = [
+        {name: "foo", health: {key: "bar"}},
+        {name: "foo", health: {key: "bar"}},
+        {name: "foo", health: {key: "bar"}},
+        {name: "foo", health: {key: "bar"}},
+        {name: "foo", health: {key: "bar"}},
+        {name: "foo", health: {key: "bar"}}
+      ];
+
+      var list = this.instance.getServicesList(services);
+      expect(list.length).toEqual(5);
+    });
+
+    it("should sort by health", function () {
+      var services = [
+        {name: "foo", health: {key: "IDLE"}},
+        {name: "bar", health: {key: "UNHEALTHY"}},
+        {name: "qaz", health: {key: "HEALTHY"}},
+        {name: "zin", health: {key: "NA"}},
+      ];
+
+      var list = this.instance.getServicesList(services);
+      expect(list[0].health.key).toEqual("UNHEALTHY");
+      expect(list[1].health.key).toEqual("HEALTHY");
+      expect(list[2].health.key).toEqual("IDLE");
+      expect(list[3].health.key).toEqual("NA");
+    });
+  });
 });
