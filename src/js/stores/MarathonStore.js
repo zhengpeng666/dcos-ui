@@ -69,9 +69,10 @@ var MarathonStore = Store.createStore({
       key: "NA",
       value: HealthTypes.NA
     };
+    let marathonApps = this.get("apps");
 
-    if (this.get("apps")[appName]) {
-      appHealth = this.get("apps")[appName].health;
+    if (marathonApps[appName]) {
+      appHealth = marathonApps[appName].health;
     }
 
     return appHealth;
@@ -80,9 +81,10 @@ var MarathonStore = Store.createStore({
   getServiceImages: function (name) {
     let appName = name.toLowerCase();
     let appImages = null;
+    let marathonApps = this.get("apps");
 
-    if (this.get("apps")[appName]) {
-      appImages = this.get("apps")[appName].images;
+    if (marathonApps[appName]) {
+      appImages = marathonApps[appName].images;
     }
 
     return appImages;
