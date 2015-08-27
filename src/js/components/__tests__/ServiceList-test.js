@@ -1,5 +1,8 @@
+jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../ServiceList");
 jest.dontMock("../ServiceOverlay");
+jest.dontMock("../../utils/Store");
+jest.dontMock("../../stores/MarathonStore");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
@@ -13,7 +16,9 @@ describe("ServiceList", function () {
     beforeEach(function () {
       var services = [{name: "foo"}];
       this.instance = TestUtils.renderIntoDocument(
-        <ServiceList services={services} healthProcessed={false} />
+        <ServiceList
+          services={services}
+          healthProcessed={false} />
       );
     });
 
@@ -36,7 +41,9 @@ describe("ServiceList", function () {
     beforeEach(function () {
       var services = [{name: "foo"}];
       this.instance = TestUtils.renderIntoDocument(
-        <ServiceList services={services} healthProcessed={false} />
+        <ServiceList
+          services={services}
+          healthProcessed={false} />
       );
     });
 

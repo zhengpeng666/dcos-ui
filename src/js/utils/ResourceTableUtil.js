@@ -1,11 +1,12 @@
-var _ = require("underscore");
-var classNames = require("classnames");
+const _ = require("underscore");
+const classNames = require("classnames");
 /*eslint-disable no-unused-vars*/
-var React = require("react/addons");
+const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
-var HealthSorting = require("../constants/HealthSorting");
-var TableHeaderLabels = require("../constants/TableHeaderLabels");
+const HealthSorting = require("../constants/HealthSorting");
+const MarathonStore = require("../stores/MarathonStore");
+const TableHeaderLabels = require("../constants/TableHeaderLabels");
 
 function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
@@ -30,13 +31,15 @@ var TableUtil = {
       }
 
       return function (model) {
-        var value = model[prop];
-        if (_.isNumber(value)) {
-          return value;
-        }
+        let value = model[prop];
 
         if (prop === "health") {
-          value = HealthSorting[value.key];
+          let health = MarathonStore.getServiceHealth(model.name);
+          value = HealthSorting[health.key];
+        }
+
+        if (_.isNumber(value)) {
+          return value;
         }
 
         return value.toString().toLowerCase() + "-" + model[title].toLowerCase();

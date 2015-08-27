@@ -3,9 +3,11 @@ var classNames = require("classnames");
 var Link = require("react-router").Link;
 var React = require("react/addons");
 
+var EventTypes = require("../constants/EventTypes");
 var HealthLabels = require("../constants/HealthLabels");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
+var MarathonStore = require("../stores/MarathonStore");
 var Maths = require("../utils/Maths");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var Table = require("./Table");
@@ -23,19 +25,45 @@ var ServicesTable = React.createClass({
     healthProcessed: React.PropTypes.bool.isRequired
   },
 
+  componentDidMount: function () {
+    MarathonStore.addChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE,
+      this.onMarathonAppsChange
+    );
+  },
+
+  componentWillUnmount: function () {
+    MarathonStore.removeChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE,
+      this.onMarathonAppsChange
+    );
+  },
+
   getDefaultProps: function () {
     return {
       services: []
     };
   },
 
+  onMarathonAppsChange: function () {
+    this.forceUpdate();
+  },
+
   renderHeadline: function (prop, model) {
+    let appImages = MarathonStore.getServiceImages(model.name);
+    let imageTag = null;
+
+    if (appImages) {
+      imageTag = (
+        <img className="icon icon-small border-radius"
+          src={appImages["icon-small"]} />
+      );
+    }
+
     if (model.webui_url.length === 0) {
       return (
         <span className="h5 flush-top flush-bottom headline">
-          <img className="icon icon-small border-radius"
-            src={model.images["icon-small"]} />
-          {model[prop]}
+          {imageTag} {model[prop]}
         </span>
       );
     }
@@ -45,15 +73,15 @@ var ServicesTable = React.createClass({
         params={{serviceName: model.name}}
         className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
-          <img className="icon icon-small border-radius"
-          src={model.images["icon-small"]} />
-          {model[prop]}
+          {imageTag} {model[prop]}
         </span>
       </Link>
     );
   },
 
   renderHealth: function (prop, model) {
+    let appHealth = MarathonStore.getServiceHealth(model.name);
+
     if (!this.props.healthProcessed) {
       return (
         <div className="loader-small ball-beat">
@@ -64,31 +92,32 @@ var ServicesTable = React.createClass({
       );
     }
 
-    var statusClassSet = classNames({
-      "text-success": model.health.value === HealthTypes.HEALTHY,
-      "text-danger": model.health.value === HealthTypes.UNHEALTHY,
-      "text-warning": model.health.value === HealthTypes.IDLE,
-      "text-mute": model.health.value === HealthTypes.NA
+    let statusClassSet = classNames({
+      "text-success": appHealth.value === HealthTypes.HEALTHY,
+      "text-danger": appHealth.value === HealthTypes.UNHEALTHY,
+      "text-warning": appHealth.value === HealthTypes.IDLE,
+      "text-mute": appHealth.value === HealthTypes.NA
     });
 
-    var attributes = {};
+    let attributes = {};
     attributes["data-behavior"] = "show-tip";
 
-    if (model.health.value === HealthTypes.HEALTHY) {
+    if (appHealth.value === HealthTypes.HEALTHY) {
       attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
-    } else if (model.health.value === HealthTypes.UNHEALTHY) {
+    } else if (appHealth.value === HealthTypes.UNHEALTHY) {
       attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
-    } else if (model.health.value === HealthTypes.IDLE) {
+    } else if (appHealth.value === HealthTypes.IDLE) {
       attributes["data-tip-content"] = HealthTypesDescription.IDLE;
-    } else if (model.health.value === HealthTypes.NA) {
+    } else if (appHealth.value === HealthTypes.NA) {
       attributes["data-tip-content"] = HealthTypesDescription.NA;
     }
 
     return React.createElement(
       "span",
       _.extend({className: statusClassSet}, attributes),
-      HealthLabels[model.health.key]
+      HealthLabels[appHealth.key]
     );
+
   },
 
   renderStats: function (prop, model) {
@@ -171,6 +200,7 @@ var ServicesTable = React.createClass({
   },
 
   render: function () {
+    let marathonApps = MarathonStore.get("apps");
     return (
       <div>
         <Table
@@ -180,7 +210,7 @@ var ServicesTable = React.createClass({
           data={this.props.services.slice(0)}
           keys={["id"]}
           sortBy={{prop: "name", order: "desc"}}
-          sortFunc={ResourceTableUtil.getSortFunction("name")} />
+          sortFunc={ResourceTableUtil.getSortFunction("name", {marathonApps})} />
       </div>
     );
   }

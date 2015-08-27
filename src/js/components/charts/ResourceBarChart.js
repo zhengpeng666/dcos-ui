@@ -1,15 +1,15 @@
-var _ = require("underscore");
-var classNames = require("classnames");
-var React = require("react/addons");
+const _ = require("underscore");
+const classNames = require("classnames");
+const React = require("react/addons");
 
-var Chart = require("./Chart");
-var BarChart = require("./BarChart");
-var ResourceTypes = require("../../constants/ResourceTypes");
+const BarChart = require("./BarChart");
+const Chart = require("./Chart");
+const ResourceTypes = require("../../constants/ResourceTypes");
 
 // number to fit design of width vs. height ratio
-var WIDTH_HEIGHT_RATIO = 4.5;
+const WIDTH_HEIGHT_RATIO = 4.5;
 
-var ResourceBarChart = React.createClass({
+let ResourceBarChart = React.createClass({
 
   displayName: "ResourceBarChart",
 
@@ -34,13 +34,13 @@ var ResourceBarChart = React.createClass({
   },
 
   getData: function () {
-    var props = this.props;
+    let props = this.props;
 
     if (props.itemCount === 0) {
       return [];
     }
 
-    var selectedResource = this.props.selectedResource;
+    let selectedResource = props.selectedResource;
     return [{
         id: "used_resources",
         name: selectedResource + " allocated",
@@ -50,8 +50,8 @@ var ResourceBarChart = React.createClass({
   },
 
   getMaxY: function () {
-    var props = this.props;
-    return _.last(props.totalResources[this.props.selectedResource])[props.y];
+    let props = this.props;
+    return _.last(props.totalResources[props.selectedResource])[props.y];
   },
 
   handleSelectedResourceChange: function (selectedResource) {
@@ -59,10 +59,10 @@ var ResourceBarChart = React.createClass({
   },
 
   getModeButtons: function () {
-    var selectedResource = this.props.selectedResource;
+    let selectedResource = this.props.selectedResource;
 
     return _.map(ResourceTypes, function (info, key) {
-      var classSet = classNames({
+      let classSet = classNames({
         "button button-small button-stroke button-inverse": true,
         "active": selectedResource === key
       });
@@ -92,7 +92,7 @@ var ResourceBarChart = React.createClass({
   },
 
   getHeadline: function (info) {
-    var headline = info.label + " Allocation Rate";
+    let headline = info.label + " Allocation Rate";
 
     return (
       <div>
@@ -107,7 +107,7 @@ var ResourceBarChart = React.createClass({
   },
 
   render: function () {
-    var info = ResourceTypes[this.props.selectedResource];
+    let info = ResourceTypes[this.props.selectedResource];
 
     return (
       <div className="chart panel">

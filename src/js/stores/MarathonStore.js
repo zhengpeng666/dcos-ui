@@ -4,6 +4,7 @@ var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
+var GetSetMixin = require("../mixins/GetSetMixin");
 var HealthTypes = require("../constants/HealthTypes");
 var MarathonActions = require("../events/MarathonActions");
 var ServiceImages = require("../constants/ServiceImages");
@@ -29,6 +30,28 @@ function stopPolling() {
 
 var MarathonStore = Store.createStore({
 
+  mixins: [GetSetMixin],
+
+  getSet_data: {
+    apps: {}
+  },
+
+  addChangeListener: function (eventName, callback) {
+    this.on(eventName, callback);
+
+    if (eventName === EventTypes.MARATHON_APPS_CHANGE) {
+      startPolling();
+    }
+  },
+
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
+
+    if (_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE))) {
+      stopPolling();
+    }
+  },
+
   getFrameworkHealth: function (app) {
     if (app.healthChecks == null || app.healthChecks.length === 0) {
       return null;
@@ -44,14 +67,31 @@ var MarathonStore = Store.createStore({
     return health;
   },
 
-  parseMetadata: function (b64Data) {
-    // extract content of the DCOS_PACKAGE_METADATA label
-    try {
-      var dataAsJsonString = global.atob(b64Data);
-      return JSON.parse(dataAsJsonString);
-    } catch (error) {
-      return {};
+  getServiceHealth: function (name) {
+    let appName = name.toLowerCase();
+    let appHealth = {
+      key: "NA",
+      value: HealthTypes.NA
+    };
+    let marathonApps = this.get("apps");
+
+    if (marathonApps[appName]) {
+      appHealth = marathonApps[appName].health;
     }
+
+    return appHealth;
+  },
+
+  getServiceImages: function (name) {
+    let appName = name.toLowerCase();
+    let appImages = null;
+    let marathonApps = this.get("apps");
+
+    if (marathonApps[appName]) {
+      appImages = marathonApps[appName].images;
+    }
+
+    return appImages;
   },
 
   getImageSizeFromMetadata: function (metadata, size) {
@@ -80,22 +120,6 @@ var MarathonStore = Store.createStore({
     }
 
     return metadata.images;
-  },
-
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-
-    if (eventName === EventTypes.MARATHON_APPS_CHANGE) {
-      startPolling();
-    }
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
-
-    if (_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE))) {
-      stopPolling();
-    }
   },
 
   processMarathonApps: function (data) {
@@ -133,13 +157,23 @@ var MarathonStore = Store.createStore({
       images: ServiceImages.MARATHON_IMAGES
     };
 
-    this.apps = apps;
+    this.set({apps});
 
-    this.emit(EventTypes.MARATHON_APPS_CHANGE, this.apps);
+    this.emit(EventTypes.MARATHON_APPS_CHANGE, this.get("apps"));
   },
 
   processMarathonAppsError: function () {
     this.emit(EventTypes.MARATHON_APPS_ERROR);
+  },
+
+  parseMetadata: function (b64Data) {
+    // extract content of the DCOS_PACKAGE_METADATA label
+    try {
+      var dataAsJsonString = global.atob(b64Data);
+      return JSON.parse(dataAsJsonString);
+    } catch (error) {
+      return {};
+    }
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {

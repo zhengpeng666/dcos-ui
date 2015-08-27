@@ -6,6 +6,7 @@ var EventTypes = require("../constants/EventTypes");
 var HealthSorting = require("../constants/HealthSorting");
 var HostTimeSeriesChart = require("../components/charts/HostTimeSeriesChart");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var MarathonStore = require("../stores/MarathonStore");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var Page = require("../components/Page");
 var Panel = require("../components/Panel");
@@ -69,6 +70,10 @@ var DashboardPage = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
+    MarathonStore.addChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE,
+      this.onMarathonStateChange
+    );
   },
 
   componentWillUnmount: function () {
@@ -76,6 +81,14 @@ var DashboardPage = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
+    MarathonStore.removeChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE,
+      this.onMarathonStateChange
+    );
+  },
+
+  onMarathonStateChange: function () {
+    this.forceUpdate();
   },
 
   onMesosStateChange: function () {
@@ -85,16 +98,17 @@ var DashboardPage = React.createClass({
 
   getServicesList: function (_services) {
     // Pick out only the data we need.
-    var services = _.map(_services, function (service) {
-      return _.pick(service, "name", "health", "webui_url", "TASK_RUNNING", "id");
+    let services = _.map(_services, function (service) {
+      return _.pick(service, "name", "webui_url", "TASK_RUNNING", "id");
     });
 
-    var sortedServices = _.sortBy(services, function (service) {
-      if (service.health == null) {
+    let sortedServices = _.sortBy(services, function (service) {
+      let health = MarathonStore.getServiceHealth(service.name);
+      if (health && health.key) {
+        return HealthSorting[health.key];
+      } else {
         return HealthSorting.NA;
       }
-
-      return HealthSorting[service.health.key];
     });
 
     return _.first(sortedServices, this.props.servicesListLength);
@@ -157,6 +171,7 @@ var DashboardPage = React.createClass({
             <Panel title="Services Health" className="dashboard-panel">
               <ServiceList
                 healthProcessed={data.appsProcessed}
+                marathonApps={MarathonStore.get("apps")}
                 services={this.getServicesList(data.services)} />
               {this.getViewAllServicesBtn()}
             </Panel>

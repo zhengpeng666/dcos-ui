@@ -1,6 +1,7 @@
 jest.dontMock("../ServiceOverlay");
 jest.dontMock("../ServiceTable");
 jest.dontMock("../../mixins/GetSetMixin");
+jest.dontMock("../../stores/MarathonStore");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../stores/__tests__/fixtures/state.json");
@@ -52,8 +53,7 @@ describe("ServiceTable", function () {
       });
     });
 
-    it("should have N/A health status on all frameworks",
-        function () {
+    it("should have N/A health status on all frameworks", function () {
       MesosSummaryStore.onMarathonAppsError();
       expect(MesosSummaryStore.get("appsProcessed")).toBe(true);
 
@@ -65,7 +65,9 @@ describe("ServiceTable", function () {
         );
         expect(healthlabel.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
       });
+
     });
+
   });
 
 });

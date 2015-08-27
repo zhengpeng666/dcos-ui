@@ -5,6 +5,7 @@ import _ from "underscore";
 import Cluster from "../utils/Cluster";
 import EventTypes from "../constants/EventTypes";
 import HealthLabels from "../constants/HealthLabels";
+import MarathonStore from "../stores/MarathonStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import StringUtil from "../utils/StringUtil";
 
@@ -119,7 +120,8 @@ export default class ServiceOverlay extends React.Component {
   }
 
   getServiceNav(service) {
-    let serviceHealth = HealthLabels[service.health.key];
+    let appHealth = MarathonStore.getServiceHealth(service.name);
+    let serviceHealth = HealthLabels[appHealth.key];
     let taskCount = "";
 
     if (_.isNumber(service.TASK_RUNNING)) {

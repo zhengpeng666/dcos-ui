@@ -1,19 +1,20 @@
-var _ = require("underscore");
-var Link = require("react-router").Link;
-var React = require("react");
+const _ = require("underscore");
+const Link = require("react-router").Link;
+const React = require("react");
 
-var HealthLabels = require("../constants/HealthLabels");
-var HealthTypesDescription = require("../constants/HealthTypesDescription");
-var List = require("./List");
+const HealthLabels = require("../constants/HealthLabels");
+const HealthTypesDescription = require("../constants/HealthTypesDescription");
+const List = require("./List");
+const MarathonStore = require("../stores/MarathonStore");
 
-var STATES = {
+const STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
   HEALTHY: {key: "HEALTHY", classes: {"text-success": true}},
   IDLE: {key: "IDLE", classes: {"text-warning": true}},
   NA: {key: "NA", classes: {"text-mute": true}}
 };
 
-var ServiceList = React.createClass({
+let ServiceList = React.createClass({
 
   displayName: "ServiceList",
 
@@ -43,30 +44,31 @@ var ServiceList = React.createClass({
 
   getServices: function (services, healthProcessed) {
     return _.map(services, function (service) {
-      var attributes = {};
-      var state = STATES.NA;
-      var title = service.name;
+      let appHealth = MarathonStore.getServiceHealth(service.name);
+      let attributes = {};
+      let state = STATES.NA;
+      let title = service.name;
 
-      if (service.health != null) {
-        state = STATES[service.health.key];
+      if (appHealth != null) {
+        state = STATES[appHealth.key];
 
         attributes["data-behavior"] = "show-tip";
         attributes["data-tip-place"] = "top-left";
 
-        if (service.health.key === STATES.HEALTHY.key) {
+        if (appHealth.key === STATES.HEALTHY.key) {
           attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
-        } else if (service.health.key === STATES.UNHEALTHY.key) {
+        } else if (appHealth.key === STATES.UNHEALTHY.key) {
           attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
-        } else if (service.health.key === STATES.IDLE.key) {
+        } else if (appHealth.key === STATES.IDLE.key) {
           attributes["data-tip-content"] = HealthTypesDescription.IDLE;
-        } else if (service.health.key === STATES.NA.key) {
+        } else if (appHealth.key === STATES.NA.key) {
           attributes["data-tip-content"] = HealthTypesDescription.NA;
         }
       }
 
-      var health = HealthLabels[state.key];
+      let healthLabel = HealthLabels[state.key];
       if (!healthProcessed) {
-        health = (
+        healthLabel = (
           <div className="loader-small ball-beat">
             <div></div>
             <div></div>
@@ -90,7 +92,7 @@ var ServiceList = React.createClass({
           value: title
         },
         health: {
-          value: health,
+          value: healthLabel,
           classes: state.classes,
           attributes: attributes,
           textAlign: "right"

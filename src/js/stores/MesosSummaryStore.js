@@ -4,12 +4,11 @@ var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
-var HealthTypes = require("../constants/HealthTypes");
 var GetSetMixin = require("../mixins/GetSetMixin");
 var MarathonStore = require("./MarathonStore");
 var Maths = require("../utils/Maths");
 var MesosSummaryActions = require("../events/MesosSummaryActions");
-var ServiceImages = require("../constants/ServiceImages");
+var MesosStateUtil = require("../utils/MesosStateUtil");
 var Store = require("../utils/Store");
 var StringUtil = require("../utils/StringUtil");
 var TimeScales = require("../constants/TimeScales");
@@ -322,26 +321,6 @@ function getActiveSlaves(slaves) {
   return _.where(slaves, {active: true});
 }
 
-function filterByString(objects, key, searchString) {
-  var searchPattern = new RegExp(StringUtil.escapeForRegExp(searchString), "i");
-
-  return _.filter(objects, function (obj) {
-    return searchPattern.test(obj[key]);
-  });
-}
-
-function filterByHealth(objects, healthFilter) {
-  return _.filter(objects, function (obj) {
-    return obj.health.value === healthFilter;
-  });
-}
-
-function filterHostsByService(hosts, frameworkId) {
-  return _.filter(hosts, function (host) {
-    return _.contains(host.framework_ids, frameworkId);
-  });
-}
-
 function getInitialStates() {
   var currentDate = Date.now();
   // reverse date range!!!
@@ -456,16 +435,15 @@ var MesosSummaryStore = Store.createStore({
   },
 
   getFrameworks: function (filterOptions) {
-    filterOptions = filterOptions || {};
     var frameworks = getStatesByFramework();
 
     if (filterOptions) {
       if (filterOptions.healthFilter != null) {
-        frameworks = filterByHealth(frameworks, filterOptions.healthFilter);
+        frameworks = MesosStateUtil.filterByHealth(frameworks, filterOptions.healthFilter);
       }
 
-      if (filterOptions.searchString !== "") {
-        frameworks = filterByString(frameworks,
+      if (filterOptions.searchString && filterOptions.searchString !== "") {
+        frameworks = StringUtil.filterByString(frameworks,
           "name",
           filterOptions.searchString
         );
@@ -488,16 +466,15 @@ var MesosSummaryStore = Store.createStore({
   },
 
   getHosts: function (filterOptions) {
-    filterOptions = filterOptions || {};
     var hosts = getStateByHosts();
 
     if (filterOptions) {
       if (filterOptions.byServiceFilter != null) {
-        hosts = filterHostsByService(hosts, filterOptions.byServiceFilter);
+        hosts = MesosStateUtil.filterHostsByService(hosts, filterOptions.byServiceFilter);
       }
 
-      if (filterOptions.searchString !== "") {
-        hosts = filterByString(hosts,
+      if (filterOptions.searchString && filterOptions.searchString !== "") {
+        hosts = StringUtil.filterByString(hosts,
           "hostname",
           filterOptions.searchString
         );
@@ -589,8 +566,6 @@ var MesosSummaryStore = Store.createStore({
    */
   normalizeFrameworks: function (frameworks, date) {
     var frameworkIDs = this.get("frameworkIDs");
-    var frameworkHealth = this.get("frameworkHealth");
-    var frameworkImages = this.get("frameworkImages");
     var frameworkNames = this.get("frameworkNames");
     var mesosStates = this.get("mesosStates");
 
@@ -607,13 +582,6 @@ var MesosSummaryStore = Store.createStore({
       }
       // set color index after discovering and assigning index framework
       framework.colorIndex = index;
-      framework.health = frameworkHealth[framework.name] ||
-        {key: "NA", value: HealthTypes.NA};
-      framework.images = frameworkImages[framework.name];
-
-      if (framework.images == null) {
-        framework.images = ServiceImages.NA_IMAGES;
-      }
 
       return framework;
     });

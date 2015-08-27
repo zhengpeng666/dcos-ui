@@ -1,4 +1,6 @@
 jest.dontMock("../DashboardPage");
+jest.dontMock("../../stores/MarathonStore");
+jest.dontMock("./fixtures/MockMarathonResponse");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../utils/Store");
@@ -8,7 +10,9 @@ var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var DashboardPage = require("../DashboardPage");
+var MarathonStore = require("../../stores/MarathonStore");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
+var MockMarathonResponse = require("./fixtures/MockMarathonResponse");
 
 MesosSummaryStore.getLatest = function () {
   return {frameworks: []};
@@ -19,6 +23,7 @@ describe("DashboardPage", function () {
   describe("#getServicesList", function () {
 
     beforeEach(function () {
+      MarathonStore.addChangeListener = function () {};
       this.instance = TestUtils.renderIntoDocument(
         <DashboardPage servicesListLength={5}/>
       );
@@ -29,16 +34,28 @@ describe("DashboardPage", function () {
         {name: "foo", health: {key: "bar"}}
       ];
       var list = this.instance.getServicesList(services);
-      expect(list).toEqual([{name: "foo", health: {key: "bar"}}]);
+      expect(list).toEqual([{name: "foo"}]);
     });
 
-    it("should pick out name,health keys only", function () {
-      var services = [
-        {name: "foo", health: {key: "bar"}, bar: "baz"}
-      ];
+    it("should pick out name, webui_url," +
+      "TASK_RUNNING, and id keys only", function () {
+      var services = [{
+        name: "foo",
+        health: {key: "bar"},
+        webui_url: "qux",
+        TASK_RUNNING: "baz",
+        id: "quux",
+        corge: "grault"
+      }];
 
       var list = this.instance.getServicesList(services);
-      expect(list).toEqual([{name: "foo", health: {key: "bar"}}]);
+
+      expect(list).toEqual([{
+        name: "foo",
+        webui_url: "qux",
+        TASK_RUNNING: "baz",
+        id: "quux"
+      }]);
     });
 
     it("handles services with missing health", function () {
@@ -47,16 +64,6 @@ describe("DashboardPage", function () {
       ];
       var list = this.instance.getServicesList(services);
       expect(list).toEqual([{name: "foo"}]);
-    });
-
-    it("sorts services by health", function () {
-      var services = [
-        {name: "bar", health: {key: "HEALTHY"}},
-        {name: "foo", health: {key: "UNHEALTHY"}}
-      ];
-      var list = this.instance.getServicesList(services);
-      expect(list[0].name).toEqual("foo");
-      expect(list[1].name).toEqual("bar");
     });
 
     it("should not return more services than servicesListLength", function () {
@@ -68,24 +75,25 @@ describe("DashboardPage", function () {
         {name: "foo", health: {key: "bar"}},
         {name: "foo", health: {key: "bar"}}
       ];
-
       var list = this.instance.getServicesList(services);
       expect(list.length).toEqual(5);
     });
 
     it("should sort by health", function () {
-      var services = [
-        {name: "foo", health: {key: "IDLE"}},
-        {name: "bar", health: {key: "UNHEALTHY"}},
-        {name: "qaz", health: {key: "HEALTHY"}},
-        {name: "zin", health: {key: "NA"}},
-      ];
+      MarathonStore.processMarathonApps(MockMarathonResponse);
 
-      var list = this.instance.getServicesList(services);
-      expect(list[0].health.key).toEqual("UNHEALTHY");
-      expect(list[1].health.key).toEqual("HEALTHY");
-      expect(list[2].health.key).toEqual("IDLE");
-      expect(list[3].health.key).toEqual("NA");
+      var servicesList = [
+        {name: "IdleFramework"},
+        {name: "UnhealthyFramework"},
+        {name: "HealthyFramework"},
+        {name: "NAFramework"}
+      ];
+      var list = this.instance.getServicesList(servicesList);
+
+      expect(list[0].name).toEqual("UnhealthyFramework");
+      expect(list[1].name).toEqual("HealthyFramework");
+      expect(list[2].name).toEqual("IdleFramework");
+      expect(list[3].name).toEqual("NAFramework");
     });
 
   });

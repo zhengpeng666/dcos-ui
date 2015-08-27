@@ -1,4 +1,14 @@
+var _ = require("underscore");
+
 const StringUtil = {
+  filterByString: function (objects, key, searchString) {
+    var searchPattern = new RegExp(StringUtil.escapeForRegExp(searchString), "i");
+
+    return _.filter(objects, function (obj) {
+      return searchPattern.test(obj[key]);
+    });
+  },
+
   escapeForRegExp: function (str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
   },
