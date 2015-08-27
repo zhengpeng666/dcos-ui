@@ -4,7 +4,6 @@ const React = require("react/addons");
 
 const BarChart = require("./BarChart");
 const Chart = require("./Chart");
-const InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 const ResourceTypes = require("../../constants/ResourceTypes");
 
 // number to fit design of width vs. height ratio
@@ -13,8 +12,6 @@ const WIDTH_HEIGHT_RATIO = 4.5;
 let ResourceBarChart = React.createClass({
 
   displayName: "ResourceBarChart",
-
-  mixins: [InternalStorageMixin],
 
   propTypes: {
     onResourceSelectionChange: React.PropTypes.func.isRequired,
