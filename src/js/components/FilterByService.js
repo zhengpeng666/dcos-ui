@@ -101,7 +101,9 @@ var FilterByService = React.createClass({
         wrapperClassName="dropdown"
         items={this.getDropdownItems()}
         onItemSelection={this.handleItemSelection}
-        selectedID={this.getSelectedId(this.props.byServiceFilter)} />
+        selectedID={this.getSelectedId(this.props.byServiceFilter)}
+        transition={true}
+        transitionName="dropdown-menu" />
     );
   }
 });

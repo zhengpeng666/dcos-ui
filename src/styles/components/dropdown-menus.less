@@ -18,10 +18,6 @@
     overflow: hidden;
   }
 
-  > .dropdown-menu {
-    margin-top: @base-spacing-unit * 0.5 + @button-border-width;
-  }
-
   > .dropdown-menu,
   > .dropdown-toggle {
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium);
@@ -30,5 +26,9 @@
   > .dropdown-toggle > :first-child {
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
       - @base-spacing-unit * 2;
+  }
+
+  .dropdown-menu-enter {
+    animation: slide-down 0.25s, fade-in 0.25s;
   }
 }
