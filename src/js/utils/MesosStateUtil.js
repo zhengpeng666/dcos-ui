@@ -1,7 +1,5 @@
 var _ = require("underscore");
 
-var MarathonStore = require("../stores/MarathonStore");
-
 const MesosStateUtil = {
 
   /**

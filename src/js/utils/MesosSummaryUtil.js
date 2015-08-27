@@ -99,11 +99,11 @@ const MesosSummaryUtil = {
    */
   getStatesByResource: function (mesosStates, list, resourcesKey) {
     var values = {cpus: [], disk: [], mem: []};
-    return _.foldl(values, function (memo, arr, index) {
+    return _.foldl(values, function (memo, array, type) {
       _.each(list, function (state, i) {
-        var value = state[resourcesKey][index];
-        var max = Math.max(1, mesosStates[i].total_resources[index]);
-        memo[index].push({
+        var value = state[resourcesKey][type];
+        var max = Math.max(1, mesosStates[i].total_resources[type]);
+        memo[type].push({
           date: state.date,
           value: Maths.round(value, 2),
           percentage: Maths.round(100 * value / max)
