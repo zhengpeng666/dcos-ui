@@ -1,11 +1,13 @@
 const _ = require("underscore");
+const classNames = require("classnames");
 const React = require("react");
 
 const HealthLabels = require("../constants/HealthLabels");
 const HealthTypesDescription = require("../constants/HealthTypesDescription");
-const List = require("./List");
+const List = require("reactjs-components").List;
 const MarathonStore = require("../stores/MarathonStore");
 const ServiceSidePanel = require("./ServiceSidePanel");
+const TooltipMixin = require("../mixins/TooltipMixin");
 
 const STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
@@ -22,6 +24,8 @@ let ServiceList = React.createClass({
     services: React.PropTypes.array.isRequired,
     healthProcessed: React.PropTypes.bool.isRequired
   },
+
+  mixins: [TooltipMixin],
 
   getDefaultProps: function () {
     return {
@@ -95,16 +99,21 @@ let ServiceList = React.createClass({
         );
       }
 
+      var classes = {"h3 flush-top flush-bottom text-align-right": true};
+      _.extend(classes, state.classes);
+      var classSet = classNames(classes);
+
+      var value = [
+        <div key="title" className="h3 flush-top flush-bottom">
+          {title}
+        </div>,
+        <div key="health" className={classSet} {...attributes}>
+          {healthLabel}
+        </div>
+      ];
+
       return {
-        title: {
-          value: title
-        },
-        health: {
-          value: healthLabel,
-          classes: state.classes,
-          attributes: attributes,
-          textAlign: "right"
-        }
+        value: value
       };
     }, this);
   },
@@ -125,7 +134,8 @@ let ServiceList = React.createClass({
     return (
       <div className="service-list-component">
         <List
-          list={this.getServices(this.props.services, this.props.healthProcessed)}
+          className="list-unstyled"
+          items={this.getServices(this.props.services, this.props.healthProcessed)}
           order={listOrder} />
         <ServiceSidePanel
           open={selectedServiceName != null}
