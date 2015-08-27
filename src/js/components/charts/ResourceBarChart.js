@@ -54,7 +54,7 @@ let ResourceBarChart = React.createClass({
 
   getMaxY: function () {
     let props = this.props;
-    return _.last(props.totalResources[this.props.selectedResource])[props.y];
+    return _.last(props.totalResources[props.selectedResource])[props.y];
   },
 
   handleSelectedResourceChange: function (selectedResource) {
