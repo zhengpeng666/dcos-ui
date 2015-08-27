@@ -7,6 +7,7 @@ var EventTypes = require("../constants/EventTypes");
 var GetSetMixin = require("../mixins/GetSetMixin");
 var MesosStateActions = require("../events/MesosStateActions");
 var Store = require("../utils/Store");
+var MesosStateUtil = require("../utils/MesosStateUtil");
 
 var requestInterval = null;
 
@@ -45,6 +46,12 @@ var MesosStateStore = Store.createStore({
     if (_.isEmpty(this.listeners(EventTypes.MESOS_STATE_CHANGE))) {
       stopPolling();
     }
+  },
+
+  getHostResourcesByFramework: function (filter) {
+    return MesosStateUtil.getHostResourcesByFramework(
+      MesosStateStore.get("lastMesosState"), filter
+    );
   },
 
   processStateSuccess: function (lastMesosState) {

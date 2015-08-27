@@ -1,31 +1,14 @@
 var _ = require("underscore");
 
-var MarathonStore = require("../stores/MarathonStore");
-var MesosStateStore = require("../stores/MesosStateStore");
-
 const MesosStateUtil = {
 
-  filterByHealth: function (objects, healthFilter) {
-    return _.filter(objects, function (obj) {
-      let appHealth = MarathonStore.getServiceHealth(obj.name);
-      return appHealth.value === healthFilter;
-    });
-  },
-
-  filterHostsByService: function (hosts, frameworkId) {
-    return _.filter(hosts, function (host) {
-      return _.contains(host.framework_ids, frameworkId);
-    });
-  },
-
   /**
+   * @param  {Object} state A document of mesos state.json
    * @param  {Array} filter Allows us to filter by framework id
    *   All other frameworks will be put into an "other" category
    * @returns {Object} A map of frameworks running on host
    */
-  getHostResourcesByFramework: function (filter) {
-    var state = MesosStateStore.get("lastMesosState");
-
+  getHostResourcesByFramework: function (state, filter) {
     return _.foldl(state.frameworks, function (memo, framework) {
       _.each(framework.tasks, function (task) {
         if (memo[task.slave_id] == null) {
