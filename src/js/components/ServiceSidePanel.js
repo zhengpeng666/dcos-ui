@@ -52,6 +52,19 @@ const ServiceSidePanel = React.createClass({
     this.forceUpdate();
   },
 
+  getHeader: function () {
+    return (
+      <div>
+        <span
+          className="button button-link button-inverse"
+          onClick={this.handlePanelClose}>
+          <i className="service-detail-close"></i>
+          Close
+        </span>
+      </div>
+    );
+  },
+
   getSerivceDetails: function () {
     let service = getServiceFromName(this.props.serviceName);
 
@@ -60,20 +73,19 @@ const ServiceSidePanel = React.createClass({
     }
 
     return (
-      <div>
-        <button className="button button-stroke button-rounded"
-          onClick={this.handlePanelClose}>
-          ✕
-        </button>
+      <h2 className="text-align-center inverse overlay-header">
         {service.name}
-      </div>
+      </h2>
     );
   },
 
   render: function () {
 
+    // TODO(ml): rename to className
     return (
-      <SidePanel open={this.props.open}
+      <SidePanel classNames="service-detail"
+        header={this.getHeader()}
+        open={this.props.open}
         onClose={this.handlePanelClose}>
         {this.getSerivceDetails()}
       </SidePanel>

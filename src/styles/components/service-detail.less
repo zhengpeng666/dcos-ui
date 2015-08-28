@@ -1,0 +1,49 @@
+.service-detail {
+  .side-panel-header {
+    background: @purple;
+    color: @white;
+    .button:hover .service-detail-close {
+      &:before,
+      &:after {
+        .opacity(1);
+      }
+    }
+  }
+
+  .service-detail-close {
+    width: @button-large-height;
+    height: @button-large-height;
+    margin-left: @button-large-height * 0.5;
+    cursor: pointer;
+    .transition(e('all 0.15s ease'));
+    .box-sizing(content-box);
+
+    &:before,
+    &:after {
+      content: '';
+      display: block;
+      width: @button-large-height * 0.5;
+      height: 2px;
+      position: absolute;
+      top: (@button-large-height * 0.5) - 1px;
+      margin-left: -(@button-large-height * 0.5) * 0.5;
+      .rotate(45deg);
+      background-color: @white;
+      .opacity(0.8);
+    }
+
+    &:after {
+      .rotate(-45deg);
+    }
+
+    &:active {
+      background: @body-text-link-text-color;
+      .rotate(0deg);
+
+      &:before,
+      &:after {
+        background-color: @white;
+      }
+    }
+  }
+}
