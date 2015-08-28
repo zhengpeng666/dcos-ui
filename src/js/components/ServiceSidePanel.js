@@ -108,6 +108,20 @@ const ServiceSidePanel = React.createClass({
     );
   },
 
+  getTopRow: function () {
+    return (
+      <div className="container container-pod">
+        <div className="row">
+          <div className="column-8">
+          </div>
+          <div className="column-4 text-align-right">
+            {this.getOpenServiceButton()}
+          </div>
+        </div>
+      </div>
+    );
+  },
+
   render: function () {
 
     // TODO(ml): rename to className
