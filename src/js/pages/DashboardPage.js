@@ -171,7 +171,6 @@ var DashboardPage = React.createClass({
             <Panel title="Services Health" className="dashboard-panel">
               <ServiceList
                 healthProcessed={data.appsProcessed}
-                marathonApps={MarathonStore.get("apps")}
                 services={this.getServicesList(data.services)} />
               {this.getViewAllServicesBtn()}
             </Panel>
