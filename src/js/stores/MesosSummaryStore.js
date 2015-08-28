@@ -126,6 +126,14 @@ var MesosSummaryStore = Store.createStore({
     });
   },
 
+  getServiceFromName: function (name) {
+    let services = this.getLatest().frameworks;
+
+    return _.find(services, function (service) {
+      return service.name === name;
+    });
+  },
+
   getTaskTotals: function () {
     return MesosSummaryUtil.getFrameworksTaskTotals(
       this.getLatest().frameworks

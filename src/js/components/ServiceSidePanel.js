@@ -1,18 +1,9 @@
-import _ from "underscore";
 import React from "react/addons";
-import { SidePanel } from "reactjs-components";
+import {SidePanel} from "reactjs-components";
 
 import EventTypes from "../constants/EventTypes";
 import InternalStorageMixin from "../mixins/InternalStorageMixin";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
-
-function getServiceFromName(name) {
-  let services = MesosSummaryStore.getLatest().frameworks;
-
-  return _.find(services, function (service) {
-    return service.name === name;
-  });
-}
 
 const ServiceSidePanel = React.createClass({
 
@@ -55,8 +46,7 @@ const ServiceSidePanel = React.createClass({
   getHeader: function () {
     return (
       <div>
-        <span
-          className="button button-link button-inverse"
+        <span className="button button-link button-inverse"
           onClick={this.handlePanelClose}>
           <i className="service-detail-close"></i>
           Close
@@ -66,7 +56,7 @@ const ServiceSidePanel = React.createClass({
   },
 
   getSerivceDetails: function () {
-    let service = getServiceFromName(this.props.serviceName);
+    let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
 
     if (service == null) {
       return "loading...";

@@ -11,14 +11,6 @@ import StringUtil from "../utils/StringUtil";
 
 const PropTypes = React.PropTypes;
 
-function getServiceFromName(name) {
-  let services = MesosSummaryStore.getLatest().frameworks;
-
-  return _.find(services, function (service) {
-    return service.name === name;
-  });
-}
-
 export default class ServiceOverlay extends React.Component {
 
   constructor() {
@@ -103,7 +95,7 @@ export default class ServiceOverlay extends React.Component {
   }
 
   findAndRenderService(serviceName) {
-    this.service = getServiceFromName(serviceName);
+    this.service = MesosSummaryStore.getServiceFromName(serviceName);
 
     // Did not find a service.
     if (!this.service) {
