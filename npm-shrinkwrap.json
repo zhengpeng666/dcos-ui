@@ -13451,8 +13451,13 @@
       "resolved": "http://registry.npmjs.org/react-zeroclipboard/-/react-zeroclipboard-0.4.1.tgz"
     },
     "reactjs-components": {
+<<<<<<< HEAD
       "version": "0.0.4",
       "resolved": "http://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.4.tgz",
+=======
+      "version": "0.0.3",
+      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.3.tgz",
+>>>>>>> Shrinkwrap with reactjs-components 0.0.3
       "dependencies": {
         "body-parser": {
           "version": "1.13.3",
@@ -13510,7 +13515,11 @@
             },
             "qs": {
               "version": "4.0.0",
+<<<<<<< HEAD
               "resolved": "http://registry.npmjs.org/qs/-/qs-4.0.0.tgz"
+=======
+              "resolved": "https://registry.npmjs.org/qs/-/qs-4.0.0.tgz"
+>>>>>>> Shrinkwrap with reactjs-components 0.0.3
             },
             "raw-body": {
               "version": "2.1.2",
@@ -13524,6 +13533,7 @@
             },
             "type-is": {
               "version": "1.6.7",
+<<<<<<< HEAD
               "resolved": "http://registry.npmjs.org/type-is/-/type-is-1.6.7.tgz",
               "dependencies": {
                 "media-typer": {
@@ -13537,6 +13547,21 @@
                     "mime-db": {
                       "version": "1.17.0",
                       "resolved": "http://registry.npmjs.org/mime-db/-/mime-db-1.17.0.tgz"
+=======
+              "resolved": "https://registry.npmjs.org/type-is/-/type-is-1.6.7.tgz",
+              "dependencies": {
+                "media-typer": {
+                  "version": "0.3.0",
+                  "resolved": "https://registry.npmjs.org/media-typer/-/media-typer-0.3.0.tgz"
+                },
+                "mime-types": {
+                  "version": "2.1.5",
+                  "resolved": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.5.tgz",
+                  "dependencies": {
+                    "mime-db": {
+                      "version": "1.17.0",
+                      "resolved": "https://registry.npmjs.org/mime-db/-/mime-db-1.17.0.tgz"
+>>>>>>> Shrinkwrap with reactjs-components 0.0.3
                     }
                   }
                 }
