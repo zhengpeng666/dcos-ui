@@ -128,15 +128,13 @@ let ServiceList = React.createClass({
   },
 
   getList: function () {
-    let listOrder = ["title", "health"];
     let selectedServiceName = this.state.selectedServiceName;
 
     return (
       <div className="service-list-component">
         <List
           className="list-unstyled"
-          items={this.getServices(this.props.services, this.props.healthProcessed)}
-          order={listOrder} />
+          items={this.getServices(this.props.services, this.props.healthProcessed)} />
         <ServiceSidePanel
           open={selectedServiceName != null}
           onClose={this.onServiceDetailClose}
