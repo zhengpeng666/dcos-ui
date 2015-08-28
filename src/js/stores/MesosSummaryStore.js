@@ -47,10 +47,7 @@ var MesosSummaryStore = Store.createStore({
     }
 
     this.set({
-      appsProcessed: false,
       frameworkIDs: [],
-      frameworkHealth: {},
-      frameworkImages: {},
       frameworkNames: [],
       initCalledAt: Date.now(), // log when we started calling
       loading: null,
@@ -61,26 +58,10 @@ var MesosSummaryStore = Store.createStore({
     });
 
     startPolling();
-    this.onMarathonAppsChange = this.onMarathonAppsChange.bind(this);
-    this.onMarathonAppsError = this.onMarathonAppsError.bind(this);
-
-    MarathonStore.addChangeListener(
-      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonAppsChange
-    );
-    MarathonStore.addChangeListener(
-      EventTypes.MARATHON_APPS_ERROR, this.onMarathonAppsError
-    );
-
   },
 
   unmount: function () {
     stopPolling();
-    MarathonStore.removeChangeListener(
-      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonAppsChange
-    );
-    MarathonStore.removeChangeListener(
-      EventTypes.MARATHON_APPS_ERROR, this.onMarathonAppsError
-    );
   },
 
   addChangeListener: function (eventName, callback) {
@@ -333,44 +314,6 @@ var MesosSummaryStore = Store.createStore({
 
   processSummaryError: function () {
     this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
-  },
-
-  onMarathonAppsChange: function (apps) {
-    var frameworkNames = this.get("frameworkNames");
-
-    var marathonData = _.foldl(apps, function (curr, app, packageName) {
-      // Find the framework based on package name
-      var frameworkName = _.find(frameworkNames, function (name) {
-        // Use insensitive check
-        if (name.length) {
-          name = name.toLowerCase();
-        }
-
-        // Match exactly (case insensitive)
-        return name === packageName;
-      });
-
-      if (packageName === "marathon") {
-        frameworkName = packageName;
-      }
-
-      if (frameworkName == null) {
-        return curr;
-      }
-
-      curr.frameworkHealth[frameworkName] = app.health;
-      curr.frameworkImages[frameworkName] = app.images;
-
-      return curr;
-    }, {frameworkHealth: {}, frameworkImages: {}});
-
-    marathonData.appsProcessed = true;
-
-    this.set(marathonData);
-  },
-
-  onMarathonAppsError: function () {
-    this.set({appsProcessed: true});
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {

@@ -34,7 +34,6 @@ function getMesosServices(state) {
   var allFrameworks = MesosSummaryStore.getLatest().frameworks;
 
   return {
-    appsProcessed: MesosSummaryStore.get("appsProcessed"),
     frameworks: frameworks,
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
     countByHealth: getCountByHealth(allFrameworks),
@@ -158,6 +157,7 @@ var ServicesPage = React.createClass({
   getServicesPageContent: function () {
     var state = this.state;
     var data = this.internalStorage_get();
+    let appsProcessed = !!Object.keys(MarathonStore.get("apps")).length;
 
     return (
       <div>
@@ -190,7 +190,7 @@ var ServicesPage = React.createClass({
         </ul>
         <ServiceTable
           services={data.frameworks}
-          healthProcessed={data.appsProcessed} />
+          healthProcessed={appsProcessed} />
       </div>
     );
   },
