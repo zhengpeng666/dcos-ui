@@ -1,5 +1,10 @@
 import React from "react/addons";
+<<<<<<< HEAD
 import {SidePanel} from "reactjs-components";
+=======
+import { SidePanel } from "reactjs-components";
+import { Link } from "react-router";
+>>>>>>> Add open service button
 
 import EventTypes from "../constants/EventTypes";
 import InternalStorageMixin from "../mixins/InternalStorageMixin";
@@ -69,6 +74,36 @@ const ServiceSidePanel = React.createClass({
     );
   },
 
+  getOpenServiceButton: function () {
+    let service = getServiceFromName(this.props.serviceName);
+
+    if (!service || !service.webui_url || service.webui_url.length === 0) {
+      return null;
+    }
+
+    return (
+      <Link className="button button-success text-align-right"
+        params={{serviceName: this.props.serviceName}}
+        to="service-ui">
+        Open service
+      </Link>
+    );
+  },
+
+  getTopRow: function () {
+    return (
+      <div className="container container-pod">
+        <div className="row">
+          <div className="column-8">
+          </div>
+          <div className="column-4 text-align-right">
+            {this.getOpenServiceButton()}
+          </div>
+        </div>
+      </div>
+    );
+  },
+
   render: function () {
 
     // TODO(ml): rename to className
@@ -77,7 +112,8 @@ const ServiceSidePanel = React.createClass({
         header={this.getHeader()}
         open={this.props.open}
         onClose={this.handlePanelClose}>
-        {this.getServiceDetails()}
+        {this.getSerivceDetails()}
+        {this.getTopRow()}
       </SidePanel>
     );
   }
