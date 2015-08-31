@@ -1,8 +1,20 @@
+import classNames from "classnames";
 import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
+import DateUtil from "../utils/DateUtil";
 import EventTypes from "../constants/EventTypes";
+import HealthLabels from "../constants/HealthLabels";
+import MarathonStore from "../stores/MarathonStore";
+import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+
+const STATES = {
+  UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
+  HEALTHY: {key: "HEALTHY", classes: {"text-success": true}},
+  IDLE: {key: "IDLE", classes: {"text-warning": true}},
+  NA: {key: "NA", classes: {"text-mute": true}}
+};
 
 const ServiceSidePanel = React.createClass({
 
@@ -20,8 +32,12 @@ const ServiceSidePanel = React.createClass({
   },
 
   componentDidMount: function () {
-    MesosSummaryStore.addChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
+    );
+
+    MarathonStore.addChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
     );
 
     this.forceUpdate();
@@ -40,6 +56,23 @@ const ServiceSidePanel = React.createClass({
         EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
       );
 
+      this.forceUpdate();
+    }
+  },
+
+  onMarathonStoreChange: function () {
+    MarathonStore.removeChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
+    );
+
+    this.forceUpdate();
+  },
+
+  onMesosStateChange: function () {
+    if (MesosStateStore.get("lastMesosState")) {
+      MesosStateStore.removeChangeListener(
+        EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
+      );
       this.forceUpdate();
     }
   },
@@ -108,22 +141,104 @@ const ServiceSidePanel = React.createClass({
     );
   },
 
-  getTopRow: function () {
+  getBasicInfo: function () {
+    let service = getServiceFromName(this.props.serviceName);
+    let appImages = MarathonStore.getServiceImages(this.props.serviceName);
+    let appHealth = MarathonStore.getServiceHealth(this.props.serviceName);
+    let healthClass = classNames(STATES[appHealth.key].classes, "medium");
+    let healthLabel = HealthLabels[STATES[appHealth.key].key];
+    let imageTag = null;
+
+    if (!service) {
+      return null;
+    }
+
+    if (appImages) {
+      imageTag = (
+        <img className="icon icon-image icon-service"
+          src={appImages["icon-large"]} />
+      );
+    }
+
     return (
-      <div className="container container-pod">
-        <div className="row">
-          <div className="column-8">
+      <div className="flex-box flex-box-align-vertical-center">
+        {imageTag}
+        <div className="container container-fluid container-fluid-narrow">
+          <div className="h2 inverse flush-top flush-bottom">
+            {this.props.serviceName}
           </div>
-          <div className="column-4 text-align-right">
-            {this.getOpenServiceButton()}
+          <div className={healthClass}>
+            {healthLabel}
           </div>
         </div>
       </div>
     );
   },
 
-  render: function () {
+  getInfo: function () {
+    let service = getServiceFromName(this.props.serviceName);
+    if (!service) {
+      return null;
+    }
 
+    var registeredTime = service.registered_time.toFixed(3) * 1000;
+    var date = DateUtil.msToDateStr(registeredTime);
+    return (
+      <div>
+        <p className="p row flex-box">
+          <span className="column-4 emphasize">
+            Service
+          </span>
+          <span className="column-12">
+            {service.name}
+          </span>
+        </p>
+        <p className="row flex-box">
+          <span className="column-4 emphasize">
+            Tasks
+          </span>
+          <span className="column-12">
+            {service.tasks.length}
+          </span>
+        </p>
+        <p className="row flex-box">
+          <span className="column-4 emphasize">
+            Registered
+          </span>
+          <span className="column-12">
+            {date}
+          </span>
+        </p>
+      </div>
+    );
+  },
+
+  getTopRow: function () {
+    return [
+      <div className="container container-pod">
+        <div className="row flex-box flex-box-align-vertical-center">
+          <div className="column-8">
+            {this.getBasicInfo()}
+          </div>
+          <div className="column-4 text-align-right">
+            {this.getOpenServiceButton()}
+          </div>
+        </div>
+
+        <div className="container container-pod container-pod-short flush-left">
+          <div className="row">
+            <div className="column-8">
+              {this.getInfo()}
+            </div>
+            <div className="column-4">
+            </div>
+          </div>
+        </div>
+      </div>
+    ];
+  },
+
+  render: function () {
     // TODO(ml): rename to className
     return (
       <SidePanel classNames="service-detail"
