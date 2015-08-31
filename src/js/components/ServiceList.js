@@ -1,11 +1,11 @@
 const _ = require("underscore");
-const Link = require("react-router").Link;
 const React = require("react");
 
 const HealthLabels = require("../constants/HealthLabels");
 const HealthTypesDescription = require("../constants/HealthTypesDescription");
 const List = require("./List");
 const MarathonStore = require("../stores/MarathonStore");
+const ServiceSidePanel = require("./ServiceSidePanel");
 
 const STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
@@ -31,7 +31,7 @@ let ServiceList = React.createClass({
 
   getInitialState: function () {
     return {
-      openedService: null
+      selectedServiceName: null
     };
   },
 
@@ -40,6 +40,14 @@ let ServiceList = React.createClass({
       nextState !== undefined && !_.isEqual(this.state, nextState);
 
     return !_.isEqual(this.props, nextProps) || changedState;
+  },
+
+  handleServiceClick: function (selectedServiceName) {
+    this.setState({selectedServiceName});
+  },
+
+  onServiceDetailClose: function () {
+    this.setState({selectedServiceName: null});
   },
 
   getServices: function (services, healthProcessed) {
@@ -79,11 +87,11 @@ let ServiceList = React.createClass({
 
       if (service.webui_url && service.webui_url.length > 0) {
         title = (
-          <Link to="service-ui"
-            params={{serviceName: service.name}}
-            className="h3 flush-top flush-bottom">
+          <a
+            onClick={this.handleServiceClick.bind(this, service.name)}
+            className="h3 flush-top flush-bottom clickable">
             {service.name}
-          </Link>
+          </a>
         );
       }
 
@@ -111,13 +119,18 @@ let ServiceList = React.createClass({
   },
 
   getList: function () {
-    var listOrder = ["title", "health"];
+    let listOrder = ["title", "health"];
+    let selectedServiceName = this.state.selectedServiceName;
 
     return (
       <div className="service-list-component">
         <List
           list={this.getServices(this.props.services, this.props.healthProcessed)}
           order={listOrder} />
+        <ServiceSidePanel
+          open={selectedServiceName != null}
+          onClose={this.onServiceDetailClose}
+          serviceName={selectedServiceName} />
       </div>
     );
   },

@@ -1,6 +1,5 @@
 var _ = require("underscore");
 var classNames = require("classnames");
-var Link = require("react-router").Link;
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
@@ -10,6 +9,7 @@ var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var MarathonStore = require("../stores/MarathonStore");
 var Maths = require("../utils/Maths");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
+var ServiceSidePanel = require("./ServiceSidePanel");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
@@ -23,6 +23,10 @@ var ServicesTable = React.createClass({
   propTypes: {
     services: React.PropTypes.array.isRequired,
     healthProcessed: React.PropTypes.bool.isRequired
+  },
+
+  getInitialState: function () {
+    return {selectedServiceName: null};
   },
 
   componentDidMount: function () {
@@ -49,6 +53,14 @@ var ServicesTable = React.createClass({
     this.forceUpdate();
   },
 
+  handleServiceClick: function (selectedServiceName) {
+    this.setState({selectedServiceName});
+  },
+
+  onServiceDetailClose: function () {
+    this.setState({selectedServiceName: null});
+  },
+
   renderHeadline: function (prop, model) {
     let appImages = MarathonStore.getServiceImages(model.name);
     let imageTag = null;
@@ -63,19 +75,19 @@ var ServicesTable = React.createClass({
     if (model.webui_url.length === 0) {
       return (
         <span className="h5 flush-top flush-bottom headline">
-          {imageTag} {model[prop]}
+          {imageTag}{model[prop]}
         </span>
       );
     }
 
     return (
-      <Link to="service-ui"
-        params={{serviceName: model.name}}
+      <a
+        onClick={this.handleServiceClick.bind(this, model.name)}
         className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
-          {imageTag} {model[prop]}
+          {imageTag}{model[prop]}
         </span>
-      </Link>
+      </a>
     );
   },
 
@@ -201,6 +213,8 @@ var ServicesTable = React.createClass({
 
   render: function () {
     let marathonApps = MarathonStore.get("apps");
+    let selectedServiceName = this.state.selectedServiceName;
+
     return (
       <div>
         <Table
@@ -211,6 +225,10 @@ var ServicesTable = React.createClass({
           keys={["id"]}
           sortBy={{prop: "name", order: "desc"}}
           sortFunc={ResourceTableUtil.getSortFunction("name", {marathonApps})} />
+        <ServiceSidePanel
+          open={selectedServiceName != null}
+          onClose={this.onServiceDetailClose}
+          serviceName={selectedServiceName} />
       </div>
     );
   }
