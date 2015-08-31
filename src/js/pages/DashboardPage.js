@@ -136,7 +136,7 @@ var DashboardPage = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-    let appsProcessed = !!Object.keys(MarathonStore.get("apps")).length;
+    let appsProcessed = MarathonStore.hasProcessedApps();
 
     return (
       <Page title="Dashboard">

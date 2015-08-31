@@ -157,7 +157,7 @@ var ServicesPage = React.createClass({
   getServicesPageContent: function () {
     var state = this.state;
     var data = this.internalStorage_get();
-    let appsProcessed = !!Object.keys(MarathonStore.get("apps")).length;
+    let appsProcessed = MarathonStore.hasProcessedApps();
 
     return (
       <div>
