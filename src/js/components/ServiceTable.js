@@ -26,7 +26,7 @@ var ServicesTable = React.createClass({
   },
 
   getInitialState: function () {
-    return {selectedService: null};
+    return {selectedServiceName: null};
   },
 
   componentDidMount: function () {
@@ -53,12 +53,12 @@ var ServicesTable = React.createClass({
     this.forceUpdate();
   },
 
-  handleServiceClick: function (selectedService) {
-    this.setState({selectedService});
+  handleServiceClick: function (selectedServiceName) {
+    this.setState({selectedServiceName});
   },
 
   onServiceDetailClose: function () {
-    this.setState({selectedService: null});
+    this.setState({selectedServiceName: null});
   },
 
   renderHeadline: function (prop, model) {
@@ -82,7 +82,7 @@ var ServicesTable = React.createClass({
 
     return (
       <a
-        onClick={this.handleServiceClick.bind(this, model)}
+        onClick={this.handleServiceClick.bind(this, model.name)}
         className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
           {imageTag}{model[prop]}
@@ -213,11 +213,7 @@ var ServicesTable = React.createClass({
 
   render: function () {
     let marathonApps = MarathonStore.get("apps");
-    let selectedService = this.state.selectedService;
-    let serviceName = "";
-    if (selectedService != null) {
-      serviceName = selectedService.name;
-    }
+    let selectedServiceName = this.state.selectedServiceName;
 
     return (
       <div>
@@ -230,9 +226,9 @@ var ServicesTable = React.createClass({
           sortBy={{prop: "name", order: "desc"}}
           sortFunc={ResourceTableUtil.getSortFunction("name", {marathonApps})} />
         <ServiceSidePanel
-          open={selectedService != null}
+          open={selectedServiceName != null}
           onClose={this.onServiceDetailClose}
-          serviceName={serviceName} />
+          serviceName={selectedServiceName} />
       </div>
     );
   }

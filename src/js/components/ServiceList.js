@@ -31,7 +31,7 @@ let ServiceList = React.createClass({
 
   getInitialState: function () {
     return {
-      selectedService: null
+      selectedServiceName: null
     };
   },
 
@@ -42,12 +42,12 @@ let ServiceList = React.createClass({
     return !_.isEqual(this.props, nextProps) || changedState;
   },
 
-  handleServiceClick: function (selectedService) {
-    this.setState({selectedService});
+  handleServiceClick: function (selectedServiceName) {
+    this.setState({selectedServiceName});
   },
 
   onServiceDetailClose: function () {
-    this.setState({selectedService: null});
+    this.setState({selectedServiceName: null});
   },
 
   getServices: function (services, healthProcessed) {
@@ -88,7 +88,7 @@ let ServiceList = React.createClass({
       if (service.webui_url && service.webui_url.length > 0) {
         title = (
           <a
-            onClick={this.handleServiceClick.bind(this, service)}
+            onClick={this.handleServiceClick.bind(this, service.name)}
             className="h3 flush-top flush-bottom clickable">
             {service.name}
           </a>
@@ -120,11 +120,7 @@ let ServiceList = React.createClass({
 
   getList: function () {
     let listOrder = ["title", "health"];
-    let selectedService = this.state.selectedService;
-    let serviceName = "";
-    if (selectedService != null) {
-      serviceName = selectedService.name;
-    }
+    let selectedServiceName = this.state.selectedServiceName;
 
     return (
       <div className="service-list-component">
@@ -132,9 +128,9 @@ let ServiceList = React.createClass({
           list={this.getServices(this.props.services, this.props.healthProcessed)}
           order={listOrder} />
         <ServiceSidePanel
-          open={selectedService != null}
+          open={selectedServiceName != null}
           onClose={this.onServiceDetailClose}
-          serviceName={serviceName} />
+          serviceName={selectedServiceName} />
       </div>
     );
   },
