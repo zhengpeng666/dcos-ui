@@ -103,7 +103,6 @@ const ServiceSidePanel = React.createClass({
 
   getServiceDetails: function () {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
-
     if (service == null) {
       return "loading...";
     }
@@ -142,16 +141,16 @@ const ServiceSidePanel = React.createClass({
   },
 
   getBasicInfo: function () {
-    let service = getServiceFromName(this.props.serviceName);
-    let appImages = MarathonStore.getServiceImages(this.props.serviceName);
-    let appHealth = MarathonStore.getServiceHealth(this.props.serviceName);
-    let healthClass = classNames(STATES[appHealth.key].classes, "medium");
-    let healthLabel = HealthLabels[STATES[appHealth.key].key];
-    let imageTag = null;
-
+    let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (!service) {
       return null;
     }
+
+    let appImages = MarathonStore.getServiceImages(this.props.serviceName);
+    let appHealth = MarathonStore.getServiceHealth(this.props.serviceName);
+    let healthClass = classNames(STATES[appHealth.key].classes);
+    let healthLabel = HealthLabels[STATES[appHealth.key].key];
+    let imageTag = null;
 
     if (appImages) {
       imageTag = (
@@ -176,13 +175,14 @@ const ServiceSidePanel = React.createClass({
   },
 
   getInfo: function () {
-    let service = getServiceFromName(this.props.serviceName);
+    let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (!service) {
       return null;
     }
 
     var registeredTime = service.registered_time.toFixed(3) * 1000;
     var date = DateUtil.msToDateStr(registeredTime);
+
     return (
       <div>
         <p className="p row flex-box">
