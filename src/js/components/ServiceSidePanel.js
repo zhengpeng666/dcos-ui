@@ -214,8 +214,9 @@ const ServiceSidePanel = React.createClass({
   },
 
   getTopRow: function () {
-    return [
-      <div className="container container-pod">
+    return (
+      <div
+        className="container container-pod container-pod-divider-bottom container-pod-divider-inverse">
         <div className="row flex-box flex-box-align-vertical-center">
           <div className="column-8">
             {this.getBasicInfo()}
@@ -235,7 +236,7 @@ const ServiceSidePanel = React.createClass({
           </div>
         </div>
       </div>
-    ];
+    );
   },
 
   render: function () {
