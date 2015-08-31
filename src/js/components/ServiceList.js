@@ -42,11 +42,11 @@ let ServiceList = React.createClass({
     return !_.isEqual(this.props, nextProps) || changedState;
   },
 
-  openServiceDetail: function (serviceDetail) {
+  handleServiceClick: function (serviceDetail) {
     this.setState({serviceDetail});
   },
 
-  closeServiceDetail: function () {
+  onServiceDetailClose: function () {
     this.setState({serviceDetail: null});
   },
 
@@ -88,7 +88,7 @@ let ServiceList = React.createClass({
       if (service.webui_url && service.webui_url.length > 0) {
         title = (
           <a
-            onClick={this.openServiceDetail.bind(this, service)}
+            onClick={this.handleServiceClick.bind(this, service)}
             className="h3 flush-top flush-bottom clickable">
             {service.name}
           </a>
@@ -133,7 +133,7 @@ let ServiceList = React.createClass({
           order={listOrder} />
         <ServiceSidePanel
           open={serviceDetail != null}
-          onClose={this.closeServiceDetail}
+          onClose={this.onServiceDetailClose}
           serviceName={serviceName} />
       </div>
     );

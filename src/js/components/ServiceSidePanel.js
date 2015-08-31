@@ -55,7 +55,7 @@ const ServiceSidePanel = React.createClass({
     );
   },
 
-  getSerivceDetails: function () {
+  getServiceDetails: function () {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
 
     if (service == null) {
@@ -77,7 +77,7 @@ const ServiceSidePanel = React.createClass({
         header={this.getHeader()}
         open={this.props.open}
         onClose={this.handlePanelClose}>
-        {this.getSerivceDetails()}
+        {this.getServiceDetails()}
       </SidePanel>
     );
   }

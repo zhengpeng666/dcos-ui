@@ -53,11 +53,11 @@ var ServicesTable = React.createClass({
     this.forceUpdate();
   },
 
-  openServiceDetail: function (serviceDetail) {
+  handleServiceClick: function (serviceDetail) {
     this.setState({serviceDetail});
   },
 
-  closeServiceDetail: function () {
+  onServiceDetailClose: function () {
     this.setState({serviceDetail: null});
   },
 
@@ -82,7 +82,7 @@ var ServicesTable = React.createClass({
 
     return (
       <a
-        onClick={this.openServiceDetail.bind(this, model)}
+        onClick={this.handleServiceClick.bind(this, model)}
         className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
           {imageTag}{model[prop]}
@@ -231,7 +231,7 @@ var ServicesTable = React.createClass({
           sortFunc={ResourceTableUtil.getSortFunction("name", {marathonApps})} />
         <ServiceSidePanel
           open={serviceDetail != null}
-          onClose={this.closeServiceDetail}
+          onClose={this.onServiceDetailClose}
           serviceName={serviceName} />
       </div>
     );
