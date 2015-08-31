@@ -2,6 +2,7 @@
   .side-panel-header {
     background: @purple;
     color: @white;
+
     .button:hover .service-detail-close {
       &:before,
       &:after {
@@ -11,25 +12,25 @@
   }
 
   .service-detail-close {
-    width: @button-large-height;
+    .box-sizing(content-box);
+    cursor: pointer;
     height: @button-large-height;
     margin-left: @button-large-height * 0.5;
-    cursor: pointer;
     .transition(e('all 0.15s ease'));
-    .box-sizing(content-box);
+    width: @button-large-height;
 
     &:before,
     &:after {
+      background-color: @white;
       content: '';
       display: block;
-      width: @button-large-height * 0.5;
       height: 2px;
-      position: absolute;
-      top: (@button-large-height * 0.5) - 1px;
       margin-left: -(@button-large-height * 0.5) * 0.5;
-      .rotate(45deg);
-      background-color: @white;
       .opacity(0.8);
+      position: absolute;
+      .rotate(45deg);
+      top: (@button-large-height * 0.5) - 1px;
+      width: @button-large-height * 0.5;
     }
 
     &:after {
