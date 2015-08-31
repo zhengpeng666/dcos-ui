@@ -26,7 +26,7 @@ var ServicesTable = React.createClass({
   },
 
   getInitialState: function () {
-    return {serviceDetail: null};
+    return {selectedService: null};
   },
 
   componentDidMount: function () {
@@ -53,12 +53,12 @@ var ServicesTable = React.createClass({
     this.forceUpdate();
   },
 
-  handleServiceClick: function (serviceDetail) {
-    this.setState({serviceDetail});
+  handleServiceClick: function (selectedService) {
+    this.setState({selectedService});
   },
 
   onServiceDetailClose: function () {
-    this.setState({serviceDetail: null});
+    this.setState({selectedService: null});
   },
 
   renderHeadline: function (prop, model) {
@@ -213,10 +213,10 @@ var ServicesTable = React.createClass({
 
   render: function () {
     let marathonApps = MarathonStore.get("apps");
-    let serviceDetail = this.state.serviceDetail;
+    let selectedService = this.state.selectedService;
     let serviceName = "";
-    if (serviceDetail != null) {
-      serviceName = serviceDetail.name;
+    if (selectedService != null) {
+      serviceName = selectedService.name;
     }
 
     return (
@@ -230,7 +230,7 @@ var ServicesTable = React.createClass({
           sortBy={{prop: "name", order: "desc"}}
           sortFunc={ResourceTableUtil.getSortFunction("name", {marathonApps})} />
         <ServiceSidePanel
-          open={serviceDetail != null}
+          open={selectedService != null}
           onClose={this.onServiceDetailClose}
           serviceName={serviceName} />
       </div>

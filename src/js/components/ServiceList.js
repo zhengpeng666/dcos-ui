@@ -31,7 +31,7 @@ let ServiceList = React.createClass({
 
   getInitialState: function () {
     return {
-      serviceDetail: null
+      selectedService: null
     };
   },
 
@@ -42,12 +42,12 @@ let ServiceList = React.createClass({
     return !_.isEqual(this.props, nextProps) || changedState;
   },
 
-  handleServiceClick: function (serviceDetail) {
-    this.setState({serviceDetail});
+  handleServiceClick: function (selectedService) {
+    this.setState({selectedService});
   },
 
   onServiceDetailClose: function () {
-    this.setState({serviceDetail: null});
+    this.setState({selectedService: null});
   },
 
   getServices: function (services, healthProcessed) {
@@ -120,10 +120,10 @@ let ServiceList = React.createClass({
 
   getList: function () {
     let listOrder = ["title", "health"];
-    let serviceDetail = this.state.serviceDetail;
+    let selectedService = this.state.selectedService;
     let serviceName = "";
-    if (serviceDetail != null) {
-      serviceName = serviceDetail.name;
+    if (selectedService != null) {
+      serviceName = selectedService.name;
     }
 
     return (
@@ -132,7 +132,7 @@ let ServiceList = React.createClass({
           list={this.getServices(this.props.services, this.props.healthProcessed)}
           order={listOrder} />
         <ServiceSidePanel
-          open={serviceDetail != null}
+          open={selectedService != null}
           onClose={this.onServiceDetailClose}
           serviceName={serviceName} />
       </div>
