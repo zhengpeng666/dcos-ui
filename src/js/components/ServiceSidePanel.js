@@ -1,10 +1,6 @@
 import React from "react/addons";
-<<<<<<< HEAD
+import {Link} from "react-router";
 import {SidePanel} from "reactjs-components";
-=======
-import { SidePanel } from "reactjs-components";
-import { Link } from "react-router";
->>>>>>> Add open service button
 
 import EventTypes from "../constants/EventTypes";
 import InternalStorageMixin from "../mixins/InternalStorageMixin";
