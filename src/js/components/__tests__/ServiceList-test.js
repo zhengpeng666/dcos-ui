@@ -56,7 +56,6 @@ describe("ServiceList", function () {
       expect(TestUtils.isElement(result[0].value[0])).toEqual(true);
       expect(TestUtils.isElement(result[0].value[1])).toEqual(true);
     });
-
   });
 
 });
