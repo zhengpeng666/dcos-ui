@@ -1,6 +1,5 @@
 var _ = require("underscore");
 
-var MesosSummaryUtil = require("../utils/MesosSummaryUtil");
 var StateSummary = require("./StateSummary");
 
 export default class SummaryList {
@@ -40,4 +39,4 @@ export default class SummaryList {
   last() {
     return _.last(this.list);
   }
-};
+}

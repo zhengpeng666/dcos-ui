@@ -19,9 +19,9 @@ describe("SummaryList", function () {
     });
 
     it("throws when initialized with a non-array argument", function () {
-      function fn () {
+      var fn = function () {
         return new SummaryList({items: "foo"});
-      }
+      };
 
       expect(fn).toThrow();
     });
