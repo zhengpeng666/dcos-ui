@@ -64,14 +64,25 @@ const ServiceSidePanel = React.createClass({
     }
 
     return (
-      <h2 className="text-align-center inverse overlay-header">
-        {service.name}
-      </h2>
+      <div>
+        <h2 className="text-align-center inverse overlay-header">
+          {service.name}
+        </h2>
+        <div className="container container-pod">
+          <div className="row">
+            <div className="column-8">
+            </div>
+            <div className="column-4 text-align-right">
+              {this.getOpenServiceButton()}
+            </div>
+          </div>
+        </div>
+      </div>
     );
   },
 
   getOpenServiceButton: function () {
-    let service = getServiceFromName(this.props.serviceName);
+    let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
 
     if (!service || !service.webui_url || service.webui_url.length === 0) {
       return null;
@@ -86,20 +97,6 @@ const ServiceSidePanel = React.createClass({
     );
   },
 
-  getTopRow: function () {
-    return (
-      <div className="container container-pod">
-        <div className="row">
-          <div className="column-8">
-          </div>
-          <div className="column-4 text-align-right">
-            {this.getOpenServiceButton()}
-          </div>
-        </div>
-      </div>
-    );
-  },
-
   render: function () {
 
     // TODO(ml): rename to className
@@ -108,8 +105,7 @@ const ServiceSidePanel = React.createClass({
         header={this.getHeader()}
         open={this.props.open}
         onClose={this.handlePanelClose}>
-        {this.getSerivceDetails()}
-        {this.getTopRow()}
+        {this.getServiceDetails()}
       </SidePanel>
     );
   }
