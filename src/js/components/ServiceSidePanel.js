@@ -82,9 +82,7 @@ const ServiceSidePanel = React.createClass({
   },
 
   getOpenServiceButton: function () {
-    let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
-
-    if (!service || !service.webui_url || service.webui_url.length === 0) {
+    if (!MesosSummaryStore.hasServiceUrl(this.props.serviceName)) {
       return null;
     }
 

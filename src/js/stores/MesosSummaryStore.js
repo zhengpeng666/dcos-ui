@@ -185,6 +185,12 @@ var MesosSummaryStore = Store.createStore({
     return hosts;
   },
 
+  hasServiceUrl: function (serviceName) {
+    let service = MesosSummaryStore.getServiceFromName(serviceName);
+
+    return service && service.webui_url && service.webui_url.length > 0;
+  },
+
   updateStateProcessed: function () {
     this.set({statesProcessed: true});
     this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
