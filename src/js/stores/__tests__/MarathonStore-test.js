@@ -25,7 +25,9 @@ describe("MarathonStore", function () {
       var health = MarathonStore.getFrameworkHealth(
         MockMarathonResponse.hasNoHealthy.apps[0]
       );
-      expect(health).toEqual(null);
+      expect(health).toNotEqual(null);
+      expect(health.key).toEqual("NA");
+      expect(health.value).toEqual(3);
     });
 
     it("should return idle when app has no running tasks", function () {
@@ -193,6 +195,25 @@ describe("MarathonStore", function () {
       );
       var marathonApps = MarathonStore.get("apps");
       expect(marathonApps.marathon.health.key).toEqual("HEALTHY");
+    });
+
+    it("should have apps with NA health if apps have no health checks", function () {
+      MarathonStore.processMarathonApps(
+        MockMarathonResponse.hasNoHealthy
+      );
+      var marathonApps = MarathonStore.get("apps");
+
+      for (var key in marathonApps) {
+        var appHealth = marathonApps[key].health;
+
+        if (key === "marathon") {
+          // The marathon app should still be healthy
+          expect(appHealth.key).toEqual("HEALTHY");
+        } else {
+          expect(appHealth.key).toEqual("NA");
+          expect(appHealth.value).toEqual(3);
+        }
+      }
     });
 
   });

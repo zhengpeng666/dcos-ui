@@ -58,7 +58,10 @@ var MarathonStore = Store.createStore({
 
   getFrameworkHealth: function (app) {
     if (app.healthChecks == null || app.healthChecks.length === 0) {
-      return null;
+      return {
+        key: "NA",
+        value: HealthTypes.NA
+      };
     }
 
     var health = {key: "IDLE", value: HealthTypes.IDLE};
@@ -73,17 +76,16 @@ var MarathonStore = Store.createStore({
 
   getServiceHealth: function (name) {
     let appName = name.toLowerCase();
-    let appHealth = {
-      key: "NA",
-      value: HealthTypes.NA
-    };
     let marathonApps = this.get("apps");
 
-    if (marathonApps[appName]) {
-      appHealth = marathonApps[appName].health;
+    if (!marathonApps[appName]) {
+      return {
+        key: "NA",
+        value: HealthTypes.NA
+      };
     }
 
-    return appHealth;
+    return marathonApps[appName].health;
   },
 
   getServiceImages: function (name) {
