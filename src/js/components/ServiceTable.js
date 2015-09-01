@@ -72,14 +72,6 @@ var ServicesTable = React.createClass({
       );
     }
 
-    if (service.webui_url.length === 0) {
-      return (
-        <span className="h5 flush-top flush-bottom headline">
-          {imageTag}{service[prop]}
-        </span>
-      );
-    }
-
     return (
       <a
         onClick={this.handleServiceClick.bind(this, service.name)}
