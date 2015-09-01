@@ -109,15 +109,23 @@ const ServiceSidePanel = React.createClass({
 
     return (
       <div>
-        <h2 className="text-align-center inverse overlay-header">
-          {service.name}
-        </h2>
-        <div className="container container-pod">
-          <div className="row">
+        <div
+          className="container container-pod container-pod-divider-bottom container-pod-divider-inverse">
+          <div className="row flex-box flex-box-align-vertical-center">
             <div className="column-8">
+              {this.getBasicInfo()}
             </div>
             <div className="column-4 text-align-right">
               {this.getOpenServiceButton()}
+            </div>
+          </div>
+          <div className="container container-pod container-pod-short flush-left">
+            <div className="row">
+              <div className="column-8">
+                {this.getInfo()}
+              </div>
+              <div className="column-4">
+              </div>
             </div>
           </div>
         </div>
@@ -175,11 +183,11 @@ const ServiceSidePanel = React.createClass({
   },
 
   getInfo: function () {
-    let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
+    let service = MesosStateStore.getServiceFromName(this.props.serviceName);
     if (!service) {
       return null;
     }
-
+    console.log(service);
     var registeredTime = service.registered_time.toFixed(3) * 1000;
     var date = DateUtil.msToDateStr(registeredTime);
 
@@ -209,32 +217,6 @@ const ServiceSidePanel = React.createClass({
             {date}
           </span>
         </p>
-      </div>
-    );
-  },
-
-  getTopRow: function () {
-    return (
-      <div
-        className="container container-pod container-pod-divider-bottom container-pod-divider-inverse">
-        <div className="row flex-box flex-box-align-vertical-center">
-          <div className="column-8">
-            {this.getBasicInfo()}
-          </div>
-          <div className="column-4 text-align-right">
-            {this.getOpenServiceButton()}
-          </div>
-        </div>
-
-        <div className="container container-pod container-pod-short flush-left">
-          <div className="row">
-            <div className="column-8">
-              {this.getInfo()}
-            </div>
-            <div className="column-4">
-            </div>
-          </div>
-        </div>
       </div>
     );
   },
