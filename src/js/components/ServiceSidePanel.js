@@ -1,8 +1,11 @@
+import _ from "underscore";
 import classNames from "classnames";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
+import BarChart from "./charts/BarChart";
+import Chart from "./charts/Chart";
 import DateUtil from "../utils/DateUtil";
 import DetailSidePanel from "./DetailSidePanel";
 import HealthLabels from "../constants/HealthLabels";
@@ -10,8 +13,14 @@ import HealthStatus from "../constants/HealthStatus";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
-import TaskView from "./TaskView";
+import ResourceTypes from "../constants/ResourceTypes";
 import StringUtil from "../utils/StringUtil";
+import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
+import TaskView from "./TaskView";
+import Units from "../utils/Units";
+
+// number to fit design of width vs. height ratio
+const WIDTH_HEIGHT_RATIO = 4.5;
 
 const METHODS_TO_BIND = [
   "handleOpenServiceButtonClick",
@@ -150,12 +159,20 @@ export default class ServiceSidePanel extends DetailSidePanel {
       return this.getNotFound("service");
     }
 
+              // <div className="column-8">
+              //   {this.getInfo()}
+              // </div>
     return (
       <div>
         <div
           className="container container-pod container-pod-divider-bottom
             container-pod-divider-inverse flush-bottom">
           {this.getBasicInfo()}
+          <div className="container container-pod container-pod-short flush-left flush-right">
+            <div className="row chart">
+              {this.getCharts()}
+            </div>
+          </div>
           <div className="container container-pod container-pod-short flush-left">
             <div className="row">
               <div className="column-4">
@@ -220,6 +237,80 @@ export default class ServiceSidePanel extends DetailSidePanel {
         </p>
       );
     });
+  }
+
+  getResourceValue(resource, value) {
+    if (resource === "mem") {
+      return Units.filesize(
+        value * 1024 * 1024
+      ).replace(/ /, "");
+    }
+
+    if (resource === "disk") {
+      return Units.filesize(
+        value * 1024 * 1024 * 1024
+      ).replace(/ /, "");
+    }
+
+    return value;
+  }
+
+  getResourceChart(resource, totalResources) {
+    let colorIndex = ResourceTypes[resource].colorIndex;
+    let resourceLabel = TaskTableHeaderLabels[resource];
+    let resourceData = [{
+      name: "Alloc",
+      colorIndex: colorIndex,
+      values: totalResources[resource]
+    }];
+    let resourceValue = this.getResourceValue(
+      resource, _.last(totalResources[resource]).value
+    );
+
+    return (
+      <div className="column-4
+        flex-box-align-vertical-center
+        container-pod
+        container-pod-super-short
+        flush-top">
+        <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}>
+          <BarChart
+            data={resourceData}
+            inverse={true}
+            maxY={100}
+            y="percentage"
+            ticksY={2}
+            xGridLines={0}
+            margin={{top: 0, left: 10, right: 10, bottom: 40}}
+            refreshRate={2000} />
+        </Chart>
+        <div>
+          <h4 className={`text-color-${colorIndex} flush-top flush-bottom`}>
+            {resourceValue}
+          </h4>
+          <div>
+            {resourceLabel}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  getCharts() {
+    let service = MesosStateStore.getServiceFromName(this.props.itemID);
+
+    if (!service) {
+      return null;
+    }
+
+    let states = MesosSummaryStore.get("states");
+    let resources = states.getResourceStatesForServiceIDs([service.id]);
+
+    return [
+      this.getResourceChart("cpus", resources),
+      this.getResourceChart("mem", resources),
+      this.getResourceChart("disk", resources)
+    ];
   }
 
   render() {

@@ -342,7 +342,6 @@ var TimeSeriesChart = React.createClass({
     var margin = props.margin;
     var height = this.getHeight(props);
     var width = this.getWidth(props);
-
     var xScale = this.getXScale(props.data, width, props.refreshRate);
     var xTimeScale = this.getXTimeScale(props.data, width);
     var yScale = this.getYScale(height, props.maxY);

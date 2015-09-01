@@ -14,6 +14,10 @@
 
   svg .background {
     fill: fade(@neutral, 80%);
+
+    &.inverse {
+      fill: fade(@neutral, 5%);
+    }
   }
 
   .axis path,
@@ -226,4 +230,8 @@
     }
   }
 
+}
+
+.side-panel .chart {
+  flex-direction: row;
 }

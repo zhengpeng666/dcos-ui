@@ -1,4 +1,5 @@
 var _ = require("underscore");
+var classNames = require("classnames");
 var d3 = require("d3");
 var React = require("react/addons");
 
@@ -36,6 +37,7 @@ var BarChart = React.createClass({
       maxY: 10,
       ticksY: 10,
       y: "y",
+      xGridLines: null,
       transition: {
         delay: 200,
         duration: 800
@@ -181,12 +183,16 @@ var BarChart = React.createClass({
           .tickFormat("")
       );
 
+    let xGridLines = props.ticksY;
+    if (props.xGridLines != null) {
+      xGridLines = props.xGridLines;
+    }
     d3.select(this.refs.xGrid.getDOMNode())
       .attr("class", "grid x")
       .call(
         d3.svg.axis().scale(xScale)
           .orient("top")
-          .ticks(props.ticksY)
+          .ticks(xGridLines)
           .tickSize(-props.height, 0, 0)
           .tickFormat("")
       );
@@ -271,6 +277,10 @@ var BarChart = React.createClass({
     var margin = props.margin;
     var clipPath = "url(#" + data.clipPathID + ")";
 
+    var gridClassSet = classNames({
+      "grid-graph": true
+    });
+
     return (
       <svg height={props.height + margin.bottom}
           width={props.width}
@@ -281,7 +291,7 @@ var BarChart = React.createClass({
           <g className="x axis"
             transform={"translate(" + [0, props.height] + ")"}
             ref="xAxis"/>
-          <g className="grid-graph" clipPath={clipPath}>
+          <g className={gridClassSet} clipPath={clipPath}>
             <g ref="yGrid" />
             <g ref="xGrid" />
             {this.getBarList()}
