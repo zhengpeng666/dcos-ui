@@ -52,6 +52,10 @@ var MarathonStore = Store.createStore({
     }
   },
 
+  hasProcessedApps: function () {
+    return !!Object.keys(this.get("apps")).length;
+  },
+
   getFrameworkHealth: function (app) {
     if (app.healthChecks == null || app.healthChecks.length === 0) {
       return null;

@@ -39,9 +39,7 @@ describe("ServiceTable", function () {
     });
 
     it("should have loaders on all frameworks", function () {
-      expect(MesosSummaryStore.get("appsProcessed")).toBe(false);
-
-      var table = getTable(MesosSummaryStore.get("appsProcessed"));
+      var table = getTable(false);
 
       this.frameworks.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(
@@ -56,10 +54,7 @@ describe("ServiceTable", function () {
     });
 
     it("should have N/A health status on all frameworks", function () {
-      MesosSummaryStore.onMarathonAppsError();
-      expect(MesosSummaryStore.get("appsProcessed")).toBe(true);
-
-      var table = getTable(MesosSummaryStore.get("appsProcessed"));
+      var table = getTable(true);
 
       this.frameworks.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(
@@ -67,7 +62,6 @@ describe("ServiceTable", function () {
         );
         expect(healthlabel.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
       });
-
     });
 
   });

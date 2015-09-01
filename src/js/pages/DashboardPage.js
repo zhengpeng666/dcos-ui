@@ -21,7 +21,6 @@ var SidebarActions = require("../events/SidebarActions");
 function getMesosState() {
   return {
     allocResources: MesosSummaryStore.getAllocResources(),
-    appsProcessed: MesosSummaryStore.get("appsProcessed"),
     // Need clone, modifying in place will make update components check for
     // change in the same array, in stead of two different references
     taskFailureRate: _.clone(MesosSummaryStore.get("taskFailureRate")),
@@ -137,6 +136,7 @@ var DashboardPage = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
+    let appsProcessed = MarathonStore.hasProcessedApps();
 
     return (
       <Page title="Dashboard">
@@ -170,7 +170,7 @@ var DashboardPage = React.createClass({
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="Services Health" className="dashboard-panel">
               <ServiceList
-                healthProcessed={data.appsProcessed}
+                healthProcessed={appsProcessed}
                 services={this.getServicesList(data.services)} />
               {this.getViewAllServicesBtn()}
             </Panel>
