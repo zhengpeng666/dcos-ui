@@ -59,7 +59,6 @@ let ServiceList = React.createClass({
       let appHealth = MarathonStore.getServiceHealth(service.name);
       let attributes = {};
       let state = STATES.NA;
-      let title = service.name;
 
       if (appHealth != null) {
         state = STATES[appHealth.key];
@@ -89,15 +88,13 @@ let ServiceList = React.createClass({
         );
       }
 
-      if (service.webui_url && service.webui_url.length > 0) {
-        title = (
-          <a
-            onClick={this.handleServiceClick.bind(this, service.name)}
-            className="h3 flush-top flush-bottom clickable">
-            {service.name}
-          </a>
-        );
-      }
+      let title = (
+        <a
+          onClick={this.handleServiceClick.bind(this, service.name)}
+          className="h3 flush-top flush-bottom clickable">
+          {service.name}
+        </a>
+      );
 
       var classSet = classNames(_.extend({
         "h3 flush-top flush-bottom text-align-right": true
