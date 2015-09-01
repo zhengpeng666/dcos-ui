@@ -7,6 +7,7 @@ jest.dontMock("./fixtures/MockParsedAppMetadata");
 jest.dontMock("../../utils/Store");
 
 var HealthLabels = require("../../constants/HealthLabels");
+var HealthTypes = require("../../constants/HealthTypes");
 var MarathonStore = require("../MarathonStore");
 var MockAppMetadata = require("./fixtures/MockAppMetadata");
 var MockMarathonResponse = require("./fixtures/MockMarathonResponse");
@@ -211,7 +212,7 @@ describe("MarathonStore", function () {
           expect(appHealth.key).toEqual("HEALTHY");
         } else {
           expect(appHealth.key).toEqual("NA");
-          expect(appHealth.value).toEqual(3);
+          expect(appHealth.value).toEqual(HealthTypes.NA);
         }
       }
     });
