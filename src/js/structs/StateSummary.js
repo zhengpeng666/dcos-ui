@@ -26,10 +26,10 @@ export default class StateSummary {
     this.metadata.totalResources = MesosSummaryUtil.sumResources(
       // We may only want to get the active slaves...
       _.pluck(this.snapshot.slaves, "resources")
-     );
+    );
     this.metadata.usedResources = MesosSummaryUtil.sumResources(
       _.pluck(this.snapshot.frameworks, "used_resources")
-     );
+    );
   }
 
   getActiveSlaves() {
