@@ -95,7 +95,7 @@ var ServiceTasksView = React.createClass({
     var errorMsg = null;
 
     if (hasLoadingError) {
-      errorMsg = <RequestErrorMsg />
+      errorMsg = <RequestErrorMsg />;
     }
 
     return (
