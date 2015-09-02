@@ -1,13 +1,14 @@
-const _ = require("underscore");
-const classNames = require("classnames");
-const React = require("react");
+import _ from "underscore";
+import classNames from "classnames";
+import {Link} from "react-router";
+import {List} from "reactjs-components";
+import React from "react/addons";
 
-const HealthLabels = require("../constants/HealthLabels");
-const HealthTypesDescription = require("../constants/HealthTypesDescription");
-const List = require("reactjs-components").List;
-const MarathonStore = require("../stores/MarathonStore");
-const ServiceSidePanel = require("./ServiceSidePanel");
-const TooltipMixin = require("../mixins/TooltipMixin");
+import HealthLabels from "../constants/HealthLabels";
+import HealthTypesDescription from "../constants/HealthTypesDescription";
+import MarathonStore from "../stores/MarathonStore";
+import ServiceSidePanel from "./ServiceSidePanel";
+import TooltipMixin from "../mixins/TooltipMixin";
 
 const STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
@@ -33,25 +34,11 @@ let ServiceList = React.createClass({
     };
   },
 
-  getInitialState: function () {
-    return {
-      selectedServiceName: null
-    };
-  },
-
   shouldComponentUpdate: function (nextProps, nextState) {
     var changedState =
       nextState !== undefined && !_.isEqual(this.state, nextState);
 
     return !_.isEqual(this.props, nextProps) || changedState;
-  },
-
-  handleServiceClick: function (selectedServiceName) {
-    this.setState({selectedServiceName});
-  },
-
-  onServiceDetailClose: function () {
-    this.setState({selectedServiceName: null});
   },
 
   getServices: function (services, healthProcessed) {
@@ -89,11 +76,11 @@ let ServiceList = React.createClass({
       }
 
       let title = (
-        <a
-          onClick={this.handleServiceClick.bind(this, service.name)}
-          className="h3 flush-top flush-bottom clickable">
+        <Link to="dashboard-panel"
+          className="h3 flush-top flush-bottom clickable"
+          params={{serviceName: service.name}}>
           {service.name}
-        </a>
+        </Link>
       );
 
       var classSet = classNames(_.extend({
@@ -125,14 +112,15 @@ let ServiceList = React.createClass({
   },
 
   getList: function () {
-    let selectedServiceName = this.state.selectedServiceName;
     let props = this.props;
+    let selectedServiceName = this.state.selectedServiceName;
+    let listOrder = ["title", "health"];
 
     return (
       <div className="service-list-component">
         <List
-          className="list-unstyled"
-          items={this.getServices(props.services, props.healthProcessed)} />
+          list={this.getServices(props.services, props.healthProcessed)}
+          order={listOrder} />
         <ServiceSidePanel
           open={selectedServiceName != null}
           onClose={this.onServiceDetailClose}

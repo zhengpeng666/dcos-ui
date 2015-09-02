@@ -1,19 +1,21 @@
-var _ = require("underscore");
-var React = require("react/addons");
+import _ from "underscore";
+import classNames from "classnames";
+import React from "react/addons";
+import {RouteHandler, Navigation} from "react-router";
 
-var AlertPanel = require("../components/AlertPanel");
-var EventTypes = require("../constants/EventTypes");
-var FilterHealth = require("../components/FilterHealth");
-var FilterHeadline = require("../components/FilterHeadline");
-var FilterInputText = require("../components/FilterInputText");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var Page = require("../components/Page");
-var MarathonStore = require("../stores/MarathonStore");
-var MesosSummaryStore = require("../stores/MesosSummaryStore");
-var ResourceBarChart = require("../components/charts/ResourceBarChart");
-var ServiceTable = require("../components/ServiceTable");
-var SidebarActions = require("../events/SidebarActions");
-var RouteHandler = require("react-router").RouteHandler;
+import AlertPanel from "../components/AlertPanel";
+import EventTypes from "../constants/EventTypes";
+import FilterHealth from "../components/FilterHealth";
+import FilterHeadline from "../components/FilterHeadline";
+import FilterInputText from "../components/FilterInputText";
+import InternalStorageMixin from "../mixins/InternalStorageMixin";
+import Page from "../components/Page";
+import MarathonStore from "../stores/MarathonStore";
+import MesosSummaryStore from "../stores/MesosSummaryStore";
+import ResourceBarChart from "../components/charts/ResourceBarChart";
+import ServiceTable from "../components/ServiceTable";
+import ServiceSidePanel from "../components/ServiceSidePanel";
+import SidebarActions from "../events/SidebarActions";
 
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
@@ -58,7 +60,7 @@ var ServicesPage = React.createClass({
 
   displayName: "ServicesPage",
 
-  mixins: [InternalStorageMixin],
+  mixins: [InternalStorageMixin, Navigation],
 
   statics: {
     routeConfig: {
@@ -127,6 +129,10 @@ var ServicesPage = React.createClass({
     this.setState({searchString: searchString});
   },
 
+  handleSideBarClose: function () {
+    this.transitionTo("services");
+  },
+
   resetFilter: function () {
     var state = _.clone(DEFAULT_FILTER_OPTIONS);
     this.internalStorage_set(getMesosServices(state));
@@ -134,9 +140,10 @@ var ServicesPage = React.createClass({
   },
 
   getServicesPageContent: function () {
-    var state = this.state;
-    var data = this.internalStorage_get();
+    let state = this.state;
+    let data = this.internalStorage_get();
     let appsProcessed = MarathonStore.hasProcessedApps();
+    let serviceName = this.props.params.serviceName;
 
     return (
       <div>
@@ -146,7 +153,7 @@ var ServicesPage = React.createClass({
           totalResources={data.totalResources}
           refreshRate={data.refreshRate}
           resourceType="Services"
-          selectedResource={this.state.selectedResource}
+          selectedResource={state.selectedResource}
           onResourceSelectionChange={this.onResourceSelectionChange} />
         <FilterHeadline
           onReset={this.resetFilter}
@@ -170,6 +177,10 @@ var ServicesPage = React.createClass({
         <ServiceTable
           services={data.services}
           healthProcessed={appsProcessed} />
+        <ServiceSidePanel
+          open={serviceName != null}
+          serviceName={serviceName}
+          onClose={this.handleSideBarClose} />
       </div>
     );
   },

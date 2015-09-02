@@ -18,8 +18,7 @@ const ServiceSidePanel = React.createClass({
   shouldComponentUpdate: function (nextProps) {
     let currentService = this.props.serviceName;
     let nextService = nextProps.serviceName;
-
-    return nextService && currentService !== nextService;
+    return currentService !== nextService;
   },
 
   componentDidMount: function () {
@@ -27,7 +26,6 @@ const ServiceSidePanel = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
 
-    this.internalStorage_update({open: true});
     this.forceUpdate();
   },
 

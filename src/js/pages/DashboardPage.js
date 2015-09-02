@@ -1,22 +1,21 @@
-var _ = require("underscore");
-var React = require("react/addons");
-var Link = require("react-router").Link;
+import _ from "underscore";
+import React from "react/addons";
+import {Link, Navigation} from "react-router";
 
-var EventTypes = require("../constants/EventTypes");
-var HealthSorting = require("../constants/HealthSorting");
-var HostTimeSeriesChart = require("../components/charts/HostTimeSeriesChart");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var MarathonStore = require("../stores/MarathonStore");
-var MesosSummaryStore = require("../stores/MesosSummaryStore");
-var Page = require("../components/Page");
-var Panel = require("../components/Panel");
-var ResourceTimeSeriesChart =
-  require("../components/charts/ResourceTimeSeriesChart");
-var TaskFailureTimeSeriesChart =
-  require("../components/charts/TaskFailureTimeSeriesChart");
-var ServiceList = require("../components/ServiceList");
-var TasksChart = require("../components/charts/TasksChart");
-var SidebarActions = require("../events/SidebarActions");
+import EventTypes from "../constants/EventTypes";
+import HealthSorting from "../constants/HealthSorting";
+import HostTimeSeriesChart from "../components/charts/HostTimeSeriesChart";
+import InternalStorageMixin from "../mixins/InternalStorageMixin";
+import MarathonStore from "../stores/MarathonStore";
+import MesosSummaryStore from "../stores/MesosSummaryStore";
+import Page from "../components/Page";
+import Panel from "../components/Panel";
+import ResourceTimeSeriesChart from "../components/charts/ResourceTimeSeriesChart";
+import TaskFailureTimeSeriesChart from "../components/charts/TaskFailureTimeSeriesChart";
+import ServiceList from "../components/ServiceList";
+import TasksChart from "../components/charts/TasksChart";
+import ServiceSidePanel from "../components/ServiceSidePanel";
+import SidebarActions from "../events/SidebarActions";
 
 function getMesosState() {
   return {
@@ -36,7 +35,7 @@ var DashboardPage = React.createClass({
 
   displayName: "DashboardPage",
 
-  mixins: [InternalStorageMixin],
+  mixins: [InternalStorageMixin, Navigation],
 
   statics: {
     routeConfig: {
@@ -95,6 +94,10 @@ var DashboardPage = React.createClass({
     this.forceUpdate();
   },
 
+  handleSideBarClose: function () {
+    this.transitionTo("dashboard");
+  },
+
   getServicesList: function (_services) {
     // Pick out only the data we need.
     let services = _.map(_services, function (service) {
@@ -135,8 +138,9 @@ var DashboardPage = React.createClass({
   },
 
   render: function () {
-    var data = this.internalStorage_get();
+    let data = this.internalStorage_get();
     let appsProcessed = MarathonStore.hasProcessedApps();
+    let serviceName = this.props.params.serviceName;
 
     return (
       <Page title="Dashboard">
@@ -188,6 +192,10 @@ var DashboardPage = React.createClass({
             </Panel>
           </div>
         </div>
+        <ServiceSidePanel
+          open={serviceName != null}
+          serviceName={serviceName}
+          onClose={this.handleSideBarClose} />
       </Page>
     );
   }
