@@ -48,7 +48,7 @@ var MesosSummaryStore = Store.createStore({
     }
 
     let initialStates = MesosSummaryUtil.getInitialStates();
-    let list = new SummaryList();
+    let list = new SummaryList({maxLength: Config.historyLength});
     _.clone(initialStates).forEach(state => {
       list.addSnapshot(state, state.date);
     });
@@ -147,7 +147,9 @@ var MesosSummaryStore = Store.createStore({
 
     if (filters) {
       if (filters.healthFilter != null) {
-        frameworks = this.filterByHealth(frameworks, filters.healthFilter);
+        frameworks = MesosSummaryUtil.filterServicesByHealth(
+          frameworks, filters.healthFilter
+        );
       }
 
       if (filters.searchString && filters.searchString !== "") {
@@ -182,14 +184,6 @@ var MesosSummaryStore = Store.createStore({
     }
 
     return hosts;
-  },
-
-  // TODO: Try to move this method to MesosSummaryUtil
-  filterByHealth: function (objects, healthFilter) {
-    return _.filter(objects, function (obj) {
-      let appHealth = MarathonStore.getServiceHealth(obj.name);
-      return appHealth.value === healthFilter;
-    });
   },
 
   updateStateProcessed: function () {
@@ -284,6 +278,8 @@ var MesosSummaryStore = Store.createStore({
     if (typeof data.date !== "number") {
       data.date = Date.now();
     }
+
+    this.get("states").addSnapshot(_.clone(data), data.date);
 
     data.slaves = data.slaves || [];
     data.frameworks = this.normalizeFrameworks(data.frameworks, data.date);

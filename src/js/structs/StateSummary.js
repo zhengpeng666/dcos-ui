@@ -1,6 +1,7 @@
 const _ = require("underscore");
 
 let MesosSummaryUtil = require("../utils/MesosSummaryUtil");
+let ServicesList = require("./ServicesList");
 
 export default class StateSummary {
   constructor(options = {}) {
@@ -30,6 +31,10 @@ export default class StateSummary {
     this.metadata.usedResources = MesosSummaryUtil.sumResources(
       _.pluck(this.snapshot.frameworks, "used_resources")
     );
+  }
+
+  getServiceList() {
+    return new ServicesList({items: this.snapshot.frameworks});
   }
 
   getActiveSlaves() {

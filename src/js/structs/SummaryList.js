@@ -1,25 +1,14 @@
-const _ = require("underscore");
+import StateSummary from "./StateSummary";
+import List from "./List";
 
-let StateSummary = require("./StateSummary");
-
-export default class SummaryList {
+export default class SummaryList extends List {
   constructor(options = {}) {
-    this.list = [];
-    this.maxLength = null;
-
-    if (options.items) {
-      if (toString.call(options.items) !== "[object Array]") {
-        throw "Expected an array.";
-      }
-
-      this.list = options.items;
-    }
-
-    this.maxLength = options.maxLength || this.maxLength;
+    super(...arguments);
+    this.maxLength = options.maxLength || null;
   }
 
-  add(item) {
-    this.list.push(item);
+  add() {
+    super.add(...arguments);
 
     if (this.maxLength && this.list.length > this.maxLength) {
       this.list.shift();
@@ -28,13 +17,5 @@ export default class SummaryList {
 
   addSnapshot(snapshot, date) {
     this.add(new StateSummary({snapshot, date}));
-  }
-
-  getItems() {
-    return this.list;
-  }
-
-  last() {
-    return _.last(this.list);
   }
 }
