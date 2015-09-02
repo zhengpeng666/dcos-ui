@@ -7,7 +7,6 @@ import React from "react/addons";
 import HealthLabels from "../constants/HealthLabels";
 import HealthTypesDescription from "../constants/HealthTypesDescription";
 import MarathonStore from "../stores/MarathonStore";
-import ServiceSidePanel from "./ServiceSidePanel";
 import TooltipMixin from "../mixins/TooltipMixin";
 
 const STATES = {
@@ -113,18 +112,12 @@ let ServiceList = React.createClass({
 
   getList: function () {
     let props = this.props;
-    let selectedServiceName = this.state.selectedServiceName;
-    let listOrder = ["title", "health"];
 
     return (
       <div className="service-list-component">
         <List
-          list={this.getServices(props.services, props.healthProcessed)}
-          order={listOrder} />
-        <ServiceSidePanel
-          open={selectedServiceName != null}
-          onClose={this.onServiceDetailClose}
-          serviceName={selectedServiceName} />
+          className="list-unstyled"
+          items={this.getServices(props.services, props.healthProcessed)} />
       </div>
     );
   },
