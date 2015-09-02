@@ -47,23 +47,14 @@ describe("ServiceList", function () {
       );
     });
 
-    it("returns title as the value to display", function () {
+    it("returns services that have a value of two elements", function () {
       var services = [{
         name: "foo"
       }];
       var result = this.instance.getServices(services, false);
 
-      expect(result[0].title.value).toEqual("foo");
-    });
-
-    it("returns title as a link", function () {
-      var services = [{
-        name: "foo",
-        webui_url: "bar"
-      }];
-      var result = this.instance.getServices(services, false);
-
-      expect(TestUtils.isElement(result[0].title.value)).toBe(true);
+      expect(TestUtils.isElement(result[0].value[0])).toEqual(true);
+      expect(TestUtils.isElement(result[0].value[1])).toEqual(true);
     });
 
   });
