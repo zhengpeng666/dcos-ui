@@ -5,7 +5,7 @@ var ActionTypes = require("../constants/ActionTypes");
 var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
 var GetSetMixin = require("../mixins/GetSetMixin");
-var HealthTypes = require("../constants/HealthTypes");
+var HealthStatus = require("../constants/HealthStatus");
 var MarathonActions = require("../events/MarathonActions");
 var ServiceImages = require("../constants/ServiceImages");
 var Store = require("../utils/Store");
@@ -58,14 +58,14 @@ var MarathonStore = Store.createStore({
 
   getFrameworkHealth: function (app) {
     if (app.healthChecks == null || app.healthChecks.length === 0) {
-      return null;
+      return HealthStatus.NA;
     }
 
-    var health = {key: "IDLE", value: HealthTypes.IDLE};
+    var health = HealthStatus.IDLE;
     if (app.tasksUnhealthy > 0) {
-      health = {key: "UNHEALTHY", value: HealthTypes.UNHEALTHY};
+      health = HealthStatus.UNHEALTHY;
     } else if (app.tasksRunning > 0 && app.tasksHealthy === app.tasksRunning) {
-      health = {key: "HEALTHY", value: HealthTypes.HEALTHY};
+      health = HealthStatus.HEALTHY;
     }
 
     return health;
@@ -73,17 +73,13 @@ var MarathonStore = Store.createStore({
 
   getServiceHealth: function (name) {
     let appName = name.toLowerCase();
-    let appHealth = {
-      key: "NA",
-      value: HealthTypes.NA
-    };
     let marathonApps = this.get("apps");
 
-    if (marathonApps[appName]) {
-      appHealth = marathonApps[appName].health;
+    if (!marathonApps[appName]) {
+      return HealthStatus.NA;
     }
 
-    return appHealth;
+    return marathonApps[appName].health;
   },
 
   getServiceImages: function (name) {
