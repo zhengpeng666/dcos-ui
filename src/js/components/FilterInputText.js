@@ -7,12 +7,14 @@ var FilterInputText = React.createClass({
 
   propTypes: {
     searchString: React.PropTypes.string.isRequired,
-    handleFilterChange: React.PropTypes.func.isRequired
+    handleFilterChange: React.PropTypes.func.isRequired,
+    inverse: React.PropTypes.bool
   },
 
   getDefaultProps: function () {
     return {
-      searchString: ""
+      searchString: "",
+      inverse: false
     };
   },
 
@@ -46,14 +48,25 @@ var FilterInputText = React.createClass({
 
   render: function () {
     var props = this.props;
-    var clearIconClasses = classNames({
+    var clearIconContainerClasses = classNames({
       "form-control-group-add-on form-control-group-add-on-append": true,
       "hidden": props.searchString.length === 0
     });
 
+    var clearIconClasses = classNames({
+      "icon icon-mini icon-close": true,
+      "icon-mini-white": !this.props.inverse
+    });
+
     var iconSearchClasses = classNames({
-      "icon icon-mini icon-mini-white icon-search": true,
+      "icon icon-mini icon-search": true,
+      "icon-mini-white": !this.props.inverse,
       "active": this.state.focus
+    });
+
+    var inputClasses = classNames({
+      "form-control form-control-small filter-input-text": true,
+      "form-control-inverse": !this.props.inverse
     });
 
     return (
@@ -64,16 +77,16 @@ var FilterInputText = React.createClass({
           </span>
           <input
             type="text"
-            className="form-control form-control-small form-control-inverse filter-input-text"
+            className={inputClasses}
             placeholder="Filter"
             value={this.props.searchString}
             onBlur={this.handleBlur}
             onChange={this.handleChange}
             onFocus={this.handleFocus}
             ref="filterInput" />
-          <span className={clearIconClasses}>
+          <span className={clearIconContainerClasses}>
             <a href="#" onClick={this.handleClearInput}>
-              <i className="icon icon-mini icon-mini-white icon-close"></i>
+              <i className={clearIconClasses}></i>
             </a>
           </span>
         </div>

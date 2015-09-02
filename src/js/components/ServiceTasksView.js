@@ -1,23 +1,27 @@
+var _ = require("underscore");
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
+var FilterInputText = require("./FilterInputText");
 var MesosStateStore = require("../stores/MesosStateStore");
 var RequestErrorMsg = require("./RequestErrorMsg");
 var ServiceTasksTable = require("./ServiceTasksTable");
+var StringUtil = require("../utils/StringUtil");
 
 var ServiceTasksView = React.createClass({
 
   displayName: "ServiceTasksView",
 
   propTypes: {
-    serviceName: React.PropTypes.string.isRequired
+    serviceName: React.PropTypes.string
   },
 
   tasks: null,
 
   getInitialState: function () {
     return {
-      mesosStateErrorCount: 0
+      mesosStateErrorCount: 0,
+      searchString: ""
     };
   },
 
@@ -60,6 +64,10 @@ var ServiceTasksView = React.createClass({
     this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
   },
 
+  handleSearchStringChange: function (searchString) {
+    this.setState({searchString});
+  },
+
   hasLoadingError: function () {
     return this.state.mesosStateErrorCount >= 3;
   },
@@ -84,7 +92,31 @@ var ServiceTasksView = React.createClass({
 
   getContent: function () {
     if (this.tasks) {
-      return this.getTasksTable(this.tasks);
+      var state = this.state;
+      var tasks = this.tasks;
+
+      if (state.searchString !== "") {
+        tasks = StringUtil.filterByString(
+          tasks,
+          "name",
+          state.searchString
+        );
+      }
+
+      return (
+        <div>
+          <h2 className="inverse">{this.tasks.length} Tasks</h2>
+          <ul className="list list-unstyled list-inline flush-bottom">
+            <li>
+              <FilterInputText
+                searchString={state.searchString}
+                handleFilterChange={this.handleSearchStringChange}
+                inverse={true}/>
+            </li>
+          </ul>
+          {this.getTasksTable(tasks)}
+        </div>
+      );
     } else {
       return this.getLoadingScreen();
     }
