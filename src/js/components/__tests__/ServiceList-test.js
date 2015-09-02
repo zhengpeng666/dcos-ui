@@ -47,7 +47,7 @@ describe("ServiceList", function () {
       );
     });
 
-    it("should return services that have a value of two elements", function () {
+    it("returns services that have a value of two elements", function () {
       var services = [{
         name: "foo"
       }];

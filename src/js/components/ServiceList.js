@@ -99,22 +99,22 @@ let ServiceList = React.createClass({
         );
       }
 
-      var classes = {"h3 flush-top flush-bottom text-align-right": true};
-      _.extend(classes, state.classes);
-      var classSet = classNames(classes);
+      var classSet = classNames(_.extend({
+        "h3 flush-top flush-bottom text-align-right": true
+      }, state.classes));
 
-      var value = [
+      var value = [(
         <div key="title" className="h3 flush-top flush-bottom">
           {title}
-        </div>,
+        </div>
+        ), (
         <div key="health" className={classSet} {...attributes}>
           {healthLabel}
         </div>
+        )
       ];
 
-      return {
-        value: value
-      };
+      return {value};
     }, this);
   },
 
@@ -129,12 +129,13 @@ let ServiceList = React.createClass({
 
   getList: function () {
     let selectedServiceName = this.state.selectedServiceName;
+    let props = this.props;
 
     return (
       <div className="service-list-component">
         <List
           className="list-unstyled"
-          items={this.getServices(this.props.services, this.props.healthProcessed)} />
+          items={this.getServices(props.services, props.healthProcessed)} />
         <ServiceSidePanel
           open={selectedServiceName != null}
           onClose={this.onServiceDetailClose}
