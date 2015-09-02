@@ -261,11 +261,11 @@ export default class ServiceSidePanel extends DetailSidePanel {
       return null;
     }
 
-    let registeredTime = service.registered_time.toFixed(3) * 1000;
+    let installTime = MarathonStore.getServiceVersion(this.props.serviceName);
     let headerValueMapping = {
       "Host Name": service.hostname,
       Tasks: service.tasks.length,
-      Registered: DateUtil.msToDateStr(registeredTime),
+      Installed: DateUtil.msToDateStr(installTime),
       Instances: marathonService.snapshot.instances,
       Command: marathonService.snapshot.cmd,
       Ports: marathonService.snapshot.ports.join(", "),
