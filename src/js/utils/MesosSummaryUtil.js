@@ -19,6 +19,10 @@ const MesosSummaryUtil = {
 
   sumResources: function (resourceList) {
     return _.foldl(resourceList, function (memo, resource) {
+      if (resource == null) {
+        return memo;
+      }
+
       _.each(memo, function (value, key) {
         memo[key] = value + resource[key];
       });

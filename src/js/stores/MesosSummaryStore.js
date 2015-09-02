@@ -8,6 +8,7 @@ var GetSetMixin = require("../mixins/GetSetMixin");
 var MarathonStore = require("./MarathonStore");
 var MesosSummaryUtil = require("../utils/MesosSummaryUtil");
 var MesosSummaryActions = require("../events/MesosSummaryActions");
+var SummaryList = require("../structs/SummaryList");
 var StringUtil = require("../utils/StringUtil");
 var Store = require("../utils/Store");
 var TimeScales = require("../constants/TimeScales");
@@ -46,12 +47,19 @@ var MesosSummaryStore = Store.createStore({
       return;
     }
 
+    let initialStates = MesosSummaryUtil.getInitialStates();
+    let list = new SummaryList();
+    _.clone(initialStates).forEach(state => {
+      list.addSnapshot(state, state.date);
+    });
+
     this.set({
       frameworkIDs: [],
       frameworkNames: [],
       initCalledAt: Date.now(), // log when we started calling
       loading: null,
-      mesosStates: MesosSummaryUtil.getInitialStates(),
+      mesosStates: initialStates,
+      states: list,
       prevMesosStatusesMap: {},
       statesProcessed: false,
       taskFailureRate: MesosSummaryUtil.getInitialTaskFailureRates()
