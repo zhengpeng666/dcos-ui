@@ -14,7 +14,7 @@ export default class ServicesList extends List {
         );
       }
 
-      if (filters.name && filters.name !== "") {
+      if (filters.name) {
         services = StringUtil.filterByString(services, "name", filters.name);
       }
     }

@@ -20,14 +20,14 @@ describe("ServicesList", function () {
     it("filters by health", function () {
       var oldFunction = MarathonStore.getServiceHealth;
       MarathonStore.getServiceHealth = function (name) {
-        switch(name) {
+        switch (name) {
           case "marathon":
           case "marathon-user":
             return {value: 1};
           default:
             return {value: 0};
         }
-      }
+      };
 
       let items = [
         {name: "marathon"},
