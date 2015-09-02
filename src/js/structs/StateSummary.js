@@ -1,6 +1,6 @@
-var _ = require("underscore");
+const _ = require("underscore");
 
-var MesosSummaryUtil = require("../utils/MesosSummaryUtil");
+let MesosSummaryUtil = require("../utils/MesosSummaryUtil");
 
 export default class StateSummary {
   constructor(options = {}) {
@@ -15,7 +15,7 @@ export default class StateSummary {
       total_resources: {cpus: 0, mem: 0, disk: 0}
     };
 
-    var snapshot = options.snapshot || this.snapshot;
+    let snapshot = options.snapshot || this.snapshot;
     // Only place where we normalize server data
     // we may be able to remove this, but it needs testing
     snapshot.slaves = snapshot.slaves || [];

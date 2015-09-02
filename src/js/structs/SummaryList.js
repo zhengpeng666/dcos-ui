@@ -1,6 +1,6 @@
-var _ = require("underscore");
+const _ = require("underscore");
 
-var StateSummary = require("./StateSummary");
+let StateSummary = require("./StateSummary");
 
 export default class SummaryList {
   constructor(options = {}) {
@@ -15,9 +15,7 @@ export default class SummaryList {
       this.list = options.items;
     }
 
-    if (options.maxLength) {
-      this.maxLength = options.maxLength;
-    }
+    this.maxLength = options.maxLength || this.maxLength;
   }
 
   add(item) {
@@ -29,7 +27,7 @@ export default class SummaryList {
   }
 
   addSnapshot(snapshot, date) {
-    this.add(new StateSummary(snapshot, date));
+    this.add(new StateSummary({snapshot, date}));
   }
 
   getItems() {

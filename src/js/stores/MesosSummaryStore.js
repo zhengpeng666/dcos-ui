@@ -47,8 +47,8 @@ var MesosSummaryStore = Store.createStore({
       return;
     }
 
-    var initialStates = MesosSummaryUtil.getInitialStates();
-    var list = new SummaryList();
+    let initialStates = MesosSummaryUtil.getInitialStates();
+    let list = new SummaryList();
     _.clone(initialStates).forEach(state => {
       list.addSnapshot(state, state.date);
     });
