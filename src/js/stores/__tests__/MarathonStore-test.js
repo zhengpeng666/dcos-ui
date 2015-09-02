@@ -28,7 +28,7 @@ describe("MarathonStore", function () {
       );
       expect(health).toNotEqual(null);
       expect(health.key).toEqual("NA");
-      expect(health.value).toEqual(3);
+      expect(health.value).toEqual(HealthTypes.NA);
     });
 
     it("should return idle when app has no running tasks", function () {

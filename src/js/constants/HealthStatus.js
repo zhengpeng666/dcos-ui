@@ -1,10 +1,10 @@
-var HealthTypes = require("./HealthTypes");
+import HealthTypes from "./HealthTypes";
 
-var HealthStatus = {
-  "na": {key: "NA", value: HealthTypes.NA},
-  "healthy": {key: "HEALTHY", value: HealthTypes.HEALTHY},
-  "unhealthy": {key: "UNHEALTHY", value: HealthTypes.UNHEALTHY},
-  "idle": {key: "IDLE", value: HealthTypes.IDLE}
+const HealthStatus = {
+  NA: {key: "NA", value: HealthTypes.NA},
+  HEALTHY: {key: "HEALTHY", value: HealthTypes.HEALTHY},
+  UNHEALTHY: {key: "UNHEALTHY", value: HealthTypes.UNHEALTHY},
+  IDLE: {key: "IDLE", value: HealthTypes.IDLE}
 };
 
 module.exports = HealthStatus;

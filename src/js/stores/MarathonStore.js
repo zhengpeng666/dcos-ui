@@ -58,14 +58,14 @@ var MarathonStore = Store.createStore({
 
   getFrameworkHealth: function (app) {
     if (app.healthChecks == null || app.healthChecks.length === 0) {
-      return HealthStatus.na;
+      return HealthStatus.NA;
     }
 
-    var health = HealthStatus.idle;
+    var health = HealthStatus.IDLE;
     if (app.tasksUnhealthy > 0) {
-      health = HealthStatus.unhealthy;
+      health = HealthStatus.UNHEALTHY;
     } else if (app.tasksRunning > 0 && app.tasksHealthy === app.tasksRunning) {
-      health = HealthStatus.healthy;
+      health = HealthStatus.HEALTHY;
     }
 
     return health;
@@ -76,7 +76,7 @@ var MarathonStore = Store.createStore({
     let marathonApps = this.get("apps");
 
     if (!marathonApps[appName]) {
-      return HealthStatus.na;
+      return HealthStatus.NA;
     }
 
     return marathonApps[appName].health;
