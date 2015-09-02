@@ -12,6 +12,7 @@ import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import ServiceTasksTable from "./ServiceTasksTable";
 import StringUtil from "../utils/StringUtil";
+import ServiceTasksView from "./ServiceTasksView";
 
 const METHODS_TO_BIND = [
   "handleOpenServiceButtonClick",
