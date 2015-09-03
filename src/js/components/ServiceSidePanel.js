@@ -16,9 +16,10 @@ const ServiceSidePanel = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps) {
-    let currentService = this.props.serviceName;
-    let nextService = nextProps.serviceName;
-    return currentService !== nextService;
+    let props = this.props;
+
+    return props.serviceName !== nextProps.serviceName ||
+      props.open !== nextProps.open;
   },
 
   componentDidMount: function () {
