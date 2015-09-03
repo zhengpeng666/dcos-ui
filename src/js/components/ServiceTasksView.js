@@ -3,10 +3,14 @@ var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
 var FilterInputText = require("./FilterInputText");
+var FilterState = require("./FilterState");
 var MesosStateStore = require("../stores/MesosStateStore");
 var RequestErrorMsg = require("./RequestErrorMsg");
 var ServiceTasksTable = require("./ServiceTasksTable");
 var StringUtil = require("../utils/StringUtil");
+
+const ACTIVE_STATES = ["TASK_RUNNING", "TASK_STARTING", "TASK_FINISHED"];
+const COMPLETED_STATES = ["TASK_FAILED", "TASK_KILLED", "TASK_LOST", "TASK_ERROR"];
 
 var ServiceTasksView = React.createClass({
 
@@ -21,7 +25,8 @@ var ServiceTasksView = React.createClass({
   getInitialState: function () {
     return {
       mesosStateErrorCount: 0,
-      searchString: ""
+      searchString: "",
+      filterByState: "active"
     };
   },
 
@@ -64,8 +69,44 @@ var ServiceTasksView = React.createClass({
     this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
   },
 
+  getStatusCounts: function (tasks) {
+    // todo: active/completed don't yet cover all the states
+    return tasks.reduce(function (acc, task) {
+      if (_.contains(ACTIVE_STATES, task.state)) {
+        acc.active += 1;
+      }
+
+      if (_.contains(COMPLETED_STATES, task.state)) {
+        acc.completed += 1;
+      }
+
+      return acc;
+    }, {active: 0, completed: 0});
+  },
+
+  filterByCurrentStatus: function (tasks) {
+    var status = this.state.filterByState;
+    if (!status) {
+      status = "active";
+    }
+
+    if (status === "active") {
+      return _.filter(tasks, function (task) {
+        return _.contains(ACTIVE_STATES, task.state);
+      });
+    }
+
+    return _.filter(tasks, function (task) {
+      return _.contains(COMPLETED_STATES, task.state);
+    });
+  },
+
   handleSearchStringChange: function (searchString) {
     this.setState({searchString});
+  },
+
+  handleFilterStateChange: function (filterByState) {
+    this.setState({filterByState});
   },
 
   hasLoadingError: function () {
@@ -94,6 +135,7 @@ var ServiceTasksView = React.createClass({
     if (this.tasks) {
       var state = this.state;
       var tasks = this.tasks;
+      var statusCount = this.getStatusCounts(tasks);
 
       if (state.searchString !== "") {
         tasks = StringUtil.filterByString(
@@ -103,15 +145,23 @@ var ServiceTasksView = React.createClass({
         );
       }
 
+      tasks = this.filterByCurrentStatus(tasks);
+
       return (
         <div>
           <h2 className="inverse">{this.tasks.length} Tasks</h2>
           <ul className="list list-unstyled list-inline flush-bottom">
             <li>
+              <FilterState
+                handleFilterChange={this.handleFilterStateChange}
+                currentFilterState={state.filterByState}
+                statusCounts={statusCount} />
+            </li>
+            <li>
               <FilterInputText
                 searchString={state.searchString}
                 handleFilterChange={this.handleSearchStringChange}
-                inverse={true}/>
+                inverse={true} />
             </li>
           </ul>
           {this.getTasksTable(tasks)}
