@@ -86,7 +86,10 @@ var ServicesPage = React.createClass({
   },
 
   componentWillMount: function () {
-    this.internalStorage_set(getMesosServices(this.state));
+    this.internalStorage_set(_.extend(
+      {openServicePanel: false},
+      getMesosServices(this.state)
+    ));
   },
 
   componentDidMount: function () {
@@ -94,6 +97,16 @@ var ServicesPage = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
+
+    this.internalStorage_update({
+      openServicePanel: this.props.params.serviceName != null
+    });
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.internalStorage_update({
+      openServicePanel: nextProps.params.serviceName != null
+    });
   },
 
   componentWillUnmount: function () {
@@ -104,7 +117,7 @@ var ServicesPage = React.createClass({
   },
 
   onMesosStateChange: function () {
-    this.internalStorage_set(getMesosServices(this.state));
+    this.internalStorage_update(getMesosServices(this.state));
     this.forceUpdate();
   },
 
@@ -112,7 +125,7 @@ var ServicesPage = React.createClass({
     var stateChanges = _.clone(DEFAULT_FILTER_OPTIONS);
     stateChanges.healthFilter = healthFilter;
 
-    this.internalStorage_set(getMesosServices(stateChanges));
+    this.internalStorage_update(getMesosServices(stateChanges));
     this.setState(stateChanges);
   },
 
@@ -128,7 +141,7 @@ var ServicesPage = React.createClass({
       healthFilter: this.state.healthFilter
     });
 
-    this.internalStorage_set(data);
+    this.internalStorage_update(data);
     this.setState({searchString: searchString});
   },
 
@@ -138,7 +151,7 @@ var ServicesPage = React.createClass({
 
   resetFilter: function () {
     var state = _.clone(DEFAULT_FILTER_OPTIONS);
-    this.internalStorage_set(getMesosServices(state));
+    this.internalStorage_update(getMesosServices(state));
     this.setState(state);
   },
 
@@ -146,7 +159,6 @@ var ServicesPage = React.createClass({
     let state = this.state;
     let data = this.internalStorage_get();
     let appsProcessed = MarathonStore.hasProcessedApps();
-    let serviceName = this.props.params.serviceName;
 
     return (
       <div>
@@ -181,8 +193,8 @@ var ServicesPage = React.createClass({
           services={data.services}
           healthProcessed={appsProcessed} />
         <ServiceSidePanel
-          open={serviceName != null}
-          serviceName={serviceName}
+          open={data.openServicePanel}
+          serviceName={this.props.params.serviceName}
           onClose={this.handleSideBarClose} />
       </div>
     );

@@ -2,14 +2,11 @@ import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
 import EventTypes from "../constants/EventTypes";
-import InternalStorageMixin from "../mixins/InternalStorageMixin";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 
 const ServiceSidePanel = React.createClass({
 
   displayName: "ServiceSidePanel",
-
-  mixins: [InternalStorageMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -27,8 +24,6 @@ const ServiceSidePanel = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
 
-    // Needs to rerendered for the component to be animate in on mount
-    this.internalStorage_update({didRender: true});
     this.forceUpdate();
   },
 
@@ -114,13 +109,12 @@ const ServiceSidePanel = React.createClass({
   },
 
   render: function () {
-    let data = this.internalStorage_get();
 
     // TODO(ml): rename to className
     return (
       <SidePanel classNames="service-detail"
         header={this.getHeader()}
-        open={data.didRender && this.props.open}
+        open={this.props.open}
         onClose={this.handlePanelClose}>
         {this.getServiceDetails()}
       </SidePanel>

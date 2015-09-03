@@ -64,7 +64,10 @@ var DashboardPage = React.createClass({
   },
 
   componentWillMount: function () {
-    this.internalStorage_set(getMesosState());
+    this.internalStorage_set(_.extend(
+      {openServicePanel: false},
+      getMesosState()
+    ));
   },
 
   componentDidMount: function () {
@@ -76,6 +79,16 @@ var DashboardPage = React.createClass({
       EventTypes.MARATHON_APPS_CHANGE,
       this.onMarathonStateChange
     );
+
+    this.internalStorage_update({
+      openServicePanel: this.props.params.serviceName != null
+    });
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.internalStorage_update({
+      openServicePanel: nextProps.params.serviceName != null
+    });
   },
 
   componentWillUnmount: function () {
@@ -94,11 +107,12 @@ var DashboardPage = React.createClass({
   },
 
   onMesosStateChange: function () {
-    this.internalStorage_set(getMesosState());
+    this.internalStorage_update(getMesosState());
     this.forceUpdate();
   },
 
   handleSideBarClose: function () {
+    this.internalStorage_update({openServicePanel: false});
     this.context.router.transitionTo("dashboard");
   },
 
@@ -144,7 +158,6 @@ var DashboardPage = React.createClass({
   render: function () {
     let data = this.internalStorage_get();
     let appsProcessed = MarathonStore.hasProcessedApps();
-    let serviceName = this.props.params.serviceName;
 
     return (
       <Page title="Dashboard">
@@ -197,8 +210,8 @@ var DashboardPage = React.createClass({
           </div>
         </div>
         <ServiceSidePanel
-          open={serviceName != null}
-          serviceName={serviceName}
+          open={data.openServicePanel}
+          serviceName={this.props.params.serviceName}
           onClose={this.handleSideBarClose} />
       </Page>
     );
