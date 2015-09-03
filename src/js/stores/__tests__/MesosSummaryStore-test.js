@@ -152,9 +152,8 @@ describe("Mesos State Store", function () {
   });
 
   describe("#hasServiceUrl", function () {
-    this.getServiceFromName = MesosSummaryStore.getServiceFromName;
-
     beforeEach(function () {
+      this.getServiceFromName = MesosSummaryStore.getServiceFromName;
       MesosSummaryStore.getServiceFromName = function (hasUrl) {
         if (hasUrl === "name_of_service_with_url") {
           return {
