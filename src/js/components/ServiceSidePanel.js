@@ -12,6 +12,10 @@ const ServiceSidePanel = React.createClass({
 
   mixins: [InternalStorageMixin],
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   shouldComponentUpdate: function (nextProps) {
     let currentService = this.props.serviceName;
     let nextService = nextProps.serviceName;
@@ -28,6 +32,12 @@ const ServiceSidePanel = React.createClass({
     this.forceUpdate();
   },
 
+  componentWillUnmount: function () {
+    MesosSummaryStore.removeChangeListener(
+      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
+    );
+  },
+
   onMesosSummaryChange: function () {
     if (MesosSummaryStore.get("statesProcessed")) {
       // Once we have the data we need (frameworks), stop listening for changes.
@@ -42,6 +52,13 @@ const ServiceSidePanel = React.createClass({
   handlePanelClose: function () {
     this.props.onClose();
     this.forceUpdate();
+  },
+
+  handleOpenServiceButtonClick: function () {
+    this.context.router.transitionTo(
+      "service-ui",
+      {serviceName: this.props.serviceName}
+    );
   },
 
   getHeader: function () {
@@ -87,11 +104,10 @@ const ServiceSidePanel = React.createClass({
     }
 
     return (
-      <Link className="button button-success text-align-right"
-        params={{serviceName: this.props.serviceName}}
-        to="service-ui">
+      <a className="button button-success text-align-right"
+        onClick={this.handleOpenServiceButtonClick}>
         Open service
-      </Link>
+      </a>
     );
   },
 
