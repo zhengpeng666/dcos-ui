@@ -1,5 +1,4 @@
 var _ = require("underscore");
-var classNames = require("classnames");
 var React = require("react/addons");
 
 var AlertPanel = require("../components/AlertPanel");
@@ -31,14 +30,19 @@ function getCountByHealth(frameworks) {
 function getMesosServices(state) {
   var filters = _.pick(state, "searchString", "healthFilter");
   var frameworks = MesosSummaryStore.getFrameworks(filters);
-  var allFrameworks = MesosSummaryStore.getLatest().frameworks;
+
+  var services = MesosSummaryStore.get("states").last().getServiceList();
+  var filteredServices = services.filter({
+    health: filters.healthFilter,
+    name: filters.searchString
+  });
 
   return {
-    frameworks: frameworks,
+    services: filteredServices,
+    totalServices: services.getItems().length,
+    countByHealth: getCountByHealth(services.getItems()),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
-    countByHealth: getCountByHealth(allFrameworks),
     refreshRate: MesosSummaryStore.getRefreshRate(),
-    totalFrameworks: allFrameworks.length,
     totalFrameworksResources:
       MesosSummaryStore.getTotalFrameworksResources(frameworks),
     totalResources: MesosSummaryStore.getTotalResources()
@@ -129,31 +133,6 @@ var ServicesPage = React.createClass({
     this.setState(state);
   },
 
-  getServiceStats: function () {
-    var data = this.internalStorage_get();
-    var filteredLength = data.frameworks.length;
-    var totalLength = data.totalFrameworks;
-
-    var filteredClassSet = classNames({
-      "hidden": filteredLength === totalLength
-    });
-
-    var unfilteredClassSet = classNames({
-      "hidden": filteredLength !== totalLength
-    });
-
-    return (
-      <div>
-        <h4 className={filteredClassSet}>
-          Showing {filteredLength} of {totalLength} Services
-        </h4>
-        <h4 className={unfilteredClassSet}>
-          {totalLength} Services
-        </h4>
-      </div>
-    );
-  },
-
   getServicesPageContent: function () {
     var state = this.state;
     var data = this.internalStorage_get();
@@ -162,7 +141,7 @@ var ServicesPage = React.createClass({
     return (
       <div>
         <ResourceBarChart
-          itemCount={data.frameworks.length}
+          itemCount={data.services.length}
           resources={data.totalFrameworksResources}
           totalResources={data.totalResources}
           refreshRate={data.refreshRate}
@@ -172,15 +151,15 @@ var ServicesPage = React.createClass({
         <FilterHeadline
           onReset={this.resetFilter}
           name="Services"
-          currentLength={data.frameworks.length}
-          totalLength={data.totalFrameworks} />
+          currentLength={data.services.length}
+          totalLength={data.totalServices} />
         <ul className="list list-unstyled list-inline flush-bottom">
           <li>
             <FilterHealth
               countByHealth={data.countByHealth}
               healthFilter={state.healthFilter}
               handleFilterChange={this.handleHealthFilterChange}
-              servicesLength={data.totalFrameworks} />
+              servicesLength={data.totalServices} />
           </li>
           <li>
             <FilterInputText
@@ -189,7 +168,7 @@ var ServicesPage = React.createClass({
           </li>
         </ul>
         <ServiceTable
-          services={data.frameworks}
+          services={data.services}
           healthProcessed={appsProcessed} />
       </div>
     );
@@ -213,7 +192,7 @@ var ServicesPage = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-    var isEmpty = data.statesProcessed && data.totalFrameworks === 0;
+    var isEmpty = data.statesProcessed && data.totalServices === 0;
 
     return (
       <Page title="Services">

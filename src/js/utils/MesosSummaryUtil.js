@@ -2,6 +2,7 @@ var _ = require("underscore");
 
 var Config = require("../config/Config");
 var Maths = require("../utils/Maths");
+let MarathonStore = require("../stores/MarathonStore");
 
 const MesosSummaryUtil = {
 
@@ -29,6 +30,13 @@ const MesosSummaryUtil = {
 
       return memo;
     }, {cpus: 0, mem: 0, disk: 0});
+  },
+
+  filterServicesByHealth: function (services, healthFilter) {
+    return _.filter(services, function (service) {
+      let appHealth = MarathonStore.getServiceHealth(service.name);
+      return appHealth.value === healthFilter;
+    });
   },
 
   /**

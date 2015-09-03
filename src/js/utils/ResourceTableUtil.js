@@ -12,7 +12,7 @@ function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
 }
 
-var TableUtil = {
+var ResourceTableUtil = {
   getClassName: function (prop, sortBy, row) {
     return classNames({
       "align-right": isStat(prop) || prop === "TASK_RUNNING",
@@ -26,7 +26,11 @@ var TableUtil = {
     return function (prop) {
       if (isStat(prop)) {
         return function (model) {
-          return _.last(model.used_resources[prop]).value;
+          if (_.isArray(model.used_resources[prop])) {
+            return _.last(model.used_resources[prop]).value;
+          } else {
+            return model.used_resources[prop];
+          }
         };
       }
 
@@ -84,4 +88,4 @@ var TableUtil = {
   }
 };
 
-module.exports = TableUtil;
+module.exports = ResourceTableUtil;

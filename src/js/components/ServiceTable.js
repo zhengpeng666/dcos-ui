@@ -61,8 +61,8 @@ var ServicesTable = React.createClass({
     this.setState({selectedServiceName: null});
   },
 
-  renderHeadline: function (prop, model) {
-    let appImages = MarathonStore.getServiceImages(model.name);
+  renderHeadline: function (prop, service) {
+    let appImages = MarathonStore.getServiceImages(service.name);
     let imageTag = null;
 
     if (appImages) {
@@ -72,27 +72,27 @@ var ServicesTable = React.createClass({
       );
     }
 
-    if (model.webui_url.length === 0) {
+    if (service.webui_url.length === 0) {
       return (
         <span className="h5 flush-top flush-bottom headline">
-          {imageTag}{model[prop]}
+          {imageTag}{service[prop]}
         </span>
       );
     }
 
     return (
       <a
-        onClick={this.handleServiceClick.bind(this, model.name)}
+        onClick={this.handleServiceClick.bind(this, service.name)}
         className="h5 headline cell-link clickable">
         <span className="flush-top flush-bottom">
-          {imageTag}{model[prop]}
+          {imageTag}{service[prop]}
         </span>
       </a>
     );
   },
 
-  renderHealth: function (prop, model) {
-    let appHealth = MarathonStore.getServiceHealth(model.name);
+  renderHealth: function (prop, service) {
+    let appHealth = MarathonStore.getServiceHealth(service.name);
 
     if (!this.props.healthProcessed) {
       return (
@@ -132,8 +132,8 @@ var ServicesTable = React.createClass({
 
   },
 
-  renderStats: function (prop, model) {
-    var value = Maths.round(_.last(model.used_resources[prop]).value, 2);
+  renderStats: function (prop, service) {
+    var value = Maths.round(service.used_resources[prop], 2);
     if (prop !== "cpus") {
       value = Units.filesize(value * 1024 * 1024, 1);
     }
