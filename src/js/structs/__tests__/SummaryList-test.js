@@ -1,6 +1,9 @@
 jest.dontMock("../List");
+jest.dontMock("../ServicesList");
 jest.dontMock("../SummaryList");
 jest.dontMock("../StateSummary");
+jest.dontMock("../../utils/MesosSummaryUtil");
+jest.dontMock("../../utils/Maths");
 
 let SummaryList = require("../SummaryList");
 let StateSummary = require("../StateSummary");
@@ -32,6 +35,93 @@ describe("SummaryList", function () {
       list.addSnapshot({}, Date.now());
       let instance = list.last();
       expect(instance instanceof StateSummary).toEqual(true);
+    });
+
+  });
+
+  describe("#getResourceStatesForServiceIDs", function () {
+
+    beforeEach(function () {
+      this.now = Date.now();
+      this.list = new SummaryList();
+      this.list.addSnapshot({
+        frameworks: [
+          {id: 1, used_resources: {cpus: 1, mem: 3, disk: 1}},
+          {id: 2, used_resources: {cpus: 1, mem: 3, disk: 1}}
+        ],
+        slaves: [
+          {resources: {cpus: 10, mem: 10, disk: 10}}
+        ]
+      }, this.now);
+    });
+
+    it("returns empty resource lists", function () {
+      let list = new SummaryList();
+      let resources = list.getResourceStatesForServiceIDs();
+      expect(resources).toEqual({cpus: [], mem: [], disk: []});
+    });
+
+    it("doesn't filter by ids", function () {
+      let resources = this.list.getResourceStatesForServiceIDs();
+      let expectedResult = {
+        cpus: [{date: this.now, percentage: 20, value: 2}],
+        mem: [{date: this.now, percentage: 60, value: 6}],
+        disk: [{date: this.now, percentage: 20, value: 2}]
+      };
+
+      expect(resources).toEqual(expectedResult);
+    });
+
+    it("filters by id", function () {
+      let resources = this.list.getResourceStatesForServiceIDs([1]);
+      let expectedResult = {
+        cpus: [{date: this.now, percentage: 10, value: 1}],
+        mem: [{date: this.now, percentage: 30, value: 3}],
+        disk: [{date: this.now, percentage: 10, value: 1}]
+      };
+
+      expect(resources).toEqual(expectedResult);
+    });
+
+    it("filters by ids", function () {
+      let resources = this.list.getResourceStatesForServiceIDs([1, 2]);
+      let expectedResult = {
+        cpus: [{date: this.now, percentage: 20, value: 2}],
+        mem: [{date: this.now, percentage: 60, value: 6}],
+        disk: [{date: this.now, percentage: 20, value: 2}]
+      };
+
+      expect(resources).toEqual(expectedResult);
+    });
+
+    it("computes all states and filters", function () {
+      this.list.addSnapshot({
+        frameworks: [
+          {id: 1, used_resources: {cpus: 1, mem: 3, disk: 1}},
+          {id: 2, used_resources: {cpus: 1, mem: 3, disk: 1}}
+        ],
+        slaves: [
+          {resources: {cpus: 10, mem: 10, disk: 10}}
+        ]
+      }, this.now + 1);
+
+      let resources = this.list.getResourceStatesForServiceIDs([1]);
+      let expectedResult = {
+        cpus: [
+          {date: this.now, percentage: 10, value: 1},
+          {date: this.now + 1, percentage: 10, value: 1}
+        ],
+        mem: [
+          {date: this.now, percentage: 30, value: 3},
+          {date: this.now + 1, percentage: 30, value: 3}
+        ],
+        disk: [
+          {date: this.now, percentage: 10, value: 1},
+          {date: this.now + 1, percentage: 10, value: 1}
+        ]
+      };
+
+      expect(resources).toEqual(expectedResult);
     });
 
   });

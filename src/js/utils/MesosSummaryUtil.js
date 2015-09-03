@@ -125,6 +125,29 @@ const MesosSummaryUtil = {
     }, values);
   },
 
+  stateResourcesToResourceStates: function (stateResources) {
+    // Transpose from [{date, resources, totalResources}, ...]
+    // to {resource: [{date, value, percentage}, ...], resource: ...}
+    let resources = {cpus: [], mem: [], disk: []};
+    let resourceTypes = Object.keys(resources);
+
+    stateResources.forEach(function (stateResource) {
+      resourceTypes.forEach(function (resourceType) {
+        let value = stateResource.resources[resourceType];
+        let max = Math.max(1, stateResource.totalResources[resourceType]);
+        let percentage = Maths.round(100 * value / max);
+
+        resources[resourceType].push({
+          date: stateResource.date,
+          percentage,
+          value
+        });
+      });
+    });
+
+    return resources;
+  },
+
   getFrameworksTaskTotals: function (frameworks) {
     if (frameworks.length === 0) {
       return {};
