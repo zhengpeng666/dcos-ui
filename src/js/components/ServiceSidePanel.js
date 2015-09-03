@@ -187,7 +187,7 @@ const ServiceSidePanel = React.createClass({
     if (!service) {
       return null;
     }
-    console.log(service);
+
     var registeredTime = service.registered_time.toFixed(3) * 1000;
     var date = DateUtil.msToDateStr(registeredTime);
 
