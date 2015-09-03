@@ -1,5 +1,4 @@
 import React from "react/addons";
-import {Link} from "react-router";
 import {SidePanel} from "reactjs-components";
 
 import EventTypes from "../constants/EventTypes";
