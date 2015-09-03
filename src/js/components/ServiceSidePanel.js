@@ -102,6 +102,8 @@ const ServiceSidePanel = React.createClass({
       return null;
     }
 
+    // We are not using react-router's Link tag due to reactjs-component's
+    // Portal going outside of React's render tree.
     return (
       <a className="button button-success text-align-right"
         onClick={this.handleOpenServiceButtonClick}>
