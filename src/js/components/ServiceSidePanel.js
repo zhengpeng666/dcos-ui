@@ -37,7 +37,7 @@ const ServiceSidePanel = React.createClass({
     );
 
     MesosSummaryStore.addChangeListener(
-      EventTypes.MESOS_STATE_CHANGE, this.onMesosSummaryChange
+      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
 
     MarathonStore.addChangeListener(
