@@ -97,7 +97,7 @@ let ServiceList = React.createClass({
         )
       ];
 
-      return {value};
+      return value;
     }, this);
   },
 
