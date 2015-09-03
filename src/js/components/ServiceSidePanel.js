@@ -27,6 +27,8 @@ const ServiceSidePanel = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
 
+    // Needs to rerendered for the component to be animate in on mount
+    this.internalStorage_update({didRender: true});
     this.forceUpdate();
   },
 
@@ -112,12 +114,13 @@ const ServiceSidePanel = React.createClass({
   },
 
   render: function () {
+    let data = this.internalStorage_get();
 
     // TODO(ml): rename to className
     return (
       <SidePanel classNames="service-detail"
         header={this.getHeader()}
-        open={this.props.open}
+        open={data.didRender && this.props.open}
         onClose={this.handlePanelClose}>
         {this.getServiceDetails()}
       </SidePanel>
