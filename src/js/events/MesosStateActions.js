@@ -6,7 +6,7 @@ var RequestUtil = require("../utils/RequestUtil");
 var MesosStateActions = {
 
   fetchState: RequestUtil.debounceOnError(
-    Config.stateRefresh,
+    Config.getRefreshRate(),
     function (resolve, reject) {
       return function () {
         RequestUtil.json({

@@ -8,6 +8,10 @@ var Config = {
   version: "@@VERSION"
 };
 
+Config.getRefreshRate = function () {
+  return this.stateRefresh;
+};
+
 // @@ENV gets replaced by Broccoli
 if (Config.environment === "development") {
   var _ = require("underscore");

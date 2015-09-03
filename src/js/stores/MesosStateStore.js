@@ -15,7 +15,7 @@ function startPolling() {
   if (requestInterval == null) {
     MesosStateActions.fetchState();
     requestInterval = setInterval(
-      MesosStateActions.fetchState, Config.stateRefresh
+      MesosStateActions.fetchState, Config.getRefreshRate()
     );
   }
 }

@@ -336,7 +336,7 @@ const MesosSummaryUtil = {
     // reverse date range!!!
     return _.map(_.range(-Config.historyLength, 0), function (i) {
       return {
-        date: currentDate + (i * Config.stateRefresh),
+        date: currentDate + (i * Config.getRefreshRate()),
         frameworks: [],
         slaves: [],
         used_resources: {cpus: 0, mem: 0, disk: 0},
@@ -350,7 +350,7 @@ const MesosSummaryUtil = {
     var currentDate = Date.now();
     return _.map(_.range(-Config.historyLength, 0), function (i) {
       return {
-        date: currentDate + (i * Config.stateRefresh),
+        date: currentDate + (i * Config.getRefreshRate()),
         rate: 0
       };
     });

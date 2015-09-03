@@ -2,6 +2,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var AlertPanel = require("../components/AlertPanel");
+import Config from "../config/Config";
 var EventTypes = require("../constants/EventTypes");
 var FilterHealth = require("../components/FilterHealth");
 var FilterHeadline = require("../components/FilterHeadline");
@@ -42,7 +43,7 @@ function getMesosServices(state) {
     totalServices: services.getItems().length,
     countByHealth: getCountByHealth(services.getItems()),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
-    refreshRate: MesosSummaryStore.getRefreshRate(),
+    refreshRate: Config.getRefreshRate(),
     totalFrameworksResources:
       MesosSummaryStore.getTotalFrameworksResources(frameworks),
     totalResources: MesosSummaryStore.getTotalResources()

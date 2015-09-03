@@ -8,7 +8,7 @@ var RequestUtil = {
     options = _.extend({}, {
       contentType: "application/json; charset=utf-8",
       dataType: "json",
-      timeout: Config.stateRefresh,
+      timeout: Config.getRefreshRate(),
       type: "GET"
     }, options);
 

@@ -2,6 +2,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 var Link = require("react-router").Link;
 
+import Config from "../config/Config";
 var EventTypes = require("../constants/EventTypes");
 var HealthSorting = require("../constants/HealthSorting");
 var HostTimeSeriesChart = require("../components/charts/HostTimeSeriesChart");
@@ -25,7 +26,7 @@ function getMesosState() {
     // change in the same array, in stead of two different references
     taskFailureRate: _.clone(MesosSummaryStore.get("taskFailureRate")),
     hostsCount: MesosSummaryStore.getActiveHostsCount(),
-    refreshRate: MesosSummaryStore.getRefreshRate(),
+    refreshRate: Config.getRefreshRate(),
     services: MesosSummaryStore.getLatest().frameworks,
     tasks: MesosSummaryStore.getTaskTotals(),
     totalResources: MesosSummaryStore.getTotalResources()
