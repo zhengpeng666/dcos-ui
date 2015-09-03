@@ -2,7 +2,7 @@ const DateUtil = {
   msToDateStr: function (ms) {
     var date = new Date(ms);
     var dateStr = "";
-    console.log(date.getYear());
+
     dateStr += date.getMonth() + "-";
     dateStr += date.getDate() + "-";
     dateStr += date.getFullYear() % 1000 + " at ";
