@@ -152,18 +152,26 @@ describe("Mesos State Store", function () {
   });
 
   describe("#hasServiceUrl", function () {
-    MesosSummaryStore.getServiceFromName = function (hasUrl) {
-      if (hasUrl === "name_of_service_with_url") {
-        return {
-          name: "fake_service",
-          webui_url: "http://google.com"
-        };
-      }
+    beforeEach(function () {
+      this.getServiceFromName = MesosSummaryStore.getServiceFromName;
 
-      return {
-        name: "fake_service"
+      MesosSummaryStore.getServiceFromName = function (hasUrl) {
+        if (hasUrl === "name_of_service_with_url") {
+          return {
+            name: "fake_service",
+            webui_url: "http://google.com"
+          };
+        }
+
+        return {
+          name: "fake_service"
+        };
       };
-    };
+    });
+
+    afterEach(function () {
+      MesosSummaryStore.getServiceFromName = this.getServiceFromName;
+    });
 
     it("returns true if service has a web url", function () {
       var hasUrl = MesosSummaryStore.hasServiceUrl("name_of_service_with_url");
