@@ -25,7 +25,7 @@ describe("DashboardPage", function () {
     beforeEach(function () {
       MarathonStore.addChangeListener = function () {};
       this.instance = TestUtils.renderIntoDocument(
-        <DashboardPage servicesListLength={5}/>
+        <DashboardPage servicesListLength={5} params={{serviceName: ""}} />
       );
     });
 
