@@ -1,6 +1,6 @@
 import _ from "underscore";
 import React from "react/addons";
-import {Link, Navigation} from "react-router";
+import {Link} from "react-router";
 
 import EventTypes from "../constants/EventTypes";
 import HealthSorting from "../constants/HealthSorting";
@@ -35,7 +35,7 @@ var DashboardPage = React.createClass({
 
   displayName: "DashboardPage",
 
-  mixins: [InternalStorageMixin, Navigation],
+  mixins: [InternalStorageMixin],
 
   statics: {
     routeConfig: {
@@ -51,6 +51,10 @@ var DashboardPage = React.createClass({
     willTransitionTo: function () {
       SidebarActions.close();
     }
+  },
+
+  contextTypes: {
+    router: React.PropTypes.func
   },
 
   getDefaultProps: function () {
@@ -95,7 +99,7 @@ var DashboardPage = React.createClass({
   },
 
   handleSideBarClose: function () {
-    this.transitionTo("dashboard");
+    this.context.router.transitionTo("dashboard");
   },
 
   getServicesList: function (_services) {

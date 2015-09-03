@@ -1,7 +1,7 @@
 import _ from "underscore";
 import classNames from "classnames";
 import React from "react/addons";
-import {RouteHandler, Navigation} from "react-router";
+import {RouteHandler} from "react-router";
 
 import AlertPanel from "../components/AlertPanel";
 import EventTypes from "../constants/EventTypes";
@@ -60,7 +60,7 @@ var ServicesPage = React.createClass({
 
   displayName: "ServicesPage",
 
-  mixins: [InternalStorageMixin, Navigation],
+  mixins: [InternalStorageMixin],
 
   statics: {
     routeConfig: {
@@ -76,6 +76,10 @@ var ServicesPage = React.createClass({
     willTransitionTo: function () {
       SidebarActions.close();
     }
+  },
+
+  contextTypes: {
+    router: React.PropTypes.func
   },
 
   getInitialState: function () {
@@ -130,7 +134,7 @@ var ServicesPage = React.createClass({
   },
 
   handleSideBarClose: function () {
-    this.transitionTo("services");
+    this.context.router.transitionTo("services");
   },
 
   resetFilter: function () {
