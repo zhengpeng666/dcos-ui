@@ -49,10 +49,6 @@ var ServicesTable = React.createClass({
     this.forceUpdate();
   },
 
-  onServiceDetailClose: function () {
-    this.setState({selectedServiceName: null});
-  },
-
   renderHeadline: function (prop, service) {
     let appImages = MarathonStore.getServiceImages(service.name);
     let imageTag = null;
