@@ -95,15 +95,15 @@ var MarathonStore = Store.createStore({
   },
 
   getServiceVersion: function (name) {
-      let appName = name.toLowerCase();
-      let appVersion = null;
-      let marathonApps = this.get("apps");
+    let appName = name.toLowerCase();
+    let appVersion = null;
+    let marathonApps = this.get("apps");
 
-      if (marathonApps[appName]) {
-        appVersion = marathonApps[appName].version;
-      }
+    if (marathonApps[appName]) {
+      appVersion = marathonApps[appName].version;
+    }
 
-      return appVersion;
+    return appVersion;
   },
 
   getImageSizeFromMetadata: function (metadata, size) {
