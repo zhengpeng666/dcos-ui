@@ -5,16 +5,10 @@ import {SidePanel} from "reactjs-components";
 import DateUtil from "../utils/DateUtil";
 import EventTypes from "../constants/EventTypes";
 import HealthLabels from "../constants/HealthLabels";
+import HealthStatus from "../constants/HealthStatus";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
-
-const STATES = {
-  UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
-  HEALTHY: {key: "HEALTHY", classes: {"text-success": true}},
-  IDLE: {key: "IDLE", classes: {"text-warning": true}},
-  NA: {key: "NA", classes: {"text-mute": true}}
-};
 
 const ServiceSidePanel = React.createClass({
 
@@ -93,6 +87,40 @@ const ServiceSidePanel = React.createClass({
     );
   },
 
+  getBasicInfo: function () {
+    let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
+    if (!service) {
+      return null;
+    }
+
+    let appImages = MarathonStore.getServiceImages(this.props.serviceName);
+    let appHealth = MarathonStore.getServiceHealth(this.props.serviceName);
+    let healthClass = classNames(HealthStatus[appHealth.key].classes);
+    let healthLabel = HealthLabels[HealthStatus[appHealth.key].key];
+    let imageTag = null;
+
+    if (appImages) {
+      imageTag = (
+        <img className="icon icon-image icon-service"
+          src={appImages["icon-large"]} />
+      );
+    }
+
+    return (
+      <div className="flex-box flex-box-align-vertical-center">
+        {imageTag}
+        <div className="container container-fluid container-fluid-narrow">
+          <div className="h2 inverse flush-top flush-bottom">
+            {this.props.serviceName}
+          </div>
+          <div className={healthClass}>
+            {healthLabel}
+          </div>
+        </div>
+      </div>
+    );
+  },
+
   getHeader: function () {
     return (
       <div>
@@ -149,40 +177,6 @@ const ServiceSidePanel = React.createClass({
         onClick={this.handleOpenServiceButtonClick}>
         Open service
       </a>
-    );
-  },
-
-  getBasicInfo: function () {
-    let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
-    if (!service) {
-      return null;
-    }
-
-    let appImages = MarathonStore.getServiceImages(this.props.serviceName);
-    let appHealth = MarathonStore.getServiceHealth(this.props.serviceName);
-    let healthClass = classNames(STATES[appHealth.key].classes);
-    let healthLabel = HealthLabels[STATES[appHealth.key].key];
-    let imageTag = null;
-
-    if (appImages) {
-      imageTag = (
-        <img className="icon icon-image icon-service"
-          src={appImages["icon-large"]} />
-      );
-    }
-
-    return (
-      <div className="flex-box flex-box-align-vertical-center">
-        {imageTag}
-        <div className="container container-fluid container-fluid-narrow">
-          <div className="h2 inverse flush-top flush-bottom">
-            {this.props.serviceName}
-          </div>
-          <div className={healthClass}>
-            {healthLabel}
-          </div>
-        </div>
-      </div>
     );
   },
 
