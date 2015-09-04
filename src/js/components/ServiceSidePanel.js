@@ -42,8 +42,16 @@ const ServiceSidePanel = React.createClass({
   },
 
   componentWillUnmount: function () {
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
+    );
+
     MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
+    );
+
+    MarathonStore.removeChangeListener(
+      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
     );
   },
 
