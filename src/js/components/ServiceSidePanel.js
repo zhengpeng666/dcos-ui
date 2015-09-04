@@ -101,8 +101,8 @@ const ServiceSidePanel = React.createClass({
       return null;
     }
 
-    let appImages = MarathonStore.getServiceImages(this.props.serviceName);
-    let appHealth = MarathonStore.getServiceHealth(this.props.serviceName);
+    let appImages = MarathonStore.getServiceImages(service.name);
+    let appHealth = MarathonStore.getServiceHealth(service.name);
     let healthClass = HealthStatus[appHealth.key].classNames;
     let healthLabel = HealthLabels[HealthStatus[appHealth.key].key];
     let imageTag = null;
@@ -119,7 +119,7 @@ const ServiceSidePanel = React.createClass({
         {imageTag}
         <div className="container container-fluid container-fluid-narrow">
           <div className="h2 inverse flush-top flush-bottom">
-            {this.props.serviceName}
+            {service.name}
           </div>
           <div className={healthClass}>
             {healthLabel}
