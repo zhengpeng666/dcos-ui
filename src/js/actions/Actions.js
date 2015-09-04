@@ -64,7 +64,7 @@ var Actions = {
   identify: function () {
     global.analytics.identify.apply(global.analytics, arguments);
     this.log({
-      description: "Logged in"
+      uiEventName: "Logged in"
     });
   },
 
@@ -80,7 +80,7 @@ var Actions = {
     // Populates with basic data that all logs need
     var log = _.extend({
       appVersion: Config.version,
-      description: "",
+      uiEventName: "",
       date: Date.now(),
       DCOS_HOSTNAME: global.location.hostname,
       page: this.activePage,
@@ -90,7 +90,7 @@ var Actions = {
 
     log = this.prepareLog(log);
 
-    global.analytics.track(log.description, log);
+    global.analytics.track("dcos-ui", log);
   },
 
   /**
@@ -109,9 +109,9 @@ var Actions = {
 
     // If the description is an array then prepend the current page
     // this assumes that we want a unique description for the log
-    if (_.isArray(log.description)) {
-      log.description.unshift(this.activePage.replace(/^\//, ""));
-      log.description = log.description.join(".");
+    if (_.isArray(log.uiEventName)) {
+      log.uiEventName.unshift(this.activePage.replace(/^\//, ""));
+      log.uiEventName = log.uiEventName.join(".");
     }
 
     // Calculate the time since the last event
@@ -125,14 +125,14 @@ var Actions = {
    * Logs a replayable action
    * Replayable actions are possible by watching state changes
    *
-   * @param  {Array} description
+   * @param  {Array} uiEventName
    * @param  {Object} data
    * @param  {Number} componentID
    */
-  logAction: function (description, data, componentID) {
+  logAction: function (uiEventName, data, componentID) {
     this.log({
       replayable: true,
-      description: description,
+      uiEventName: uiEventName,
       componentID: componentID,
       data: data
     });
@@ -149,8 +149,8 @@ var Actions = {
   logBatchAction: function (messages, data, componentID) {
     this.logAction(messages.shift(), data, componentID);
 
-    messages.forEach(function (message) {
-      this.log({description: message});
+    messages.forEach(function (uiEventName) {
+      this.log({uiEventName: uiEventName});
     }, this);
   },
 
