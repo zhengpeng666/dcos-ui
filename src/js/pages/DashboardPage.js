@@ -1,6 +1,6 @@
 import _ from "underscore";
 import React from "react/addons";
-import {Link} from "react-router";
+import Router, {Link} from "react-router";
 
 import EventTypes from "../constants/EventTypes";
 import HealthSorting from "../constants/HealthSorting";
@@ -111,9 +111,9 @@ var DashboardPage = React.createClass({
     this.forceUpdate();
   },
 
-  handleSideBarClose: function () {
+  onServiceDetailClose: function () {
     this.internalStorage_update({openServicePanel: false});
-    this.context.router.transitionTo("dashboard");
+    Router.History.back();
   },
 
   getServicesList: function (_services) {
@@ -210,9 +210,9 @@ var DashboardPage = React.createClass({
           </div>
         </div>
         <ServiceSidePanel
-          open={data.openServicePanel}
+          open={this.props.params.serviceName != null}
           serviceName={this.props.params.serviceName}
-          onClose={this.handleSideBarClose} />
+          onClose={this.onServiceDetailClose} />
       </Page>
     );
   }

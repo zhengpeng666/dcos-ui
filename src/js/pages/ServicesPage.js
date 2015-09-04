@@ -1,6 +1,6 @@
 import _ from "underscore";
 import React from "react/addons";
-import {RouteHandler} from "react-router";
+import Router, {RouteHandler} from "react-router";
 
 import AlertPanel from "../components/AlertPanel";
 import EventTypes from "../constants/EventTypes";
@@ -146,7 +146,7 @@ var ServicesPage = React.createClass({
   },
 
   handleSideBarClose: function () {
-    this.context.router.transitionTo("services");
+    Router.History.back();
   },
 
   resetFilter: function () {
