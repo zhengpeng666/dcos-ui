@@ -47,7 +47,8 @@ describe("ServiceSidePanel", function () {
     beforeEach(function () {
       this.getServiceFromName = MesosSummaryStore.getServiceFromName;
       this.getServiceImage = MarathonStore.getServiceImage;
-      var fakeFn = function (name) {
+
+      function fakeFn(name) {
         if (name === "service_that_exists") {
           return {
             name: "foo",
@@ -57,7 +58,8 @@ describe("ServiceSidePanel", function () {
         }
 
         return null;
-      };
+      }
+
       MesosSummaryStore.getServiceFromName = fakeFn;
       MesosStateStore.getServiceFromName = fakeFn;
     });
