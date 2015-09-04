@@ -1,7 +1,7 @@
 const DateUtil = {
   msToDateStr: function (ms) {
-    var date = new Date(ms);
-    var dateStr = "";
+    let date = new Date(ms);
+    let dateStr = "";
 
     dateStr += date.getMonth() + 1 + "-";
     dateStr += date.getDate() + "-";
@@ -12,12 +12,12 @@ const DateUtil = {
   },
 
   formatAMPM: function (date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
 
-    var ampm = "am";
+    let meridiem = "am";
     if (hours >= 12) {
-      ampm = "pm";
+      meridiem = "pm";
     }
 
     hours = hours % 12;
@@ -29,7 +29,7 @@ const DateUtil = {
       minutes = "0" + minutes;
     }
 
-    var strTime = `${hours}:${minutes} ${ampm}`;
+    var strTime = `${hours}:${minutes} ${meridiem}`;
     return strTime;
   }
 };
