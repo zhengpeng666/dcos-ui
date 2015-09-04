@@ -55,7 +55,7 @@ var MesosStateStore = Store.createStore({
   },
 
   getServiceFromName: function (name) {
-    let services = MesosStateStore.get("lastMesosState").frameworks;
+    let services = this.get("lastMesosState").frameworks;
 
     return _.findWhere(services, {name});
   },
