@@ -64,10 +64,8 @@ var DashboardPage = React.createClass({
   },
 
   componentWillMount: function () {
-    this.internalStorage_set(_.extend(
-      {openServicePanel: false},
-      getMesosState()
-    ));
+    this.internalStorage_set({openServicePanel: false});
+    this.internalStorage_update(getMesosState());
   },
 
   componentDidMount: function () {
