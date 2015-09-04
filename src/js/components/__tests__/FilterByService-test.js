@@ -39,10 +39,10 @@ describe("FilterByService", function () {
       .toEqual("Filter by Service");
   });
 
-  describe("#itemHtml", function () {
+  describe("#getItemHtml", function () {
     it("should display the badge correctly", function () {
       var item = TestUtils.renderIntoDocument(
-        this.filterByService.itemHtml(MockFrameworks.frameworks[4])
+        this.filterByService.getItemHtml(MockFrameworks.frameworks[4])
       );
       var badge = TestUtils.findRenderedDOMComponentWithClass(item, "badge");
       expect(badge.getDOMNode().textContent)
