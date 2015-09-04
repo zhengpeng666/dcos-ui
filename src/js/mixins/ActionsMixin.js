@@ -92,18 +92,18 @@ var ActionsMixin = {
     }
 
     var messages = _.map(state, function (value, key) {
-      var uiEventNames = [];
+      var eventIDs = [];
       var keyConfig = this.actions_getStateConfigurationForKey(key);
 
       // Build a unique ui event names
-      uiEventNames.push(this.constructor.displayName, key);
+      eventIDs.push(this.constructor.displayName, key);
 
       // Append custom ui event names if there's one
       if (keyConfig && typeof keyConfig === "function") {
-        uiEventNames.push(keyConfig.call(this, value));
+        eventIDs.push(keyConfig.call(this, value));
       }
 
-      return uiEventNames;
+      return eventIDs;
     }, this);
 
     messages = _.values(messages);

@@ -19,7 +19,7 @@ function getStateUrl(timeScale) {
 function registerServerError(message, type) {
   _historyServiceOnline = false;
   Actions.log({
-    description: "Server error",
+    eventID: "Server error",
     type: type,
     error: message
   });
