@@ -9,14 +9,6 @@ var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var MesosStateStore = require("../../stores/MesosStateStore");
 var ServiceSidePanel = require("../ServiceSidePanel");
 
-MarathonStore.getServiceHealth = function () {
-  return {
-    key: "HEALTHY",
-    value: 1,
-    classNames: "text-success"
-  };
-};
-
 describe("ServiceSidePanel", function () {
 
   describe("callback functionality", function () {
@@ -46,7 +38,7 @@ describe("ServiceSidePanel", function () {
   describe("getting info", function () {
     beforeEach(function () {
       this.getServiceFromName = MesosSummaryStore.getServiceFromName;
-      this.getServiceImage = MarathonStore.getServiceImage;
+      this.getServiceHealth = MarathonStore.getServiceHealth;
 
       function fakeFn(name) {
         if (name === "service_that_exists") {
@@ -59,14 +51,22 @@ describe("ServiceSidePanel", function () {
 
         return null;
       }
-
       MesosSummaryStore.getServiceFromName = fakeFn;
       MesosStateStore.getServiceFromName = fakeFn;
+
+      MarathonStore.getServiceHealth = function () {
+        return {
+          key: "HEALTHY",
+          value: 1,
+          classNames: "text-success"
+        };
+      };
     });
 
     afterEach(function () {
       MesosSummaryStore.getServiceFromName = this.getServiceFromName;
       MesosStateStore.getServiceFromName = this.getServiceFromName;
+      MarathonStore.getServiceHealth = this.getServiceHealth;
     });
 
     describe("#getInfo", function () {
