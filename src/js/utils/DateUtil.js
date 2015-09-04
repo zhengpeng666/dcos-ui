@@ -26,7 +26,7 @@ const DateUtil = {
     }
 
     if (minutes < 10) {
-      minutes = "0" + minutes;
+      minutes = `0${minutes}`;
     }
 
     var strTime = `${hours}:${minutes} ${meridiem}`;
