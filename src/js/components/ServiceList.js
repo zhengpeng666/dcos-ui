@@ -76,7 +76,7 @@ let ServiceList = React.createClass({
       }
 
       let classes = {};
-      classes[state.classes] = true;
+      classes[state.classNames] = true;
       let classSet = classNames(_.extend({
         "h3 flush-top flush-bottom text-align-right": true
       }, classes));
