@@ -94,7 +94,7 @@ describe("Mesos State Actions", function () {
         spyOn(Actions, "log");
         MesosSummaryActions.fetchSummary(TimeScales.MINUTE);
         expect(Actions.log).toHaveBeenCalled();
-        expect(Actions.log.mostRecentCall.args[0].description).toEqual("Server error");
+        expect(Actions.log.mostRecentCall.args[0].eventID).toEqual("Server error");
         expect(Actions.log.mostRecentCall.args[0].type).toEqual(ActionTypes.REQUEST_MESOS_HISTORY_ERROR);
         expect(Actions.log.mostRecentCall.args[0].error).toEqual("Guru Meditation");
       });
@@ -103,7 +103,7 @@ describe("Mesos State Actions", function () {
         spyOn(Actions, "log");
         MesosSummaryActions.fetchSummary();
         expect(Actions.log).toHaveBeenCalled();
-        expect(Actions.log.mostRecentCall.args[0].description).toEqual("Server error");
+        expect(Actions.log.mostRecentCall.args[0].eventID).toEqual("Server error");
         expect(Actions.log.mostRecentCall.args[0].type).toEqual(ActionTypes.REQUEST_MESOS_SUMMARY_ERROR);
         expect(Actions.log.mostRecentCall.args[0].error).toEqual("Guru Meditation");
       });
