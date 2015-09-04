@@ -33,22 +33,12 @@ var FilterByService = React.createClass({
     }
   },
 
-  itemHtml: function (service, selected) {
-    var html = (
+  getItemHtml: function (service, selected) {
+    return (
       <span className="badge-container">
         <span>{service.name}</span>
         <span className="badge">{service.slaves_count}</span>
       </span>
-    );
-
-    if (selected) {
-      return html;
-    }
-
-    return (
-      <a>
-        {html}
-      </a>
     );
   },
 
@@ -60,14 +50,14 @@ var FilterByService = React.createClass({
     }].concat(this.props.services);
 
     return _.map(items, function (service) {
-      var itemHtml = this.itemHtml(service);
-      var selectedHtml = this.itemHtml(service, true);
+      var selectedHtml = this.getItemHtml(service);
+      var dropdownHtml = (<a>{selectedHtml}</a>);
 
       var item = {
         id: service.id,
         name: service.name,
-        html: itemHtml,
-        selectedHtml: selectedHtml,
+        html: dropdownHtml,
+        selectedHtml,
         slaves_count: service.slaves_count
       };
 
