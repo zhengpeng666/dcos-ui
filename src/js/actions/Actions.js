@@ -130,12 +130,7 @@ var Actions = {
    * @param  {Number} componentID
    */
   logAction: function (eventID, data, componentID) {
-    this.log({
-      replayable: true,
-      eventID: eventID,
-      componentID: componentID,
-      data: data
-    });
+    this.log({replayable: true, eventID, componentID, data});
   },
 
   /**
