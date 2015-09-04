@@ -150,7 +150,7 @@ var Actions = {
     this.logAction(messages.shift(), data, componentID);
 
     messages.forEach(function (uiEventName) {
-      this.log({uiEventName: uiEventName});
+      this.log({uiEventName});
     }, this);
   },
 
