@@ -95,7 +95,7 @@ const ServiceSidePanel = React.createClass({
 
     let appImages = MarathonStore.getServiceImages(this.props.serviceName);
     let appHealth = MarathonStore.getServiceHealth(this.props.serviceName);
-    let healthClass = classNames(HealthStatus[appHealth.key].classes);
+    let healthClass = HealthStatus[appHealth.key].classes;
     let healthLabel = HealthLabels[HealthStatus[appHealth.key].key];
     let imageTag = null;
 

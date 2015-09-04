@@ -75,9 +75,11 @@ let ServiceList = React.createClass({
         );
       }
 
-      var classSet = classNames(_.extend({
+      let classes = {};
+      classes[state.classes] = true;
+      let classSet = classNames(_.extend({
         "h3 flush-top flush-bottom text-align-right": true
-      }, state.classes));
+      }, classes));
 
       return {
         value: [
