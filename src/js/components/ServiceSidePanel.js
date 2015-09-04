@@ -97,7 +97,7 @@ const ServiceSidePanel = React.createClass({
 
   getBasicInfo: function () {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
-    if (!service) {
+    if (service == null) {
       return null;
     }
 
@@ -190,7 +190,7 @@ const ServiceSidePanel = React.createClass({
 
   getInfo: function () {
     let service = MesosStateStore.getServiceFromName(this.props.serviceName);
-    if (!service) {
+    if (service == null) {
       return null;
     }
 
