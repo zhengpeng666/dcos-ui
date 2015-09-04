@@ -8,9 +8,7 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var RequestErrorMsg = require("./RequestErrorMsg");
 var ServiceTasksTable = require("./ServiceTasksTable");
 var StringUtil = require("../utils/StringUtil");
-
-const ACTIVE_STATES = ["TASK_RUNNING", "TASK_STARTING", "TASK_FINISHED"];
-const COMPLETED_STATES = ["TASK_FAILED", "TASK_KILLED", "TASK_LOST", "TASK_ERROR"];
+var TaskStates = require("../constants/TaskStates");
 
 var ServiceTasksView = React.createClass({
 
@@ -70,13 +68,12 @@ var ServiceTasksView = React.createClass({
   },
 
   getStatusCounts: function (tasks) {
-    // todo: active/completed don't yet cover all the states
     return tasks.reduce(function (acc, task) {
-      if (_.contains(ACTIVE_STATES, task.state)) {
+      if (_.contains(TaskStates.active, task.state)) {
         acc.active += 1;
       }
 
-      if (_.contains(COMPLETED_STATES, task.state)) {
+      if (_.contains(TaskStates.completed, task.state)) {
         acc.completed += 1;
       }
 
@@ -92,12 +89,12 @@ var ServiceTasksView = React.createClass({
 
     if (status === "active") {
       return _.filter(tasks, function (task) {
-        return _.contains(ACTIVE_STATES, task.state);
+        return _.contains(TaskStates.active, task.state);
       });
     }
 
     return _.filter(tasks, function (task) {
-      return _.contains(COMPLETED_STATES, task.state);
+      return _.contains(TaskStates.completed, task.state);
     });
   },
 
