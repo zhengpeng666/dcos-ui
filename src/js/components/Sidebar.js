@@ -125,7 +125,7 @@ var Sidebar = React.createClass({
 
   handleCopy: function () {
     this.tip_updateTipContent(this.refs.copyButton.getDOMNode(), "Copied!");
-    Actions.log({description: "Copied hostname from sidebar"});
+    Actions.log({eventID: "Copied hostname from sidebar"});
   },
 
   getFlashButton: function (content) {

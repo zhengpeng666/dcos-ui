@@ -24,26 +24,26 @@ describe("Actions", function () {
     });
 
     it("calls analytics#track", function () {
-      Actions.log({description: "foo"});
+      Actions.log({eventID: "foo"});
       expect(global.analytics.track.calls.length).toEqual(1);
     });
 
-    it("calls analytics#track with correct description", function () {
-      Actions.log({description: "foo"});
-      expect(global.analytics.track.calls[0].args[0]).toEqual("foo");
+    it("calls analytics#track with correct eventID", function () {
+      Actions.log({});
+      expect(global.analytics.track.calls[0].args[0]).toEqual("dcos-ui");
     });
 
     it("calls analytics#track with correct log", function () {
-      Actions.log({description: "foo"});
+      Actions.log({eventID: "foo"});
 
       var args = global.analytics.track.calls[0].args[1];
       expect(args.appVersion).toBeDefined();
       expect(args.date).toBeDefined();
-      expect(args.description).toEqual("foo");
+      expect(args.eventID).toEqual("foo");
       expect(args.duration).toBeDefined();
       expect(args.page).toBeDefined();
       expect(args.stintID).toBeDefined();
-      expect(args.uiVersion).toBeDefined();
+      expect(args.version).toBeDefined();
     });
 
   });
@@ -73,28 +73,28 @@ describe("Actions", function () {
       expect(log.uniqueEventID).toBeDefined();
     });
 
-    it("flattens a description of type array", function () {
+    it("flattens a eventID of type array", function () {
       var log = Actions.prepareLog(_.extend(this.log, {
-        description: ["foo", "bar"]
+        eventID: ["foo", "bar"]
       }));
 
-      expect(_.isArray(log.description)).toBe(false);
+      expect(_.isArray(log.eventID)).toBe(false);
     });
 
-    it("adds page to description when description is array", function () {
+    it("adds page to eventID when eventID is array", function () {
       var log = Actions.prepareLog(_.extend(this.log, {
-        description: ["foo", "bar"]
+        eventID: ["foo", "bar"]
       }));
 
-      expect(log.description).toBe("services.foo.bar");
+      expect(log.eventID).toBe("services.foo.bar");
     });
 
-    it("does not add a page to non Array descriptions", function () {
+    it("does not add a page to non Array eventIDs", function () {
       var log = Actions.prepareLog(_.extend(this.log, {
-        description: "foo"
+        eventID: "foo"
       }));
 
-      expect(log.description).toBe("foo");
+      expect(log.eventID).toBe("foo");
     });
 
     it("sets the duration since last log", function () {

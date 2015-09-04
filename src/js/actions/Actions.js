@@ -64,7 +64,7 @@ var Actions = {
   identify: function () {
     global.analytics.identify.apply(global.analytics, arguments);
     this.log({
-      description: "Logged in"
+      eventID: "Logged in"
     });
   },
 
@@ -80,17 +80,17 @@ var Actions = {
     // Populates with basic data that all logs need
     var log = _.extend({
       appVersion: Config.version,
-      description: "",
+      eventID: "",
       date: Date.now(),
       DCOS_HOSTNAME: global.location.hostname,
       page: this.activePage,
       stintID: this.stintID,
-      uiVersion: "@@VERSION"
+      version: "@@VERSION"
     }, anything);
 
     log = this.prepareLog(log);
 
-    global.analytics.track(log.description, log);
+    global.analytics.track("dcos-ui", log);
   },
 
   /**
@@ -107,11 +107,11 @@ var Actions = {
       log.uniqueEventID = md5(id);
     }
 
-    // If the description is an array then prepend the current page
-    // this assumes that we want a unique description for the log
-    if (_.isArray(log.description)) {
-      log.description.unshift(this.activePage.replace(/^\//, ""));
-      log.description = log.description.join(".");
+    // If the eventID is an array then prepend the current page
+    // this assumes that we want a unique eventID for the log
+    if (_.isArray(log.eventID)) {
+      log.eventID.unshift(this.activePage.replace(/^\//, ""));
+      log.eventID = log.eventID.join(".");
     }
 
     // Calculate the time since the last event
@@ -125,17 +125,12 @@ var Actions = {
    * Logs a replayable action
    * Replayable actions are possible by watching state changes
    *
-   * @param  {Array} description
+   * @param  {Array} eventID
    * @param  {Object} data
    * @param  {Number} componentID
    */
-  logAction: function (description, data, componentID) {
-    this.log({
-      replayable: true,
-      description: description,
-      componentID: componentID,
-      data: data
-    });
+  logAction: function (eventID, data, componentID) {
+    this.log({replayable: true, eventID, componentID, data});
   },
 
   /**
@@ -149,8 +144,8 @@ var Actions = {
   logBatchAction: function (messages, data, componentID) {
     this.logAction(messages.shift(), data, componentID);
 
-    messages.forEach(function (message) {
-      this.log({description: message});
+    messages.forEach(function (eventID) {
+      this.log({eventID});
     }, this);
   },
 
