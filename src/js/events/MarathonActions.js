@@ -6,7 +6,7 @@ var RequestUtil = require("../utils/RequestUtil");
 module.exports = {
 
   fetchApps: RequestUtil.debounceOnError(
-    Config.stateRefresh,
+    Config.getRefreshRate(),
     function (resolve, reject) {
       return function () {
         var url = Config.rootUrl + "/marathon/v2/apps";

@@ -16,7 +16,7 @@ function startPolling() {
   if (requestInterval == null) {
     MarathonActions.fetchApps();
     requestInterval = global.setInterval(
-      MarathonActions.fetchApps, Config.stateRefresh
+      MarathonActions.fetchApps, Config.getRefreshRate()
     );
   }
 }

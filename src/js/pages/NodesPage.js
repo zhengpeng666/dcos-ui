@@ -7,6 +7,7 @@ var RouterLocation = Router.HashLocation;
 var Link = Router.Link;
 
 var AlertPanel = require("../components/AlertPanel");
+import Config from "../config/Config";
 var EventTypes = require("../constants/EventTypes");
 var FilterByService = require("../components/FilterByService");
 var FilterInputText = require("../components/FilterInputText");
@@ -27,7 +28,7 @@ function getMesosHosts(state) {
   return {
     allHosts: allHosts,
     hosts: hosts,
-    refreshRate: MesosSummaryStore.getRefreshRate(),
+    refreshRate: Config.getRefreshRate(),
     services: MesosSummaryStore.getFrameworksWithHostsCount(),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
     totalHostsResources: MesosSummaryStore.getTotalHostsResources(hosts),

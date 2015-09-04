@@ -12,8 +12,8 @@ export default class StateSummary {
 
     this.metadata = {
       date: undefined,
-      used_resources: {cpus: 0, mem: 0, disk: 0},
-      total_resources: {cpus: 0, mem: 0, disk: 0}
+      usedResources: {cpus: 0, mem: 0, disk: 0},
+      totalResources: {cpus: 0, mem: 0, disk: 0}
     };
 
     let snapshot = options.snapshot || this.snapshot;

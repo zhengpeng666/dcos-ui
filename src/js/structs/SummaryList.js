@@ -1,5 +1,6 @@
-import StateSummary from "./StateSummary";
 import List from "./List";
+import MesosSummaryUtil from "../utils/MesosSummaryUtil";
+import StateSummary from "./StateSummary";
 
 export default class SummaryList extends List {
   constructor(options = {}) {
@@ -18,4 +19,17 @@ export default class SummaryList extends List {
   addSnapshot(snapshot, date) {
     this.add(new StateSummary({snapshot, date}));
   }
+
+  getResourceStatesForServiceIDs(ids) {
+    let stateResources = this.getItems().map(function (state) {
+      return {
+        date: state.getSnapshotDate(),
+        resources: state.getServiceList().filter({ids}).sumUsedResources(),
+        totalResources: state.getTotalSlaveResources()
+      };
+    });
+
+    return MesosSummaryUtil.stateResourcesToResourceStates(stateResources);
+  }
+
 }

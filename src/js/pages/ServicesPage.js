@@ -2,6 +2,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var AlertPanel = require("../components/AlertPanel");
+import Config from "../config/Config";
 var EventTypes = require("../constants/EventTypes");
 var FilterHealth = require("../components/FilterHealth");
 var FilterHeadline = require("../components/FilterHeadline");
@@ -28,24 +29,23 @@ function getCountByHealth(frameworks) {
 }
 
 function getMesosServices(state) {
-  var filters = _.pick(state, "searchString", "healthFilter");
-  var frameworks = MesosSummaryStore.getFrameworks(filters);
-
-  var services = MesosSummaryStore.get("states").last().getServiceList();
-  var filteredServices = services.filter({
+  let filters = _.pick(state, "searchString", "healthFilter");
+  let states = MesosSummaryStore.get("states");
+  let services = states.last().getServiceList();
+  let filteredServices = services.filter({
     health: filters.healthFilter,
     name: filters.searchString
-  });
+  }).getItems();
+  let serviceIDs = _.pluck(filteredServices, "id");
 
   return {
     services: filteredServices,
     totalServices: services.getItems().length,
     countByHealth: getCountByHealth(services.getItems()),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
-    refreshRate: MesosSummaryStore.getRefreshRate(),
-    totalFrameworksResources:
-      MesosSummaryStore.getTotalFrameworksResources(frameworks),
-    totalResources: MesosSummaryStore.getTotalResources()
+    refreshRate: Config.getRefreshRate(),
+    totalServiceResources: states.getResourceStatesForServiceIDs(serviceIDs),
+    totalResources: states.last().getTotalSlaveResources()
   };
 }
 
@@ -142,7 +142,7 @@ var ServicesPage = React.createClass({
       <div>
         <ResourceBarChart
           itemCount={data.services.length}
-          resources={data.totalFrameworksResources}
+          resources={data.totalServiceResources}
           totalResources={data.totalResources}
           refreshRate={data.refreshRate}
           resourceType="Services"

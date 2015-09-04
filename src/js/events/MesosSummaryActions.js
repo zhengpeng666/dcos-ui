@@ -28,7 +28,7 @@ function registerServerError(message, type) {
 var MesosSummaryActions = {
 
   fetchSummary: RequestUtil.debounceOnError(
-    Config.stateRefresh,
+    Config.getRefreshRate(),
     function (resolve, reject) {
       return function (timeScale) {
         var successType = ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS;

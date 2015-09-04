@@ -24,7 +24,7 @@ function startPolling() {
 
     MesosSummaryActions.fetchSummary(timeScale);
     requestInterval = setInterval(
-      MesosSummaryActions.fetchSummary, Config.stateRefresh
+      MesosSummaryActions.fetchSummary, Config.getRefreshRate()
     );
   }
 }
@@ -77,10 +77,6 @@ var MesosSummaryStore = Store.createStore({
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
-  },
-
-  getRefreshRate: function () {
-    return Config.stateRefresh;
   },
 
   getLatest: function () {
@@ -315,7 +311,7 @@ var MesosSummaryStore = Store.createStore({
 
   processBulkState: function (data) {
     // Multiply Config.stateRefresh in order to use larger time slices
-    data = MesosSummaryUtil.addTimestampsToData(data, Config.stateRefresh);
+    data = MesosSummaryUtil.addTimestampsToData(data, Config.getRefreshRate());
     _.each(data, function (datum) {
       MesosSummaryStore.processSummary(datum, {silent: true});
     });
