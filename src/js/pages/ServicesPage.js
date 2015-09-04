@@ -1,20 +1,20 @@
-import _ from "underscore";
-import React from "react/addons";
+var _ = require("underscore");
+var React = require("react/addons");
 import Router, {RouteHandler} from "react-router";
 
-import AlertPanel from "../components/AlertPanel";
-import EventTypes from "../constants/EventTypes";
-import FilterHealth from "../components/FilterHealth";
-import FilterHeadline from "../components/FilterHeadline";
-import FilterInputText from "../components/FilterInputText";
-import InternalStorageMixin from "../mixins/InternalStorageMixin";
-import Page from "../components/Page";
-import MarathonStore from "../stores/MarathonStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import ResourceBarChart from "../components/charts/ResourceBarChart";
-import ServiceTable from "../components/ServiceTable";
-import ServiceSidePanel from "../components/ServiceSidePanel";
-import SidebarActions from "../events/SidebarActions";
+var AlertPanel = require("../components/AlertPanel");
+var EventTypes = require("../constants/EventTypes");
+var FilterHealth = require("../components/FilterHealth");
+var FilterHeadline = require("../components/FilterHeadline");
+var FilterInputText = require("../components/FilterInputText");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var Page = require("../components/Page");
+var MarathonStore = require("../stores/MarathonStore");
+var MesosSummaryStore = require("../stores/MesosSummaryStore");
+var ResourceBarChart = require("../components/charts/ResourceBarChart");
+var ServiceTable = require("../components/ServiceTable");
+var ServiceSidePanel = require("../components/ServiceSidePanel");
+var SidebarActions = require("../events/SidebarActions");
 
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {

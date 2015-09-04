@@ -1,21 +1,21 @@
-import _ from "underscore";
-import React from "react/addons";
+var _ = require("underscore");
+var React = require("react/addons");
 import Router, {Link} from "react-router";
 
-import EventTypes from "../constants/EventTypes";
-import HealthSorting from "../constants/HealthSorting";
-import HostTimeSeriesChart from "../components/charts/HostTimeSeriesChart";
-import InternalStorageMixin from "../mixins/InternalStorageMixin";
-import MarathonStore from "../stores/MarathonStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import Page from "../components/Page";
-import Panel from "../components/Panel";
-import ResourceTimeSeriesChart from "../components/charts/ResourceTimeSeriesChart";
-import TaskFailureTimeSeriesChart from "../components/charts/TaskFailureTimeSeriesChart";
-import ServiceList from "../components/ServiceList";
-import TasksChart from "../components/charts/TasksChart";
-import ServiceSidePanel from "../components/ServiceSidePanel";
-import SidebarActions from "../events/SidebarActions";
+var EventTypes = require("../constants/EventTypes");
+var HealthSorting = require("../constants/HealthSorting");
+var HostTimeSeriesChart = require("../components/charts/HostTimeSeriesChart");
+var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var MarathonStore = require("../stores/MarathonStore");
+var MesosSummaryStore = require("../stores/MesosSummaryStore");
+var Page = require("../components/Page");
+var Panel = require("../components/Panel");
+var ResourceTimeSeriesChart = require("../components/charts/ResourceTimeSeriesChart");
+var TaskFailureTimeSeriesChart = require("../components/charts/TaskFailureTimeSeriesChart");
+var ServiceList = require("../components/ServiceList");
+var TasksChart = require("../components/charts/TasksChart");
+var ServiceSidePanel = require("../components/ServiceSidePanel");
+var SidebarActions = require("../events/SidebarActions");
 
 function getMesosState() {
   return {

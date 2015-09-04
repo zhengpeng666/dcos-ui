@@ -1,12 +1,12 @@
-import _ from "underscore";
-import classNames from "classnames";
+const _ = require("underscore");
+const classNames = require("classnames");
 import {List} from "reactjs-components";
-import React from "react/addons";
+const React = require("react/addons");
 
-import HealthLabels from "../constants/HealthLabels";
-import HealthTypesDescription from "../constants/HealthTypesDescription";
-import MarathonStore from "../stores/MarathonStore";
-import TooltipMixin from "../mixins/TooltipMixin";
+const HealthLabels = require("../constants/HealthLabels");
+const HealthTypesDescription = require("../constants/HealthTypesDescription");
+const MarathonStore = require("../stores/MarathonStore");
+const TooltipMixin = require("../mixins/TooltipMixin");
 
 const STATES = {
   UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},

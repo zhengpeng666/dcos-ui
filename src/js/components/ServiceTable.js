@@ -1,7 +1,7 @@
-import _ from "underscore";
-import classNames from "classnames";
+var _ = require("underscore");
+var classNames = require("classnames");
 import {Link} from "react-router";
-import React from "react/addons";
+var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
 var HealthLabels = require("../constants/HealthLabels");
