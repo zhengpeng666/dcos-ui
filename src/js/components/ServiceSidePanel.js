@@ -191,7 +191,7 @@ const ServiceSidePanel = React.createClass({
 
     return (
       <div>
-        <p className="p row flex-box">
+        <p className="row flex-box">
           <span className="column-4 emphasize">
             Service
           </span>
