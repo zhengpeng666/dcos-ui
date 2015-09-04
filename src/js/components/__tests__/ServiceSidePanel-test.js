@@ -7,10 +7,6 @@ var TestUtils = React.addons.TestUtils;
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var ServiceSidePanel = require("../ServiceSidePanel");
 
-MesosSummaryStore.getServiceFromName = function () {
-  return {name: "foo"};
-};
-
 describe("ServiceSidePanel", function () {
 
   beforeEach(function () {
@@ -27,5 +23,11 @@ describe("ServiceSidePanel", function () {
   it("should call the callback when the panel close is called", function () {
     this.instance.handlePanelClose();
     expect(this.callback).toHaveBeenCalled();
+  });
+
+  afterEach(function () {
+    MesosSummaryStore.getServiceFromName = function () {
+      return {name: "foo"};
+    };
   });
 });
