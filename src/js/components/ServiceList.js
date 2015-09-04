@@ -1,6 +1,5 @@
 import _ from "underscore";
 import classNames from "classnames";
-import {Link} from "react-router";
 import {List} from "reactjs-components";
 import React from "react/addons";
 
@@ -27,6 +26,10 @@ let ServiceList = React.createClass({
 
   mixins: [TooltipMixin],
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   getDefaultProps: function () {
     return {
       services: []
@@ -38,6 +41,10 @@ let ServiceList = React.createClass({
       nextState !== undefined && !_.isEqual(this.state, nextState);
 
     return !_.isEqual(this.props, nextProps) || changedState;
+  },
+
+  handleServiceClick: function (serviceName) {
+    this.context.router.transitionTo("dashboard-panel", {serviceName});
   },
 
   getServices: function (services, healthProcessed) {
@@ -74,30 +81,26 @@ let ServiceList = React.createClass({
         );
       }
 
-      let title = (
-        <Link to="dashboard-panel"
-          className="h3 flush-top flush-bottom clickable"
-          params={{serviceName: service.name}}>
-          {service.name}
-        </Link>
-      );
-
       var classSet = classNames(_.extend({
         "h3 flush-top flush-bottom text-align-right": true
       }, state.classes));
 
-      var value = [(
-        <div key="title" className="h3 flush-top flush-bottom">
-          {title}
-        </div>
-        ), (
-        <div key="health" className={classSet} {...attributes}>
-          {healthLabel}
-        </div>
-        )
-      ];
-
-      return value;
+      return {
+        value: [
+          (
+            <a key="title"
+              onClick={this.handleServiceClick.bind(this, service.name)}
+              className="h3 flush-top flush-bottom clickable">
+              {service.name}
+            </a>
+          ),
+          (
+            <div key="health" className={classSet} {...attributes}>
+              {healthLabel}
+            </div>
+          )
+        ]
+      };
     }, this);
   },
 
