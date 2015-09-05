@@ -208,7 +208,7 @@ var DashboardPage = React.createClass({
           </div>
         </div>
         <ServiceSidePanel
-          open={this.props.params.serviceName != null}
+          open={data.openServicePanel}
           serviceName={this.props.params.serviceName}
           onClose={this.onServiceDetailClose} />
       </Page>
