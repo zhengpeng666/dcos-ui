@@ -27,7 +27,8 @@ function getMesosState() {
     refreshRate: MesosSummaryStore.getRefreshRate(),
     services: MesosSummaryStore.getLatest().frameworks,
     tasks: MesosSummaryStore.getTaskTotals(),
-    totalResources: MesosSummaryStore.getTotalResources()
+    totalResources: MesosSummaryStore.getTotalResources(),
+    statesProcessed: MesosSummaryStore.get("statesProcessed")
   };
 }
 
@@ -208,7 +209,7 @@ var DashboardPage = React.createClass({
           </div>
         </div>
         <ServiceSidePanel
-          open={data.openServicePanel}
+          open={data.statesProcessed && data.openServicePanel}
           serviceName={this.props.params.serviceName}
           onClose={this.onServiceDetailClose} />
       </Page>

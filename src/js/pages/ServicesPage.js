@@ -193,7 +193,7 @@ var ServicesPage = React.createClass({
           services={data.services}
           healthProcessed={appsProcessed} />
         <ServiceSidePanel
-          open={data.openServicePanel}
+          open={data.statesProcessed && data.openServicePanel}
           serviceName={this.props.params.serviceName}
           onClose={this.handleSideBarClose} />
       </div>
