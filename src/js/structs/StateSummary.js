@@ -2,6 +2,7 @@ const _ = require("underscore");
 
 let MesosSummaryUtil = require("../utils/MesosSummaryUtil");
 let ServicesList = require("./ServicesList");
+let NodesList = require("./NodesList");
 
 export default class StateSummary {
   constructor(options = {}) {
@@ -35,6 +36,10 @@ export default class StateSummary {
 
   getServiceList() {
     return new ServicesList({items: this.snapshot.frameworks});
+  }
+
+  getNodesList() {
+    return new NodesList({items: this.snapshot.slaves});
   }
 
   getActiveSlaves() {

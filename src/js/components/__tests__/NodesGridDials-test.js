@@ -7,21 +7,24 @@ var TestUtils = React.addons.TestUtils;
 
 var NodesGridDials = require("../NodesGridDials");
 var ResourceTypes = require("../../constants/ResourceTypes");
+var NodesList = require("../../structs/NodesList");
+var Node = require("../../structs/Node");
 
 var host = {
   id: "foo",
   active: true,
+  resources: {
+    cpus: 4
+  },
   used_resources: {
-    cpus: [{
-      percentage: 50
-    }]
+    cpus: 2
   }
 };
 
 describe("NodesGridDials", function () {
 
   beforeEach(function () {
-    this.hosts = [_.clone(host)];
+    this.hosts = [new Node(_.clone(host))];
     this.instance = TestUtils.renderIntoDocument(
       <NodesGridDials
         hosts={this.hosts}
@@ -110,13 +113,13 @@ describe("NodesGridDials", function () {
     });
 
     it("returns different configurations depending on the active paramter", function () {
-      var _host = this.hosts[0];
+      let host = _.clone(this.hosts[0]);
+      host.active = true;
+      var config1 = this.instance.getDialConfig(new Node(host));
 
-      _host.active = true;
-      var config1 = this.instance.getDialConfig(_host);
-
-      _host.active = false;
-      var config2 = this.instance.getDialConfig(_host);
+      host = _.clone(this.hosts[0]);
+      host.active = false;
+      var config2 = this.instance.getDialConfig(new Node(host));
 
       expect(_.isEqual(config1, config2)).toEqual(false);
     });
@@ -134,9 +137,9 @@ describe("NodesGridDials", function () {
     });
 
     it("render the correct number of charts", function () {
-      var _host = _.clone(host);
-      _host.id = "bar";
-      this.hosts.push(_host);
+      let host = _.clone(this.hosts[0]);
+      host.id = "bar";
+      this.hosts.push(new Node(host));
       this.instance = TestUtils.renderIntoDocument(
         <NodesGridDials
           hosts={this.hosts}

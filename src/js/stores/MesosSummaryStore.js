@@ -95,12 +95,6 @@ var MesosSummaryStore = Store.createStore({
     );
   },
 
-  getFrameworksWithHostsCount: function () {
-    return MesosSummaryUtil.getFrameworksWithHostsCount(
-      this.getLatest().frameworks
-    );
-  },
-
   getActiveHostsCount: function () {
     return _.map(this.get("mesosStates"), function (state) {
       return {

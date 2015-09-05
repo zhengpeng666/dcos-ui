@@ -1,5 +1,3 @@
-jest.dontMock("../List");
-jest.dontMock("../ServicesList");
 jest.dontMock("../../stores/MarathonStore");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/MesosSummaryUtil");
@@ -13,8 +11,35 @@ describe("ServicesList", function () {
   describe("#filter", function () {
 
     it("returns unfiltered list", function () {
-      let list = new ServicesList({items: [0, 1, 2]});
-      expect(list.filter().getItems()).toEqual([0, 1, 2]);
+      let items = [{a: 1}, {b: 2}]
+      let list = new ServicesList({items: items});
+      expect(list.filter().getItems().length).toEqual(2);
+    });
+
+    it("filters by ids", function () {
+      let items = [
+        {id: 1, name: "marathon"},
+        {id: 2, name: "chronos"},
+        {id: "3", name: "marathon-user"}
+      ];
+      let list = new ServicesList({items});
+      let filteredList = list.filter({ids: [2, "3"]}).getItems();
+      expect(filteredList.length).toEqual(2);
+      expect(filteredList[0].get("name")).toEqual("chronos");
+      expect(filteredList[1].get("name")).toEqual("marathon-user");
+    });
+
+    it("filters by name", function () {
+      let items = [
+        {name: "marathon"},
+        {name: "chronos"},
+        {name: "marathon-user"}
+      ];
+      let list = new ServicesList({items});
+      let filteredList = list.filter({name: "marath"}).getItems();
+      expect(filteredList.length).toEqual(2);
+      expect(filteredList[0].get("name")).toEqual("marathon");
+      expect(filteredList[1].get("name")).toEqual("marathon-user");
     });
 
     it("filters by health", function () {
@@ -34,43 +59,13 @@ describe("ServicesList", function () {
         {name: "chronos"},
         {name: "marathon-user"}
       ];
-      let expectedList = [{name: "chronos"}];
       let list = new ServicesList({items});
       let filteredList = list.filter({health: 0}).getItems();
-      expect(filteredList).toEqual(expectedList);
+      expect(filteredList.length).toEqual(1);
+      expect(filteredList[0].get("name")).toEqual("chronos");
 
       // Reset
       MarathonStore.getServiceHealth = oldFunction;
-    });
-
-    it("filters by name", function () {
-      let items = [
-        {name: "marathon"},
-        {name: "chronos"},
-        {name: "marathon-user"}
-      ];
-      let expectedList = [
-        {name: "marathon"},
-        {name: "marathon-user"}
-      ];
-      let list = new ServicesList({items});
-      let filteredList = list.filter({name: "marath"}).getItems();
-      expect(filteredList).toEqual(expectedList);
-    });
-
-    it("filters by ids", function () {
-      let items = [
-        {id: 1, name: "marathon"},
-        {id: 2, name: "chronos"},
-        {id: "3", name: "marathon-user"}
-      ];
-      let expectedList = [
-        {id: 2, name: "chronos"},
-        {id: "3", name: "marathon-user"}
-      ];
-      let list = new ServicesList({items});
-      let filteredList = list.filter({ids: [2, "3"]}).getItems();
-      expect(filteredList).toEqual(expectedList);
     });
 
   });

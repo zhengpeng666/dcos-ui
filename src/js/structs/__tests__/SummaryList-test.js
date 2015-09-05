@@ -1,7 +1,3 @@
-jest.dontMock("../List");
-jest.dontMock("../ServicesList");
-jest.dontMock("../SummaryList");
-jest.dontMock("../StateSummary");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/Maths");
 

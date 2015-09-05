@@ -23,13 +23,20 @@ var NODES_DISPLAY_LIMIT = 300;
 function getMesosHosts(state) {
   var filters = _.pick(state, "searchString", "byServiceFilter");
   var hosts = MesosSummaryStore.getHosts(filters);
-  var allHosts = MesosSummaryStore.getLatest().slaves;
+
+  let states = MesosSummaryStore.get("states");
+  let lastState = states.last();
+  let nodes = lastState.getNodesList();
+  let filteredNodes = nodes.filter({
+    service: filters.byServiceFilter,
+    name: filters.searchString
+  }).getItems();
 
   return {
-    allHosts: allHosts,
-    hosts: hosts,
+    nodes: filteredNodes,
+    totalNodes: nodes.getItems().length,
     refreshRate: Config.getRefreshRate(),
-    services: MesosSummaryStore.getFrameworksWithHostsCount(),
+    services: lastState.getServiceList().getItems(),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
     totalHostsResources: MesosSummaryStore.getTotalHostsResources(hosts),
     totalResources: MesosSummaryStore.getTotalResources()
@@ -157,13 +164,13 @@ var NodesPage = React.createClass({
   getHostsPageContent: function () {
     var data = this.internalStorage_get();
     var state = this.state;
-    var hostList = _.first(data.hosts, NODES_DISPLAY_LIMIT);
-    var currentLength = Math.min(data.hosts.length, NODES_DISPLAY_LIMIT);
+    var nodesList = _.first(data.nodes, NODES_DISPLAY_LIMIT);
+    var currentLength = Math.min(data.nodes.length, NODES_DISPLAY_LIMIT);
 
     return (
       <div>
         <ResourceBarChart
-          itemCount={data.hosts.length}
+          itemCount={data.nodes.length}
           resources={data.totalHostsResources}
           totalResources={data.totalResources}
           refreshRate={data.refreshRate}
@@ -174,14 +181,14 @@ var NodesPage = React.createClass({
           onReset={this.resetFilter}
           name="Nodes"
           currentLength={currentLength}
-          totalLength={data.allHosts.length} />
+          totalLength={data.totalNodes} />
         <ul className="list list-unstyled list-inline flush-bottom">
           <li>
             <div className="form-group">
               <FilterByService
                 byServiceFilter={state.byServiceFilter}
                 services={data.services}
-                totalHostsCount={data.allHosts.length}
+                totalHostsCount={data.totalNodes}
                 handleFilterChange={this.handleByServiceFilterChange} />
             </div>
           </li>
@@ -194,7 +201,7 @@ var NodesPage = React.createClass({
         </ul>
         <RouteHandler
           selectedResource={this.state.selectedResource}
-          hosts={hostList}
+          hosts={nodesList}
           services={data.services} />
       </div>
     );
@@ -219,7 +226,7 @@ var NodesPage = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-    var isEmpty = data.statesProcessed && data.allHosts.length === 0;
+    var isEmpty = data.statesProcessed && data.totalNodes === 0;
 
     return (
       <Page title="Nodes">

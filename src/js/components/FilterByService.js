@@ -2,6 +2,7 @@ var _ = require("underscore");
 var React = require("react/addons");
 
 var Dropdown = require("reactjs-components").Dropdown;
+var Service = require("../structs/Service");
 
 var defaultId = "default";
 
@@ -36,32 +37,33 @@ var FilterByService = React.createClass({
   getItemHtml: function (service) {
     return (
       <span className="badge-container">
-        <span>{service.name}</span>
-        <span className="badge">{service.slaves_count}</span>
+        <span>{service.get("name")}</span>
+        <span className="badge">{service.getSlaveIDs().length}</span>
       </span>
     );
   },
 
   getDropdownItems: function () {
-    var items = [{
+    let defaultItem = new Service({
       id: defaultId,
       name: "All Services",
-      slaves_count: this.props.totalHostsCount
-    }].concat(this.props.services);
+      // This is literally the worst way of doing this.
+      slave_ids: new Array(this.props.totalHostsCount)
+    });
+    let items = [defaultItem].concat(this.props.services);
 
     return _.map(items, function (service) {
       var selectedHtml = this.getItemHtml(service);
       var dropdownHtml = (<a>{selectedHtml}</a>);
 
       var item = {
-        id: service.id,
-        name: service.name,
+        id: service.get("id"),
+        name: service.get("name"),
         html: dropdownHtml,
         selectedHtml,
-        slaves_count: service.slaves_count
       };
 
-      if (service.id === defaultId) {
+      if (service.get("id") === defaultId) {
         item.selectedHtml = (
           <span className="badge-container">
             <span>Filter by Service</span>

@@ -9,6 +9,7 @@ var TestUtils = React.addons.TestUtils;
 
 var NodesGridView = require("../NodesGridView");
 var MesosStateStore = require("../../stores/MesosStateStore");
+var NodesList = require("../../structs/NodesList");
 
 MesosStateStore.addChangeListener = function () {};
 
@@ -18,7 +19,7 @@ describe("NodesGridView", function () {
 
     beforeEach(function () {
       MesosStateStore.processStateSuccess({frameworks: []});
-      this.hosts = [
+      this.hosts = new NodesList({items: [
         {
           name: "foo",
           framework_ids: [
@@ -47,19 +48,19 @@ describe("NodesGridView", function () {
             "z"
           ]
         }
-      ];
+      ]});
 
       this.instance = TestUtils.renderIntoDocument(
         <NodesGridView
           selectedResource={"mem"}
-          hosts={this.hosts}
+          hosts={this.hosts.getItems()}
           services={[]}
           />
       );
     });
 
     it("should return a list of unique framwork_ids", function () {
-      var list = this.instance.getActiveServiceIds(this.hosts);
+      var list = this.instance.getActiveServiceIds(this.hosts.getItems());
 
       expect(list).toEqual(["a", "b", "c", "d", "e", "f", "g", "z"]);
     });

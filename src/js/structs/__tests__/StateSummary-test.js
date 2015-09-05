@@ -1,8 +1,6 @@
-jest.dontMock("../List");
-jest.dontMock("../ServicesList");
-jest.dontMock("../StateSummary");
 jest.dontMock("../../utils/MesosSummaryUtil");
 
+let Service = require("../Service");
 let ServicesList = require("../ServicesList");
 let StateSummary = require("../StateSummary");
 
@@ -25,10 +23,12 @@ describe("StateSummary", function () {
       expect(services instanceof ServicesList).toBeTruthy();
     });
 
-    it("ServicesList contains frameworks", function () {
-      let instance = new StateSummary({snapshot: {frameworks: [0, 1, 2]}});
+    it("ServicesList contains instances of Service", function () {
+      let frameworks = [{a: 1}];
+      let instance = new StateSummary({snapshot: {frameworks}});
       let services = instance.getServiceList();
-      expect(services.getItems()).toEqual([0, 1, 2]);
+      expect(services.getItems().length).toEqual(1);
+      expect(services.getItems()[0] instanceof Service).toBeTruthy();
     });
 
   });

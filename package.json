@@ -96,6 +96,8 @@
       "/.module-cache/"
     ],
     "unmockedModulePathPatterns": [
+      "structs",
+
       "MD5",
       "browser-info",
       "d3",
