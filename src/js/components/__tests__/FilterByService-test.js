@@ -2,7 +2,6 @@ var _ = require("underscore");
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
-jest.dontMock("../Dropdown");
 jest.dontMock("../FilterByService");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("./fixtures/MockFrameworks");
@@ -40,10 +39,10 @@ describe("FilterByService", function () {
       .toEqual("Filter by Service");
   });
 
-  describe("#itemHtml", function () {
+  describe("#getItemHtml", function () {
     it("should display the badge correctly", function () {
       var item = TestUtils.renderIntoDocument(
-        this.filterByService.itemHtml(MockFrameworks.frameworks[4])
+        this.filterByService.getItemHtml(MockFrameworks.frameworks[4])
       );
       var badge = TestUtils.findRenderedDOMComponentWithClass(item, "badge");
       expect(badge.getDOMNode().textContent)
@@ -71,20 +70,6 @@ describe("FilterByService", function () {
         expect(item.slaves_count)
           .toEqual(MockFrameworks.frameworks[index].slaves_count);
       });
-    });
-
-    it("should only have selectedHtml on the first element", function () {
-      var items = this.filterByService.getDropdownItems(
-        MockFrameworks.frameworks
-      );
-      var first = items.shift();
-
-      expect(_.isObject(first.selectedHtml)).toEqual(true);
-
-      _.each(items, function (item) {
-        expect(_.isObject(item.selectedHtml)).toEqual(false);
-      });
-
     });
   });
 

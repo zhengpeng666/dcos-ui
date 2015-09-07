@@ -1,3 +1,14 @@
+// We don't call it fade-in because intercom overrides fade-in
+// into something we don't want.
+@keyframes fade-in-opacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .dropdown {
   > .button {
     &.button-small {
@@ -16,10 +27,6 @@
     overflow: hidden;
   }
 
-  > .dropdown-menu {
-    margin-top: @base-spacing-unit * 0.5 + @button-border-width;
-  }
-
   > .dropdown-menu,
   > .dropdown-toggle {
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium);
@@ -29,4 +36,14 @@
     width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
       - @base-spacing-unit * 2;
   }
+
+  &.open .dropdown-menu.dropdown-menu-enter {
+    animation: slide-down 0.25s, fade-in-opacity 0.25s;
+    z-index: 4;
+  }
+
+  .dropdown-menu-leave {
+    z-index: 1;
+  }
+
 }

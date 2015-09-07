@@ -1,7 +1,7 @@
 var _ = require("underscore");
 var React = require("react/addons");
 
-var Dropdown = require("./Dropdown");
+var Dropdown = require("reactjs-components").Dropdown;
 
 var defaultId = "default";
 
@@ -33,7 +33,7 @@ var FilterByService = React.createClass({
     }
   },
 
-  itemHtml: function (service) {
+  getItemHtml: function (service) {
     return (
       <span className="badge-container">
         <span>{service.name}</span>
@@ -50,12 +50,14 @@ var FilterByService = React.createClass({
     }].concat(this.props.services);
 
     return _.map(items, function (service) {
-      var itemHtml = this.itemHtml(service);
+      var selectedHtml = this.getItemHtml(service);
+      var dropdownHtml = (<a>{selectedHtml}</a>);
 
       var item = {
         id: service.id,
         name: service.name,
-        html: itemHtml,
+        html: dropdownHtml,
+        selectedHtml,
         slaves_count: service.slaves_count
       };
 
@@ -82,10 +84,16 @@ var FilterByService = React.createClass({
   render: function () {
     return (
       <Dropdown
-        analyticsName={this.constructor.displayName}
-        selectedId={this.getSelectedId(this.props.byServiceFilter)}
+        buttonClassName="button button-small button-inverse dropdown-toggle"
+        dropdownMenuClassName="dropdown-menu inverse"
+        dropdownMenuListClassName="dropdown-menu-list"
+        dropdownMenuListItemClassName="clickable"
+        wrapperClassName="dropdown"
+        items={this.getDropdownItems()}
         onItemSelection={this.handleItemSelection}
-        items={this.getDropdownItems()} />
+        selectedID={this.getSelectedId(this.props.byServiceFilter)}
+        transition={true}
+        transitionName="dropdown-menu" />
     );
   }
 });
