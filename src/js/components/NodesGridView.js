@@ -7,7 +7,6 @@ var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var NodesGridDials = require("./NodesGridDials");
-import NodeSidePanel from "../components/NodeSidePanel";
 var RequestErrorMsg = require("./RequestErrorMsg");
 
 var MAX_SERVICES_TO_SHOW = 8;
@@ -36,7 +35,6 @@ var NodesGridView = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set({
-      openNodePanel: false,
       resourcesByFramework: {},
       serviceColors: {}
     });
@@ -50,12 +48,6 @@ var NodesGridView = React.createClass({
       EventTypes.MESOS_STATE_REQUEST_ERROR,
       this.onMesosStateRequestError
     );
-  },
-
-  componentDidMount: function () {
-    this.internalStorage_update({
-      openNodePanel: this.props.params.nodeID != null
-    });
   },
 
   componentWillUnmount: function () {
@@ -73,20 +65,15 @@ var NodesGridView = React.createClass({
   /**
    * Updates metadata on services when services are added/removed
    *
-   * @param  {Object} nextProps
+   * @param  {Object} props
    */
-  componentWillReceiveProps: function (nextProps) {
-    let ids = _.pluck(nextProps.services, "id");
-    let openNodePanel = nextProps.params.nodeID != null;
+  componentWillReceiveProps: function (props) {
+    let ids = _.pluck(props.services, "id");
     let serviceColors = this.internalStorage_get().serviceColors;
 
     if (!_.isEqual(Object.keys(serviceColors), ids)) {
-      this.computeServiceColors(nextProps.services);
-      this.computeShownServices(nextProps.services);
-    }
-
-    if (this.internalStorage_get().openNodePanel !== openNodePanel) {
-      this.internalStorage_update({openNodePanel});
+      this.computeServiceColors(props.services);
+      this.computeShownServices(props.services);
     }
   },
 
@@ -268,10 +255,6 @@ var NodesGridView = React.createClass({
           serviceColors={data.serviceColors}
           resourcesByFramework={this.getFilteredResourcesByFramework()}
           showServices={state.showServices} />
-        <NodeSidePanel
-          open={data.openNodePanel}
-          nodeID={props.params.nodeID}
-          onClose={this.handleSideBarClose} />
       </div>
     );
   },
