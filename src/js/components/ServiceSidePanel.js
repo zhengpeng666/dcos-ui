@@ -214,8 +214,6 @@ const ServiceSidePanel = React.createClass({
               <div className="column-4">
                 {this.getOpenServiceButton()}
               </div>
-              <div className="column-4">
-              </div>
             </div>
           </div>
           {this.getTabs()}
