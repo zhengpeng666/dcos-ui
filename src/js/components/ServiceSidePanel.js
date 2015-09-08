@@ -206,7 +206,8 @@ const ServiceSidePanel = React.createClass({
     return (
       <div>
         <div
-          className="container container-pod container-pod-divider-bottom container-pod-divider-inverse flush-bottom">
+          className="container container-pod container-pod-divider-bottom
+            container-pod-divider-inverse flush-bottom">
           {this.getBasicInfo()}
           <div className="container container-pod container-pod-short flush-left">
             <div className="row">
