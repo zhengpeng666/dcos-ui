@@ -118,5 +118,4 @@ describe("ServiceSidePanel", function () {
     });
   });
 
->>>>>>> Add tests for getInfo and getBasicInfo
 });
