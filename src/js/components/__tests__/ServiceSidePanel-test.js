@@ -16,6 +16,12 @@ describe("ServiceSidePanel", function () {
     );
   });
 
+  afterEach(function () {
+    MesosSummaryStore.getServiceFromName = function () {
+      return {name: "foo"};
+    };
+  });
+
   it("shouldn't call the callback after initialization", function () {
     expect(this.callback).not.toHaveBeenCalled();
   });
@@ -23,11 +29,5 @@ describe("ServiceSidePanel", function () {
   it("should call the callback when the panel close is called", function () {
     this.instance.handlePanelClose();
     expect(this.callback).toHaveBeenCalled();
-  });
-
-  afterEach(function () {
-    MesosSummaryStore.getServiceFromName = function () {
-      return {name: "foo"};
-    };
   });
 });
