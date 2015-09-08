@@ -18,11 +18,22 @@ const ServiceSidePanel = React.createClass({
     router: React.PropTypes.func
   },
 
-  shouldComponentUpdate: function (nextProps) {
-    let props = this.props;
+  getInitialState: function () {
+    return {
+      currentTab: "tasks"
+    };
+  },
 
-    return props.serviceName !== nextProps.serviceName ||
-      props.open !== nextProps.open;
+  shouldComponentUpdate: function (nextProps, nextState) {
+    let props = this.props;
+    let currentService = props.serviceName;
+    let nextService = nextProps.serviceName;
+
+    let currentTab = this.state.currentTab;
+    let nextTab = nextState.currentTab;
+
+    return nextService && currentService !== nextService ||
+      currentTab !== nextTab || props.open !== nextProps.open;
   },
 
   componentDidMount: function () {
@@ -95,6 +106,10 @@ const ServiceSidePanel = React.createClass({
     );
   },
 
+  handleTabClick: function (nextTab) {
+    this.setState({currentTab: nextTab});
+  },
+
   getBasicInfo: function () {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (service == null) {
@@ -117,7 +132,7 @@ const ServiceSidePanel = React.createClass({
     return (
       <div className="flex-box flex-box-align-vertical-center">
         {imageTag}
-        <div className="container container-fluid container-fluid-narrow">
+        <div className="container container-fluid">
           <div className="h2 inverse flush-top flush-bottom">
             {service.name}
           </div>
@@ -141,6 +156,47 @@ const ServiceSidePanel = React.createClass({
     );
   },
 
+  getTabs: function () {
+    let currentTab = this.state.currentTab;
+    let tasksClassSet = classNames({
+      "button button-link": true,
+      "button-primary": currentTab === "tasks"
+    });
+    let detailsClassSet = classNames({
+      "button button-link": true,
+      "button-primary": currentTab === "details"
+    });
+
+    return (
+      <div className="side-panel-tabs">
+        <div
+          className={tasksClassSet}
+          onClick={this.handleTabClick.bind(this, "tasks")}>
+          Tasks
+        </div>
+        <div
+          className={detailsClassSet}
+          onClick={this.handleTabClick.bind(this, "details")}>
+          Details
+        </div>
+      </div>
+    );
+  },
+
+  getTasksView: function () {
+    // Going to leave table here.
+    return null;
+  },
+
+  getTabView: function () {
+    let currentTab = this.state.currentTab;
+    if (currentTab === "tasks") {
+      return this.getTasksView();
+    }
+
+    return this.getInfo();
+  },
+
   getServiceDetails: function () {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (service == null) {
@@ -150,25 +206,20 @@ const ServiceSidePanel = React.createClass({
     return (
       <div>
         <div
-          className="container container-pod container-pod-divider-bottom container-pod-divider-inverse">
-          <div className="row flex-box flex-box-align-vertical-center">
-            <div className="column-8">
-              {this.getBasicInfo()}
-            </div>
-            <div className="column-4 text-align-right">
-              {this.getOpenServiceButton()}
-            </div>
-          </div>
+          className="container container-pod container-pod-divider-bottom container-pod-divider-inverse flush-bottom">
+          {this.getBasicInfo()}
           <div className="container container-pod container-pod-short flush-left">
             <div className="row">
-              <div className="column-8">
-                {this.getInfo()}
+              <div className="column-4">
+                {this.getOpenServiceButton()}
               </div>
               <div className="column-4">
               </div>
             </div>
           </div>
+          {this.getTabs()}
         </div>
+        {this.getTabView()}
       </div>
     );
   },
@@ -181,48 +232,58 @@ const ServiceSidePanel = React.createClass({
     // We are not using react-router's Link tag due to reactjs-component's
     // Portal going outside of React's render tree.
     return (
-      <a className="button button-success text-align-right"
+      <a className="button button-primary text-align-right"
         onClick={this.handleOpenServiceButtonClick}>
         Open service
       </a>
     );
   },
 
+  getInfoRow: function (header, value) {
+    return (
+      <p className="row flex-box">
+        <span className="column-4 emphasize">
+          {header}
+        </span>
+        <span className="column-12">
+          {value}
+        </span>
+      </p>
+    );
+  },
+
   getInfo: function () {
-    let service = MesosStateStore.getServiceFromName(this.props.serviceName);
-    if (service == null) {
-      return null;
+    let serviceName = this.props.serviceName;
+    let service = MesosStateStore.getServiceFromName(serviceName);
+    let marathonService = MarathonStore.getServiceFromName(serviceName);
+
+    if (service == null ||
+      marathonService == null ||
+      marathonService.snapshot == null) {
+      return (
+        <div className="container container-pod container-pod-short">
+          <h3 className="inverse">No info</h3>
+        </div>
+      );
     }
 
-    var registeredTime = service.registered_time.toFixed(3) * 1000;
-    var date = DateUtil.msToDateStr(registeredTime);
+    let registeredTime = service.registered_time.toFixed(3) * 1000;
+    let date = DateUtil.msToDateStr(registeredTime);
+    let hostName = service.hostname;
+    let instances = marathonService.snapshot.instances;
+    let command = marathonService.snapshot.cmd;
+    let ports = marathonService.snapshot.ports;
+    let version = marathonService.snapshot.version;
 
     return (
-      <div>
-        <p className="row flex-box">
-          <span className="column-4 emphasize">
-            Service
-          </span>
-          <span className="column-12">
-            {service.name}
-          </span>
-        </p>
-        <p className="row flex-box">
-          <span className="column-4 emphasize">
-            Tasks
-          </span>
-          <span className="column-12">
-            {service.tasks.length}
-          </span>
-        </p>
-        <p className="row flex-box">
-          <span className="column-4 emphasize">
-            Registered
-          </span>
-          <span className="column-12">
-            {date}
-          </span>
-        </p>
+      <div className="container container-pod container-pod-short">
+        {this.getInfoRow("Host Name", hostName)}
+        {this.getInfoRow("Tasks", service.tasks.length)}
+        {this.getInfoRow("Registered", date)}
+        {this.getInfoRow("Instances", instances)}
+        {this.getInfoRow("Command", command)}
+        {this.getInfoRow("Ports", ports)}
+        {this.getInfoRow("Version", version)}
       </div>
     );
   },

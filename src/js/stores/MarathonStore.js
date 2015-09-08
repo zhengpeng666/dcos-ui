@@ -122,6 +122,10 @@ var MarathonStore = Store.createStore({
     return metadata.images;
   },
 
+  getServiceFromName: function (name) {
+    return this.get("apps")[name];
+  },
+
   processMarathonApps: function (data) {
     var apps = {};
     _.each(data.apps, function (app) {
@@ -138,7 +142,8 @@ var MarathonStore = Store.createStore({
 
       apps[packageName] = {
         health: this.getFrameworkHealth(app),
-        images: this.getFrameworkImages(app)
+        images: this.getFrameworkImages(app),
+        snapshot: app
       };
     }, this);
 
