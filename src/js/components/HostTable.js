@@ -1,4 +1,5 @@
 var classNames = require("classnames");
+import {Link} from "react-router";
 var React = require("react/addons");
 
 var Table = require("./Table");
@@ -31,30 +32,32 @@ var HostTable = React.createClass({
   },
 
   renderHeadline: function (prop, node) {
-    var label = node.get(prop);
     var classSet = classNames({
       "h5 flush-top flush-bottom headline": true,
       "headline-tooltip": !node.isActive()
     });
+    let icon = null;
+    let toolTip = {};
 
-    if (node.isActive()) {
-      return (
-        <span className={classSet}>
-          {label}
-        </span>
-      );
+    if (!node.isActive()) {
+      icon = <i className="icon icon-mini icon-mini-white icon-alert" />;
+      toolTip = {
+        "data-behavior": "show-tip",
+        "data-tip-place": "top",
+        "data-tip-content": "Connection to node lost"
+      };
     }
 
     return (
-      <span className={classSet}
-          data-behavior="show-tip"
-          data-tip-place="top"
-          data-tip-content="Connection to node lost">
+      <Link className={classSet}
+        params={{nodeID: node.id}}
+        to="nodes-list-panel"
+        {...toolTip}>
         <span className="headline-label">
-          <i className="icon icon-mini icon-mini-white icon-alert" />
-          {label}
+          {icon}
+          {node.get(prop)}
         </span>
-      </span>
+      </Link>
     );
   },
 

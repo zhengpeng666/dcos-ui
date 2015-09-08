@@ -1,11 +1,13 @@
 var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
+import Router from "react-router";
 
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosStateStore = require("../stores/MesosStateStore");
 var NodesGridDials = require("./NodesGridDials");
+import NodeSidePanel from "../components/NodeSidePanel";
 var RequestErrorMsg = require("./RequestErrorMsg");
 
 var MAX_SERVICES_TO_SHOW = 8;
@@ -34,8 +36,9 @@ var NodesGridView = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set({
-      serviceColors: {},
-      resourcesByFramework: {}
+      openNodePanel: false,
+      resourcesByFramework: {},
+      serviceColors: {}
     });
 
     MesosStateStore.addChangeListener(
@@ -47,6 +50,12 @@ var NodesGridView = React.createClass({
       EventTypes.MESOS_STATE_REQUEST_ERROR,
       this.onMesosStateRequestError
     );
+  },
+
+  componentDidMount: function () {
+    this.internalStorage_update({
+      openNodePanel: this.props.params.nodeID != null
+    });
   },
 
   componentWillUnmount: function () {
@@ -64,15 +73,20 @@ var NodesGridView = React.createClass({
   /**
    * Updates metadata on services when services are added/removed
    *
-   * @param  {Object} props
+   * @param  {Object} nextProps
    */
-  componentWillReceiveProps: function (props) {
-    var ids = _.pluck(props.services, "id");
-    var serviceColors = this.internalStorage_get().serviceColors;
+  componentWillReceiveProps: function (nextProps) {
+    let ids = _.pluck(nextProps.services, "id");
+    let openNodePanel = nextProps.params.nodeID != null;
+    let serviceColors = this.internalStorage_get().serviceColors;
 
     if (!_.isEqual(Object.keys(serviceColors), ids)) {
-      this.computeServiceColors(props.services);
-      this.computeShownServices(props.services);
+      this.computeServiceColors(nextProps.services);
+      this.computeShownServices(nextProps.services);
+    }
+
+    if (this.internalStorage_get().openNodePanel !== openNodePanel) {
+      this.internalStorage_update({openNodePanel});
     }
   },
 
@@ -117,6 +131,10 @@ var NodesGridView = React.createClass({
     });
 
     this.internalStorage_update({hiddenServices: hidden});
+  },
+
+  handleSideBarClose: function () {
+    Router.History.back();
   },
 
   handleShowServices: function (e) {
@@ -250,6 +268,10 @@ var NodesGridView = React.createClass({
           serviceColors={data.serviceColors}
           resourcesByFramework={this.getFilteredResourcesByFramework()}
           showServices={state.showServices} />
+        <NodeSidePanel
+          open={data.openNodePanel}
+          nodeID={props.params.nodeID}
+          onClose={this.handleSideBarClose} />
       </div>
     );
   },

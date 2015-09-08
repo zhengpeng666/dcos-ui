@@ -1,4 +1,5 @@
 var _ = require("underscore");
+import {Link} from "react-router";
 var React = require("react/addons");
 
 var Chart = require("./charts/Chart");
@@ -150,7 +151,10 @@ var NodesGridDials = React.createClass({
       }
 
       return (
-        <div className="nodes-grid-dials-item" key={node.get("id")}>
+        <Link className="nodes-grid-dials-item"
+          key={node.get("id")}
+          params={{nodeID: node.get("id")}}
+          to="nodes-grid-panel">
           <div className="chart">
             <Chart calcHeight={function (w) { return w; }}>
               <DialChart data={config.data}
@@ -161,7 +165,7 @@ var NodesGridDials = React.createClass({
               </DialChart>
             </Chart>
           </div>
-        </div>
+        </Link>
       );
     }, this);
   },

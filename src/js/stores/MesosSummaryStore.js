@@ -104,6 +104,12 @@ var MesosSummaryStore = Store.createStore({
     return _.findWhere(services, {name});
   },
 
+  getNodeFromID: function (id) {
+    let nodes = this.getLatest().slaves;
+
+    return _.findWhere(nodes, {id});
+  },
+
   getTaskTotals: function () {
     return MesosSummaryUtil.getFrameworksTaskTotals(
       this.getLatest().frameworks
