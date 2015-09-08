@@ -160,7 +160,7 @@ const ServiceSidePanel = React.createClass({
       <div>
         <span className="button button-link button-inverse"
           onClick={this.handlePanelClose}>
-          <i className="service-detail-close"></i>
+          <i className="side-panel-detail-close"></i>
           Close
         </span>
       </div>
@@ -293,7 +293,7 @@ const ServiceSidePanel = React.createClass({
   render: function () {
     // TODO(ml): rename to className
     return (
-      <SidePanel classNames="service-detail"
+      <SidePanel classNames="side-panel-detail"
         header={this.getHeader()}
         open={this.props.open}
         onClose={this.handlePanelClose}>
