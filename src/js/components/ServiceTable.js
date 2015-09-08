@@ -1,5 +1,6 @@
 var _ = require("underscore");
 var classNames = require("classnames");
+import {Link} from "react-router";
 var React = require("react/addons");
 
 var EventTypes = require("../constants/EventTypes");
@@ -9,7 +10,6 @@ var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var MarathonStore = require("../stores/MarathonStore");
 var Maths = require("../utils/Maths");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
-var ServiceSidePanel = require("./ServiceSidePanel");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
@@ -23,10 +23,6 @@ var ServicesTable = React.createClass({
   propTypes: {
     services: React.PropTypes.array.isRequired,
     healthProcessed: React.PropTypes.bool.isRequired
-  },
-
-  getInitialState: function () {
-    return {selectedServiceName: null};
   },
 
   componentDidMount: function () {
@@ -53,14 +49,6 @@ var ServicesTable = React.createClass({
     this.forceUpdate();
   },
 
-  handleServiceClick: function (selectedServiceName) {
-    this.setState({selectedServiceName});
-  },
-
-  onServiceDetailClose: function () {
-    this.setState({selectedServiceName: null});
-  },
-
   renderHeadline: function (prop, service) {
     let appImages = MarathonStore.getServiceImages(service.name);
     let imageTag = null;
@@ -73,13 +61,13 @@ var ServicesTable = React.createClass({
     }
 
     return (
-      <a
-        onClick={this.handleServiceClick.bind(this, service.name)}
-        className="h5 headline cell-link clickable">
+      <Link to="services-panel"
+        className="h5 headline cell-link clickable"
+        params={{serviceName: service.name}}>
         <span className="flush-top flush-bottom">
           {imageTag}{service[prop]}
         </span>
-      </a>
+      </Link>
     );
   },
 
@@ -205,7 +193,6 @@ var ServicesTable = React.createClass({
 
   render: function () {
     let marathonApps = MarathonStore.get("apps");
-    let selectedServiceName = this.state.selectedServiceName;
 
     return (
       <div>
@@ -217,10 +204,6 @@ var ServicesTable = React.createClass({
           keys={["id"]}
           sortBy={{prop: "name", order: "desc"}}
           sortFunc={ResourceTableUtil.getSortFunction("name", {marathonApps})} />
-        <ServiceSidePanel
-          open={selectedServiceName != null}
-          onClose={this.onServiceDetailClose}
-          serviceName={selectedServiceName} />
       </div>
     );
   }

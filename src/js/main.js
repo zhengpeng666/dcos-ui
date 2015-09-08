@@ -28,9 +28,12 @@ var ServicesPage = require("./pages/ServicesPage");
 
 var routes = (
   <Route name="home" path="/" handler={Index}>
-    <Route name="dashboard" path="dashboard/?" handler={DashboardPage} />
+    <Route name="dashboard" path="dashboard/?" handler={DashboardPage}>
+      <Route name="dashboard-panel" path="service-detail/:serviceName" />
+    </Route>
     <Route name="services" path="services/?" handler={ServicesPage}>
       <Route name="service-ui" path="ui/:serviceName" handler={ServiceOverlay} />
+      <Route name="services-panel" path="service-detail/:serviceName" />
     </Route>
     <Route name="nodes" path="nodes/?" handler={NodesPage}>
       <Route name="nodes-list" path="list/?" handler={HostTable} />

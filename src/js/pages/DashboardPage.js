@@ -1,6 +1,6 @@
 var _ = require("underscore");
 var React = require("react/addons");
-var Link = require("react-router").Link;
+import Router, {Link} from "react-router";
 
 import Config from "../config/Config";
 var EventTypes = require("../constants/EventTypes");
@@ -11,12 +11,11 @@ var MarathonStore = require("../stores/MarathonStore");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var Page = require("../components/Page");
 var Panel = require("../components/Panel");
-var ResourceTimeSeriesChart =
-  require("../components/charts/ResourceTimeSeriesChart");
-var TaskFailureTimeSeriesChart =
-  require("../components/charts/TaskFailureTimeSeriesChart");
+var ResourceTimeSeriesChart = require("../components/charts/ResourceTimeSeriesChart");
+var TaskFailureTimeSeriesChart = require("../components/charts/TaskFailureTimeSeriesChart");
 var ServiceList = require("../components/ServiceList");
 var TasksChart = require("../components/charts/TasksChart");
+var ServiceSidePanel = require("../components/ServiceSidePanel");
 var SidebarActions = require("../events/SidebarActions");
 
 function getMesosState() {
@@ -29,7 +28,8 @@ function getMesosState() {
     refreshRate: Config.getRefreshRate(),
     services: MesosSummaryStore.getLatest().frameworks,
     tasks: MesosSummaryStore.getTaskTotals(),
-    totalResources: MesosSummaryStore.getTotalResources()
+    totalResources: MesosSummaryStore.getTotalResources(),
+    statesProcessed: MesosSummaryStore.get("statesProcessed")
   };
 }
 
@@ -55,6 +55,10 @@ var DashboardPage = React.createClass({
     }
   },
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   getDefaultProps: function () {
     return {
       servicesListLength: 5
@@ -62,7 +66,8 @@ var DashboardPage = React.createClass({
   },
 
   componentWillMount: function () {
-    this.internalStorage_set(getMesosState());
+    this.internalStorage_set({openServicePanel: false});
+    this.internalStorage_update(getMesosState());
   },
 
   componentDidMount: function () {
@@ -74,6 +79,16 @@ var DashboardPage = React.createClass({
       EventTypes.MARATHON_APPS_CHANGE,
       this.onMarathonStateChange
     );
+
+    this.internalStorage_update({
+      openServicePanel: this.props.params.serviceName != null
+    });
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.internalStorage_update({
+      openServicePanel: nextProps.params.serviceName != null
+    });
   },
 
   componentWillUnmount: function () {
@@ -92,8 +107,13 @@ var DashboardPage = React.createClass({
   },
 
   onMesosStateChange: function () {
-    this.internalStorage_set(getMesosState());
+    this.internalStorage_update(getMesosState());
     this.forceUpdate();
+  },
+
+  onServiceDetailClose: function () {
+    this.internalStorage_update({openServicePanel: false});
+    Router.History.back();
   },
 
   getServicesList: function (_services) {
@@ -136,7 +156,7 @@ var DashboardPage = React.createClass({
   },
 
   render: function () {
-    var data = this.internalStorage_get();
+    let data = this.internalStorage_get();
     let appsProcessed = MarathonStore.hasProcessedApps();
 
     return (
@@ -189,6 +209,10 @@ var DashboardPage = React.createClass({
             </Panel>
           </div>
         </div>
+        <ServiceSidePanel
+          open={data.statesProcessed && data.openServicePanel}
+          serviceName={this.props.params.serviceName}
+          onClose={this.onServiceDetailClose} />
       </Page>
     );
   }

@@ -1,5 +1,6 @@
 var _ = require("underscore");
 var React = require("react/addons");
+import Router, {RouteHandler} from "react-router";
 
 var AlertPanel = require("../components/AlertPanel");
 import Config from "../config/Config";
@@ -13,8 +14,8 @@ var MarathonStore = require("../stores/MarathonStore");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
+var ServiceSidePanel = require("../components/ServiceSidePanel");
 var SidebarActions = require("../events/SidebarActions");
-var RouteHandler = require("react-router").RouteHandler;
 
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
@@ -76,12 +77,19 @@ var ServicesPage = React.createClass({
     }
   },
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   getInitialState: function () {
     return _.extend({selectedResource: "cpus"}, DEFAULT_FILTER_OPTIONS);
   },
 
   componentWillMount: function () {
-    this.internalStorage_set(getMesosServices(this.state));
+    this.internalStorage_set(_.extend(
+      {openServicePanel: false},
+      getMesosServices(this.state)
+    ));
   },
 
   componentDidMount: function () {
@@ -89,6 +97,16 @@ var ServicesPage = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
+
+    this.internalStorage_update({
+      openServicePanel: this.props.params.serviceName != null
+    });
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.internalStorage_update({
+      openServicePanel: nextProps.params.serviceName != null
+    });
   },
 
   componentWillUnmount: function () {
@@ -99,7 +117,7 @@ var ServicesPage = React.createClass({
   },
 
   onMesosStateChange: function () {
-    this.internalStorage_set(getMesosServices(this.state));
+    this.internalStorage_update(getMesosServices(this.state));
     this.forceUpdate();
   },
 
@@ -107,7 +125,7 @@ var ServicesPage = React.createClass({
     var stateChanges = _.clone(DEFAULT_FILTER_OPTIONS);
     stateChanges.healthFilter = healthFilter;
 
-    this.internalStorage_set(getMesosServices(stateChanges));
+    this.internalStorage_update(getMesosServices(stateChanges));
     this.setState(stateChanges);
   },
 
@@ -123,19 +141,23 @@ var ServicesPage = React.createClass({
       healthFilter: this.state.healthFilter
     });
 
-    this.internalStorage_set(data);
+    this.internalStorage_update(data);
     this.setState({searchString: searchString});
+  },
+
+  handleSideBarClose: function () {
+    Router.History.back();
   },
 
   resetFilter: function () {
     var state = _.clone(DEFAULT_FILTER_OPTIONS);
-    this.internalStorage_set(getMesosServices(state));
+    this.internalStorage_update(getMesosServices(state));
     this.setState(state);
   },
 
   getServicesPageContent: function () {
-    var state = this.state;
-    var data = this.internalStorage_get();
+    let state = this.state;
+    let data = this.internalStorage_get();
     let appsProcessed = MarathonStore.hasProcessedApps();
 
     return (
@@ -146,7 +168,7 @@ var ServicesPage = React.createClass({
           totalResources={data.totalResources}
           refreshRate={data.refreshRate}
           resourceType="Services"
-          selectedResource={this.state.selectedResource}
+          selectedResource={state.selectedResource}
           onResourceSelectionChange={this.onResourceSelectionChange} />
         <FilterHeadline
           onReset={this.resetFilter}
@@ -170,6 +192,10 @@ var ServicesPage = React.createClass({
         <ServiceTable
           services={data.services}
           healthProcessed={appsProcessed} />
+        <ServiceSidePanel
+          open={data.statesProcessed && data.openServicePanel}
+          serviceName={this.props.params.serviceName}
+          onClose={this.handleSideBarClose} />
       </div>
     );
   },

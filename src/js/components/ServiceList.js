@@ -1,12 +1,11 @@
 const _ = require("underscore");
 const classNames = require("classnames");
-const React = require("react");
+import {List} from "reactjs-components";
+const React = require("react/addons");
 
 const HealthLabels = require("../constants/HealthLabels");
 const HealthTypesDescription = require("../constants/HealthTypesDescription");
-const List = require("reactjs-components").List;
 const MarathonStore = require("../stores/MarathonStore");
-const ServiceSidePanel = require("./ServiceSidePanel");
 const TooltipMixin = require("../mixins/TooltipMixin");
 
 const STATES = {
@@ -27,15 +26,13 @@ let ServiceList = React.createClass({
 
   mixins: [TooltipMixin],
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   getDefaultProps: function () {
     return {
       services: []
-    };
-  },
-
-  getInitialState: function () {
-    return {
-      selectedServiceName: null
     };
   },
 
@@ -46,12 +43,8 @@ let ServiceList = React.createClass({
     return !_.isEqual(this.props, nextProps) || changedState;
   },
 
-  handleServiceClick: function (selectedServiceName) {
-    this.setState({selectedServiceName});
-  },
-
-  onServiceDetailClose: function () {
-    this.setState({selectedServiceName: null});
+  handleServiceClick: function (serviceName) {
+    this.context.router.transitionTo("dashboard-panel", {serviceName});
   },
 
   getServices: function (services, healthProcessed) {
@@ -88,30 +81,26 @@ let ServiceList = React.createClass({
         );
       }
 
-      let title = (
-        <a
-          onClick={this.handleServiceClick.bind(this, service.name)}
-          className="h3 flush-top flush-bottom clickable">
-          {service.name}
-        </a>
-      );
-
       var classSet = classNames(_.extend({
         "h3 flush-top flush-bottom text-align-right": true
       }, state.classes));
 
-      var value = [(
-        <div key="title" className="h3 flush-top flush-bottom">
-          {title}
-        </div>
-        ), (
-        <div key="health" className={classSet} {...attributes}>
-          {healthLabel}
-        </div>
-        )
-      ];
-
-      return {value};
+      return {
+        value: [
+          (
+            <a key="title"
+              onClick={this.handleServiceClick.bind(this, service.name)}
+              className="h3 flush-top flush-bottom clickable">
+              {service.name}
+            </a>
+          ),
+          (
+            <div key="health" className={classSet} {...attributes}>
+              {healthLabel}
+            </div>
+          )
+        ]
+      };
     }, this);
   },
 
@@ -125,7 +114,6 @@ let ServiceList = React.createClass({
   },
 
   getList: function () {
-    let selectedServiceName = this.state.selectedServiceName;
     let props = this.props;
 
     return (
@@ -133,10 +121,6 @@ let ServiceList = React.createClass({
         <List
           className="list-unstyled"
           items={this.getServices(props.services, props.healthProcessed)} />
-        <ServiceSidePanel
-          open={selectedServiceName != null}
-          onClose={this.onServiceDetailClose}
-          serviceName={selectedServiceName} />
       </div>
     );
   },

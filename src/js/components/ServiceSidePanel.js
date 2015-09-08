@@ -2,24 +2,21 @@ import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
 import EventTypes from "../constants/EventTypes";
-import InternalStorageMixin from "../mixins/InternalStorageMixin";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 
 const ServiceSidePanel = React.createClass({
 
   displayName: "ServiceSidePanel",
 
-  mixins: [InternalStorageMixin],
-
   contextTypes: {
     router: React.PropTypes.func
   },
 
   shouldComponentUpdate: function (nextProps) {
-    let currentService = this.props.serviceName;
-    let nextService = nextProps.serviceName;
+    let props = this.props;
 
-    return nextService && currentService !== nextService;
+    return props.serviceName !== nextProps.serviceName ||
+      props.open !== nextProps.open;
   },
 
   componentDidMount: function () {
@@ -27,7 +24,6 @@ const ServiceSidePanel = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
 
-    this.internalStorage_update({open: true});
     this.forceUpdate();
   },
 
