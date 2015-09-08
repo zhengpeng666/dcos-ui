@@ -50,7 +50,7 @@ var HostTable = React.createClass({
 
     return (
       <Link className={classSet}
-        params={{nodeID: node.id}}
+        params={{nodeID: node.get("id")}}
         to="nodes-list-panel"
         {...toolTip}>
         <span className="headline-label">
