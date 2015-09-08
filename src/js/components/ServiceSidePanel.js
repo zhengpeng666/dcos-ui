@@ -260,11 +260,7 @@ const ServiceSidePanel = React.createClass({
     if (service == null ||
       marathonService == null ||
       marathonService.snapshot == null) {
-      return (
-        <div className="container container-pod container-pod-short">
-          <h3 className="inverse">No info</h3>
-        </div>
-      );
+      return null;
     }
 
     let registeredTime = service.registered_time.toFixed(3) * 1000;

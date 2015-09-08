@@ -10,6 +10,43 @@ var MesosStateStore = require("../../stores/MesosStateStore");
 var ServiceSidePanel = require("../ServiceSidePanel");
 
 describe("ServiceSidePanel", function () {
+  beforeEach(function () {
+    this.summaryGetServiceFromName = MesosSummaryStore.getServiceFromName;
+    this.marathonGetServiceFromName = MarathonStore.getServiceFromName;
+    this.stateGetServiceFromName = MesosStateStore.getServiceFromName;
+    this.getServiceHealth = MarathonStore.getServiceHealth;
+
+    function fakeFn(name) {
+      if (name === "service_that_exists") {
+        return {
+          name: "foo",
+          registered_time: 1000,
+          tasks: [],
+          snapshot: {name: "foo"}
+        };
+      }
+
+      return null;
+    }
+    MesosSummaryStore.getServiceFromName = fakeFn;
+    MesosStateStore.getServiceFromName = fakeFn;
+    MarathonStore.getServiceFromName = fakeFn;
+
+    MarathonStore.getServiceHealth = function () {
+      return {
+        key: "HEALTHY",
+        value: 1,
+        classNames: "text-success"
+      };
+    };
+  });
+
+  afterEach(function () {
+    MesosSummaryStore.getServiceFromName = this.summaryGetServiceFromName;
+    MesosStateStore.getServiceFromName = this.stateGetServiceFromName;
+    MarathonStore.getServiceFromName = this.marathonGetServiceFromName;
+    MarathonStore.getServiceHealth = this.getServiceHealth;
+  });
 
   describe("callback functionality", function () {
     beforeEach(function () {
@@ -17,12 +54,6 @@ describe("ServiceSidePanel", function () {
       this.instance = TestUtils.renderIntoDocument(
         <ServiceSidePanel open={false} onClose={this.callback} />
       );
-    });
-
-    afterEach(function () {
-      MesosSummaryStore.getServiceFromName = function () {
-        return {name: "foo"};
-      };
     });
 
     it("shouldn't call the callback after initialization", function () {
@@ -36,38 +67,6 @@ describe("ServiceSidePanel", function () {
   });
 
   describe("getting info", function () {
-    beforeEach(function () {
-      this.getServiceFromName = MesosSummaryStore.getServiceFromName;
-      this.getServiceHealth = MarathonStore.getServiceHealth;
-
-      function fakeFn(name) {
-        if (name === "service_that_exists") {
-          return {
-            name: "foo",
-            registered_time: 1000,
-            tasks: []
-          };
-        }
-
-        return null;
-      }
-      MesosSummaryStore.getServiceFromName = fakeFn;
-      MesosStateStore.getServiceFromName = fakeFn;
-
-      MarathonStore.getServiceHealth = function () {
-        return {
-          key: "HEALTHY",
-          value: 1,
-          classNames: "text-success"
-        };
-      };
-    });
-
-    afterEach(function () {
-      MesosSummaryStore.getServiceFromName = this.getServiceFromName;
-      MesosStateStore.getServiceFromName = this.getServiceFromName;
-      MarathonStore.getServiceHealth = this.getServiceHealth;
-    });
 
     describe("#getInfo", function () {
       it("should return null if service doesn't exist", function () {
