@@ -9,6 +9,7 @@ import HealthStatus from "../constants/HealthStatus";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import StringUtil from "../utils/StringUtil";
 
 const ServiceSidePanel = React.createClass({
 
@@ -110,6 +111,10 @@ const ServiceSidePanel = React.createClass({
     this.setState({currentTab: nextTab});
   },
 
+  getActiveTasksCount: function (service) {
+    return service.TASK_RUNNING + service.TASK_STARTING + service.TASK_STAGING;
+  },
+
   getBasicInfo: function () {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (service == null) {
@@ -118,13 +123,15 @@ const ServiceSidePanel = React.createClass({
 
     let appImages = MarathonStore.getServiceImages(service.name);
     let appHealth = MarathonStore.getServiceHealth(service.name);
-    let healthClass = HealthStatus[appHealth.key].classNames;
+    let healthClass = `${HealthStatus[appHealth.key].classNames} side-panel-subheader`;
     let healthLabel = HealthLabels[HealthStatus[appHealth.key].key];
+    let activeTasksCount = this.getActiveTasksCount(service);
+    let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
     let imageTag = null;
 
     if (appImages) {
       imageTag = (
-        <img className="icon icon-image icon-service"
+        <img className="icon icon-image icon-rounded"
           src={appImages["icon-large"]} />
       );
     }
@@ -136,8 +143,13 @@ const ServiceSidePanel = React.createClass({
           <div className="h2 inverse flush-top flush-bottom">
             {service.name}
           </div>
-          <div className={healthClass}>
-            {healthLabel}
+          <div>
+            <span className={healthClass}>
+              {healthLabel}
+            </span>
+            <span>
+              {`${activeTasksCount} Active ${activeTasksSubHeader}`}
+            </span>
           </div>
         </div>
       </div>
