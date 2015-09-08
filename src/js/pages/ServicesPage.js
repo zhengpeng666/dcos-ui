@@ -86,10 +86,8 @@ var ServicesPage = React.createClass({
   },
 
   componentWillMount: function () {
-    this.internalStorage_set(_.extend(
-      {openServicePanel: false},
-      getMesosServices(this.state)
-    ));
+    this.internalStorage_set(getMesosServices(this.state));
+    this.internalStorage_update({openServicePanel: false});
   },
 
   componentDidMount: function () {

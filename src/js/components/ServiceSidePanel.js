@@ -15,6 +15,12 @@ const ServiceSidePanel = React.createClass({
 
   displayName: "ServiceSidePanel",
 
+  propTypes: {
+    open: React.PropTypes.bool,
+    nodeID: React.PropTypes.string,
+    onClose: React.PropTypes.func
+  },
+
   contextTypes: {
     router: React.PropTypes.func
   },
@@ -291,7 +297,7 @@ const ServiceSidePanel = React.createClass({
   },
 
   render: function () {
-    // TODO(ml): rename to className
+    // TODO: rename from classNames to className
     return (
       <SidePanel classNames="side-panel-detail"
         header={this.getHeader()}
