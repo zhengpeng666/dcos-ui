@@ -1,19 +1,13 @@
 const _ = require("underscore");
-const classNames = require("classnames");
+import classNames from "classnames";
 import {List} from "reactjs-components";
 const React = require("react/addons");
 
 const HealthLabels = require("../constants/HealthLabels");
+const HealthStatus = require("../constants/HealthStatus");
 const HealthTypesDescription = require("../constants/HealthTypesDescription");
 const MarathonStore = require("../stores/MarathonStore");
 const TooltipMixin = require("../mixins/TooltipMixin");
-
-const STATES = {
-  UNHEALTHY: {key: "UNHEALTHY", classes: {"text-danger": true}},
-  HEALTHY: {key: "HEALTHY", classes: {"text-success": true}},
-  IDLE: {key: "IDLE", classes: {"text-warning": true}},
-  NA: {key: "NA", classes: {"text-mute": true}}
-};
 
 let ServiceList = React.createClass({
 
@@ -51,21 +45,21 @@ let ServiceList = React.createClass({
     return _.map(services, function (service) {
       let appHealth = MarathonStore.getServiceHealth(service.name);
       let attributes = {};
-      let state = STATES.NA;
+      let state = HealthStatus.NA;
 
       if (appHealth != null) {
-        state = STATES[appHealth.key];
+        state = HealthStatus[appHealth.key];
 
         attributes["data-behavior"] = "show-tip";
         attributes["data-tip-place"] = "top-left";
 
-        if (appHealth.key === STATES.HEALTHY.key) {
+        if (appHealth.key === HealthStatus.HEALTHY.key) {
           attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
-        } else if (appHealth.key === STATES.UNHEALTHY.key) {
+        } else if (appHealth.key === HealthStatus.UNHEALTHY.key) {
           attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
-        } else if (appHealth.key === STATES.IDLE.key) {
+        } else if (appHealth.key === HealthStatus.IDLE.key) {
           attributes["data-tip-content"] = HealthTypesDescription.IDLE;
-        } else if (appHealth.key === STATES.NA.key) {
+        } else if (appHealth.key === HealthStatus.NA.key) {
           attributes["data-tip-content"] = HealthTypesDescription.NA;
         }
       }
@@ -81,9 +75,10 @@ let ServiceList = React.createClass({
         );
       }
 
-      var classSet = classNames(_.extend({
-        "h3 flush-top flush-bottom text-align-right": true
-      }, state.classes));
+      let classSet = classNames(
+        "h3 flush-top flush-bottom text-align-right",
+        state.classNames
+      );
 
       return {
         value: [
