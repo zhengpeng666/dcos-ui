@@ -30,14 +30,14 @@ var HostTable = React.createClass({
     };
   },
 
-  renderHeadline: function (prop, host) {
-    var label = host.get(prop);
+  renderHeadline: function (prop, node) {
+    var label = node.get(prop);
     var classSet = classNames({
       "h5 flush-top flush-bottom headline": true,
-      "headline-tooltip": !host.isActive()
+      "headline-tooltip": !node.isActive()
     });
 
-    if (host.isActive()) {
+    if (node.isActive()) {
       return (
         <span className={classSet}>
           {label}
@@ -58,14 +58,14 @@ var HostTable = React.createClass({
     );
   },
 
-  renderStats: function (prop, host) {
+  renderStats: function (prop, node) {
     var colorMapping = {
       cpus: 1,
       mem: 2,
       disk: 3
     };
 
-    var value = host.getUsageStats(prop).percentage;
+    var value = node.getUsageStats(prop).percentage;
     return (
       <span className="spread-content">
         <ProgressBar value={value}
@@ -131,10 +131,10 @@ var HostTable = React.createClass({
     );
   },
 
-  getRowAttributes: function (host) {
+  getRowAttributes: function (node) {
     return {
       className: classNames({
-        "danger": host.isActive() === false
+        "danger": node.isActive() === false
       })
     };
   },

@@ -1,4 +1,4 @@
-import * as _ from "underscore";
+import _ from "underscore";
 
 import List from "./List";
 import MesosSummaryUtil from "../utils/MesosSummaryUtil";
