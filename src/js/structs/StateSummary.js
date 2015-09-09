@@ -1,8 +1,8 @@
-const _ = require("underscore");
+import _ from "underscore";
 
-let MesosSummaryUtil = require("../utils/MesosSummaryUtil");
-let ServicesList = require("./ServicesList");
-let NodesList = require("./NodesList");
+import MesosSummaryUtil from "../utils/MesosSummaryUtil";
+import ServicesList from "./ServicesList";
+import NodesList from "./NodesList";
 
 export default class StateSummary {
   constructor(options = {}) {

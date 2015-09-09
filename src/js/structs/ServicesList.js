@@ -1,9 +1,9 @@
-const _ = require("underscore");
+import _ from "underscore";
 
-let List = require("./List");
-let MesosSummaryUtil = require("../utils/MesosSummaryUtil");
-let Service = require("./Service");
-let StringUtil = require("../utils/StringUtil");
+import List from "./List";
+import MesosSummaryUtil from "../utils/MesosSummaryUtil";
+import Service from "./Service";
+import StringUtil from "../utils/StringUtil";
 
 export default class ServicesList extends List {
   constructor() {
