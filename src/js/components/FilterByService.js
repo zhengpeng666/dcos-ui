@@ -60,7 +60,7 @@ var FilterByService = React.createClass({
         id: service.get("id"),
         name: service.get("name"),
         html: dropdownHtml,
-        selectedHtml,
+        selectedHtml
       };
 
       if (service.get("id") === defaultId) {

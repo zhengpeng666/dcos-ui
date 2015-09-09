@@ -7,10 +7,9 @@ var TestUtils = React.addons.TestUtils;
 
 var NodesGridDials = require("../NodesGridDials");
 var ResourceTypes = require("../../constants/ResourceTypes");
-var NodesList = require("../../structs/NodesList");
 var Node = require("../../structs/Node");
 
-var host = {
+var mockHost = {
   id: "foo",
   active: true,
   resources: {
@@ -24,7 +23,7 @@ var host = {
 describe("NodesGridDials", function () {
 
   beforeEach(function () {
-    this.hosts = [new Node(_.clone(host))];
+    this.hosts = [new Node(_.clone(mockHost))];
     this.instance = TestUtils.renderIntoDocument(
       <NodesGridDials
         hosts={this.hosts}

@@ -3,7 +3,6 @@ jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/Store");
 
-let MarathonStore = require("../../stores/MarathonStore");
 let Node = require("../Node");
 let NodesList = require("../NodesList");
 
@@ -23,7 +22,7 @@ describe("NodesList", function () {
   describe("#filter", function () {
 
     it("returns unfiltered list", function () {
-      let items = [{a: 1}, {b: 2}]
+      let items = [{a: 1}, {b: 2}];
       let list = new NodesList({items: items});
       expect(list.filter().getItems().length).toEqual(2);
     });

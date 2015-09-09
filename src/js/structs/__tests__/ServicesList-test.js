@@ -23,7 +23,7 @@ describe("ServicesList", function () {
   describe("#filter", function () {
 
     it("returns unfiltered list", function () {
-      let items = [{a: 1}, {b: 2}]
+      let items = [{a: 1}, {b: 2}];
       let list = new ServicesList({items: items});
       expect(list.filter().getItems().length).toEqual(2);
     });

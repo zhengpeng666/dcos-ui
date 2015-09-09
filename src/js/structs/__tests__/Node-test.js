@@ -36,7 +36,8 @@ describe("Node", function () {
         percentage: 50,
         total: 10,
         value: 5
-      }
+      };
+
       expect(node.getUsageStats("cpus")).toEqual(stats);
     });
 
