@@ -165,7 +165,6 @@ var NodesPage = React.createClass({
     var data = this.internalStorage_get();
     var state = this.state;
     var nodesList = _.first(data.nodes, NODES_DISPLAY_LIMIT);
-    var currentLength = Math.min(data.nodes.length, NODES_DISPLAY_LIMIT);
 
     return (
       <div>
@@ -180,7 +179,7 @@ var NodesPage = React.createClass({
         <FilterHeadline
           onReset={this.resetFilter}
           name="Nodes"
-          currentLength={currentLength}
+          currentLength={nodesList.length}
           totalLength={data.totalNodes} />
         <ul className="list list-unstyled list-inline flush-bottom">
           <li>

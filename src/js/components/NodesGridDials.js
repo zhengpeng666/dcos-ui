@@ -37,7 +37,7 @@ var NodesGridDials = React.createClass({
 
     _.each(resourcesByFramework, function (fwkResources, fwkId) {
       var percentage = fwkResources[props.selectedResource] * 100;
-      percentage /= node.getUsageStats([props.selectedResource]).total;
+      percentage /= node.getUsageStats(props.selectedResource).total;
 
       config.push({
         colorIndex: props.serviceColors[fwkId],

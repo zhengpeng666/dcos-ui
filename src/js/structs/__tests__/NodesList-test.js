@@ -23,7 +23,7 @@ describe("NodesList", function () {
 
     it("returns unfiltered list", function () {
       let items = [{a: 1}, {b: 2}];
-      let list = new NodesList({items: items});
+      let list = new NodesList({items});
       expect(list.filter().getItems().length).toEqual(2);
     });
 

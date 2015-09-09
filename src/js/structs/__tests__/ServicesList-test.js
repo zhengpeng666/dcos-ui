@@ -24,7 +24,7 @@ describe("ServicesList", function () {
 
     it("returns unfiltered list", function () {
       let items = [{a: 1}, {b: 2}];
-      let list = new ServicesList({items: items});
+      let list = new ServicesList({items});
       expect(list.filter().getItems().length).toEqual(2);
     });
 

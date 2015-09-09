@@ -1,9 +1,9 @@
-const _ = require("underscore");
+import * as _ from "underscore";
 
-let List = require("./List");
-let MesosSummaryUtil = require("../utils/MesosSummaryUtil");
-let Node = require("./Node");
-let StringUtil = require("../utils/StringUtil");
+import List from "./List";
+import MesosSummaryUtil from "../utils/MesosSummaryUtil";
+import Node from "./Node";
+import StringUtil from "../utils/StringUtil";
 
 export default class NodesList extends List {
   constructor() {
