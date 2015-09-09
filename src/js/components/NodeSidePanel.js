@@ -71,7 +71,16 @@ const NodeSidePanel = React.createClass({
     let node = MesosSummaryStore.getNodeFromID(this.props.nodeID);
 
     if (node == null) {
-      return "loading...";
+      return (
+        <div>
+          <h2 className="text-align-center inverse overlay-header">
+            Error finding node
+          </h2>
+          <div className="container container-pod text-align-center flush-top text-danger">
+            {`Did not find a node with the id "${this.props.nodeID}"`}
+          </div>
+        </div>
+      );
     }
 
     return (

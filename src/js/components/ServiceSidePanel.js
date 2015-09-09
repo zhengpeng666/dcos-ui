@@ -220,7 +220,16 @@ const ServiceSidePanel = React.createClass({
   getServiceDetails: function () {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (service == null) {
-      return "loading...";
+      return (
+        <div>
+          <h2 className="text-align-center inverse overlay-header">
+            Error finding service
+          </h2>
+          <div className="container container-pod text-align-center flush-top text-danger">
+            {`Did not find a service by the name "${this.props.serviceName}"`}
+          </div>
+        </div>
+      );
     }
 
     return (
