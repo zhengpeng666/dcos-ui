@@ -1,4 +1,3 @@
-var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
 
@@ -31,14 +30,14 @@ var HostTable = React.createClass({
     };
   },
 
-  renderHeadline: function (prop, model) {
-    var label = model[prop];
+  renderHeadline: function (prop, node) {
+    var label = node.get(prop);
     var classSet = classNames({
       "h5 flush-top flush-bottom headline": true,
-      "headline-tooltip": !model.active
+      "headline-tooltip": !node.isActive()
     });
 
-    if (model.active) {
+    if (node.isActive()) {
       return (
         <span className={classSet}>
           {label}
@@ -59,14 +58,14 @@ var HostTable = React.createClass({
     );
   },
 
-  renderStats: function (prop, model) {
+  renderStats: function (prop, node) {
     var colorMapping = {
       cpus: 1,
       mem: 2,
       disk: 3
     };
 
-    var value = _.last(model.used_resources[prop]).percentage;
+    var value = node.getUsageStats(prop).percentage;
     return (
       <span className="spread-content">
         <ProgressBar value={value}
@@ -132,10 +131,10 @@ var HostTable = React.createClass({
     );
   },
 
-  getRowAttributes: function (model) {
+  getRowAttributes: function (node) {
     return {
       className: classNames({
-        "danger": model.active === false
+        "danger": node.isActive() === false
       })
     };
   },

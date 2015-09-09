@@ -6,18 +6,6 @@ let MarathonStore = require("../stores/MarathonStore");
 
 const MesosSummaryUtil = {
 
-  getFrameworksWithHostsCount: function (frameworks) {
-    return _.map(frameworks, function (framework) {
-      if (framework.slave_ids == null) {
-        framework.slave_ids = [];
-      }
-
-      // TODO: IMPORTANT Stop mutating server data!
-      framework.slaves_count = framework.slave_ids.length;
-      return framework;
-    });
-  },
-
   sumResources: function (resourceList) {
     return _.foldl(resourceList, function (memo, resource) {
       if (resource == null) {

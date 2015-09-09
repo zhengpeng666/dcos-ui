@@ -1,5 +1,3 @@
-jest.dontMock("../List");
-
 let List = require("../List");
 
 describe("List", function () {

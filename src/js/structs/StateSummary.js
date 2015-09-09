@@ -1,7 +1,8 @@
-const _ = require("underscore");
+import _ from "underscore";
 
-let MesosSummaryUtil = require("../utils/MesosSummaryUtil");
-let ServicesList = require("./ServicesList");
+import MesosSummaryUtil from "../utils/MesosSummaryUtil";
+import ServicesList from "./ServicesList";
+import NodesList from "./NodesList";
 
 export default class StateSummary {
   constructor(options = {}) {
@@ -35,6 +36,10 @@ export default class StateSummary {
 
   getServiceList() {
     return new ServicesList({items: this.snapshot.frameworks});
+  }
+
+  getNodesList() {
+    return new NodesList({items: this.snapshot.slaves});
   }
 
   getActiveSlaves() {

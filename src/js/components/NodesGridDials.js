@@ -26,10 +26,10 @@ var NodesGridDials = React.createClass({
     resourcesByFramework: React.PropTypes.object.isRequired
   },
 
-  getServiceSlicesConfig: function (host) {
+  getServiceSlicesConfig: function (node) {
     var config = [];
     var props = this.props;
-    var resourcesByFramework = props.resourcesByFramework[host.id];
+    var resourcesByFramework = props.resourcesByFramework[node.get("id")];
 
     if (!resourcesByFramework) {
       return config;
@@ -37,7 +37,7 @@ var NodesGridDials = React.createClass({
 
     _.each(resourcesByFramework, function (fwkResources, fwkId) {
       var percentage = fwkResources[props.selectedResource] * 100;
-      percentage /= host.resources[props.selectedResource];
+      percentage /= node.getUsageStats(props.selectedResource).total;
 
       config.push({
         colorIndex: props.serviceColors[fwkId],
@@ -49,10 +49,10 @@ var NodesGridDials = React.createClass({
     return config;
   },
 
-  getUsedSliceConfig: function (host) {
+  getUsedSliceConfig: function (node) {
     var props = this.props;
     var resourceConfig = ResourceTypes[props.selectedResource];
-    var serviceSlices = this.getServiceSlicesConfig(host);
+    var serviceSlices = this.getServiceSlicesConfig(node);
     var percentage;
 
     if (serviceSlices.length > 0) {
@@ -60,9 +60,7 @@ var NodesGridDials = React.createClass({
         return memo + slice.percentage;
       }, 0);
     } else {
-      percentage = _.last(
-        host.used_resources[props.selectedResource]
-      ).percentage;
+      percentage = node.getUsageStats(props.selectedResource).percentage;
     }
 
     return [{
@@ -72,14 +70,14 @@ var NodesGridDials = React.createClass({
     }];
   },
 
-  getActiveSliceData: function (host) {
+  getActiveSliceData: function (node) {
     var config;
     var props = this.props;
 
     if (props.showServices) {
-      config = this.getServiceSlicesConfig(host);
+      config = this.getServiceSlicesConfig(node);
     } else {
-      config = this.getUsedSliceConfig(host);
+      config = this.getUsedSliceConfig(node);
     }
 
     var percentage = _.reduce(config, function (memo, slice) {
@@ -110,11 +108,11 @@ var NodesGridDials = React.createClass({
     ];
   },
 
-  getDialConfig: function (host) {
+  getDialConfig: function (node) {
     var resourceConfig = ResourceTypes[this.props.selectedResource];
 
-    if (host.active) {
-      var sliceData = this.getActiveSliceData(host);
+    if (node.isActive()) {
+      var sliceData = this.getActiveSliceData(node);
       return {
         data: sliceData.data,
         description: [
@@ -139,11 +137,11 @@ var NodesGridDials = React.createClass({
   },
 
   getDials: function () {
-    return _.map(this.props.hosts, function (host) {
-      var config = this.getDialConfig(host);
+    return _.map(this.props.hosts, function (node) {
+      var config = this.getDialConfig(node);
       var tooltipProps = {};
 
-      if (!host.active) {
+      if (!node.isActive()) {
         tooltipProps = {
           "data-behavior": "show-tip",
           "data-tip-place": "top",
@@ -152,7 +150,7 @@ var NodesGridDials = React.createClass({
       }
 
       return (
-        <div className="nodes-grid-dials-item" key={host.id}>
+        <div className="nodes-grid-dials-item" key={node.get("id")}>
           <div className="chart">
             <Chart calcHeight={function (w) { return w; }}>
               <DialChart data={config.data}

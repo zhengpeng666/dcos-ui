@@ -152,16 +152,16 @@ var NodesGridView = React.createClass({
     );
   },
 
-  getActiveServiceIds: function (hosts) {
-    var frameworkIDs = {};
+  getActiveServiceIds: function (nodes) {
+    var serviceIDs = {};
 
-    hosts.forEach(function (host) {
-      host.framework_ids.forEach(function (id) {
-        frameworkIDs[id] = true;
+    nodes.forEach(function (node) {
+      node.getServiceIDs().forEach(function (id) {
+        serviceIDs[id] = true;
       });
     });
 
-    return Object.keys(frameworkIDs);
+    return Object.keys(serviceIDs);
   },
 
   getServicesList: function (props) {
