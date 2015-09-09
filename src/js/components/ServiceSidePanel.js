@@ -1,3 +1,4 @@
+import _ from "underscore";
 import classNames from "classnames";
 import React from "react/addons";
 import {SidePanel} from "reactjs-components";
@@ -123,8 +124,8 @@ const ServiceSidePanel = React.createClass({
 
     let appImages = MarathonStore.getServiceImages(service.name);
     let appHealth = MarathonStore.getServiceHealth(service.name);
-    let healthClass = `${HealthStatus[appHealth.key].classNames} side-panel-subheader`;
-    let healthLabel = HealthLabels[HealthStatus[appHealth.key].key];
+    let healthClass =
+      `${HealthStatus[appHealth.key].classNames} side-panel-subheader`;
     let activeTasksCount = this.getActiveTasksCount(service);
     let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
     let imageTag = null;
@@ -145,7 +146,7 @@ const ServiceSidePanel = React.createClass({
           </div>
           <div>
             <span className={healthClass}>
-              {healthLabel}
+              {HealthLabels[HealthStatus[appHealth.key].key]}
             </span>
             <span>
               {`${activeTasksCount} Active ${activeTasksSubHeader}`}
@@ -170,33 +171,32 @@ const ServiceSidePanel = React.createClass({
 
   getTabs: function () {
     let currentTab = this.state.currentTab;
-    let tasksClassSet = classNames({
-      "button button-link": true,
-      "button-primary": currentTab === "tasks"
-    });
-    let detailsClassSet = classNames({
-      "button button-link": true,
-      "button-primary": currentTab === "details"
-    });
 
-    return (
-      <div className="side-panel-tabs">
+    // key is the name, value is the display name
+    const TABS = {
+      tasks: "Tasks",
+      details: "Details"
+    };
+
+    return _.map(Object.keys(TABS), function (tab, i) {
+      let classSet = classNames({
+        "button button-link": true,
+        "button-primary": currentTab === tab
+      });
+
+      return (
         <div
-          className={tasksClassSet}
-          onClick={this.handleTabClick.bind(this, "tasks")}>
-          Tasks
+          key={i}
+          className={classSet}
+          onClick={this.handleTabClick.bind(this, tab)}>
+          {TABS[tab]}
         </div>
-        <div
-          className={detailsClassSet}
-          onClick={this.handleTabClick.bind(this, "details")}>
-          Details
-        </div>
-      </div>
-    );
+      );
+    }, this);
   },
 
   getTasksView: function () {
-    // Going to leave table here.
+    // Coming soon: table view.
     return null;
   },
 
@@ -206,7 +206,11 @@ const ServiceSidePanel = React.createClass({
       return this.getTasksView();
     }
 
-    return this.getInfo();
+    return (
+      <div className="container container-pod container-pod-short">
+        {this.getInfo()}
+      </div>
+    );
   },
 
   getServiceDetails: function () {
@@ -228,7 +232,9 @@ const ServiceSidePanel = React.createClass({
               </div>
             </div>
           </div>
-          {this.getTabs()}
+          <div className="side-panel-tabs">
+            {this.getTabs()}
+          </div>
         </div>
         {this.getTabView()}
       </div>
@@ -250,19 +256,6 @@ const ServiceSidePanel = React.createClass({
     );
   },
 
-  getInfoRow: function (header, value) {
-    return (
-      <p className="row flex-box">
-        <span className="column-4 emphasize">
-          {header}
-        </span>
-        <span className="column-12">
-          {value}
-        </span>
-      </p>
-    );
-  },
-
   getInfo: function () {
     let serviceName = this.props.serviceName;
     let service = MesosStateStore.getServiceFromName(serviceName);
@@ -275,24 +268,28 @@ const ServiceSidePanel = React.createClass({
     }
 
     let registeredTime = service.registered_time.toFixed(3) * 1000;
-    let date = DateUtil.msToDateStr(registeredTime);
-    let hostName = service.hostname;
-    let instances = marathonService.snapshot.instances;
-    let command = marathonService.snapshot.cmd;
-    let ports = marathonService.snapshot.ports;
-    let version = marathonService.snapshot.version;
+    let headerValueMapping = {
+      "Host Name": service.hostname,
+      Tasks: service.tasks.length,
+      Registered: DateUtil.msToDateStr(registeredTime),
+      Instances: marathonService.snapshot.instances,
+      Command: marathonService.snapshot.cmd,
+      Ports: marathonService.snapshot.ports.join(", "),
+      Version: marathonService.snapshot.version
+    };
 
-    return (
-      <div className="container container-pod container-pod-short">
-        {this.getInfoRow("Host Name", hostName)}
-        {this.getInfoRow("Tasks", service.tasks.length)}
-        {this.getInfoRow("Registered", date)}
-        {this.getInfoRow("Instances", instances)}
-        {this.getInfoRow("Command", command)}
-        {this.getInfoRow("Ports", ports)}
-        {this.getInfoRow("Version", version)}
-      </div>
-    );
+    return _.map(Object.keys(headerValueMapping), function (header, i) {
+      return (
+        <p key={i} className="row flex-box">
+          <span className="column-4 emphasize">
+            {header}
+          </span>
+          <span className="column-12">
+            {headerValueMapping[header]}
+          </span>
+        </p>
+      );
+    });
   },
 
   render: function () {

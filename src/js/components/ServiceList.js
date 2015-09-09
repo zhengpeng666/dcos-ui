@@ -1,4 +1,5 @@
 const _ = require("underscore");
+import classNames from "classnames";
 import {List} from "reactjs-components";
 const React = require("react/addons");
 
@@ -74,7 +75,11 @@ let ServiceList = React.createClass({
         );
       }
 
-      let classSet = `h3 flush-top flush-bottom text-align-right ${state.classNames}`;
+      let classSet = classNames(
+        "h3 flush-top flush-bottom text-align-right",
+        state.classNames
+      );
+
       return {
         value: [
           (
