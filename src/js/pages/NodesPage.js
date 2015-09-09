@@ -38,7 +38,7 @@ function getMesosHosts(state) {
     services: lastState.getServiceList().getItems(),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
     totalHostsResources: states.getResourceStatesForNodeIDs(nodeIDs),
-    totalResources: states.last().getTotalSlaveResources()
+    totalResources: states.last().getSlaveTotalResources()
   };
 }
 

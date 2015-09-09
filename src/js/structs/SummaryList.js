@@ -20,12 +20,21 @@ export default class SummaryList extends List {
     this.add(new StateSummary({snapshot, date}));
   }
 
+  getActiveNodesByState() {
+    return this.getItems().map(function (state) {
+      return {
+        date: state.getSnapshotDate(),
+        slavesCount: state.getActiveSlaves().length
+      };
+    });
+  }
+
   getResourceStatesForServiceIDs(ids) {
     let stateResources = this.getItems().map(function (state) {
       return {
         date: state.getSnapshotDate(),
         resources: state.getServiceList().filter({ids}).sumUsedResources(),
-        totalResources: state.getTotalSlaveResources()
+        totalResources: state.getSlaveTotalResources()
       };
     });
 
@@ -37,7 +46,7 @@ export default class SummaryList extends List {
       return {
         date: state.getSnapshotDate(),
         resources: state.getNodesList().filter({ids}).sumUsedResources(),
-        totalResources: state.getTotalSlaveResources()
+        totalResources: state.getSlaveTotalResources()
       };
     });
 

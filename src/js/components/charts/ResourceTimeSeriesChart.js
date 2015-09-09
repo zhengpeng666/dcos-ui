@@ -1,4 +1,3 @@
-var _ = require("underscore");
 var React = require("react/addons");
 var Units = require("../../utils/Units");
 
@@ -12,8 +11,9 @@ var ResourceTimeSeriesChart = React.createClass({
 
   propTypes: {
     colorIndex: React.PropTypes.number.isRequired,
-    allocResources: React.PropTypes.object.isRequired,
+    usedResources: React.PropTypes.object.isRequired,
     totalResources: React.PropTypes.object.isRequired,
+    usedResourcesStates: React.PropTypes.object.isRequired,
     mode: React.PropTypes.string,
     refreshRate: React.PropTypes.number.isRequired
   },
@@ -29,21 +29,15 @@ var ResourceTimeSeriesChart = React.createClass({
     return [{
       name: "Alloc",
       colorIndex: this.props.colorIndex,
-      values: props.allocResources[props.mode]
+      values: props.usedResourcesStates[props.mode]
     }];
   },
 
-  getLatestPercent: function (values) {
-    return _.last(values).percentage;
-  },
-
-  getHeadline: function (values, totalValues) {
-    var value = _.last(values).value;
-    var totalValue = _.last(totalValues).value;
+  getHeadline: function (usedValue, totalValue) {
     if (this.props.mode === "cpus") {
-      return value + " of " + totalValue + " Shares";
+      return usedValue + " of " + totalValue + " Shares";
     } else {
-      return Units.filesize(value * 1024 * 1024, 0) + " of " +
+      return Units.filesize(usedValue * 1024 * 1024, 0) + " of " +
         Units.filesize(totalValue * 1024 * 1024, 0);
     }
   },
@@ -64,14 +58,15 @@ var ResourceTimeSeriesChart = React.createClass({
 
   render: function () {
     var props = this.props;
-    var allocResources = props.allocResources[props.mode];
-    var totalResources = props.totalResources[props.mode];
+    var usedValue = props.usedResources[props.mode];
+    var totalValue = props.totalResources[props.mode];
+    let percentage = Math.round(100 * usedValue / totalValue);
 
     return (
       <div className="chart">
         <TimeSeriesLabel colorIndex={this.props.colorIndex}
-          currentValue={this.getLatestPercent(allocResources)}
-          subHeading={this.getHeadline(allocResources, totalResources)} />
+          currentValue={percentage}
+          subHeading={this.getHeadline(usedValue, totalValue)} />
         {this.getChart()}
         <div className="timeseries-selector" />
       </div>

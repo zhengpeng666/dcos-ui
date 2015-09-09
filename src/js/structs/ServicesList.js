@@ -48,4 +48,33 @@ export default class ServicesList extends List {
     let resourcesList = _.pluck(services, "used_resources");
     return MesosSummaryUtil.sumResources(resourcesList);
   }
+
+  sumTaskStates() {
+    let services = this.getItems();
+
+    if (services.length === 0) {
+      return {};
+    }
+
+    let tasks = {
+      TASK_STAGING: 0,
+      TASK_STARTING: 0,
+      TASK_RUNNING: 0,
+      TASK_FINISHED: 0,
+      TASK_FAILED: 0,
+      TASK_LOST: 0,
+      TASK_ERROR: 0
+    };
+    let taskTypes = Object.keys(tasks);
+
+    services.forEach(function (service) {
+      taskTypes.forEach(function (taskType) {
+        if (service[taskType]) {
+          tasks[taskType] += service[taskType];
+        }
+      });
+    });
+
+    return tasks;
+  }
 }
