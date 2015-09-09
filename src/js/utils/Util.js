@@ -6,6 +6,7 @@
  * This is not the original file, and has been modified
  */
 
+import _ from "underscore";
 import React from "react";
 
 function noop() {
@@ -26,18 +27,18 @@ function es6ify(mixin) {
     // convert to ES6 class
     class MixinClass extends Base {}
 
-    const clonedMixin = Object.assign({}, mixin);
+    const clonedMixin = _.extend({}, mixin);
     // These React properties are defined as ES7 class static properties
     let staticProps = [
       "childContextTypes", "contextTypes",
       "defaultProps", "propTypes"
     ];
-    staticProps.forEach(function (static) {
-      MixinClass[static] = clonedMixin[static];
-      delete clonedMixin[static];
+    staticProps.forEach(function (staticProp) {
+      MixinClass[staticProp] = clonedMixin[staticProp];
+      delete clonedMixin[staticProp];
     });
 
-    Object.assign(MixinClass.prototype, clonedMixin);
+    _.extend(MixinClass.prototype, clonedMixin);
 
     return MixinClass;
   };
@@ -57,13 +58,13 @@ const Util = {
       "componentWillUnmount", "render"
     ];
     functions.forEach(function (lifecycleFn) {
-      Base.prototype[lifecycleFn] = noop
+      Base.prototype[lifecycleFn] = noop;
     });
 
     mixins.reverse();
 
     mixins.forEach(function (mixin) {
-      Base = es6ify(mixin)(Base)
+      Base = es6ify(mixin)(Base);
     });
 
     return Base;
