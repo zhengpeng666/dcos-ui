@@ -183,15 +183,12 @@ export default class ServiceSidePanel extends DetailSidePanel {
   }
 
   getTasksView() {
-    // This will all get replaced by ServiceTasksView soon enough. But lets
-    // merge in the Table first.
-    let tasks = MesosStateStore.getTasksFromServiceName(this.props.serviceName);
     return (
-      <div className="container container-pod">
-        <ServiceTasksTable tasks={tasks} />
+      <div className="container container-pod flush-top">
+        <ServiceTasksView serviceName={this.props.serviceName} />
       </div>
     );
-  }
+  },
 
   getTabView() {
     let currentTab = this.state.currentTab;
@@ -253,7 +250,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
     return (
       <a className="button button-primary text-align-right"
         onClick={this.handleOpenServiceButtonClick}>
-        Open service
+        Open Service
       </a>
     );
   }
