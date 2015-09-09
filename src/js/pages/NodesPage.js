@@ -21,16 +21,15 @@ var SidebarActions = require("../events/SidebarActions");
 var NODES_DISPLAY_LIMIT = 300;
 
 function getMesosHosts(state) {
-  var filters = _.pick(state, "searchString", "byServiceFilter");
-  var hosts = MesosSummaryStore.getHosts(filters);
-
   let states = MesosSummaryStore.get("states");
   let lastState = states.last();
   let nodes = lastState.getNodesList();
+  let filters = _.pick(state, "searchString", "byServiceFilter");
   let filteredNodes = nodes.filter({
     service: filters.byServiceFilter,
     name: filters.searchString
   }).getItems();
+  let nodeIDs = _.pluck(filteredNodes, "id");
 
   return {
     nodes: filteredNodes,
@@ -38,8 +37,8 @@ function getMesosHosts(state) {
     refreshRate: Config.getRefreshRate(),
     services: lastState.getServiceList().getItems(),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
-    totalHostsResources: MesosSummaryStore.getTotalHostsResources(hosts),
-    totalResources: MesosSummaryStore.getTotalResources()
+    totalHostsResources: states.getResourceStatesForNodeIDs(nodeIDs),
+    totalResources: states.last().getTotalSlaveResources()
   };
 }
 
