@@ -22,7 +22,7 @@ describe("ServiceSidePanel", function () {
           name: "foo",
           registered_time: 1000,
           tasks: [],
-          snapshot: {name: "foo"}
+          snapshot: {name: "foo", ports: [1, 2]}
         };
       }
 
@@ -88,7 +88,7 @@ describe("ServiceSidePanel", function () {
         );
 
         var info = instance.getInfo();
-        expect(TestUtils.isElement(info)).toEqual(true);
+        expect(TestUtils.isElement(info[0])).toEqual(true);
       });
     });
 
