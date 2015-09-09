@@ -47,7 +47,7 @@ describe("FilterByService", function () {
     it("should display the badge correctly", function () {
       let service = new Service(MockFrameworks.frameworks[4]);
       var item = TestUtils.renderIntoDocument(
-        this.instance.itemHtml(service)
+        this.instance.getItemHtml(service)
       );
       var badge = TestUtils.findRenderedDOMComponentWithClass(item, "badge");
       expect(parseInt(badge.getDOMNode().textContent, 10))

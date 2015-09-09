@@ -1,7 +1,7 @@
 jest.dontMock("../../utils/MesosSummaryUtil");
 
-let Service = require("../Service");
 let ServicesList = require("../ServicesList");
+let NodesList = require("../NodesList");
 let StateSummary = require("../StateSummary");
 
 describe("StateSummary", function () {
@@ -28,7 +28,25 @@ describe("StateSummary", function () {
       let instance = new StateSummary({snapshot: {frameworks}});
       let services = instance.getServiceList();
       expect(services.getItems().length).toEqual(1);
-      expect(services.getItems()[0] instanceof Service).toBeTruthy();
+      expect(services instanceof ServicesList).toBeTruthy();
+    });
+
+  });
+
+  describe("#getNodesList", function () {
+
+    it("returns an instance of NodesList", function () {
+      let instance = new StateSummary();
+      let nodes = instance.getNodesList();
+      expect(nodes instanceof NodesList).toBeTruthy();
+    });
+
+    it("NodesList contains instances of Node", function () {
+      let slaves = [{a: 1}];
+      let instance = new StateSummary({snapshot: {slaves}});
+      let nodes = instance.getNodesList();
+      expect(nodes.getItems().length).toEqual(1);
+      expect(nodes instanceof NodesList).toBeTruthy();
     });
 
   });

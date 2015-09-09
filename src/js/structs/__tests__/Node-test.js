@@ -6,7 +6,7 @@ describe("Node", function () {
 
     it("returns ids of services running on node", function () {
       let node = new Node({framework_ids: [1, 2, 3]});
-      expect(node.getServices()).toEqual([1, 2, 3]);
+      expect(node.getServiceIDs()).toEqual([1, 2, 3]);
     });
 
   });

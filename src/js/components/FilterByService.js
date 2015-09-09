@@ -38,7 +38,7 @@ var FilterByService = React.createClass({
     return (
       <span className="badge-container">
         <span>{service.get("name")}</span>
-        <span className="badge">{service.getSlaveIDs().length}</span>
+        <span className="badge">{service.getNodeIDs().length}</span>
       </span>
     );
   },

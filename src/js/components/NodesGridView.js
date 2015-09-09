@@ -156,7 +156,7 @@ var NodesGridView = React.createClass({
     var serviceIDs = {};
 
     nodes.forEach(function (node) {
-      node.getServices().forEach(function (id) {
+      node.getServiceIDs().forEach(function (id) {
         serviceIDs[id] = true;
       });
     });

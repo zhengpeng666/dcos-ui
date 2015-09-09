@@ -4,9 +4,21 @@ jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/Store");
 
 let MarathonStore = require("../../stores/MarathonStore");
+let Service = require("../Service");
 let ServicesList = require("../ServicesList");
 
 describe("ServicesList", function () {
+
+  describe("#constructor", function () {
+
+    it("creates instances of Service", function () {
+      let items = [{foo: "bar"}];
+      let list = new ServicesList({items});
+      items = list.getItems();
+      expect(items[0] instanceof Service).toBeTruthy();
+    });
+
+  });
 
   describe("#filter", function () {
 

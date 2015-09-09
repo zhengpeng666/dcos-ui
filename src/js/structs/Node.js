@@ -1,7 +1,7 @@
 import Item from "./Item";
 
 export default class Node extends Item {
-  getServices() {
+  getServiceIDs() {
     return this.get("framework_ids");
   }
 
