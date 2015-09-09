@@ -12,27 +12,38 @@ import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import StringUtil from "../utils/StringUtil";
 
-const ServiceSidePanel = React.createClass({
+const METHODS_TO_BIND = [
+  "onMesosStateChange",
+  "onMesosSummaryChange",
+  "onMarathonStoreChange",
+  "handlePanelClose",
+  "handleOpenServiceButtonClick",
+  "handleTabClick",
+  "getBasicInfo",
+  "getHeader",
+  "getTabs",
+  "getTasksView",
+  "getTabView",
+  "getServiceDetails",
+  "getOpenServiceButton",
+  "getInfo"
+];
 
-  displayName: "ServiceSidePanel",
+export default class ServiceSidePanel extends React.Component {
 
-  propTypes: {
-    open: React.PropTypes.bool,
-    serviceName: React.PropTypes.string,
-    onClose: React.PropTypes.func
-  },
+  constructor(...args) {
+    super(...args);
 
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-
-  getInitialState: function () {
-    return {
+    this.state = {
       currentTab: "tasks"
     };
-  },
 
-  shouldComponentUpdate: function (nextProps, nextState) {
+    METHODS_TO_BIND.forEach(function (method) {
+      this[method] = this[method].bind(this);
+    }, this);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
     let props = this.props;
     let currentService = props.serviceName;
     let nextService = nextProps.serviceName;
@@ -42,9 +53,9 @@ const ServiceSidePanel = React.createClass({
 
     return nextService && currentService !== nextService ||
       currentTab !== nextTab || props.open !== nextProps.open;
-  },
+  }
 
-  componentDidMount: function () {
+  componentDidMount() {
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
     );
@@ -58,9 +69,9 @@ const ServiceSidePanel = React.createClass({
     );
 
     this.forceUpdate();
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
     );
@@ -72,9 +83,9 @@ const ServiceSidePanel = React.createClass({
     MarathonStore.removeChangeListener(
       EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
     );
-  },
+  }
 
-  onMesosSummaryChange: function () {
+  onMesosSummaryChange() {
     if (MesosSummaryStore.get("statesProcessed")) {
       // Once we have the data we need (frameworks), stop listening for changes.
       MesosSummaryStore.removeChangeListener(
@@ -83,44 +94,44 @@ const ServiceSidePanel = React.createClass({
 
       this.forceUpdate();
     }
-  },
+  }
 
-  onMarathonStoreChange: function () {
+  onMarathonStoreChange() {
     MarathonStore.removeChangeListener(
       EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
     );
 
     this.forceUpdate();
-  },
+  }
 
-  onMesosStateChange: function () {
+  onMesosStateChange() {
     if (MesosStateStore.get("lastMesosState")) {
       MesosStateStore.removeChangeListener(
         EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
       );
       this.forceUpdate();
     }
-  },
+  }
 
-  handlePanelClose: function () {
+  handlePanelClose() {
     if (_.isFunction(this.props.onClose)) {
       this.props.onClose();
     }
     this.forceUpdate();
-  },
+  }
 
-  handleOpenServiceButtonClick: function () {
+  handleOpenServiceButtonClick() {
     this.context.router.transitionTo(
       "service-ui",
       {serviceName: this.props.serviceName}
     );
-  },
+  }
 
-  handleTabClick: function (nextTab) {
+  handleTabClick(nextTab) {
     this.setState({currentTab: nextTab});
-  },
+  }
 
-  getBasicInfo: function () {
+  getBasicInfo() {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (service == null) {
       return null;
@@ -162,9 +173,9 @@ const ServiceSidePanel = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
-  getHeader: function () {
+  getHeader() {
     return (
       <div>
         <span className="button button-link button-inverse"
@@ -174,9 +185,9 @@ const ServiceSidePanel = React.createClass({
         </span>
       </div>
     );
-  },
+  }
 
-  getTabs: function () {
+  getTabs() {
     let currentTab = this.state.currentTab;
 
     // key is the name, value is the display name
@@ -200,14 +211,14 @@ const ServiceSidePanel = React.createClass({
         </div>
       );
     }, this);
-  },
+  }
 
-  getTasksView: function () {
+  getTasksView() {
     // Coming soon: table view.
     return null;
-  },
+  }
 
-  getTabView: function () {
+  getTabView() {
     let currentTab = this.state.currentTab;
     if (currentTab === "tasks") {
       return this.getTasksView();
@@ -218,9 +229,9 @@ const ServiceSidePanel = React.createClass({
         {this.getInfo()}
       </div>
     );
-  },
+  }
 
-  getServiceDetails: function () {
+  getServiceDetails() {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (service == null) {
       return (
@@ -255,9 +266,9 @@ const ServiceSidePanel = React.createClass({
         {this.getTabView()}
       </div>
     );
-  },
+  }
 
-  getOpenServiceButton: function () {
+  getOpenServiceButton() {
     if (!MesosSummaryStore.hasServiceUrl(this.props.serviceName)) {
       return null;
     }
@@ -270,9 +281,9 @@ const ServiceSidePanel = React.createClass({
         Open service
       </a>
     );
-  },
+  }
 
-  getInfo: function () {
+  getInfo() {
     let serviceName = this.props.serviceName;
     let service = MesosStateStore.getServiceFromName(serviceName);
     let marathonService = MarathonStore.getServiceFromName(serviceName);
@@ -306,9 +317,9 @@ const ServiceSidePanel = React.createClass({
         </p>
       );
     });
-  },
+  }
 
-  render: function () {
+  render() {
     // TODO: rename from classNames to className
     return (
       <SidePanel classNames="side-panel-detail"
@@ -319,6 +330,14 @@ const ServiceSidePanel = React.createClass({
       </SidePanel>
     );
   }
-});
+}
 
-module.exports = ServiceSidePanel;
+ServiceSidePanel.propTypes = {
+  open: React.PropTypes.bool,
+  serviceName: React.PropTypes.string,
+  onClose: React.PropTypes.func
+};
+
+ServiceSidePanel.contextTypes = {
+  router: React.PropTypes.func
+};
