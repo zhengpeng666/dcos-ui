@@ -4,42 +4,44 @@ import {SidePanel} from "reactjs-components";
 import EventTypes from "../constants/EventTypes";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 
-const NodeSidePanel = React.createClass({
+const METHODS_TO_BIND = [
+  "onMesosSummaryChange",
+  "getNodeDetails",
+  "handlePanelClose"
+];
 
-  displayName: "NodeSidePanel",
+export default class NodeSidePanel extends React.Component {
 
-  propTypes: {
-    open: React.PropTypes.bool,
-    nodeID: React.PropTypes.string,
-    onClose: React.PropTypes.func
-  },
+  constructor(...args) {
+    super(...args);
 
-  contextTypes: {
-    router: React.PropTypes.func
-  },
+    METHODS_TO_BIND.forEach(function (method) {
+      this[method] = this[method].bind(this);
+    }, this);
+  }
 
-  shouldComponentUpdate: function (nextProps) {
+  shouldComponentUpdate(nextProps) {
     let props = this.props;
 
     return props.nodeID !== nextProps.nodeID ||
       props.open !== nextProps.open;
-  },
+  }
 
-  componentDidMount: function () {
+  componentDidMount() {
     MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
 
     this.forceUpdate();
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
-  },
+  }
 
-  onMesosSummaryChange: function () {
+  onMesosSummaryChange() {
     if (MesosSummaryStore.get("statesProcessed")) {
       // Once we have the data we need (nodes), stop listening for changes.
       MesosSummaryStore.removeChangeListener(
@@ -48,14 +50,14 @@ const NodeSidePanel = React.createClass({
 
       this.forceUpdate();
     }
-  },
+  }
 
-  handlePanelClose: function () {
+  handlePanelClose() {
     this.props.onClose();
     this.forceUpdate();
-  },
+  }
 
-  getHeader: function () {
+  getHeader() {
     return (
       <div>
         <span className="button button-link button-inverse"
@@ -65,9 +67,9 @@ const NodeSidePanel = React.createClass({
         </span>
       </div>
     );
-  },
+  }
 
-  getNodeDetails: function () {
+  getNodeDetails() {
     let node = MesosSummaryStore.getNodeFromID(this.props.nodeID);
 
     if (node == null) {
@@ -90,9 +92,9 @@ const NodeSidePanel = React.createClass({
         </h2>
       </div>
     );
-  },
+  }
 
-  render: function () {
+  render() {
 
     // TODO: rename from classNames to className
     return (
@@ -104,6 +106,14 @@ const NodeSidePanel = React.createClass({
       </SidePanel>
     );
   }
-});
+}
 
-module.exports = NodeSidePanel;
+NodeSidePanel.contextTypes = {
+  router: React.PropTypes.func
+};
+
+NodeSidePanel.propTypes = {
+  open: React.PropTypes.bool,
+  nodeID: React.PropTypes.string,
+  onClose: React.PropTypes.func
+};
