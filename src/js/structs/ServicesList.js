@@ -52,10 +52,6 @@ export default class ServicesList extends List {
   sumTaskStates() {
     let services = this.getItems();
 
-    if (services.length === 0) {
-      return {};
-    }
-
     let tasks = {
       TASK_STAGING: 0,
       TASK_STARTING: 0,
@@ -65,6 +61,11 @@ export default class ServicesList extends List {
       TASK_LOST: 0,
       TASK_ERROR: 0
     };
+
+    if (services.length === 0) {
+      return tasks;
+    }
+
     let taskTypes = Object.keys(tasks);
 
     services.forEach(function (service) {

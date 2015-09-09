@@ -43,8 +43,7 @@ describe("DashboardPage", function () {
       expect(list).toEqual([{name: "foo"}]);
     });
 
-    it("should pick out name, webui_url," +
-      "TASK_RUNNING, and id keys only", function () {
+    it("picks out [name, webui_url, TASK_RUNNING, id] keys only", function () {
       let services = new ServicesList({items: [{
         name: "foo",
         health: {key: "bar"},
@@ -91,7 +90,7 @@ describe("DashboardPage", function () {
         {name: "UnhealthyFramework"},
         {name: "HealthyFramework"},
         {name: "NAFramework"}
-      ]});;
+      ]});
       let list = this.instance.getServicesList(services.getItems());
 
       expect(list[0].name).toEqual("UnhealthyFramework");
