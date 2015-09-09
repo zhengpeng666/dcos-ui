@@ -8,19 +8,23 @@
 
 import React from "react";
 
-const noop = () => null;
-const trueNoop = () => true;
+function noop() {
+  return null;
+}
+function trueNoop() {
+  return true;
+}
 
-const es6ify = (mixin) => {
+function es6ify(mixin) {
   if (typeof mixin === "function") {
     // mixin is already es6 style
     return mixin;
   }
 
-  return (Base) => {
+  return function (Base) {
     // mixin is old-react style plain object
     // convert to ES6 class
-    class NewClass extends Base {}
+    class MixinClass extends Base {}
 
     const clonedMixin = Object.assign({}, mixin);
     // These React properties are defined as ES7 class static properties
@@ -28,19 +32,19 @@ const es6ify = (mixin) => {
       "childContextTypes", "contextTypes",
       "defaultProps", "propTypes"
     ];
-    staticProps.forEach(m => {
-      NewClass[m] = clonedMixin[m];
-      delete clonedMixin[m];
+    staticProps.forEach(function (static) {
+      MixinClass[static] = clonedMixin[static];
+      delete clonedMixin[static];
     });
 
-    Object.assign(NewClass.prototype, clonedMixin);
+    Object.assign(MixinClass.prototype, clonedMixin);
 
-    return NewClass;
+    return MixinClass;
   };
-};
+}
 
 const Util = {
-  mixin: (...mixins) => {
+  mixin: function (...mixins) {
     // Creates base class
     class Base extends React.Component {}
 
@@ -52,11 +56,15 @@ const Util = {
       "componentWillReceiveProps", "componentWillUpdate", "componentDidUpdate",
       "componentWillUnmount", "render"
     ];
-    functions.forEach(m => Base.prototype[m] = noop);
+    functions.forEach(function (lifecycleFn) {
+      Base.prototype[lifecycleFn] = noop
+    });
 
     mixins.reverse();
 
-    mixins.forEach(mixin => Base = es6ify(mixin)(Base));
+    mixins.forEach(function (mixin) {
+      Base = es6ify(mixin)(Base)
+    });
 
     return Base;
   }
