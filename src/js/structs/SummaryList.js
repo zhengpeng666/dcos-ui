@@ -32,4 +32,16 @@ export default class SummaryList extends List {
     return MesosSummaryUtil.stateResourcesToResourceStates(stateResources);
   }
 
+  getResourceStatesForNodeIDs(ids) {
+    let stateResources = this.getItems().map(function (state) {
+      return {
+        date: state.getSnapshotDate(),
+        resources: state.getNodesList().filter({ids}).sumUsedResources(),
+        totalResources: state.getTotalSlaveResources()
+      };
+    });
+
+    return MesosSummaryUtil.stateResourcesToResourceStates(stateResources);
+  }
+
 }

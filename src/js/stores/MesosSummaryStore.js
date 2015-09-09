@@ -83,12 +83,6 @@ var MesosSummaryStore = Store.createStore({
     return _.last(this.get("mesosStates"));
   },
 
-  getTotalFrameworksResources: function (frameworks) {
-    return MesosSummaryUtil.sumListResources(
-      this.get("mesosStates"), frameworks, "used_resources"
-    );
-  },
-
   getTotalHostsResources: function (hosts) {
     return MesosSummaryUtil.sumListResources(
       this.get("mesosStates"), hosts, "used_resources"
