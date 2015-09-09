@@ -1,4 +1,3 @@
-import _ from "underscore";
 import classNames from "classnames";
 import React from "react/addons";
 import {SidePanel} from "reactjs-components";
@@ -112,10 +111,6 @@ const ServiceSidePanel = React.createClass({
     this.setState({currentTab: nextTab});
   },
 
-  getActiveTasksCount: function (service) {
-    return service.TASK_RUNNING + service.TASK_STARTING + service.TASK_STAGING;
-  },
-
   getBasicInfo: function () {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (service == null) {
@@ -124,9 +119,12 @@ const ServiceSidePanel = React.createClass({
 
     let appImages = MarathonStore.getServiceImages(service.name);
     let appHealth = MarathonStore.getServiceHealth(service.name);
-    let healthClass =
-      `${HealthStatus[appHealth.key].classNames} side-panel-subheader`;
-    let activeTasksCount = this.getActiveTasksCount(service);
+    let healthClass = classNames(
+      HealthStatus[appHealth.key].classNames,
+      "side-panel-subheader"
+    );
+    let activeTasksCount = service.TASK_RUNNING + service.TASK_STARTING +
+      service.TASK_STAGING;
     let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
     let imageTag = null;
 
@@ -178,7 +176,7 @@ const ServiceSidePanel = React.createClass({
       details: "Details"
     };
 
-    return _.map(Object.keys(TABS), function (tab, i) {
+    return Object.keys(TABS).map(function (tab, i) {
       let classSet = classNames({
         "button button-link": true,
         "button-primary": currentTab === tab
@@ -278,7 +276,7 @@ const ServiceSidePanel = React.createClass({
       Version: marathonService.snapshot.version
     };
 
-    return _.map(Object.keys(headerValueMapping), function (header, i) {
+    return Object.keys(headerValueMapping).map(function (header, i) {
       return (
         <p key={i} className="row flex-box">
           <span className="column-4 emphasize">
