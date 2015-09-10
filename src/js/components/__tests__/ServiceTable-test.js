@@ -24,8 +24,10 @@ MesosSummaryStore.init();
 MesosSummaryStore.processSummary(stateJSON);
 
 function getTable(isAppsProcessed) {
+  let last = MesosSummaryStore.get("states").last();
+  let services = last.getServiceList().getItems();
   return TestUtils.renderIntoDocument(
-    <ServiceTable services={MesosSummaryStore.getFrameworks()}
+    <ServiceTable services={services}
       healthProcessed={isAppsProcessed} />
   );
 }
@@ -35,13 +37,14 @@ describe("ServiceTable", function () {
   describe("#renderHealth", function () {
 
     beforeEach(function () {
-      this.frameworks = MesosSummaryStore.getFrameworks();
+      let last = MesosSummaryStore.get("states").last();
+      this.services = last.getServiceList().getItems();
     });
 
-    it("should have loaders on all frameworks", function () {
+    it("should have loaders on all services", function () {
       var table = getTable(false);
 
-      this.frameworks.slice(0).forEach(function (row) {
+      this.services.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(
           table.renderHealth(null, row)
         );
@@ -53,10 +56,10 @@ describe("ServiceTable", function () {
       });
     });
 
-    it("should have N/A health status on all frameworks", function () {
+    it("should have N/A health status on all services", function () {
       var table = getTable(true);
 
-      this.frameworks.slice(0).forEach(function (row) {
+      this.services.slice(0).forEach(function (row) {
         var healthlabel = TestUtils.renderIntoDocument(
           table.renderHealth(null, row)
         );

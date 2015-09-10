@@ -8,7 +8,9 @@ export default class StateSummary {
   constructor(options = {}) {
     this.snapshot = {
       frameworks: [],
-      slaves: []
+      slaves: [],
+      cluster: "",
+      hostname: ""
     };
 
     this.metadata = {
@@ -41,6 +43,10 @@ export default class StateSummary {
 
   getSnapshotDate() {
     return this.metadata.date;
+  }
+
+  getClusterName() {
+    return this.snapshot.cluster;
   }
 
   getActiveSlaves() {
