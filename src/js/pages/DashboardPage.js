@@ -19,16 +19,20 @@ var ServiceSidePanel = require("../components/ServiceSidePanel");
 var SidebarActions = require("../events/SidebarActions");
 
 function getMesosState() {
+  let states = MesosSummaryStore.get("states");
+  let last = states.last();
+  let services = last.getServiceList();
+
   return {
-    allocResources: MesosSummaryStore.getAllocResources(),
     // Need clone, modifying in place will make update components check for
     // change in the same array, in stead of two different references
     taskFailureRate: _.clone(MesosSummaryStore.get("taskFailureRate")),
-    hostsCount: MesosSummaryStore.getActiveHostsCount(),
+    hostsCount: states.getActiveNodesByState(),
     refreshRate: Config.getRefreshRate(),
-    services: MesosSummaryStore.getLatest().frameworks,
-    tasks: MesosSummaryStore.getTaskTotals(),
-    totalResources: MesosSummaryStore.getTotalResources(),
+    services,
+    usedResourcesStates: states.getResourceStatesForNodeIDs(),
+    usedResources: last.getSlaveUsedResources(),
+    totalResources: last.getSlaveTotalResources(),
     statesProcessed: MesosSummaryStore.get("statesProcessed")
   };
 }
@@ -116,13 +120,18 @@ var DashboardPage = React.createClass({
     Router.History.back();
   },
 
-  getServicesList: function (_services) {
+  getServicesList: function (services) {
     // Pick out only the data we need.
-    let services = _.map(_services, function (service) {
-      return _.pick(service, "name", "webui_url", "TASK_RUNNING", "id");
+    let servicesMap = services.map(function (service) {
+      return {
+        name: service.get("name"),
+        webui_url: service.get("webui_url"),
+        TASK_RUNNING: service.get("TASK_RUNNING"),
+        id: service.get("id")
+      };
     });
 
-    let sortedServices = _.sortBy(services, function (service) {
+    let sortedServices = _.sortBy(servicesMap, function (service) {
       let health = MarathonStore.getServiceHealth(service.name);
       if (health && health.key) {
         return HealthSorting[health.key];
@@ -165,7 +174,8 @@ var DashboardPage = React.createClass({
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="CPU Allocation" className="dashboard-panel">
               <ResourceTimeSeriesChart
-                allocResources={data.allocResources}
+                usedResourcesStates={data.usedResourcesStates}
+                usedResources={data.usedResources}
                 totalResources={data.totalResources}
                 mode="cpus"
                 refreshRate={data.refreshRate} />
@@ -175,7 +185,8 @@ var DashboardPage = React.createClass({
             <Panel title="Memory Allocation" className="dashboard-panel">
               <ResourceTimeSeriesChart
                 colorIndex={3}
-                allocResources={data.allocResources}
+                usedResourcesStates={data.usedResourcesStates}
+                usedResources={data.usedResources}
                 totalResources={data.totalResources}
                 mode="mem"
                 refreshRate={data.refreshRate} />
@@ -192,13 +203,13 @@ var DashboardPage = React.createClass({
             <Panel title="Services Health" className="dashboard-panel">
               <ServiceList
                 healthProcessed={appsProcessed}
-                services={this.getServicesList(data.services)} />
+                services={this.getServicesList(data.services.getItems())} />
               {this.getViewAllServicesBtn()}
             </Panel>
           </div>
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="Tasks" className="dashboard-panel">
-              <TasksChart tasks={data.tasks} />
+              <TasksChart tasks={data.services.sumTaskStates()} />
             </Panel>
           </div>
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">

@@ -46,7 +46,7 @@ function getMesosServices(state) {
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
     refreshRate: Config.getRefreshRate(),
     totalServiceResources: states.getResourceStatesForServiceIDs(serviceIDs),
-    totalResources: states.last().getTotalSlaveResources()
+    totalResources: states.last().getSlaveTotalResources()
   };
 }
 

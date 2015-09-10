@@ -13,9 +13,15 @@ var DashboardPage = require("../DashboardPage");
 var MarathonStore = require("../../stores/MarathonStore");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var MockMarathonResponse = require("./fixtures/MockMarathonResponse");
+var ServicesList = require("../../structs/ServicesList");
+var SummaryList = require("../../structs/SummaryList");
 
-MesosSummaryStore.getLatest = function () {
-  return {frameworks: []};
+MesosSummaryStore.get = function (key) {
+  if (key === "states") {
+    let list = new SummaryList();
+    list.addSnapshot({frameworks: []}, Date.now());
+    return list;
+  }
 };
 
 describe("DashboardPage", function () {
@@ -30,25 +36,24 @@ describe("DashboardPage", function () {
     });
 
     it("gets list of services", function () {
-      var services = [
+      let services = new ServicesList({items: [
         {name: "foo", health: {key: "bar"}}
-      ];
-      var list = this.instance.getServicesList(services);
+      ]});
+      let list = this.instance.getServicesList(services.getItems());
       expect(list).toEqual([{name: "foo"}]);
     });
 
-    it("should pick out name, webui_url," +
-      "TASK_RUNNING, and id keys only", function () {
-      var services = [{
+    it("picks out [name, webui_url, TASK_RUNNING, id] keys only", function () {
+      let services = new ServicesList({items: [{
         name: "foo",
         health: {key: "bar"},
         webui_url: "qux",
         TASK_RUNNING: "baz",
         id: "quux",
         corge: "grault"
-      }];
+      }]});
 
-      var list = this.instance.getServicesList(services);
+      let list = this.instance.getServicesList(services.getItems());
 
       expect(list).toEqual([{
         name: "foo",
@@ -59,36 +64,34 @@ describe("DashboardPage", function () {
     });
 
     it("handles services with missing health", function () {
-      var services = [
-        {name: "foo"}
-      ];
-      var list = this.instance.getServicesList(services);
+      let services = new ServicesList({items: [{name: "foo"}]});
+      let list = this.instance.getServicesList(services.getItems());
       expect(list).toEqual([{name: "foo"}]);
     });
 
     it("should not return more services than servicesListLength", function () {
-      var services = [
+      let services = new ServicesList({items: [
         {name: "foo", health: {key: "bar"}},
         {name: "foo", health: {key: "bar"}},
         {name: "foo", health: {key: "bar"}},
         {name: "foo", health: {key: "bar"}},
         {name: "foo", health: {key: "bar"}},
         {name: "foo", health: {key: "bar"}}
-      ];
-      var list = this.instance.getServicesList(services);
+      ]});
+      let list = this.instance.getServicesList(services.getItems());
       expect(list.length).toEqual(5);
     });
 
     it("should sort by health", function () {
       MarathonStore.processMarathonApps(MockMarathonResponse);
 
-      var servicesList = [
+      let services = new ServicesList({items: [
         {name: "IdleFramework"},
         {name: "UnhealthyFramework"},
         {name: "HealthyFramework"},
         {name: "NAFramework"}
-      ];
-      var list = this.instance.getServicesList(servicesList);
+      ]});
+      let list = this.instance.getServicesList(services.getItems());
 
       expect(list[0].name).toEqual("UnhealthyFramework");
       expect(list[1].name).toEqual("HealthyFramework");

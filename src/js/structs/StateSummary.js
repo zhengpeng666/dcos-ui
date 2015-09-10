@@ -13,8 +13,9 @@ export default class StateSummary {
 
     this.metadata = {
       date: undefined,
-      usedResources: {cpus: 0, mem: 0, disk: 0},
-      totalResources: {cpus: 0, mem: 0, disk: 0}
+      serviceUsedResources: {cpus: 0, mem: 0, disk: 0},
+      slaveUsedResources: {cpus: 0, mem: 0, disk: 0},
+      slaveTotalResources: {cpus: 0, mem: 0, disk: 0}
     };
 
     let snapshot = options.snapshot || this.snapshot;
@@ -25,13 +26,25 @@ export default class StateSummary {
 
     this.metadata.date = options.date || Date.now();
     // Store computed data – this is something we may not need to store
-    this.metadata.totalResources = MesosSummaryUtil.sumResources(
+    this.metadata.slaveTotalResources = MesosSummaryUtil.sumResources(
       // We may only want to get the active slaves...
       _.pluck(this.snapshot.slaves, "resources")
     );
-    this.metadata.usedResources = MesosSummaryUtil.sumResources(
+    this.metadata.slaveUsedResources = MesosSummaryUtil.sumResources(
+      // We may only want to get the active slaves...
+      _.pluck(this.snapshot.slaves, "used_resources")
+    );
+    this.metadata.serviceUsedResources = MesosSummaryUtil.sumResources(
       _.pluck(this.snapshot.frameworks, "used_resources")
     );
+  }
+
+  getSnapshotDate() {
+    return this.metadata.date;
+  }
+
+  getActiveSlaves() {
+    return _.where(this.snapshot.slaves, {active: true});
   }
 
   getServiceList() {
@@ -42,19 +55,15 @@ export default class StateSummary {
     return new NodesList({items: this.snapshot.slaves});
   }
 
-  getActiveSlaves() {
-    return _.where(this.snapshot.slaves, {active: true}).length;
+  getSlaveTotalResources() {
+    return this.metadata.slaveTotalResources;
   }
 
-  getSnapshotDate() {
-    return this.metadata.date;
+  getSlaveUsedResources() {
+    return this.metadata.slaveUsedResources;
   }
 
-  getTotalSlaveResources() {
-    return this.metadata.totalResources;
-  }
-
-  getFrameworkUsedResources() {
-    return this.metadata.usedResources;
+  getServiceUsedResources() {
+    return this.metadata.serviceUsedResources;
   }
 }

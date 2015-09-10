@@ -106,4 +106,55 @@ describe("ServicesList", function () {
 
   });
 
+  describe("#sumTaskStates", function () {
+
+    it("returns an empty hash when there's no services", function () {
+      let list = new ServicesList();
+      let expectedList = {
+        TASK_STAGING: 0,
+        TASK_STARTING: 0,
+        TASK_RUNNING: 0,
+        TASK_FINISHED: 0,
+        TASK_FAILED: 0,
+        TASK_LOST: 0,
+        TASK_ERROR: 0
+      };
+      expect(list.sumTaskStates()).toEqual(expectedList);
+    });
+
+    it("sums tasks for one service", function () {
+      let list = new ServicesList({items: [
+        {TASK_STAGING: 2, TASK_STARTING: 10, TASK_LOST: 5}
+      ]});
+      let expectedList = {
+        TASK_STAGING: 2,
+        TASK_STARTING: 10,
+        TASK_RUNNING: 0,
+        TASK_FINISHED: 0,
+        TASK_FAILED: 0,
+        TASK_LOST: 5,
+        TASK_ERROR: 0
+      };
+      expect(list.sumTaskStates()).toEqual(expectedList);
+    });
+
+    it("sums tasks for many services", function () {
+      let list = new ServicesList({items: [
+        {TASK_STAGING: 2, TASK_STARTING: 10, TASK_LOST: 5},
+        {TASK_STAGING: 2, TASK_STARTING: 5, TASK_FAILED: 3}
+      ]});
+      let expectedList = {
+        TASK_STAGING: 4,
+        TASK_STARTING: 15,
+        TASK_RUNNING: 0,
+        TASK_FINISHED: 0,
+        TASK_FAILED: 3,
+        TASK_LOST: 5,
+        TASK_ERROR: 0
+      };
+      expect(list.sumTaskStates()).toEqual(expectedList);
+    });
+
+  });
+
 });

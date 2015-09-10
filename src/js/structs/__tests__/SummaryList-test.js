@@ -35,6 +35,24 @@ describe("SummaryList", function () {
 
   });
 
+  describe("#getActiveNodesByState", function () {
+
+    it("returns a list of state objects with slave count", function () {
+      let now = Date.now();
+      let list = new SummaryList();
+      list.addSnapshot({slaves: [{active: true}, {active: false}]}, now);
+      list.addSnapshot({slaves: [{active: true}, {active: true}]}, now + 1);
+
+      let expectedList = [
+        {date: now, slavesCount: 1},
+        {date: now + 1, slavesCount: 2}
+      ];
+
+      expect(list.getActiveNodesByState()).toEqual(expectedList);
+    });
+
+  });
+
   describe("#getResourceStatesForServiceIDs", function () {
 
     beforeEach(function () {
