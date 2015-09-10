@@ -2,9 +2,10 @@ var classNames = require("classnames");
 import {Link} from "react-router";
 var React = require("react/addons");
 
-var Table = require("./Table");
-var ProgressBar = require("./charts/ProgressBar");
+var HostTableHeaderLabels = require("../constants/HostTableHeaderLabels");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
+var ProgressBar = require("./charts/ProgressBar");
+var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
 
 var HostTable = React.createClass({
@@ -85,7 +86,7 @@ var HostTable = React.createClass({
         prop: "hostname",
         render: this.renderHeadline,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(HostTableHeaderLabels)
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -93,7 +94,7 @@ var HostTable = React.createClass({
         prop: "TASK_RUNNING",
         render: ResourceTableUtil.renderTask,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(HostTableHeaderLabels)
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -101,7 +102,7 @@ var HostTable = React.createClass({
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(HostTableHeaderLabels)
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -109,7 +110,7 @@ var HostTable = React.createClass({
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(HostTableHeaderLabels)
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -117,7 +118,7 @@ var HostTable = React.createClass({
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(HostTableHeaderLabels)
       }
     ];
   },

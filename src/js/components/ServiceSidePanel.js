@@ -10,6 +10,7 @@ import HealthStatus from "../constants/HealthStatus";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import ServiceTasksTable from "./ServiceTasksTable";
 import StringUtil from "../utils/StringUtil";
 
 const METHODS_TO_BIND = [
@@ -181,8 +182,14 @@ export default class ServiceSidePanel extends DetailSidePanel {
   }
 
   getTasksView() {
-    // Coming soon: table view.
-    return null;
+    // This will all get replaced by ServiceTasksView soon enough. But lets
+    // merge in the Table first.
+    let tasks = MesosStateStore.getTasksFromServiceName(this.props.serviceName);
+    return (
+      <div className="container container-pod">
+        <ServiceTasksTable tasks={tasks} />
+      </div>
+    );
   }
 
   getTabView() {

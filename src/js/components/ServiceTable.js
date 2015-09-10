@@ -10,6 +10,7 @@ var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var MarathonStore = require("../stores/MarathonStore");
 var Maths = require("../utils/Maths");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
+var ServiceTableHeaderLabels = require("../constants/ServiceTableHeaderLabels");
 var Table = require("./Table");
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
@@ -133,7 +134,7 @@ var ServicesTable = React.createClass({
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -141,7 +142,7 @@ var ServicesTable = React.createClass({
         prop: "health",
         render: this.renderHealth,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -149,7 +150,7 @@ var ServicesTable = React.createClass({
         prop: "TASK_RUNNING",
         render: ResourceTableUtil.renderTask,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -157,7 +158,7 @@ var ServicesTable = React.createClass({
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -165,7 +166,7 @@ var ServicesTable = React.createClass({
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -173,7 +174,7 @@ var ServicesTable = React.createClass({
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader
+        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
       }
     ];
   },

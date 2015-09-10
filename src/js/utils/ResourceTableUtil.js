@@ -6,7 +6,6 @@ const React = require("react/addons");
 
 const HealthSorting = require("../constants/HealthSorting");
 const MarathonStore = require("../stores/MarathonStore");
-const TableHeaderLabels = require("../constants/TableHeaderLabels");
 
 function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
@@ -51,31 +50,33 @@ var ResourceTableUtil = {
     };
   },
 
-  renderHeader: function (prop, order, sortBy) {
-    var title = TableHeaderLabels[prop];
-    var caret = {
-      before: null,
-      after: null
+  renderHeader: function (config) {
+    return function (prop, order, sortBy) {
+      var title = config[prop];
+      var caret = {
+        before: null,
+        after: null
+      };
+      var caretClassSet = classNames({
+        "caret": true,
+        "dropup": order === "desc",
+        "invisible": prop !== sortBy.prop
+      });
+
+      if (isStat(prop) || prop === "TASK_RUNNING") {
+        caret.before = <span className={caretClassSet} />;
+      } else {
+        caret.after = <span className={caretClassSet} />;
+      }
+
+      return (
+        <span>
+          {caret.before}
+          {title}
+          {caret.after}
+        </span>
+      );
     };
-    var caretClassSet = classNames({
-      "caret": true,
-      "dropup": order === "desc",
-      "invisible": prop !== sortBy.prop
-    });
-
-    if (isStat(prop) || prop === "TASK_RUNNING") {
-      caret.before = <span className={caretClassSet} />;
-    } else {
-      caret.after = <span className={caretClassSet} />;
-    }
-
-    return (
-      <span>
-        {caret.before}
-        {title}
-        {caret.after}
-      </span>
-    );
   },
 
   renderTask: function (prop, model) {
