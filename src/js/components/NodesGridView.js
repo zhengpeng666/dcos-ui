@@ -1,7 +1,6 @@
 var _ = require("underscore");
 var classNames = require("classnames");
 var React = require("react/addons");
-import Router from "react-router";
 
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
