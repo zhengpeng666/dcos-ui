@@ -3,7 +3,7 @@ import React from "react/addons";
 
 import {Dropdown} from "reactjs-components";
 
-const defaultId = "default";
+const defaultId = "all";
 
 export default class FilterByTaskState extends React.Component {
 
@@ -14,11 +14,7 @@ export default class FilterByTaskState extends React.Component {
   }
 
   handleItemSelection(obj) {
-    if (obj.id === defaultId) {
-      this.props.handleFilterChange(null);
-    } else {
-      this.props.handleFilterChange(obj.name);
-    }
+    this.props.handleFilterChange(obj.value);
   }
 
   getItemHtml(item) {
@@ -33,25 +29,27 @@ export default class FilterByTaskState extends React.Component {
   getDropdownItems() {
     var items = [{
       id: defaultId,
-      name: "All States",
+      name: "All Tasks",
+      value: "all",
       count: this.props.totalTasksCount
-    }].concat(this.props.states);
+    }].concat(this.props.statuses);
 
-    return _.map(items, function (state) {
-      var selectedHtml = this.getItemHtml(state);
+    return _.map(items, function (status) {
+      var selectedHtml = this.getItemHtml(status);
       var dropdownHtml = (<a>{selectedHtml}</a>);
 
       var item = {
-        id: state.id,
-        name: state.name,
+        id: status.value,
+        name: status.name,
         html: dropdownHtml,
+        value: status.value,
         selectedHtml
       };
 
-      if (state.id === defaultId) {
+      if (status.id === defaultId) {
         item.selectedHtml = (
           <span className="badge-container">
-            <span>All States</span>
+            <span>All Tasks</span>
           </span>
         );
       }
@@ -70,7 +68,7 @@ export default class FilterByTaskState extends React.Component {
         wrapperClassName="dropdown"
         items={this.getDropdownItems()}
         onItemSelection={this.handleItemSelection}
-        selectedID={this.props.byServiceFilter}
+        selectedID={this.props.currentStatus}
         transition={true}
         transitionName="dropdown-menu" />
     );
@@ -78,15 +76,15 @@ export default class FilterByTaskState extends React.Component {
 }
 
 FilterByTaskState.propTypes = {
-  byServiceFilter: React.PropTypes.string,
-  states: React.PropTypes.array.isRequired,
+  currentStatus: React.PropTypes.string,
+  statuses: React.PropTypes.array.isRequired,
   totalTasksCount: React.PropTypes.number.isRequired,
   handleFilterChange: React.PropTypes.func
 };
 
 FilterByTaskState.defaultProps = {
-  byServiceFilter: defaultId,
-  states: [],
+  currentStatus: defaultId,
+  statuses: [],
   totalHostsCount: 0,
   handleFilterChange: _.noop
 };

@@ -8,7 +8,6 @@ var MesosStateStore = require("../stores/MesosStateStore");
 var RequestErrorMsg = require("./RequestErrorMsg");
 var ServiceTasksTable = require("./ServiceTasksTable");
 var StringUtil = require("../utils/StringUtil");
-var TaskHealthStates = require("../constants/TaskHealthStates");
 var TaskStates = require("../constants/TaskStates");
 
 var ServiceTasksView = React.createClass({
@@ -25,8 +24,7 @@ var ServiceTasksView = React.createClass({
     return {
       mesosStateErrorCount: 0,
       searchString: "",
-      filterByStatus: "active",
-      filterByTaskState: ""
+      filterByStatus: "all"
     };
   },
 
@@ -71,18 +69,17 @@ var ServiceTasksView = React.createClass({
 
   filterByCurrentStatus: function (tasks) {
     var status = this.state.filterByStatus;
-    if (!status) {
-      status = "active";
+    if (status === "all") {
+      return tasks;
     }
 
+    var filterBy = TaskStates.completed;
     if (status === "active") {
-      return _.filter(tasks, function (task) {
-        return _.contains(TaskStates.active, task.state);
-      });
+      filterBy = TaskStates.active;
     }
 
     return _.filter(tasks, function (task) {
-      return _.contains(TaskStates.completed, task.state);
+      return _.contains(filterBy, task.state);
     });
   },
 
@@ -90,20 +87,8 @@ var ServiceTasksView = React.createClass({
     this.setState({searchString});
   },
 
-  handleFilterStateChange: function (filterByStatus) {
+  handleStatusFilterChange: function (filterByStatus) {
     this.setState({filterByStatus});
-  },
-
-  handleTaskStateFilterChange: function (taskStateFilter) {
-    this.setState({taskStateFilter});
-  },
-
-  handleToggleStatus: function () {
-    if (this.state.filterByStatus === "active") {
-      this.setState({filterByStatus: "completed"});
-    } else {
-      this.setState({filterByStatus: "active"});
-    }
   },
 
   hasLoadingError: function () {
@@ -124,25 +109,22 @@ var ServiceTasksView = React.createClass({
     }, {active: 0, completed: 0});
   },
 
-  getTaskStateCount: function (state) {
-    return this.tasks.reduce(function (acc, task) {
-      if (task.state === state) {
-        return acc + 1;
+  getStatuses: function () {
+    let statusCount = this.getStatusCounts(this.tasks);
+    return [
+      {
+        count: statusCount.active,
+        id: 1,
+        name: "Active Tasks",
+        value: "active"
+      },
+      {
+        count: statusCount.completed,
+        id: 2,
+        name: "Completed Tasks",
+        value: "completed"
       }
-
-      return acc;
-    }, 0);
-  },
-
-  getStates: function () {
-    let allStates = TaskStates.allStates;
-    return allStates.map(function (state, i) {
-      return {
-        id: i,
-        name: TaskHealthStates[state],
-        count: this.getTaskStateCount(state)
-      };
-    }, this);
+    ];
   },
 
   getLoadingScreen: function () {
@@ -164,13 +146,21 @@ var ServiceTasksView = React.createClass({
   },
 
   getHeaderText: function () {
-    let state = this.state;
-    let statusCount = this.getStatusCounts(this.tasks);
-    if (state.filterByStatus === "active") {
-      return `${statusCount.active} ${StringUtil.pluralize("Task", this.tasks.length)}`;
+    let currentStatus = this.state.filterByStatus;
+    let tasksLength = this.tasks.length;
+    if (currentStatus === "all") {
+      return `${tasksLength} ${StringUtil.pluralize("Task", tasksLength)}`;
     }
 
-    return `${statusCount[state.filterByStatus]} ${state.filterByStatus} Tasks`;
+    const displayNameMap = {
+      active: "Active",
+      completed: "Completed"
+    };
+
+    let statusCount = this.getStatusCounts(this.tasks)[currentStatus];
+    let displayName = displayNameMap[currentStatus];
+    let pluralizedTasks = StringUtil.pluralize("Task", statusCount);
+    return `${statusCount} ${displayName} ${pluralizedTasks}`;
   },
 
   getContent: function () {
@@ -186,23 +176,13 @@ var ServiceTasksView = React.createClass({
         );
       }
 
-      if (state.taskStateFilter) {
-        tasks = StringUtil.filterByString(
-          tasks,
-          "state",
-          state.taskStateFilter
-        );
-      }
-
       tasks = this.filterByCurrentStatus(tasks);
 
       return (
         <div>
-          <div
-            className="h2 clickable inverse text-align-left"
-            onClick={this.handleToggleStatus}>
+          <h2 className="inverse text-align-left">
             {this.getHeaderText()}
-          </div>
+          </h2>
           <div className="flex-box control-group">
             <FilterInputText
               searchString={state.searchString}
@@ -210,9 +190,10 @@ var ServiceTasksView = React.createClass({
               inverse={true} />
             <div>
               <FilterByTaskState
-                states={this.getStates()}
-                handleFilterChange={this.handleTaskStateFilterChange}
-                totalTasksCount={this.tasks.length}/>
+                statuses={this.getStatuses()}
+                handleFilterChange={this.handleStatusFilterChange}
+                totalTasksCount={this.tasks.length}
+                currentStatus={state.filterByStatus}/>
             </div>
           </div>
           {this.getTasksTable(tasks)}
