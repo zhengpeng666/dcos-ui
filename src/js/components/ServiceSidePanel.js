@@ -1,9 +1,9 @@
 import _ from "underscore";
 import classNames from "classnames";
 import React from "react/addons";
-import {SidePanel} from "reactjs-components";
 
 import DateUtil from "../utils/DateUtil";
+import DetailSidePanel from "./DetailSidePanel";
 import EventTypes from "../constants/EventTypes";
 import HealthLabels from "../constants/HealthLabels";
 import HealthStatus from "../constants/HealthStatus";
@@ -14,25 +14,23 @@ import StringUtil from "../utils/StringUtil";
 
 const METHODS_TO_BIND = [
   "onMesosStateChange",
-  "onMesosSummaryChange",
   "onMarathonStoreChange",
-  "handlePanelClose",
   "handleOpenServiceButtonClick",
   "handleTabClick",
+  "getContents",
   "getBasicInfo",
   "getHeader",
   "getTabs",
   "getTasksView",
   "getTabView",
-  "getServiceDetails",
   "getOpenServiceButton",
   "getInfo"
 ];
 
-export default class ServiceSidePanel extends React.Component {
+export default class ServiceSidePanel extends DetailSidePanel {
 
-  constructor(...args) {
-    super(...args);
+  constructor() {
+    super(...arguments);
 
     this.state = {
       currentTab: "tasks"
@@ -60,10 +58,6 @@ export default class ServiceSidePanel extends React.Component {
       EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
     );
 
-    MesosSummaryStore.addChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
-    );
-
     MarathonStore.addChangeListener(
       EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
     );
@@ -76,24 +70,9 @@ export default class ServiceSidePanel extends React.Component {
       EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
     );
 
-    MesosSummaryStore.removeChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
-    );
-
     MarathonStore.removeChangeListener(
       EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
     );
-  }
-
-  onMesosSummaryChange() {
-    if (MesosSummaryStore.get("statesProcessed")) {
-      // Once we have the data we need (frameworks), stop listening for changes.
-      MesosSummaryStore.removeChangeListener(
-        EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
-      );
-
-      this.forceUpdate();
-    }
   }
 
   onMarathonStoreChange() {
@@ -231,7 +210,7 @@ export default class ServiceSidePanel extends React.Component {
     );
   }
 
-  getServiceDetails() {
+  getContents() {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (service == null) {
       return (
@@ -318,26 +297,8 @@ export default class ServiceSidePanel extends React.Component {
       );
     });
   }
-
-  render() {
-    // TODO: rename from classNames to className
-    return (
-      <SidePanel classNames="side-panel-detail"
-        header={this.getHeader()}
-        open={this.props.open}
-        onClose={this.handlePanelClose}>
-        {this.getServiceDetails()}
-      </SidePanel>
-    );
-  }
 }
 
 ServiceSidePanel.propTypes = {
-  open: React.PropTypes.bool,
-  serviceName: React.PropTypes.string,
-  onClose: React.PropTypes.func
-};
-
-ServiceSidePanel.contextTypes = {
-  router: React.PropTypes.func
+  serviceName: React.PropTypes.string
 };
