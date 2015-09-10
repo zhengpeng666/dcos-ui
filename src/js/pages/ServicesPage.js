@@ -144,7 +144,13 @@ var ServicesPage = React.createClass({
   },
 
   handleSideBarClose: function () {
-    Router.History.back();
+    if (Router.History.length > 1) {
+      Router.History.back();
+    } else {
+      let currentRoutes = this.context.router.getCurrentRoutes();
+      let routeName = currentRoutes[currentRoutes.length - 2].name;
+      this.context.router.transitionTo(routeName);
+    }
   },
 
   resetFilter: function () {
