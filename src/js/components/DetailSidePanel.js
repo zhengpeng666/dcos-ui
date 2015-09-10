@@ -6,9 +6,8 @@ import EventTypes from "../constants/EventTypes";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 
 const METHODS_TO_BIND = [
-  "onMesosSummaryChange",
-  "getContents",
-  "handlePanelClose"
+  "handlePanelClose",
+  "onMesosSummaryChange"
 ];
 
 export default class DetailSidePanel extends React.Component {
@@ -20,17 +19,10 @@ export default class DetailSidePanel extends React.Component {
     }, this);
   }
 
-  shouldComponentUpdate(nextProps) {
-    let props = this.props;
-
-    return props.nodeID !== nextProps.nodeID || props.open !== nextProps.open;
-  }
-
   componentDidMount() {
     MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
-
     this.forceUpdate();
   }
 
@@ -42,11 +34,9 @@ export default class DetailSidePanel extends React.Component {
 
   onMesosSummaryChange() {
     if (MesosSummaryStore.get("statesProcessed")) {
-      // Once we have the data we need (nodes), stop listening for changes.
       MesosSummaryStore.removeChangeListener(
         EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
       );
-
       this.forceUpdate();
     }
   }
@@ -76,13 +66,12 @@ export default class DetailSidePanel extends React.Component {
   }
 
   render() {
-
     // TODO: rename from classNames to className
     return (
       <SidePanel classNames="side-panel-detail"
         header={this.getHeader()}
-        open={this.props.open}
-        onClose={this.handlePanelClose}>
+        onClose={this.handlePanelClose}
+        open={this.props.open}>
         {this.getContents()}
       </SidePanel>
     );
@@ -94,6 +83,6 @@ DetailSidePanel.contextTypes = {
 };
 
 DetailSidePanel.propTypes = {
-  open: React.PropTypes.bool,
-  onClose: React.PropTypes.func
+  onClose: React.PropTypes.func,
+  open: React.PropTypes.bool
 };

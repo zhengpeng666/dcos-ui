@@ -1,9 +1,15 @@
+import _ from "underscore";
 import React from "react/addons";
 
 import DetailSidePanel from "./DetailSidePanel";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 
 export default class NodeSidePanel extends DetailSidePanel {
+  shouldComponentUpdate(nextProps) {
+    let props = this.props;
+    return props.nodeID !== nextProps.nodeID || props.open !== nextProps.open;
+  }
+
   getContents() {
     let last = MesosSummaryStore.get("states").last();
     let node = last.getNodesList().filter({ids: [this.props.nodeID]}).last();
@@ -29,8 +35,12 @@ export default class NodeSidePanel extends DetailSidePanel {
       </div>
     );
   }
+
+  render() {
+    return super.render(...arguments);
+  }
 }
 
-NodeSidePanel.propTypes = {
+NodeSidePanel.propTypes = _.extend({}, DetailSidePanel.propTypes, {
   nodeID: React.PropTypes.string
-};
+});

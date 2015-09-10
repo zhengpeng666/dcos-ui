@@ -13,22 +13,13 @@ import MesosSummaryStore from "../stores/MesosSummaryStore";
 import StringUtil from "../utils/StringUtil";
 
 const METHODS_TO_BIND = [
-  "onMesosStateChange",
-  "onMarathonStoreChange",
   "handleOpenServiceButtonClick",
   "handleTabClick",
-  "getContents",
-  "getBasicInfo",
-  "getHeader",
-  "getTabs",
-  "getTasksView",
-  "getTabView",
-  "getOpenServiceButton",
-  "getInfo"
+  "onMesosStateChange",
+  "onMarathonStoreChange"
 ];
 
 export default class ServiceSidePanel extends DetailSidePanel {
-
   constructor() {
     super(...arguments);
 
@@ -54,6 +45,8 @@ export default class ServiceSidePanel extends DetailSidePanel {
   }
 
   componentDidMount() {
+    super.componentDidMount(...arguments);
+
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
     );
@@ -66,6 +59,8 @@ export default class ServiceSidePanel extends DetailSidePanel {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount(...arguments);
+
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
     );
@@ -79,7 +74,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
     MarathonStore.removeChangeListener(
       EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
     );
-
     this.forceUpdate();
   }
 
@@ -90,13 +84,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
       );
       this.forceUpdate();
     }
-  }
-
-  handlePanelClose() {
-    if (_.isFunction(this.props.onClose)) {
-      this.props.onClose();
-    }
-    this.forceUpdate();
   }
 
   handleOpenServiceButtonClick() {
@@ -112,6 +99,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
   getBasicInfo() {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
+
     if (service == null) {
       return null;
     }
@@ -297,8 +285,12 @@ export default class ServiceSidePanel extends DetailSidePanel {
       );
     });
   }
+
+  render() {
+    return super.render(...arguments);
+  }
 }
 
-ServiceSidePanel.propTypes = {
+ServiceSidePanel.propTypes = _.extend({}, DetailSidePanel.propTypes, {
   serviceName: React.PropTypes.string
-};
+});
