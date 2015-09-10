@@ -261,7 +261,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
       return null;
     }
 
-    let installTime = MarathonStore.getServiceVersion(this.props.serviceName);
+    let installTime = marathonService.snapshot.version;
     let headerValueMapping = {
       "Host Name": service.hostname,
       Tasks: service.tasks.length,
