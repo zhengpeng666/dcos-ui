@@ -86,10 +86,8 @@ var ServicesPage = React.createClass({
   },
 
   componentWillMount: function () {
-    this.internalStorage_set(_.extend(
-      {openServicePanel: false},
-      getMesosServices(this.state)
-    ));
+    this.internalStorage_set(getMesosServices(this.state));
+    this.internalStorage_update({openServicePanel: false});
   },
 
   componentDidMount: function () {
@@ -146,7 +144,13 @@ var ServicesPage = React.createClass({
   },
 
   handleSideBarClose: function () {
-    Router.History.back();
+    if (Router.History.length > 1) {
+      Router.History.back();
+    } else {
+      let currentRoutes = this.context.router.getCurrentRoutes();
+      let routeName = currentRoutes[currentRoutes.length - 2].name;
+      this.context.router.transitionTo(routeName);
+    }
   },
 
   resetFilter: function () {

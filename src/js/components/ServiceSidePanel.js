@@ -1,3 +1,4 @@
+import _ from "underscore";
 import classNames from "classnames";
 import React from "react/addons";
 import {SidePanel} from "reactjs-components";
@@ -14,6 +15,12 @@ import StringUtil from "../utils/StringUtil";
 const ServiceSidePanel = React.createClass({
 
   displayName: "ServiceSidePanel",
+
+  propTypes: {
+    open: React.PropTypes.bool,
+    serviceName: React.PropTypes.string,
+    onClose: React.PropTypes.func
+  },
 
   contextTypes: {
     router: React.PropTypes.func
@@ -96,7 +103,9 @@ const ServiceSidePanel = React.createClass({
   },
 
   handlePanelClose: function () {
-    this.props.onClose();
+    if (_.isFunction(this.props.onClose)) {
+      this.props.onClose();
+    }
     this.forceUpdate();
   },
 
@@ -160,7 +169,7 @@ const ServiceSidePanel = React.createClass({
       <div>
         <span className="button button-link button-inverse"
           onClick={this.handlePanelClose}>
-          <i className="service-detail-close"></i>
+          <i className="side-panel-detail-close"></i>
           Close
         </span>
       </div>
@@ -214,7 +223,16 @@ const ServiceSidePanel = React.createClass({
   getServiceDetails: function () {
     let service = MesosSummaryStore.getServiceFromName(this.props.serviceName);
     if (service == null) {
-      return "loading...";
+      return (
+        <div>
+          <h2 className="text-align-center inverse overlay-header">
+            Error finding service
+          </h2>
+          <div className="container container-pod text-align-center flush-top text-danger">
+            {`Did not find a service by the name "${this.props.serviceName}"`}
+          </div>
+        </div>
+      );
     }
 
     return (
@@ -291,9 +309,9 @@ const ServiceSidePanel = React.createClass({
   },
 
   render: function () {
-    // TODO(ml): rename to className
+    // TODO: rename from classNames to className
     return (
-      <SidePanel classNames="service-detail"
+      <SidePanel classNames="side-panel-detail"
         header={this.getHeader()}
         open={this.props.open}
         onClose={this.handlePanelClose}>

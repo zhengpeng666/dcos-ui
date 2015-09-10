@@ -34,8 +34,8 @@ var NodesGridView = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set({
-      serviceColors: {},
-      resourcesByFramework: {}
+      resourcesByFramework: {},
+      serviceColors: {}
     });
 
     MesosStateStore.addChangeListener(
@@ -67,8 +67,8 @@ var NodesGridView = React.createClass({
    * @param  {Object} props
    */
   componentWillReceiveProps: function (props) {
-    var ids = _.pluck(props.services, "id");
-    var serviceColors = this.internalStorage_get().serviceColors;
+    let ids = _.pluck(props.services, "id");
+    let serviceColors = this.internalStorage_get().serviceColors;
 
     if (!_.isEqual(Object.keys(serviceColors), ids)) {
       this.computeServiceColors(props.services);

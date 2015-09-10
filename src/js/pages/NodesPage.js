@@ -14,6 +14,7 @@ var FilterInputText = require("../components/FilterInputText");
 var FilterHeadline = require("../components/FilterHeadline");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
+import NodeSidePanel from "../components/NodeSidePanel";
 var Page = require("../components/Page");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
@@ -64,12 +65,17 @@ var NodesPage = React.createClass({
     }
   },
 
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
   getInitialState: function () {
     return _.extend({selectedResource: "cpus"}, DEFAULT_FILTER_OPTIONS);
   },
 
   componentWillMount: function () {
     this.internalStorage_set(getMesosHosts(this.state));
+    this.internalStorage_update({openNodePanel: false});
   },
 
   componentDidMount: function () {
@@ -77,6 +83,16 @@ var NodesPage = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
+
+    this.internalStorage_update({
+      openNodePanel: this.props.params.nodeID != null
+    });
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    this.internalStorage_update({
+      openNodePanel: nextProps.params.nodeID != null
+    });
   },
 
   componentWillUnmount: function () {
@@ -87,13 +103,13 @@ var NodesPage = React.createClass({
   },
 
   onMesosStateChange: function () {
-    this.internalStorage_set(getMesosHosts(this.state));
+    this.internalStorage_update(getMesosHosts(this.state));
     this.forceUpdate();
   },
 
   resetFilter: function () {
     var state = _.clone(DEFAULT_FILTER_OPTIONS);
-    this.internalStorage_set(getMesosHosts(state));
+    this.internalStorage_update(getMesosHosts(state));
     this.setState(state);
   },
 
@@ -102,7 +118,7 @@ var NodesPage = React.createClass({
       searchString: searchString
     });
 
-    this.internalStorage_set(getMesosHosts(stateChanges));
+    this.internalStorage_update(getMesosHosts(stateChanges));
     this.setState({searchString: searchString});
   },
 
@@ -115,8 +131,18 @@ var NodesPage = React.createClass({
       byServiceFilter: byServiceFilter
     });
 
-    this.internalStorage_set(getMesosHosts(stateChanges));
+    this.internalStorage_update(getMesosHosts(stateChanges));
     this.setState({byServiceFilter: byServiceFilter});
+  },
+
+  handleSideBarClose: function () {
+    if (Router.History.length > 1) {
+      Router.History.back();
+    } else {
+      let currentRoutes = this.context.router.getCurrentRoutes();
+      let routeName = currentRoutes[currentRoutes.length - 2].name;
+      this.context.router.transitionTo(routeName);
+    }
   },
 
   onResourceSelectionChange: function (selectedResource) {
@@ -201,6 +227,10 @@ var NodesPage = React.createClass({
           selectedResource={this.state.selectedResource}
           hosts={nodesList}
           services={data.services} />
+        <NodeSidePanel
+          open={data.statesProcessed && data.openNodePanel}
+          nodeID={this.props.params.nodeID}
+          onClose={this.handleSideBarClose} />
       </div>
     );
   },

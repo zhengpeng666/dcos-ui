@@ -15,8 +15,6 @@ var NodesGridDials = React.createClass({
 
   displayName: "NodesGridDials",
 
-  mixins: [TooltipMixin],
-
   propTypes: {
     hosts: React.PropTypes.array.isRequired,
     // enum: ["cpus", "mem", "disk"]
@@ -24,6 +22,17 @@ var NodesGridDials = React.createClass({
     serviceColors: React.PropTypes.object.isRequired,
     showServices: React.PropTypes.bool.isRequired,
     resourcesByFramework: React.PropTypes.object.isRequired
+  },
+
+  contextTypes: {
+    router: React.PropTypes.func
+  },
+
+  mixins: [TooltipMixin],
+
+  handleDialClick: function (nodeID) {
+    // Using handler, since Link in arrays cannot get router context
+    this.context.router.transitionTo("nodes-grid-panel", {nodeID});
   },
 
   getServiceSlicesConfig: function (node) {
@@ -150,7 +159,9 @@ var NodesGridDials = React.createClass({
       }
 
       return (
-        <div className="nodes-grid-dials-item" key={node.get("id")}>
+        <a className="nodes-grid-dials-item clickable"
+          onClick={this.handleDialClick.bind(this, node.get("id"))}
+          key={node.get("id")}>
           <div className="chart">
             <Chart calcHeight={function (w) { return w; }}>
               <DialChart data={config.data}
@@ -161,7 +172,7 @@ var NodesGridDials = React.createClass({
               </DialChart>
             </Chart>
           </div>
-        </div>
+        </a>
       );
     }, this);
   },

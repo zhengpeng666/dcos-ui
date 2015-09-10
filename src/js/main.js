@@ -36,8 +36,12 @@ var routes = (
       <Route name="services-panel" path="service-detail/:serviceName" />
     </Route>
     <Route name="nodes" path="nodes/?" handler={NodesPage}>
-      <Route name="nodes-list" path="list/?" handler={HostTable} />
-      <Route name="nodes-grid" path="grid/?" handler={NodesGridView} />
+      <Route name="nodes-list" path="list/?" handler={HostTable}>
+        <Route name="nodes-list-panel" path="node-detail/:nodeID" />
+      </Route>
+      <Route name="nodes-grid" path="grid/?" handler={NodesGridView}>
+        <Route name="nodes-grid-panel" path="node-detail/:nodeID" />
+      </Route>
       <Redirect from="/nodes/?" to="nodes-list" />
     </Route>
     <Redirect from="/" to="dashboard" />
