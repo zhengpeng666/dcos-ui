@@ -13,21 +13,15 @@ var NodeSidePanel = require("../NodeSidePanel");
 
 describe("NodeSidePanel", function () {
   beforeEach(function () {
-    this.summaryGetNodeFromID = MesosSummaryStore.getNodeFromID;
     this.fetchSummary = MesosSummaryActions.fetchSummary;
 
     MesosSummaryActions.fetchSummary = function () {
       return null;
     };
     MesosSummaryStore.init();
-
-    MesosSummaryStore.getNodeFromID = function () {
-      return null;
-    };
   });
 
   afterEach(function () {
-    MesosSummaryStore.getNodeFromID = this.summaryGetNodeFromID;
     MesosSummaryActions.fetchSummary = this.fetchSummary;
   });
 
