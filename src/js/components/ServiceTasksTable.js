@@ -1,106 +1,53 @@
-var _ = require("underscore");
-var classNames = require("classnames");
-var React = require("react/addons");
+import _ from "underscore";
+import classNames from "classnames";
+import React from "react/addons";
 
-var DateUtil = require("../utils/DateUtil");
-var TaskHealthStates = require("../constants/TaskHealthStates");
-var Maths = require("../utils/Maths");
-var ResourceTableUtil = require("../utils/ResourceTableUtil");
-var Table = require("./Table");
-var TaskTableHeaderLabels = require("../constants/TaskTableHeaderLabels");
-var Units = require("../utils/Units");
+import DateUtil from "../utils/DateUtil";
+import Maths from "../utils/Maths";
+import ResourceTableUtil from "../utils/ResourceTableUtil";
+import Table from "./Table";
+import TaskHealthStates from "../constants/TaskHealthStates";
+import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
+import Units from "../utils/Units";
 
-var ServiceTasksTable = React.createClass({
+const METHODS_TO_BIND = [
+  "renderUpdated"
+];
 
-  displayName: "ServiceTasksTable",
+export default class ServiceTasksTable extends React.Component {
+  constructor() {
+    super(...arguments);
 
-  propTypes: {
-    tasks: React.PropTypes.array.isRequired
-  },
+    METHODS_TO_BIND.forEach(function (method) {
+      this[method] = this[method].bind(this);
+    }, this);
+  }
 
-  getDefaultProps: function () {
-    return {
-      tasks: []
-    };
-  },
+  getTaskUpdatedTimestamp(task) {
+    return _.last(task.statuses).timestamp;
+  }
 
-  renderHeadline: function (prop, model) {
-    var dangerState = _.contains([
-      "TASK_FAILED", "TASK_KILLED", "TASK_LOST", "TASK_ERROR"
-    ], model.state);
-
-    var successState = _.contains([
-      "TASK_RUNNING", "TASK_STARTING", "TASK_FINISHED"
-    ], model.state);
-
-    var statusClass = classNames({
-      "dot": true,
-      success: successState,
-      danger: dangerState
-    });
-
-    var title = model.name;
-    if (!title) {
-      title = model.id;
-    }
-
-    return (
-      <div className="flex-box flex-box-align-vertical-center">
-        <div>
-          <span className={statusClass}></span>
-        </div>
-        <div className="flex-box flex-box-col">
-          <div className="emphasize">
-            {title}
-          </div>
-        </div>
-      </div>
-    );
-  },
-
-  renderStats: function (prop, model) {
-    var value = Maths.round(model.resources[prop], 2);
-
-    if (prop !== "cpus") {
-      value = Units.filesize(value / 1024, 1, null, null, ["GiB"]);
-    }
-
-    return (
-      <span>
-        {value}
-      </span>
-    );
-  },
-
-  renderUpdated: function (prop, model) {
-    var updatedAt = _.last(model.statuses).timestamp;
-    updatedAt = DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
-    return (
-      <span>
-        {updatedAt}
-      </span>
-    );
-  },
-
-  getSortFunction: function (title) {
-    return function (prop) {
-      return function (model) {
-        var value = model[prop];
+  getSortFunction(title) {
+    return (prop) => {
+      return (task) => {
+        let value = task[prop];
 
         if (prop === "cpus" || prop === "mem") {
-          return model.resources[prop];
+          return task.resources[prop];
         }
 
         if (prop === "updated") {
-          return value;
+          return this.getTaskUpdatedTimestamp(task);
         }
 
-        return value.toString().toLowerCase() + "-" + model[title].toLowerCase();
+        value = value.toString().toLowerCase();
+        title = title.toLowerCase();
+        return `${value}-${title}`;
       };
     };
-  },
+  }
 
-  getColumns: function () {
+  getColumns() {
     return [
       {
         className: ResourceTableUtil.getClassName,
@@ -143,9 +90,9 @@ var ServiceTasksTable = React.createClass({
         sortable: true
       }
     ];
-  },
+  }
 
-  getColGroup: function () {
+  getColGroup() {
     return (
       <colgroup>
         <col />
@@ -155,10 +102,41 @@ var ServiceTasksTable = React.createClass({
         <col style={{width: "100px"}} />
       </colgroup>
     );
-  },
+  }
 
-  renderStat: function (prop, model) {
-    var value = Maths.round(model.resources[prop], 2);
+  renderHeadline(prop, task) {
+    let dangerState = _.contains([
+      "TASK_FAILED", "TASK_KILLED", "TASK_LOST", "TASK_ERROR"
+    ], task.state);
+
+    let successState = _.contains([
+      "TASK_RUNNING", "TASK_STARTING", "TASK_FINISHED"
+    ], task.state);
+
+    let statusClass = classNames({
+      "dot": true,
+      success: successState,
+      danger: dangerState
+    });
+
+    let title = task.name || task.id;
+
+    return (
+      <div className="flex-box flex-box-align-vertical-center">
+        <div>
+          <span className={statusClass}></span>
+        </div>
+        <div className="flex-box flex-box-col">
+          <div className="emphasize">
+            {title}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderStats(prop, task) {
+    let value = Maths.round(task.resources[prop], 2);
 
     if (prop !== "cpus") {
       value = Units.filesize(value / 1024, 1, null, null, ["GiB"]);
@@ -169,16 +147,30 @@ var ServiceTasksTable = React.createClass({
         {value}
       </span>
     );
-  },
+  }
 
-  renderState: function (prop, model) {
-    return TaskHealthStates[model[prop]];
-  },
+  renderUpdated(prop, task) {
+    let updatedAt = this.getTaskUpdatedTimestamp(task);
+    updatedAt = DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
 
-  render: function () {
+    return (
+      <span>
+        {updatedAt}
+      </span>
+    );
+  }
+
+  renderState(prop, task) {
+    return TaskHealthStates[task[prop]];
+  }
+
+  render() {
     return (
       <Table
-        className="table table-borderless-outer table-borderless-inner-columns flush-bottom"
+        className="table
+          table-borderless-outer
+          table-borderless-inner-columns
+          flush-bottom"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
         data={this.props.tasks.slice(0)}
@@ -187,6 +179,13 @@ var ServiceTasksTable = React.createClass({
         sortFunc={this.getSortFunction("name")} />
     );
   }
-});
+}
 
-module.exports = ServiceTasksTable;
+ServiceTasksTable.propTypes = {
+  tasks: React.PropTypes.array.isRequired
+};
+
+ServiceTasksTable.defaultProps = {
+  tasks: []
+};
+
