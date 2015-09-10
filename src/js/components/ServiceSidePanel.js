@@ -18,7 +18,7 @@ const ServiceSidePanel = React.createClass({
 
   propTypes: {
     open: React.PropTypes.bool,
-    nodeID: React.PropTypes.string,
+    serviceName: React.PropTypes.string,
     onClose: React.PropTypes.func
   },
 
