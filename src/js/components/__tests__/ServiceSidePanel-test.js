@@ -1,3 +1,4 @@
+jest.dontMock("../DetailSidePanel");
 jest.dontMock("../ServiceSidePanel");
 jest.dontMock("../../utils/Store");
 
@@ -46,24 +47,6 @@ describe("ServiceSidePanel", function () {
     MesosStateStore.getServiceFromName = this.stateGetServiceFromName;
     MarathonStore.getServiceFromName = this.marathonGetServiceFromName;
     MarathonStore.getServiceHealth = this.getServiceHealth;
-  });
-
-  describe("callback functionality", function () {
-    beforeEach(function () {
-      this.callback = jasmine.createSpy();
-      this.instance = TestUtils.renderIntoDocument(
-        <ServiceSidePanel open={false} onClose={this.callback} />
-      );
-    });
-
-    it("shouldn't call the callback after initialization", function () {
-      expect(this.callback).not.toHaveBeenCalled();
-    });
-
-    it("should call the callback when the panel close is called", function () {
-      this.instance.handlePanelClose();
-      expect(this.callback).toHaveBeenCalled();
-    });
   });
 
   describe("getting info", function () {
