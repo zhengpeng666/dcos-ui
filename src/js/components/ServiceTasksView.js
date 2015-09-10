@@ -143,7 +143,6 @@ var ServiceTasksView = React.createClass({
         count: this.getTaskStateCount(state)
       };
     }, this);
-    // return [{id: 1, name: "running", count: 5}, {id: 2, name: "failed", count: 4}];
   },
 
   getLoadingScreen: function () {
@@ -164,11 +163,20 @@ var ServiceTasksView = React.createClass({
     );
   },
 
+  getHeaderText: function () {
+    let state = this.state;
+    let statusCount = this.getStatusCounts(this.tasks);
+    if (state.filterByStatus === "active") {
+      return `${statusCount.active} ${StringUtil.pluralize("Task", this.tasks.length)}`;
+    }
+
+    return `${statusCount[state.filterByStatus]} ${state.filterByStatus} Tasks`;
+  },
+
   getContent: function () {
     if (this.tasks) {
       var state = this.state;
       var tasks = this.tasks;
-      var statusCount = this.getStatusCounts(tasks);
 
       if (state.searchString !== "") {
         tasks = StringUtil.filterByString(
@@ -193,21 +201,18 @@ var ServiceTasksView = React.createClass({
           <div
             className="h2 clickable inverse text-align-left"
             onClick={this.handleToggleStatus}>
-            {`Showing ${statusCount[state.filterByStatus]} of ${this.tasks.length} ${state.filterByStatus} Tasks`}
-            <span className="caret dropdown"></span>
+            {this.getHeaderText()}
           </div>
-          <div className="flex-box">
+          <div className="flex-box control-group">
+            <FilterInputText
+              searchString={state.searchString}
+              handleFilterChange={this.handleSearchStringChange}
+              inverse={true} />
             <div>
               <FilterByTaskState
                 states={this.getStates()}
                 handleFilterChange={this.handleTaskStateFilterChange}
                 totalTasksCount={this.tasks.length}/>
-            </div>
-            <div className="flex-box flex-box-row-reverse side-panel-input-filter">
-              <FilterInputText
-                searchString={state.searchString}
-                handleFilterChange={this.handleSearchStringChange}
-                inverse={true} />
             </div>
           </div>
           {this.getTasksTable(tasks)}
