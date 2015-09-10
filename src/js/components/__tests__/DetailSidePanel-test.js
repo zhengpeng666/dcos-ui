@@ -1,7 +1,7 @@
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../NodeSidePanel");
+jest.dontMock("../DetailSidePanel");
 jest.dontMock("../../utils/Store");
 
 var React = require("react/addons");
@@ -9,9 +9,9 @@ var TestUtils = React.addons.TestUtils;
 
 var MesosSummaryActions = require("../../events/MesosSummaryActions");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
-var NodeSidePanel = require("../NodeSidePanel");
+var DetailSidePanel = require("../DetailSidePanel");
 
-describe("NodeSidePanel", function () {
+describe("DetailSidePanel", function () {
   beforeEach(function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
 
@@ -29,7 +29,7 @@ describe("NodeSidePanel", function () {
     beforeEach(function () {
       this.callback = jasmine.createSpy();
       this.instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={false} onClose={this.callback} />
+        <DetailSidePanel open={false} onClose={this.callback} />
       );
     });
 
