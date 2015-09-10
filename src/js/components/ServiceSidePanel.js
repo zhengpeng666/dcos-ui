@@ -1,3 +1,4 @@
+import _ from "underscore";
 import classNames from "classnames";
 import React from "react/addons";
 import {SidePanel} from "reactjs-components";
@@ -102,7 +103,9 @@ const ServiceSidePanel = React.createClass({
   },
 
   handlePanelClose: function () {
-    this.props.onClose();
+    if (_.isFunction(this.props.onClose)) {
+      this.props.onClose();
+    }
     this.forceUpdate();
   },
 

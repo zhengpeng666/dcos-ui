@@ -1,3 +1,4 @@
+import _ from "underscore";
 import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
@@ -11,9 +12,8 @@ const METHODS_TO_BIND = [
 ];
 
 export default class NodeSidePanel extends React.Component {
-
-  constructor(...args) {
-    super(...args);
+  constructor() {
+    super(...arguments);
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
@@ -23,8 +23,7 @@ export default class NodeSidePanel extends React.Component {
   shouldComponentUpdate(nextProps) {
     let props = this.props;
 
-    return props.nodeID !== nextProps.nodeID ||
-      props.open !== nextProps.open;
+    return props.nodeID !== nextProps.nodeID || props.open !== nextProps.open;
   }
 
   componentDidMount() {
@@ -53,7 +52,9 @@ export default class NodeSidePanel extends React.Component {
   }
 
   handlePanelClose() {
-    this.props.onClose();
+    if (_.isFunction(this.props.onClose)) {
+      this.props.onClose();
+    }
     this.forceUpdate();
   }
 
@@ -70,7 +71,8 @@ export default class NodeSidePanel extends React.Component {
   }
 
   getNodeDetails() {
-    let node = MesosSummaryStore.getNodeFromID(this.props.nodeID);
+    let last = MesosSummaryStore.get("states").last();
+    let node = last.getNodesList().filter({ids: [this.props.nodeID]}).last();
 
     if (node == null) {
       return (

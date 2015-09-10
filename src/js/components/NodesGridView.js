@@ -120,10 +120,6 @@ var NodesGridView = React.createClass({
     this.internalStorage_update({hiddenServices: hidden});
   },
 
-  handleSideBarClose: function () {
-    Router.History.back();
-  },
-
   handleShowServices: function (e) {
     this.setState({showServices: e.currentTarget.checked});
   },
