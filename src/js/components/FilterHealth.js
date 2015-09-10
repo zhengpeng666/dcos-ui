@@ -60,7 +60,7 @@ var FilterHealth = React.createClass({
       });
 
       var dotClassSet = classNames({
-        "status-dot": _.contains([
+        "dot": _.contains([
           HealthTypes.UNHEALTHY,
           HealthTypes.HEALTHY,
           HealthTypes.NA], health),
