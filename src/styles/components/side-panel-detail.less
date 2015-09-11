@@ -83,11 +83,61 @@
     margin-right: @base-spacing-unit * 0.5;
   }
 
-  .table > tbody tr > td.highlight {
-    background: inherit;
-  }
-
   .form-control-inverse {
     border-color: color-lighten(@neutral, 80);
+
+    .icon {
+      opacity: 0.4;
+    }
+
+    &:hover {
+      .icon {
+        opacity: 1;
+      }
+    }
   }
+
+  .table {
+    > tbody tr > td.highlight {
+      background: inherit;
+    }
+
+    th {
+      background: color-lighten(@neutral, 80);
+      color: inherit;
+
+      &.highlight {
+        background: color-lighten(@neutral, 70);
+        color: @neutral;
+      }
+    }
+  }
+
+
+  .dropdown {
+    > .button {
+      padding-right: @base-spacing-unit * 1.5;
+      width: auto;
+
+      &.dropdown-toggle:after {
+        margin-right: @base-spacing-unit * -0.75;
+      }
+    }
+
+    > .dropdown-menu,
+    > .dropdown-toggle {
+      width: auto;
+    }
+
+    > .dropdown-toggle > :first-child {
+      width: auto;
+    }
+
+    .dropdown-menu {
+      right: 0;
+      left: auto;
+      top: 115%;
+    }
+  }
+
 }

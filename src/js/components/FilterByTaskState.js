@@ -19,9 +19,8 @@ export default class FilterByTaskState extends React.Component {
 
   getItemHtml(item) {
     return (
-      <span className="badge-container inverse">
+      <span className="inverse">
         <span>{item.name}</span>
-        <span className="badge">{item.count}</span>
       </span>
     );
   }
@@ -48,7 +47,7 @@ export default class FilterByTaskState extends React.Component {
 
       if (status.id === defaultId) {
         item.selectedHtml = (
-          <span className="badge-container">
+          <span>
             <span>All Tasks</span>
           </span>
         );
@@ -61,7 +60,7 @@ export default class FilterByTaskState extends React.Component {
   render() {
     return (
       <Dropdown
-        buttonClassName="button button-small dropdown-toggle"
+        buttonClassName="button button-small dropdown-toggle text-align-left"
         dropdownMenuClassName="dropdown-menu"
         dropdownMenuListClassName="dropdown-menu-list"
         dropdownMenuListItemClassName="clickable"
