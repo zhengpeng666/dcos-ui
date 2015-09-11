@@ -10,9 +10,8 @@ import HealthStatus from "../constants/HealthStatus";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
-import ServiceTasksTable from "./ServiceTasksTable";
-import StringUtil from "../utils/StringUtil";
 import ServiceTasksView from "./ServiceTasksView";
+import StringUtil from "../utils/StringUtil";
 
 const METHODS_TO_BIND = [
   "handleOpenServiceButtonClick",
@@ -188,7 +187,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
         <ServiceTasksView serviceName={this.props.serviceName} />
       </div>
     );
-  },
+  }
 
   getTabView() {
     let currentTab = this.state.currentTab;
@@ -259,7 +258,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let serviceName = this.props.serviceName;
     let service = MesosStateStore.getServiceFromName(serviceName);
     let marathonService = MarathonStore.getServiceFromName(serviceName);
-    let serviceVersion = MarathonStore.getServiceVersion(serviceName);
 
     if (service == null ||
       marathonService == null ||
@@ -267,6 +265,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
       return null;
     }
 
+    let serviceVersion = MarathonStore.getServiceVersion(serviceName);
     let headerValueMapping = {
       "Host Name": service.hostname,
       Tasks: service.tasks.length,

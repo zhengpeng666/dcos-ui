@@ -84,19 +84,6 @@ var MesosSummaryStore = Store.createStore({
     });
   },
 
-  getTasksFromServiceName: function (serviceName) {
-    var frameworks = this.getLatest().frameworks;
-    var tasks = [];
-
-    frameworks.forEach(function (framework) {
-      if (framework.name === serviceName) {
-        tasks = framework.tasks;
-      }
-    });
-
-    return tasks;
-  },
-
   hasServiceUrl: function (serviceName) {
     let service = MesosSummaryStore.getServiceFromName(serviceName);
     let webuiUrl = service.get("webui_url");
