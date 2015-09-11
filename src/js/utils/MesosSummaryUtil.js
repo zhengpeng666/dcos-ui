@@ -78,7 +78,7 @@ const MesosSummaryUtil = {
     }
 
     return {
-      date: state.date,
+      date: state.snapshot.date,
       rate: (failed / (failed + successful)) * 100 | 0
     };
   },
