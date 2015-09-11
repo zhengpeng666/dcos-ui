@@ -1,6 +1,6 @@
 var _ = require("underscore");
 var React = require("react/addons");
-import Router, {Link} from "react-router";
+import {Link} from "react-router";
 
 import Config from "../config/Config";
 var EventTypes = require("../constants/EventTypes");
@@ -116,8 +116,7 @@ var DashboardPage = React.createClass({
   },
 
   onServiceDetailClose: function () {
-    this.internalStorage_update({openServicePanel: false});
-    Router.History.back();
+    this.context.router.transitionTo("dashboard");
   },
 
   getServicesList: function (services) {

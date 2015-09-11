@@ -31,20 +31,26 @@ var routes = (
     <Route name="dashboard" path="dashboard/?" handler={DashboardPage}>
       <Route name="dashboard-panel" path="service-detail/:serviceName" />
     </Route>
+
     <Route name="services" path="services/?" handler={ServicesPage}>
       <Route name="service-ui" path="ui/:serviceName" handler={ServiceOverlay} />
       <Route name="services-panel" path="service-detail/:serviceName" />
     </Route>
+
     <Route name="nodes" path="nodes/?" handler={NodesPage}>
       <Route name="nodes-list" path="list/?" handler={HostTable}>
         <Route name="nodes-list-panel" path="node-detail/:nodeID" />
       </Route>
+
       <Route name="nodes-grid" path="grid/?" handler={NodesGridView}>
         <Route name="nodes-grid-panel" path="node-detail/:nodeID" />
       </Route>
+
       <Redirect from="/nodes/?" to="nodes-list" />
     </Route>
+
     <Redirect from="/" to="dashboard" />
+
     <NotFoundRoute handler={NotFoundPage}/>
   </Route>
 );

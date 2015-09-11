@@ -6,6 +6,7 @@ var RouteHandler = require("react-router").RouteHandler;
 var AnimatedLogo = require("../components/AnimatedLogo");
 var Actions = require("../actions/Actions");
 var EventTypes = require("../constants/EventTypes");
+import HistoryStore from "../stores/HistoryStore";
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var IntercomStore = require("../stores/IntercomStore");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
@@ -44,6 +45,7 @@ var Index = React.createClass({
   },
 
   componentWillMount: function () {
+    HistoryStore.init();
     MesosSummaryStore.init();
     SidebarStore.init();
     this.internalStorage_set(getSidebarState());

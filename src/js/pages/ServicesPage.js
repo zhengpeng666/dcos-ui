@@ -1,6 +1,6 @@
 var _ = require("underscore");
 var React = require("react/addons");
-import Router, {RouteHandler} from "react-router";
+import {RouteHandler} from "react-router";
 
 var AlertPanel = require("../components/AlertPanel");
 import Config from "../config/Config";
@@ -144,13 +144,7 @@ var ServicesPage = React.createClass({
   },
 
   handleSideBarClose: function () {
-    if (Router.History.length > 1) {
-      Router.History.back();
-    } else {
-      let currentRoutes = this.context.router.getCurrentRoutes();
-      let routeName = currentRoutes[currentRoutes.length - 2].name;
-      this.context.router.transitionTo(routeName);
-    }
+    this.context.router.transitionTo("services");
   },
 
   resetFilter: function () {
