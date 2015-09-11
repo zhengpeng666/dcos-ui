@@ -94,6 +94,18 @@ var MarathonStore = Store.createStore({
     return appImages;
   },
 
+  getServiceVersion: function (name) {
+    let appName = name.toLowerCase();
+    let appVersion = null;
+    let marathonApps = this.get("apps");
+
+    if (marathonApps[appName]) {
+      appVersion = marathonApps[appName].snapshot.version;
+    }
+
+    return appVersion;
+  },
+
   getImageSizeFromMetadata: function (metadata, size) {
     if (metadata.images == null ||
       metadata.images[`icon-${size}`] == null ||

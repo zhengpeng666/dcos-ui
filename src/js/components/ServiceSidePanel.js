@@ -261,6 +261,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let serviceName = this.props.serviceName;
     let service = MesosStateStore.getServiceFromName(serviceName);
     let marathonService = MarathonStore.getServiceFromName(serviceName);
+    let serviceVersion = MarathonStore.getServiceVersion(serviceName);
 
     if (service == null ||
       marathonService == null ||
@@ -268,15 +269,13 @@ export default class ServiceSidePanel extends DetailSidePanel {
       return null;
     }
 
-    let registeredTime = service.registered_time.toFixed(3) * 1000;
     let headerValueMapping = {
       "Host Name": service.hostname,
       Tasks: service.tasks.length,
-      Registered: DateUtil.msToDateStr(registeredTime),
+      Installed: DateUtil.msToDateStr(serviceVersion),
       Instances: marathonService.snapshot.instances,
       Command: marathonService.snapshot.cmd,
-      Ports: marathonService.snapshot.ports.join(", "),
-      Version: marathonService.snapshot.version
+      Ports: marathonService.snapshot.ports.join(", ")
     };
 
     return Object.keys(headerValueMapping).map(function (header, i) {

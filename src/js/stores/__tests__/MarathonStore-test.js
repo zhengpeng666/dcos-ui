@@ -158,6 +158,24 @@ describe("MarathonStore", function () {
 
   });
 
+  describe("#getServiceVersion", function () {
+
+    it("returns a dateString", function () {
+      MarathonStore.processMarathonApps(MockMarathonResponse.hasVersion);
+      let version = MarathonStore.getServiceVersion("Framework 1");
+
+      expect(!isNaN(Date.parse(version))).toEqual(true);
+    });
+
+    it("returns null when no service version", function () {
+      MarathonStore.processMarathonApps(MockMarathonResponse.hasVersion);
+      let version = MarathonStore.getServiceVersion("bloop");
+
+      expect(version).toEqual(null);
+    });
+
+  });
+
   describe("#getServiceImages", function () {
 
     it("returns null when app is not found", function () {
