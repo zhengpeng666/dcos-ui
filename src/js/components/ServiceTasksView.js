@@ -1,34 +1,38 @@
-var _ = require("underscore");
-var React = require("react/addons");
+import _ from "underscore";
+import React from "react/addons";
 
-var EventTypes = require("../constants/EventTypes");
-var FilterByTaskState = require("./FilterByTaskState");
-var FilterInputText = require("./FilterInputText");
-var MesosStateStore = require("../stores/MesosStateStore");
-var RequestErrorMsg = require("./RequestErrorMsg");
-var ServiceTasksTable = require("./ServiceTasksTable");
-var StringUtil = require("../utils/StringUtil");
-var TaskStates = require("../constants/TaskStates");
+import EventTypes from "../constants/EventTypes";
+import FilterByTaskState from "./FilterByTaskState";
+import FilterInputText from "./FilterInputText";
+import MesosStateStore from "../stores/MesosStateStore";
+import RequestErrorMsg from "./RequestErrorMsg";
+import ServiceTasksTable from "./ServiceTasksTable";
+import StringUtil from "../utils/StringUtil";
+import TaskStates from "../constants/TaskStates";
 
-var ServiceTasksView = React.createClass({
+const METHODS_TO_BIND = [
+  "handleSearchStringChange",
+  "handleStatusFilterChange",
+  "onMesosStateChange",
+  "onMesosStateRequestError"
+];
 
-  displayName: "ServiceTasksView",
+export default class ServiceTasksView extends React.Component {
+  constructor() {
+    super();
 
-  propTypes: {
-    serviceName: React.PropTypes.string
-  },
-
-  tasks: null,
-
-  getInitialState: function () {
-    return {
+    this.state = {
       mesosStateErrorCount: 0,
       searchString: "",
       filterByStatus: "all"
     };
-  },
 
-  componentWillMount: function () {
+    METHODS_TO_BIND.forEach(function (method) {
+      this[method] = this[method].bind(this);
+    }, this);
+  }
+
+  componentWillMount() {
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange
@@ -38,9 +42,9 @@ var ServiceTasksView = React.createClass({
       EventTypes.MESOS_STATE_REQUEST_ERROR,
       this.onMesosStateRequestError
     );
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange
@@ -50,30 +54,30 @@ var ServiceTasksView = React.createClass({
       EventTypes.MESOS_STATE_REQUEST_ERROR,
       this.onMesosStateRequestError
     );
-  },
+  }
 
-  onMesosStateChange: function () {
+  onMesosStateChange() {
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_CHANGE,
       this.onMesosStateChange
     );
 
-    var serviceName = this.props.serviceName;
+    let serviceName = this.props.serviceName;
     this.tasks = MesosStateStore.getTasksFromServiceName(serviceName);
     this.forceUpdate();
-  },
+  }
 
-  onMesosStateRequestError: function () {
+  onMesosStateRequestError() {
     this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
-  },
+  }
 
-  filterByCurrentStatus: function (tasks) {
-    var status = this.state.filterByStatus;
+  filterByCurrentStatus(tasks) {
+    let status = this.state.filterByStatus;
     if (status === "all") {
       return tasks;
     }
 
-    var filterBy = TaskStates.completed;
+    let filterBy = TaskStates.completed;
     if (status === "active") {
       filterBy = TaskStates.active;
     }
@@ -81,21 +85,21 @@ var ServiceTasksView = React.createClass({
     return _.filter(tasks, function (task) {
       return _.contains(filterBy, task.state);
     });
-  },
+  }
 
-  handleSearchStringChange: function (searchString) {
+  handleSearchStringChange(searchString) {
     this.setState({searchString});
-  },
+  }
 
-  handleStatusFilterChange: function (filterByStatus) {
+  handleStatusFilterChange(filterByStatus) {
     this.setState({filterByStatus});
-  },
+  }
 
-  hasLoadingError: function () {
+  hasLoadingError() {
     return this.state.mesosStateErrorCount >= 3;
-  },
+  }
 
-  getStatusCounts: function (tasks) {
+  getStatusCounts(tasks) {
     return tasks.reduce(function (acc, task) {
       if (_.contains(TaskStates.active, task.state)) {
         acc.active += 1;
@@ -107,9 +111,9 @@ var ServiceTasksView = React.createClass({
 
       return acc;
     }, {active: 0, completed: 0});
-  },
+  }
 
-  getStatuses: function () {
+  getStatuses() {
     let statusCount = this.getStatusCounts(this.tasks);
     return [
       {
@@ -125,9 +129,9 @@ var ServiceTasksView = React.createClass({
         value: "completed"
       }
     ];
-  },
+  }
 
-  getLoadingScreen: function () {
+  getLoadingScreen() {
     return (
       <div className="text-align-center vertical-center inverse">
         <div className="row">
@@ -137,15 +141,15 @@ var ServiceTasksView = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
-  getTasksTable: function (tasks) {
+  getTasksTable(tasks) {
     return (
       <ServiceTasksTable tasks={tasks} />
     );
-  },
+  }
 
-  getHeaderText: function () {
+  getHeaderText() {
     let currentStatus = this.state.filterByStatus;
     let tasksLength = this.tasks.length;
     if (currentStatus === "all") {
@@ -161,12 +165,12 @@ var ServiceTasksView = React.createClass({
     let displayName = displayNameMap[currentStatus];
     let pluralizedTasks = StringUtil.pluralize("Task", statusCount);
     return `${statusCount} ${displayName} ${pluralizedTasks}`;
-  },
+  }
 
-  getContent: function () {
+  getContent() {
     if (this.tasks) {
-      var state = this.state;
-      var tasks = this.tasks;
+      let state = this.state;
+      let tasks = this.tasks;
 
       if (state.searchString !== "") {
         tasks = StringUtil.filterByString(
@@ -202,11 +206,11 @@ var ServiceTasksView = React.createClass({
     } else {
       return this.getLoadingScreen();
     }
-  },
+  }
 
-  render: function () {
-    var hasLoadingError = this.hasLoadingError();
-    var errorMsg = null;
+  render() {
+    let hasLoadingError = this.hasLoadingError();
+    let errorMsg = null;
 
     if (hasLoadingError) {
       errorMsg = <RequestErrorMsg />;
@@ -219,6 +223,8 @@ var ServiceTasksView = React.createClass({
       </div>
     );
   }
-});
+}
 
-module.exports = ServiceTasksView;
+ServiceTasksView.propTypes = {
+  serviceName: React.PropTypes.string
+};
