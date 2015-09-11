@@ -6,6 +6,7 @@ import DateUtil from "../utils/DateUtil";
 import Maths from "../utils/Maths";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import Table from "./Table";
+import TaskStates from "../constants/TaskStates";
 import TaskHealthStates from "../constants/TaskHealthStates";
 import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
 import Units from "../utils/Units";
@@ -111,13 +112,9 @@ export default class ServiceTasksTable extends React.Component {
   }
 
   renderHeadline(prop, task) {
-    let dangerState = _.contains([
-      "TASK_FAILED", "TASK_KILLED", "TASK_LOST", "TASK_ERROR"
-    ], task.state);
+    let dangerState = _.contains(TaskStates.failureStates, task.state);
 
-    let successState = _.contains([
-      "TASK_RUNNING", "TASK_STARTING", "TASK_FINISHED"
-    ], task.state);
+    let successState = _.contains(TaskStates.successStates, task.state);
 
     let statusClass = classNames({
       "dot": true,
