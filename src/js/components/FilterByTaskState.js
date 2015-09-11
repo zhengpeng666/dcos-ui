@@ -1,6 +1,5 @@
 import _ from "underscore";
 import React from "react/addons";
-
 import {Dropdown} from "reactjs-components";
 
 const defaultId = "all";
