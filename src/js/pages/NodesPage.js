@@ -162,7 +162,7 @@ var NodesPage = React.createClass({
       <FilterInputText
           searchString={this.state.searchString}
           handleFilterChange={this.handleSearchStringChange}
-          inverse={true} />
+          inverseStyle={true} />
     );
   },
 

@@ -191,7 +191,7 @@ var ServicesPage = React.createClass({
             <FilterInputText
               searchString={state.searchString}
               handleFilterChange={this.handleSearchStringChange}
-              inverse={true} />
+              inverseStyle={true} />
           </li>
         </ul>
         <ServiceTable

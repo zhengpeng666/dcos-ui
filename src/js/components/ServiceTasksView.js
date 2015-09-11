@@ -13,7 +13,6 @@ import TaskStates from "../constants/TaskStates";
 const METHODS_TO_BIND = [
   "handleSearchStringChange",
   "handleStatusFilterChange",
-  "onMesosStateChange",
   "onMesosStateRequestError"
 ];
 
@@ -170,7 +169,8 @@ export default class ServiceTasksView extends React.Component {
         <div className="flex-box control-group">
           <FilterInputText
             searchString={state.searchString}
-            handleFilterChange={this.handleSearchStringChange} />
+            handleFilterChange={this.handleSearchStringChange}
+            inverseStyle={false} />
           <div>
             <FilterByTaskState
               statuses={this.getStatuses(tasks)}
