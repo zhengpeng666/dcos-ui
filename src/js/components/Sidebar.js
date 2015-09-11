@@ -38,7 +38,7 @@ var Sidebar = React.createClass({
     MetadataActions.fetch();
 
     this.internalStorage_set({
-      mesosInfo: MesosSummaryStore.getLatest(),
+      mesosInfo: MesosSummaryStore.get("states").last(),
       metadata: MetadataStore.get("metadata")
     });
   },
@@ -79,7 +79,9 @@ var Sidebar = React.createClass({
   },
 
   onMesosStateChange: function () {
-    this.internalStorage_update({mesosInfo: MesosSummaryStore.getLatest()});
+    this.internalStorage_update({
+      mesosInfo: MesosSummaryStore.get("states").last()
+    });
     this.forceUpdate();
 
     // Datacenter info won't change often
@@ -212,6 +214,7 @@ var Sidebar = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
+    let clusterName = data.mesosInfo.getClusterName();
 
     var chatIconClassSet = classNames({
       "clickable": true,
@@ -228,8 +231,8 @@ var Sidebar = React.createClass({
             <div className="sidebar-header-image">
               <img className="sidebar-header-image-inner" src="./img/layout/sidebar/sidebar-dcos-icon-medium.png" alt="sidebar header image"/>
             </div>
-            <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={data.mesosInfo.cluster}>
-              {data.mesosInfo.cluster}
+            <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={clusterName}>
+              {clusterName}
             </h2>
             {this.getHostName(data)}
           </div>

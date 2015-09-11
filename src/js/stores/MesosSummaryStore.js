@@ -8,7 +8,6 @@ var GetSetMixin = require("../mixins/GetSetMixin");
 var MesosSummaryUtil = require("../utils/MesosSummaryUtil");
 var MesosSummaryActions = require("../events/MesosSummaryActions");
 var SummaryList = require("../structs/SummaryList");
-var StringUtil = require("../utils/StringUtil");
 var Store = require("../utils/Store");
 var TimeScales = require("../constants/TimeScales");
 
@@ -53,11 +52,8 @@ var MesosSummaryStore = Store.createStore({
     });
 
     this.set({
-      frameworkIDs: [],
-      frameworkNames: [],
       initCalledAt: Date.now(), // log when we started calling
       loading: null,
-      mesosStates: initialStates,
       states: list,
       prevMesosStatusesMap: {},
       statesProcessed: false,
@@ -79,100 +75,20 @@ var MesosSummaryStore = Store.createStore({
     this.removeListener(eventName, callback);
   },
 
-  getLatest: function () {
-    return _.last(this.get("mesosStates"));
-  },
-
-  getTotalHostsResources: function (hosts) {
-    return MesosSummaryUtil.sumListResources(
-      this.get("mesosStates"), hosts, "used_resources"
-    );
-  },
-
-  getActiveHostsCount: function () {
-    return _.map(this.get("mesosStates"), function (state) {
-      return {
-        date: state.date,
-        slavesCount: state.active_slaves || 0
-      };
-    });
-  },
-
   getServiceFromName: function (name) {
-    let services = this.getLatest().frameworks;
+    let last = this.get("states").last();
+    let services = last.getServiceList().getItems();
 
-    return _.findWhere(services, {name});
-  },
-
-  getTaskTotals: function () {
-    return MesosSummaryUtil.getFrameworksTaskTotals(
-      this.getLatest().frameworks
-    );
-  },
-
-  getTotalResources: function () {
-    var mesosStates = this.get("mesosStates");
-    return MesosSummaryUtil.getStatesByResource(
-      this.get("mesosStates"), mesosStates, "total_resources"
-    );
-  },
-
-  getAllocResources: function () {
-    var mesosStates = this.get("mesosStates");
-    return MesosSummaryUtil.getStatesByResource(
-      this.get("mesosStates"), mesosStates, "used_resources"
-    );
-  },
-
-  getFrameworks: function (filters) {
-    var mesosStates = this.get("mesosStates");
-    var frameworks = MesosSummaryUtil.getStatesByFramework(mesosStates);
-
-    if (filters) {
-      if (filters.healthFilter != null) {
-        frameworks = MesosSummaryUtil.filterServicesByHealth(
-          frameworks, filters.healthFilter
-        );
-      }
-
-      if (filters.searchString && filters.searchString !== "") {
-        frameworks = StringUtil.filterByString(
-          frameworks,
-          "name",
-          filters.searchString
-        );
-      }
-    }
-
-    return frameworks;
-  },
-
-  getHosts: function (filters) {
-    var hosts = MesosSummaryUtil.getStateByHosts(this.get("mesosStates"));
-
-    if (filters) {
-      if (filters.byServiceFilter != null) {
-        hosts = MesosSummaryUtil.filterHostsByService(
-          hosts, filters.byServiceFilter
-        );
-      }
-
-      if (filters.searchString && filters.searchString !== "") {
-        hosts = StringUtil.filterByString(
-          hosts,
-          "hostname",
-          filters.searchString
-        );
-      }
-    }
-
-    return hosts;
+    return _.find(services, function (service) {
+      return service.get("name") === name;
+    });
   },
 
   hasServiceUrl: function (serviceName) {
     let service = MesosSummaryStore.getServiceFromName(serviceName);
+    let webuiUrl = service.get("webui_url");
 
-    return service && !!service.webui_url && service.webui_url.length > 0;
+    return service && !!webuiUrl && webuiUrl.length > 0;
   },
 
   updateStateProcessed: function () {
@@ -203,57 +119,8 @@ var MesosSummaryStore = Store.createStore({
     }
   },
 
-  /**
-   * This function will normalize a given framwork list adding necessary
-   * information to the frameworks and mesos states
-   *
-   * @param {Array} frameworks to normalize
-   * @param {Date} date Time step for the current data
-   * @return {Array} List of frameworks with normalized data
-   * [{
-   *   frameworks:[{
-   *     colorIndex: 0,
-   *     date: request time,
-   *     name: "Marathon",
-   *     resources: {...},
-   *     ...
-   *   }]
-   * ]}]
-   */
-  normalizeFrameworks: function (frameworks, date) {
-    var frameworkIDs = this.get("frameworkIDs");
-    var frameworkNames = this.get("frameworkNames");
-    var mesosStates = this.get("mesosStates");
-
-    var normalizedFrameworks = _.map(frameworks, function (framework) {
-      var index = _.indexOf(frameworkIDs, framework.id);
-      framework.date = date;
-
-      // this is a new framework, fill in 0s for all the previous datapoints
-      if (index === -1) {
-        frameworkIDs.push(framework.id);
-        frameworkNames.push(framework.name);
-        index = frameworkIDs.length - 1;
-        MesosSummaryUtil.addFrameworkToPreviousStates(
-          mesosStates, framework, index
-        );
-      }
-      // set color index after discovering and assigning index framework
-      framework.colorIndex = index;
-
-      return framework;
-    });
-
-    // Update our ID and name lists
-    this.set({frameworkIDs, frameworkNames});
-
-    return normalizedFrameworks;
-  },
-
-  processFailureRate: function (mesosState) {
-    var currentFailureRate = MesosSummaryUtil.getFailureRate(
-      mesosState, this.getLatest()
-    );
+  processFailureRate: function (state, prevState) {
+    var currentFailureRate = MesosSummaryUtil.getFailureRate(state, prevState);
 
     var taskFailureRate = this.get("taskFailureRate");
     taskFailureRate.push(currentFailureRate);
@@ -262,35 +129,19 @@ var MesosSummaryStore = Store.createStore({
   },
 
   processSummary: function (data, options) {
+    let states = this.get("states");
+    let prevState = states.last();
     options = _.defaults({}, options, {silent: false});
 
     if (typeof data.date !== "number") {
       data.date = Date.now();
     }
 
-    this.get("states").addSnapshot(_.clone(data), data.date);
+    states.addSnapshot(data, data.date);
 
-    data.slaves = data.slaves || [];
-    data.frameworks = this.normalizeFrameworks(data.frameworks, data.date);
-    data.total_resources = MesosSummaryUtil.sumResources(
-      _.pluck(data.slaves, "resources")
-    );
-    data.used_resources = MesosSummaryUtil.sumResources(
-      _.pluck(data.frameworks, "used_resources")
-    );
-    data.active_slaves = _.where(data.slaves, {active: true}).length;
-
-    var taskFailureRate = this.processFailureRate(data);
+    // Calculate the task failure rate before we add a new snapshot
+    var taskFailureRate = this.processFailureRate(states.last(), prevState);
     this.set({taskFailureRate});
-
-    // Add new snapshot
-    var mesosStates = this.get("mesosStates");
-    mesosStates.push(data);
-    // Remove oldest snapshot when we have more than we should
-    if (mesosStates.length > Config.historyLength) {
-      mesosStates.shift();
-    }
-    this.set({mesosStates});
 
     if (options.silent === false) {
       this.notifySummaryProcessed();

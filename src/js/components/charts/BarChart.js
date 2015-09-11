@@ -240,11 +240,11 @@ var BarChart = React.createClass({
       lineClass = "hidden ";
     }
 
-    return _.map(data.stackedData, function (framework) {
-      var colorClass = "path-color-" + framework.colorIndex;
+    return _.map(data.stackedData, function (service) {
+      var colorClass = "path-color-" + service.colorIndex;
       var rectWidth = (chartWidth - marginLeft - marginRight) / (valuesLength - 1);
 
-      return _.map(framework.values, function (val, j) {
+      return _.map(service.values, function (val, j) {
         var rectHeight = props.height * val[y] / props.maxY - peaklineHeight;
 
         var posX = chartWidth - marginLeft - marginRight - rectWidth * (valuesLength - 1 - j);
