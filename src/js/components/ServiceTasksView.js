@@ -190,8 +190,7 @@ export default class ServiceTasksView extends React.Component {
           <div className="flex-box control-group">
             <FilterInputText
               searchString={state.searchString}
-              handleFilterChange={this.handleSearchStringChange}
-              inverse={true} />
+              handleFilterChange={this.handleSearchStringChange} />
             <div>
               <FilterByTaskState
                 statuses={this.getStatuses()}
