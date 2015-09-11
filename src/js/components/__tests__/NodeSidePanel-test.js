@@ -41,7 +41,7 @@ describe("NodeSidePanel", function () {
     expect(headline.getDOMNode().textContent).toBe("Error finding node");
   });
 
-  it("should show error if node is not to be found", function () {
+  it("should show the nodes hostname if it is found", function () {
     this.instance = TestUtils.renderIntoDocument(
       <NodeSidePanel open={true} onClose={this.callback} nodeID="foo" />
     );
