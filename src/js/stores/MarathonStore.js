@@ -100,7 +100,7 @@ var MarathonStore = Store.createStore({
     let marathonApps = this.get("apps");
 
     if (marathonApps[appName]) {
-      appVersion = marathonApps[appName].version;
+      appVersion = marathonApps[appName].snapshot.version;
     }
 
     return appVersion;
