@@ -8,13 +8,13 @@ var FilterInputText = React.createClass({
   propTypes: {
     searchString: React.PropTypes.string.isRequired,
     handleFilterChange: React.PropTypes.func.isRequired,
-    inverse: React.PropTypes.bool
+    inverseStyle: React.PropTypes.bool
   },
 
   getDefaultProps: function () {
     return {
       searchString: "",
-      inverse: false
+      inverseStyle: false
     };
   },
 
@@ -55,24 +55,24 @@ var FilterInputText = React.createClass({
 
     var clearIconClasses = classNames({
       "icon icon-mini icon-close": true,
-      "icon-mini-white": this.props.inverse
+      "icon-mini-white": this.props.inverseStyle
     });
 
     var iconSearchClasses = classNames({
       "icon icon-mini icon-search": true,
-      "icon-mini-white": this.props.inverse,
-      "icon-mini-color": !this.props.inverse && this.state.focus,
+      "icon-mini-white": this.props.inverseStyle,
+      "icon-mini-color": !this.props.inverseStyle && this.state.focus,
       "active": this.state.focus
     });
 
     var inputClasses = classNames({
       "form-control form-control-small filter-input-text": true,
-      "form-control-inverse": this.props.inverse
+      "form-control-inverse": this.props.inverseStyle
     });
 
     let inputContainerClasses = classNames({
       "form-control form-control-small form-control-group": true,
-      "form-control-inverse": this.props.inverse,
+      "form-control-inverse": this.props.inverseStyle,
       "focus": this.state.focus
     });
 

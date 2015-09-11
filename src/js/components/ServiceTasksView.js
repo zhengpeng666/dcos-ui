@@ -69,22 +69,6 @@ export default class ServiceTasksView extends React.Component {
     this.setState({mesosStateErrorCount: this.state.mesosStateErrorCount + 1});
   }
 
-  filterByCurrentStatus(tasks) {
-    let status = this.state.filterByStatus;
-    if (status === "all") {
-      return tasks;
-    }
-
-    let filterBy = TaskStates.completed;
-    if (status === "active") {
-      filterBy = TaskStates.active;
-    }
-
-    return _.filter(tasks, function (task) {
-      return _.contains(filterBy, task.state);
-    });
-  }
-
   handleSearchStringChange(searchString) {
     this.setState({searchString});
   }
@@ -93,22 +77,35 @@ export default class ServiceTasksView extends React.Component {
     this.setState({filterByStatus});
   }
 
+  filterByCurrentStatus(tasks) {
+    let status = this.state.filterByStatus;
+    if (status === "all") {
+      return tasks;
+    }
+
+    return _.filter(tasks, function (task) {
+      return _.contains(TaskStates[task.state].stateTypes, status);
+    });
+  }
+
   hasLoadingError() {
     return this.state.mesosStateErrorCount >= 3;
   }
 
   getStatusCounts(tasks) {
-    return tasks.reduce(function (acc, task) {
-      if (_.contains(TaskStates.active, task.state)) {
-        acc.active += 1;
+    let statusCount = {active: 0, completed: 0};
+
+    tasks.forEach(function (task) {
+      if (_.contains(TaskStates[task.state].stateTypes, "active")) {
+        statusCount.active += 1;
       }
 
-      if (_.contains(TaskStates.completed, task.state)) {
-        acc.completed += 1;
+      if (_.contains(TaskStates[task.state].stateTypes, "completed")) {
+        statusCount.completed += 1;
       }
+    });
 
-      return acc;
-    }, {active: 0, completed: 0});
+    return statusCount;
   }
 
   getStatuses(tasks) {
@@ -116,13 +113,13 @@ export default class ServiceTasksView extends React.Component {
     return [
       {
         count: statusCount.active,
-        id: 1,
+        id: "active",
         name: "Active Tasks",
         value: "active"
       },
       {
         count: statusCount.completed,
-        id: 2,
+        id: "completed",
         name: "Completed Tasks",
         value: "completed"
       }
@@ -178,7 +175,6 @@ export default class ServiceTasksView extends React.Component {
     let state = this.state;
     let serviceName = this.props.serviceName;
     let tasks = MesosStateStore.getTasksFromServiceName(serviceName) || [];
-
     if (state.searchString !== "") {
       tasks = StringUtil.filterByString(tasks, "name", state.searchString);
     }

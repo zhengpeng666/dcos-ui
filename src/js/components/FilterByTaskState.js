@@ -2,17 +2,17 @@ import _ from "underscore";
 import React from "react/addons";
 import {Dropdown} from "reactjs-components";
 
-const defaultId = "all";
+const defaultID = "all";
 
 export default class FilterByTaskState extends React.Component {
 
   constructor() {
     super();
 
-    this.handleItemSelection = this.handleItemSelection.bind(this);
+    this.onItemSelection = this.onItemSelection.bind(this);
   }
 
-  handleItemSelection(obj) {
+  onItemSelection(obj) {
     this.props.handleFilterChange(obj.value);
   }
 
@@ -26,13 +26,13 @@ export default class FilterByTaskState extends React.Component {
 
   getDropdownItems() {
     let items = [{
-      id: defaultId,
+      id: defaultID,
       name: "All Tasks",
       value: "all",
       count: this.props.totalTasksCount
     }].concat(this.props.statuses);
 
-    return _.map(items, function (status) {
+    return items.map(function (status) {
       let selectedHtml = this.getItemHtml(status);
       let dropdownHtml = (<a>{selectedHtml}</a>);
 
@@ -44,7 +44,7 @@ export default class FilterByTaskState extends React.Component {
         selectedHtml
       };
 
-      if (status.id === defaultId) {
+      if (status.id === defaultID) {
         item.selectedHtml = (
           <span>
             <span>All Tasks</span>
@@ -68,7 +68,7 @@ export default class FilterByTaskState extends React.Component {
         dropdownMenuListItemClassName="clickable"
         wrapperClassName="dropdown"
         items={this.getDropdownItems()}
-        onItemSelection={this.handleItemSelection}
+        onItemSelection={this.onItemSelection}
         selectedID={this.props.currentStatus}
         transition={true}
         transitionName="dropdown-menu" />
@@ -78,14 +78,14 @@ export default class FilterByTaskState extends React.Component {
 
 FilterByTaskState.propTypes = {
   currentStatus: React.PropTypes.string,
+  handleFilterChange: React.PropTypes.func,
   statuses: React.PropTypes.array.isRequired,
-  totalTasksCount: React.PropTypes.number.isRequired,
-  handleFilterChange: React.PropTypes.func
+  totalTasksCount: React.PropTypes.number.isRequired
 };
 
 FilterByTaskState.defaultProps = {
-  currentStatus: defaultId,
+  currentStatus: defaultID,
+  handleFilterChange: _.noop,
   statuses: [],
-  totalHostsCount: 0,
-  handleFilterChange: _.noop
+  totalHostsCount: 0
 };

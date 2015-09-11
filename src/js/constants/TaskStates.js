@@ -1,9 +1,43 @@
 const TaskStates = {
-  active: ["TASK_STAGING", "TASK_STARTING", "TASK_RUNNING"],
-  completed: ["TASK_FAILED", "TASK_KILLED", "TASK_LOST", "TASK_ERROR", "TASK_FINISHED"],
+  TASK_STAGING: {
+    stateTypes: ["active", "success"],
+    displayName: "Staging"
+  },
 
-  successStates: ["TASK_STAGING", "TASK_STARTING", "TASK_RUNNING", "TASK_FINISHED"],
-  failureStates: ["TASK_FAILED", "TASK_KILLED", "TASK_LOST", "TASK_ERROR"]
+  TASK_STARTING: {
+    stateTypes: ["active", "success"],
+    displayName: "Starting"
+  },
+
+  TASK_RUNNING: {
+    stateTypes: ["active", "success"],
+    displayName: "Running"
+  },
+
+  TASK_FAILED: {
+    stateTypes: ["completed", "failure"],
+    displayName: "Failed"
+  },
+
+  TASK_KILLED: {
+    stateTypes: ["completed", "failure"],
+    displayName: "Killed"
+  },
+
+  TASK_LOST: {
+    stateTypes: ["completed", "failure"],
+    displayName: "Lost"
+  },
+
+  TASK_ERROR: {
+    stateTypes: ["completed", "failure"],
+    displayName: "Error"
+  },
+
+  TASK_FINISHED: {
+    stateTypes: ["completed", "success"],
+    displayName: "Finished"
+  }
 };
 
 module.exports = TaskStates;
