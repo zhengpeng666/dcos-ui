@@ -29,7 +29,7 @@ describe("MesosStateStore", function () {
 
     it("should null if no service matches", function () {
       var result = MesosStateStore.getTasksFromServiceName("nonExistent");
-      expect(result).toEqual(null);
+      expect(result).toEqual([]);
     });
   });
 });
