@@ -34,11 +34,6 @@ export default class ServiceTasksView extends React.Component {
 
   componentWillMount() {
     MesosStateStore.addChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
-      this.onMesosStateChange
-    );
-
-    MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_REQUEST_ERROR,
       this.onMesosStateRequestError
     );
@@ -46,23 +41,9 @@ export default class ServiceTasksView extends React.Component {
 
   componentWillUnmount() {
     MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
-      this.onMesosStateChange
-    );
-
-    MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_REQUEST_ERROR,
       this.onMesosStateRequestError
     );
-  }
-
-  onMesosStateChange() {
-    MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_CHANGE,
-      this.onMesosStateChange
-    );
-
-    this.forceUpdate();
   }
 
   onMesosStateRequestError() {
