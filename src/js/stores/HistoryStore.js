@@ -1,4 +1,4 @@
-import {HashLocation, History} from "react-router";
+import {HashLocation} from "react-router";
 
 import GetSetMixin from "../mixins/GetSetMixin";
 import Store from "../utils/Store";
@@ -27,7 +27,6 @@ var HistoryStore = Store.createStore({
       history.push(change.path);
     }
 
-    console.log("onHashChange", history);
     this.set({history});
   },
 
