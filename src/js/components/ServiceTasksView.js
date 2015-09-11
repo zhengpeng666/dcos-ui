@@ -135,7 +135,12 @@ export default class ServiceTasksView extends React.Component {
     }
 
     return (
-      <div className="text-align-center vertical-center inverse">
+      <div className="
+        container
+        container-pod
+        text-align-center
+        vertical-center
+        inverse">
         <div className="row">
           <div className="ball-scale">
             <div />
