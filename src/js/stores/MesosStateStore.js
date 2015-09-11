@@ -62,6 +62,11 @@ var MesosStateStore = Store.createStore({
   getTasksFromServiceName: function (serviceName) {
     let frameworks = this.get("lastMesosState").frameworks;
     let framework = _.findWhere(frameworks, {name: serviceName});
+
+    if (!framework) {
+      return null;
+    }
+
     return framework.tasks || [];
   },
 
