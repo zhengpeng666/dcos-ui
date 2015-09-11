@@ -77,9 +77,11 @@ var MesosSummaryStore = Store.createStore({
 
   getServiceFromName: function (name) {
     let last = this.get("states").last();
-    let services = last.getServiceList().filter({name});
+    let services = last.getServiceList().getItems();
 
-    return services.last();
+    return _.find(services, function (service) {
+      return service.get("name") === name;
+    });
   },
 
   hasServiceUrl: function (serviceName) {

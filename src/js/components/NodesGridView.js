@@ -95,13 +95,12 @@ var NodesGridView = React.createClass({
   },
 
   computeServiceColors: function (services) {
-    // {service.id: colorIndex}
     var colors = {};
 
-    services.forEach(function (service) {
+    services.forEach(function (service, index) {
       // Drop all others into the same "other" color
-      if (service.colorIndex < MAX_SERVICES_TO_SHOW) {
-        colors[service.id] = service.colorIndex;
+      if (index < MAX_SERVICES_TO_SHOW) {
+        colors[service.id] = index;
       } else {
         colors.other = OTHER_SERVICES_COLOR;
       }
@@ -167,25 +166,26 @@ var NodesGridView = React.createClass({
   getServicesList: function (props) {
     // Return a list of unique service IDs from the selected hosts.
     var activeServiceIds = this.getActiveServiceIds(props.hosts);
+    var data = this.internalStorage_get();
 
     // Filter out inactive services
     var items = _.filter(props.services, function (service) {
-      return activeServiceIds.indexOf(service.id) !== -1;
-    })
-    // Limit to max amount
-    .slice(0, MAX_SERVICES_TO_SHOW)
-    // Return view definition
-    .map(function (service) {
-      var className = "service-legend-color service-color-" +
-        service.colorIndex;
+        return activeServiceIds.indexOf(service.id) !== -1;
+      })
+      // Limit to max amount
+      .slice(0, MAX_SERVICES_TO_SHOW)
+      // Return view definition
+      .map(function (service) {
+        var color = data.serviceColors[service.id];
+        var className = `service-legend-color service-color-${color}`;
 
-      return (
-        <li key={service.id}>
-          <span className={className}></span>
-          <span>{service.name}</span>
-        </li>
-      );
-    });
+        return (
+          <li key={service.id}>
+            <span className={className}></span>
+            <span>{service.name}</span>
+          </li>
+        );
+      });
 
     // Add "Others" node to the list
     if (activeServiceIds.length > MAX_SERVICES_TO_SHOW) {
