@@ -6,9 +6,9 @@ var FilterInputText = React.createClass({
   displayName: "FilterInputText",
 
   propTypes: {
-    searchString: React.PropTypes.string.isRequired,
     handleFilterChange: React.PropTypes.func.isRequired,
-    inverseStyle: React.PropTypes.bool
+    inverseStyle: React.PropTypes.bool,
+    searchString: React.PropTypes.string.isRequired
   },
 
   getDefaultProps: function () {
