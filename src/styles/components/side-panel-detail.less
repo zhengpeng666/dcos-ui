@@ -68,32 +68,32 @@
     margin-right: @base-spacing-unit;
   }
 
-  .side-panel-input-filter {
-    flex: 2;
+  .control-group > *:first-child {
+    margin-right: @base-spacing-unit * 0.5;
   }
 
   .filter-input-text {
     width: @base-spacing-unit * 3;
   }
+
   .filter-input-text-group {
     width: @base-spacing-unit * 7;
-  }
 
-  .control-group > *:first-child {
-    margin-right: @base-spacing-unit * 0.5;
+    .icon {
+      opacity: 0.2;
+
+      &.active {
+        opacity: 1;
+      }
+    }
+
   }
 
   .form-control-inverse {
     border-color: color-lighten(@neutral, 80);
 
-    .icon {
-      opacity: 0.4;
-    }
-
     &:hover {
-      .icon {
-        opacity: 1;
-      }
+      border-color: color-lighten(@neutral, 40);
     }
   }
 
@@ -129,34 +129,5 @@
         }
       }
     }
-
   }
-
-
-  .dropdown {
-    > .button {
-      padding-right: @base-spacing-unit * 1.5;
-      width: auto;
-
-      &.dropdown-toggle:after {
-        margin-right: @base-spacing-unit * -0.75;
-      }
-    }
-
-    > .dropdown-menu,
-    > .dropdown-toggle {
-      width: auto;
-    }
-
-    > .dropdown-toggle > :first-child {
-      width: auto;
-    }
-
-    .dropdown-menu {
-      right: 0;
-      left: auto;
-      margin-top: @base-spacing-unit * 0.25;
-    }
-  }
-
 }

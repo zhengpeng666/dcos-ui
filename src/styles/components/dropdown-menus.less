@@ -11,30 +11,19 @@
 
 .dropdown {
   > .button {
+    overflow: hidden;
+    padding-right: @base-spacing-unit * 1.5;
+
     &.button-small {
       &.dropdown-toggle:after {
         display: flex;
         margin-top: @base-spacing-unit * -0.5;
-        margin-right: 0;
+        margin-right: @base-spacing-unit * -0.75;
         margin-bottom: @button-text-line-height * 0.5;
         margin-left: auto;
       }
     }
 
-    /* This is for IE10, what avoid overflow long text,
-    because flexbox isn't working and isn't setting the width of the elements */
-    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium);
-    overflow: hidden;
-  }
-
-  > .dropdown-menu,
-  > .dropdown-toggle {
-    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium);
-  }
-
-  > .dropdown-toggle > :first-child {
-    width: floor(@dropdown-menu-width-minimum * @dropdown-menu-scale-screen-medium)
-      - @base-spacing-unit * 2;
   }
 
   &.open .dropdown-menu.dropdown-menu-enter {
@@ -46,4 +35,14 @@
     z-index: 1;
   }
 
+  .dropdown-menu {
+    &.dropdown-menu-space-bottom {
+      margin-top: @base-spacing-unit * 0.25;
+    }
+
+    &.dropdown-menu-right-align {
+      right: 0;
+      left: auto;
+    }
+  }
 }
