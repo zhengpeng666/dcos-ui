@@ -62,8 +62,6 @@ export default class ServiceTasksView extends React.Component {
       this.onMesosStateChange
     );
 
-    let serviceName = this.props.serviceName;
-    this.tasks = MesosStateStore.getTasksFromServiceName(serviceName);
     this.forceUpdate();
   }
 
@@ -113,8 +111,8 @@ export default class ServiceTasksView extends React.Component {
     }, {active: 0, completed: 0});
   }
 
-  getStatuses() {
-    let statusCount = this.getStatusCounts(this.tasks);
+  getStatuses(tasks) {
+    let statusCount = this.getStatusCounts(tasks);
     return [
       {
         count: statusCount.active,
@@ -132,6 +130,10 @@ export default class ServiceTasksView extends React.Component {
   }
 
   getLoadingScreen() {
+    if (this.hasLoadingError()) {
+      return <RequestErrorMsg />;
+    }
+
     return (
       <div className="text-align-center vertical-center inverse">
         <div className="row">
@@ -149,9 +151,9 @@ export default class ServiceTasksView extends React.Component {
     );
   }
 
-  getHeaderText() {
+  getHeaderText(tasks) {
     let currentStatus = this.state.filterByStatus;
-    let tasksLength = this.tasks.length;
+    let tasksLength = tasks.length;
     if (currentStatus === "all") {
       return `${tasksLength} ${StringUtil.pluralize("Task", tasksLength)}`;
     }
@@ -161,66 +163,54 @@ export default class ServiceTasksView extends React.Component {
       completed: "Completed"
     };
 
-    let statusCount = this.getStatusCounts(this.tasks)[currentStatus];
+    let statusCount = this.getStatusCounts(tasks)[currentStatus];
     let displayName = displayNameMap[currentStatus];
     let pluralizedTasks = StringUtil.pluralize("Task", statusCount);
     return `${statusCount} ${displayName} ${pluralizedTasks}`;
   }
 
   getContent() {
-    if (this.tasks) {
-      let state = this.state;
-      let tasks = this.tasks;
+    let state = this.state;
+    let serviceName = this.props.serviceName;
+    let tasks = MesosStateStore.getTasksFromServiceName(serviceName) || [];
 
-      if (state.searchString !== "") {
-        tasks = StringUtil.filterByString(
-          tasks,
-          "name",
-          state.searchString
-        );
-      }
-
-      tasks = this.filterByCurrentStatus(tasks);
-
-      return (
-        <div>
-          <h2 className="inverse text-align-left">
-            {this.getHeaderText()}
-          </h2>
-          <div className="flex-box control-group">
-            <FilterInputText
-              searchString={state.searchString}
-              handleFilterChange={this.handleSearchStringChange} />
-            <div>
-              <FilterByTaskState
-                statuses={this.getStatuses()}
-                handleFilterChange={this.handleStatusFilterChange}
-                totalTasksCount={this.tasks.length}
-                currentStatus={state.filterByStatus}/>
-            </div>
-          </div>
-          {this.getTasksTable(tasks)}
-        </div>
-      );
-    } else {
-      return this.getLoadingScreen();
+    if (state.searchString !== "") {
+      tasks = StringUtil.filterByString(tasks, "name", state.searchString);
     }
-  }
 
-  render() {
-    let hasLoadingError = this.hasLoadingError();
-    let errorMsg = null;
-
-    if (hasLoadingError) {
-      errorMsg = <RequestErrorMsg />;
-    }
+    tasks = this.filterByCurrentStatus(tasks);
 
     return (
       <div>
-        {this.getContent()}
-        {errorMsg}
+        <h2 className="inverse text-align-left">
+          {this.getHeaderText(tasks)}
+        </h2>
+        <div className="flex-box control-group">
+          <FilterInputText
+            searchString={state.searchString}
+            handleFilterChange={this.handleSearchStringChange} />
+          <div>
+            <FilterByTaskState
+              statuses={this.getStatuses(tasks)}
+              handleFilterChange={this.handleStatusFilterChange}
+              totalTasksCount={tasks.length}
+              currentStatus={state.filterByStatus}/>
+          </div>
+        </div>
+        {this.getTasksTable(tasks)}
       </div>
     );
+  }
+
+  render() {
+    var showLoading = this.hasLoadingError() ||
+      Object.keys(MesosStateStore.get("lastMesosState")).length === 0;
+
+    if (showLoading) {
+      return this.getLoadingScreen();
+    } else {
+      return this.getContent();
+    }
   }
 }
 
