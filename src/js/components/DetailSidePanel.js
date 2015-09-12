@@ -21,6 +21,18 @@ export default class DetailSidePanel extends React.Component {
     }, this);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    let props = this.props;
+    let currentItem = props.itemID;
+    let nextItem = nextProps.itemID;
+
+    let currentTab = this.state.currentTab;
+    let nextTab = nextState.currentTab;
+
+    return nextItem && currentItem !== nextItem ||
+      currentTab !== nextTab || props.open !== nextProps.open;
+  }
+
   componentDidMount() {
     MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
@@ -103,6 +115,7 @@ DetailSidePanel.contextTypes = {
 };
 
 DetailSidePanel.propTypes = {
+  itemID: React.PropTypes.string,
   onClose: React.PropTypes.func,
   open: React.PropTypes.bool
 };

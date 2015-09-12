@@ -60,7 +60,7 @@ describe("NodeSidePanel", function () {
 
   it("should show the nodes hostname if it is found", function () {
     this.instance = TestUtils.renderIntoDocument(
-      <NodeSidePanel open={true} onClose={this.callback} nodeID="foo" />
+      <NodeSidePanel open={true} onClose={this.callback} itemID="foo" />
     );
     let contents = TestUtils.renderIntoDocument(this.instance.getContents());
     let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h1");

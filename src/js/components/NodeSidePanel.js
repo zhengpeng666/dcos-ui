@@ -1,6 +1,7 @@
-import _ from "underscore";
 import classNames from "classnames";
-import React from "react/addons";
+/*eslint-disable no-unused-vars*/
+const React = require("react/addons");
+/*eslint-enable no-unused-vars*/
 
 import DetailSidePanel from "./DetailSidePanel";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
@@ -23,24 +24,12 @@ export default class NodeSidePanel extends DetailSidePanel {
     super(...arguments);
 
     this.state = {
-      currentTab: "tasks"
+      currentTab: Object.keys(TABS).shift()
     };
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
     }, this);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    let props = this.props;
-    let currentNode = props.nodeID;
-    let nextNode = nextProps.nodeID;
-
-    let currentTab = this.state.currentTab;
-    let nextTab = nextState.currentTab;
-
-    return nextNode && currentNode !== nextNode ||
-      currentTab !== nextTab || props.open !== nextProps.open;
   }
 
   handleTabClick(nextTab) {
@@ -89,7 +78,7 @@ export default class NodeSidePanel extends DetailSidePanel {
   }
 
   getTaskView() {
-    let tasks = MesosStateStore.getTasksFromNodeID(this.props.nodeID);
+    let tasks = MesosStateStore.getTasksFromNodeID(this.props.itemID);
 
     return (
       <div className="container container-pod flush-top">
@@ -112,7 +101,7 @@ export default class NodeSidePanel extends DetailSidePanel {
   }
 
   getContents() {
-    let nodeID = this.props.nodeID;
+    let nodeID = this.props.itemID;
     let last = MesosSummaryStore.get("states").last();
     let node = last.getNodesList().filter({ids: [nodeID]}).last();
 
@@ -153,7 +142,3 @@ export default class NodeSidePanel extends DetailSidePanel {
     return super.render(...arguments);
   }
 }
-
-NodeSidePanel.propTypes = _.extend({}, DetailSidePanel.propTypes, {
-  nodeID: React.PropTypes.string
-});
