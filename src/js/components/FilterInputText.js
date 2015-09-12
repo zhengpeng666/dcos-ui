@@ -6,13 +6,15 @@ var FilterInputText = React.createClass({
   displayName: "FilterInputText",
 
   propTypes: {
-    searchString: React.PropTypes.string.isRequired,
-    handleFilterChange: React.PropTypes.func.isRequired
+    handleFilterChange: React.PropTypes.func.isRequired,
+    inverseStyle: React.PropTypes.bool,
+    searchString: React.PropTypes.string.isRequired
   },
 
   getDefaultProps: function () {
     return {
-      searchString: ""
+      searchString: "",
+      inverseStyle: false
     };
   },
 
@@ -46,34 +48,52 @@ var FilterInputText = React.createClass({
 
   render: function () {
     var props = this.props;
-    var clearIconClasses = classNames({
+    var clearIconContainerClasses = classNames({
       "form-control-group-add-on form-control-group-add-on-append": true,
       "hidden": props.searchString.length === 0
     });
 
+    var clearIconClasses = classNames({
+      "icon icon-mini icon-close": true,
+      "icon-mini-white": this.props.inverseStyle
+    });
+
     var iconSearchClasses = classNames({
-      "icon icon-mini icon-mini-white icon-search": true,
+      "icon icon-mini icon-search": true,
+      "icon-mini-white": this.props.inverseStyle,
+      "icon-mini-color": !this.props.inverseStyle && this.state.focus,
       "active": this.state.focus
+    });
+
+    var inputClasses = classNames({
+      "form-control form-control-small filter-input-text": true,
+      "form-control-inverse": this.props.inverseStyle
+    });
+
+    let inputContainerClasses = classNames({
+      "form-control form-control-small form-control-group": true,
+      "form-control-inverse": this.props.inverseStyle,
+      "focus": this.state.focus
     });
 
     return (
       <div className="form-group form-group-small filter-input-text-group">
-        <div className="form-control form-control-small form-control-inverse form-control-group">
+        <div className={inputContainerClasses}>
           <span className="form-control-group-add-on form-control-group-add-on-prepend">
             <i className={iconSearchClasses}></i>
           </span>
           <input
             type="text"
-            className="form-control form-control-small form-control-inverse filter-input-text"
+            className={inputClasses}
             placeholder="Filter"
             value={this.props.searchString}
             onBlur={this.handleBlur}
             onChange={this.handleChange}
             onFocus={this.handleFocus}
             ref="filterInput" />
-          <span className={clearIconClasses}>
+          <span className={clearIconContainerClasses}>
             <a href="#" onClick={this.handleClearInput}>
-              <i className="icon icon-mini icon-mini-white icon-close"></i>
+              <i className={clearIconClasses}></i>
             </a>
           </span>
         </div>

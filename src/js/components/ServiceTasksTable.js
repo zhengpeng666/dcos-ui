@@ -6,7 +6,7 @@ import DateUtil from "../utils/DateUtil";
 import Maths from "../utils/Maths";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import Table from "./Table";
-import TaskHealthStates from "../constants/TaskHealthStates";
+import TaskStates from "../constants/TaskStates";
 import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
 import Units from "../utils/Units";
 
@@ -24,7 +24,8 @@ export default class ServiceTasksTable extends React.Component {
   }
 
   getTaskUpdatedTimestamp(task) {
-    return _.last(task.statuses).timestamp;
+    let lastStatus = _.last(task.statuses);
+    return lastStatus && lastStatus.timestamp || null;
   }
 
   getSortFunction(title) {
@@ -37,7 +38,13 @@ export default class ServiceTasksTable extends React.Component {
         }
 
         if (prop === "updated") {
-          return this.getTaskUpdatedTimestamp(task);
+          let updatedAt = this.getTaskUpdatedTimestamp(task);
+
+          if (updatedAt == null) {
+            return 0;
+          } else {
+            return updatedAt;
+          }
         }
 
         value = value.toString().toLowerCase();
@@ -105,13 +112,9 @@ export default class ServiceTasksTable extends React.Component {
   }
 
   renderHeadline(prop, task) {
-    let dangerState = _.contains([
-      "TASK_FAILED", "TASK_KILLED", "TASK_LOST", "TASK_ERROR"
-    ], task.state);
+    let dangerState = _.contains(TaskStates[task.state].stateTypes, "failure");
 
-    let successState = _.contains([
-      "TASK_RUNNING", "TASK_STARTING", "TASK_FINISHED"
-    ], task.state);
+    let successState = _.contains(TaskStates[task.state].stateTypes, "success");
 
     let statusClass = classNames({
       "dot": true,
@@ -151,7 +154,12 @@ export default class ServiceTasksTable extends React.Component {
 
   renderUpdated(prop, task) {
     let updatedAt = this.getTaskUpdatedTimestamp(task);
-    updatedAt = DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
+
+    if (updatedAt == null) {
+      updatedAt = "NA";
+    } else {
+      updatedAt = DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
+    }
 
     return (
       <span>
@@ -161,7 +169,7 @@ export default class ServiceTasksTable extends React.Component {
   }
 
   renderState(prop, task) {
-    return TaskHealthStates[task[prop]];
+    return TaskStates[task[prop]].displayName;
   }
 
   render() {

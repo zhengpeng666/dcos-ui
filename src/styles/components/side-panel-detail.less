@@ -67,4 +67,50 @@
   .side-panel-subheader {
     margin-right: @base-spacing-unit;
   }
+
+  .control-group > *:first-child {
+    margin-right: @base-spacing-unit * 0.5;
+  }
+
+  .filter-input-text {
+    width: @base-spacing-unit * 3;
+  }
+
+  .filter-input-text-group {
+    width: @base-spacing-unit * 7;
+  }
+
+  .table {
+    > tbody tr > td.highlight {
+      background: inherit;
+    }
+
+    th {
+      background: color-lighten(@neutral, 80);
+      position: relative;
+      color: inherit;
+
+      &.highlight {
+        background: color-lighten(@neutral, 70);
+        color: @neutral;
+      }
+
+      .caret {
+        border-top: @caret-width-base * 1.3 dashed;
+        border-left: @caret-width-base * 1.3 solid transparent;
+        border-right: @caret-width-base * 1.3 solid transparent;
+        display: inline-block;
+        position: absolute;
+        right: @base-spacing-unit * 0.5;
+        top: 50%;
+        margin: 0;
+        margin-top: @caret-width-base * -0.65;
+
+        &.dropup {
+          border-top: 0;
+          border-bottom: @caret-width-base * 1.3 solid;
+        }
+      }
+    }
+  }
 }
