@@ -1,26 +1,28 @@
 import React from "react/addons";
-import Router from "react-router";
 import _ from "underscore";
 
 import Cluster from "../utils/Cluster";
 import EventTypes from "../constants/EventTypes";
 import HealthLabels from "../constants/HealthLabels";
+import HistoryStore from "../stores/HistoryStore";
+import InternalStorageMixin from "../mixins/InternalStorageMixin";
 import MarathonStore from "../stores/MarathonStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import StringUtil from "../utils/StringUtil";
+import Util from "../utils/Util";
 
 const PropTypes = React.PropTypes;
 
-export default class ServiceOverlay extends React.Component {
+export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
 
   constructor() {
+    super();
+
     const methodsToBind = [
       "handleServiceClose",
       "onMesosSummaryChange",
-      "onPopState",
       "removeMesosStateListeners"
     ];
-    super();
 
     methodsToBind.forEach(function (method) {
       this[method] = this[method].bind(this);
@@ -40,6 +42,13 @@ export default class ServiceOverlay extends React.Component {
   }
 
   componentDidMount() {
+    // Next tick so that the history actually updates correctly
+    setTimeout(() => {
+      this.internalStorage_update({
+        prevHistoryPath: HistoryStore.getHistoryAt(-1)
+      });
+    });
+
     if (MesosSummaryStore.get("statesProcessed")) {
       this.findAndRenderService(this.props.params.serviceName);
     } else {
@@ -48,7 +57,9 @@ export default class ServiceOverlay extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.overlayEl) {
+    let overlayEl = this.internalStorage_get().overlayEl;
+
+    if (overlayEl) {
       this.removeOverlay();
       this.props.onServiceClose();
     }
@@ -70,41 +81,46 @@ export default class ServiceOverlay extends React.Component {
     if (MesosSummaryStore.get("statesProcessed")) {
       // Once we have the data we need (frameworks), stop listening for changes.
       this.removeMesosStateListeners();
-      this.findAndRenderService(this.props.params.serviceName);
+      this.findAndRenderService();
     }
   }
 
   removeOverlay() {
-    if (!this.overlayEl) {
+    let overlayEl = this.internalStorage_get().overlayEl;
+
+    if (!overlayEl) {
       return;
     }
 
     // Remove the div that we created at the root of the dom.
-    React.unmountComponentAtNode(this.overlayEl);
-    document.body.removeChild(this.overlayEl);
-    this.overlayEl = null;
+    React.unmountComponentAtNode(overlayEl);
+    document.body.removeChild(overlayEl);
+    this.internalStorage_update({overlayEl: null});
   }
 
   handleServiceClose() {
-    Router.History.back();
+    let path = this.internalStorage_get().prevHistoryPath;
+    let routeName = "services-panel";
+    let serviceName = this.props.params.serviceName;
+
+    if (path) {
+      let matchedRoutes = this.context.router.match(path).routes;
+      if (matchedRoutes[matchedRoutes.length - 1]) {
+        routeName = matchedRoutes[matchedRoutes.length - 1].name;
+      }
+    }
+
+    this.context.router.transitionTo(routeName, {serviceName});
   }
 
-  onPopState() {
-    window.removeEventListener("popstate", this.onPopState);
-    this.context.router.transitionTo("services");
-  }
-
-  findAndRenderService(serviceName) {
-    this.service = MesosSummaryStore.getServiceFromName(serviceName);
+  findAndRenderService() {
+    let serviceName = this.props.params.serviceName;
+    let service = MesosSummaryStore.getServiceFromName(serviceName);
 
     // Did not find a service.
-    if (!this.service) {
-      // We do this in order to not break the user's back button.
-      // If we go to /services/ui/unknown-service and redirect to /services
-      // and the user presses back, they'll be stuck in a loop.
-      // Doing this prevents that.
-      window.addEventListener("popstate", this.onPopState);
-      Router.History.back();
+    if (!service) {
+      this.context.router.transitionTo("services");
+      this.context.router.transitionTo("services-panel", {serviceName});
       return;
     }
 
@@ -163,10 +179,14 @@ export default class ServiceOverlay extends React.Component {
   renderService() {
     // Create a new div and append to body in order
     // to always be full screen.
-    this.overlayEl = document.createElement("div");
-    this.overlayEl.className = "service-overlay";
-    document.body.appendChild(this.overlayEl);
-    let service = this.service;
+    let overlayEl = document.createElement("div");
+    overlayEl.className = "service-overlay";
+    document.body.appendChild(overlayEl);
+
+    this.internalStorage_update({overlayEl});
+
+    let serviceName = this.props.params.serviceName;
+    let service = MesosSummaryStore.getServiceFromName(serviceName);
 
     React.render(
       <div className="overlay-container">
@@ -175,7 +195,7 @@ export default class ServiceOverlay extends React.Component {
           src={Cluster.getServiceLink(service.name)}
           className="overlay-frame" />
       </div>,
-      this.overlayEl
+      overlayEl
     );
   }
 
