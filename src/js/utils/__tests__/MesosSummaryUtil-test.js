@@ -4,6 +4,7 @@ jest.dontMock("../Maths");
 jest.dontMock("../MesosSummaryUtil");
 
 let MesosSummaryUtil = require("../MesosSummaryUtil");
+let SummaryList = require("../../structs/SummaryList");
 
 describe("MesosSummaryUtil", function () {
 
@@ -69,4 +70,21 @@ describe("MesosSummaryUtil", function () {
 
   });
 
+  describe("#failureRateReturnsEpochDate", function () {
+
+    let snapshot = {frameworks: []};
+    let states = new SummaryList();
+    states.addSnapshot(snapshot, Date.now());
+    let epochDate = MesosSummaryUtil.getFailureRate(states.list[0], states.list[0]).date;
+
+    it("returns a number", function () {
+      expect(typeof epochDate).toEqual("number");
+    });
+
+    it("returns a valid epoch time", function () {
+      let date = new Date(epochDate);
+      expect(isNaN(date.getTime())).toEqual(false);
+    });
+
+  });
 });
