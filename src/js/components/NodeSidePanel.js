@@ -119,9 +119,9 @@ export default class NodeSidePanel extends DetailSidePanel {
     if (node == null) {
       return (
         <div>
-          <h2 className="text-align-center inverse overlay-header">
+          <h1 className="text-align-center inverse overlay-header">
             Error finding node
-          </h2>
+          </h1>
           <div className="container container-pod text-align-center flush-top text-danger">
             {`Did not find a node with the id "${nodeID}"`}
           </div>
