@@ -115,9 +115,9 @@ export default class ServiceSidePanel extends DetailSidePanel {
       <div className="flex-box flex-box-align-vertical-center">
         {imageTag}
         <div className="container container-fluid">
-          <div className="h2 inverse flush-top flush-bottom">
+          <h1 className="inverse flush-top flush-bottom">
             {service.name}
-          </div>
+          </h1>
           <div>
             <span className={healthClass}>
               {HealthLabels[HealthStatus[appHealth.key].key]}
