@@ -3,6 +3,10 @@ const DateUtil = {
     let date = new Date(ms);
     let dateStr = "";
 
+    if (isNaN(date.getTime())) {
+      return dateStr;
+    }
+
     dateStr += date.getMonth() + 1 + "-";
     dateStr += date.getDate() + "-";
     dateStr += date.getFullYear() % 100 + " at ";

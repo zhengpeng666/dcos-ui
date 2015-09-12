@@ -90,20 +90,17 @@ export default class ServiceTasksView extends React.Component {
 
   getStatuses(tasks) {
     let statusCount = this.getStatusCounts(tasks);
-    return [
-      {
-        count: statusCount.active,
-        id: "active",
-        name: "Active Tasks",
-        value: "active"
-      },
-      {
-        count: statusCount.completed,
-        id: "completed",
-        name: "Completed Tasks",
-        value: "completed"
-      }
-    ];
+    return [{
+      count: statusCount.active,
+      id: "active",
+      name: "Active Tasks",
+      value: "active"
+    }, {
+      count: statusCount.completed,
+      id: "completed",
+      name: "Completed Tasks",
+      value: "completed"
+    }];
   }
 
   getLoadingScreen() {

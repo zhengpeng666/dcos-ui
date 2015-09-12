@@ -25,12 +25,7 @@ export default class ServiceTasksTable extends React.Component {
 
   getTaskUpdatedTimestamp(task) {
     let lastStatus = _.last(task.statuses);
-
-    if (!lastStatus) {
-      return null;
-    }
-
-    return lastStatus.timestamp;
+    return lastStatus && lastStatus.timestamp || null;
   }
 
   getSortFunction(title) {
