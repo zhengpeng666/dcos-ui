@@ -14,7 +14,7 @@ const METHODS_TO_BIND = [
   "renderUpdated"
 ];
 
-export default class ServiceTasksTable extends React.Component {
+export default class TaskTable extends React.Component {
   constructor() {
     super(...arguments);
 
@@ -189,11 +189,11 @@ export default class ServiceTasksTable extends React.Component {
   }
 }
 
-ServiceTasksTable.propTypes = {
+TaskTable.propTypes = {
   tasks: React.PropTypes.array.isRequired
 };
 
-ServiceTasksTable.defaultProps = {
+TaskTable.defaultProps = {
   tasks: []
 };
 

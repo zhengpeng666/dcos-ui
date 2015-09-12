@@ -3,10 +3,12 @@ import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
 import EventTypes from "../constants/EventTypes";
+import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 
 const METHODS_TO_BIND = [
   "handlePanelClose",
+  "onMesosStateChange",
   "onMesosSummaryChange"
 ];
 
@@ -23,6 +25,11 @@ export default class DetailSidePanel extends React.Component {
     MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
+
+    MesosStateStore.addChangeListener(
+      EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
+    );
+
     this.forceUpdate();
   }
 
@@ -30,12 +37,25 @@ export default class DetailSidePanel extends React.Component {
     MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
     );
+
+    MesosStateStore.removeChangeListener(
+      EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
+    );
   }
 
   onMesosSummaryChange() {
     if (MesosSummaryStore.get("statesProcessed")) {
       MesosSummaryStore.removeChangeListener(
         EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
+      );
+      this.forceUpdate();
+    }
+  }
+
+  onMesosStateChange() {
+    if (MesosStateStore.get("lastMesosState")) {
+      MesosStateStore.removeChangeListener(
+        EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
       );
       this.forceUpdate();
     }

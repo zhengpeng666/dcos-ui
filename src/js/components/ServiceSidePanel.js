@@ -10,15 +10,20 @@ import HealthStatus from "../constants/HealthStatus";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
-import ServiceTasksView from "./ServiceTasksView";
+import TaskView from "./TaskView";
 import StringUtil from "../utils/StringUtil";
 
 const METHODS_TO_BIND = [
   "handleOpenServiceButtonClick",
   "handleTabClick",
-  "onMesosStateChange",
   "onMarathonStoreChange"
 ];
+
+// key is the name, value is the display name
+const TABS = {
+  tasks: "Tasks",
+  details: "Details"
+};
 
 export default class ServiceSidePanel extends DetailSidePanel {
   constructor() {
@@ -48,10 +53,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
   componentDidMount() {
     super.componentDidMount(...arguments);
 
-    MesosStateStore.addChangeListener(
-      EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
-    );
-
     MarathonStore.addChangeListener(
       EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
     );
@@ -61,10 +62,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
   componentWillUnmount() {
     super.componentWillUnmount(...arguments);
-
-    MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
-    );
 
     MarathonStore.removeChangeListener(
       EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
@@ -76,15 +73,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
       EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
     );
     this.forceUpdate();
-  }
-
-  onMesosStateChange() {
-    if (MesosStateStore.get("lastMesosState")) {
-      MesosStateStore.removeChangeListener(
-        EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
-      );
-      this.forceUpdate();
-    }
   }
 
   handleOpenServiceButtonClick() {
@@ -143,26 +131,8 @@ export default class ServiceSidePanel extends DetailSidePanel {
     );
   }
 
-  getHeader() {
-    return (
-      <div>
-        <span className="button button-link button-inverse"
-          onClick={this.handlePanelClose}>
-          <i className="side-panel-detail-close"></i>
-          Close
-        </span>
-      </div>
-    );
-  }
-
   getTabs() {
     let currentTab = this.state.currentTab;
-
-    // key is the name, value is the display name
-    const TABS = {
-      tasks: "Tasks",
-      details: "Details"
-    };
 
     return Object.keys(TABS).map(function (tab, i) {
       let classSet = classNames({
@@ -181,10 +151,13 @@ export default class ServiceSidePanel extends DetailSidePanel {
     }, this);
   }
 
-  getTasksView() {
+  getTaskView() {
+    let serviceName = this.props.serviceName;
+    let tasks = MesosStateStore.getTasksFromServiceName(serviceName);
+
     return (
       <div className="container container-pod flush-top">
-        <ServiceTasksView serviceName={this.props.serviceName} />
+        <TaskView tasks={tasks} />
       </div>
     );
   }
@@ -192,7 +165,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
   getTabView() {
     let currentTab = this.state.currentTab;
     if (currentTab === "tasks") {
-      return this.getTasksView();
+      return this.getTaskView();
     }
 
     return (
