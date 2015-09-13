@@ -166,17 +166,9 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
   getContents() {
     let service = MesosSummaryStore.getServiceFromName(this.props.itemID);
+
     if (service == null) {
-      return (
-        <div>
-          <h1 className="text-align-center inverse overlay-header">
-            Error finding service
-          </h1>
-          <div className="container container-pod text-align-center flush-top text-danger">
-            {`Did not find a service by the name "${this.props.itemID}"`}
-          </div>
-        </div>
-      );
+      return this.getNotFound("service");
     }
 
     return (

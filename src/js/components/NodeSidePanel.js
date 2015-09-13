@@ -9,10 +9,6 @@ import MesosStateStore from "../stores/MesosStateStore";
 import StringUtil from "../utils/StringUtil";
 import TaskView from "./TaskView";
 
-const METHODS_TO_BIND = [
-  "handleTabClick"
-];
-
 // key is the name, value is the display name
 const TABS = {
   tasks: "Tasks",
@@ -26,10 +22,6 @@ export default class NodeSidePanel extends DetailSidePanel {
     this.state = {
       currentTab: Object.keys(TABS).shift()
     };
-
-    METHODS_TO_BIND.forEach(function (method) {
-      this[method] = this[method].bind(this);
-    }, this);
   }
 
   handleTabClick(nextTab) {
@@ -37,12 +29,7 @@ export default class NodeSidePanel extends DetailSidePanel {
   }
 
   getBasicInfo(node) {
-    if (node == null) {
-      return null;
-    }
-
-    let activeTasksCount = node.TASK_RUNNING + node.TASK_STARTING +
-      node.TASK_STAGING;
+    let activeTasksCount = node.sumTaskTypesByState("active");
     let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
 
     return (
@@ -87,8 +74,14 @@ export default class NodeSidePanel extends DetailSidePanel {
     );
   }
 
+  getInfo() {
+    // info will go here
+    return null;
+  }
+
   getTabView() {
     let currentTab = this.state.currentTab;
+
     if (currentTab === "tasks") {
       return this.getTaskView();
     }
@@ -106,16 +99,7 @@ export default class NodeSidePanel extends DetailSidePanel {
     let node = last.getNodesList().filter({ids: [nodeID]}).last();
 
     if (node == null) {
-      return (
-        <div>
-          <h1 className="text-align-center inverse overlay-header">
-            Error finding node
-          </h1>
-          <div className="container container-pod text-align-center flush-top text-danger">
-            {`Did not find a node with the id "${nodeID}"`}
-          </div>
-        </div>
-      );
+      return this.getNotFound("node");
     }
 
     return (
@@ -131,11 +115,6 @@ export default class NodeSidePanel extends DetailSidePanel {
         {this.getTabView()}
       </div>
     );
-  }
-
-  getInfo() {
-    // info will go here
-    return null;
   }
 
   render() {

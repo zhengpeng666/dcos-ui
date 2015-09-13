@@ -80,6 +80,19 @@ export default class DetailSidePanel extends React.Component {
     this.forceUpdate();
   }
 
+  getNotFound(itemType) {
+    return (
+      <div>
+        <h1 className="text-align-center inverse overlay-header">
+          {`Error finding ${itemType}`}
+        </h1>
+        <div className="container container-pod text-align-center flush-top text-danger">
+          {`Did not find a ${itemType} by the id "${this.props.itemID}"`}
+        </div>
+      </div>
+    );
+  }
+
   getHeader() {
     return (
       <div>
