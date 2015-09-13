@@ -6,7 +6,7 @@ import FilterByTaskState from "./FilterByTaskState";
 import FilterInputText from "./FilterInputText";
 import MesosStateStore from "../stores/MesosStateStore";
 import RequestErrorMsg from "./RequestErrorMsg";
-import ServiceTasksTable from "./ServiceTasksTable";
+import TaskTable from "./TaskTable";
 import StringUtil from "../utils/StringUtil";
 import TaskStates from "../constants/TaskStates";
 
@@ -16,7 +16,7 @@ const METHODS_TO_BIND = [
   "onMesosStateRequestError"
 ];
 
-export default class ServiceTasksView extends React.Component {
+export default class TaskView extends React.Component {
   constructor() {
     super();
 
@@ -124,9 +124,9 @@ export default class ServiceTasksView extends React.Component {
     );
   }
 
-  getTasksTable(tasks) {
+  getTaskTable(tasks) {
     return (
-      <ServiceTasksTable tasks={tasks} />
+      <TaskTable tasks={tasks} />
     );
   }
 
@@ -150,8 +150,8 @@ export default class ServiceTasksView extends React.Component {
 
   getContent() {
     let state = this.state;
-    let serviceName = this.props.serviceName;
-    let tasks = MesosStateStore.getTasksFromServiceName(serviceName) || [];
+    let tasks = this.props.tasks || [];
+
     if (state.searchString !== "") {
       tasks = StringUtil.filterByString(tasks, "name", state.searchString);
     }
@@ -176,7 +176,7 @@ export default class ServiceTasksView extends React.Component {
               currentStatus={state.filterByStatus}/>
           </div>
         </div>
-        {this.getTasksTable(tasks)}
+        {this.getTaskTable(tasks)}
       </div>
     );
   }
@@ -193,6 +193,6 @@ export default class ServiceTasksView extends React.Component {
   }
 }
 
-ServiceTasksView.propTypes = {
-  serviceName: React.PropTypes.string
+TaskView.propTypes = {
+  tasks: React.PropTypes.array
 };

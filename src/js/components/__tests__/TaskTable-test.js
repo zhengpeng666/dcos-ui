@@ -1,17 +1,17 @@
 jest.dontMock("./fixtures/MockTasks");
-jest.dontMock("../ServiceTasksTable");
+jest.dontMock("../TaskTable");
 
 var _ = require("underscore");
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
-var ServiceTasksTable = require("../ServiceTasksTable");
+var TaskTable = require("../TaskTable");
 const Tasks = require("./fixtures/MockTasks").tasks;
 
-describe("ServiceTasksTable", function () {
+describe("TaskTable", function () {
   beforeEach(function () {
     this.instance = TestUtils.renderIntoDocument(
-      <ServiceTasksTable tasks={Tasks} />
+      <TaskTable tasks={Tasks} />
     );
   });
 

@@ -1,37 +1,118 @@
-import _ from "underscore";
-import React from "react/addons";
+import classNames from "classnames";
+/*eslint-disable no-unused-vars*/
+const React = require("react/addons");
+/*eslint-enable no-unused-vars*/
 
 import DetailSidePanel from "./DetailSidePanel";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import MesosStateStore from "../stores/MesosStateStore";
+import StringUtil from "../utils/StringUtil";
+import TaskView from "./TaskView";
+
+// key is the name, value is the display name
+const TABS = {
+  tasks: "Tasks",
+  details: "Details"
+};
 
 export default class NodeSidePanel extends DetailSidePanel {
-  shouldComponentUpdate(nextProps) {
-    let props = this.props;
-    return props.nodeID !== nextProps.nodeID || props.open !== nextProps.open;
+  constructor() {
+    super(...arguments);
+
+    this.state = {
+      currentTab: Object.keys(TABS).shift()
+    };
+  }
+
+  handleTabClick(nextTab) {
+    this.setState({currentTab: nextTab});
+  }
+
+  getBasicInfo(node) {
+    let activeTasksCount = node.sumTaskTypesByState("active");
+    let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
+
+    return (
+      <div>
+        <h1 className="inverse flush-top flush-bottom">
+          {node.hostname}
+        </h1>
+        <div>
+          {`${activeTasksCount} Active ${activeTasksSubHeader}`}
+        </div>
+      </div>
+    );
+  }
+
+  getTabs() {
+    let currentTab = this.state.currentTab;
+
+    return Object.keys(TABS).map(function (tab, i) {
+      let classSet = classNames({
+        "button button-link": true,
+        "button-primary": currentTab === tab
+      });
+
+      return (
+        <div
+          key={i}
+          className={classSet}
+          onClick={this.handleTabClick.bind(this, tab)}>
+          {TABS[tab]}
+        </div>
+      );
+    }, this);
+  }
+
+  getTaskView() {
+    let tasks = MesosStateStore.getTasksFromNodeID(this.props.itemID);
+
+    return (
+      <div className="container container-pod flush-top">
+        <TaskView tasks={tasks} />
+      </div>
+    );
+  }
+
+  getInfo() {
+    // info will go here
+    return null;
+  }
+
+  getTabView() {
+    let currentTab = this.state.currentTab;
+
+    if (currentTab === "tasks") {
+      return this.getTaskView();
+    }
+
+    return (
+      <div className="container container-pod container-pod-short">
+        {this.getInfo()}
+      </div>
+    );
   }
 
   getContents() {
+    let nodeID = this.props.itemID;
     let last = MesosSummaryStore.get("states").last();
-    let node = last.getNodesList().filter({ids: [this.props.nodeID]}).last();
+    let node = last.getNodesList().filter({ids: [nodeID]}).last();
 
     if (node == null) {
-      return (
-        <div>
-          <h2 className="text-align-center inverse overlay-header">
-            Error finding node
-          </h2>
-          <div className="container container-pod text-align-center flush-top text-danger">
-            {`Did not find a node with the id "${this.props.nodeID}"`}
-          </div>
-        </div>
-      );
+      return this.getNotFound("node");
     }
 
     return (
       <div>
-        <h2 className="text-align-center inverse overlay-header">
-          {node.hostname}
-        </h2>
+        <div
+          className="container container-pod container-pod-divider-bottom
+            container-pod-divider-inverse flush-bottom">
+          {this.getBasicInfo(node)}
+          <div className="side-panel-tabs">
+            {this.getTabs()}
+          </div>
+        </div>
+        {this.getTabView()}
       </div>
     );
   }
@@ -40,7 +121,3 @@ export default class NodeSidePanel extends DetailSidePanel {
     return super.render(...arguments);
   }
 }
-
-NodeSidePanel.propTypes = _.extend({}, DetailSidePanel.propTypes, {
-  nodeID: React.PropTypes.string
-});

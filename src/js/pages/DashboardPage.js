@@ -220,9 +220,9 @@ var DashboardPage = React.createClass({
           </div>
         </div>
         <ServiceSidePanel
-          open={data.statesProcessed && data.openServicePanel}
-          serviceName={this.props.params.serviceName}
-          onClose={this.onServiceDetailClose} />
+          itemID={this.props.params.serviceName}
+          onClose={this.onServiceDetailClose}
+          open={data.statesProcessed && data.openServicePanel} />
       </Page>
     );
   }

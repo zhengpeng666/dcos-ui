@@ -59,6 +59,21 @@ var MesosStateStore = Store.createStore({
     return _.findWhere(services, {name});
   },
 
+  getTasksFromNodeID: function (nodeID) {
+    let services = this.get("lastMesosState").frameworks;
+    let memberTasks = {};
+
+    services.forEach(function (service) {
+      service.tasks.forEach(function (task) {
+        if (task.slave_id === nodeID) {
+          memberTasks[task.id] = task;
+        }
+      });
+    });
+
+    return _.values(memberTasks);
+  },
+
   getTasksFromServiceName: function (serviceName) {
     let frameworks = this.get("lastMesosState").frameworks;
     let framework = _.findWhere(frameworks, {name: serviceName});

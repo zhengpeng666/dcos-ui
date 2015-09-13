@@ -229,9 +229,9 @@ var NodesPage = React.createClass({
           hosts={nodesList}
           services={data.services} />
         <NodeSidePanel
-          open={data.statesProcessed && data.openNodePanel}
-          nodeID={this.props.params.nodeID}
-          onClose={this.handleSideBarClose} />
+          itemID={this.props.params.nodeID}
+          onClose={this.handleSideBarClose}
+          open={data.statesProcessed && data.openNodePanel} />
       </div>
     );
   },

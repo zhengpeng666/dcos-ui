@@ -56,7 +56,7 @@ describe("ServiceSidePanel", function () {
         var instance = TestUtils.renderIntoDocument(
           <ServiceSidePanel
             open={false}
-            serviceName="service_that_does_not_exist"/>
+            itemID="service_that_does_not_exist"/>
         );
 
         var info = instance.getInfo();
@@ -67,7 +67,7 @@ describe("ServiceSidePanel", function () {
         var instance = TestUtils.renderIntoDocument(
           <ServiceSidePanel
             open={false}
-            serviceName="service_that_exists"/>
+            itemID="service_that_exists"/>
         );
 
         var info = instance.getInfo();
@@ -80,7 +80,7 @@ describe("ServiceSidePanel", function () {
         var instance = TestUtils.renderIntoDocument(
           <ServiceSidePanel
             open={false}
-            serviceName="service_that_does_not_exist"/>
+            itemID="service_that_does_not_exist"/>
         );
 
         var info = instance.getBasicInfo();
@@ -91,7 +91,7 @@ describe("ServiceSidePanel", function () {
         var instance = TestUtils.renderIntoDocument(
           <ServiceSidePanel
             open={false}
-            serviceName="service_that_exists"/>
+            itemID="service_that_exists"/>
         );
 
         var info = instance.getBasicInfo();

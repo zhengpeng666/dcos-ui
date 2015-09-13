@@ -1,3 +1,5 @@
+jest.dontMock("../../constants/TaskStates");
+
 let Node = require("../Node");
 
 describe("Node", function () {
@@ -21,6 +23,29 @@ describe("Node", function () {
     it("return true when node is nactive", function () {
       let node = new Node({active: true});
       expect(node.isActive()).toBeTruthy();
+    });
+
+  });
+
+  describe("#sumTaskTypesByState", function () {
+
+    it("default to returning 0", function () {
+      let node = new Node({});
+      expect(node.sumTaskTypesByState("active")).toEqual(0);
+    });
+
+    it("sums tasks that match state", function () {
+      let node = new Node({
+        TASK_STAGING: 1,
+        TASK_STARTING: 3,
+        TASK_FAILED: 4
+      });
+      expect(node.sumTaskTypesByState("active")).toEqual(4);
+    });
+
+    it("returns 0 if there's tasks that match requested state", function () {
+      let node = new Node({TASK_FAILED: 4});
+      expect(node.sumTaskTypesByState("active")).toEqual(0);
     });
 
   });
