@@ -5,7 +5,6 @@ const React = require("react/addons");
 
 import DateUtil from "../utils/DateUtil";
 import DetailSidePanel from "./DetailSidePanel";
-import EventTypes from "../constants/EventTypes";
 import HealthLabels from "../constants/HealthLabels";
 import HealthStatus from "../constants/HealthStatus";
 import MarathonStore from "../stores/MarathonStore";
@@ -16,8 +15,7 @@ import StringUtil from "../utils/StringUtil";
 
 const METHODS_TO_BIND = [
   "handleOpenServiceButtonClick",
-  "handleTabClick",
-  "onMarathonStoreChange"
+  "handleTabClick"
 ];
 
 // key is the name, value is the display name
@@ -34,34 +32,15 @@ export default class ServiceSidePanel extends DetailSidePanel {
       currentTab: Object.keys(TABS).shift()
     };
 
+    this.storesListeners = [
+      "marathon",
+      "summary",
+      "state"
+    ];
+
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
     }, this);
-  }
-
-  componentDidMount() {
-    super.componentDidMount(...arguments);
-
-    MarathonStore.addChangeListener(
-      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
-    );
-
-    this.forceUpdate();
-  }
-
-  componentWillUnmount() {
-    super.componentWillUnmount(...arguments);
-
-    MarathonStore.removeChangeListener(
-      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
-    );
-  }
-
-  onMarathonStoreChange() {
-    MarathonStore.removeChangeListener(
-      EventTypes.MARATHON_APPS_CHANGE, this.onMarathonStoreChange
-    );
-    this.forceUpdate();
   }
 
   handleOpenServiceButtonClick() {
