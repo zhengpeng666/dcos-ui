@@ -1,8 +1,33 @@
+jest.dontMock("../Maths");
 jest.dontMock("../Units");
 
 var Units = require("../Units");
 
 describe("Units", function () {
+
+  describe("#formatResource", function () {
+
+    it("formats cpus", function () {
+      let value = Units.formatResource("cpus", 3.4);
+      expect(value).toEqual(3.4);
+    });
+
+    it("rounds values", function () {
+      let value = Units.formatResource("cpus", 3.405);
+      expect(value).toEqual(3.41);
+    });
+
+    it("formats mem", function () {
+      let value = Units.formatResource("mem", 3.4);
+      expect(value).toEqual("3.4 MiB");
+    });
+
+    it("formats disk", function () {
+      let value = Units.formatResource("disk", 3481.6);
+      expect(value).toEqual("3.4 GiB");
+    });
+
+  });
 
   describe("#filesize", function () {
     beforeEach(function () {

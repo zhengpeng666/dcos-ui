@@ -14,35 +14,43 @@ var BarChart = React.createClass({
   mixins: [ChartMixin, InternalStorageMixin],
 
   propTypes: {
+    axisConfiguration: React.PropTypes.object,
     data: React.PropTypes.array.isRequired,
     // `height` and `width` are required if this
     // module isn't used as a child of the `Chart` component
     // Otherwise Chart will automatically calculate this.
     height: React.PropTypes.number,
-    width: React.PropTypes.number,
+    inverseStyle: React.PropTypes.bool,
     peakline: React.PropTypes.bool,
+    refreshRate: React.PropTypes.number.isRequired,
     y: React.PropTypes.string,
-    refreshRate: React.PropTypes.number.isRequired
+    width: React.PropTypes.number
   },
 
   getDefaultProps: function () {
     return {
+      axisConfiguration: {
+        x: {
+          showZeroTick: true
+        }
+      },
+      inverseStyle: false,
       margin: {
         top: 0,
         right: 5,
         bottom: 40,
         left: 43
       },
-      peakline: false,
       maxY: 10,
+      peakline: false,
       ticksY: 10,
-      y: "y",
-      xGridLines: null,
       transition: {
         delay: 200,
         duration: 800
       },
-      refreshRate: 0
+      refreshRate: 0,
+      xGridLines: null,
+      y: "y"
     };
   },
 
@@ -154,6 +162,10 @@ var BarChart = React.createClass({
 
     // The 4 is a number that works, though random :)
     if (firstDataSet) {
+      let xAxisClass = classNames("x axis", {
+        "text-small": props.width < 350
+      });
+
       var xTicks = length / (props.refreshRate / 1000) / 4;
       var xAxis = d3.svg.axis()
         .scale(xScale)
@@ -161,16 +173,20 @@ var BarChart = React.createClass({
         .tickFormat(this.formatXAxis)
         .orient("bottom");
       d3.select(this.refs.xAxis.getDOMNode()).interrupt()
-        .attr("class", "x axis")
+        .attr("class", xAxisClass)
         .call(xAxis);
     }
 
+    let yAxisClass = classNames("y axis", {
+      "text-small": props.width < 350
+    });
     var yAxis = d3.svg.axis()
       .scale(yScale)
       .ticks(props.ticksY)
       .tickFormat(this.formatYAxis(props.ticksY, props.maxY))
       .orient("left");
     d3.select(this.refs.yAxis.getDOMNode())
+      .attr("class", yAxisClass)
       .call(yAxis);
 
     d3.select(this.refs.yGrid.getDOMNode())
@@ -278,7 +294,8 @@ var BarChart = React.createClass({
     var clipPath = "url(#" + data.clipPathID + ")";
 
     var gridClassSet = classNames({
-      "grid-graph": true
+      "grid-graph": true,
+      inverse: props.inverseStyle
     });
 
     return (

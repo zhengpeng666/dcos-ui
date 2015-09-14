@@ -1,8 +1,7 @@
 .chart {
-  transform: translateZ(0);
-
   display: flex;
   flex-direction: column;
+  transform: translateZ(0);
 
   .chart-chart {
     flex-grow: 1;
@@ -14,10 +13,6 @@
 
   svg .background {
     fill: fade(@neutral, 80%);
-
-    &.inverse {
-      fill: fade(@neutral, 5%);
-    }
   }
 
   .axis path,
@@ -152,10 +147,14 @@
     }
 
     .grid-graph {
-      &.y {
+      .grid.y {
         .tick:first-child line {
           stroke-dasharray: 0,0;
         }
+      }
+
+      &.inverse line {
+        stroke: fade(@neutral, 10%);
       }
 
       line {

@@ -6,6 +6,7 @@ const React = require("react/addons");
 
 import BarChart from "./charts/BarChart";
 import Chart from "./charts/Chart";
+import Config from "../config/Config";
 import DateUtil from "../utils/DateUtil";
 import DetailSidePanel from "./DetailSidePanel";
 import HealthLabels from "../constants/HealthLabels";
@@ -159,9 +160,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
       return this.getNotFound("service");
     }
 
-              // <div className="column-8">
-              //   {this.getInfo()}
-              // </div>
     return (
       <div>
         <div
@@ -239,59 +237,45 @@ export default class ServiceSidePanel extends DetailSidePanel {
     });
   }
 
-  getResourceValue(resource, value) {
-    if (resource === "mem") {
-      return Units.filesize(
-        value * 1024 * 1024
-      ).replace(/ /, "");
-    }
-
-    if (resource === "disk") {
-      return Units.filesize(
-        value * 1024 * 1024 * 1024
-      ).replace(/ /, "");
-    }
-
-    return value;
-  }
-
   getResourceChart(resource, totalResources) {
     let colorIndex = ResourceTypes[resource].colorIndex;
-    let resourceLabel = TaskTableHeaderLabels[resource];
+    let resourceLabel = ResourceTypes[resource].label;
     let resourceData = [{
       name: "Alloc",
       colorIndex: colorIndex,
       values: totalResources[resource]
     }];
-    let resourceValue = this.getResourceValue(
+    let resourceValue = Units.formatResource(
       resource, _.last(totalResources[resource]).value
     );
 
     return (
-      <div className="column-4
+      <div key={resource} className="column-4
         flex-box-align-vertical-center
         container-pod
         container-pod-super-short
         flush-top">
+        <div>
+          <h3 className="flush-top flush-bottom text-color-neutral">
+            {resourceValue}
+          </h3>
+          <span className={`text-color-${colorIndex}`}>
+            {resourceLabel.toUpperCase()}
+          </span>
+        </div>
+
         <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}>
           <BarChart
+            axisConfiguration={{x: {showZeroTick: false}}}
             data={resourceData}
-            inverse={true}
+            inverseStyle={true}
+            margin={{top: 0, left: 43, right: 10, bottom: 40}}
             maxY={100}
-            y="percentage"
+            refreshRate={Config.getRefreshRate()}
             ticksY={2}
             xGridLines={0}
-            margin={{top: 0, left: 10, right: 10, bottom: 40}}
-            refreshRate={2000} />
+            y="percentage" />
         </Chart>
-        <div>
-          <h4 className={`text-color-${colorIndex} flush-top flush-bottom`}>
-            {resourceValue}
-          </h4>
-          <div>
-            {resourceLabel}
-          </div>
-        </div>
       </div>
     );
   }

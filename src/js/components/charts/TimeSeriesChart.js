@@ -16,36 +16,42 @@ var TimeSeriesChart = React.createClass({
   displayName: "TimeSeriesChart",
 
   propTypes: {
+    axisConfiguration: React.PropTypes.object,
     // [{name: "Area Name", values: [{date: some time, y: 0}]}]
     data: React.PropTypes.array.isRequired,
-    maxY: React.PropTypes.number,
-    ticksY: React.PropTypes.number,
-    y: React.PropTypes.string,
-    yFormat: React.PropTypes.string,
     // `height` and `width` are required if this
     // module isn't used as a child of the `Chart` component
     // Otherwise Chart will automatically calculate this.
     height: React.PropTypes.number,
-    width: React.PropTypes.number,
     margin: React.PropTypes.object.isRequired,
-    refreshRate: React.PropTypes.number.isRequired
+    maxY: React.PropTypes.number,
+    refreshRate: React.PropTypes.number.isRequired,
+    ticksY: React.PropTypes.number,
+    y: React.PropTypes.string,
+    yFormat: React.PropTypes.string,
+    width: React.PropTypes.number
   },
 
   mixins: [ChartMixin, InternalStorageMixin],
 
   getDefaultProps: function () {
     return {
-      maxY: 10,
-      ticksY: 3,
-      y: "y",
-      yFormat: ValueTypes.PERCENTAGE,
+      axisConfiguration: {
+        x: {
+          showZeroTick: true
+        }
+      },
       margin: {
         top: 10,
         left: 45,
         bottom: 25,
         right: 5
       },
-      refreshRate: 0
+      maxY: 10,
+      refreshRate: 0,
+      ticksY: 3,
+      y: "y",
+      yFormat: ValueTypes.PERCENTAGE
     };
   },
 

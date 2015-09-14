@@ -8,7 +8,6 @@ var HealthLabels = require("../constants/HealthLabels");
 var HealthTypes = require("../constants/HealthTypes");
 var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var MarathonStore = require("../stores/MarathonStore");
-var Maths = require("../utils/Maths");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var ServiceTableHeaderLabels = require("../constants/ServiceTableHeaderLabels");
 var Table = require("./Table");
@@ -114,14 +113,9 @@ var ServicesTable = React.createClass({
   },
 
   renderStats: function (prop, service) {
-    var value = Maths.round(service.used_resources[prop], 2);
-    if (prop !== "cpus") {
-      value = Units.filesize(value * 1024 * 1024, 1);
-    }
-
     return (
       <span>
-        {value}
+        {Units.formatResource(prop, service.used_resources[prop])}
       </span>
     );
   },
