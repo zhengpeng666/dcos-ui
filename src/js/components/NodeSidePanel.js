@@ -90,7 +90,7 @@ export default class NodeSidePanel extends DetailSidePanel {
       ID: node.id,
       Active: StringUtil.capitalize(node.active.toString().toLowerCase()),
       Registered: registeredValue,
-      "Master Version": masterVersion
+      "Master version": masterVersion
     };
 
     return Object.keys(headerValueMapping).map(function (header, i) {
