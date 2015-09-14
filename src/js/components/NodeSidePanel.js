@@ -76,8 +76,7 @@ export default class NodeSidePanel extends DetailSidePanel {
   }
 
   getInfo() {
-    let nodeID = this.props.itemID;
-    let node = MesosStateStore.getNodeFromNodeID(nodeID);
+    let node = MesosStateStore.getNodeFromNodeID(this.props.itemID);
 
     if (node == null) {
       return null;
