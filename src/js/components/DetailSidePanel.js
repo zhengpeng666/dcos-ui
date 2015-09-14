@@ -3,9 +3,9 @@ import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
 import EventTypes from "../constants/EventTypes";
+import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
-import MarathonStore from "../stores/MarathonStore";
 
 const METHODS_TO_BIND = [
   "handlePanelClose",
