@@ -83,19 +83,13 @@ export default class NodeSidePanel extends DetailSidePanel {
       return null;
     }
 
-    let boolDisplayName = {
-      true: "True",
-      false: "False"
-    };
-
     let masterVersion = MesosStateStore.get("lastMesosState").version;
-    let activeValue = boolDisplayName[node.active.toString()];
     let registeredValue =
       DateUtil.msToDateStr(node.registered_time.toFixed(3) * 1000);
 
     let headerValueMapping = {
       ID: node.id,
-      Active: activeValue,
+      Active: StringUtil.capitalize(node.active.toString().toLowerCase()),
       Registered: registeredValue,
       "Master Version": masterVersion
     };
