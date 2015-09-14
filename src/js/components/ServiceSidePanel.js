@@ -16,7 +16,6 @@ import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import ResourceTypes from "../constants/ResourceTypes";
 import StringUtil from "../utils/StringUtil";
-import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
 import TaskView from "./TaskView";
 import Units from "../utils/Units";
 
@@ -249,6 +248,11 @@ export default class ServiceSidePanel extends DetailSidePanel {
       resource, _.last(totalResources[resource]).value
     );
 
+    let axisConfiguration = {
+      x: {hideMatch: /^0$/},
+      y: {hideMatch: /^50$/}
+    };
+
     return (
       <div key={resource} className="column-4
         flex-box-align-vertical-center
@@ -266,7 +270,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
         <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}>
           <BarChart
-            axisConfiguration={{x: {showZeroTick: false}}}
+            axisConfiguration={axisConfiguration}
             data={resourceData}
             inverseStyle={true}
             margin={{top: 0, left: 43, right: 10, bottom: 40}}

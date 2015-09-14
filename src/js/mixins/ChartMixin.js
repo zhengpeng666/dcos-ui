@@ -29,15 +29,16 @@ var ChartMixin = {
   },
 
   formatXAxis: function (d) {
-    if (parseInt(Math.abs(d)) > 0) {
-      return d + "s";
-    } else {
-      if (this.props.axisConfiguration.x.showZeroTick === true) {
-        return d;
-      } else {
-        return "";
-      }
+    let hideMatch = this.props.axisConfiguration.x.hideMatch;
+    if (hideMatch && hideMatch.test(d.toString())) {
+      return "";
     }
+
+    if (parseInt(Math.abs(d)) > 0) {
+      return `${d}s`;
+    }
+
+    return d;
   }
 };
 

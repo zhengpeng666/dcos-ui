@@ -137,8 +137,14 @@
         display: none;
       }
 
-      &.y path {
-        stroke: @neutral;
+      &.y {
+        &.inverse path {
+          stroke: fade(@neutral, 10%);
+        }
+
+        path {
+          stroke: @neutral;
+        }
       }
 
       line {
