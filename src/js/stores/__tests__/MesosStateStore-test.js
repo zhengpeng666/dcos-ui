@@ -32,4 +32,32 @@ describe("MesosStateStore", function () {
       expect(result).toEqual([]);
     });
   });
+
+  describe("#getNodeFromNodeID", function () {
+    beforeEach(function () {
+      this.get = MesosStateStore.get;
+      MesosStateStore.get = function () {
+        return {
+          slaves: [{
+            id: "amazon-thing",
+            fakeProp: "fake"
+          }]
+        };
+      };
+    });
+
+    afterEach(function () {
+      MesosStateStore.get = this.get;
+    });
+
+    it("should return the node with the correct ID", function () {
+      var result = MesosStateStore.getNodeFromNodeID("amazon-thing");
+      expect(result.fakeProp).toEqual("fake");
+    });
+
+    it("should return null if node not found", function () {
+      var result = MesosStateStore.getNodeFromNodeID("nonExistentNode");
+      expect(result).toEqual(null);
+    });
+  });
 });

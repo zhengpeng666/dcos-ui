@@ -68,4 +68,39 @@ describe("NodeSidePanel", function () {
     expect(headline.getDOMNode().textContent).toBe("bar");
   });
 
+  describe("#getInfo", function () {
+    beforeEach(function () {
+      MesosStateStore.getNodeFromNodeID = function (id) {
+        if (id === "nonExistent") {
+          return null;
+        }
+
+        return {
+          id: "existingNode",
+          version: "10",
+          active: true,
+          registered_time: 10
+        };
+      };
+    });
+
+    it("should return null if node does not exist", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanel open={true} itemID="nonExistent" />
+      );
+
+      var result = instance.getInfo();
+      expect(result).toEqual(null);
+    });
+
+    it("should return an array of elements if node exists", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanel open={true} itemID="existingNode" />
+      );
+
+      var result = instance.getInfo();
+      expect(TestUtils.isElement(result[0])).toEqual(true);
+    });
+  });
+
 });
