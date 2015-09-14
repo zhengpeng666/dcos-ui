@@ -3,6 +3,7 @@ import classNames from "classnames";
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
+import DateUtil from "../utils/DateUtil";
 import DetailSidePanel from "./DetailSidePanel";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import MesosStateStore from "../stores/MesosStateStore";
@@ -75,8 +76,42 @@ export default class NodeSidePanel extends DetailSidePanel {
   }
 
   getInfo() {
-    // info will go here
-    return null;
+    let nodeID = this.props.itemID;
+    let node = MesosStateStore.getNodeFromNodeID(nodeID);
+
+    if (node == null) {
+      return null;
+    }
+
+    let boolDisplayName = {
+      true: "True",
+      false: "False"
+    };
+
+    let masterVersion = MesosStateStore.get("lastMesosState").version;
+    let activeValue = boolDisplayName[node.active.toString()];
+    let registeredValue =
+      DateUtil.msToDateStr(node.registered_time.toFixed(3) * 1000);
+
+    let headerValueMapping = {
+      ID: node.id,
+      Active: activeValue,
+      Registered: registeredValue,
+      "Master Version": masterVersion
+    };
+
+    return Object.keys(headerValueMapping).map(function (header, i) {
+      return (
+        <p key={i} className="row flex-box">
+          <span className="column-4 emphasize">
+            {header}
+          </span>
+          <span className="column-12">
+            {headerValueMapping[header]}
+          </span>
+        </p>
+      );
+    });
   }
 
   getTabView() {
