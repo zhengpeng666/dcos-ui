@@ -3,6 +3,7 @@ jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../DetailSidePanel");
 jest.dontMock("../../utils/Store");
+jest.dontMock("../../utils/Util");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
@@ -31,6 +32,12 @@ describe("DetailSidePanel", function () {
       this.instance = TestUtils.renderIntoDocument(
         <DetailSidePanel open={false} onClose={this.callback} />
       );
+
+      // Mock router
+      this.instance.context.router = {
+        getCurrentRoutes: function () { return [1, 2, 3]; },
+        transitionTo: function () {}
+      };
     });
 
     it("shouldn't call the callback after initialization", function () {

@@ -136,7 +136,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
     return (
       <div className="container container-pod flush-top">
-        <TaskView tasks={tasks} />
+        <TaskView tasks={tasks} parentRouter={this.context.router} />
       </div>
     );
   }

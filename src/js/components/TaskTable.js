@@ -11,6 +11,8 @@ import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
 import Units from "../utils/Units";
 
 const METHODS_TO_BIND = [
+  "handleTaskClick",
+  "renderHeadline",
   "renderUpdated"
 ];
 
@@ -21,6 +23,12 @@ export default class TaskTable extends React.Component {
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
     }, this);
+  }
+
+  handleTaskClick(taskID) {
+    let linkTo = this.getTaskPanelRoute();
+
+    this.props.parentRouter.transitionTo(linkTo, {taskID});
   }
 
   getTaskUpdatedTimestamp(task) {
@@ -111,6 +119,13 @@ export default class TaskTable extends React.Component {
     );
   }
 
+  getTaskPanelRoute() {
+    let currentRoutes = this.props.parentRouter.getCurrentRoutes();
+    let currentPage = currentRoutes[currentRoutes.length - 2].name;
+
+    return `${currentPage}-task-panel`;
+  }
+
   renderHeadline(prop, task) {
     let dangerState = _.contains(TaskStates[task.state].stateTypes, "failure");
 
@@ -130,9 +145,11 @@ export default class TaskTable extends React.Component {
           <span className={statusClass}></span>
         </div>
         <div className="flex-box flex-box-col">
-          <div className="emphasize">
+          <a
+            className="emphasize clickable"
+            onClick={this.handleTaskClick.bind(this, task.id)}>
             {title}
-          </div>
+          </a>
         </div>
       </div>
     );

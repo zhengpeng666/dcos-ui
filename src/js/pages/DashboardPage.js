@@ -17,6 +17,7 @@ var ServiceList = require("../components/ServiceList");
 var TasksChart = require("../components/charts/TasksChart");
 var ServiceSidePanel = require("../components/ServiceSidePanel");
 var SidebarActions = require("../events/SidebarActions");
+import TaskSidePanel from "../components/TaskSidePanel";
 
 function getMesosState() {
   let states = MesosSummaryStore.get("states");
@@ -70,7 +71,10 @@ var DashboardPage = React.createClass({
   },
 
   componentWillMount: function () {
-    this.internalStorage_set({openServicePanel: false});
+    this.internalStorage_set({
+      openServicePanel: false,
+      openTaskPanel: false
+    });
     this.internalStorage_update(getMesosState());
   },
 
@@ -85,13 +89,15 @@ var DashboardPage = React.createClass({
     );
 
     this.internalStorage_update({
-      openServicePanel: this.props.params.serviceName != null
+      openServicePanel: this.props.params.serviceName != null,
+      openTaskPanel: this.props.params.taskID != null
     });
   },
 
   componentWillReceiveProps: function (nextProps) {
     this.internalStorage_update({
-      openServicePanel: nextProps.params.serviceName != null
+      openServicePanel: nextProps.params.serviceName != null,
+      openTaskPanel: nextProps.params.taskID != null
     });
   },
 
@@ -113,10 +119,6 @@ var DashboardPage = React.createClass({
   onMesosStateChange: function () {
     this.internalStorage_update(getMesosState());
     this.forceUpdate();
-  },
-
-  onServiceDetailClose: function () {
-    this.context.router.transitionTo("dashboard");
   },
 
   getServicesList: function (services) {
@@ -221,8 +223,10 @@ var DashboardPage = React.createClass({
         </div>
         <ServiceSidePanel
           itemID={this.props.params.serviceName}
-          onClose={this.onServiceDetailClose}
           open={data.statesProcessed && data.openServicePanel} />
+        <TaskSidePanel
+          itemID={this.props.params.taskID}
+          open={data.statesProcessed && data.openTaskPanel} />
       </Page>
     );
   }
