@@ -43,6 +43,17 @@ export default class ServiceSidePanel extends DetailSidePanel {
     }, this);
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (this.props.open !== nextProps.open && nextProps.open) {
+      let defaultTab = Object.keys(TABS).shift();
+      if (this.state.currentTab !== defaultTab) {
+        this.setState({currentTab: defaultTab});
+      }
+    }
+
+    return super.shouldComponentUpdate(...arguments);
+  }
+
   handleOpenServiceButtonClick() {
     this.context.router.transitionTo(
       "service-ui",
