@@ -1,12 +1,8 @@
-import _ from "underscore";
 import classNames from "classnames";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
-import BarChart from "./charts/BarChart";
-import Chart from "./charts/Chart";
-import Config from "../config/Config";
 import DateUtil from "../utils/DateUtil";
 import DetailSidePanel from "./DetailSidePanel";
 import HealthLabels from "../constants/HealthLabels";
@@ -14,13 +10,8 @@ import HealthStatus from "../constants/HealthStatus";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
-import ResourceTypes from "../constants/ResourceTypes";
 import StringUtil from "../utils/StringUtil";
 import TaskView from "./TaskView";
-import Units from "../utils/Units";
-
-// number to fit design of width vs. height ratio
-const WIDTH_HEIGHT_RATIO = 4.5;
 
 const METHODS_TO_BIND = [
   "handleOpenServiceButtonClick",
@@ -234,55 +225,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
         </p>
       );
     });
-  }
-
-  getResourceChart(resource, totalResources) {
-    let colorIndex = ResourceTypes[resource].colorIndex;
-    let resourceLabel = ResourceTypes[resource].label;
-    let resourceData = [{
-      name: "Alloc",
-      colorIndex: colorIndex,
-      values: totalResources[resource]
-    }];
-    let resourceValue = Units.formatResource(
-      resource, _.last(totalResources[resource]).value
-    );
-
-    let axisConfiguration = {
-      x: {hideMatch: /^0$/},
-      y: {hideMatch: /^50$/}
-    };
-
-    return (
-      <div key={resource} className="column-4
-        flex-box-align-vertical-center
-        container-pod
-        container-pod-super-short
-        flush-top">
-        <div>
-          <h3 className="flush-top flush-bottom text-color-neutral">
-            {resourceValue}
-          </h3>
-          <span className={`text-color-${colorIndex}`}>
-            {resourceLabel.toUpperCase()}
-          </span>
-        </div>
-
-        <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}
-          delayRender={true}>
-          <BarChart
-            axisConfiguration={axisConfiguration}
-            data={resourceData}
-            inverseStyle={true}
-            margin={{top: 0, left: 43, right: 10, bottom: 40}}
-            maxY={100}
-            refreshRate={Config.getRefreshRate()}
-            ticksY={2}
-            xGridLines={0}
-            y="percentage" />
-        </Chart>
-      </div>
-    );
   }
 
   getCharts() {

@@ -50,6 +50,23 @@ export default class NodeSidePanel extends DetailSidePanel {
     );
   }
 
+  getCharts() {
+    let node = MesosStateStore.getNodeFromNodeID(this.props.itemID);
+
+    if (!node) {
+      return null;
+    }
+
+    let states = MesosSummaryStore.get("states");
+    let resources = states.getResourceStatesForNodeIDs([node.id]);
+
+    return [
+      this.getResourceChart("cpus", resources),
+      this.getResourceChart("mem", resources),
+      this.getResourceChart("disk", resources)
+    ];
+  }
+
   getTabs() {
     let currentTab = this.state.currentTab;
 
@@ -141,6 +158,11 @@ export default class NodeSidePanel extends DetailSidePanel {
           className="container container-pod container-pod-divider-bottom
             container-pod-divider-inverse flush-bottom">
           {this.getBasicInfo(node)}
+          <div className="container container-pod container-pod-short flush-left flush-right">
+            <div className="row chart">
+              {this.getCharts()}
+            </div>
+          </div>
           <div className="side-panel-tabs">
             {this.getTabs()}
           </div>

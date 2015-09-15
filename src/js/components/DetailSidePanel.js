@@ -2,10 +2,18 @@ import _ from "underscore";
 import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
+import BarChart from "./charts/BarChart";
+import Chart from "./charts/Chart";
+import Config from "../config/Config";
 import EventTypes from "../constants/EventTypes";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import ResourceTypes from "../constants/ResourceTypes";
+import Units from "../utils/Units";
+
+// number to fit design of width vs. height ratio
+const WIDTH_HEIGHT_RATIO = 4.5;
 
 const METHODS_TO_BIND = [
   "handlePanelClose",
@@ -115,6 +123,55 @@ export default class DetailSidePanel extends React.Component {
       this.props.onClose();
     }
     this.forceUpdate();
+  }
+
+  getResourceChart(resource, totalResources) {
+    let colorIndex = ResourceTypes[resource].colorIndex;
+    let resourceLabel = ResourceTypes[resource].label;
+    let resourceData = [{
+      name: "Alloc",
+      colorIndex: colorIndex,
+      values: totalResources[resource]
+    }];
+    let resourceValue = Units.formatResource(
+      resource, _.last(totalResources[resource]).value
+    );
+
+    let axisConfiguration = {
+      x: {hideMatch: /^0$/},
+      y: {hideMatch: /^50$/}
+    };
+
+    return (
+      <div key={resource} className="column-4
+        flex-box-align-vertical-center
+        container-pod
+        container-pod-super-short
+        flush-top">
+        <div>
+          <h3 className="flush-top flush-bottom text-color-neutral">
+            {resourceValue}
+          </h3>
+          <span className={`text-color-${colorIndex}`}>
+            {resourceLabel.toUpperCase()}
+          </span>
+        </div>
+
+        <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}
+          delayRender={true}>
+          <BarChart
+            axisConfiguration={axisConfiguration}
+            data={resourceData}
+            inverseStyle={true}
+            margin={{top: 0, left: 43, right: 10, bottom: 40}}
+            maxY={100}
+            refreshRate={Config.getRefreshRate()}
+            ticksY={2}
+            xGridLines={0}
+            y="percentage" />
+        </Chart>
+      </div>
+    );
   }
 
   getNotFound(itemType) {
