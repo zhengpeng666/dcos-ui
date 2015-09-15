@@ -1,3 +1,4 @@
+import _ from "underscore";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
@@ -44,16 +45,20 @@ export default class TaskSidePanel extends DetailSidePanel {
     let headerValueMapping = {
       ID: task.id,
       Service: `${service.name} (${service.id})`,
-      Node: `${node.name} (${node.id})`
+      Node: `${node.hostname} (${node.id})`
     };
+
+    task.labels.forEach(function (label) {
+      headerValueMapping[label.key] = label.value;
+    });
 
     return Object.keys(headerValueMapping).map(function (header, i) {
       return (
         <p key={i} className="row flex-box">
-          <span className="column-4 emphasize">
+          <span className="column-6 emphasize">
             {header}
           </span>
-          <span className="column-12">
+          <span className="column-10">
             {headerValueMapping[header]}
           </span>
         </p>
@@ -84,8 +89,6 @@ export default class TaskSidePanel extends DetailSidePanel {
     if (task == null) {
       return this.getNotFound("task");
     }
-
-    console.log(task);
 
     return (
       <div>

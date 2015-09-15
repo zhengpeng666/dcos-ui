@@ -160,7 +160,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
     if (service == null) {
       return this.getNotFound("service");
     }
-    console.log(service);
 
     return (
       <div>
