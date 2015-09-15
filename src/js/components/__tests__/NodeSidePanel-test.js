@@ -7,6 +7,7 @@ jest.dontMock("../../utils/Store");
 jest.dontMock("../TaskTable");
 jest.dontMock("../TaskView");
 jest.dontMock("../RequestErrorMsg");
+jest.dontMock("../../utils/Util");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
