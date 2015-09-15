@@ -16,6 +16,21 @@ const TABS = {
   details: "Details"
 };
 
+function displayKeyValuePairs(hash = {}) {
+  return Object.keys(hash).map(function (key) {
+    return (
+      <p key={key} className="row flex-box">
+        <span className="column-4 emphasize">
+          {key}
+        </span>
+        <span className="column-12">
+          {hash[key]}
+        </span>
+      </p>
+    );
+  });
+}
+
 export default class NodeSidePanel extends DetailSidePanel {
   constructor() {
     super(...arguments);
@@ -77,48 +92,43 @@ export default class NodeSidePanel extends DetailSidePanel {
     );
   }
 
-  getInfo() {
-    let node = MesosStateStore.getNodeFromNodeID(this.props.itemID);
-
-    if (node == null) {
-      return null;
-    }
-
-    let masterVersion = MesosStateStore.get("lastMesosState").version;
-    let registeredValue =
-      DateUtil.msToDateStr(node.registered_time.toFixed(3) * 1000);
-
-    let headerValueMapping = {
-      ID: node.id,
-      Active: StringUtil.capitalize(node.active.toString().toLowerCase()),
-      Registered: registeredValue,
-      "Master version": masterVersion
-    };
-
-    return Object.keys(headerValueMapping).map(function (header, i) {
-      return (
-        <p key={i} className="row flex-box">
-          <span className="column-4 emphasize">
-            {header}
-          </span>
-          <span className="column-12">
-            {headerValueMapping[header]}
-          </span>
-        </p>
-      );
-    });
-  }
-
-  getTabView() {
+  getTabView(node) {
     let currentTab = this.state.currentTab;
 
     if (currentTab === "tasks") {
       return this.getTaskView();
     }
 
+    let headerValueMapping = null;
+
+    if (node != null) {
+      headerValueMapping = {
+        ID: node.id,
+        Active: StringUtil.capitalize(node.active.toString().toLowerCase()),
+        Registered: DateUtil.msToDateStr(
+          node.registered_time.toFixed(3) * 1000
+        ),
+        "Master version": MesosStateStore.get("lastMesosState").version
+      };
+    }
+
+    let attributeNodes = null;
+
+    if (node.attributes != null && Object.keys(node.attributes).length > 0) {
+      attributeNodes = (
+        <div className="container container-pod container-pod-short flush-top">
+          <h3 className="inverse flush-top">Attributes</h3>
+          {displayKeyValuePairs(node.attributes)}
+        </div>
+      );
+    }
+
     return (
-      <div className="container container-pod container-pod-short">
-        {this.getInfo()}
+      <div>
+        <div className="container container-pod container-pod-short">
+          {displayKeyValuePairs(headerValueMapping)}
+        </div>
+        {attributeNodes}
       </div>
     );
   }
@@ -142,7 +152,7 @@ export default class NodeSidePanel extends DetailSidePanel {
             {this.getTabs()}
           </div>
         </div>
-        {this.getTabView()}
+        {this.getTabView(node)}
       </div>
     );
   }
