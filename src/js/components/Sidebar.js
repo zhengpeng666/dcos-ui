@@ -12,7 +12,6 @@ global.ZeroClipboard = ZeroClipboard;
 var ReactZeroClipboard = require("react-zeroclipboard");
 
 var Actions = require("../actions/Actions");
-var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
 var IntercomActions = require("../events/IntercomActions");
 var IntercomStore = require("../stores/IntercomStore");
@@ -49,6 +48,10 @@ var Sidebar = React.createClass({
       this.onMesosStateChange
     );
     MetadataStore.addChangeListener(
+      EventTypes.DCOS_METADATA_CHANGE,
+      this.onDCOSMetadataChange
+    );
+    MetadataStore.addChangeListener(
       EventTypes.METADATA_CHANGE,
       this.onMetadataChange
     );
@@ -61,6 +64,10 @@ var Sidebar = React.createClass({
   componentWillUnmount: function () {
     this.removeMesosStateListener();
 
+    MetadataStore.removeChangeListener(
+      EventTypes.DCOS_METADATA_CHANGE,
+      this.onDCOSMetadataChange
+    );
     MetadataStore.removeChangeListener(
       EventTypes.METADATA_CHANGE,
       this.onMetadataChange
@@ -89,8 +96,14 @@ var Sidebar = React.createClass({
     this.removeMesosStateListener();
   },
 
-  onMetadataChange: function () {
+  onDCOSMetadataChange: function () {
     this.internalStorage_update({metadata: MetadataStore.get("metadata")});
+  },
+
+  onMetadataChange: function () {
+    this.internalStorage_update({
+      dcosMetadata: MetadataStore.get("dcosMetadata")
+    });
   },
 
   onIntercomChange: function () {
@@ -212,6 +225,18 @@ var Sidebar = React.createClass({
     }, this);
   },
 
+  getVersion(data) {
+    if (data == null
+      || data.dcosMetadata == null
+      || data.dcosMetadata.version == null) {
+      return null;
+    }
+
+    return (
+      <span className="version-number">v.{data.dcosMetadata.version}</span>
+    );
+  },
+
   render: function () {
     var data = this.internalStorage_get();
     let clusterName = data.mesosInfo.getClusterName();
@@ -254,7 +279,7 @@ var Sidebar = React.createClass({
                 <span className="clickable" onClick={this.handleVersionClick}>
                   <span className="company-name">Mesosphere </span>
                   <span className="app-name">DCOS </span>
-                  <span className="version-number">v.{Config.version}</span>
+                  {this.getVersion(data)}
                 </span>
               </small>
             </p>
