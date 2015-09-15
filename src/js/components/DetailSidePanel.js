@@ -3,18 +3,53 @@ import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
 import EventTypes from "../constants/EventTypes";
+import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 
 const METHODS_TO_BIND = [
   "handlePanelClose",
-  "onMesosStateChange",
-  "onMesosSummaryChange"
+  "onStoreChange"
 ];
+
+const ListenersDescription = {
+  summary: {
+    store: MesosSummaryStore,
+    event: EventTypes.MESOS_SUMMARY_CHANGE,
+    unmountWhen: function (store) {
+      return store.get("statesProcessed");
+    }
+  },
+  state: {
+    store: MesosStateStore,
+    event: EventTypes.MESOS_STATE_CHANGE,
+    unmountWhen: function (store) {
+      return Object.keys(store.get("lastMesosState")).length;
+    }
+  },
+  marathon: {
+    store: MarathonStore,
+    event: EventTypes.MARATHON_APPS_CHANGE,
+    unmountWhen: function (store) {
+      return store.hasProcessedApps();
+    }
+  }
+};
+
+function changeListeners(listeners, changeListener) {
+  Object.keys(listeners).forEach(function (listener) {
+    let store = listeners[listener];
+    store.store[changeListener](
+      store.event, this.onStoreChange
+    );
+  }, this);
+}
 
 export default class DetailSidePanel extends React.Component {
   constructor() {
     super(...arguments);
+
+    this.storesListeners = [];
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
@@ -34,43 +69,45 @@ export default class DetailSidePanel extends React.Component {
   }
 
   componentDidMount() {
-    MesosSummaryStore.addChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
-    );
+    this.storesListeners.forEach(function (listener, i) {
+      if (typeof listener === "string") {
+        this.storesListeners[i] = _.clone(ListenersDescription[listener]);
+      } else {
+        let storeName = listener.name;
+        this.storesListeners[i] = _.defaults(
+          listener, ListenersDescription[storeName]
+        );
+      }
+    }, this);
 
-    MesosStateStore.addChangeListener(
-      EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
-    );
-
-    this.forceUpdate();
+    changeListeners.call(this, this.storesListeners, "addChangeListener");
   }
 
   componentWillUnmount() {
-    MesosSummaryStore.removeChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
-    );
-
-    MesosStateStore.removeChangeListener(
-      EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
-    );
+    changeListeners.call(this, this.storesListeners, "removeChangeListener");
   }
 
-  onMesosSummaryChange() {
-    if (MesosSummaryStore.get("statesProcessed")) {
-      MesosSummaryStore.removeChangeListener(
-        EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
-      );
-      this.forceUpdate();
-    }
-  }
+  onStoreChange() {
+    // Iterate through all the current stores to see if we should remove our
+    // change listener.
+    this.storesListeners.forEach(function (listener, i) {
+      if (!listener.unmountWhen || listener.listenAlways) {
+        return;
+      }
 
-  onMesosStateChange() {
-    if (MesosStateStore.get("lastMesosState")) {
-      MesosStateStore.removeChangeListener(
-        EventTypes.MESOS_STATE_CHANGE, this.onMesosStateChange
-      );
-      this.forceUpdate();
-    }
+      // Remove change listener if the settings want to unmount after a certain
+      // time such as "appsProcessed".
+      if (listener.unmountWhen && listener.unmountWhen(listener.store)) {
+        listener.store.removeChangeListener(
+          listener.event, this.onStoreChange
+        );
+
+        this.storesListeners.splice(i, 1);
+      }
+    }, this);
+
+    // Always forceUpdate no matter where the change came from
+    this.forceUpdate();
   }
 
   handlePanelClose() {
