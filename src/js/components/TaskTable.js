@@ -11,9 +11,9 @@ import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
 import Units from "../utils/Units";
 
 const METHODS_TO_BIND = [
-  "renderUpdated",
+  "handleTaskClick",
   "renderHeadline",
-  "handleTaskClick"
+  "renderUpdated"
 ];
 
 export default class TaskTable extends React.Component {
