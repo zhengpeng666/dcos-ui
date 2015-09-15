@@ -1,4 +1,5 @@
 var _ = require("underscore");
+var classNames = require("classnames");
 var d3 = require("d3");
 var React = require("react/addons");
 
@@ -13,34 +14,42 @@ var BarChart = React.createClass({
   mixins: [ChartMixin, InternalStorageMixin],
 
   propTypes: {
+    axisConfiguration: React.PropTypes.object,
     data: React.PropTypes.array.isRequired,
     // `height` and `width` are required if this
     // module isn't used as a child of the `Chart` component
     // Otherwise Chart will automatically calculate this.
     height: React.PropTypes.number,
-    width: React.PropTypes.number,
+    inverseStyle: React.PropTypes.bool,
     peakline: React.PropTypes.bool,
+    refreshRate: React.PropTypes.number.isRequired,
     y: React.PropTypes.string,
-    refreshRate: React.PropTypes.number.isRequired
+    width: React.PropTypes.number
   },
 
   getDefaultProps: function () {
     return {
+      axisConfiguration: {
+        x: {hideMatch: false},
+        y: {hideMatch: false}
+      },
+      inverseStyle: false,
       margin: {
         top: 0,
         right: 5,
         bottom: 40,
         left: 43
       },
-      peakline: false,
       maxY: 10,
+      peakline: false,
       ticksY: 10,
-      y: "y",
       transition: {
         delay: 200,
         duration: 800
       },
-      refreshRate: 0
+      refreshRate: 0,
+      xGridLines: null,
+      y: "y"
     };
   },
 
@@ -134,8 +143,14 @@ var BarChart = React.createClass({
 
   formatYAxis: function (ticks, maxY) {
     var formatPercent = d3.scale.linear().tickFormat(ticks, ".0%");
-    return function (d) {
+    return (d) => {
       var a = formatPercent(d / maxY);
+
+      let hideMatch = this.props.axisConfiguration.y.hideMatch;
+      if (hideMatch && hideMatch.test(d.toString())) {
+        return "";
+      }
+
       if (d >= maxY) {
         a = "100%";
       }
@@ -152,6 +167,10 @@ var BarChart = React.createClass({
 
     // The 4 is a number that works, though random :)
     if (firstDataSet) {
+      let xAxisClass = classNames("x axis", {
+        "text-small": props.width < 350
+      });
+
       var xTicks = length / (props.refreshRate / 1000) / 4;
       var xAxis = d3.svg.axis()
         .scale(xScale)
@@ -159,16 +178,21 @@ var BarChart = React.createClass({
         .tickFormat(this.formatXAxis)
         .orient("bottom");
       d3.select(this.refs.xAxis.getDOMNode()).interrupt()
-        .attr("class", "x axis")
+        .attr("class", xAxisClass)
         .call(xAxis);
     }
 
+    let yAxisClass = classNames("y axis", {
+      "text-small": props.width < 350,
+      "inverse": props.inverseStyle
+    });
     var yAxis = d3.svg.axis()
       .scale(yScale)
       .ticks(props.ticksY)
       .tickFormat(this.formatYAxis(props.ticksY, props.maxY))
       .orient("left");
     d3.select(this.refs.yAxis.getDOMNode())
+      .attr("class", yAxisClass)
       .call(yAxis);
 
     d3.select(this.refs.yGrid.getDOMNode())
@@ -181,12 +205,16 @@ var BarChart = React.createClass({
           .tickFormat("")
       );
 
+    let xGridLines = props.ticksY;
+    if (props.xGridLines != null) {
+      xGridLines = props.xGridLines;
+    }
     d3.select(this.refs.xGrid.getDOMNode())
       .attr("class", "grid x")
       .call(
         d3.svg.axis().scale(xScale)
           .orient("top")
-          .ticks(props.ticksY)
+          .ticks(xGridLines)
           .tickSize(-props.height, 0, 0)
           .tickFormat("")
       );
@@ -250,12 +278,16 @@ var BarChart = React.createClass({
         var posX = chartWidth - marginLeft - marginRight - rectWidth * (valuesLength - 1 - j);
         posY[j] -= rectHeight;
 
+        // Will increase the margin between bars as they become smaller
+        // to make it visually easier to parse
+        let barMargin = Math.pow(rectWidth, -0.4);
+
         return (
           <Bar
             posX={posX}
             posY={posY[j]}
             rectHeight={rectHeight}
-            rectWidth={rectWidth}
+            rectWidth={rectWidth - barMargin}
             colorClass={colorClass}
             transitionDelay={props.transition.delay}
             transitionDuration={props.transition.duration}
@@ -271,6 +303,11 @@ var BarChart = React.createClass({
     var margin = props.margin;
     var clipPath = "url(#" + data.clipPathID + ")";
 
+    var gridClassSet = classNames({
+      "grid-graph": true,
+      inverse: props.inverseStyle
+    });
+
     return (
       <svg height={props.height + margin.bottom}
           width={props.width}
@@ -281,7 +318,7 @@ var BarChart = React.createClass({
           <g className="x axis"
             transform={"translate(" + [0, props.height] + ")"}
             ref="xAxis"/>
-          <g className="grid-graph" clipPath={clipPath}>
+          <g className={gridClassSet} clipPath={clipPath}>
             <g ref="yGrid" />
             <g ref="xGrid" />
             {this.getBarList()}

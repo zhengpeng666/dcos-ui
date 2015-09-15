@@ -11,7 +11,15 @@ var Chart = React.createClass({
   mixins: [InternalStorageMixin],
 
   propTypes: {
-    calcHeight: React.PropTypes.func
+    calcHeight: React.PropTypes.func,
+    delayRender: React.PropTypes.bool
+  },
+
+  getDefaultProps: function () {
+    return {
+      calcHeight: null,
+      delayRender: false
+    };
   },
 
   componentWillMount: function () {
@@ -20,7 +28,16 @@ var Chart = React.createClass({
   },
 
   componentDidMount: function () {
-    this.updateWidth();
+    if (this.props.delayRender) {
+      // As of right now this is used on the Side Panels
+      // because they animate in we need to wait on calling
+      // `window.getComputedStyle` because it'll cause a repaint
+      // which causes the panel to not animate
+      // Making this happen on the next tick fixes it.
+      setTimeout(this.updateWidth, 0);
+    } else {
+      this.updateWidth();
+    }
     window.addEventListener("resize", this.updateWidth);
   },
 
@@ -29,6 +46,10 @@ var Chart = React.createClass({
   },
 
   updateWidth: function () {
+    if (!this.isMounted()) {
+      return;
+    }
+
     var dimensions = DOMUtils.getComputedDimensions(this.getDOMNode());
     var data = this.internalStorage_get();
 

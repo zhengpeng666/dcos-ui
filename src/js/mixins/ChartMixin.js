@@ -2,7 +2,6 @@ var _ = require("underscore");
 var d3 = require("d3");
 
 var ChartMixin = {
-
   getXScale: function (data, width, refreshRate) {
     var length = width;
     var firstDataSet = _.first(data);
@@ -30,13 +29,17 @@ var ChartMixin = {
   },
 
   formatXAxis: function (d) {
-    if (parseInt(Math.abs(d)) > 0) {
-      return d + "s";
-    } else {
-      return d;
+    let hideMatch = this.props.axisConfiguration.x.hideMatch;
+    if (hideMatch && hideMatch.test(d.toString())) {
+      return "";
     }
-  }
 
+    if (parseInt(Math.abs(d)) > 0) {
+      return `${d}s`;
+    }
+
+    return d;
+  }
 };
 
 module.exports = ChartMixin;

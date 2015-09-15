@@ -1,4 +1,16 @@
-var Units = {
+import Maths from "./Maths";
+
+const Units = {
+  formatResource: function (resource, value) {
+    value = Maths.round(value, 2);
+
+    if (resource !== "cpus") {
+      value = Units.filesize(value * 1024 * 1024, 1);
+    }
+
+    return value;
+  },
+
   filesize: function (size, decimals, threshold, multiplier, units) {
     size = size || 0;
     if (decimals == null) {

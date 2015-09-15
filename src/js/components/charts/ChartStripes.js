@@ -14,6 +14,7 @@ var ChartStripes = React.createClass({
   getStripes: function (props) {
     var count = props.count;
     var width = props.width / (2 * count);
+
     return _.map(_.range(0, count), function (i) {
       // indent with margin, start one width length in
       // and add two times width per step

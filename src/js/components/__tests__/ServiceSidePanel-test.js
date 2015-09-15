@@ -1,14 +1,23 @@
 jest.dontMock("../DetailSidePanel");
 jest.dontMock("../ServiceSidePanel");
+jest.dontMock("../../events/MesosSummaryActions");
+jest.dontMock("../../stores/MesosSummaryStore");
+jest.dontMock("../../mixins/GetSetMixin");
+jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/Store");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var MarathonStore = require("../../stores/MarathonStore");
+var MesosSummaryActions = require("../../events/MesosSummaryActions");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var MesosStateStore = require("../../stores/MesosStateStore");
+var Service = require("../../structs/Service");
 var ServiceSidePanel = require("../ServiceSidePanel");
+
+MesosSummaryActions.fetchSummary = function () {};
+MesosSummaryStore.init();
 
 describe("ServiceSidePanel", function () {
   beforeEach(function () {
@@ -19,12 +28,12 @@ describe("ServiceSidePanel", function () {
 
     function fakeFn(name) {
       if (name === "service_that_exists") {
-        return {
+        return new Service({
           name: "foo",
           registered_time: 1000,
           tasks: [],
           snapshot: {name: "foo", ports: [1, 2]}
-        };
+        });
       }
 
       return null;
