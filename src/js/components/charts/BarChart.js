@@ -278,12 +278,16 @@ var BarChart = React.createClass({
         var posX = chartWidth - marginLeft - marginRight - rectWidth * (valuesLength - 1 - j);
         posY[j] -= rectHeight;
 
+        // Will increase the margin between bars as they become smaller
+        // to make it visually easier to parse
+        let barMargin = Math.pow(rectWidth, -0.4);
+
         return (
           <Bar
             posX={posX}
             posY={posY[j]}
             rectHeight={rectHeight}
-            rectWidth={rectWidth}
+            rectWidth={rectWidth - barMargin}
             colorClass={colorClass}
             transitionDelay={props.transition.delay}
             transitionDuration={props.transition.duration}
