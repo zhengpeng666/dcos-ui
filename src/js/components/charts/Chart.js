@@ -20,7 +20,7 @@ var Chart = React.createClass({
   },
 
   componentDidMount: function () {
-    this.updateWidth();
+    setTimeout(this.updateWidth, 500);
     window.addEventListener("resize", this.updateWidth);
   },
 
@@ -29,6 +29,10 @@ var Chart = React.createClass({
   },
 
   updateWidth: function () {
+    if (!this.isMounted()) {
+      return;
+    }
+
     var dimensions = DOMUtils.getComputedDimensions(this.getDOMNode());
     var data = this.internalStorage_get();
 
