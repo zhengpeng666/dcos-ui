@@ -150,7 +150,7 @@ export default class TaskTable extends React.Component {
         </div>
         <div className="flex-box flex-box-col">
           <a
-            className="emphasize"
+            className="emphasize clickable"
             onClick={this.handleTaskClick.bind(this, task.id)}>
             {title}
           </a>
