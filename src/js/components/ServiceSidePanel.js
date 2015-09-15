@@ -165,18 +165,12 @@ export default class ServiceSidePanel extends DetailSidePanel {
           className="container container-pod container-pod-divider-bottom
             container-pod-divider-inverse flush-bottom">
           {this.getBasicInfo()}
-          <div className="container container-pod container-pod-short flush-left flush-right">
+          <div className="container container-pod container-pod-short flush-left flush-bottom flush-right">
             <div className="row chart">
               {this.getCharts()}
             </div>
           </div>
-          <div className="container container-pod container-pod-short flush-left">
-            <div className="row">
-              <div className="column-4">
-                {this.getOpenServiceButton()}
-              </div>
-            </div>
-          </div>
+          {this.getOpenServiceButton()}
           <div className="side-panel-tabs">
             {this.getTabs()}
           </div>
@@ -194,10 +188,16 @@ export default class ServiceSidePanel extends DetailSidePanel {
     // We are not using react-router's Link tag due to reactjs-component's
     // Portal going outside of React's render tree.
     return (
-      <a className="button button-primary text-align-right"
-        onClick={this.handleOpenServiceButtonClick}>
-        Open Service
-      </a>
+      <div className="container container-pod container-pod-short flush-left">
+        <div className="row">
+          <div className="column-4">
+            <a className="button button-primary text-align-right"
+              onClick={this.handleOpenServiceButtonClick}>
+              Open Service
+            </a>
+          </div>
+        </div>
+      </div>
     );
   }
 

@@ -33,8 +33,8 @@ var Chart = React.createClass({
       // because they animate in we need to wait on calling
       // `window.getComputedStyle` because it'll cause a repaint
       // which causes the panel to not animate
-      // The animation doesn't take longer than 500ms
-      setTimeout(this.updateWidth, 500);
+      // Making this happen on the next tick fixes it.
+      setTimeout(this.updateWidth, 0);
     } else {
       this.updateWidth();
     }
