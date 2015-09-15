@@ -7,6 +7,7 @@ import DetailSidePanel from "./DetailSidePanel";
 import HistoryStore from "../stores/HistoryStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import TaskStates from "../constants/TaskStates";
 
 export default class TaskSidePanel extends DetailSidePanel {
   constructor() {
@@ -118,6 +119,7 @@ export default class TaskSidePanel extends DetailSidePanel {
         <h1 className="inverse flush-top flush-bottom">
           {task.name}
         </h1>
+        {TaskStates[task.state].displayName}
       </div>
     );
   }
@@ -138,8 +140,11 @@ export default class TaskSidePanel extends DetailSidePanel {
     return (
       <div>
         <div
-          className="container container-pod container-pod-divider-bottom
-            container-pod-divider-inverse flush-bottom">
+          className="container
+            container-pod
+            container-pod-short
+            container-pod-divider-bottom
+            container-pod-divider-inverse">
           {this.getBasicInfo(task)}
         </div>
         <div className="container container-pod container-pod-short">
