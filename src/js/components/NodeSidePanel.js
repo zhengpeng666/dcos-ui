@@ -96,10 +96,9 @@ export default class NodeSidePanel extends DetailSidePanel {
       );
     });
 
-    let headlineNode = null;
-
+    // Wrap in headline element and classes
     if (headline != null) {
-      headlineNode = (
+      headline = (
         <h3 className="inverse flush-top">
           {headline}
         </h3>
@@ -108,7 +107,7 @@ export default class NodeSidePanel extends DetailSidePanel {
 
     return (
       <div className="container container-pod container-pod-short flush-bottom">
-        {headlineNode}
+        {headline}
         {items}
       </div>
     );
