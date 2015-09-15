@@ -1,3 +1,10 @@
 .tooltip {
   z-index: 99999;
 }
+
+// This property is necessary for the tooltip to render consistently when
+// multiple mouseover events are fired. For some reason, without this
+// property, the tooltip renders inconsistently.
+.disable-pointer-events {
+  pointer-events: none;
+}
