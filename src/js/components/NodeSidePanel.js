@@ -16,21 +16,6 @@ const TABS = {
   details: "Details"
 };
 
-function displayKeyValuePairs(hash = {}) {
-  return Object.keys(hash).map(function (key) {
-    return (
-      <p key={key} className="row flex-box">
-        <span className="column-4 emphasize">
-          {key}
-        </span>
-        <span className="column-12">
-          {hash[key]}
-        </span>
-      </p>
-    );
-  });
-}
-
 export default class NodeSidePanel extends DetailSidePanel {
   constructor() {
     super(...arguments);
@@ -92,6 +77,21 @@ export default class NodeSidePanel extends DetailSidePanel {
     );
   }
 
+  displayKeyValuePairs(hash = {}) {
+    return Object.keys(hash).map(function (key) {
+      return (
+        <p key={key} className="row flex-box">
+          <span className="column-4 emphasize">
+            {key}
+          </span>
+          <span className="column-12">
+            {hash[key]}
+          </span>
+        </p>
+      );
+    });
+  }
+
   getTabView(node) {
     let currentTab = this.state.currentTab;
 
@@ -118,7 +118,7 @@ export default class NodeSidePanel extends DetailSidePanel {
       attributeNodes = (
         <div className="container container-pod container-pod-short flush-top">
           <h3 className="inverse flush-top">Attributes</h3>
-          {displayKeyValuePairs(node.attributes)}
+          {this.displayKeyValuePairs(node.attributes)}
         </div>
       );
     }
@@ -126,7 +126,7 @@ export default class NodeSidePanel extends DetailSidePanel {
     return (
       <div>
         <div className="container container-pod container-pod-short">
-          {displayKeyValuePairs(headerValueMapping)}
+          {this.displayKeyValuePairs(headerValueMapping)}
         </div>
         {attributeNodes}
       </div>

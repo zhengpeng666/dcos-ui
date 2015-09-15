@@ -64,13 +64,38 @@ describe("NodeSidePanel", function () {
     MesosStateStore.getNodeFromNodeID = this.storeGetNode;
   });
 
-  describe("#getInfo", function () {
-    it("should return null if node does not exist", function () {
+  describe("#displayKeyValuePairs", function () {
+    beforeEach(function () {
+      MesosStateStore.getNodeFromNodeID = function (id) {
+        if (id === "nonExistent") {
+          return null;
+        }
+
+        return {
+          id: "existingNode",
+          version: "10",
+          active: true,
+          registered_time: 10
+        };
+      };
+    });
+
+    it("should return an empty set if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanel open={true} itemID="nonExistent" />
       );
-      var result = instance.getInfo();
-      expect(result).toEqual(null);
+
+      var result = instance.displayKeyValuePairs({});
+      expect(result).toEqual([]);
+    });
+
+    it("should return an empty set if undefined is passed", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanel open={true} itemID="nonExistent" />
+      );
+
+      var result = instance.displayKeyValuePairs();
+      expect(result).toEqual([]);
     });
 
     it("should return an array of elements if node exists", function () {
@@ -78,7 +103,9 @@ describe("NodeSidePanel", function () {
         <NodeSidePanel open={true} itemID="existingNode" />
       );
 
-      var result = instance.getInfo();
+      var result = instance.displayKeyValuePairs({
+        "boo": "bar"
+      });
       expect(TestUtils.isElement(result[0])).toEqual(true);
     });
   });
