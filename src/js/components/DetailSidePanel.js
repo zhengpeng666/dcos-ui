@@ -69,20 +69,17 @@ export default class DetailSidePanel extends React.Component {
   }
 
   componentDidMount() {
-    let mergedListeners = {};
-
-    this.storesListeners.forEach(function (listener) {
+    this.storesListeners.forEach(function (listener, i) {
       if (typeof listener === "string") {
-        mergedListeners[listener] = _.clone(ListenersDescription[listener]);
+        this.storesListeners[i] = _.clone(ListenersDescription[listener]);
       } else {
         let storeName = listener.name;
-        mergedListeners[storeName] = _.defaults(
+        this.storesListeners[i] = _.defaults(
           listener, ListenersDescription[storeName]
         );
       }
-    });
+    }, this);
 
-    this.storesListeners = mergedListeners;
     changeListeners.call(this, this.storesListeners, "addChangeListener");
   }
 
@@ -93,22 +90,19 @@ export default class DetailSidePanel extends React.Component {
   onStoreChange() {
     // Iterate through all the current stores to see if we should remove our
     // change listener.
-    Object.keys(this.storesListeners).forEach(function (listener) {
-      let store = this.storesListeners[listener];
-
-      if (!store.unmountWhen || store.listenAlways) {
+    this.storesListeners.forEach(function (listener, i) {
+      if (!listener.unmountWhen || listener.listenAlways) {
         return;
       }
 
       // Remove change listener if the settings want to unmount after a certain
       // time such as "appsProcessed".
-      Object.keys(store.unmountWhen).forEach(function (prop) {
-        if (!!store.store.get(prop) === store.unmountWhen[prop]
-          || store.listenOnce) {
-          store.store.removeChangeListener(
-            store.event, this.onStoreChange
+      Object.keys(listener.unmountWhen).forEach(function (prop) {
+        if (!!listener.store.get(prop) === listener.unmountWhen[prop]) {
+          listener.store.removeChangeListener(
+            listener.event, this.onStoreChange
           );
-          delete this.storesListeners[listener];
+          this.storesListeners.splice(i, 1);
         }
       }, this);
     }, this);
