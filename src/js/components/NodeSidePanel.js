@@ -1,3 +1,4 @@
+import _ from "underscore";
 import classNames from "classnames";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
@@ -77,58 +78,66 @@ export default class NodeSidePanel extends DetailSidePanel {
     );
   }
 
-  displayKeyValuePairs(hash = {}) {
-    return Object.keys(hash).map(function (key) {
+  getKeyValuePairs(hash, headline) {
+    if (_.isEmpty(hash)) {
+      return null;
+    }
+
+    let items = Object.keys(hash).map(function (key) {
       return (
-        <p key={key} className="row flex-box">
-          <span className="column-4 emphasize">
+        <dl key={key} className="row flex-box">
+          <dt className="column-4 emphasize">
             {key}
-          </span>
-          <span className="column-12">
+          </dt>
+          <dd className="column-12">
             {hash[key]}
-          </span>
-        </p>
+          </dd>
+        </dl>
       );
     });
+
+    let headlineNode = null;
+
+    if (headline != null) {
+      headlineNode = (
+        <h3 className="inverse flush-top">
+          {headline}
+        </h3>
+      );
+    }
+
+    return (
+      <div className="container container-pod container-pod-short flush-bottom">
+        {headlineNode}
+        {items}
+      </div>
+    );
   }
 
   getTabView(node) {
+    if (node == null) {
+      return null;
+    }
+
     let currentTab = this.state.currentTab;
 
     if (currentTab === "tasks") {
       return this.getTaskView();
     }
 
-    let headerValueMapping = null;
-
-    if (node != null) {
-      headerValueMapping = {
-        ID: node.id,
-        Active: StringUtil.capitalize(node.active.toString().toLowerCase()),
-        Registered: DateUtil.msToDateStr(
-          node.registered_time.toFixed(3) * 1000
-        ),
-        "Master version": MesosStateStore.get("lastMesosState").version
-      };
-    }
-
-    let attributeNodes = null;
-
-    if (node.attributes != null && Object.keys(node.attributes).length > 0) {
-      attributeNodes = (
-        <div className="container container-pod container-pod-short flush-top">
-          <h3 className="inverse flush-top">Attributes</h3>
-          {this.displayKeyValuePairs(node.attributes)}
-        </div>
-      );
-    }
+    let headerValueMapping = {
+      ID: node.id,
+      Active: StringUtil.capitalize(node.active.toString().toLowerCase()),
+      Registered: DateUtil.msToDateStr(
+        node.registered_time.toFixed(3) * 1000
+      ),
+      "Master version": MesosStateStore.get("lastMesosState").version
+    };
 
     return (
       <div>
-        <div className="container container-pod container-pod-short">
-          {this.displayKeyValuePairs(headerValueMapping)}
-        </div>
-        {attributeNodes}
+        {this.getKeyValuePairs(headerValueMapping)}
+        {this.getKeyValuePairs(node.attributes, "Attributes")}
       </div>
     );
   }
