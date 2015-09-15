@@ -1,3 +1,4 @@
+import _ from "underscore";
 import classNames from "classnames";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
@@ -80,48 +81,65 @@ export default class NodeSidePanel extends DetailSidePanel {
     );
   }
 
-  getInfo() {
-    let node = MesosStateStore.getNodeFromNodeID(this.props.itemID);
+  getKeyValuePairs(hash, headline) {
+    if (_.isEmpty(hash)) {
+      return null;
+    }
 
+    let items = Object.keys(hash).map(function (key) {
+      return (
+        <dl key={key} className="row flex-box">
+          <dt className="column-4 emphasize">
+            {key}
+          </dt>
+          <dd className="column-12">
+            {hash[key]}
+          </dd>
+        </dl>
+      );
+    });
+
+    // Wrap in headline element and classes
+    if (headline != null) {
+      headline = (
+        <h3 className="inverse flush-top">
+          {headline}
+        </h3>
+      );
+    }
+
+    return (
+      <div className="container container-pod container-pod-short flush-bottom">
+        {headline}
+        {items}
+      </div>
+    );
+  }
+
+  getTabView(node) {
     if (node == null) {
       return null;
     }
 
-    let masterVersion = MesosStateStore.get("lastMesosState").version;
-    let registeredValue =
-      DateUtil.msToDateStr(node.registered_time.toFixed(3) * 1000);
-
-    let headerValueMapping = {
-      ID: node.id,
-      Active: StringUtil.capitalize(node.active.toString().toLowerCase()),
-      Registered: registeredValue,
-      "Master version": masterVersion
-    };
-
-    return Object.keys(headerValueMapping).map(function (header, i) {
-      return (
-        <p key={i} className="row flex-box">
-          <span className="column-4 emphasize">
-            {header}
-          </span>
-          <span className="column-12">
-            {headerValueMapping[header]}
-          </span>
-        </p>
-      );
-    });
-  }
-
-  getTabView() {
     let currentTab = this.state.currentTab;
 
     if (currentTab === "tasks") {
       return this.getTaskView();
     }
 
+    let headerValueMapping = {
+      ID: node.id,
+      Active: StringUtil.capitalize(node.active.toString().toLowerCase()),
+      Registered: DateUtil.msToDateStr(
+        node.registered_time.toFixed(3) * 1000
+      ),
+      "Master version": MesosStateStore.get("lastMesosState").version
+    };
+
     return (
-      <div className="container container-pod container-pod-short">
-        {this.getInfo()}
+      <div>
+        {this.getKeyValuePairs(headerValueMapping)}
+        {this.getKeyValuePairs(node.attributes, "Attributes")}
       </div>
     );
   }
@@ -145,7 +163,7 @@ export default class NodeSidePanel extends DetailSidePanel {
             {this.getTabs()}
           </div>
         </div>
-        {this.getTabView()}
+        {this.getTabView(node)}
       </div>
     );
   }

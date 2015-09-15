@@ -16,6 +16,11 @@ var MesosSummaryActions = require("../../events/MesosSummaryActions");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var NodeSidePanel = require("../NodeSidePanel");
 
+function renderAndFindTag(instance, tag) {
+  var result = TestUtils.renderIntoDocument(instance);
+  return TestUtils.findRenderedDOMComponentWithTag(result, tag);
+}
+
 describe("NodeSidePanel", function () {
   beforeEach(function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
@@ -64,22 +69,87 @@ describe("NodeSidePanel", function () {
     MesosStateStore.getNodeFromNodeID = this.storeGetNode;
   });
 
-  describe("#getInfo", function () {
+  it("should show error if node is not to be found", function () {
+    let headline = renderAndFindTag(this.instance.getContents(), "h1");
+
+    expect(headline.getDOMNode().textContent).toBe("Error finding node");
+  });
+
+  it("should show the nodes hostname if it is found", function () {
+    this.instance = TestUtils.renderIntoDocument(
+      <NodeSidePanel open={true} onClose={this.callback} itemID="foo" />
+    );
+    let headline = renderAndFindTag(this.instance.getContents(), "h1");
+
+    expect(headline.getDOMNode().textContent).toBe("bar");
+  });
+
+  describe("#getTabView", function () {
+
     it("should return null if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanel open={true} itemID="nonExistent" />
       );
-      var result = instance.getInfo();
+
+      var result = instance.getTabView();
       expect(result).toEqual(null);
     });
 
-    it("should return an array of elements if node exists", function () {
+    it("should return a node if node exists", function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanel open={true} itemID="existingNode" />
       );
 
-      var result = instance.getInfo();
-      expect(TestUtils.isElement(result[0])).toEqual(true);
+      var result = instance.getTabView({
+        id: "existingNode",
+        version: "10",
+        active: true,
+        registered_time: 10
+      });
+      expect(TestUtils.isElement(result)).toEqual(true);
+    });
+  });
+
+  describe("#getKeyValuePairs", function () {
+
+    it("should return an empty set if node does not exist", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanel open={true} itemID="nonExistent" />
+      );
+
+      var result = instance.getKeyValuePairs({});
+      expect(result).toEqual(null);
+    });
+
+    it("should return null if undefined is passed", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanel open={true} itemID="nonExistent" />
+      );
+
+      var result = instance.getKeyValuePairs();
+      expect(result).toEqual(null);
+    });
+
+    it("should return a node of elements if node exists", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanel open={true} itemID="existingNode" />
+      );
+
+      var result = instance.getKeyValuePairs({"foo": "bar"});
+      expect(TestUtils.isElement(result)).toEqual(true);
+    });
+
+    it("should return a headline if headline string is given", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanel open={true} itemID="existingNode" />
+      );
+
+      let headline = renderAndFindTag(
+        instance.getKeyValuePairs({"foo": "bar"}, "baz"),
+        "h3"
+      );
+
+      expect(TestUtils.isDOMComponent(headline)).toEqual(true);
     });
   });
 
