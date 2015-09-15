@@ -54,12 +54,12 @@ var HostTable = React.createClass({
         params={{nodeID: node.get("id")}}
         to="nodes-list-panel"
         {...toolTip}>
-        <strong className="headline-label">
+        <div className="headline-label">
           {icon}
           <strong>
             {node.get(prop)}
           </strong>
-        </strong>
+        </div>
       </Link>
     );
   },
