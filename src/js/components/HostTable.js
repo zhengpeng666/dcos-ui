@@ -36,7 +36,7 @@ var HostTable = React.createClass({
     let icon = null;
     let toolTip = {};
 
-    if (node.isActive()) {
+    if (!node.isActive()) {
       icon = <i className="icon icon-mini icon-mini-white icon-alert disable-pointer-events" />;
       toolTip = {
         "data-behavior": "show-tip",
