@@ -133,6 +133,8 @@ export default class TaskSidePanel extends DetailSidePanel {
       return this.getNotFound("task");
     }
 
+    console.log(task);
+
     return (
       <div>
         <div
