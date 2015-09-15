@@ -45,6 +45,16 @@ var MetadataStore = Store.createStore({
           MetadataStore.emitChange(EventTypes.METADATA_CHANGE);
         }
         break;
+      case ActionTypes.REQUEST_DCOS_METADATA:
+        var oldDCOSMetadata = MetadataStore.get("dcosMetadata");
+        var dcosMetadata = action.data;
+
+        // only emitting on change
+        if (!_.isEqual(oldDCOSMetadata, dcosMetadata)) {
+          MetadataStore.set({dcosMetadata});
+          MetadataStore.emitChange(EventTypes.DCOS_METADATA_CHANGE);
+        }
+        break;
     }
 
     return true;
