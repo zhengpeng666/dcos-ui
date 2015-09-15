@@ -42,9 +42,9 @@ export default class ServiceSidePanel extends DetailSidePanel {
     };
 
     this.storesListeners = [
-      "marathon",
-      "summary",
-      "state"
+      {name: "marathon", listenAlways: true},
+      {name: "summary", listenAlways: true},
+      {name: "state", listenAlways: true}
     ];
 
     METHODS_TO_BIND.forEach(function (method) {

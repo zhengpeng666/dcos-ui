@@ -20,7 +20,10 @@ export default class NodeSidePanel extends DetailSidePanel {
   constructor() {
     super(...arguments);
 
-    this.storesListeners = ["summary", "state"];
+    this.storesListeners = [
+      {name: "summary", listenAlways: true},
+      {name: "state", listenAlways: true}
+    ];
 
     this.state = {
       currentTab: Object.keys(TABS).shift()
