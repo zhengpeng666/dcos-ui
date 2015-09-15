@@ -268,7 +268,8 @@ export default class ServiceSidePanel extends DetailSidePanel {
           </span>
         </div>
 
-        <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}>
+        <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}
+          delayRender={true}>
           <BarChart
             axisConfiguration={axisConfiguration}
             data={resourceData}
