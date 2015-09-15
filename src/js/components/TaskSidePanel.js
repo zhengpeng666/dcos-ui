@@ -16,8 +16,6 @@ export default class TaskSidePanel extends DetailSidePanel {
   }
 
   componentDidUpdate() {
-    // super.componentWillMount();
-
     // Next tick so that the history actually updates correctly
     setTimeout(() => {
       this.internalStorage_update({
