@@ -36,6 +36,15 @@ const ListenersDescription = {
   }
 };
 
+function changeListeners(listeners, changeListener) {
+  Object.keys(listeners).forEach(function (listener) {
+    let store = listeners[listener];
+    store.store[changeListener](
+      store.event, this.onStoreChange
+    );
+  }, this);
+}
+
 export default class DetailSidePanel extends React.Component {
   constructor() {
     super(...arguments);
@@ -60,15 +69,9 @@ export default class DetailSidePanel extends React.Component {
   }
 
   componentDidMount() {
-    let listeners = this.storesListeners;
     let mergedListeners = {};
-    this.storesListeners = mergedListeners;
 
-    if (!listeners.length) {
-      return;
-    }
-
-    listeners.forEach(function (listener) {
+    this.storesListeners.forEach(function (listener) {
       if (typeof listener === "string") {
         mergedListeners[listener] = _.clone(ListenersDescription[listener]);
       } else {
@@ -79,26 +82,17 @@ export default class DetailSidePanel extends React.Component {
       }
     });
 
-    Object.keys(mergedListeners).forEach(function (listener) {
-      let store = mergedListeners[listener];
-      store.store.addChangeListener(
-        store.event, this.onStoreChange
-      );
-    }, this);
-
     this.storesListeners = mergedListeners;
+    changeListeners.call(this, this.storesListeners, "addChangeListener");
   }
 
   componentWillUnmount() {
-    Object.keys(this.storesListeners).forEach(function (listener) {
-      let store = this.storesListeners[listener];
-      store.store.removeChangeListener(
-        store.event, this.onStoreChange
-      );
-    }, this);
+    changeListeners.call(this, this.storesListeners, "removeChangeListener");
   }
 
   onStoreChange() {
+    // Iterate through all the current stores to see if we should remove our
+    // change listener.
     Object.keys(this.storesListeners).forEach(function (listener) {
       let store = this.storesListeners[listener];
 
@@ -106,12 +100,15 @@ export default class DetailSidePanel extends React.Component {
         return;
       }
 
+      // Remove change listener if the settings want to unmount after a certain
+      // time such as "appsProcessed".
       Object.keys(store.unmountWhen).forEach(function (prop) {
         if (!!store.store.get(prop) === store.unmountWhen[prop]
           || store.listenOnce) {
           store.store.removeChangeListener(
             store.event, this.onStoreChange
           );
+          delete this.storesListeners[listener];
         }
       }, this);
     }, this);
