@@ -18,6 +18,9 @@
 
       .headline {
         color: @white;
+        strong {
+          color: @white;
+        }
       }
 
       // This property is necessary for the tooltip to appear centered above
@@ -31,6 +34,10 @@
       // property, the tooltip renders inconsistently.
       .headline-label {
         pointer-events: none;
+        strong {
+          font-weight: @heading-h5-text-font-weight;
+          color: @white;
+        }
       }
     }
 
