@@ -70,16 +70,17 @@ export default class DetailSidePanel extends React.Component {
 
     listeners.forEach(function (listener) {
       if (typeof listener === "string") {
-        mergedListeners[listener] = ListenersDescription[listener];
+        mergedListeners[listener] = _.clone(ListenersDescription[listener]);
       } else {
         let storeName = listener.name;
-        mergedListeners[storeName] =
-          _.defaults(listener, ListenersDescription[storeName]);
+        mergedListeners[storeName] = _.defaults(
+          listener, ListenersDescription[storeName]
+        );
       }
     });
 
     Object.keys(mergedListeners).forEach(function (listener) {
-      var store = mergedListeners[listener];
+      let store = mergedListeners[listener];
       store.store.addChangeListener(
         store.event, this.onStoreChange
       );
@@ -91,7 +92,7 @@ export default class DetailSidePanel extends React.Component {
 
   componentWillUnmount() {
     Object.keys(this.storesListeners).forEach(function (listener) {
-      var store = this.storesListeners[listener];
+      let store = this.storesListeners[listener];
       store.store.removeChangeListener(
         store.event, this.onStoreChange
       );
@@ -100,7 +101,7 @@ export default class DetailSidePanel extends React.Component {
 
   onStoreChange() {
     Object.keys(this.storesListeners).forEach(function (listener) {
-      var store = this.storesListeners[listener];
+      let store = this.storesListeners[listener];
 
       if (!store.unmountWhen || store.listenAlways) {
         return;
