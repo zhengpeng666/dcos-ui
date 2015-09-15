@@ -26,12 +26,6 @@ describe("NodeSidePanel", function () {
     MesosSummaryActions.fetchSummary = function () {
       return null;
     };
-    MesosSummaryStore.init();
-    MesosSummaryStore.processSummary({slaves: [{
-      "id": "foo",
-      "hostname": "bar"
-    }]});
-
     MesosStateStore.getTasksFromNodeID = function () {
       return [];
     };
@@ -52,6 +46,11 @@ describe("NodeSidePanel", function () {
         registered_time: 10
       };
     };
+    MesosSummaryStore.init();
+    MesosSummaryStore.processSummary({slaves: [{
+      "id": "foo",
+      "hostname": "bar"
+    }]});
 
     this.instance = TestUtils.renderIntoDocument(
       <NodeSidePanel open={true} onClose={this.callback} />

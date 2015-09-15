@@ -16,22 +16,22 @@ const ListenersDescription = {
   summary: {
     store: MesosSummaryStore,
     event: EventTypes.MESOS_SUMMARY_CHANGE,
-    unmountWhen: {
-      statesProcessed: true
+    unmountWhen: function (store) {
+      return store.get("statesProcessed");
     }
   },
   state: {
     store: MesosStateStore,
     event: EventTypes.MESOS_STATE_CHANGE,
-    unmountWhen: {
-      lastMesosState: true
+    unmountWhen: function (store) {
+      return Object.keys(store.get("lastMesosState")).length;
     }
   },
   marathon: {
     store: MarathonStore,
     event: EventTypes.MARATHON_APPS_CHANGE,
-    unmountWhen: {
-      apps: true
+    unmountWhen: function (store) {
+      return store.hasProcessedApps();
     }
   }
 };
@@ -97,14 +97,13 @@ export default class DetailSidePanel extends React.Component {
 
       // Remove change listener if the settings want to unmount after a certain
       // time such as "appsProcessed".
-      Object.keys(listener.unmountWhen).forEach(function (prop) {
-        if (!!listener.store.get(prop) === listener.unmountWhen[prop]) {
-          listener.store.removeChangeListener(
-            listener.event, this.onStoreChange
-          );
-          this.storesListeners.splice(i, 1);
-        }
-      }, this);
+      if (listener.unmountWhen && listener.unmountWhen(listener.store)) {
+        listener.store.removeChangeListener(
+          listener.event, this.onStoreChange
+        );
+
+        this.storesListeners.splice(i, 1);
+      }
     }, this);
 
     // Always forceUpdate no matter where the change came from
