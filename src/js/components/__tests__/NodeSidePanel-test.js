@@ -21,6 +21,7 @@ describe("NodeSidePanel", function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
     this.getTasksFromNodeID = MesosStateStore.getTasksFromNodeID;
     this.storeGet = MesosStateStore.get;
+    this.storeGetNode = MesosStateStore.getNodeFromNodeID;
 
     MesosSummaryActions.fetchSummary = function () {
       return null;
@@ -39,6 +40,18 @@ describe("NodeSidePanel", function () {
         return {};
       }
     };
+    MesosStateStore.getNodeFromNodeID = function (id) {
+      if (id === "nonExistent") {
+        return null;
+      }
+
+      return {
+        id: "existingNode",
+        version: "10",
+        active: true,
+        registered_time: 10
+      };
+    };
 
     this.instance = TestUtils.renderIntoDocument(
       <NodeSidePanel open={true} onClose={this.callback} />
@@ -49,46 +62,14 @@ describe("NodeSidePanel", function () {
     MesosSummaryActions.fetchSummary = this.fetchSummary;
     MesosStateStore.getTasksFromNodeID = this.getTasksFromNodeID;
     MesosStateStore.get = this.storeGet;
-  });
-
-  it("should show error if node is not to be found", function () {
-    let contents = TestUtils.renderIntoDocument(this.instance.getContents());
-    let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h1");
-
-    expect(headline.getDOMNode().textContent).toBe("Error finding node");
-  });
-
-  it("should show the nodes hostname if it is found", function () {
-    this.instance = TestUtils.renderIntoDocument(
-      <NodeSidePanel open={true} onClose={this.callback} itemID="foo" />
-    );
-    let contents = TestUtils.renderIntoDocument(this.instance.getContents());
-    let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h1");
-
-    expect(headline.getDOMNode().textContent).toBe("bar");
+    MesosStateStore.getNodeFromNodeID = this.storeGetNode;
   });
 
   describe("#getInfo", function () {
-    beforeEach(function () {
-      MesosStateStore.getNodeFromNodeID = function (id) {
-        if (id === "nonExistent") {
-          return null;
-        }
-
-        return {
-          id: "existingNode",
-          version: "10",
-          active: true,
-          registered_time: 10
-        };
-      };
-    });
-
     it("should return null if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanel open={true} itemID="nonExistent" />
       );
-
       var result = instance.getInfo();
       expect(result).toEqual(null);
     });
@@ -103,4 +84,20 @@ describe("NodeSidePanel", function () {
     });
   });
 
+  it("should show error if node is not to be found", function () {
+    let contents = TestUtils.renderIntoDocument(this.instance.getContents());
+    let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h1");
+
+    expect(headline.getDOMNode().textContent).toBe("Error finding node");
+  });
+
+  it("should show the nodes hostname if it is found", function () {
+    var instance = TestUtils.renderIntoDocument(
+      <NodeSidePanel open={true} onClose={this.callback} itemID="foo" />
+    );
+    let contents = TestUtils.renderIntoDocument(instance.getContents());
+    let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h1");
+
+    expect(headline.getDOMNode().textContent).toBe("bar");
+  });
 });
