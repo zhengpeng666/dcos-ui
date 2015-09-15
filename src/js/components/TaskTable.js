@@ -11,9 +11,9 @@ import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
 import Units from "../utils/Units";
 
 const METHODS_TO_BIND = [
-  "handleTaskClick",
+  "renderUpdated",
   "renderHeadline",
-  "renderUpdated"
+  "handleTaskClick"
 ];
 
 export default class TaskTable extends React.Component {
@@ -26,7 +26,7 @@ export default class TaskTable extends React.Component {
   }
 
   handleTaskClick(taskID) {
-    let linkTo = `${this.props.taskRoute}-task-panel`;
+    let linkTo = this.getTaskPanelRoute();
 
     this.props.parentRouter.transitionTo(linkTo, {taskID});
   }
@@ -121,13 +121,9 @@ export default class TaskTable extends React.Component {
 
   getTaskPanelRoute() {
     let currentRoutes = this.props.parentRouter.getCurrentRoutes();
-    let currentPage = currentRoutes[1].name;
+    let currentPage = currentRoutes[currentRoutes.length - 2].name;
 
-    if (currentPage !== "nodes") {
-      return `${currentPage}-task-panel`;
-    }
-
-    return `${currentRoutes[2].name}-task-panel`;
+    return `${currentPage}-task-panel`;
   }
 
   renderHeadline(prop, task) {
@@ -211,8 +207,7 @@ export default class TaskTable extends React.Component {
 }
 
 TaskTable.propTypes = {
-  tasks: React.PropTypes.array.isRequired,
-  taskRoute: React.PropTypes.string
+  tasks: React.PropTypes.array.isRequired
 };
 
 TaskTable.defaultProps = {

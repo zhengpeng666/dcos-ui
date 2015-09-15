@@ -47,7 +47,7 @@ var routes = (
 
       <Route name="nodes-grid" path="grid/?" handler={NodesGridView}>
         <Route name="nodes-grid-panel" path="node-detail/:nodeID" />
-        <Route name="node-grid-task-panel" path="task-detail/:taskID" />
+        <Route name="nodes-grid-task-panel" path="task-detail/:taskID" />
       </Route>
 
       <Redirect from="/nodes/?" to="nodes-list" />

@@ -126,11 +126,7 @@ export default class TaskView extends React.Component {
 
   getTaskTable(tasks) {
     return (
-      <TaskTable
-        parentRouter={this.props.parentRouter}
-        taskRoute={this.props.taskRoute}
-        tasks={tasks}
-        />
+      <TaskTable tasks={tasks} parentRouter={this.props.parentRouter} />
     );
   }
 
