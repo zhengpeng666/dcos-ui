@@ -11,7 +11,6 @@ export default class TaskSidePanel extends DetailSidePanel {
     super(...arguments);
 
     this.state = {};
-    this.prevHistoryPath = null;
     this.storesListeners = ["state"];
   }
 
