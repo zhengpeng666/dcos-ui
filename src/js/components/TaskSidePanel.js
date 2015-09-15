@@ -35,6 +35,10 @@ export default class TaskSidePanel extends DetailSidePanel {
   }
 
   getBasicInfo(task) {
+    if (task == null) {
+      return null;
+    }
+
     return (
       <div>
         <h1 className="inverse flush-top flush-bottom">
