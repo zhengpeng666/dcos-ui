@@ -28,7 +28,7 @@ export default class TaskTable extends React.Component {
   handleTaskClick(taskID) {
     let linkTo = this.getTaskPanelRoute();
 
-    this.context.router.transitionTo(linkTo, {taskID});
+    this.props.parentRouter.transitionTo(linkTo, {taskID});
   }
 
   getTaskUpdatedTimestamp(task) {
@@ -120,7 +120,7 @@ export default class TaskTable extends React.Component {
   }
 
   getTaskPanelRoute() {
-    let currentRoutes = this.context.router.getCurrentRoutes();
+    let currentRoutes = this.props.parentRouter.getCurrentRoutes();
     let currentPage = currentRoutes[1].name;
 
     if (currentPage !== "nodes") {
@@ -209,10 +209,6 @@ export default class TaskTable extends React.Component {
     );
   }
 }
-
-TaskTable.contextTypes = {
-  router: React.PropTypes.func
-};
 
 TaskTable.propTypes = {
   tasks: React.PropTypes.array.isRequired
