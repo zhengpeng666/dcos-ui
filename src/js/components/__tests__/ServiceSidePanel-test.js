@@ -16,7 +16,7 @@ var MesosStateStore = require("../../stores/MesosStateStore");
 var Service = require("../../structs/Service");
 var ServiceSidePanel = require("../ServiceSidePanel");
 
-MesosSummaryActions.fetchSummary = function () {}
+MesosSummaryActions.fetchSummary = function () {};
 MesosSummaryStore.init();
 
 describe("ServiceSidePanel", function () {
