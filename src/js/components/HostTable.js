@@ -33,15 +33,11 @@ var HostTable = React.createClass({
   },
 
   renderHeadline: function (prop, node) {
-    var classSet = classNames({
-      "h5 flush-top flush-bottom headline": true,
-      "headline-tooltip": !node.isActive()
-    });
     let icon = null;
     let toolTip = {};
 
     if (!node.isActive()) {
-      icon = <i className="icon icon-mini icon-mini-white icon-alert" />;
+      icon = <i className="icon icon-mini icon-mini-white icon-alert disable-pointer-events" />;
       toolTip = {
         "data-behavior": "show-tip",
         "data-tip-place": "top",
@@ -49,16 +45,22 @@ var HostTable = React.createClass({
       };
     }
 
+    // Anything nested in elements hosting a tooltip needs to have
+    // "disable-pointer-events" in order for the tip to render correctly.
     return (
-      <Link className={classSet}
-        params={{nodeID: node.get("id")}}
-        to="nodes-list-panel"
-        {...toolTip}>
-        <span className="headline-label">
+      <div className="h5 flush-top flush-bottom">
+        <Link params={{nodeID: node.get("id")}}
+          to="nodes-list-panel"
+          {...toolTip}>
           {icon}
+        </Link>
+        <Link className="headline"
+          params={{nodeID: node.get("id")}}
+          to="nodes-list-panel"
+          {...toolTip}>
           {node.get(prop)}
-        </span>
-      </Link>
+        </Link>
+      </div>
     );
   },
 
