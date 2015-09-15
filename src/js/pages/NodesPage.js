@@ -18,6 +18,7 @@ import NodeSidePanel from "../components/NodeSidePanel";
 var Page = require("../components/Page");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
+import TaskSidePanel from "../components/TaskSidePanel";
 
 var NODES_DISPLAY_LIMIT = 300;
 
@@ -75,7 +76,10 @@ var NodesPage = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set(getMesosHosts(this.state));
-    this.internalStorage_update({openNodePanel: false});
+    this.internalStorage_update({
+      openNodePanel: false,
+      openTaskPanel: false
+    });
   },
 
   componentDidMount: function () {
@@ -85,13 +89,15 @@ var NodesPage = React.createClass({
     );
 
     this.internalStorage_update({
-      openNodePanel: this.props.params.nodeID != null
+      openNodePanel: this.props.params.nodeID != null,
+      openTaskPanel: this.props.params.taskID != null
     });
   },
 
   componentWillReceiveProps: function (nextProps) {
     this.internalStorage_update({
-      openNodePanel: nextProps.params.nodeID != null
+      openNodePanel: nextProps.params.nodeID != null,
+      openTaskPanel: nextProps.params.taskID != null
     });
   },
 
@@ -133,16 +139,6 @@ var NodesPage = React.createClass({
 
     this.internalStorage_update(getMesosHosts(stateChanges));
     this.setState({byServiceFilter: byServiceFilter});
-  },
-
-  handleSideBarClose: function () {
-    if (Router.History.length > 1) {
-      Router.History.back();
-    } else {
-      let currentRoutes = this.context.router.getCurrentRoutes();
-      let routeName = currentRoutes[currentRoutes.length - 2].name;
-      this.context.router.transitionTo(routeName);
-    }
   },
 
   onResourceSelectionChange: function (selectedResource) {
@@ -230,8 +226,10 @@ var NodesPage = React.createClass({
           services={data.services} />
         <NodeSidePanel
           itemID={this.props.params.nodeID}
-          onClose={this.handleSideBarClose}
           open={data.statesProcessed && data.openNodePanel} />
+        <TaskSidePanel
+          itemID={this.props.params.taskID}
+          open={data.statesProcessed && data.openTaskPanel} />
       </div>
     );
   },

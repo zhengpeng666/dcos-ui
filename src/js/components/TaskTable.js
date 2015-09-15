@@ -11,7 +11,9 @@ import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
 import Units from "../utils/Units";
 
 const METHODS_TO_BIND = [
-  "renderUpdated"
+  "renderUpdated",
+  "renderHeadline",
+  "handleTaskClick"
 ];
 
 export default class TaskTable extends React.Component {
@@ -21,6 +23,12 @@ export default class TaskTable extends React.Component {
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
     }, this);
+  }
+
+  handleTaskClick(taskID) {
+    let linkTo = this.getTaskPanelRoute();
+
+    this.context.router.transitionTo(linkTo, {taskID});
   }
 
   getTaskUpdatedTimestamp(task) {
@@ -111,6 +119,17 @@ export default class TaskTable extends React.Component {
     );
   }
 
+  getTaskPanelRoute() {
+    let currentRoutes = this.context.router.getCurrentRoutes();
+    let currentPage = currentRoutes[1].name;
+
+    if (currentPage !== "nodes") {
+      return `${currentPage}-task-panel`;
+    }
+
+    return `${currentRoutes[2].name}-task-panel`;
+  }
+
   renderHeadline(prop, task) {
     let dangerState = _.contains(TaskStates[task.state].stateTypes, "failure");
 
@@ -130,9 +149,11 @@ export default class TaskTable extends React.Component {
           <span className={statusClass}></span>
         </div>
         <div className="flex-box flex-box-col">
-          <div className="emphasize">
+          <a
+            className="emphasize"
+            onClick={this.handleTaskClick.bind(this, task.id)}>
             {title}
-          </div>
+          </a>
         </div>
       </div>
     );
@@ -188,6 +209,10 @@ export default class TaskTable extends React.Component {
     );
   }
 }
+
+TaskTable.contextTypes = {
+  router: React.PropTypes.func
+};
 
 TaskTable.propTypes = {
   tasks: React.PropTypes.array.isRequired

@@ -30,20 +30,24 @@ var routes = (
   <Route name="home" path="/" handler={Index}>
     <Route name="dashboard" path="dashboard/?" handler={DashboardPage}>
       <Route name="dashboard-panel" path="service-detail/:serviceName" />
+      <Route name="dashboard-task-panel" path="task-detail/:taskID" />
     </Route>
 
     <Route name="services" path="services/?" handler={ServicesPage}>
       <Route name="service-ui" path="ui/:serviceName" handler={ServiceOverlay} />
       <Route name="services-panel" path="service-detail/:serviceName" />
+      <Route name="services-task-panel" path="task-detail/:taskID" />
     </Route>
 
     <Route name="nodes" path="nodes/?" handler={NodesPage}>
       <Route name="nodes-list" path="list/?" handler={HostTable}>
         <Route name="nodes-list-panel" path="node-detail/:nodeID" />
+        <Route name="nodes-list-task-panel" path="task-detail/:taskID" />
       </Route>
 
       <Route name="nodes-grid" path="grid/?" handler={NodesGridView}>
         <Route name="nodes-grid-panel" path="node-detail/:nodeID" />
+        <Route name="node-grid-task-panel" path="task-detail/:taskID" />
       </Route>
 
       <Redirect from="/nodes/?" to="nodes-list" />

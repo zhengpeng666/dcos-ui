@@ -16,6 +16,7 @@ var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
 var ServiceSidePanel = require("../components/ServiceSidePanel");
 var SidebarActions = require("../events/SidebarActions");
+import TaskSidePanel from "../components/TaskSidePanel";
 
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
@@ -87,7 +88,10 @@ var ServicesPage = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set(getMesosServices(this.state));
-    this.internalStorage_update({openServicePanel: false});
+    this.internalStorage_update({
+      openServicePanel: false,
+      openTaskPanel: false
+    });
   },
 
   componentDidMount: function () {
@@ -97,13 +101,15 @@ var ServicesPage = React.createClass({
     );
 
     this.internalStorage_update({
-      openServicePanel: this.props.params.serviceName != null
+      openServicePanel: this.props.params.serviceName != null,
+      openTaskPanel: this.props.params.taskID != null
     });
   },
 
   componentWillReceiveProps: function (nextProps) {
     this.internalStorage_update({
-      openServicePanel: nextProps.params.serviceName != null
+      openServicePanel: nextProps.params.serviceName != null,
+      openTaskPanel: nextProps.params.taskID != null
     });
   },
 
@@ -141,10 +147,6 @@ var ServicesPage = React.createClass({
 
     this.internalStorage_update(data);
     this.setState({searchString: searchString});
-  },
-
-  handleSideBarClose: function () {
-    this.context.router.transitionTo("services");
   },
 
   resetFilter: function () {
@@ -193,8 +195,10 @@ var ServicesPage = React.createClass({
           healthProcessed={appsProcessed} />
         <ServiceSidePanel
           itemID={this.props.params.serviceName}
-          onClose={this.handleSideBarClose}
           open={data.statesProcessed && data.openServicePanel} />
+        <TaskSidePanel
+          itemID={this.props.params.taskID}
+          open={data.statesProcessed && data.openTaskPanel} />
       </div>
     );
   },

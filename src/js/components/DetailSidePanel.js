@@ -6,11 +6,13 @@ import BarChart from "./charts/BarChart";
 import Chart from "./charts/Chart";
 import Config from "../config/Config";
 import EventTypes from "../constants/EventTypes";
+import InternalStorageMixin from "../mixins/InternalStorageMixin";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import ResourceTypes from "../constants/ResourceTypes";
 import Units from "../utils/Units";
+import Util from "../utils/Util";
 
 // number to fit design of width vs. height ratio
 const WIDTH_HEIGHT_RATIO = 4.5;
@@ -53,7 +55,7 @@ function changeListeners(listeners, changeListener) {
   }, this);
 }
 
-export default class DetailSidePanel extends React.Component {
+export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
   constructor() {
     super(...arguments);
 
@@ -122,7 +124,10 @@ export default class DetailSidePanel extends React.Component {
     if (_.isFunction(this.props.onClose)) {
       this.props.onClose();
     }
-    this.forceUpdate();
+
+    let routes = this.context.router.getCurrentRoutes();
+    let pageBefore = routes[routes.length - 2];
+    this.context.router.transitionTo(pageBefore.name);
   }
 
   getResourceChart(resource, totalResources) {
