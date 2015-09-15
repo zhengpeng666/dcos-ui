@@ -90,10 +90,14 @@ export default class NodeSidePanel extends DetailSidePanel {
 
   getTaskView() {
     let tasks = MesosStateStore.getTasksFromNodeID(this.props.itemID);
+    let taskRoute = this.context.router.getCurrentRoutes()[2].name;
 
     return (
       <div className="container container-pod flush-top">
-        <TaskView tasks={tasks} parentRouter={this.context.router}/>
+        <TaskView
+          parentRouter={this.context.router}
+          taskRoute={taskRoute}
+          tasks={tasks} />
       </div>
     );
   }

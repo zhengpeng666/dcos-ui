@@ -11,9 +11,9 @@ import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
 import Units from "../utils/Units";
 
 const METHODS_TO_BIND = [
-  "renderUpdated",
+  "handleTaskClick",
   "renderHeadline",
-  "handleTaskClick"
+  "renderUpdated"
 ];
 
 export default class TaskTable extends React.Component {
@@ -26,7 +26,7 @@ export default class TaskTable extends React.Component {
   }
 
   handleTaskClick(taskID) {
-    let linkTo = this.getTaskPanelRoute();
+    let linkTo = `${this.props.taskRoute}-task-panel`;
 
     this.props.parentRouter.transitionTo(linkTo, {taskID});
   }
@@ -211,7 +211,8 @@ export default class TaskTable extends React.Component {
 }
 
 TaskTable.propTypes = {
-  tasks: React.PropTypes.array.isRequired
+  tasks: React.PropTypes.array.isRequired,
+  taskRoute: React.PropTypes.string
 };
 
 TaskTable.defaultProps = {

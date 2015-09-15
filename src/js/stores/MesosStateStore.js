@@ -83,11 +83,15 @@ var MesosStateStore = Store.createStore({
     let services = this.get("lastMesosState").frameworks;
     let foundTask = null;
 
-    services.forEach(function (service) {
-      service.tasks.forEach(function (task) {
-        if (task.id === taskID) {
+    _.some(services, function (service) {
+      return _.some(service.tasks, function (task) {
+        var equalTask = task.id === taskID;
+
+        if (equalTask) {
           foundTask = task;
         }
+
+        return equalTask;
       });
     });
 
