@@ -26,6 +26,11 @@ export default class TaskSidePanel extends DetailSidePanel {
 
   handlePanelClose() {
     var prevPath = this.internalStorage_get().prevHistoryPath;
+
+    if (prevPath == null) {
+      super.handlePanelClose();
+    }
+
     this.context.router.transitionTo(prevPath);
   }
 
