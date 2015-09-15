@@ -62,16 +62,17 @@ var ServicesTable = React.createClass({
     }
 
     return (
-      <Link to="services-panel"
-        className="h5 headline cell-link clickable"
-        params={{serviceName: service.name}}>
-        <div className="flush-top flush-bottom">
+      <div className="h5 flush-top flush-bottom">
+        <Link to="services-panel"
+          params={{serviceName: service.name}}>
           {imageTag}
-          <strong>
-            {service[prop]}
-          </strong>
-        </div>
-      </Link>
+        </Link>
+        <Link to="services-panel"
+          className="headline"
+          params={{serviceName: service.name}}>
+          {service[prop]}
+        </Link>
+      </div>
     );
   },
 

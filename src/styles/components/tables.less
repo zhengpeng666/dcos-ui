@@ -2,42 +2,16 @@
   .table {
     // create row-hover style
     &.inverse {
-      tbody {
-        td {
-          .cell-link {
-            padding:
-              @table-cell-padding-vertical
-              @table-cell-padding-horizontal;
-            margin:
-              -@table-cell-padding-vertical
-              -@table-cell-padding-horizontal;
-            display: block;
-          }
-        }
-      }
 
       .headline {
         color: @white;
-        strong {
-          color: @white;
-        }
-      }
-
-      // This property is necessary for the tooltip to appear centered above
-      // the string of text, as opposed to the entire table cell.
-      .headline-tooltip {
-        display: inline-block;
       }
 
       // This property is necessary for the tooltip to render consistently when
       // multiple mouseover events are fired. For some reason, without this
       // property, the tooltip renders inconsistently.
-      .headline-label {
+      .disable-pointer-events {
         pointer-events: none;
-        strong {
-          font-weight: @heading-h5-text-font-weight;
-          color: @white;
-        }
       }
     }
 
@@ -50,98 +24,6 @@
         }
         span {
             vertical-align: middle;
-        }
-      }
-    }
-  }
-}
-
-& when (@table-enabled) and (@screen-mini-enabled)
-  and (@table-cell-default-inverse-enabled) {
-
-  @_horizontal: floor(@table-cell-padding-horizontal * @table-cell-padding-horizontal-scale-screen-mini);
-  @_vertical: floor(@table-cell-padding-vertical * @table-cell-padding-vertical-scale-screen-mini);
-
-  @media (min-width: @screen-mini) {
-    .table {
-      // create row-hover style
-      &.inverse {
-        & tbody {
-          td {
-            .cell-link {
-              padding: @_vertical @_horizontal;
-              margin: -@_vertical -@_horizontal;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-& when (@table-enabled) and (@screen-small-enabled)
-  and (@table-cell-default-inverse-enabled) {
-
-  @_horizontal: floor(@table-cell-padding-horizontal * @table-cell-padding-horizontal-scale-screen-small);
-  @_vertical: floor(@table-cell-padding-vertical * @table-cell-padding-vertical-scale-screen-small);
-
-  @media (min-width: @screen-small) {
-    .table {
-      // create row-hover style
-      &.inverse {
-        & tbody {
-          td {
-            .cell-link {
-              padding: @_vertical @_horizontal;
-              margin: -@_vertical -@_horizontal;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-& when (@table-enabled) and (@screen-medium-enabled)
-  and (@table-cell-default-inverse-enabled) {
-
-  @_horizontal: floor(@table-cell-padding-horizontal * @table-cell-padding-horizontal-scale-screen-medium);
-  @_vertical: floor(@table-cell-padding-vertical * @table-cell-padding-vertical-scale-screen-medium);
-
-  @media (min-width: @screen-medium) {
-    .table {
-      // create row-hover style
-      &.inverse {
-        & tbody {
-          td {
-            .cell-link {
-              padding: @_vertical @_horizontal;
-              margin: -@_vertical -@_horizontal;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-& when (@table-enabled) and (@screen-large-enabled)
-  and (@table-cell-default-inverse-enabled) {
-
-  @_horizontal: floor(@table-cell-padding-horizontal * @table-cell-padding-horizontal-scale-screen-large);
-  @_vertical: floor(@table-cell-padding-vertical * @table-cell-padding-vertical-scale-screen-large);
-
-  @media (min-width: @screen-large) {
-    .table {
-      // create row-hover style
-      &.inverse {
-        & tbody {
-          td {
-            .cell-link {
-              padding: @_vertical @_horizontal;
-              margin: -@_vertical -@_horizontal;
-            }
-          }
         }
       }
     }
