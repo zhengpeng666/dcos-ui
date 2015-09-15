@@ -87,7 +87,6 @@ export default class DetailSidePanel extends React.Component {
     }, this);
 
     this.storesListeners = mergedListeners;
-    this.forceUpdate();
   }
 
   componentWillUnmount() {
