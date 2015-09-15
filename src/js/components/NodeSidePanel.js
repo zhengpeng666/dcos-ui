@@ -30,6 +30,17 @@ export default class NodeSidePanel extends DetailSidePanel {
     };
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (this.props.open !== nextProps.open && nextProps.open) {
+      let defaultTab = Object.keys(TABS).shift();
+      if (this.state.currentTab !== defaultTab) {
+        this.setState({currentTab: defaultTab});
+      }
+    }
+
+    return super.shouldComponentUpdate(...arguments);
+  }
+
   handleTabClick(nextTab) {
     this.setState({currentTab: nextTab});
   }
