@@ -13,7 +13,7 @@ var MarathonStore = require("../../stores/MarathonStore");
 var MesosSummaryActions = require("../../events/MesosSummaryActions");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var MesosStateStore = require("../../stores/MesosStateStore");
-var Service = require("../../structs/service");
+var Service = require("../../structs/Service");
 var ServiceSidePanel = require("../ServiceSidePanel");
 
 MesosSummaryActions.fetchSummary = function () {}
