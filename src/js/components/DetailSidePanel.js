@@ -113,6 +113,7 @@ export default class DetailSidePanel extends React.Component {
       }, this);
     }, this);
 
+    // Always forceUpdate no matter where the change came from
     this.forceUpdate();
   }
 
