@@ -228,7 +228,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
   getInfo() {
     let serviceName = this.props.itemID;
-    let service = MesosSummaryStore.getServiceFromName(serviceName);
+    let service = MesosStateStore.getServiceFromName(serviceName);
     let marathonService = MarathonStore.getServiceFromName(serviceName);
 
     if (service == null ||
