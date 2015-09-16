@@ -1,4 +1,3 @@
-import _ from "underscore";
 import classNames from "classnames";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
