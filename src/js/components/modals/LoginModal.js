@@ -22,6 +22,10 @@ var LoginModal = React.createClass({
     });
   },
 
+  handleChange: function (e) {
+    this.internalStorage_set({email: e.target.value});
+  },
+
   handleSubmit: function (e) {
     e.preventDefault();
 
@@ -63,7 +67,6 @@ var LoginModal = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-
     var emailClassSet = classNames({
       "form-group": true,
       "flush-bottom": true,
@@ -74,7 +77,6 @@ var LoginModal = React.createClass({
       "form-help-block": true,
       "hidden": !data.emailHasError
     });
-
     return (
       <Modal closeByBackdropClick={false}
         modalClassName="login-modal"
@@ -87,9 +89,12 @@ var LoginModal = React.createClass({
           onSubmit={this.handleSubmit}>
           <div className={emailClassSet}>
             <input className="form-control flush-bottom"
+              autofocus
               type="email"
               placeholder="Email address"
-              ref="email" />
+              ref="email"
+              defaultValue={data.email}
+              onChange={this.handleChange} />
             <p className={emailHelpBlock}>
               Please provide a valid email address (e.g. email@domain.com).
             </p>
