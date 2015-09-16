@@ -40,13 +40,8 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     let node = MesosStateStore.getNodeFromNodeID(task.slave_id);
-    let service = MesosSummaryStore.get("states")
-      .last()
-      .getServiceList()
-      .filter({
-        ids: [task.framework_id]
-      })
-      .last();
+    let services = MesosSummaryStore.get("states").last().getServiceList();
+    let service = services.filter({ids: [task.framework_id]}).last();
 
     let headerValueMapping = {
       ID: task.id,
@@ -102,7 +97,7 @@ export default class TaskSidePanel extends DetailSidePanel {
         </div>
         <div className="container
           container-pod
-          container-port-short
+          container-pod-short
           flush-left">
           {this.getInfo(task)}
         </div>
