@@ -5,13 +5,14 @@ const React = require("react/addons");
 import DetailSidePanel from "./DetailSidePanel";
 import HistoryStore from "../stores/HistoryStore";
 import MesosStateStore from "../stores/MesosStateStore";
+import MesosSummaryStore from "../stores/MesosSummaryStore";
 
 export default class TaskSidePanel extends DetailSidePanel {
   constructor() {
     super(...arguments);
 
     this.state = {};
-    this.storesListeners = ["state"];
+    this.storesListeners = ["state", "summary"];
   }
 
   componentDidUpdate() {
@@ -33,6 +34,35 @@ export default class TaskSidePanel extends DetailSidePanel {
     this.context.router.transitionTo(prevPath);
   }
 
+  getInfo(task) {
+    if (task == null || !MesosSummaryStore.get("statesProcessed")) {
+      return null;
+    }
+
+    let node = MesosStateStore.getNodeFromNodeID(task.slave_id);
+    let services = MesosSummaryStore.get("states").last().getServiceList();
+    let service = services.filter({ids: [task.framework_id]}).last();
+
+    let headerValueMapping = {
+      ID: task.id,
+      Service: `${service.name} (${service.id})`,
+      Node: `${node.hostname} (${node.id})`
+    };
+
+    let labelMapping = {};
+
+    task.labels.forEach(function (label) {
+      labelMapping[label.key] = label.value;
+    });
+
+    return (
+      <div>
+        {this.getKeyValuePairs(headerValueMapping)}
+        {this.getKeyValuePairs(labelMapping, "Labels")}
+      </div>
+    );
+  }
+
   getBasicInfo(task) {
     if (task == null) {
       return null;
@@ -41,7 +71,7 @@ export default class TaskSidePanel extends DetailSidePanel {
     return (
       <div>
         <h1 className="inverse flush-top flush-bottom">
-          {task.id}
+          {task.name}
         </h1>
       </div>
     );
@@ -53,6 +83,7 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+
     if (task == null) {
       return this.getNotFound("task");
     }
@@ -63,6 +94,12 @@ export default class TaskSidePanel extends DetailSidePanel {
           className="container container-pod container-pod-divider-bottom
             container-pod-divider-inverse flush-bottom">
           {this.getBasicInfo(task)}
+        </div>
+        <div className="container
+          container-pod
+          container-pod-short
+          flush-left">
+          {this.getInfo(task)}
         </div>
       </div>
     );
