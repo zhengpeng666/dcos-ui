@@ -1,4 +1,3 @@
-import _ from "underscore";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
@@ -6,13 +5,14 @@ const React = require("react/addons");
 import DetailSidePanel from "./DetailSidePanel";
 import HistoryStore from "../stores/HistoryStore";
 import MesosStateStore from "../stores/MesosStateStore";
+import MesosSummaryStore from "../stores/MesosSummaryStore";
 
 export default class TaskSidePanel extends DetailSidePanel {
   constructor() {
     super(...arguments);
 
     this.state = {};
-    this.storesListeners = ["state"];
+    this.storesListeners = ["state", "summary"];
   }
 
   componentDidUpdate() {
@@ -35,12 +35,18 @@ export default class TaskSidePanel extends DetailSidePanel {
   }
 
   getInfo(task) {
-    if (task == null) {
+    if (task == null || !MesosSummaryStore.get("statesProcessed")) {
       return null;
     }
 
     let node = MesosStateStore.getNodeFromNodeID(task.slave_id);
-    let service = MesosStateStore.getServiceFromServiceID(task.framework_id);
+    let service = MesosSummaryStore.get("states")
+      .last()
+      .getServiceList()
+      .filter({
+        ids: [task.framework_id]
+      })
+      .last();
 
     let headerValueMapping = {
       ID: task.id,
@@ -86,6 +92,7 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+
     if (task == null) {
       return this.getNotFound("task");
     }
