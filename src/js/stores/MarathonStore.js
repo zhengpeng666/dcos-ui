@@ -111,7 +111,7 @@ var MarathonStore = Store.createStore({
     let marathonApps = this.get("apps");
 
     if (marathonApps[appName]) {
-      return marathonApps[appName].version;
+      return this.getVersion(marathonApps[appName].snapshot);
     }
 
     return null;
@@ -146,7 +146,8 @@ var MarathonStore = Store.createStore({
   },
 
   getVersion: function (app) {
-    if (app.labels == null ||
+    if (app == null ||
+      app.labels == null ||
       app.labels.DCOS_PACKAGE_VERSION == null) {
       return null;
     }
@@ -175,8 +176,7 @@ var MarathonStore = Store.createStore({
       apps[packageName] = {
         health: this.getFrameworkHealth(app),
         images: this.getFrameworkImages(app),
-        snapshot: app,
-        version: this.getVersion(app)
+        snapshot: app
       };
     }, this);
 

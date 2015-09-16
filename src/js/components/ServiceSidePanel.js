@@ -68,15 +68,12 @@ export default class ServiceSidePanel extends DetailSidePanel {
   getSubHeader(service) {
     let appHealth = MarathonStore.getServiceHealth(service.name);
     let appVersion = MarathonStore.getServiceVersion(service.name);
-    let activeTasksCount = service.TASK_RUNNING + service.TASK_STARTING +
-      service.TASK_STAGING;
+    let activeTasksCount = service.sumTaskTypesByState("active");
     let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
     let subHeaderItems = [
       {
-        classes: classNames(
-          HealthStatus[appHealth.key].classNames,
-          "side-panel-subheader"
-        ),
+        classes:
+          `side-panel-subheader ${HealthStatus[appHealth.key].classNames}`,
         label: HealthLabels[HealthStatus[appHealth.key].key],
         shouldShow: appHealth.key != null
       },
