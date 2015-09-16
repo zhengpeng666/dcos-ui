@@ -94,16 +94,27 @@ var MarathonStore = Store.createStore({
     return appImages;
   },
 
-  getServiceVersion: function (name) {
+  getServiceInstalledTime: function (name) {
     let appName = name.toLowerCase();
-    let appVersion = null;
+    let appInstalledTime = null;
     let marathonApps = this.get("apps");
 
     if (marathonApps[appName]) {
-      appVersion = marathonApps[appName].snapshot.version;
+      appInstalledTime = marathonApps[appName].snapshot.version;
     }
 
-    return appVersion;
+    return appInstalledTime;
+  },
+
+  getServiceVersion: function (name) {
+    let appName = name.toLowerCase();
+    let marathonApps = this.get("apps");
+
+    if (marathonApps[appName]) {
+      return marathonApps[appName].version;
+    }
+
+    return null;
   },
 
   getImageSizeFromMetadata: function (metadata, size) {
@@ -134,6 +145,15 @@ var MarathonStore = Store.createStore({
     return metadata.images;
   },
 
+  getVersion: function (app) {
+    if (app.labels == null ||
+      app.labels.DCOS_PACKAGE_VERSION == null) {
+      return null;
+    }
+
+    return app.labels.DCOS_PACKAGE_VERSION;
+  },
+
   getServiceFromName: function (name) {
     return this.get("apps")[name];
   },
@@ -155,7 +175,8 @@ var MarathonStore = Store.createStore({
       apps[packageName] = {
         health: this.getFrameworkHealth(app),
         images: this.getFrameworkImages(app),
-        snapshot: app
+        snapshot: app,
+        version: this.getVersion(app)
       };
     }, this);
 

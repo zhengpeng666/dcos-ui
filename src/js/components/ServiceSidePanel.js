@@ -65,6 +65,46 @@ export default class ServiceSidePanel extends DetailSidePanel {
     this.setState({currentTab: nextTab});
   }
 
+  getSubHeader(service) {
+    let appHealth = MarathonStore.getServiceHealth(service.name);
+    let appVersion = MarathonStore.getServiceVersion(service.name);
+    let activeTasksCount = service.TASK_RUNNING + service.TASK_STARTING +
+      service.TASK_STAGING;
+    let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
+    let subHeaderItems = [
+      {
+        classes: classNames(
+          HealthStatus[appHealth.key].classNames,
+          "side-panel-subheader"
+        ),
+        label: HealthLabels[HealthStatus[appHealth.key].key],
+        shouldShow: appHealth.key != null
+      },
+      {
+        classes: "side-panel-subheader",
+        label: `Version ${appVersion}`,
+        shouldShow: appVersion != null
+      },
+      {
+        classes: "side-panel-subheader",
+        label: `${activeTasksCount} Active ${activeTasksSubHeader}`,
+        shouldShow: activeTasksCount != null && activeTasksSubHeader != null
+      }
+    ];
+
+    return subHeaderItems.map(function (item, index) {
+      if (!item.shouldShow) {
+        return null;
+      }
+
+      return (
+        <span className={item.classes} key={index}>
+          {item.label}
+        </span>
+      );
+    });
+  }
+
   getBasicInfo() {
     let service = MesosSummaryStore.getServiceFromName(this.props.itemID);
 
@@ -72,17 +112,8 @@ export default class ServiceSidePanel extends DetailSidePanel {
       return null;
     }
 
-    let appImages = MarathonStore.getServiceImages(service.name);
-    let appHealth = MarathonStore.getServiceHealth(service.name);
-    let healthClass = classNames(
-      HealthStatus[appHealth.key].classNames,
-      "side-panel-subheader"
-    );
-    let activeTasksCount = service.TASK_RUNNING + service.TASK_STARTING +
-      service.TASK_STAGING;
-    let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
     let imageTag = null;
-
+    let appImages = MarathonStore.getServiceImages(service.name);
     if (appImages) {
       imageTag = (
         <img className="icon icon-image icon-rounded"
@@ -98,12 +129,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
             {service.name}
           </h1>
           <div>
-            <span className={healthClass}>
-              {HealthLabels[HealthStatus[appHealth.key].key]}
-            </span>
-            <span>
-              {`${activeTasksCount} Active ${activeTasksSubHeader}`}
-            </span>
+            {this.getSubHeader(service)}
           </div>
         </div>
       </div>
@@ -214,11 +240,11 @@ export default class ServiceSidePanel extends DetailSidePanel {
       return null;
     }
 
-    let serviceVersion = MarathonStore.getServiceVersion(serviceName);
+    let installedTime = MarathonStore.getServiceInstalledTime(serviceName);
     let headerValueMapping = {
       "Host Name": service.hostname,
       Tasks: service.tasks.length,
-      Installed: DateUtil.msToDateStr(serviceVersion),
+      Installed: DateUtil.msToDateStr(installedTime),
       Instances: marathonService.snapshot.instances,
       Command: marathonService.snapshot.cmd,
       Ports: marathonService.snapshot.ports.join(", ")
