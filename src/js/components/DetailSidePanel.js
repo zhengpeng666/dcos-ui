@@ -182,8 +182,21 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
 
     let axisConfiguration = {
       x: {hideMatch: /^0$/},
-      y: {hideMatch: /^50$/}
+      y: {showPercentage: false, suffix: "%"}
     };
+
+    let maxY = 5;
+    totalResources[resource].forEach(function(resource) {
+      if (resource.percentage > maxY) {
+        maxY = resource.percentage;
+      }
+    });
+
+    maxY *= 1.5; // Multiply by 150%
+    maxY /= 10; // Divide so that we can round to nearest tenth
+    maxY = Math.round(maxY); // Round
+    maxY *= 10; // Multiply so that we get a percentage number between 0-100
+    maxY = Math.min(100, maxY); // Don't let it be greater than 100%
 
     return (
       <div key={resource} className="column-12
@@ -207,9 +220,9 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
             data={resourceData}
             inverseStyle={true}
             margin={{top: 0, left: 43, right: 10, bottom: 40}}
-            maxY={100}
+            maxY={maxY}
             refreshRate={Config.getRefreshRate()}
-            ticksY={2}
+            ticksY={3}
             xGridLines={0}
             y="percentage" />
         </Chart>

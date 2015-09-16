@@ -31,7 +31,7 @@ var BarChart = React.createClass({
     return {
       axisConfiguration: {
         x: {hideMatch: false},
-        y: {hideMatch: false}
+        y: {hideMatch: false, showPercentage: true}
       },
       inverseStyle: false,
       margin: {
@@ -144,17 +144,27 @@ var BarChart = React.createClass({
   formatYAxis: function (ticks, maxY) {
     var formatPercent = d3.scale.linear().tickFormat(ticks, ".0%");
     return (d) => {
-      var a = formatPercent(d / maxY);
-
-      let hideMatch = this.props.axisConfiguration.y.hideMatch;
+      let axisConfiguration = this.props.axisConfiguration;
+      let hideMatch = axisConfiguration.y.hideMatch;
       if (hideMatch && hideMatch.test(d.toString())) {
         return "";
       }
 
-      if (d >= maxY) {
-        a = "100%";
+      let value = d;
+
+      if (axisConfiguration.y.showPercentage) {
+        value = formatPercent(d / maxY);
+
+        if (d >= maxY) {
+          value = "100%";
+        }
       }
-      return a;
+
+      if (axisConfiguration.y.suffix) {
+        value += axisConfiguration.y.suffix;
+      }
+
+      return value;
     };
   },
 
