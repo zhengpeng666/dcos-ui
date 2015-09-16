@@ -238,13 +238,16 @@ export default class ServiceSidePanel extends DetailSidePanel {
     }
 
     let installedTime = MarathonStore.getServiceInstalledTime(serviceName);
+    let portTitle = StringUtil.pluralize(
+      "Port", marathonService.snapshot.ports.length
+    );
     let headerValueMapping = {
       "Host Name": service.hostname,
       Tasks: service.tasks.length,
       Installed: DateUtil.msToDateStr(installedTime),
       Instances: marathonService.snapshot.instances,
       Command: marathonService.snapshot.cmd,
-      Ports: marathonService.snapshot.ports.join(", ")
+      [portTitle]: marathonService.snapshot.ports.join(", ")
     };
 
     return Object.keys(headerValueMapping).map(function (header, i) {
