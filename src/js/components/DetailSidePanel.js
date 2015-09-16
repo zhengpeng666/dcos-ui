@@ -186,9 +186,9 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     };
 
     let maxY = 5;
-    totalResources[resource].forEach(function(resource) {
-      if (resource.percentage > maxY) {
-        maxY = resource.percentage;
+    totalResources[resource].forEach(function (resourceTotal) {
+      if (resourceTotal.percentage > maxY) {
+        maxY = resourceTotal.percentage;
       }
     });
 
