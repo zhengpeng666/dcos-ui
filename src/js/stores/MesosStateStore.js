@@ -59,11 +59,6 @@ var MesosStateStore = Store.createStore({
     return _.findWhere(services, {name});
   },
 
-  getServiceFromServiceID: function (id) {
-    let services = this.get("lastMesosState").frameworks;
-    return _.findWhere(services, {id});
-  },
-
   getNodeFromNodeID: function (id) {
     let nodes = this.get("lastMesosState").slaves;
     return _.findWhere(nodes, {id});
