@@ -27,7 +27,7 @@ describe("NodeSidePanel", function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
     this.getTasksFromNodeID = MesosStateStore.getTasksFromNodeID;
     this.storeGet = MesosStateStore.get;
-    this.storeGetNode = MesosStateStore.getNodeFromNodeID;
+    this.storeGetNode = MesosStateStore.getNodeFromID;
 
     MesosSummaryActions.fetchSummary = function () {
       return null;
@@ -40,7 +40,7 @@ describe("NodeSidePanel", function () {
         return {};
       }
     };
-    MesosStateStore.getNodeFromNodeID = function (id) {
+    MesosStateStore.getNodeFromID = function (id) {
       if (id === "nonExistent") {
         return null;
       }
@@ -67,7 +67,7 @@ describe("NodeSidePanel", function () {
     MesosSummaryActions.fetchSummary = this.fetchSummary;
     MesosStateStore.getTasksFromNodeID = this.getTasksFromNodeID;
     MesosStateStore.get = this.storeGet;
-    MesosStateStore.getNodeFromNodeID = this.storeGetNode;
+    MesosStateStore.getNodeFromID = this.storeGetNode;
   });
 
   it("should show error if node is not to be found", function () {

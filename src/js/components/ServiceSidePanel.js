@@ -191,8 +191,8 @@ export default class ServiceSidePanel extends DetailSidePanel {
             container-pod-divider-inverse flush-bottom">
           {this.getBasicInfo()}
           <div className="container container-pod container-pod-short flush-left flush-bottom flush-right">
-            <div className="row chart">
-              {this.getCharts()}
+            <div className="row">
+              {this.getCharts("Service", service)}
             </div>
           </div>
           {this.getOpenServiceButton()}
@@ -228,7 +228,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
   getInfo() {
     let serviceName = this.props.itemID;
-    let service = MesosStateStore.getServiceFromName(serviceName);
+    let service = MesosSummaryStore.getServiceFromName(serviceName);
     let marathonService = MarathonStore.getServiceFromName(serviceName);
 
     if (service == null ||
@@ -262,23 +262,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
         </p>
       );
     });
-  }
-
-  getCharts() {
-    let service = MesosStateStore.getServiceFromName(this.props.itemID);
-
-    if (!service) {
-      return null;
-    }
-
-    let states = MesosSummaryStore.get("states");
-    let resources = states.getResourceStatesForServiceIDs([service.id]);
-
-    return [
-      this.getResourceChart("cpus", resources),
-      this.getResourceChart("mem", resources),
-      this.getResourceChart("disk", resources)
-    ];
   }
 
   render() {

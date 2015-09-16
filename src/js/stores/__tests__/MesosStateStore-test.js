@@ -33,7 +33,7 @@ describe("MesosStateStore", function () {
     });
   });
 
-  describe("#getNodeFromNodeID", function () {
+  describe("#getNodeFromID", function () {
     beforeEach(function () {
       this.get = MesosStateStore.get;
       MesosStateStore.get = function () {
@@ -51,12 +51,12 @@ describe("MesosStateStore", function () {
     });
 
     it("should return the node with the correct ID", function () {
-      var result = MesosStateStore.getNodeFromNodeID("amazon-thing");
+      var result = MesosStateStore.getNodeFromID("amazon-thing");
       expect(result.fakeProp).toEqual("fake");
     });
 
     it("should return null if node not found", function () {
-      var result = MesosStateStore.getNodeFromNodeID("nonExistentNode");
+      var result = MesosStateStore.getNodeFromID("nonExistentNode");
       expect(result).toEqual(null);
     });
   });
