@@ -1,5 +1,6 @@
 jest.dontMock("../DetailSidePanel");
 jest.dontMock("../TaskSidePanel");
+jest.dontMock("../../constants/TaskStates");
 jest.dontMock("../../stores/MesosStateStore");
 jest.dontMock("../../events/MesosStateActions");
 jest.dontMock("../../mixins/GetSetMixin");
@@ -26,7 +27,8 @@ describe("TaskSidePanel", function () {
     MesosStateStore.addChangeListener = function () {};
     MesosStateStore.getTaskFromTaskID = function () {
       return {
-        id: "fake id"
+        id: "fake id",
+        state: "TASK_RUNNING"
       };
     };
   });
@@ -72,7 +74,10 @@ describe("TaskSidePanel", function () {
     });
 
     it("should return an element if task is not null", function () {
-      var result = this.instance.getBasicInfo({id: "fade"});
+      var result = this.instance.getBasicInfo({
+        id: "fade",
+        state: "TASK_RUNNING"
+      });
       expect(TestUtils.isElement(result)).toEqual(true);
     });
   });
