@@ -1,4 +1,3 @@
-import TaskStates from "../constants/TaskStates";
 import Item from "./Item";
 
 export default class Node extends Item {
@@ -8,21 +7,6 @@ export default class Node extends Item {
 
   isActive() {
     return this.get("active");
-  }
-
-  sumTaskTypesByState(state) {
-    let sum = 0;
-
-    Object.keys(TaskStates).forEach(function (taskType) {
-      if (TaskStates[taskType].stateTypes.indexOf(state) !== -1) {
-        // Make sure there's a value
-        if (this[taskType]) {
-          sum += this[taskType];
-        }
-      }
-    }, this);
-
-    return sum;
   }
 
   getUsageStats(resource) {

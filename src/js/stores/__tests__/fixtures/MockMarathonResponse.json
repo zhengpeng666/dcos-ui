@@ -6,7 +6,25 @@
         "labels": {
           "DCOS_PACKAGE_SOURCE": "https://github.com/mesosphere/universe/archive/master.zip",
           "DCOS_PACKAGE_REGISTRY_VERSION": "0.1.0-alpha",
-          "DCOS_PACKAGE_VERSION": "0.1.0-SNAPSHOT-424-master-5c6e140d5b",
+          "DCOS_PACKAGE_VERSION": "0.1.0",
+          "DCOS_PACKAGE_NAME": "Framework 1",
+          "DCOS_PACKAGE_FRAMEWORK_NAME": "Framework 1"
+        },
+        "tasksStaged": 0,
+        "tasksRunning": 1,
+        "tasksHealthy": 0,
+        "tasksUnhealthy": 0,
+        "version": "2015-09-01T22:09:01.376Z"
+      }
+    ]
+  },
+  "hasNoVersion": {
+    "apps": [
+      {
+        "healthChecks": [],
+        "labels": {
+          "DCOS_PACKAGE_SOURCE": "https://github.com/mesosphere/universe/archive/master.zip",
+          "DCOS_PACKAGE_REGISTRY_VERSION": "0.1.0-alpha",
           "DCOS_PACKAGE_NAME": "Framework 1",
           "DCOS_PACKAGE_FRAMEWORK_NAME": "Framework 1"
         },
