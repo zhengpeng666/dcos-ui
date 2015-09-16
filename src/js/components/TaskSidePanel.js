@@ -1,4 +1,3 @@
-import _ from "underscore";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
@@ -33,45 +32,6 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     this.context.router.transitionTo(prevPath);
-  }
-
-  getKeyValuePairs(hash, headline) {
-    if (_.isEmpty(hash)) {
-      return null;
-    }
-
-    let items = Object.keys(hash).map(function (key) {
-      return (
-        <dl key={key} className="row flex-box">
-          <dt className="column-8 emphasize">
-            {key}
-          </dt>
-          <dd className="column-10">
-            {hash[key]}
-          </dd>
-        </dl>
-      );
-    });
-
-    // Wrap in headline element and classes
-    if (headline != null) {
-      headline = (
-        <h3 className="inverse flush-top">
-          {headline}
-        </h3>
-      );
-    }
-
-    return (
-      <div className="container
-        container-pod
-        container-pod-short
-        flush-top
-        flush-left">
-        {headline}
-        {items}
-      </div>
-    );
   }
 
   getInfo(task) {
@@ -140,7 +100,10 @@ export default class TaskSidePanel extends DetailSidePanel {
             container-pod-divider-inverse flush-bottom">
           {this.getBasicInfo(task)}
         </div>
-        <div className="container container-pod container-pod-short">
+        <div className="container
+          container-pod
+          container-port-short
+          flush-left">
           {this.getInfo(task)}
         </div>
       </div>

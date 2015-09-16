@@ -109,41 +109,6 @@ export default class NodeSidePanel extends DetailSidePanel {
     );
   }
 
-  getKeyValuePairs(hash, headline) {
-    if (_.isEmpty(hash)) {
-      return null;
-    }
-
-    let items = Object.keys(hash).map(function (key) {
-      return (
-        <dl key={key} className="row flex-box">
-          <dt className="column-4 emphasize">
-            {key}
-          </dt>
-          <dd className="column-12">
-            {hash[key]}
-          </dd>
-        </dl>
-      );
-    });
-
-    // Wrap in headline element and classes
-    if (headline != null) {
-      headline = (
-        <h3 className="inverse flush-top">
-          {headline}
-        </h3>
-      );
-    }
-
-    return (
-      <div className="container container-pod container-pod-short flush-bottom">
-        {headline}
-        {items}
-      </div>
-    );
-  }
-
   getTabView(node) {
     if (node == null) {
       return null;
