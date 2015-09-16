@@ -1,3 +1,4 @@
+import _ from "underscore";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
@@ -34,6 +35,45 @@ export default class TaskSidePanel extends DetailSidePanel {
     this.context.router.transitionTo(prevPath);
   }
 
+  getKeyValuePairs(hash, headline) {
+    if (_.isEmpty(hash)) {
+      return null;
+    }
+
+    let items = Object.keys(hash).map(function (key) {
+      return (
+        <dl key={key} className="row flex-box">
+          <dt className="column-8 emphasize">
+            {key}
+          </dt>
+          <dd className="column-10">
+            {hash[key]}
+          </dd>
+        </dl>
+      );
+    });
+
+    // Wrap in headline element and classes
+    if (headline != null) {
+      headline = (
+        <h3 className="inverse flush-top">
+          {headline}
+        </h3>
+      );
+    }
+
+    return (
+      <div className="container
+        container-pod
+        container-pod-short
+        flush-top
+        flush-left">
+        {headline}
+        {items}
+      </div>
+    );
+  }
+
   getInfo(task) {
     if (task == null || !MesosSummaryStore.get("statesProcessed")) {
       return null;
@@ -54,22 +94,18 @@ export default class TaskSidePanel extends DetailSidePanel {
       Node: `${node.hostname} (${node.id})`
     };
 
+    let labelMapping = {};
+
     task.labels.forEach(function (label) {
-      headerValueMapping[label.key] = label.value;
+      labelMapping[label.key] = label.value;
     });
 
-    return Object.keys(headerValueMapping).map(function (header, i) {
-      return (
-        <p key={i} className="row flex-box">
-          <span className="column-6 emphasize">
-            {header}
-          </span>
-          <span className="column-10">
-            {headerValueMapping[header]}
-          </span>
-        </p>
-      );
-    });
+    return (
+      <div>
+        {this.getKeyValuePairs(headerValueMapping)}
+        {this.getKeyValuePairs(labelMapping, "Labels")}
+      </div>
+    );
   }
 
   getBasicInfo(task) {
