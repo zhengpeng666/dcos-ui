@@ -17,13 +17,17 @@ var LoginModal = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set({
-      emailHasError: false,
-      email: ""
+      emailHasError: false
     });
   },
 
   handleChange: function (e) {
-    this.internalStorage_set({email: e.target.value});
+    this.internalStorage_update({email: e.target.value});
+    this.forceUpdate();
+  },
+
+  handleFocus: function (e) {
+    e.target.value = e.target.value;
   },
 
   handleSubmit: function (e) {
@@ -89,12 +93,13 @@ var LoginModal = React.createClass({
           onSubmit={this.handleSubmit}>
           <div className={emailClassSet}>
             <input className="form-control flush-bottom"
-              autofocus
+              autoFocus={true}
               type="email"
               placeholder="Email address"
               ref="email"
-              defaultValue={data.email}
-              onChange={this.handleChange} />
+              value={data.email}
+              onChange={this.handleChange}
+              onFocus={this.handleFocus} />
             <p className={emailHelpBlock}>
               Please provide a valid email address (e.g. email@domain.com).
             </p>
