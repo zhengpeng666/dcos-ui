@@ -206,10 +206,6 @@ export default class TaskTable extends React.Component {
   }
 }
 
-TaskTable.contextTypes = {
-  router: React.PropTypes.func
-};
-
 TaskTable.propTypes = {
   tasks: React.PropTypes.array.isRequired
 };
