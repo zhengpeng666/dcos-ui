@@ -129,12 +129,9 @@ var Modals = React.createClass({
   },
 
   getLoginModal: function (hasIdentity) {
-    const isOpen = (!hasIdentity && !Config.disableLoginModal);
-    let isReady = MesosSummaryStore.get("statesProcessed");
+    let statesReady = MesosSummaryStore.get("statesProcessed");
+    let isOpen = (!hasIdentity && !Config.disableLoginModal && statesReady);
 
-    if (!isReady) {
-      return null;
-    }
     if (isOpen) {
       Actions.logFakePageView({
         title: "Signup Modal",
