@@ -135,7 +135,7 @@ export default class NodeSidePanel extends DetailSidePanel {
             container-pod-divider-inverse flush-bottom">
           {this.getBasicInfo(node)}
           <div className="container container-pod container-pod-short flush-left flush-right">
-            <div className="row chart">
+            <div className="row">
               {this.getCharts("Node", node)}
             </div>
           </div>
