@@ -2,6 +2,7 @@ var classNames = require("classnames");
 var React = require("react");
 
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
+var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var Modal = require("../../components/Modal");
 var Validator = require("../../utils/Validator");
 
@@ -23,11 +24,6 @@ var LoginModal = React.createClass({
 
   handleChange: function (e) {
     this.internalStorage_update({email: e.target.value});
-    this.forceUpdate();
-  },
-
-  handleFocus: function (e) {
-    e.target.value = e.target.value;
   },
 
   handleSubmit: function (e) {
@@ -70,6 +66,10 @@ var LoginModal = React.createClass({
   },
 
   render: function () {
+    let isReady = MesosSummaryStore.get("statesProcessed");
+    if (!isReady) {
+      return false;
+    }
     var data = this.internalStorage_get();
     var emailClassSet = classNames({
       "form-group": true,
@@ -98,8 +98,7 @@ var LoginModal = React.createClass({
               placeholder="Email address"
               ref="email"
               value={data.email}
-              onChange={this.handleChange}
-              onFocus={this.handleFocus} />
+              onChange={this.handleChange} />
             <p className={emailHelpBlock}>
               Please provide a valid email address (e.g. email@domain.com).
             </p>
