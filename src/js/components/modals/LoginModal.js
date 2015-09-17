@@ -22,10 +22,6 @@ var LoginModal = React.createClass({
     });
   },
 
-  handleChange: function (e) {
-    this.internalStorage_update({email: e.target.value});
-  },
-
   handleSubmit: function (e) {
     e.preventDefault();
 
@@ -68,7 +64,7 @@ var LoginModal = React.createClass({
   render: function () {
     let isReady = MesosSummaryStore.get("statesProcessed");
     if (!isReady) {
-      return false;
+      return null;
     }
     var data = this.internalStorage_get();
     var emailClassSet = classNames({
@@ -96,9 +92,7 @@ var LoginModal = React.createClass({
               autoFocus={true}
               type="email"
               placeholder="Email address"
-              ref="email"
-              value={data.email}
-              onChange={this.handleChange} />
+              ref="email" />
             <p className={emailHelpBlock}>
               Please provide a valid email address (e.g. email@domain.com).
             </p>
