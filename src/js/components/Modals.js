@@ -2,12 +2,13 @@ var React = require("react");
 
 var Actions = require("../actions/Actions");
 var CliInstallModal = require("./modals/CliInstallModal");
+var Config = require("../config/Config");
 var ErrorModal = require("./modals/ErrorModal");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
-var Config = require("../config/Config");
 var LoginModal = require("./modals/LoginModal");
+var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var SidebarStore = require("../stores/SidebarStore");
 var VersionsModal = require("./modals/VersionsModal");
 
@@ -129,7 +130,11 @@ var Modals = React.createClass({
 
   getLoginModal: function (hasIdentity) {
     const isOpen = (!hasIdentity && !Config.disableLoginModal);
+    let isReady = MesosSummaryStore.get("statesProcessed");
 
+    if (!isReady) {
+      return null;
+    }
     if (isOpen) {
       Actions.logFakePageView({
         title: "Signup Modal",
@@ -137,7 +142,6 @@ var Modals = React.createClass({
         referrer: "https://mesosphere.com/"
       });
     }
-
     return (
       <LoginModal
         onLogin={this.onLogin}

@@ -2,7 +2,6 @@ var classNames = require("classnames");
 var React = require("react");
 
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
-var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var Modal = require("../../components/Modal");
 var Validator = require("../../utils/Validator");
 
@@ -62,10 +61,6 @@ var LoginModal = React.createClass({
   },
 
   render: function () {
-    let isReady = MesosSummaryStore.get("statesProcessed");
-    if (!isReady) {
-      return null;
-    }
     var data = this.internalStorage_get();
     var emailClassSet = classNames({
       "form-group": true,
