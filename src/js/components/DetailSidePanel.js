@@ -199,7 +199,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     maxY = Math.min(100, maxY); // Don't let it be greater than 100%
 
     return (
-      <div key={resource} className="column-4
+      <div key={resource} className="column-12
         flex-box-align-vertical-center
         container-pod
         container-pod-super-short
@@ -228,6 +228,31 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
         </Chart>
       </div>
     );
+  }
+
+  getCharts(itemType, item) {
+    if (!item) {
+      return null;
+    }
+
+    let states = MesosSummaryStore.get("states");
+    let resources = states[`getResourceStatesFor${itemType}IDs`]([item.id]);
+
+    let charts = [
+      this.getResourceChart("cpus", resources),
+      this.getResourceChart("mem", resources),
+      this.getResourceChart("disk", resources)
+    ];
+
+    return charts.map(function (chart, i) {
+      return (
+        <div key={i} className="column-12 column-mini-4">
+          <div className="row chart">
+            {chart}
+          </div>
+        </div>
+      );
+    });
   }
 
   getNotFound(itemType) {
