@@ -17,7 +17,8 @@ var LoginModal = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set({
-      emailHasError: false
+      emailHasError: false,
+      email: ""
     });
   },
 
