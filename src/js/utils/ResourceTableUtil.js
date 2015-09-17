@@ -24,28 +24,42 @@ var ResourceTableUtil = {
   getSortFunction: function (title) {
     return function (prop) {
       if (isStat(prop)) {
-        return function (model) {
-          if (_.isArray(model.used_resources[prop])) {
-            return _.last(model.used_resources[prop]).value;
+        return function (a, b) {
+          if (_.isArray(a.used_resources[prop])) {
+            let aValue = _.last(a.used_resources[prop]).value;
+            let bValue = _.last(b.used_resources[prop]).value;
+            return aValue - bValue;
           } else {
-            return model.used_resources[prop];
+            return a.used_resources[prop] - b.used_resources[prop];
           }
         };
       }
 
-      return function (model) {
-        let value = model[prop];
+      return function (a, b) {
+        let aValue = a[prop];
+        let bValue = b[prop];
 
         if (prop === "health") {
-          let health = MarathonStore.getServiceHealth(model.name);
-          value = HealthSorting[health.key];
+          let aHealth = MarathonStore.getServiceHealth(a.name);
+          let bHealth = MarathonStore.getServiceHealth(b.name);
+          aValue = HealthSorting[aHealth.key];
+          bValue = HealthSorting[bHealth.key];
         }
 
-        if (_.isNumber(value)) {
-          return value;
+        if (_.isNumber(aValue)) {
+          return aValue - bValue;
         }
 
-        return value.toString().toLowerCase() + "-" + model[title].toLowerCase();
+        aValue = aValue.toString().toLowerCase() + "-" + a[title].toLowerCase();
+        bValue = bValue.toString().toLowerCase() + "-" + b[title].toLowerCase();
+
+        if (aValue > bValue) {
+          return 1;
+        } else if (aValue < bValue) {
+          return -1;
+        } else {
+          return 0;
+        }
       };
     };
   },
