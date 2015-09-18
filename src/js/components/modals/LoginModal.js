@@ -63,7 +63,6 @@ var LoginModal = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-
     var emailClassSet = classNames({
       "form-group": true,
       "flush-bottom": true,
@@ -74,7 +73,6 @@ var LoginModal = React.createClass({
       "form-help-block": true,
       "hidden": !data.emailHasError
     });
-
     return (
       <Modal closeByBackdropClick={false}
         modalClassName="login-modal"
@@ -87,6 +85,7 @@ var LoginModal = React.createClass({
           onSubmit={this.handleSubmit}>
           <div className={emailClassSet}>
             <input className="form-control flush-bottom"
+              autoFocus={true}
               type="email"
               placeholder="Email address"
               ref="email" />
