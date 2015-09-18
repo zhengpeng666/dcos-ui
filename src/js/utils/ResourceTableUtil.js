@@ -133,7 +133,9 @@ var ResourceTableUtil = {
         <span className="visible-mini-inline"> Tasks</span>
       </span>
     );
-  }
+  },
+
+  tieBreaker: tieBreaker
 };
 
 module.exports = ResourceTableUtil;
