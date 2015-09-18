@@ -5,7 +5,6 @@ import React from "react/addons";
 import DateUtil from "../utils/DateUtil";
 import Maths from "../utils/Maths";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
-// import Table from "./Table";
 import {Table} from "reactjs-components";
 import TaskStates from "../constants/TaskStates";
 import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";

@@ -10,7 +10,6 @@ var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var MarathonStore = require("../stores/MarathonStore");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var ServiceTableHeaderLabels = require("../constants/ServiceTableHeaderLabels");
-// var Table = require("./Table");
 import {Table} from "reactjs-components";
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");

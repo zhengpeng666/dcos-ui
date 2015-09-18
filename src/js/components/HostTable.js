@@ -5,7 +5,6 @@ var React = require("react/addons");
 var HostTableHeaderLabels = require("../constants/HostTableHeaderLabels");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var ProgressBar = require("./charts/ProgressBar");
-// var Table = require("./Table");
 import {Table} from "reactjs-components";
 var TooltipMixin = require("../mixins/TooltipMixin");
 
