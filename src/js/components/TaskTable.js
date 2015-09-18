@@ -39,12 +39,9 @@ export default class TaskTable extends React.Component {
   getSortFunction(title) {
     return (prop) => {
       return (a, b) => {
-        let aValue = a[prop];
-        let bValue = b[prop];
-
         if (prop === "cpus" || prop === "mem") {
-          aValue = a.resources[prop];
-          bValue = b.resources[prop];
+          let aValue = a.resources[prop];
+          let bValue = b.resources[prop];
           let tied = ResourceTableUtil.tieBreaker(a, b, title, aValue, bValue);
 
           if (typeof tied === "number") {
@@ -61,8 +58,10 @@ export default class TaskTable extends React.Component {
           return aUpdatedAt - bUpdatedAt;
         }
 
-        aValue = `${aValue.toString().toLowerCase()}-${a[title].toLowerCase()}`;
-        bValue = `${bValue.toString().toLowerCase()}-${b[title].toLowerCase()}`;
+        let aValue =
+          `${a[prop].toString().toLowerCase()}-${a[title].toLowerCase()}`;
+        let bValue =
+          `${b[prop].toString().toLowerCase()}-${b[title].toLowerCase()}`;
 
         if (aValue > bValue) {
           return 1;
