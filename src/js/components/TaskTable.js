@@ -61,10 +61,8 @@ export default class TaskTable extends React.Component {
           return aUpdatedAt - bUpdatedAt;
         }
 
-        aValue = aValue.toString().toLowerCase();
-        aValue = `${aValue}-${a[title].toLowerCase()}`;
-        bValue = bValue.toString().toLowerCase();
-        bValue = `${bValue}-${b[title].toLowerCase()}`;
+        aValue = `${aValue.toString().toLowerCase()}-${a[title].toLowerCase()}`;
+        bValue = `${bValue.toString().toLowerCase()}-${b[title].toLowerCase()}`;
 
         if (aValue > bValue) {
           return 1;
