@@ -198,15 +198,13 @@ var ServicesTable = React.createClass({
   },
 
   render: function () {
-    var clone = this.props.services.slice();
-    console.log(")))))", clone.sort);
     return (
       <div>
         <Table
           className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
-          data={clone}
+          data={this.props.services.slice()}
           keys={["id"]}
           sortBy={{prop: "name", order: "desc"}} />
       </div>
