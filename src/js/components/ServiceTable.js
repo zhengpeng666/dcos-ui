@@ -205,7 +205,8 @@ var ServicesTable = React.createClass({
           colGroup={this.getColGroup()}
           data={this.props.services.slice()}
           keys={["id"]}
-          sortBy={{prop: "name", order: "desc"}} />
+          sortBy={{prop: "name", order: "desc"}}
+          transition={true} />
       </div>
     );
   }

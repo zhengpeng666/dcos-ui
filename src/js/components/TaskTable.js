@@ -156,7 +156,8 @@ export default class TaskTable extends React.Component {
         colGroup={this.getColGroup()}
         data={this.props.tasks.slice()}
         keys={["id"]}
-        sortBy={{prop: "name", order: "desc"}} />
+        sortBy={{prop: "name", order: "desc"}}
+        transition={true} />
     );
   }
 }
