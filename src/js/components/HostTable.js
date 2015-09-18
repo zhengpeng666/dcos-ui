@@ -33,10 +33,6 @@ var HostTable = React.createClass({
     };
   },
 
-  handleSort: function () {
-    this.forceUpdate();
-  },
-
   renderHeadline: function (prop, node) {
     let icon = null;
     let toolTip = {};
