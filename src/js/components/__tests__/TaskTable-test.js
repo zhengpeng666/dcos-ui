@@ -14,14 +14,4 @@ describe("TaskTable", function () {
       <TaskTable tasks={Tasks} />
     );
   });
-
-  describe("#getTaskUpdatedTimestamp", function () {
-    it("should return the timestamp of the most recent status", function () {
-      var task = Tasks[0];
-
-      var result = this.instance.getTaskUpdatedTimestamp(task);
-      var lastStatus = task.statuses[task.statuses.length - 1];
-      expect(result).toEqual(lastStatus.timestamp);
-    });
-  });
 });
