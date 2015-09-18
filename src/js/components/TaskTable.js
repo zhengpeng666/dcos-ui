@@ -55,30 +55,24 @@ export default class TaskTable extends React.Component {
         }
 
         if (prop === "updated") {
-          let aUpdatedAt = this.getTaskUpdatedTimestamp(a);
-          let bUpdatedAt = this.getTaskUpdatedTimestamp(b);
+          let aUpdatedAt = this.getTaskUpdatedTimestamp(a) || 0;
+          let bUpdatedAt = this.getTaskUpdatedTimestamp(b) || 0;
 
           return aUpdatedAt - bUpdatedAt;
-
-          // if (updatedAt == null) {
-          //   return 0;
-          // } else {
-          //   return updatedAt;
-          // }
         }
 
         aValue = aValue.toString().toLowerCase();
+        aValue = `${aValue}-${a[title].toLowerCase()}`;
         bValue = bValue.toString().toLowerCase();
-        let aTitle = a[title].toLowerCase();
-        let bTitle = b[title].toLowerCase();
-        let comparison = `${aValue}-${aTitle}` > `${bValue}-${bTitle}`;
+        bValue = `${bValue}-${b[title].toLowerCase()}`;
 
-        if (comparison) {
+        if (aValue > bValue) {
           return 1;
+        } else if (aValue === bValue) {
+          return 0;
         } else {
           return -1;
         }
-        // return `${value}-${title}`;
       };
     };
   }
