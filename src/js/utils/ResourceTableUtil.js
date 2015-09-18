@@ -11,6 +11,20 @@ function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
 }
 
+function tieBreaker(a, b, tiedProp, aValue, bValue) {
+  if (aValue === bValue) {
+    if (a[tiedProp] > b[tiedProp]) {
+      return 1;
+    } else if (a[tiedProp] < a[tiedProp]) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+
+  return false;
+}
+
 var ResourceTableUtil = {
   getClassName: function (prop, sortBy, row) {
     return classNames({
@@ -28,8 +42,22 @@ var ResourceTableUtil = {
           if (_.isArray(a.used_resources[prop])) {
             let aValue = _.last(a.used_resources[prop]).value;
             let bValue = _.last(b.used_resources[prop]).value;
+            let tied = tieBreaker(a, b, title, aValue, bValue);
+
+            if (typeof tied === "number") {
+              return tied;
+            }
+
             return aValue - bValue;
           } else {
+            let tied = tieBreaker(
+              a, b, title, a.used_resources[prop], b.used_resources[prop]
+            );
+
+            if (typeof tied === "number") {
+              return tied;
+            }
+
             return a.used_resources[prop] - b.used_resources[prop];
           }
         };
@@ -47,6 +75,11 @@ var ResourceTableUtil = {
         }
 
         if (_.isNumber(aValue)) {
+          let tied = tieBreaker(a, b, title, aValue, bValue);
+
+          if (typeof tied === "number") {
+            return tied;
+          }
           return aValue - bValue;
         }
 
