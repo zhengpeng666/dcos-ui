@@ -1,6 +1,6 @@
 var React = require("react");
 
-var Modal = require("../../components/Modal");
+import {Modal} from "reactjs-components";
 
 var VersionsModal = React.createClass({
 
@@ -27,11 +27,16 @@ var VersionsModal = React.createClass({
   render: function () {
     return (
       <Modal titleText="DCOS Info"
-          showCloseButton={false}
-          showFooter={false}
-          size="large"
-          onClose={this.onClose}
-          open={this.props.open}>
+        titleClass="modal-header-title
+          text-align-center
+          flush-top
+          flush-bottom
+          inverse"
+        showCloseButton={false}
+        showFooter={false}
+        size="large"
+        onClose={this.onClose}
+        open={this.props.open}>
         {this.getContent()}
       </Modal>
     );

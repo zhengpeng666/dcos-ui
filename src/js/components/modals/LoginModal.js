@@ -2,7 +2,7 @@ var classNames = require("classnames");
 var React = require("react");
 
 var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
-var Modal = require("../../components/Modal");
+import {Modal} from "reactjs-components";
 var Validator = require("../../utils/Validator");
 
 var LoginModal = React.createClass({
@@ -75,10 +75,13 @@ var LoginModal = React.createClass({
     });
     return (
       <Modal closeByBackdropClick={false}
+        modalClass="modal"
+        titleClass="modal-header-title text-align-center flush-top inverse"
         modalClassName="login-modal"
         titleText="Mesosphere DCOS"
         subHeader={this.getSubHeader()}
         footer={this.getFooter()}
+        showFooter={true}
         showCloseButton={false}
         open={this.props.open}>
         <form className="flush-bottom"
