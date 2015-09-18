@@ -1,4 +1,5 @@
 jest.dontMock("../../../utils/DOMUtils");
+jest.dontMock("../VersionsModal");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
