@@ -12,16 +12,11 @@ function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
 }
 
-function getTaskUpdatedTimestamp(task) {
-  let lastStatus = _.last(task.statuses);
-  return lastStatus && lastStatus.timestamp || null;
-}
-
-function tieBreaker(a, b, tiedProp, aValue, bValue) {
+function checkIfTied(a, b, tieBreakerProp, aValue, bValue) {
   if (aValue === bValue) {
-    if (a[tiedProp] > b[tiedProp]) {
+    if (a[tieBreakerProp] > b[tieBreakerProp]) {
       return 1;
-    } else if (a[tiedProp] < a[tiedProp]) {
+    } else if (a[tieBreakerProp] < a[tieBreakerProp]) {
       return -1;
     } else {
       return 0;
@@ -29,6 +24,83 @@ function tieBreaker(a, b, tiedProp, aValue, bValue) {
   }
 
   return false;
+}
+
+function getUpdatedTimestamp(model) {
+  let lastStatus = _.last(model.statuses);
+  return lastStatus && lastStatus.timestamp || null;
+}
+
+function getStatSortFunction(title, prop) {
+  return function (a, b) {
+    let resourceProp = "used_resources";
+    if (!a[resourceProp]) {
+      resourceProp = "resources";
+    }
+
+    if (_.isArray(a[resourceProp][prop])) {
+      let aValue = _.last(a[resourceProp][prop]).value;
+      let bValue = _.last(b[resourceProp][prop]).value;
+      let tied = checkIfTied(a, b, title, aValue, bValue);
+
+      if (typeof tied === "number") {
+        return tied;
+      }
+
+      return aValue - bValue;
+    } else {
+      let tied = checkIfTied(
+        a, b, title, a[resourceProp][prop], b[resourceProp][prop]
+      );
+
+      if (typeof tied === "number") {
+        return tied;
+      }
+
+      return a[resourceProp][prop] - b[resourceProp][prop];
+    }
+  };
+}
+
+function getPropSortFunction(title, prop) {
+  return function (a, b) {
+    if (prop === "updated") {
+      let aUpdatedAt = getUpdatedTimestamp(a) || 0;
+      let bUpdatedAt = getUpdatedTimestamp(b) || 0;
+
+      return aUpdatedAt - bUpdatedAt;
+    }
+
+    let aValue = a[prop];
+    let bValue = b[prop];
+
+    if (prop === "health") {
+      let aHealth = MarathonStore.getServiceHealth(a.name);
+      let bHealth = MarathonStore.getServiceHealth(b.name);
+      aValue = HealthSorting[aHealth.key];
+      bValue = HealthSorting[bHealth.key];
+    }
+
+    if (_.isNumber(aValue)) {
+      let tied = checkIfTied(a, b, title, aValue, bValue);
+
+      if (typeof tied === "number") {
+        return tied;
+      }
+      return aValue - bValue;
+    }
+
+    aValue = aValue.toString().toLowerCase() + "-" + a[title].toLowerCase();
+    bValue = bValue.toString().toLowerCase() + "-" + b[title].toLowerCase();
+
+    if (aValue > bValue) {
+      return 1;
+    } else if (aValue < bValue) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
 }
 
 var ResourceTableUtil = {
@@ -44,74 +116,10 @@ var ResourceTableUtil = {
   getSortFunction: function (title) {
     return function (prop) {
       if (isStat(prop)) {
-        return function (a, b) {
-          let resourceProp = "used_resources";
-          if (!a[resourceProp]) {
-            resourceProp = "resources";
-          }
-
-          if (_.isArray(a[resourceProp][prop])) {
-            let aValue = _.last(a[resourceProp][prop]).value;
-            let bValue = _.last(b[resourceProp][prop]).value;
-            let tied = tieBreaker(a, b, title, aValue, bValue);
-
-            if (typeof tied === "number") {
-              return tied;
-            }
-
-            return aValue - bValue;
-          } else {
-            let tied = tieBreaker(
-              a, b, title, a[resourceProp][prop], b[resourceProp][prop]
-            );
-
-            if (typeof tied === "number") {
-              return tied;
-            }
-
-            return a[resourceProp][prop] - b[resourceProp][prop];
-          }
-        };
+        return getStatSortFunction(title, prop);
       }
 
-      return function (a, b) {
-        let aValue = a[prop];
-        let bValue = b[prop];
-
-        if (prop === "health") {
-          let aHealth = MarathonStore.getServiceHealth(a.name);
-          let bHealth = MarathonStore.getServiceHealth(b.name);
-          aValue = HealthSorting[aHealth.key];
-          bValue = HealthSorting[bHealth.key];
-        }
-
-        if (_.isNumber(aValue)) {
-          let tied = tieBreaker(a, b, title, aValue, bValue);
-
-          if (typeof tied === "number") {
-            return tied;
-          }
-          return aValue - bValue;
-        }
-
-        if (prop === "updated") {
-          let aUpdatedAt = getTaskUpdatedTimestamp(a) || 0;
-          let bUpdatedAt = getTaskUpdatedTimestamp(b) || 0;
-
-          return aUpdatedAt - bUpdatedAt;
-        }
-
-        aValue = aValue.toString().toLowerCase() + "-" + a[title].toLowerCase();
-        bValue = bValue.toString().toLowerCase() + "-" + b[title].toLowerCase();
-
-        if (aValue > bValue) {
-          return 1;
-        } else if (aValue < bValue) {
-          return -1;
-        } else {
-          return 0;
-        }
-      };
+      return getPropSortFunction(title, prop);
     };
   },
 
@@ -144,8 +152,8 @@ var ResourceTableUtil = {
     };
   },
 
-  renderUpdated: function (prop, task) {
-    let updatedAt = getTaskUpdatedTimestamp(task);
+  renderUpdated: function (prop, model) {
+    let updatedAt = getUpdatedTimestamp(model);
 
     if (updatedAt == null) {
       updatedAt = "NA";
@@ -169,7 +177,7 @@ var ResourceTableUtil = {
     );
   },
 
-  tieBreaker: tieBreaker
+  checkIfTied: checkIfTied
 };
 
 module.exports = ResourceTableUtil;
