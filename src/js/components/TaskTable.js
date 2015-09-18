@@ -2,7 +2,6 @@ import _ from "underscore";
 import classNames from "classnames";
 import React from "react/addons";
 
-import DateUtil from "../utils/DateUtil";
 import Maths from "../utils/Maths";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import {Table} from "reactjs-components";
@@ -12,8 +11,7 @@ import Units from "../utils/Units";
 
 const METHODS_TO_BIND = [
   "handleTaskClick",
-  "renderHeadline",
-  "renderUpdated"
+  "renderHeadline"
 ];
 
 export default class TaskTable extends React.Component {
@@ -31,49 +29,6 @@ export default class TaskTable extends React.Component {
     this.props.parentRouter.transitionTo(linkTo, {taskID});
   }
 
-  getTaskUpdatedTimestamp(task) {
-    let lastStatus = _.last(task.statuses);
-    return lastStatus && lastStatus.timestamp || null;
-  }
-
-  getSortFunction(title) {
-    return (prop) => {
-      return (a, b) => {
-        if (prop === "cpus" || prop === "mem") {
-          let aValue = a.resources[prop];
-          let bValue = b.resources[prop];
-          let tied = ResourceTableUtil.tieBreaker(a, b, title, aValue, bValue);
-
-          if (typeof tied === "number") {
-            return tied;
-          }
-
-          return aValue - bValue;
-        }
-
-        if (prop === "updated") {
-          let aUpdatedAt = this.getTaskUpdatedTimestamp(a) || 0;
-          let bUpdatedAt = this.getTaskUpdatedTimestamp(b) || 0;
-
-          return aUpdatedAt - bUpdatedAt;
-        }
-
-        let aValue =
-          `${a[prop].toString().toLowerCase()}-${a[title].toLowerCase()}`;
-        let bValue =
-          `${b[prop].toString().toLowerCase()}-${b[title].toLowerCase()}`;
-
-        if (aValue > bValue) {
-          return 1;
-        } else if (aValue === bValue) {
-          return 0;
-        } else {
-          return -1;
-        }
-      };
-    };
-  }
-
   getColumns() {
     return [
       {
@@ -83,16 +38,16 @@ export default class TaskTable extends React.Component {
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        sortFunction: this.getSortFunction("name")
+        sortFunction: ResourceTableUtil.getSortFunction("name")
       },
       {
         className: ResourceTableUtil.getClassName,
         heading: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
         headerClassName: ResourceTableUtil.getClassName,
         prop: "updated",
-        render: this.renderUpdated,
+        render: ResourceTableUtil.renderUpdated,
         sortable: true,
-        sortFunction: this.getSortFunction("name")
+        sortFunction: ResourceTableUtil.getSortFunction("name")
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -101,7 +56,7 @@ export default class TaskTable extends React.Component {
         prop: "state",
         render: this.renderState,
         sortable: true,
-        sortFunction: this.getSortFunction("name")
+        sortFunction: ResourceTableUtil.getSortFunction("name")
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -110,7 +65,7 @@ export default class TaskTable extends React.Component {
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        sortFunction: this.getSortFunction("name")
+        sortFunction: ResourceTableUtil.getSortFunction("name")
       },
       {
         className: ResourceTableUtil.getClassName,
@@ -119,7 +74,7 @@ export default class TaskTable extends React.Component {
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        sortFunction: this.getSortFunction("name")
+        sortFunction: ResourceTableUtil.getSortFunction("name")
       }
     ];
   }
@@ -182,22 +137,6 @@ export default class TaskTable extends React.Component {
     return (
       <span>
         {value}
-      </span>
-    );
-  }
-
-  renderUpdated(prop, task) {
-    let updatedAt = this.getTaskUpdatedTimestamp(task);
-
-    if (updatedAt == null) {
-      updatedAt = "NA";
-    } else {
-      updatedAt = DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
-    }
-
-    return (
-      <span>
-        {updatedAt}
       </span>
     );
   }

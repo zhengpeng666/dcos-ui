@@ -4,11 +4,17 @@ const classNames = require("classnames");
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
+import DateUtil from "../utils/DateUtil";
 const HealthSorting = require("../constants/HealthSorting");
 const MarathonStore = require("../stores/MarathonStore");
 
 function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
+}
+
+function getTaskUpdatedTimestamp(task) {
+  let lastStatus = _.last(task.statuses);
+  return lastStatus && lastStatus.timestamp || null;
 }
 
 function tieBreaker(a, b, tiedProp, aValue, bValue) {
@@ -39,9 +45,14 @@ var ResourceTableUtil = {
     return function (prop) {
       if (isStat(prop)) {
         return function (a, b) {
-          if (_.isArray(a.used_resources[prop])) {
-            let aValue = _.last(a.used_resources[prop]).value;
-            let bValue = _.last(b.used_resources[prop]).value;
+          let resourceProp = "used_resources";
+          if (!a[resourceProp]) {
+            resourceProp = "resources";
+          }
+
+          if (_.isArray(a[resourceProp][prop])) {
+            let aValue = _.last(a[resourceProp][prop]).value;
+            let bValue = _.last(b[resourceProp][prop]).value;
             let tied = tieBreaker(a, b, title, aValue, bValue);
 
             if (typeof tied === "number") {
@@ -51,14 +62,14 @@ var ResourceTableUtil = {
             return aValue - bValue;
           } else {
             let tied = tieBreaker(
-              a, b, title, a.used_resources[prop], b.used_resources[prop]
+              a, b, title, a[resourceProp][prop], b[resourceProp][prop]
             );
 
             if (typeof tied === "number") {
               return tied;
             }
 
-            return a.used_resources[prop] - b.used_resources[prop];
+            return a[resourceProp][prop] - b[resourceProp][prop];
           }
         };
       }
@@ -81,6 +92,13 @@ var ResourceTableUtil = {
             return tied;
           }
           return aValue - bValue;
+        }
+
+        if (prop === "updated") {
+          let aUpdatedAt = getTaskUpdatedTimestamp(a) || 0;
+          let bUpdatedAt = getTaskUpdatedTimestamp(b) || 0;
+
+          return aUpdatedAt - bUpdatedAt;
         }
 
         aValue = aValue.toString().toLowerCase() + "-" + a[title].toLowerCase();
@@ -124,6 +142,22 @@ var ResourceTableUtil = {
         </span>
       );
     };
+  },
+
+  renderUpdated: function (prop, task) {
+    let updatedAt = getTaskUpdatedTimestamp(task);
+
+    if (updatedAt == null) {
+      updatedAt = "NA";
+    } else {
+      updatedAt = DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
+    }
+
+    return (
+      <span>
+        {updatedAt}
+      </span>
+    );
   },
 
   renderTask: function (prop, model) {
