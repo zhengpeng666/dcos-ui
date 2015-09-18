@@ -74,6 +74,16 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     let currentTab = this.state.currentTab;
     let nextTab = nextState.currentTab;
 
+    if (props.open !== nextProps.open) {
+      if (nextProps.open) {
+        changeListeners.call(this, this.storesListeners, "addChangeListener");
+      } else {
+        changeListeners.call(
+          this, this.storesListeners, "removeChangeListener"
+        );
+      }
+    }
+
     return nextItem && currentItem !== nextItem ||
       currentTab !== nextTab || props.open !== nextProps.open;
   }
@@ -89,8 +99,6 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
         );
       }
     }, this);
-
-    changeListeners.call(this, this.storesListeners, "addChangeListener");
   }
 
   componentWillUnmount() {
