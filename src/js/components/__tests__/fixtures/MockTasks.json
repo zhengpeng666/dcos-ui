@@ -1,6 +1,7 @@
 {
   "tasks": [
     {
+      "id": 1,
       "name": "zkfc",
       "resources": {
         "cpus": 0.1,
@@ -21,6 +22,7 @@
     },
 
     {
+      "id": 2,
       "name": "marathon",
       "resources": {
         "cpus": 0.1,
