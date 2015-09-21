@@ -132,8 +132,9 @@ var ResourceTableUtil = {
       };
       var caretClassSet = classNames({
         "caret": true,
-        "dropup": order === "desc",
-        "invisible": prop !== sortBy.prop
+        "caret--visible": prop === sortBy.prop,
+        "caret--desc": order === "desc",
+        "caret--asc": order === "asc"
       });
 
       if (isStat(prop) || prop === "TASK_RUNNING") {
