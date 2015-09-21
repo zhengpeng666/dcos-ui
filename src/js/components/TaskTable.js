@@ -2,7 +2,6 @@ import _ from "underscore";
 import classNames from "classnames";
 import React from "react/addons";
 
-import Maths from "../utils/Maths";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import {Table} from "reactjs-components";
 import TaskStates from "../constants/TaskStates";
@@ -128,15 +127,9 @@ export default class TaskTable extends React.Component {
   }
 
   renderStats(prop, task) {
-    let value = Maths.round(task.resources[prop], 2);
-
-    if (prop !== "cpus") {
-      value = Units.filesize(value / 1024, 1, null, null, ["GiB"]);
-    }
-
     return (
       <span>
-        {value}
+        {Units.formatResource(prop, task.resources[prop])}
       </span>
     );
   }
