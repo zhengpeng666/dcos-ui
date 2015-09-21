@@ -125,15 +125,21 @@
   vertical-align: middle;
   background-position: 0px 0px;
   background-repeat: no-repeat;
+  position: relative;
+  z-index: -1;
 }
 
 .icon-image {
   width: 76px;
   height: 76px;
+}
 
-  &.icon-rounded {
-    border-radius: 15px;
-  }
+.icon-rounded {
+  border-radius: 15px;
+}
+
+.icon-inset-border {
+  box-shadow: inset 0px 0px 0px 2px rgba(0,0,0,0.05);
 }
 
 /* Icons (Mini) */

@@ -120,7 +120,9 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
     return (
       <div className="flex-box flex-box-align-vertical-center">
-        {imageTag}
+        <div className="icon-inset-border icon-rounded">
+          {imageTag}
+        </div>
         <div className="container container-fluid">
           <h1 className="inverse flush-top flush-bottom">
             {service.name}
