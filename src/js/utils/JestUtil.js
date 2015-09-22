@@ -1,4 +1,4 @@
-import {React} from "react/addons";
+import React from "react/addons";
 const TestUtils = React.addons.TestUtils;
 
 const JestUtil = {
