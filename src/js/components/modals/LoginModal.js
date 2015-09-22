@@ -74,16 +74,17 @@ var LoginModal = React.createClass({
       "hidden": !data.emailHasError
     });
     return (
-      <Modal closeByBackdropClick={false}
-        modalClass="modal"
-        titleClass="modal-header-title text-align-center flush-top inverse"
-        modalClassName="login-modal"
-        titleText="Mesosphere DCOS"
-        subHeader={this.getSubHeader()}
+      <Modal
+        closeByBackdropClick={false}
         footer={this.getFooter()}
-        showFooter={true}
+        modalClass="modal"
+        modalClassName="login-modal"
+        open={this.props.open}
         showCloseButton={false}
-        open={this.props.open}>
+        showFooter={true}
+        subHeader={this.getSubHeader()}
+        titleClass="modal-header-title text-align-center flush-top inverse"
+        titleText="Mesosphere DCOS">
         <form className="flush-bottom"
           onSubmit={this.handleSubmit}>
           <div className={emailClassSet}>

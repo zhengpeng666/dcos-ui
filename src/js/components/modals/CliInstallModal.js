@@ -97,15 +97,15 @@ var CliInstructionsModal = React.createClass({
   render: function () {
     return (
       <Modal
+        footer={this.props.footer}
         modalClass="modal"
-        titleClass="modal-header-title text-align-center flush-top inverse"
-        titleText={this.props.title}
-        subHeader={this.getSubHeader()}
+        onClose={this.onClose}
+        open={this.props.open}
         showCloseButton={false}
         showFooter={this.props.showFooter}
-        onClose={this.onClose}
-        footer={this.props.footer}
-        open={this.props.open}>
+        subHeader={this.getSubHeader()}
+        titleClass="modal-header-title text-align-center flush-top inverse"
+        titleText={this.props.title}>
         {this.getContent()}
       </Modal>
     );
