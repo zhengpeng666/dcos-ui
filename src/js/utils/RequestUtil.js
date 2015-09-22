@@ -3,8 +3,49 @@ var _ = require("underscore");
 
 var Config = require("../config/Config");
 
+var currentOngoingRequests = {};
+
+var jsonCallbackWrapper = function (callback, url) {
+  return function (response) {
+    currentOngoingRequests[url] = false;
+
+    if (_.isFunction(callback)) {
+      callback(response);
+    }
+  };
+};
+
+var wrapJsonCallbacks = function (options, ongoingRequests) {
+  var url = options.url;
+  var prevSuccess = options.success;
+  var prevError = options.error;
+
+  ongoingRequests[url] = true;
+  options.success = jsonCallbackWrapper(prevSuccess, url);
+  options.error = jsonCallbackWrapper(prevError, url);
+};
+
+var requestOngoing = function (url, ongoingRequests) {
+  if (!url) {
+    return true;
+  }
+
+  if (ongoingRequests.hasOwnProperty(url)
+    && ongoingRequests[url] === true) {
+    return true;
+  }
+
+  return false;
+};
+
 var RequestUtil = {
   json: function (options) {
+    if (requestOngoing(options.url, currentOngoingRequests)) {
+      return;
+    }
+
+    wrapJsonCallbacks(options, currentOngoingRequests);
+
     options = _.extend({}, {
       contentType: "application/json; charset=utf-8",
       dataType: "json",
