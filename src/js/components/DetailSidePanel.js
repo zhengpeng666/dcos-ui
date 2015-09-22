@@ -294,9 +294,8 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
   }
 
   render() {
-    // TODO: rename from classNames to className
     return (
-      <SidePanel classNames="side-panel-detail"
+      <SidePanel className="side-panel-detail"
         header={this.getHeader()}
         onClose={this.handlePanelClose}
         open={this.props.open}>
