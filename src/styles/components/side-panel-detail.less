@@ -11,6 +11,25 @@
     }
   }
 
+  .side-panel-content-header {
+    margin-top: @base-spacing-unit * 0.75;
+  }
+
+  .side-panel-content-header-label {
+    font-size: 32px;
+    margin-bottom: @base-spacing-unit * 0.33;
+  }
+
+  .side-panel-icon {
+    height: 64px;
+    width: 64px;
+
+    .icon-image {
+      height: 64px;
+      width: 64px;
+    }
+  }
+
   .side-panel-detail-close {
     .box-sizing(content-box);
     cursor: pointer;
@@ -48,15 +67,19 @@
     }
   }
 
-  .side-panel-tabs .button.button-link {
-    padding-left: 0;
-    padding-right: 0;
-    border-radius: 0;
-    margin-right: @base-spacing-unit;
-    z-index: 10;
+  .side-panel-tabs {
+    margin-bottom: -1px;
 
-    &.button-primary {
-      border-bottom: 3px solid @purple;
+    .button.button-link {
+      padding-left: 0;
+      padding-right: 0;
+      border-radius: 0;
+      margin-right: @base-spacing-unit;
+      z-index: 10;
+
+      &.button-primary {
+        border-bottom: 3px solid @purple;
+      }
     }
   }
 
@@ -65,7 +88,13 @@
   }
 
   .side-panel-subheader {
-    margin-right: @base-spacing-unit;
+    font-size: 15px;
+    margin-right: @base-spacing-unit * 0.75;
+    margin-top: @base-spacing-unit * 0.25;
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 
   .control-group > *:first-child {

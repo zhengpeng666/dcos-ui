@@ -119,14 +119,16 @@ export default class ServiceSidePanel extends DetailSidePanel {
     }
 
     return (
-      <div className="flex-box flex-box-align-vertical-center">
-        <div className="icon-inset-border icon-rounded">
+      <div className="side-panel-content-header flex-box
+          flex-box-align-vertical-center">
+        <div className="side-panel-icon icon-inset-border
+            icon-rounded">
           {imageTag}
         </div>
         <div className="container container-fluid">
-          <h1 className="inverse flush-top flush-bottom">
+          <h2 className="side-panel-content-header-label inverse flush-top">
             {service.name}
-          </h1>
+          </h2>
           <div>
             {this.getSubHeader(service)}
           </div>
@@ -188,11 +190,12 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
     return (
       <div>
-        <div
-          className="container container-pod container-pod-divider-bottom
-            container-pod-divider-inverse flush-bottom">
+        <div className="container container-pod container-pod-divider-bottom
+            container-pod-divider-inverse container-pod-short-top
+            flush-bottom">
           {this.getBasicInfo()}
-          <div className="container container-pod container-pod-short flush-left flush-bottom flush-right">
+          <div className="container container-pod container-pod-short flush-left
+              flush-bottom flush-right">
             <div className="row">
               {this.getCharts("Service", service)}
             </div>
@@ -215,7 +218,8 @@ export default class ServiceSidePanel extends DetailSidePanel {
     // We are not using react-router's Link tag due to reactjs-component's
     // Portal going outside of React's render tree.
     return (
-      <div className="container container-pod container-pod-short flush-left">
+      <div className="container container-pod container-pod-short
+          container-pod-super-short-top flush-left">
         <div className="row">
           <div className="column-4">
             <a className="button button-primary text-align-right"

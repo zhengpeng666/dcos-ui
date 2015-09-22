@@ -50,10 +50,10 @@ export default class NodeSidePanel extends DetailSidePanel {
     let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
 
     return (
-      <div>
-        <h1 className="inverse flush-top flush-bottom">
+      <div className="side-panel-content-header">
+        <h2 className="side-panel-content-header-label inverse flush-top">
           {node.hostname}
-        </h1>
+        </h2>
         <div>
           {`${activeTasksCount} Active ${activeTasksSubHeader}`}
         </div>
@@ -132,7 +132,7 @@ export default class NodeSidePanel extends DetailSidePanel {
       <div>
         <div
           className="container container-pod container-pod-divider-bottom
-            container-pod-divider-inverse flush-bottom">
+            container-pod-divider-inverse container-pod-short-top flush-bottom">
           {this.getBasicInfo(node)}
           <div className="container container-pod container-pod-short flush-left flush-right">
             <div className="row">
