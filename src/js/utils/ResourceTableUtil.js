@@ -58,15 +58,13 @@ function getStatSortFunction(title, prop) {
 
 function getPropSortFunction(title, prop) {
   return function (a, b) {
-    if (prop === "updated") {
-      let aUpdatedAt = getUpdatedTimestamp(a) || 0;
-      let bUpdatedAt = getUpdatedTimestamp(b) || 0;
-
-      return aUpdatedAt - bUpdatedAt;
-    }
-
     let aValue = a[prop];
     let bValue = b[prop];
+
+    if (prop === "updated") {
+      aValue = getUpdatedTimestamp(a) || 0;
+      bValue = getUpdatedTimestamp(b) || 0;
+    }
 
     if (prop === "health") {
       let aHealth = MarathonStore.getServiceHealth(a.name);
