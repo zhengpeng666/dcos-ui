@@ -38,27 +38,21 @@ function getStatSortFunction(title, prop) {
       resourceProp = "resources";
     }
 
-    if (_.isArray(a[resourceProp][prop])) {
-      let aValue = _.last(a[resourceProp][prop]).value;
-      let bValue = _.last(b[resourceProp][prop]).value;
-      let tied = checkIfTied(a, b, title, aValue, bValue);
+    let aValue = a[resourceProp][prop];
+    let bValue = b[resourceProp][prop];
 
-      if (typeof tied === "number") {
-        return tied;
-      }
-
-      return aValue - bValue;
-    } else {
-      let tied = checkIfTied(
-        a, b, title, a[resourceProp][prop], b[resourceProp][prop]
-      );
-
-      if (typeof tied === "number") {
-        return tied;
-      }
-
-      return a[resourceProp][prop] - b[resourceProp][prop];
+    if (_.isArray(aValue)) {
+      aValue = _.last(aValue).value;
+      bValue = _.last(bValue).value;
     }
+
+    let tied = checkIfTied(a, b, title, aValue, bValue);
+
+    if (typeof tied === "number") {
+      return tied;
+    }
+
+    return aValue - bValue;
   };
 }
 
