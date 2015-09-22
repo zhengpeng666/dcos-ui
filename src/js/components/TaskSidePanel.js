@@ -70,10 +70,10 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     return (
-      <div>
-        <h1 className="inverse flush-top flush-bottom">
+      <div className="side-panel-content-header">
+        <h2 className="side-panel-content-header-label inverse flush-top">
           {task.name}
-        </h1>
+        </h2>
         {TaskStates[task.state].displayName}
       </div>
     );
@@ -92,18 +92,12 @@ export default class TaskSidePanel extends DetailSidePanel {
 
     return (
       <div>
-        <div
-          className="container
-            container-pod
-            container-pod-short
-            container-pod-divider-bottom
-            container-pod-divider-inverse">
+        <div className="container container-pod container-pod-short
+            container-pod-divider-bottom container-pod-divider-inverse">
           {this.getBasicInfo(task)}
         </div>
-        <div className="container
-          container-pod
-          container-pod-short
-          flush-left">
+        <div className="container container-pod container-pod-short flush-left
+            flush-top">
           {this.getInfo(task)}
         </div>
       </div>

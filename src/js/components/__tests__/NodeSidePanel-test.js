@@ -70,21 +70,6 @@ describe("NodeSidePanel", function () {
     MesosStateStore.getNodeFromID = this.storeGetNode;
   });
 
-  it("should show error if node is not to be found", function () {
-    let headline = renderAndFindTag(this.instance.getContents(), "h1");
-
-    expect(headline.getDOMNode().textContent).toBe("Error finding node");
-  });
-
-  it("should show the nodes hostname if it is found", function () {
-    this.instance = TestUtils.renderIntoDocument(
-      <NodeSidePanel open={true} onClose={this.callback} itemID="foo" />
-    );
-    let headline = renderAndFindTag(this.instance.getContents(), "h1");
-
-    expect(headline.getDOMNode().textContent).toBe("bar");
-  });
-
   describe("#getTabView", function () {
 
     it("should return null if node does not exist", function () {
@@ -166,7 +151,9 @@ describe("NodeSidePanel", function () {
       <NodeSidePanel open={true} onClose={this.callback} itemID="foo" />
     );
     let contents = TestUtils.renderIntoDocument(instance.getContents());
-    let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h1");
+    let headline = TestUtils.findRenderedDOMComponentWithClass(
+      contents, "side-panel-content-header-label"
+    );
 
     expect(headline.getDOMNode().textContent).toBe("bar");
   });

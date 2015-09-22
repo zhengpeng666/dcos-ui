@@ -146,10 +146,10 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     let items = Object.keys(hash).map(function (key) {
       return (
         <dl key={key} className="row flex-box">
-          <dt className="column-4 emphasize">
+          <dt className="column-3 emphasize">
             {key}
           </dt>
-          <dd className="column-8">
+          <dd className="column-9">
             {hash[key]}
           </dd>
         </dl>
@@ -166,10 +166,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     }
 
     return (
-      <div className="container
-        container-pod
-        container-pod-short
-        flush-top">
+      <div className="container container-pod container-pod-super-short">
         {headline}
         {items}
       </div>
@@ -213,9 +210,9 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
         container-pod-super-short
         flush-top">
         <div>
-          <h3 className="flush-top flush-bottom text-color-neutral">
+          <h2 className="flush-top flush-bottom text-color-neutral">
             {resourceValue}
-          </h3>
+          </h2>
           <span className={`text-color-${colorIndex}`}>
             {resourceLabel.toUpperCase()}
           </span>
@@ -297,6 +294,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     return (
       <SidePanel className="side-panel-detail"
         header={this.getHeader()}
+        headerContainerClass="container container-pod container-pod-super-short"
         onClose={this.handlePanelClose}
         open={this.props.open}>
         {this.getContents()}
