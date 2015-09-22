@@ -126,9 +126,9 @@ export default class ServiceSidePanel extends DetailSidePanel {
           {imageTag}
         </div>
         <div className="container container-fluid">
-          <h1 className="h2 side-panel-content-header-label inverse flush-top">
+          <h2 className="side-panel-content-header-label inverse flush-top">
             {service.name}
-          </h1>
+          </h2>
           <div>
             {this.getSubHeader(service)}
           </div>
