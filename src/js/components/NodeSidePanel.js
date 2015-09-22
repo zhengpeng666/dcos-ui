@@ -51,9 +51,9 @@ export default class NodeSidePanel extends DetailSidePanel {
 
     return (
       <div className="side-panel-content-header">
-        <h1 className="h2 side-panel-content-header-label inverse flush-top">
+        <h2 className="side-panel-content-header-label inverse flush-top">
           {node.hostname}
-        </h1>
+        </h2>
         <div>
           {`${activeTasksCount} Active ${activeTasksSubHeader}`}
         </div>
