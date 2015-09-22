@@ -168,9 +168,7 @@ var ResourceTableUtil = {
         <span className="visible-mini-inline"> Tasks</span>
       </span>
     );
-  },
-
-  checkIfTied: checkIfTied
+  }
 };
 
 module.exports = ResourceTableUtil;
