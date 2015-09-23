@@ -125,64 +125,64 @@ var ServicesTable = React.createClass({
   },
 
   getColumns: function () {
-    var getClassName = ResourceTableUtil.getClassName;
+    var className = ResourceTableUtil.getClassName;
     var heading = ResourceTableUtil.renderHeading(ServiceTableHeaderLabels);
     var sortFunction = ResourceTableUtil.getSortFunction("name");
 
     return [
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className,
+        headerClassName: className,
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        sortFunction: sortFunction,
-        heading: heading
+        sortFunction,
+        heading
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className,
+        headerClassName: className,
         prop: "health",
         render: this.renderHealth,
         sortable: true,
-        sortFunction: sortFunction,
-        heading: heading
+        sortFunction,
+        heading
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className,
+        headerClassName: className,
         prop: "TASK_RUNNING",
         render: ResourceTableUtil.renderTask,
         sortable: true,
-        sortFunction: sortFunction,
-        heading: heading
+        sortFunction,
+        heading
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className,
+        headerClassName: className,
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        sortFunction: sortFunction,
-        heading: heading
+        sortFunction,
+        heading
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className,
+        headerClassName: className,
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        sortFunction: sortFunction,
-        heading: heading
+        sortFunction,
+        heading
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
+        className,
+        headerClassName: className,
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        sortFunction: sortFunction,
-        heading: heading
+        sortFunction,
+        heading
       }
     ];
   },

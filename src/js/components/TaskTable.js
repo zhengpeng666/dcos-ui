@@ -29,55 +29,55 @@ export default class TaskTable extends React.Component {
   }
 
   getColumns() {
-    var getClassName = ResourceTableUtil.getClassName;
+    var className = ResourceTableUtil.getClassName;
     var heading = ResourceTableUtil.renderHeading(TaskTableHeaderLabels);
     var sortFunction = ResourceTableUtil.getSortFunction("name");
 
     return [
       {
-        className: getClassName,
-        heading: heading,
-        headerClassName: getClassName,
+        className,
+        heading,
+        headerClassName: className,
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        sortFunction: sortFunction
+        sortFunction
       },
       {
-        className: getClassName,
-        heading: heading,
-        headerClassName: getClassName,
+        className,
+        heading,
+        headerClassName: className,
         prop: "updated",
         render: ResourceTableUtil.renderUpdated,
         sortable: true,
-        sortFunction: sortFunction
+        sortFunction
       },
       {
-        className: getClassName,
-        heading: heading,
-        headerClassName: getClassName,
+        className,
+        heading,
+        headerClassName: className,
         prop: "state",
         render: this.renderState,
         sortable: true,
-        sortFunction: sortFunction
+        sortFunction
       },
       {
-        className: getClassName,
-        heading: heading,
-        headerClassName: getClassName,
+        className,
+        heading,
+        headerClassName: className,
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        sortFunction: sortFunction
+        sortFunction
       },
       {
-        className: getClassName,
-        heading: heading,
-        headerClassName: getClassName,
+        className,
+        heading,
+        headerClassName: className,
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        sortFunction: sortFunction
+        sortFunction
       }
     ];
   }
