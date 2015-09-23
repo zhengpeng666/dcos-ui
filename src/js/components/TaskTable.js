@@ -29,51 +29,55 @@ export default class TaskTable extends React.Component {
   }
 
   getColumns() {
+    var getClassName = ResourceTableUtil.getClassName;
+    var heading = ResourceTableUtil.renderHeading(TaskTableHeaderLabels);
+    var sortFunction = ResourceTableUtil.getSortFunction("name");
+
     return [
       {
-        className: ResourceTableUtil.getClassName,
-        heading: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        heading: heading,
+        headerClassName: getClassName,
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name")
+        sortFunction: sortFunction
       },
       {
-        className: ResourceTableUtil.getClassName,
-        heading: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        heading: heading,
+        headerClassName: getClassName,
         prop: "updated",
         render: ResourceTableUtil.renderUpdated,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name")
+        sortFunction: sortFunction
       },
       {
-        className: ResourceTableUtil.getClassName,
-        heading: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        heading: heading,
+        headerClassName: getClassName,
         prop: "state",
         render: this.renderState,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name")
+        sortFunction: sortFunction
       },
       {
-        className: ResourceTableUtil.getClassName,
-        heading: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        heading: heading,
+        headerClassName: getClassName,
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name")
+        sortFunction: sortFunction
       },
       {
-        className: ResourceTableUtil.getClassName,
-        heading: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        heading: heading,
+        headerClassName: getClassName,
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name")
+        sortFunction: sortFunction
       }
     ];
   }
@@ -150,7 +154,7 @@ export default class TaskTable extends React.Component {
         data={this.props.tasks.slice()}
         keys={["id"]}
         sortBy={{prop: "name", order: "desc"}}
-        transition={true} />
+        transition={false} />
     );
   }
 }

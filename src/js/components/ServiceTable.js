@@ -125,60 +125,64 @@ var ServicesTable = React.createClass({
   },
 
   getColumns: function () {
+    var getClassName = ResourceTableUtil.getClassName;
+    var heading = ResourceTableUtil.renderHeading(ServiceTableHeaderLabels);
+    var sortFunction = ResourceTableUtil.getSortFunction("name");
+
     return [
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        headerClassName: getClassName,
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name"),
-        heading: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: sortFunction,
+        heading: heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        headerClassName: getClassName,
         prop: "health",
         render: this.renderHealth,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name"),
-        heading: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: sortFunction,
+        heading: heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        headerClassName: getClassName,
         prop: "TASK_RUNNING",
         render: ResourceTableUtil.renderTask,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name"),
-        heading: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: sortFunction,
+        heading: heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        headerClassName: getClassName,
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name"),
-        heading: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: sortFunction,
+        heading: heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        headerClassName: getClassName,
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name"),
-        heading: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: sortFunction,
+        heading: heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className: getClassName,
+        headerClassName: getClassName,
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        sortFunction: ResourceTableUtil.getSortFunction("name"),
-        heading: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: sortFunction,
+        heading: heading
       }
     ];
   },
@@ -206,7 +210,7 @@ var ServicesTable = React.createClass({
           data={this.props.services.slice()}
           keys={["id"]}
           sortBy={{prop: "name", order: "desc"}}
-          transition={true} />
+          transition={false} />
       </div>
     );
   }

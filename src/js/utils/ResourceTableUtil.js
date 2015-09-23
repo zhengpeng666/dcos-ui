@@ -115,7 +115,7 @@ var ResourceTableUtil = {
     };
   },
 
-  renderHeader: function (config) {
+  renderHeading: function (config) {
     return function (prop, order, sortBy) {
       var title = config[prop];
       var caret = {
