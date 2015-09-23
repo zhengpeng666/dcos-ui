@@ -97,12 +97,14 @@ var Sidebar = React.createClass({
   },
 
   onDCOSMetadataChange: function () {
-    this.internalStorage_update({metadata: MetadataStore.get("metadata")});
+    this.internalStorage_update(
+      {dcosMetadata: MetadataStore.get("dcosMetadata")}
+    );
   },
 
   onMetadataChange: function () {
     this.internalStorage_update({
-      dcosMetadata: MetadataStore.get("dcosMetadata")
+      metadata: MetadataStore.get("metadata")
     });
   },
 
