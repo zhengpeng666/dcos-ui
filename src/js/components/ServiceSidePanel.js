@@ -237,6 +237,12 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let service = MesosStateStore.getServiceFromName(serviceName);
     let marathonService = MarathonStore.getServiceFromName(serviceName);
 
+    if (service != null && service.name === "marathon") {
+      return (
+        <h2 className="inverse flush-top">No info</h2>
+      );
+    }
+
     if (service == null ||
       marathonService == null ||
       marathonService.snapshot == null) {
