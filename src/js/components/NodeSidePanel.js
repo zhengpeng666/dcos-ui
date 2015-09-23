@@ -82,7 +82,11 @@ export default class NodeSidePanel extends DetailSidePanel {
   }
 
   getTaskView() {
-    let tasks = MesosStateStore.getTasksFromNodeID(this.props.itemID);
+    let tasks = [];
+
+    if (MesosStateStore.get("lastMesosState").frameworks){
+      tasks = MesosStateStore.getTasksFromNodeID(this.props.itemID);
+    }
 
     return (
       <div className="container container-pod flush-top">
