@@ -113,18 +113,17 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let appImages = MarathonStore.getServiceImages(service.name);
     if (appImages) {
       imageTag = (
-        <img className="icon icon-image icon-rounded"
-          src={appImages["icon-large"]} />
+        <div className="side-panel-icon icon-inset-border icon-rounded">
+          <img className="icon icon-image icon-rounded"
+            src={appImages["icon-large"]} />
+        </div>
       );
     }
 
     return (
       <div className="side-panel-content-header flex-box
-          flex-box-align-vertical-center">
-        <div className="side-panel-icon icon-inset-border
-            icon-rounded">
-          {imageTag}
-        </div>
+        flex-box-align-vertical-center">
+        {imageTag}
         <div className="container container-fluid">
           <h2 className="side-panel-content-header-label inverse flush-top">
             {service.name}
