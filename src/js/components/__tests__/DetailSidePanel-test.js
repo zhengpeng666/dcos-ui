@@ -61,10 +61,7 @@ describe("DetailSidePanel", function () {
         node
       );
       // Mock router
-      instance.context.router = {
-        getCurrentRoutes: function () { return [1, 2, 3]; },
-        transitionTo: function () {}
-      };
+      instance.context.router = this.instance.context.router;
       instance.handlePanelClose();
       expect(this.callback).toHaveBeenCalled();
 
