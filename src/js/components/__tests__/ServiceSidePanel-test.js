@@ -3,6 +3,7 @@ jest.dontMock("../ServiceSidePanel");
 jest.dontMock("../../events/MesosSummaryActions");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../mixins/GetSetMixin");
+jest.dontMock("../../utils/JestUtil");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
@@ -10,6 +11,7 @@ jest.dontMock("../../utils/Util");
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
+var JestUtil = require("../../utils/JestUtil");
 var MarathonStore = require("../../stores/MarathonStore");
 var MesosSummaryActions = require("../../events/MesosSummaryActions");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
@@ -62,15 +64,16 @@ describe("ServiceSidePanel", function () {
   describe("getting info", function () {
 
     describe("#getInfo", function () {
-      it("should return null if service doesn't exist", function () {
+      it("should return 'no info' if service doesn't exist", function () {
         var instance = TestUtils.renderIntoDocument(
           <ServiceSidePanel
             open={false}
             itemID="service_that_does_not_exist"/>
         );
 
-        var info = instance.getInfo();
-        expect(info).toEqual(null);
+        var info = JestUtil.renderAndFindTag(instance.getInfo(), "h2");
+        expect(info.getDOMNode().textContent)
+          .toEqual("No information available.");
       });
 
       it("should return an element if service does exist", function () {
