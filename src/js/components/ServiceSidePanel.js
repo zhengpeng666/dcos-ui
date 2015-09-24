@@ -111,7 +111,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
     let imageTag = null;
     let appImages = MarathonStore.getServiceImages(service.name);
-    if (appImages) {
+    if (appImages && appImages["icon-large"]) {
       imageTag = (
         <div className="side-panel-icon icon-inset-border icon-rounded">
           <img className="icon icon-image icon-rounded"
