@@ -181,9 +181,9 @@ describe("SummaryList", function () {
     it("filters by id", function () {
       let resources = this.list.getResourceStatesForNodeIDs([1]);
       let expectedResult = {
-        cpus: [{date: this.now, percentage: 10, value: 1}],
-        mem: [{date: this.now, percentage: 30, value: 3}],
-        disk: [{date: this.now, percentage: 10, value: 1}]
+        cpus: [{date: this.now, percentage: 20, value: 1}],
+        mem: [{date: this.now, percentage: 60, value: 3}],
+        disk: [{date: this.now, percentage: 20, value: 1}]
       };
 
       expect(resources).toEqual(expectedResult);
@@ -219,16 +219,16 @@ describe("SummaryList", function () {
       let resources = this.list.getResourceStatesForNodeIDs([1]);
       let expectedResult = {
         cpus: [
-          {date: this.now, percentage: 10, value: 1},
-          {date: this.now + 1, percentage: 5, value: 1}
+          {date: this.now, percentage: 20, value: 1},
+          {date: this.now + 1, percentage: 10, value: 1}
         ],
         mem: [
-          {date: this.now, percentage: 30, value: 3},
-          {date: this.now + 1, percentage: 15, value: 3}
+          {date: this.now, percentage: 60, value: 3},
+          {date: this.now + 1, percentage: 30, value: 3}
         ],
         disk: [
-          {date: this.now, percentage: 10, value: 1},
-          {date: this.now + 1, percentage: 5, value: 1}
+          {date: this.now, percentage: 20, value: 1},
+          {date: this.now + 1, percentage: 10, value: 1}
         ]
       };
 
