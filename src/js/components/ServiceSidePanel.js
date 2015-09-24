@@ -121,15 +121,14 @@ export default class ServiceSidePanel extends DetailSidePanel {
     }
 
     let containerClassSet = classNames({
-      container: true,
-      "container-fluid": imageTag !== null
+      "container container-fluid": imageTag != null
     });
 
     return (
       <div className="side-panel-content-header flex-box
         flex-box-align-vertical-center">
         {imageTag}
-        <div className={{containerClassSet}}>
+        <div className={containerClassSet}>
           <h2 className="side-panel-content-header-label inverse flush-top">
             {service.name}
           </h2>
