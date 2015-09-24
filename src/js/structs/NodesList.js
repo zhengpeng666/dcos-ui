@@ -49,9 +49,9 @@ export default class NodesList extends List {
   }
 
   sumResources() {
-   let services = this.getItems();
-   let resourcesList = _.pluck(services, "resources");
+    let services = this.getItems();
+    let resourcesList = _.pluck(services, "resources");
 
-   return MesosSummaryUtil.sumResources(resourcesList);
+    return MesosSummaryUtil.sumResources(resourcesList);
   }
 }
