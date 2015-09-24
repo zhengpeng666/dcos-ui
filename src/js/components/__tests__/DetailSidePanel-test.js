@@ -30,7 +30,7 @@ describe("DetailSidePanel", function () {
     beforeEach(function () {
       this.callback = jasmine.createSpy();
       this.instance = TestUtils.renderIntoDocument(
-        <DetailSidePanel open={false} onClose={this.callback} />
+        <DetailSidePanel open={true} onClose={this.callback} />
       );
 
       // Mock router
@@ -40,6 +40,10 @@ describe("DetailSidePanel", function () {
       };
     });
 
+    afterEach(function () {
+      this.callback.reset();
+    });
+
     it("shouldn't call the callback after initialization", function () {
       expect(this.callback).not.toHaveBeenCalled();
     });
@@ -47,6 +51,29 @@ describe("DetailSidePanel", function () {
     it("should call the callback when the panel close is called", function () {
       this.instance.handlePanelClose();
       expect(this.callback).toHaveBeenCalled();
+    });
+
+    it("should call the callback only when panel is open", function () {
+      let node = document.createElement("div");
+      // Use regular render so we can check for update
+      let instance = React.render(
+        <DetailSidePanel open={true} onClose={this.callback} />,
+        node
+      );
+      // Mock router
+      instance.context.router = this.instance.context.router;
+      instance.handlePanelClose();
+      expect(this.callback).toHaveBeenCalled();
+
+      this.callback.reset();
+      // Rerender with open set to false
+      instance = React.render(
+        <DetailSidePanel open={false} onClose={this.callback} />,
+        node
+      );
+      instance.handlePanelClose();
+      instance.handlePanelClose();
+      expect(this.callback).not.toHaveBeenCalled();
     });
   });
 
