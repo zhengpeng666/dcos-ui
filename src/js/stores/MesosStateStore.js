@@ -65,7 +65,7 @@ var MesosStateStore = Store.createStore({
   },
 
   getTasksFromNodeID: function (nodeID) {
-    let services = this.get("lastMesosState").frameworks;
+    let services = this.get("lastMesosState").frameworks || [];
     let memberTasks = {};
 
     services.forEach(function (service) {
