@@ -64,6 +64,8 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
     }, this);
+
+    this.state = {};
   }
 
   shouldComponentUpdate(nextProps, nextState) {
