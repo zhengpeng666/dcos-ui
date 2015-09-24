@@ -129,6 +129,10 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
   }
 
   handlePanelClose() {
+    if (!this.props.open) {
+      return;
+    }
+
     if (_.isFunction(this.props.onClose)) {
       this.props.onClose();
     }

@@ -30,7 +30,7 @@ describe("DetailSidePanel", function () {
     beforeEach(function () {
       this.callback = jasmine.createSpy();
       this.instance = TestUtils.renderIntoDocument(
-        <DetailSidePanel open={false} onClose={this.callback} />
+        <DetailSidePanel open={true} onClose={this.callback} />
       );
 
       // Mock router
