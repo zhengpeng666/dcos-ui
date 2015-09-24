@@ -54,7 +54,7 @@ describe("DetailSidePanel", function () {
     });
 
     it("should call the callback only when panel is open", function () {
-      let node = document.createElement('div');
+      let node = document.createElement("div");
       // Use regular render so we can check for update
       let instance = React.render(
         <DetailSidePanel open={true} onClose={this.callback} />,
