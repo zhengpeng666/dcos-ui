@@ -50,6 +50,10 @@ var Modal = React.createClass({
   },
 
   componentDidUpdate: function () {
+    if (!this.props.open) {
+      this.innerContainerDOMNode = null;
+    }
+
     // Set DOM node for height calculation when we want to open after close
     if (this.innerContainerDOMNode == null && this.props.open) {
       this.innerContainerDOMNode = this.refs.innerContainer.getDOMNode();
