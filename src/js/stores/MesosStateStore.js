@@ -102,14 +102,7 @@ var MesosStateStore = Store.createStore({
     let frameworks = this.get("lastMesosState").frameworks;
     let framework = _.findWhere(frameworks, {name: serviceName});
 
-    if (framework) {
-      let activeTasks = framework.tasks || [];
-      let completedTasks = framework.completed_tasks || [];
-
-      return activeTasks.concat(completedTasks);
-    }
-
-    return [];
+    return framework && framework.tasks || [];
   },
 
   processStateSuccess: function (lastMesosState) {
