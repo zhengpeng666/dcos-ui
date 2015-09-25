@@ -2,7 +2,6 @@ import _ from "underscore";
 import React from "react/addons";
 
 import EventTypes from "../constants/EventTypes";
-import FilterByTaskState from "./FilterByTaskState";
 import FilterInputText from "./FilterInputText";
 import MesosStateStore from "../stores/MesosStateStore";
 import RequestErrorMsg from "./RequestErrorMsg";
@@ -134,7 +133,8 @@ export default class TaskView extends React.Component {
     let currentStatus = this.state.filterByStatus;
     let tasksLength = tasks.length;
     if (currentStatus === "all") {
-      return `${tasksLength} ${StringUtil.pluralize("Task", tasksLength)}`;
+      let taskLabel = StringUtil.pluralize("Task", tasksLength);
+      return `${tasksLength} Active ${taskLabel}`;
     }
 
     const displayNameMap = {
@@ -168,13 +168,6 @@ export default class TaskView extends React.Component {
             searchString={state.searchString}
             handleFilterChange={this.handleSearchStringChange}
             inverseStyle={false} />
-          <div>
-            <FilterByTaskState
-              statuses={this.getStatuses(tasks)}
-              handleFilterChange={this.handleStatusFilterChange}
-              totalTasksCount={tasks.length}
-              currentStatus={state.filterByStatus}/>
-          </div>
         </div>
         {this.getTaskTable(tasks)}
       </div>
