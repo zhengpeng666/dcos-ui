@@ -74,6 +74,11 @@ var MesosStateStore = Store.createStore({
           memberTasks[task.id] = task;
         }
       });
+      service.completed_tasks.forEach(function (task) {
+        if (task.slave_id === nodeID) {
+          memberTasks[task.id] = task;
+        }
+      });
     });
 
     return _.values(memberTasks);
