@@ -127,6 +127,9 @@ var MesosStateStore = Store.createStore({
       case ActionTypes.REQUEST_MESOS_STATE_ERROR:
         MesosStateStore.processStateError();
         break;
+      case ActionTypes.REQUEST_MESOS_STATE_ONGOING:
+        // do stuff here
+        break;
     }
 
     return true;

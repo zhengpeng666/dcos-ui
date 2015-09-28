@@ -177,6 +177,9 @@ var MesosSummaryStore = Store.createStore({
       case ActionTypes.REQUEST_MESOS_HISTORY_ERROR:
         MesosSummaryStore.processSummaryError();
         break;
+      case ActionTypes.REQUEST_MESOS_SUMMARY_ONGOING:
+        // do stuff here
+        break;
     }
 
     return true;

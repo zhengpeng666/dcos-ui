@@ -227,6 +227,9 @@ var MarathonStore = Store.createStore({
       case ActionTypes.REQUEST_MARATHON_APPS_ERROR:
         MarathonStore.processMarathonAppsError();
         break;
+      case ActionTypes.REQUEST_MARATHON_APPS_ONGOING:
+        // do stuff here
+        break;
     }
 
     return true;
