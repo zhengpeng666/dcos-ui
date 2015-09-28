@@ -25,7 +25,7 @@ var MesosStateActions = {
             });
             reject();
           }
-        });
+        }, ActionTypes.REQUEST_MESOS_STATE_ERROR);
       };
     },
     {delayAfterCount: 3}

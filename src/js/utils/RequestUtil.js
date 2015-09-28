@@ -1,11 +1,12 @@
 var $ = require("jquery");
 var _ = require("underscore");
 
+var AppDispatcher = require("../events/AppDispatcher");
 var Config = require("../config/Config");
 
-var currentOngoingRequests = {};
+let currentOngoingRequests = {};
 
-var jsonCallbackWrapper = function (callback, url) {
+let jsonCallbackWrapper = function (callback, url) {
   return function (response) {
     currentOngoingRequests[url] = false;
 
@@ -15,35 +16,32 @@ var jsonCallbackWrapper = function (callback, url) {
   };
 };
 
-var wrapJsonCallbacks = function (options, ongoingRequests) {
-  var url = options.url;
-  var prevSuccess = options.success;
-  var prevError = options.error;
+let wrapJsonCallbacks = function (options) {
+  let url = options.url;
 
-  ongoingRequests[url] = true;
-  options.success = jsonCallbackWrapper(prevSuccess, url);
-  options.error = jsonCallbackWrapper(prevError, url);
+  options.success = jsonCallbackWrapper(options.success, url);
+  options.error = jsonCallbackWrapper(options.error, url);
 };
 
-var requestOngoing = function (url, ongoingRequests) {
+let requestOngoing = function (url, ongoingRequests) {
   if (!url) {
-    return true;
+    return false;
   }
 
-  if (ongoingRequests.hasOwnProperty(url)
-    && ongoingRequests[url] === true) {
-    return true;
-  }
-
-  return false;
+  return ongoingRequests.hasOwnProperty(url) && ongoingRequests[url] === true;
 };
 
 var RequestUtil = {
-  json: function (options) {
+  json: function (options, errorType) {
+    options = options || {};
     if (requestOngoing(options.url, currentOngoingRequests)) {
+      AppDispatcher.handleServerAction({
+        type: errorType
+      });
       return;
     }
 
+    currentOngoingRequests[options.url] = true;
     wrapJsonCallbacks(options, currentOngoingRequests);
 
     options = _.extend({}, {

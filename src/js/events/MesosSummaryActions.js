@@ -58,7 +58,7 @@ var MesosSummaryActions = {
             });
             reject();
           }
-        });
+        }, errorType);
       };
     },
     {delayAfterCount: 3}
