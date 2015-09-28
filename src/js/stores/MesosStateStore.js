@@ -114,6 +114,10 @@ var MesosStateStore = Store.createStore({
     this.emit(EventTypes.MESOS_STATE_REQUEST_ERROR);
   },
 
+  processOngoingRequest: function () {
+    this.emit(EventTypes.MESOS_STATE_REQUEST_ONGOING);
+  },
+
   dispatcherIndex: AppDispatcher.register(function (payload) {
     if (payload.source !== ActionTypes.SERVER_ACTION) {
       return false;
@@ -128,7 +132,7 @@ var MesosStateStore = Store.createStore({
         MesosStateStore.processStateError();
         break;
       case ActionTypes.REQUEST_MESOS_STATE_ONGOING:
-        // do stuff here
+        MesosStateStore.processOngoingRequest();
         break;
     }
 
