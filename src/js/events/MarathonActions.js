@@ -27,7 +27,7 @@ module.exports = {
             });
             reject();
           }
-        }, ActionTypes.REQUEST_MARATHON_APPS_ERROR);
+        }, ActionTypes.REQUEST_MARATHON_APPS_ONGOING);
       };
     },
     {delayAfterCount: 3}

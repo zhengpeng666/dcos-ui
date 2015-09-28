@@ -33,10 +33,12 @@ var MesosSummaryActions = {
       return function (timeScale) {
         var successType = ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS;
         var errorType = ActionTypes.REQUEST_MESOS_HISTORY_ERROR;
+        var ongoingType = ActionTypes.REQUEST_MESOS_HISTORY_ONGOING;
 
         if (timeScale == null) {
           successType = ActionTypes.REQUEST_MESOS_SUMMARY_SUCCESS;
           errorType = ActionTypes.REQUEST_MESOS_SUMMARY_ERROR;
+          ongoingType = ActionTypes.REQUEST_MESOS_SUMMARY_ONGOING;
         }
 
         var url = getStateUrl(timeScale);
@@ -58,7 +60,7 @@ var MesosSummaryActions = {
             });
             reject();
           }
-        }, errorType);
+        }, ongoingType);
       };
     },
     {delayAfterCount: 3}
