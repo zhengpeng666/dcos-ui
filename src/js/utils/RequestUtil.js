@@ -32,11 +32,11 @@ let requestOngoing = function (url, ongoingRequests) {
 };
 
 var RequestUtil = {
-  json: function (options, errorType) {
+  json: function (options, ongoingType) {
     options = options || {};
     if (requestOngoing(options.url, currentOngoingRequests)) {
       AppDispatcher.handleServerAction({
-        type: errorType
+        type: ongoingType
       });
       return;
     }
