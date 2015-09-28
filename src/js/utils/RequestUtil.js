@@ -34,7 +34,7 @@ let requestOngoing = function (url, ongoingRequests) {
 var RequestUtil = {
   json: function (options, ongoingType) {
     options = options || {};
-    if (requestOngoing(options.url, currentOngoingRequests)) {
+    if (requestOngoing(options.url, currentOngoingRequests) && ongoingType) {
       AppDispatcher.handleServerAction({
         type: ongoingType
       });

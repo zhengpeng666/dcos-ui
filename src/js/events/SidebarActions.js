@@ -51,7 +51,7 @@ var SidebarActions = {
           data: e.message
         });
       }
-    }, ActionTypes.REQUEST_VERSIONS_ERROR);
+    });
   }
 
 };
