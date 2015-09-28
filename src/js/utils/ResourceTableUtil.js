@@ -117,12 +117,12 @@ var ResourceTableUtil = {
 
   renderHeading: function (config) {
     return function (prop, order, sortBy) {
-      var title = config[prop];
-      var caret = {
+      let title = config[prop];
+      let caret = {
         before: null,
         after: null
       };
-      var caretClassSet = classNames({
+      let caretClassSet = classNames({
         "caret": true,
         "caret--visible": prop === sortBy.prop,
         "caret--desc": order === "desc",
@@ -149,16 +149,10 @@ var ResourceTableUtil = {
     let updatedAt = getUpdatedTimestamp(model);
 
     if (updatedAt == null) {
-      updatedAt = "NA";
-    } else {
-      updatedAt = DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
+      return "NA";
     }
 
-    return (
-      <span>
-        {updatedAt}
-      </span>
-    );
+    return DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
   },
 
   renderTask: function (prop, model) {

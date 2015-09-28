@@ -65,13 +65,13 @@ var HostTable = React.createClass({
   },
 
   renderStats: function (prop, node) {
-    var colorMapping = {
+    let colorMapping = {
       cpus: 1,
       mem: 2,
       disk: 3
     };
 
-    var value = node.getUsageStats(prop).percentage;
+    let value = node.getUsageStats(prop).percentage;
     return (
       <span className="spread-content">
         <ProgressBar value={value}
@@ -81,9 +81,9 @@ var HostTable = React.createClass({
   },
 
   getColumns: function () {
-    var className = ResourceTableUtil.getClassName;
-    var heading = ResourceTableUtil.renderHeading(HostTableHeaderLabels);
-    var sortFunction = ResourceTableUtil.getSortFunction("hostname");
+    let className = ResourceTableUtil.getClassName;
+    let heading = ResourceTableUtil.renderHeading(HostTableHeaderLabels);
+    let sortFunction = ResourceTableUtil.getSortFunction("hostname");
 
     return [
       {
