@@ -215,7 +215,7 @@ var MarathonStore = Store.createStore({
   },
 
   processOngoingRequest: function () {
-    this.emit(EventTypes.MARATHON_APPS_ONGOING);
+    // Handle ongoing request here.
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {

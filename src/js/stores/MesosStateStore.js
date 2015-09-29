@@ -115,7 +115,7 @@ var MesosStateStore = Store.createStore({
   },
 
   processOngoingRequest: function () {
-    this.emit(EventTypes.MESOS_STATE_REQUEST_ONGOING);
+    // Handle ongoing request here.
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
