@@ -15,15 +15,16 @@ export default class StateSummary {
 
     this.metadata = {
       date: undefined,
+      empty: null,
       serviceUsedResources: {cpus: 0, mem: 0, disk: 0},
       slaveUsedResources: {cpus: 0, mem: 0, disk: 0},
       slaveTotalResources: {cpus: 0, mem: 0, disk: 0}
     };
-
     let snapshot = options.snapshot || this.snapshot;
     // Only place where we normalize server data
     // we may be able to remove this, but it needs testing
     snapshot.slaves = snapshot.slaves || [];
+    this.metadata.isEmpty = !options.snapshot;
     this.snapshot = snapshot;
 
     this.metadata.date = options.date || Date.now();
@@ -71,5 +72,9 @@ export default class StateSummary {
 
   getServiceUsedResources() {
     return this.metadata.serviceUsedResources;
+  }
+
+  isEmpty() {
+    return this.metadata.isEmpty;
   }
 }

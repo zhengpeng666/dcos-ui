@@ -158,6 +158,10 @@ var MesosSummaryStore = Store.createStore({
 
   processSummaryError: function () {
     this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
+
+    // add empty StateSummary snapshot to SummaryList
+    this.get("states").addSnapshot(null, Date.now());
+
   },
 
   processOngoingRequest: function () {
