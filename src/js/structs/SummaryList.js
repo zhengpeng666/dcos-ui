@@ -35,7 +35,7 @@ export default class SummaryList extends List {
         date: state.getSnapshotDate(),
         resources: state.getServiceList().filter({ids}).sumUsedResources(),
         totalResources: state.getSlaveTotalResources(),
-        isEmpty: state.isEmpty
+        isEmpty: state.isEmpty()
       };
     });
 
