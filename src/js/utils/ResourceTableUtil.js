@@ -118,12 +118,10 @@ var ResourceTableUtil = {
         before: null,
         after: null
       };
-      let caretClassSet = classNames({
-        "caret": true,
-        "caret--visible": prop === sortBy.prop,
-        "caret--desc": order === "desc",
-        "caret--asc": order === "asc"
-      });
+      let caretClassSet = classNames(
+        `caret caret--${order}`,
+        {"caret--visible": prop === sortBy.prop}
+      );
 
       if (isStat(prop) || prop === "TASK_RUNNING") {
         caret.before = <span className={caretClassSet} />;
