@@ -31,7 +31,8 @@ export default class TaskTable extends React.Component {
   getColumns() {
     var className = ResourceTableUtil.getClassName;
     var heading = ResourceTableUtil.renderHeading(TaskTableHeaderLabels);
-    var sortFunction = ResourceTableUtil.getSortFunction("name");
+    let propSortFunction = ResourceTableUtil.getPropSortFunction("name");
+    let statSortFunction = ResourceTableUtil.getStatSortFunction("name");
 
     return [
       {
@@ -41,7 +42,7 @@ export default class TaskTable extends React.Component {
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        sortFunction
+        sortFunction: propSortFunction
       },
       {
         className,
@@ -50,7 +51,7 @@ export default class TaskTable extends React.Component {
         prop: "updated",
         render: ResourceTableUtil.renderUpdated,
         sortable: true,
-        sortFunction
+        sortFunction: propSortFunction
       },
       {
         className,
@@ -59,7 +60,7 @@ export default class TaskTable extends React.Component {
         prop: "state",
         render: this.renderState,
         sortable: true,
-        sortFunction
+        sortFunction: statSortFunction
       },
       {
         className,
@@ -68,7 +69,7 @@ export default class TaskTable extends React.Component {
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        sortFunction
+        sortFunction: statSortFunction
       },
       {
         className,
@@ -77,7 +78,7 @@ export default class TaskTable extends React.Component {
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        sortFunction
+        sortFunction: statSortFunction
       }
     ];
   }

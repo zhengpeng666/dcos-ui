@@ -83,7 +83,8 @@ var HostTable = React.createClass({
   getColumns: function () {
     let className = ResourceTableUtil.getClassName;
     let heading = ResourceTableUtil.renderHeading(HostTableHeaderLabels);
-    let sortFunction = ResourceTableUtil.getSortFunction("hostname");
+    let propSortFunction = ResourceTableUtil.getPropSortFunction("hostname");
+    let statSortFunction = ResourceTableUtil.getStatSortFunction("hostname");
 
     return [
       {
@@ -92,7 +93,7 @@ var HostTable = React.createClass({
         prop: "hostname",
         render: this.renderHeadline,
         sortable: true,
-        sortFunction,
+        sortFunction: propSortFunction,
         heading
       },
       {
@@ -101,7 +102,7 @@ var HostTable = React.createClass({
         prop: "TASK_RUNNING",
         render: ResourceTableUtil.renderTask,
         sortable: true,
-        sortFunction,
+        sortFunction: propSortFunction,
         heading
       },
       {
@@ -110,7 +111,7 @@ var HostTable = React.createClass({
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        sortFunction,
+        sortFunction: statSortFunction,
         heading
       },
       {
@@ -119,7 +120,7 @@ var HostTable = React.createClass({
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        sortFunction,
+        sortFunction: statSortFunction,
         heading
       },
       {
@@ -128,7 +129,7 @@ var HostTable = React.createClass({
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        sortFunction,
+        sortFunction: statSortFunction,
         heading
       }
     ];

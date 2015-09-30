@@ -31,87 +31,83 @@ function getUpdatedTimestamp(model) {
   return lastStatus && lastStatus.timestamp || null;
 }
 
-function getStatSortFunction(title, prop) {
-  return function (a, b) {
-    let resourceProp = "used_resources";
-    if (!a[resourceProp]) {
-      resourceProp = "resources";
-    }
-
-    let aValue = a[resourceProp][prop];
-    let bValue = b[resourceProp][prop];
-
-    if (_.isArray(aValue)) {
-      aValue = _.last(aValue).value;
-      bValue = _.last(bValue).value;
-    }
-
-    let tied = checkIfTied(a, b, title, aValue, bValue);
-
-    if (typeof tied === "number") {
-      return tied;
-    }
-
-    return aValue - bValue;
-  };
-}
-
-function getPropSortFunction(title, prop) {
-  return function (a, b) {
-    let aValue = a[prop];
-    let bValue = b[prop];
-
-    if (prop === "updated") {
-      aValue = getUpdatedTimestamp(a) || 0;
-      bValue = getUpdatedTimestamp(b) || 0;
-    }
-
-    if (prop === "health") {
-      let aHealth = MarathonStore.getServiceHealth(a.name);
-      let bHealth = MarathonStore.getServiceHealth(b.name);
-      aValue = HealthSorting[aHealth.key];
-      bValue = HealthSorting[bHealth.key];
-    }
-
-    if (_.isNumber(aValue)) {
-      let tied = checkIfTied(a, b, title, aValue, bValue);
-
-      if (typeof tied === "number") {
-        return tied;
-      }
-      return aValue - bValue;
-    }
-
-    aValue = aValue.toString().toLowerCase() + "-" + a[title].toLowerCase();
-    bValue = bValue.toString().toLowerCase() + "-" + b[title].toLowerCase();
-
-    if (aValue > bValue) {
-      return 1;
-    } else if (aValue < bValue) {
-      return -1;
-    } else {
-      return 0;
-    }
-  };
-}
-
 var ResourceTableUtil = {
   getClassName: function (prop, sortBy, row) {
     return classNames({
-      "align-right": isStat(prop) || prop === "TASK_RUNNING",
+      "text-align-right": isStat(prop) || prop === "TASK_RUNNING",
       "hidden-mini": isStat(prop),
       "highlight": prop === sortBy.prop,
       "clickable": row == null // this is a header
     });
   },
 
-  getSortFunction: function (title) {
+  getStatSortFunction: function (baseProp) {
     return function (prop) {
-      if (isStat(prop)) {
-        return getStatSortFunction(title, prop);
-      }
+      return function (a, b) {
+        let resourceProp = "used_resources";
+        if (!a[resourceProp]) {
+          resourceProp = "resources";
+        }
 
-      return getPropSortFunction(title, prop);
+        let aValue = a[resourceProp][prop];
+        let bValue = b[resourceProp][prop];
+
+        if (_.isArray(aValue)) {
+          aValue = _.last(aValue).value;
+          bValue = _.last(bValue).value;
+        }
+
+        let tied = checkIfTied(a, b, baseProp, aValue, bValue);
+
+        if (typeof tied === "number") {
+          return tied;
+        }
+
+        return aValue - bValue;
+      };
+    };
+  },
+
+  getPropSortFunction: function (baseProp) {
+    return function (prop) {
+      return function (a, b) {
+        let aValue = a[prop];
+        let bValue = b[prop];
+
+        if (prop === "updated") {
+          aValue = getUpdatedTimestamp(a) || 0;
+          bValue = getUpdatedTimestamp(b) || 0;
+        }
+
+        if (prop === "health") {
+          let aHealth = MarathonStore.getServiceHealth(a.name);
+          let bHealth = MarathonStore.getServiceHealth(b.name);
+          aValue = HealthSorting[aHealth.key];
+          bValue = HealthSorting[bHealth.key];
+        }
+
+        if (_.isNumber(aValue)) {
+          let tied = checkIfTied(a, b, baseProp, aValue, bValue);
+
+          if (typeof tied === "number") {
+            return tied;
+          }
+          return aValue - bValue;
+        }
+
+        aValue = aValue.toString().toLowerCase() + "-" +
+          a[baseProp].toLowerCase();
+        bValue = bValue.toString().toLowerCase() + "-" +
+          b[baseProp].toLowerCase();
+
+        if (aValue > bValue) {
+          return 1;
+        } else if (aValue < bValue) {
+          return -1;
+        } else {
+          return 0;
+        }
+      };
     };
   },
 

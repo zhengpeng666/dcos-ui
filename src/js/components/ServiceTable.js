@@ -127,7 +127,8 @@ var ServicesTable = React.createClass({
   getColumns: function () {
     let className = ResourceTableUtil.getClassName;
     let heading = ResourceTableUtil.renderHeading(ServiceTableHeaderLabels);
-    let sortFunction = ResourceTableUtil.getSortFunction("name");
+    let propSortFunction = ResourceTableUtil.getPropSortFunction("name");
+    let statSortFunction = ResourceTableUtil.getStatSortFunction("name");
 
     return [
       {
@@ -136,7 +137,7 @@ var ServicesTable = React.createClass({
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        sortFunction,
+        sortFunction: propSortFunction,
         heading
       },
       {
@@ -145,7 +146,7 @@ var ServicesTable = React.createClass({
         prop: "health",
         render: this.renderHealth,
         sortable: true,
-        sortFunction,
+        sortFunction: propSortFunction,
         heading
       },
       {
@@ -154,7 +155,7 @@ var ServicesTable = React.createClass({
         prop: "TASK_RUNNING",
         render: ResourceTableUtil.renderTask,
         sortable: true,
-        sortFunction,
+        sortFunction: propSortFunction,
         heading
       },
       {
@@ -163,7 +164,7 @@ var ServicesTable = React.createClass({
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        sortFunction,
+        sortFunction: statSortFunction,
         heading
       },
       {
@@ -172,7 +173,7 @@ var ServicesTable = React.createClass({
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        sortFunction,
+        sortFunction: statSortFunction,
         heading
       },
       {
@@ -181,7 +182,7 @@ var ServicesTable = React.createClass({
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        sortFunction,
+        sortFunction: statSortFunction,
         heading
       }
     ];
