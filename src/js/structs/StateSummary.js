@@ -74,7 +74,7 @@ export default class StateSummary {
     return this.metadata.serviceUsedResources;
   }
 
-  hasSuccessfulSnapshot() {
+  isSnapshotSuccessful() {
     return this.metadata.successfulSnapshot;
   }
 }
