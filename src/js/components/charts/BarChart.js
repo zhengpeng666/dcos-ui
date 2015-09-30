@@ -68,8 +68,8 @@ var BarChart = React.createClass({
 
     var data = {
       stack: this.getStack(),
-      xScale: xScale,
-      yScale: yScale,
+      xScale,
+      yScale,
       clipPathID: _.uniqueId("clip")
     };
 
@@ -127,7 +127,6 @@ var BarChart = React.createClass({
     var props = this.props;
     var width = props.width - props.margin.left - props.margin.right;
     var height = props.height + 1;  // +1 for the base axis line
-
     d3.select("#" + data.clipPathID + " rect")
       .attr({
         width: width,
@@ -297,7 +296,6 @@ var BarChart = React.createClass({
         // Will increase the margin between bars as they become smaller
         // to make it visually easier to parse
         let barMargin = Math.pow(rectWidth, -0.4);
-
         return (
           <Bar
             posX={posX}
