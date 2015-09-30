@@ -42,8 +42,7 @@ const MesosSummaryUtil = {
         resources[resourceType].push({
           date: stateResource.date,
           percentage,
-          value,
-          isEmpty: stateResource.isEmpty
+          value
         });
       });
     });
