@@ -60,7 +60,7 @@ export default class TaskTable extends React.Component {
         prop: "state",
         render: this.renderState,
         sortable: true,
-        sortFunction: statSortFunction
+        sortFunction: propSortFunction
       },
       {
         className,
