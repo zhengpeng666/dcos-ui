@@ -90,7 +90,7 @@ export default class TaskTable extends React.Component {
         <col />
         <col style={{width: "100px"}} />
         <col style={{width: "100px"}} />
-        <col style={{width: "100px"}} />
+        <col style={{width: "115px"}} />
       </colgroup>
     );
   }
