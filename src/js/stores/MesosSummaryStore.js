@@ -8,6 +8,7 @@ var GetSetMixin = require("../mixins/GetSetMixin");
 var MesosSummaryUtil = require("../utils/MesosSummaryUtil");
 var MesosSummaryActions = require("../events/MesosSummaryActions");
 var SummaryList = require("../structs/SummaryList");
+import StateSummary from "../structs/StateSummary";
 var Store = require("../utils/Store");
 var TimeScales = require("../constants/TimeScales");
 
@@ -157,7 +158,8 @@ var MesosSummaryStore = Store.createStore({
   },
 
   processSummaryError: function () {
-    this.get("states").addSnapshot(null, Date.now());
+    let unsuccessfulSummary = new StateSummary({successful: false});
+    this.get("states").add(unsuccessfulSummary);
 
     this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
   },

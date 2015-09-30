@@ -15,7 +15,7 @@ export default class StateSummary {
 
     this.metadata = {
       date: undefined,
-      empty: null,
+      sucessful: true,
       serviceUsedResources: {cpus: 0, mem: 0, disk: 0},
       slaveUsedResources: {cpus: 0, mem: 0, disk: 0},
       slaveTotalResources: {cpus: 0, mem: 0, disk: 0}
@@ -24,9 +24,9 @@ export default class StateSummary {
     // Only place where we normalize server data
     // we may be able to remove this, but it needs testing
     snapshot.slaves = snapshot.slaves || [];
-    this.metadata.isEmpty = !options.snapshot;
     this.snapshot = snapshot;
 
+    this.metadata.successful = options.successful || true;
     this.metadata.date = options.date || Date.now();
     // Store computed data – this is something we may not need to store
     this.metadata.slaveTotalResources = MesosSummaryUtil.sumResources(
