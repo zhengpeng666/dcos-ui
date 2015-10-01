@@ -168,6 +168,10 @@ var MesosSummaryStore = Store.createStore({
     // Handle ongoing request here.
   },
 
+  processBulkError: function (data) {
+    data.forEach(() => MesosSummaryStore.processSummaryError());
+  },
+
   dispatcherIndex: AppDispatcher.register(function (payload) {
     if (payload.source !== ActionTypes.SERVER_ACTION) {
       return false;
@@ -182,6 +186,8 @@ var MesosSummaryStore = Store.createStore({
         MesosSummaryStore.processBulkState(action.data);
         break;
       case ActionTypes.REQUEST_MESOS_SUMMARY_ERROR:
+        MesosSummaryStore.processBulkError(action.data);
+        break;
       case ActionTypes.REQUEST_MESOS_HISTORY_ERROR:
         MesosSummaryStore.processSummaryError();
         break;
