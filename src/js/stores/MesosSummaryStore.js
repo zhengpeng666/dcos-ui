@@ -157,8 +157,10 @@ var MesosSummaryStore = Store.createStore({
     });
   },
 
-  processSummaryError: function () {
-    let unsuccessfulSummary = new StateSummary({successful: false});
+  processSummaryError: function (options) {
+    options = _.extend({successful: false}, options);
+
+    let unsuccessfulSummary = new StateSummary(options);
     this.get("states").add(unsuccessfulSummary);
 
     this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
@@ -169,7 +171,11 @@ var MesosSummaryStore = Store.createStore({
   },
 
   processBulkError: function (data) {
-    data.forEach(() => MesosSummaryStore.processSummaryError());
+    let options = {silent: true};
+
+    data.forEach(function () {
+      MesosSummaryStore.processSummaryError(options);
+    });
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -186,10 +192,10 @@ var MesosSummaryStore = Store.createStore({
         MesosSummaryStore.processBulkState(action.data);
         break;
       case ActionTypes.REQUEST_MESOS_SUMMARY_ERROR:
-        MesosSummaryStore.processBulkError(action.data);
+        MesosSummaryStore.processSummaryError();
         break;
       case ActionTypes.REQUEST_MESOS_HISTORY_ERROR:
-        MesosSummaryStore.processSummaryError();
+        MesosSummaryStore.processBulkError(action.data);
         break;
       case ActionTypes.REQUEST_MESOS_SUMMARY_ONGOING:
       case ActionTypes.REQUEST_MESOS_HISTORY_ONGOING:
