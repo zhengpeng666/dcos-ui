@@ -4,45 +4,41 @@ var _ = require("underscore");
 var AppDispatcher = require("../events/AppDispatcher");
 var Config = require("../config/Config");
 
-let currentOngoingRequests = {};
+let activeRequests = {};
 
-let jsonCallbackWrapper = function (callback, url) {
-  return function (response) {
-    currentOngoingRequests[url] = false;
+let createCallbackWrapper = function (callback, url) {
+  return function () {
+    activeRequests[url] = false;
 
     if (_.isFunction(callback)) {
-      callback(response);
+      callback.apply(null, arguments);
     }
   };
 };
 
-let wrapJsonCallbacks = function (options) {
-  let url = options.url;
-
-  options.success = jsonCallbackWrapper(options.success, url);
-  options.error = jsonCallbackWrapper(options.error, url);
-};
-
-let requestOngoing = function (url, ongoingRequests) {
-  if (!url) {
-    return false;
-  }
-
-  return ongoingRequests.hasOwnProperty(url) && ongoingRequests[url] === true;
-};
-
 var RequestUtil = {
-  json: function (options, ongoingType) {
-    options = options || {};
-    if (requestOngoing(options.url, currentOngoingRequests) && ongoingType) {
-      AppDispatcher.handleServerAction({
-        type: ongoingType
-      });
-      return;
+  isRequestActive: function (requestID) {
+    if (!requestID) {
+      return false;
     }
 
-    currentOngoingRequests[options.url] = true;
-    wrapJsonCallbacks(options, currentOngoingRequests);
+    return activeRequests.hasOwnProperty(requestID) &&
+      activeRequests[requestID] === true;
+  },
+
+  json: function (options, ongoingType) {
+    if (ongoingType) {
+      let requestID = JSON.stringify(options);
+      options.success = createCallbackWrapper(options.success, options.url);
+      options.error = createCallbackWrapper(options.error, options.url);
+
+      if (this.isRequestActive(requestID)) {
+        AppDispatcher.handleServerAction({type: ongoingType});
+        return;
+      } else {
+        activeRequests[requestID] = true;
+      }
+    }
 
     options = _.extend({}, {
       contentType: "application/json; charset=utf-8",

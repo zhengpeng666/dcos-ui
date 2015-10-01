@@ -182,8 +182,6 @@ var MesosSummaryStore = Store.createStore({
         MesosSummaryStore.processSummaryError();
         break;
       case ActionTypes.REQUEST_MESOS_SUMMARY_ONGOING:
-        MesosSummaryStore.processOngoingRequest();
-        break;
       case ActionTypes.REQUEST_MESOS_HISTORY_ONGOING:
         MesosSummaryStore.processOngoingRequest();
         break;
