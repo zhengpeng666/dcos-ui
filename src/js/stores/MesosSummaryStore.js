@@ -158,12 +158,12 @@ var MesosSummaryStore = Store.createStore({
   },
 
   processSummaryError: function (options) {
-    options = _.extend({successful: false}, options);
-
-    let unsuccessfulSummary = new StateSummary(options);
+    let unsuccessfulSummary = new StateSummary({successful: false});
     this.get("states").add(unsuccessfulSummary);
 
-    this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
+    if (options.silent !== true) {
+      this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
+    }
   },
 
   processOngoingRequest: function () {
@@ -171,10 +171,8 @@ var MesosSummaryStore = Store.createStore({
   },
 
   processBulkError: function (data) {
-    let options = {silent: true};
-
     data.forEach(function () {
-      MesosSummaryStore.processSummaryError(options);
+      MesosSummaryStore.processSummaryError({silent: true});
     });
   },
 
