@@ -26,7 +26,9 @@ export default class StateSummary {
     snapshot.slaves = snapshot.slaves || [];
     this.snapshot = snapshot;
 
-    this.metadata.successfulSnapshot = options.successful || true;
+    if (options.successful != null) {
+      this.metadata.successfulSnapshot = options.successful;
+    }
     this.metadata.date = options.date || Date.now();
     // Store computed data – this is something we may not need to store
     this.metadata.slaveTotalResources = MesosSummaryUtil.sumResources(
