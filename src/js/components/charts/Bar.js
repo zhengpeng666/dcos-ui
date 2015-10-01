@@ -64,13 +64,14 @@ var Bar = React.createClass({
             className={lineClass}
             x1={0}
             y1={posY}
-            x2={rectWidth - 1}
+            x2={rectWidth - props.margin}
             y2={posY} />
         <rect
+            shape-rendering={props.shapeRendering}
             className={colorClass}
             y={posY}
             height={rectHeight}
-            width={rectWidth - 1} />
+            width={rectWidth - props.margin} />
       </g>
     );
   }

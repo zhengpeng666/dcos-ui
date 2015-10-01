@@ -127,6 +127,7 @@ var BarChart = React.createClass({
     var props = this.props;
     var width = props.width - props.margin.left - props.margin.right;
     var height = props.height + 1;  // +1 for the base axis line
+
     d3.select("#" + data.clipPathID + " rect")
       .attr({
         width: width,
@@ -284,28 +285,44 @@ var BarChart = React.createClass({
     }
 
     return _.map(data.stackedData, function (service) {
-      var colorClass = "path-color-" + service.colorIndex;
-      var rectWidth = (chartWidth - marginLeft - marginRight) / (valuesLength - 1);
 
       return _.map(service.values, function (val, j) {
-        var rectHeight = props.height * val[y] / props.maxY - peaklineHeight;
+        let rectHeight, colorClass;
+        let barMargin = 0;
+        let shapeRendering = "auto";
+        let rectWidth = (chartWidth - marginLeft - marginRight) / (valuesLength - 1);
+        let posX = chartWidth - marginLeft - marginRight - rectWidth * (valuesLength - 1 - j);
 
-        var posX = chartWidth - marginLeft - marginRight - rectWidth * (valuesLength - 1 - j);
+        if (!val.isSuccessfulSnapshot) {
+          rectHeight = props.height - peaklineHeight;
+          colorClass = "path-color-7";
+
+          // flush svg rect edges together
+          shapeRendering = "crispEdges";
+
+        } else {
+          rectHeight = props.height * val[y] / props.maxY - peaklineHeight;
+          colorClass = "path-color-" + service.colorIndex;
+
+          // Will increase the margin between bars as they become smaller
+          // to make it visually easier to parse
+          barMargin = 1 + Math.pow(rectWidth, -0.4);
+        }
+
         posY[j] -= rectHeight;
 
-        // Will increase the margin between bars as they become smaller
-        // to make it visually easier to parse
-        let barMargin = Math.pow(rectWidth, -0.4);
         return (
           <Bar
             posX={posX}
             posY={posY[j]}
             rectHeight={rectHeight}
-            rectWidth={rectWidth - barMargin}
+            rectWidth={rectWidth}
+            margin={barMargin}
             colorClass={colorClass}
             transitionDelay={props.transition.delay}
             transitionDuration={props.transition.duration}
-            lineClass={lineClass + colorClass} />
+            lineClass={lineClass + colorClass}
+            shapeRendering={shapeRendering} />
         );
       });
     });
