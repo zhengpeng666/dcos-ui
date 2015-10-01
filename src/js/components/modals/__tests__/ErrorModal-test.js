@@ -1,4 +1,3 @@
-jest.dontMock("../../Modal");
 jest.dontMock("../ErrorModal");
 jest.dontMock("../../../utils/DOMUtils");
 

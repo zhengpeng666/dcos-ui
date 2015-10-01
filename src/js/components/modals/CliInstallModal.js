@@ -1,7 +1,7 @@
 var browserInfo = require("browser-info");
 var React = require("react");
 
-var Modal = require("../Modal");
+import {Modal} from "reactjs-components";
 
 var CliInstructionsModal = React.createClass({
 
@@ -96,13 +96,16 @@ var CliInstructionsModal = React.createClass({
 
   render: function () {
     return (
-      <Modal titleText={this.props.title}
-          subHeader={this.getSubHeader()}
-          showCloseButton={false}
-          showFooter={this.props.showFooter}
-          onClose={this.onClose}
-          footer={this.props.footer}
-          open={this.props.open}>
+      <Modal
+        footer={this.props.footer}
+        modalClass="modal"
+        onClose={this.onClose}
+        open={this.props.open}
+        showCloseButton={false}
+        showFooter={this.props.showFooter}
+        subHeader={this.getSubHeader()}
+        titleClass="modal-header-title text-align-center flush-top inverse"
+        titleText={this.props.title}>
         {this.getContent()}
       </Modal>
     );

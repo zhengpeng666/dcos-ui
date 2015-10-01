@@ -8,19 +8,16 @@ jest.dontMock("../TaskTable");
 jest.dontMock("../TaskView");
 jest.dontMock("../RequestErrorMsg");
 jest.dontMock("../../utils/Util");
+jest.dontMock("../../utils/JestUtil");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
+var JestUtil = require("../../utils/JestUtil");
 var MesosStateStore = require("../../stores/MesosStateStore");
 var MesosSummaryActions = require("../../events/MesosSummaryActions");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var NodeSidePanel = require("../NodeSidePanel");
-
-function renderAndFindTag(instance, tag) {
-  var result = TestUtils.renderIntoDocument(instance);
-  return TestUtils.findRenderedDOMComponentWithTag(result, tag);
-}
 
 describe("NodeSidePanel", function () {
   beforeEach(function () {
@@ -130,7 +127,7 @@ describe("NodeSidePanel", function () {
         <NodeSidePanel open={true} itemID="existingNode" />
       );
 
-      let headline = renderAndFindTag(
+      let headline = JestUtil.renderAndFindTag(
         instance.getKeyValuePairs({"foo": "bar"}, "baz"),
         "h3"
       );

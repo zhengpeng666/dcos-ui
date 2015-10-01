@@ -1,6 +1,6 @@
 var React = require("react");
 
-var Modal = require("../../components/Modal");
+import {Modal} from "reactjs-components";
 
 var ErrorModal = React.createClass({
 
@@ -17,12 +17,15 @@ var ErrorModal = React.createClass({
 
   render: function () {
     return (
-      <Modal titleText="Looks Like Something is Wrong"
-          subHeader=""
-          showCloseButton={false}
-          showFooter={false}
-          onClose={this.onClose}
-          open={this.props.open}>
+      <Modal
+        modalClass="modal"
+        onClose={this.onClose}
+        open={this.props.open}
+        showCloseButton={false}
+        showFooter={false}
+        subHeader=""
+        titleClass="modal-header-title text-align-center flush-top inverse"
+        titleText="Looks Like Something is Wrong">
         {this.props.errorMsg}
       </Modal>
     );
