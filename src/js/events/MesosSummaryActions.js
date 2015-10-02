@@ -31,14 +31,14 @@ var MesosSummaryActions = {
     Config.getRefreshRate(),
     function (resolve, reject) {
       return function (timeScale) {
-        var successType = ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS;
-        var errorType = ActionTypes.REQUEST_MESOS_HISTORY_ERROR;
-        var ongoingType = ActionTypes.REQUEST_MESOS_HISTORY_ONGOING;
+        var successAction = ActionTypes.REQUEST_MESOS_HISTORY_SUCCESS;
+        var errorAction = ActionTypes.REQUEST_MESOS_HISTORY_ERROR;
+        var hangingRequestAction = ActionTypes.REQUEST_MESOS_HISTORY_ONGOING;
 
         if (timeScale == null) {
-          successType = ActionTypes.REQUEST_MESOS_SUMMARY_SUCCESS;
-          errorType = ActionTypes.REQUEST_MESOS_SUMMARY_ERROR;
-          ongoingType = ActionTypes.REQUEST_MESOS_SUMMARY_ONGOING;
+          successAction = ActionTypes.REQUEST_MESOS_SUMMARY_SUCCESS;
+          errorAction = ActionTypes.REQUEST_MESOS_SUMMARY_ERROR;
+          hangingRequestAction = ActionTypes.REQUEST_MESOS_SUMMARY_ONGOING;
         }
 
         var url = getStateUrl(timeScale);
@@ -47,20 +47,23 @@ var MesosSummaryActions = {
           url: url,
           success: function (response) {
             AppDispatcher.handleServerAction({
-              type: successType,
+              type: successAction,
               data: response
             });
             resolve();
           },
           error: function (e) {
-            registerServerError(e.message, errorType);
+            registerServerError(e.message, errorAction);
             AppDispatcher.handleServerAction({
-              type: errorType,
+              type: errorAction,
               data: e.message
             });
             reject();
+          },
+          hangingRequestCallback: function () {
+            AppDispatcher.handleServerAction({type: hangingRequestAction});
           }
-        }, ongoingType);
+        });
       };
     },
     {delayAfterCount: 3}

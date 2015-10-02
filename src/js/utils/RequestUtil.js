@@ -1,42 +1,42 @@
 var $ = require("jquery");
 var _ = require("underscore");
 
-var AppDispatcher = require("../events/AppDispatcher");
 var Config = require("../config/Config");
 
 let activeRequests = {};
 
-let createCallbackWrapper = function (callback, url) {
+function createCallbackWrapper(callback, requestID) {
   return function () {
-    activeRequests[url] = false;
+    setRequestState(requestID, false);
 
     if (_.isFunction(callback)) {
       callback.apply(null, arguments);
     }
   };
-};
+}
+
+function isRequestActive(requestID) {
+  return activeRequests.hasOwnProperty(requestID) &&
+    activeRequests[requestID] === true;
+}
+
+function setRequestState(requestID, state) {
+  activeRequests[requestID] = state;
+}
 
 var RequestUtil = {
-  isRequestActive: function (requestID) {
-    if (!requestID) {
-      return false;
-    }
-
-    return activeRequests.hasOwnProperty(requestID) &&
-      activeRequests[requestID] === true;
-  },
-
-  json: function (options, ongoingType) {
-    if (ongoingType) {
+  json: function (options) {
+    if (options && _.isFunction(options.hangingRequestCallback)) {
       let requestID = JSON.stringify(options);
-      options.success = createCallbackWrapper(options.success, options.url);
-      options.error = createCallbackWrapper(options.error, options.url);
+      options.success = createCallbackWrapper(options.success, requestID);
+      options.error = createCallbackWrapper(options.error, requestID);
 
-      if (this.isRequestActive(requestID)) {
-        AppDispatcher.handleServerAction({type: ongoingType});
+      if (isRequestActive(requestID)) {
+        options.hangingRequestCallback();
         return;
       } else {
-        activeRequests[requestID] = true;
+        setRequestState(requestID, true);
+        delete options.hangingRequestCallback;
       }
     }
 

@@ -26,8 +26,13 @@ module.exports = {
               data: e.message
             });
             reject();
+          },
+          hangingRequestCallback: function () {
+            AppDispatcher.handleServerAction({
+              type: ActionTypes.REQUEST_MARATHON_APPS_ONGOING
+            });
           }
-        }, ActionTypes.REQUEST_MARATHON_APPS_ONGOING);
+        });
       };
     },
     {delayAfterCount: 3}
