@@ -3,8 +3,43 @@ var _ = require("underscore");
 
 var Config = require("../config/Config");
 
+let activeRequests = {};
+
+function createCallbackWrapper(callback, requestID) {
+  return function () {
+    setRequestState(requestID, false);
+
+    if (_.isFunction(callback)) {
+      callback.apply(null, arguments);
+    }
+  };
+}
+
+function isRequestActive(requestID) {
+  return activeRequests.hasOwnProperty(requestID) &&
+    activeRequests[requestID] === true;
+}
+
+function setRequestState(requestID, state) {
+  activeRequests[requestID] = state;
+}
+
 var RequestUtil = {
   json: function (options) {
+    if (options && _.isFunction(options.hangingRequestCallback)) {
+      let requestID = JSON.stringify(options);
+      options.success = createCallbackWrapper(options.success, requestID);
+      options.error = createCallbackWrapper(options.error, requestID);
+
+      if (isRequestActive(requestID)) {
+        options.hangingRequestCallback();
+        return;
+      } else {
+        setRequestState(requestID, true);
+        delete options.hangingRequestCallback;
+      }
+    }
+
     options = _.extend({}, {
       contentType: "application/json; charset=utf-8",
       dataType: "json",

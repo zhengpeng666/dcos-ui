@@ -214,6 +214,10 @@ var MarathonStore = Store.createStore({
     }
   },
 
+  processOngoingRequest: function () {
+    // Handle ongoing request here.
+  },
+
   dispatcherIndex: AppDispatcher.register(function (payload) {
     if (payload.source !== ActionTypes.SERVER_ACTION) {
       return false;
@@ -226,6 +230,9 @@ var MarathonStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_MARATHON_APPS_ERROR:
         MarathonStore.processMarathonAppsError();
+        break;
+      case ActionTypes.REQUEST_MARATHON_APPS_ONGOING:
+        MarathonStore.processOngoingRequest();
         break;
     }
 

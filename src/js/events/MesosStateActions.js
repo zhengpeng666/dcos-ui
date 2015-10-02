@@ -24,6 +24,11 @@ var MesosStateActions = {
               data: e.message
             });
             reject();
+          },
+          hangingRequestCallback: function () {
+            AppDispatcher.handleServerAction({
+              type: ActionTypes.REQUEST_MESOS_STATE_ONGOING
+            });
           }
         });
       };

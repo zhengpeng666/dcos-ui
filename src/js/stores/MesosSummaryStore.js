@@ -160,6 +160,10 @@ var MesosSummaryStore = Store.createStore({
     this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
   },
 
+  processOngoingRequest: function () {
+    // Handle ongoing request here.
+  },
+
   dispatcherIndex: AppDispatcher.register(function (payload) {
     if (payload.source !== ActionTypes.SERVER_ACTION) {
       return false;
@@ -176,6 +180,10 @@ var MesosSummaryStore = Store.createStore({
       case ActionTypes.REQUEST_MESOS_SUMMARY_ERROR:
       case ActionTypes.REQUEST_MESOS_HISTORY_ERROR:
         MesosSummaryStore.processSummaryError();
+        break;
+      case ActionTypes.REQUEST_MESOS_SUMMARY_ONGOING:
+      case ActionTypes.REQUEST_MESOS_HISTORY_ONGOING:
+        MesosSummaryStore.processOngoingRequest();
         break;
     }
 
