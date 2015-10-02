@@ -143,7 +143,7 @@ var MesosSummaryStore = Store.createStore({
     var taskFailureRate = this.processFailureRate(states.last(), prevState);
     this.set({taskFailureRate});
 
-    if (options.silent == null || options.silent === false) {
+    if (!options.silent) {
       this.notifySummaryProcessed();
     }
   },
@@ -160,7 +160,7 @@ var MesosSummaryStore = Store.createStore({
     let unsuccessfulSummary = new StateSummary({successful: false});
     this.get("states").add(unsuccessfulSummary);
 
-    if (options.silent == null || options.silent === false) {
+    if (!options.silent) {
       this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
     }
   },
