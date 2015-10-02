@@ -12,18 +12,22 @@ function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
 }
 
-function checkIfTied(a, b, tieBreakerProp, aValue, bValue) {
+function compareValues(a, b) {
+  if (a > b) {
+    return 1;
+  } else if (a < b) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+function compareFunction(a, b, tieBreakerProp, aValue, bValue) {
   if (aValue === bValue) {
-    if (a[tieBreakerProp] > b[tieBreakerProp]) {
-      return 1;
-    } else if (a[tieBreakerProp] < a[tieBreakerProp]) {
-      return -1;
-    } else {
-      return 0;
-    }
+    return compareValues(a[tieBreakerProp], b[tieBreakerProp]);
   }
 
-  return false;
+  return aValue - bValue;
 }
 
 function getUpdatedTimestamp(model) {
@@ -57,13 +61,7 @@ var ResourceTableUtil = {
           bValue = _.last(bValue).value;
         }
 
-        let tied = checkIfTied(a, b, baseProp, aValue, bValue);
-
-        if (typeof tied === "number") {
-          return tied;
-        }
-
-        return aValue - bValue;
+        return compareFunction(a, b, baseProp, aValue, bValue);
       };
     };
   },
@@ -87,12 +85,7 @@ var ResourceTableUtil = {
         }
 
         if (_.isNumber(aValue)) {
-          let tied = checkIfTied(a, b, baseProp, aValue, bValue);
-
-          if (typeof tied === "number") {
-            return tied;
-          }
-          return aValue - bValue;
+          return compareFunction(a, b, baseProp, aValue, bValue);
         }
 
         aValue = aValue.toString().toLowerCase() + "-" +
@@ -100,13 +93,7 @@ var ResourceTableUtil = {
         bValue = bValue.toString().toLowerCase() + "-" +
           b[baseProp].toLowerCase();
 
-        if (aValue > bValue) {
-          return 1;
-        } else if (aValue < bValue) {
-          return -1;
-        } else {
-          return 0;
-        }
+        return compareValues(aValue, bValue);
       };
     };
   },
