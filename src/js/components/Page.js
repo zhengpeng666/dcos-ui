@@ -57,7 +57,7 @@ var Page = React.createClass({
           <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
             <div className="page-header-context">
               <SidebarToggle />
-              <h1 className="page-header-title flush-top flush-bottom">
+              <h1 className="page-header-title inverse flush">
                 {this.props.title}
               </h1>
             </div>

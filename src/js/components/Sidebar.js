@@ -209,7 +209,7 @@ var Sidebar = React.createClass({
       iconClasses[`icon-${route.handler.routeConfig.icon}`] = true;
 
       var itemClassSet = classNames({
-        "sidebar-menu-item h3": true,
+        "sidebar-menu-item": true,
         "selected": isActive
       });
 
@@ -217,7 +217,7 @@ var Sidebar = React.createClass({
         <li className={itemClassSet} key={route.name}>
           <Link to={route.name}>
             <i className={classNames(iconClasses)}></i>
-            <span className="sidebar-menu-item-label">
+            <span className="sidebar-menu-item-label h4 flush">
               {route.handler.routeConfig.label}
             </span>
           </Link>
@@ -254,13 +254,13 @@ var Sidebar = React.createClass({
     return (
       <div className="sidebar flex-container-col">
         <div className="sidebar-header">
-          <div className="container container-fluid container-fluid-narrow container-pod">
+          <div className="container container-fluid container-fluid-narrow container-pod container-pod-short">
             <div className="sidebar-header-image">
               <img className="sidebar-header-image-inner" src="./img/layout/sidebar/sidebar-dcos-icon-medium.png" alt="sidebar header image"/>
             </div>
-            <h2 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={clusterName}>
+            <h3 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={clusterName}>
               {clusterName}
-            </h2>
+            </h3>
             {this.getHostName(data)}
           </div>
         </div>
@@ -275,15 +275,12 @@ var Sidebar = React.createClass({
         </GeminiScrollbar>
         <div className="sidebar-footer">
           <div className="container container-fluid container-fluid-narrow container-pod container-pod-short logo-container">
-            <img src="./img/layout/sidebar/sidebar-logo.png" className="sidebar-footer-image" alt="sidebar footer image" />
-            <p className="text-align-center flush-top flush-bottom mute">
-              <small>
-                <span className="clickable" onClick={this.handleVersionClick}>
-                  <span className="company-name">Mesosphere </span>
-                  <span className="app-name">DCOS </span>
-                  {this.getVersion(data)}
-                </span>
-              </small>
+            <div className="sidebar-footer-image" />
+            <p className="text-align-center flush-top flush-bottom mute small">
+              <span className="clickable" onClick={this.handleVersionClick}>
+                <span className="company-name small">Mesosphere </span>
+                <span className="app-name small">DCOS {this.getVersion(data)}</span>
+              </span>
             </p>
           </div>
           <div className="icon-buttons">

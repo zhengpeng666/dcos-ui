@@ -135,10 +135,15 @@ gulp.task("less", function () {
       paths: [dirs.styles], // @import paths
       plugins: [colorLighten]
     }))
+    .on('error', function (err) {
+        gutil.log(err);
+        this.emit('end');
+    })
     .pipe(autoprefixer())
     .pipe(gulpif(development, sourcemaps.write(".")))
     .pipe(gulp.dest(dirs.dist + "/" + dirs.stylesDist))
-    .pipe(gulpif(development, browserSync.stream()));
+    .pipe(gulpif(development, browserSync.stream()))
+    .on('error', gutil.log);
 });
 
 gulp.task("minify-css", ["less"], function () {

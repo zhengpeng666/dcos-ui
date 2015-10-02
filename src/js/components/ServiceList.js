@@ -76,7 +76,7 @@ let ServiceList = React.createClass({
       }
 
       let classSet = classNames(
-        "h3 flush-top flush-bottom text-align-right",
+        "h4 inverse flush-top flush-bottom text-align-right",
         state.classNames
       );
 
@@ -85,7 +85,7 @@ let ServiceList = React.createClass({
           (
             <a key="title"
               onClick={this.handleServiceClick.bind(this, service.name)}
-              className="h3 flush-top flush-bottom clickable">
+              className="h4 inverse flush-top flush-bottom clickable">
               {service.name}
             </a>
           ),
@@ -114,7 +114,7 @@ let ServiceList = React.createClass({
     return (
       <div className="service-list-component">
         <List
-          className="list-unstyled"
+          className="list-unstyled flush"
           items={this.getServices(props.services, props.healthProcessed)} />
       </div>
     );

@@ -18,7 +18,7 @@ var Panel = React.createClass({
 
     return (
       <div className="panel-heading text-align-center">
-        <h4 className="panel-title">
+        <h4 className="panel-title inverse">
           {title}
         </h4>
       </div>

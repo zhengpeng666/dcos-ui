@@ -1,41 +1,118 @@
-/* Canvas */
-html, body {
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+layout/foundation.less
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
+
+
+
+
+
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Foundation
+
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
+html,
+body {
+
   height: 100%;
+
 }
 
 ::selection {
+
   background: color-lighten(@purple, 0);
+
 }
 
 .clickable {
+
   cursor: pointer;
+
 }
 
 .clear {
+
   clear: both;
+
 }
 
 .hidden {
+
   display: none !important;
+
 }
 
-// scrollable areas
+
+
+
+
+
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Flex Container Column
+
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
 .flex-container-col {
+
   display: flex;
   flex: 1;
   flex-direction: column;
+
 }
 
+
+
+
+
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Scrollable Container
+
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
 .container-scrollable {
+
   flex: 8;
   overflow-y: auto;
   overflow-x: hidden;
+
   > .gm-scrollbar-container {
+
     height: 100%;
+
   }
+
 }
 
+
+
+
+
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Canvas
+
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
 #canvas {
+
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -47,160 +124,332 @@ html, body {
   height: 100%;
   overflow: hidden;
   .transition(e('left 0.3s ease, margin-left 0.3s ease'));
+
 }
 
-/* Container Pod */
+
+
+
+
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Container Pod
+
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
 .container-pod {
+
   &.container-pod-super-short {
+
     padding-top: @base-spacing-unit * 0.6;
     padding-bottom: @base-spacing-unit * 0.6;
+
   }
 
   &.container-pod-super-short-top {
+
     padding-top: @base-spacing-unit * 0.6;
+
   }
 
   &.container-pod-divider-bottom {
+
     &.container-pod-divider-bottom-align-left {
+
       position: relative;
 
       &:after {
+
         content: '';
         position: absolute;
         bottom: -1px;
         background: @border-color;
         display: block;
         height: 1px;
-        width: (@grid-gutter-width-screen-large * 1.0);
-        left: -(@grid-gutter-width-screen-large * 1.0);
+        width: (@grid-container-fluid-gutter-width * 1.0);
+        left: -(@grid-container-fluid-gutter-width * 1.0);
 
       }
 
       &.container-pod-divider-inverse {
+
         &:after {
+
           background: @border-color-inverse;
+
         }
+
       }
+
     }
 
     &.container-pod-divider-bottom-align-right {
+
       position: relative;
 
       &:after {
+
         content: '';
         position: absolute;
         bottom: -1px;
         background: @border-color;
         display: block;
         height: 1px;
-        width: (@grid-gutter-width-screen-large * 1.0);
-        right: -(@grid-gutter-width-screen-large * 1.0);
+        width: (@grid-container-fluid-gutter-width * 1.0);
+        right: -(@grid-container-fluid-gutter-width * 1.0);
+
       }
 
       &.container-pod-divider-inverse {
+
         &:after {
+
           background: @border-color-inverse;
+
         }
+
       }
+
     }
+
   }
+
 }
 
-/* Screen Size: Mini (@screen-mini) and above */
+
+
+
+
+
 & when (@screen-mini-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Screen Size: Mini (@screen-mini) and above
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
   @media (min-width: @screen-mini) {
 
-    /* Container Pod */
+    /* -----------------------------------------------------------------------------
+    --------------------------------------------------------------------------------
+
+    Container Pod
+
+    --------------------------------------------------------------------------------
+    ----------------------------------------------------------------------------- */
+
     .container-pod {
+
       &.container-pod-divider-bottom {
+
         &.container-pod-divider-bottom-align-left {
+
           &:after {
-            width: (@grid-gutter-width-screen-mini * 1.0);
-            left: -(@grid-gutter-width-screen-mini * 1.0);
+
+            width: (@grid-container-fluid-gutter-width-screen-mini * 1.0);
+            left: -(@grid-container-fluid-gutter-width-screen-mini * 1.0);
+
           }
+
         }
+
         &.container-pod-divider-bottom-align-right {
+
           &:after {
-            width: (@grid-gutter-width-screen-mini * 1.0);
-            right: -(@grid-gutter-width-screen-mini * 1.0);
+
+            width: (@grid-container-fluid-gutter-width-screen-mini * 1.0);
+            right: -(@grid-container-fluid-gutter-width-screen-mini * 1.0);
+
           }
+
         }
+
       }
+
     }
+
   }
+
 }
 
-/* Screen Size: Small (@screen-small) and above */
+
+
+
+
+
 & when (@screen-small-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Screen Size: Small (@screen-small) and above
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
   @media (min-width: @screen-small) {
 
-    /* Container Pod */
+    /* -----------------------------------------------------------------------------
+    --------------------------------------------------------------------------------
+
+    Container Pod
+
+    --------------------------------------------------------------------------------
+    ----------------------------------------------------------------------------- */
+
     .container-pod {
+
       &.container-pod-divider-bottom {
+
         &.container-pod-divider-bottom-align-left {
+
           &:after {
-            width: (@grid-gutter-width-screen-small * 1.0);
-            left: -(@grid-gutter-width-screen-small * 1.0);
+
+            width: (@grid-container-fluid-gutter-width-screen-small * 1.0);
+            left: -(@grid-container-fluid-gutter-width-screen-small * 1.0);
+
           }
+
         }
 
         &.container-pod-divider-bottom-align-right {
+
           &:after {
-            width: (@grid-gutter-width-screen-small * 1.0);
-            right: -(@grid-gutter-width-screen-small * 1.0);
+
+            width: (@grid-container-fluid-gutter-width-screen-small * 1.0);
+            right: -(@grid-container-fluid-gutter-width-screen-small * 1.0);
+
           }
+
         }
+
       }
+
     }
+
   }
+
 }
 
-/* Screen Size: Medium (@screen-medium) and above */
+
+
+
+
+
 & when (@screen-medium-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Screen Size: Medium (@screen-medium) and above
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
   @media (min-width: @screen-medium) {
 
-    /* Container Pod */
+    /* -----------------------------------------------------------------------------
+    --------------------------------------------------------------------------------
+
+    Container Pod
+
+    --------------------------------------------------------------------------------
+    ----------------------------------------------------------------------------- */
+
     .container-pod {
+
       &.container-pod-divider-bottom {
+
         &.container-pod-divider-bottom-align-left {
+
           &:after {
-            width: (@grid-gutter-width-screen-medium * 1.0);
-            left: -(@grid-gutter-width-screen-medium * 1.0);
+
+            width: (@grid-container-fluid-gutter-width-screen-medium * 1.0);
+            left: -(@grid-container-fluid-gutter-width-screen-medium * 1.0);
+
           }
+
         }
 
         &.container-pod-divider-bottom-align-right {
+
           &:after {
-            width: (@grid-gutter-width-screen-medium * 1.0);
-            right: -(@grid-gutter-width-screen-medium * 1.0);
+
+            width: (@grid-container-fluid-gutter-width-screen-medium * 1.0);
+            right: -(@grid-container-fluid-gutter-width-screen-medium * 1.0);
+
           }
+
         }
+
       }
+
     }
+
   }
+
 }
 
-/* Screen Size: Large (@screen-large) and above */
+
+
+
+
+
 & when (@screen-large-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Screen Size: Large (@screen-large) and above
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
   @media (min-width: @screen-large) {
 
-    /* Container Pod */
+    /* -----------------------------------------------------------------------------
+    --------------------------------------------------------------------------------
+
+    Container Pod
+
+    --------------------------------------------------------------------------------
+    ----------------------------------------------------------------------------- */
+
     .container-pod {
+
       &.container-pod-divider-bottom {
+
         &.container-pod-divider-bottom-align-left {
+
           &:after {
-            width: (@grid-gutter-width-screen-large * 1.0);
-            left: -(@grid-gutter-width-screen-large * 1.0);
+
+            width: (@grid-container-fluid-gutter-width-screen-large * 1.0);
+            left: -(@grid-container-fluid-gutter-width-screen-large * 1.0);
+
           }
+
         }
 
         &.container-pod-divider-bottom-align-right {
+
           &:after {
-            width: (@grid-gutter-width-screen-large * 1.0);
-            right: -(@grid-gutter-width-screen-large * 1.0);
+
+            width: (@grid-container-fluid-gutter-width-screen-large * 1.0);
+            right: -(@grid-container-fluid-gutter-width-screen-large * 1.0);
+
           }
+
         }
+
       }
+
     }
+
   }
+
 }
