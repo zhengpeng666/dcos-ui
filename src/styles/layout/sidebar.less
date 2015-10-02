@@ -21,8 +21,8 @@ Sidebar Variables
 --------------------------------------------------------------------------------
 ----------------------------------------------------------------------------- */
 
-@sidebar-footer-image-source-width:                                             50px;
-@sidebar-footer-image-source-height:                                            36px;
+@sidebar-footer-image-source-width:                                             46px;
+@sidebar-footer-image-source-height:                                            33px;
 @sidebar-footer-image-scale:                                                    1.0;
 @sidebar-footer-image-scale-screen-small:                                       1.0;
 @sidebar-footer-image-scale-screen-medium:                                      1.0;
@@ -75,8 +75,8 @@ Sidebar
       padding: 3px;
       margin: 0 auto;
       display: block;
-      width: 64px + (3 * 2) + 1;
-      height: 64px + (3 * 2) + 1;
+      width: 64px + (3 * 2) + 2;
+      height: 64px + (3 * 2) + 2;
       background: @white;
       .border-radius(50%);
       overflow: hidden;
@@ -92,7 +92,6 @@ Sidebar
         overflow: hidden;
         margin-right: auto;
         margin-left: auto;
-        max-width: 100%;
 
       }
 
@@ -116,6 +115,7 @@ Sidebar
 
       display: flex;
       justify-content: center;
+      margin-top: @base-spacing-unit * 0.25;
 
       &:hover {
 
@@ -136,9 +136,21 @@ Sidebar
 
       .hostname {
 
-        padding: @base-spacing-unit * 0.1 @base-spacing-unit * 0.25;
-        margin-left: @base-spacing-unit;
+        margin-left: @icon-mini-width + (@base-spacing-unit * 0.25);
         color: @purple;
+
+      }
+
+      .sidebar-header-sublabel-action {
+
+        margin-left: @base-spacing-unit * 0.25;
+        vertical-align: center;
+
+        .icon {
+
+          vertical-align: text-bottom;
+
+        }
 
       }
 
@@ -150,12 +162,6 @@ Sidebar
           opacity: 1;
 
         }
-
-      }
-
-      :last-child {
-
-        margin-left: 0;
 
       }
 
@@ -345,13 +351,19 @@ Sidebar
     .sidebar-footer-image {
 
       display: block;
-      background: url("@{path-images}/layout/sidebar/sidebar-logo.png");
+      background-image: url("@{path-images}/layout/sidebar/sidebar-logo.png");
       .background-size(100% 100%);
       width: @sidebar-footer-image-source-width * @sidebar-footer-image-scale;
       height: @sidebar-footer-image-source-height * @sidebar-footer-image-scale;
       margin: 0 auto;
       margin-bottom: @base-spacing-unit * 0.15;
       .opacity(0.10);
+
+    }
+
+    p {
+
+      .opacity(0.5);
 
     }
 
@@ -483,6 +495,30 @@ Sidebar Open
 
         }
 
+
+
+        /* -----------------------------------------------------------------------------
+        Sidebar Header Label
+        ----------------------------------------------------------------------------- */
+
+        .sidebar-header-label {
+
+          display: none;
+
+        }
+
+
+
+        /* -----------------------------------------------------------------------------
+        Sidebar Header Sublabel
+        ----------------------------------------------------------------------------- */
+
+        .sidebar-header-sublabel {
+
+          display: none;
+
+        }
+
       }
 
 
@@ -603,9 +639,10 @@ Sidebar Open
 
         .sidebar-header-image {
 
-          width: @icon-medium-width + (3 * 2) + 1;
-          height: @icon-medium-height + (3 * 2) + 1;
+          width: @icon-medium-width + (3 * 2) + 2;
+          height: @icon-medium-height + (3 * 2) + 2;
           margin-bottom: 0px;
+          margin-left: -5px;
 
           .sidebar-header-image-inner {
 
@@ -623,8 +660,6 @@ Sidebar Open
         }
 
         .sidebar-header-sublabel {
-
-          display: none;
 
         }
 
@@ -776,9 +811,10 @@ Sidebar Open
 
         .sidebar-header-image {
 
-          width: 64px + (3 * 2) + 1;
-          height: 64px + (3 * 2) + 1;
+          width: 64px + (3 * 2) + 2;
+          height: 64px + (3 * 2) + 2;
           margin-bottom: (@base-spacing-unit-screen-medium * 0.25);
+          margin-left: auto;
 
           .sidebar-header-image-inner {
 
@@ -801,9 +837,28 @@ Sidebar Open
 
         }
 
+
+
+        /* -----------------------------------------------------------------------------
+        Sidebar Header Sub Label
+        ----------------------------------------------------------------------------- */
+
         .sidebar-header-sublabel {
 
           display: flex;
+          margin-top: @base-spacing-unit-screen-medium * 0.1;
+
+          .hostname {
+
+            margin-left: @icon-mini-width + (@base-spacing-unit-screen-medium * 0.1);
+
+          }
+
+          .sidebar-header-sublabel-action {
+
+            margin-left: @base-spacing-unit-screen-medium * 0.1;
+
+          }
 
         }
 
@@ -958,14 +1013,38 @@ Sidebar Open
 
         .sidebar-header-image {
 
-          width: 64px + (3 * 2) + 1;
-          height: 64px + (3 * 2) + 1;
+          width: 64px + (3 * 2) + 2;
+          height: 64px + (3 * 2) + 2;
           margin-bottom: (@base-spacing-unit-screen-large * 0.25);
 
           .sidebar-header-image-inner {
 
             width: 64px;
             height: 64px;
+
+          }
+
+        }
+
+
+
+        /* -----------------------------------------------------------------------------
+        Sidebar Header Sub Label
+        ----------------------------------------------------------------------------- */
+
+        .sidebar-header-sublabel {
+
+          margin-top: @base-spacing-unit-screen-large * 0.1;
+
+          .hostname {
+
+            margin-left: @icon-mini-width + (@base-spacing-unit-screen-large * 0.1);
+
+          }
+
+          .sidebar-header-sublabel-action {
+
+            margin-left: @base-spacing-unit-screen-large * 0.1;
 
           }
 
@@ -1051,7 +1130,7 @@ Sidebar Open
   --------------------------------------------------------------------------------
 
   Screen Resolution: 2x
-  
+
   --------------------------------------------------------------------------------
   ----------------------------------------------------------------------------- */
 
@@ -1075,7 +1154,7 @@ Sidebar Open
 
         .sidebar-footer-image {
 
-          background: url("@{path-images}/layout/sidebar/sidebar-logo@2x.png");
+          background-image: url("@{path-images}/layout/sidebar/sidebar-logo@2x.png");
 
         }
 

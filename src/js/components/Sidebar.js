@@ -181,12 +181,14 @@ var Sidebar = React.createClass({
     }
 
     return (
-      <div className="sidebar-header-sublabel flush-bottom"
-         title={data.metadata.PUBLIC_IPV4}>
-        <span className="hostname text-align-center text-overflow">
+      <div className="sidebar-header-sublabel"
+        title={data.metadata.PUBLIC_IPV4}>
+        <span className="hostname text-overflow">
           {data.metadata.PUBLIC_IPV4}
         </span>
-        {this.getFlashButton(data.metadata.PUBLIC_IPV4)}
+        <span className="sidebar-header-sublabel-action">
+          {this.getFlashButton(data.metadata.PUBLIC_IPV4)}
+        </span>
       </div>
     );
   },
