@@ -65,13 +65,13 @@ var HostTable = React.createClass({
   },
 
   renderStats: function (prop, node) {
-    let colorMapping = {
+    var colorMapping = {
       cpus: 1,
       mem: 2,
       disk: 3
     };
 
-    let value = node.getUsageStats(prop).percentage;
+    var value = node.getUsageStats(prop).percentage;
     return (
       <span className="spread-content">
         <ProgressBar value={value}
