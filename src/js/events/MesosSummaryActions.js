@@ -46,19 +46,11 @@ var MesosSummaryActions = {
         RequestUtil.json({
           url: url,
           success: function (response) {
-            if (Math.random() < 0.7) {
-              AppDispatcher.handleServerAction({
-                type: errorAction,
-                data: "fake response"
-              });
-              reject();
-            } else {
-              AppDispatcher.handleServerAction({
-                type: successAction,
-                data: response
-              });
-              resolve();
-            }
+            AppDispatcher.handleServerAction({
+              type: successAction,
+              data: response
+            });
+            resolve();
           },
           error: function (e) {
             registerServerError(e.message, errorAction);

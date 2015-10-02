@@ -147,7 +147,6 @@ var Index = React.createClass({
     this.setState({
       mesosSummaryErrorCount: this.state.mesosSummaryErrorCount + 1
     });
-    console.log("onMesosSummaryError", this.state.mesosSummaryErrorCount);
   },
 
   getLoadingScreen: function (showLoading, hasLoadingError) {
