@@ -129,7 +129,7 @@ var MesosSummaryStore = Store.createStore({
     return taskFailureRate;
   },
 
-  processSummary: function (data, {silent = false} = {}) {
+  processSummary: function (data, options = {}) {
     let states = this.get("states");
     let prevState = states.last();
 
@@ -143,7 +143,7 @@ var MesosSummaryStore = Store.createStore({
     var taskFailureRate = this.processFailureRate(states.last(), prevState);
     this.set({taskFailureRate});
 
-    if (silent === false) {
+    if (options.silent == null || options.silent === false) {
       this.notifySummaryProcessed();
     }
   },
@@ -156,11 +156,11 @@ var MesosSummaryStore = Store.createStore({
     });
   },
 
-  processSummaryError: function ({silent = false} = {}) {
+  processSummaryError: function (options = {}) {
     let unsuccessfulSummary = new StateSummary({successful: false});
     this.get("states").add(unsuccessfulSummary);
 
-    if (silent === false) {
+    if (options.silent == null || options.silent === false) {
       this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
     }
   },
