@@ -8,6 +8,7 @@ var GetSetMixin = require("../mixins/GetSetMixin");
 var MesosSummaryUtil = require("../utils/MesosSummaryUtil");
 var MesosSummaryActions = require("../events/MesosSummaryActions");
 var SummaryList = require("../structs/SummaryList");
+import StateSummary from "../structs/StateSummary";
 var Store = require("../utils/Store");
 var TimeScales = require("../constants/TimeScales");
 
@@ -128,10 +129,9 @@ var MesosSummaryStore = Store.createStore({
     return taskFailureRate;
   },
 
-  processSummary: function (data, options) {
+  processSummary: function (data, options = {}) {
     let states = this.get("states");
     let prevState = states.last();
-    options = _.defaults({}, options, {silent: false});
 
     if (typeof data.date !== "number") {
       data.date = Date.now();
@@ -143,7 +143,7 @@ var MesosSummaryStore = Store.createStore({
     var taskFailureRate = this.processFailureRate(states.last(), prevState);
     this.set({taskFailureRate});
 
-    if (options.silent === false) {
+    if (!options.silent) {
       this.notifySummaryProcessed();
     }
   },
@@ -156,12 +156,23 @@ var MesosSummaryStore = Store.createStore({
     });
   },
 
-  processSummaryError: function () {
-    this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
+  processSummaryError: function (options = {}) {
+    let unsuccessfulSummary = new StateSummary({successful: false});
+    this.get("states").add(unsuccessfulSummary);
+
+    if (!options.silent) {
+      this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
+    }
   },
 
   processOngoingRequest: function () {
     // Handle ongoing request here.
+  },
+
+  processBulkError: function () {
+    for (let i = 0; i < Config.historyLength; i++) {
+      MesosSummaryStore.processSummaryError({silent: true});
+    }
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -178,8 +189,10 @@ var MesosSummaryStore = Store.createStore({
         MesosSummaryStore.processBulkState(action.data);
         break;
       case ActionTypes.REQUEST_MESOS_SUMMARY_ERROR:
-      case ActionTypes.REQUEST_MESOS_HISTORY_ERROR:
         MesosSummaryStore.processSummaryError();
+        break;
+      case ActionTypes.REQUEST_MESOS_HISTORY_ERROR:
+        MesosSummaryStore.processBulkError();
         break;
       case ActionTypes.REQUEST_MESOS_SUMMARY_ONGOING:
       case ActionTypes.REQUEST_MESOS_HISTORY_ONGOING:
