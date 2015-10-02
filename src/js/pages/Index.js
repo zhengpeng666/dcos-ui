@@ -132,10 +132,6 @@ var Index = React.createClass({
 
   onMesosSummaryChange: function () {
     var state = getMesosState();
-    // if state is processed, stop listening
-    if (state.statesProcessed) {
-      this.removeMesosStateListeners();
-    }
 
     this.internalStorage_update(state);
 
@@ -151,33 +147,23 @@ var Index = React.createClass({
     this.setState({
       mesosSummaryErrorCount: this.state.mesosSummaryErrorCount + 1
     });
+    console.log("onMesosSummaryError", this.state.mesosSummaryErrorCount);
   },
 
-  getLoadingScreen: function (showLoading) {
-    if (!showLoading) {
+  getLoadingScreen: function (showLoading, hasLoadingError) {
+    if (!showLoading || hasLoadingError) {
       return null;
     }
 
-    var hasLoadingError = this.state.mesosSummaryErrorCount >= 3;
-    var errorMsg = null;
-    if (hasLoadingError) {
-      errorMsg = <RequestErrorMsg />;
+    return <AnimatedLogo speed={500} scale={0.16} />;
+  },
+
+  getErrorScreen: function (hasLoadingError) {
+    if (!hasLoadingError) {
+      return null;
     }
 
-    var loadingClassSet = classNames({
-      "hidden": hasLoadingError
-    });
-
-    return (
-      <div className="text-align-center vertical-center">
-        <div className="row">
-          <div className={loadingClassSet}>
-            <AnimatedLogo speed={500} scale={0.16} />
-          </div>
-          {errorMsg}
-        </div>
-      </div>
-    );
+    return <RequestErrorMsg />;
   },
 
   renderIntercom: function () {
@@ -194,9 +180,15 @@ var Index = React.createClass({
   render: function () {
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
+    let hasLoadingError = this.state.mesosSummaryErrorCount >= 3;
 
     var classSet = classNames({
       "canvas-sidebar-open": data.isOpen
+    });
+
+    var centerClassSet = classNames({
+      "text-align-center vertical-center": true,
+      "hidden": isReady && !hasLoadingError
     });
 
     this.renderIntercom();
@@ -205,7 +197,12 @@ var Index = React.createClass({
       <div>
         <a id="start-tour"></a>
         <div id="canvas" className={classSet}>
-          {this.getLoadingScreen(!isReady)}
+          <div className={centerClassSet}>
+            <div className="row">
+              {this.getErrorScreen(hasLoadingError)}
+              {this.getLoadingScreen(!isReady, hasLoadingError)}
+            </div>
+          </div>
           <Sidebar />
           <RouteHandler />
         </div>

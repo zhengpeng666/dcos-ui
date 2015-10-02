@@ -156,7 +156,12 @@ var MesosSummaryStore = Store.createStore({
   },
 
   processSummaryError: function (options = {}) {
-    let unsuccessfulSummary = new StateSummary({successful: false});
+    // use info from previous StateSummary so service information
+    // can continue to be displayed
+    let snapshot = _.clone(this.get("states").last().getSnapshot());
+    snapshot.date = Date.now();
+    let unsuccessfulSummary = new StateSummary({snapshot, successful: false});
+
     this.get("states").add(unsuccessfulSummary);
 
     if (!options.silent) {

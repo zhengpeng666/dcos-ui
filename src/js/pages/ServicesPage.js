@@ -42,6 +42,7 @@ function getMesosServices(state) {
 
   return {
     services: filteredServices,
+    successfulSnapshot: lastState.isSnapshotSuccessful(),
     totalServices: services.getItems().length,
     countByHealth: getCountByHealth(services.getItems()),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
@@ -97,6 +98,10 @@ var ServicesPage = React.createClass({
   componentDidMount: function () {
     MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
+      this.onMesosStateChange
+    );
+    MesosSummaryStore.addChangeListener(
+      EventTypes.MESOS_SUMMARY_REQUEST_ERROR,
       this.onMesosStateChange
     );
 
@@ -221,7 +226,7 @@ var ServicesPage = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-    var isEmpty = data.statesProcessed && data.totalServices === 0;
+    var isEmpty = data.statesProcessed && data.totalServices === 0 && data.successful;
 
     return (
       <Page title="Services">

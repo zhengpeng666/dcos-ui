@@ -24,7 +24,6 @@ export default class StateSummary {
     // Only place where we normalize server data
     // we may be able to remove this, but it needs testing
     snapshot.slaves = snapshot.slaves || [];
-    this.metadata.isEmpty = !options.snapshot;
     this.snapshot = snapshot;
 
     if (options.successful != null) {
@@ -47,6 +46,10 @@ export default class StateSummary {
 
   getSnapshotDate() {
     return this.metadata.date;
+  }
+
+  getSnapshot() {
+    return this.snapshot;
   }
 
   getClusterName() {
