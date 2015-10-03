@@ -66,7 +66,7 @@ var MesosSummaryActions = {
         });
       };
     },
-    {delayAfterCount: 3}
+    {delayAfterCount: Config.delayAfterErrorCount}
   )
 
 };

@@ -5,7 +5,8 @@ var Config = {
   historyServer: "",
   stateLoadDelay: 3000,
   stateRefresh: 2000,
-  version: "@@VERSION"
+  version: "@@VERSION",
+  delayAfterErrorCount: 5
 };
 
 Config.getRefreshRate = function () {

@@ -84,7 +84,7 @@ describe("RequestUtil", function () {
             });
           };
         },
-        {delayAfterCount: 4}
+        {delayAfterCount: Config.delayAfterErrorCount}
       );
 
     });
