@@ -40,7 +40,7 @@ export default class TaskSidePanel extends DetailSidePanel {
       <div>
         <span className="button button-link button-inverse"
           onClick={this.handlePanelClose}>
-          <i className="side-panel-detail-close"></i>
+          <i className="icon icon-small icon-back icon-small-white"></i>
           Back
         </span>
       </div>
