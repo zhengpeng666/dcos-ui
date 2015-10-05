@@ -2,18 +2,15 @@ import _ from "underscore";
 import classNames from "classnames";
 import React from "react/addons";
 
-import DateUtil from "../utils/DateUtil";
-import Maths from "../utils/Maths";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
-import Table from "./Table";
+import {Table} from "reactjs-components";
 import TaskStates from "../constants/TaskStates";
 import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
 import Units from "../utils/Units";
 
 const METHODS_TO_BIND = [
   "handleTaskClick",
-  "renderHeadline",
-  "renderUpdated"
+  "renderHeadline"
 ];
 
 export default class TaskTable extends React.Component {
@@ -31,78 +28,62 @@ export default class TaskTable extends React.Component {
     this.props.parentRouter.transitionTo(linkTo, {taskID});
   }
 
-  getTaskUpdatedTimestamp(task) {
-    let lastStatus = _.last(task.statuses);
-    return lastStatus && lastStatus.timestamp || null;
-  }
-
-  getSortFunction(title) {
-    return (prop) => {
-      return (task) => {
-        let value = task[prop];
-
-        if (prop === "cpus" || prop === "mem") {
-          return task.resources[prop];
-        }
-
-        if (prop === "updated") {
-          let updatedAt = this.getTaskUpdatedTimestamp(task);
-
-          if (updatedAt == null) {
-            return 0;
-          } else {
-            return updatedAt;
-          }
-        }
-
-        value = value.toString().toLowerCase();
-        title = title.toLowerCase();
-        return `${value}-${title}`;
-      };
-    };
-  }
-
   getColumns() {
+    var className = ResourceTableUtil.getClassName;
+    var heading = ResourceTableUtil.renderHeading(TaskTableHeaderLabels);
+    let propSortFunction = ResourceTableUtil.getPropSortFunction("name");
+    let statSortFunction = ResourceTableUtil.getStatSortFunction(
+      "name",
+      function (task, resource) {
+        return task.resources[resource];
+      }
+    );
+
     return [
       {
-        className: ResourceTableUtil.getClassName,
-        header: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        heading,
+        headerClassName: className,
         prop: "name",
         render: this.renderHeadline,
-        sortable: true
+        sortable: true,
+        sortFunction: propSortFunction
       },
       {
-        className: ResourceTableUtil.getClassName,
-        header: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        heading,
+        headerClassName: className,
         prop: "updated",
-        render: this.renderUpdated,
-        sortable: true
+        render: ResourceTableUtil.renderUpdated,
+        sortable: true,
+        sortFunction: propSortFunction
       },
       {
-        className: ResourceTableUtil.getClassName,
-        header: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        heading,
+        headerClassName: className,
         prop: "state",
         render: this.renderState,
-        sortable: true
+        sortable: true,
+        sortFunction: propSortFunction
       },
       {
-        className: ResourceTableUtil.getClassName,
-        header: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        heading,
+        headerClassName: className,
         prop: "cpus",
         render: this.renderStats,
-        sortable: true
+        sortable: true,
+        sortFunction: statSortFunction
       },
       {
-        className: ResourceTableUtil.getClassName,
-        header: ResourceTableUtil.renderHeader(TaskTableHeaderLabels),
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        heading,
+        headerClassName: className,
         prop: "mem",
         render: this.renderStats,
-        sortable: true
+        sortable: true,
+        sortFunction: statSortFunction
       }
     ];
   }
@@ -114,7 +95,7 @@ export default class TaskTable extends React.Component {
         <col />
         <col style={{width: "100px"}} />
         <col style={{width: "100px"}} />
-        <col style={{width: "100px"}} />
+        <col style={{width: "115px"}} />
       </colgroup>
     );
   }
@@ -156,31 +137,9 @@ export default class TaskTable extends React.Component {
   }
 
   renderStats(prop, task) {
-    let value = Maths.round(task.resources[prop], 2);
-
-    if (prop !== "cpus") {
-      value = Units.filesize(value / 1024, 1, null, null, ["GiB"]);
-    }
-
     return (
       <span>
-        {value}
-      </span>
-    );
-  }
-
-  renderUpdated(prop, task) {
-    let updatedAt = this.getTaskUpdatedTimestamp(task);
-
-    if (updatedAt == null) {
-      updatedAt = "NA";
-    } else {
-      updatedAt = DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
-    }
-
-    return (
-      <span>
-        {updatedAt}
+        {Units.formatResource(prop, task.resources[prop])}
       </span>
     );
   }
@@ -198,10 +157,10 @@ export default class TaskTable extends React.Component {
           flush-bottom"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
-        data={this.props.tasks.slice(0)}
+        data={this.props.tasks.slice()}
         keys={["id"]}
         sortBy={{prop: "name", order: "desc"}}
-        sortFunc={this.getSortFunction("name")} />
+        transition={false} />
     );
   }
 }

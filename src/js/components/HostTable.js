@@ -5,7 +5,7 @@ var React = require("react/addons");
 var HostTableHeaderLabels = require("../constants/HostTableHeaderLabels");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var ProgressBar = require("./charts/ProgressBar");
-var Table = require("./Table");
+import {Table} from "reactjs-components";
 var TooltipMixin = require("../mixins/TooltipMixin");
 
 var HostTable = React.createClass({
@@ -81,46 +81,61 @@ var HostTable = React.createClass({
   },
 
   getColumns: function () {
+    let className = ResourceTableUtil.getClassName;
+    let heading = ResourceTableUtil.renderHeading(HostTableHeaderLabels);
+    let propSortFunction = ResourceTableUtil.getPropSortFunction("hostname");
+    let statSortFunction = ResourceTableUtil.getStatSortFunction(
+      "hostname",
+      function (node, resource) {
+        return node.getUsageStats(resource).percentage;
+      }
+    );
+
     return [
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "hostname",
         render: this.renderHeadline,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(HostTableHeaderLabels)
+        sortFunction: propSortFunction,
+        heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "TASK_RUNNING",
         render: ResourceTableUtil.renderTask,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(HostTableHeaderLabels)
+        sortFunction: propSortFunction,
+        heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(HostTableHeaderLabels)
+        sortFunction: statSortFunction,
+        heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(HostTableHeaderLabels)
+        sortFunction: statSortFunction,
+        heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(HostTableHeaderLabels)
+        sortFunction: statSortFunction,
+        heading
       }
     ];
   },
@@ -131,7 +146,7 @@ var HostTable = React.createClass({
         <col />
         <col style={{width: "100px"}} />
         <col className="hidden-mini" style={{width: "100px"}} />
-        <col className="hidden-mini" style={{width: "100px"}} />
+        <col className="hidden-mini" style={{width: "115px"}} />
         <col className="hidden-mini" style={{width: "100px"}} />
       </colgroup>
     );
@@ -151,11 +166,11 @@ var HostTable = React.createClass({
         className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
-        data={this.props.hosts.slice(0)}
+        data={this.props.hosts.slice()}
         keys={["id"]}
         sortBy={{ prop: "hostname", order: "desc" }}
-        sortFunc={ResourceTableUtil.getSortFunction("hostname")}
-        buildRowOptions={this.getRowAttributes} />
+        buildRowOptions={this.getRowAttributes}
+        transition={false} />
     );
   }
 });

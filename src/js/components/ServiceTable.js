@@ -10,7 +10,7 @@ var HealthTypesDescription = require("../constants/HealthTypesDescription");
 var MarathonStore = require("../stores/MarathonStore");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var ServiceTableHeaderLabels = require("../constants/ServiceTableHeaderLabels");
-var Table = require("./Table");
+import {Table} from "reactjs-components";
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
 
@@ -125,54 +125,70 @@ var ServicesTable = React.createClass({
   },
 
   getColumns: function () {
+    let className = ResourceTableUtil.getClassName;
+    let heading = ResourceTableUtil.renderHeading(ServiceTableHeaderLabels);
+    let propSortFunction = ResourceTableUtil.getPropSortFunction("name");
+    let statSortFunction = ResourceTableUtil.getStatSortFunction(
+      "name",
+      function (service, resource) {
+        return service.getUsageStats(resource).value;
+      }
+    );
+
     return [
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "name",
         render: this.renderHeadline,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: propSortFunction,
+        heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "health",
         render: this.renderHealth,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: propSortFunction,
+        heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "TASK_RUNNING",
         render: ResourceTableUtil.renderTask,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: propSortFunction,
+        heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "cpus",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: statSortFunction,
+        heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "mem",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: statSortFunction,
+        heading
       },
       {
-        className: ResourceTableUtil.getClassName,
-        headerClassName: ResourceTableUtil.getClassName,
+        className,
+        headerClassName: className,
         prop: "disk",
         render: this.renderStats,
         sortable: true,
-        header: ResourceTableUtil.renderHeader(ServiceTableHeaderLabels)
+        sortFunction: statSortFunction,
+        heading
       }
     ];
   },
@@ -184,25 +200,23 @@ var ServicesTable = React.createClass({
         <col style={{width: "14%"}} />
         <col style={{width: "100px"}} />
         <col className="hidden-mini" style={{width: "100px"}} />
-        <col className="hidden-mini" style={{width: "100px"}} />
+        <col className="hidden-mini" style={{width: "115px"}} />
         <col className="hidden-mini" style={{width: "100px"}} />
       </colgroup>
     );
   },
 
   render: function () {
-    let marathonApps = MarathonStore.get("apps");
-
     return (
       <div>
         <Table
           className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
-          data={this.props.services.slice(0)}
+          data={this.props.services.slice()}
           keys={["id"]}
           sortBy={{prop: "name", order: "desc"}}
-          sortFunc={ResourceTableUtil.getSortFunction("name", {marathonApps})} />
+          transition={false} />
       </div>
     );
   }

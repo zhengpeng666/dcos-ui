@@ -5,6 +5,7 @@ jest.dontMock("../../stores/MarathonStore");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/RequestUtil");
+jest.dontMock("../../utils/ResourceTableUtil");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../stores/__tests__/fixtures/state.json");
 jest.dontMock("../../utils/Store");
@@ -24,10 +25,8 @@ MesosSummaryStore.init();
 MesosSummaryStore.processSummary(stateJSON);
 
 function getTable(isAppsProcessed) {
-  let last = MesosSummaryStore.get("states").last();
-  let services = last.getServiceList().getItems();
   return TestUtils.renderIntoDocument(
-    <ServiceTable services={services}
+    <ServiceTable services={[]}
       healthProcessed={isAppsProcessed} />
   );
 }

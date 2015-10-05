@@ -2,7 +2,7 @@ var ServiceTableHeaderLabels = {
   cpus: "CPU",
   disk: "DISK",
   health: "HEALTH",
-  mem: "MEM",
+  mem: "MEMORY",
   name: "SERVICE NAME",
   "TASK_RUNNING": "TASKS"
 };

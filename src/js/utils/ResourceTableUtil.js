@@ -4,6 +4,7 @@ const classNames = require("classnames");
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
+import DateUtil from "../utils/DateUtil";
 const HealthSorting = require("../constants/HealthSorting");
 const MarathonStore = require("../stores/MarathonStore");
 
@@ -11,57 +12,98 @@ function isStat(prop) {
   return _.contains(["cpus", "mem", "disk"], prop);
 }
 
+function compareValues(a, b) {
+  if (a > b) {
+    return 1;
+  } else if (a < b) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+function compareFunction(a, b, tieBreakerProp, aValue, bValue) {
+  if (aValue === bValue) {
+    return compareValues(a[tieBreakerProp], b[tieBreakerProp]);
+  }
+
+  return aValue - bValue;
+}
+
+function getUpdatedTimestamp(model) {
+  let lastStatus = _.last(model.statuses);
+  return lastStatus && lastStatus.timestamp || null;
+}
+
 var ResourceTableUtil = {
   getClassName: function (prop, sortBy, row) {
     return classNames({
-      "align-right": isStat(prop) || prop === "TASK_RUNNING",
+      "text-align-right": isStat(prop) || prop === "TASK_RUNNING",
       "hidden-mini": isStat(prop),
       "highlight": prop === sortBy.prop,
       "clickable": row == null // this is a header
     });
   },
 
-  getSortFunction: function (title) {
+  getStatSortFunction: function (baseProp, getResource) {
     return function (prop) {
-      if (isStat(prop)) {
-        return function (model) {
-          if (_.isArray(model.used_resources[prop])) {
-            return _.last(model.used_resources[prop]).value;
-          } else {
-            return model.used_resources[prop];
-          }
-        };
-      }
+      return function (a, b) {
+        let aValue = getResource(a, prop);
+        let bValue = getResource(b, prop);
 
-      return function (model) {
-        let value = model[prop];
-
-        if (prop === "health") {
-          let health = MarathonStore.getServiceHealth(model.name);
-          value = HealthSorting[health.key];
+        if (_.isArray(aValue)) {
+          aValue = _.last(aValue).value;
+          bValue = _.last(bValue).value;
         }
 
-        if (_.isNumber(value)) {
-          return value;
-        }
-
-        return value.toString().toLowerCase() + "-" + model[title].toLowerCase();
+        return compareFunction(a, b, baseProp, aValue, bValue);
       };
     };
   },
 
-  renderHeader: function (config) {
+  getPropSortFunction: function (baseProp) {
+    return function (prop) {
+      return function (a, b) {
+        let aValue = a[prop];
+        let bValue = b[prop];
+
+        if (prop === "updated") {
+          aValue = getUpdatedTimestamp(a) || 0;
+          bValue = getUpdatedTimestamp(b) || 0;
+        }
+
+        if (prop === "health") {
+          let aHealth = MarathonStore.getServiceHealth(a.name);
+          let bHealth = MarathonStore.getServiceHealth(b.name);
+          aValue = HealthSorting[aHealth.key];
+          bValue = HealthSorting[bHealth.key];
+        }
+
+        if (_.isNumber(aValue)) {
+          return compareFunction(a, b, baseProp, aValue, bValue);
+        }
+
+        aValue = aValue.toString().toLowerCase() + "-" +
+          a[baseProp].toLowerCase();
+        bValue = bValue.toString().toLowerCase() + "-" +
+          b[baseProp].toLowerCase();
+
+        return compareValues(aValue, bValue);
+      };
+    };
+  },
+
+  renderHeading: function (config) {
     return function (prop, order, sortBy) {
-      var title = config[prop];
-      var caret = {
+      let title = config[prop];
+      let caret = {
         before: null,
         after: null
       };
-      var caretClassSet = classNames({
-        "caret": true,
-        "dropup": order === "desc",
-        "invisible": prop !== sortBy.prop
-      });
+      let caretClassSet = classNames(
+        `caret caret--${order}`,
+        {"caret--visible": prop === sortBy.prop}
+      );
 
       if (isStat(prop) || prop === "TASK_RUNNING") {
         caret.before = <span className={caretClassSet} />;
@@ -77,6 +119,16 @@ var ResourceTableUtil = {
         </span>
       );
     };
+  },
+
+  renderUpdated: function (prop, model) {
+    let updatedAt = getUpdatedTimestamp(model);
+
+    if (updatedAt == null) {
+      return "N/A";
+    }
+
+    return DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
   },
 
   renderTask: function (prop, model) {
