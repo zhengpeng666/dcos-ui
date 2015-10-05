@@ -35,6 +35,18 @@ export default class TaskSidePanel extends DetailSidePanel {
     this.context.router.transitionTo(prevPath);
   }
 
+  getHeader() {
+    return (
+      <div>
+        <span className="button button-link button-inverse"
+          onClick={this.handlePanelClose}>
+          <i className="icon icon-small icon-back icon-small-white"></i>
+          Back
+        </span>
+      </div>
+    );
+  }
+
   getInfo(task) {
     if (task == null || !MesosSummaryStore.get("statesProcessed")) {
       return null;
