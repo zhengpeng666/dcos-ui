@@ -48,6 +48,10 @@ export default class StateSummary {
     return this.metadata.date;
   }
 
+  getSnapshot() {
+    return this.snapshot;
+  }
+
   getClusterName() {
     return this.snapshot.cluster;
   }
