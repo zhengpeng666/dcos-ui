@@ -32,7 +32,12 @@ export default class TaskTable extends React.Component {
     var className = ResourceTableUtil.getClassName;
     var heading = ResourceTableUtil.renderHeading(TaskTableHeaderLabels);
     let propSortFunction = ResourceTableUtil.getPropSortFunction("name");
-    let statSortFunction = ResourceTableUtil.getStatSortFunction("name");
+    let statSortFunction = ResourceTableUtil.getStatSortFunction(
+      "name",
+      function (task, resource) {
+        return task.resources[resource];
+      }
+    );
 
     return [
       {

@@ -84,7 +84,12 @@ var HostTable = React.createClass({
     let className = ResourceTableUtil.getClassName;
     let heading = ResourceTableUtil.renderHeading(HostTableHeaderLabels);
     let propSortFunction = ResourceTableUtil.getPropSortFunction("hostname");
-    let statSortFunction = ResourceTableUtil.getStatSortFunction("hostname");
+    let statSortFunction = ResourceTableUtil.getStatSortFunction(
+      "hostname",
+      function (node, resource) {
+        return node.getUsageStats(resource).percentage;
+      }
+    );
 
     return [
       {

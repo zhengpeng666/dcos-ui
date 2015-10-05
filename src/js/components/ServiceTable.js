@@ -128,7 +128,12 @@ var ServicesTable = React.createClass({
     let className = ResourceTableUtil.getClassName;
     let heading = ResourceTableUtil.renderHeading(ServiceTableHeaderLabels);
     let propSortFunction = ResourceTableUtil.getPropSortFunction("name");
-    let statSortFunction = ResourceTableUtil.getStatSortFunction("name");
+    let statSortFunction = ResourceTableUtil.getStatSortFunction(
+      "name",
+      function (service, resource) {
+        return service.getUsageStats(resource).value;
+      }
+    );
 
     return [
       {

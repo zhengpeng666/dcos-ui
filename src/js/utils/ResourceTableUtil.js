@@ -45,16 +45,11 @@ var ResourceTableUtil = {
     });
   },
 
-  getStatSortFunction: function (baseProp) {
+  getStatSortFunction: function (baseProp, getResource) {
     return function (prop) {
       return function (a, b) {
-        let resourceProp = "used_resources";
-        if (!a[resourceProp]) {
-          resourceProp = "resources";
-        }
-
-        let aValue = a[resourceProp][prop];
-        let bValue = b[resourceProp][prop];
+        let aValue = getResource(a, prop);
+        let bValue = getResource(b, prop);
 
         if (_.isArray(aValue)) {
           aValue = _.last(aValue).value;
