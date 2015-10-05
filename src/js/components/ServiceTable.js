@@ -200,7 +200,7 @@ var ServicesTable = React.createClass({
         <col style={{width: "14%"}} />
         <col style={{width: "100px"}} />
         <col className="hidden-mini" style={{width: "100px"}} />
-        <col className="hidden-mini" style={{width: "100px"}} />
+        <col className="hidden-mini" style={{width: "115px"}} />
         <col className="hidden-mini" style={{width: "100px"}} />
       </colgroup>
     );

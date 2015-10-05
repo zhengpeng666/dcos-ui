@@ -146,7 +146,7 @@ var HostTable = React.createClass({
         <col />
         <col style={{width: "100px"}} />
         <col className="hidden-mini" style={{width: "100px"}} />
-        <col className="hidden-mini" style={{width: "100px"}} />
+        <col className="hidden-mini" style={{width: "115px"}} />
         <col className="hidden-mini" style={{width: "100px"}} />
       </colgroup>
     );

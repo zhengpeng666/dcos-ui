@@ -2,7 +2,7 @@ var HostTableHeaderLabels = {
   cpus: "CPU",
   disk: "DISK",
   hostname: "HOSTNAME",
-  mem: "MEM",
+  mem: "MEMORY",
   "TASK_RUNNING": "TASKS"
 };
 
