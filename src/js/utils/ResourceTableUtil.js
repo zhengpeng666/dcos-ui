@@ -125,7 +125,7 @@ var ResourceTableUtil = {
     let updatedAt = getUpdatedTimestamp(model);
 
     if (updatedAt == null) {
-      return "NA";
+      return "N/A";
     }
 
     return DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
