@@ -48,7 +48,7 @@ describe("ResourceTableUtil", function () {
       expect(_.isFunction(this.sortFunction)).toEqual(true);
     });
 
-    it("should return the most recent timestamps when prop is updated",
+    it("should compare the most recent timestamps when prop is updated",
       function () {
         var sortPropFunction = this.sortFunction("updated");
         expect(sortPropFunction(this.foo, this.bar))
