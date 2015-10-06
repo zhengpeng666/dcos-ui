@@ -1,5 +1,6 @@
 import List from "./List";
 import MesosSummaryUtil from "../utils/MesosSummaryUtil";
+import ServicesList from "../structs/ServicesList";
 import StateSummary from "./StateSummary";
 
 export default class SummaryList extends List {
@@ -27,6 +28,17 @@ export default class SummaryList extends List {
         slavesCount: state.getActiveSlaves().length
       };
     });
+  }
+
+  getActiveServices() {
+    // finds last StateSummary with successful snapshot
+    let stateResources = this.getItems();
+    for (let i = stateResources.length - 1; i >= 0; i--) {
+      if (stateResources[i].isSnapshotSuccessful()) {
+        return stateResources[i].getServiceList();
+      }
+    }
+    return new ServicesList();
   }
 
   getResourceStatesForServiceIDs(ids) {
