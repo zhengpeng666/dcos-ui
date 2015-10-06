@@ -58,8 +58,12 @@ describe("SummaryList", function () {
     it("returns the services from the last successful snapshot", () => {
       let now = Date.now();
       let states = new SummaryList();
-      states.addSnapshot({frameworks: [{name: "framework 1"}, {name: "framework 2"}]}, now);
-      states.addSnapshot({frameworks: [{name: "framework 1"}, {name: "framework 2"}]}, now + 1);
+      states.addSnapshot({
+        frameworks: [{name: "framework 1"}, {name: "framework 2"}]
+      }, now);
+      states.addSnapshot({
+        frameworks: [{name: "framework 1"}, {name: "framework 2"}]
+      }, now + 1);
 
       let expectedServices = {
         list: [
