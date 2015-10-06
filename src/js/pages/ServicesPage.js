@@ -42,7 +42,6 @@ function getMesosServices(state) {
 
   return {
     services: filteredServices,
-    successfulSnapshot: lastState.isSnapshotSuccessful(),
     totalServices: services.getItems().length,
     countByHealth: getCountByHealth(services.getItems()),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
@@ -226,7 +225,7 @@ var ServicesPage = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-    var isEmpty = data.statesProcessed && data.totalServices === 0 && data.successful;
+    var isEmpty = data.statesProcessed && data.totalServices === 0;
 
     return (
       <Page title="Services">
