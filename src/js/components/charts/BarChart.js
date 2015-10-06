@@ -285,12 +285,12 @@ var BarChart = React.createClass({
     }
 
     return _.map(data.stackedData, function (service) {
+      let rectWidth = (chartWidth - marginLeft - marginRight) / (valuesLength - 1);
 
       return _.map(service.values, function (val, j) {
         let rectHeight, colorClass;
         let barMargin = 0;
         let shapeRendering = "auto";
-        let rectWidth = (chartWidth - marginLeft - marginRight) / (valuesLength - 1);
         let posX = chartWidth - marginLeft - marginRight - rectWidth * (valuesLength - 1 - j);
 
         if (!val.isSuccessfulSnapshot) {
@@ -302,7 +302,7 @@ var BarChart = React.createClass({
 
         } else {
           rectHeight = props.height * val[y] / props.maxY - peaklineHeight;
-          colorClass = "path-color-" + service.colorIndex;
+          colorClass = `path-color-${service.colorIndex}`;
 
           // Will increase the margin between bars as they become smaller
           // to make it visually easier to parse
