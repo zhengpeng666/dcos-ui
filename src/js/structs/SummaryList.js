@@ -29,6 +29,17 @@ export default class SummaryList extends List {
     });
   }
 
+  getActiveServices() {
+    // finds last StateSummary with successful snapshot
+    let stateResources = this.getItems();
+    for (let i = stateResources.length - 1; i >= 0; i--) {
+      if (stateResources[i].isSnapshotSuccessful()) {
+        return stateResources[i].getServiceList();
+      }
+    }
+    return null;
+  }
+
   getResourceStatesForServiceIDs(ids) {
     let stateResources = this.getItems().map(function (state) {
       return {
