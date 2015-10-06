@@ -33,7 +33,7 @@ function getCountByHealth(frameworks) {
 function getMesosServices(state) {
   let filters = _.pick(state, "searchString", "healthFilter");
   let states = MesosSummaryStore.get("states");
-  let services = states.getActiveServices();
+  let services = states.last().getServiceList();
   let filteredServices = services.filter({
     health: filters.healthFilter,
     name: filters.searchString
