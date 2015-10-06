@@ -11,4 +11,14 @@ describe("Service", function () {
 
   });
 
+  describe("#getUsageStats", function () {
+
+    it("returns an object containing the value for the resource", function () {
+      let service = new Service({used_resources: {cpus: 1, mem: 512}});
+      expect(service.getUsageStats("cpus").value).toEqual(1);
+      expect(service.getUsageStats("mem").value).toEqual(512);
+    });
+
+  });
+
 });
