@@ -53,6 +53,57 @@ describe("SummaryList", function () {
 
   });
 
+  describe("#getActiveServices", function () {
+
+    it("returns the services from the last successful snapshot", function () {
+      let now = Date.now();
+      let states = new SummaryList();
+      states.addSnapshot({
+        frameworks: [{name: "framework 1-1"}, {name: "framework 1-2"}]
+      }, now);
+      states.addSnapshot({
+        frameworks: [{name: "framework 2-1"}, {name: "framework 2-2"}]
+      }, now + 1);
+
+      let expectedServices = {
+        list: [
+          {name: "framework 2-1", _itemData: {name: "framework 2-1"}},
+          {name: "framework 2-2", _itemData: {name: "framework 2-2"}}
+        ]
+      };
+      expect(states.getActiveServices()).toEqual(expectedServices);
+    });
+
+    it(`returns the services from the last successful snapshot if
+        the latest snapshot is unsuccessful`, function () {
+      let now = Date.now();
+      let states = new SummaryList();
+      states.addSnapshot({
+        frameworks: [{name: "framework 1-1"}, {name: "framework 1-2"}]
+      }, now);
+      states.add(new StateSummary({successful: false, date: now + 1}));
+
+      let expectedServices = {
+        list: [
+          {name: "framework 1-1", _itemData: {name: "framework 1-1"}},
+          {name: "framework 1-2", _itemData: {name: "framework 1-2"}}
+        ]
+      };
+      expect(states.getActiveServices()).toEqual(expectedServices);
+    });
+
+    it("returns empty ServicesList if no successful snapshot found", function () {
+      let now = Date.now();
+      let states = new SummaryList();
+      states.add(new StateSummary({successful: false, date: now}));
+      states.add(new StateSummary({successful: false, date: now + 1}));
+
+      let expectedServices = {list: []};
+      expect(states.getActiveServices()).toEqual(expectedServices);
+    });
+
+  });
+
   describe("#getResourceStatesForServiceIDs", function () {
 
     beforeEach(function () {
