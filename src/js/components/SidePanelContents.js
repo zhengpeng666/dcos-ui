@@ -4,13 +4,11 @@ import React from "react/addons";
 import BarChart from "./charts/BarChart";
 import Chart from "./charts/Chart";
 import Config from "../config/Config";
-import EventTypes from "../constants/EventTypes";
 import InternalStorageMixin from "../mixins/InternalStorageMixin";
-import MarathonStore from "../stores/MarathonStore";
-import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import ResourceTypes from "../constants/ResourceTypes";
 import TabsMixin from "../mixins/TabsMixin";
+import StoreMixin from "../mixins/StoreMixin";
 import Units from "../utils/Units";
 import Util from "../utils/Util";
 
@@ -21,41 +19,8 @@ const METHODS_TO_BIND = [
   "onStoreChange"
 ];
 
-const ListenersDescription = {
-  summary: {
-    store: MesosSummaryStore,
-    event: EventTypes.MESOS_SUMMARY_CHANGE,
-    unmountWhen: function (store) {
-      return store.get("statesProcessed");
-    }
-  },
-  state: {
-    store: MesosStateStore,
-    event: EventTypes.MESOS_STATE_CHANGE,
-    unmountWhen: function (store) {
-      return Object.keys(store.get("lastMesosState")).length;
-    }
-  },
-  marathon: {
-    store: MarathonStore,
-    event: EventTypes.MARATHON_APPS_CHANGE,
-    unmountWhen: function (store) {
-      return store.hasProcessedApps();
-    }
-  }
-};
-
-function changeListeners(listeners, changeListener) {
-  Object.keys(listeners).forEach(function (listener) {
-    let store = listeners[listener];
-    store.store[changeListener](
-      store.event, this.onStoreChange
-    );
-  }, this);
-}
-
 export default class SidePanelContents extends
-  Util.mixin(InternalStorageMixin, TabsMixin) {
+  Util.mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
   constructor() {
     super(...arguments);
 
