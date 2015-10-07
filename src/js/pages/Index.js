@@ -5,6 +5,7 @@ var RouteHandler = require("react-router").RouteHandler;
 
 var AnimatedLogo = require("../components/AnimatedLogo");
 var Actions = require("../actions/Actions");
+var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
 import HistoryStore from "../stores/HistoryStore";
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
@@ -179,7 +180,7 @@ var Index = React.createClass({
   render: function () {
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
-    let hasLoadingError = this.state.mesosSummaryErrorCount >= 3;
+    let hasLoadingError = this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount;
 
     var classSet = classNames({
       "canvas-sidebar-open": data.isOpen
