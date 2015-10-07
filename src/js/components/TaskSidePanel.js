@@ -53,7 +53,7 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     let node = MesosStateStore.getNodeFromID(task.slave_id);
-    let services = MesosSummaryStore.get("states").last().getServiceList();
+    let services = MesosSummaryStore.get("states").getActiveServices();
     let service = services.filter({ids: [task.framework_id]}).last();
 
     let headerValueMapping = {

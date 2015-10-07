@@ -37,10 +37,10 @@ function getMesosHosts(state) {
     nodes: filteredNodes,
     totalNodes: nodes.getItems().length,
     refreshRate: Config.getRefreshRate(),
-    services: lastState.getServiceList().getItems(),
+    services: states.getActiveServices().getItems(),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
     totalHostsResources: states.getResourceStatesForNodeIDs(nodeIDs),
-    totalResources: states.last().getSlaveTotalResources()
+    totalResources: lastState.getSlaveTotalResources()
   };
 }
 
