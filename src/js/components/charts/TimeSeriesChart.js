@@ -57,7 +57,8 @@ var TimeSeriesChart = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set({
-      clipPathID: _.uniqueId("clip")
+      clipPathID: _.uniqueId("clip"),
+      maskID: _.uniqueId("mask")
     });
   },
 
@@ -65,9 +66,12 @@ var TimeSeriesChart = React.createClass({
     var props = this.props;
     var height = this.getHeight(props);
     var width = this.getWidth(props);
+    var maskID = this.internalStorage_get().maskID;
 
     this.renderAxis(props, width, height);
     this.createClipPath(width, height);
+
+    this.refs.masking.getDOMNode().setAttribute("mask", "url(#" + maskID + ")");
   },
 
   shouldComponentUpdate: function (nextProps) {
@@ -92,14 +96,19 @@ var TimeSeriesChart = React.createClass({
     var prevY = _.pluck(prevVal, props.y);
     var nextY = _.pluck(nextVal, props.y);
 
-    return !_.isEqual(prevY, nextY);
+    var prevSuccess = _.pluck(prevVal, "isSuccessfulSnapshot");
+    var nextSuccess = _.pluck(nextVal, "isSuccessfulSnapshot");
+
+    return !_.isEqual(prevY, nextY) || !_.isEqual(prevSuccess, nextSuccess);
   },
 
   componentDidUpdate: function () {
     var props = this.props;
     var height = this.getHeight(props);
     var width = this.getWidth(props);
+    var xTimeScale = this.getXTimeScale(props.data, width);
 
+    this.createUnsuccessfulBlocks(_.first(props.data).values, xTimeScale);
     this.updateClipPath(width, height);
   },
 
@@ -115,6 +124,37 @@ var TimeSeriesChart = React.createClass({
         .append("rect");
 
     this.updateClipPath(width, height);
+  },
+
+  createUnsuccessfulBlocks: function (data, xTimeScale) {
+    var transitionTime = this.getTransitionTime(data);
+    var nextY = this.getNextXPosition(data, xTimeScale, transitionTime);
+    var props = this.props;
+    var width = props.width / 31;
+    var height = props.height;
+    var maskDef = this.refs.maskDef.getDOMNode();
+
+    d3.select(maskDef).selectAll(".unsuccessfulBlock").remove();
+
+    data.forEach(function (obj) {
+      if (obj.isSuccessfulSnapshot === false) {
+        var x = xTimeScale(obj.date);
+        d3.select(maskDef)
+          .append("rect")
+          .attr({
+            width,
+            height,
+            x,
+            y: 0,
+            fill: "black",
+            class: "unsuccessfulBlock"
+          })
+          .transition()
+          .duration(props.refreshRate)
+          .ease("linear")
+          .attr("transform", "translate(" + -nextY + ", 0)");
+      }
+    });
   },
 
   updateClipPath: function (width, height) {
@@ -280,7 +320,6 @@ var TimeSeriesChart = React.createClass({
   getAreaList: function (props, yScale, xTimeScale) {
     var area = this.getArea(props.y, xTimeScale, yScale);
     var valueLine = this.getValueLine(xTimeScale, yScale);
-
     return _.map(props.data, function (obj, i) {
       var transitionTime = this.getTransitionTime(obj.values);
       var nextY = this.getNextXPosition(obj.values, xTimeScale, transitionTime);
@@ -380,11 +419,16 @@ var TimeSeriesChart = React.createClass({
 
         <svg height={props.height} width={props.width} ref="movingEls" className="moving-elements">
           <g transform={"translate(" + margin.left + "," + margin.top + ")"}>
-            <g clipPath={clipPath}>
+            <g ref="masking" clipPath={clipPath}>
               {this.getAreaList(props, yScale, xTimeScale)}
             </g>
             {this.getCircleList(props, yScale, width, height)}
           </g>
+          <defs>
+            <mask ref="maskDef" id={store.maskID}>
+              <rect x="0" y="0" width={width} height={height} fill="white" />
+            </mask>
+          </defs>
         </svg>
       </div>
     );

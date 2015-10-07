@@ -82,6 +82,10 @@ var DashboardPage = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
+    MesosSummaryStore.addChangeListener(
+      EventTypes.MESOS_SUMMARY_REQUEST_ERROR,
+      this.onMesosStateChange
+    );
     MarathonStore.addChangeListener(
       EventTypes.MARATHON_APPS_CHANGE,
       this.onMarathonStateChange
@@ -103,6 +107,10 @@ var DashboardPage = React.createClass({
   componentWillUnmount: function () {
     MesosSummaryStore.removeChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
+      this.onMesosStateChange
+    );
+    MesosSummaryStore.removeChangeListener(
+      EventTypes.MESOS_SUMMARY_REQUEST_ERROR,
       this.onMesosStateChange
     );
     MarathonStore.removeChangeListener(
