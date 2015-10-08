@@ -36,7 +36,7 @@ describe("ServiceTable", function () {
   describe("#renderHealth", function () {
 
     beforeEach(function () {
-      this.services = MesosSummaryStore.get("states").getActiveState().getServiceList().getItems();
+      this.services = MesosSummaryStore.get("states").lastSuccessful().getServiceList().getItems();
     });
 
     it("should have loaders on all services", function () {

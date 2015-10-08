@@ -24,7 +24,7 @@ var NODES_DISPLAY_LIMIT = 300;
 
 function getMesosHosts(state) {
   let states = MesosSummaryStore.get("states");
-  let lastState = states.getActiveState();
+  let lastState = states.lastSuccessful();
   let nodes = lastState.getNodesList();
   let filters = _.pick(state, "searchString", "byServiceFilter");
   let filteredNodes = nodes.filter({
@@ -37,7 +37,7 @@ function getMesosHosts(state) {
     nodes: filteredNodes,
     totalNodes: nodes.getItems().length,
     refreshRate: Config.getRefreshRate(),
-    services: states.getActiveState().getServiceList().getItems(),
+    services: states.lastSuccessful().getServiceList().getItems(),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
     totalHostsResources: states.getResourceStatesForNodeIDs(nodeIDs),
     totalResources: lastState.getSlaveTotalResources()

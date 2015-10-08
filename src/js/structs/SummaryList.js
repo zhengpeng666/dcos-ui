@@ -29,7 +29,7 @@ export default class SummaryList extends List {
     });
   }
 
-  getActiveState() {
+  lastSuccessful() {
     // finds last StateSummary with successful snapshot
     let stateResources = this.getItems();
     for (let i = stateResources.length - 1; i >= 0; i--) {

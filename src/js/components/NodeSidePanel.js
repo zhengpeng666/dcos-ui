@@ -121,7 +121,7 @@ export default class NodeSidePanel extends DetailSidePanel {
 
   getContents() {
     let nodeID = this.props.itemID;
-    let last = MesosSummaryStore.get("states").getActiveState();
+    let last = MesosSummaryStore.get("states").lastSuccessful();
     let node = last.getNodesList().filter({ids: [nodeID]}).last();
 
     if (node == null) {

@@ -84,7 +84,7 @@ describe("SummaryList", function () {
           slaveTotalResources: { cpus: 0, mem: 0, disk: 0 } }
         };
 
-      expect(states.getActiveState()).toEqual(expectedState);
+      expect(states.lastSuccessful()).toEqual(expectedState);
     });
 
     it("gets last successful state if latest is unsuccessful", function () {
@@ -108,7 +108,7 @@ describe("SummaryList", function () {
           slaveTotalResources: { cpus: 0, mem: 0, disk: 0 } }
         };
 
-      expect(states.getActiveState()).toEqual(expectedState);
+      expect(states.lastSuccessful()).toEqual(expectedState);
     });
 
     it("returns empty state if no successful snapshot found", function () {
@@ -116,7 +116,7 @@ describe("SummaryList", function () {
       states.add(new StateSummary({successful: false, date: this.now}));
       states.add(new StateSummary({successful: false, date: this.now + 1}));
 
-      expect(states.getActiveState().metadata.successfulSnapshot).toEqual(false);
+      expect(states.lastSuccessful().metadata.successfulSnapshot).toEqual(false);
     });
 
   });
