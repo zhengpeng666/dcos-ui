@@ -21,7 +21,7 @@ import TaskSidePanel from "../components/TaskSidePanel";
 
 function getMesosState() {
   let states = MesosSummaryStore.get("states");
-  let last = states.last();
+  let last = states.getActiveState();
 
   return {
     // Need clone, modifying in place will make update components check for
@@ -29,7 +29,7 @@ function getMesosState() {
     taskFailureRate: _.clone(MesosSummaryStore.get("taskFailureRate")),
     hostsCount: states.getActiveNodesByState(),
     refreshRate: Config.getRefreshRate(),
-    services: states.getActiveServices(),
+    services: states.getActiveState().getServiceList(),
     usedResourcesStates: states.getResourceStatesForNodeIDs(),
     usedResources: last.getSlaveUsedResources(),
     totalResources: last.getSlaveTotalResources(),

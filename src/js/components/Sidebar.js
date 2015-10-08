@@ -37,7 +37,7 @@ var Sidebar = React.createClass({
     MetadataActions.fetch();
 
     this.internalStorage_set({
-      mesosInfo: MesosSummaryStore.get("states").last(),
+      mesosInfo: MesosSummaryStore.get("states").getActiveState(),
       metadata: MetadataStore.get("metadata")
     });
   },
@@ -87,7 +87,7 @@ var Sidebar = React.createClass({
 
   onMesosStateChange: function () {
     this.internalStorage_update({
-      mesosInfo: MesosSummaryStore.get("states").last()
+      mesosInfo: MesosSummaryStore.get("states").getActiveState()
     });
     this.forceUpdate();
 
