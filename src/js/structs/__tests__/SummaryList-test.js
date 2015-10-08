@@ -53,7 +53,7 @@ describe("SummaryList", function () {
 
   });
 
-  describe("#getActiveServices", function () {
+  describe("#getActiveState", function () {
 
     beforeEach(function () {
       this.now = Date.now();
@@ -63,44 +63,60 @@ describe("SummaryList", function () {
       this.service4 = {name: "service 4"};
     });
 
-    it("returns the services from the last successful snapshot", function () {
+    it("returns the last successful snapshot", function () {
       let states = new SummaryList();
       states.addSnapshot({frameworks: [this.service1, this.service2]}, this.now);
       states.addSnapshot({frameworks: [this.service3, this.service4]}, this.now + 1);
 
-      let expectedServices = {
-        list: [
-          {name: "service 3", _itemData: {name: "service 3"}},
-          {name: "service 4", _itemData: {name: "service 4"}}
-        ]
-      };
+      let expectedState = {
+        snapshot: {
+          frameworks: [
+            {name: "service 3"},
+            {name: "service 4"}
+          ],
+          slaves: []
+        },
+        metadata: {
+          date: this.now + 1,
+          successfulSnapshot: true,
+          serviceUsedResources: { cpus: 0, mem: 0, disk: 0 },
+          slaveUsedResources: { cpus: 0, mem: 0, disk: 0 },
+          slaveTotalResources: { cpus: 0, mem: 0, disk: 0 } }
+        };
 
-      expect(states.getActiveServices()).toEqual(expectedServices);
+      expect(states.getActiveState()).toEqual(expectedState);
     });
 
-    it("gets services of last successful state if latest is unsuccessful", function () {
+    it("gets last successful state if latest is unsuccessful", function () {
       let states = new SummaryList();
       states.addSnapshot({frameworks: [this.service1, this.service2]}, this.now);
       states.add(new StateSummary({successful: false, date: this.now + 1}));
 
-      let expectedServices = {
-        list: [
-          {name: "service 1", _itemData: {name: "service 1"}},
-          {name: "service 2", _itemData: {name: "service 2"}}
-        ]
-      };
+      let expectedState = {
+        snapshot: {
+          frameworks: [
+            {name: "service 1"},
+            {name: "service 2"}
+          ],
+          slaves: []
+        },
+        metadata: {
+          date: this.now,
+          successfulSnapshot: true,
+          serviceUsedResources: { cpus: 0, mem: 0, disk: 0 },
+          slaveUsedResources: { cpus: 0, mem: 0, disk: 0 },
+          slaveTotalResources: { cpus: 0, mem: 0, disk: 0 } }
+        };
 
-      expect(states.getActiveServices()).toEqual(expectedServices);
+      expect(states.getActiveState()).toEqual(expectedState);
     });
 
-    it("returns empty ServicesList if no successful snapshot found", function () {
+    it("returns empty state if no successful snapshot found", function () {
       let states = new SummaryList();
       states.add(new StateSummary({successful: false, date: this.now}));
       states.add(new StateSummary({successful: false, date: this.now + 1}));
 
-      let expectedServices = {list: []};
-
-      expect(states.getActiveServices()).toEqual(expectedServices);
+      expect(states.getActiveState().metadata.successfulSnapshot).toEqual(false);
     });
 
   });
