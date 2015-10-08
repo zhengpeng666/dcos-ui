@@ -185,19 +185,25 @@ For example we want to test that when an slave fails in a cluster, the UI visual
   cypress open
   ```
 
-This should show a new icon on your desktop menu bar.
-![img](../master/docs/images/cypress-desktop-icon.png?raw=true)
+  This should show a new icon on your desktop menu bar.
+
+  ![img](../../../../../../../mesosphere/dcos-ui/blob/master/docs/images/cypress-desktop-icon.png?raw=true)
 
 4. Login with Github
-Click on the icon on your desktop menu bar and login.
-![img](../master/docs/images/cypress-login.png?raw=true)
+
+  Click on the icon on your desktop menu bar and login.
+
+  ![img](../../../../../../../mesosphere/dcos-ui/blob/master/docs/images/cypress-login.png?raw=true)
 
 5. Add project to Cypress app
-Once you've logged in click on the plus button and add the `dcos-ui` folder.
-![img](../master/docs/images/cypress-no-projects.png?raw=true)
+
+  Once you've logged in click on the plus button and add the `dcos-ui` folder.
+
+  ![img](../../../../../../../mesosphere/dcos-ui/blob/master/docs/images/cypress-no-projects.png?raw=true)
 
 6. Once the project is added click on it to start the server
-![img](../master/docs/images/cypress-project.png?raw=true)
-![img](../master/docs/images/cypress-server-running.png?raw=true)
+
+  ![img](../../../../../../../mesosphere/dcos-ui/blob/master/docs/images/cypress-project.png?raw=true)
+  ![img](../../../../../../../mesosphere/dcos-ui/blob/master/docs/images/cypress-server-running.png?raw=true)
 
 7. Ask someone on the team to teach all about writing integration tests.
