@@ -174,7 +174,7 @@ var NodesPage = React.createClass({
 
   getViewTypeRadioButtons: function (resetFilter) {
     var buttonClasses = {
-      "button button-small button-stroke button-inverse": true
+      "button button-stroke button-inverse": true
     };
 
     var listClassSet = classNames(_.extend({

@@ -59,7 +59,7 @@ export default class FilterByTaskState extends React.Component {
   render() {
     return (
       <Dropdown
-        buttonClassName="button button-small dropdown-toggle text-align-left"
+        buttonClassName="button dropdown-toggle text-align-left"
         dropdownMenuClassName="
           dropdown-menu
           dropdown-menu-space-bottom
