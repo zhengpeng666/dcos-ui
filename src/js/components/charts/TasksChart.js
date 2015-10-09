@@ -58,7 +58,7 @@ var TasksChart = React.createClass({
       var classSet = classNames(classes);
       return (
         <div key={key} className={classSet}>
-          <p className="h1 unit flush-top">
+          <p className="h1 unit inverse flush-top">
             {task.value}
           </p>
           <p className={"unit-label path-color-" + info.colorIndex}>
