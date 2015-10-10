@@ -54,7 +54,7 @@ export default class TaskSidePanel extends DetailSidePanel {
       <div>
         <span className="button button-link button-inverse"
           onClick={this.handlePanelClose}>
-          <i className="icon icon-small icon-back icon-small-white"></i>
+          <i className="icon icon-sprite icon-sprite-small icon-back icon-sprite-small-white"></i>
           Back
         </span>
       </div>
@@ -130,9 +130,9 @@ export default class TaskSidePanel extends DetailSidePanel {
 
     return (
       <div className="side-panel-content-header">
-        <h2 className="side-panel-content-header-label inverse flush-top">
+        <h1 className="side-panel-content-header-label flush">
           {task.name}
-        </h2>
+        </h1>
         {TaskStates[task.state].displayName}
       </div>
     );

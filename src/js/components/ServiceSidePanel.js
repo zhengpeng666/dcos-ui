@@ -113,9 +113,8 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let appImages = MarathonStore.getServiceImages(service.name);
     if (appImages && appImages["icon-large"]) {
       imageTag = (
-        <div className="side-panel-icon icon-inset-border icon-rounded">
-          <img className="icon icon-image icon-rounded"
-            src={appImages["icon-large"]} />
+        <div className="side-panel-icon icon icon-large icon-image-container icon-app-container">
+          <img src={appImages["icon-large"]} />
         </div>
       );
     }
@@ -129,9 +128,9 @@ export default class ServiceSidePanel extends DetailSidePanel {
         flex-box-align-vertical-center">
         {imageTag}
         <div className={containerClassSet}>
-          <h2 className="side-panel-content-header-label inverse flush-top">
+          <h1 className="side-panel-content-header-label flush">
             {service.name}
-          </h2>
+          </h1>
           <div>
             {this.getSubHeader(service)}
           </div>
@@ -165,7 +164,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let tasks = MesosStateStore.getTasksFromServiceName(serviceName);
 
     return (
-      <div className="container container-pod flush-top">
+      <div className="container container-pod container-pod-short-top">
         <TaskView tasks={tasks} parentRouter={this.context.router} />
       </div>
     );
@@ -194,8 +193,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
     return (
       <div>
         <div className="container container-pod container-pod-divider-bottom
-            container-pod-divider-inverse container-pod-short-top
-            flush-bottom">
+            container-pod-divider-inverse flush-bottom">
           {this.getBasicInfo()}
           <div className="container container-pod container-pod-short flush-left
               flush-bottom flush-right">

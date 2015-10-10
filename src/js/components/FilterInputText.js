@@ -54,14 +54,14 @@ var FilterInputText = React.createClass({
     });
 
     var clearIconClasses = classNames({
-      "icon icon-mini icon-close": true,
-      "icon-mini-white": this.props.inverseStyle
+      "icon icon-sprite icon-sprite-mini icon-close": true,
+      "icon-sprite-mini-white": this.props.inverseStyle
     });
 
     var iconSearchClasses = classNames({
-      "icon icon-mini icon-search": true,
-      "icon-mini-white": this.props.inverseStyle,
-      "icon-mini-color": !this.props.inverseStyle && this.state.focus,
+      "icon icon-sprite icon-sprite-mini icon-search": true,
+      "icon-sprite-mini-white": this.props.inverseStyle,
+      "icon-sprite-mini-color": !this.props.inverseStyle && this.state.focus,
       "active": this.state.focus
     });
 

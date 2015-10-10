@@ -216,9 +216,9 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
         container-pod-super-short
         flush-top">
         <div>
-          <h2 className="flush-top flush-bottom text-color-neutral">
+          <h3 className="flush-top flush-bottom text-color-neutral">
             {resourceValue}
-          </h2>
+          </h3>
           <span className={`text-color-${colorIndex}`}>
             {resourceLabel.toUpperCase()}
           </span>

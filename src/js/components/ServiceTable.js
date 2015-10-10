@@ -55,8 +55,9 @@ var ServicesTable = React.createClass({
 
     if (appImages) {
       imageTag = (
-        <img className="icon icon-small border-radius"
-          src={appImages["icon-small"]} />
+        <span className="icon icon-small icon-image-container icon-app-container">
+          <img src={appImages["icon-small"]} />
+        </span>
       );
     }
 
@@ -67,7 +68,7 @@ var ServicesTable = React.createClass({
           {imageTag}
         </Link>
         <Link to="services-panel"
-          className="headline emphasize"
+          className="headline"
           params={{serviceName: service.name}}>
           {service[prop]}
         </Link>
@@ -199,9 +200,9 @@ var ServicesTable = React.createClass({
         <col />
         <col style={{width: "14%"}} />
         <col style={{width: "100px"}} />
-        <col className="hidden-mini" style={{width: "100px"}} />
-        <col className="hidden-mini" style={{width: "115px"}} />
-        <col className="hidden-mini" style={{width: "100px"}} />
+        <col className="hidden-mini" style={{width: "120px"}} />
+        <col className="hidden-mini" style={{width: "120px"}} />
+        <col className="hidden-mini" style={{width: "120px"}} />
       </colgroup>
     );
   },

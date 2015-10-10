@@ -147,7 +147,7 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
           <span
             className="button button-link button-inverse overlay-nav-button"
             onClick={this.handleServiceClose}>
-            <i className="icon icon-small icon-back icon-small-white"></i>
+            <i className="icon icon-sprite icon-sprite-small icon-back icon-sprite-small-white"></i>
             <span className="overlay-short-top">Back</span>
           </span>
         </div>

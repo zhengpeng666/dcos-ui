@@ -1,4 +1,28 @@
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+components/badges.less
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
+
+
+
+
+
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Badge
+
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
 .badge {
+
   color: @body-background-color;
   font-size: @body-text-font-size;
   line-height: @body-text-line-height;
@@ -7,56 +31,90 @@
   border-radius: 1000px !important;
 
   &:empty {
+
     display: none;
+
   }
+
 }
+
+
 
 .active {
+
   .badge {
+
     background-color: @white;
+
   }
+
 }
 
+
+
 .dot {
+
   background-color: @neutral;
   width: @body-text-font-size * 0.75;
   height: @body-text-font-size * 0.75;
   border-radius: 50%;
 
   &.danger {
+
     background-color: @text-danger-color;
+
   }
 
   &.success {
+
     background-color: @text-success-color;
+
   }
+
 }
 
+
+
+/*
 .badge-container {
+
   display: flex;
 
   :first-child {
-    margin-right: 0.25 * @base-spacing-unit;
+
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     flex-grow: 1;
     text-align: left;
+
   }
 
   .badge {
-    margin-left: auto;
+
+    margin-left: 0.25 * @base-spacing-unit;
     flex-shrink: 0;
     align-self: center;
+
   }
+
 }
+*/
+
+
 
 .inverse .badge-container .badge,
 .badge-container.inverse .badge {
+
   background-color: @white;
+
 }
 
+
+
 .table .dot {
+
   display: inline-block;
   margin-right: @base-spacing-unit * 0.25;
+
 }

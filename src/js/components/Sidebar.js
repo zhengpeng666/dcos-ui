@@ -164,7 +164,7 @@ var Sidebar = React.createClass({
           <ReactZeroClipboard
             text={content}
             onAfterCopy={this.handleCopy}>
-            <i className="icon icon-mini icon-clipboard icon-mini-color clickable" />
+            <i className="icon icon-sprite icon-sprite-mini icon-clipboard icon-sprite-mini-color clickable" />
           </ReactZeroClipboard>
         </div>
       );
@@ -203,9 +203,9 @@ var Sidebar = React.createClass({
       // Figure out if current route is active
       var isActive = route.handler.routeConfig.matches.test(currentPath);
       var iconClasses = {
-        "sidebar-menu-item-icon icon icon-medium": true,
-        "icon-medium-color": isActive,
-        "icon-medium-black": !isActive
+        "sidebar-menu-item-icon icon icon-sprite icon-sprite-medium": true,
+        "icon-sprite-medium-color": isActive,
+        "icon-sprite-medium-black": !isActive
       };
 
       iconClasses[`icon-${route.handler.routeConfig.icon}`] = true;
@@ -248,9 +248,10 @@ var Sidebar = React.createClass({
     var chatIconClassSet = classNames({
       "clickable": true,
       "icon": true,
+      "icon-sprite": true,
       "icon-chat": true,
-      "icon-medium": true,
-      "icon-medium-color": IntercomStore.get("isOpen")
+      "icon-sprite-medium": true,
+      "icon-sprite-medium-color": IntercomStore.get("isOpen")
     });
 
     return (
@@ -268,7 +269,7 @@ var Sidebar = React.createClass({
         </div>
         <GeminiScrollbar autoshow={true} className="sidebar-content container-scrollable">
           <nav>
-            <div className="container container-fluid container-fluid-narrow">
+            <div className="container container-fluid">
               <ul className="sidebar-menu list-unstyled">
                 {this.getMenuItems()}
               </ul>
@@ -276,7 +277,7 @@ var Sidebar = React.createClass({
           </nav>
         </GeminiScrollbar>
         <div className="sidebar-footer">
-          <div className="container container-fluid container-fluid-narrow container-pod container-pod-short logo-container">
+          <div className="container container-fluid container-pod container-pod-short logo-container">
             <div className="sidebar-footer-image" />
             <p className="text-align-center flush-top flush-bottom mute small">
               <span className="clickable" onClick={this.handleVersionClick}>
@@ -292,7 +293,7 @@ var Sidebar = React.createClass({
               data-behavior="show-tip"
               data-tip-place="top-right"
               data-tip-content="Documentation">
-                <i className="icon icon-documents icon-medium clickable"></i>
+                <i className="icon icon-sprite icon-documents icon-sprite-medium clickable"></i>
             </a>
             <button className="button button-link"
               data-behavior="show-tip"
@@ -305,7 +306,7 @@ var Sidebar = React.createClass({
               data-tip-place="top-left"
               data-tip-content="Install CLI and Take Tour"
               onClick={this.handleStartTour}>
-                <i className="icon icon-tour icon-medium clickable"></i>
+                <i className="icon icon-sprite icon-tour icon-sprite-medium clickable"></i>
             </button>
           </div>
         </div>
