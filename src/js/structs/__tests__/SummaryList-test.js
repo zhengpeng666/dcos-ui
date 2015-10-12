@@ -146,9 +146,9 @@ describe("SummaryList", function () {
     it("doesn't filter by ids", function () {
       let resources = this.list.getResourceStatesForServiceIDs();
       let expectedResult = {
-        cpus: [{date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 2}],
-        mem: [{date: this.now, isSuccessfulSnapshot: true, percentage: 60, value: 6}],
-        disk: [{date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 2}]
+        cpus: [{date: this.now, percentage: 20, value: 2}],
+        mem: [{date: this.now, percentage: 60, value: 6}],
+        disk: [{date: this.now, percentage: 20, value: 2}]
       };
 
       expect(resources).toEqual(expectedResult);
@@ -157,9 +157,9 @@ describe("SummaryList", function () {
     it("filters by id", function () {
       let resources = this.list.getResourceStatesForServiceIDs([1]);
       let expectedResult = {
-        cpus: [{date: this.now, isSuccessfulSnapshot: true, percentage: 10, value: 1}],
-        mem: [{date: this.now, isSuccessfulSnapshot: true, percentage: 30, value: 3}],
-        disk: [{date: this.now, isSuccessfulSnapshot: true, percentage: 10, value: 1}]
+        cpus: [{date: this.now, percentage: 10, value: 1}],
+        mem: [{date: this.now, percentage: 30, value: 3}],
+        disk: [{date: this.now, percentage: 10, value: 1}]
       };
 
       expect(resources).toEqual(expectedResult);
@@ -168,9 +168,9 @@ describe("SummaryList", function () {
     it("filters by ids", function () {
       let resources = this.list.getResourceStatesForServiceIDs([1, 2]);
       let expectedResult = {
-        cpus: [{date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 2}],
-        mem: [{date: this.now, isSuccessfulSnapshot: true, percentage: 60, value: 6}],
-        disk: [{date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 2}]
+        cpus: [{date: this.now, percentage: 20, value: 2}],
+        mem: [{date: this.now, percentage: 60, value: 6}],
+        disk: [{date: this.now, percentage: 20, value: 2}]
       };
 
       expect(resources).toEqual(expectedResult);
@@ -190,16 +190,16 @@ describe("SummaryList", function () {
       let resources = this.list.getResourceStatesForServiceIDs([1]);
       let expectedResult = {
         cpus: [
-          {date: this.now, isSuccessfulSnapshot: true, percentage: 10, value: 1},
-          {date: this.now + 1, isSuccessfulSnapshot: true, percentage: 10, value: 1}
+          {date: this.now, percentage: 10, value: 1},
+          {date: this.now + 1, percentage: 10, value: 1}
         ],
         mem: [
-          {date: this.now, isSuccessfulSnapshot: true, percentage: 30, value: 3},
-          {date: this.now + 1, isSuccessfulSnapshot: true, percentage: 30, value: 3}
+          {date: this.now, percentage: 30, value: 3},
+          {date: this.now + 1, percentage: 30, value: 3}
         ],
         disk: [
-          {date: this.now, isSuccessfulSnapshot: true, percentage: 10, value: 1},
-          {date: this.now + 1, isSuccessfulSnapshot: true, percentage: 10, value: 1}
+          {date: this.now, percentage: 10, value: 1},
+          {date: this.now + 1, percentage: 10, value: 1}
         ]
       };
 
@@ -238,9 +238,9 @@ describe("SummaryList", function () {
     it("doesn't filter by ids", function () {
       let resources = this.list.getResourceStatesForNodeIDs();
       let expectedResult = {
-        cpus: [{date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 2}],
-        mem: [{date: this.now, isSuccessfulSnapshot: true, percentage: 60, value: 6}],
-        disk: [{date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 2}]
+        cpus: [{date: this.now, percentage: 20, value: 2}],
+        mem: [{date: this.now, percentage: 60, value: 6}],
+        disk: [{date: this.now, percentage: 20, value: 2}]
       };
 
       expect(resources).toEqual(expectedResult);
@@ -249,9 +249,9 @@ describe("SummaryList", function () {
     it("filters by id", function () {
       let resources = this.list.getResourceStatesForNodeIDs([1]);
       let expectedResult = {
-        cpus: [{date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 1}],
-        mem: [{date: this.now, isSuccessfulSnapshot: true, percentage: 60, value: 3}],
-        disk: [{date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 1}]
+        cpus: [{date: this.now, percentage: 20, value: 1}],
+        mem: [{date: this.now, percentage: 60, value: 3}],
+        disk: [{date: this.now, percentage: 20, value: 1}]
       };
 
       expect(resources).toEqual(expectedResult);
@@ -260,9 +260,9 @@ describe("SummaryList", function () {
     it("filters by ids", function () {
       let resources = this.list.getResourceStatesForNodeIDs([1, 2]);
       let expectedResult = {
-        cpus: [{date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 2}],
-        mem: [{date: this.now, isSuccessfulSnapshot: true, percentage: 60, value: 6}],
-        disk: [{date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 2}]
+        cpus: [{date: this.now, percentage: 20, value: 2}],
+        mem: [{date: this.now, percentage: 60, value: 6}],
+        disk: [{date: this.now, percentage: 20, value: 2}]
       };
 
       expect(resources).toEqual(expectedResult);
@@ -287,16 +287,16 @@ describe("SummaryList", function () {
       let resources = this.list.getResourceStatesForNodeIDs([1]);
       let expectedResult = {
         cpus: [
-          {date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 1},
-          {date: this.now + 1, isSuccessfulSnapshot: true, percentage: 10, value: 1}
+          {date: this.now, percentage: 20, value: 1},
+          {date: this.now + 1, percentage: 10, value: 1}
         ],
         mem: [
-          {date: this.now, isSuccessfulSnapshot: true, percentage: 60, value: 3},
-          {date: this.now + 1, isSuccessfulSnapshot: true, percentage: 30, value: 3}
+          {date: this.now, percentage: 60, value: 3},
+          {date: this.now + 1, percentage: 30, value: 3}
         ],
         disk: [
-          {date: this.now, isSuccessfulSnapshot: true, percentage: 20, value: 1},
-          {date: this.now + 1, isSuccessfulSnapshot: true, percentage: 10, value: 1}
+          {date: this.now, percentage: 20, value: 1},
+          {date: this.now + 1, percentage: 10, value: 1}
         ]
       };
 
