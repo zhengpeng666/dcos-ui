@@ -123,6 +123,11 @@ var ServicesPage = React.createClass({
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
+
+    MesosSummaryStore.removeChangeListener(
+      EventTypes.MESOS_SUMMARY_REQUEST_ERROR,
+      this.onMesosStateChange
+    );
   },
 
   onMesosStateChange: function () {

@@ -18,12 +18,6 @@ var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
 
-function getMesosState() {
-  return {
-    statesProcessed: MesosSummaryStore.get("statesProcessed")
-  };
-}
-
 function getSidebarState() {
   return {
     isOpen: SidebarStore.get("isOpen")
@@ -132,14 +126,17 @@ var Index = React.createClass({
   },
 
   onMesosSummaryChange: function () {
-    var state = getMesosState();
-
-    this.internalStorage_update(state);
+    let statesProcessed = MesosSummaryStore.get("statesProcessed");
+    let prevStatesProcessed = this.internalStorage_get().statesProcessed;
+    this.internalStorage_update({statesProcessed});
 
     // Reset count as we've just received a successful response
     if (this.state.mesosSummaryErrorCount > 0) {
       this.setState({mesosSummaryErrorCount: 0});
-    } else {
+    } else if (!prevStatesProcessed) {
+      // This conditional is needed to remove the loading screen after
+      // receiving a successful server response. This forceupdate should only
+      // run once, otherwise the whole application will update.
       this.forceUpdate();
     }
   },
@@ -150,8 +147,8 @@ var Index = React.createClass({
     });
   },
 
-  getLoadingScreen: function (showLoading, hasLoadingError) {
-    if (!showLoading || hasLoadingError) {
+  getLoadingScreen: function (showLoading) {
+    if (!showLoading) {
       return null;
     }
 
@@ -200,7 +197,7 @@ var Index = React.createClass({
           <div className={centerClassSet}>
             <div className="row">
               {this.getErrorScreen(hasLoadingError)}
-              {this.getLoadingScreen(!isReady, hasLoadingError)}
+              {this.getLoadingScreen(!isReady && !hasLoadingError)}
             </div>
           </div>
           <Sidebar />
