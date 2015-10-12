@@ -299,7 +299,6 @@ var BarChart = React.createClass({
 
           // flush svg rect edges together
           shapeRendering = "crispEdges";
-
         } else {
           rectHeight = props.height * val[y] / props.maxY - peaklineHeight;
           colorClass = `path-color-${service.colorIndex}`;

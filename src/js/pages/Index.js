@@ -147,20 +147,35 @@ var Index = React.createClass({
     });
   },
 
-  getLoadingScreen: function (showLoading) {
-    if (!showLoading) {
+  getLoadingScreen: function (showLoadingScreen) {
+    if (!showLoadingScreen) {
       return null;
     }
 
     return <AnimatedLogo speed={500} scale={0.16} />;
   },
 
-  getErrorScreen: function (hasLoadingError) {
-    if (!hasLoadingError) {
+  getErrorScreen: function (showErrorScreen) {
+    if (!showErrorScreen) {
       return null;
     }
 
     return <RequestErrorMsg />;
+  },
+
+  getScreenOverlays: function (showLoadingScreen, showErrorScreen) {
+    if (!showLoadingScreen && !showErrorScreen) {
+      return null;
+    }
+
+    return (
+      <div className={"text-align-center vertical-center"}>
+        <div className="row">
+          {this.getErrorScreen(showErrorScreen)}
+          {this.getLoadingScreen(showLoadingScreen)}
+        </div>
+      </div>
+    );
   },
 
   renderIntercom: function () {
@@ -177,15 +192,12 @@ var Index = React.createClass({
   render: function () {
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
-    let hasLoadingError = this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount;
+    let showErrorScreen =
+      this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount;
+    let showLoadingScreen = !isReady && !showErrorScreen;
 
     var classSet = classNames({
       "canvas-sidebar-open": data.isOpen
-    });
-
-    var centerClassSet = classNames({
-      "text-align-center vertical-center": true,
-      "hidden": isReady && !hasLoadingError
     });
 
     this.renderIntercom();
@@ -194,12 +206,7 @@ var Index = React.createClass({
       <div>
         <a id="start-tour"></a>
         <div id="canvas" className={classSet}>
-          <div className={centerClassSet}>
-            <div className="row">
-              {this.getErrorScreen(hasLoadingError)}
-              {this.getLoadingScreen(!isReady && !hasLoadingError)}
-            </div>
-          </div>
+          {this.getScreenOverlays(showLoadingScreen, showErrorScreen)}
           <Sidebar />
           <RouteHandler />
         </div>
