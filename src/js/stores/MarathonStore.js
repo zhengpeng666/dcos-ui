@@ -30,6 +30,8 @@ function stopPolling() {
 
 var MarathonStore = Store.createStore({
 
+  storeID: "marathon",
+
   mixins: [GetSetMixin],
 
   getSet_data: {

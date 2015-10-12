@@ -29,6 +29,8 @@ function stopPolling() {
 
 var MesosStateStore = Store.createStore({
 
+  storeID: "state",
+
   mixins: [GetSetMixin],
 
   getSet_data: {

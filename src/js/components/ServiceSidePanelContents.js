@@ -25,7 +25,7 @@ export default class ServiceSidePanelContents extends SidePanelContents {
       currentTab: Object.keys(this.tabs).shift()
     };
 
-    this.storesListeners = [
+    this.store_listeners = [
       {name: "marathon", listenAlways: true},
       {name: "summary", listenAlways: true},
       {name: "state", listenAlways: true}

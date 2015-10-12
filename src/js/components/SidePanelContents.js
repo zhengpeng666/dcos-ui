@@ -24,7 +24,8 @@ export default class SidePanelContents extends
   constructor() {
     super(...arguments);
 
-    this.storesListeners = [];
+    this.store_listeners = [];
+
     this.tabs = {
       tasks: "Tasks",
       details: "Details"
@@ -38,46 +39,8 @@ export default class SidePanelContents extends
   }
 
   componentDidMount() {
+    super.componentDidMount();
     this.mountedAt = Date.now();
-
-    this.storesListeners.forEach(function (listener, i) {
-      if (typeof listener === "string") {
-        this.storesListeners[i] = _.clone(ListenersDescription[listener]);
-      } else {
-        let storeName = listener.name;
-        this.storesListeners[i] = _.defaults(
-          listener, ListenersDescription[storeName]
-        );
-      }
-    }, this);
-    changeListeners.call(this, this.storesListeners, "addChangeListener");
-  }
-
-  componentWillUnmount() {
-    changeListeners.call(this, this.storesListeners, "removeChangeListener");
-  }
-
-  onStoreChange() {
-    // Iterate through all the current stores to see if we should remove our
-    // change listener.
-    this.storesListeners.forEach(function (listener, i) {
-      if (!listener.unmountWhen || listener.listenAlways) {
-        return;
-      }
-
-      // Remove change listener if the settings want to unmount after a certain
-      // time such as "appsProcessed".
-      if (listener.unmountWhen && listener.unmountWhen(listener.store)) {
-        listener.store.removeChangeListener(
-          listener.event, this.onStoreChange
-        );
-
-        this.storesListeners.splice(i, 1);
-      }
-    }, this);
-
-    // Always forceUpdate no matter where the change came from
-    this.forceUpdate();
   }
 
   getKeyValuePairs(hash, headline) {
