@@ -53,7 +53,7 @@ describe("SummaryList", function () {
 
   });
 
-  describe("#getActiveState", function () {
+  describe("#lastSuccessful", function () {
 
     beforeEach(function () {
       this.now = Date.now();
@@ -116,7 +116,7 @@ describe("SummaryList", function () {
       states.add(new StateSummary({successful: false, date: this.now}));
       states.add(new StateSummary({successful: false, date: this.now + 1}));
 
-      expect(states.lastSuccessful().metadata.successfulSnapshot).toEqual(false);
+      expect(states.lastSuccessful().isSnapshotSuccessful()).toEqual(false);
     });
 
   });
