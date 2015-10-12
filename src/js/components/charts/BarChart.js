@@ -293,7 +293,7 @@ var BarChart = React.createClass({
         let shapeRendering = "auto";
         let posX = chartWidth - marginLeft - marginRight - rectWidth * (valuesLength - 1 - j);
 
-        if (!val.isSuccessfulSnapshot) {
+        if (val.percentage == null) {
           rectHeight = props.height - peaklineHeight;
           colorClass = "path-color-7";
 
