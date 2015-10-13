@@ -29,7 +29,7 @@ function getMesosState() {
     taskFailureRate: _.clone(MesosSummaryStore.get("taskFailureRate")),
     hostsCount: states.getActiveNodesByState(),
     refreshRate: Config.getRefreshRate(),
-    services: states.lastSuccessful().getServiceList(),
+    services: last.getServiceList(),
     usedResourcesStates: states.getResourceStatesForNodeIDs(),
     usedResources: last.getSlaveUsedResources(),
     totalResources: last.getSlaveTotalResources(),
