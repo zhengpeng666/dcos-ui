@@ -15,6 +15,38 @@ describe("MesosSummaryUtil", function () {
       expect(resourceStates).toEqual({cpus: [], mem: [], disk: []});
     });
 
+    it("sets fields to null indicating unsuccessful snapshot", function () {
+      let stateResources = [
+        {
+          date: 1,
+          resources: null,
+          totalResources: null
+        }, {
+          date: 2,
+          resources: {cpus: 7, mem: 3, disk: 4},
+          totalResources: {cpus: 10, mem: 3, disk: 4}
+        }
+      ];
+      let resources = MesosSummaryUtil.stateResourcesToResourceStates(stateResources);
+
+      let expectedResult = {
+        cpus: [
+          {date: 1, percentage: null, value: null},
+          {date: 2, percentage: 70, value: 7}
+        ],
+        mem: [
+          {date: 1, percentage: null, value: null},
+          {date: 2, percentage: 100, value: 3}
+        ],
+        disk: [
+          {date: 1, percentage: null, value: null},
+          {date: 2, percentage: 100, value: 4}
+        ]
+     };
+
+      expect(resources).toEqual(expectedResult);
+    });
+
     it("transposes state resources to resource states", function () {
       let stateResources = [{
         date: 1,

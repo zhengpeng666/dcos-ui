@@ -206,6 +206,19 @@ describe("SummaryList", function () {
       expect(resources).toEqual(expectedResult);
     });
 
+    it("sets fields to null to indicate unsuccessful snapshot", function () {
+      let list = new SummaryList();
+      list.add(new StateSummary({successful: false, date: this.now}));
+      let resources = list.getResourceStatesForServiceIDs();
+      let expectedResult = {
+        cpus: [ { date: this.now, percentage: null, value: null } ],
+        mem: [ { date: this.now, percentage: null, value: null } ],
+        disk: [ { date: this.now, percentage: null, value: null } ]
+      };
+
+      expect(resources).toEqual(expectedResult);
+    });
+
   });
 
   describe("#getResourceStatesForNodeIDs", function () {
@@ -303,6 +316,18 @@ describe("SummaryList", function () {
       expect(resources).toEqual(expectedResult);
     });
 
+    it("sets fields to null to indicate unsuccessful snapshot", function () {
+      let list = new SummaryList();
+      list.add(new StateSummary({successful: false, date: this.now}));
+      let resources = list.getResourceStatesForNodeIDs();
+      let expectedResult = {
+        cpus: [ { date: this.now, percentage: null, value: null } ],
+        mem: [ { date: this.now, percentage: null, value: null } ],
+        disk: [ { date: this.now, percentage: null, value: null } ]
+      };
+
+      expect(resources).toEqual(expectedResult);
+    });
   });
 
 });
