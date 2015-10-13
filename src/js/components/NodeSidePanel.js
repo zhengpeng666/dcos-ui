@@ -108,7 +108,7 @@ export default class NodeSidePanel extends DetailSidePanel {
       Registered: DateUtil.msToDateStr(
         node.registered_time.toFixed(3) * 1000
       ),
-      "Master version": MesosStateStore.get("lastMesosState").version
+      "Master Version": MesosStateStore.get("lastMesosState").version
     };
 
     return (
