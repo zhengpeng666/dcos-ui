@@ -84,21 +84,23 @@ describe("RequestUtil", function () {
             });
           };
         },
-        {delayAfterCount: 4}
+        {delayAfterCount: Config.delayAfterErrorCount}
       );
 
     });
 
-    it("should not debounce on the first 4 errors", function () {
+    it("should not debounce on the first 5 errors", function () {
       this.request("failRequest");
       this.request("failRequest");
       this.request("failRequest");
       this.request("failRequest");
-      expect(errorFn.mock.calls.length).toEqual(4);
+      this.request("failRequest");
+      expect(errorFn.mock.calls.length).toEqual(5);
     });
 
-    it("should debounce on more than 4 errors", function () {
+    it("should debounce on more than 5 errors", function () {
       // These will all be called
+      this.request("failRequest");
       this.request("failRequest");
       this.request("failRequest");
       this.request("failRequest");
@@ -107,7 +109,7 @@ describe("RequestUtil", function () {
       this.request("failRequest");
       this.request("failRequest");
       this.request("failRequest");
-      expect(errorFn.mock.calls.length).toEqual(4);
+      expect(errorFn.mock.calls.length).toEqual(5);
     });
 
     it("should reset debouncing after success call", function () {
@@ -120,10 +122,11 @@ describe("RequestUtil", function () {
       this.request("failRequest");
       this.request("failRequest");
       this.request("failRequest");
+      this.request("failRequest");
       // This will be debounced
       this.request("failRequest");
       this.request("failRequest");
-      expect(errorFn.mock.calls.length).toEqual(7);
+      expect(errorFn.mock.calls.length).toEqual(8);
       expect(successFn.mock.calls.length).toEqual(1);
     });
 

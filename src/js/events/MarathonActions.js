@@ -35,7 +35,7 @@ module.exports = {
         });
       };
     },
-    {delayAfterCount: 3}
+    {delayAfterCount: Config.delayAfterErrorCount}
   )
 
 };

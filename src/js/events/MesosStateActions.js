@@ -33,7 +33,7 @@ var MesosStateActions = {
         });
       };
     },
-    {delayAfterCount: 3}
+    {delayAfterCount: Config.delayAfterErrorCount}
   )
 
 };

@@ -1,6 +1,5 @@
 import List from "./List";
 import MesosSummaryUtil from "../utils/MesosSummaryUtil";
-import ServicesList from "../structs/ServicesList";
 import StateSummary from "./StateSummary";
 
 export default class SummaryList extends List {
@@ -30,23 +29,30 @@ export default class SummaryList extends List {
     });
   }
 
-  getActiveServices() {
+  lastSuccessful() {
     // finds last StateSummary with successful snapshot
     let stateResources = this.getItems();
     for (let i = stateResources.length - 1; i >= 0; i--) {
       if (stateResources[i].isSnapshotSuccessful()) {
-        return stateResources[i].getServiceList();
+        return stateResources[i];
       }
     }
-    return new ServicesList();
+    return new StateSummary({successful: false});
   }
 
   getResourceStatesForServiceIDs(ids) {
     let stateResources = this.getItems().map(function (state) {
+      let resources = null, totalResources = null;
+
+      if (state.isSnapshotSuccessful()) {
+        resources = state.getServiceList().filter({ids}).sumUsedResources();
+        totalResources = state.getSlaveTotalResources();
+      }
+
       return {
         date: state.getSnapshotDate(),
-        resources: state.getServiceList().filter({ids}).sumUsedResources(),
-        totalResources: state.getSlaveTotalResources()
+        resources,
+        totalResources
       };
     });
 
@@ -55,10 +61,17 @@ export default class SummaryList extends List {
 
   getResourceStatesForNodeIDs(ids) {
     let stateResources = this.getItems().map(function (state) {
+      let resources = null, totalResources = null;
+
+      if (state.isSnapshotSuccessful()) {
+        resources = state.getNodesList().filter({ids}).sumUsedResources();
+        totalResources = state.getNodesList().filter({ids}).sumResources();
+      }
+
       return {
         date: state.getSnapshotDate(),
-        resources: state.getNodesList().filter({ids}).sumUsedResources(),
-        totalResources: state.getNodesList().filter({ids}).sumResources()
+        resources,
+        totalResources
       };
     });
 

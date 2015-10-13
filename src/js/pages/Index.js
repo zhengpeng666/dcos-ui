@@ -5,6 +5,7 @@ var RouteHandler = require("react-router").RouteHandler;
 
 var AnimatedLogo = require("../components/AnimatedLogo");
 var Actions = require("../actions/Actions");
+var Config = require("../config/Config");
 var EventTypes = require("../constants/EventTypes");
 import HistoryStore from "../stores/HistoryStore";
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
@@ -16,12 +17,6 @@ var RequestErrorMsg = require("../components/RequestErrorMsg");
 var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
-
-function getMesosState() {
-  return {
-    statesProcessed: MesosSummaryStore.get("statesProcessed")
-  };
-}
 
 function getSidebarState() {
   return {
@@ -131,18 +126,17 @@ var Index = React.createClass({
   },
 
   onMesosSummaryChange: function () {
-    var state = getMesosState();
-    // if state is processed, stop listening
-    if (state.statesProcessed) {
-      this.removeMesosStateListeners();
-    }
-
-    this.internalStorage_update(state);
+    let statesProcessed = MesosSummaryStore.get("statesProcessed");
+    let prevStatesProcessed = this.internalStorage_get().statesProcessed;
+    this.internalStorage_update({statesProcessed});
 
     // Reset count as we've just received a successful response
     if (this.state.mesosSummaryErrorCount > 0) {
       this.setState({mesosSummaryErrorCount: 0});
-    } else {
+    } else if (!prevStatesProcessed) {
+      // This conditional is needed to remove the loading screen after
+      // receiving a successful server response. This forceupdate should only
+      // run once, otherwise the whole application will update.
       this.forceUpdate();
     }
   },
@@ -153,28 +147,32 @@ var Index = React.createClass({
     });
   },
 
-  getLoadingScreen: function (showLoading) {
-    if (!showLoading) {
+  getLoadingScreen: function (showLoadingScreen) {
+    if (!showLoadingScreen) {
       return null;
     }
 
-    var hasLoadingError = this.state.mesosSummaryErrorCount >= 3;
-    var errorMsg = null;
-    if (hasLoadingError) {
-      errorMsg = <RequestErrorMsg />;
+    return <AnimatedLogo speed={500} scale={0.16} />;
+  },
+
+  getErrorScreen: function (showErrorScreen) {
+    if (!showErrorScreen) {
+      return null;
     }
 
-    var loadingClassSet = classNames({
-      "hidden": hasLoadingError
-    });
+    return <RequestErrorMsg />;
+  },
+
+  getScreenOverlays: function (showLoadingScreen, showErrorScreen) {
+    if (!showLoadingScreen && !showErrorScreen) {
+      return null;
+    }
 
     return (
       <div className="text-align-center vertical-center">
         <div className="row">
-          <div className={loadingClassSet}>
-            <AnimatedLogo speed={500} scale={0.16} />
-          </div>
-          {errorMsg}
+          {this.getErrorScreen(showErrorScreen)}
+          {this.getLoadingScreen(showLoadingScreen)}
         </div>
       </div>
     );
@@ -194,6 +192,9 @@ var Index = React.createClass({
   render: function () {
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
+    let showErrorScreen =
+      this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount;
+    let showLoadingScreen = !isReady && !showErrorScreen;
 
     var classSet = classNames({
       "canvas-sidebar-open": data.isOpen
@@ -205,7 +206,7 @@ var Index = React.createClass({
       <div>
         <a id="start-tour"></a>
         <div id="canvas" className={classSet}>
-          {this.getLoadingScreen(!isReady)}
+          {this.getScreenOverlays(showLoadingScreen, showErrorScreen)}
           <Sidebar />
           <RouteHandler />
         </div>

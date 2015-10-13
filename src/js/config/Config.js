@@ -1,8 +1,9 @@
 var Config = {
+  delayAfterErrorCount: 5,
   environment: "@@ENV",
   historyLength: 31,
-  rootUrl: "",
   historyServer: "",
+  rootUrl: "",
   stateLoadDelay: 3000,
   stateRefresh: 2000,
   version: "@@VERSION"

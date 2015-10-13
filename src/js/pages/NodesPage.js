@@ -24,7 +24,7 @@ var NODES_DISPLAY_LIMIT = 300;
 
 function getMesosHosts(state) {
   let states = MesosSummaryStore.get("states");
-  let lastState = states.last();
+  let lastState = states.lastSuccessful();
   let nodes = lastState.getNodesList();
   let filters = _.pick(state, "searchString", "byServiceFilter");
   let filteredNodes = nodes.filter({
@@ -37,7 +37,7 @@ function getMesosHosts(state) {
     nodes: filteredNodes,
     totalNodes: nodes.getItems().length,
     refreshRate: Config.getRefreshRate(),
-    services: states.getActiveServices().getItems(),
+    services: lastState.getServiceList().getItems(),
     statesProcessed: MesosSummaryStore.get("statesProcessed"),
     totalHostsResources: states.getResourceStatesForNodeIDs(nodeIDs),
     totalResources: lastState.getSlaveTotalResources()
@@ -85,6 +85,11 @@ var NodesPage = React.createClass({
   componentDidMount: function () {
     MesosSummaryStore.addChangeListener(
       EventTypes.MESOS_SUMMARY_CHANGE,
+      this.onMesosStateChange
+    );
+
+    MesosSummaryStore.addChangeListener(
+      EventTypes.MESOS_SUMMARY_REQUEST_ERROR,
       this.onMesosStateChange
     );
 

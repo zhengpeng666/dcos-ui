@@ -35,9 +35,13 @@ const MesosSummaryUtil = {
 
     stateResources.forEach(function (stateResource) {
       resourceTypes.forEach(function (resourceType) {
-        let value = stateResource.resources[resourceType];
-        let max = Math.max(1, stateResource.totalResources[resourceType]);
-        let percentage = Maths.round(100 * value / max);
+        let percentage = null, value = null;
+
+        if (stateResource.resources != null) {
+          let max = Math.max(1, stateResource.totalResources[resourceType]);
+          value = stateResource.resources[resourceType];
+          percentage = Maths.round(100 * value / max);
+        }
 
         resources[resourceType].push({
           date: stateResource.date,
@@ -46,6 +50,7 @@ const MesosSummaryUtil = {
         });
       });
     });
+
     return resources;
   },
 
