@@ -71,6 +71,8 @@ var TimeSeriesChart = React.createClass({
     this.renderAxis(props, width, height);
     this.createClipPath(width, height);
 
+    // React doesn't allow us to set the 'mask' attribute through JSX
+    // so we do this.
     this.refs.masking.getDOMNode().setAttribute("mask", "url(#" + maskID + ")");
   },
 
@@ -124,18 +126,18 @@ var TimeSeriesChart = React.createClass({
   },
 
   createUnsuccessfulBlocks: function (data, xTimeScale) {
-    var transitionTime = this.getTransitionTime(data);
-    var nextY = this.getNextXPosition(data, xTimeScale, transitionTime);
-    var props = this.props;
-    var width = props.width / 31;
-    var height = props.height;
-    var maskDef = this.refs.maskDef.getDOMNode();
+    let transitionTime = this.getTransitionTime(data);
+    let nextY = this.getNextXPosition(data, xTimeScale, transitionTime);
+    let props = this.props;
+    let width = props.width / 31;
+    let height = props.height;
+    let maskDef = this.refs.maskDef.getDOMNode();
 
     d3.select(maskDef).selectAll(".unsuccessfulBlock").remove();
 
     data.forEach(function (obj) {
       if (obj[props.y] == null) {
-        var x = xTimeScale(obj.date - props.refreshRate);
+        let x = xTimeScale(obj.date - props.refreshRate);
         d3.select(maskDef)
           .append("rect")
           .attr({
