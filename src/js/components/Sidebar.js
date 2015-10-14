@@ -269,7 +269,7 @@ var Sidebar = React.createClass({
         </div>
         <GeminiScrollbar autoshow={true} className="sidebar-content container-scrollable">
           <nav>
-            <div className="container container-fluid">
+            <div className="container container-fluid container-fluid-narrow">
               <ul className="sidebar-menu list-unstyled">
                 {this.getMenuItems()}
               </ul>

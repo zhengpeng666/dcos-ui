@@ -61,7 +61,7 @@ var TasksChart = React.createClass({
           <p className="h1 unit inverse flush-top">
             {task.value}
           </p>
-          <p className={"unit-label path-color-" + info.colorIndex}>
+          <p className={"unit-label short-top tall-bottom path-color-" + info.colorIndex}>
             {info.label}
           </p>
         </div>
@@ -103,8 +103,8 @@ var TasksChart = React.createClass({
   getDialChartChildren: function (total) {
     return (
       <div className="description">
-        <span className="h1-jumbo flush-top unit">{total}</span>
-        <span className="h4 unit-label text-muted">{"Total Tasks"}</span>
+        <span className="h1 h1-large inverse flush flush-top unit">{total}</span>
+        <span className="h4 unit-label short-top flush-bottom text-muted">{"Total Tasks"}</span>
       </div>
     );
   },
