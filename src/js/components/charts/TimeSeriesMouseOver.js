@@ -87,7 +87,7 @@ var TimeSeriesMouseOver = React.createClass({
       .transition()
       .duration(50)
       .attr("y", props.yScale(firstDataSet.values[index][props.y]))
-      .text(firstDataSet.values[index][props.y] + props.yCaption);
+      .text((firstDataSet.values[index][props.y] || 0) + props.yCaption);
 
     // An extra -2 on each because we show the extra data point at the end
 
@@ -116,7 +116,7 @@ var TimeSeriesMouseOver = React.createClass({
       .transition()
       .duration(50)
       .attr("x", xPosition)
-      .text(value);
+      .text(value || 0);
   },
 
   handleMouseOut: function () {

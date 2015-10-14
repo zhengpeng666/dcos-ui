@@ -157,7 +157,13 @@ var MesosSummaryStore = Store.createStore({
 
   processSummaryError: function (options = {}) {
     let unsuccessfulSummary = new StateSummary({successful: false});
-    this.get("states").add(unsuccessfulSummary);
+    let states = this.get("states");
+    let prevState = states.last();
+
+    states.add(unsuccessfulSummary);
+
+    let taskFailureRate = this.processFailureRate(states.last(), prevState);
+    this.set({taskFailureRate});
 
     if (!options.silent) {
       this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);

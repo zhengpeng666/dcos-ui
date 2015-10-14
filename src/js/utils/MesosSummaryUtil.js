@@ -80,9 +80,15 @@ const MesosSummaryUtil = {
         (diff.TASK_ERROR || 0);
     }
 
+    let rate = (failed / (failed + successful)) * 100 | 0;
+
+    if (!state.isSnapshotSuccessful()) {
+      rate = null;
+    }
+
     return {
       date: state.getSnapshotDate(),
-      rate: (failed / (failed + successful)) * 100 | 0
+      rate
     };
   },
 

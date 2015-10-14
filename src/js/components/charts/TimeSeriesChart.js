@@ -96,10 +96,7 @@ var TimeSeriesChart = React.createClass({
     var prevY = _.pluck(prevVal, props.y);
     var nextY = _.pluck(nextVal, props.y);
 
-    var prevSuccess = _.pluck(prevVal, "isSuccessfulSnapshot");
-    var nextSuccess = _.pluck(nextVal, "isSuccessfulSnapshot");
-
-    return !_.isEqual(prevY, nextY) || !_.isEqual(prevSuccess, nextSuccess);
+    return !_.isEqual(prevY, nextY) || !_.isEqual(prevVal, nextVal);
   },
 
   componentDidUpdate: function () {
@@ -137,8 +134,8 @@ var TimeSeriesChart = React.createClass({
     d3.select(maskDef).selectAll(".unsuccessfulBlock").remove();
 
     data.forEach(function (obj) {
-      if (obj.isSuccessfulSnapshot === false) {
-        var x = xTimeScale(obj.date);
+      if (obj[props.y] == null) {
+        var x = xTimeScale(obj.date - props.refreshRate);
         d3.select(maskDef)
           .append("rect")
           .attr({
@@ -167,20 +164,37 @@ var TimeSeriesChart = React.createClass({
       });
   },
 
-  getArea: function (y, xTimeScale, yScale) {
+  getArea: function (y, xTimeScale, yScale, firstSuccessful) {
+    var value = firstSuccessful[y] || 0;
+    var successfulValue = yScale(value);
+
     return d3.svg.area()
       .x(function (d) { return xTimeScale(d.date); })
       .y0(function () { return yScale(0); })
-      .y1(function (d) { return yScale(d[y]); })
+      .y1(function (d) {
+        if (d[y] != null) {
+          successfulValue = yScale(d[y]);
+        }
+
+        return successfulValue;
+      })
       .interpolate("monotone");
   },
 
-  getValueLine: function (xTimeScale, yScale) {
+  getValueLine: function (xTimeScale, yScale, firstSuccessful) {
     var y = this.props.y;
+    var value = firstSuccessful[y] || 0;
+    var successfulValue = yScale(value);
 
     return d3.svg.line()
       .x(function (d) { return xTimeScale(d.date); })
-      .y(function (d) { return yScale(d[y]); })
+      .y(function (d) {
+        if (d[y] != null) {
+          successfulValue = yScale(d[y]);
+        }
+
+        return successfulValue;
+      })
       .interpolate("monotone");
   },
 
@@ -318,8 +332,12 @@ var TimeSeriesChart = React.createClass({
   },
 
   getAreaList: function (props, yScale, xTimeScale) {
-    var area = this.getArea(props.y, xTimeScale, yScale);
-    var valueLine = this.getValueLine(xTimeScale, yScale);
+    var firstSuccess = _.find(props.data[0].values, function (obj) {
+      return obj[props.y] != null;
+    }) || {};
+    var area = this.getArea(props.y, xTimeScale, yScale, firstSuccess);
+    var valueLine = this.getValueLine(xTimeScale, yScale, firstSuccess);
+
     return _.map(props.data, function (obj, i) {
       var transitionTime = this.getTransitionTime(obj.values);
       var nextY = this.getNextXPosition(obj.values, xTimeScale, transitionTime);
@@ -339,6 +357,12 @@ var TimeSeriesChart = React.createClass({
   getCircleList: function (props, yScale, width, height) {
     return _.map(props.data, function (obj, i) {
       var transitionTime = this.getTransitionTime(obj.values);
+      var lastObj = _.last(obj.values);
+
+      if (lastObj[props.y] == null) {
+        return null;
+      }
+
       var nextX = this.getNextYPosition(obj, props.y, yScale, height);
 
       return (
