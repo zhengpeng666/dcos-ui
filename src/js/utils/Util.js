@@ -61,6 +61,10 @@ const Util = {
       Base.prototype[lifecycleFn] = noop;
     });
 
+    mixins.forEach(function (mixin, i) {
+      mixin.parent = mixins[i + 1] || Base;
+    });
+
     mixins.reverse();
 
     mixins.forEach(function (mixin) {

@@ -64,17 +64,16 @@ const StoreMixin = {
       this.store_listeners = storesListeners;
       this.store_addListeners();
     }
-
-    if (super.componentDidMount) {
-      super.componentDidMount();
+    if (this.parent.componentDidMount) {
+      this.parent.componentDidMount();
     }
   },
 
   componentWillUnmount() {
     this.store_removeListeners();
 
-    if (super.componentWillUnmount) {
-      super.componentWillUnmount();
+    if (this.parent.componentWillUnmount) {
+      this.parent.componentWillUnmount();
     }
   },
 
