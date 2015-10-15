@@ -51,7 +51,11 @@ var HostTimeSeriesChart = React.createClass({
   },
 
   getLatest: function (data) {
-    return _.last(data).slavesCount;
+    let index = _.findLastIndex(data, function (obj) {
+      return obj.slavesCount != null;
+    }) || 0;
+
+    return data[index].slavesCount;
   },
 
   getChart: function (props) {
