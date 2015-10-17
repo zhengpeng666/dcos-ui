@@ -54,7 +54,7 @@ var Page = React.createClass({
     return (
       <div className={classSet}>
         <div className="page-header">
-          <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-bottom-align-right">
+          <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-inverse container-pod-divider-bottom-align-right">
             <div className="page-header-context">
               <SidebarToggle />
               <h1 className="page-header-title inverse flush">

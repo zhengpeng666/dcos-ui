@@ -165,14 +165,14 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     // Wrap in headline element and classes
     if (headline != null) {
       headline = (
-        <h3 className="inverse flush-top">
+        <h3 className="flush-top">
           {headline}
         </h3>
       );
     }
 
     return (
-      <div className="container container-pod container-pod-super-short">
+      <div className="container container-fluid container-fluid-flush container-pod container-pod-short flush-top">
         {headline}
         {items}
       </div>
@@ -216,9 +216,9 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
         container-pod-super-short
         flush-top">
         <div>
-          <h3 className="flush-top flush-bottom text-color-neutral">
+          <h4 className="flush-top flush-bottom text-color-neutral">
             {resourceValue}
-          </h3>
+          </h4>
           <span className={`text-color-${colorIndex}`}>
             {resourceLabel.toUpperCase()}
           </span>
@@ -282,9 +282,9 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
   getHeader() {
     return (
       <div>
-        <span className="button button-link button-inverse"
+        <span className=""
           onClick={this.handlePanelClose}>
-          <i className="side-panel-detail-close"></i>
+          <i className="icon icon-sprite icon-sprite-small icon-back icon-sprite-small-white"></i>
           Close
         </span>
       </div>
@@ -300,7 +300,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     return (
       <SidePanel className="side-panel-detail"
         header={this.getHeader()}
-        headerContainerClass="container container-pod container-pod-super-short"
+        headerContainerClass="container container-fluid container-fluid-narrow container-pod container-pod-short"
         onClose={this.handlePanelClose}
         open={this.props.open}>
         {this.getContents()}

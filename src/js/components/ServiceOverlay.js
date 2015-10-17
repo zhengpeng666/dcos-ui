@@ -142,35 +142,36 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
     }
 
     return (
-      <div className="container container-fluid flush-left flush-right overlay-nav">
-        <div>
+      <div className="overlay-nav">
+        <div className="container container-fluid container-fluid-narrow">
           <span
             className="button button-link button-inverse overlay-nav-button"
             onClick={this.handleServiceClose}>
             <i className="icon icon-sprite icon-sprite-small icon-back icon-sprite-small-white"></i>
             <span className="overlay-short-top">Back</span>
           </span>
-        </div>
-
-        <h2 className="text-align-center inverse overlay-header">
-          {service.name}
-          <div className="h4 overlay-subheader flush-top text-align-center">
-            {serviceHealth + taskCount}
+          <div className="text-align-center overlay-header">
+            <h4 className="inverse flush">
+              {service.name}
+            </h4>
+            <div className="inverse overlay-subheader flush-top text-align-center">
+              {serviceHealth + taskCount}
+            </div>
           </div>
-        </h2>
 
-        <div>
-          <a href={Cluster.getServiceLink(service.name)}
-            target="_blank"
-            title="Open in a new window"
-            className="button button-link
-              button-inverse
-              text-align-right
-              overlay-nav-button"
-            >
-            <i className="icon icon-small icon-new-window icon-small-white"></i>
-            <span className="overlay-short-top">Open in a New Window</span>
-          </a>
+          <div>
+            <a href={Cluster.getServiceLink(service.name)}
+              target="_blank"
+              title="Open in a new window"
+              className="button button-link
+                button-inverse
+                text-align-right
+                overlay-nav-button"
+              >
+              <i className="icon icon-small icon-new-window icon-small-white"></i>
+              <span className="overlay-short-top">Open in a New Window</span>
+            </a>
+          </div>
         </div>
       </div>
     );

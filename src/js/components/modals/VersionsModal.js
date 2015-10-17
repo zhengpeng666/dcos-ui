@@ -33,7 +33,7 @@ var VersionsModal = React.createClass({
         showFooter={false}
         size="large"
         titleClass="modal-header-title text-align-center flush-top
-          flush-bottom inverse"
+          flush-bottom"
         titleText="DCOS Info">
         {this.getContent()}
       </Modal>
