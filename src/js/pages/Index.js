@@ -169,11 +169,9 @@ var Index = React.createClass({
     }
 
     return (
-      <div className="text-align-center vertical-center">
-        <div className="row">
-          {this.getErrorScreen(showErrorScreen)}
-          {this.getLoadingScreen(showLoadingScreen)}
-        </div>
+      <div className="container container-pod vertical-center">
+        {this.getErrorScreen(showErrorScreen)}
+        {this.getLoadingScreen(showLoadingScreen)}
       </div>
     );
   },
