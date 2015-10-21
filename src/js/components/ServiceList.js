@@ -101,9 +101,11 @@ let ServiceList = React.createClass({
 
   getNoServicesMessage: function () {
     return (
-      <div className="text-align-center vertical-center">
-        <h2>No Services Running</h2>
-        <p>Use the DCOS command line tools to find and install services.</p>
+      <div className="flex-box flex-box-align-vertical-center">
+        <div className="vertical-center">
+          <h3 className="flush-top inverse text-align-center">No Services Running</h3>
+          <p className="inverse flush text-align-center">Use the DCOS command line tools to find and install services.</p>
+        </div>
       </div>
     );
   },
