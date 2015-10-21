@@ -299,6 +299,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
       <SidePanel className="side-panel-detail"
         header={this.getHeader()}
         headerContainerClass="side-panel-header-container container container-fluid container-fluid-narrow container-pod container-pod-short"
+        bodyClass="side-panel-content container container-scrollable container-fluid container-fluid-narrow flex-container-col"
         onClose={this.handlePanelClose}
         open={this.props.open}>
         {this.getContents()}

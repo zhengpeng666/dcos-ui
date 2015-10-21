@@ -164,8 +164,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let tasks = MesosStateStore.getTasksFromServiceName(serviceName);
 
     return (
-
-      <div className="container container-fluid container-pod container-pod-short-top">
+      <div className="flex-container-col container container-pod flush-top flush-bottom flex-grow">
         <TaskView tasks={tasks} parentRouter={this.context.router} />
       </div>
     );
@@ -192,7 +191,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
     }
 
     return (
-      <div>
+      <div className="flex-container-col" style={{height: "100%"}}>
         <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo()}
           <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
