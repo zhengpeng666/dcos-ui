@@ -268,21 +268,19 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
 
   getNotFound(itemType) {
     return (
-      <div>
-        <h1 className="text-align-center inverse overlay-header">
+      <div className="container container-fluid container-pod text-align-center">
+        <h3 className="flush-top text-align-center">
           {`Error finding ${itemType}`}
-        </h1>
-        <div className="container container-pod text-align-center flush-top text-danger">
-          {`Did not find a ${itemType} by the id "${this.props.itemID}"`}
-        </div>
+        </h3>
+        <p class="flush">{`Did not find a ${itemType} by the id "${this.props.itemID}"`}</p>
       </div>
     );
   }
 
   getHeader() {
     return (
-      <div>
-        <span className=""
+      <div className="side-panel-header-actions side-panel-header-actions-primary">
+        <span className="side-panel-header-action"
           onClick={this.handlePanelClose}>
           <i className="icon icon-sprite icon-sprite-small icon-back icon-sprite-small-white"></i>
           Close
@@ -300,7 +298,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     return (
       <SidePanel className="side-panel-detail"
         header={this.getHeader()}
-        headerContainerClass="container container-fluid container-fluid-narrow container-pod container-pod-short"
+        headerContainerClass="side-panel-header-container container container-fluid container-fluid-narrow container-pod container-pod-short"
         onClose={this.handlePanelClose}
         open={this.props.open}>
         {this.getContents()}

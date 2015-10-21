@@ -51,8 +51,8 @@ export default class TaskSidePanel extends DetailSidePanel {
 
   getHeader() {
     return (
-      <div>
-        <span className=""
+      <div className="side-panel-header-actions side-panel-header-actions-primary">
+        <span className="side-panel-header-action"
           onClick={this.handlePanelClose}>
           <i className="icon icon-sprite icon-sprite-small icon-back icon-sprite-small-white"></i>
           Back

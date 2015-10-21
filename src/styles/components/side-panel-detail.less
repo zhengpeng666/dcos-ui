@@ -26,44 +26,6 @@ Side Panel Detail
   /* -----------------------------------------------------------------------------
   --------------------------------------------------------------------------------
 
-  Side Panel Detail Header
-
-  --------------------------------------------------------------------------------
-  ----------------------------------------------------------------------------- */
-
-  .side-panel-header {
-
-    background: @purple;
-    color: @white;
-
-    .button {
-
-      &:hover .side-panel-detail-close {
-
-        &:before,
-        &:after {
-
-          .opacity(1);
-
-        }
-
-      }
-
-    }
-
-    .icon {
-
-      margin-right: @base-spacing-unit * 0.5;
-
-    }
-
-  }
-
-
-
-  /* -----------------------------------------------------------------------------
-  --------------------------------------------------------------------------------
-
   Side Panel Content Header
 
   --------------------------------------------------------------------------------
@@ -100,55 +62,6 @@ Side Panel Detail
     }
 
   }
-
-  /*
-  .side-panel-detail-close {
-
-    .box-sizing(content-box);
-    cursor: pointer;
-    height: @button-large-height;
-    margin-left: @button-large-height * 0.5;
-    .transition(e('all 0.15s ease'));
-    width: @button-large-height;
-
-    &:before,
-    &:after {
-
-      background-color: @white;
-      content: '';
-      display: block;
-      height: 2px;
-      margin-left: -(@button-large-height * 0.5) * 0.5;
-      .opacity(0.8);
-      position: absolute;
-      .rotate(45deg);
-      top: (@button-large-height * 0.5) - 1px;
-      width: @button-large-height * 0.5;
-
-    }
-
-    &:after {
-
-      .rotate(-45deg);
-
-    }
-
-    &:active {
-
-      background: @body-text-link-text-color;
-      .rotate(0deg);
-
-      &:before,
-      &:after {
-
-        background-color: @white;
-
-      }
-
-    }
-
-  }
-  */
 
   .side-panel-tabs {
 
