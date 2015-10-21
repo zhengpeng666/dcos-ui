@@ -37,7 +37,7 @@ Icon (Small)
 ----------------------------------------------------------------------------- */
 
 @icon-sprite-small-count-horizontal:                                            3;
-@icon-sprite-small-count-vertical:                                              3;
+@icon-sprite-small-count-vertical:                                              4;
 @icon-sprite-small-border-radius:                                               4px;
 
 @icon-sprite-small-variant-black-offset-horizontal:                             0 * @icon-small-width;
@@ -409,6 +409,26 @@ Icon (jumbo)
         &.icon-sprite-small-color {
 
           background-position: floor(-@icon-sprite-small-variant-color-offset-horizontal) -(floor(@icon-small-height) * 2);
+
+        }
+
+      }
+
+      /* Icon: Close */
+
+      &.icon-close {
+
+        background-position: floor(-@icon-sprite-small-variant-black-offset-horizontal) -(floor(@icon-small-height) * 3);
+
+        &.icon-sprite-small-white {
+
+          background-position: floor(-@icon-sprite-small-variant-white-offset-horizontal) -(floor(@icon-small-height) * 3);
+
+        }
+
+        &.icon-sprite-small-color {
+
+          background-position: floor(-@icon-sprite-small-variant-color-offset-horizontal) -(floor(@icon-small-height) * 3);
 
         }
 
