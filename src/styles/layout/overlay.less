@@ -77,7 +77,8 @@ Overlay
 
       align-items: center;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
+      flex-direction: row;
 
     }
 
@@ -87,7 +88,8 @@ Overlay
 
     .overlay-header-content {
 
-      flex: 1;
+      flex-grow: 2;
+      flex-basis: 0;
 
       .overlay-header-content-title {
 
@@ -123,7 +125,8 @@ Overlay
 
     .overlay-header-actions {
 
-      flex: 3;
+      flex-grow: 1;
+      flex-basis: 0;
 
       &.overlay-header-actions-primary {
 
