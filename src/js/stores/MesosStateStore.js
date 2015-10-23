@@ -89,8 +89,10 @@ var MesosStateStore = Store.createStore({
     let foundTask = null;
 
     _.some(services, function (service) {
-      return _.some(service.tasks, function (task) {
-        var equalTask = task.id === taskID;
+      let tasks = service.tasks.concat(service.completed_tasks);
+
+      return _.some(tasks, function (task) {
+        let equalTask = task.id === taskID;
 
         if (equalTask) {
           foundTask = task;

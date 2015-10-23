@@ -60,4 +60,32 @@ describe("MesosStateStore", function () {
       expect(result).toEqual(null);
     });
   });
+
+  describe("#getTaskFromTaskID", function () {
+    beforeEach(function () {
+      this.get = MesosStateStore.get;
+      MesosStateStore.get = function () {
+        return {
+          frameworks: [{
+            tasks: [{id: 1}],
+            completed_tasks: [{id: 2}]
+          }]
+        };
+      };
+    });
+
+    afterEach(function () {
+      MesosStateStore.get = this.get;
+    });
+
+    it("should find a currently running task", function () {
+      var result = MesosStateStore.getTaskFromTaskID(1);
+      expect(result).toEqual({id: 1});
+    });
+
+    it("should find a completed task", function () {
+      var result = MesosStateStore.getTaskFromTaskID(2);
+      expect(result).toEqual({id: 2});
+    });
+  });
 });
