@@ -1,6 +1,7 @@
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
+import classNames from "classnames";
 
 import DetailSidePanel from "./DetailSidePanel";
 import HistoryStore from "../stores/HistoryStore";
@@ -8,11 +9,20 @@ import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import TaskStates from "../constants/TaskStates";
 
+// key is the name, value is the display name
+const TABS = {
+  files: "Files",
+  details: "Details"
+};
+
 export default class TaskSidePanel extends DetailSidePanel {
   constructor() {
     super(...arguments);
 
-    this.state = {};
+    this.state = {
+      currentTab: Object.keys(TABS).shift()
+    };
+
     this.storesListeners = ["state", "summary"];
   }
 
@@ -33,6 +43,10 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     this.context.router.transitionTo(prevPath);
+  }
+
+  handleTabClick(nextTab) {
+    this.setState({currentTab: nextTab});
   }
 
   getHeader() {
@@ -76,6 +90,39 @@ export default class TaskSidePanel extends DetailSidePanel {
     );
   }
 
+  getTabs() {
+    let currentTab = this.state.currentTab;
+
+    return Object.keys(TABS).map(function (tab, i) {
+      let classSet = classNames({
+        "button button-link": true,
+        "button-primary": currentTab === tab
+      });
+
+      return (
+        <div
+          key={i}
+          className={classSet}
+          onClick={this.handleTabClick.bind(this, tab)}>
+          {TABS[tab]}
+        </div>
+      );
+    }, this);
+  }
+
+  getTabView(task) {
+    let currentTab = this.state.currentTab;
+    if (currentTab === "files") {
+      return this.getFileView(task);
+    }
+
+    return this.getInfo(task);
+  }
+
+  getFileView(task) {
+    return null;
+  }
+
   getBasicInfo(task) {
     if (task == null) {
       return null;
@@ -105,13 +152,15 @@ export default class TaskSidePanel extends DetailSidePanel {
     return (
       <div>
         <div className="container container-pod container-pod-short
-            container-pod-divider-bottom container-pod-divider-inverse">
+            container-pod-divider-bottom container-pod-divider-inverse
+            flush-bottom">
           {this.getBasicInfo(task)}
+          <div className="container container-pod side-panel-tabs
+            flush flush-bottom">
+            {this.getTabs()}
+          </div>
         </div>
-        <div className="container container-pod container-pod-short flush-left
-            flush-top">
-          {this.getInfo(task)}
-        </div>
+        {this.getTabView(task)}
       </div>
     );
   }
