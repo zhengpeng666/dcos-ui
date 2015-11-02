@@ -142,8 +142,7 @@ gulp.task("less", function () {
     .pipe(autoprefixer())
     .pipe(gulpif(development, sourcemaps.write(".")))
     .pipe(gulp.dest(dirs.dist + "/" + dirs.stylesDist))
-    .pipe(gulpif(development, browserSync.stream()))
-    .on('error', gutil.log);
+    .pipe(gulpif(development, browserSync.stream()));
 });
 
 gulp.task("minify-css", ["less"], function () {
