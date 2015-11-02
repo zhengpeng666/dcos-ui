@@ -72,8 +72,7 @@ const MesosSummaryUtil = {
       });
 
       // refs: https://github.com/apache/mesos/blob/master/include/mesos/mesos.proto
-      successful = (diff.TASK_STAGING || 0) +
-        (diff.TASK_STARTING || 0) +
+      successful = (diff.TASK_STARTING || 0) +
         (diff.TASK_RUNNING || 0) +
         (diff.TASK_FINISHED || 0);
       failed = (diff.TASK_FAILED || 0) +
