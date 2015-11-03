@@ -25,13 +25,6 @@ function startPolling(task, deeperPath) {
   }
 }
 
-function stopPolling() {
-  if (requestInterval != null) {
-    clearInterval(requestInterval);
-    requestInterval = null;
-  }
-}
-
 var TaskDirectoryStore = Store.createStore({
   mixins: [GetSetMixin],
 
@@ -47,17 +40,13 @@ var TaskDirectoryStore = Store.createStore({
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
 
-    if (request != null) {
-      request.abort();
-    }
-
     if (_.isEmpty(this.listeners(EventTypes.TASK_DIRECTORY_CHANGE))) {
-      stopPolling();
-      this.set({extraPath: ""});
+      this.resetRequests();
+      this.set({extraPath: "", directory: []});
     }
   },
 
-  getDirectory: function (task, deeperPath) {
+  resetRequests: function () {
     if (requestInterval != null) {
       clearInterval(requestInterval);
       requestInterval = null;
@@ -65,7 +54,12 @@ var TaskDirectoryStore = Store.createStore({
 
     if (request != null) {
       request.abort();
+      request = null;
     }
+  },
+
+  getDirectory: function (task, deeperPath) {
+    this.resetRequests();
 
     startPolling(task, deeperPath);
   },
