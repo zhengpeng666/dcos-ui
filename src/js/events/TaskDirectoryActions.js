@@ -12,8 +12,8 @@ var TaskDirectoryActions = {
   fetchState: RequestUtil.debounceOnError(
     Config.getRefreshRate(),
     function (resolve, reject) {
-      return function (task, deeperPath) {
-        deeperPath = deeperPath || "";
+      return function (task, innerPath) {
+        innerPath = innerPath || "";
         let pid = MesosStateStore.getNodeFromID(task.slave_id).pid;
         let nodePID = pid.substring(0, pid.indexOf("@"));
 
@@ -35,7 +35,7 @@ var TaskDirectoryActions = {
             RequestUtil.json({
               url: TaskDirectoryURLUtil.getFilePathURL(task.slave_id),
               data: {
-                path: `${directoryPath}/${deeperPath}`
+                path: `${directoryPath}/${innerPath}`
               },
               success: function (directory) {
                 AppDispatcher.handleServerAction({
