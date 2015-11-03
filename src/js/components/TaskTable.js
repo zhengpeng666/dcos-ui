@@ -158,7 +158,7 @@ export default class TaskTable extends React.Component {
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
         data={this.props.tasks.slice()}
-        keys={["id"]}
+        idAttribute={"id"}
         sortBy={{prop: "name", order: "desc"}}
         transition={false} />
     );
@@ -172,4 +172,3 @@ TaskTable.propTypes = {
 TaskTable.defaultProps = {
   tasks: []
 };
-

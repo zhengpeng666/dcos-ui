@@ -81,19 +81,25 @@ let ServiceList = React.createClass({
       );
 
       return {
-        value: [
-          (
-            <a key="title"
-              onClick={this.handleServiceClick.bind(this, service.name)}
-              className="h4 inverse flush-top flush-bottom clickable">
-              {service.name}
-            </a>
-          ),
-          (
-            <div key="health" className={classSet} {...attributes}>
-              {healthLabel}
-            </div>
-          )
+        content: [
+          {
+            content: (
+              <a key="title"
+                onClick={this.handleServiceClick.bind(this, service.name)}
+                className="h4 inverse flush-top flush-bottom clickable">
+                {service.name}
+              </a>
+            ),
+            tag: "span"
+          },
+          {
+            content: (
+              <div key="health" className={classSet} {...attributes}>
+                {healthLabel}
+              </div>
+            ),
+            tag: "div"
+          }
         ]
       };
     }, this);
@@ -117,7 +123,8 @@ let ServiceList = React.createClass({
       <div className="service-list-component">
         <List
           className="list-unstyled flush"
-          items={this.getServices(props.services, props.healthProcessed)} />
+          content={this.getServices(props.services, props.healthProcessed)}
+          transition={false} />
       </div>
     );
   },
