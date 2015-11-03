@@ -22,7 +22,6 @@ export default class TaskDirectoryTable extends React.Component {
       element = (
         <a
           className="emphasize clickable"
-          style={{color: "red"}}
           onClick={this.handleTaskClick.bind(this, value)}>
           {value}
         </a>
