@@ -1,17 +1,19 @@
 import React from "react";
 
 import EventTypes from "../constants/EventTypes";
+import RequestErrorMsg from "./RequestErrorMsg";
 import TaskDirectoryTable from "./TaskDirectoryTable";
 import TaskDirectoryStore from "../stores/TaskDirectoryStore";
 
-const METHODS_TO_BIND = ["handleDirectoryChange"];
+const METHODS_TO_BIND = ["onDirectoryChange", "onDirectoryError"];
 
 export default class TaskDirectoryView extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      directory: null
+      directory: null,
+      taskDirectoryErrorCount: 0
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -21,20 +23,37 @@ export default class TaskDirectoryView extends React.Component {
 
   componentWillMount() {
     TaskDirectoryStore.getDirectory(this.props.task);
+
     TaskDirectoryStore.addChangeListener(
       EventTypes.TASK_DIRECTORY_CHANGE,
-      this.handleDirectoryChange
+      this.onDirectoryChange
+    );
+
+    TaskDirectoryStore.addChangeListener(
+      EventTypes.TASK_DIRECTORY_ERROR,
+      this.onDirectoryError
     );
   }
 
   componentWillUnmount() {
     TaskDirectoryStore.removeChangeListener(
       EventTypes.TASK_DIRECTORY_CHANGE,
-      this.handleDirectoryChange
+      this.onDirectoryChange
+    );
+
+    TaskDirectoryStore.removeChangeListener(
+      EventTypes.TASK_DIRECTORY_ERROR,
+      this.onDirectoryError
     );
   }
 
-  handleDirectoryChange() {
+  onDirectoryError() {
+    this.setState({
+      taskDirectoryErrorCount: this.state.taskDirectoryErrorCount + 1
+    });
+  }
+
+  onDirectoryChange() {
     let directory = TaskDirectoryStore.get("directory");
     this.setState({directory});
   }
@@ -43,7 +62,15 @@ export default class TaskDirectoryView extends React.Component {
     TaskDirectoryStore.addPath(this.props.task, path);
   }
 
+  hasLoadingError() {
+    return this.state.taskDirectoryErrorCount >= 3;
+  }
+
   getLoadingScreen() {
+    if (this.hasLoadingError()) {
+      return <RequestErrorMsg />;
+    }
+
     return (
       <div className="container container-pod text-align-center vertical-center
         inverse">
