@@ -40,7 +40,7 @@ var AlertPanel = React.createClass({
     return (
       <div className={classSet}>
         <div className="column-small-offset-2 column-small-8 column-medium-offset-3 column-medium-6 column-large-offset-4 column-large-4">
-          <Panel ref="panel panel-inverse"
+          <Panel ref="panel"
             style={{height: data.height}}
             className="vertical-center text-align-center flush">
             <h3 className="inverse flush-top">
