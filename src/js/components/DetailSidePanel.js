@@ -272,7 +272,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
         <h3 className="flush-top text-align-center">
           {`Error finding ${itemType}`}
         </h3>
-        <p class="flush">{`Did not find a ${itemType} by the id "${this.props.itemID}"`}</p>
+        <p className="flush">{`Did not find a ${itemType} by the id "${this.props.itemID}"`}</p>
       </div>
     );
   }
