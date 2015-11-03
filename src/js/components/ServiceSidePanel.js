@@ -113,25 +113,24 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let appImages = MarathonStore.getServiceImages(service.name);
     if (appImages && appImages["icon-large"]) {
       imageTag = (
-        <div className="side-panel-icon icon-inset-border icon-rounded">
-          <img className="icon icon-image icon-rounded"
-            src={appImages["icon-large"]} />
+        <div className="side-panel-icon icon icon-large icon-image-container icon-app-container">
+          <img src={appImages["icon-large"]} />
         </div>
       );
     }
 
     let containerClassSet = classNames({
-      "container container-fluid": imageTag != null
+      "": imageTag != null
     });
 
     return (
-      <div className="side-panel-content-header flex-box
+      <div className="side-panel-content-header-details flex-box
         flex-box-align-vertical-center">
         {imageTag}
         <div className={containerClassSet}>
-          <h2 className="side-panel-content-header-label inverse flush-top">
+          <h1 className="side-panel-content-header-label flush">
             {service.name}
-          </h2>
+          </h1>
           <div>
             {this.getSubHeader(service)}
           </div>
@@ -165,7 +164,8 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let tasks = MesosStateStore.getTasksFromServiceName(serviceName);
 
     return (
-      <div className="container container-pod flush-top">
+
+      <div className="container container-fluid container-pod container-pod-short-top">
         <TaskView tasks={tasks} parentRouter={this.context.router} />
       </div>
     );
@@ -178,7 +178,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
     }
 
     return (
-      <div className="container container-pod container-pod-short">
+      <div className="container container-fluid container-pod container-pod-short-top">
         {this.getInfo()}
       </div>
     );
@@ -193,12 +193,9 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
     return (
       <div>
-        <div className="container container-pod container-pod-divider-bottom
-            container-pod-divider-inverse container-pod-short-top
-            flush-bottom">
+        <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo()}
-          <div className="container container-pod container-pod-short flush-left
-              flush-bottom flush-right">
+          <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
             <div className="row">
               {this.getCharts("Service", service)}
             </div>
@@ -221,15 +218,12 @@ export default class ServiceSidePanel extends DetailSidePanel {
     // We are not using react-router's Link tag due to reactjs-component's
     // Portal going outside of React's render tree.
     return (
-      <div className="container container-pod container-pod-short
-          container-pod-super-short-top flush-left">
-        <div className="row">
-          <div className="column-4">
-            <a className="button button-primary text-align-right"
-              onClick={this.handleOpenServiceButtonClick}>
-              Open Service
-            </a>
-          </div>
+      <div className="side-panel-content-header-actions container-pod container-pod-short">
+        <div className="button-collection flush-bottom">
+          <a className="button button-large button-primary"
+            onClick={this.handleOpenServiceButtonClick}>
+            Open Service
+          </a>
         </div>
       </div>
     );

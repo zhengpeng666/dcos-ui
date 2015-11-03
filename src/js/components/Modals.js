@@ -191,7 +191,7 @@ var Modals = React.createClass({
       footer: (
         <div className="tour-start-modal-footer">
           <div className="row text-align-center">
-            <button className="button button-primary" onClick={beginTour}>
+            <button className="button button-primary button-large" onClick={beginTour}>
               Start The Tour
             </button>
           </div>

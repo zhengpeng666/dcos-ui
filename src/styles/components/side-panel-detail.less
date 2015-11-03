@@ -1,80 +1,74 @@
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+components/side-panel-detail.less
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
+
+
+
+
+
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+Side Panel Detail
+
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
 .side-panel-detail {
-  .side-panel-header {
-    background: @purple;
-    color: @white;
 
-    .button:hover .side-panel-detail-close {
-      &:before,
-      &:after {
-        .opacity(1);
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Side Panel Content Header
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
+  .side-panel-content {
+
+    .side-panel-content-header {
+
+      .side-panel-content-header-details {
+
+        .side-panel-icon {
+
+          margin-right: @base-spacing-unit * 0.5;
+
+        }
+
       }
+
     }
 
-    .icon {
-      margin-right: @base-spacing-unit * 0.5;
-    }
-  }
-
-  .side-panel-content-header {
-    margin-top: @base-spacing-unit * 0.75;
-  }
-
-  .side-panel-content-header-label {
-    font-size: 32px;
-    margin-bottom: @base-spacing-unit * 0.33;
   }
 
   .side-panel-icon {
+
     height: 64px;
     width: 64px;
 
     .icon-image {
+
       height: 64px;
       width: 64px;
-    }
-  }
 
-  .side-panel-detail-close {
-    .box-sizing(content-box);
-    cursor: pointer;
-    height: @button-large-height;
-    margin-left: @button-large-height * 0.5;
-    .transition(e('all 0.15s ease'));
-    width: @button-large-height;
-
-    &:before,
-    &:after {
-      background-color: @white;
-      content: '';
-      display: block;
-      height: 2px;
-      margin-left: -(@button-large-height * 0.5) * 0.5;
-      .opacity(0.8);
-      position: absolute;
-      .rotate(45deg);
-      top: (@button-large-height * 0.5) - 1px;
-      width: @button-large-height * 0.5;
     }
 
-    &:after {
-      .rotate(-45deg);
-    }
-
-    &:active {
-      background: @body-text-link-text-color;
-      .rotate(0deg);
-
-      &:before,
-      &:after {
-        background-color: @white;
-      }
-    }
   }
 
   .side-panel-tabs {
+
     margin-bottom: -1px;
 
     .button.button-link {
+
       padding-left: 0;
       padding-right: 0;
       border-radius: 0;
@@ -82,55 +76,82 @@
       z-index: 10;
 
       &.button-primary {
+
         border-bottom: 3px solid @purple;
+
       }
+
     }
+
   }
 
   .container-pod.container-pod-divider-inverse {
+
     border-color: color-lighten(@neutral, 90);
+
   }
 
   .side-panel-subheader {
+
     font-size: 15px;
     margin-right: @base-spacing-unit * 0.75;
     margin-top: @base-spacing-unit * 0.25;
 
     &:last-child {
+
       margin-right: 0;
+
     }
+
   }
 
   .control-group > *:first-child {
+
     margin-right: @base-spacing-unit * 0.5;
+
   }
 
   .filter-input-text {
+
     width: @base-spacing-unit * 3;
+
   }
 
   .filter-input-text-group {
+
     width: @base-spacing-unit * 7;
+
   }
 
   .table {
+
     > tbody tr > td.highlight {
+
       background: inherit;
+
     }
 
     th {
+
       background: color-lighten(@neutral, 80);
       position: relative;
       color: inherit;
 
       &.highlight {
+
         background: color-lighten(@neutral, 70);
         color: @neutral;
+
       }
+
     }
+
   }
 
   dd, dt {
+
     word-break: break-all;
+
   }
+
 }

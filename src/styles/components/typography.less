@@ -1,68 +1,115 @@
+/* -----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+components/typography.less
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+----------------------------------------------------------------------------- */
+
+
+
+
+
+
 & when (@typography-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Unit
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
   .unit {
+
     font-weight: 100;
     .flush-bottom();
 
     sup {
+
       top: 0em;
       vertical-align: super;
       font-size: 45%;
+
     }
+
   }
 
-  .unit-label {
-    .flush-top();
-  }
 
-  .text-danger {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Conditional Text Styling
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
+  .text-danger,
+  .text-danger.inverse {
     color: @text-danger-color;
   }
 
-  .text-warning {
+  .text-warning,
+  .text-warning.inverse {
     color: @text-warning-color;
   }
 
-  .text-success {
+  .text-success,
+  .text-success.inverse {
     color: @text-success-color;
   }
 
-  .text-muted {
+  .text-muted,
+  .text-muted.inverse {
     color: @text-muted-color;
   }
 
-  .text-color-0 {
+  .text-color-0,
+  .text-color-0.inverse {
     color: @purple;
   }
 
-  .text-color-1 {
+  .text-color-1,
+  .text-color-1.inverse {
     color: @orange;
   }
 
-  .text-color-2 {
+  .text-color-2,
+  .text-color-2.inverse {
     color: @red;
   }
 
-  .text-color-3 {
+  .text-color-3,
+  .text-color-3.inverse {
     color: @blue;
   }
 
-  .text-color-4 {
+  .text-color-4,
+  .text-color-4.inverse {
     color: @yellow;
   }
 
-  .text-color-5 {
+  .text-color-5,
+  .text-color-5.inverse {
     color: @green;
   }
 
-  .text-color-6 {
+  .text-color-6,
+  .text-color-6.inverse {
     color: @pink;
   }
 
-  .text-color-7 {
+  .text-color-7,
+  .text-color-7.inverse {
     color: @cyan;
   }
 
-  .text-color-8 {
+  .text-color-8,
+  .text-color-8.inverse  {
     color: color-lighten(@neutral, 40);
   }
 
@@ -70,298 +117,863 @@
     color: @neutral;
   }
 
+
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Small Text
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
   .text-small {
+
     font-size: .7rem;
+
   }
 
-  a {
-    &.small {
-      font-size: smaller;
-      color: @body-text-link-text-color;
-    }
+  a.small {
+
+    color: @body-text-link-text-color;
+
   }
+
+
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Text Overflow
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
 
   .text-overflow {
+
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
   }
 
-  /* Heading h1 Jumbo Text */
-  & when (@heading-h1-jumbo-text-enabled) {
 
-    .h1-jumbo {
+
+  & when (@heading-h1-large-text-enabled) {
+
+    /* -----------------------------------------------------------------------------
+    --------------------------------------------------------------------------------
+
+    Heading h1 Large Text
+
+    --------------------------------------------------------------------------------
+    ----------------------------------------------------------------------------- */
+
+    .h1-large {
+
+      display: block;
+
       .text-styling (
-        @heading-h1-jumbo-text-color,
-        @heading-h1-jumbo-text-font-family,
-        @heading-h1-jumbo-text-font-size,
-        @heading-h1-jumbo-text-font-style,
-        @heading-h1-jumbo-text-font-weight,
-        @heading-h1-jumbo-text-line-height,
-        @heading-h1-jumbo-text-transform,
-        @heading-h1-jumbo-text-shadow
+
+        @heading-h1-large-text-color,
+        @heading-h1-large-text-font-family,
+        @heading-h1-large-text-font-size,
+        @heading-h1-large-text-font-style,
+        @heading-h1-large-text-font-weight,
+        @heading-h1-large-text-line-height,
+        @heading-h1-large-text-transform,
+        @heading-h1-large-text-shadow
+
       );
 
-      margin-top: @heading-h1-jumbo-text-margin-top;
-      margin-bottom: @heading-h1-jumbo-text-margin-bottom;
+      margin-top: @heading-h1-large-text-margin-top;
+      margin-bottom: @heading-h1-large-text-margin-bottom;
 
-      /* Short */
+
+
+      /* -----------------------------------------------------------------------------
+      Short
+      ----------------------------------------------------------------------------- */
+
       &.short {
-        margin-top: @heading-h1-jumbo-text-short-margin-top;
-        margin-bottom: @heading-h1-jumbo-text-short-margin-bottom;
+
+        margin-top: @heading-h1-large-text-short-margin-top;
+        margin-bottom: @heading-h1-large-text-short-margin-bottom;
+
       }
 
       &.short-top {
-        margin-top: @heading-h1-jumbo-text-short-margin-top;
+
+        margin-top: @heading-h1-large-text-short-margin-top;
+
       }
 
       &.short-bottom {
-        margin-bottom: @heading-h1-jumbo-text-short-margin-bottom;
+
+        margin-bottom: @heading-h1-large-text-short-margin-bottom;
+
       }
 
-      /* Tall */
+
+
+      /* -----------------------------------------------------------------------------
+      Tall
+      ----------------------------------------------------------------------------- */
+
       &.tall {
-        margin-top: @heading-h1-jumbo-text-tall-margin-top;
-        margin-bottom: @heading-h1-jumbo-text-tall-margin-bottom;
+
+        margin-top: @heading-h1-large-text-tall-margin-top;
+        margin-bottom: @heading-h1-large-text-tall-margin-bottom;
+
       }
 
       &.tall-top {
-        margin-top: @heading-h1-jumbo-text-tall-margin-top;
+
+        margin-top: @heading-h1-large-text-tall-margin-top;
+
       }
 
       &.tall-bottom {
-        margin-bottom: @heading-h1-jumbo-text-tall-margin-bottom;
+
+        margin-bottom: @heading-h1-large-text-tall-margin-bottom;
+
       }
 
-      & when (@screen-mini-enabled) {
-        @media (min-width: @screen-mini) {
-          font-size: @heading-h1-jumbo-text-font-size * @heading-h1-jumbo-text-font-size-scale-screen-mini;
-          line-height: @heading-h1-jumbo-text-line-height * @heading-h1-jumbo-text-line-height-scale-screen-mini;
+
+
+      /* -----------------------------------------------------------------------------
+      Text Decoration (Line)
+      ----------------------------------------------------------------------------- */
+
+      &.decorate-line {
+
+        &:after {
+
+          width: @heading-h1-large-text-line-height;
+
         }
-      }
 
-      & when (@screen-small-enabled) {
-        @media (min-width: @screen-small) {
-          font-size: @heading-h1-jumbo-text-font-size * @heading-h1-jumbo-text-font-size-scale-screen-small;
-          line-height: @heading-h1-jumbo-text-line-height * @heading-h1-jumbo-text-line-height-scale-screen-small;
-        }
-      }
+        &.text-align-center {
 
-      & when (@screen-medium-enabled) {
-        @media (min-width: @screen-medium) {
-          font-size: @heading-h1-jumbo-text-font-size * @heading-h1-jumbo-text-font-size-scale-screen-medium;
-          line-height: @heading-h1-jumbo-text-line-height * @heading-h1-jumbo-text-line-height-scale-screen-medium;
-        }
-      }
+          &:after {
 
-      & when (@screen-large-enabled) {
-        @media (min-width: @screen-large) {
-          font-size: @heading-h1-jumbo-text-font-size * @heading-h1-jumbo-text-font-size-scale-screen-large;
-          line-height: @heading-h1-jumbo-text-line-height * @heading-h1-jumbo-text-line-height-scale-screen-large;
-        }
-      }
+            margin-left: -(@heading-h1-large-text-line-height / 2);
 
-      /* Links */
-      & when (@heading-h1-jumbo-text-link-enabled) {
-        a {
-          color: @heading-h1-jumbo-text-link-text-color;
-          text-decoration: @heading-h1-jumbo-text-link-text-decoration;
-
-          &:hover {
-            color: @heading-h1-jumbo-text-link-hover-text-color;
-            text-decoration: @heading-h1-jumbo-text-link-hover-text-decoration;
           }
 
-          &:active {
-            color: @heading-h1-jumbo-text-link-active-text-color;
-            text-decoration: @heading-h1-jumbo-text-link-active-text-decoration;
+        }
+
+        &.decorate-line-underline {
+
+          padding-bottom: @heading-h1-large-text-margin-bottom;
+
+          &.decorate-line-short {
+
+            padding-bottom: (@heading-h1-large-text-short-margin-bottom);
+
           }
 
-          &:disabled {
-            color: @heading-h1-jumbo-text-link-active-text-color;
-            text-decoration: @heading-h1-jumbo-text-link-active-text-decoration;
+          &.decorate-line-tall {
+
+            padding-bottom: (@heading-h1-large-text-tall-margin-bottom);
+
           }
+
         }
+
+        &.decorate-line-overline {
+
+          padding-top: @heading-h1-large-text-margin-bottom;
+
+          &.decorate-line-short {
+
+            padding-top: (@heading-h1-large-text-short-margin-bottom);
+
+          }
+
+          &.decorate-line-tall {
+
+            padding-top: (@heading-h1-large-text-tall-margin-bottom);
+
+          }
+
+        }
+
       }
 
-      /* Emphasize */
-      & when (@heading-h1-jumbo-text-emphasize-enabled) {
-        strong,
-        .emphasize {
-          .text-styling (
-            @heading-h1-jumbo-text-emphasize-color,
-            @heading-h1-jumbo-text-emphasize-font-family,
-            @heading-h1-jumbo-text-emphasize-font-size,
-            @heading-h1-jumbo-text-emphasize-font-style,
-            @heading-h1-jumbo-text-emphasize-font-weight,
-            @heading-h1-jumbo-text-emphasize-line-height,
-            @heading-h1-jumbo-text-emphasize-transform,
-            @heading-h1-jumbo-text-emphasize-shadow
-          );
 
 
+      /* -----------------------------------------------------------------------------
+      Thin
+      ----------------------------------------------------------------------------- */
 
-          /* Links */
-          & when (@heading-h1-jumbo-text-emphasize-link-enabled) {
-            a {
-              color: @heading-h1-jumbo-text-emphasize-link-text-color;
-              text-decoration: @heading-h1-jumbo-text-emphasize-link-text-decoration;
+      &.thin {
 
-              &:hover {
-                color: @heading-h1-jumbo-text-emphasize-link-hover-text-color;
-                text-decoration: @heading-h1-jumbo-text-emphasize-link-hover-text-decoration;
-              }
+        font-weight: 100;
 
-              &:active {
-                color: @heading-h1-jumbo-text-emphasize-link-active-text-color;
-                text-decoration: @heading-h1-jumbo-text-emphasize-link-active-text-decoration;
-              }
-
-              &:disabled {
-                color: @heading-h1-jumbo-text-emphasize-link-active-text-color;
-                text-decoration: @heading-h1-jumbo-text-emphasize-link-active-text-decoration;
-              }
-            }
-          }
-        }
       }
 
-      /* Mute */
-      & when (@heading-h1-jumbo-text-mute-enabled) {
-        .mute {
-          .text-styling (
-            @heading-h1-jumbo-text-mute-color,
-            @heading-h1-jumbo-text-mute-font-family,
-            @heading-h1-jumbo-text-mute-font-size,
-            @heading-h1-jumbo-text-mute-font-style,
-            @heading-h1-jumbo-text-mute-font-weight,
-            @heading-h1-jumbo-text-mute-line-height,
-            @heading-h1-jumbo-text-mute-transform,
-            @heading-h1-jumbo-text-mute-shadow
-          );
-
-          /* Links */
-          & when (@heading-h1-jumbo-text-mute-link-enabled) {
-            a {
-              color: @heading-h1-jumbo-text-mute-link-text-color;
-              text-decoration: @heading-h1-jumbo-text-mute-link-text-decoration;
-
-              &:hover {
-                color: @heading-h1-jumbo-text-mute-link-hover-text-color;
-                text-decoration: @heading-h1-jumbo-text-mute-link-hover-text-decoration;
-              }
-
-              &:active {
-                color: @heading-h1-jumbo-text-mute-link-active-text-color;
-                text-decoration: @heading-h1-jumbo-text-mute-link-active-text-decoration;
-              }
-
-              &:disabled {
-                color: @heading-h1-jumbo-text-mute-link-active-text-color;
-                text-decoration: @heading-h1-jumbo-text-mute-link-active-text-decoration;
-              }
-            }
-          }
-        }
-      }
-
-      /* Inverse */
-      & when (@heading-h1-jumbo-text-inverse-enabled) {
-        &.inverse {
-          color: @heading-h1-jumbo-text-inverse-color;
-          text-shadow: @heading-h1-jumbo-text-inverse-shadow;
-
-          /* Links */
-          & when (@heading-h1-jumbo-text-inverse-link-enabled) {
-
-            a {
-              color: @heading-h1-jumbo-text-inverse-link-text-color;
-              text-decoration: @heading-h1-jumbo-text-inverse-link-text-decoration;
-
-              &:hover {
-                color: @heading-h1-jumbo-text-inverse-link-hover-text-color;
-                text-decoration: @heading-h1-jumbo-text-inverse-link-hover-text-decoration;
-              }
-
-              &:active {
-                color: @heading-h1-jumbo-text-inverse-link-active-text-color;
-                text-decoration: @heading-h1-jumbo-text-inverse-link-active-text-decoration;
-              }
-
-              &:disabled {
-                color: @heading-h1-jumbo-text-inverse-link-active-text-color;
-                text-decoration: @heading-h1-jumbo-text-inverse-link-active-text-decoration;
-              }
-            }
-          }
-
-          /* Emphasize Inverse */
-          & when (@heading-h1-jumbo-text-inverse-emphasize-enabled) {
-            strong,
-            .emphasize {
-              color: @heading-h1-jumbo-text-inverse-emphasize-color;
-              text-shadow: @heading-h1-jumbo-text-inverse-emphasize-shadow;
-
-              /* Links */
-              & when (@heading-h1-jumbo-text-inverse-emphasize-link-enabled) {
-
-                a {
-                  color: @heading-h1-jumbo-text-inverse-emphasize-link-text-color;
-                  text-decoration: @heading-h1-jumbo-text-inverse-emphasize-link-text-decoration;
-
-                  &:hover {
-                    color: @heading-h1-jumbo-text-inverse-emphasize-link-hover-text-color;
-                    text-decoration: @heading-h1-jumbo-text-inverse-emphasize-link-hover-text-decoration;
-                  }
-
-                  &:active {
-                    color: @heading-h1-jumbo-text-inverse-emphasize-link-active-text-color;
-                    text-decoration: @heading-h1-jumbo-text-inverse-emphasize-link-active-text-decoration;
-                  }
-
-                  &:disabled {
-                    color: @heading-h1-jumbo-text-inverse-emphasize-link-active-text-color;
-                    text-decoration: @heading-h1-jumbo-text-inverse-emphasize-link-active-text-decoration;
-                  }
-                }
-              }
-            }
-          }
-
-          /* Mute Inverse */
-          & when (@heading-h1-jumbo-text-inverse-mute-enabled) {
-            .mute {
-              color: @heading-h1-jumbo-text-inverse-mute-color;
-              text-shadow: @heading-h1-jumbo-text-inverse-mute-shadow;
-
-              /* Links */
-              & when (@heading-h1-jumbo-text-inverse-mute-link-enabled) {
-
-                a {
-                  color: @heading-h1-jumbo-text-inverse-mute-link-text-color;
-                  text-decoration: @heading-h1-jumbo-text-inverse-mute-link-text-decoration;
-
-                  &:hover {
-                    color: @heading-h1-jumbo-text-inverse-mute-link-hover-text-color;
-                    text-decoration: @heading-h1-jumbo-text-inverse-mute-link-hover-text-decoration;
-                  }
-
-                  &:active {
-                    color: @heading-h1-jumbo-text-inverse-mute-link-active-text-color;
-                    text-decoration: @heading-h1-jumbo-text-inverse-mute-link-active-text-decoration;
-                  }
-
-                  &:disabled {
-                    color: @heading-h1-jumbo-text-inverse-mute-link-active-text-color;
-                    text-decoration: @heading-h1-jumbo-text-inverse-mute-link-active-text-decoration;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
+
   }
+
+}
+
+
+
+
+
+
+& when (@typography-enabled) and (@screen-mini-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Screen Size: Mini (@screen-mini) and above
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
+  @media (min-width: @screen-mini) {
+
+    & when (@heading-h1-large-text-enabled) and (@heading-h1-large-text-scale-screen-mini) {
+
+      /* -----------------------------------------------------------------------------
+      --------------------------------------------------------------------------------
+
+      Heading H1 Large Text
+
+      --------------------------------------------------------------------------------
+      ----------------------------------------------------------------------------- */
+
+      .h1-large {
+
+        font-size: @heading-h1-large-text-font-size * @heading-h1-large-text-font-size-scale-screen-mini;
+        line-height: @heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-mini;
+        margin-top: @heading-h1-large-text-margin-top * @heading-h1-large-text-margin-top-scale-screen-mini;
+        margin-bottom: @heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini;
+
+
+
+        /* -----------------------------------------------------------------------------
+        Short
+        ----------------------------------------------------------------------------- */
+
+        &.short {
+
+          margin-top: @heading-h1-large-text-short-margin-top * @heading-h1-large-text-margin-top-scale-screen-mini;
+          margin-bottom: @heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini;
+
+        }
+
+        &.short-top {
+
+          margin-top: @heading-h1-large-text-short-margin-top * @heading-h1-large-text-margin-top-scale-screen-mini;
+
+        }
+
+        &.short-bottom {
+
+          margin-bottom: @heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini;
+
+        }
+
+
+
+        /* -----------------------------------------------------------------------------
+        Tall
+        ----------------------------------------------------------------------------- */
+
+        &.tall {
+
+          margin-top: @heading-h1-large-text-tall-margin-top * @heading-h1-large-text-margin-top-scale-screen-mini;
+          margin-bottom: @heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini;
+
+        }
+
+        &.tall-top {
+
+          margin-top: @heading-h1-large-text-tall-margin-top * @heading-h1-large-text-margin-top-scale-screen-mini;
+
+        }
+
+        &.tall-bottom {
+
+          margin-bottom: @heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini;
+
+        }
+
+
+
+        /* -----------------------------------------------------------------------------
+        Text Decoration (Line)
+        ----------------------------------------------------------------------------- */
+
+        &.decorate-line {
+
+          &:after {
+
+            width: (@heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-mini);
+
+          }
+
+          &.text-align-center {
+
+            &:after {
+
+              margin-left: -((@heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-mini) / 2);
+
+            }
+
+          }
+
+          &.decorate-line-underline {
+
+            padding-bottom: (@heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini);
+
+            &.decorate-line-short {
+
+              padding-bottom: (@heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini);
+
+            }
+
+            &.decorate-line-tall {
+
+              padding-bottom: (@heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini);
+
+            }
+
+          }
+
+          &.decorate-line-overline {
+
+            padding-top: (@heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini);
+
+            &.decorate-line-short {
+
+              padding-top: (@heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini);
+
+            }
+
+            &.decorate-line-tall {
+
+              padding-top: (@heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-mini);
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+
+
+
+
+
+& when (@typography-enabled) and (@screen-small-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Screen Size: Small (@screen-small) and above
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
+  @media (min-width: @screen-small) {
+
+    & when (@heading-h1-large-text-enabled) and (@heading-h1-large-text-scale-screen-small) {
+
+      /* -----------------------------------------------------------------------------
+      --------------------------------------------------------------------------------
+
+      Heading H1 Large Text
+
+      --------------------------------------------------------------------------------
+      ----------------------------------------------------------------------------- */
+
+      .h1-large {
+
+        font-size: @heading-h1-large-text-font-size * @heading-h1-large-text-font-size-scale-screen-small;
+        line-height: @heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-small;
+        margin-top: @heading-h1-large-text-margin-top * @heading-h1-large-text-margin-top-scale-screen-small;
+        margin-bottom: @heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small;
+
+
+
+        /* -----------------------------------------------------------------------------
+        Short
+        ----------------------------------------------------------------------------- */
+
+        &.short {
+
+          margin-top: @heading-h1-large-text-short-margin-top * @heading-h1-large-text-margin-top-scale-screen-small;
+          margin-bottom: @heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small;
+
+        }
+
+        &.short-top {
+
+          margin-top: @heading-h1-large-text-short-margin-top * @heading-h1-large-text-margin-top-scale-screen-small;
+
+        }
+
+        &.short-bottom {
+
+          margin-bottom: @heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small;
+
+        }
+
+
+
+        /* -----------------------------------------------------------------------------
+        Tall
+        ----------------------------------------------------------------------------- */
+
+        &.tall {
+
+          margin-top: @heading-h1-large-text-tall-margin-top * @heading-h1-large-text-margin-top-scale-screen-small;
+          margin-bottom: @heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small;
+
+        }
+
+        &.tall-top {
+
+          margin-top: @heading-h1-large-text-tall-margin-top * @heading-h1-large-text-margin-top-scale-screen-small;
+
+        }
+
+        &.tall-bottom {
+
+          margin-bottom: @heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small;
+
+        }
+
+
+
+        /* -----------------------------------------------------------------------------
+        Text Decoration (Line)
+        ----------------------------------------------------------------------------- */
+
+        &.decorate-line {
+
+          &:after {
+
+            width: (@heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-small);
+
+          }
+
+          &.text-align-center {
+
+            &:after {
+
+              margin-left: -((@heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-small) / 2);
+
+            }
+
+          }
+
+          &.decorate-line-underline {
+
+            padding-bottom: (@heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small);
+
+            &.decorate-line-short {
+
+              padding-bottom: (@heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small);
+
+            }
+
+            &.decorate-line-tall {
+
+              padding-bottom: (@heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small);
+
+            }
+
+          }
+
+          &.decorate-line-overline {
+
+            padding-top: (@heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small);
+
+            &.decorate-line-short {
+
+              padding-top: (@heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small);
+
+            }
+
+            &.decorate-line-tall {
+
+              padding-top: (@heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-small);
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+
+
+
+
+
+& when (@typography-enabled) and (@screen-medium-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Screen Size: Medium (@screen-medium) and above
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
+  @media (min-width: @screen-medium) {
+
+    & when (@heading-h1-large-text-enabled) and (@heading-h1-large-text-scale-screen-medium) {
+
+      /* -----------------------------------------------------------------------------
+      --------------------------------------------------------------------------------
+
+      Heading H1 Large Text
+
+      --------------------------------------------------------------------------------
+      ----------------------------------------------------------------------------- */
+
+      .h1-large {
+
+        font-size: @heading-h1-large-text-font-size * @heading-h1-large-text-font-size-scale-screen-medium;
+        line-height: @heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-medium;
+        margin-top: @heading-h1-large-text-margin-top * @heading-h1-large-text-margin-top-scale-screen-medium;
+        margin-bottom: @heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium;
+
+
+
+        /* -----------------------------------------------------------------------------
+        Short
+        ----------------------------------------------------------------------------- */
+
+        &.short {
+
+          margin-top: @heading-h1-large-text-short-margin-top * @heading-h1-large-text-margin-top-scale-screen-medium;
+          margin-bottom: @heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium;
+
+        }
+
+        &.short-top {
+
+          margin-top: @heading-h1-large-text-short-margin-top * @heading-h1-large-text-margin-top-scale-screen-medium;
+
+        }
+
+        &.short-bottom {
+
+          margin-bottom: @heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium;
+
+        }
+
+
+
+        /* -----------------------------------------------------------------------------
+        Tall
+        ----------------------------------------------------------------------------- */
+
+        &.tall {
+
+          margin-top: @heading-h1-large-text-tall-margin-top * @heading-h1-large-text-margin-top-scale-screen-medium;
+          margin-bottom: @heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium;
+
+        }
+
+        &.tall-top {
+
+          margin-top: @heading-h1-large-text-tall-margin-top * @heading-h1-large-text-margin-top-scale-screen-medium;
+
+        }
+
+        &.tall-bottom {
+
+          margin-bottom: @heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium;
+
+        }
+
+
+
+        /* -----------------------------------------------------------------------------
+        Text Decoration (Line)
+        ----------------------------------------------------------------------------- */
+
+        &.decorate-line {
+
+          &:after {
+
+            width: (@heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-medium);
+
+          }
+
+          &.text-align-center {
+
+            &:after {
+
+              margin-left: -((@heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-medium) / 2);
+
+            }
+
+          }
+
+          &.decorate-line-underline {
+
+            padding-bottom: (@heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium);
+
+            &.decorate-line-short {
+
+              padding-bottom: (@heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium);
+
+            }
+
+            &.decorate-line-tall {
+
+              padding-bottom: (@heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium);
+
+            }
+
+          }
+
+          &.decorate-line-overline {
+
+            padding-top: (@heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium);
+
+            &.decorate-line-short {
+
+              padding-top: (@heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium);
+
+            }
+
+            &.decorate-line-tall {
+
+              padding-top: (@heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-medium);
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+
+
+
+
+
+& when (@typography-enabled) and (@screen-large-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Screen Size: Large (@screen-large) and above
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
+  @media (min-width: @screen-large) {
+
+    & when (@heading-h1-large-text-enabled) and (@heading-h1-large-text-scale-screen-large) {
+
+      /* -----------------------------------------------------------------------------
+      --------------------------------------------------------------------------------
+
+      Heading H1 Large Text
+
+      --------------------------------------------------------------------------------
+      ----------------------------------------------------------------------------- */
+
+      .h1-large {
+
+        font-size: @heading-h1-large-text-font-size * @heading-h1-large-text-font-size-scale-screen-large;
+        line-height: @heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-large;
+        margin-top: @heading-h1-large-text-margin-top * @heading-h1-large-text-margin-top-scale-screen-large;
+        margin-bottom: @heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large;
+
+
+
+        /* -----------------------------------------------------------------------------
+        Short
+        ----------------------------------------------------------------------------- */
+
+        &.short {
+
+          margin-top: @heading-h1-large-text-short-margin-top * @heading-h1-large-text-margin-top-scale-screen-large;
+          margin-bottom: @heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large;
+
+        }
+
+        &.short-top {
+
+          margin-top: @heading-h1-large-text-short-margin-top * @heading-h1-large-text-margin-top-scale-screen-large;
+
+        }
+
+        &.short-bottom {
+
+          margin-bottom: @heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large;
+
+        }
+
+
+
+        /* -----------------------------------------------------------------------------
+        Tall
+        ----------------------------------------------------------------------------- */
+
+        &.tall {
+
+          margin-top: @heading-h1-large-text-tall-margin-top * @heading-h1-large-text-margin-top-scale-screen-large;
+          margin-bottom: @heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large;
+
+        }
+
+        &.tall-top {
+
+          margin-top: @heading-h1-large-text-tall-margin-top * @heading-h1-large-text-margin-top-scale-screen-large;
+
+        }
+
+        &.tall-bottom {
+
+          margin-bottom: @heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large;
+
+        }
+
+
+
+        /* -----------------------------------------------------------------------------
+        Text Decoration (Line)
+        ----------------------------------------------------------------------------- */
+
+        &.decorate-line {
+
+          &:after {
+
+            width: (@heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-large);
+
+          }
+
+          &.text-align-center {
+
+            &:after {
+
+              margin-left: -((@heading-h1-large-text-line-height * @heading-h1-large-text-line-height-scale-screen-large) / 2);
+
+            }
+
+          }
+
+          &.decorate-line-underline {
+
+            padding-bottom: (@heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large);
+
+            &.decorate-line-short {
+
+              padding-bottom: (@heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large);
+
+            }
+
+            &.decorate-line-tall {
+
+              padding-bottom: (@heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large);
+
+            }
+
+          }
+
+          &.decorate-line-overline {
+
+            padding-top: (@heading-h1-large-text-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large);
+
+            &.decorate-line-short {
+
+              padding-top: (@heading-h1-large-text-short-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large);
+
+            }
+
+            &.decorate-line-tall {
+
+              padding-top: (@heading-h1-large-text-tall-margin-bottom * @heading-h1-large-text-margin-bottom-scale-screen-large);
+
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+
+
+
+
+
+& when (@typography-enabled) and (@screen-resolution-2x-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Screen Resolution: 2x
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
+  @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+
+  }
+
+}
+
+
+
+
+
+
+& when (@typography-enabled) and (@screen-resolution-3x-enabled) {
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Screen Resolution: 3x
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
+  @media only screen and (-webkit-min-device-pixel-ratio: 3) {
+
+  }
+
 }

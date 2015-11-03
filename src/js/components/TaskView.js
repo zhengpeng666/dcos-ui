@@ -160,9 +160,9 @@ export default class TaskView extends React.Component {
 
     return (
       <div>
-        <h2 className="inverse text-align-left">
+        <h4 className="text-align-left flush-top">
           {this.getHeaderText(tasks)}
-        </h2>
+        </h4>
         <div className="flex-box control-group">
           <FilterInputText
             searchString={state.searchString}

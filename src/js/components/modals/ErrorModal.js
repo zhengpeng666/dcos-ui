@@ -24,7 +24,7 @@ var ErrorModal = React.createClass({
         showCloseButton={false}
         showFooter={false}
         subHeader=""
-        titleClass="modal-header-title text-align-center flush-top inverse"
+        titleClass="modal-header-title text-align-center flush-top"
         titleText="Looks Like Something is Wrong">
         {this.props.errorMsg}
       </Modal>

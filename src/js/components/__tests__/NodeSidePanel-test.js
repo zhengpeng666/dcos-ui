@@ -138,7 +138,7 @@ describe("NodeSidePanel", function () {
 
   it("should show error if node is not to be found", function () {
     let contents = TestUtils.renderIntoDocument(this.instance.getContents());
-    let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h1");
+    let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h3");
 
     expect(headline.getDOMNode().textContent).toBe("Error finding node");
   });

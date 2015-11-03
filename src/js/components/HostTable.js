@@ -48,13 +48,13 @@ var HostTable = React.createClass({
     // Anything nested in elements hosting a tooltip needs to have
     // "disable-pointer-events" in order for the tip to render correctly.
     return (
-      <div className="h5 flush-top flush-bottom">
+      <div>
         <Link params={{nodeID: node.get("id")}}
           to="nodes-list-panel"
           {...toolTip}>
           {icon}
         </Link>
-        <Link className="headline"
+        <Link className="headline emphasize"
           params={{nodeID: node.get("id")}}
           to="nodes-list-panel"
           {...toolTip}>
@@ -144,10 +144,10 @@ var HostTable = React.createClass({
     return (
       <colgroup>
         <col />
-        <col style={{width: "100px"}} />
-        <col className="hidden-mini" style={{width: "100px"}} />
-        <col className="hidden-mini" style={{width: "115px"}} />
-        <col className="hidden-mini" style={{width: "100px"}} />
+        <col style={{width: "110px"}} />
+        <col className="hidden-mini" style={{width: "135px"}} />
+        <col className="hidden-mini" style={{width: "135px"}} />
+        <col className="hidden-mini" style={{width: "135px"}} />
       </colgroup>
     );
   },
@@ -167,7 +167,7 @@ var HostTable = React.createClass({
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
         data={this.props.hosts.slice()}
-        keys={["id"]}
+        idAttribute={"id"}
         sortBy={{ prop: "hostname", order: "desc" }}
         buildRowOptions={this.getRowAttributes}
         transition={false} />

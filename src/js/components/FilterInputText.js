@@ -54,30 +54,30 @@ var FilterInputText = React.createClass({
     });
 
     var clearIconClasses = classNames({
-      "icon icon-mini icon-close": true,
-      "icon-mini-white": this.props.inverseStyle
+      "icon icon-sprite icon-sprite-mini icon-close": true,
+      "icon-sprite-mini-white": this.props.inverseStyle
     });
 
     var iconSearchClasses = classNames({
-      "icon icon-mini icon-search": true,
-      "icon-mini-white": this.props.inverseStyle,
-      "icon-mini-color": !this.props.inverseStyle && this.state.focus,
+      "icon icon-sprite icon-sprite-mini icon-search": true,
+      "icon-sprite-mini-white": this.props.inverseStyle,
+      "icon-sprite-mini-color": !this.props.inverseStyle && this.state.focus,
       "active": this.state.focus
     });
 
     var inputClasses = classNames({
-      "form-control form-control-small filter-input-text": true,
+      "form-control filter-input-text": true,
       "form-control-inverse": this.props.inverseStyle
     });
 
     let inputContainerClasses = classNames({
-      "form-control form-control-small form-control-group": true,
+      "form-control form-control-group filter-input-text-group": true,
       "form-control-inverse": this.props.inverseStyle,
       "focus": this.state.focus
     });
 
     return (
-      <div className="form-group form-group-small filter-input-text-group">
+      <div className="form-group">
         <div className={inputContainerClasses}>
           <span className="form-control-group-add-on form-control-group-add-on-prepend">
             <i className={iconSearchClasses}></i>

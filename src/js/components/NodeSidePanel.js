@@ -51,9 +51,9 @@ export default class NodeSidePanel extends DetailSidePanel {
 
     return (
       <div className="side-panel-content-header">
-        <h2 className="side-panel-content-header-label inverse flush-top">
+        <h1 className="side-panel-content-header-label flush">
           {node.hostname}
-        </h2>
+        </h1>
         <div>
           {`${activeTasksCount} Active ${activeTasksSubHeader}`}
         </div>
@@ -85,7 +85,7 @@ export default class NodeSidePanel extends DetailSidePanel {
     let tasks = MesosStateStore.getTasksFromNodeID(this.props.itemID);
 
     return (
-      <div className="container container-pod flush-top">
+      <div className="container container-fluid container-pod container-pod-short-top">
         <TaskView tasks={tasks} parentRouter={this.context.router}/>
       </div>
     );
@@ -130,11 +130,9 @@ export default class NodeSidePanel extends DetailSidePanel {
 
     return (
       <div>
-        <div
-          className="container container-pod container-pod-divider-bottom
-            container-pod-divider-inverse container-pod-short-top flush-bottom">
+        <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo(node)}
-          <div className="container container-pod container-pod-short flush-left flush-right">
+          <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
             <div className="row">
               {this.getCharts("Node", node)}
             </div>

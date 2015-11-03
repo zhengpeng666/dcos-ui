@@ -76,24 +76,32 @@ let ServiceList = React.createClass({
       }
 
       let classSet = classNames(
-        "h3 flush-top flush-bottom text-align-right",
+        "h4 inverse flush-top flush-bottom text-align-right",
         state.classNames
       );
 
       return {
-        value: [
-          (
-            <a key="title"
-              onClick={this.handleServiceClick.bind(this, service.name)}
-              className="h3 flush-top flush-bottom clickable">
-              {service.name}
-            </a>
-          ),
-          (
-            <div key="health" className={classSet} {...attributes}>
-              {healthLabel}
-            </div>
-          )
+        content: [
+          {
+            className: null,
+            content: (
+              <a key="title"
+                onClick={this.handleServiceClick.bind(this, service.name)}
+                className="h4 inverse flush-top flush-bottom clickable">
+                {service.name}
+              </a>
+            ),
+            tag: "span"
+          },
+          {
+            className: null,
+            content: (
+              <div key="health" className={classSet} {...attributes}>
+                {healthLabel}
+              </div>
+            ),
+            tag: "div"
+          }
         ]
       };
     }, this);
@@ -101,9 +109,11 @@ let ServiceList = React.createClass({
 
   getNoServicesMessage: function () {
     return (
-      <div className="text-align-center vertical-center">
-        <h2>No Services Running</h2>
-        <p>Use the DCOS command line tools to find and install services.</p>
+      <div className="flex-box flex-box-align-vertical-center">
+        <div className="vertical-center">
+          <h3 className="flush-top inverse text-align-center">No Services Running</h3>
+          <p className="inverse flush text-align-center">Use the DCOS command line tools to find and install services.</p>
+        </div>
       </div>
     );
   },
@@ -114,8 +124,9 @@ let ServiceList = React.createClass({
     return (
       <div className="service-list-component">
         <List
-          className="list-unstyled"
-          items={this.getServices(props.services, props.healthProcessed)} />
+          className="list list-unstyled flush"
+          content={this.getServices(props.services, props.healthProcessed)}
+          transition={false} />
       </div>
     );
   },

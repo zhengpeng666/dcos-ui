@@ -66,7 +66,7 @@ let ResourceBarChart = React.createClass({
 
     return _.map(ResourceTypes, function (info, key) {
       let classSet = classNames({
-        "button button-small button-stroke button-inverse": true,
+        "button button-stroke button-inverse": true,
         "active": selectedResource === key
       });
 
@@ -99,10 +99,10 @@ let ResourceBarChart = React.createClass({
 
     return (
       <div>
-        <h3 className="flush-top flush-bottom">
+        <h4 className="flush inverse">
           {headline}
-        </h3>
-        <p className="flush-bottom">
+        </h4>
+        <p className="flush inverse">
           {this.props.itemCount + " Total " + this.props.resourceType}
         </p>
       </div>
@@ -118,7 +118,7 @@ let ResourceBarChart = React.createClass({
           <div className="panel-options-left button-group">
             {this.getModeButtons()}
           </div>
-          <div className="panel-title">
+          <div className="panel-title inverse">
             {this.getHeadline(info)}
           </div>
           <div className="panel-options-right fixed-width">
