@@ -83,6 +83,7 @@ let ServiceList = React.createClass({
       return {
         content: [
           {
+            className: null,
             content: (
               <a key="title"
                 onClick={this.handleServiceClick.bind(this, service.name)}
@@ -93,6 +94,7 @@ let ServiceList = React.createClass({
             tag: "span"
           },
           {
+            className: null,
             content: (
               <div key="health" className={classSet} {...attributes}>
                 {healthLabel}
@@ -122,7 +124,7 @@ let ServiceList = React.createClass({
     return (
       <div className="service-list-component">
         <List
-          className="list-unstyled flush"
+          className="list list-unstyled flush"
           content={this.getServices(props.services, props.healthProcessed)}
           transition={false} />
       </div>
