@@ -14,10 +14,10 @@ export default class TaskDirectoryTable extends React.Component {
 
   renderHeadline(prop, file) {
     let element;
-    let value = file[prop];
-    value = value.split("/");
+    let value = file[prop].split("/");
     value = value[value.length - 1];
 
+    // File is a directory if nlink is greater than 1.
     if (file.nlink > 1) {
       element = (
         <a
