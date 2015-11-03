@@ -46,9 +46,8 @@ var MesosSummaryActions = {
         RequestUtil.json({
           url: url,
           success: function (response) {
-            let possibleActions = [successAction];
             AppDispatcher.handleServerAction({
-              type: possibleActions[Math.floor(Math.random() * possibleActions.length)],
+              type: successAction,
               data: response
             });
             resolve();
