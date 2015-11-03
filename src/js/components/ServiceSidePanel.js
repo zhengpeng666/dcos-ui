@@ -164,6 +164,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let tasks = MesosStateStore.getTasksFromServiceName(serviceName);
 
     return (
+
       <div className="container container-fluid container-pod container-pod-short-top">
         <TaskView tasks={tasks} parentRouter={this.context.router} />
       </div>
@@ -177,7 +178,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
     }
 
     return (
-      <div className="container container-pod container-pod-short">
+      <div className="container container-fluid container-pod container-pod-short-top">
         {this.getInfo()}
       </div>
     );
