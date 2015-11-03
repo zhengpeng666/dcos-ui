@@ -7,6 +7,15 @@ import MesosStateStore from "../stores/MesosStateStore";
 import RequestUtil from "../utils/RequestUtil";
 import TaskDirectoryURLUtil from "../utils/TaskDirectoryURLUtil";
 
+function handleError(cb, e) {
+  AppDispatcher.handleServerAction({
+    type: ActionTypes.REQUEST_TASK_DIRECTORY_ERROR,
+    data: e.message
+  });
+
+  cb();
+}
+
 var TaskDirectoryActions = {
 
   fetchState: RequestUtil.debounceOnError(
@@ -44,23 +53,10 @@ var TaskDirectoryActions = {
                 });
                 resolve();
               },
-              error: function (e) {
-                AppDispatcher.handleServerAction({
-                  type: ActionTypes.REQUEST_TASK_DIRECTORY_ERROR,
-                  data: e.message
-                });
-                reject();
-              }
+              error: handleError.bind(this, reject)
             });
           },
-
-          error: function (e) {
-            AppDispatcher.handleServerAction({
-              type: ActionTypes.REQUEST_TASK_DIRECTORY_ERROR,
-              data: e.message
-            });
-            reject();
-          }
+          error: handleError.bind(this, reject)
         });
       };
     },
