@@ -13451,8 +13451,8 @@
       "resolved": "http://registry.npmjs.org/react-zeroclipboard/-/react-zeroclipboard-0.4.1.tgz"
     },
     "reactjs-components": {
-      "version": "0.0.8",
-      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.8.tgz",
+      "version": "0.0.15",
+      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.15.tgz",
       "dependencies": {
         "body-parser": {
           "version": "1.13.3",
@@ -13543,6 +13543,10 @@
               }
             }
           }
+        },
+        "canvas-ui-system": {
+          "version": "0.1.5",
+          "resolved": "http://registry.npmjs.org/canvas-ui-system/-/canvas-ui-system-0.1.5.tgz"
         }
       }
     },
