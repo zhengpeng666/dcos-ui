@@ -7,6 +7,7 @@ import DetailSidePanel from "./DetailSidePanel";
 import HistoryStore from "../stores/HistoryStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import TaskDirectoryView from "./TaskDirectoryView";
 import TaskStates from "../constants/TaskStates";
 import TaskUtil from "../utils/TaskUtil";
 
@@ -121,7 +122,7 @@ export default class TaskSidePanel extends DetailSidePanel {
   }
 
   getFileView(task) {
-    return null;
+    return <TaskDirectoryView task={task} />;
   }
 
   getBasicInfo(task) {
