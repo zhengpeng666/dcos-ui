@@ -53,8 +53,8 @@ describe("ServiceList", function () {
       }];
       var result = this.instance.getServices(services, false);
 
-      expect(result[0].value[0].key).toEqual("title");
-      expect(result[0].value[1].key).toEqual("health");
+      expect(result[0].content[0].content.key).toEqual("title");
+      expect(result[0].content[1].content.key).toEqual("health");
     });
   });
 
