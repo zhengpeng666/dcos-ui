@@ -7,6 +7,7 @@ Node 0.10.x is **required** as versions 0.11 and 0.12 introduced compatibility i
 ## Local Setup
 
 To install, run, and contribute to DCOS-UI on your local machine you will need to setup 3 different environments (listed below).  The DCOS UI is the actual application code that runs as a standalone server.  The DCOS UI Proxy is a simple Vagrant Machine that connects requests from your local DCOS UI Application Server to a DCOS Cluster (local or remote).  Optionally, you may also run a DCOS Image, also a simple Vagrant Machine, to act as a local install of the DCOS.
+
 * [DCOS Image](#dcos-image)
 * [DCOS UI Proxy](#dcos-ui-proxy)
 * [DCOS UI](#dcos-ui)
@@ -16,6 +17,7 @@ To install, run, and contribute to DCOS-UI on your local machine you will need t
 This is a simple Vagrant machine which acts as a proxy between your local DCOS UI Application Server and an active DCOS Cluster. Since the assets for the DCOS UI Application needs to make requests to endpoints located on the local DCOS Image (or a remote DCOS Cluster) which resides on a different domain, this will normally cause CORS problems due to browser security policies. This vagrant machine solves this problem by proxying both requests through the same domain.
 
 ##### Installation Instructions:
+
 1. Download the latest `dcos-ui` file from the Mesosphere Google Drive in the directory `Engineering/Frontend/Vagrant Machines`
 3. `vagrant box add dcos-ui file:///PATH/dcos-ui` (replace PATH with the path to the dcos-ui file you just downloaded)
 4. `mkdir vagrant-dcos-ui && cd vagrant-dcos-ui`
@@ -29,6 +31,7 @@ This is a simple Vagrant machine which acts as a proxy between your local DCOS U
 ##### Remote DCOS Cluster
 
 The instructions in the following section ([DCOS Image](#dcos-image)) have you setup a local DCOS Cluster in a virtual machine on your computer.  If you would like to instead have your local DCOS UI Application work of a remote DCOS Cluster, you will need to modify the DCOS UI Proxy you setup and ran in the steps above.  Follow these simple steps:
+
 1. Navigate to the directory in which you installed and are running your DCOS UI Proxy
 2. `vagrant ssh`
 3. `sudo vi /etc/nginx/sites-enabled/dcos-ui`
@@ -38,9 +41,12 @@ The instructions in the following section ([DCOS Image](#dcos-image)) have you s
 
 ### DCOS Image
 
-The DCOS Image will create a virtual machine on your computer. This machine will contain a small version of a DCOS cluster. In short, it'll have a Mesos Master, Slave, and Marathon along with other packages that are needed for DCOS to operate.  **NOTE:** You can skip this step if your DCOS UI Proxy (see [DCOS UI Proxy](#dcos-ui-proxy) above) is pointing to a remote DCOS Cluster.
+The DCOS Image will create a virtual machine on your computer. This machine will contain a small version of a DCOS cluster. In short, it'll have a Mesos Master, Slave, and Marathon along with other packages that are needed for DCOS to operate.
+
+**NOTE:** You can skip this step if your DCOS UI Proxy (see [DCOS UI Proxy](#dcos-ui-proxy) above) is pointing to a remote DCOS Cluster.
 
 ##### Installation Instructions:
+
 1. `mkdir vagrant-dcos-image && cd vagrant-dcos-image`
 2. `curl https://downloads.mesosphere.io/dcos/testing/continuous/make_dcos_vagrant.sh > make_dcos_vagrant.sh`
 3. `chmod +x make_dcos_vagrant.sh`
@@ -52,6 +58,7 @@ The DCOS Image will create a virtual machine on your computer. This machine will
 This repository contains the DCOS UI application. The application gathers data from endpoints located on the DCOS Image.
 
 ##### Installation Instructions:
+
 1. Clone this repository (https://github.com/mesosphere/dcos-ui)
 2. Install [NPM](https://npmjs.org/)
 3. Install development dependencies
@@ -61,8 +68,7 @@ This repository contains the DCOS UI application. The application gathers data f
     ```
 4. Setup development project configuration
     * Copy `src/js/config/Config.template.js` to `src/js/config/Config.dev.js`
-    * Override variables in `Config.dev.js` to reflect
-  your local development configuration
+    * Override variables in `Config.dev.js` to reflect your local development configuration
 5. Run development environment
     ```sh
     npm run serve
@@ -105,8 +111,7 @@ If you want to add a new npm package to 'node_modules':
     * SublimeLinter-eslint needs a global eslint in your system, see [instructions](https://github.com/roadhump/SublimeLinter-eslint#sublimelinter-eslint)
 3. Syntax Highlihgting for files containing JSX
     * Install Babel using Sublime Package Manager, see [instructions](https://github.com/babel/babel-sublime). From here you can decide to use Babel for all .js files. See their docs for that. If you don't want to do that, continue reading.
-    * Installing ApplySyntax using Sublime Package Manager,
-  see [instructions](https://github.com/facelessuser/ApplySyntax)
+    * Installing ApplySyntax using Sublime Package Manager, see [instructions](https://github.com/facelessuser/ApplySyntax)
     * Open up the user configuration file for ApplySyntax: `Sublime Text` -> `Preferences` -> `Package Settings` -> `ApplySyntax` -> `Settings - User`
     * Replace the contents with this:
     ```
@@ -128,6 +133,7 @@ If you want to add a new npm package to 'node_modules':
 **Why is testing important?** Many of us like to sleep at night. So to give us peace of mind when we release a new version of our software, we want to guarantee that the application works as it should, always. To accomplish this we write two kinds of tests that will ensure that our applications behaves as it should even as we add new features.
 
 ## Unit tests
+
 These tests ensure that individual units of code (functions/methods) return the expected results with different inputs.
 Think of a `sum` function. When called as `sum(1)` we may expect a return value of `1`. When called as `sum(1, 2)` we may expect a return value of `3`. And when called with no arguments, we may expect an error to be thrown.
 
@@ -138,25 +144,41 @@ We want to guarantee that our project DCOS UI works as it should within DCOS as 
 ##### Setup Instructions:
 
 1. Install Cypress CLI
+
     ```sh
     npm install -g cypress
     ```
+
 2. Install Cypress desktop app
+
     ```sh
     cypress install
     ```
+
 3. Open Cypress
+
     ```sh
     cypress open
     ```
+
     This should show a new icon on your desktop menu bar.
+
     ![img](../../../../../../../mesosphere/dcos-ui/blob/master/docs/images/cypress-desktop-icon.png?raw=true)
+
 4. Login with Github. Click on the icon on your desktop menu bar and login.
+
     ![img](../../../../../../../mesosphere/dcos-ui/blob/master/docs/images/cypress-login.png?raw=true)
+
 5. Add project to Cypress app
+
     Once you've logged in click on the plus button and add the `dcos-ui` folder.
+
     ![img](../../../../../../../mesosphere/dcos-ui/blob/master/docs/images/cypress-no-projects.png?raw=true)
+
 6. Once the project is added click on it to start the server
+
     ![img](../../../../../../../mesosphere/dcos-ui/blob/master/docs/images/cypress-project.png?raw=true)
+
     ![img](../../../../../../../mesosphere/dcos-ui/blob/master/docs/images/cypress-server-running.png?raw=true)
+
 7. Ask someone on the team to teach all about writing integration tests.
