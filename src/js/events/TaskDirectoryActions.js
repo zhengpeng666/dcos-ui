@@ -5,7 +5,6 @@ import AppDispatcher from "./AppDispatcher";
 import Config from "../config/Config";
 import MesosStateStore from "../stores/MesosStateStore";
 import RequestUtil from "../utils/RequestUtil";
-import TaskDirectoryURLUtil from "../utils/TaskDirectoryURLUtil";
 
 function handleError(cb, e) {
   AppDispatcher.handleServerAction({
@@ -17,6 +16,17 @@ function handleError(cb, e) {
 }
 
 var TaskDirectoryActions = {
+  getFilePathURL: function (nodeID) {
+    return `/slave/${nodeID}/files/browse.json`;
+  },
+
+  getDownloadURL: function (nodeID, path) {
+    return `/slave/${nodeID}/files/download.json?path=${path}`;
+  },
+
+  getNodeStateJSON: function (nodeID, nodePID) {
+    return `slave/${nodeID}/${nodePID}/state.json`;
+  },
 
   fetchState: RequestUtil.debounceOnError(
     Config.getRefreshRate(),
@@ -27,7 +37,7 @@ var TaskDirectoryActions = {
         let nodePID = pid.substring(0, pid.indexOf("@"));
 
         return RequestUtil.json({
-          url: TaskDirectoryURLUtil.getNodeStateJSON(task.slave_id, nodePID),
+          url: TaskDirectoryActions.getNodeStateJSON(task.slave_id, nodePID),
           success: function (response) {
             let taskFramework = _.find(response.frameworks, function (framework) {
               return framework.id === task.framework_id;
@@ -42,7 +52,7 @@ var TaskDirectoryActions = {
             let directoryPath = taskExecutor.directory;
 
             RequestUtil.json({
-              url: TaskDirectoryURLUtil.getFilePathURL(task.slave_id),
+              url: TaskDirectoryActions.getFilePathURL(task.slave_id),
               data: {
                 path: `${directoryPath}/${innerPath}`
               },

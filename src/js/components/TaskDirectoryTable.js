@@ -5,7 +5,7 @@ import {Table} from "reactjs-components";
 import DateUtil from "../utils/DateUtil";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import TaskDirectoryHeaderLabels from "../constants/TaskDirectoryHeaderLabels";
-import TaskDirectoryURLUtil from "../utils/TaskDirectoryURLUtil";
+import TaskDirectoryActions from "../events/TaskDirectoryActions";
 import Units from "../utils/Units";
 
 export default class TaskDirectoryTable extends React.Component {
@@ -30,7 +30,7 @@ export default class TaskDirectoryTable extends React.Component {
       element = (
         <a
           className="emphasize"
-          href={TaskDirectoryURLUtil.getDownloadURL(this.props.nodeID, file.path)}>
+          href={TaskDirectoryActions.getDownloadURL(this.props.nodeID, file.path)}>
           {value}
         </a>
       );
