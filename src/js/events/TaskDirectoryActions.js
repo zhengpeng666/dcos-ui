@@ -29,11 +29,19 @@ var TaskDirectoryActions = {
       return framework.id === task.framework_id;
     });
 
+    if (!taskFramework) {
+      return null;
+    }
+
     let taskExecutor = _.find(taskFramework.executors, function (executor) {
       return _.some(executor.tasks, function (executorTask) {
         return executorTask.id === task.id;
       });
     });
+
+    if (!taskExecutor) {
+      return null;
+    }
 
     return `${taskExecutor.directory}/${innerPath}`;
   },
@@ -63,10 +71,19 @@ var TaskDirectoryActions = {
   ),
 
   fetchDirectory: function (task, innerPath, nodeState) {
+    innerPath = TaskDirectoryActions.getInnerPath(nodeState, task, innerPath);
+
+    if (innerPath == null) {
+      AppDispatcher.handleServerAction({
+        type: ActionTypes.REQUEST_TASK_DIRECTORY_ERROR
+      });
+      return;
+    }
+
     RequestUtil.json({
       url: TaskDirectoryActions.getFilePathURL(task.slave_id),
       data: {
-        path: TaskDirectoryActions.getInnerPath(nodeState, task, innerPath)
+        path: innerPath
       },
       success: function (directory) {
         AppDispatcher.handleServerAction({
