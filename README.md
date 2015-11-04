@@ -79,7 +79,7 @@ This repository contains the DCOS UI application. The application gathers data f
   npm run serve
   ```
 
-After install all development dependencies and configuring your local environment (steps 1-4 above), you can run test by running `npm test`.  You can build assets, without actually running the DCOS UI server by running `npm run dist`.  If you are actively developing, you may want to run `npm run liverreload` to avoid haivng to refresh your browser with every change.
+After install all development dependencies and configuring your local environment (steps 1-4 above), you can run test by running `npm test`.  You can build assets, without actually running the DCOS UI server by running `npm run dist`.  If you are actively developing, you may want to run `npm run livereload` to avoid having to refresh your browser with every change.
 
 ## Adding npm Package Dependencies
 
