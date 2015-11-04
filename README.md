@@ -134,19 +134,19 @@ If you want to add a new npm package to 'node_modules':
   * Open up the user configuration file for ApplySyntax: `Sublime Text` -> `Preferences` -> `Package Settings` -> `ApplySyntax` -> `Settings - User`
   * Replace the contents with this:
 
-  ```
-  {
-    // Put your custom syntax rules here:
-    "syntaxes": [
-      {
-        "name": "Babel/JavaScript (Babel)",
-        "rules": [
-          {"first_line": "^\\/\\*\\*\\s@jsx\\sReact\\.DOM\\s\\*\\/"}
-        ]
-      }
-    ]
-  }
-  ```
+    ```
+    {
+      // Put your custom syntax rules here:
+      "syntaxes": [
+        {
+          "name": "Babel/JavaScript (Babel)",
+          "rules": [
+            {"first_line": "^\\/\\*\\*\\s@jsx\\sReact\\.DOM\\s\\*\\/"}
+          ]
+        }
+      ]
+    }
+    ```
 
 ## Testing
 
