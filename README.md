@@ -62,14 +62,19 @@ This repository contains the DCOS UI application. The application gathers data f
 1. Clone this repository (https://github.com/mesosphere/dcos-ui)
 2. Install [NPM](https://npmjs.org/)
 3. Install development dependencies
+
     ```sh
     npm install
     npm install -g gulp
     ```
+
 4. Setup development project configuration
+
     * Copy `src/js/config/Config.template.js` to `src/js/config/Config.dev.js`
     * Override variables in `Config.dev.js` to reflect your local development configuration
+
 5. Run development environment
+
     ```sh
     npm run serve
     ```
@@ -82,19 +87,24 @@ If you want to add a new npm package to 'node_modules':
 
 1. Install the new package
     * Install and save dependencies in `package.json`
+
         ```
         npm install [your package] --save
         ```
+
     * Then, add the package to devDependencies
+
         ```
         npm install [your package] --save-dev
         ```
+
 2. Create a synced npm-shrinkwrap.json with devDependencies included by running `npm run shrinkwrap`
 3. Commit to repository
 
 ## Development Setup (Sublime Text Only)
 
 1. Add the following to your Sublime Text User Settings:
+
     ```json
     {
         ...
@@ -106,14 +116,19 @@ If you want to add a new npm package to 'node_modules':
         "default_line_ending": "unix"
     }
     ```
+
 2. Add Sublime-linter with jshint & jsxhint:
+
     * Installing SublimeLinter is straightforward using Sublime Package Manager, see [instructions](http://sublimelinter.readthedocs.org/en/latest/installation.html#installing-via-pc)
     * SublimeLinter-eslint needs a global eslint in your system, see [instructions](https://github.com/roadhump/SublimeLinter-eslint#sublimelinter-eslint)
+
 3. Syntax Highlihgting for files containing JSX
+
     * Install Babel using Sublime Package Manager, see [instructions](https://github.com/babel/babel-sublime). From here you can decide to use Babel for all .js files. See their docs for that. If you don't want to do that, continue reading.
     * Installing ApplySyntax using Sublime Package Manager, see [instructions](https://github.com/facelessuser/ApplySyntax)
     * Open up the user configuration file for ApplySyntax: `Sublime Text` -> `Preferences` -> `Package Settings` -> `ApplySyntax` -> `Settings - User`
     * Replace the contents with this:
+
     ```
     {
         // Put your custom syntax rules here:
