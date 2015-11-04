@@ -1,6 +1,7 @@
 jest.dontMock("./fixtures/MockTasks");
 jest.dontMock("../../utils/ResourceTableUtil");
 jest.dontMock("../TaskTable");
+jest.dontMock("moment");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;

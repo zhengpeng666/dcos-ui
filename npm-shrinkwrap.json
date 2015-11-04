@@ -2202,6 +2202,10 @@
       "version": "0.2.0",
       "resolved": "http://registry.npmjs.org/canvas-ui/-/canvas-ui-0.2.0.tgz"
     },
+    "canvas-ui-system": {
+      "version": "0.1.5",
+      "resolved": "http://registry.npmjs.org/canvas-ui-system/-/canvas-ui-system-0.1.5.tgz"
+    },
     "chalk": {
       "version": "1.0.0",
       "resolved": "http://registry.npmjs.org/chalk/-/chalk-1.0.0.tgz",
@@ -12427,6 +12431,10 @@
     "localStorage": {
       "version": "1.0.3",
       "resolved": "https://registry.npmjs.org/localStorage/-/localStorage-1.0.3.tgz"
+    },
+    "moment": {
+      "version": "2.10.6",
+      "resolved": "https://registry.npmjs.org/moment/-/moment-2.10.6.tgz"
     },
     "node-libs-browser": {
       "version": "0.5.2",
