@@ -339,13 +339,19 @@ var TimeSeriesChart = React.createClass({
     var firstSuccess = _.find(props.data[0].values, function (stateResource) {
       return stateResource[props.y] != null;
     }) || {};
-
+    // We need firstSuccess because if the current value is null,
+    // we want to make it equal to the most recent successful value in order to
+    // have a straight line on the graph.
     var area = this.getArea(props.y, xTimeScale, yScale, firstSuccess);
     var valueLine = this.getValueLine(xTimeScale, yScale, firstSuccess);
 
     return _.map(props.data, function (stateResource, i) {
       var transitionTime = this.getTransitionTime(stateResource.values);
-      var nextY = this.getNextXPosition(stateResource.values, xTimeScale, transitionTime);
+      var nextY = this.getNextXPosition(
+        stateResource.values,
+        xTimeScale,
+        transitionTime
+      );
 
       return (
         <TimeSeriesArea
@@ -448,7 +454,11 @@ var TimeSeriesChart = React.createClass({
           </g>
         </svg>
 
-        <svg height={props.height} width={props.width} ref="movingEls" className="moving-elements">
+        <svg
+          height={props.height}
+          width={props.width}
+          ref="movingEls"
+          className="moving-elements">
           <g transform={"translate(" + margin.left + "," + margin.top + ")"}>
             <g ref="masking" mask={`url(#${maskID})`} clipPath={clipPath}>
               {this.getAreaList(props, yScale, xTimeScale)}
