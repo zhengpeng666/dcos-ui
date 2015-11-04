@@ -27,6 +27,7 @@ var VersionsModal = React.createClass({
   render: function () {
     return (
       <Modal
+        headerContainerClass="container container-pod container-pod-short"
         onClose={this.onClose}
         open={this.props.open}
         showCloseButton={false}
