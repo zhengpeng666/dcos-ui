@@ -15,7 +15,7 @@ function fetchState(task, deeperPath) {
   request = TaskDirectoryActions.fetchNodeState(
     task,
     function (response) {
-      TaskDirectoryActions.fetchDirectory(task, deeperPath, response);
+      request = TaskDirectoryActions.fetchDirectory(task, deeperPath, response);
     }
   );
 }
@@ -66,7 +66,6 @@ var TaskDirectoryStore = Store.createStore({
   getDirectory: function (task, deeperPath) {
     this.resetRequests();
     this.set({directory: null});
-    this.emit(EventTypes.TASK_DIRECTORY_CHANGE);
 
     startPolling(task, deeperPath);
   },

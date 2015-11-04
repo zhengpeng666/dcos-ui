@@ -57,6 +57,11 @@ var TaskDirectoryActions = {
             cb(response);
           },
           error: function (e) {
+            if (e.statusText === "abort") {
+              resolve();
+              return;
+            }
+
             AppDispatcher.handleServerAction({
               type: ActionTypes.REQUEST_TASK_DIRECTORY_ERROR,
               data: e.message
@@ -92,6 +97,10 @@ var TaskDirectoryActions = {
         });
       },
       error: function (e) {
+        if (e.statusText === "abort") {
+          return;
+        }
+
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_TASK_DIRECTORY_ERROR,
           data: e.message
