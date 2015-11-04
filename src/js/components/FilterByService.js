@@ -86,7 +86,7 @@ var FilterByService = React.createClass({
   render: function () {
     return (
       <Dropdown
-        buttonClassName="button button-small button-inverse dropdown-toggle"
+        buttonClassName="button button-inverse dropdown-toggle"
         dropdownMenuClassName="dropdown-menu inverse"
         dropdownMenuListClassName="dropdown-menu-list"
         dropdownMenuListItemClassName="clickable"

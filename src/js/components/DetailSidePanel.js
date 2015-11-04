@@ -165,14 +165,14 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     // Wrap in headline element and classes
     if (headline != null) {
       headline = (
-        <h3 className="inverse flush-top">
+        <h3 className="flush-top">
           {headline}
         </h3>
       );
     }
 
     return (
-      <div className="container container-pod container-pod-super-short">
+      <div className="container container-fluid container-pod container-pod-short-top">
         {headline}
         {items}
       </div>
@@ -216,9 +216,9 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
         container-pod-super-short
         flush-top">
         <div>
-          <h2 className="flush-top flush-bottom text-color-neutral">
+          <h4 className="flush-top flush-bottom text-color-neutral">
             {resourceValue}
-          </h2>
+          </h4>
           <span className={`text-color-${colorIndex}`}>
             {resourceLabel.toUpperCase()}
           </span>
@@ -268,23 +268,21 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
 
   getNotFound(itemType) {
     return (
-      <div>
-        <h1 className="text-align-center inverse overlay-header">
+      <div className="container container-fluid container-pod text-align-center">
+        <h3 className="flush-top text-align-center">
           {`Error finding ${itemType}`}
-        </h1>
-        <div className="container container-pod text-align-center flush-top text-danger">
-          {`Did not find a ${itemType} by the id "${this.props.itemID}"`}
-        </div>
+        </h3>
+        <p className="flush">{`Did not find a ${itemType} by the id "${this.props.itemID}"`}</p>
       </div>
     );
   }
 
   getHeader() {
     return (
-      <div>
-        <span className="button button-link button-inverse"
+      <div className="side-panel-header-actions side-panel-header-actions-primary">
+        <span className="side-panel-header-action"
           onClick={this.handlePanelClose}>
-          <i className="side-panel-detail-close"></i>
+          <i className="icon icon-sprite icon-sprite-small icon-close icon-sprite-small-white"></i>
           Close
         </span>
       </div>
@@ -300,7 +298,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     return (
       <SidePanel className="side-panel-detail"
         header={this.getHeader()}
-        headerContainerClass="container container-pod container-pod-super-short"
+        headerContainerClass="side-panel-header-container container container-fluid container-fluid-narrow container-pod container-pod-short"
         onClose={this.handlePanelClose}
         open={this.props.open}>
         {this.getContents()}

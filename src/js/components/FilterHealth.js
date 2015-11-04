@@ -55,7 +55,7 @@ var FilterHealth = React.createClass({
         health = null;
       }
       var classSet = classNames({
-        "button button-small button-stroke button-inverse": true,
+        "button button-stroke button-inverse": true,
         "active": mode === health
       });
 

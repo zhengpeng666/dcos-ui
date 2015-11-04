@@ -190,16 +190,18 @@ var AnimatedLogo = React.createClass({
     var triangles = this.buildTriangles(strokeID);
 
     return (
-      <svg width="400" height="300" version="1.1" xmlns="http://www.w3.org/2000/svg" style={svgStyle}>
-          <defs>
-            <linearGradient id={data.logoGradientID} x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style={gradientStyles.start} />
-              <stop offset="100%" style={gradientStyles.stop} />
-            </linearGradient>
-          </defs>
+      <div className="text-align-center">
+        <svg width="400" height="300" version="1.1" xmlns="http://www.w3.org/2000/svg" style={svgStyle}>
+            <defs>
+              <linearGradient id={data.logoGradientID} x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style={gradientStyles.start} />
+                <stop offset="100%" style={gradientStyles.stop} />
+              </linearGradient>
+            </defs>
 
-          {triangles}
-      </svg>
+            {triangles}
+        </svg>
+      </div>
     );
   }
 });

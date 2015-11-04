@@ -55,13 +55,14 @@ var ServicesTable = React.createClass({
 
     if (appImages) {
       imageTag = (
-        <img className="icon icon-small border-radius"
-          src={appImages["icon-small"]} />
+        <span className="icon icon-small icon-image-container icon-app-container">
+          <img src={appImages["icon-small"]} />
+        </span>
       );
     }
 
     return (
-      <div className="h5 flush-top flush-bottom">
+      <div className="">
         <Link to="services-panel"
           params={{serviceName: service.name}}>
           {imageTag}
@@ -199,9 +200,9 @@ var ServicesTable = React.createClass({
         <col />
         <col style={{width: "14%"}} />
         <col style={{width: "100px"}} />
-        <col className="hidden-mini" style={{width: "100px"}} />
-        <col className="hidden-mini" style={{width: "115px"}} />
-        <col className="hidden-mini" style={{width: "100px"}} />
+        <col className="hidden-mini" style={{width: "120px"}} />
+        <col className="hidden-mini" style={{width: "120px"}} />
+        <col className="hidden-mini" style={{width: "120px"}} />
       </colgroup>
     );
   },
@@ -214,7 +215,7 @@ var ServicesTable = React.createClass({
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
           data={this.props.services.slice()}
-          keys={["id"]}
+          idAttribute={"id"}
           sortBy={{prop: "name", order: "desc"}}
           transition={false} />
       </div>

@@ -51,10 +51,10 @@ export default class TaskSidePanel extends DetailSidePanel {
 
   getHeader() {
     return (
-      <div>
-        <span className="button button-link button-inverse"
+      <div className="side-panel-header-actions side-panel-header-actions-primary">
+        <span className="side-panel-header-action"
           onClick={this.handlePanelClose}>
-          <i className="icon icon-small icon-back icon-small-white"></i>
+          <i className="icon icon-sprite icon-sprite-small icon-back icon-sprite-small-white"></i>
           Back
         </span>
       </div>
@@ -129,10 +129,10 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     return (
-      <div className="side-panel-content-header">
-        <h2 className="side-panel-content-header-label inverse flush-top">
+      <div className="side-panel-content-header container-pod flush-top container-pod-short-bottom">
+        <h1 className="side-panel-content-header-label flush">
           {task.name}
-        </h2>
+        </h1>
         {TaskStates[task.state].displayName}
       </div>
     );
@@ -151,16 +151,18 @@ export default class TaskSidePanel extends DetailSidePanel {
 
     return (
       <div>
-        <div className="container container-pod container-pod-short
-            container-pod-divider-bottom container-pod-divider-inverse
-            flush-bottom">
+        <div className="side-panel-content-header container container-pod
+          container-fluid container-pod-divider-bottom
+          container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo(task)}
           <div className="container container-pod side-panel-tabs
             flush flush-bottom">
             {this.getTabs()}
           </div>
         </div>
-        {this.getTabView(task)}
+        <div className="container container-fluid container-pod container-pod-short">
+          {this.getTabView(task)}
+        </div>
       </div>
     );
   }

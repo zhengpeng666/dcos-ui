@@ -23,17 +23,17 @@ var FilterHeadline = React.createClass({
     var totalLength = this.props.totalLength;
 
     var filteredClassSet = classNames({
-      "h4": true,
+      "h4 inverse": true,
       "hidden": filteredLength === totalLength
     });
 
     var unfilteredClassSet = classNames({
-      "h4": true,
+      "h4 inverse": true,
       "hidden": filteredLength !== totalLength
     });
 
     var anchorClassSet = classNames({
-      "h4 clickable": true,
+      "h4 inverse clickable": true,
       "hidden": filteredLength === totalLength
     });
 

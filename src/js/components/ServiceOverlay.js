@@ -142,35 +142,33 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
     }
 
     return (
-      <div className="container container-fluid flush-left flush-right overlay-nav">
-        <div>
-          <span
-            className="button button-link button-inverse overlay-nav-button"
-            onClick={this.handleServiceClose}>
-            <i className="icon icon-small icon-back icon-small-white"></i>
-            <span className="overlay-short-top">Back</span>
-          </span>
-        </div>
-
-        <h2 className="text-align-center inverse overlay-header">
-          {service.name}
-          <div className="h4 overlay-subheader flush-top text-align-center">
-            {serviceHealth + taskCount}
+      <div className="overlay-header">
+        <div className="overlay-header-container container container-fluid container-fluid-narrow container-pod container-pod-short">
+          <div className="overlay-header-actions overlay-header-actions-primary">
+            <span className="overlay-header-action"
+              onClick={this.handleServiceClose}>
+              <i className="icon icon-sprite icon-sprite-small icon-back icon-sprite-small-white"></i>
+              <span className="overlay-short-top">Back</span>
+            </span>
           </div>
-        </h2>
-
-        <div>
-          <a href={Cluster.getServiceLink(service.name)}
-            target="_blank"
-            title="Open in a new window"
-            className="button button-link
-              button-inverse
-              text-align-right
-              overlay-nav-button"
-            >
-            <i className="icon icon-small icon-new-window icon-small-white"></i>
-            <span className="overlay-short-top">Open in a New Window</span>
-          </a>
+          <div className="overlay-header-content text-align-center">
+            <h4 className="overlay-header-content-title inverse flush">
+              {service.name}
+            </h4>
+            <div className="overlay-header-content-subtitle inverse flush">
+              {serviceHealth + taskCount}
+            </div>
+          </div>
+          <div className="overlay-header-actions overlay-header-actions-secondary">
+            <a href={Cluster.getServiceLink(service.name)}
+              target="_blank"
+              title="Open in a new window"
+              className="overlay-header-action"
+              >
+              <span className="overlay-short-top">Open in a New Window</span>
+              <i className="icon icon-sprite icon-sprite-small icon-new-window icon-sprite-small-white"></i>
+            </a>
+          </div>
         </div>
       </div>
     );
@@ -180,7 +178,7 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
     // Create a new div and append to body in order
     // to always be full screen.
     let overlayEl = document.createElement("div");
-    overlayEl.className = "service-overlay";
+    overlayEl.className = "overlay overlay-service";
     document.body.appendChild(overlayEl);
 
     this.internalStorage_update({overlayEl});
@@ -193,7 +191,7 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
         {this.getServiceNav(service)}
         <iframe
           src={Cluster.getServiceLink(service.name)}
-          className="overlay-frame" />
+          className="overlay-content" />
       </div>,
       overlayEl
     );
