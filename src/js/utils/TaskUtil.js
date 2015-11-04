@@ -1,4 +1,4 @@
-var TaskTableUtil = {
+var TaskUtil = {
 
   getTaskStatusClassName(task) {
     let taskStatus = task.state.substring("TASK_".length).toLowerCase();
@@ -7,4 +7,4 @@ var TaskTableUtil = {
 
 };
 
-module.exports = TaskTableUtil;
+module.exports = TaskUtil;
