@@ -8,6 +8,7 @@ import HistoryStore from "../stores/HistoryStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import TaskStates from "../constants/TaskStates";
+import TaskTableUtil from "../utils/TaskTableUtil";
 
 // key is the name, value is the display name
 const TABS = {
@@ -128,8 +129,7 @@ export default class TaskSidePanel extends DetailSidePanel {
       return null;
     }
 
-    let taskStatus = task.state.substring('TASK_'.length).toLowerCase();
-    let statusClassName = `task-status-${taskStatus}`;
+    let statusClassName = TaskTableUtil.getTaskStatusClassName(task);
 
     return (
       <div className="side-panel-content-header container-pod flush-top container-pod-short-bottom">
