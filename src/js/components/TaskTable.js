@@ -121,11 +121,11 @@ export default class TaskTable extends React.Component {
     let title = task.name || task.id;
 
     return (
-      <div className="flex-box flex-box-align-vertical-center">
-        <div>
+      <div className="flex-box flex-box-align-vertical-center table-cell-flex-box">
+        <div className="table-cell-indicator task-status-indicator">
           <span className={statusClass}></span>
         </div>
-        <div className="flex-box flex-box-col text-overflow-wrapper">
+        <div className="table-cell-value flex-box flex-box-col">
           <a
             className="emphasize clickable text-overflow"
             onClick={this.handleTaskClick.bind(this, task.id)}
