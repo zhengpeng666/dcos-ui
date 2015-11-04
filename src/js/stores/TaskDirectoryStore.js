@@ -12,7 +12,13 @@ var requestInterval = null;
 var request = null;
 
 function fetchState(task, deeperPath) {
-  request = TaskDirectoryActions.fetchState(task, deeperPath);
+  request = TaskDirectoryActions.fetchNodeState(
+    task,
+    deeperPath,
+    function (response) {
+      TaskDirectoryActions.fetchDirectory(task, deeperPath, response);
+    }
+  );
 }
 
 function startPolling(task, deeperPath) {
