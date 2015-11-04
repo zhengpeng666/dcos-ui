@@ -35,7 +35,7 @@ var TaskDirectoryStore = Store.createStore({
 
   getSet_data: {
     directory: null,
-    extraPath: ""
+    innerPath: ""
   },
 
   addChangeListener: function (eventName, callback) {
@@ -47,7 +47,7 @@ var TaskDirectoryStore = Store.createStore({
 
     if (_.isEmpty(this.listeners(EventTypes.TASK_DIRECTORY_CHANGE))) {
       this.resetRequests();
-      this.set({extraPath: "", directory: []});
+      this.set({innerPath: "", directory: []});
     }
   },
 
@@ -71,8 +71,13 @@ var TaskDirectoryStore = Store.createStore({
   },
 
   addPath: function (task, path) {
-    this.set({extraPath: this.get("extraPath") + "/" + path});
-    this.getDirectory(task, this.get("extraPath"));
+    this.set({innerPath: this.get("innerPath") + "/" + path});
+    this.getDirectory(task, this.get("innerPath"));
+  },
+
+  writePath: function (task, path) {
+    this.set({innerPath: path});
+    this.getDirectory(task, path);
   },
 
   processStateError: function () {

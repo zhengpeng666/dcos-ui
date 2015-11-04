@@ -62,6 +62,10 @@ export default class TaskDirectoryView extends React.Component {
     TaskDirectoryStore.addPath(this.props.task, path);
   }
 
+  handleBreadcrumbClick(path) {
+    TaskDirectoryStore.writePath(this.props.task, path);
+  }
+
   hasLoadingError() {
     return this.state.taskDirectoryErrorCount >= 3;
   }
@@ -83,6 +87,49 @@ export default class TaskDirectoryView extends React.Component {
     );
   }
 
+  getBreadcrumbs() {
+    let innerPath = TaskDirectoryStore.get("innerPath").split("/");
+    let onClickPath = "";
+
+    let crumbs = innerPath.map((level, i) => {
+      if (i === 0 && innerPath.length > 1) {
+        return (
+          <a
+            className="clickable"
+            onClick={this.handleBreadcrumbClick.bind(this, onClickPath)}>
+            Working Directory
+          </a>
+        );
+      } else if (i === 0) {
+        return (
+          <span>Working Directory</span>
+        );
+      }
+
+      if (i > 0) {
+        onClickPath += ("/" + level);
+      }
+
+      if (i === innerPath.length - 1) {
+        return (
+          <span key={i}>{level}</span>
+        );
+      }
+
+      return (
+        <a
+          className="clickable"
+          onClick={this.handleBreadcrumbClick.bind(this, onClickPath)}>
+          {level}
+        </a>
+      );
+    });
+
+    return (
+      <h3>{crumbs}</h3>
+    );
+  }
+
   render() {
     let directory = this.state.directory;
 
@@ -91,10 +138,13 @@ export default class TaskDirectoryView extends React.Component {
     }
 
     return (
-      <TaskDirectoryTable
-        files={directory}
-        onFileClick={this.handleFileClick.bind(this)}
-        nodeID={this.props.task.slave_id} />
+      <div>
+        {this.getBreadcrumbs()}
+        <TaskDirectoryTable
+          files={directory}
+          onFileClick={this.handleFileClick.bind(this)}
+          nodeID={this.props.task.slave_id} />
+      </div>
     );
   }
 }
