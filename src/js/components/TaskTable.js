@@ -92,10 +92,10 @@ export default class TaskTable extends React.Component {
     return (
       <colgroup>
         <col />
-        <col />
+        <col style={{width: "120px"}} />
         <col style={{width: "100px"}} />
-        <col style={{width: "100px"}} />
-        <col style={{width: "115px"}} />
+        <col style={{width: "85px"}} />
+        <col style={{width: "110px"}} />
       </colgroup>
     );
   }
@@ -125,10 +125,11 @@ export default class TaskTable extends React.Component {
         <div>
           <span className={statusClass}></span>
         </div>
-        <div className="flex-box flex-box-col">
+        <div className="flex-box flex-box-col text-overflow-wrapper">
           <a
-            className="emphasize clickable"
-            onClick={this.handleTaskClick.bind(this, task.id)}>
+            className="emphasize clickable text-overflow"
+            onClick={this.handleTaskClick.bind(this, task.id)}
+            title={title}>
             {title}
           </a>
         </div>
