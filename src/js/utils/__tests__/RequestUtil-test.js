@@ -43,6 +43,24 @@ describe("RequestUtil", function () {
       expect($.ajax.mostRecentCall.args[0].type).toEqual("POST");
     });
 
+    it("Should return a request that is able to be aborted", function () {
+      let prevAjax = $.ajax;
+      $.ajax = function () {return {fakeProp: "faked"}; };
+
+      var request = RequestUtil.json({url: "lolz"});
+      expect(typeof request).toEqual("object");
+      expect(request.fakeProp).toEqual("faked");
+
+      $.ajax = prevAjax;
+    });
+
+    it("Should return undefined if there is an ongoing request", function () {
+      RequestUtil.json({url: "double"});
+      let request = RequestUtil.json({url: "double"});
+
+      expect(request).toEqual(undefined);
+    });
+
   });
 
   describe("#debounceOnError", function () {
@@ -64,6 +82,8 @@ describe("RequestUtil", function () {
           if (/successRequest/.test(options.url)) {
             options.success();
           }
+
+          return {};
         }
       );
 
@@ -71,7 +91,7 @@ describe("RequestUtil", function () {
         10,
         function (resolve, reject) {
           return function (url) {
-            RequestUtil.json({
+            return RequestUtil.json({
               url: url,
               success: function () {
                 successFn();
@@ -128,6 +148,12 @@ describe("RequestUtil", function () {
       this.request("failRequest");
       expect(errorFn.mock.calls.length).toEqual(8);
       expect(successFn.mock.calls.length).toEqual(1);
+    });
+
+    it("should return the result of the function", function () {
+      let result = this.request("successRequest");
+
+      expect(typeof result).toEqual("object");
     });
 
   });
