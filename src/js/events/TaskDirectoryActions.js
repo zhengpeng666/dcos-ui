@@ -41,7 +41,7 @@ var TaskDirectoryActions = {
   fetchNodeState: RequestUtil.debounceOnError(
     Config.getRefreshRate(),
     function (resolve, reject) {
-      return function (task, innerPath, cb) {
+      return function (task, cb) {
         return RequestUtil.json({
           url: TaskDirectoryActions.getNodeStateJSON(task),
           success: function (response) {
