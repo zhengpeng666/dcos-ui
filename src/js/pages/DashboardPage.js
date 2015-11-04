@@ -33,6 +33,7 @@ function getMesosState() {
     usedResourcesStates: states.getResourceStatesForNodeIDs(),
     usedResources: last.getSlaveUsedResources(),
     totalResources: last.getSlaveTotalResources(),
+    activeSlaves: last.getActiveSlaves(),
     statesProcessed: MesosSummaryStore.get("statesProcessed")
   };
 }
@@ -224,6 +225,7 @@ var DashboardPage = React.createClass({
             <Panel title="Nodes" className="dashboard-panel">
               <HostTimeSeriesChart
                 data={data.hostsCount}
+                currentValue={data.activeSlaves.length}
                 refreshRate={data.refreshRate} />
             </Panel>
           </div>
