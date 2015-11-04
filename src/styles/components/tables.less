@@ -86,6 +86,9 @@ components/tables.less
 
     td {
 
+      // This property is necessary for table cells to respect the text-overflow
+      // property. http://stackoverflow.com/questions/9789723/css-text-overflow-in-a-table-cell
+
       max-width: 0;
 
     }
