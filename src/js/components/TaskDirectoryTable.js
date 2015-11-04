@@ -1,3 +1,4 @@
+import _ from "underscore";
 import React from "react";
 import {Table} from "reactjs-components";
 
@@ -14,8 +15,7 @@ export default class TaskDirectoryTable extends React.Component {
 
   renderHeadline(prop, file) {
     let element;
-    let value = file[prop].split("/");
-    value = value[value.length - 1];
+    let value = _.last(file[prop].split("/"));
 
     // File is a directory if nlink is greater than 1.
     if (file.nlink > 1) {
@@ -62,8 +62,8 @@ export default class TaskDirectoryTable extends React.Component {
   }
 
   getColumns() {
-    var className = ResourceTableUtil.getClassName;
-    var heading = ResourceTableUtil.renderHeading(TaskDirectoryHeaderLabels);
+    let className = ResourceTableUtil.getClassName;
+    let heading = ResourceTableUtil.renderHeading(TaskDirectoryHeaderLabels);
     let propSortFunction = ResourceTableUtil.getPropSortFunction("path");
     let statSortFunction = ResourceTableUtil.getStatSortFunction(
       "path",
@@ -72,53 +72,39 @@ export default class TaskDirectoryTable extends React.Component {
       }
     );
 
+    let defaultColumnSettings = {
+      className,
+      heading,
+      headerClassName: className,
+      render: null,
+      sortable: true,
+      sortFunction: propSortFunction
+    };
+
     return [
       {
-        className,
-        heading,
-        headerClassName: className,
         prop: "path",
-        render: this.renderHeadline.bind(this),
-        sortable: true,
-        sortFunction: propSortFunction
+        render: this.renderHeadline.bind(this)
       },
       {
-        className,
-        heading,
-        headerClassName: className,
-        prop: "mode",
-        render: null,
-        sortable: true,
-        sortFunction: propSortFunction
+        prop: "mode"
       },
       {
-        className,
-        heading,
-        headerClassName: className,
-        prop: "uid",
-        render: this.renderState,
-        sortable: true,
-        sortFunction: propSortFunction
+        prop: "uid"
       },
       {
-        className,
-        heading,
-        headerClassName: className,
         prop: "size",
         render: this.renderStats,
-        sortable: true,
         sortFunction: statSortFunction
       },
       {
-        className,
-        heading,
-        headerClassName: className,
         prop: "mtime",
         render: this.renderDate,
-        sortable: true,
         sortFunction: statSortFunction
       }
-    ];
+    ].map(function (columnSetting) {
+      return _.extend({}, defaultColumnSettings, columnSetting);
+    });
   }
 
   getColGroup() {
