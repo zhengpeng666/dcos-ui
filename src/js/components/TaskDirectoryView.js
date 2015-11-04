@@ -86,17 +86,15 @@ export default class TaskDirectoryView extends React.Component {
   render() {
     let directory = this.state.directory;
 
-    if (directory == null) {
+    if (directory == null || TaskDirectoryStore.get("directory") == null) {
       return this.getLoadingScreen();
     }
 
     return (
-      <div className="container container-pod container-pod-short">
-        <TaskDirectoryTable
-          files={directory}
-          onFileClick={this.handleFileClick.bind(this)}
-          nodeID={this.props.task.slave_id} />
-      </div>
+      <TaskDirectoryTable
+        files={directory}
+        onFileClick={this.handleFileClick.bind(this)}
+        nodeID={this.props.task.slave_id} />
     );
   }
 }

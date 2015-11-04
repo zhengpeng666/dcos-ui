@@ -125,10 +125,10 @@ export default class TaskDirectoryTable extends React.Component {
     return (
       <colgroup>
         <col />
-        <col />
-        <col />
-        <col />
-        <col />
+        <col style={{width: "100px"}}/>
+        <col style={{width: "100px"}}/>
+        <col style={{width: "100px"}}/>
+        <col style={{width: "100px"}}/>
       </colgroup>
     );
   }
@@ -143,7 +143,7 @@ export default class TaskDirectoryTable extends React.Component {
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
         data={this.props.files}
-        keys={["path"]}
+        idAttribute="path"
         sortBy={{prop: "path", order: "desc"}}
         transition={false} />
     );
