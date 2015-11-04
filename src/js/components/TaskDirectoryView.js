@@ -92,18 +92,9 @@ export default class TaskDirectoryView extends React.Component {
     let onClickPath = "";
 
     let crumbs = innerPath.map((level, i) => {
-      if (i === 0 && innerPath.length > 1) {
-        return (
-          <a
-            className="clickable"
-            onClick={this.handleBreadcrumbClick.bind(this, onClickPath)}>
-            Working Directory
-          </a>
-        );
-      } else if (i === 0) {
-        return (
-          <span>Working Directory</span>
-        );
+      let textValue = level;
+      if (i === 0) {
+        textValue = "Working Directory";
       }
 
       if (i > 0) {
@@ -112,21 +103,22 @@ export default class TaskDirectoryView extends React.Component {
 
       if (i === innerPath.length - 1) {
         return (
-          <span key={i}>{level}</span>
+          <span className="crumb" key={i}>{textValue}</span>
         );
       }
 
       return (
         <a
-          className="clickable"
+          className="crumb clickable"
+          key={i}
           onClick={this.handleBreadcrumbClick.bind(this, onClickPath)}>
-          {level}
+          {textValue}
         </a>
       );
     });
 
     return (
-      <h3>{crumbs}</h3>
+      <h3 className="breadcrumbs">{crumbs}</h3>
     );
   }
 
