@@ -15,6 +15,7 @@ var Route = Router.Route;
 var Redirect = Router.Redirect;
 var NotFoundRoute = Router.NotFoundRoute;
 
+require("./utils/MomentJSConfig");
 require("./utils/ReactSVG");
 var Config = require("./config/Config");
 var DashboardPage = require("./pages/DashboardPage");
