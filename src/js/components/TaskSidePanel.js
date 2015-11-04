@@ -128,12 +128,17 @@ export default class TaskSidePanel extends DetailSidePanel {
       return null;
     }
 
+    let taskStatus = task.state.substring('TASK_'.length).toLowerCase();
+    let statusClassName = `task-status-${taskStatus}`;
+
     return (
       <div className="side-panel-content-header container-pod flush-top container-pod-short-bottom">
         <h1 className="side-panel-content-header-label flush">
           {task.name}
         </h1>
-        {TaskStates[task.state].displayName}
+        <span className={statusClassName}>
+          {TaskStates[task.state].displayName}
+        </span>
       </div>
     );
   }
