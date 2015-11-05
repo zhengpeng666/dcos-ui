@@ -118,7 +118,7 @@ export default class TaskDirectoryView extends React.Component {
     });
 
     return (
-      <h3 className="breadcrumbs">{crumbs}</h3>
+      <h4 className="breadcrumbs">{crumbs}</h4>
     );
   }
 
