@@ -20,7 +20,6 @@ export default class TaskDirectoryTable extends React.Component {
     let label;
     let value = _.last(file[prop].split("/"));
 
-    // File is a directory if nlink is greater than 1.
     if (TaskDirectoryUtil.isDirectory(file)) {
       label = (
         <a
