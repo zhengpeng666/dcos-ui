@@ -91,14 +91,14 @@ export default class TaskDirectoryView extends React.Component {
     let innerPath = TaskDirectoryStore.get("innerPath").split("/");
     let onClickPath = "";
 
-    let crumbs = innerPath.map((level, i) => {
-      let textValue = level;
+    let crumbs = innerPath.map((file, i) => {
+      let textValue = file;
       if (i === 0) {
         textValue = "Working Directory";
       }
 
       if (i > 0) {
-        onClickPath += ("/" + level);
+        onClickPath += ("/" + file);
       }
 
       if (i === innerPath.length - 1) {
