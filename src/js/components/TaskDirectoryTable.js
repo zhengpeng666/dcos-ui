@@ -20,19 +20,25 @@ export default class TaskDirectoryTable extends React.Component {
     // File is a directory if nlink is greater than 1.
     if (file.nlink > 1) {
       element = (
-        <a
-          className="emphasize clickable"
-          onClick={this.handleTaskClick.bind(this, value)}>
-          {value}
-        </a>
+        <span>
+          <i className="icon icon-sprite icon-sprite-mini icon-directory"></i>
+          <a
+            className="emphasize clickable"
+            onClick={this.handleTaskClick.bind(this, value)}>
+            {value}
+          </a>
+        </span>
       );
     } else {
       element = (
-        <a
-          className="emphasize"
-          href={TaskDirectoryActions.getDownloadURL(this.props.nodeID, file.path)}>
-          {value}
-        </a>
+        <span>
+          <i className="icon icon-sprite icon-sprite-mini icon-file"></i>
+          <a
+            className="emphasize"
+            href={TaskDirectoryActions.getDownloadURL(this.props.nodeID, file.path)}>
+            {value}
+          </a>
+        </span>
       );
     }
 
