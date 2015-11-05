@@ -24,7 +24,7 @@ var TaskUtil = {
     }
 
     return (
-      <div className={iconClassName}></div>
+      <i className={iconClassName}></i>
     );
   }
 
