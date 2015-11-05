@@ -133,10 +133,10 @@ export default class TaskDirectoryTable extends React.Component {
     return (
       <colgroup>
         <col />
-        <col style={{width: "130px"}}/>
-        <col style={{width: "120px"}}/>
+        <col style={{width: "150px"}}/>
+        <col style={{width: "110px"}}/>
         <col style={{width: "100px"}}/>
-        <col style={{width: "130px"}}/>
+        <col style={{width: "125px"}}/>
       </colgroup>
     );
   }
