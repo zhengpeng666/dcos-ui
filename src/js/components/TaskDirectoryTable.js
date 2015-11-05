@@ -1,4 +1,5 @@
 import _ from "underscore";
+import classNames from "classnames";
 import React from "react";
 import {Table} from "reactjs-components";
 
@@ -67,8 +68,17 @@ export default class TaskDirectoryTable extends React.Component {
     );
   }
 
+  getClassName(prop, sortBy, row) {
+    let isHeader = row == null;
+    return classNames({
+      "text-align-right": false,
+      "highlight": prop === sortBy.prop && isHeader,
+      "clickable": isHeader
+    });
+  }
+
   getColumns() {
-    let className = ResourceTableUtil.getClassName;
+    let className = this.getClassName;
     let heading = ResourceTableUtil.renderHeading(TaskDirectoryHeaderLabels);
     let propSortFunction = ResourceTableUtil.getPropSortFunction("path");
     let statSortFunction = ResourceTableUtil.getStatSortFunction(
