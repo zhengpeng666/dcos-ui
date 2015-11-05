@@ -63,7 +63,7 @@ export default class TaskDirectoryView extends React.Component {
   }
 
   handleBreadcrumbClick(path) {
-    TaskDirectoryStore.writePath(this.props.task, path);
+    TaskDirectoryStore.setPath(this.props.task, path);
   }
 
   hasLoadingError() {

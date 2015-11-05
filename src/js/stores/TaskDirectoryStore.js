@@ -75,7 +75,7 @@ var TaskDirectoryStore = Store.createStore({
     this.getDirectory(task, this.get("innerPath"));
   },
 
-  writePath: function (task, path) {
+  setPath: function (task, path) {
     this.set({innerPath: path});
     this.getDirectory(task, path);
   },
