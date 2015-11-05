@@ -1,8 +1,8 @@
 /*eslint-disable no-unused-vars*/
-const React = require("react/addons");
+import React from "react/addons";
 /*eslint-enable no-unused-vars*/
 
-var TaskUtil = {
+const TaskUtil = {
 
   getTaskStatusSlug(task) {
     return task.state.substring("TASK_".length).toLowerCase();
@@ -30,4 +30,4 @@ var TaskUtil = {
 
 };
 
-module.exports = TaskUtil;
+export default TaskUtil;
