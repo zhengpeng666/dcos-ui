@@ -163,9 +163,29 @@ export default class ServiceSidePanel extends DetailSidePanel {
     let serviceName = this.props.itemID;
     let tasks = MesosStateStore.getTasksFromServiceName(serviceName);
 
+    let contents = (
+      <div className="
+        container
+        container-pod
+        text-align-center
+        vertical-center
+        inverse">
+        <div className="row">
+          <div className="ball-scale">
+            <div />
+          </div>
+        </div>
+      </div>
+    );
+
+    let timeSinceMount = (Date.now() - this.mountedAt) / 1000;
+    if (timeSinceMount >= DetailSidePanel.animationLengthSeconds) {
+      contents = <TaskView tasks={tasks} parentRouter={this.context.router} />;
+    }
+
     return (
-      <div className="flex-container-col container container-pod flush-top flush-bottom flex-grow">
-        <TaskView tasks={tasks} parentRouter={this.context.router} />
+      <div className="container container-fluid container-pod container-pod-short-top flex-container-col flush-bottom flex-grow">
+        {contents}
       </div>
     );
   }
