@@ -18,13 +18,14 @@ var ErrorModal = React.createClass({
   render: function () {
     return (
       <Modal
+        headerContainerClass="container container-pod container-pod-short"
         modalClass="modal"
         onClose={this.onClose}
         open={this.props.open}
         showCloseButton={false}
         showFooter={false}
         subHeader=""
-        titleClass="modal-header-title text-align-center flush-top"
+        titleClass="modal-header-title text-align-center flush-top flush-bottom"
         titleText="Looks Like Something is Wrong">
         {this.props.errorMsg}
       </Modal>

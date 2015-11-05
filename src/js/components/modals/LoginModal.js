@@ -77,6 +77,8 @@ var LoginModal = React.createClass({
       <Modal
         closeByBackdropClick={false}
         footer={this.getFooter()}
+        footerContainerClass="container container-pod container-pod-short"
+        headerContainerClass="container container-pod container-pod-short"
         modalClass="modal"
         modalClassName="login-modal"
         open={this.props.open}
