@@ -1,6 +1,5 @@
 const _ = require("underscore");
 const classNames = require("classnames");
-import moment from "moment";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
@@ -130,7 +129,7 @@ var ResourceTableUtil = {
     }
 
     let exactTime = DateUtil.msToDateStr(updatedAt.toFixed(3) * 1000);
-    let relativeTime = moment.unix(updatedAt).fromNow();
+    let relativeTime = DateUtil.msToRelativeTime(updatedAt);
 
     return <span title={exactTime}>{relativeTime}</span>;
   },

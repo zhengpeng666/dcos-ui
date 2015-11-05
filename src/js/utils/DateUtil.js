@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const DateUtil = {
   msToDateStr: function (ms) {
     let date = new Date(ms);
@@ -13,6 +15,10 @@ const DateUtil = {
     dateStr += DateUtil.formatAMPM(date);
 
     return dateStr;
+  },
+
+  msToRelativeTime: function (ms) {
+    return moment.unix(ms).fromNow();
   },
 
   formatAMPM: function (date) {
