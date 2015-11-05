@@ -108,7 +108,6 @@ var TaskDirectoryActions = {
       }
     });
   }
-
 };
 
 module.exports = TaskDirectoryActions;
