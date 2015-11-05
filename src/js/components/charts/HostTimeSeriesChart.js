@@ -44,14 +44,10 @@ var HostTimeSeriesChart = React.createClass({
 
   getData: function (props) {
     return [{
-        name: "Nodes",
-        colorIndex: 4,
-        values: props.data
-      }];
-  },
-
-  getLatest: function (data) {
-    return _.last(data).slavesCount;
+      name: "Nodes",
+      colorIndex: 4,
+      values: props.data
+    }];
   },
 
   getChart: function (props) {
@@ -74,7 +70,7 @@ var HostTimeSeriesChart = React.createClass({
       <div className="chart">
         <TimeSeriesLabel
           colorIndex={4}
-          currentValue={this.getLatest(props.data)}
+          currentValue={props.currentValue}
           subHeading={"Connected Nodes"}
           y="slavesCount" />
         {this.getChart(props)}

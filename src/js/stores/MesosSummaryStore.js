@@ -91,6 +91,11 @@ var MesosSummaryStore = Store.createStore({
     return service && !!webuiUrl && webuiUrl.length > 0;
   },
 
+  setFailureRate: function (state, prevState) {
+    var taskFailureRate = this.processFailureRate(state, prevState);
+    this.set({taskFailureRate});
+  },
+
   updateStateProcessed: function () {
     this.set({statesProcessed: true});
     this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
@@ -137,10 +142,7 @@ var MesosSummaryStore = Store.createStore({
     }
 
     states.addSnapshot(data, data.date);
-
-    // Calculate the task failure rate before we add a new snapshot
-    var taskFailureRate = this.processFailureRate(states.last(), prevState);
-    this.set({taskFailureRate});
+    this.setFailureRate(states.last(), prevState);
 
     if (!options.silent) {
       this.notifySummaryProcessed();
@@ -157,7 +159,11 @@ var MesosSummaryStore = Store.createStore({
 
   processSummaryError: function (options = {}) {
     let unsuccessfulSummary = new StateSummary({successful: false});
-    this.get("states").add(unsuccessfulSummary);
+    let states = this.get("states");
+    let prevState = states.last();
+
+    states.add(unsuccessfulSummary);
+    this.setFailureRate(states.last(), prevState);
 
     if (!options.silent) {
       this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
@@ -195,7 +201,7 @@ var MesosSummaryStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_MESOS_SUMMARY_ONGOING:
       case ActionTypes.REQUEST_MESOS_HISTORY_ONGOING:
-        MesosSummaryStore.processOngoingRequest();
+        MesosSummaryStore.processSummaryError();
         break;
     }
 

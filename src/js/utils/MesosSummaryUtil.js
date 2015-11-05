@@ -61,6 +61,7 @@ const MesosSummaryUtil = {
     var failed = 0;
     var successful = 0;
     var diff = {};
+    let rate = null;
 
     // Only compute diff if we have previous data
     var keys = Object.keys(newMesosStatusesMap);
@@ -80,9 +81,13 @@ const MesosSummaryUtil = {
         (diff.TASK_ERROR || 0);
     }
 
+    if (state.isSnapshotSuccessful()) {
+      rate = (failed / (failed + successful)) * 100 | 0;
+    }
+
     return {
       date: state.getSnapshotDate(),
-      rate: (failed / (failed + successful)) * 100 | 0
+      rate
     };
   },
 

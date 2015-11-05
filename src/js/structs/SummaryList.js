@@ -22,9 +22,15 @@ export default class SummaryList extends List {
 
   getActiveNodesByState() {
     return this.getItems().map(function (state) {
+      let slavesCount = null;
+
+      if (state.isSnapshotSuccessful()) {
+        slavesCount = state.getActiveSlaves().length;
+      }
+
       return {
         date: state.getSnapshotDate(),
-        slavesCount: state.getActiveSlaves().length
+        slavesCount
       };
     });
   }
