@@ -6,6 +6,7 @@ import ResourceTableUtil from "../utils/ResourceTableUtil";
 import {Table} from "reactjs-components";
 import TaskStates from "../constants/TaskStates";
 import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
+import TaskUtil from "../utils/TaskUtil";
 import Units from "../utils/Units";
 
 const METHODS_TO_BIND = [
@@ -93,7 +94,7 @@ export default class TaskTable extends React.Component {
       <colgroup>
         <col />
         <col style={{width: "120px"}} />
-        <col style={{width: "100px"}} />
+        <col style={{width: "120px"}} />
         <col style={{width: "85px"}} />
         <col style={{width: "110px"}} />
       </colgroup>
@@ -121,8 +122,10 @@ export default class TaskTable extends React.Component {
     let title = task.name || task.id;
 
     return (
-      <div className="flex-box flex-box-align-vertical-center table-cell-flex-box">
-        <div className="table-cell-indicator task-status-indicator">
+      <div className="flex-box flex-box-align-vertical-center
+        table-cell-flex-box">
+        <div className="table-cell-status-icon table-cell-task-dot
+          task-status-indicator">
           <span className={statusClass}></span>
         </div>
         <div className="table-cell-value flex-box flex-box-col">
@@ -146,7 +149,21 @@ export default class TaskTable extends React.Component {
   }
 
   renderState(prop, task) {
-    return TaskStates[task[prop]].displayName;
+    let statusClassName = TaskUtil.getTaskStatusClassName(task);
+    let statusIcon = TaskUtil.getTaskStatusIcon(task);
+    let statusLabelClasses = `${statusClassName} table-cell-value`;
+
+    return (
+      <div className="flex-box flex-box-align-vertical-center
+        table-cell-flex-box">
+        <div className="table-cell-status-icon table-cell-status-icon-mini">
+          {statusIcon}
+        </div>
+        <span className={statusLabelClasses}>
+          {TaskStates[task[prop]].displayName}
+        </span>
+      </div>
+    );
   }
 
   render() {
