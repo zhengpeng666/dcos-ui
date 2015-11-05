@@ -1,5 +1,6 @@
 jest.dontMock("../DetailSidePanel");
 jest.dontMock("../TaskSidePanel");
+jest.dontMock("../TaskDirectoryView");
 jest.dontMock("../../constants/TaskStates");
 jest.dontMock("../../stores/MesosStateStore");
 jest.dontMock("../../events/MesosStateActions");

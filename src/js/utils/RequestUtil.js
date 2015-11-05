@@ -47,7 +47,9 @@ var RequestUtil = {
       type: "GET"
     }, options);
 
-    $.ajax(options);
+    /* eslint-disable consistent-return */
+    return $.ajax(options);
+    /* eslint-enable consistent-return */
   },
 
   debounceOnError: function (interval, promiseFn, options) {
@@ -84,7 +86,9 @@ var RequestUtil = {
         return;
       }
 
-      callback.apply(options.context, arguments);
+      /* eslint-disable consistent-return */
+      return callback.apply(options.context, arguments);
+      /* eslint-enable consistent-return */
     };
   }
 };
