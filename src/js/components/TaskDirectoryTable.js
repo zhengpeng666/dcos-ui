@@ -82,6 +82,25 @@ export default class TaskDirectoryTable extends React.Component {
     });
   }
 
+  getDirectorySortFunction(baseProp, sortFunc) {
+    return function (prop) {
+      return function (a, b) {
+        let aIsDirectory = TaskDirectoryUtil.isDirectory(a);
+        let bIsDirectory = TaskDirectoryUtil.isDirectory(b);
+
+        if (aIsDirectory && !bIsDirectory) {
+          return -1;
+        }
+
+        if (!aIsDirectory && bIsDirectory) {
+          return 1;
+        }
+
+        return sortFunc(prop)(a, b);
+      };
+    };
+  }
+
   getColumns() {
     let className = this.getClassName;
     let heading = ResourceTableUtil.renderHeading(TaskDirectoryHeaderLabels);
@@ -92,6 +111,9 @@ export default class TaskDirectoryTable extends React.Component {
         return file[resource];
       }
     );
+
+    propSortFunction = this.getDirectorySortFunction("path", propSortFunction);
+    statSortFunction = this.getDirectorySortFunction("path", statSortFunction);
 
     let defaultColumnSettings = {
       className,
