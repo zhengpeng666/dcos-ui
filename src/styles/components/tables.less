@@ -99,16 +99,22 @@ components/tables.less
 
     }
 
-    .table-cell-indicator {
+    .table-cell-status-icon,
+    .table-cell-value {
 
       flex: 1;
+
+    }
+
+    .table-cell-task-dot {
+
       max-width: @body-text-font-size * 0.75 + @base-spacing-unit * 0.25;
 
     }
 
-    .table-cell-value {
+    .table-cell-status-icon-mini {
 
-      flex: 1;
+      max-width: @icon-mini-width @base-spacing-unit * 0.25;
 
     }
 
@@ -242,6 +248,12 @@ components/tables.less
 
         }
 
+        .table-cell-status-icon-mini {
+
+          max-width: @icon-mini-width + @base-spacing-unit-screen-small * 0.25;
+
+        }
+
       }
 
     }
@@ -317,6 +329,12 @@ components/tables.less
             }
 
           }
+
+        }
+
+        .table-cell-status-icon-mini {
+
+          max-width: @icon-mini-width + @base-spacing-unit-screen-medium * 0.15;
 
         }
 
@@ -397,6 +415,12 @@ components/tables.less
           }
 
         }
+
+      }
+
+      .table-cell-status-icon-mini {
+
+        max-width: @icon-mini-width + @base-spacing-unit-screen-large * 0.15;
 
       }
 
