@@ -8,8 +8,8 @@ import DateUtil from "../utils/DateUtil";
 const HealthSorting = require("../constants/HealthSorting");
 const MarathonStore = require("../stores/MarathonStore");
 
-function isStat(prop) {
-  return _.contains(["cpus", "mem", "disk"], prop);
+function leftAlignCaret(prop) {
+  return _.contains(["cpus", "mem", "disk", "uid", "size", "mtime"], prop);
 }
 
 function compareValues(a, b) {
@@ -38,8 +38,8 @@ function getUpdatedTimestamp(model) {
 var ResourceTableUtil = {
   getClassName: function (prop, sortBy, row) {
     return classNames({
-      "text-align-right": isStat(prop) || prop === "TASK_RUNNING",
-      "hidden-mini": isStat(prop),
+      "text-align-right": leftAlignCaret(prop) || prop === "TASK_RUNNING",
+      "hidden-mini": leftAlignCaret(prop),
       "highlight": prop === sortBy.prop,
       "clickable": row == null // this is a header
     });
@@ -105,7 +105,7 @@ var ResourceTableUtil = {
         {"caret--visible": prop === sortBy.prop}
       );
 
-      if (isStat(prop) || prop === "TASK_RUNNING") {
+      if (leftAlignCaret(prop) || prop === "TASK_RUNNING") {
         caret.before = <span className={caretClassSet} />;
       } else {
         caret.after = <span className={caretClassSet} />;

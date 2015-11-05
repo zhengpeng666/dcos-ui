@@ -1,5 +1,6 @@
 import _ from "underscore";
 import classNames from "classnames";
+import moment from "moment";
 import React from "react";
 import {Table} from "reactjs-components";
 
@@ -7,6 +8,7 @@ import DateUtil from "../utils/DateUtil";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import TaskDirectoryHeaderLabels from "../constants/TaskDirectoryHeaderLabels";
 import TaskDirectoryActions from "../events/TaskDirectoryActions";
+import TaskDirectoryUtil from "../utils/TaskDirectoryUtil";
 import Units from "../utils/Units";
 
 export default class TaskDirectoryTable extends React.Component {
@@ -15,39 +17,42 @@ export default class TaskDirectoryTable extends React.Component {
   }
 
   renderHeadline(prop, file) {
-    let element;
+    let label;
     let value = _.last(file[prop].split("/"));
 
     // File is a directory if nlink is greater than 1.
-    if (file.nlink > 1) {
-      element = (
-        <span>
-          <i className="icon icon-sprite icon-sprite-mini icon-directory"></i>
-          <a
-            className="emphasize clickable"
-            onClick={this.handleTaskClick.bind(this, value)}>
-            {value}
-          </a>
-        </span>
+    if (TaskDirectoryUtil.isDirectory(file)) {
+      label = (
+        <a
+          className="emphasize clickable"
+          onClick={this.handleTaskClick.bind(this, value)}>
+          {value}
+        </a>
       );
     } else {
-      element = (
-        <span>
-          <i className="icon icon-sprite icon-sprite-mini icon-file"></i>
-          <a
-            className="emphasize"
-            href={TaskDirectoryActions.getDownloadURL(this.props.nodeID, file.path)}>
-            {value}
-          </a>
-        </span>
+      label = (
+        <a
+          className="emphasize"
+          href={TaskDirectoryActions.getDownloadURL(this.props.nodeID, file.path)}>
+          {value}
+        </a>
       );
     }
 
+    let iconClass = classNames({
+      "icon icon-sprite icon-sprite-mini": true,
+      "icon-file": !TaskDirectoryUtil.isDirectory(file),
+      "icon-directory": TaskDirectoryUtil.isDirectory(file)
+    });
+
     return (
-      <div className="flex-box flex-box-align-vertical-center">
-        <div className="flex-box flex-box-col">
-          {element}
+      <div className="flex-box flex-box-align-vertical-center table-cell-flex-box">
+        <div className="table-cell-status-icon table-cell-status-icon-mini">
+          <i className={iconClass}></i>
         </div>
+        <span className="table-cell-value text-overflow">
+          {label}
+        </span>
       </div>
     );
   }
@@ -62,16 +67,18 @@ export default class TaskDirectoryTable extends React.Component {
 
   renderDate(prop, file) {
     return (
-      <span>
-        {DateUtil.msToDateStr(file[prop] * 1000)}
+      <span title={DateUtil.msToDateStr(file[prop] * 1000)}>
+        {moment.unix(file[prop]).fromNow()}
       </span>
     );
   }
 
   getClassName(prop, sortBy, row) {
     let isHeader = row == null;
+    let propsToRight = ["uid", "size", "mtime"];
+
     return classNames({
-      "text-align-right": false,
+      "text-align-right": _.contains(propsToRight, prop),
       "highlight": prop === sortBy.prop && isHeader,
       "clickable": isHeader
     });
@@ -127,10 +134,10 @@ export default class TaskDirectoryTable extends React.Component {
     return (
       <colgroup>
         <col />
+        <col style={{width: "130px"}}/>
+        <col style={{width: "120px"}}/>
         <col style={{width: "100px"}}/>
-        <col style={{width: "100px"}}/>
-        <col style={{width: "100px"}}/>
-        <col style={{width: "100px"}}/>
+        <col style={{width: "130px"}}/>
       </colgroup>
     );
   }
