@@ -278,6 +278,24 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     );
   }
 
+  getLoadingScreen() {
+    return (
+      <div className="
+        container
+        container-fluid
+        container-pod
+        text-align-center
+        vertical-center
+        inverse">
+        <div className="row">
+          <div className="ball-scale">
+            <div />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   getHeader() {
     return (
       <div className="side-panel-header-actions side-panel-header-actions-primary">

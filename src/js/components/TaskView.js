@@ -159,7 +159,7 @@ export default class TaskView extends React.Component {
     tasks = this.filterByCurrentStatus(tasks);
 
     return (
-      <div className="flex-container-col flex-grow">
+      <div className="flex-container-col flex-grow no-overflow">
         <h3 className="text-align-left flush-top">
           {this.getHeaderText(tasks)}
         </h3>

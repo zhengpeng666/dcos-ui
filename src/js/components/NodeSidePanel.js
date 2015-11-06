@@ -84,9 +84,16 @@ export default class NodeSidePanel extends DetailSidePanel {
   getTaskView() {
     let tasks = MesosStateStore.getTasksFromNodeID(this.props.itemID);
 
+    let contents = this.getLoadingScreen();
+
+    let timeSinceMount = (Date.now() - this.mountedAt) / 1000;
+    if (timeSinceMount >= DetailSidePanel.animationLengthSeconds) {
+      contents = <TaskView tasks={tasks} parentRouter={this.context.router} />;
+    }
+
     return (
-      <div className="container container-fluid container-pod container-pod-short-top">
-        <TaskView tasks={tasks} parentRouter={this.context.router}/>
+      <div className="container container-fluid container-pod container-pod-short-top container-fluid flex-container-col flush-bottom flex-grow no-overflow">
+        {contents}
       </div>
     );
   }
@@ -129,7 +136,7 @@ export default class NodeSidePanel extends DetailSidePanel {
     }
 
     return (
-      <div>
+      <div className="flex-container-col" style={{height: "100%"}}>
         <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo(node)}
           <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
