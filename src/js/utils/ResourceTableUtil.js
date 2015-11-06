@@ -114,7 +114,7 @@ var ResourceTableUtil = {
       return (
         <span>
           {caret.before}
-          {title}
+          <span className="table-header-title">{title}</span>
           {caret.after}
         </span>
       );
