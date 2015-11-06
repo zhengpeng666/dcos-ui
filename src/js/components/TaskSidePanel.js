@@ -127,6 +127,10 @@ export default class TaskSidePanel extends DetailSidePanel {
   }
 
   getResources(task) {
+    if (task.resources == null) {
+      return null;
+    }
+
     let resources = Object.keys(task.resources);
 
     return resources.map(function (resource) {
