@@ -49,6 +49,32 @@ Side Panel Detail
 
   }
 
+
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
+
+  Side Panel Resource Container
+
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
+  .side-panel-resource-container {
+    display: inline-block;
+    margin-right: @base-spacing-unit;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+  }
+
+  .side-panel-resource-label {
+
+    font-size: 12px;
+    font-weight: 500;
+
+  }
+
   .side-panel-icon {
 
     height: 64px;
@@ -63,12 +89,6 @@ Side Panel Detail
 
   }
 
-  .side-panel-resource-label {
-
-    font-size: 12px;
-    font-weight: 500;
-
-  }
 
   .side-panel-tabs {
 
@@ -108,6 +128,10 @@ Side Panel Detail
 
       margin-right: 0;
 
+    }
+
+    &.side-panel-subheader-emphasize {
+      color: @neutral;
     }
 
   }

@@ -28,13 +28,19 @@ components/media-objects.less
     display: flex;
     width: 100%;
 
+    &.media-object-inline {
+      display: inline-flex;
+      width: auto;
+      margin-right: @base-spacing-unit;
+    }
+
     .media-object-icon {
 
       flex: 1;
 
       &.media-object-icon-mini {
 
-        margin-right: @base-spacing-unit * 1/2;
+        margin-right: @base-spacing-unit * 1/4;
         max-width: @icon-mini-width;
 
       }
