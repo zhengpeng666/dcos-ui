@@ -127,9 +127,8 @@ export default class TaskSidePanel extends DetailSidePanel {
   }
 
   getResources(task) {
-    console.log(task);
     let resources = Object.keys(task.resources);
-    console.log(resources);
+
     return resources.map(function (resource) {
       if (resource === "ports") {
         return null;
