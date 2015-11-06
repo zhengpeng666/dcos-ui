@@ -10,10 +10,10 @@ var TableUtil = {
   getRowHeight: function () {
     let defaultRowSize = 29;
     let definitionList = {
-      mini: {screen: 480, rowHeight: 29},
-      small: {screen: 768, rowHeight: 34},
-      medium: {screen: 992, rowHeight: 42},
-      large: {screen: 1270, rowHeight: 49}
+      mini: {screen: 480, rowHeight: 32},
+      small: {screen: 768, rowHeight: 37},
+      medium: {screen: 992, rowHeight: 45},
+      large: {screen: 1270, rowHeight: 52}
     };
 
     let rowHeight = null;
