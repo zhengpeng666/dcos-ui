@@ -6,6 +6,7 @@ var HostTableHeaderLabels = require("../constants/HostTableHeaderLabels");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var ProgressBar = require("./charts/ProgressBar");
 import {Table} from "reactjs-components";
+import TableUtil from "../utils/TableUtil";
 var TooltipMixin = require("../mixins/TooltipMixin");
 
 var HostTable = React.createClass({
@@ -167,7 +168,8 @@ var HostTable = React.createClass({
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
         data={this.props.hosts.slice()}
-        idAttribute={"id"}
+        idAttribute="id"
+        itemHeight={TableUtil.getRowHeight()}
         sortBy={{ prop: "hostname", order: "desc" }}
         buildRowOptions={this.getRowAttributes}
         transition={false} />

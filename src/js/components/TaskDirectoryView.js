@@ -76,7 +76,7 @@ export default class TaskDirectoryView extends React.Component {
     }
 
     return (
-      <div className="container container-pod text-align-center vertical-center
+      <div className="container container-fluid container-pod text-align-center vertical-center
         inverse">
         <div className="row">
           <div className="ball-scale">

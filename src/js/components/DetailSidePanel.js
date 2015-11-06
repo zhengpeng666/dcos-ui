@@ -79,6 +79,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     if (props.open !== nextProps.open) {
       if (nextProps.open) {
         changeListeners.call(this, this.storesListeners, "addChangeListener");
+        this.mountedAt = Date.now();
       } else {
         changeListeners.call(
           this, this.storesListeners, "removeChangeListener"
@@ -277,6 +278,24 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     );
   }
 
+  getLoadingScreen() {
+    return (
+      <div className="
+        container
+        container-fluid
+        container-pod
+        text-align-center
+        vertical-center
+        inverse">
+        <div className="row">
+          <div className="ball-scale">
+            <div />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   getHeader() {
     return (
       <div className="side-panel-header-actions side-panel-header-actions-primary">
@@ -299,6 +318,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
       <SidePanel className="side-panel-detail"
         header={this.getHeader()}
         headerContainerClass="side-panel-header-container container container-fluid container-fluid-narrow container-pod container-pod-short"
+        bodyClass="side-panel-content flex-container-col"
         onClose={this.handlePanelClose}
         open={this.props.open}>
         {this.getContents()}
@@ -316,3 +336,5 @@ DetailSidePanel.propTypes = {
   onClose: React.PropTypes.func,
   open: React.PropTypes.bool
 };
+
+DetailSidePanel.animationLengthSeconds = .5;

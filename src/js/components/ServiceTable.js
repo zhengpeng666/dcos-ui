@@ -11,6 +11,7 @@ var MarathonStore = require("../stores/MarathonStore");
 var ResourceTableUtil = require("../utils/ResourceTableUtil");
 var ServiceTableHeaderLabels = require("../constants/ServiceTableHeaderLabels");
 import {Table} from "reactjs-components";
+import TableUtil from "../utils/TableUtil";
 var TooltipMixin = require("../mixins/TooltipMixin");
 var Units = require("../utils/Units");
 
@@ -215,7 +216,8 @@ var ServicesTable = React.createClass({
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
           data={this.props.services.slice()}
-          idAttribute={"id"}
+          idAttribute="id"
+          itemHeight={TableUtil.getRowHeight()}
           sortBy={{prop: "name", order: "desc"}}
           transition={false} />
       </div>

@@ -133,7 +133,7 @@ export default class TaskSidePanel extends DetailSidePanel {
     let statusClassName = TaskUtil.getTaskStatusClassName(task);
 
     return (
-      <div className="side-panel-content-header container-pod flush-top container-pod-short-bottom">
+      <div className="side-panel-content-header container-fluid container-pod flush-top container-pod-short-bottom">
         <h1 className="side-panel-content-header-label flush">
           {task.name}
         </h1>
@@ -161,7 +161,7 @@ export default class TaskSidePanel extends DetailSidePanel {
           container-fluid container-pod-divider-bottom
           container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo(task)}
-          <div className="container container-pod side-panel-tabs
+          <div className="container container-fluid container-pod side-panel-tabs
             flush flush-bottom">
             {this.getTabs()}
           </div>

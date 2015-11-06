@@ -4,6 +4,7 @@ import React from "react/addons";
 
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import {Table} from "reactjs-components";
+import TableUtil from "../utils/TableUtil";
 import TaskStates from "../constants/TaskStates";
 import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
 import TaskUtil from "../utils/TaskUtil";
@@ -172,12 +173,15 @@ export default class TaskTable extends React.Component {
         className="table
           table-borderless-outer
           table-borderless-inner-columns
-          flush-bottom"
+          flush-bottom
+          no-overflow"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
         data={this.props.tasks.slice()}
-        idAttribute={"id"}
+        idAttribute="id"
+        itemHeight={TableUtil.getRowHeight()}
         sortBy={{prop: "name", order: "desc"}}
+        useFlex={true}
         transition={false} />
     );
   }
