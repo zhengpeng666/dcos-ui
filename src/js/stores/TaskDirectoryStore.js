@@ -25,7 +25,7 @@ function startPolling(task, deeperPath) {
     fetchState(task, deeperPath);
 
     requestInterval = setInterval(
-      fetchState.bind(this, task, deeperPath), Config.getRefreshRate() * 2
+      fetchState.bind(this, task, deeperPath), Config.getRefreshRate()
     );
   }
 }
