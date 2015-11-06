@@ -183,6 +183,7 @@ var DashboardPage = React.createClass({
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="CPU Allocation" className="dashboard-panel">
               <ResourceTimeSeriesChart
+                colorIndex={0}
                 usedResourcesStates={data.usedResourcesStates}
                 usedResources={data.usedResources}
                 totalResources={data.totalResources}
@@ -193,7 +194,7 @@ var DashboardPage = React.createClass({
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel title="Memory Allocation" className="dashboard-panel">
               <ResourceTimeSeriesChart
-                colorIndex={3}
+                colorIndex={6}
                 usedResourcesStates={data.usedResourcesStates}
                 usedResources={data.usedResources}
                 totalResources={data.totalResources}

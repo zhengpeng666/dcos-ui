@@ -191,6 +191,8 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     let resourceValue = Units.formatResource(
       resource, _.last(totalResources[resource]).value
     );
+    let resourceIconClasses = `icon icon-sprite icon-sprite-medium
+      icon-sprite-medium-color icon-resources-${resourceLabel.toLowerCase()}`;
 
     let axisConfiguration = {
       x: {hideMatch: /^0$/},
@@ -216,13 +218,19 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
         container-pod
         container-pod-super-short
         flush-top">
-        <div>
-          <h4 className="flush-top flush-bottom text-color-neutral">
-            {resourceValue}
-          </h4>
-          <span className={`text-color-${colorIndex}`}>
-            {resourceLabel.toUpperCase()}
-          </span>
+        <div className="media-object media-object-align-middle">
+          <div className="media-object-icon media-object-icon-medium">
+            <i className={resourceIconClasses}></i>
+          </div>
+          <div className="media-object-content">
+            <h4 className="flush-top flush-bottom text-color-neutral">
+              {resourceValue}
+            </h4>
+            <span className={`side-panel-resource-label
+                text-color-${colorIndex}`}>
+              {resourceLabel.toUpperCase()}
+            </span>
+          </div>
         </div>
 
         <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}
