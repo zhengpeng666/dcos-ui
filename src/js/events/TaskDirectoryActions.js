@@ -6,20 +6,22 @@ import Config from "../config/Config";
 import MesosStateStore from "../stores/MesosStateStore";
 import RequestUtil from "../utils/RequestUtil";
 
+const ROOT_URL = Config.rootUrl;
+
 var TaskDirectoryActions = {
   getFilePathURL: function (nodeID) {
-    return `/slave/${nodeID}/files/browse.json`;
+    return `${ROOT_URL}/slave/${nodeID}/files/browse.json`;
   },
 
   getDownloadURL: function (nodeID, path) {
-    return `/slave/${nodeID}/files/download.json?path=${path}`;
+    return `${ROOT_URL}/slave/${nodeID}/files/download.json?path=${path}`;
   },
 
   getNodeStateJSON: function (task) {
     let pid = MesosStateStore.getNodeFromID(task.slave_id).pid;
     let nodePID = pid.substring(0, pid.indexOf("@"));
 
-    return `slave/${task.slave_id}/${nodePID}/state.json`;
+    return `${ROOT_URL}/slave/${task.slave_id}/${nodePID}/state.json`;
   },
 
   getInnerPath: function (nodeState, task, innerPath) {

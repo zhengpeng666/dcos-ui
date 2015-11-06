@@ -1,6 +1,5 @@
 import _ from "underscore";
 import classNames from "classnames";
-import moment from "moment";
 import React from "react";
 import {Table} from "reactjs-components";
 
@@ -67,7 +66,7 @@ export default class TaskDirectoryTable extends React.Component {
   renderDate(prop, file) {
     return (
       <span title={DateUtil.msToDateStr(file[prop] * 1000)}>
-        {moment.unix(file[prop]).fromNow()}
+        {DateUtil.msToRelativeTime(file[prop])}
       </span>
     );
   }

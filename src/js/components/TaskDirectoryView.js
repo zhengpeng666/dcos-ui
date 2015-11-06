@@ -93,32 +93,50 @@ export default class TaskDirectoryView extends React.Component {
 
     let crumbs = innerPath.map((file, i) => {
       let textValue = file;
+      let icon = (
+        <i
+          className="
+            icon
+            icon-sprite
+            icon-sprite-small
+            icon-back
+            forward">
+        </i>
+      );
+
+      // First breadcrumb is always "Working Directory".
       if (i === 0) {
         textValue = "Working Directory";
-      }
-
-      if (i > 0) {
+        icon = null;
+      } else {
+        // Build the path that the user goes to if clicked.
         onClickPath += ("/" + file);
       }
 
+      // Last breadcrumb. Don't make it a link.
       if (i === innerPath.length - 1) {
         return (
-          <span className="crumb" key={i}>{textValue}</span>
+          <span key={i}>
+            {icon}
+            <span className="crumb" key={i}>{textValue}</span>
+          </span>
         );
       }
 
       return (
-        <a
-          className="crumb clickable"
-          key={i}
-          onClick={this.handleBreadcrumbClick.bind(this, onClickPath)}>
-          {textValue}
-        </a>
+        <span key={i}>
+          {icon}
+          <a
+            className="crumb clickable"
+            onClick={this.handleBreadcrumbClick.bind(this, onClickPath)}>
+            {textValue}
+          </a>
+        </span>
       );
     });
 
     return (
-      <h4 className="breadcrumbs">{crumbs}</h4>
+      <h3 className="breadcrumbs">{crumbs}</h3>
     );
   }
 
@@ -130,8 +148,10 @@ export default class TaskDirectoryView extends React.Component {
     }
 
     return (
-      <div>
-        {this.getBreadcrumbs()}
+      <div className="flex-container-col flex-grow no-overflow">
+        <div className="flex-box control-group">
+          {this.getBreadcrumbs()}
+        </div>
         <TaskDirectoryTable
           files={directory}
           onFileClick={this.handleFileClick.bind(this)}

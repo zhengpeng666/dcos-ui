@@ -25,7 +25,7 @@ function startPolling(task, deeperPath) {
     fetchState(task, deeperPath);
 
     requestInterval = setInterval(
-      fetchState.bind(this, task, deeperPath), Config.getRefreshRate()
+      fetchState.bind(this, task, deeperPath), Config.getRefreshRate() * 2
     );
   }
 }
@@ -66,6 +66,7 @@ var TaskDirectoryStore = Store.createStore({
   getDirectory: function (task, deeperPath) {
     this.resetRequests();
     this.set({directory: null});
+    this.emit(EventTypes.TASK_DIRECTORY_CHANGE);
 
     startPolling(task, deeperPath);
   },
