@@ -82,6 +82,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
     );
   }
 
+
   render() {
     let nodeID = this.props.itemID;
     let last = MesosSummaryStore.get("states").lastSuccessful();
@@ -91,8 +92,13 @@ export default class NodeSidePanelContents extends SidePanelContents {
       return this.getNotFound("node");
     }
 
+    let height = "100%";
+    if (window.innerHeight <= 800) {
+      height = "900px";
+    }
+
     return (
-      <div className="flex-container-col" style={{height: "100%"}}>
+      <div className="flex-container-col" style={{height: height}}>
         <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo(node)}
           <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
