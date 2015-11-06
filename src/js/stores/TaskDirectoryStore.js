@@ -66,6 +66,7 @@ var TaskDirectoryStore = Store.createStore({
   getDirectory: function (task, deeperPath) {
     this.resetRequests();
     this.set({directory: null});
+    this.emit(EventTypes.TASK_DIRECTORY_CHANGE);
 
     startPolling(task, deeperPath);
   },

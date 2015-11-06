@@ -40,6 +40,17 @@ describe("TaskSidePanel", function () {
   });
 
   describe("#getContents", function () {
+    beforeEach(function () {
+      this.getNodeFromID = MesosStateStore.getNodeFromID;
+      MesosStateStore.getNodeFromID = function () {
+        return {hostname: "hello"};
+      };
+    });
+
+    afterEach(function () {
+      MesosStateStore.getNodeFromID = this.getNodeFromID;
+    });
+
     it("should return null if there are no nodes", function () {
       var instance = TestUtils.renderIntoDocument(
         <TaskSidePanel open={true} />
@@ -78,7 +89,7 @@ describe("TaskSidePanel", function () {
       var result = this.instance.getBasicInfo({
         id: "fade",
         state: "TASK_RUNNING"
-      });
+      }, {hostname: "hello"});
       expect(TestUtils.isElement(result)).toEqual(true);
     });
   });
