@@ -244,7 +244,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
       marathonService == null ||
       marathonService.snapshot == null ||
       service != null && service.name === "marathon") {
-      return <h2 className="inverse flush-top">No information available.</h2>;
+      return <h2 className="flush-top">No information available.</h2>;
     }
 
     let installedTime = MarathonStore.getServiceInstalledTime(serviceName);

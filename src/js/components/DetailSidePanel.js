@@ -173,7 +173,7 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     }
 
     return (
-      <div className="container container-fluid container-pod container-pod-short-top">
+      <div>
         {headline}
         {items}
       </div>

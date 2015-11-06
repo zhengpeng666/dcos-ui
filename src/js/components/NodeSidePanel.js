@@ -119,7 +119,7 @@ export default class NodeSidePanel extends DetailSidePanel {
     };
 
     return (
-      <div>
+      <div className="container container-fluid container-pod container-pod-short-top">
         {this.getKeyValuePairs(headerValueMapping)}
         {this.getKeyValuePairs(node.attributes, "Attributes")}
       </div>
