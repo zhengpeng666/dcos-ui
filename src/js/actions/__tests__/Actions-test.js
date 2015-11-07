@@ -24,16 +24,19 @@ describe("Actions", function () {
     });
 
     it("calls analytics#track", function () {
+      Actions.setClusterID('a');
       Actions.log({eventID: "foo"});
       expect(global.analytics.track.calls.length).toEqual(1);
     });
 
     it("calls analytics#track with correct eventID", function () {
+      Actions.setClusterID('a');
       Actions.log({});
       expect(global.analytics.track.calls[0].args[0]).toEqual("dcos-ui");
     });
 
     it("calls analytics#track with correct log", function () {
+      Actions.setClusterID('a');
       Actions.log({eventID: "foo"});
 
       var args = global.analytics.track.calls[0].args[1];
