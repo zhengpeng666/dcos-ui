@@ -15,6 +15,10 @@ var Actions = {
 
   previousFakePageLog: "",
 
+  clusterID: null,
+
+  logQueue: [],
+
   initialize: function () {
     this.createdAt = Date.now();
     this.lastLogDate = this.createdAt;
@@ -25,6 +29,18 @@ var Actions = {
     RouterLocation.addChangeListener(function (data) {
       Actions.setActivePage(data.path);
     });
+  },
+
+  setClusterID: function (clusterID) {
+    this.clusterID = clusterID;
+
+    if (this.logQueue.length) {
+      this.logQueue.forEach((log) => {
+        this.log(log);
+      });
+
+      this.logQueue = [];
+    }
   },
 
   canLog: function () {
@@ -77,12 +93,17 @@ var Actions = {
       return;
     }
 
+    if (this.clusterID == null) {
+      this.logQueue.push(anything);
+      return;
+    }
+
     // Populates with basic data that all logs need
     var log = _.extend({
       appVersion: Config.version,
       eventID: "",
       date: Date.now(),
-      DCOS_HOSTNAME: global.location.hostname,
+      CLUSTER_ID: this.clusterID,
       page: this.activePage,
       stintID: this.stintID,
       version: "@@VERSION"

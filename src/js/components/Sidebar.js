@@ -103,9 +103,10 @@ var Sidebar = React.createClass({
   },
 
   onMetadataChange: function () {
-    this.internalStorage_update({
-      metadata: MetadataStore.get("metadata")
-    });
+    let metadata = MetadataStore.get("metadata");
+    this.internalStorage_update({metadata});
+
+    Actions.setClusterID(metadata.CLUSTER_ID);
   },
 
   onIntercomChange: function () {
