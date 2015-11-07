@@ -93,10 +93,12 @@ export default class TaskSidePanel extends DetailSidePanel {
     );
   }
 
-  getTabs() {
-    let currentTab = this.state.currentTab;
-
+  getTabs(currentTab, completed) {
     return Object.keys(TABS).map(function (tab, i) {
+      if (completed && tab === "files") {
+        return null;
+      }
+
       let classSet = classNames({
         "button button-link": true,
         "button-primary": currentTab === tab
@@ -113,8 +115,7 @@ export default class TaskSidePanel extends DetailSidePanel {
     }, this);
   }
 
-  getTabView(task, node) {
-    let currentTab = this.state.currentTab;
+  getTabView(task, node, currentTab) {
     if (currentTab === "files") {
       return this.getFileView(task);
     }
@@ -214,12 +215,19 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+    let currentTab = this.state.currentTab;
 
     if (task == null) {
       return this.getNotFound("task");
     }
 
     let node = MesosStateStore.getNodeFromID(task.slave_id);
+
+    let completed = TaskStates[task.state].stateTypes[0] === "completed";
+    if (completed) {
+      // If task is completed, don't allow users to see File tab.
+      currentTab = Object.keys(TABS)[1];
+    }
 
     return (
       <div>
@@ -229,11 +237,11 @@ export default class TaskSidePanel extends DetailSidePanel {
           {this.getBasicInfo(task, node)}
           <div className="container container-fluid container-pod side-panel-tabs
             flush flush-bottom flush-top">
-            {this.getTabs()}
+            {this.getTabs(currentTab, completed)}
           </div>
         </div>
         <div className="container container-fluid container-pod container-pod-short">
-          {this.getTabView(task, node)}
+          {this.getTabView(task, node, currentTab)}
         </div>
       </div>
     );
