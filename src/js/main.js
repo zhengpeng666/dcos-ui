@@ -26,6 +26,7 @@ var NodesGridView = require("./components/NodesGridView");
 var NotFoundPage = require("./pages/NotFoundPage");
 var ServiceOverlay = require("./components/ServiceOverlay");
 var ServicesPage = require("./pages/ServicesPage");
+var SettingsPage = require("./pages/SettingsPage");
 
 var routes = (
   <Route name="home" path="/" handler={Index}>
@@ -53,6 +54,8 @@ var routes = (
 
       <Redirect from="/nodes/?" to="nodes-list" />
     </Route>
+
+    <Route name="settings" path="settings/?" handler={SettingsPage} />
 
     <Redirect from="/" to="dashboard" />
 
