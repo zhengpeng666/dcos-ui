@@ -56,10 +56,21 @@ describe("NodeSidePanel", function () {
       };
     };
     MesosSummaryStore.init();
-    MesosSummaryStore.processSummary({slaves: [{
-      "id": "foo",
-      "hostname": "bar"
-    }]});
+    MesosSummaryStore.processSummary({
+      slaves: [
+        {
+          "id": "foo",
+          "hostname": "bar"
+        },
+        {
+          id: "existingNode",
+          version: "10",
+          active: true,
+          registered_time: 10,
+          sumTaskTypesByState: function () { return 1; }
+        }
+      ]
+    });
 
     this.instance = TestUtils.renderIntoDocument(
       <NodeSidePanel open={true} onClose={this.callback} />
@@ -74,57 +85,6 @@ describe("NodeSidePanel", function () {
   });
 
   describe("#renderDetailsTabView", function () {
-
-    beforeEach(function () {
-      this.summaryGet = MesosSummaryStore.get;
-
-      MesosSummaryStore.get = function (key) {
-        if (key === "states") {
-          return {
-            lastSuccessful: function () {
-              return {
-                getNodesList: function () {
-                  return {
-                    filter: function (options) {
-                      var lastFn = function () {
-                        return {
-                          id: "existingNode",
-                          version: "10",
-                          active: true,
-                          registered_time: 10,
-                          sumTaskTypesByState: function () { return 1; }
-                        };
-                      };
-
-                      if (options.ids[0] === "nonExistent") {
-                        lastFn = function () {
-                          return null;
-                        };
-                      }
-
-                      return {
-                        last: lastFn
-                      };
-                    }
-                  };
-                }
-              };
-            },
-            getResourceStatesForNodeIDs: function () {
-              return {
-                cpus: [{value: 1}],
-                mem: [{value: 1}],
-                disk: [{value: 1}]
-              };
-            }
-          };
-        }
-      };
-    });
-
-    afterEach(function () {
-      MesosSummaryStore.get = this.summaryGet;
-    });
 
     it("should return null if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(

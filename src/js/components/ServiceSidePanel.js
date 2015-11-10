@@ -14,8 +14,7 @@ import StringUtil from "../utils/StringUtil";
 import TaskView from "./TaskView";
 
 const METHODS_TO_BIND = [
-  "handleOpenServiceButtonClick",
-  "handleTabClick"
+  "handleOpenServiceButtonClick"
 ];
 
 export default class ServiceSidePanel extends DetailSidePanel {
@@ -147,10 +146,10 @@ export default class ServiceSidePanel extends DetailSidePanel {
           </div>
           {this.getOpenServiceButton()}
           <div className="side-panel-tabs">
-            {this.getTabs()}
+            {this.tabs_getTabs()}
           </div>
         </div>
-        {this.getTabView()}
+        {this.tabs_getTabView()}
       </div>
     );
   }

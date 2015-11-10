@@ -4,7 +4,7 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 
 const TabsMixin = {
-  getTabs() {
+  tabs_getTabs() {
     let currentTab = this.state.currentTab;
     let tabs = this.tabs;
 
@@ -18,14 +18,14 @@ const TabsMixin = {
         <div
           key={i}
           className={classSet}
-          onClick={this.handleTabClick.bind(this, tab)}>
+          onClick={this.tabs_handleTabClick.bind(this, tab)}>
           {tabs[tab]}
         </div>
       );
     }, this);
   },
 
-  getTabView() {
+  tabs_getTabView() {
     let currentTab = this.tabs[this.state.currentTab];
     let renderFunction = this[`render${currentTab}TabView`];
 
@@ -34,6 +34,10 @@ const TabsMixin = {
     }
 
     return renderFunction.apply(this);
+  },
+
+  tabs_handleTabClick(nextTab) {
+    this.setState({currentTab: nextTab});
   }
 };
 

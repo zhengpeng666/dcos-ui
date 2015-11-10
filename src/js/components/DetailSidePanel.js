@@ -151,10 +151,6 @@ export default class DetailSidePanel extends
     this.context.router.transitionTo(pageBefore.name);
   }
 
-  handleTabClick(nextTab) {
-    this.setState({currentTab: nextTab});
-  }
-
   getKeyValuePairs(hash, headline) {
     if (_.isEmpty(hash)) {
       return null;

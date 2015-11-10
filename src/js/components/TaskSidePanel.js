@@ -43,11 +43,10 @@ export default class TaskSidePanel extends DetailSidePanel {
 
       if (completed) {
         delete this.tabs.files;
+        this.setState({currentTab: Object.keys(this.tabs)[0]});
       } else {
         this.tabs = _.clone(TABS);
       }
-
-      this.setState({currentTab: Object.keys(this.tabs)[0]});
     }
   }
 
@@ -185,11 +184,11 @@ export default class TaskSidePanel extends DetailSidePanel {
           {this.getBasicInfo(task, node)}
           <div className="container container-fluid container-pod side-panel-tabs
             flush flush-bottom flush-top">
-            {this.getTabs()}
+            {this.tabs_getTabs()}
           </div>
         </div>
         <div className="container container-fluid container-pod container-pod-short">
-          {this.getTabView()}
+          {this.tabs_getTabView()}
         </div>
       </div>
     );
@@ -203,7 +202,9 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     let node = MesosStateStore.getNodeFromID(task.slave_id);
-    let services = MesosSummaryStore.get("states").lastSuccessful().getServiceList();
+    let services = MesosSummaryStore.get("states")
+      .lastSuccessful()
+      .getServiceList();
     let service = services.filter({ids: [task.framework_id]}).last();
 
     let headerValueMapping = {

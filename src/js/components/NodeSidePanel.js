@@ -69,10 +69,10 @@ export default class NodeSidePanel extends DetailSidePanel {
             </div>
           </div>
           <div className="side-panel-tabs">
-            {this.getTabs()}
+            {this.tabs_getTabs()}
           </div>
         </div>
-        {this.getTabView()}
+        {this.tabs_getTabView()}
       </div>
     );
   }
