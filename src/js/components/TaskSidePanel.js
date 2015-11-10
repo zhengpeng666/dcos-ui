@@ -31,6 +31,7 @@ export default class TaskSidePanel extends DetailSidePanel {
   }
 
   componentWillUpdate(nextProps) {
+    // If the task is 'completed', we do not show the 'Files' tab.
     if (nextProps.itemID) {
       let task = MesosStateStore.getTaskFromTaskID(nextProps.itemID);
 
