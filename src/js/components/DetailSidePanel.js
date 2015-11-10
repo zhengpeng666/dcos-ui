@@ -11,6 +11,7 @@ import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import ResourceTypes from "../constants/ResourceTypes";
+import TabsMixin from "../mixins/TabsMixin";
 import Units from "../utils/Units";
 import Util from "../utils/Util";
 
@@ -55,11 +56,15 @@ function changeListeners(listeners, changeListener) {
   }, this);
 }
 
-export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
+export default class DetailSidePanel extends Util.mixin(InternalStorageMixin, TabsMixin) {
   constructor() {
     super(...arguments);
 
     this.storesListeners = [];
+    this.tabs = {
+      tasks: "Tasks",
+      details: "Details"
+    };
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
@@ -143,6 +148,10 @@ export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
     let routes = this.context.router.getCurrentRoutes();
     let pageBefore = routes[routes.length - 2];
     this.context.router.transitionTo(pageBefore.name);
+  }
+
+  handleTabClick(nextTab) {
+    this.setState({currentTab: nextTab});
   }
 
   getKeyValuePairs(hash, headline) {

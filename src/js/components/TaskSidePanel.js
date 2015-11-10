@@ -1,7 +1,7 @@
+import _ from "underscore";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
-import classNames from "classnames";
 
 import DetailSidePanel from "./DetailSidePanel";
 import HistoryStore from "../stores/HistoryStore";
@@ -13,7 +13,6 @@ import TaskStates from "../constants/TaskStates";
 import TaskUtil from "../utils/TaskUtil";
 import Units from "../utils/Units";
 
-// key is the name, value is the display name
 const TABS = {
   files: "Files",
   details: "Details"
@@ -23,11 +22,32 @@ export default class TaskSidePanel extends DetailSidePanel {
   constructor() {
     super(...arguments);
 
+    this.tabs = _.clone(TABS);
     this.state = {
-      currentTab: Object.keys(TABS).shift()
+      currentTab: Object.keys(this.tabs).shift()
     };
 
     this.storesListeners = ["state", "summary"];
+  }
+
+  componentWillUpdate(nextProps) {
+    if (nextProps.itemID) {
+      let task = MesosStateStore.getTaskFromTaskID(nextProps.itemID);
+
+      if (task == null) {
+        return;
+      }
+
+      let completed = TaskStates[task.state].stateTypes[0] === "completed";
+
+      if (completed) {
+        delete this.tabs.files;
+      } else {
+        this.tabs = _.clone(TABS);
+      }
+
+      this.setState({currentTab: Object.keys(this.tabs)[0]});
+    }
   }
 
   componentDidUpdate() {
@@ -49,10 +69,6 @@ export default class TaskSidePanel extends DetailSidePanel {
     this.context.router.transitionTo(prevPath);
   }
 
-  handleTabClick(nextTab) {
-    this.setState({currentTab: nextTab});
-  }
-
   getHeader() {
     return (
       <div className="side-panel-header-actions side-panel-header-actions-primary">
@@ -63,68 +79,6 @@ export default class TaskSidePanel extends DetailSidePanel {
         </span>
       </div>
     );
-  }
-
-  getInfo(task, node) {
-    if (task == null || !MesosSummaryStore.get("statesProcessed")) {
-      return null;
-    }
-
-    let services = MesosSummaryStore.get("states").lastSuccessful().getServiceList();
-    let service = services.filter({ids: [task.framework_id]}).last();
-
-    let headerValueMapping = {
-      ID: task.id,
-      Service: `${service.name} (${service.id})`,
-      Node: `${node.hostname} (${node.id})`
-    };
-
-    let labelMapping = {};
-
-    task.labels.forEach(function (label) {
-      labelMapping[label.key] = label.value;
-    });
-
-    return (
-      <div>
-        {this.getKeyValuePairs(headerValueMapping)}
-        {this.getKeyValuePairs(labelMapping, "Labels")}
-      </div>
-    );
-  }
-
-  getTabs(currentTab, completed) {
-    return Object.keys(TABS).map(function (tab, i) {
-      if (completed && tab === "files") {
-        return null;
-      }
-
-      let classSet = classNames({
-        "button button-link": true,
-        "button-primary": currentTab === tab
-      });
-
-      return (
-        <div
-          key={i}
-          className={classSet}
-          onClick={this.handleTabClick.bind(this, tab)}>
-          {TABS[tab]}
-        </div>
-      );
-    }, this);
-  }
-
-  getTabView(task, node, currentTab) {
-    if (currentTab === "files") {
-      return this.getFileView(task);
-    }
-
-    return this.getInfo(task, node);
-  }
-
-  getFileView(task) {
-    return <TaskDirectoryView task={task} />;
   }
 
   getResources(task) {
@@ -215,19 +169,13 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
-    let currentTab = this.state.currentTab;
 
     if (task == null) {
       return this.getNotFound("task");
     }
 
     let node = MesosStateStore.getNodeFromID(task.slave_id);
-
     let completed = TaskStates[task.state].stateTypes[0] === "completed";
-    if (completed) {
-      // If task is completed, don't allow users to see File tab.
-      currentTab = Object.keys(TABS)[1];
-    }
 
     return (
       <div>
@@ -237,14 +185,53 @@ export default class TaskSidePanel extends DetailSidePanel {
           {this.getBasicInfo(task, node)}
           <div className="container container-fluid container-pod side-panel-tabs
             flush flush-bottom flush-top">
-            {this.getTabs(currentTab, completed)}
+            {this.getTabs(function (tab) { return completed && tab === "files"; })}
           </div>
         </div>
         <div className="container container-fluid container-pod container-pod-short">
-          {this.getTabView(task, node, currentTab)}
+          {this.getTabView(function (tab) { return completed && tab === "files"; })}
         </div>
       </div>
     );
+  }
+
+  renderDetailsTabView() {
+    let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+
+    if (task == null || !MesosSummaryStore.get("statesProcessed")) {
+      return null;
+    }
+
+    let node = MesosStateStore.getNodeFromID(task.slave_id);
+    let services = MesosSummaryStore.get("states").lastSuccessful().getServiceList();
+    let service = services.filter({ids: [task.framework_id]}).last();
+
+    let headerValueMapping = {
+      ID: task.id,
+      Service: `${service.name} (${service.id})`,
+      Node: `${node.hostname} (${node.id})`
+    };
+
+    let labelMapping = {};
+
+    if (task.labels) {
+      task.labels.forEach(function (label) {
+        labelMapping[label.key] = label.value;
+      });
+    }
+
+    return (
+      <div>
+        {this.getKeyValuePairs(headerValueMapping)}
+        {this.getKeyValuePairs(labelMapping, "Labels")}
+      </div>
+    );
+  }
+
+  renderFilesTabView() {
+    let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+
+    return <TaskDirectoryView task={task} />;
   }
 
   render() {

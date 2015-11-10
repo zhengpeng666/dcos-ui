@@ -18,18 +18,12 @@ const METHODS_TO_BIND = [
   "handleTabClick"
 ];
 
-// key is the name, value is the display name
-const TABS = {
-  tasks: "Tasks",
-  details: "Details"
-};
-
 export default class ServiceSidePanel extends DetailSidePanel {
   constructor() {
     super(...arguments);
 
     this.state = {
-      currentTab: Object.keys(TABS).shift()
+      currentTab: Object.keys(this.tabs).shift()
     };
 
     this.storesListeners = [
@@ -45,7 +39,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
   shouldComponentUpdate(nextProps) {
     if (this.props.open !== nextProps.open && nextProps.open) {
-      let defaultTab = Object.keys(TABS).shift();
+      let defaultTab = Object.keys(this.tabs).shift();
       if (this.state.currentTab !== defaultTab) {
         this.setState({currentTab: defaultTab});
       }
@@ -59,10 +53,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
       "service-ui",
       {serviceName: this.props.itemID}
     );
-  }
-
-  handleTabClick(nextTab) {
-    this.setState({currentTab: nextTab});
   }
 
   getSubHeader(service) {
@@ -139,57 +129,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
     );
   }
 
-  getTabs() {
-    let currentTab = this.state.currentTab;
-
-    return Object.keys(TABS).map(function (tab, i) {
-      let classSet = classNames({
-        "button button-link": true,
-        "button-primary": currentTab === tab
-      });
-
-      return (
-        <div
-          key={i}
-          className={classSet}
-          onClick={this.handleTabClick.bind(this, tab)}>
-          {TABS[tab]}
-        </div>
-      );
-    }, this);
-  }
-
-  getTaskView() {
-    let serviceName = this.props.itemID;
-    let tasks = MesosStateStore.getTasksFromServiceName(serviceName);
-
-    let contents = this.getLoadingScreen();
-
-    let timeSinceMount = (Date.now() - this.mountedAt) / 1000;
-    if (timeSinceMount >= DetailSidePanel.animationLengthSeconds) {
-      contents = <TaskView tasks={tasks} parentRouter={this.context.router} />;
-    }
-
-    return (
-      <div className="container container-fluid container-pod container-pod-short-top container-fluid flex-container-col flush-bottom flex-grow no-overflow">
-        {contents}
-      </div>
-    );
-  }
-
-  getTabView() {
-    let currentTab = this.state.currentTab;
-    if (currentTab === "tasks") {
-      return this.getTaskView();
-    }
-
-    return (
-      <div className="container container-fluid container-pod container-pod-short-top">
-        {this.getInfo()}
-      </div>
-    );
-  }
-
   getContents() {
     let service = MesosSummaryStore.getServiceFromName(this.props.itemID);
 
@@ -235,7 +174,25 @@ export default class ServiceSidePanel extends DetailSidePanel {
     );
   }
 
-  getInfo() {
+  renderTasksTabView() {
+    let serviceName = this.props.itemID;
+    let tasks = MesosStateStore.getTasksFromServiceName(serviceName);
+
+    let contents = this.getLoadingScreen();
+
+    let timeSinceMount = (Date.now() - this.mountedAt) / 1000;
+    if (timeSinceMount >= DetailSidePanel.animationLengthSeconds) {
+      contents = <TaskView tasks={tasks} parentRouter={this.context.router} />;
+    }
+
+    return (
+      <div className="container container-fluid container-pod container-pod-short-top container-fluid flex-container-col flush-bottom flex-grow no-overflow">
+        {contents}
+      </div>
+    );
+  }
+
+  renderDetailsTabView() {
     let serviceName = this.props.itemID;
     let service = MesosStateStore.getServiceFromName(serviceName);
     let marathonService = MarathonStore.getServiceFromName(serviceName);
@@ -244,7 +201,11 @@ export default class ServiceSidePanel extends DetailSidePanel {
       marathonService == null ||
       marathonService.snapshot == null ||
       service != null && service.name === "marathon") {
-      return <h2 className="flush-top">No information available.</h2>;
+      return (
+        <div className="container container-fluid container-pod container-pod-short-top">
+          <h2 className="flush-top">No information available.</h2>
+        </div>
+      );
     }
 
     let installedTime = MarathonStore.getServiceInstalledTime(serviceName);
@@ -260,7 +221,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
       [portTitle]: marathonService.snapshot.ports.join(", ")
     };
 
-    return Object.keys(headerValueMapping).map(function (header, i) {
+    let info = Object.keys(headerValueMapping).map(function (header, i) {
       return (
         <p key={i} className="row flex-box">
           <span className="column-4 emphasize">
@@ -272,6 +233,12 @@ export default class ServiceSidePanel extends DetailSidePanel {
         </p>
       );
     });
+
+    return (
+      <div className="container container-fluid container-pod container-pod-short-top">
+        {info}
+      </div>
+    );
   }
 
   render() {

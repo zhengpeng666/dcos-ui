@@ -1,4 +1,3 @@
-import classNames from "classnames";
 /*eslint-disable no-unused-vars*/
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
@@ -10,12 +9,6 @@ import MesosStateStore from "../stores/MesosStateStore";
 import StringUtil from "../utils/StringUtil";
 import TaskView from "./TaskView";
 
-// key is the name, value is the display name
-const TABS = {
-  tasks: "Tasks",
-  details: "Details"
-};
-
 export default class NodeSidePanel extends DetailSidePanel {
   constructor() {
     super(...arguments);
@@ -26,23 +19,19 @@ export default class NodeSidePanel extends DetailSidePanel {
     ];
 
     this.state = {
-      currentTab: Object.keys(TABS).shift()
+      currentTab: Object.keys(this.tabs).shift()
     };
   }
 
   shouldComponentUpdate(nextProps) {
     if (this.props.open !== nextProps.open && nextProps.open) {
-      let defaultTab = Object.keys(TABS).shift();
+      let defaultTab = Object.keys(this.tabs).shift();
       if (this.state.currentTab !== defaultTab) {
         this.setState({currentTab: defaultTab});
       }
     }
 
     return super.shouldComponentUpdate(...arguments);
-  }
-
-  handleTabClick(nextTab) {
-    this.setState({currentTab: nextTab});
   }
 
   getBasicInfo(node) {
@@ -57,71 +46,6 @@ export default class NodeSidePanel extends DetailSidePanel {
         <div>
           {`${activeTasksCount} Active ${activeTasksSubHeader}`}
         </div>
-      </div>
-    );
-  }
-
-  getTabs() {
-    let currentTab = this.state.currentTab;
-
-    return Object.keys(TABS).map(function (tab, i) {
-      let classSet = classNames({
-        "button button-link": true,
-        "button-primary": currentTab === tab
-      });
-
-      return (
-        <div
-          key={i}
-          className={classSet}
-          onClick={this.handleTabClick.bind(this, tab)}>
-          {TABS[tab]}
-        </div>
-      );
-    }, this);
-  }
-
-  getTaskView() {
-    let tasks = MesosStateStore.getTasksFromNodeID(this.props.itemID);
-
-    let contents = this.getLoadingScreen();
-
-    let timeSinceMount = (Date.now() - this.mountedAt) / 1000;
-    if (timeSinceMount >= DetailSidePanel.animationLengthSeconds) {
-      contents = <TaskView tasks={tasks} parentRouter={this.context.router} />;
-    }
-
-    return (
-      <div className="container container-fluid container-pod container-pod-short-top container-fluid flex-container-col flush-bottom flex-grow no-overflow">
-        {contents}
-      </div>
-    );
-  }
-
-  getTabView(node) {
-    if (node == null) {
-      return null;
-    }
-
-    let currentTab = this.state.currentTab;
-
-    if (currentTab === "tasks") {
-      return this.getTaskView();
-    }
-
-    let headerValueMapping = {
-      ID: node.id,
-      Active: StringUtil.capitalize(node.active.toString().toLowerCase()),
-      Registered: DateUtil.msToDateStr(
-        node.registered_time.toFixed(3) * 1000
-      ),
-      "Master Version": MesosStateStore.get("lastMesosState").version
-    };
-
-    return (
-      <div className="container container-fluid container-pod container-pod-short-top">
-        {this.getKeyValuePairs(headerValueMapping)}
-        {this.getKeyValuePairs(node.attributes, "Attributes")}
       </div>
     );
   }
@@ -148,7 +72,50 @@ export default class NodeSidePanel extends DetailSidePanel {
             {this.getTabs()}
           </div>
         </div>
-        {this.getTabView(node)}
+        {this.getTabView()}
+      </div>
+    );
+  }
+
+  renderTasksTabView() {
+    let tasks = MesosStateStore.getTasksFromNodeID(this.props.itemID);
+
+    let contents = this.getLoadingScreen();
+
+    let timeSinceMount = (Date.now() - this.mountedAt) / 1000;
+    if (timeSinceMount >= DetailSidePanel.animationLengthSeconds) {
+      contents = <TaskView tasks={tasks} parentRouter={this.context.router} />;
+    }
+
+    return (
+      <div className="container container-fluid container-pod container-pod-short-top container-fluid flex-container-col flush-bottom flex-grow no-overflow">
+        {contents}
+      </div>
+    );
+  }
+
+  renderDetailsTabView() {
+    let nodeID = this.props.itemID;
+    let last = MesosSummaryStore.get("states").lastSuccessful();
+    let node = last.getNodesList().filter({ids: [nodeID]}).last();
+
+    if (node == null) {
+      return null;
+    }
+
+    let headerValueMapping = {
+      ID: node.id,
+      Active: StringUtil.capitalize(node.active.toString().toLowerCase()),
+      Registered: DateUtil.msToDateStr(
+        node.registered_time.toFixed(3) * 1000
+      ),
+      "Master Version": MesosStateStore.get("lastMesosState").version
+    };
+
+    return (
+      <div className="container container-fluid container-pod container-pod-short-top">
+        {this.getKeyValuePairs(headerValueMapping)}
+        {this.getKeyValuePairs(node.attributes, "Attributes")}
       </div>
     );
   }
