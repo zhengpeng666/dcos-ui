@@ -10,7 +10,7 @@
                 "plugins": {
                     "type": "object",
                     "properties": {
-                        "bannerPlugin": {
+                        "banner": {
                             "title": "A banner plugin",
                             "description": "Allows users to have a custom banner in the UI",
                             "type": "object",
@@ -34,7 +34,8 @@
                     }
                 }
             }
-        }
+        },
+        "required": ["plugins"]
     },
     "required": ["uiConfig"]
 }
