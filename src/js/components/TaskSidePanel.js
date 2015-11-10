@@ -185,11 +185,11 @@ export default class TaskSidePanel extends DetailSidePanel {
           {this.getBasicInfo(task, node)}
           <div className="container container-fluid container-pod side-panel-tabs
             flush flush-bottom flush-top">
-            {this.getTabs(function (tab) { return completed && tab === "files"; })}
+            {this.getTabs()}
           </div>
         </div>
         <div className="container container-fluid container-pod container-pod-short">
-          {this.getTabView(function (tab) { return completed && tab === "files"; })}
+          {this.getTabView()}
         </div>
       </div>
     );
