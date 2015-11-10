@@ -26,9 +26,9 @@ export default class ServiceSidePanelContents extends SidePanelContents {
     };
 
     this.store_listeners = [
-      {name: "marathon", listenAlways: true},
-      {name: "summary", listenAlways: true},
-      {name: "state", listenAlways: true}
+      {name: "marathon", events: ["success"]},
+      {name: "summary", events: ["success"]},
+      {name: "state", events: ["success"]}
     ];
 
     METHODS_TO_BIND.forEach(function (method) {

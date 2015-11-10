@@ -14,8 +14,8 @@ export default class NodeSidePanelContents extends SidePanelContents {
     super(...arguments);
 
     this.store_listeners = [
-      {name: "summary", listenAlways: true},
-      {name: "state", listenAlways: true}
+      {name: "summary", events: ["success"]},
+      {name: "state", events: ["success"]}
     ];
 
     this.state = {

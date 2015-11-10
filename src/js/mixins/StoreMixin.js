@@ -12,33 +12,48 @@ const ListenersDescription = {
     store: MesosSummaryStore,
 
     // What event to listen to
-    event: EventTypes.MESOS_SUMMARY_CHANGE,
+    events: {
+      succes: EventTypes.MESOS_SUMMARY_CHANGE,
+      error: EventTypes.MESOS_SUMMARY_REQUEST_ERROR
+    },
 
     // When to remove listener
-    unmountWhen: function (store) {
-      return store.get("statesProcessed");
+    unmountWhen: function (store, event) {
+      if (event === "success") {
+        return store.get("statesProcessed");
+      }
     },
 
     // Set to true to keep listening until unmount
-    listenAlways: false
+    listenAlways: true
   },
 
   state: {
     store: MesosStateStore,
-    event: EventTypes.MESOS_STATE_CHANGE,
-    unmountWhen: function (store) {
-      return Object.keys(store.get("lastMesosState")).length;
+    events: {
+      success: EventTypes.MESOS_STATE_CHANGE,
+      error: EventTypes.MESOS_STATE_REQUEST_ERROR
     },
-    listenAlways: false
+    unmountWhen: function (store, event) {
+      if (event === "success") {
+        return Object.keys(store.get("lastMesosState")).length;
+      }
+    },
+    listenAlways: true
   },
 
   marathon: {
     store: MarathonStore,
-    event: EventTypes.MARATHON_APPS_CHANGE,
-    unmountWhen: function (store) {
-      return store.hasProcessedApps();
+    events: {
+      success: EventTypes.MARATHON_APPS_CHANGE,
+      error: EventTypes.MARATHON_APPS_ERROR
     },
-    listenAlways: false
+    unmountWhen: function (store, event) {
+      if (event === "success") {
+        return store.hasProcessedApps();
+      }
+    },
+    listenAlways: true
   }
 };
 
@@ -52,9 +67,22 @@ const StoreMixin = {
       // the ListenersDescription definition above
       this.store_listeners.forEach(function (listener) {
         if (typeof listener === "string") {
+          // Use all defaults
           storesListeners[listener] = _.clone(ListenersDescription[listener]);
         } else {
           let storeName = listener.name;
+          let events = listener.events;
+
+          // Populate events by key. For example, a component
+          // may only want to listen for "success" events
+          if (events) {
+            listener.events = {};
+            events.forEach(function (event) {
+              listener.events[event] =
+                ListenersDescription[storeName].events[event];
+            });
+          }
+
           storesListeners[storeName] = _.defaults(
             listener, ListenersDescription[storeName]
           );
@@ -64,77 +92,92 @@ const StoreMixin = {
       this.store_listeners = storesListeners;
       this.store_addListeners();
     }
-    if (this.parent.componentDidMount) {
-      this.parent.componentDidMount();
-    }
+
+    this.parent.componentDidMount();
   },
 
   componentWillUnmount() {
     this.store_removeListeners();
 
-    if (this.parent.componentWillUnmount) {
-      this.parent.componentWillUnmount();
-    }
+    this.parent.componentWillUnmount();
   },
 
   store_addListeners() {
-    Object.keys(this.store_listeners).forEach(function (id) {
-      let storeListener = this.store_listeners[id];
+    Object.keys(this.store_listeners).forEach((storeID) => {
+      let listenerDetail = this.store_listeners[storeID];
 
-      // Check to see if we are already listening
-      if (storeListener.activeListenerFn) {
-        return;
-      }
+      // Loop through all available events
+      Object.keys(listenerDetail.events).forEach((event) => {
+        let eventListenerID = `${event}ListenerFn`;
 
-      storeListener.activeListenerFn = this.store_onStoreChange.bind(this, id);
+        // Check to see if we are already listening for this event
+        if (listenerDetail[eventListenerID]) {
+          return;
+        }
 
-      storeListener.store.addChangeListener(
-        storeListener.event, storeListener.activeListenerFn
-      );
-    }, this);
+        // Create listener
+        listenerDetail[eventListenerID] = this.store_onStoreChange.bind(
+          this, storeID, event
+        );
+
+        // Set up listener with store
+        listenerDetail.store.addChangeListener(
+          listenerDetail.events[event], listenerDetail[eventListenerID]
+        );
+      });
+    });
   },
 
   store_removeListeners() {
-    Object.keys(this.store_listeners).forEach(function (id) {
-      let storeListener = this.store_listeners[id];
+    Object.keys(this.store_listeners).forEach((storeID) => {
+      let listenerDetail = this.store_listeners[storeID];
 
-      // Check to see if we are already listening
-      if (storeListener.activeListenerFn) {
-        storeListener.store.removeChangeListener(
-          storeListener.event, storeListener.activeListenerFn
-        );
+      // Loop through all available events
+      Object.keys(listenerDetail.events).forEach((event) => {
+        this.store_removeEventListenerForStoreID(storeID, event);
+      });
+    });
+  },
 
-        storeListener.activeListenerFn = null;
-      }
-    }, this);
+  store_removeEventListenerForStoreID(storeID, event) {
+    let listenerDetail = this.store_listeners[storeID];
+    let eventListenerID = `${event}ListenerFn`;
+
+    // Return if there was no listener setup
+    if (!listenerDetail[eventListenerID]) {
+      return;
+    }
+
+    listenerDetail.store.removeChangeListener(
+      listenerDetail.events[event], listenerDetail[eventListenerID]
+    );
+
+    listenerDetail[eventListenerID] = null;
   },
 
   /**
    * This is a callback that will be invoked when stores emit a change event
    *
-   * @param  {String} id The id of a store
+   * @param  {String} storeID The id of a store
+   * @param  {String} event Normally a string containing success|error
    */
-  store_onStoreChange(id, ...args) {
+  store_onStoreChange(storeID, event, ...args) {
     // See if we need to remove our change listener
-    let storeListener = this.store_listeners[id];
-
+    let listenerDetail = this.store_listeners[storeID];
     // Maybe remove listener
-    if (storeListener.unmountWhen && !storeListener.listenAlways) {
+    if (listenerDetail.unmountWhen && !listenerDetail.listenAlways) {
       // Remove change listener if the settings want to unmount after a certain
       // condition is truthy
-      let unmountWhen = storeListener.unmountWhen;
-      if (unmountWhen && unmountWhen(storeListener.store)) {
-        storeListener.store.removeChangeListener(
-          storeListener.event, storeListener.activeListenerFn
-        );
-
-        storeListener.activeListenerFn = null;
+      let unmountWhen = listenerDetail.unmountWhen;
+      if (unmountWhen && unmountWhen(listenerDetail.store, event)) {
+        this.store_removeEventListenerForStoreID(storeID, event);
       }
     }
 
     // Call callback on component that implements mixin if it exists
-    let storeName = StringUtil.capitalize(storeListener.store.storeID);
-    let onChangeFn = this[`on${storeName}StoreChange`];
+    let storeName = StringUtil.capitalize(listenerDetail.store.storeID);
+    let eventName = StringUtil.capitalize(event);
+    let onChangeFn = `on${storeName}Store${eventName}`;
     if (this[onChangeFn]) {
       this[onChangeFn].apply(this, args);
     }

@@ -44,6 +44,33 @@ function es6ify(mixin) {
   };
 }
 
+/**
+ * Modifies an object by adding missing lifecycle function
+ *
+ * @param  {Object} proto
+ * @param  {Boolean} useNoop Optional. To use noop or call parent function
+ */
+function addMissingLifecycleFunctions (proto, useNoop) {
+  // No-ops so we need not check before calling super()
+  let functions = [
+    "componentWillMount", "componentDidMount",
+    "componentWillReceiveProps", "componentWillUpdate", "componentDidUpdate",
+    "componentWillUnmount", "render"
+  ];
+
+  functions.forEach(function (lifecycleFn) {
+    if (typeof proto[lifecycleFn] !== "function") {
+      if (useNoop) {
+        proto[lifecycleFn] = noop;
+      } else {
+        proto[lifecycleFn] = function () {
+          this.parent[lifecycleFn]();
+        }
+      }
+    }
+  });
+}
+
 const Util = {
   mixin: function (...mixins) {
     // Creates base class
@@ -51,18 +78,12 @@ const Util = {
 
     Base.prototype.shouldComponentUpdate = trueNoop;
 
-    // No-ops so we need not check before calling super()
-    let functions = [
-      "componentWillMount", "componentDidMount",
-      "componentWillReceiveProps", "componentWillUpdate", "componentDidUpdate",
-      "componentWillUnmount", "render"
-    ];
-    functions.forEach(function (lifecycleFn) {
-      Base.prototype[lifecycleFn] = noop;
-    });
+    addMissingLifecycleFunctions(Base.prototype, noop);
 
     mixins.forEach(function (mixin, i) {
-      mixin.parent = mixins[i + 1] || Base;
+      addMissingLifecycleFunctions(mixin);
+
+      mixin.parent = mixins[i + 1] || Base.prototype;
     });
 
     mixins.reverse();
