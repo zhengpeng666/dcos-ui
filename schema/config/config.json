@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema",
-    "id": "",
+    "id": "http://schema.mesos/state-01/config",
     "title": "DCOS-UI Config",
     "type": "object",
     "properties" : {
@@ -33,9 +33,9 @@
                         }
                     }
                 }
-            }
-        },
-        "required": ["plugins"]
+            },
+            "required": ["plugins"]
+        }
     },
     "required": ["uiConfig"]
 }
