@@ -1,5 +1,6 @@
 jest.dontMock("../DetailSidePanel");
 jest.dontMock("../../mixins/GetSetMixin");
+jest.dontMock("../../mixins/TabsMixin");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../NodeSidePanel");
@@ -32,11 +33,16 @@ describe("NodeSidePanel", function () {
     MesosStateStore.getTasksFromNodeID = function () {
       return [];
     };
+
     MesosStateStore.get = function (key) {
       if (key === "lastMesosState") {
-        return {};
+        return {
+          version: "1"
+        };
       }
+
     };
+
     MesosStateStore.getNodeFromID = function (id) {
       if (id === "nonExistent") {
         return null;
@@ -67,28 +73,74 @@ describe("NodeSidePanel", function () {
     MesosStateStore.getNodeFromID = this.storeGetNode;
   });
 
-  describe("#getTabView", function () {
+  describe("#renderDetailsTabView", function () {
+
+    beforeEach(function () {
+      this.summaryGet = MesosSummaryStore.get;
+
+      MesosSummaryStore.get = function (key) {
+        if (key === "states") {
+          return {
+            lastSuccessful: function () {
+              return {
+                getNodesList: function () {
+                  return {
+                    filter: function (options) {
+                      var lastFn = function () {
+                        return {
+                          id: "existingNode",
+                          version: "10",
+                          active: true,
+                          registered_time: 10,
+                          sumTaskTypesByState: function () { return 1; }
+                        };
+                      };
+
+                      if (options.ids[0] === "nonExistent") {
+                        lastFn = function () {
+                          return null;
+                        };
+                      }
+
+                      return {
+                        last: lastFn
+                      };
+                    }
+                  };
+                }
+              };
+            },
+            getResourceStatesForNodeIDs: function () {
+              return {
+                cpus: [{value: 1}],
+                mem: [{value: 1}],
+                disk: [{value: 1}]
+              };
+            }
+          };
+        }
+      };
+    });
+
+    afterEach(function () {
+      MesosSummaryStore.get = this.summaryGet;
+    });
 
     it("should return null if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={true} itemID="nonExistent" />
+        <NodeSidePanel open={false} itemID="nonExistent" />
       );
 
-      var result = instance.getTabView();
+      var result = instance.renderDetailsTabView();
       expect(result).toEqual(null);
     });
 
     it("should return a node if node exists", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={true} itemID="existingNode" />
+        <NodeSidePanel open={false} itemID="existingNode" />
       );
 
-      var result = instance.getTabView({
-        id: "existingNode",
-        version: "10",
-        active: true,
-        registered_time: 10
-      });
+      var result = instance.renderDetailsTabView();
       expect(TestUtils.isElement(result)).toEqual(true);
     });
   });
