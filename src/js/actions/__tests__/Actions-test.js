@@ -24,19 +24,19 @@ describe("Actions", function () {
     });
 
     it("calls analytics#track", function () {
-      Actions.setClusterID('a');
+      Actions.setClusterID("a");
       Actions.log({eventID: "foo"});
       expect(global.analytics.track.calls.length).toEqual(1);
     });
 
     it("calls analytics#track with correct eventID", function () {
-      Actions.setClusterID('a');
+      Actions.setClusterID("a");
       Actions.log({});
       expect(global.analytics.track.calls[0].args[0]).toEqual("dcos-ui");
     });
 
     it("calls analytics#track with correct log", function () {
-      Actions.setClusterID('a');
+      Actions.setClusterID("a");
       Actions.log({eventID: "foo"});
 
       var args = global.analytics.track.calls[0].args[1];
@@ -47,6 +47,37 @@ describe("Actions", function () {
       expect(args.page).toBeDefined();
       expect(args.stintID).toBeDefined();
       expect(args.version).toBeDefined();
+    });
+
+  });
+
+  describe("#setClusterID", function () {
+
+    beforeEach(function () {
+      Actions.setClusterID(null);
+      spyOn(global.analytics, "track");
+    });
+
+    it("doesn't track any logs when there's no cluster ID", function () {
+      Actions.log("Test");
+      expect(global.analytics.track).not.toHaveBeenCalled();
+    });
+
+    it("sets the clusterID", function () {
+      Actions.setClusterID("foo");
+      expect(Actions.clusterID).toEqual("foo");
+    });
+
+    it("runs queued logs when clusterID is set", function () {
+      Actions.log("foo");
+      Actions.log("bar");
+      Actions.log("baz");
+      spyOn(Actions, "log");
+      Actions.setClusterID("qux");
+      expect(Actions.log.calls.length).toEqual(3);
+      ["foo", "bar", "baz"].forEach(function (log, i) {
+        expect(Actions.log.calls[i].args[0]).toEqual(log);
+      });
     });
 
   });
