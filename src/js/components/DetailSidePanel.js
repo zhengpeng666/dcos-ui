@@ -11,6 +11,7 @@ import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import ResourceTypes from "../constants/ResourceTypes";
+import TabsMixin from "../mixins/TabsMixin";
 import Units from "../utils/Units";
 import Util from "../utils/Util";
 
@@ -55,11 +56,16 @@ function changeListeners(listeners, changeListener) {
   }, this);
 }
 
-export default class DetailSidePanel extends Util.mixin(InternalStorageMixin) {
+export default class DetailSidePanel extends
+  Util.mixin(InternalStorageMixin, TabsMixin) {
   constructor() {
     super(...arguments);
 
     this.storesListeners = [];
+    this.tabs = {
+      tasks: "Tasks",
+      details: "Details"
+    };
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);

@@ -1,5 +1,6 @@
 jest.dontMock("../DetailSidePanel");
 jest.dontMock("../../mixins/GetSetMixin");
+jest.dontMock("../../mixins/TabsMixin");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../NodeSidePanel");
@@ -32,11 +33,16 @@ describe("NodeSidePanel", function () {
     MesosStateStore.getTasksFromNodeID = function () {
       return [];
     };
+
     MesosStateStore.get = function (key) {
       if (key === "lastMesosState") {
-        return {};
+        return {
+          version: "1"
+        };
       }
+
     };
+
     MesosStateStore.getNodeFromID = function (id) {
       if (id === "nonExistent") {
         return null;
@@ -50,10 +56,21 @@ describe("NodeSidePanel", function () {
       };
     };
     MesosSummaryStore.init();
-    MesosSummaryStore.processSummary({slaves: [{
-      "id": "foo",
-      "hostname": "bar"
-    }]});
+    MesosSummaryStore.processSummary({
+      slaves: [
+        {
+          "id": "foo",
+          "hostname": "bar"
+        },
+        {
+          id: "existingNode",
+          version: "10",
+          active: true,
+          registered_time: 10,
+          sumTaskTypesByState: function () { return 1; }
+        }
+      ]
+    });
 
     this.instance = TestUtils.renderIntoDocument(
       <NodeSidePanel open={true} onClose={this.callback} />
@@ -67,14 +84,14 @@ describe("NodeSidePanel", function () {
     MesosStateStore.getNodeFromID = this.storeGetNode;
   });
 
-  describe("#getTabView", function () {
+  describe("#renderDetailsTabView", function () {
 
     it("should return null if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanel open={true} itemID="nonExistent" />
       );
 
-      var result = instance.getTabView();
+      var result = instance.renderDetailsTabView();
       expect(result).toEqual(null);
     });
 
@@ -83,12 +100,7 @@ describe("NodeSidePanel", function () {
         <NodeSidePanel open={true} itemID="existingNode" />
       );
 
-      var result = instance.getTabView({
-        id: "existingNode",
-        version: "10",
-        active: true,
-        registered_time: 10
-      });
+      var result = instance.renderDetailsTabView();
       expect(TestUtils.isElement(result)).toEqual(true);
     });
   });

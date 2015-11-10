@@ -63,7 +63,7 @@ describe("ServiceSidePanel", function () {
 
   describe("getting info", function () {
 
-    describe("#getInfo", function () {
+    describe("#renderDetailsTabView", function () {
       it("should return 'no info' if service doesn't exist", function () {
         var instance = TestUtils.renderIntoDocument(
           <ServiceSidePanel
@@ -71,7 +71,7 @@ describe("ServiceSidePanel", function () {
             itemID="service_that_does_not_exist"/>
         );
 
-        var info = JestUtil.renderAndFindTag(instance.getInfo(), "h2");
+        var info = JestUtil.renderAndFindTag(instance.renderDetailsTabView(), "h2");
         expect(info.getDOMNode().textContent)
           .toEqual("No information available.");
       });
@@ -83,8 +83,8 @@ describe("ServiceSidePanel", function () {
             itemID="service_that_exists"/>
         );
 
-        var info = instance.getInfo();
-        expect(TestUtils.isElement(info[0])).toEqual(true);
+        var info = instance.renderDetailsTabView();
+        expect(TestUtils.isElement(info)).toEqual(true);
       });
     });
 
