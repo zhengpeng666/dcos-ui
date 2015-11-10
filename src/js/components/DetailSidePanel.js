@@ -56,7 +56,8 @@ function changeListeners(listeners, changeListener) {
   }, this);
 }
 
-export default class DetailSidePanel extends Util.mixin(InternalStorageMixin, TabsMixin) {
+export default class DetailSidePanel extends
+  Util.mixin(InternalStorageMixin, TabsMixin) {
   constructor() {
     super(...arguments);
 

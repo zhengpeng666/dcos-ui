@@ -128,7 +128,7 @@ describe("NodeSidePanel", function () {
 
     it("should return null if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={false} itemID="nonExistent" />
+        <NodeSidePanel open={true} itemID="nonExistent" />
       );
 
       var result = instance.renderDetailsTabView();
@@ -137,7 +137,7 @@ describe("NodeSidePanel", function () {
 
     it("should return a node if node exists", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={false} itemID="existingNode" />
+        <NodeSidePanel open={true} itemID="existingNode" />
       );
 
       var result = instance.renderDetailsTabView();

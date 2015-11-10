@@ -186,7 +186,16 @@ export default class ServiceSidePanel extends DetailSidePanel {
     }
 
     return (
-      <div className="container container-fluid container-pod container-pod-short-top container-fluid flex-container-col flush-bottom flex-grow no-overflow">
+      <div className="
+        container
+        container-fluid
+        container-pod
+        container-pod-short-top
+        container-fluid
+        flex-container-col
+        flush-bottom
+        flex-grow
+        no-overflow">
         {contents}
       </div>
     );
