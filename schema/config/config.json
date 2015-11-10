@@ -23,8 +23,16 @@
                                     "title": "Name or hex value of a CSS color",
                                     "type": "string"
                                 },
-                                "content": {
-                                    "title": "Content to show in banner",
+                                "headerTitle": {
+                                    "title": "Title for banner header",
+                                    "type": "string"
+                                },
+                                "headerContent": {
+                                    "title": "Content to show in banner header",
+                                    "type": "string"
+                                },
+                                "footerContent": {
+                                    "title": "Content to show in banner footer",
                                     "type": "string"
                                 },
                                 "imagePath": {
@@ -36,7 +44,7 @@
                                     "type": "string"
                                 }
                             },
-                            "required": ["backgroundColor", "foregroundColor", "content"]
+                            "required": ["backgroundColor", "foregroundColor", "headerContent", "headerTitle"]
                         }
                     }
                 }
