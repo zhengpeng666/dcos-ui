@@ -175,7 +175,6 @@ export default class TaskSidePanel extends DetailSidePanel {
     }
 
     let node = MesosStateStore.getNodeFromID(task.slave_id);
-    let completed = TaskStates[task.state].stateTypes[0] === "completed";
 
     return (
       <div>
