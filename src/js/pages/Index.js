@@ -26,8 +26,6 @@ function getSidebarState() {
   };
 }
 
-const CONFIG_ERROR_LIMIT = 3;
-
 var Index = React.createClass({
 
   displayName: "Index",
@@ -129,7 +127,7 @@ var Index = React.createClass({
   onConfigError: function () {
     this.setState({configErrorCount: this.state.configErrorCount + 1});
 
-    if (this.state.configErrorCount < CONFIG_ERROR_LIMIT) {
+    if (this.state.configErrorCount < Config.delayAfterErrorCount) {
       ConfigStore.fetchConfig();
     }
   },
@@ -221,7 +219,7 @@ var Index = React.createClass({
     var isReady = data.statesProcessed;
     let showErrorScreen =
       this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount
-      || this.state.configError >= CONFIG_ERROR_LIMIT;
+      || this.state.configError >= Config.delayAfterErrorCount;
     let showLoadingScreen = (!isReady || !this.state.pluginsLoaded)
       && !showErrorScreen;
 
