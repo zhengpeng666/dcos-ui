@@ -1,21 +1,25 @@
 import _ from "underscore";
 
-function addListener(hookName, listener, store) {
-  let listeners = store[hookName];
-
-  if (_.isArray(listeners)) {
-    listeners.push(listener);
-  } else {
-    store[hookName] = [listener];
+function addListener(store, hook, listener, priority = 10) {
+  if (typeof priority !== "number") {
+    priority = 10;
   }
+
+  if (store[hook] === undefined) {
+    store[hook] = {};
+  }
+
+  if (store[hook][priority] === undefined) {
+    store[hook][priority] = [];
+  }
+
+  store[hook][priority].push(listener);
 }
 
 var Plugins = {
   actions: {},
 
-  filters: {
-    renderingBanner: []
-  },
+  filters: {},
 
   onLoaded: [],
 
@@ -42,35 +46,88 @@ var Plugins = {
     this.loaded = true;
   },
 
-  doAction(hookName) {
-    let listeners = this.actions[hookName];
-    let args = Array.prototype.slice.apply(arguments, 1);
+  /**
+   * Attaches listener for filter
+   *
+   * @param  {String} hook The event id to listen for
+   * @param  {Function} listener Callback to fire when event executes
+   * @param  {Number} priority Priority for listener
+   */
+  addFilter(hook, listener, priority) {
+    addListener(this.filters, hook, listener, priority);
+  },
 
-    if (_.isArray(listeners)) {
-      listeners.forEach(function (listener) {
-        listener.apply(this, args);
-      }, this);
+  /**
+   * Will apply all filters for a given hook
+   * If more arguments are passed to the function these arguments will
+   * be passed down to the listeners. But we only expect `value` to be
+   * modified.
+   *
+   * @param  {String} hook An event identifier
+   * @param  {Mixed} value The value that is being filtered
+   * @return {Mixed} The filtered value after all hooked functions are applied
+   */
+  applyFilter(hook, value, ...args) {
+    let listeners = this.filters[hook];
+
+    // If there's no listeners, then return early
+    if (typeof listeners === undefined || listeners.length === 0) {
+      return value;
     }
+
+    // Sort the listeners by priority
+    let priorities = Object.keys(listeners);
+    priorities.sort();
+
+    priorities.forEach(function (priority) {
+      // Call all listeners
+      listeners[priority].forEach(function (listener) {
+        // Creates new arguments array to call the listener with
+        let groupedArgs = _.clone(args).unshift(value);
+        value = listener.apply(null, groupedArgs);
+      });
+    });
+
+    return value;
   },
 
-  addAction(hookName, listener) {
-    addListener(hookName, listener, this.actions);
+  /**
+   * Attaches listener for action
+   *
+   * @param  {String} hook The event id to listen for
+   * @param  {Function} listener Callback to fire when event executes
+   * @param  {Number} priority Priority for listener
+   */
+  addAction(hook, listener, priority) {
+    addListener(this.actions, hook, listener, priority);
   },
 
-  applyFilter(hookName, arg) {
-    let listeners = this.filters[hookName];
+  /**
+   * Will apply all filters for a given hook
+   * If more arguments are passed to the function these arguments will
+   * be passed down to the listeners. But we only expect `value` to be
+   * modified.
+   *
+   * @param  {String} hook An event identifier
+   */
+  doAction(hook, ...args) {
+    let listeners = this.actions[hook];
 
-    if (_.isArray(listeners)) {
-      return listeners.reduce(function (total, listener) {
-        return listener.call(this, total);
-      }.bind(this), arg);
+    // If there's no listeners, then return early
+    if (typeof listeners === undefined || listeners.length === 0) {
+      return;
     }
 
-    return null;
-  },
+    // Sort the listeners by priority
+    let priorities = Object.keys(listeners);
+    priorities.sort();
 
-  addFilter(hookName, listener) {
-    addListener(hookName, listener, this.filters);
+    priorities.forEach(function (priority) {
+      // Call all listeners
+      listeners[priority].forEach(function (listener) {
+        listener.apply(null, args);
+      });
+    });
   }
 };
 
