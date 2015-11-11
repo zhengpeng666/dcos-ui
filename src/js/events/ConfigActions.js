@@ -44,13 +44,10 @@ var fetchConfig = RequestUtil.debounceOnError(
 
 if (useFixtures) {
   fetchConfig = function () {
-    setTimeout(function () {
-      console.log("happened");
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_CONFIG_SUCCESS,
-        data: FIXTURE
-      });
-    }, 7500);
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_CONFIG_SUCCESS,
+      data: FIXTURE
+    });
   };
 }
 
