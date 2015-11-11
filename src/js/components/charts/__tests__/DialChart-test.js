@@ -27,7 +27,7 @@ describe("DialChart", function () {
         ], []
       );
       expect(normalizedData).toEqual([
-        { colorIndex: 6, value: 1 }
+        { colorIndex: 7, value: 1 }
       ]);
     });
 

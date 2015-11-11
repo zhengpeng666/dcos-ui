@@ -7,7 +7,7 @@ var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 
 // the data to render a single grey circle
 function getEmptyState() {
-  return [{ colorIndex: 6, value: 1 }];
+  return [{ colorIndex: 7, value: 1 }];
 }
 
 var DialChart = React.createClass({
