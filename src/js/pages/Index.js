@@ -14,7 +14,7 @@ var IntercomStore = require("../stores/IntercomStore");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var Modals = require("../components/Modals");
-import plugins from "../plugins/plugin";
+import plugins from "../plugins/index";
 var RequestErrorMsg = require("../components/RequestErrorMsg");
 var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");

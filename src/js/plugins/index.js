@@ -31,9 +31,7 @@ var Plugins = {
   init() {
     ConfigStore.addChangeListener(
       EventTypes.CONFIG_LOADED,
-      function () {
-        this.loadPlugins();
-      }.bind(this)
+      this.loadPlugins.bind(this)
     );
 
     ConfigStore.fetchConfig();
