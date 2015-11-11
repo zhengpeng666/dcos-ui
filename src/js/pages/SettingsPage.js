@@ -1,6 +1,6 @@
 import React from "react";
 
-import Page from "../components/page";
+import Page from "../components/Page";
 
 export default class SettingsPage extends React.Component {
   render() {
