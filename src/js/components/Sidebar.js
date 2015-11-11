@@ -195,7 +195,7 @@ var Sidebar = React.createClass({
   },
 
   getMenuItems: function () {
-    const menuItems = ["dashboard", "services", "nodes-list"];
+    const menuItems = ["dashboard", "services", "nodes-list", "settings"];
     let currentPath = this.context.router.getLocation().getCurrentPath();
 
     return _.map(menuItems, function (routeKey) {
