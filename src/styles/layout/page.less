@@ -20,6 +20,18 @@
 
       .page-header-title {
         float: left;
+
+        &.button-primary {
+          color: @white;
+        }
+
+        &.button-link {
+
+          &:not(.button-primary) {
+            color: color-lighten(@neutral, 40);
+          }
+
+        }
       }
 
       /* Page Header Sidebar Toggle */
