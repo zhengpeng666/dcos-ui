@@ -10,14 +10,37 @@ function addListener(hookName, listener, store) {
   }
 }
 
-class Plugins {
-  constructor() {
-    this.actions = {};
+var Plugins = {
+  actions: {},
 
-    this.filters = {
-      renderingBanner: []
-    };
-  }
+  filters: {
+    renderingBanner: []
+  },
+
+  onLoaded: [],
+
+  loaded: false,
+
+  init() {
+  },
+
+  addLoadedListener(listener) {
+    this.onLoaded.push(listener);
+
+    if (this.loaded) {
+      listener();
+    }
+  },
+
+  loadPlugins() {
+    // load plugins here.
+
+    this.onLoaded.forEach(function (listener) {
+      listener();
+    });
+
+    this.loaded = true;
+  },
 
   doAction(hookName) {
     let listeners = this.actions[hookName];
@@ -28,11 +51,11 @@ class Plugins {
         listener.apply(this, args);
       }, this);
     }
-  }
+  },
 
   addAction(hookName, listener) {
     addListener(hookName, listener, this.actions);
-  }
+  },
 
   applyFilter(hookName, arg) {
     let listeners = this.filters[hookName];
@@ -44,11 +67,11 @@ class Plugins {
     }
 
     return null;
-  }
+  },
 
   addFilter(hookName, listener) {
     addListener(hookName, listener, this.filters);
   }
-}
+};
 
-export default new Plugins();
+export default Plugins;
