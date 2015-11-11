@@ -1,5 +1,3 @@
-import _ from "underscore";
-
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "../events/AppDispatcher";
 import ConfigActions from "../events/ConfigActions";
