@@ -49,7 +49,6 @@ var Index = React.createClass({
     HistoryStore.init();
     MesosSummaryStore.init();
     SidebarStore.init();
-    plugins.init();
     this.internalStorage_set(getSidebarState());
 
     var email = LocalStorageUtil.get("email");
@@ -75,6 +74,7 @@ var Index = React.createClass({
     );
 
     plugins.addLoadedListener(this.onPluginsLoaded);
+    plugins.init();
 
     this.addMesosStateListeners();
   },
