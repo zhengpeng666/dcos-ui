@@ -1,27 +1,39 @@
+/*eslint-disable no-unused-vars*/
 import React from "react";
-import {RouteHandler} from "react-router";
+/*eslint-enable no-unused-vars*/
+import { RouteHandler } from "react-router";
 
 import Page from "../components/Page";
+import TabsMixin from "../mixins/TabsMixin";
+import Util from "../utils/Util";
 
-export default class SettingsPage extends React.Component {
+export default class SettingsPage extends Util.mixin(TabsMixin) {
+
+  constructor() {
+    super();
+
+    this.tabs = {
+      settings: "System",
+      access: "Access Control"
+    };
+
+    this.state = {
+      currentTab: Object.keys(this.tabs).shift()
+    };
+  }
 
   getNavigation() {
     return (
-      <h1 className="page-header-title inverse flush">
-        <span className="button button-link button-primary">
-          System
-        </span>
-        <span className="button button-link">
-          Access Control
-        </span>
-      </h1>
+      <div>
+        {this.tabs_getTabLinks("h1 page-header-title inverse flush")}
+      </div>
     );
   }
 
   render() {
     return (
       <Page
-        renderNavigation={this.getNavigation}>
+        title={this.getNavigation()}>
         <RouteHandler />
       </Page>
     );

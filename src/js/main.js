@@ -56,7 +56,7 @@ var routes = (
     </Route>
 
     <Route name="settings" path="settings/?" handler={SettingsPage}>
-      <Route name="access-control" path="access-control" />
+      <Route name="access" path="access-control" />
     </Route>
 
     <Redirect from="/" to="dashboard" />
