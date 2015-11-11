@@ -1,10 +1,10 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema",
-    "id": "http://schema.mesos/state-01/config",
-    "title": "DCOS-UI Config",
+    "id": "http://schema.mesos/dcos/config",
+    "title": "DCOS Config API Endpoint",
     "type": "object",
     "properties" : {
-        "uiConfig": {
+        "uiConfiguration": {
             "type": "object",
             "properties": {
                 "plugins": {
@@ -12,23 +12,26 @@
                     "properties": {
                         "banner": {
                             "title": "A banner plugin",
-                            "description": "Allows users to have a custom banner in the UI",
+                            "description": "Adds a custom header/footer banner to the UI.",
                             "type": "object",
                             "properties": {
                                 "backgroundColor": {
-                                    "title": "Name or hex value of a CSS color",
+                                    "title": "Background color for banners.",
+                                    "description": "Color should be a valid CSS color (hex, color name).",
                                     "type": "string"
                                 },
                                 "foregroundColor": {
-                                    "title": "Name or hex value of a CSS color",
+                                    "title": "Text color for banners.",
+                                    "description": "Color should be a valid CSS color (hex, color name).",
                                     "type": "string"
                                 },
                                 "headerTitle": {
-                                    "title": "Title for banner header",
+                                    "title": "Title for banner header.",
                                     "type": "string"
                                 },
                                 "headerContent": {
-                                    "title": "Content to show in banner header",
+                                    "title": "Content to show in banner header.",
+                                    "description": "This content is shown to the right of the banner.",
                                     "type": "string"
                                 },
                                 "footerContent": {
@@ -36,15 +39,16 @@
                                     "type": "string"
                                 },
                                 "imagePath": {
-                                    "title": "Options. A path to an image.",
+                                    "title": "Optional. A path to an image.",
+                                    "description": "Image size should be 32x32 pixels.",
                                     "type": "string"
                                 },
-                                "tooltip": {
-                                    "title": "Tooltip for content",
-                                    "type": "string"
+                                "dismissible": {
+                                    "title": "Dismiss banners.",
+                                    "type": "boolean"
                                 }
                             },
-                            "required": ["backgroundColor", "foregroundColor", "headerContent", "headerTitle"]
+                            "required": ["headerTitle", "headerContent", "footerContent"]
                         }
                     }
                 }
@@ -52,5 +56,5 @@
             "required": ["plugins"]
         }
     },
-    "required": ["uiConfig"]
+    "required": ["uiConfiguration"]
 }
