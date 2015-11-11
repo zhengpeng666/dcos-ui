@@ -1,6 +1,5 @@
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "./AppDispatcher";
-import Config from "../config/Config";
 import RequestUtil from "../utils/RequestUtil";
 
 var FIXTURE = {
@@ -16,31 +15,23 @@ var FIXTURE = {
 };
 
 var useFixtures = true;
-var fetchConfig = RequestUtil.debounceOnError(
-  Config.getRefreshRate(),
-  function (resolve, reject) {
-    return function () {
-      RequestUtil.json({
-        url: "BIG_FUCKING_QUESTION_MARK",
-        success: function (response) {
-          AppDispatcher.handleServerAction({
-            type: ActionTypes.REQUEST_CONFIG_SUCCESS,
-            data: response
-          });
-          resolve();
-        },
-        error: function (e) {
-          AppDispatcher.handleServerAction({
-            type: ActionTypes.REQUEST_CONFIG_ERROR,
-            data: e.message
-          });
-          reject();
-        }
+var fetchConfig = function () {
+  RequestUtil.json({
+    url: "BIG_FUCKING_QUESTION_MARK",
+    success: function (response) {
+      AppDispatcher.handleServerAction({
+        type: ActionTypes.REQUEST_CONFIG_SUCCESS,
+        data: response
       });
-    };
-  },
-  {delayAfterCount: Config.delayAfterErrorCount}
-);
+    },
+    error: function (e) {
+      AppDispatcher.handleServerAction({
+        type: ActionTypes.REQUEST_CONFIG_ERROR,
+        data: e.message
+      });
+    }
+  });
+};
 
 if (useFixtures) {
   fetchConfig = function () {
