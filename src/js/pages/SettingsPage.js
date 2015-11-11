@@ -12,6 +12,6 @@ export default class SettingsPage extends React.Component {
 
 SettingsPage.routeConfig = {
   label: "Settings",
-  icon: "services",
+  icon: "resources-settings",
   matches: /^\/settings/
 };
