@@ -26,6 +26,8 @@ function getSidebarState() {
   };
 }
 
+const CONFIG_ERROR_LIMIT = 3;
+
 var Index = React.createClass({
 
   displayName: "Index",
@@ -39,7 +41,7 @@ var Index = React.createClass({
       showErrorModal: false,
       modalErrorMsg: "",
       pluginsLoaded: false,
-      configError: false
+      configErrorCount: 0
     };
   },
 
@@ -47,6 +49,7 @@ var Index = React.createClass({
     HistoryStore.init();
     MesosSummaryStore.init();
     SidebarStore.init();
+    plugins.init();
     this.internalStorage_set(getSidebarState());
 
     var email = LocalStorageUtil.get("email");
@@ -124,7 +127,11 @@ var Index = React.createClass({
   },
 
   onConfigError: function () {
-    this.setState({configError: true});
+    this.setState({configErrorCount: this.state.configErrorCount + 1});
+
+    if (this.state.configErrorCount < CONFIG_ERROR_LIMIT) {
+      ConfigStore.fetchConfig();
+    }
   },
 
   onPluginsLoaded: function () {
@@ -214,7 +221,7 @@ var Index = React.createClass({
     var isReady = data.statesProcessed;
     let showErrorScreen =
       this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount
-      || this.state.configError;
+      || this.state.configError >= CONFIG_ERROR_LIMIT;
     let showLoadingScreen = (!isReady || !this.state.pluginsLoaded)
       && !showErrorScreen;
 
