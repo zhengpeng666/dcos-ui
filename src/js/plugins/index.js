@@ -1,5 +1,8 @@
 import _ from "underscore";
 
+import ConfigStore from "../stores/ConfigStore";
+import EventTypes from "../constants/EventTypes";
+
 function addListener(store, hook, listener, priority = 10) {
   if (typeof priority !== "number") {
     priority = 10;
@@ -26,18 +29,24 @@ var Plugins = {
   loaded: false,
 
   init() {
+    ConfigStore.addChangeListener(
+      EventTypes.CONFIG_LOADED,
+      function () {
+        this.loadPlugins();
+      }.bind(this)
+    );
+
+    ConfigStore.fetchConfig();
   },
 
   addLoadedListener(listener) {
     this.onLoaded.push(listener);
-
-    if (this.loaded) {
-      listener();
-    }
   },
 
   loadPlugins() {
     // load plugins here.
+    var config = ConfigStore.get("config");
+    console.log(config);
 
     this.onLoaded.forEach(function (listener) {
       listener();
