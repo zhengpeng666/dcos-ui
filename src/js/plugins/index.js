@@ -10,12 +10,14 @@ function addListener(hookName, listener, store) {
   }
 }
 
-const plugins = {
-  actions: {},
+class Plugins {
+  constructor() {
+    this.actions = {};
 
-  filters: {
-    renderingBanner: []
-  },
+    this.filters = {
+      renderingBanner: []
+    };
+  }
 
   doAction(hookName) {
     let listeners = this.actions[hookName];
@@ -26,11 +28,11 @@ const plugins = {
         listener.apply(this, args);
       }, this);
     }
-  },
+  }
 
   addAction(hookName, listener) {
     addListener(hookName, listener, this.actions);
-  },
+  }
 
   applyFilter(hookName, arg) {
     let listeners = this.filters[hookName];
@@ -42,11 +44,11 @@ const plugins = {
     }
 
     return null;
-  },
+  }
 
   addFilter(hookName, listener) {
     addListener(hookName, listener, this.filters);
   }
-};
+}
 
-export default plugins;
+export default new Plugins();
