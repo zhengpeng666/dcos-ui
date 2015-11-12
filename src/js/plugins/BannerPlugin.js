@@ -35,8 +35,8 @@ const BannerPlugin = {
       this.applicationContents.bind(this)
     );
     Plugins.addFilter(
-      "renderOverlayNewWindowButton",
-      this.renderOverlayNewWindowButton.bind(this)
+      "overlayNewWindowButton",
+      this.overlayNewWindowButton.bind(this)
     );
   },
 
@@ -100,7 +100,7 @@ const BannerPlugin = {
     );
   },
 
-  renderOverlayNewWindowButton: function (button) {
+  overlayNewWindowButton: function (button) {
     if (this.isEnabled()) {
       return null;
     }

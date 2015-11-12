@@ -140,7 +140,7 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
       </a>
     );
 
-    return Plugins.applyFilter("renderOverlayNewWindowButton", link);
+    return Plugins.applyFilter("overlayNewWindowButton", link);
   }
 
   getServiceNav(service) {
