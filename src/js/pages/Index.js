@@ -86,9 +86,7 @@ var Index = React.createClass({
   },
 
   componentDidUpdate: function () {
-    if (this.state.pluginsLoaded) {
-      Plugins.doAction("indexDidUpdate");
-    }
+    Plugins.doAction("applicationIsMounted");
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
@@ -248,7 +246,7 @@ var Index = React.createClass({
     this.renderIntercom();
 
     if (this.state.pluginsLoaded) {
-      let pluginRender = Plugins.applyFilter("renderIndex");
+      let pluginRender = Plugins.applyFilter("applicationContents", null);
 
       if (pluginRender) {
         // Clean out listeners

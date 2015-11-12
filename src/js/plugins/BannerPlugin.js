@@ -15,22 +15,51 @@ function inIframe() {
 const BannerPlugin = {
 
   configuration: {
-    enabled: false
+    backgroundColor: null,
+    foregroundColor: null,
+    headerTitle: null,
+    headerContent: null,
+    footerContent: null,
+    imagePath: null,
+    dismissible: null
   },
 
   /**
    * @param  {Object} Plugins The Plugins API
    */
   initialize: function (Plugins) {
-    Plugins.addFilter("renderIndex", this.renderIndex.bind(this));
-    Plugins.addAction("indexDidUpdate", this.indexDidUpdate.bind(this));
+    Plugins.addAction("applicationIsMounted",
+      this.applicationIsMounted.bind(this)
+    );
+    Plugins.addFilter("applicationContents",
+      this.applicationContents.bind(this)
+    );
   },
 
   configure: function (configuration) {
     this.configuration = _.extend(this.configuration, configuration);
   },
 
-  renderIndex: function () {
+  applicationIsMounted: function () {
+    let frame = document.getElementById("banner-plugin-iframe");
+    if (frame == null) {
+      return;
+    }
+
+    if (this.historyListenerAdded) {
+      return;
+    }
+
+    this.historyListenerAdded = true;
+    let frameWindow = frame.contentWindow;
+    let topWindow = window;
+
+    frameWindow.addEventListener("popstate", function () {
+      topWindow.location.hash = frameWindow.location.hash;
+    });
+  },
+
+  applicationContents: function () {
     if (inIframe()) {
       return null;
     }
@@ -83,26 +112,8 @@ const BannerPlugin = {
         </footer>
       </div>
     );
-  },
-
-  indexDidUpdate: function () {
-    let frame = document.getElementById("banner-plugin-iframe");
-    if (frame == null) {
-      return;
-    }
-
-    if (this.historyListenerAdded) {
-      return;
-    }
-
-    this.historyListenerAdded = true;
-    let frameWindow = frame.contentWindow;
-    let topWindow = window;
-
-    frameWindow.addEventListener("popstate", function () {
-      topWindow.location.hash = frameWindow.location.hash;
-    });
   }
+
 };
 
 export default BannerPlugin;
