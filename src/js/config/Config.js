@@ -1,4 +1,5 @@
 var Config = {
+  analyticsKey: "@@ANALYTICS_KEY",
   delayAfterErrorCount: 5,
   environment: "@@ENV",
   historyLength: 31,

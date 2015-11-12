@@ -19,6 +19,7 @@ var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var MetadataActions = require("../events/MetadataActions");
 var MetadataStore = require("../stores/MetadataStore");
+import Plugins from "../plugins/Plugins";
 var SidebarActions = require("../events/SidebarActions");
 var TooltipMixin = require("../mixins/TooltipMixin");
 
@@ -242,10 +243,7 @@ var Sidebar = React.createClass({
     );
   },
 
-  render: function () {
-    var data = this.internalStorage_get();
-    let clusterName = data.mesosInfo.getClusterName();
-
+  getFooterButtons() {
     var chatIconClassSet = classNames({
       "clickable": true,
       "icon": true,
@@ -254,6 +252,51 @@ var Sidebar = React.createClass({
       "icon-sprite-medium": true,
       "icon-sprite-medium-color": IntercomStore.get("isOpen")
     });
+
+    let defaultButtonSet = [
+      (
+        <a key="button-docs" className="button button-link"
+          href="http://docs.mesosphere.com/"
+          target="_blank"
+          data-behavior="show-tip"
+          data-tip-place="top-right"
+          data-tip-content="Documentation">
+            <i className="icon icon-sprite icon-documents icon-sprite-medium clickable"></i>
+        </a>
+      ),
+      (
+        <button key="button-intercom" className="button button-link"
+          data-behavior="show-tip"
+          data-tip-content="Talk with us"
+          onClick={this.handleToggleIntercom}>
+            <i className={chatIconClassSet}></i>
+        </button>
+      ),
+      (
+        <button key="button-tour" className="button button-link"
+          data-behavior="show-tip"
+          data-tip-place="top-left"
+          data-tip-content="Install CLI and Take Tour"
+          onClick={this.handleStartTour}>
+            <i className="icon icon-sprite icon-tour icon-sprite-medium clickable"></i>
+        </button>
+      )
+    ];
+
+    let buttonSet = Plugins.applyFilter("footerButtonSet", defaultButtonSet);
+
+    if (buttonSet && buttonSet.length) {
+      return (
+        <div className="icon-buttons">{defaultButtonSet}</div>
+      );
+    } else {
+      return null;
+    }
+  },
+
+  render: function () {
+    var data = this.internalStorage_get();
+    let clusterName = data.mesosInfo.getClusterName();
 
     return (
       <div className="sidebar flex-container-col">
@@ -287,29 +330,7 @@ var Sidebar = React.createClass({
               </span>
             </p>
           </div>
-          <div className="icon-buttons">
-            <a className="button button-link"
-              href="http://docs.mesosphere.com/"
-              target="_blank"
-              data-behavior="show-tip"
-              data-tip-place="top-right"
-              data-tip-content="Documentation">
-                <i className="icon icon-sprite icon-documents icon-sprite-medium clickable"></i>
-            </a>
-            <button className="button button-link"
-              data-behavior="show-tip"
-              data-tip-content="Talk with us"
-              onClick={this.handleToggleIntercom}>
-                <i className={chatIconClassSet}></i>
-            </button>
-            <button className="button button-link"
-              data-behavior="show-tip"
-              data-tip-place="top-left"
-              data-tip-content="Install CLI and Take Tour"
-              onClick={this.handleStartTour}>
-                <i className="icon icon-sprite icon-tour icon-sprite-medium clickable"></i>
-            </button>
-          </div>
+          {this.getFooterButtons()}
         </div>
       </div>
     );
