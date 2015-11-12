@@ -66,6 +66,14 @@ var DOMUtils = {
     );
   },
 
+  isTopFrame: function () {
+    try {
+      return window.self === window.top;
+    } catch (e) {
+      return true;
+    }
+  },
+
   whichTransitionEvent: function (el) {
     var transitions = {
       "transition": "transitionend",

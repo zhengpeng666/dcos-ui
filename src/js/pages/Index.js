@@ -85,6 +85,10 @@ var Index = React.createClass({
     this.addMesosStateListeners();
   },
 
+  componentDidUpdate: function () {
+    Plugins.doAction("applicationDidUpdate");
+  },
+
   shouldComponentUpdate: function (nextProps, nextState) {
     return !(_.isEqual(this.props, nextProps) &&
         _.isEqual(this.state, nextState));
@@ -240,6 +244,17 @@ var Index = React.createClass({
     });
 
     this.renderIntercom();
+
+    if (this.state.pluginsLoaded) {
+      let contents = Plugins.applyFilter("applicationContents", null);
+
+      if (contents) {
+        // Clean out listeners
+        this.componentWillUnmount();
+
+        return contents;
+      }
+    }
 
     return (
       <div>
