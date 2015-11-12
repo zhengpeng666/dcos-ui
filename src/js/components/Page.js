@@ -13,7 +13,10 @@ var Page = React.createClass({
   mixins: [InternalStorageMixin],
 
   propTypes: {
-    title: React.PropTypes.string,
+    title: React.PropTypes.oneOfType([
+        React.PropTypes.object,
+        React.PropTypes.string
+      ]),
     renderNavigation: React.PropTypes.func
   },
 
@@ -40,6 +43,18 @@ var Page = React.createClass({
     return null;
   },
 
+  getTitle: function () {
+    if (_.isObject(this.props.title)) {
+      return this.props.title;
+    } else {
+      return (
+        <h1 className="page-header-title inverse flush">
+          {this.props.title}
+        </h1>
+      );
+    }
+  },
+
   render: function () {
     var classes = {
       "page": true,
@@ -57,9 +72,7 @@ var Page = React.createClass({
           <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-inverse container-pod-divider-bottom-align-right">
             <div className="page-header-context">
               <SidebarToggle />
-              <h1 className="page-header-title inverse flush">
-                {this.props.title}
-              </h1>
+              {this.getTitle()}
             </div>
             {this.getNavigation()}
           </div>

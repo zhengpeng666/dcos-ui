@@ -1,26 +1,50 @@
 import classNames from "classnames";
+import { Link } from "react-router";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
 const TabsMixin = {
-  tabs_getTabs() {
-    let currentTab = this.state.currentTab;
-    let tabs = this.tabs;
 
-    return Object.keys(tabs).map(function (tab, i) {
+  getTabClassSet(customClasses) {
+    return Object.keys(this.tabs).map(function (tab) {
       let classSet = classNames({
         "button button-link": true,
-        "button-primary": currentTab === tab
+        "button-primary": this.state.currentTab === tab,
+        [customClasses]: customClasses
       });
 
+      return classSet;
+    }, this);
+  },
+
+  tabs_getTabs(customClasses) {
+    let tabSet = Object.keys(this.tabs);
+
+    return this.getTabClassSet(customClasses).map(function (classSet, i) {
       return (
         <div
           key={i}
           className={classSet}
-          onClick={this.tabs_handleTabClick.bind(this, tab)}>
-          {tabs[tab]}
+          onClick={this.tabs_handleTabClick.bind(this, tabSet[i])}>
+          {this.tabs[tabSet[i]]}
         </div>
+      );
+    }, this);
+  },
+
+  tabs_getTabLinks(customClasses) {
+    let tabSet = Object.keys(this.tabs);
+
+    return this.getTabClassSet(customClasses).map(function (classSet, i) {
+      return (
+        <Link
+          key={i}
+          to={tabSet[i]}
+          className={classSet}
+          onClick={this.tabs_handleTabClick.bind(this, tabSet[i])}>
+            {this.tabs[tabSet[i]]}
+        </Link>
       );
     }, this);
   },
