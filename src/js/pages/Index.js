@@ -234,8 +234,8 @@ var Index = React.createClass({
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
     let showErrorScreen =
-      this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount
-      || this.state.configError >= Config.delayAfterErrorCount;
+      (this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount)
+      || (this.state.configErrorCount >= Config.delayAfterErrorCount);
     let showLoadingScreen = (!isReady || !this.state.pluginsLoaded)
       && !showErrorScreen;
 
