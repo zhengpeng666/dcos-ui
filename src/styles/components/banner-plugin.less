@@ -1,7 +1,12 @@
-.bannerPlugin {
+.banner-plugin-wrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
+
+  #banner-plugin-iframe {
+    height: 100%;
+    width: 100%;
+  }
 
   footer,
   header {
@@ -54,7 +59,7 @@
 /* Screen Size: Mini (@screen-mini) and above */
 & when (@screen-mini-enabled) {
   @media (min-width: @screen-mini) {
-    .bannerPlugin {
+    .banner-plugin-wrapper {
       footer,
       header {
         padding-top: @base-spacing-unit-screen-mini / 1.5;
@@ -74,7 +79,7 @@
 /* Screen Size: Small (@screen-small) and above */
 & when (@screen-small-enabled) {
   @media (min-width: @screen-small) {
-    .bannerPlugin {
+    .banner-plugin-wrapper {
       footer,
       header {
         padding-top: @base-spacing-unit-screen-small * 0.5;
@@ -94,7 +99,7 @@
 /* Screen Size: Medium (@screen-medium) and above */
 & when (@screen-medium-enabled) {
   @media (min-width: @screen-medium) {
-    .bannerPlugin {
+    .banner-plugin-wrapper {
       footer,
       header {
         padding-top: @base-spacing-unit-screen-medium * 0.35;
@@ -114,7 +119,7 @@
 /* Screen Size: Large (@screen-large) and above */
 & when (@screen-large-enabled) {
   @media (min-width: @screen-large) {
-    .bannerPlugin {
+    .banner-plugin-wrapper {
       footer,
       header {
         padding-top: @base-spacing-unit-screen-large * 0.35;

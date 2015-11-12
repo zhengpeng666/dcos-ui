@@ -1,12 +1,10 @@
-import _ from "underscore";
-import classNames from "classnames";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
-function inIframe() {
+function isTopFrame() {
   try {
-    return window.self !== window.top;
+    return window.self === window.top;
   } catch (e) {
     return true;
   }
@@ -15,8 +13,8 @@ function inIframe() {
 const BannerPlugin = {
 
   configuration: {
-    backgroundColor: null,
-    foregroundColor: null,
+    backgroundColor: "#1E232F",
+    foregroundColor: "#FFFFFF",
     headerTitle: null,
     headerContent: null,
     footerContent: null,
@@ -43,16 +41,25 @@ const BannerPlugin = {
   },
 
   configure: function (configuration) {
-    this.enabled = true;
-    this.configuration = configuration;
+    // Only merge keys that have a non-null value
+    Object.keys(configuration).forEach((key) => {
+      if (configuration[key] != null) {
+        this.configuration[key] = configuration[key];
+      }
+    });
   },
 
   isEnabled: function () {
-    return this.enabled;
+    let configuration = this.configuration;
+
+    return configuration.headerTitle ||
+      configuration.headerContent ||
+      configuration.footerContent ||
+      configuration.imagePath;
   },
 
   applicationIsMounted: function () {
-    if (!this.isEnabled()) {
+    if (this.isEnabled() === false || !isTopFrame()) {
       return;
     }
 
@@ -75,56 +82,20 @@ const BannerPlugin = {
   },
 
   applicationContents: function () {
-    if (inIframe() || !this.isEnabled()) {
+    if (this.isEnabled() === false || !isTopFrame()) {
       return null;
     }
 
-    let configuration = this.configuration;
-
-    let imageClassSet = classNames({
-      "icon icon-small icon-image-container icon-app-container": true,
-      "hidden": configuration.imagePath == null ||
-        configuration.imagePath === ""
-    });
-
-    let headerClassSet = classNames({
-      "title flush-top flush-bottom": true,
-      "hidden": configuration.headerTitle == null ||
-        configuration.headerTitle === ""
-    });
-
-    let styles = {
-      color: configuration.foregroundColor,
-      backgroundColor: configuration.backgroundColor
-    };
-
     return (
-      <div className="bannerPlugin">
-        <header style={styles}>
-          <span>
-            <span className={imageClassSet}>
-              <img src={configuration.imagePath} />
-            </span>
-            <h5
-              className={headerClassSet}
-              style={_.pick(styles, "color")}>
-              {configuration.headerTitle}
-            </h5>
-          </span>
-          <span className="content" title={configuration.headerContent}>
-            {configuration.headerContent}
-          </span>
-        </header>
+      <div className="banner-plugin-wrapper">
+        {this.getHeader()}
+
         <iframe
           frameBorder="0"
           id="banner-plugin-iframe"
-          src={window.location.href}
-          style={{width: "100%", height: "100%"}} />
-        <footer style={styles}>
-          <span className="content" title={configuration.footerContent}>
-            {configuration.footerContent}
-          </span>
-        </footer>
+          src={window.location.href} />
+
+        {this.getFooter()}
       </div>
     );
   },
@@ -135,6 +106,97 @@ const BannerPlugin = {
     }
 
     return button;
+  },
+
+  getColorStyles: function () {
+    return {
+      color: this.configuration.foregroundColor,
+      backgroundColor: this.configuration.backgroundColor
+    };
+  },
+
+  getIcon: function () {
+    let imagePath = this.configuration.imagePath;
+
+    if (imagePath == null || imagePath === "") {
+      return null;
+    }
+
+    return (
+      <span className="
+        icon
+        icon-small
+        icon-image-container
+        icon-app-container">
+        <img src={imagePath} />
+      </span>
+    );
+  },
+
+  getTitle: function () {
+    let title = this.configuration.headerTitle;
+
+    if (title == null || title === "") {
+      return null;
+    }
+
+    return (
+      <h5
+        className="title flush-top flush-bottom"
+        style={{color: this.configuration.foregroundColor}}>
+        {title}
+      </h5>
+    );
+  },
+
+  getHeaderContent: function () {
+    let content = this.configuration.headerContent;
+
+    if (content == null || content === "") {
+      return null;
+    }
+
+    return (
+      <span className="content" title={content}>
+        {content}
+      </span>
+    );
+  },
+
+  getHeader: function () {
+    let icon = this.getIcon();
+    let title = this.getTitle();
+    let content = this.getHeaderContent();
+
+    if (icon == null && title == null && content == null) {
+      return null;
+    }
+
+    return (
+      <header style={this.getColorStyles()}>
+        <span>
+          {icon}
+          {title}
+        </span>
+        {content}
+      </header>
+    );
+  },
+
+  getFooter: function () {
+    let content = this.configuration.footerContent;
+
+    if (content == null || content === "") {
+      return null;
+    }
+
+    return (
+      <footer style={this.getColorStyles()}>
+        <span className="content" title={content}>
+          {content}
+        </span>
+      </footer>
+    );
   }
 
 };

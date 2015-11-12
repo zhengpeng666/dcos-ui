@@ -246,13 +246,13 @@ var Index = React.createClass({
     this.renderIntercom();
 
     if (this.state.pluginsLoaded) {
-      let pluginRender = Plugins.applyFilter("applicationContents", null);
+      let contents = Plugins.applyFilter("applicationContents", null);
 
-      if (pluginRender) {
+      if (contents) {
         // Clean out listeners
         this.componentWillUnmount();
 
-        return pluginRender;
+        return contents;
       }
     }
 
