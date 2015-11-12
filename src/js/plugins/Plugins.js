@@ -74,6 +74,7 @@ var Plugins = _.extend({}, Events.EventEmitter.prototype, {
    * @param  {Number} priority Priority for listener
    */
   addFilter(hook, listener, priority) {
+    console.log(hook, listener);
     addListener(this.filters, hook, listener, priority);
   },
 

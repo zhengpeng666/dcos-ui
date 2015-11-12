@@ -27,6 +27,15 @@ const FIXTURE = {
     "plugins": {
       "tracking": {
         "enabled": true
+      },
+      "banner": {
+        "backgroundColor": "red",
+        "foregroundColor": "green",
+        "headerTitle": "tester",
+        "headerContent": "content tester",
+        "footerContent": "footer tester",
+        "imagePath": "",
+        "dismissible": "false"
       }
     }
   }

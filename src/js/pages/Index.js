@@ -20,14 +20,6 @@ var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
 
-function inIframe() {
-  try {
-    return window.self !== window.top;
-  } catch (e) {
-    return true;
-  }
-}
-
 function getSidebarState() {
   return {
     isOpen: SidebarStore.get("isOpen")
@@ -91,6 +83,12 @@ var Index = React.createClass({
     Plugins.initialize();
 
     this.addMesosStateListeners();
+  },
+
+  componentDidUpdate: function () {
+    if (this.state.pluginsLoaded) {
+      Plugins.doAction("indexDidUpdate");
+    }
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
@@ -249,65 +247,15 @@ var Index = React.createClass({
 
     this.renderIntercom();
 
-    if (!inIframe()) {
-      // Clean out listeners
-      this.componentWillUnmount();
+    if (this.state.pluginsLoaded) {
+      let pluginRender = Plugins.applyFilter("renderIndex");
 
-      let pluginConfig = {
-        backgroundColor: "red",
-        foregroundColor: "white",
-        headerTitle: "Organization Name",
-        headerContent: "CONFIDENTIAL: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium.",
-        footerContent: "Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus. Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus.",
-        imagePath: "./img/services/icon-service-marathon-small@2x.png",
-        dismissible: false
-      };
+      if (pluginRender) {
+        // Clean out listeners
+        this.componentWillUnmount();
 
-      let imageClassSet = classNames({
-        "icon icon-small icon-image-container icon-app-container": true,
-        "hidden": pluginConfig.imagePath == null ||
-          pluginConfig.imagePath === ""
-      });
-
-      let headerClassSet = classNames({
-        "title flush-top flush-bottom": true,
-        "hidden": pluginConfig.headerTitle == null ||
-          pluginConfig.headerTitle === ""
-      });
-
-      let styles = {
-        color: pluginConfig.foregroundColor,
-        backgroundColor: pluginConfig.backgroundColor
-      };
-
-      return (
-        <div className="bannerPlugin">
-          <header style={styles}>
-            <span>
-              <span className={imageClassSet}>
-                <img src={pluginConfig.imagePath} />
-              </span>
-              <h5
-                className={headerClassSet}
-                style={_.pick(styles, "color")}>
-                {pluginConfig.headerTitle}
-              </h5>
-            </span>
-            <span className="content" title={pluginConfig.headerContent}>
-              {pluginConfig.headerContent}
-            </span>
-          </header>
-          <iframe
-            frameBorder="0"
-            src={window.location.href}
-            style={{width: "100%", height: "100%"}} />
-          <footer style={styles}>
-            <span className="content" title={pluginConfig.footerContent}>
-              {pluginConfig.footerContent}
-            </span>
-          </footer>
-        </div>
-      );
+        return pluginRender;
+      }
     }
 
     return (
