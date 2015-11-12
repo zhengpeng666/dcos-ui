@@ -175,11 +175,13 @@ var Modals = React.createClass({
       });
 
       if (this.state.tourSetup === false) {
-        // setup with user infor for their tracking
-        global.chmln.setup({
-          uid: Actions.getStintID(),
-          version: Config.version
-        });
+        // Setup with user info for their tracking
+        if (global.chmln && global.chmln.setup) {
+          global.chmln.setup({
+            uid: Actions.getStintID(),
+            version: Config.version
+          });
+        }
         this.setState({tourSetup: true});
       } else {
         // Awful hack.
