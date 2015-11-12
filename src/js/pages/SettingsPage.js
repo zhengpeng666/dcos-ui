@@ -22,6 +22,16 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
     };
   }
 
+  componentWillMount() {
+    let routes = this.context.router.getCurrentRoutes();
+    let currentRoute = routes[routes.length - 1].name;
+
+    if (Object.keys(this.tabs).indexOf(currentRoute) >= 0) {
+      this.state.currentTab = currentRoute;
+      this.forceUpdate();
+    }
+  }
+
   getNavigation() {
     return (
       <div>
@@ -39,6 +49,10 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
     );
   }
 }
+
+SettingsPage.contextTypes = {
+  router: React.PropTypes.func
+};
 
 SettingsPage.routeConfig = {
   label: "Settings",

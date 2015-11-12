@@ -17,6 +17,7 @@ var NotFoundRoute = Router.NotFoundRoute;
 
 require("./utils/MomentJSConfig");
 require("./utils/ReactSVG");
+var AccessControlPage = require("./pages/AccessControlPage");
 var Config = require("./config/Config");
 var DashboardPage = require("./pages/DashboardPage");
 var HostTable = require("./components/HostTable");
@@ -56,7 +57,7 @@ var routes = (
     </Route>
 
     <Route name="settings" path="settings/?" handler={SettingsPage}>
-      <Route name="access" path="access-control" />
+      <Route name="access" path="access-control" handler={AccessControlPage}/>
     </Route>
 
     <Redirect from="/" to="dashboard" />
