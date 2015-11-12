@@ -25,10 +25,8 @@ const ConfigActions = {
 const FIXTURE = {
   "uiConfig": {
     "plugins": {
-      "banner": {
-        "bgColor": "#999",
-        "content": "This is confidential",
-        "alignment": "center"
+      "tracking": {
+        "enabled": true
       }
     }
   }

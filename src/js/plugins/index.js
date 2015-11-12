@@ -4,6 +4,11 @@ import Events from "events";
 import ConfigStore from "../stores/ConfigStore";
 import EventTypes from "../constants/EventTypes";
 
+import TrackingPlugin from "./TrackingPlugin";
+var pluginList = {
+  "tracking": TrackingPlugin
+};
+
 function addListener(store, hook, listener, priority = 10) {
   if (typeof priority !== "number") {
     priority = 10;
@@ -46,7 +51,11 @@ var Plugins = _.extend({}, Events.EventEmitter.prototype, {
 
   onPluginsLoaded() {
     var config = ConfigStore.get("config");
-    console.log(config);
+    var configPlugins = config.uiConfig.plugins;
+
+    Object.keys(configPlugins).forEach(function (pluginName) {
+      pluginList[pluginName](configPlugins[pluginName]);
+    });
 
     this.emit(EventTypes.PLUGINS_LOADED);
   },
@@ -76,7 +85,7 @@ var Plugins = _.extend({}, Events.EventEmitter.prototype, {
     let listeners = this.filters[hook];
 
     // If there's no listeners, then return early
-    if (typeof listeners === undefined || listeners.length === 0) {
+    if (listeners == null || listeners.length === 0) {
       return value;
     }
 
@@ -88,7 +97,8 @@ var Plugins = _.extend({}, Events.EventEmitter.prototype, {
       // Call all listeners
       listeners[priority].forEach(function (listener) {
         // Creates new arguments array to call the listener with
-        let groupedArgs = _.clone(args).unshift(value);
+        let groupedArgs = _.clone(args);
+        groupedArgs.unshift(value);
         value = listener.apply(null, groupedArgs);
       });
     });
