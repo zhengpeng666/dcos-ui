@@ -102,22 +102,7 @@ const BannerPlugin = {
     let frameWindow = frame.contentWindow;
     let topWindow = window;
 
-    let doNotUpdateHash = false;
-
-    frameWindow.history.back = function () {
-      doNotUpdateHash = true;
-      console.log("happened");
-      topWindow.history.back();
-    };
-
-    frameWindow.addEventListener("popstate", function (arg) {
-      if (doNotUpdateHash) {
-        doNotUpdateHash = false;
-        return;
-      }
-
-      console.log(arg);
-
+    frameWindow.addEventListener("popstate", function () {
       topWindow.location.hash = frameWindow.location.hash;
     });
   }
