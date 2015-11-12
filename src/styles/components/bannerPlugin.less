@@ -1,21 +1,123 @@
 .bannerPlugin {
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  height: 100vh;
 
-  header,
-  footer {
-    flex-basis: 60px;
+  footer,
+  header {
+    padding: @base-spacing-unit / 1.5;
     vertical-align: middle;
 
     .content,
+    .title {
+      line-height: 24px;
+    }
+
+    .title,
+    .icon {
+      margin-right: @base-spacing-unit / 1.5;
+    }
+
+    .content,
+    .title,
     .icon,
     .title {
       display: inline-block;
+    }
+
+    .content {
+      overflow: hidden;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  footer .content {
+    text-align: center;
+    width: 100%;
+  }
+
+  header {
+    display: flex;
+    .content {
+      flex: 1;
     }
   }
 
   #canvas {
     flex: 1;
+  }
+}
+
+/* Screen Size: Mini (@screen-mini) and above */
+& when (@screen-mini-enabled) {
+  @media (min-width: @screen-mini) {
+    footer,
+    header {
+      padding-top: @base-spacing-unit-screen-mini / 1.5;
+      padding-left: @base-spacing-unit-screen-mini / 1.5;
+      padding-right: @base-spacing-unit-screen-mini / 1.5;
+      padding-bottom: @base-spacing-unit-screen-mini / 1.5;
+    }
+
+    .title,
+    .icon {
+      margin-right: @base-spacing-unit-screen-mini / 1.5;
+    }
+  }
+}
+
+/* Screen Size: Small (@screen-small) and above */
+& when (@screen-small-enabled) {
+  @media (min-width: @screen-small) {
+    footer,
+    header {
+      padding-top: @base-spacing-unit-screen-small / 1.5;
+      padding-left: @base-spacing-unit-screen-small / 1.5;
+      padding-right: @base-spacing-unit-screen-small / 1.5;
+      padding-bottom: @base-spacing-unit-screen-small / 1.5;
+    }
+
+    .title,
+    .icon {
+      margin-right: @base-spacing-unit-screen-small / 1.5;
+    }
+  }
+}
+
+/* Screen Size: Medium (@screen-medium) and above */
+& when (@screen-medium-enabled) {
+  @media (min-width: @screen-medium) {
+    footer,
+    header {
+      padding-top: @base-spacing-unit-screen-medium / 1.5;
+      padding-left: @base-spacing-unit-screen-medium / 1.5;
+      padding-right: @base-spacing-unit-screen-medium / 1.5;
+      padding-bottom: @base-spacing-unit-screen-medium / 1.5;
+    }
+
+    .title,
+    .icon {
+      margin-right: @base-spacing-unit-screen-medium / 1.5;
+    }
+  }
+}
+
+/* Screen Size: Large (@screen-large) and above */
+& when (@screen-large-enabled) {
+  @media (min-width: @screen-large) {
+    footer,
+    header {
+      padding-top: @base-spacing-unit-screen-large / 1.5;
+      padding-left: @base-spacing-unit-screen-large / 1.5;
+      padding-right: @base-spacing-unit-screen-large / 1.5;
+      padding-bottom: @base-spacing-unit-screen-large / 1.5;
+    }
+
+    .title,
+    .icon {
+      margin-right: @base-spacing-unit-screen-large / 1.5;
+    }
   }
 }

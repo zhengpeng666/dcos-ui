@@ -249,27 +249,34 @@ var Index = React.createClass({
 
     this.renderIntercom();
 
-    if(!inIframe()) {
+    if (!inIframe()) {
       // Clean out listeners
       this.componentWillUnmount();
 
+      let pluginConfig = {
+        color: "white",
+        backgroundColor: "red"
+      };
+
       return (
         <div className="bannerPlugin">
-          <header>
-            <span className="icon icon-small icon-image-container icon-app-container">
-              <img />
+          <header style={{color: pluginConfig.color, backgroundColor: pluginConfig.backgroundColor}}>
+            <span>
+              <span className="icon icon-small icon-image-container icon-app-container">
+                <img src="./img/services/icon-service-marathon-small@2x.png" />
+              </span>
+              <h5 className="title flush-top flush-bottom" style={{color: pluginConfig.color}}>
+                Organization Name
+              </h5>
             </span>
-            <span className="title h5 flush-top flush-bottom">
-              Organization Name
-            </span>
-            <span className="content">
-              CONFIDENTIAL: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium.
+            <span className="content" title="CONFIDENTIAL: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium.">
+              CONFIDENTIAL: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium.
             </span>
           </header>
-          <iframe src={window.location.href} frameBorder="0" style={{width: '100%', height: '100%'}} onLoad={function (...attr) {console.log(attr)}}/>
-          <footer>
-            <span className="content">
-              Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus.
+          <iframe src={window.location.href} frameBorder="0" style={{width: "100%", height: "100%"}} />
+          <footer style={{color: pluginConfig.color, backgroundColor: pluginConfig.backgroundColor}}>
+            <span className="content" title="Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus. Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus.">
+              Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus. Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus.
             </span>
           </footer>
         </div>
