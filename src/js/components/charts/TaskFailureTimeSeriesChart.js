@@ -25,9 +25,13 @@ var TaskFailureTimeSeriesChart = React.createClass({
   getLatestPercent: function (data) {
     let index = _.findLastIndex(data, function (obj) {
       return obj.rate != null;
-    }) || 0;
+    });
 
-    return data[index].rate;
+    if (index < 0) {
+      index = 0;
+    }
+
+    return data[index].rate || 0;
   },
 
   getChart: function (props) {
