@@ -30,10 +30,6 @@ const BannerPlugin = {
     this.configuration = _.extend(this.configuration, configuration);
   },
 
-  isEnabled() {
-    return this.configuration.enabled;
-  },
-
   renderIndex: function () {
     if (inIframe()) {
       return null;
@@ -77,6 +73,7 @@ const BannerPlugin = {
         </header>
         <iframe
           frameBorder="0"
+          id="banner-plugin-iframe"
           src={window.location.href}
           style={{width: "100%", height: "100%"}} />
         <footer style={styles}>
