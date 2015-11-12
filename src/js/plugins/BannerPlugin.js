@@ -2,13 +2,7 @@
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
-function isTopFrame() {
-  try {
-    return window.self === window.top;
-  } catch (e) {
-    return true;
-  }
-}
+import DOMUtils from "../utils/DOMUtils";
 
 const BannerPlugin = {
 
@@ -22,20 +16,17 @@ const BannerPlugin = {
     dismissible: null
   },
 
-  enabled: false,
-
   /**
    * @param  {Object} Plugins The Plugins API
    */
   initialize: function (Plugins) {
-    Plugins.addAction("applicationIsMounted",
-      this.applicationIsMounted.bind(this)
+    Plugins.addAction("applicationDidUpdate",
+      this.applicationDidUpdate.bind(this)
     );
     Plugins.addFilter("applicationContents",
       this.applicationContents.bind(this)
     );
-    Plugins.addFilter(
-      "overlayNewWindowButton",
+    Plugins.addFilter("overlayNewWindowButton",
       this.overlayNewWindowButton.bind(this)
     );
   },
@@ -58,8 +49,8 @@ const BannerPlugin = {
       configuration.imagePath;
   },
 
-  applicationIsMounted: function () {
-    if (this.isEnabled() === false || !isTopFrame()) {
+  applicationDidUpdate: function () {
+    if (this.isEnabled() === false || !DOMUtils.isTopFrame()) {
       return;
     }
 
@@ -82,7 +73,7 @@ const BannerPlugin = {
   },
 
   applicationContents: function () {
-    if (this.isEnabled() === false || !isTopFrame()) {
+    if (this.isEnabled() === false || !DOMUtils.isTopFrame()) {
       return null;
     }
 

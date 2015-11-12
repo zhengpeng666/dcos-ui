@@ -86,7 +86,7 @@ var Index = React.createClass({
   },
 
   componentDidUpdate: function () {
-    Plugins.doAction("applicationIsMounted");
+    Plugins.doAction("applicationDidUpdate");
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
