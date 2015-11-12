@@ -35,7 +35,7 @@ const BannerPlugin = {
   },
 
   renderIndex: function () {
-    if (!inIframe()) {
+    if (inIframe()) {
       return null;
     }
 
