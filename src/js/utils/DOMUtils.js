@@ -1,6 +1,19 @@
 var _ = require("underscore");
 
 var DOMUtils = {
+  appendScript: function (el, code) {
+    let scriptNode = document.createElement("script");
+    scriptNode.type = "text/javascript";
+
+    try {
+      scriptNode.appendChild(document.createTextNode(code));
+    } catch (e) {
+      scriptNode.text = code;
+    }
+
+    el.appendChild(scriptNode);
+  },
+
   getComputedWidth: function (obj) {
     return DOMUtils.getComputedDimensions(obj).width;
   },

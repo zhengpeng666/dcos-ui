@@ -1,5 +1,3 @@
-var React = require("react/addons");
-
 jest.dontMock("../TaskFailureTimeSeriesChart");
 
 var TaskFailureTimeSeriesChart = require("../TaskFailureTimeSeriesChart");

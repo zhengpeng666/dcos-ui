@@ -44,10 +44,14 @@ var Actions = {
   },
 
   canLog: function () {
-    return global.analytics.initialized;
+    return !!(global.analytics && global.analytics.initialized);
   },
 
   logFakePageView: function (fakePageLog) {
+    if (this.canLog() === false) {
+      return;
+    }
+
     if (_.isEqual(this.previousFakePageLog, fakePageLog)) {
       return;
     }
@@ -78,6 +82,10 @@ var Actions = {
   },
 
   identify: function () {
+    if (this.canLog() === false) {
+      return;
+    }
+
     global.analytics.identify.apply(global.analytics, arguments);
     this.log({
       eventID: "Logged in"
