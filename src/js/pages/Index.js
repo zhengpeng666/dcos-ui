@@ -254,29 +254,56 @@ var Index = React.createClass({
       this.componentWillUnmount();
 
       let pluginConfig = {
-        color: "white",
-        backgroundColor: "red"
+        backgroundColor: "red",
+        foregroundColor: "white",
+        headerTitle: "Organization Name",
+        headerContent: "CONFIDENTIAL: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium.",
+        footerContent: "Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus. Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus.",
+        imagePath: "./img/services/icon-service-marathon-small@2x.png",
+        dismissible: false
+      };
+
+      let imageClassSet = classNames({
+        "icon icon-small icon-image-container icon-app-container": true,
+        "hidden": pluginConfig.imagePath == null ||
+          pluginConfig.imagePath === ""
+      });
+
+      let headerClassSet = classNames({
+        "title flush-top flush-bottom": true,
+        "hidden": pluginConfig.headerTitle == null ||
+          pluginConfig.headerTitle === ""
+      });
+
+      let styles = {
+        color: pluginConfig.foregroundColor,
+        backgroundColor: pluginConfig.backgroundColor
       };
 
       return (
         <div className="bannerPlugin">
-          <header style={{color: pluginConfig.color, backgroundColor: pluginConfig.backgroundColor}}>
+          <header style={styles}>
             <span>
-              <span className="icon icon-small icon-image-container icon-app-container">
-                <img src="./img/services/icon-service-marathon-small@2x.png" />
+              <span className={imageClassSet}>
+                <img src={pluginConfig.imagePath} />
               </span>
-              <h5 className="title flush-top flush-bottom" style={{color: pluginConfig.color}}>
-                Organization Name
+              <h5
+                className={headerClassSet}
+                style={_.pick(styles, "color")}>
+                {pluginConfig.headerTitle}
               </h5>
             </span>
-            <span className="content" title="CONFIDENTIAL: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium.">
-              CONFIDENTIAL: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium.
+            <span className="content" title={pluginConfig.headerContent}>
+              {pluginConfig.headerContent}
             </span>
           </header>
-          <iframe src={window.location.href} frameBorder="0" style={{width: "100%", height: "100%"}} />
-          <footer style={{color: pluginConfig.color, backgroundColor: pluginConfig.backgroundColor}}>
-            <span className="content" title="Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus. Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus.">
-              Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus. Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus.
+          <iframe
+            frameBorder="0"
+            src={window.location.href}
+            style={{width: "100%", height: "100%"}} />
+          <footer style={styles}>
+            <span className="content" title={pluginConfig.footerContent}>
+              {pluginConfig.footerContent}
             </span>
           </footer>
         </div>
