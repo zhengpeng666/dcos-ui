@@ -1,4 +1,8 @@
 import _ from "underscore";
+import Events from "events";
+
+import ConfigStore from "../stores/ConfigStore";
+import EventTypes from "../constants/EventTypes";
 
 function addListener(store, hook, listener, priority = 10) {
   if (typeof priority !== "number") {
@@ -16,34 +20,35 @@ function addListener(store, hook, listener, priority = 10) {
   store[hook][priority].push(listener);
 }
 
-var Plugins = {
+var Plugins = _.extend({}, Events.EventEmitter.prototype, {
   actions: {},
 
   filters: {},
 
   onLoaded: [],
 
-  loaded: false,
-
   init() {
+    ConfigStore.addChangeListener(
+      EventTypes.CONFIG_LOADED,
+      this.onPluginsLoaded.bind(this)
+    );
+
+    ConfigStore.fetchConfig();
   },
 
-  addLoadedListener(listener) {
-    this.onLoaded.push(listener);
-
-    if (this.loaded) {
-      listener();
-    }
+  addChangeListener: function (eventName, callback) {
+    this.on(eventName, callback);
   },
 
-  loadPlugins() {
-    // load plugins here.
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
+  },
 
-    this.onLoaded.forEach(function (listener) {
-      listener();
-    });
+  onPluginsLoaded() {
+    var config = ConfigStore.get("config");
+    console.log(config);
 
-    this.loaded = true;
+    this.emit(EventTypes.PLUGINS_LOADED);
   },
 
   /**
@@ -129,6 +134,6 @@ var Plugins = {
       });
     });
   }
-};
+});
 
 export default Plugins;

@@ -6,6 +6,7 @@ var RouteHandler = require("react-router").RouteHandler;
 var AnimatedLogo = require("../components/AnimatedLogo");
 var Actions = require("../actions/Actions");
 var Config = require("../config/Config");
+import ConfigStore from "../stores/ConfigStore";
 var EventTypes = require("../constants/EventTypes");
 import HistoryStore from "../stores/HistoryStore";
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
@@ -13,6 +14,7 @@ var IntercomStore = require("../stores/IntercomStore");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var Modals = require("../components/Modals");
+import plugins from "../plugins/index";
 var RequestErrorMsg = require("../components/RequestErrorMsg");
 var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
@@ -35,7 +37,9 @@ var Index = React.createClass({
       showIntercom: IntercomStore.get("isOpen"),
       mesosSummaryErrorCount: 0,
       showErrorModal: false,
-      modalErrorMsg: ""
+      modalErrorMsg: "",
+      pluginsLoaded: false,
+      configErrorCount: 0
     };
   },
 
@@ -62,6 +66,15 @@ var Index = React.createClass({
     IntercomStore.addChangeListener(
       EventTypes.INTERCOM_CHANGE, this.handleIntercomChange
     );
+
+    ConfigStore.addChangeListener(
+      EventTypes.CONFIG_ERROR, this.onConfigError
+    );
+
+    plugins.addChangeListener(
+      EventTypes.PLUGINS_LOADED, this.onPluginsLoaded
+    );
+    plugins.init();
 
     this.addMesosStateListeners();
   },
@@ -99,6 +112,14 @@ var Index = React.createClass({
       EventTypes.INTERCOM_CHANGE, this.handleIntercomChange
     );
 
+    ConfigStore.removeChangeListener(
+      EventTypes.CONFIG_ERROR, this.onConfigError
+    );
+
+    plugins.removeChangeListener(
+      EventTypes.PLUGINS_LOADED, this.onPluginsLoaded
+    );
+
     this.removeMesosStateListeners();
 
     MesosSummaryStore.unmount();
@@ -107,6 +128,18 @@ var Index = React.createClass({
   onSideBarChange: function () {
     this.internalStorage_update(getSidebarState());
     this.forceUpdate();
+  },
+
+  onConfigError: function () {
+    this.setState({configErrorCount: this.state.configErrorCount + 1});
+
+    if (this.state.configErrorCount < Config.delayAfterErrorCount) {
+      ConfigStore.fetchConfig();
+    }
+  },
+
+  onPluginsLoaded: function () {
+    this.setState({pluginsLoaded: true});
   },
 
   handleIntercomChange: function () {
@@ -191,8 +224,10 @@ var Index = React.createClass({
     var data = this.internalStorage_get();
     var isReady = data.statesProcessed;
     let showErrorScreen =
-      this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount;
-    let showLoadingScreen = !isReady && !showErrorScreen;
+      this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount
+      || this.state.configError >= Config.delayAfterErrorCount;
+    let showLoadingScreen = (!isReady || !this.state.pluginsLoaded)
+      && !showErrorScreen;
 
     var classSet = classNames({
       "canvas-sidebar-open": data.isOpen
