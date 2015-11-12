@@ -6,21 +6,19 @@ import React from "react";
 
 const TabsMixin = {
 
-  getTabClassSet(customClasses="") {
+  getTabClassSet(customClasses) {
     return Object.keys(this.tabs).map(function (tab) {
       let classSet = classNames({
         "button button-link": true,
-        "button-primary": this.state.currentTab === tab
+        "button-primary": this.state.currentTab === tab,
+        [customClasses]: customClasses
       });
-      if (customClasses) {
-        classSet += " " + customClasses;
-      }
 
       return classSet;
     }, this);
   },
 
-  tabs_getTabs(customClasses="") {
+  tabs_getTabs(customClasses) {
     let tabSet = Object.keys(this.tabs);
 
     return this.getTabClassSet(customClasses).map(function (classSet, i) {
@@ -35,7 +33,7 @@ const TabsMixin = {
     }, this);
   },
 
-  tabs_getTabLinks(customClasses="") {
+  tabs_getTabLinks(customClasses) {
     let tabSet = Object.keys(this.tabs);
 
     return this.getTabClassSet(customClasses).map(function (classSet, i) {

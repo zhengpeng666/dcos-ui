@@ -1,6 +1,4 @@
-/*eslint-disable no-unused-vars*/
 import React from "react";
-/*eslint-enable no-unused-vars*/
 import { RouteHandler } from "react-router";
 
 import Page from "../components/Page";
@@ -27,8 +25,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
     let currentRoute = routes[routes.length - 1].name;
 
     if (Object.keys(this.tabs).indexOf(currentRoute) >= 0) {
-      this.state.currentTab = currentRoute;
-      this.forceUpdate();
+      this.setState({currentTab: currentRoute});
     }
   }
 

@@ -4,7 +4,7 @@ export default class AccessControlPage extends React.Component {
 
   render() {
     return (
-      <h3>No access.</h3>
+      <h3 className="flush">No access.</h3>
     );
   }
 }
