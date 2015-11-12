@@ -20,6 +20,14 @@ var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
 
+function inIframe() {
+  try {
+    return window.self !== window.top;
+  } catch (e) {
+    return true;
+  }
+}
+
 function getSidebarState() {
   return {
     isOpen: SidebarStore.get("isOpen")
@@ -240,6 +248,33 @@ var Index = React.createClass({
     });
 
     this.renderIntercom();
+
+    if(!inIframe()) {
+      // Clean out listeners
+      this.componentWillUnmount();
+
+      return (
+        <div className="bannerPlugin">
+          <header>
+            <span className="icon icon-small icon-image-container icon-app-container">
+              <img />
+            </span>
+            <span className="title h5 flush-top flush-bottom">
+              Organization Name
+            </span>
+            <span className="content">
+              CONFIDENTIAL: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pulvinar massa sit amet risus blandit pretium.
+            </span>
+          </header>
+          <iframe src={window.location.href} frameBorder="0" style={{width: '100%', height: '100%'}} onLoad={function (...attr) {console.log(attr)}}/>
+          <footer>
+            <span className="content">
+              Phaesllus mollis, dolor quis congue semper, augue turpis auctor arcu, nec effecitur mi quam sit amet dui. Nulla vestubulum neque sed tellus.
+            </span>
+          </footer>
+        </div>
+      );
+    }
 
     return (
       <div>
