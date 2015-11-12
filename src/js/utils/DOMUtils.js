@@ -7,11 +7,11 @@ var DOMUtils = {
 
     try {
       scriptNode.appendChild(document.createTextNode(code));
-      el.appendChild(scriptNode);
     } catch (e) {
       scriptNode.text = code;
-      el.appendChild(scriptNode);
     }
+
+    el.appendChild(scriptNode);
   },
 
   getComputedWidth: function (obj) {

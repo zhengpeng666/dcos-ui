@@ -9,7 +9,7 @@ var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
 var LoginModal = require("./modals/LoginModal");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
-import plugins from "../plugins/index";
+import Plugins from "../plugins/Plugins";
 var SidebarStore = require("../stores/SidebarStore");
 var VersionsModal = require("./modals/VersionsModal");
 
@@ -131,8 +131,8 @@ var Modals = React.createClass({
 
   getLoginModal: function (hasIdentity) {
     let statesReady = MesosSummaryStore.get("statesProcessed");
-    let isOpen = plugins.applyFilter(
-      "isLoginModalOpen",
+    let isOpen = Plugins.applyFilter(
+      "openLoginModal",
       (!hasIdentity && !Config.disableLoginModal && statesReady)
     );
 
