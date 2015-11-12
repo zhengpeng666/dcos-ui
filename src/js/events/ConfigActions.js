@@ -2,7 +2,27 @@ import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "./AppDispatcher";
 import RequestUtil from "../utils/RequestUtil";
 
-var FIXTURE = {
+const ConfigActions = {
+  fetchConfig: function () {
+    RequestUtil.json({
+      url: "BIG_FUCKING_QUESTION_MARK",
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_CONFIG_SUCCESS,
+          data: response
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_CONFIG_ERROR,
+          data: e.message
+        });
+      }
+    });
+  }
+};
+
+const FIXTURE = {
   "uiConfig": {
     "plugins": {
       "banner": {
@@ -13,37 +33,15 @@ var FIXTURE = {
     }
   }
 };
-
-var useFixtures = true;
-var fetchConfig = function () {
-  RequestUtil.json({
-    url: "BIG_FUCKING_QUESTION_MARK",
-    success: function (response) {
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_CONFIG_SUCCESS,
-        data: response
-      });
-    },
-    error: function (e) {
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_CONFIG_ERROR,
-        data: e.message
-      });
-    }
-  });
-};
+let useFixtures = true;
 
 if (useFixtures) {
-  fetchConfig = function () {
+  ConfigActions.fetchConfig = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_CONFIG_SUCCESS,
       data: FIXTURE
     });
   };
 }
-
-const ConfigActions = {
-  fetchConfig
-};
 
 export default ConfigActions;

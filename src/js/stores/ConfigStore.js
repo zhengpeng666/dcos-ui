@@ -20,23 +20,16 @@ var ConfigStore = Store.createStore({
     this.removeListener(eventName, callback);
   },
 
-  processStateError: function () {
-    this.emit(EventTypes.CONFIG_ERROR);
-  },
-
   processStateSuccess: function (config) {
     this.set({config});
     this.emit(EventTypes.CONFIG_LOADED);
   },
 
-  fetchConfig: function () {
-    let config = this.get("config");
-    if (config != null) {
-      return config;
-    }
-
-    ConfigActions.fetchConfig();
+  processStateError: function () {
+    this.emit(EventTypes.CONFIG_ERROR);
   },
+
+  fetchConfig: ConfigActions.fetchConfig,
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
     if (payload.source !== ActionTypes.SERVER_ACTION) {

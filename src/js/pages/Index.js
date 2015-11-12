@@ -71,7 +71,9 @@ var Index = React.createClass({
       EventTypes.CONFIG_ERROR, this.onConfigError
     );
 
-    plugins.addLoadedListener(this.onPluginsLoaded);
+    plugins.addChangeListener(
+      EventTypes.PLUGINS_LOADED, this.onPluginsLoaded
+    );
     plugins.init();
 
     this.addMesosStateListeners();
@@ -112,6 +114,10 @@ var Index = React.createClass({
 
     ConfigStore.removeChangeListener(
       EventTypes.CONFIG_ERROR, this.onConfigError
+    );
+
+    plugins.removeChangeListener(
+      EventTypes.PLUGINS_LOADED, this.onPluginsLoaded
     );
 
     this.removeMesosStateListeners();
