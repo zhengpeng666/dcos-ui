@@ -24,6 +24,8 @@ const BannerPlugin = {
     dismissible: null
   },
 
+  enabled: false,
+
   /**
    * @param  {Object} Plugins The Plugins API
    */
@@ -34,13 +36,26 @@ const BannerPlugin = {
     Plugins.addFilter("applicationContents",
       this.applicationContents.bind(this)
     );
+    Plugins.addFilter(
+      "renderOverlayNewWindowButton",
+      this.renderOverlayNewWindowButton.bind(this)
+    );
   },
 
   configure: function (configuration) {
-    this.configuration = _.extend(this.configuration, configuration);
+    this.enabled = true;
+    this.configuration = configuration;
+  },
+
+  isEnabled: function () {
+    return this.enabled;
   },
 
   applicationIsMounted: function () {
+    if (!this.isEnabled()) {
+      return;
+    }
+
     let frame = document.getElementById("banner-plugin-iframe");
     if (frame == null) {
       return;
@@ -60,7 +75,7 @@ const BannerPlugin = {
   },
 
   applicationContents: function () {
-    if (inIframe()) {
+    if (inIframe() || !this.isEnabled()) {
       return null;
     }
 
@@ -112,6 +127,14 @@ const BannerPlugin = {
         </footer>
       </div>
     );
+  },
+
+  renderOverlayNewWindowButton: function (button) {
+    if (this.isEnabled()) {
+      return null;
+    }
+
+    return button;
   }
 
 };

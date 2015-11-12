@@ -8,6 +8,7 @@ import HistoryStore from "../stores/HistoryStore";
 import InternalStorageMixin from "../mixins/InternalStorageMixin";
 import MarathonStore from "../stores/MarathonStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import Plugins from "../plugins/Plugins";
 import StringUtil from "../utils/StringUtil";
 import Util from "../utils/Util";
 
@@ -127,6 +128,21 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
     this.renderService();
   }
 
+  getNewWindowButton(serviceName) {
+    var link = (
+      <a href={Cluster.getServiceLink(serviceName)}
+        target="_blank"
+        title="Open in a new window"
+        className="overlay-header-action"
+        >
+        <span className="overlay-short-top">Open in a New Window</span>
+        <i className="icon icon-sprite icon-sprite-small icon-new-window icon-sprite-small-white"></i>
+      </a>
+    );
+
+    return Plugins.applyFilter("renderOverlayNewWindowButton", link);
+  }
+
   getServiceNav(service) {
     let appHealth = MarathonStore.getServiceHealth(service.name);
     let serviceHealth = HealthLabels[appHealth.key];
@@ -160,14 +176,7 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
             </div>
           </div>
           <div className="overlay-header-actions overlay-header-actions-secondary">
-            <a href={Cluster.getServiceLink(service.name)}
-              target="_blank"
-              title="Open in a new window"
-              className="overlay-header-action"
-              >
-              <span className="overlay-short-top">Open in a New Window</span>
-              <i className="icon icon-sprite icon-sprite-small icon-new-window icon-sprite-small-white"></i>
-            </a>
+            {this.getNewWindowButton(service.name)}
           </div>
         </div>
       </div>
