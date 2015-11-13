@@ -188,22 +188,6 @@ const BannerPlugin = {
     );
   },
 
-  getFullHeaderContent: function () {
-    let content = this.configuration.headerContent;
-
-    if (content == null || content === "") {
-      return null;
-    }
-
-    return (
-      <div
-        className="full-content hidden-small hidden-medium hidden-large"
-        title={content}>
-        {content}
-      </div>
-    );
-  },
-
   getHeader: function () {
     let icon = this.getIcon();
     let title = this.getTitle();
