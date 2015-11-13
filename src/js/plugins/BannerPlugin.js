@@ -51,14 +51,8 @@ const BannerPlugin = {
   },
 
   toggleFullContent: function () {
-    let banner = document.
-      getElementsByClassName("banner-plugin-wrapper display-full")[0];
-    if (banner != null) {
-      banner.className = "banner-plugin-wrapper";
-    } else {
-      banner = document.getElementsByClassName("banner-plugin-wrapper")[0];
-      banner.className = "banner-plugin-wrapper display-full";
-    }
+    let banner = document.getElementsByClassName("banner-plugin-wrapper")[0];
+    banner.classList.toggle("display-full");
   },
 
   applicationDidUpdate: function () {
