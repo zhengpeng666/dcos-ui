@@ -3,14 +3,16 @@
   flex-direction: column;
   height: 100vh;
 
+  // Let the iframe take up the remaining height
   #banner-plugin-iframe {
+    flex: 1 1 auto;
     height: 100%;
     width: 100%;
   }
 
-  // Let the iframe take up the remaining height
-  #banner-plugin-iframe {
-    flex: 1 1 auto;
+  .icon-info path {
+    stroke-width: 1;
+    fill-rule: evenodd;
   }
 
   footer,
@@ -24,10 +26,7 @@
       padding-bottom: @base-spacing-unit * 0.35;
       padding-left: @base-spacing-unit * 0.35;
       padding-right: @base-spacing-unit * 0.35;
-
-      &:first-child {
-        padding-top: @base-spacing-unit * 0.35;
-      }
+      padding-top: @base-spacing-unit * 0.35;
     }
 
     .title,
@@ -39,7 +38,7 @@
     .title,
     .icon,
     .title,
-    #banner-plugin-info-icon {
+    .banner-plugin-info-icon {
       display: inline-block;
       vertical-align: middle;
     }
@@ -64,7 +63,7 @@
   .flex-container {
     display: flex;
     flex-direction: row;
-    #banner-plugin-info-icon,
+    .banner-plugin-info-icon,
     .content {
       text-align: right;
       flex: 1;
@@ -72,7 +71,7 @@
   }
 
   // Display top level content in column on mini and below
-  header > .flex-container {
+  header.flex-container {
     flex-direction: column;
   }
 
@@ -103,10 +102,7 @@
           padding-bottom: @base-spacing-unit-screen-mini * 0.35;
           padding-left: @base-spacing-unit-screen-mini * 0.35;
           padding-right: @base-spacing-unit-screen-mini * 0.35;
-
-          &:first-child {
-            padding-top: @base-spacing-unit-screen-mini * 0.35;
-          }
+          padding-top: @base-spacing-unit-screen-mini * 0.35;
         }
       }
 
@@ -122,6 +118,10 @@
 & when (@screen-small-enabled) {
   @media (min-width: @screen-small) {
     .banner-plugin-wrapper {
+      // Make sure to display top level content in row on anything above mini
+      header.flex-container {
+        flex-direction: row;
+      }
       footer,
       header {
         // Setting padding on all children, since we can't use margin or
@@ -130,10 +130,7 @@
           padding-bottom: @base-spacing-unit-screen-small * 0.35;
           padding-left: @base-spacing-unit-screen-small * 0.35;
           padding-right: @base-spacing-unit-screen-small * 0.35;
-
-          &:first-child {
-            padding-top: @base-spacing-unit-screen-small * 0.35;
-          }
+          padding-top: @base-spacing-unit-screen-small * 0.35;
         }
       }
 
@@ -150,11 +147,6 @@
   @media (min-width: @screen-medium) {
 
     .banner-plugin-wrapper {
-      // Make sure to display top level content in row on anything above mini
-      header > .flex-container {
-        flex-direction: row;
-      }
-
       footer,
       header {
         // Setting padding on all children, since we can't use margin or
@@ -163,10 +155,7 @@
           padding-bottom: @base-spacing-unit-screen-medium * 0.35;
           padding-left: @base-spacing-unit-screen-medium * 0.35;
           padding-right: @base-spacing-unit-screen-medium * 0.35;
-
-          &:first-child {
-            padding-top: @base-spacing-unit-screen-medium * 0.35;
-          }
+          padding-top: @base-spacing-unit-screen-medium * 0.35;
         }
       }
 
@@ -190,10 +179,7 @@
           padding-bottom: @base-spacing-unit-screen-large * 0.35;
           padding-left: @base-spacing-unit-screen-large * 0.35;
           padding-right: @base-spacing-unit-screen-large * 0.35;
-
-          &:first-child {
-            padding-top: @base-spacing-unit-screen-large * 0.35;
-          }
+          padding-top: @base-spacing-unit-screen-large * 0.35;
         }
       }
 

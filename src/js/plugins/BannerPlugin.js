@@ -1,8 +1,8 @@
-import d3 from "d3";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
+import IconInfo from "../components/icons/IconInfo";
 import DOMUtils from "../utils/DOMUtils";
 
 const BannerPlugin = {
@@ -50,26 +50,6 @@ const BannerPlugin = {
       configuration.imagePath;
   },
 
-  renderInfoIcon: function () {
-    let configuration = this.configuration;
-
-    // Import SVG element from icons
-    d3.xml(
-      "./img/components/icons/icon-info.svg",
-      "image/svg+xml",
-      function (xml) {
-        let importedNode = document.importNode(xml.documentElement, true);
-        let svgContainer = document.getElementById("banner-plugin-info-icon");
-        svgContainer.appendChild(importedNode);
-
-        // Set fill color to configuration foreground color
-        d3.select(svgContainer)
-          .select("path")
-          .attr("fill", configuration.foregroundColor);
-      }
-    );
-  },
-
   toggleFullContent: function () {
     let banner = document.
       getElementsByClassName("banner-plugin-wrapper display-full")[0];
@@ -102,8 +82,6 @@ const BannerPlugin = {
     frameWindow.addEventListener("popstate", function () {
       topWindow.location.hash = frameWindow.location.hash;
     });
-
-    this.renderInfoIcon();
   },
 
   applicationContents: function () {
@@ -198,20 +176,21 @@ const BannerPlugin = {
     }
 
     return (
-      <header style={this.getColorStyles()}>
-        <div className="flex-container">
-          <span className="flex-container">
-            <span>
-              {icon}
-              {title}
-            </span>
-            <span
-              id="banner-plugin-info-icon"
-              className="clickable hidden-small hidden-medium hidden-large"
-              onClick={this.toggleFullContent} />
+      <header
+        className="flex-container"
+        style={this.getColorStyles()}>
+        <span className="flex-container">
+          <span>
+            {icon}
+            {title}
           </span>
-          {content}
-        </div>
+          <span
+            className="banner-plugin-info-icon clickable hidden-small hidden-medium hidden-large"
+            onClick={this.toggleFullContent}>
+            <IconInfo fill={this.configuration.foregroundColor} />
+          </span>
+        </span>
+        {content}
       </header>
     );
   },
