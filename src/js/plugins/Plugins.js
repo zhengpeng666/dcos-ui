@@ -54,7 +54,7 @@ var Plugins = _.extend({}, Events.EventEmitter.prototype, {
 
   onConfigurationReceived() {
     var config = ConfigStore.get("config");
-    var pluginsConfig = config.uiConfig.plugins;
+    var pluginsConfig = config.uiConfiguration.plugins;
 
     Object.keys(pluginsConfig).forEach(function (pluginID) {
       if (pluginList[pluginID].configure != null) {
