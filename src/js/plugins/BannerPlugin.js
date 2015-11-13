@@ -1,3 +1,4 @@
+import d3 from "d3";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -49,6 +50,37 @@ const BannerPlugin = {
       configuration.imagePath;
   },
 
+  renderInfoIcon: function () {
+    let configuration = this.configuration;
+
+    // Import SVG element from icons
+    d3.xml(
+      "./img/components/icons/icon-info.svg",
+      "image/svg+xml",
+      function (xml) {
+        let importedNode = document.importNode(xml.documentElement, true);
+        let svgContainer = document.getElementById("banner-plugin-info-icon");
+        svgContainer.appendChild(importedNode);
+
+        // Set fill color to configuration foreground color
+        d3.select(svgContainer)
+          .select("path")
+          .attr("fill", configuration.foregroundColor);
+      }
+    );
+  },
+
+  toggleFullContent: function () {
+    let banner = document.
+      getElementsByClassName("banner-plugin-wrapper display-full")[0];
+    if (banner != null) {
+      banner.className = "banner-plugin-wrapper";
+    } else {
+      banner = document.getElementsByClassName("banner-plugin-wrapper")[0];
+      banner.className = "banner-plugin-wrapper display-full";
+    }
+  },
+
   applicationDidUpdate: function () {
     if (this.isEnabled() === false || !DOMUtils.isTopFrame()) {
       return;
@@ -70,6 +102,8 @@ const BannerPlugin = {
     frameWindow.addEventListener("popstate", function () {
       topWindow.location.hash = frameWindow.location.hash;
     });
+
+    this.renderInfoIcon();
   },
 
   applicationContents: function () {
@@ -148,9 +182,25 @@ const BannerPlugin = {
     }
 
     return (
-      <span className="content" title={content}>
+      <span className="content hidden-mini" title={content}>
         {content}
       </span>
+    );
+  },
+
+  getFullHeaderContent: function () {
+    let content = this.configuration.headerContent;
+
+    if (content == null || content === "") {
+      return null;
+    }
+
+    return (
+      <div
+        className="full-content hidden-small hidden-medium hidden-large"
+        title={content}>
+        {content}
+      </div>
     );
   },
 
@@ -165,11 +215,19 @@ const BannerPlugin = {
 
     return (
       <header style={this.getColorStyles()}>
-        <span>
-          {icon}
-          {title}
-        </span>
-        {content}
+        <div className="flex-container">
+          <span className="flex-container">
+            <span>
+              {icon}
+              {title}
+            </span>
+            <span
+              id="banner-plugin-info-icon"
+              className="clickable hidden-small hidden-medium hidden-large"
+              onClick={this.toggleFullContent} />
+          </span>
+          {content}
+        </div>
       </header>
     );
   },
