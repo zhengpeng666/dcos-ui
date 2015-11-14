@@ -51,7 +51,7 @@ const BannerPlugin = {
   },
 
   toggleFullContent: function () {
-    let banner = document.getElementsByClassName("banner-plugin-wrapper")[0];
+    let banner = document.querySelector(".banner-plugin-wrapper");
     banner.classList.toggle("display-full");
   },
 
