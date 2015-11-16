@@ -159,8 +159,10 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
 
     return (
       <div className="overlay-header">
-        <div className="overlay-header-container container container-fluid container-fluid-narrow container-pod container-pod-short">
-          <div className="overlay-header-actions overlay-header-actions-primary">
+        <div className="overlay-header-container container container-fluid
+          container-fluid-narrow">
+          <div className="overlay-header-actions overlay-header-actions-primary
+            container container-pod container-pod-short">
             <span className="overlay-header-action"
               onClick={this.handleServiceClose}>
               <i className="icon icon-sprite icon-sprite-small icon-back icon-sprite-small-white"></i>
@@ -175,7 +177,8 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
               {serviceHealth + taskCount}
             </div>
           </div>
-          <div className="overlay-header-actions overlay-header-actions-secondary">
+          <div className="overlay-header-actions
+            overlay-header-actions-secondary container-pod container-pod-short">
             {this.getNewWindowButton(service.name)}
           </div>
         </div>
