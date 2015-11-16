@@ -5,6 +5,16 @@ import RequestUtil from "../utils/RequestUtil";
 
 const ConfigActions = {
   fetchConfig: function () {
+    let configFixture = Config.uiConfigurationFixture;
+    if (configFixture) {
+      AppDispatcher.handleServerAction({
+        type: ActionTypes.REQUEST_CONFIG_SUCCESS,
+        data: configFixture
+      });
+
+      return;
+    }
+
     RequestUtil.json({
       url: `${Config.rootUrl}/dcos-metadata/ui-config.json`,
       success: function (response) {
