@@ -29,7 +29,10 @@ describe("DCOS UI [00j]", function() {
       // Get the task panel's header.
       cy.get(".side-panel-header-container").as("sidePanelHeader");
       // Open the Marathon UI.
-      cy.get(".side-panel-content-header-actions").find("a").contains("Open Service").click();
+      cy.get(".side-panel-content-header-actions")
+        .find("a")
+        .contains("Open Service")
+        .click();
       // Get the service overlay's header.
       cy.get(".overlay-header-container").as("overlayHeader");
 
