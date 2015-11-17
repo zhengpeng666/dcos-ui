@@ -51,21 +51,46 @@ function es6ify(mixin) {
  * @param  {Boolean} useNoop Optional. To use noop or call parent function
  */
 function addMissingLifecycleFunctions (proto, useNoop) {
-  // No-ops so we need not check before calling super()
-  let functions = [
-    "componentWillMount", "componentDidMount",
-    "componentWillReceiveProps", "componentWillUpdate", "componentDidUpdate",
-    "componentWillUnmount", "render"
-  ];
+  function callToParent (lifecycleFn) {
+    return function () {
+      this.parent[lifecycleFn]();
+    }
+  };
 
-  functions.forEach(function (lifecycleFn) {
+  // No-ops so we need not check before calling super()
+  let functions = {
+    "componentWillMount": callToParent,
+    "componentDidMount": callToParent,
+    "componentWillReceiveProps": function () {
+      return function (nextProps) {
+        this.parent.componentWillReceiveProps(nextProps);
+      }
+    },
+    "shouldComponentUpdate": function () {
+      return function (nextProps, nextState) {
+        this.parent.shouldComponentUpdate(nextProps, nextState);
+      }
+    },
+    "componentWillUpdate": function () {
+      return function (nextProps, nextState) {
+        this.parent.componentWillUpdate(nextProps, nextState);
+      }
+    },
+    "componentDidUpdate": function () {
+      return function (prevProps, prevState) {
+        this.parent.componentDidUpdate(prevProps, prevState);
+      }
+    },
+    "componentWillUnmount": callToParent,
+    "render": callToParent
+  };
+
+  Object.keys(functions).forEach(function (lifecycleFn) {
     if (typeof proto[lifecycleFn] !== "function") {
       if (useNoop) {
         proto[lifecycleFn] = noop;
       } else {
-        proto[lifecycleFn] = function () {
-          this.parent[lifecycleFn]();
-        }
+        proto[lifecycleFn] = functions[lifecycleFn](lifecycleFn);
       }
     }
   });
@@ -76,9 +101,8 @@ const Util = {
     // Creates base class
     class Base extends React.Component {}
 
-    Base.prototype.shouldComponentUpdate = trueNoop;
-
     addMissingLifecycleFunctions(Base.prototype, noop);
+    Base.prototype.shouldComponentUpdate = trueNoop;
 
     mixins.forEach(function (mixin, i) {
       addMissingLifecycleFunctions(mixin);
