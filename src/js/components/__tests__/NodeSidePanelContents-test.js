@@ -73,7 +73,7 @@ describe("NodeSidePanelContents", function () {
     });
 
     this.instance = TestUtils.renderIntoDocument(
-      <NodeSidePanelContents open={true} onClose={this.callback} />
+      <NodeSidePanelContents itemID="nonExistent" />
     );
   });
 
@@ -88,7 +88,7 @@ describe("NodeSidePanelContents", function () {
 
     it("should return null if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents open={true} itemID="nonExistent" />
+        <NodeSidePanelContents itemID="nonExistent" />
       );
 
       var result = instance.renderDetailsTabView();
@@ -97,7 +97,7 @@ describe("NodeSidePanelContents", function () {
 
     it("should return a node if node exists", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents open={true} itemID="existingNode" />
+        <NodeSidePanelContents itemID="existingNode" />
       );
 
       var result = instance.renderDetailsTabView();
@@ -109,7 +109,7 @@ describe("NodeSidePanelContents", function () {
 
     it("should return an empty set if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents open={true} itemID="nonExistent" />
+        <NodeSidePanelContents itemID="nonExistent" />
       );
 
       var result = instance.getKeyValuePairs({});
@@ -118,7 +118,7 @@ describe("NodeSidePanelContents", function () {
 
     it("should return null if undefined is passed", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents open={true} itemID="nonExistent" />
+        <NodeSidePanelContents itemID="nonExistent" />
       );
 
       var result = instance.getKeyValuePairs();
@@ -127,7 +127,7 @@ describe("NodeSidePanelContents", function () {
 
     it("should return a node of elements if node exists", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents open={true} itemID="existingNode" />
+        <NodeSidePanelContents itemID="existingNode" />
       );
 
       var result = instance.getKeyValuePairs({"foo": "bar"});
@@ -136,7 +136,7 @@ describe("NodeSidePanelContents", function () {
 
     it("should return a headline if headline string is given", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents open={true} itemID="existingNode" />
+        <NodeSidePanelContents itemID="existingNode" />
       );
 
       let headline = JestUtil.renderAndFindTag(
@@ -157,7 +157,7 @@ describe("NodeSidePanelContents", function () {
 
   it("should show the nodes hostname if it is found", function () {
     var instance = TestUtils.renderIntoDocument(
-      <NodeSidePanelContents open={true} onClose={this.callback} itemID="foo" />
+      <NodeSidePanelContents itemID="foo" />
     );
     let contents = TestUtils.renderIntoDocument(instance.render());
     let headline = TestUtils.findRenderedDOMComponentWithClass(
