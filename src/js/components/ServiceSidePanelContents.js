@@ -25,11 +25,11 @@ export default class ServiceSidePanelContents extends SidePanelContents {
       currentTab: Object.keys(this.tabs).shift()
     };
 
-    // this.storesListeners = [
-    //   {name: "marathon", listenAlways: true},
-    //   {name: "summary", listenAlways: true},
-    //   {name: "state", listenAlways: true}
-    // ];
+    this.storesListeners = [
+      {name: "marathon", listenAlways: true},
+      {name: "summary", listenAlways: true},
+      {name: "state", listenAlways: true}
+    ];
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);

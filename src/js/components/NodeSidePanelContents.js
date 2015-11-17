@@ -27,17 +27,6 @@ export default class NodeSidePanelContents extends SidePanelContents {
     this.mountedAt = Date.now();
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   if (this.props.open !== nextProps.open && nextProps.open) {
-  //     let defaultTab = Object.keys(this.tabs).shift();
-  //     if (this.state.currentTab !== defaultTab) {
-  //       this.setState({currentTab: defaultTab});
-  //     }
-  //   }
-
-  //   return super.shouldComponentUpdate(...arguments);
-  // }
-
   getBasicInfo(node) {
     let activeTasksCount = node.sumTaskTypesByState("active");
     let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
