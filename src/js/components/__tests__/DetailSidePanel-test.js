@@ -1,7 +1,7 @@
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../DetailSidePanel");
+jest.dontMock("../SidePanelContents");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 
@@ -10,9 +10,9 @@ var TestUtils = React.addons.TestUtils;
 
 var MesosSummaryActions = require("../../events/MesosSummaryActions");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
-var DetailSidePanel = require("../DetailSidePanel");
+var SidePanelContents = require("../SidePanelContents");
 
-describe("DetailSidePanel", function () {
+describe("SidePanelContents", function () {
   beforeEach(function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
 
@@ -30,7 +30,7 @@ describe("DetailSidePanel", function () {
     beforeEach(function () {
       this.callback = jasmine.createSpy();
       this.instance = TestUtils.renderIntoDocument(
-        <DetailSidePanel open={true} onClose={this.callback} />
+        <SidePanelContents open={true} onClose={this.callback} />
       );
 
       // Mock router
@@ -57,7 +57,7 @@ describe("DetailSidePanel", function () {
       let node = document.createElement("div");
       // Use regular render so we can check for update
       let instance = React.render(
-        <DetailSidePanel open={true} onClose={this.callback} />,
+        <SidePanelContents open={true} onClose={this.callback} />,
         node
       );
       // Mock router
@@ -68,7 +68,7 @@ describe("DetailSidePanel", function () {
       this.callback.reset();
       // Rerender with open set to false
       instance = React.render(
-        <DetailSidePanel open={false} onClose={this.callback} />,
+        <SidePanelContents open={false} onClose={this.callback} />,
         node
       );
       instance.handlePanelClose();

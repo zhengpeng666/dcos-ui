@@ -1,6 +1,5 @@
 import _ from "underscore";
 import React from "react/addons";
-import {SidePanel} from "reactjs-components";
 
 import BarChart from "./charts/BarChart";
 import Chart from "./charts/Chart";
@@ -55,7 +54,7 @@ function changeListeners(listeners, changeListener) {
   }, this);
 }
 
-export default class DetailSidePanel extends
+export default class SidePanelContents extends
   Util.mixin(InternalStorageMixin, TabsMixin) {
   constructor() {
     super(...arguments);
@@ -288,10 +287,10 @@ export default class DetailSidePanel extends
   }
 }
 
-DetailSidePanel.propTypes = {
+SidePanelContents.propTypes = {
   itemID: React.PropTypes.string,
   onClose: React.PropTypes.func,
   open: React.PropTypes.bool
 };
 
-DetailSidePanel.animationLengthSeconds = .5;
+SidePanelContents.animationLengthSeconds = .5;

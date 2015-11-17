@@ -3,7 +3,7 @@ import _ from "underscore";
 const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
-import DetailSidePanel from "./DetailSidePanel";
+import SidePanelContents from "./SidePanelContents";
 import HistoryStore from "../stores/HistoryStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
@@ -18,7 +18,7 @@ const TABS = {
   details: "Details"
 };
 
-export default class TaskSidePanel extends DetailSidePanel {
+export default class TaskSidePanel extends SidePanelContents {
   constructor() {
     super(...arguments);
 

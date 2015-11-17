@@ -1,4 +1,4 @@
-jest.dontMock("../DetailSidePanel");
+jest.dontMock("../SidePanelContents");
 jest.dontMock("../ServiceSidePanel");
 jest.dontMock("../../events/MesosSummaryActions");
 jest.dontMock("../../stores/MesosSummaryStore");

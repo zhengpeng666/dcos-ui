@@ -3,13 +3,13 @@ const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
 import DateUtil from "../utils/DateUtil";
-import DetailSidePanel from "./DetailSidePanel";
+import SidePanelContents from "./SidePanelContents";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import StringUtil from "../utils/StringUtil";
 import TaskView from "./TaskView";
 
-export default class NodeSidePanel extends DetailSidePanel {
+export default class NodeSidePanel extends SidePanelContents {
   constructor() {
     super(...arguments);
 
@@ -60,7 +60,7 @@ export default class NodeSidePanel extends DetailSidePanel {
     let contents = this.getLoadingScreen();
 
     let timeSinceMount = (Date.now() - this.mountedAt) / 1000;
-    if (timeSinceMount >= DetailSidePanel.animationLengthSeconds) {
+    if (timeSinceMount >= SidePanelContents.animationLengthSeconds) {
       contents = <TaskView tasks={tasks} parentRouter={this.props.parentRouter} />;
     }
 
