@@ -57,7 +57,7 @@ export default class SidePanels extends React.Component {
       let matchedRoutes = this.context.router.match(prevPage).routes;
       prevPage = _.last(matchedRoutes).name;
 
-      if (_.contains(["services", "dashboard", "list", "grid"], prevPage)) {
+      if (_.contains(["services", "dashboard", "nodes-list", "nodes-grid"], prevPage)) {
         text = "close";
       }
     }
