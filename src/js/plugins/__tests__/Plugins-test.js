@@ -1,12 +1,11 @@
-jest.dontMock("events");
 jest.dontMock("../Plugins");
 jest.dontMock("../../config/Config");
 jest.dontMock("../../constants/EventTypes");
-jest.dontMock("../../stores/ConfigStore");
-jest.dontMock("../../utils/Store");
-jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../events/ConfigActions");
+jest.dontMock("../../mixins/GetSetMixin");
+jest.dontMock("../../stores/ConfigStore");
+jest.dontMock("../../utils/Store");
 
 jest.setMock("../index", {
   fakePlugin: {
@@ -17,9 +16,6 @@ jest.setMock("../index", {
     }
   }
 });
-
-var React = require("react/addons");
-var TestUtils = React.addons.TestUtils;
 
 var Config = require("../../config/Config");
 var ConfigStore = require("../../stores/ConfigStore");
