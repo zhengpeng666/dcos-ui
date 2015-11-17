@@ -3,33 +3,44 @@
   flex-direction: column;
   height: 100vh;
 
+  // Let the iframe take up the remaining height
   #banner-plugin-iframe {
+    flex: 1 1 auto;
     height: 100%;
     width: 100%;
   }
 
+  .icon-info path {
+    stroke-width: 1;
+    fill-rule: evenodd;
+  }
+
   footer,
   header {
-    padding: @base-spacing-unit / 1.5;
-    vertical-align: middle;
+    flex: 0 1 auto;
+    line-height: @base-spacing-unit;
 
-    .content,
-    .title {
-      line-height: 24px;
+    // Setting padding on all children, since we can't use margin or padding on
+    // parent due to use of flexbox
+    > * {
+      padding: @base-spacing-unit * 0.35;
     }
 
     .title,
     .icon {
-      margin-right: @base-spacing-unit / 1.5;
+      margin-right: @base-spacing-unit * 0.35;
     }
 
     .content,
     .title,
     .icon,
-    .title {
+    .title,
+    .banner-plugin-info-icon {
       display: inline-block;
+      vertical-align: middle;
     }
 
+    // Make sure to use ellipsis on content more than container
     .content {
       overflow: hidden;
       text-align: right;
@@ -38,21 +49,41 @@
     }
   }
 
+  // Elements where we want text centered and take up full with
   footer .content {
     text-align: center;
     width: 100%;
   }
 
-  header {
-    display: flex;
 
+  // Let content and banner-plugin-info-icon take up remaining width
+  .flex-container {
+    display: flex;
+    flex-direction: row;
+    .banner-plugin-info-icon,
     .content {
+      text-align: right;
       flex: 1;
     }
   }
 
-  #canvas {
-    flex: 1;
+  // Display top level content in column on mini and below
+  header.flex-container {
+    flex-direction: column;
+  }
+
+
+  // Show full content in header and footer
+  &.display-full {
+    header,
+    footer {
+      .content {
+        text-align: center;
+        overflow: visible;
+        white-space: normal;
+        display: block !important;
+      }
+    }
   }
 }
 
@@ -62,15 +93,16 @@
     .banner-plugin-wrapper {
       footer,
       header {
-        padding-top: @base-spacing-unit-screen-mini / 1.5;
-        padding-left: @base-spacing-unit-screen-mini / 1.5;
-        padding-right: @base-spacing-unit-screen-mini / 1.5;
-        padding-bottom: @base-spacing-unit-screen-mini / 1.5;
+        // Setting padding on all children, since we can't use margin or
+        // padding on parent due to use of flexbox
+        > * {
+          padding: @base-spacing-unit-screen-mini * 0.35;
+        }
       }
 
       .title,
       .icon {
-        margin-right: @base-spacing-unit-screen-mini / 1.5;
+        margin-right: @base-spacing-unit-screen-mini * 0.35;
       }
     }
   }
@@ -80,17 +112,22 @@
 & when (@screen-small-enabled) {
   @media (min-width: @screen-small) {
     .banner-plugin-wrapper {
+      // Make sure to display top level content in row on anything above mini
+      header.flex-container {
+        flex-direction: row;
+      }
       footer,
       header {
-        padding-top: @base-spacing-unit-screen-small * 0.5;
-        padding-left: @base-spacing-unit-screen-small * 0.5;
-        padding-right: @base-spacing-unit-screen-small * 0.5;
-        padding-bottom: @base-spacing-unit-screen-small * 0.5;
+        // Setting padding on all children, since we can't use margin or
+        // padding on parent due to use of flexbox
+        > * {
+          padding: @base-spacing-unit-screen-small * 0.35;
+        }
       }
 
       .title,
       .icon {
-        margin-right: @base-spacing-unit-screen-small / 1.5;
+        margin-right: @base-spacing-unit-screen-small * 0.35;
       }
     }
   }
@@ -99,18 +136,20 @@
 /* Screen Size: Medium (@screen-medium) and above */
 & when (@screen-medium-enabled) {
   @media (min-width: @screen-medium) {
+
     .banner-plugin-wrapper {
       footer,
       header {
-        padding-top: @base-spacing-unit-screen-medium * 0.35;
-        padding-left: @base-spacing-unit-screen-medium * 0.35;
-        padding-right: @base-spacing-unit-screen-medium * 0.35;
-        padding-bottom: @base-spacing-unit-screen-medium * 0.35;
+        // Setting padding on all children, since we can't use margin or
+        // padding on parent due to use of flexbox
+        > * {
+          padding: @base-spacing-unit-screen-medium * 0.35;
+        }
       }
 
       .title,
       .icon {
-        margin-right: @base-spacing-unit-screen-medium / 1.5;
+        margin-right: @base-spacing-unit-screen-medium * 0.35;
       }
     }
   }
@@ -122,15 +161,16 @@
     .banner-plugin-wrapper {
       footer,
       header {
-        padding-top: @base-spacing-unit-screen-large * 0.35;
-        padding-left: @base-spacing-unit-screen-large * 0.35;
-        padding-right: @base-spacing-unit-screen-large * 0.35;
-        padding-bottom: @base-spacing-unit-screen-large * 0.35;
+        // Setting padding on all children, since we can't use margin or
+        // padding on parent due to use of flexbox
+        > * {
+          padding: @base-spacing-unit-screen-large * 0.35;
+        }
       }
 
       .title,
       .icon {
-        margin-right: @base-spacing-unit-screen-large / 1.5;
+        margin-right: @base-spacing-unit-screen-large * 0.35;
       }
     }
   }

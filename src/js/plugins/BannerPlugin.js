@@ -2,6 +2,7 @@
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
+import IconInfo from "../components/icons/IconInfo";
 import DOMUtils from "../utils/DOMUtils";
 
 const BannerPlugin = {
@@ -47,6 +48,11 @@ const BannerPlugin = {
       configuration.headerContent ||
       configuration.footerContent ||
       configuration.imagePath;
+  },
+
+  toggleFullContent: function () {
+    let banner = document.querySelector(".banner-plugin-wrapper");
+    banner.classList.toggle("display-full");
   },
 
   applicationDidUpdate: function () {
@@ -148,7 +154,7 @@ const BannerPlugin = {
     }
 
     return (
-      <span className="content" title={content}>
+      <span className="content hidden-mini" title={content}>
         {content}
       </span>
     );
@@ -164,10 +170,19 @@ const BannerPlugin = {
     }
 
     return (
-      <header style={this.getColorStyles()}>
-        <span>
-          {icon}
-          {title}
+      <header
+        className="flex-container"
+        style={this.getColorStyles()}>
+        <span className="flex-container">
+          <span>
+            {icon}
+            {title}
+          </span>
+          <span
+            className="banner-plugin-info-icon clickable hidden-small hidden-medium hidden-large"
+            onClick={this.toggleFullContent}>
+            <IconInfo fill={this.configuration.foregroundColor} />
+          </span>
         </span>
         {content}
       </header>
