@@ -1,3 +1,4 @@
+import _ from "underscore";
 import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
@@ -5,6 +6,7 @@ import HistoryStore from "../stores/HistoryStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import NodeSidePanelContents from "./NodeSidePanelContents";
 import ServiceSidePanelContents from "./ServiceSidePanelContents";
+import StringUtil from "../utils/StringUtil";
 import TaskSidePanelContents from "./TaskSidePanelContents";
 
 const METHODS_TO_BIND = [
@@ -44,12 +46,28 @@ export default class SidePanels extends React.Component {
   }
 
   getHeader() {
+    let text = "back";
+    let prevPage = HistoryStore.getHistoryAt(-1);
+
+    if (prevPage == null) {
+      text = "close";
+    }
+
+    if (prevPage) {
+      let matchedRoutes = this.context.router.match(prevPage).routes;
+      prevPage = _.last(matchedRoutes).name;
+
+      if (_.contains(["services", "dashboard", "list", "grid"], prevPage)) {
+        text = "close";
+      }
+    }
+
     return (
       <div className="side-panel-header-actions side-panel-header-actions-primary">
         <span className="side-panel-header-action"
           onClick={this.handlePanelClose}>
-          <i className="icon icon-sprite icon-sprite-small icon-close icon-sprite-small-white"></i>
-          Close
+          <i className={`icon icon-sprite icon-sprite-small icon-${text} icon-sprite-small-white`}></i>
+          {StringUtil.capitalize(text)}
         </span>
       </div>
     );
