@@ -48,7 +48,6 @@ var MesosSummaryStore = Store.createStore({
 
     let initialStates = MesosSummaryUtil.getInitialStates();
     let list = new SummaryList({maxLength: Config.historyLength});
-
     _.clone(initialStates).forEach(state => {
       list.addSnapshot(state, state.date);
     });
