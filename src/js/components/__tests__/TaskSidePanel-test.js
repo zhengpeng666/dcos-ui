@@ -1,5 +1,5 @@
 jest.dontMock("../SidePanelContents");
-jest.dontMock("../TaskSidePanel");
+jest.dontMock("../TaskSidePanelContents");
 jest.dontMock("../TaskDirectoryView");
 jest.dontMock("../../constants/TaskStates");
 jest.dontMock("../../stores/MesosStateStore");
@@ -12,9 +12,9 @@ var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var MesosStateStore = require("../../stores/MesosStateStore");
-var TaskSidePanel = require("../TaskSidePanel");
+var TaskSidePanelContents = require("../TaskSidePanelContents");
 
-describe("TaskSidePanel", function () {
+describe("TaskSidePanelContents", function () {
   beforeEach(function () {
     this.storeGet = MesosStateStore.get;
     this.storeChangeListener = MesosStateStore.addChangeListener;
@@ -53,7 +53,7 @@ describe("TaskSidePanel", function () {
 
     it("should return null if there are no nodes", function () {
       var instance = TestUtils.renderIntoDocument(
-        <TaskSidePanel open={true} />
+        <TaskSidePanelContents open={true} />
       );
       expect(instance.getContents()).toEqual(null);
     });
@@ -66,7 +66,7 @@ describe("TaskSidePanel", function () {
       };
 
       var instance = TestUtils.renderIntoDocument(
-        <TaskSidePanel open={true} />
+        <TaskSidePanelContents open={true} />
       );
 
       expect(TestUtils.isElement(instance.getContents())).toEqual(true);
@@ -76,7 +76,7 @@ describe("TaskSidePanel", function () {
   describe("#getBasicInfo", function () {
     beforeEach(function () {
       this.instance = TestUtils.renderIntoDocument(
-        <TaskSidePanel open={false} />
+        <TaskSidePanelContents open={false} />
       );
     });
 

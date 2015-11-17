@@ -3,9 +3,9 @@ import {SidePanel} from "reactjs-components";
 
 import HistoryStore from "../stores/HistoryStore";
 import InternalStorageMixin from "../mixins/InternalStorageMixin";
-import NodeSidePanel from "./NodeSidePanel";
-import ServiceSidePanel from "./ServiceSidePanel";
-import TaskSidePanel from "./TaskSidePanel";
+import NodeSidePanelContents from "./NodeSidePanelContents";
+import ServiceSidePanelContents from "./ServiceSidePanelContents";
+import TaskSidePanelContents from "./TaskSidePanelContents";
 import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
@@ -76,7 +76,7 @@ export default class SidePanels extends
 
     if (statesProcessed && nodeID != null) {
       return (
-        <NodeSidePanel
+        <NodeSidePanelContents
           itemID={nodeID}
           parentRouter={this.context.router} />
       );
@@ -84,7 +84,7 @@ export default class SidePanels extends
 
     if (statesProcessed && serviceName != null) {
       return (
-        <ServiceSidePanel
+        <ServiceSidePanelContents
           itemID={serviceName}
           parentRouter={this.context.router} />
       );
@@ -92,7 +92,7 @@ export default class SidePanels extends
 
     if (statesProcessed && taskID != null) {
       return (
-        <TaskSidePanel
+        <TaskSidePanelContents
           itemID={taskID}
           parentRouter={this.context.router} />
       );

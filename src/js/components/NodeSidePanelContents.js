@@ -9,7 +9,7 @@ import MesosStateStore from "../stores/MesosStateStore";
 import StringUtil from "../utils/StringUtil";
 import TaskView from "./TaskView";
 
-export default class NodeSidePanel extends SidePanelContents {
+export default class NodeSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 

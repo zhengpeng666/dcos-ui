@@ -18,7 +18,7 @@ const TABS = {
   details: "Details"
 };
 
-export default class TaskSidePanel extends SidePanelContents {
+export default class TaskSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 

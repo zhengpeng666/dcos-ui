@@ -1,5 +1,5 @@
 jest.dontMock("../SidePanelContents");
-jest.dontMock("../ServiceSidePanel");
+jest.dontMock("../ServiceSidePanelContents");
 jest.dontMock("../../events/MesosSummaryActions");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../mixins/GetSetMixin");
@@ -17,12 +17,12 @@ var MesosSummaryActions = require("../../events/MesosSummaryActions");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var MesosStateStore = require("../../stores/MesosStateStore");
 var Service = require("../../structs/Service");
-var ServiceSidePanel = require("../ServiceSidePanel");
+var ServiceSidePanelContents = require("../ServiceSidePanelContents");
 
 MesosSummaryActions.fetchSummary = function () {};
 MesosSummaryStore.init();
 
-describe("ServiceSidePanel", function () {
+describe("ServiceSidePanelContents", function () {
   beforeEach(function () {
     this.summaryGetServiceFromName = MesosSummaryStore.getServiceFromName;
     this.marathonGetServiceFromName = MarathonStore.getServiceFromName;
@@ -66,7 +66,7 @@ describe("ServiceSidePanel", function () {
     describe("#renderDetailsTabView", function () {
       it("should return 'no info' if service doesn't exist", function () {
         var instance = TestUtils.renderIntoDocument(
-          <ServiceSidePanel
+          <ServiceSidePanelContents
             open={false}
             itemID="service_that_does_not_exist"/>
         );
@@ -78,7 +78,7 @@ describe("ServiceSidePanel", function () {
 
       it("should return an element if service does exist", function () {
         var instance = TestUtils.renderIntoDocument(
-          <ServiceSidePanel
+          <ServiceSidePanelContents
             open={false}
             itemID="service_that_exists"/>
         );
@@ -91,7 +91,7 @@ describe("ServiceSidePanel", function () {
     describe("#getBasicInfo", function () {
       it("should return null if service doesn't exist", function () {
         var instance = TestUtils.renderIntoDocument(
-          <ServiceSidePanel
+          <ServiceSidePanelContents
             open={false}
             itemID="service_that_does_not_exist"/>
         );
@@ -102,7 +102,7 @@ describe("ServiceSidePanel", function () {
 
       it("should return an element if service does exist", function () {
         var instance = TestUtils.renderIntoDocument(
-          <ServiceSidePanel
+          <ServiceSidePanelContents
             open={false}
             itemID="service_that_exists"/>
         );

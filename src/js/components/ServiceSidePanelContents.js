@@ -17,7 +17,7 @@ const METHODS_TO_BIND = [
   "handleOpenServiceButtonClick"
 ];
 
-export default class ServiceSidePanel extends SidePanelContents {
+export default class ServiceSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
