@@ -57,8 +57,6 @@ export default class SidePanels extends
   }
 
   getHeader() {
-    let prevPath = HistoryStore.getHistoryAt(-1);
-
     return (
       <div className="side-panel-header-actions side-panel-header-actions-primary">
         <span className="side-panel-header-action"
@@ -82,18 +80,18 @@ export default class SidePanels extends
       );
     }
 
-    if (statesProcessed && serviceName != null) {
-      return (
-        <ServiceSidePanelContents
-          itemID={serviceName}
-          parentRouter={this.context.router} />
-      );
-    }
-
     if (statesProcessed && taskID != null) {
       return (
         <TaskSidePanelContents
           itemID={taskID}
+          parentRouter={this.context.router} />
+      );
+    }
+
+    if (statesProcessed && serviceName != null) {
+      return (
+        <ServiceSidePanelContents
+          itemID={serviceName}
           parentRouter={this.context.router} />
       );
     }

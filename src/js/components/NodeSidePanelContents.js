@@ -23,10 +23,6 @@ export default class NodeSidePanelContents extends SidePanelContents {
     };
   }
 
-  componentWillMount() {
-    this.mountedAt = Date.now();
-  }
-
   getBasicInfo(node) {
     let activeTasksCount = node.sumTaskTypesByState("active");
     let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);

@@ -36,10 +36,6 @@ export default class ServiceSidePanelContents extends SidePanelContents {
     }, this);
   }
 
-  componentDidMount() {
-    this.mountedAt = Date.now();
-  }
-
   handleOpenServiceButtonClick() {
     this.props.parentRouter.transitionTo(
       "service-ui",
