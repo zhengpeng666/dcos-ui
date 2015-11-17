@@ -59,8 +59,6 @@ export default class SidePanels extends
   getHeader() {
     let prevPath = HistoryStore.getHistoryAt(-1);
 
-    console.log(prevPath);
-
     return (
       <div className="side-panel-header-actions side-panel-header-actions-primary">
         <span className="side-panel-header-action"
