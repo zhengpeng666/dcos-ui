@@ -2,22 +2,17 @@ import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
 import HistoryStore from "../stores/HistoryStore";
-import InternalStorageMixin from "../mixins/InternalStorageMixin";
 import NodeSidePanelContents from "./NodeSidePanelContents";
 import ServiceSidePanelContents from "./ServiceSidePanelContents";
 import TaskSidePanelContents from "./TaskSidePanelContents";
-import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handlePanelClose"
 ];
 
-export default class SidePanels extends
-  Util.mixin(InternalStorageMixin) {
+export default class SidePanels extends React.Component {
   constructor() {
-    super(...arguments);
-
-    this.storesListeners = [];
+    super();
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);

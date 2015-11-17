@@ -149,7 +149,7 @@ describe("NodeSidePanelContents", function () {
   });
 
   it("should show error if node is not to be found", function () {
-    let contents = TestUtils.renderIntoDocument(this.instance.getContents());
+    let contents = TestUtils.renderIntoDocument(this.instance.render());
     let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h3");
 
     expect(headline.getDOMNode().textContent).toBe("Error finding node");
@@ -159,7 +159,7 @@ describe("NodeSidePanelContents", function () {
     var instance = TestUtils.renderIntoDocument(
       <NodeSidePanelContents open={true} onClose={this.callback} itemID="foo" />
     );
-    let contents = TestUtils.renderIntoDocument(instance.getContents());
+    let contents = TestUtils.renderIntoDocument(instance.render());
     let headline = TestUtils.findRenderedDOMComponentWithClass(
       contents, "side-panel-content-header-label"
     );

@@ -39,7 +39,7 @@ describe("TaskSidePanelContents", function () {
     MesosStateStore.addChangeListener = this.storeChangeListener;
   });
 
-  describe("#getContents", function () {
+  describe("#render", function () {
     beforeEach(function () {
       this.getNodeFromID = MesosStateStore.getNodeFromID;
       MesosStateStore.getNodeFromID = function () {
@@ -55,7 +55,7 @@ describe("TaskSidePanelContents", function () {
       var instance = TestUtils.renderIntoDocument(
         <TaskSidePanelContents open={true} />
       );
-      expect(instance.getContents()).toEqual(null);
+      expect(instance.render()).toEqual(null);
     });
 
     it("should return an element if there is a node", function () {
@@ -69,7 +69,7 @@ describe("TaskSidePanelContents", function () {
         <TaskSidePanelContents open={true} />
       );
 
-      expect(TestUtils.isElement(instance.getContents())).toEqual(true);
+      expect(TestUtils.isElement(instance.render())).toEqual(true);
     });
   });
 

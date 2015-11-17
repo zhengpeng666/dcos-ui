@@ -274,16 +274,8 @@ export default class SidePanelContents extends
     );
   }
 
-  getHeader() {
-    return (
-      <div className="side-panel-header-actions side-panel-header-actions-primary">
-        <span className="side-panel-header-action"
-          onClick={this.handlePanelClose}>
-          <i className="icon icon-sprite icon-sprite-small icon-close icon-sprite-small-white"></i>
-          Close
-        </span>
-      </div>
-    );
+  render() {
+
   }
 }
 
