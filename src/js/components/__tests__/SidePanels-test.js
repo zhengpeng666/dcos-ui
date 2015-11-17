@@ -34,6 +34,10 @@ describe("SidePanels", function () {
     MesosSummaryActions.fetchSummary = function () {
       return null;
     };
+
+    MesosSummaryStore.get = function () {
+      return true;
+    };
     MesosSummaryStore.init();
   });
 
