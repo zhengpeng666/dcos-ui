@@ -1,9 +1,11 @@
+import ArrayUtil from "../utils/ArrayUtil";
+
 export default class List {
   constructor(options = {}) {
     this.list = [];
 
     if (options.items) {
-      if (toString.call(options.items) !== "[object Array]") {
+      if (!ArrayUtil.isArray(options.items)) {
         throw "Expected an array.";
       }
 
