@@ -90,7 +90,7 @@ const BannerPlugin = {
         <iframe
           frameBorder="0"
           id="banner-plugin-iframe"
-          src="index.html" />
+          src="./index.html" />
 
         {this.getFooter()}
       </div>
