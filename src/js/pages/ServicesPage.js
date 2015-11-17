@@ -14,9 +14,8 @@ var MarathonStore = require("../stores/MarathonStore");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var ServiceTable = require("../components/ServiceTable");
-var ServiceSidePanel = require("../components/ServiceSidePanel");
 var SidebarActions = require("../events/SidebarActions");
-import TaskSidePanel from "../components/TaskSidePanel";
+import SidePanels from "../components/SidePanels";
 
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
@@ -204,12 +203,9 @@ var ServicesPage = React.createClass({
         <ServiceTable
           services={data.services}
           healthProcessed={appsProcessed} />
-        <ServiceSidePanel
-          itemID={this.props.params.serviceName}
-          open={data.statesProcessed && data.openServicePanel} />
-        <TaskSidePanel
-          itemID={this.props.params.taskID}
-          open={data.statesProcessed && data.openTaskPanel} />
+        <SidePanels
+          statesProcessed={data.statesProcessed}
+          params={this.props.params} />
       </div>
     );
   },

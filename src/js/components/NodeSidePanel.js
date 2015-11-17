@@ -23,16 +23,20 @@ export default class NodeSidePanel extends DetailSidePanel {
     };
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (this.props.open !== nextProps.open && nextProps.open) {
-      let defaultTab = Object.keys(this.tabs).shift();
-      if (this.state.currentTab !== defaultTab) {
-        this.setState({currentTab: defaultTab});
-      }
-    }
-
-    return super.shouldComponentUpdate(...arguments);
+  componentWillMount() {
+    this.mountedAt = Date.now();
   }
+
+  // shouldComponentUpdate(nextProps) {
+  //   if (this.props.open !== nextProps.open && nextProps.open) {
+  //     let defaultTab = Object.keys(this.tabs).shift();
+  //     if (this.state.currentTab !== defaultTab) {
+  //       this.setState({currentTab: defaultTab});
+  //     }
+  //   }
+
+  //   return super.shouldComponentUpdate(...arguments);
+  // }
 
   getBasicInfo(node) {
     let activeTasksCount = node.sumTaskTypesByState("active");
@@ -50,33 +54,6 @@ export default class NodeSidePanel extends DetailSidePanel {
     );
   }
 
-  getContents() {
-    let nodeID = this.props.itemID;
-    let last = MesosSummaryStore.get("states").lastSuccessful();
-    let node = last.getNodesList().filter({ids: [nodeID]}).last();
-
-    if (node == null) {
-      return this.getNotFound("node");
-    }
-
-    return (
-      <div className="flex-container-col" style={{height: "100%"}}>
-        <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
-          {this.getBasicInfo(node)}
-          <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
-            <div className="row">
-              {this.getCharts("Node", node)}
-            </div>
-          </div>
-          <div className="side-panel-tabs">
-            {this.tabs_getTabs()}
-          </div>
-        </div>
-        {this.tabs_getTabView()}
-      </div>
-    );
-  }
-
   renderTasksTabView() {
     let tasks = MesosStateStore.getTasksFromNodeID(this.props.itemID);
 
@@ -84,7 +61,7 @@ export default class NodeSidePanel extends DetailSidePanel {
 
     let timeSinceMount = (Date.now() - this.mountedAt) / 1000;
     if (timeSinceMount >= DetailSidePanel.animationLengthSeconds) {
-      contents = <TaskView tasks={tasks} parentRouter={this.context.router} />;
+      contents = <TaskView tasks={tasks} parentRouter={this.props.parentRouter} />;
     }
 
     return (
@@ -121,6 +98,29 @@ export default class NodeSidePanel extends DetailSidePanel {
   }
 
   render() {
-    return super.render(...arguments);
+    let nodeID = this.props.itemID;
+    let last = MesosSummaryStore.get("states").lastSuccessful();
+    let node = last.getNodesList().filter({ids: [nodeID]}).last();
+
+    if (node == null) {
+      return this.getNotFound("node");
+    }
+
+    return (
+      <div className="flex-container-col" style={{height: "100%"}}>
+        <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
+          {this.getBasicInfo(node)}
+          <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
+            <div className="row">
+              {this.getCharts("Node", node)}
+            </div>
+          </div>
+          <div className="side-panel-tabs">
+            {this.tabs_getTabs()}
+          </div>
+        </div>
+        {this.tabs_getTabView()}
+      </div>
+    );
   }
 }

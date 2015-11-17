@@ -25,30 +25,23 @@ export default class ServiceSidePanel extends DetailSidePanel {
       currentTab: Object.keys(this.tabs).shift()
     };
 
-    this.storesListeners = [
-      {name: "marathon", listenAlways: true},
-      {name: "summary", listenAlways: true},
-      {name: "state", listenAlways: true}
-    ];
+    // this.storesListeners = [
+    //   {name: "marathon", listenAlways: true},
+    //   {name: "summary", listenAlways: true},
+    //   {name: "state", listenAlways: true}
+    // ];
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
     }, this);
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (this.props.open !== nextProps.open && nextProps.open) {
-      let defaultTab = Object.keys(this.tabs).shift();
-      if (this.state.currentTab !== defaultTab) {
-        this.setState({currentTab: defaultTab});
-      }
-    }
-
-    return super.shouldComponentUpdate(...arguments);
+  componentDidMount() {
+    this.mountedAt = Date.now();
   }
 
   handleOpenServiceButtonClick() {
-    this.context.router.transitionTo(
+    this.props.parentRouter.transitionTo(
       "service-ui",
       {serviceName: this.props.itemID}
     );
@@ -128,32 +121,6 @@ export default class ServiceSidePanel extends DetailSidePanel {
     );
   }
 
-  getContents() {
-    let service = MesosSummaryStore.getServiceFromName(this.props.itemID);
-
-    if (service == null) {
-      return this.getNotFound("service");
-    }
-
-    return (
-      <div className="flex-container-col" style={{height: "100%"}}>
-        <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
-          {this.getBasicInfo()}
-          <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
-            <div className="row">
-              {this.getCharts("Service", service)}
-            </div>
-          </div>
-          {this.getOpenServiceButton()}
-          <div className="side-panel-tabs">
-            {this.tabs_getTabs()}
-          </div>
-        </div>
-        {this.tabs_getTabView()}
-      </div>
-    );
-  }
-
   getOpenServiceButton() {
     if (!MesosSummaryStore.hasServiceUrl(this.props.itemID)) {
       return null;
@@ -181,7 +148,7 @@ export default class ServiceSidePanel extends DetailSidePanel {
 
     let timeSinceMount = (Date.now() - this.mountedAt) / 1000;
     if (timeSinceMount >= DetailSidePanel.animationLengthSeconds) {
-      contents = <TaskView tasks={tasks} parentRouter={this.context.router} />;
+      contents = <TaskView tasks={tasks} parentRouter={this.props.parentRouter} />;
     }
 
     return (
@@ -250,6 +217,27 @@ export default class ServiceSidePanel extends DetailSidePanel {
   }
 
   render() {
-    return super.render(...arguments);
+    let service = MesosSummaryStore.getServiceFromName(this.props.itemID);
+    if (service == null) {
+      return this.getNotFound("service");
+    }
+
+    return (
+      <div className="flex-container-col" style={{height: "100%"}}>
+        <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
+          {this.getBasicInfo()}
+          <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
+            <div className="row">
+              {this.getCharts("Service", service)}
+            </div>
+          </div>
+          {this.getOpenServiceButton()}
+          <div className="side-panel-tabs">
+            {this.tabs_getTabs()}
+          </div>
+        </div>
+        {this.tabs_getTabView()}
+      </div>
+    );
   }
 }

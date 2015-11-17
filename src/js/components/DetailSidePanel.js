@@ -19,7 +19,6 @@ import Util from "../utils/Util";
 const WIDTH_HEIGHT_RATIO = 4.5;
 
 const METHODS_TO_BIND = [
-  "handlePanelClose",
   "onStoreChange"
 ];
 
@@ -74,30 +73,9 @@ export default class DetailSidePanel extends
     this.state = {};
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    let props = this.props;
-    let currentItem = props.itemID;
-    let nextItem = nextProps.itemID;
-
-    let currentTab = this.state.currentTab;
-    let nextTab = nextState.currentTab;
-
-    if (props.open !== nextProps.open) {
-      if (nextProps.open) {
-        changeListeners.call(this, this.storesListeners, "addChangeListener");
-        this.mountedAt = Date.now();
-      } else {
-        changeListeners.call(
-          this, this.storesListeners, "removeChangeListener"
-        );
-      }
-    }
-
-    return nextItem && currentItem !== nextItem ||
-      currentTab !== nextTab || props.open !== nextProps.open;
-  }
-
   componentDidMount() {
+    this.mountedAt = Date.now();
+
     this.storesListeners.forEach(function (listener, i) {
       if (typeof listener === "string") {
         this.storesListeners[i] = _.clone(ListenersDescription[listener]);
@@ -108,6 +86,7 @@ export default class DetailSidePanel extends
         );
       }
     }, this);
+    changeListeners.call(this, this.storesListeners, "addChangeListener");
   }
 
   componentWillUnmount() {
@@ -135,20 +114,6 @@ export default class DetailSidePanel extends
 
     // Always forceUpdate no matter where the change came from
     this.forceUpdate();
-  }
-
-  handlePanelClose() {
-    if (!this.props.open) {
-      return;
-    }
-
-    if (_.isFunction(this.props.onClose)) {
-      this.props.onClose();
-    }
-
-    let routes = this.context.router.getCurrentRoutes();
-    let pageBefore = routes[routes.length - 2];
-    this.context.router.transitionTo(pageBefore.name);
   }
 
   getKeyValuePairs(hash, headline) {
@@ -321,29 +286,7 @@ export default class DetailSidePanel extends
       </div>
     );
   }
-
-  getContents() {
-    // Needs to be implemented
-    return null;
-  }
-
-  render() {
-    return (
-      <SidePanel className="side-panel-detail"
-        header={this.getHeader()}
-        headerContainerClass="side-panel-header-container container container-fluid container-fluid-narrow container-pod container-pod-short"
-        bodyClass="side-panel-content flex-container-col"
-        onClose={this.handlePanelClose}
-        open={this.props.open}>
-        {this.getContents()}
-      </SidePanel>
-    );
-  }
 }
-
-DetailSidePanel.contextTypes = {
-  router: React.PropTypes.func
-};
 
 DetailSidePanel.propTypes = {
   itemID: React.PropTypes.string,

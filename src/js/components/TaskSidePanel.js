@@ -30,10 +30,10 @@ export default class TaskSidePanel extends DetailSidePanel {
     this.storesListeners = ["state", "summary"];
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillMount() {
     // If the task is 'completed', we do not show the 'Files' tab.
-    if (nextProps.itemID) {
-      let task = MesosStateStore.getTaskFromTaskID(nextProps.itemID);
+    if (this.props.itemID) {
+      let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
 
       if (task == null) {
         return;
@@ -163,37 +163,6 @@ export default class TaskSidePanel extends DetailSidePanel {
     );
   }
 
-  getContents() {
-    if (MesosStateStore.get("lastMesosState").slaves == null) {
-      return null;
-    }
-
-    let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
-
-    if (task == null) {
-      return this.getNotFound("task");
-    }
-
-    let node = MesosStateStore.getNodeFromID(task.slave_id);
-
-    return (
-      <div>
-        <div className="side-panel-content-header container container-pod
-          container-fluid container-pod-divider-bottom
-          container-pod-divider-bottom-align-right flush-bottom">
-          {this.getBasicInfo(task, node)}
-          <div className="container container-fluid container-pod side-panel-tabs
-            flush flush-bottom flush-top">
-            {this.tabs_getTabs()}
-          </div>
-        </div>
-        <div className="container container-fluid container-pod container-pod-short">
-          {this.tabs_getTabView()}
-        </div>
-      </div>
-    );
-  }
-
   renderDetailsTabView() {
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
 
@@ -236,6 +205,33 @@ export default class TaskSidePanel extends DetailSidePanel {
   }
 
   render() {
-    return super.render(...arguments);
+    if (MesosStateStore.get("lastMesosState").slaves == null) {
+      return null;
+    }
+
+    let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+
+    if (task == null) {
+      return this.getNotFound("task");
+    }
+
+    let node = MesosStateStore.getNodeFromID(task.slave_id);
+
+    return (
+      <div>
+        <div className="side-panel-content-header container container-pod
+          container-fluid container-pod-divider-bottom
+          container-pod-divider-bottom-align-right flush-bottom">
+          {this.getBasicInfo(task, node)}
+          <div className="container container-fluid container-pod side-panel-tabs
+            flush flush-bottom flush-top">
+            {this.tabs_getTabs()}
+          </div>
+        </div>
+        <div className="container container-fluid container-pod container-pod-short">
+          {this.tabs_getTabView()}
+        </div>
+      </div>
+    );
   }
 }
