@@ -40,6 +40,21 @@ var HistoryStore = Store.createStore({
   getHistoryAt: function (offset) {
     let history = this.get("history");
     return history[history.length - 1 + offset];
+  },
+
+  goBack: function (router) {
+    let prevPath = HistoryStore.getHistoryAt(-1);
+    if (prevPath) {
+      router.transitionTo(prevPath);
+      HistoryStore.get("history").pop();
+      HistoryStore.get("history").pop();
+      return;
+    }
+
+    let routes = router.getCurrentRoutes();
+    let pageBefore = routes[routes.length - 2];
+    router.transitionTo(pageBefore.name);
+
   }
 });
 

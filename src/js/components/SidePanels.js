@@ -26,17 +26,7 @@ export default class SidePanels extends React.Component {
       return;
     }
 
-    let prevPath = HistoryStore.getHistoryAt(-1);
-    if (prevPath) {
-      this.context.router.transitionTo(prevPath);
-      HistoryStore.get("history").pop();
-      HistoryStore.get("history").pop();
-      return;
-    }
-
-    let routes = this.context.router.getCurrentRoutes();
-    let pageBefore = routes[routes.length - 2];
-    this.context.router.transitionTo(pageBefore.name);
+    HistoryStore.goBack(this.context.router);
   }
 
   isOpen() {
