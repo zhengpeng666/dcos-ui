@@ -44,10 +44,10 @@ const BannerPlugin = {
   isEnabled: function () {
     let configuration = this.configuration;
 
-    return configuration.headerTitle ||
-      configuration.headerContent ||
-      configuration.footerContent ||
-      configuration.imagePath;
+    return configuration.headerTitle != null ||
+      configuration.headerContent != null ||
+      configuration.footerContent != null ||
+      configuration.imagePath != null;
   },
 
   toggleFullContent: function () {
@@ -90,7 +90,7 @@ const BannerPlugin = {
         <iframe
           frameBorder="0"
           id="banner-plugin-iframe"
-          src={window.location.href} />
+          src="index.html" />
 
         {this.getFooter()}
       </div>
