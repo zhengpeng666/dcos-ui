@@ -2,6 +2,7 @@ import React from "react/addons";
 import {SidePanel} from "reactjs-components";
 
 import HistoryStore from "../stores/HistoryStore";
+import MesosSummaryStore from "../stores/MesosSummaryStore";
 import NodeSidePanelContents from "./NodeSidePanelContents";
 import ServiceSidePanelContents from "./ServiceSidePanelContents";
 import TaskSidePanelContents from "./TaskSidePanelContents";
@@ -36,9 +37,10 @@ export default class SidePanels extends React.Component {
     let nodeID = params.nodeID;
     let serviceName = params.serviceName;
     let taskID = params.taskID;
+    let statesProcessed = MesosSummaryStore.get("statesProcessed");
 
-    return props.statesProcessed
-      && (nodeID != null || serviceName != null || taskID != null);
+    return (nodeID != null || serviceName != null || taskID != null)
+      && statesProcessed;
   }
 
   getHeader() {
@@ -54,10 +56,13 @@ export default class SidePanels extends React.Component {
   }
 
   getContents(ids) {
-    let statesProcessed = this.props.statesProcessed;
+    if (!this.isOpen()) {
+      return null;
+    }
+
     let {nodeID, serviceName, taskID} = ids;
 
-    if (statesProcessed && nodeID != null) {
+    if (nodeID != null) {
       return (
         <NodeSidePanelContents
           itemID={nodeID}
@@ -65,7 +70,7 @@ export default class SidePanels extends React.Component {
       );
     }
 
-    if (statesProcessed && taskID != null) {
+    if (taskID != null) {
       return (
         <TaskSidePanelContents
           itemID={taskID}
@@ -73,7 +78,7 @@ export default class SidePanels extends React.Component {
       );
     }
 
-    if (statesProcessed && serviceName != null) {
+    if (serviceName != null) {
       return (
         <ServiceSidePanelContents
           itemID={serviceName}
@@ -110,6 +115,5 @@ SidePanels.contextTypes = {
 };
 
 SidePanels.propTypes = {
-  statesProcessed: React.PropTypes.bool,
   params: React.PropTypes.object
 };

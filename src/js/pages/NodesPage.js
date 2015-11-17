@@ -233,9 +233,7 @@ var NodesPage = React.createClass({
           selectedResource={this.state.selectedResource}
           hosts={nodesList}
           services={data.services} />
-        <SidePanels
-          params={this.props.params}
-          statesProcessed={data.statesProcessed} />
+        <SidePanels params={this.props.params} />
       </div>
     );
   },

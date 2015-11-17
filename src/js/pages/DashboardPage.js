@@ -230,9 +230,7 @@ var DashboardPage = React.createClass({
             </Panel>
           </div>
         </div>
-        <SidePanels
-          params={this.props.params}
-          statesProcessed={data.statesProcessed} />
+        <SidePanels params={this.props.params} />
       </Page>
     );
   }
