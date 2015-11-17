@@ -51,10 +51,13 @@ var HistoryStore = Store.createStore({
       return;
     }
 
+    HistoryStore.goBackToPage(router);
+  },
+
+  goBackToPage: function (router) {
     let routes = router.getCurrentRoutes();
     let pageBefore = routes[routes.length - 2];
     router.transitionTo(pageBefore.name);
-
   }
 });
 
