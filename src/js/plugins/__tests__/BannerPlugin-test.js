@@ -25,15 +25,8 @@ describe("BannerPlugin", function () {
       expect(BannerPlugin.isEnabled()).toEqual(true);
     });
 
-    it("should return true if imagePath is defined", function () {
-      BannerPlugin.configuration = {imagePath: "foo"};
-
-      expect(BannerPlugin.isEnabled()).toEqual(true);
-    });
-
     it("should return false if no content is defined", function () {
-      // None of these are defined: headerTitle, headerContent, footerContent
-      // or imagePath
+      // None of these are defined: headerTitle, headerContent or footerContent
       BannerPlugin.configuration = {foo: "bar"};
 
       expect(BannerPlugin.isEnabled()).toEqual(false);
@@ -43,8 +36,7 @@ describe("BannerPlugin", function () {
       BannerPlugin.configuration = {
         headerTitle: null,
         headerContent: null,
-        footerContent: null,
-        imagePath: null
+        footerContent: null
       };
 
       expect(BannerPlugin.isEnabled()).toEqual(false);

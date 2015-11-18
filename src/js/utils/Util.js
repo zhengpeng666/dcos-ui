@@ -71,11 +71,11 @@ const Util = {
   },
 
   /**
-   * @param  {Object} object to determine whether is an array or not
-   * @return {Boolean} returns whether given object is an array or not
+   * @param  {Object} args to determine whether is an array or not
+   * @return {Boolean} returns whether given args is an array or not
    */
   isArray: function (args) {
-    return Object.prototype.toString.call(args) === '[object Array]';
+    return Object.prototype.toString.call(args) === "[object Array]";
   }
 };
 

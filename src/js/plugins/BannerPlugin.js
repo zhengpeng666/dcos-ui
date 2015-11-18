@@ -46,8 +46,7 @@ const BannerPlugin = {
 
     return configuration.headerTitle != null ||
       configuration.headerContent != null ||
-      configuration.footerContent != null ||
-      configuration.imagePath != null;
+      configuration.footerContent != null;
   },
 
   toggleFullContent: function () {
@@ -61,6 +60,7 @@ const BannerPlugin = {
     }
 
     let frame = document.getElementById("banner-plugin-iframe");
+
     if (frame == null) {
       return;
     }
@@ -70,10 +70,11 @@ const BannerPlugin = {
     }
 
     this.historyListenerAdded = true;
+
     let frameWindow = frame.contentWindow;
     let topWindow = window;
 
-    frameWindow.addEventListener("popstate", function () {
+    frameWindow.addEventListener("hashchange", function () {
       topWindow.location.hash = frameWindow.location.hash;
     });
   },
@@ -90,7 +91,7 @@ const BannerPlugin = {
         <iframe
           frameBorder="0"
           id="banner-plugin-iframe"
-          src="./index.html" />
+          src={`./index.html${window.location.hash}`} />
 
         {this.getFooter()}
       </div>
