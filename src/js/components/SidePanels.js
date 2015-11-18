@@ -5,6 +5,7 @@ import {SidePanel} from "reactjs-components";
 import HistoryStore from "../stores/HistoryStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import NodeSidePanelContents from "./NodeSidePanelContents";
+import PageList from "../constants/PageList";
 import ServiceSidePanelContents from "./ServiceSidePanelContents";
 import StringUtil from "../utils/StringUtil";
 import TaskSidePanelContents from "./TaskSidePanelContents";
@@ -37,19 +38,6 @@ export default class SidePanels extends React.Component {
     HistoryStore.goBack(this.context.router);
   }
 
-  // isOpen() {
-  //   let props = this.props;
-  //   let params = props.params;
-
-  //   let nodeID = params.nodeID;
-  //   let serviceName = params.serviceName;
-  //   let taskID = params.taskID;
-  //   let statesProcessed = MesosSummaryStore.get("statesProcessed");
-
-  //   return (nodeID != null || serviceName != null || taskID != null)
-  //     && statesProcessed;
-  // }
-
   isOpen() {
     let params = this.props.params;
 
@@ -73,7 +61,7 @@ export default class SidePanels extends React.Component {
       prevPage = _.last(matchedRoutes).name;
 
       if (_.contains(
-        ["services", "dashboard", "nodes-list", "nodes-grid"], prevPage)) {
+        PageList, prevPage)) {
         text = "close";
       }
     }
