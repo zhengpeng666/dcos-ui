@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "id": "http://schema.mesos/dcos/config",
+    "title": "DCOS User Authentication",
+    "type": "object",
+    "properties" : {
+        "token": {
+            "title": "User authentication token",
+            "type": "string"
+        }
+    },
+    "required": ["token"]
+}
