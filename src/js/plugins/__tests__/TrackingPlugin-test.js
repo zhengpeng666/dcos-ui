@@ -19,7 +19,6 @@ var _ = require("underscore");
 
 var ConfigStore = require("../../stores/ConfigStore");
 var DOMUtils = require("../../utils/DOMUtils");
-var EventTypes = require("../../constants/EventTypes");
 var Plugins = require("../Plugins");
 
 function processConfigState(isEnabled) {
