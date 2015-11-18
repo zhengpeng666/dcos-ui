@@ -61,16 +61,21 @@ export default class SidePanels extends React.Component {
       let matchedRoutes = this.context.router.match(prevPage).routes;
       prevPage = _.last(matchedRoutes).name;
 
-      if (_.contains(["services", "dashboard", "nodes-list", "nodes-grid"], prevPage)) {
+      if (_.contains(
+        ["services", "dashboard", "nodes-list", "nodes-grid"], prevPage)) {
         text = "close";
       }
     }
 
+    let iconClass =
+      `icon icon-sprite icon-sprite-small icon-${text} icon-sprite-small-white`;
+
     return (
-      <div className="side-panel-header-actions side-panel-header-actions-primary">
+      <div className="side-panel-header-actions
+        side-panel-header-actions-primary">
         <span className="side-panel-header-action"
           onClick={this.handlePanelClose}>
-          <i className={`icon icon-sprite icon-sprite-small icon-${text} icon-sprite-small-white`}></i>
+          <i className={iconClass}></i>
           {StringUtil.capitalize(text)}
         </span>
       </div>
@@ -122,7 +127,9 @@ export default class SidePanels extends React.Component {
     return (
       <SidePanel className="side-panel-detail"
         header={this.getHeader()}
-        headerContainerClass="side-panel-header-container container container-fluid container-fluid-narrow container-pod container-pod-short"
+        headerContainerClass="side-panel-header-container container
+          container-fluid container-fluid-narrow container-pod
+          container-pod-short"
         bodyClass="side-panel-content flex-container-col"
         onClose={this.handlePanelClose}
         open={this.isOpen()}>

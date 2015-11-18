@@ -285,4 +285,4 @@ SidePanelContents.propTypes = {
   open: React.PropTypes.bool
 };
 
-SidePanelContents.animationLengthSeconds = .5;
+SidePanelContents.animationLengthSeconds = 0.5;
