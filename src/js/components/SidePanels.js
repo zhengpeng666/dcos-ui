@@ -60,21 +60,20 @@ export default class SidePanels extends React.Component {
       let matchedRoutes = this.context.router.match(prevPage).routes;
       prevPage = _.last(matchedRoutes).name;
 
-      if (_.contains(
-        PageList, prevPage)) {
+      if (_.contains(PageList, prevPage)) {
         text = "close";
       }
     }
-
-    let iconClass =
-      `icon icon-sprite icon-sprite-small icon-${text} icon-sprite-small-white`;
 
     return (
       <div className="side-panel-header-actions
         side-panel-header-actions-primary">
         <span className="side-panel-header-action"
           onClick={this.handlePanelClose}>
-          <i className={iconClass}></i>
+          <i className={`icon icon-sprite
+            icon-sprite-small
+            icon-${text}
+            icon-sprite-small-white`}></i>
           {StringUtil.capitalize(text)}
         </span>
       </div>
