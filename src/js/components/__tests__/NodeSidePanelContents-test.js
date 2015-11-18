@@ -2,6 +2,7 @@ jest.dontMock("../SidePanelContents");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../mixins/TabsMixin");
 jest.dontMock("../../stores/MesosSummaryStore");
+jest.dontMock("../../events/MesosSummaryActions");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../NodeSidePanelContents");
 jest.dontMock("../../utils/Store");
