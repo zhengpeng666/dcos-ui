@@ -1,4 +1,4 @@
-describe("DCOS UI [00j]", function() {
+describe("Overlay Header Height [00j]", function() {
 
   beforeEach(function() {
     cy
@@ -16,21 +16,21 @@ describe("DCOS UI [00j]", function() {
 
   });
 
-  context("Services [00n]", function() {
+  context("Headers [00n]", function() {
 
     beforeEach(function() {
       cy.get(".sidebar-menu-item").contains("Services").click();
       cy.get("table tbody tr").as("tableRows");
     });
 
-    it("should open the service panel [00p]", function() {
+    it("should render all overlay headers at the same height [00p]",
+      function() {
       // Open the Marathon task.
-      cy.get("@tableRows").find("a").contains("marathon").click();
+      cy.get("@tableRows").contains("marathon").click();
       // Get the task panel's header.
       cy.get(".side-panel-header-container").as("sidePanelHeader");
       // Open the Marathon UI.
       cy.get(".side-panel-content-header-actions")
-        .find("a")
         .contains("Open Service")
         .click();
       // Get the service overlay's header.
