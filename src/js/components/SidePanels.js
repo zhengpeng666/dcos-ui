@@ -37,17 +37,27 @@ export default class SidePanels extends React.Component {
     HistoryStore.goBack(this.context.router);
   }
 
+  // isOpen() {
+  //   let props = this.props;
+  //   let params = props.params;
+
+  //   let nodeID = params.nodeID;
+  //   let serviceName = params.serviceName;
+  //   let taskID = params.taskID;
+  //   let statesProcessed = MesosSummaryStore.get("statesProcessed");
+
+  //   return (nodeID != null || serviceName != null || taskID != null)
+  //     && statesProcessed;
+  // }
+
   isOpen() {
-    let props = this.props;
-    let params = props.params;
+    let params = this.props.params;
 
-    let nodeID = params.nodeID;
-    let serviceName = params.serviceName;
-    let taskID = params.taskID;
-    let statesProcessed = MesosSummaryStore.get("statesProcessed");
-
-    return (nodeID != null || serviceName != null || taskID != null)
-      && statesProcessed;
+    return (
+      params.nodeID != null ||
+      params.serviceName != null ||
+      params.taskID != null
+    ) && MesosSummaryStore.get("statesProcessed");
   }
 
   getHeader() {
