@@ -2,6 +2,7 @@ jest.dontMock("../../stores/MarathonStore");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/Store");
+jest.dontMock("../../utils/Util");
 
 let MarathonStore = require("../../stores/MarathonStore");
 let Service = require("../Service");

@@ -1,11 +1,11 @@
-import ArrayUtil from "../utils/ArrayUtil";
+import Util from "../utils/Util";
 
 export default class List {
   constructor(options = {}) {
     this.list = [];
 
     if (options.items) {
-      if (!ArrayUtil.isArray(options.items)) {
+      if (!Util.isArray(options.items)) {
         throw "Expected an array.";
       }
 

@@ -4,6 +4,7 @@ var TestUtils = React.addons.TestUtils;
 jest.dontMock("../FilterByService");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("./fixtures/MockFrameworks");
+jest.dontMock("../../utils/Util");
 
 var FilterByService = require("../FilterByService");
 var MockFrameworks = require("./fixtures/MockFrameworks");

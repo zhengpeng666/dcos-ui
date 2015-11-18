@@ -10,6 +10,7 @@ jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/StringUtil");
+jest.dontMock("../../utils/Util");
 
 var MesosSummaryStore = require("../MesosSummaryStore");
 var MockStates = require("./fixtures/MockStates");
