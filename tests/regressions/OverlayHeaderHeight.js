@@ -25,30 +25,30 @@ describe("Overlay Header Height [00j]", function() {
 
     it("should render all overlay headers at the same height [00p]",
       function() {
+      var sidePanelHeaderHeight = null;
+      var overlayHeaderHeight = null;
+
       // Open the Marathon task.
       cy.get("@tableRows").contains("marathon").click();
       // Get the task panel's header.
       cy.get(".side-panel-header-container").as("sidePanelHeader");
+
+      cy.get("@sidePanelHeader").should(function ($sidePanelHeader) {
+        sidePanelHeaderHeight = $sidePanelHeader.outerHeight();
+      });
+
       // Open the Marathon UI.
       cy.get(".side-panel-content-header-actions")
         .contains("Open Service")
         .click();
+
       // Get the service overlay's header.
       cy.get(".overlay-header-container").as("overlayHeader");
 
-      // Assert that the height of the two headers are equal.
-      cy.get("@sidePanelHeader").should(function($sidePanelHeader) {
-        var sidePanelHeaderHeight = $sidePanelHeader.outerHeight();
-
-        cy.get("@overlayHeader").should(function($overlayHeader) {
-          var overlayHeaderHeight = $overlayHeader.outerHeight();
-          expect(sidePanelHeaderHeight).to.eq(overlayHeaderHeight);
-        });
-
+      cy.get("@overlayHeader").should(function ($overlayHeader) {
+        overlayHeaderHeight = $overlayHeader.outerHeight();
+        expect(sidePanelHeaderHeight).to.eq(overlayHeaderHeight);
       });
-
     });
-
   });
-
 });
