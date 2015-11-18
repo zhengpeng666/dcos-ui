@@ -1,6 +1,6 @@
-describe("Overlay Header Height [00j]", function() {
+describe("Overlay Header Height [00j]", function () {
 
-  beforeEach(function() {
+  beforeEach(function () {
     cy
       .server()
       .route(/apps/, "fx:marathon-1-task/app")
@@ -9,22 +9,22 @@ describe("Overlay Header Height [00j]", function() {
       .route(/state-summary/, "fx:marathon-1-task/summary")
       .route(/state/, "fx:marathon-1-task/state")
       .visit("http://localhost:4200/", {
-      onBeforeLoad: function(contentWindow) {
+      onBeforeLoad: function (contentWindow) {
         contentWindow.localStorage.setItem("email", "ui-bot@mesosphere.io");
       }
     });
 
   });
 
-  context("Headers [00n]", function() {
+  context("Headers [00n]", function () {
 
-    beforeEach(function() {
+    beforeEach(function () {
       cy.get(".sidebar-menu-item").contains("Services").click();
       cy.get("table tbody tr").as("tableRows");
     });
 
     it("should render all overlay headers at the same height [00p]",
-      function() {
+      function () {
       var sidePanelHeaderHeight = null;
       var overlayHeaderHeight = null;
 
