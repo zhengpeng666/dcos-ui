@@ -145,25 +145,30 @@ describe("NodeSidePanelContents", function () {
     });
   });
 
-  it("should show error if node is not to be found", function () {
-    var instance = TestUtils.renderIntoDocument(
-      <NodeSidePanelContents itemID="nonExistent" />
-    );
-    let contents = TestUtils.renderIntoDocument(instance.render());
-    let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h3");
+  describe("#render", function () {
+    it("should show error if node is not to be found", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanelContents itemID="nonExistent" />
+      );
 
-    expect(headline.getDOMNode().textContent).toBe("Error finding node");
-  });
+      let headline = JestUtil.renderAndFindTag(
+        instance.render(),
+        "h3"
+      );
 
-  it("should show the nodes hostname if it is found", function () {
-    var instance = TestUtils.renderIntoDocument(
-      <NodeSidePanelContents itemID="foo" />
-    );
-    let contents = TestUtils.renderIntoDocument(instance.render());
-    let headline = TestUtils.findRenderedDOMComponentWithClass(
-      contents, "side-panel-content-header-label"
-    );
+      expect(headline.getDOMNode().textContent).toBe("Error finding node");
+    });
 
-    expect(headline.getDOMNode().textContent).toBe("bar");
+    it("should show the nodes hostname if it is found", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanelContents itemID="foo" />
+      );
+      let contents = TestUtils.renderIntoDocument(instance.render());
+      let headline = TestUtils.findRenderedDOMComponentWithClass(
+        contents, "side-panel-content-header-label"
+      );
+
+      expect(headline.getDOMNode().textContent).toBe("bar");
+    });
   });
 });
