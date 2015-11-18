@@ -11,13 +11,12 @@ jest.setMock("../index", {
   fakePlugin: {
     initialize: jasmine.createSpy("initialize"),
     configure: jasmine.createSpy("configure"),
-    isEnabled: function() {
+    isEnabled: function () {
       return true;
     }
   }
 });
 
-var Config = require("../../config/Config");
 var ConfigStore = require("../../stores/ConfigStore");
 var EventTypes = require("../../constants/EventTypes");
 var pluginList = require("../index");
@@ -42,9 +41,9 @@ describe("PluginsAPI", function () {
 
   describe("#applyFilter", function () {
 
-    beforeEach(function() {
+    beforeEach(function () {
       this.fakeFilter = jest.genMockFunction();
-      this.fakeFilter.mockImplementation(function(value) {
+      this.fakeFilter.mockImplementation(function (value) {
         return value.replace("bar", "baz");
       });
 
@@ -57,7 +56,7 @@ describe("PluginsAPI", function () {
       expect(this.fakeFilter.mock.calls[0]).toEqual(["foo bar", "qux"]);
     });
 
-    it("should call the filter once", function() {
+    it("should call the filter once", function () {
       expect(this.fakeFilter.mock.calls.length).toEqual(1);
     });
 
@@ -70,11 +69,11 @@ describe("PluginsAPI", function () {
       var lowPriorityFilter = jest.genMockFunction();
       var highPriorityFilter = jest.genMockFunction();
 
-      lowPriorityFilter.mockImplementation(function(value) {
+      lowPriorityFilter.mockImplementation(function (value) {
         return value.replace("bar", "baz");
       });
 
-      highPriorityFilter.mockImplementation(function(value) {
+      highPriorityFilter.mockImplementation(function (value) {
         return value.replace("bar", "qux");
       });
 
@@ -90,7 +89,7 @@ describe("PluginsAPI", function () {
 
   describe("#doAction", function () {
 
-    beforeEach(function() {
+    beforeEach(function () {
       this.fakeAction = jest.genMockFunction();
       Plugins.addAction("foo", this.fakeAction);
     });
@@ -125,7 +124,7 @@ describe("PluginsAPI", function () {
 
   describe("Events", function () {
 
-    beforeEach(function() {
+    beforeEach(function () {
       ConfigStore.set({config: {
         uiConfiguration: {
           plugins: {
@@ -135,15 +134,14 @@ describe("PluginsAPI", function () {
           }
         }
       }});
+      Plugins.initialize();
     });
 
-    afterEach(function() {
+    afterEach(function () {
       ConfigStore.removeAllListeners();
     });
 
     it("configures plugins when store receives configuration", function () {
-      Plugins.initialize();
-
       ConfigStore.emit(EventTypes.CONFIG_LOADED);
       expect(pluginList.fakePlugin.configure).toHaveBeenCalled();
       expect(pluginList.fakePlugin.configure.calls[0].args).toEqual(
@@ -152,16 +150,13 @@ describe("PluginsAPI", function () {
     });
 
     it("fires an action when the configuration is loaded", function () {
-      Plugins.initialize();
-
       this.fakeAction = jest.genMockFunction();
-      Plugins.addAction('pluginsConfigured', this.fakeAction);
+      Plugins.addAction("pluginsConfigured", this.fakeAction);
       ConfigStore.emit(EventTypes.CONFIG_LOADED);
       expect(this.fakeAction.mock.calls.length).toEqual(1);
     });
 
     it("emits an event when when the configuration is loaded", function () {
-      Plugins.initialize();
       this.fakeEventHandler = jest.genMockFunction();
       Plugins.addChangeListener(
         EventTypes.PLUGINS_CONFIGURED,
@@ -172,7 +167,6 @@ describe("PluginsAPI", function () {
     });
 
     it("allows listeners to be added and removed", function () {
-      Plugins.initialize();
       this.fakeEventHandler = jest.genMockFunction();
       Plugins.addChangeListener(
         EventTypes.PLUGINS_CONFIGURED,
