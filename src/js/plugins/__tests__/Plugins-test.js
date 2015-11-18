@@ -32,6 +32,12 @@ describe("PluginsAPI", function () {
       expect(pluginList.fakePlugin.initialize).toHaveBeenCalled();
     });
 
+    it("should call the fetchConfig method on ConfigStore", function () {
+      ConfigStore.fetchConfig = jest.genMockFunction();
+      Plugins.initialize();
+      expect(ConfigStore.fetchConfig.mock.calls.length).toEqual(1);
+    });
+
   });
 
   describe("#applyFilter", function () {
@@ -39,30 +45,59 @@ describe("PluginsAPI", function () {
     beforeEach(function() {
       this.fakeFilter = jest.genMockFunction();
       this.fakeFilter.mockImplementation(function(value) {
-        return value.replace("dolor", "x");
+        return value.replace("bar", "baz");
       });
+
       // Add a filter with the mocked function.
-      Plugins.addFilter("fake_plugin_title", this.fakeFilter, 1);
+      Plugins.addFilter("foo", this.fakeFilter);
+
+      this.filteredContent = Plugins.applyFilter(
+        "foo", // The event name.
+        "foo bar", // The value to be filtered.
+        "qux" // The additional arguments.
+      );
+    });
+
+    it("should receive the arguments that we defined",
+      function () {
+      // Expect the arguments of the call to the mocked function to equal the
+      // arguments that were included in the filter.
+      expect(this.fakeFilter.mock.calls[0]).toEqual(
+        ["foo bar", "qux"]
+      );
+    });
+
+    it("should call the filter once", function() {
+      // Expect the mocked function to have been called one time.
+      expect(this.fakeFilter.mock.calls.length).toEqual(1);
     });
 
     it("should return the filtered content when a filter is applied",
       function () {
-      var filteredContent = Plugins.applyFilter(
-        "fake_plugin_title", // The plugin title.
-        "Lorem ipsum dolor sit amet.", // The value to be filtered.
-        "fake_filter_arguments" // The additional arguments.
-      );
-
-      // Expect the mocked function to have been called one time.
-      expect(this.fakeFilter.mock.calls.length).toEqual(1);
-      // Expect the arguments of the call to the mocked function to equal the
-      // arguments that were included in the filter.
-      expect(this.fakeFilter.mock.calls[0]).toEqual(
-        ["Lorem ipsum dolor sit amet.", "fake_filter_arguments"]
-      );
       // Expect the returned content to have been filtered and equal the mocked
       // filtered value.
-      expect(filteredContent).toEqual("Lorem ipsum x sit amet.");
+      expect(this.filteredContent).toEqual("foo baz");
+    });
+
+    it("should apply the filters in the order of priority",
+      function () {
+      var lowPriorityFilter = jest.genMockFunction();
+      var highPriorityFilter = jest.genMockFunction();
+
+      lowPriorityFilter.mockImplementation(function(value) {
+        return value.replace("bar", "baz");
+      });
+
+      highPriorityFilter.mockImplementation(function(value) {
+        return value.replace("bar", "qux");
+      });
+
+      Plugins.addFilter("corge", lowPriorityFilter, 20);
+      Plugins.addFilter("corge", highPriorityFilter, 1);
+
+      var filteredContent = Plugins.applyFilter("corge", "foo bar");
+
+      expect(filteredContent).toEqual("foo qux");
     });
 
   });
@@ -72,18 +107,37 @@ describe("PluginsAPI", function () {
     beforeEach(function() {
       this.fakeAction = jest.genMockFunction();
       // Add an action.
-      Plugins.addAction("fake_action", this.fakeAction, 1);
+      Plugins.addAction("foo", this.fakeAction);
     });
 
     it("should receive arguments when an action is performed", function () {
-      Plugins.doAction("fake_action", "fake_action_arguments");
+      Plugins.doAction("foo", "bar");
 
       // Expect the mocked function to have been called one time.
       expect(this.fakeAction.mock.calls.length).toEqual(1);
       // Expect the arguments of the call to the mocked function to equal the
       // arguments that were included in the action.
-      expect(this.fakeAction.mock.calls[0][0])
-        .toEqual("fake_action_arguments");
+      expect(this.fakeAction.mock.calls[0][0]).toEqual("bar");
+    });
+
+    it("should not receive arguments when arguments are not passed",
+      function () {
+      this.noArgumentsAction = jest.genMockFunction();
+      // Add an action.
+      Plugins.addAction("qux", this.noArgumentsAction);
+      Plugins.doAction("qux");
+      // Expect there to not be any arguments to the function.
+      expect(this.noArgumentsAction.mock.calls[0].length).toEqual(0);
+    });
+
+    it("should receive two arguments when two arguments are passed",
+      function () {
+      this.twoArgumentsAction = jest.genMockFunction();
+      // Add an action.
+      Plugins.addAction("quux", this.twoArgumentsAction);
+      Plugins.doAction("quux", "baz", "bar");
+      // Expect there to not be any arguments to the function.
+      expect(this.twoArgumentsAction.mock.calls[0].length).toEqual(2);
     });
 
   });
@@ -122,7 +176,7 @@ describe("PluginsAPI", function () {
 
       this.fakeAction = jest.genMockFunction();
       // Add the mocked function as the action.
-      Plugins.addAction('pluginsConfigured', this.fakeAction, 1);
+      Plugins.addAction('pluginsConfigured', this.fakeAction);
       ConfigStore.emit(EventTypes.CONFIG_LOADED);
       // Ensure that the action called the mocked function.
       expect(this.fakeAction.mock.calls.length).toEqual(1);
