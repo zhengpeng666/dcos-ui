@@ -72,10 +72,6 @@ describe("NodeSidePanelContents", function () {
         }
       ]
     });
-
-    this.instance = TestUtils.renderIntoDocument(
-      <NodeSidePanelContents itemID="nonExistent" />
-    );
   });
 
   afterEach(function () {
@@ -150,7 +146,10 @@ describe("NodeSidePanelContents", function () {
   });
 
   it("should show error if node is not to be found", function () {
-    let contents = TestUtils.renderIntoDocument(this.instance.render());
+    var instance = TestUtils.renderIntoDocument(
+      <NodeSidePanelContents itemID="nonExistent" />
+    );
+    let contents = TestUtils.renderIntoDocument(instance.render());
     let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h3");
 
     expect(headline.getDOMNode().textContent).toBe("Error finding node");
