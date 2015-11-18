@@ -24,13 +24,14 @@ export default class SidePanels extends React.Component {
     this.state = {};
   }
 
-  handlePanelClose(closedByBackdrop) {
+  handlePanelClose(closeInfo) {
     if (!this.isOpen()) {
       return;
     }
 
-    if (closedByBackdrop) {
+    if (closeInfo && closeInfo.closedByBackdrop) {
       HistoryStore.goBackToPage(this.context.router);
+      return;
     }
 
     HistoryStore.goBack(this.context.router);
