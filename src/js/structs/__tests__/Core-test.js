@@ -88,11 +88,11 @@ describe("Core", function () {
 
     it("returns state and marathon summaries merged into one object",
       function () {
-        expect(Core.getLatest()).toEqual({
-          foo: "baz",
-          baz: "quux",
-          corge: "grault"
-        });
+      expect(Core.getLatest()).toEqual({
+        foo: "baz",
+        baz: "quux",
+        corge: "grault"
+      });
     });
 
   });
