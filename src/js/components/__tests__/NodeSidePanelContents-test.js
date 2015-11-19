@@ -163,6 +163,7 @@ describe("NodeSidePanelContents", function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanelContents itemID="foo" />
       );
+      console.log(instance, instance.render);
       let contents = TestUtils.renderIntoDocument(instance.render());
       let headline = TestUtils.findRenderedDOMComponentWithClass(
         contents, "side-panel-content-header-label"
