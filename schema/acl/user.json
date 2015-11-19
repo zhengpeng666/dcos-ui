@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "id": "http://schema.mesos/dcos/config",
+    "title": "DCOS ACL: Single User Response",
+    "type": "object",
+    "properties": {
+        "uid": {
+            "title": "User's ID",
+            "type": "string"
+        },
+        "url": {
+            "title": "User's URL",
+            "type": "string"
+        },
+        "meta": {
+            "title": "User's metadata",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "title": "User's full name",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "required": [
+        "uid",
+        "url",
+        "meta"
+    ]
+}
