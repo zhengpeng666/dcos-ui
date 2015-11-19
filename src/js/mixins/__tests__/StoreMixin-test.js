@@ -5,8 +5,7 @@ jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/Util");
 
-var _ = require("underscore");
-import EventTypes from "../../constants/EventTypes";
+var EventTypes = require("../../constants/EventTypes");
 var MarathonStore = require("../../stores/MarathonStore");
 var StoreMixin = require("../StoreMixin");
 var Util = require("../../utils/Util");
@@ -75,6 +74,7 @@ describe("StoreMixin", function () {
     it("starts listening for store changes", function () {
       this.instance.store_listeners = ["marathon"];
       this.instance.componentDidMount();
+      // 2 because of success/error events
       expect(MarathonStore.addChangeListener.calls.length).toEqual(2);
     });
 
@@ -86,18 +86,20 @@ describe("StoreMixin", function () {
       this.instance.componentDidMount();
 
       expect(MarathonStore.addChangeListener.calls.length).toEqual(1);
-      expect(MarathonStore.addChangeListener)
-        .toHaveBeenCalledWith(EventTypes.MARATHON_APPS_CHANGE, function () {});
+      expect(MarathonStore.addChangeListener).toHaveBeenCalledWith(
+        EventTypes.MARATHON_APPS_CHANGE, jasmine.any(Function)
+      );
     });
 
   });
 
   describe("#store_addListeners", function () {
 
-    it("doesn't create new listeners when thery already exist", function () {
+    it("doesn't create new listeners when they already exist", function () {
       this.instance.store_listeners = ["marathon"];
       this.instance.componentDidMount();
       this.instance.store_addListeners();
+      // 2 because of success/error events
       expect(MarathonStore.addChangeListener.calls.length).toEqual(2);
     });
 
@@ -161,7 +163,7 @@ describe("StoreMixin", function () {
   describe("#store_onStoreChange", function () {
 
     it("calls unmountWhen", function () {
-      let fn = jasmine.createSpy('unmountWhen');
+      let fn = jasmine.createSpy("unmountWhen");
       this.instance.store_listeners = [{
         name: "marathon",
         unmountWhen: fn,
@@ -174,7 +176,7 @@ describe("StoreMixin", function () {
     });
 
     it("calls unmountWhen with the correct storeID and event", function () {
-      let fn = jasmine.createSpy('unmountWhen');
+      let fn = jasmine.createSpy("unmountWhen");
       this.instance.store_listeners = [{
         name: "marathon",
         unmountWhen: fn,

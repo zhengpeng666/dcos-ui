@@ -50,39 +50,39 @@ function es6ify(mixin) {
  * @param  {Object} proto
  * @param  {Boolean} useNoop Optional. To use noop or call parent function
  */
-function addMissingLifecycleFunctions (proto, useNoop) {
-  function callToParent (lifecycleFn) {
+function addMissingLifecycleFunctions(proto, useNoop) {
+  function callToParent(lifecycleFn) {
     return function () {
       this.parent[lifecycleFn]();
-    }
-  };
+    };
+  }
 
   // No-ops so we need not check before calling super()
   let functions = {
-    "componentWillMount": callToParent,
-    "componentDidMount": callToParent,
-    "componentWillReceiveProps": function () {
+    componentWillMount: callToParent,
+    componentDidMount: callToParent,
+    componentWillReceiveProps: function () {
       return function (nextProps) {
         this.parent.componentWillReceiveProps(nextProps);
-      }
+      };
     },
-    "shouldComponentUpdate": function () {
+    shouldComponentUpdate: function () {
       return function (nextProps, nextState) {
-        this.parent.shouldComponentUpdate(nextProps, nextState);
-      }
+        return this.parent.shouldComponentUpdate(nextProps, nextState);
+      };
     },
-    "componentWillUpdate": function () {
+    componentWillUpdate: function () {
       return function (nextProps, nextState) {
         this.parent.componentWillUpdate(nextProps, nextState);
-      }
+      };
     },
-    "componentDidUpdate": function () {
+    componentDidUpdate: function () {
       return function (prevProps, prevState) {
         this.parent.componentDidUpdate(prevProps, prevState);
-      }
+      };
     },
-    "componentWillUnmount": callToParent,
-    "render": callToParent
+    componentWillUnmount: callToParent,
+    render: callToParent
   };
 
   Object.keys(functions).forEach(function (lifecycleFn) {

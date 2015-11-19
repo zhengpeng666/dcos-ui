@@ -21,6 +21,7 @@ describe("Store", function () {
       }
 
       var newStore = Store.createStore({
+        storeID: "foo",
         mixins: [{someFunction, foo: true}]
       });
       expect(newStore.someFunction()).toEqual(true);
@@ -31,6 +32,7 @@ describe("Store", function () {
         someValue: "someValue"
       };
       var newStore = Store.createStore({
+        storeID: "foo",
         mixins: [{someObject}]
       });
 
@@ -43,44 +45,50 @@ describe("Store", function () {
         someValue: function () {}
       };
       var newStore = Store.createStore({
+        storeID: "foo",
         mixins: [{someObject}]
       });
 
       expect(newStore.someObject.someValue).toEqual(someObject.someValue);
     });
 
-    it("should return a store if given store is undefined", function () {
-      var newStore = Store.createStore();
-
-      expect(typeof newStore).toEqual("object");
+    it("doesn't allow creating a store without storeID", function () {
+      expect(Store.createStore).toThrow();
     });
 
-    it("should be able to create a store without mixins", function () {
+    it("creates a store without mixins", function () {
       var emitterProps = this.emitterProps;
-      var newStore = Store.createStore({});
+      var newStore = Store.createStore({storeID: "foo"});
       var props = _.sortBy(Object.keys(newStore), function (el) {
         return el;
       });
       props.map(function (key, index) {
-        expect(key).toEqual(emitterProps[index]);
+        let value = emitterProps[index];
+        if (key === "storeID") {
+          value = "storeID";
+        }
+
+        expect(key).toEqual(value);
       });
     });
 
-    it("should be able to create a store with 1 mixin", function () {
+    it("creates a store with 1 mixin", function () {
       var emitterProps = this.emitterProps;
       var newStore = Store.createStore({
+        storeID: "foo",
         mixins: [{someProperty: "someValue"}]
       });
 
       Object.keys(newStore).map(function (key, index) {
-        if (emitterProps[index] == null) {
+        if (emitterProps[index] == null && key !== "storeID") {
           expect(key === "someProperty" || key === "mixins").toEqual(true);
         }
       });
     });
 
-    it("should be able to create a store with multiple mixins", function () {
+    it("creates a store with multiple mixins", function () {
       var newStore = Store.createStore({
+        storeID: "foo",
         mixins: [
           {someProperty: "someValue"},
           {anotherProperty: "anotherValue"}
@@ -93,6 +101,7 @@ describe("Store", function () {
 
     it("should let mixins take preceedence over store", function () {
       var newStore = Store.createStore({
+        storeID: "foo",
         someProperty: "someValue",
         mixins: [{someProperty: "anotherValue"}]
       });
@@ -102,6 +111,7 @@ describe("Store", function () {
 
     it("should let mixins take preceedence over EventEmitter", function () {
       var newStore = Store.createStore({
+        storeID: "foo",
         mixins: [{emit: "someValue"}]
       });
 

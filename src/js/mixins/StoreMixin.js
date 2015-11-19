@@ -6,6 +6,8 @@ import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import StringUtil from "../utils/StringUtil";
 
+const LISTENER_SUFFIX = "ListenerFn";
+
 const ListenersDescription = {
   summary: {
     // Which store to use
@@ -13,7 +15,7 @@ const ListenersDescription = {
 
     // What event to listen to
     events: {
-      succes: EventTypes.MESOS_SUMMARY_CHANGE,
+      success: EventTypes.MESOS_SUMMARY_CHANGE,
       error: EventTypes.MESOS_SUMMARY_REQUEST_ERROR
     },
 
@@ -87,7 +89,7 @@ const StoreMixin = {
             listener, ListenersDescription[storeName]
           );
         }
-      }, this);
+      });
 
       this.store_listeners = storesListeners;
       this.store_addListeners();
@@ -108,7 +110,7 @@ const StoreMixin = {
 
       // Loop through all available events
       Object.keys(listenerDetail.events).forEach((event) => {
-        let eventListenerID = `${event}ListenerFn`;
+        let eventListenerID = `${event}${LISTENER_SUFFIX}`;
 
         // Check to see if we are already listening for this event
         if (listenerDetail[eventListenerID]) {
@@ -141,7 +143,7 @@ const StoreMixin = {
 
   store_removeEventListenerForStoreID(storeID, event) {
     let listenerDetail = this.store_listeners[storeID];
-    let eventListenerID = `${event}ListenerFn`;
+    let eventListenerID = `${event}${LISTENER_SUFFIX}`;
 
     // Return if there was no listener setup
     if (!listenerDetail[eventListenerID]) {
@@ -168,8 +170,7 @@ const StoreMixin = {
     if (listenerDetail.unmountWhen && !listenerDetail.listenAlways) {
       // Remove change listener if the settings want to unmount after a certain
       // condition is truthy
-      let unmountWhen = listenerDetail.unmountWhen;
-      if (unmountWhen && unmountWhen(listenerDetail.store, event)) {
+      if (listenerDetail.unmountWhen(listenerDetail.store, event)) {
         this.store_removeEventListenerForStoreID(storeID, event);
       }
     }
