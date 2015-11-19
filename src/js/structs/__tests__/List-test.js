@@ -1,3 +1,5 @@
+jest.dontMock("../../utils/Util");
+
 let List = require("../List");
 
 describe("List", function () {

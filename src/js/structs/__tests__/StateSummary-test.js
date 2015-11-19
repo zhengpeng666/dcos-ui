@@ -1,4 +1,5 @@
 jest.dontMock("../../utils/MesosSummaryUtil");
+jest.dontMock("../../utils/Util");
 
 let ServicesList = require("../ServicesList");
 let NodesList = require("../NodesList");
