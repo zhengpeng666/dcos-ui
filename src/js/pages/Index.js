@@ -54,13 +54,6 @@ var Index = React.createClass({
     MesosSummaryStore.init();
     SidebarStore.init();
     this.internalStorage_set(getSidebarState());
-
-    var email = LocalStorageUtil.get("email");
-    if (email != null) {
-      Actions.identify(email, function () {
-        IntercomStore.init();
-      });
-    }
   },
 
   componentDidMount: function () {
