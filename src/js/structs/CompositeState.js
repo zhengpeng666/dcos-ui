@@ -17,7 +17,9 @@ export default class CompositeState {
   }
 
   getServiceList() {
-    return new ServicesList(this.data);
+    return new ServicesList({
+      items: [this.data]
+    });
   }
 
 }
