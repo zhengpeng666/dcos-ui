@@ -22,9 +22,10 @@ const TrackingPlugin = {
    * @param  {Object} Plugins The Plugins API
    */
   initialize: function (Plugins) {
-    Plugins.addAction("pluginsConfigured", this.pluginsConfigured.bind(this));
-    Plugins.addFilter("openLoginModal", this.openLoginModal.bind(this));
     Plugins.addFilter("footerButtonSet", this.footerButtonSet.bind(this));
+    Plugins.addFilter("openLoginModal", this.openLoginModal.bind(this));
+    Plugins.addAction("pluginsConfigured", this.pluginsConfigured.bind(this));
+    Plugins.addAction("receivedUserEmail", this.receivedUserEmail.bind(this));
   },
 
   configure: function (configuration) {
@@ -56,6 +57,10 @@ const TrackingPlugin = {
         }
       }, 500);
     }
+  },
+
+  receivedUserEmail: function (email) {
+    LocalStorageUtil.set("email", email);
   },
 
   openLoginModal: function (value) {
