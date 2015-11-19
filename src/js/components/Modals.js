@@ -121,7 +121,7 @@ var Modals = React.createClass({
   },
 
   onLogin: function (email) {
-    Plugins.doAction("receivedUserEmail", email);
+    LocalStorageUtil.set("email", email);
 
     this.setState({
       hasIdentity: true,

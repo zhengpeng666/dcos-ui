@@ -22,7 +22,6 @@ const TrackingPlugin = {
    * @param  {Object} Plugins The Plugins API
    */
   initialize: function (Plugins) {
-    Plugins.addAction("receivedUserEmail", this.receivedUserEmail.bind(this));
     Plugins.addAction("pluginsConfigured", this.pluginsConfigured.bind(this));
     Plugins.addFilter("openLoginModal", this.openLoginModal.bind(this));
     Plugins.addFilter("footerButtonSet", this.footerButtonSet.bind(this));
@@ -41,6 +40,8 @@ const TrackingPlugin = {
       DOMUtils.appendScript(document.head, segmentScript);
       DOMUtils.appendScript(document.head, chameleonScript);
 
+      // Continue to check if analytics script (Segment) is initialized and only
+      // identify user by email after it is ready.
       interval = setInterval(function () {
         if (Actions.canLog()) {
           var email = LocalStorageUtil.get("email");
@@ -48,21 +49,13 @@ const TrackingPlugin = {
             Actions.identify(email, function () {
               IntercomStore.init();
             });
-          }
 
-          clearInterval(interval);
-          interval = null;
+            clearInterval(interval);
+            interval = null;
+          }
         }
       }, 500);
     }
-  },
-
-  receivedUserEmail: function (email) {
-    clearInterval(interval);
-    interval = null;
-
-    LocalStorageUtil.set("email", email);
-    Actions.identify(email);
   },
 
   openLoginModal: function (value) {
