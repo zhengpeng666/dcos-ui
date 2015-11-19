@@ -161,7 +161,7 @@ var Index = React.createClass({
         showErrorModal: true,
         modalErrorMsg: (
           <p className="text-align-center flush-bottom">
-            We are unable to communicate with Intercom.io. It is possible that you have a browser plugin or extension that is blocking communication. If so, please disabled and try again.
+            We are unable to communicate with Intercom.io. It is possible that you have a browser plugin or extension that is blocking communication. If so, please disable it and try again.
           </p>
         )
       });
