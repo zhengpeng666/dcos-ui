@@ -1,8 +1,7 @@
-
 {
     "$schema": "http://json-schema.org/draft-04/schema",
-    "id": "http://schema.mesos/dcos/config",
-    "title": "DCOS ACL: Single User Response",
+    "id": "http://schema.dcos/acl/users/user",
+    "title": "DCOS ACL: Single user endpoint response",
     "type": "object",
     "properties": {
         "uid": {
