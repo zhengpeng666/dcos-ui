@@ -1,3 +1,5 @@
+import _ from "underscore";
+
 import CompositeState from "./CompositeState";
 import SummaryList from "./SummaryList";
 
@@ -20,10 +22,10 @@ var Core = {
   },
 
   getLatest() {
-    return Object.assign(
+    return _.extend(
       {},
-      this.compositeStore.data.state,
-      this.compositeStore.data.marathon
+      this.compositeState.data.state,
+      this.compositeState.data.marathon
     );
   }
 

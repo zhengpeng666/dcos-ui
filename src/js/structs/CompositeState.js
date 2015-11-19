@@ -1,3 +1,5 @@
+import _ from "underscore";
+
 import ServicesList from "./ServicesList";
 
 export default class CompositeState {
@@ -7,11 +9,11 @@ export default class CompositeState {
   }
 
   addState(data) {
-    this.data.state = Object.assign({}, this.data.state, data);
+    this.data.state = _.extend({}, this.data.state, data);
   }
 
   addMarathon(data) {
-    this.data.marathon = Object.assign({}, this.data.marathon, data);
+    this.data.marathon = _.extend({}, this.data.marathon, data);
   }
 
   getServiceList() {
