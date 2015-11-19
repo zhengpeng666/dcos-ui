@@ -17,6 +17,10 @@ function mixInto(target, source) {
 
 const Store = {
   createStore: function (store = {}) {
+    if (store.storeID == null) {
+      throw "All stores must have an id!";
+    }
+
     let mixins = store.mixins || [];
     mixins.forEach(function (mixin) {
       mixInto(store, mixin);

@@ -7,6 +7,7 @@ var GetSetMixin = require("../mixins/GetSetMixin");
 var Store = require("../utils/Store");
 
 var MetadataStore = Store.createStore({
+  storeID: "metadata",
 
   init: function () {
     this.set({metadata: {}});
