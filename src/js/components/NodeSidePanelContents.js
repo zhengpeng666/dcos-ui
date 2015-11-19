@@ -82,7 +82,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
     );
   }
 
-  getContents() {
+  render() {
     let nodeID = this.props.itemID;
     let last = MesosSummaryStore.get("states").lastSuccessful();
     let node = last.getNodesList().filter({ids: [nodeID]}).last();
@@ -107,9 +107,5 @@ export default class NodeSidePanelContents extends SidePanelContents {
         {this.tabs_getTabView()}
       </div>
     );
-  }
-
-  render() {
-    return this.getContents();
   }
 }
