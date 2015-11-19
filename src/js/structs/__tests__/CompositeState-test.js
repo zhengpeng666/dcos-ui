@@ -2,9 +2,9 @@ jest.autoMockOff();
 
 let CompositeState = require("../CompositeState");
 
-describe("Core", function () {
+describe("CompositeState", function () {
 
-  beforeEach(function() {
+  beforeEach(function () {
     this.instance = new CompositeState();
   });
 

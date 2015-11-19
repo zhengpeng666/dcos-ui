@@ -87,7 +87,7 @@ describe("Core", function () {
   describe("#getLatest", function () {
 
     it("returns state and marathon summaries merged into one object",
-      function() {
+      function () {
         expect(Core.getLatest()).toEqual({
           foo: "baz",
           baz: "quux",
