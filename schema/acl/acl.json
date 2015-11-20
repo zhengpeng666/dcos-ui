@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema",
-    "id": "http://schema.dcos/acls/acl",
+    "id": "http://schema.dcos/acl/acls/acl",
     "title": "DCOS ACL: Single ACL response.",
     "type": "object",
     "properties": {
