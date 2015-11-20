@@ -152,8 +152,7 @@ describe("NodeSidePanelContents", function () {
       );
 
       let headline = JestUtil.renderAndFindTag(
-        instance.render(),
-        "h3"
+        instance, "h3"
       );
 
       expect(headline.getDOMNode().textContent).toBe("Error finding node");
