@@ -12,20 +12,14 @@
             "title": "User's URL",
             "type": "string"
         },
-        "meta": {
-            "title": "User's metadata",
-            "type": "object",
-            "properties": {
-                "name": {
-                    "title": "User's full name",
-                    "type": "string"
-                }
-            }
+        "description": {
+            "title": "User's description",
+            "type": "string"
         }
     },
     "required": [
         "uid",
         "url",
-        "meta"
+        "description"
     ]
 }
