@@ -13,7 +13,7 @@
             "type": "string"
         },
         "description": {
-            "title": "Groups' description",
+            "title": "Group's description",
             "type": "string"
         }
     },
