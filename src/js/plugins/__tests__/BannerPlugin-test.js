@@ -327,7 +327,7 @@ describe("BannerPlugin", function () {
         .toBeTruthy();
     });
 
-    it("should return an element if getHeaderContent return something", function () {
+    it("should return element when getHeaderContent does", function () {
       BannerPlugin.getHeaderContent = function () { return "foo"; };
 
       expect(TestUtils.isElement(BannerPlugin.getHeader()))
