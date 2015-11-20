@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "id": "http://schema.dcos/acl/users",
+    "title": "DCOS ACL: All users endpoint response",
+    "type": "object",
+    "properties": {
+        "users": {
+            "title": "An array of all the users",
+            "type": "array",
+            "items": {
+                "title": "A single user",
+                "type": "object",
+                "properties": {
+                    "uid": {
+                        "title": "User's ID",
+                        "type": "string"
+                    },
+                    "url": {
+                        "title": "User's URL",
+                        "type": "string"
+                    },
+                    "description": {
+                        "title": "User's description",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "uid",
+                    "url",
+                    "description"
+                ]
+            }
+        }
+    },
+    "required": ["users"]
+}
