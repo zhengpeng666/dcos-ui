@@ -5,7 +5,6 @@ import {SidePanel} from "reactjs-components";
 import HistoryStore from "../stores/HistoryStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import NodeSidePanelContents from "./NodeSidePanelContents";
-import PageList from "../constants/PageList";
 import ServiceSidePanelContents from "./ServiceSidePanelContents";
 import StringUtil from "../utils/StringUtil";
 import TaskSidePanelContents from "./TaskSidePanelContents";
@@ -60,7 +59,7 @@ export default class SidePanels extends React.Component {
       let matchedRoutes = this.context.router.match(prevPage).routes;
       prevPage = _.last(matchedRoutes).name;
 
-      if (_.contains(PageList, prevPage)) {
+      if (this.props.openedPage === prevPage) {
         text = "close";
       }
     }

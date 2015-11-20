@@ -196,6 +196,12 @@ var NodesPage = React.createClass({
     var data = this.internalStorage_get();
     var state = this.state;
     var nodesList = _.first(data.nodes, NODES_DISPLAY_LIMIT);
+    var currentPage = "nodes-grid";
+    var onNodesList = /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath());
+
+    if (onNodesList) {
+      currentPage = "nodes-list";
+    }
 
     return (
       <div>
@@ -233,7 +239,9 @@ var NodesPage = React.createClass({
           selectedResource={this.state.selectedResource}
           hosts={nodesList}
           services={data.services} />
-        <SidePanels params={this.props.params} />
+        <SidePanels
+          params={this.props.params}
+          openedPage={currentPage} />
       </div>
     );
   },

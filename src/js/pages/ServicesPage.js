@@ -203,7 +203,9 @@ var ServicesPage = React.createClass({
         <ServiceTable
           services={data.services}
           healthProcessed={appsProcessed} />
-        <SidePanels params={this.props.params} />
+        <SidePanels
+          params={this.props.params}
+          openedPage="services" />
       </div>
     );
   },

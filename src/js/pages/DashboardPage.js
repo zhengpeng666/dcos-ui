@@ -230,7 +230,9 @@ var DashboardPage = React.createClass({
             </Panel>
           </div>
         </div>
-        <SidePanels params={this.props.params} />
+        <SidePanels
+          params={this.props.params}
+          openedPage="dashboard" />
       </Page>
     );
   }
