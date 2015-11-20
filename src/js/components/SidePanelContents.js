@@ -273,10 +273,6 @@ export default class SidePanelContents extends
       </div>
     );
   }
-
-  render() {
-
-  }
 }
 
 SidePanelContents.propTypes = {
