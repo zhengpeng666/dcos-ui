@@ -4,7 +4,7 @@ let Core = require("../Core");
 
 describe("Core", function () {
 
-  beforeEach(function() {
+  beforeEach(function () {
     Core.compositeState.data = {};
     Core.summary.list = [];
   });
@@ -119,28 +119,27 @@ describe("Core", function () {
 
     it("returns the current state as a composite object of all objects",
       function () {
+        Core.addSummary({
+          frameworks: [{id: "foo", foo: "bar"}],
+          slaves: [{id: "corge", bar: "baz"}]
+        });
 
-      Core.addSummary({
-        frameworks: [{id: "foo", foo: "bar"}],
-        slaves: [{id: "corge", bar: "baz"}]
-      });
-
-      Core.addSummary({
-        frameworks: [{id: "foo", foo: "bar"}],
-        slaves: [{id: "corge", bar: "baz"}],
-        cluster: "qux",
-        hostname: "corge"
-      });
-
-      expect(Core.getLatest()).toEqual({
-        data: {
+        Core.addSummary({
           frameworks: [{id: "foo", foo: "bar"}],
           slaves: [{id: "corge", bar: "baz"}],
           cluster: "qux",
           hostname: "corge"
-        }
+        });
+
+        expect(Core.getLatest()).toEqual({
+          data: {
+            frameworks: [{id: "foo", foo: "bar"}],
+            slaves: [{id: "corge", bar: "baz"}],
+            cluster: "qux",
+            hostname: "corge"
+          }
+        });
       });
-    });
 
   });
 

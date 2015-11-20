@@ -19,7 +19,7 @@ let mergeData = (incomingData, oldData) => {
       // We need to merge the objects within the frameworks and slaves arrays
       // by finding matching IDs and merging the corresponding data.
       if (key === "frameworks" || key === "slaves") {
-        let idArr = _.pluck(incomingData[key], 'id');
+        let idArr = _.pluck(incomingData[key], "id");
         let idDiff = _.difference(ids[key], idArr);
 
         // Remove any IDs that we didn't receive new data for.
@@ -54,14 +54,14 @@ let mergeData = (incomingData, oldData) => {
   });
 
   return mergedData;
-}
+};
 
 export default class CompositeState {
-  constructor (data = {}) {
+  constructor(data = {}) {
     this.data = data;
   }
 
-  addMarathon (data) {
+  addMarathon(data) {
     if (Object.keys(this.data).length === 0) {
       return;
     }
@@ -75,11 +75,11 @@ export default class CompositeState {
     });
   }
 
-  addState (data) {
+  addState(data) {
     this.data = mergeData(data, this.data);
   }
 
-  addSummary (data) {
+  addSummary(data) {
     this.data = mergeData(data, this.data);
   }
 

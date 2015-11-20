@@ -106,7 +106,7 @@ describe("CompositeState", function () {
         }
       });
 
-      expect(this.instance.data.frameworks[0]._meta).toBeUndefined;
+      expect(this.instance.data.frameworks[0]._meta).toBeUndefined();
     });
 
   });
