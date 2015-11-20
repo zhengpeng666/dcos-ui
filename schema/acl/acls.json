@@ -1,0 +1,35 @@
+
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "id": "http://schema.dcos/acl/acls",
+    "title": "DCOS ACL: All ACLs endpoint response",
+    "type": "array",
+    "items": {
+        "title": "A single ACL",
+        "type": "object",
+        "properties": {
+            "rid": {
+                "title": "ACL's ID",
+                "type": "string"
+            },
+            "url": {
+                "title": "ACL's URL",
+                "type": "string"
+            },
+            "type": {
+                "title": "ACL's type",
+                "type": "string"
+            },
+            "description": {
+                "title": "ACL's description",
+                "type": "string"
+            }
+        },
+        "required": [
+            "rid",
+            "url",
+            "type",
+            "description"
+        ]
+    }
+}
