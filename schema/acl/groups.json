@@ -11,21 +11,23 @@
                 "title": "A single group",
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "gid": {
                         "title": "Group's ID",
                         "type": "string"
                     },
-                    "users": {
-                        "title": "Group's users",
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
+                    "url": {
+                        "title": "Group's URL",
+                        "type": "string"
+                    },
+                    "description": {
+                        "title": "Groups' description",
+                        "type": "string"
                     }
                 },
                 "required": [
-                    "id",
-                    "users"
+                    "gid",
+                    "url",
+                    "description"
                 ]
             }
         }
