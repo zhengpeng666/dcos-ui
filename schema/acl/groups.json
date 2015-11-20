@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "id": "http://schema.dcos/acl/groups",
+    "title": "DCOS ACL: All groups endpoint response",
+    "type": "object",
+    "properties": {
+        "groups": {
+            "title": "An array of all the groups",
+            "type": "array",
+            "items": {
+                "title": "A single group",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "title": "Group's ID",
+                        "type": "string"
+                    },
+                    "users": {
+                        "title": "Group's users",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "id",
+                    "users"
+                ]
+            }
+        }
+    },
+    "required": [
+        "groups"
+    ]
+}
