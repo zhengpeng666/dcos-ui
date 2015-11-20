@@ -16,34 +16,6 @@ function trueNoop() {
   return true;
 }
 
-function es6ify(mixin) {
-  if (typeof mixin === "function") {
-    // mixin is already es6 style
-    return mixin;
-  }
-
-  return function (Base) {
-    // mixin is old-react style plain object
-    // convert to ES6 class
-    class MixinClass extends Base {}
-
-    const clonedMixin = _.extend({}, mixin);
-    // These React properties are defined as ES7 class static properties
-    let staticProps = [
-      "childContextTypes", "contextTypes",
-      "defaultProps", "propTypes"
-    ];
-    staticProps.forEach(function (staticProp) {
-      MixinClass[staticProp] = clonedMixin[staticProp];
-      delete clonedMixin[staticProp];
-    });
-
-    _.extend(MixinClass.prototype, clonedMixin);
-
-    return MixinClass;
-  };
-}
-
 /**
  * Modifies an object by adding missing lifecycle function
  *
@@ -66,11 +38,6 @@ function addMissingLifecycleFunctions(proto, useNoop) {
         this.parent.componentWillReceiveProps(nextProps);
       };
     },
-    shouldComponentUpdate: function () {
-      return function (nextProps, nextState) {
-        return this.parent.shouldComponentUpdate(nextProps, nextState);
-      };
-    },
     componentWillUpdate: function () {
       return function (nextProps, nextState) {
         this.parent.componentWillUpdate(nextProps, nextState);
@@ -81,8 +48,7 @@ function addMissingLifecycleFunctions(proto, useNoop) {
         this.parent.componentDidUpdate(prevProps, prevState);
       };
     },
-    componentWillUnmount: callToParent,
-    render: callToParent
+    componentWillUnmount: callToParent
   };
 
   Object.keys(functions).forEach(function (lifecycleFn) {
@@ -96,6 +62,30 @@ function addMissingLifecycleFunctions(proto, useNoop) {
   });
 }
 
+function es6ify(mixin, Base) {
+  // mixin is old-react style plain object
+  // convert to ES6 class
+  class MixinClass extends Base {}
+
+  const clonedMixin = _.extend({}, mixin);
+
+  addMissingLifecycleFunctions(mixin);
+
+  // These React properties are defined as ES7 class static properties
+  let staticProps = [
+    "childContextTypes", "contextTypes",
+    "defaultProps", "propTypes"
+  ];
+  staticProps.forEach(function (staticProp) {
+    MixinClass[staticProp] = clonedMixin[staticProp];
+    delete clonedMixin[staticProp];
+  });
+
+  _.extend(MixinClass.prototype, clonedMixin);
+
+  return MixinClass;
+}
+
 const Util = {
   mixin: function (...mixins) {
     // Creates base class
@@ -105,15 +95,13 @@ const Util = {
     Base.prototype.shouldComponentUpdate = trueNoop;
 
     mixins.forEach(function (mixin, i) {
-      addMissingLifecycleFunctions(mixin);
-
       mixin.parent = mixins[i + 1] || Base.prototype;
     });
 
     mixins.reverse();
 
     mixins.forEach(function (mixin) {
-      Base = es6ify(mixin)(Base);
+      Base = es6ify(mixin, Base);
     });
 
     return Base;

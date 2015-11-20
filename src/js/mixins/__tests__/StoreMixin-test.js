@@ -142,6 +142,7 @@ describe("StoreMixin", function () {
       this.instance.store_listeners = ["marathon"];
       this.instance.componentDidMount();
       this.instance.componentWillUnmount();
+      // 2 because of success/error events
       expect(MarathonStore.removeChangeListener.calls.length).toEqual(2);
     });
 
