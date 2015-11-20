@@ -5,12 +5,12 @@ var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var BannerPlugin = require("../BannerPlugin");
+var defaultConfiguration = BannerPlugin.configuration;
 
 describe("BannerPlugin", function () {
 
   beforeEach(function () {
-    this.BannerPlugin = _.clone(BannerPlugin);
-    this.BannerPlugin.configuration = _.clone(BannerPlugin.configuration);
+    BannerPlugin.configuration = _.clone(defaultConfiguration);
   });
 
   describe("#initialize", function () {
@@ -21,18 +21,18 @@ describe("BannerPlugin", function () {
         addFilter: jest.genMockFunction()
       };
 
-      this.BannerPlugin.initialize(this.Plugins);
+      BannerPlugin.initialize(this.Plugins);
     });
 
     it("should add one action and two filters", function () {
       expect(this.Plugins.addAction.mock.calls[0]).toEqual(
-        ["applicationDidUpdate", this.BannerPlugin.applicationDidUpdate]
+        ["applicationDidUpdate", BannerPlugin.applicationDidUpdate]
       );
       expect(this.Plugins.addFilter.mock.calls[0]).toEqual(
-        ["applicationContents", this.BannerPlugin.applicationContents]
+        ["applicationContents", BannerPlugin.applicationContents]
       );
       expect(this.Plugins.addFilter.mock.calls[1]).toEqual(
-        ["overlayNewWindowButton", this.BannerPlugin.overlayNewWindowButton]
+        ["overlayNewWindowButton", BannerPlugin.overlayNewWindowButton]
       );
     });
   });
@@ -40,9 +40,9 @@ describe("BannerPlugin", function () {
   describe("#configure", function () {
 
     it("changes the plugin's configuration", function () {
-      expect(this.BannerPlugin.isEnabled()).toBeFalsy();
-      this.BannerPlugin.configure({headerTitle: "foo"});
-      expect(this.BannerPlugin.isEnabled()).toBeTruthy();
+      expect(BannerPlugin.isEnabled()).toBeFalsy();
+      BannerPlugin.configure({headerTitle: "foo"});
+      expect(BannerPlugin.isEnabled()).toBeTruthy();
     });
 
   });
@@ -50,49 +50,49 @@ describe("BannerPlugin", function () {
   describe("#isEnabled", function () {
 
     it("should return true if headerTitle is defined", function () {
-      this.BannerPlugin.configure({headerTitle: "foo"});
+      BannerPlugin.configure({headerTitle: "foo"});
 
-      expect(this.BannerPlugin.isEnabled()).toEqual(true);
+      expect(BannerPlugin.isEnabled()).toEqual(true);
     });
 
     it("should return true if headerContent is defined", function () {
-      this.BannerPlugin.configure({headerContent: "bar"});
+      BannerPlugin.configure({headerContent: "bar"});
 
-      expect(this.BannerPlugin.isEnabled()).toEqual(true);
+      expect(BannerPlugin.isEnabled()).toEqual(true);
     });
 
     it("should return true if footerContent is defined", function () {
-      this.BannerPlugin.configure({footerContent: "foo"});
+      BannerPlugin.configure({footerContent: "foo"});
 
-      expect(this.BannerPlugin.isEnabled()).toEqual(true);
+      expect(BannerPlugin.isEnabled()).toEqual(true);
     });
 
     it("should return false if no content is defined", function () {
       // None of these are defined: headerTitle, headerContent or footerContent
-      this.BannerPlugin.configure({foo: "bar"});
+      BannerPlugin.configure({foo: "bar"});
 
-      expect(this.BannerPlugin.isEnabled()).toEqual(false);
+      expect(BannerPlugin.isEnabled()).toEqual(false);
     });
 
     it("should return false if fields are initialized to null", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         headerTitle: null,
         headerContent: null,
         footerContent: null
       });
 
-      expect(this.BannerPlugin.isEnabled()).toEqual(false);
+      expect(BannerPlugin.isEnabled()).toEqual(false);
     });
 
     it("should return true with mixed intialization", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         headerTitle: null,
         headerContent: undefined,
         footerContent: "foo",
         imagePath: false
       });
 
-      expect(this.BannerPlugin.isEnabled()).toEqual(true);
+      expect(BannerPlugin.isEnabled()).toEqual(true);
     });
 
   });
@@ -100,15 +100,15 @@ describe("BannerPlugin", function () {
   describe("#toggleFullContent", function () {
 
     beforeEach(function () {
-      this.BannerPlugin.configure({headerTitle: "foo"});
-      spyOn(this.BannerPlugin, "toggleFullContent");
+      BannerPlugin.configure({headerTitle: "foo"});
+      spyOn(BannerPlugin, "toggleFullContent");
       this.instance = TestUtils.renderIntoDocument(
-        this.BannerPlugin.applicationContents()
+        BannerPlugin.applicationContents()
       );
     });
 
     it("should not call before click", function () {
-      expect(this.BannerPlugin.toggleFullContent).not.toHaveBeenCalled();
+      expect(BannerPlugin.toggleFullContent).not.toHaveBeenCalled();
     });
 
     it("should call once with one click", function () {
@@ -118,7 +118,7 @@ describe("BannerPlugin", function () {
       );
 
       TestUtils.Simulate.click(infoIcon);
-      expect(this.BannerPlugin.toggleFullContent.callCount).toEqual(1);
+      expect(BannerPlugin.toggleFullContent.callCount).toEqual(1);
     });
 
     it("should call n times with n clicks", function () {
@@ -131,7 +131,7 @@ describe("BannerPlugin", function () {
       TestUtils.Simulate.click(infoIcon);
       TestUtils.Simulate.click(infoIcon);
       TestUtils.Simulate.click(infoIcon);
-      expect(this.BannerPlugin.toggleFullContent.callCount).toEqual(4);
+      expect(BannerPlugin.toggleFullContent.callCount).toEqual(4);
     });
 
   });
@@ -146,13 +146,13 @@ describe("BannerPlugin", function () {
     });
 
     it("should add event listener to iframe when enabled", function () {
-      this.BannerPlugin.configure({headerTitle: "foo"});
-      this.BannerPlugin.applicationDidUpdate();
+      BannerPlugin.configure({headerTitle: "foo"});
+      BannerPlugin.applicationDidUpdate();
       expect(this.iframe.contentWindow.addEventListener).toHaveBeenCalled();
     });
 
     it("should not add event listener to iframe when not enabled", function () {
-      this.BannerPlugin.applicationDidUpdate();
+      BannerPlugin.applicationDidUpdate();
       expect(this.iframe.contentWindow.addEventListener).not.toHaveBeenCalled();
     });
   });
@@ -160,21 +160,21 @@ describe("BannerPlugin", function () {
   describe("#applicationContents", function () {
 
     it("should return content when enabled", function () {
-      this.BannerPlugin.configure({headerTitle: "foo"});
-      expect(TestUtils.isElement(this.BannerPlugin.applicationContents()))
+      BannerPlugin.configure({headerTitle: "foo"});
+      expect(TestUtils.isElement(BannerPlugin.applicationContents()))
         .toEqual(true);
     });
 
     it("should return null when not enabled", function () {
-      expect(TestUtils.isElement(this.BannerPlugin.applicationContents()))
+      expect(TestUtils.isElement(BannerPlugin.applicationContents()))
         .toEqual(false);
     });
 
     it("should render an iframe when enabled", function () {
-      this.BannerPlugin.configure({headerTitle: "foo"});
+      BannerPlugin.configure({headerTitle: "foo"});
 
       var instance = TestUtils.renderIntoDocument(
-        this.BannerPlugin.applicationContents()
+        BannerPlugin.applicationContents()
       );
       var iframe = TestUtils.findRenderedDOMComponentWithTag(
         instance, "iframe"
@@ -188,31 +188,31 @@ describe("BannerPlugin", function () {
   describe("#overlayNewWindowButton", function () {
 
     it("should return content when enabled", function () {
-      this.BannerPlugin.configure({headerTitle: "foo"});
-      expect(this.BannerPlugin.overlayNewWindowButton("foo")).toEqual(null);
+      BannerPlugin.configure({headerTitle: "foo"});
+      expect(BannerPlugin.overlayNewWindowButton("foo")).toEqual(null);
     });
 
     it("should return null when not enabled", function () {
-      expect(this.BannerPlugin.overlayNewWindowButton("foo")).toEqual("foo");
+      expect(BannerPlugin.overlayNewWindowButton("foo")).toEqual("foo");
     });
   });
 
   describe("#getColorStyles", function () {
 
     it("should return default colors when nothing is changed", function () {
-      expect(this.BannerPlugin.getColorStyles()).toEqual({
+      expect(BannerPlugin.getColorStyles()).toEqual({
         backgroundColor: "#1E232F",
         color: "#FFFFFF"
       });
     });
 
     it("should return an object with provided colors", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         backgroundColor: "foo",
         foregroundColor: "bar"
       });
 
-      expect(this.BannerPlugin.getColorStyles()).toEqual({
+      expect(BannerPlugin.getColorStyles()).toEqual({
         backgroundColor: "foo",
         color: "bar"
       });
@@ -222,81 +222,81 @@ describe("BannerPlugin", function () {
   describe("#getIcon", function () {
 
     it("should return null if imagePath is null", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         imagePath: null
       });
 
-      expect(this.BannerPlugin.getIcon()).toEqual(null);
+      expect(BannerPlugin.getIcon()).toEqual(null);
     });
 
     it("should return null if imagePath is empty string", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         imagePath: ""
       });
 
-      expect(this.BannerPlugin.getIcon()).toEqual(null);
+      expect(BannerPlugin.getIcon()).toEqual(null);
     });
 
     it("should return an element if imagePath is set", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         imagePath: "foo"
       });
 
-      expect(TestUtils.isElement(this.BannerPlugin.getIcon())).toEqual(true);
+      expect(TestUtils.isElement(BannerPlugin.getIcon())).toEqual(true);
     });
   });
 
   describe("#getTitle", function () {
 
     it("should return null if headerTitle is null", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         headerTitle: null
       });
 
-      expect(this.BannerPlugin.getTitle()).toEqual(null);
+      expect(BannerPlugin.getTitle()).toEqual(null);
     });
 
     it("should return null if headerTitle is empty string", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         headerTitle: ""
       });
 
-      expect(this.BannerPlugin.getTitle()).toEqual(null);
+      expect(BannerPlugin.getTitle()).toEqual(null);
     });
 
     it("should return an element if headerTitle is set", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         headerTitle: "foo"
       });
 
-      expect(TestUtils.isElement(this.BannerPlugin.getTitle())).toEqual(true);
+      expect(TestUtils.isElement(BannerPlugin.getTitle())).toEqual(true);
     });
   });
 
   describe("#getHeaderContent", function () {
 
     it("should return null if headerContent is null", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         headerContent: null
       });
 
-      expect(this.BannerPlugin.getHeaderContent()).toEqual(null);
+      expect(BannerPlugin.getHeaderContent()).toEqual(null);
     });
 
     it("should return null if headerContent is empty string", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         headerContent: ""
       });
 
-      expect(this.BannerPlugin.getHeaderContent()).toEqual(null);
+      expect(BannerPlugin.getHeaderContent()).toEqual(null);
     });
 
     it("should return an element if headerContent is set", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         headerContent: "foo"
       });
 
-      expect(TestUtils.isElement(this.BannerPlugin.getHeaderContent()))
+      expect(TestUtils.isElement(BannerPlugin.getHeaderContent()))
         .toEqual(true);
     });
   });
@@ -304,33 +304,33 @@ describe("BannerPlugin", function () {
   describe("#getHeader", function () {
 
     beforeEach(function () {
-      this.BannerPlugin.getIcon = function () { return null; };
-      this.BannerPlugin.getTitle = function () { return null; };
-      this.BannerPlugin.getHeaderContent = function () { return null; };
+      BannerPlugin.getIcon = function () { return null; };
+      BannerPlugin.getTitle = function () { return null; };
+      BannerPlugin.getHeaderContent = function () { return null; };
     });
 
     it("should return null if depending functions returns null", function () {
-      expect(this.BannerPlugin.getHeader()).toEqual(null);
+      expect(BannerPlugin.getHeader()).toEqual(null);
     });
 
     it("should return an element if getIcon return something", function () {
-      this.BannerPlugin.getIcon = function () { return "foo"; };
+      BannerPlugin.getIcon = function () { return "foo"; };
 
-      expect(TestUtils.isElement(this.BannerPlugin.getHeader()))
+      expect(TestUtils.isElement(BannerPlugin.getHeader()))
         .toEqual(true);
     });
 
     it("should return an element if getTitle return something", function () {
-      this.BannerPlugin.getTitle = function () { return "foo"; };
+      BannerPlugin.getTitle = function () { return "foo"; };
 
-      expect(TestUtils.isElement(this.BannerPlugin.getHeader()))
+      expect(TestUtils.isElement(BannerPlugin.getHeader()))
         .toEqual(true);
     });
 
     it("should return an element if getHeaderContent return something", function () {
-      this.BannerPlugin.getHeaderContent = function () { return "foo"; };
+      BannerPlugin.getHeaderContent = function () { return "foo"; };
 
-      expect(TestUtils.isElement(this.BannerPlugin.getHeader()))
+      expect(TestUtils.isElement(BannerPlugin.getHeader()))
         .toEqual(true);
     });
   });
@@ -338,27 +338,27 @@ describe("BannerPlugin", function () {
   describe("#getFooter", function () {
 
     it("should return null if footerContent is null", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         footerContent: null
       });
 
-      expect(this.BannerPlugin.getFooter()).toEqual(null);
+      expect(BannerPlugin.getFooter()).toEqual(null);
     });
 
     it("should return null if footerContent is empty string", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         footerContent: ""
       });
 
-      expect(this.BannerPlugin.getFooter()).toEqual(null);
+      expect(BannerPlugin.getFooter()).toEqual(null);
     });
 
     it("should return an element if footerContent is set", function () {
-      this.BannerPlugin.configure({
+      BannerPlugin.configure({
         footerContent: "foo"
       });
 
-      expect(TestUtils.isElement(this.BannerPlugin.getFooter()))
+      expect(TestUtils.isElement(BannerPlugin.getFooter()))
         .toEqual(true);
     });
   });
