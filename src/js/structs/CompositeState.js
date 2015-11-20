@@ -3,7 +3,6 @@ import _ from "underscore";
 import ServicesList from "./ServicesList";
 
 export default class CompositeState {
-
   constructor(data = {}) {
     this.data = data;
   }
@@ -22,4 +21,7 @@ export default class CompositeState {
     });
   }
 
+  getState() {
+
+  }
 }
