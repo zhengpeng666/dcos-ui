@@ -157,17 +157,5 @@ describe("NodeSidePanelContents", function () {
 
       expect(headline.getDOMNode().textContent).toBe("Error finding node");
     });
-
-    it("should show the nodes hostname if it is found", function () {
-      var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents itemID="foo" />
-      );
-
-      let headline = TestUtils.findRenderedDOMComponentWithClass(
-        instance, "side-panel-content-header-label"
-      );
-
-      expect(headline.getDOMNode().textContent).toBe("bar");
-    });
   });
 });
