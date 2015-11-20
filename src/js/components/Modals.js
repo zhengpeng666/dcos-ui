@@ -121,8 +121,8 @@ var Modals = React.createClass({
   },
 
   onLogin: function (email) {
-    LocalStorageUtil.set("email", email);
-    Actions.identify(email);
+    Plugins.doAction("receivedUserEmail", email);
+
     this.setState({
       hasIdentity: true,
       showingTourModal: true
