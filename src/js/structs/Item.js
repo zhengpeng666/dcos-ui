@@ -10,6 +10,10 @@ export default class Item {
   }
 
   get(key) {
+    if (key == null) {
+      return this._itemData;
+    }
+
     return this._itemData[key];
   }
 
