@@ -44,15 +44,18 @@ describe("TrackingPlugin", function () {
       TrackingPlugin.initialize(this.Plugins);
     });
 
-    it("should add one action and two filters", function () {
+    it("should add two action and two filters", function () {
       expect(this.Plugins.addAction.mock.calls[0]).toEqual(
         ["pluginsConfigured", TrackingPlugin.pluginsConfigured]
       );
+      expect(this.Plugins.addAction.mock.calls[1]).toEqual(
+        ["receivedUserEmail", TrackingPlugin.pluginsConfigured]
+      );
       expect(this.Plugins.addFilter.mock.calls[0]).toEqual(
-        ["openLoginModal", TrackingPlugin.openLoginModal]
+        ["footerButtonSet", TrackingPlugin.footerButtonSet]
       );
       expect(this.Plugins.addFilter.mock.calls[1]).toEqual(
-        ["footerButtonSet", TrackingPlugin.footerButtonSet]
+        ["openLoginModal", TrackingPlugin.openLoginModal]
       );
     });
   });
