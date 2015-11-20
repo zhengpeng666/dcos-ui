@@ -1,32 +1,30 @@
 import _ from "underscore";
 
 import CompositeState from "./CompositeState";
+import Config from "../config/Config";
 import SummaryList from "./SummaryList";
 
-var Core = {
+let Core = {
 
   compositeState: new CompositeState(),
 
-  summary: new SummaryList(),
+  summary: new SummaryList({maxLength: Config.historyLength}),
 
-  addState(data) {
+  addState (data) {
     this.compositeState.addState(data);
   },
 
-  addMarathon(data) {
+  addMarathon (data) {
     this.compositeState.addMarathon(data);
   },
 
-  addSummary(data) {
+  addSummary (data) {
+    this.compositeState.addSummary(data);
     this.summary.addSnapshot(data);
   },
 
-  getLatest() {
-    return _.extend(
-      {},
-      this.compositeState.data.state,
-      this.compositeState.data.marathon
-    );
+  getLatest () {
+    return this.compositeState;
   }
 
 };
