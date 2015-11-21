@@ -1,9 +1,10 @@
-jest.dontMock("../DetailSidePanel");
+jest.dontMock("../SidePanelContents");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../mixins/TabsMixin");
 jest.dontMock("../../stores/MesosSummaryStore");
+jest.dontMock("../../events/MesosSummaryActions");
 jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../NodeSidePanel");
+jest.dontMock("../NodeSidePanelContents");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../TaskTable");
 jest.dontMock("../TaskView");
@@ -18,9 +19,9 @@ var JestUtil = require("../../utils/JestUtil");
 var MesosStateStore = require("../../stores/MesosStateStore");
 var MesosSummaryActions = require("../../events/MesosSummaryActions");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
-var NodeSidePanel = require("../NodeSidePanel");
+var NodeSidePanelContents = require("../NodeSidePanelContents");
 
-describe("NodeSidePanel", function () {
+describe("NodeSidePanelContents", function () {
   beforeEach(function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
     this.getTasksFromNodeID = MesosStateStore.getTasksFromNodeID;
@@ -71,10 +72,6 @@ describe("NodeSidePanel", function () {
         }
       ]
     });
-
-    this.instance = TestUtils.renderIntoDocument(
-      <NodeSidePanel open={true} onClose={this.callback} />
-    );
   });
 
   afterEach(function () {
@@ -88,7 +85,7 @@ describe("NodeSidePanel", function () {
 
     it("should return null if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={true} itemID="nonExistent" />
+        <NodeSidePanelContents itemID="nonExistent" />
       );
 
       var result = instance.renderDetailsTabView();
@@ -97,7 +94,7 @@ describe("NodeSidePanel", function () {
 
     it("should return a node if node exists", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={true} itemID="existingNode" />
+        <NodeSidePanelContents itemID="existingNode" />
       );
 
       var result = instance.renderDetailsTabView();
@@ -109,7 +106,7 @@ describe("NodeSidePanel", function () {
 
     it("should return an empty set if node does not exist", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={true} itemID="nonExistent" />
+        <NodeSidePanelContents itemID="nonExistent" />
       );
 
       var result = instance.getKeyValuePairs({});
@@ -118,7 +115,7 @@ describe("NodeSidePanel", function () {
 
     it("should return null if undefined is passed", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={true} itemID="nonExistent" />
+        <NodeSidePanelContents itemID="nonExistent" />
       );
 
       var result = instance.getKeyValuePairs();
@@ -127,7 +124,7 @@ describe("NodeSidePanel", function () {
 
     it("should return a node of elements if node exists", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={true} itemID="existingNode" />
+        <NodeSidePanelContents itemID="existingNode" />
       );
 
       var result = instance.getKeyValuePairs({"foo": "bar"});
@@ -136,7 +133,7 @@ describe("NodeSidePanel", function () {
 
     it("should return a headline if headline string is given", function () {
       var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanel open={true} itemID="existingNode" />
+        <NodeSidePanelContents itemID="existingNode" />
       );
 
       let headline = JestUtil.renderAndFindTag(
@@ -148,22 +145,17 @@ describe("NodeSidePanel", function () {
     });
   });
 
-  it("should show error if node is not to be found", function () {
-    let contents = TestUtils.renderIntoDocument(this.instance.getContents());
-    let headline = TestUtils.findRenderedDOMComponentWithTag(contents, "h3");
+  describe("#render", function () {
+    it("should show error if node is not to be found", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanelContents itemID="nonExistent" />
+      );
 
-    expect(headline.getDOMNode().textContent).toBe("Error finding node");
-  });
+      let headline = JestUtil.renderAndFindTag(
+        instance.render(), "h3"
+      );
 
-  it("should show the nodes hostname if it is found", function () {
-    var instance = TestUtils.renderIntoDocument(
-      <NodeSidePanel open={true} onClose={this.callback} itemID="foo" />
-    );
-    let contents = TestUtils.renderIntoDocument(instance.getContents());
-    let headline = TestUtils.findRenderedDOMComponentWithClass(
-      contents, "side-panel-content-header-label"
-    );
-
-    expect(headline.getDOMNode().textContent).toBe("bar");
+      expect(headline.getDOMNode().textContent).toBe("Error finding node");
+    });
   });
 });

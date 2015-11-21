@@ -100,18 +100,7 @@ export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
   }
 
   handleServiceClose() {
-    let path = this.internalStorage_get().prevHistoryPath;
-    let routeName = "services-panel";
-    let serviceName = this.props.params.serviceName;
-
-    if (path) {
-      let matchedRoutes = this.context.router.match(path).routes;
-      if (matchedRoutes[matchedRoutes.length - 1]) {
-        routeName = matchedRoutes[matchedRoutes.length - 1].name;
-      }
-    }
-
-    this.context.router.transitionTo(routeName, {serviceName});
+    HistoryStore.goBack(this.context.router);
   }
 
   findAndRenderService() {

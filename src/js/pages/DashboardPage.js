@@ -15,9 +15,8 @@ var ResourceTimeSeriesChart = require("../components/charts/ResourceTimeSeriesCh
 var TaskFailureTimeSeriesChart = require("../components/charts/TaskFailureTimeSeriesChart");
 var ServiceList = require("../components/ServiceList");
 var TasksChart = require("../components/charts/TasksChart");
-var ServiceSidePanel = require("../components/ServiceSidePanel");
 var SidebarActions = require("../events/SidebarActions");
-import TaskSidePanel from "../components/TaskSidePanel";
+import SidePanels from "../components/SidePanels";
 
 function getMesosState() {
   let states = MesosSummaryStore.get("states");
@@ -231,16 +230,12 @@ var DashboardPage = React.createClass({
             </Panel>
           </div>
         </div>
-        <ServiceSidePanel
-          itemID={this.props.params.serviceName}
-          open={data.statesProcessed && data.openServicePanel} />
-        <TaskSidePanel
-          itemID={this.props.params.taskID}
-          open={data.statesProcessed && data.openTaskPanel} />
+        <SidePanels
+          params={this.props.params}
+          openedPage="dashboard" />
       </Page>
     );
   }
-
 });
 
 module.exports = DashboardPage;

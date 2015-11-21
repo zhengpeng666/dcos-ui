@@ -1,5 +1,5 @@
-jest.dontMock("../DetailSidePanel");
-jest.dontMock("../TaskSidePanel");
+jest.dontMock("../SidePanelContents");
+jest.dontMock("../TaskSidePanelContents");
 jest.dontMock("../TaskDirectoryView");
 jest.dontMock("../../constants/TaskStates");
 jest.dontMock("../../stores/MesosStateStore");
@@ -12,9 +12,9 @@ var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var MesosStateStore = require("../../stores/MesosStateStore");
-var TaskSidePanel = require("../TaskSidePanel");
+var TaskSidePanelContents = require("../TaskSidePanelContents");
 
-describe("TaskSidePanel", function () {
+describe("TaskSidePanelContents", function () {
   beforeEach(function () {
     this.storeGet = MesosStateStore.get;
     this.storeChangeListener = MesosStateStore.addChangeListener;
@@ -39,7 +39,7 @@ describe("TaskSidePanel", function () {
     MesosStateStore.addChangeListener = this.storeChangeListener;
   });
 
-  describe("#getContents", function () {
+  describe("#render", function () {
     beforeEach(function () {
       this.getNodeFromID = MesosStateStore.getNodeFromID;
       MesosStateStore.getNodeFromID = function () {
@@ -53,9 +53,9 @@ describe("TaskSidePanel", function () {
 
     it("should return null if there are no nodes", function () {
       var instance = TestUtils.renderIntoDocument(
-        <TaskSidePanel open={true} />
+        <TaskSidePanelContents open={true} />
       );
-      expect(instance.getContents()).toEqual(null);
+      expect(instance.render()).toEqual(null);
     });
 
     it("should return an element if there is a node", function () {
@@ -66,17 +66,17 @@ describe("TaskSidePanel", function () {
       };
 
       var instance = TestUtils.renderIntoDocument(
-        <TaskSidePanel open={true} />
+        <TaskSidePanelContents open={true} />
       );
 
-      expect(TestUtils.isElement(instance.getContents())).toEqual(true);
+      expect(TestUtils.isElement(instance.render())).toEqual(true);
     });
   });
 
   describe("#getBasicInfo", function () {
     beforeEach(function () {
       this.instance = TestUtils.renderIntoDocument(
-        <TaskSidePanel open={false} />
+        <TaskSidePanelContents open={false} />
       );
     });
 

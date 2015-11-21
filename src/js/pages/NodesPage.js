@@ -14,11 +14,10 @@ var FilterInputText = require("../components/FilterInputText");
 var FilterHeadline = require("../components/FilterHeadline");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
-import NodeSidePanel from "../components/NodeSidePanel";
 var Page = require("../components/Page");
 var ResourceBarChart = require("../components/charts/ResourceBarChart");
 var SidebarActions = require("../events/SidebarActions");
-import TaskSidePanel from "../components/TaskSidePanel";
+import SidePanels from "../components/SidePanels";
 
 var NODES_DISPLAY_LIMIT = 300;
 
@@ -197,6 +196,12 @@ var NodesPage = React.createClass({
     var data = this.internalStorage_get();
     var state = this.state;
     var nodesList = _.first(data.nodes, NODES_DISPLAY_LIMIT);
+    var currentPage = "nodes-grid";
+    var onNodesList = /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath());
+
+    if (onNodesList) {
+      currentPage = "nodes-list";
+    }
 
     return (
       <div>
@@ -234,12 +239,9 @@ var NodesPage = React.createClass({
           selectedResource={this.state.selectedResource}
           hosts={nodesList}
           services={data.services} />
-        <NodeSidePanel
-          itemID={this.props.params.nodeID}
-          open={data.statesProcessed && data.openNodePanel} />
-        <TaskSidePanel
-          itemID={this.props.params.taskID}
-          open={data.statesProcessed && data.openTaskPanel} />
+        <SidePanels
+          params={this.props.params}
+          openedPage={currentPage} />
       </div>
     );
   },
