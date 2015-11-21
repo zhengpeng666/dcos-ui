@@ -149,6 +149,8 @@ export default class ServiceSidePanelContents extends SidePanelContents {
 
     return (
       <div className="
+        side-panel-tab-content
+        side-panel-section
         container
         container-fluid
         container-pod
@@ -219,16 +221,11 @@ export default class ServiceSidePanelContents extends SidePanelContents {
       return this.getNotFound("service");
     }
 
-    let height = "100%";
-    if (window.innerHeight <= 800) {
-      height = "900px";
-    }
-
     return (
-      <div className="flex-container-col" style={{height: height}}>
+      <div className="flex-container-col">
         <div className="container container-pod container-pod-divider-bottom
-            container-pod-divider-inverse container-pod-short-top
-            flush-bottom
+            container-pod-divider-inverse side-panel-section
+            container-pod-short-top flush-bottom
             side-panel-content-header container container-pod
             container-fluid container-pod-divider-bottom
             container-pod-divider-bottom-align-right flush-bottom">

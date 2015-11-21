@@ -50,7 +50,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
     }
 
     return (
-      <div className="container container-fluid container-pod container-pod-short-top container-fluid flex-container-col flush-bottom flex-grow no-overflow">
+      <div className="side-panel-tab-content side-panel-section container container-fluid container-pod container-pod-short-top container-fluid flex-container-col flush-bottom flex-grow no-overflow">
         {contents}
       </div>
     );
@@ -75,7 +75,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
     };
 
     return (
-      <div className="container container-fluid container-pod container-pod-short-top">
+      <div className="side-panel-tab-content side-panel-section container container-fluid container-pod container-pod-short-top">
         {this.getKeyValuePairs(headerValueMapping)}
         {this.getKeyValuePairs(node.attributes, "Attributes")}
       </div>
@@ -92,14 +92,9 @@ export default class NodeSidePanelContents extends SidePanelContents {
       return this.getNotFound("node");
     }
 
-    let height = "100%";
-    if (window.innerHeight <= 800) {
-      height = "900px";
-    }
-
     return (
-      <div className="flex-container-col" style={{height: height}}>
-        <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
+      <div className="flex-container-col">
+        <div className="side-panel-section side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo(node)}
           <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
             <div className="row">

@@ -148,7 +148,7 @@ export default class TaskDirectoryView extends React.Component {
     }
 
     return (
-      <div className="flex-container-col flex-grow no-overflow">
+      <div className="side-panel-section flex-container-col flex-grow no-overflow">
         <div className="flex-box control-group">
           {this.getBreadcrumbs()}
         </div>
