@@ -15,20 +15,23 @@ let mergeData = (incomingData, oldData) => {
   Object.keys(incomingData).forEach(key => {
 
     if (_.isArray(incomingData[key])) {
-
       // We need to merge the objects within the frameworks and slaves arrays
       // by finding matching IDs and merging the corresponding data.
       if (key === "frameworks" || key === "slaves") {
         let idArr = _.pluck(incomingData[key], "id");
-        let idDiff = _.difference(ids[key], idArr);
+        let idsToRemove = _.difference(ids[key], idArr);
+        let idsToAdd = _.difference(idArr, ids[key]);
 
         // Remove any IDs that we didn't receive new data for.
-        idDiff.forEach(id => {
-          let indexToRemove = idDiff.indexOf(id);
-          ids[key].splice(indexToRemove, 1);
+        idsToRemove.forEach(function (id) {
+          let idIndexToRemove = ids[key].indexOf(id);
+          ids[key].splice(idIndexToRemove, 1);
         });
 
-        // Combine the data for each framework or slave.
+        // Add IDs that we didn't have data for previously.
+        ids[key] = ids[key].concat(idsToAdd);
+
+        // Merge the incoming data with what we currently have (if anything).
         mergedData[key] = idArr.map(id => {
           let oldObj = _.findWhere(oldData[key], {id: id});
           let newObj = _.findWhere(incomingData[key], {id: id});
