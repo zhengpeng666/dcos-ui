@@ -8,11 +8,11 @@ let ids = {
   slaves: []
 };
 
-let mergeData = (incomingData, oldData) => {
+let mergeData = function (incomingData, oldData) {
   // We use deepExtend to avoid mutating the original data.
   let mergedData = deepExtend({}, oldData);
 
-  Object.keys(incomingData).forEach(key => {
+  Object.keys(incomingData).forEach(function (key) {
 
     if (_.isArray(incomingData[key])) {
       // We need to merge the objects within the frameworks and slaves arrays
@@ -32,7 +32,7 @@ let mergeData = (incomingData, oldData) => {
         ids[key] = ids[key].concat(idsToAdd);
 
         // Merge the incoming data with what we currently have (if anything).
-        mergedData[key] = idArr.map(id => {
+        mergedData[key] = idArr.map(function (id) {
           let oldObj = _.findWhere(oldData[key], {id: id});
           let newObj = _.findWhere(incomingData[key], {id: id});
 
