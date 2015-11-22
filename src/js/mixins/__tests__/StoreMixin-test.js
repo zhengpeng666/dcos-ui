@@ -28,24 +28,6 @@ describe("StoreMixin", function () {
       expect(this.instance.store_listeners).toEqual(undefined);
     });
 
-    it("calls #componentDidMount on the parent", function () {
-      spyOn(this.instance.parent, "componentDidMount");
-      this.instance.componentDidMount();
-      expect(this.instance.parent.componentDidMount).toHaveBeenCalled();
-    });
-
-    it("calls the next mixin's #componentDidMount", function () {
-      let finalMixin = jasmine.createSpyObj("finalMixin", [
-        "componentDidMount"
-      ]);
-
-      class MyClass extends Util.mixin(StoreMixin, finalMixin) {}
-      let instance = new MyClass();
-      instance.componentDidMount();
-
-      expect(finalMixin.componentDidMount.calls.length).toEqual(1);
-    });
-
     it("should create an object for store_listeners", function () {
       this.instance.store_listeners = ["marathon"];
       this.instance.componentDidMount();
@@ -123,20 +105,6 @@ describe("StoreMixin", function () {
   });
 
   describe("#componentWillUnmount", function () {
-
-    it("calls the next mixin's #componentWillUnmount", function () {
-      let finalMixin = jasmine.createSpyObj("finalMixin", [
-        "componentDidMount", "componentWillUnmount"
-      ]);
-
-      class MyClass extends Util.mixin(StoreMixin, finalMixin) {}
-      let instance = new MyClass();
-      instance.store_listeners = ["marathon"];
-      instance.componentDidMount();
-      instance.componentWillUnmount();
-
-      expect(finalMixin.componentWillUnmount.calls.length).toEqual(1);
-    });
 
     it("removes listeners from store", function () {
       this.instance.store_listeners = ["marathon"];
