@@ -8,19 +8,19 @@ let ids = {
   slaves: []
 };
 
-let mergeData = function (incomingData, oldData) {
+let mergeData = function (newData, oldData) {
   // We use deepExtend to avoid mutating the original data.
   let mergedData = deepExtend({}, oldData);
 
-  Object.keys(incomingData).forEach(function (key) {
+  Object.keys(newData).forEach(function (key) {
 
-    if (_.isArray(incomingData[key])) {
+    if (_.isArray(newData[key])) {
       // We need to merge the objects within the frameworks and slaves arrays
       // by finding matching IDs and merging the corresponding data.
       if (key === "frameworks" || key === "slaves") {
-        let idArr = _.pluck(incomingData[key], "id");
-        let idsToRemove = _.difference(ids[key], idArr);
-        let idsToAdd = _.difference(idArr, ids[key]);
+        let activeIDs = _.pluck(newData[key], "id");
+        let idsToRemove = _.difference(ids[key], activeIDs);
+        let idsToAdd = _.difference(activeIDs, ids[key]);
 
         // Remove any IDs that we didn't receive new data for.
         idsToRemove.forEach(function (id) {
@@ -32,9 +32,9 @@ let mergeData = function (incomingData, oldData) {
         ids[key] = ids[key].concat(idsToAdd);
 
         // Merge the incoming data with what we currently have (if anything).
-        mergedData[key] = idArr.map(function (id) {
+        mergedData[key] = activeIDs.map(function (id) {
           let oldObj = _.findWhere(oldData[key], {id: id});
-          let newObj = _.findWhere(incomingData[key], {id: id});
+          let newObj = _.findWhere(newData[key], {id: id});
 
           // These objects don't need to be deeply merged.
           return _.extend({}, oldObj, newObj);
@@ -42,17 +42,16 @@ let mergeData = function (incomingData, oldData) {
 
       } else {
         // We can replace any array that isn't frameworks or slaves.
-        mergedData[key] = incomingData[key];
+        mergedData[key] = newData[key];
       }
-
-    } else if (_.isObject(incomingData[key])) {
+    } else if (_.isObject(newData[key])) {
       let oldObj = oldData[key] || {};
-      let newObj = incomingData[key];
+      let newObj = newData[key];
       // We need to recurse over any nested objects.
       mergedData[key] = mergeData(newObj, oldObj);
     } else {
       // Any other type of value can be replaced.
-      mergedData[key] = incomingData[key];
+      mergedData[key] = newData[key];
     }
   });
 
