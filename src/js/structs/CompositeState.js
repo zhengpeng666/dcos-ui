@@ -32,7 +32,7 @@ let mergeMesosArrays = function (newData, oldData, key) {
     // We need to merge the objects within the frameworks and slaves arrays.
     return mergeById(newData, oldData, key);
   } else {
-    // We can replace any array that isn't frameworks or slaves.
+    // We can replace any other array.
     return newData[key];
   }
 };
