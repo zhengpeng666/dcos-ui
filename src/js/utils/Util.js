@@ -9,6 +9,12 @@
 import _ from "underscore";
 import React from "react";
 
+let lifecycleFunctions = [
+  "componentWillMount", "componentDidMount",
+  "componentWillReceiveProps", "componentWillUpdate", "componentDidUpdate",
+  "componentWillUnmount", "render"
+];
+
 function noop() {
   return null;
 }
@@ -16,74 +22,71 @@ function trueNoop() {
   return true;
 }
 
-/**
- * Modifies an object by adding missing lifecycle function
- *
- * @param  {Object} proto
- * @param  {Boolean} useNoop Optional. To use noop or call parent function
- */
-function addMissingLifecycleFunctions(proto, useNoop) {
-  function callToParent(lifecycleFn) {
-    return function () {
-      this.parent[lifecycleFn]();
-    };
+function es6ify(mixin) {
+  if (typeof mixin === "function") {
+    // mixin is already es6 style
+    return mixin;
   }
 
-  // No-ops so we need not check before calling super()
-  let functions = {
-    componentWillMount: callToParent,
-    componentDidMount: callToParent,
-    componentWillReceiveProps: function () {
-      return function (nextProps) {
-        this.parent.componentWillReceiveProps(nextProps);
-      };
-    },
-    componentWillUpdate: function () {
-      return function (nextProps, nextState) {
-        this.parent.componentWillUpdate(nextProps, nextState);
-      };
-    },
-    componentDidUpdate: function () {
-      return function (prevProps, prevState) {
-        this.parent.componentDidUpdate(prevProps, prevState);
-      };
-    },
-    componentWillUnmount: callToParent
-  };
+  return function (Base) {
+    // mixin is old-react style plain object
+    // convert to ES6 class
+    class MixinClass extends Base {}
 
-  Object.keys(functions).forEach(function (lifecycleFn) {
-    if (typeof proto[lifecycleFn] !== "function") {
-      if (useNoop) {
-        proto[lifecycleFn] = noop;
-      } else {
-        proto[lifecycleFn] = functions[lifecycleFn](lifecycleFn);
-      }
-    }
-  });
+    const clonedMixin = _.extend({}, mixin);
+    // These React properties are defined as ES7 class static properties
+    let staticProps = [
+      "childContextTypes", "contextTypes",
+      "defaultProps", "propTypes"
+    ];
+    staticProps.forEach(function (staticProp) {
+      MixinClass[staticProp] = clonedMixin[staticProp];
+      delete clonedMixin[staticProp];
+    });
+
+    // Omit lifecycle functions because we are already storing them elsewhere
+    _.extend(MixinClass.prototype, _.omit(clonedMixin, lifecycleFunctions));
+
+    return MixinClass;
+  };
 }
 
-function es6ify(mixin, Base) {
-  // mixin is old-react style plain object
-  // convert to ES6 class
-  class MixinClass extends Base {}
+function setLifecycleMixinHandler(proto, lifecycleFn, mixins) {
+  if (mixins == null || mixins.length === 0) {
+    // No-ops so we need not check before calling super()
+    proto[lifecycleFn] = noop;
+    return;
+  }
 
-  const clonedMixin = _.extend({}, mixin);
+  proto[lifecycleFn] = function (...args) {
+    mixins.forEach((mixin) => {
+      mixin.apply(this, args);
+    });
+  };
+}
 
-  addMissingLifecycleFunctions(mixin);
+function addLifeCycleFunctions(proto, mixins) {
+  let mixinLifecycleFnMap = {};
+  mixins.forEach(function (mixin) {
+    lifecycleFunctions.forEach(function (lifecycleFn) {
+      if (mixin[lifecycleFn] == null) {
+        return;
+      }
 
-  // These React properties are defined as ES7 class static properties
-  let staticProps = [
-    "childContextTypes", "contextTypes",
-    "defaultProps", "propTypes"
-  ];
-  staticProps.forEach(function (staticProp) {
-    MixinClass[staticProp] = clonedMixin[staticProp];
-    delete clonedMixin[staticProp];
+      if (mixinLifecycleFnMap[lifecycleFn] == null) {
+        mixinLifecycleFnMap[lifecycleFn] = [];
+      }
+
+      // Use push as we want to preserve order
+      mixinLifecycleFnMap[lifecycleFn].push(mixin[lifecycleFn]);
+    });
   });
 
-  _.extend(MixinClass.prototype, clonedMixin);
-
-  return MixinClass;
+  lifecycleFunctions.forEach(function (lifecycleFn) {
+    setLifecycleMixinHandler(
+      proto, lifecycleFn, mixinLifecycleFnMap[lifecycleFn]
+    );
+  });
 }
 
 const Util = {
@@ -91,17 +94,13 @@ const Util = {
     // Creates base class
     class Base extends React.Component {}
 
-    addMissingLifecycleFunctions(Base.prototype, noop);
     Base.prototype.shouldComponentUpdate = trueNoop;
-
-    mixins.forEach(function (mixin, i) {
-      mixin.parent = mixins[i + 1] || Base.prototype;
-    });
+    addLifeCycleFunctions(Base.prototype, mixins);
 
     mixins.reverse();
 
     mixins.forEach(function (mixin) {
-      Base = es6ify(mixin, Base);
+      Base = es6ify(mixin)(Base);
     });
 
     return Base;

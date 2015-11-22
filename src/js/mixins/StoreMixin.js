@@ -94,14 +94,10 @@ const StoreMixin = {
       this.store_listeners = storesListeners;
       this.store_addListeners();
     }
-
-    this.parent.componentDidMount();
   },
 
   componentWillUnmount() {
     this.store_removeListeners();
-
-    this.parent.componentWillUnmount();
   },
 
   store_addListeners() {
