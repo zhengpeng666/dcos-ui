@@ -82,7 +82,6 @@ export default class NodeSidePanelContents extends SidePanelContents {
     );
   }
 
-
   render() {
     let nodeID = this.props.itemID;
     let last = MesosSummaryStore.get("states").lastSuccessful();
