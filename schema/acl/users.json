@@ -4,6 +4,8 @@
     "title": "DCOS ACL: All users endpoint response",
     "type": "array",
     "items": {
-        "$ref": "http://schema.dcos/acl/users/user"
+      "allOf": [
+        {"$ref": "http://schema.dcos/acl/users/user"}
+      ]
     }
 }
