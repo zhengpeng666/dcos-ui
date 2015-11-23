@@ -15,10 +15,6 @@ import Util from "../utils/Util";
 // number to fit design of width vs. height ratio
 const WIDTH_HEIGHT_RATIO = 4.5;
 
-const METHODS_TO_BIND = [
-  "onStoreChange"
-];
-
 export default class SidePanelContents extends
   Util.mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
   constructor() {
@@ -30,10 +26,6 @@ export default class SidePanelContents extends
       tasks: "Tasks",
       details: "Details"
     };
-
-    METHODS_TO_BIND.forEach(function (method) {
-      this[method] = this[method].bind(this);
-    }, this);
 
     this.state = {};
   }
