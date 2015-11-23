@@ -3,11 +3,6 @@ import deepExtend from "deep-extend";
 
 import ServicesList from "./ServicesList";
 
-let ids = {
-  frameworks: [],
-  slaves: []
-};
-
 let mergeData = function (newData, oldData) {
   // We use deep-extend to avoid mutating the old data.
   let mergedData = deepExtend({}, oldData);
@@ -30,31 +25,20 @@ let mergeData = function (newData, oldData) {
 let mergeMesosArrays = function (newData, oldData, key) {
   if (key === "frameworks" || key === "slaves") {
     // We need to merge the objects within the frameworks and slaves arrays.
-    return mergeById(newData, oldData, key);
+    return mergeObjectsById(newData[key], oldData[key]);
   } else {
     // We can replace any other array.
     return newData[key];
   }
 };
 
-let mergeById = function (newData, oldData, key) {
-  let activeIDs = _.pluck(newData[key], "id");
-  let idsToRemove = _.difference(ids[key], activeIDs);
-  let idsToAdd = _.difference(activeIDs, ids[key]);
-
-  // Remove any IDs that we didn't receive new data for.
-  idsToRemove.forEach(function (id) {
-    let idIndexToRemove = ids[key].indexOf(id);
-    ids[key].splice(idIndexToRemove, 1);
-  });
-
-  // Add IDs that we didn't have data for previously.
-  ids[key] = ids[key].concat(idsToAdd);
+let mergeObjectsById = function (newData, oldData) {
+  let activeIDs = _.pluck(newData, "id");
 
   // Merge the incoming data with the old data.
   return activeIDs.map(function (id) {
-    let oldObj = _.findWhere(oldData[key], {id: id});
-    let newObj = _.findWhere(newData[key], {id: id});
+    let oldObj = _.findWhere(oldData, {id: id});
+    let newObj = _.findWhere(newData, {id: id});
 
     // These objects don't need to be deeply merged.
     return _.extend({}, oldObj, newObj);
