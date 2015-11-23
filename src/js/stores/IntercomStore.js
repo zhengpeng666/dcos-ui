@@ -5,6 +5,7 @@ var GetSetMixin = require("../mixins/GetSetMixin");
 var Store = require("../utils/Store");
 
 var IntercomStore = Store.createStore({
+  storeID: "intercom",
 
   mixins: [GetSetMixin],
 

@@ -31,6 +31,8 @@ function startPolling(task, deeperPath) {
 }
 
 var TaskDirectoryStore = Store.createStore({
+  storeID: "taskdirectory",
+
   mixins: [GetSetMixin],
 
   getSet_data: {

@@ -6,6 +6,8 @@ import GetSetMixin from "../mixins/GetSetMixin";
 import Store from "../utils/Store";
 
 var ConfigStore = Store.createStore({
+  storeID: "config",
+
   mixins: [GetSetMixin],
 
   getSet_data: {

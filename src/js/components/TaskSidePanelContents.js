@@ -27,7 +27,10 @@ export default class TaskSidePanelContents extends SidePanelContents {
       currentTab: Object.keys(this.tabs).shift()
     };
 
-    this.storesListeners = ["state", "summary"];
+    this.storesListeners = [
+      {name: "state", events: ["success"]},
+      {name: "summary", events: ["success"]}
+    ];
   }
 
   componentWillMount() {

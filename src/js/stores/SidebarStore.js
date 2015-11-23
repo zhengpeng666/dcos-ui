@@ -5,6 +5,7 @@ var GetSetMixin = require("../mixins/GetSetMixin");
 var Store = require("../utils/Store");
 
 var SidebarStore = Store.createStore({
+  storeID: "sidebar",
 
   mixins: [GetSetMixin],
 

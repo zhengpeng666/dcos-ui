@@ -9,6 +9,12 @@
 import _ from "underscore";
 import React from "react";
 
+let lifecycleFunctions = [
+  "componentWillMount", "componentDidMount",
+  "componentWillReceiveProps", "componentWillUpdate", "componentDidUpdate",
+  "componentWillUnmount", "render"
+];
+
 function noop() {
   return null;
 }
@@ -38,10 +44,49 @@ function es6ify(mixin) {
       delete clonedMixin[staticProp];
     });
 
-    _.extend(MixinClass.prototype, clonedMixin);
+    // Omit lifecycle functions because we are already storing them elsewhere
+    _.extend(MixinClass.prototype, _.omit(clonedMixin, lifecycleFunctions));
 
     return MixinClass;
   };
+}
+
+function setLifecycleMixinHandler(proto, lifecycleFn, mixins) {
+  if (mixins == null || mixins.length === 0) {
+    // No-ops so we need not check before calling super()
+    proto[lifecycleFn] = noop;
+    return;
+  }
+
+  proto[lifecycleFn] = function (...args) {
+    mixins.forEach((mixin) => {
+      mixin.apply(this, args);
+    });
+  };
+}
+
+function addLifeCycleFunctions(proto, mixins) {
+  let mixinLifecycleFnMap = {};
+  mixins.forEach(function (mixin) {
+    lifecycleFunctions.forEach(function (lifecycleFn) {
+      if (mixin[lifecycleFn] == null) {
+        return;
+      }
+
+      if (mixinLifecycleFnMap[lifecycleFn] == null) {
+        mixinLifecycleFnMap[lifecycleFn] = [];
+      }
+
+      // Use push as we want to preserve order
+      mixinLifecycleFnMap[lifecycleFn].push(mixin[lifecycleFn]);
+    });
+  });
+
+  lifecycleFunctions.forEach(function (lifecycleFn) {
+    setLifecycleMixinHandler(
+      proto, lifecycleFn, mixinLifecycleFnMap[lifecycleFn]
+    );
+  });
 }
 
 const Util = {
@@ -50,16 +95,7 @@ const Util = {
     class Base extends React.Component {}
 
     Base.prototype.shouldComponentUpdate = trueNoop;
-
-    // No-ops so we need not check before calling super()
-    let functions = [
-      "componentWillMount", "componentDidMount",
-      "componentWillReceiveProps", "componentWillUpdate", "componentDidUpdate",
-      "componentWillUnmount", "render"
-    ];
-    functions.forEach(function (lifecycleFn) {
-      Base.prototype[lifecycleFn] = noop;
-    });
+    addLifeCycleFunctions(Base.prototype, mixins);
 
     mixins.reverse();
 

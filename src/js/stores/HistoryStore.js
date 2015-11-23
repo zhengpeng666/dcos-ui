@@ -4,6 +4,8 @@ import GetSetMixin from "../mixins/GetSetMixin";
 import Store from "../utils/Store";
 
 var HistoryStore = Store.createStore({
+  storeID: "history",
+
   mixins: [GetSetMixin],
 
   init: function () {
