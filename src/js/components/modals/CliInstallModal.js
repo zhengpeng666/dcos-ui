@@ -100,6 +100,7 @@ var CliInstructionsModal = React.createClass({
         footer={this.props.footer}
         footerContainerClass="container container-pod container-pod-short"
         headerContainerClass="container container-pod container-pod-short"
+        maxHeightPercentage={0.9}
         modalClass="modal"
         onClose={this.onClose}
         open={this.props.open}
