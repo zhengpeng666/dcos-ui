@@ -1,4 +1,6 @@
-jest.autoMockOff();
+jest.dontMock("../BannerPlugin");
+jest.dontMock("../../components/icons/IconInfo");
+jest.dontMock("../../utils/DOMUtils");
 
 var _ = require("underscore");
 var React = require("react/addons");
