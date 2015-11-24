@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
-  "id": "http://schema.dcos/acl/groups/group-users",
+  "id": "http://schema.dcos/acl/groups/group/users",
   "title": "DCOS ACL: A list of users that are members of a group",
   "type": "object",
   "properties": {
@@ -18,9 +18,10 @@
               {"$ref": "http://schema.dcos/acl/users/user"}
             ]
           }
-        }
+        },
+        "required": ["membershipurl", "user"]
       }
     }
   },
-  "required": ["membershipurl", "user"]
+  "required": ["array"]
 }

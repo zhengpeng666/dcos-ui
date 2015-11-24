@@ -46,7 +46,7 @@
     },
     "groups": {
       "type": "array",
-      "description": "List of groups user has permissions on",
+      "description": "List of resources user has permissions on because they are member of a group",
       "items": {
         "allOf": [
           {"$ref": "#/definitions/acl-resource"},
