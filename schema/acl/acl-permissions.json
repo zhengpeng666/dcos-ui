@@ -5,7 +5,7 @@
   "type": "object",
   "properties": {
     "groups": {
-      "title": "Groups whom are part of this ACL",
+      "title": "Groups that are part of this ACL",
       "type": "array",
       "items": {
         "type": "object",
@@ -30,7 +30,7 @@
       }
     },
     "users": {
-      "title": "Users whom are part of this ACL",
+      "title": "Users that are part of this ACL",
       "type": "array",
       "items": {
         "type": "object",
