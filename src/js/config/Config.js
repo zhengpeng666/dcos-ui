@@ -21,9 +21,7 @@ if (Config.environment === "development") {
 
   Config.analyticsKey = ""; // Safeguard from developers logging to prod
   Config = _.extend(Config, ConfigDev);
-}
-
-if (Config.environment === "production") {
+} else if (Config.environment === "production") {
   Config.useFixtures = false;
 }
 
