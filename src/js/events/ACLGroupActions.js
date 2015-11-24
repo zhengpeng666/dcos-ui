@@ -39,9 +39,7 @@ const ACLGroupActions = {
 
 };
 
-let useFixtures = true;
-
-if (useFixtures) {
+if (Config.useFixtures) {
   ACLGroupActions.fetch = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
