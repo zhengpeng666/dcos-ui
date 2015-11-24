@@ -13,7 +13,8 @@ var ConfigDev = {
         }
       }
     }
-  }
+  },
+  useFixtures: false
 };
 
 module.exports = ConfigDev;
