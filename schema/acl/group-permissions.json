@@ -21,22 +21,27 @@
       }
     }
   },
-  "type": "array",
-  "items": {
-    "allOf": [
-      {"$ref": "#/definitions/acl-resource"},
-      {
-        "properties": {
-          "actions": {
-            "type": "array",
-            "items": {
-              "allOf": [
-                {"$ref": "http://schema.dcos/acl/action"}
-              ]
+  "type": "object",
+  "properties": {
+    "array": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {"$ref": "#/definitions/acl-resource"},
+          {
+            "properties": {
+              "actions": {
+                "type": "array",
+                "items": {
+                  "allOf": [
+                    {"$ref": "http://schema.dcos/acl/action"}
+                  ]
+                }
+              }
             }
           }
-        }
+        ]
       }
-    ]
+    }
   }
 }
