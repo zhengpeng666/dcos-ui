@@ -17,27 +17,23 @@
     /* Page Header Context */
     .page-header-context {
       width: 100%;
+      .tabs {
+        li {
+          &.active {
+            &:after {
+              .opacity(0.0);
+            }
 
-      .page-header-title {
-        float: left;
-
-        &.button-primary {
-          color: @white;
-        }
-
-        &.button-link {
-          height: auto;
-          padding-bottom: 0;
-          padding-top: 0;
-
-          &:first-child {
-            padding-left: 0;
+            .page-header-title {
+              color: @white;
+            }
           }
 
-          &:not(.button-primary) {
-            color: color-lighten(@neutral, 40);
+          &:not(.active) {
+            .page-header-title {
+              color: color-lighten(@neutral, 40);
+            }
           }
-
         }
       }
 
@@ -114,13 +110,6 @@
         .page-header-navigation {
           padding-top: @container-pod-short-padding-vertical-screen-small;
           margin-bottom: -@container-pod-short-padding-vertical-screen-small;
-
-          ul {
-            li {
-              padding-bottom: @container-pod-short-padding-vertical-screen-small * 0.5;
-              margin-right: @base-spacing-unit-screen-small * 0.5;
-            }
-          }
         }
       }
     }
@@ -142,13 +131,6 @@
         .page-header-navigation {
           padding-top: @container-pod-short-padding-vertical-screen-medium;
           margin-bottom: -@container-pod-short-padding-vertical-screen-medium;
-
-          ul {
-            li {
-              padding-bottom: @container-pod-short-padding-vertical-screen-medium * 0.5;
-              margin-right: @base-spacing-unit-screen-medium * 0.5;
-            }
-          }
         }
       }
     }
@@ -170,13 +152,6 @@
         .page-header-navigation {
           padding-top: @container-pod-short-padding-vertical-screen-large;
           margin-bottom: -@container-pod-short-padding-vertical-screen-large;
-
-          ul {
-            li {
-              padding-bottom: @container-pod-short-padding-vertical-screen-large * 0.5;
-              margin-right: @base-spacing-unit-screen-large * 0.5;
-            }
-          }
         }
       }
     }

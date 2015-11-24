@@ -34,19 +34,20 @@ export default class SystemPage extends Util.mixin(TabsMixin) {
 
   getClassSet(isActive) {
     return classNames({
-      "h1 page-header-title inverse flush": true,
       "active": isActive
     });
   }
 
-  getLink(tab, isActive, tabSet) {
+  getLink(tab, isActive) {
     return (
-      <Link
-        key={tab}
-        to={tabSet[tab]}
-        className={this.getClassSet(isActive)}>
-        {this.props.tabs[tabSet[tab]]}
-      </Link>
+      <li className={this.getClassSet(isActive)}>
+        <Link
+          key={tab}
+          to={tab}
+          className="h1 page-header-title inverse flush">
+          {this.props.tabs[tab]}
+        </Link>
+      </li>
     );
   }
 
@@ -55,13 +56,21 @@ export default class SystemPage extends Util.mixin(TabsMixin) {
     let currentRoute = routes[routes.length - 2].name;
 
     return (
-      <div>
+      <ul className="tabs list-inline list-unstyled">
         {RouteUtil.getTabLinks(
           this.props.tabs,
           currentRoute,
           this.getLink.bind(this)
         )}
-      </div>
+      </ul>
+    );
+  }
+
+  getNavigation() {
+    return (
+      <ul className="tabs list-inline flush-bottom inverse">
+        {this.tabs_getTabLinks()}
+      </ul>
     );
   }
 
@@ -69,7 +78,7 @@ export default class SystemPage extends Util.mixin(TabsMixin) {
     return (
       <Page
         title={this.getTitle()}
-        navigation={this.tabs_getTabLinks()}>
+        navigation={this.getNavigation()}>
         <h3 className="flush">No access.</h3>
       </Page>
     );

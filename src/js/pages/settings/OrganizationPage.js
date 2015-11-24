@@ -35,19 +35,20 @@ export default class OrganizationPage extends Util.mixin(TabsMixin) {
 
   getClassSet(isActive) {
     return classNames({
-      "h1 page-header-title inverse flush": true,
       "active": isActive
     });
   }
 
   getLink(tab, isActive) {
     return (
-      <Link
-        key={tab}
-        to={tab}
-        className={this.getClassSet(isActive)}>
-        {this.props.tabs[tab]}
-      </Link>
+      <li className={this.getClassSet(isActive)}>
+        <Link
+          key={tab}
+          to={tab}
+          className="h1 page-header-title inverse flush">
+          {this.props.tabs[tab]}
+        </Link>
+      </li>
     );
   }
 
@@ -56,13 +57,13 @@ export default class OrganizationPage extends Util.mixin(TabsMixin) {
     let currentRoute = routes[routes.length - 2].name;
 
     return (
-      <div>
+      <ul className="tabs list-inline list-unstyled">
         {RouteUtil.getTabLinks(
           this.props.tabs,
           currentRoute,
           this.getLink.bind(this)
         )}
-      </div>
+      </ul>
     );
   }
 
