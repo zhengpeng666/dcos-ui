@@ -16,6 +16,24 @@ describe("User", function () {
       "uid": "john",
       "url": "/users/john",
       "description": "John Doe",
+      "groups": [
+        {
+          "membershipurl": "/groups/nerds/users/john",
+          "group": {
+            "gid": "nerds",
+            "url": "/groups/nerds",
+            "description": "These are the nerds, not the geeks."
+          }
+        },
+        {
+          "membershipurl": "/groups/geeks/users/john",
+          "group": {
+            "gid": "geeks",
+            "url": "/groups/geeks",
+            "description": "These are the geeks, not the nerds."
+          }
+        }
+      ],
       "permissions": {
         "direct": [
           {
@@ -91,6 +109,18 @@ describe("User", function () {
     it("returns an instance of GroupsList", function () {
       let groups = this.instance.getGroups();
       expect(groups instanceof GroupsList).toBeTruthy();
+    });
+
+    it("returns a GroupsList with the number of items we provided",
+      function () {
+      let groups = this.instance.getGroups();
+      expect(groups.list.length).toEqual(2);
+    });
+
+    it("returns a GroupsList with the data we provided", function () {
+      let groups = this.instance.getGroups();
+      expect(groups.list[0].gid).toEqual("nerds");
+      expect(groups.list[1].gid).toEqual("geeks");
     });
 
   });

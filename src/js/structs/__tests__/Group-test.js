@@ -37,11 +37,11 @@ describe("Group", function () {
             "description": "John Doe"
           }
         }, {
-          "membershipurl": "/groups/nerds/users/john",
+          "membershipurl": "/groups/nerds/users/jane",
           "user": {
-            "uid": "john",
-            "url": "/users/john",
-            "description": "John Doe"
+            "uid": "jane",
+            "url": "/users/jane",
+            "description": "Jane Doe"
           }
         }
       ]
@@ -73,6 +73,18 @@ describe("Group", function () {
     it("returns an instance of UsersList", function () {
       let users = this.instance.getUsers();
       expect(users instanceof UsersList).toBeTruthy();
+    });
+
+    it("returns a UsersList with the number of items we provided",
+      function () {
+      let users = this.instance.getUsers();
+      expect(users.list.length).toEqual(2);
+    });
+
+    it("returns a UsersList with the data we provided", function () {
+      let users = this.instance.getUsers();
+      expect(users.list[0].uid).toEqual("john");
+      expect(users.list[1].uid).toEqual("jane");
     });
 
   });

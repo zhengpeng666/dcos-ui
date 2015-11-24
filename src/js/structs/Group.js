@@ -7,8 +7,12 @@ export default class Group extends Item {
   }
 
   getUsers() {
+    let users = this.get("users");
+    let usersList = users.map(function (userItem) {
+      return userItem.user;
+    });
     return new UsersList({
-      items: this.get("users")
+      items: usersList
     });
   }
 }
