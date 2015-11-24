@@ -17,17 +17,20 @@ var NotFoundRoute = Router.NotFoundRoute;
 
 require("./utils/MomentJSConfig");
 require("./utils/ReactSVG");
-var AccessControlPage = require("./pages/AccessControlPage");
 var Config = require("./config/Config");
 var DashboardPage = require("./pages/DashboardPage");
+import GroupsTab from "./pages/settings/GroupsTab";
 var HostTable = require("./components/HostTable");
 var Index = require("./pages/Index");
 var NodesPage = require("./pages/NodesPage");
 var NodesGridView = require("./components/NodesGridView");
 var NotFoundPage = require("./pages/NotFoundPage");
+import OrganizationPage from "./pages/settings/OrganizationPage";
 var ServiceOverlay = require("./components/ServiceOverlay");
 var ServicesPage = require("./pages/ServicesPage");
 var SettingsPage = require("./pages/SettingsPage");
+import SystemPage from "./pages/settings/SystemPage";
+import UsersTab from "./pages/settings/UsersTab";
 
 var routes = (
   <Route name="home" path="/" handler={Index}>
@@ -57,7 +60,19 @@ var routes = (
     </Route>
 
     <Route name="settings" path="settings/?" handler={SettingsPage}>
-      <Route name="access" path="access-control" handler={AccessControlPage}/>
+      <Route name="settings-system" path="system/?">
+        <Route name="settings-system-overview" path="overview/?" handler={SystemPage} />
+
+        <Redirect from="/settings/system/?" to="settings-system-overview" />
+      </Route>
+      <Route name="settings-organization" path="organization/?" handler={OrganizationPage}>
+        <Route name="settings-organization-users" path="users/?" handler={UsersTab} />
+        <Route name="settings-organization-groups" path="groups/?" handler={GroupsTab} />
+
+        <Redirect from="/settings/organization/?" to="settings-organization-users" />
+      </Route>
+
+      <Redirect from="/settings/?" to="settings-organization" />
     </Route>
 
     <Redirect from="/" to="dashboard" />

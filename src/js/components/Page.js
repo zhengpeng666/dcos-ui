@@ -14,10 +14,29 @@ var Page = React.createClass({
 
   propTypes: {
     title: React.PropTypes.oneOfType([
-        React.PropTypes.object,
-        React.PropTypes.string
-      ]),
-    renderNavigation: React.PropTypes.func
+      React.PropTypes.object,
+      React.PropTypes.string
+    ]),
+    navigation: React.PropTypes.oneOfType([
+      React.PropTypes.object,
+      React.PropTypes.string
+    ])
+  },
+
+  getInitialState: function () {
+    let currentTab;
+
+    if (_.isObject(this.props.navigation)) {
+      currentTab = Object.keys(this.props.navigation).shift();
+    }
+
+    return {currentTab};
+  },
+
+  componentWillMount: function () {
+    if (_.isObject(this.props.navigation)) {
+      this.tabs = this.props.navigation;
+    }
   },
 
   componentDidMount: function () {
@@ -28,11 +47,12 @@ var Page = React.createClass({
   },
 
   getNavigation: function () {
-    if (_.isFunction(this.props.renderNavigation)) {
-      return this.props.renderNavigation();
-    } else {
-      return <div className="page-header-navigation" />;
-    }
+    // Always return "page-header-navigation" to take up space
+    return (
+      <div className="page-header-navigation">
+        {this.props.navigation}
+      </div>
+    );
   },
 
   getChildren: function () {

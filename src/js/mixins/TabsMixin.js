@@ -4,49 +4,59 @@ import { Link } from "react-router";
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
+import RouteUtil from "../utils/RouteUtil";
+
 const TabsMixin = {
 
-  getTabClassSet(customClasses) {
-    return Object.keys(this.tabs).map(function (tab) {
-      let classSet = classNames({
-        "button button-link": true,
-        "button-primary": this.state.currentTab === tab,
-        [customClasses]: customClasses
-      });
+  tabs_getLink(customClasses, tab, isActive) {
+    let tabClass = classNames({
+      "active": isActive
+    });
 
-      return classSet;
-    }, this);
+    return (
+      <li className={tabClass}>
+        <Link
+          key={tab}
+          to={tab}
+          className={customClasses}
+          onClick={this.tabs_handleTabClick.bind(this, tab)}>
+          {this.tabs[tab]}
+        </Link>
+      </li>
+    );
+  },
+
+  tabs_getDiv(customClasses, tab, isActive) {
+    let tabClass = classNames({
+      "active": isActive
+    });
+
+    return (
+      <li className={tabClass}>
+        <span
+          key={tab}
+          className={customClasses}
+          onClick={this.tabs_handleTabClick.bind(this, tab)}>
+          {this.tabs[tab]}
+        </span>
+      </li>
+    );
   },
 
   tabs_getTabs(customClasses) {
-    let tabSet = Object.keys(this.tabs);
-
-    return this.getTabClassSet(customClasses).map(function (classSet, i) {
-      return (
-        <div
-          key={i}
-          className={classSet}
-          onClick={this.tabs_handleTabClick.bind(this, tabSet[i])}>
-          {this.tabs[tabSet[i]]}
-        </div>
-      );
-    }, this);
+    return RouteUtil.getTabLinks(
+      this.tabs,
+      this.state.currentTab,
+      this.tabs_getDiv.bind(this, customClasses)
+    );
   },
 
   tabs_getTabLinks(customClasses) {
-    let tabSet = Object.keys(this.tabs);
-
-    return this.getTabClassSet(customClasses).map(function (classSet, i) {
-      return (
-        <Link
-          key={i}
-          to={tabSet[i]}
-          className={classSet}
-          onClick={this.tabs_handleTabClick.bind(this, tabSet[i])}>
-            {this.tabs[tabSet[i]]}
-        </Link>
-      );
-    }, this);
+    return RouteUtil.getTabLinks(
+      this.tabs,
+      this.state.currentTab,
+      this.tabs_getLink.bind(this, customClasses)
+    );
   },
 
   tabs_getTabView() {

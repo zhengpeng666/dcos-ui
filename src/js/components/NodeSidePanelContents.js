@@ -100,9 +100,9 @@ export default class NodeSidePanelContents extends SidePanelContents {
               {this.getCharts("Node", node)}
             </div>
           </div>
-          <div className="side-panel-tabs">
+          <ul className="tabs list-inline flush-bottom">
             {this.tabs_getTabs()}
-          </div>
+          </ul>
         </div>
         {this.tabs_getTabView()}
       </div>

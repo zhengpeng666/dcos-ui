@@ -226,10 +226,10 @@ export default class TaskSidePanelContents extends SidePanelContents {
           container-fluid container-pod-divider-bottom
           container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo(task, node)}
-          <div className="container container-fluid container-pod side-panel-tabs
+          <ul className="tabs list-inline container container-fluid container-pod
             flush flush-bottom flush-top">
             {this.tabs_getTabs()}
-          </div>
+          </ul>
         </div>
         <div className="container container-fluid container-pod container-pod-short">
           {this.tabs_getTabView()}

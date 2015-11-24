@@ -79,58 +79,6 @@
       clear: both;
       padding-top: @container-pod-short-padding-vertical;
       margin-bottom: -@container-pod-short-padding-vertical;
-
-      ul {
-        margin-top: 0px;
-        margin-left: 0px;
-
-        li {
-          position: relative;
-          padding-bottom: @container-pod-short-padding-vertical * 0.5;
-          margin: 0px;
-          margin-right: @base-spacing-unit * 0.5;
-          color: color-lighten(@neutral, 40);
-
-          &:after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0px;
-            display: block;
-            width: 100%;
-            height: 3px;
-            background: @body-text-link-text-color;
-            .opacity(0.0);
-          }
-
-          &:last-child {
-            margin-right: 0px;
-          }
-
-          a {
-            color: inherit;
-
-            &:hover {
-              color: color-lighten(@neutral, 60);
-            }
-
-            &:active {
-              color: color-lighten(@neutral, 80);
-            }
-          }
-
-          &.selected {
-            color: @white;
-            a {
-              color: inherit;
-            }
-
-            &:after {
-              .opacity(1.00);
-            }
-          }
-        }
-      }
     }
   }
 }
