@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
-  "id": "http://schema.dcos/acl/groups/group-permissions",
+  "id": "http://schema.dcos/acl/groups/group/permissions",
   "title": "DCOS ACL: Permissions for a group",
   "definitions": {
     "acl-resource": {

@@ -7,7 +7,7 @@
     "type": "object",
     "properties": {
       "membershipurl": {
-        "title": "Memebership API endpoint",
+        "title": "Membership API endpoint",
         "type": "string"
       },
       "user": {

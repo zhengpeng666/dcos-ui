@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
-  "id": "http://schema.dcos/acl/acls/acl-permissions",
+  "id": "http://schema.dcos/acl/acls/acl/permissions",
   "title": "DCOS ACL: Single ACL permissions.",
   "type": "object",
   "properties": {

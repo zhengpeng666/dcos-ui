@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
-  "id": "http://schema.dcos/acl/users/user-permissions",
-  "title": "DCOS ACL: Groups a user is memeber of",
+  "id": "http://schema.dcos/acl/users/user/permissions",
+  "title": "DCOS ACL: Groups a user is member of",
   "definitions": {
     "acl-resource": {
       "type": "object",
