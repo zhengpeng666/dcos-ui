@@ -39,6 +39,8 @@ const ACLGroupActions = {
 
 };
 
+// Need to get this to use whatever the current value of Config.useFixtures is.
+// This is why tests are currently failing.
 if (Config.useFixtures) {
   ACLGroupActions.fetch = function () {
     AppDispatcher.handleServerAction({
