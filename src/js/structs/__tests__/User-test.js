@@ -15,8 +15,8 @@ let userFixture = require("./fixtures/userData");
 describe("User", function () {
 
   beforeEach(function () {
-    this.instance = new User(userFixture);
     this.userFixture = _.clone(userFixture);
+    this.instance = new User(userFixture);
   });
 
   describe("#getPermissions", function () {

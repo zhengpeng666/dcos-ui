@@ -14,8 +14,8 @@ let UsersList = require("../UsersList");
 describe("Group", function () {
 
   beforeEach(function () {
-    this.instance = new Group(groupFixture);
     this.groupFixture = _.clone(groupFixture);
+    this.instance = new Group(groupFixture);
   });
 
   describe("#getPermissions", function () {
