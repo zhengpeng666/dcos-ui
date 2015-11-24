@@ -1,6 +1,9 @@
-const ActionTypes = {};
+let ActionTypes = {};
 [
   "INTERCOM_ACTION",
+  "REQUEST_ACL_GROUPS_SUCCESS",
+  "REQUEST_ACL_GROUPS_ERROR",
+  "REQUEST_ACL_GROUPS_ONGOING",
   "REQUEST_ACL_USER_SUCCESS",
   "REQUEST_ACL_USER_ERROR",
   "REQUEST_ACL_USER_GROUPS_SUCCESS",
@@ -39,4 +42,4 @@ const ActionTypes = {};
   ActionTypes[actionType] = actionType;
 });
 
-module.exports = ActionTypes;
+export default ActionTypes;
