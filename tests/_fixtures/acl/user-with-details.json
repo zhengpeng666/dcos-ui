@@ -1,18 +1,18 @@
 {
-  "uid": "john",
-  "url": "/users/john",
-  "description": "John Doe",
+  "uid": "qüis",
+  "url": "/users/quis",
+  "description": "藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe",
   "groups": [
     {
-      "membershipurl": "/groups/nerds/users/john",
+      "membershipurl": "/groups/olis/users/quis",
       "group": {
-        "gid": "nerds",
-        "url": "/groups/nerds",
-        "description": "These are the nerds, not the geeks."
+        "gid": "ölis",
+        "url": "/groups/olis",
+        "description": "藍-遙 遥 悠 遼 Größe"
       }
     },
     {
-      "membershipurl": "/groups/geeks/users/john",
+      "membershipurl": "/groups/geeks/users/quis",
       "group": {
         "gid": "geeks",
         "url": "/groups/geeks",
@@ -29,7 +29,7 @@
         "actions": [
           {
             "name": "access",
-            "url": "/acls/service.marathon/users/john/access"
+            "url": "/acls/service.marathon/users/quis/access"
           }
         ]
       }
@@ -39,12 +39,12 @@
         "rid": "service.marathon",
         "description": "Marathon",
         "aclurl": "/acls/service.marathon",
-        "gid": "nerds",
-        "membershipurl": "/groups/nerds/users/john",
+        "gid": "ölis",
+        "membershipurl": "/groups/quis/users/quis",
         "actions": [
           {
             "name": "access",
-            "url": "/acls/service.marathon/groups/nerds/access"
+            "url": "/acls/service.marathon/groups/quis/access"
           }
         ]
       }
