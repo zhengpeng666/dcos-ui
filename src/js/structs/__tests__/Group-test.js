@@ -1,3 +1,5 @@
+let fixturePath = "../../../../tests/_fixtures/acl/group-with-details.json";
+
 jest.dontMock("underscore");
 jest.dontMock("../Group");
 jest.dontMock("../Item");
@@ -5,10 +7,11 @@ jest.dontMock("../List");
 jest.dontMock("../User");
 jest.dontMock("../UsersList");
 jest.dontMock("../../utils/Util");
+jest.dontMock(fixturePath);
 
 let _ = require("underscore");
 let Group = require("../Group");
-let groupFixture = require("./fixtures/groupData");
+let groupFixture = require(fixturePath);
 let UsersList = require("../UsersList");
 
 describe("Group", function () {
@@ -36,16 +39,16 @@ describe("Group", function () {
 
     it("returns a UsersList with the number of items we provided",
       function () {
-      let users = this.instance.getUsers();
-      expect(users.list.length)
+      let users = this.instance.getUsers().getItems();
+      expect(users.length)
         .toEqual(this.groupFixture.users.length);
     });
 
     it("returns a UsersList with the data we provided", function () {
-      let users = this.instance.getUsers();
-      expect(users.list[0].uid)
+      let users = this.instance.getUsers().getItems();
+      expect(users[0].get("uid"))
         .toEqual(this.groupFixture.users[0].user.uid);
-      expect(users.list[1].uid)
+      expect(users[1].get("uid"))
         .toEqual(this.groupFixture.users[1].user.uid);
     });
 
