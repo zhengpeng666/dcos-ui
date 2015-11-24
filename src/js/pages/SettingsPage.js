@@ -6,13 +6,13 @@ import { RouteHandler } from "react-router";
 export default class SettingsPage extends React.Component {
 
   render() {
-    let tabs = {
+    let pages = {
       "settings-system": "System",
       "settings-organization": "Organization"
     };
 
     return (
-      <RouteHandler tabs={tabs} />
+      <RouteHandler pages={pages} />
     );
   }
 }

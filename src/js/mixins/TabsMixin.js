@@ -26,7 +26,7 @@ const TabsMixin = {
     );
   },
 
-  tabs_getDiv(customClasses, tab, isActive) {
+  tabs_getSpan(customClasses, tab, isActive) {
     let tabClass = classNames({
       "active": isActive
     });
@@ -47,7 +47,7 @@ const TabsMixin = {
     return RouteUtil.getTabLinks(
       this.tabs,
       this.state.currentTab,
-      this.tabs_getDiv.bind(this, customClasses)
+      this.tabs_getSpan.bind(this, customClasses)
     );
   },
 

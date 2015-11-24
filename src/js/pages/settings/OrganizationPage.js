@@ -46,7 +46,7 @@ export default class OrganizationPage extends Util.mixin(TabsMixin) {
           key={tab}
           to={tab}
           className="h1 page-header-title inverse flush">
-          {this.props.tabs[tab]}
+          {this.props.pages[tab]}
         </Link>
       </li>
     );
@@ -59,7 +59,7 @@ export default class OrganizationPage extends Util.mixin(TabsMixin) {
     return (
       <ul className="tabs list-inline list-unstyled">
         {RouteUtil.getTabLinks(
-          this.props.tabs,
+          this.props.pages,
           currentRoute,
           this.getLink.bind(this)
         )}
