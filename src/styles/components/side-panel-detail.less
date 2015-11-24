@@ -32,6 +32,26 @@ Side Panel Detail
   ----------------------------------------------------------------------------- */
 
   .side-panel-content {
+    display: flex;
+
+    // We need to force the Gemini scrollbar view to fill its parent.
+    > .gm-scroll-view {
+      align-self: stretch;
+      display: flex;
+      flex: 1;
+
+      > div {
+        width: 100%;
+      }
+    }
+
+    .side-panel-section {
+      flex-shrink: 0;
+    }
+
+    .side-panel-tab-content {
+      min-height: 400px;
+    }
 
     .side-panel-content-header {
 
@@ -115,6 +135,12 @@ Side Panel Detail
   .container-pod.container-pod-divider-inverse {
 
     border-color: color-lighten(@neutral, 90);
+
+    &:after {
+
+      display: none;
+
+    }
 
   }
 

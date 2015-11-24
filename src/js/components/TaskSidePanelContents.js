@@ -194,7 +194,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
     }
 
     return (
-      <div>
+      <div className="flex-container-col">
         {this.getKeyValuePairs(headerValueMapping)}
         {this.getKeyValuePairs(labelMapping, "Labels")}
       </div>

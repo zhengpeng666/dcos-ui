@@ -149,6 +149,8 @@ export default class ServiceSidePanelContents extends SidePanelContents {
 
     return (
       <div className="
+        side-panel-tab-content
+        side-panel-section
         container
         container-fluid
         container-pod
@@ -214,13 +216,19 @@ export default class ServiceSidePanelContents extends SidePanelContents {
 
   render() {
     let service = MesosSummaryStore.getServiceFromName(this.props.itemID);
+
     if (service == null) {
       return this.getNotFound("service");
     }
 
     return (
-      <div className="flex-container-col" style={{height: "100%"}}>
-        <div className="side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
+      <div className="flex-container-col">
+        <div className="container container-pod container-pod-divider-bottom
+            container-pod-divider-inverse side-panel-section
+            container-pod-short-top flush-bottom
+            side-panel-content-header container container-pod
+            container-fluid container-pod-divider-bottom
+            container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo()}
           <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
             <div className="row">
