@@ -50,7 +50,7 @@ export default class CompositeState {
 
     this.data.frameworks.forEach(function (service) {
       if (data[service.id]) {
-        service._meta = _.extend({}, service._meta,  {
+        service._meta = _.extend({}, service._meta, {
           marathon: data[service.id]
         });
       }
