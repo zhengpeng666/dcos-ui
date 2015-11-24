@@ -2256,10 +2256,6 @@
       "version": "3.5.5",
       "resolved": "http://registry.npmjs.org/d3/-/d3-3.5.5.tgz"
     },
-    "deep-extend": {
-      "version": "0.4.0",
-      "resolved": "https://registry.npmjs.org/deep-extend/-/deep-extend-0.4.0.tgz"
-    },
     "envify": {
       "version": "3.4.0",
       "resolved": "http://registry.npmjs.org/envify/-/envify-3.4.0.tgz",

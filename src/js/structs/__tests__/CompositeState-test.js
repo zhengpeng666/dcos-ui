@@ -61,8 +61,7 @@ describe("CompositeState", function () {
       });
     });
 
-    it("replaced old marathon data with new marathon data",
-      function () {
+    it("replaced old marathon data with new marathon data", function () {
       this.instance.addState({
         frameworks: [{
           id: "foo",

@@ -3,7 +3,6 @@ import Config from "../config/Config";
 import SummaryList from "./SummaryList";
 
 let Core = {
-
   compositeState: new CompositeState(),
 
   summary: new SummaryList({maxLength: Config.historyLength}),
@@ -24,7 +23,6 @@ let Core = {
   getLatest() {
     return this.compositeState;
   }
-
 };
 
 export default Core;

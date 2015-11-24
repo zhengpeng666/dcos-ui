@@ -1,47 +1,40 @@
 import _ from "underscore";
-import deepExtend from "deep-extend";
 
 import ServicesList from "./ServicesList";
 
-let mergeData = function (newData, oldData) {
-  // We use deep-extend to avoid mutating the old data.
-  let mergedData = deepExtend({}, oldData);
-
+let mergeData = function (newData, data) {
   Object.keys(newData).forEach(function (key) {
     if (_.isArray(newData[key])) {
-      mergedData[key] = mergeMesosArrays(newData, oldData, key);
-    } else if (_.isObject(newData[key])) {
+      data[key] = mergeMesosArrays(newData, data, key);
+    } else if (_.isObject(newData[key]) && data[key]) {
       // We need to recurse over any nested objects.
-      mergedData[key] = mergeData(newData[key], oldData[key] || {});
+      data[key] = mergeData(newData[key], data[key]);
     } else {
       // Any other type of value can be replaced.
-      mergedData[key] = newData[key];
+      data[key] = newData[key];
     }
   });
 
-  return mergedData;
+  return data;
 };
 
-let mergeMesosArrays = function (newData, oldData, key) {
+let mergeMesosArrays = function (newData, data, key) {
   if (key === "frameworks" || key === "slaves") {
     // We need to merge the objects within the frameworks and slaves arrays.
-    return mergeObjectsById(newData[key], oldData[key]);
+    return mergeObjectsById(newData[key], data[key]);
   } else {
     // We can replace any other array.
     return newData[key];
   }
 };
 
-let mergeObjectsById = function (newData, oldData) {
-  let activeIDs = _.pluck(newData, "id");
-
+let mergeObjectsById = function (newData, data) {
   // Merge the incoming data with the old data.
-  return activeIDs.map(function (id) {
-    let oldObj = _.findWhere(oldData, {id: id});
-    let newObj = _.findWhere(newData, {id: id});
+  return newData.map(function (newDatum) {
+    let oldDatum = _.findWhere(data, {id: newDatum.id});
 
     // These objects don't need to be deeply merged.
-    return _.extend({}, oldObj, newObj);
+    return _.extend({}, oldDatum, newDatum);
   });
 };
 
@@ -57,9 +50,9 @@ export default class CompositeState {
 
     this.data.frameworks.forEach(function (service) {
       if (data[service.id]) {
-        service._meta = {
+        service._meta = _.extend({}, service._meta,  {
           marathon: data[service.id]
-        };
+        });
       }
     });
   }
