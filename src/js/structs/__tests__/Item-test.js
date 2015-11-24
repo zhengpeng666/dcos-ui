@@ -24,6 +24,11 @@ describe("Item", function () {
       expect(item.get("foo")).toEqual("bar");
     });
 
+    it("returns all properties when no key is defined", function () {
+      let item = new Item({foo: "bar", baz: "qux"});
+      expect(item.get()).toEqual({foo: "bar", baz: "qux"});
+    });
+
   });
 
 });
