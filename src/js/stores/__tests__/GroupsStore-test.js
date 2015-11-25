@@ -28,7 +28,6 @@ describe("GroupsStore", function () {
       handlers.success(groupsFixture);
     };
     this.groupsFixture = _.clone(groupsFixture);
-    GroupsStore.init();
   });
 
   afterEach(function () {

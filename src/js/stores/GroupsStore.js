@@ -11,10 +11,8 @@ const GroupsStore = Store.createStore({
 
   mixins: [GetSetMixin],
 
-  init: function () {
-    this.set({
-      groups: []
-    });
+  getSet_data: {
+    groups: []
   },
 
   emitChange: function (eventName) {
