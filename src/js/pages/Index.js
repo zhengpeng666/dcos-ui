@@ -259,7 +259,10 @@ var Index = React.createClass({
         //   modalErrorMsg={this.state.modalErrorMsg} />
     return (
       <div styles={{background: "white"}}>
-        <Form definition={formDefinition} onSubmit={function (arg) {console.log("index.js onsubmit", arg); }} />
+        <Form
+          definition={formDefinition}
+          triggerSubmit={function (arg) {}}
+          onSubmit={function (model) {console.log(model, "submitted"); }} />
       </div>
     );
   }
@@ -279,15 +282,29 @@ var formDefinition = [
     showLabel: true,
     writeType: "edit"
   },
-  {
-    fieldName: "address",
-    value: "string",
-    validation: function (arg) { return true; },
-    placeholder: "",
-    fieldType: "password",
-    required: true,
-    writeType: "input"
-  }
+  [
+    {
+      fieldName: "address",
+      value: "string",
+      validation: /^[a-zA-Z\s\d\/]*\d[a-zA-Z\s\d\/]*$/,
+      placeholder: "",
+      fieldType: "text",
+      errorText: "must be a valid address",
+      required: true,
+      showLabel: true,
+      showError: true,
+      writeType: "input"
+    },
+    {
+      fieldName: "password",
+      value: "string",
+      validation: function (arg) { return true; },
+      placeholder: "",
+      fieldType: "password",
+      required: true,
+      writeType: "input"
+    }
+  ]
 ];
 
 module.exports = Index;
