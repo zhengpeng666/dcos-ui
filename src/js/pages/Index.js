@@ -273,7 +273,7 @@ var formDefinition = [
     fieldName: "username",
     value: "string",
     validation: function (arg) {
-      return arg.length < 8;
+      return arg.length < 15;
     },
     placeholder: "What's up?",
     fieldType: "text",
