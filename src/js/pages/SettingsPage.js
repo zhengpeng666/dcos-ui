@@ -7,7 +7,6 @@ export default class SettingsPage extends React.Component {
 
   render() {
     let pages = {
-      "settings-system": "System",
       "settings-organization": "Organization"
     };
 
