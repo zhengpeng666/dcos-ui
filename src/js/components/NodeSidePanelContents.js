@@ -19,7 +19,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
     ];
 
     this.state = {
-      currentTab: Object.keys(this.tabs).shift()
+      currentTab: Object.keys(this.tabs_tabs).shift()
     };
   }
 

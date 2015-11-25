@@ -22,9 +22,9 @@ export default class TaskSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
-    this.tabs = _.clone(TABS);
+    this.tabs_tabs = _.clone(TABS);
     this.state = {
-      currentTab: Object.keys(this.tabs).shift()
+      currentTab: Object.keys(this.tabs_tabs).shift()
     };
 
     this.storesListeners = [
@@ -45,10 +45,10 @@ export default class TaskSidePanelContents extends SidePanelContents {
       let completed = TaskStates[task.state].stateTypes[0] === "completed";
 
       if (completed) {
-        delete this.tabs.files;
-        this.setState({currentTab: Object.keys(this.tabs)[0]});
+        delete this.tabs_tabs.files;
+        this.setState({currentTab: Object.keys(this.tabs_tabs)[0]});
       } else {
-        this.tabs = _.clone(TABS);
+        this.tabs_tabs = _.clone(TABS);
       }
     }
   }

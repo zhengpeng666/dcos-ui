@@ -22,7 +22,7 @@ export default class ServiceSidePanelContents extends SidePanelContents {
     super(...arguments);
 
     this.state = {
-      currentTab: Object.keys(this.tabs).shift()
+      currentTab: Object.keys(this.tabs_tabs).shift()
     };
 
     this.store_listeners = [

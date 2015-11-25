@@ -20,7 +20,7 @@ const TabsMixin = {
           to={tab}
           className={customClasses}
           onClick={this.tabs_handleTabClick.bind(this, tab)}>
-          {this.tabs[tab]}
+          {this.tabs_tabs[tab]}
         </Link>
       </li>
     );
@@ -37,7 +37,7 @@ const TabsMixin = {
           key={tab}
           className={customClasses}
           onClick={this.tabs_handleTabClick.bind(this, tab)}>
-          {this.tabs[tab]}
+          {this.tabs_tabs[tab]}
         </span>
       </li>
     );
@@ -45,7 +45,7 @@ const TabsMixin = {
 
   tabs_getTabs(customClasses) {
     return TabsUtil.getTabLinks(
-      this.tabs,
+      this.tabs_tabs,
       this.state.currentTab,
       this.tabs_getSpan.bind(this, customClasses)
     );
@@ -53,14 +53,14 @@ const TabsMixin = {
 
   tabs_getTabLinks(customClasses) {
     return TabsUtil.getTabLinks(
-      this.tabs,
+      this.tabs_tabs,
       this.state.currentTab,
       this.tabs_getLink.bind(this, customClasses)
     );
   },
 
   tabs_getTabView() {
-    let currentTab = this.tabs[this.state.currentTab];
+    let currentTab = this.tabs_tabs[this.state.currentTab];
     let renderFunction = this[`render${currentTab}TabView`];
 
     if (renderFunction == null) {

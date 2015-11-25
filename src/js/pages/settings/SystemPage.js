@@ -13,12 +13,12 @@ export default class SystemPage extends Util.mixin(TabsMixin) {
   constructor() {
     super();
 
-    this.tabs = {
+    this.tabs_tabs = {
       "settings-system-overview": "Overview"
     };
 
     this.state = {
-      currentTab: Object.keys(this.tabs).shift()
+      currentTab: Object.keys(this.tabs_tabs).shift()
     };
   }
 
@@ -26,7 +26,7 @@ export default class SystemPage extends Util.mixin(TabsMixin) {
     let routes = this.context.router.getCurrentRoutes();
     let currentRoute = routes[routes.length - 1].name;
 
-    if (Object.keys(this.tabs).indexOf(currentRoute) >= 0) {
+    if (Object.keys(this.tabs_tabs).indexOf(currentRoute) >= 0) {
       this.setState({currentTab: currentRoute});
     }
   }
