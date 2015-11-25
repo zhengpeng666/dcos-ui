@@ -261,6 +261,11 @@ var Index = React.createClass({
       <div styles={{background: "white"}}>
         <Form
           definition={formDefinition}
+          className="form flush-bottom"
+          readClass="read-only"
+          inputClass="form-control"
+          formControlClass="form-group"
+          helpBlockClass="form-help-block"
           triggerSubmit={function (arg) {}}
           onSubmit={function (model) {console.log(model, "submitted"); }} />
       </div>
