@@ -9,7 +9,7 @@ import TabsUtil from "../utils/TabsUtil";
 import TabsMixin from "../mixins/TabsMixin";
 import Util from "../utils/Util";
 
-let SETTINGS_PAGES = {
+const SETTINGS_TABS = {
   "settings-organization": "Organization"
   // TODO: add "settings-system": "System"
 };
@@ -35,7 +35,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
     let routes = this.context.router.getCurrentRoutes();
     let currentRoute = routes[routes.length - 1].name;
 
-    let pageKeys = Object.keys(SETTINGS_PAGES);
+    let pageKeys = Object.keys(SETTINGS_TABS);
 
     if (currentRoute.indexOf(pageKeys[0]) >= 0) {
       this.tabs_tabs = {
@@ -65,7 +65,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
         <Link
           to={tab}
           className="h1 page-header-title inverse flush">
-          {SETTINGS_PAGES[tab]}
+          {SETTINGS_TABS[tab]}
         </Link>
       </li>
     );
@@ -78,7 +78,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
     return (
       <ul className="tabs list-inline list-unstyled">
         {TabsUtil.getTabs(
-          SETTINGS_PAGES,
+          SETTINGS_TABS,
           currentRoute,
           this.getRoutedItem.bind(this)
         )}
