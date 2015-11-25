@@ -115,10 +115,6 @@ export default class FieldInput extends React.Component {
     );
     let formRowElementClassSet = this.getRowClass(this.props);
 
-    let label = this.getLabel();
-    let errorMsg = this.getErrorMsg();
-    let content = this.getInputElement(attributes);
-
     return (
       <div className={formRowElementClassSet}>
         {this.getLabel()}
