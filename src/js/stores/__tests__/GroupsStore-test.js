@@ -1,4 +1,3 @@
-jest.dontMock("underscore");
 jest.dontMock("../GroupsStore");
 jest.dontMock("../../config/Config");
 jest.dontMock("../../events/AppDispatcher");
