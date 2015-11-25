@@ -126,7 +126,7 @@ var UserDetailStore = Store.createStore({
 
   processUserError: function (userID) {
     this.emit(EventTypes.ACL_USER_DETAILS_USER_ERROR, userID);
-    this.invalidateUserWithDetailsFetch(userID, "user");
+    this.invalidateUserWithDetailsFetch(userID);
   },
 
   /**
@@ -149,7 +149,7 @@ var UserDetailStore = Store.createStore({
 
   processUserGroupsError: function (userID) {
     this.emit(EventTypes.ACL_USER_DETAILS_GROUPS_ERROR, userID);
-    this.invalidateUserWithDetailsFetch(userID, "groups");
+    this.invalidateUserWithDetailsFetch(userID);
   },
 
   /**
@@ -172,7 +172,7 @@ var UserDetailStore = Store.createStore({
 
   processUserPermissionsError: function (userID) {
     this.emit(EventTypes.ACL_USER_DETAILS_PERMISSIONS_ERROR, userID);
-    this.invalidateUserWithDetailsFetch(userID, "permissions");
+    this.invalidateUserWithDetailsFetch(userID);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
