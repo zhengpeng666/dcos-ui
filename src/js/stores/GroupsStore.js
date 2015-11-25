@@ -50,10 +50,6 @@ const GroupsStore = Store.createStore({
     this.emit(EventTypes.ACL_GROUPS_REQUEST_ERROR);
   },
 
-  processOngoingRequest: function () {
-    // Handle ongoing request here.
-  },
-
   dispatcherIndex: AppDispatcher.register(function (payload) {
     let source = payload.source;
     if (source !== ActionTypes.SERVER_ACTION) {
@@ -68,9 +64,6 @@ const GroupsStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_GROUPS_ERROR:
         GroupsStore.processGroupsError();
-        break;
-      case ActionTypes.REQUEST_ACL_GROUPS_ONGOING:
-        GroupsStore.processOngoingRequest();
         break;
     }
 

@@ -8,6 +8,7 @@ jest.dontMock("../../structs/Group");
 jest.dontMock("../../structs/GroupsList");
 jest.dontMock("../../structs/Item");
 jest.dontMock("../../structs/List");
+jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../../../tests/_fixtures/acl/groups-unicode.json");
@@ -17,13 +18,21 @@ let Config = require("../../config/Config");
 let groupsFixture = require("../../../../tests/_fixtures/acl/groups-unicode.json");
 let GroupsList = require("../../structs/GroupsList");
 let GroupsStore = require("../GroupsStore");
+let RequestUtil = require("../../utils/RequestUtil");
 
 describe("GroupsStore", function () {
 
   beforeEach(function () {
-    Config.useFixtures = true;
+    this.requestFn = RequestUtil.json;
+    RequestUtil.json = function (handlers) {
+      handlers.success(groupsFixture);
+    };
     this.groupsFixture = _.clone(groupsFixture);
     GroupsStore.init();
+  });
+
+  afterEach(function () {
+    RequestUtil.json = this.requestFn;
   });
 
   describe("#getGroups", function () {

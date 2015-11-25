@@ -6,41 +6,26 @@ import groupsFixture from "json!../../../tests/_fixtures/acl/groups-unicode.json
 
 const ACLGroupActions = {
 
-  fetch: RequestUtil.debounceOnError(
-    Config.getRefreshRate(),
-    function (resolve, reject) {
-      return function () {
-        RequestUtil.json({
-          url: `${Config.rootUrl}/groups`,
-          success: function (response) {
-            AppDispatcher.handleServerAction({
-              type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
-              data: response
-            });
-            resolve();
-          },
-          error: function (e) {
-            AppDispatcher.handleServerAction({
-              type: ActionTypes.REQUEST_ACL_GROUPS_ERROR,
-              data: e.message
-            });
-            reject();
-          },
-          hangingRequestCallback: function () {
-            AppDispatcher.handleServerAction({
-              type: ActionTypes.REQUEST_ACL_GROUPS_ONGOING
-            });
-          }
+  fetch: function () {
+    RequestUtil.json({
+      url: `${Config.rootUrl}/groups`,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
+          data: response
         });
-      };
-    },
-    {delayAfterCount: Config.delayAfterErrorCount}
-  )
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUPS_ERROR,
+          data: e.message
+        });
+      }
+    });
+  }
 
 };
 
-// Need to get this to use whatever the current value of Config.useFixtures is.
-// This is why tests are currently failing.
 if (Config.useFixtures) {
   ACLGroupActions.fetch = function () {
     AppDispatcher.handleServerAction({
