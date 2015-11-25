@@ -25,7 +25,7 @@ const GroupsStore = Store.createStore({
 
   fetchGroups: ACLGroupActions.fetch,
 
-  processGroupsSuccess: function (groups) {
+  processGroups: function (groups) {
     this.set({
       groups: new GroupsList({
         items: groups
@@ -48,7 +48,7 @@ const GroupsStore = Store.createStore({
 
     switch (action.type) {
       case ActionTypes.REQUEST_ACL_GROUPS_SUCCESS:
-        GroupsStore.processGroupsSuccess(action.data);
+        GroupsStore.processGroups(action.data);
         break;
       case ActionTypes.REQUEST_ACL_GROUPS_ERROR:
         GroupsStore.processGroupsError();
