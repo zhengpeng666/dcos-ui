@@ -77,7 +77,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
 
     return (
       <ul className="tabs list-inline list-unstyled">
-        {TabsUtil.getTabLinks(
+        {TabsUtil.getTabs(
           SETTINGS_PAGES,
           currentRoute,
           this.getRoutedItem.bind(this)
@@ -89,7 +89,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
   getNavigation() {
     return (
       <ul className="tabs list-inline flush-bottom inverse">
-        {this.tabs_getTabLinks()}
+        {this.tabs_getRoutedTabs()}
       </ul>
     );
   }
