@@ -22,7 +22,7 @@ var ConfigStore = Store.createStore({
     this.removeListener(eventName, callback);
   },
 
-  processStateSuccess: function (config) {
+  processState: function (config) {
     this.set({config});
     this.emit(EventTypes.CONFIG_LOADED);
   },
@@ -41,7 +41,7 @@ var ConfigStore = Store.createStore({
     var action = payload.action;
     switch (action.type) {
       case ActionTypes.REQUEST_CONFIG_SUCCESS:
-        ConfigStore.processStateSuccess(action.data);
+        ConfigStore.processState(action.data);
         break;
       case ActionTypes.REQUEST_CONFIG_ERROR:
         ConfigStore.processStateError();
