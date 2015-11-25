@@ -26,6 +26,7 @@ var NodesPage = require("./pages/NodesPage");
 var NodesGridView = require("./components/NodesGridView");
 var NotFoundPage = require("./pages/NotFoundPage");
 import OrganizationPage from "./pages/settings/OrganizationPage";
+import OverviewTab from "./pages/settings/OverviewTab";
 var ServiceOverlay = require("./components/ServiceOverlay");
 var ServicesPage = require("./pages/ServicesPage");
 var SettingsPage = require("./pages/SettingsPage");
@@ -60,8 +61,8 @@ var routes = (
     </Route>
 
     <Route name="settings" path="settings/?" handler={SettingsPage}>
-      <Route name="settings-system" path="system/?">
-        <Route name="settings-system-overview" path="overview/?" handler={SystemPage} />
+      <Route name="settings-system" path="system/?" handler={SystemPage}>
+        <Route name="settings-system-overview" path="overview/?" handler={OverviewTab} />
 
         <Redirect from="/settings/system/?" to="settings-system-overview" />
       </Route>

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Link } from "react-router";
+import { Link, RouteHandler } from "react-router";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -78,7 +78,7 @@ export default class SystemPage extends Util.mixin(TabsMixin) {
       <Page
         title={this.getTitle()}
         navigation={this.getNavigation()}>
-        <h3 className="flush">No access.</h3>
+        <RouteHandler />
       </Page>
     );
   }
