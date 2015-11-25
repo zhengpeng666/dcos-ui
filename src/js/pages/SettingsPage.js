@@ -80,7 +80,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
         {TabsUtil.getTabs(
           SETTINGS_TABS,
           currentRoute,
-          this.getRoutedItem.bind(this)
+          this.getRoutedItem
         )}
       </ul>
     );
