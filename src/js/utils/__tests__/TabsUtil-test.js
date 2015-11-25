@@ -7,11 +7,7 @@ var TabsUtil = require("../TabsUtil");
 describe("TabsUtil", function () {
   describe("#getTabLinks", function () {
     beforeEach(function () {
-      this.tabs = {
-        foo: "bar",
-        baz: "qux",
-        corge: "grault"
-      };
+      this.tabs = {foo: "bar", baz: "qux", corge: "grault"};
       this.getElement = function () {};
       spyOn(this, "getElement");
     });
