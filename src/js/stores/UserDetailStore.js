@@ -1,12 +1,12 @@
-var _ = require("underscore");
+import _ from "underscore";
 
-var AppDispatcher = require("../events/AppDispatcher");
-var ActionTypes = require("../constants/ActionTypes");
-var EventTypes = require("../constants/EventTypes");
-var GetSetMixin = require("../mixins/GetSetMixin");
-var User = require("../structs/User");
-var UserActions = require("../events/UserActions");
-var Store = require("../utils/Store");
+import AppDispatcher from "../events/AppDispatcher";
+import ActionTypes from "../constants/ActionTypes";
+import EventTypes from "../constants/EventTypes";
+import GetSetMixin from "../mixins/GetSetMixin";
+import User from "../structs/User";
+import UserActions from "../events/UserActions";
+import Store from "../utils/Store";
 
 /**
  * This store will keep track of users and their details
@@ -87,7 +87,7 @@ var UserDetailStore = Store.createStore({
     if (fetchedAll === true) {
       delete usersFetching[userID];
       this.set({usersFetching});
-      this.emit(EventTypes.USER_DETAILS_FETCHED_SUCCESS, userID);
+      this.emit(EventTypes.ACL_USER_DETAILS_FETCHED_SUCCESS, userID);
     }
   },
 
@@ -105,7 +105,7 @@ var UserDetailStore = Store.createStore({
 
     delete usersFetching[userID];
     this.set({usersFetching});
-    this.emit(EventTypes.USER_DETAILS_FETCHED_ERROR, userID);
+    this.emit(EventTypes.ACL_USER_DETAILS_FETCHED_ERROR, userID);
   },
 
   /**
@@ -119,13 +119,13 @@ var UserDetailStore = Store.createStore({
     user = _.extend(user, userData);
 
     this.setUser(user.uid, user);
-    this.emit(EventTypes.USER_DETAILS_USER_CHANGE, user.uid);
+    this.emit(EventTypes.ACL_USER_DETAILS_USER_CHANGE, user.uid);
 
     this.validateUserWithDetailsFetch(user.uid, "user");
   },
 
   processUserError: function (userID) {
-    this.emit(EventTypes.USER_DETAILS_USER_ERROR, userID);
+    this.emit(EventTypes.ACL_USER_DETAILS_USER_ERROR, userID);
     this.invalidateUserWithDetailsFetch(userID, "user");
   },
 
@@ -142,13 +142,13 @@ var UserDetailStore = Store.createStore({
 
     // Use userID throughout as the user may not have been previously set
     this.setUser(userID, user);
-    this.emit(EventTypes.USER_DETAILS_GROUPS_CHANGE, userID);
+    this.emit(EventTypes.ACL_USER_DETAILS_GROUPS_CHANGE, userID);
 
     this.validateUserWithDetailsFetch(userID, "groups");
   },
 
   processUserGroupsError: function (userID) {
-    this.emit(EventTypes.USER_DETAILS_GROUPS_ERROR, userID);
+    this.emit(EventTypes.ACL_USER_DETAILS_GROUPS_ERROR, userID);
     this.invalidateUserWithDetailsFetch(userID, "groups");
   },
 
@@ -165,13 +165,13 @@ var UserDetailStore = Store.createStore({
 
     // Use userID throughout as the user may not have been previously set
     this.setUser(userID, user);
-    this.emit(EventTypes.USER_DETAILS_PERMISSIONS_CHANGE, userID);
+    this.emit(EventTypes.ACL_USER_DETAILS_PERMISSIONS_CHANGE, userID);
 
     this.validateUserWithDetailsFetch(userID, "permissions");
   },
 
   processUserPermissionsError: function (userID) {
-    this.emit(EventTypes.USER_DETAILS_PERMISSIONS_ERROR, userID);
+    this.emit(EventTypes.ACL_USER_DETAILS_PERMISSIONS_ERROR, userID);
     this.invalidateUserWithDetailsFetch(userID, "permissions");
   },
 
