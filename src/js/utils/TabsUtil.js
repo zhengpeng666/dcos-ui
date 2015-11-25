@@ -10,10 +10,10 @@ const TabsUtil = {
    * This needs to be in a util because we can
    * have tabs inside of tabs for a component
    *
-   * @param  {Object} tabs       with a key for each tab to render
+   * @param  {Object} tabs with a key for each tab to render
    * @param  {String} currentTab currently active tab
    * @param  {Function} getElement render function to render each element
-   * @return {Array}            of tabs to render
+   * @return {Array} of tabs to render
    */
   getTabs: function (tabs, currentTab, getElement) {
     let tabSet = Object.keys(tabs);

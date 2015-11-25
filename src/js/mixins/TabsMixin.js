@@ -9,11 +9,11 @@ const TabsMixin = {
 
   /**
    * Returns a tab that has a callback when clicked.
-   * @see  #tabs_handleTabClick
+   * @see #tabs_handleTabClick
    *
-   * @param  {String}  customClasses to be added to the Link item
-   * @param  {String}  tab           key of tab to render
-   * @return {Component}             React component to render
+   * @param  {String} customClasses to be added to the Link item
+   * @param  {String} tab key of tab to render
+   * @return {Component} React component to render
    */
   tabs_getUnroutedItem(customClasses, tab) {
     return (
@@ -30,7 +30,7 @@ const TabsMixin = {
    * Will only have onClick handlers, as these tabs are not routable.
    *
    * @param  {String} customClasses to be added to the active component
-   * @return {Array}               of tabs to render
+   * @return {Array} of tabs to render
    */
   tabs_getUnroutedTabs(customClasses) {
     return TabsUtil.getTabs(
@@ -43,9 +43,9 @@ const TabsMixin = {
   /**
    * Returns a Link for a given tab. This tab is expected to be routable.
    *
-   * @param  {String}  customClasses to be added to the Link item
-   * @param  {String}  tab           key of tab to render
-   * @return {Component}             React component to render
+   * @param  {String} customClasses to be added to the Link item
+   * @param  {String} tab key of tab to render
+   * @return {Component} React component to render
    */
   tabs_getRoutedItem(customClasses, tab) {
     return (
@@ -63,7 +63,7 @@ const TabsMixin = {
    * Will have onClick handlers and active Link components with routes
    *
    * @param  {String} customClasses to be added to the active component
-   * @return {Array}               of tabs to render
+   * @return {Array} of tabs to render
    */
   tabs_getRoutedTabs(customClasses) {
     return TabsUtil.getTabs(
