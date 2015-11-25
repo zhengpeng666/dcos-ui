@@ -8,7 +8,7 @@ const ACLGroupActions = {
 
   fetch: function () {
     RequestUtil.json({
-      url: `${Config.rootUrl}/groups`,
+      url: `${Config.rootUrl}${Config.apiPrefix}/groups`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
