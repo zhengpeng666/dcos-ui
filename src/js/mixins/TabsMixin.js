@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
-import RouteUtil from "../utils/RouteUtil";
+import TabsUtil from "../utils/TabsUtil";
 
 const TabsMixin = {
 
@@ -44,7 +44,7 @@ const TabsMixin = {
   },
 
   tabs_getTabs(customClasses) {
-    return RouteUtil.getTabLinks(
+    return TabsUtil.getTabLinks(
       this.tabs,
       this.state.currentTab,
       this.tabs_getSpan.bind(this, customClasses)
@@ -52,7 +52,7 @@ const TabsMixin = {
   },
 
   tabs_getTabLinks(customClasses) {
-    return RouteUtil.getTabLinks(
+    return TabsUtil.getTabLinks(
       this.tabs,
       this.state.currentTab,
       this.tabs_getLink.bind(this, customClasses)
