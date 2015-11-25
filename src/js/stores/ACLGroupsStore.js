@@ -1,5 +1,4 @@
-import ACLGroupActions from "../events/ACLGroupActions";
-import ACLActionTypes from "../constants/ACLActionTypes";
+import ACLGroupsActions from "../events/ACLGroupsActions";
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "../events/AppDispatcher";
 import EventTypes from "../constants/EventTypes";
@@ -24,7 +23,7 @@ const GroupsStore = Store.createStore({
     this.removeListener(eventName, callback);
   },
 
-  fetchGroups: ACLGroupActions.fetch,
+  fetchGroups: ACLGroupsActions.fetch,
 
   processGroups: function (groups) {
     this.set({
@@ -32,11 +31,11 @@ const GroupsStore = Store.createStore({
         items: groups
       })
     });
-    this.emit(ACLActionTypes.ACL_GROUPS_CHANGE);
+    this.emit(ActionTypes.ACL_GROUPS_CHANGE);
   },
 
   processGroupsError: function () {
-    this.emit(ACLActionTypes.ACL_GROUPS_REQUEST_ERROR);
+    this.emit(ActionTypes.ACL_GROUPS_REQUEST_ERROR);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -48,10 +47,10 @@ const GroupsStore = Store.createStore({
     let action = payload.action;
 
     switch (action.type) {
-      case ACLActionTypes.REQUEST_ACL_GROUPS_SUCCESS:
+      case ActionTypes.REQUEST_ACL_GROUPS_SUCCESS:
         GroupsStore.processGroups(action.data);
         break;
-      case ACLActionTypes.REQUEST_ACL_GROUPS_ERROR:
+      case ActionTypes.REQUEST_ACL_GROUPS_ERROR:
         GroupsStore.processGroupsError();
         break;
     }

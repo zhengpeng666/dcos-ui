@@ -1,15 +1,15 @@
-jest.dontMock("../ACLGroupActions");
+jest.dontMock("../ACLGroupsActions");
 jest.dontMock("../AppDispatcher");
 jest.dontMock("../../config/Config");
 jest.dontMock("../../utils/RequestUtil");
 
-let ACLGroupActions = require("../ACLGroupActions");
-let ACLActionTypes = require("../../constants/ACLActionTypes");
+let ACLGroupsActions = require("../ACLGroupsActions");
+let ActionTypes = require("../../constants/ActionTypes");
 var AppDispatcher = require("../AppDispatcher");
 let Config = require("../../config/Config");
 let RequestUtil = require("../../utils/RequestUtil");
 
-describe("ACLGroupActions", function () {
+describe("ACLGroupsActions", function () {
 
   beforeEach(function () {
     this.configuration = null;
@@ -28,11 +28,11 @@ describe("ACLGroupActions", function () {
   describe("#fetch", function () {
 
     it("dispatches the correct action when successful", function () {
-      ACLGroupActions.fetch();
+      ACLGroupsActions.fetch();
       let id = AppDispatcher.register(function (payload) {
         let action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.type).toEqual(ACLActionTypes.REQUEST_ACL_GROUPS_SUCCESS);
+        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUPS_SUCCESS);
       });
 
       this.configuration.success({foo: "bar"});
@@ -40,13 +40,13 @@ describe("ACLGroupActions", function () {
 
     it("calls #json from the RequestUtil", function () {
       spyOn(RequestUtil, "json");
-      ACLGroupActions.fetch();
+      ACLGroupsActions.fetch();
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
     it("fetches data from the correct URL", function () {
       spyOn(RequestUtil, "json");
-      ACLGroupActions.fetch();
+      ACLGroupsActions.fetch();
       expect(RequestUtil.json.mostRecentCall.args[0].url)
         .toEqual("http://mesosserver/api/v1/groups");
     });

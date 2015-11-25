@@ -1,7 +1,7 @@
-jest.dontMock("../GroupsStore");
+jest.dontMock("../ACLGroupsStore");
 jest.dontMock("../../config/Config");
 jest.dontMock("../../events/AppDispatcher");
-jest.dontMock("../../events/ACLGroupActions");
+jest.dontMock("../../events/ACLGroupsActions");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../structs/Group");
 jest.dontMock("../../structs/GroupsList");
@@ -13,15 +13,15 @@ jest.dontMock("../../utils/Util");
 jest.dontMock("../../../../tests/_fixtures/acl/groups-unicode.json");
 
 let _ = require("underscore");
-let ACLActionTypes = require("../../constants/ACLActionTypes");
+let ActionTypes = require("../../constants/ActionTypes");
 let AppDispatcher = require("../../events/AppDispatcher");
 let Config = require("../../config/Config");
 let groupsFixture = require("../../../../tests/_fixtures/acl/groups-unicode.json");
 let GroupsList = require("../../structs/GroupsList");
-let GroupsStore = require("../GroupsStore");
+let ACLGroupsStore = require("../ACLGroupsStore");
 let RequestUtil = require("../../utils/RequestUtil");
 
-describe("GroupsStore", function () {
+describe("ACLGroupsStore", function () {
 
   beforeEach(function () {
     this.requestFn = RequestUtil.json;
@@ -37,15 +37,15 @@ describe("GroupsStore", function () {
 
   it("should return an instance of GroupsList", function () {
     Config.useFixtures = true;
-    GroupsStore.fetchGroups();
-    let groups = GroupsStore.get("groups");
+    ACLGroupsStore.fetchGroups();
+    let groups = ACLGroupsStore.get("groups");
     expect(groups instanceof GroupsList).toBeTruthy();
   });
 
   it("should return all of the groups it was given", function () {
     Config.useFixtures = true;
-    GroupsStore.fetchGroups();
-    let groups = GroupsStore.get("groups").getItems();
+    ACLGroupsStore.fetchGroups();
+    let groups = ACLGroupsStore.get("groups").getItems();
     expect(groups.length).toEqual(this.groupsFixture.length);
   });
 
@@ -53,11 +53,11 @@ describe("GroupsStore", function () {
 
     it("stores groups when event is dispatched", function () {
       AppDispatcher.handleServerAction({
-        type: ACLActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
+        type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
         data: [{gid: "foo", bar: "baz"}]
       })
 
-      let groups = GroupsStore.get("groups").list;
+      let groups = ACLGroupsStore.get("groups").list;
       expect(groups[0].gid).toEqual("foo");
       expect(groups[0].bar).toEqual("baz");
     });
