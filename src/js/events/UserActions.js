@@ -66,4 +66,33 @@ var UserActions = {
 
 };
 
+if (Config.useFixtures) {
+  let userFixture = require("../../../tests/_fixtures/acl/user-unicode.json");
+  let userDetailsFixture =
+    require("../../../tests/_fixtures/acl/user-with-details.json");
+
+  UserActions.fetchUser = function () {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_USER_SUCCESS,
+      data: userFixture
+    });
+  };
+
+  UserActions.fetchUserGroups = function () {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS,
+      data: userDetailsFixture.groups,
+      userID: userFixture.uid
+    });
+  };
+
+  UserActions.fetchUserPermissions = function () {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS,
+      data: userDetailsFixture.permissions,
+      userID: userFixture.uid
+    });
+  };
+}
+
 module.exports = UserActions;

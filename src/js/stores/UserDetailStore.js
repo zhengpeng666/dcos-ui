@@ -4,6 +4,7 @@ var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
 var GetSetMixin = require("../mixins/GetSetMixin");
+var User = require("../structs/User");
 var UserActions = require("../events/UserActions");
 var Store = require("../utils/Store");
 
@@ -35,13 +36,13 @@ var UserDetailStore = Store.createStore({
   },
 
   getUser: function (userID) {
-    return new User({item: this.getUserRaw(userID)});
+    return new User(this.getUserRaw(userID) || {});
   },
 
   setUser: function (userID, user) {
     let users = this.get("users");
     users[userID] = user;
-    this.set("users", users);
+    this.set({users});
   },
 
   /**
@@ -54,7 +55,7 @@ var UserDetailStore = Store.createStore({
     let usersFetching = this.get("usersFetching");
 
     usersFetching[userID] = {user: false, groups: false, permissions: false};
-    this.set("usersFetching", usersFetching);
+    this.set({usersFetching});
 
     UserActions.fetchUser(userID);
     UserActions.fetchUserGroups(userID);
@@ -85,7 +86,7 @@ var UserDetailStore = Store.createStore({
 
     if (fetchedAll === true) {
       delete usersFetching[userID];
-      this.set("usersFetching", usersFetching);
+      this.set({usersFetching});
       this.emit(EventTypes.USER_DETAILS_FETCHED_SUCCESS, userID);
     }
   },
@@ -103,12 +104,12 @@ var UserDetailStore = Store.createStore({
     }
 
     delete usersFetching[userID];
-    this.set("usersFetching", usersFetching);
+    this.set({usersFetching});
     this.emit(EventTypes.USER_DETAILS_FETCHED_ERROR, userID);
   },
 
   /**
-   * Process a user respons
+   * Process a user response
    *
    * @param  {Object} userData see /acl/users/user schema
    */
@@ -139,10 +140,11 @@ var UserDetailStore = Store.createStore({
 
     user.groups = groups;
 
-    this.setUser(user.uid, user);
-    this.emit(EventTypes.USER_DETAILS_GROUPS_CHANGE, user.uid);
+    // Use userID throughout as the user may not have been previously set
+    this.setUser(userID, user);
+    this.emit(EventTypes.USER_DETAILS_GROUPS_CHANGE, userID);
 
-    this.validateUserWithDetailsFetch(user.uid, "groups");
+    this.validateUserWithDetailsFetch(userID, "groups");
   },
 
   processUserGroupsError: function (userID) {
@@ -161,10 +163,11 @@ var UserDetailStore = Store.createStore({
 
     user.permissions = permissions;
 
-    this.setUser(user.uid, user);
-    this.emit(EventTypes.USER_DETAILS_PERMISSIONS_CHANGE, user.uid);
+    // Use userID throughout as the user may not have been previously set
+    this.setUser(userID, user);
+    this.emit(EventTypes.USER_DETAILS_PERMISSIONS_CHANGE, userID);
 
-    this.validateUserWithDetailsFetch(user.uid, "permissions");
+    this.validateUserWithDetailsFetch(userID, "permissions");
   },
 
   processUserPermissionsError: function (userID) {
