@@ -10,8 +10,8 @@ import TabsMixin from "../mixins/TabsMixin";
 import Util from "../utils/Util";
 
 let SETTINGS_PAGES = {
-  "settings-organization": "Organization",
-  "settings-system": "System"
+  "settings-organization": "Organization"
+  // TODO: add "settings-system": "System"
 };
 
 export default class SettingsPage extends Util.mixin(TabsMixin) {
