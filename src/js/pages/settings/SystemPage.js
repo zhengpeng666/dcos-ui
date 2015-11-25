@@ -5,7 +5,7 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import Page from "../../components/Page";
-import RouteUtil from "../../utils/RouteUtil";
+import TabsUtil from "../../utils/TabsUtil";
 import TabsMixin from "../../mixins/TabsMixin";
 import Util from "../../utils/Util";
 
@@ -57,7 +57,7 @@ export default class SystemPage extends Util.mixin(TabsMixin) {
 
     return (
       <ul className="tabs list-inline list-unstyled">
-        {RouteUtil.getTabLinks(
+        {TabsUtil.getTabLinks(
           this.props.pages,
           currentRoute,
           this.getLink.bind(this)

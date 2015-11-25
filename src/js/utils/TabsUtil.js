@@ -2,7 +2,7 @@
 import React from "react/addons";
 /*eslint-enable no-unused-vars*/
 
-const TabsUtil = {
+const RouteUtil = {
 
   getTabLinks: function (tabs, currentTab, getElement) {
     let tabSet = Object.keys(tabs);
@@ -14,4 +14,4 @@ const TabsUtil = {
 
 };
 
-export default TabsUtil;
+export default RouteUtil;
