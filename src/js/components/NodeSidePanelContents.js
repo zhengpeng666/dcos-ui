@@ -101,7 +101,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
             </div>
           </div>
           <ul className="tabs list-inline flush-bottom">
-            {this.tabs_getTabs()}
+            {this.tabs_getUnroutedTabs()}
           </ul>
         </div>
         {this.tabs_getTabView()}

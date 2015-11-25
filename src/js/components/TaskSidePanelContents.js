@@ -228,7 +228,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
           {this.getBasicInfo(task, node)}
           <ul className="tabs list-inline container container-fluid container-pod
             flush flush-bottom flush-top">
-            {this.tabs_getTabs()}
+            {this.tabs_getUnroutedTabs()}
           </ul>
         </div>
         <div className="container container-fluid container-pod container-pod-short">

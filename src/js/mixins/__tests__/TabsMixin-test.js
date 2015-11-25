@@ -72,14 +72,14 @@ describe("TabsMixin", function () {
     });
   });
 
-  describe("#tabs_getTabs", function () {
+  describe("#tabs_getUnroutedTabs", function () {
     beforeEach(function () {
       TabsMixin.state = {currentTab: "baz"};
     });
 
     it("should call getTabs with appropriate arguments", function () {
       spyOn(TabsUtil, "getTabs");
-      TabsMixin.tabs_getTabs(null);
+      TabsMixin.tabs_getUnroutedTabs(null);
 
       expect(TabsUtil.getTabs).toHaveBeenCalledWith(
         {foo: "bar", baz: "qux", corge: "Grault"},
@@ -90,7 +90,7 @@ describe("TabsMixin", function () {
 
     it("should call tabs_getUnroutedItem with appropriate arguments", function () {
       spyOn(TabsMixin, "tabs_getUnroutedItem");
-      TabsMixin.tabs_getTabs("quix");
+      TabsMixin.tabs_getUnroutedTabs("quix");
 
       expect(TabsMixin.tabs_getUnroutedItem.argsForCall).toEqual([
         ["quix", "foo", false, 0],

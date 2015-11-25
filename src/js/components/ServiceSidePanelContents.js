@@ -237,7 +237,7 @@ export default class ServiceSidePanelContents extends SidePanelContents {
           </div>
           {this.getOpenServiceButton()}
           <ul className="tabs list-inline flush-bottom">
-            {this.tabs_getTabs()}
+            {this.tabs_getUnroutedTabs()}
           </ul>
         </div>
         {this.tabs_getTabView()}
