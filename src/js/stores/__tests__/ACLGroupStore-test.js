@@ -3,11 +3,11 @@ jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../../constants/EventTypes");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../structs/User");
-jest.dontMock("../../events/ACLGroupActions");
+jest.dontMock("../../events/ACLGroupsActions");
 jest.dontMock("../ACLGroupStore");
 jest.dontMock("../../utils/Store");
 
-var ACLGroupActions = require("../../events/ACLGroupActions");
+var ACLGroupsActions = require("../../events/ACLGroupsActions");
 var ACLGroupStore = require("../ACLGroupStore");
 var AppDispatcher = require("../../events/AppDispatcher");
 var ActionTypes = require("../../constants/ActionTypes");
@@ -58,9 +58,9 @@ describe("ACLGroupStore", function () {
   describe("#fetchGroupWithDetails", function () {
 
     beforeEach(function () {
-      spyOn(ACLGroupActions, "fetchGroup");
-      spyOn(ACLGroupActions, "fetchGroupUsers");
-      spyOn(ACLGroupActions, "fetchGroupPermissions");
+      spyOn(ACLGroupsActions, "fetchGroup");
+      spyOn(ACLGroupsActions, "fetchGroupUsers");
+      spyOn(ACLGroupsActions, "fetchGroupPermissions");
     });
 
     it("tracks group as fetching", function () {
@@ -72,9 +72,9 @@ describe("ACLGroupStore", function () {
 
     it("calls necessary APIs to fetch groups details", function () {
       ACLGroupStore.fetchGroupWithDetails("foo");
-      expect(ACLGroupActions.fetchGroup).toHaveBeenCalled();
-      expect(ACLGroupActions.fetchGroupUsers).toHaveBeenCalled();
-      expect(ACLGroupActions.fetchGroupPermissions).toHaveBeenCalled();
+      expect(ACLGroupsActions.fetchGroup).toHaveBeenCalled();
+      expect(ACLGroupsActions.fetchGroupUsers).toHaveBeenCalled();
+      expect(ACLGroupsActions.fetchGroupPermissions).toHaveBeenCalled();
     });
 
   });

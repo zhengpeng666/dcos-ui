@@ -2,14 +2,14 @@ jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../AppDispatcher");
 jest.dontMock("../../config/Config");
 jest.dontMock("../../utils/RequestUtil");
-jest.dontMock("../ACLGroupActions");
+jest.dontMock("../ACLGroupsActions");
 
-var ACLGroupActions = require("../ACLGroupActions");
+var ACLGroupsActions = require("../ACLGroupsActions");
 var ActionTypes = require("../../constants/ActionTypes");
 var AppDispatcher = require("../AppDispatcher");
 var RequestUtil = require("../../utils/RequestUtil");
 
-describe("ACLGroupActions", function () {
+describe("ACLGroupsActions", function () {
 
   beforeEach(function () {
     this.configuration = null;
@@ -26,7 +26,7 @@ describe("ACLGroupActions", function () {
   describe("#fetchGroup", function () {
 
     beforeEach(function () {
-      ACLGroupActions.fetchGroup("foo");
+      ACLGroupsActions.fetchGroup("foo");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -74,7 +74,7 @@ describe("ACLGroupActions", function () {
   describe("#fetchGroupUsers", function () {
 
     beforeEach(function () {
-      ACLGroupActions.fetchGroupUsers("foo");
+      ACLGroupsActions.fetchGroupUsers("foo");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -144,7 +144,7 @@ describe("ACLGroupActions", function () {
   describe("#fetchGroupPermissions", function () {
 
     beforeEach(function () {
-      ACLGroupActions.fetchGroupPermissions("foo");
+      ACLGroupsActions.fetchGroupPermissions("foo");
     });
 
     it("dispatches the correct action when successful", function () {

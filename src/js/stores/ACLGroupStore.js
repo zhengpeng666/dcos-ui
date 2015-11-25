@@ -1,5 +1,5 @@
 import _ from "underscore";
-import ACLGroupActions from "../events/ACLGroupActions";
+import ACLGroupsActions from "../events/ACLGroupsActions";
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "../events/AppDispatcher";
 import EventTypes from "../constants/EventTypes";
@@ -45,9 +45,9 @@ let GroupDetailStore = Store.createStore({
     groupsFetching[groupID] = {group: false, users: false, permissions: false};
     this.set(groupsFetching);
 
-    ACLGroupActions.fetchGroup(groupID);
-    ACLGroupActions.fetchGroupPermissions(groupID);
-    ACLGroupActions.fetchGroupUsers(groupID);
+    ACLGroupsActions.fetchGroup(groupID);
+    ACLGroupsActions.fetchGroupPermissions(groupID);
+    ACLGroupsActions.fetchGroupUsers(groupID);
   },
 
   validateGroupWithDetailsFetch: function (groupID, type) {
