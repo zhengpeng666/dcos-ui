@@ -34,21 +34,18 @@ describe("GroupsStore", function () {
     RequestUtil.json = this.requestFn;
   });
 
-  describe("#getGroups", function () {
-
-    it("should return an instance of GroupsList", function () {
-      Config.useFixtures = true;
-      GroupsStore.fetchGroups();
-      let groups = GroupsStore.getGroups();
-      expect(groups instanceof GroupsList).toBeTruthy();
-    });
-
-    it("should return all of the groups it was given", function () {
-      Config.useFixtures = true;
-      GroupsStore.fetchGroups();
-      let groups = GroupsStore.getGroups().getItems();
-      expect(groups.length).toEqual(this.groupsFixture.length);
-    });
-
+  it("should return an instance of GroupsList", function () {
+    Config.useFixtures = true;
+    GroupsStore.fetchGroups();
+    let groups = GroupsStore.get("groups");
+    expect(groups instanceof GroupsList).toBeTruthy();
   });
+
+  it("should return all of the groups it was given", function () {
+    Config.useFixtures = true;
+    GroupsStore.fetchGroups();
+    let groups = GroupsStore.get("groups").getItems();
+    expect(groups.length).toEqual(this.groupsFixture.length);
+  });
+
 });

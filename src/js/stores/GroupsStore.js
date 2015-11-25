@@ -27,13 +27,7 @@ const GroupsStore = Store.createStore({
     this.removeListener(eventName, callback);
   },
 
-  fetchGroups: function () {
-    ACLGroupActions.fetch();
-  },
-
-  getGroups: function () {
-    return this.get("groups");
-  },
+  fetchGroups: ACLGroupActions.fetch,
 
   processGroupsSuccess: function (groups) {
     this.set({
