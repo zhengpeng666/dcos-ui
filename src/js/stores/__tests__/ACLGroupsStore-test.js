@@ -74,10 +74,10 @@ describe("ACLGroupsStore", function () {
       expect(mockedFn.mock.calls.length).toEqual(1);
     });
 
-    it("dispatches the correct event upon error", function () {
+    it.only("dispatches the correct event upon error", function () {
       let mockedFn = jest.genMockFunction();
       ACLGroupsStore.addChangeListener(
-        EventTypes.REQUEST_ACL_GROUPS_ERROR,
+        EventTypes.ACL_GROUPS_REQUEST_ERROR,
         mockedFn
       );
       AppDispatcher.handleServerAction({
