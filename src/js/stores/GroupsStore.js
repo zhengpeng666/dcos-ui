@@ -15,10 +15,6 @@ const GroupsStore = Store.createStore({
     groups: []
   },
 
-  emitChange: function (eventName) {
-    this.emit(eventName);
-  },
-
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
   },
