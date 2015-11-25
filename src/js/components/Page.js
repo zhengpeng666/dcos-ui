@@ -31,8 +31,11 @@ var Page = React.createClass({
   },
 
   getNavigation: function () {
-    // Always return "page-header-navigation". Padding will be applied
-    // to this element to add correct spacing for header
+    let navigation = this.props.navigation;
+    if (!navigation) {
+      return null;
+    }
+
     return (
       <div className="page-header-navigation">
         {this.props.navigation}
