@@ -68,7 +68,7 @@ let GroupDetailStore = Store.createStore({
     if (fetchedAll) {
       delete groupsFetching[groupID];
       this.set(groupsFetching);
-      this.emit(EventTypes.GROUP_DETAILS_FETCHED_SUCCESS, groupID);
+      this.emit(EventTypes.ACL_GROUP_DETAILS_FETCHED_SUCCESS, groupID);
     }
   },
 
@@ -80,7 +80,7 @@ let GroupDetailStore = Store.createStore({
 
     delete groupsFetching[groupID];
     this.set(groupsFetching);
-    this.emit(EventTypes.GROUP_DETAILS_FETCHED_ERROR, groupID);
+    this.emit(EventTypes.ACL_GROUP_DETAILS_FETCHED_ERROR, groupID);
   },
 
   processGroup: function (groupData) {
@@ -89,13 +89,13 @@ let GroupDetailStore = Store.createStore({
     group = _.extend(group, groupData);
 
     this.setGroup(group.gid, group);
-    this.emit(EventTypes.GROUP_DETAILS_GROUP_CHANGE, group.gid);
+    this.emit(EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE, group.gid);
 
     this.validateGroupWithDetailsFetch(group.gid, "group");
   },
 
   processGroupError: function (groupID) {
-    this.emit(EventTypes.GROUP_DETAILS_GROUP_ERROR, groupID);
+    this.emit(EventTypes.ACL_GROUP_DETAILS_GROUP_ERROR, groupID);
     this.invalidateGroupWithDetailsFetch(groupID, "group");
   },
 
@@ -105,13 +105,13 @@ let GroupDetailStore = Store.createStore({
     group.permissions = permissions;
 
     this.setGroup(groupID, group);
-    this.emit(EventTypes.GROUP_DETAILS_PERMISSIONS_CHANGE, groupID);
+    this.emit(EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE, groupID);
 
     this.validateGroupWithDetailsFetch(groupID, "permissions");
   },
 
   processGroupPermissionsError: function (groupID) {
-    this.emit(EventTypes.GROUP_DETAILS_PERMISSIONS_ERROR, groupID);
+    this.emit(EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR, groupID);
     this.invalidateGroupWithDetailsFetch(groupID, "permissions");
   },
 
@@ -121,13 +121,13 @@ let GroupDetailStore = Store.createStore({
     group.users = users;
 
     this.setGroup(groupID, group);
-    this.emit(EventTypes.GROUP_DETAILS_USERS_CHANGE, groupID);
+    this.emit(EventTypes.ACL_GROUP_DETAILS_USERS_CHANGE, groupID);
 
     this.validateGroupWithDetailsFetch(groupID, "users");
   },
 
   processGroupUsersError: function (groupID) {
-    this.emit(EventTypes.GROUP_DETAILS_USERS_ERROR, groupID);
+    this.emit(EventTypes.ACL_GROUP_DETAILS_USERS_ERROR, groupID);
     this.invalidateGroupWithDetailsFetch(groupID, "users");
   },
 
@@ -140,22 +140,22 @@ let GroupDetailStore = Store.createStore({
     let action = payload.action;
 
     switch (action.type) {
-      case ActionTypes.REQUEST_ACL_GROUP_DETAILS_GROUP_SUCCESS:
+      case ActionTypes.REQUEST_ACL_GROUP_SUCCESS:
         GroupDetailStore.processGroup(action.data);
         break;
-      case ActionTypes.REQUEST_ACL_GROUP_DETAILS_GROUP_ERROR:
+      case ActionTypes.REQUEST_ACL_GROUP_ERROR:
         GroupDetailStore.processGroupError(action.groupID);
         break;
-      case ActionTypes.REQUEST_ACL_GROUP_DETAILS_PERMISSIONS_SUCCESS:
+      case ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS:
         GroupDetailStore.processGroupPermissions(action.groupID, action.data);
         break;
-      case ActionTypes.REQUEST_ACL_GROUP_DETAILS_PERMISSIONS_ERROR:
+      case ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR:
         GroupDetailStore.processGroupPermissionsError(action.groupID);
         break;
-      case ActionTypes.REQUEST_ACL_GROUP_DETAILS_USERS_SUCCESS:
+      case ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS:
         GroupDetailStore.processGroupUsers(action.groupID, action.data);
         break;
-      case ActionTypes.REQUEST_ACL_GROUP_DETAILS_USERS_ERROR:
+      case ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR:
         GroupDetailStore.processGroupUsersError(action.groupID);
         break;
     }

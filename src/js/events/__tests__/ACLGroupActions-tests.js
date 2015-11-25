@@ -33,7 +33,7 @@ describe("ACLGroupsActions", function () {
       let id = AppDispatcher.register(function (payload) {
         let action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUP_DETAILS_GROUP_SUCCESS);
+        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUP_SUCCESS);
       });
 
       this.configuration.success({bar: "baz"});
@@ -53,7 +53,7 @@ describe("ACLGroupsActions", function () {
       let id = AppDispatcher.register(function (payload) {
         let action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUP_DETAILS_GROUP_ERROR);
+        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUP_ERROR);
       });
 
       this.configuration.error({message: "bar"});
@@ -82,7 +82,7 @@ describe("ACLGroupsActions", function () {
         let action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
-          .toEqual(ActionTypes.REQUEST_ACL_GROUP_DETAILS_USERS_SUCCESS);
+          .toEqual(ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS);
       });
 
       this.configuration.success({bar: "baz"});
@@ -113,7 +113,7 @@ describe("ACLGroupsActions", function () {
         let action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
-          .toEqual(ActionTypes.REQUEST_ACL_GROUP_DETAILS_USERS_ERROR);
+          .toEqual(ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR);
       });
 
       this.configuration.error({message: "bar"});
@@ -152,7 +152,7 @@ describe("ACLGroupsActions", function () {
         let action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
-          .toEqual(ActionTypes.REQUEST_ACL_GROUP_DETAILS_PERMISSIONS_SUCCESS);
+          .toEqual(ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS);
       });
 
       this.configuration.success({bar: "baz"});
@@ -183,7 +183,7 @@ describe("ACLGroupsActions", function () {
         let action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
-          .toEqual(ActionTypes.REQUEST_ACL_GROUP_DETAILS_PERMISSIONS_ERROR);
+          .toEqual(ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR);
       });
 
       this.configuration.error({message: "bar"});

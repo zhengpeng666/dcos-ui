@@ -85,7 +85,7 @@ describe("ACLGroupStore", function () {
 
       it("stores group when event is dispatched", function () {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_DETAILS_GROUP_SUCCESS,
+          type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
           data: {gid: "foo", bar: "baz"}
         });
 
@@ -94,7 +94,8 @@ describe("ACLGroupStore", function () {
       });
 
       it("emits event after success event is dispatched", function () {
-        ACLGroupStore.addChangeListener(EventTypes.GROUP_DETAILS_GROUP_CHANGE,
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
             ACLGroupStore.removeAllListeners();
@@ -102,13 +103,14 @@ describe("ACLGroupStore", function () {
         );
 
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_DETAILS_GROUP_SUCCESS,
+          type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
           data: {gid: "foo"}
         });
       });
 
       it("emits event after error event is dispatched", function () {
-        ACLGroupStore.addChangeListener(EventTypes.GROUP_DETAILS_GROUP_ERROR,
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_DETAILS_GROUP_ERROR,
           function (id) {
             expect(id).toEqual("foo");
             ACLGroupStore.removeAllListeners();
@@ -116,7 +118,7 @@ describe("ACLGroupStore", function () {
         );
 
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_DETAILS_GROUP_ERROR,
+          type: ActionTypes.REQUEST_ACL_GROUP_ERROR,
           groupID: "foo"
         });
       });
@@ -127,7 +129,7 @@ describe("ACLGroupStore", function () {
 
       it("stores users when event is dispatched", function () {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_DETAILS_USERS_SUCCESS,
+          type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
           data: {bar: "baz"},
           groupID: "foo"
         });
@@ -138,7 +140,7 @@ describe("ACLGroupStore", function () {
 
       it("emits event after success event is dispatched", function () {
         ACLGroupStore.addChangeListener(
-          EventTypes.GROUP_DETAILS_USERS_CHANGE,
+          EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
             ACLGroupStore.removeAllListeners();
@@ -146,14 +148,14 @@ describe("ACLGroupStore", function () {
         );
 
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_DETAILS_USERS_SUCCESS,
+          type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
           groupID: "foo"
         });
       });
 
       it("emits event after error event is dispatched", function () {
         ACLGroupStore.addChangeListener(
-          EventTypes.GROUP_DETAILS_USERS_ERROR,
+          EventTypes.ACL_GROUP_DETAILS_USERS_ERROR,
           function (id) {
             expect(id).toEqual("foo");
             ACLGroupStore.removeAllListeners();
@@ -161,7 +163,7 @@ describe("ACLGroupStore", function () {
         );
 
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_DETAILS_USERS_ERROR,
+          type: ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR,
           groupID: "foo"
         });
       });
@@ -172,7 +174,7 @@ describe("ACLGroupStore", function () {
 
       it("stores permissions when event is dispatched", function () {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_DETAILS_PERMISSIONS_SUCCESS,
+          type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
           data: {bar: "baz"},
           groupID: "foo"
         });
@@ -183,7 +185,7 @@ describe("ACLGroupStore", function () {
 
       it("emits event after success event is dispatched", function () {
         ACLGroupStore.addChangeListener(
-          EventTypes.GROUP_DETAILS_PERMISSIONS_CHANGE,
+          EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
             ACLGroupStore.removeAllListeners();
@@ -191,14 +193,14 @@ describe("ACLGroupStore", function () {
         );
 
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_DETAILS_PERMISSIONS_SUCCESS,
+          type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
           groupID: "foo"
         });
       });
 
       it("emits event after error event is dispatched", function () {
         ACLGroupStore.addChangeListener(
-          EventTypes.GROUP_DETAILS_PERMISSIONS_ERROR,
+          EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
           function (id) {
             expect(id).toEqual("foo");
             ACLGroupStore.removeAllListeners();
@@ -206,7 +208,7 @@ describe("ACLGroupStore", function () {
         );
 
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
+          type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR,
           groupID: "foo"
         });
       });
