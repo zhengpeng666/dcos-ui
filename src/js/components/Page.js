@@ -33,12 +33,6 @@ var Page = React.createClass({
     return {currentTab};
   },
 
-  componentWillMount: function () {
-    if (_.isObject(this.props.navigation)) {
-      this.tabs = this.props.navigation;
-    }
-  },
-
   componentDidMount: function () {
     this.internalStorage_set({
       rendered: true
