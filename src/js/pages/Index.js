@@ -286,7 +286,7 @@ var formDefinition = [
     {
       fieldName: "address",
       value: "string",
-      validation: /^[a-zA-Z\s\d\/]*\d[a-zA-Z\s\d\/]*$/,
+      validation: /(?:.*(?:\b(?:cat|dog)\b)){2}/,
       placeholder: "",
       fieldType: "text",
       errorText: "must be a valid address",
