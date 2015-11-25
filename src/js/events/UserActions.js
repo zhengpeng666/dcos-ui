@@ -67,9 +67,9 @@ var UserActions = {
 };
 
 if (Config.useFixtures) {
-  let userFixture = require("../../../tests/_fixtures/acl/user-unicode.json");
+  let userFixture = require("json!../../../tests/_fixtures/acl/user-unicode.json");
   let userDetailsFixture =
-    require("../../../tests/_fixtures/acl/user-with-details.json");
+    require("json!../../../tests/_fixtures/acl/user-with-details.json");
 
   UserActions.fetchUser = function () {
     AppDispatcher.handleServerAction({
