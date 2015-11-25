@@ -37,9 +37,9 @@ describe("TabsUtil", function () {
     it("should return element's with one active class", function () {
       var result = TabsUtil.getTabs(this.tabs, "baz", this.getElement);
 
-      expect(result[0].props.className).toEqual("");
-      expect(result[1].props.className).toEqual("active");
-      expect(result[2].props.className).toEqual("");
+      expect(result[0].props.className).toEqual("tab-item");
+      expect(result[1].props.className).toEqual("tab-item active");
+      expect(result[2].props.className).toEqual("tab-item");
     });
 
     it("should call getElement with appropriate arguments", function () {

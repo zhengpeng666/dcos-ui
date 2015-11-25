@@ -31,7 +31,7 @@ describe("TabsMixin", function () {
 
     it("should add custom class to link", function () {
       expect(this.instance.props.className)
-        .toEqual("foo");
+        .toEqual("foo tab-item-label");
     });
   });
 
@@ -50,7 +50,7 @@ describe("TabsMixin", function () {
 
     it("should add custom class to span", function () {
       expect(this.instance.props.className)
-        .toEqual("hux");
+        .toEqual("hux tab-item-label");
     });
   });
 

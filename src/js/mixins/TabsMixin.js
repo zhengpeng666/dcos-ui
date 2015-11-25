@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import {Link} from "react-router";
 /*eslint-disable no-unused-vars*/
 import React from "react";
@@ -16,9 +17,11 @@ const TabsMixin = {
    * @return {Component} React component to render
    */
   tabs_getUnroutedItem(customClasses, tab) {
+    let tabLabelClass = classNames(customClasses, {"tab-item-label": true});
+
     return (
       <span
-        className={customClasses}
+        className={tabLabelClass}
         onClick={this.tabs_handleTabClick.bind(this, tab)}>
         {this.tabs_tabs[tab]}
       </span>
@@ -48,10 +51,12 @@ const TabsMixin = {
    * @return {Component} React component to render
    */
   tabs_getRoutedItem(customClasses, tab) {
+    let tabLabelClass = classNames(customClasses, {"tab-item-label": true});
+
     return (
       <Link
         to={tab}
-        className={customClasses}
+        className={tabLabelClass}
         onClick={this.tabs_handleTabClick.bind(this, tab)}>
         {this.tabs_tabs[tab]}
       </Link>

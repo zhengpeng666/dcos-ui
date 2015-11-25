@@ -20,6 +20,7 @@ const TabsUtil = {
 
     return tabSet.map(function (tab, index) {
       let tabClass = classNames({
+        "tab-item": true,
         "active": currentTab === tab
       });
 

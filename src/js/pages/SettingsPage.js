@@ -58,7 +58,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
     return (
       <Link
         to={tab}
-        className="h1 page-header-title inverse flush">
+        className="tab-item-label h1 page-header-title inverse flush">
         {SETTINGS_TABS[tab]}
       </Link>
     );
