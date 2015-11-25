@@ -47,6 +47,7 @@ export default class Form extends React.Component {
     });
   }
 
+<<<<<<< HEAD
   handleEvent(eventType, fieldName, fieldValue) {
     switch (eventType) {
       case "blur":
@@ -60,6 +61,10 @@ export default class Form extends React.Component {
         break;
     }
   }
+=======
+  handleSubmit() {
+    let validated = this.validateSubmit(this.state.model, this.props.definition);
+>>>>>>> Make validation functions testable
 
   handleSubmit(event) {
     if (event) {
@@ -106,10 +111,13 @@ export default class Form extends React.Component {
 
   validateValue(field, value, definition) {
     let validation = findFieldOption(definition, field).validation;
+<<<<<<< HEAD
 
     if (validation == null) {
       return true;
     }
+=======
+>>>>>>> Make validation functions testable
 
     if (typeof validation === "function") {
       return validation(value);
@@ -119,6 +127,7 @@ export default class Form extends React.Component {
   }
 
   validateSubmit(model, definition) {
+<<<<<<< HEAD
     let erroredFields = {};
     let submitValidated = true;
 
@@ -129,15 +138,27 @@ export default class Form extends React.Component {
         name, fieldValue, definition
       );
 
+=======
+    let failedFields = _.filter(Object.keys(model), (fieldName) => {
+      let validated = this.validateValue(
+        fieldName, model[fieldName], definition
+      );
+>>>>>>> Make validation functions testable
       if (!validated) {
         erroredFields[name] = options.validationErrorText;
         submitValidated = false;
         return;
       }
 
+<<<<<<< HEAD
       if (options.required && (fieldValue == null || fieldValue === "")) {
         erroredFields[name] = "Field cannot be empty.";
         submitValidated = false;
+=======
+      let options = findFieldOption(definition, fieldName);
+      if (options.required) {
+        return model[fieldName] == null;
+>>>>>>> Make validation functions testable
       }
     });
 
