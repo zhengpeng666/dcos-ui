@@ -8,6 +8,7 @@ describe("Tracking Plugin [02w]", function() {
       .route(/history\/last/, "fx:marathon-1-task/summary")
       .route(/state-summary/, "fx:marathon-1-task/summary")
       .route(/state/, "fx:marathon-1-task/state")
+      .route(/ui-config/, "fx:config/config")
       .visit("http://localhost:4200/", {
       onBeforeLoad: function(contentWindow) {
         contentWindow.localStorage.setItem("email", "ui-bot@mesosphere.io");
