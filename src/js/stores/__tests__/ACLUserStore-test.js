@@ -94,7 +94,7 @@ describe("ACLUserStore", function () {
       });
 
       it("emits event after success event is dispatched", function () {
-        ACLUserStore.addChangeListener(EventTypes.USER_DETAILS_USER_CHANGE,
+        ACLUserStore.addChangeListener(EventTypes.ACL_USER_DETAILS_USER_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
             ACLUserStore.removeAllListeners();
@@ -108,7 +108,7 @@ describe("ACLUserStore", function () {
       });
 
       it("emits event after error event is dispatched", function () {
-        ACLUserStore.addChangeListener(EventTypes.USER_DETAILS_USER_ERROR,
+        ACLUserStore.addChangeListener(EventTypes.ACL_USER_DETAILS_USER_ERROR,
           function (id) {
             expect(id).toEqual("foo");
             ACLUserStore.removeAllListeners();
@@ -138,7 +138,7 @@ describe("ACLUserStore", function () {
 
       it("emits event after success event is dispatched", function () {
         ACLUserStore.addChangeListener(
-          EventTypes.USER_DETAILS_GROUPS_CHANGE,
+          EventTypes.ACL_USER_DETAILS_GROUPS_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
             ACLUserStore.removeAllListeners();
@@ -153,7 +153,7 @@ describe("ACLUserStore", function () {
 
       it("emits event after error event is dispatched", function () {
         ACLUserStore.addChangeListener(
-          EventTypes.USER_DETAILS_GROUPS_ERROR,
+          EventTypes.ACL_USER_DETAILS_GROUPS_ERROR,
           function (id) {
             expect(id).toEqual("foo");
             ACLUserStore.removeAllListeners();
@@ -183,7 +183,7 @@ describe("ACLUserStore", function () {
 
       it("emits event after success event is dispatched", function () {
         ACLUserStore.addChangeListener(
-          EventTypes.USER_DETAILS_PERMISSIONS_CHANGE,
+          EventTypes.ACL_USER_DETAILS_PERMISSIONS_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
             ACLUserStore.removeAllListeners();
@@ -198,7 +198,7 @@ describe("ACLUserStore", function () {
 
       it("emits event after error event is dispatched", function () {
         ACLUserStore.addChangeListener(
-          EventTypes.USER_DETAILS_PERMISSIONS_ERROR,
+          EventTypes.ACL_USER_DETAILS_PERMISSIONS_ERROR,
           function (id) {
             expect(id).toEqual("foo");
             ACLUserStore.removeAllListeners();
