@@ -25,12 +25,10 @@ var Index = require("./pages/Index");
 var NodesPage = require("./pages/NodesPage");
 var NodesGridView = require("./components/NodesGridView");
 var NotFoundPage = require("./pages/NotFoundPage");
-import OrganizationPage from "./pages/settings/OrganizationPage";
 import OverviewTab from "./pages/settings/OverviewTab";
 var ServiceOverlay = require("./components/ServiceOverlay");
 var ServicesPage = require("./pages/ServicesPage");
 var SettingsPage = require("./pages/SettingsPage");
-import SystemPage from "./pages/settings/SystemPage";
 import UsersTab from "./pages/settings/UsersTab";
 
 var routes = (
@@ -61,12 +59,12 @@ var routes = (
     </Route>
 
     <Route name="settings" path="settings/?" handler={SettingsPage}>
-      <Route name="settings-system" path="system/?" handler={SystemPage}>
+      <Route name="settings-system" path="system/?">
         <Route name="settings-system-overview" path="overview/?" handler={OverviewTab} />
 
         <Redirect from="/settings/system/?" to="settings-system-overview" />
       </Route>
-      <Route name="settings-organization" path="organization/?" handler={OrganizationPage}>
+      <Route name="settings-organization" path="organization/?">
         <Route name="settings-organization-users" path="users/?" handler={UsersTab} />
         <Route name="settings-organization-groups" path="groups/?" handler={GroupsTab} />
 
