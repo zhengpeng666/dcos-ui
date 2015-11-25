@@ -1,5 +1,7 @@
-var EventTypes = {};
+let EventTypes = {};
 [
+  "ACL_GROUPS_CHANGE",
+  "ACL_GROUPS_REQUEST_ERROR",
   "ACL_USER_DETAILS_FETCHED_SUCCESS",
   "ACL_USER_DETAILS_FETCHED_ERROR",
   "ACL_USER_DETAILS_USER_CHANGE",
@@ -31,4 +33,4 @@ var EventTypes = {};
   EventTypes[eventType] = eventType;
 });
 
-module.exports = EventTypes;
+export default EventTypes;
