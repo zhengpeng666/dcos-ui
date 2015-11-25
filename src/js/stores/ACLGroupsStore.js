@@ -31,7 +31,7 @@ const GroupsStore = Store.createStore({
         items: groups
       })
     });
-    this.emit(ActionTypes.ACL_GROUPS_CHANGE);
+    this.emit(EventTypes.ACL_GROUPS_CHANGE);
   },
 
   processGroupsError: function () {

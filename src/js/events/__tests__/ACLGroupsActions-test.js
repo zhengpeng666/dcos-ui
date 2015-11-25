@@ -38,6 +38,17 @@ describe("ACLGroupsActions", function () {
       this.configuration.success({foo: "bar"});
     });
 
+    it("dispatches the correct action when unsuccessful", function () {
+      ACLGroupsActions.fetch();
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUPS_ERROR);
+      });
+
+      this.configuration.error({message: "bar"});
+    });
+
     it("calls #json from the RequestUtil", function () {
       spyOn(RequestUtil, "json");
       ACLGroupsActions.fetch();
