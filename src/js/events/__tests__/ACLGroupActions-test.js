@@ -4,7 +4,7 @@ jest.dontMock("../../config/Config");
 jest.dontMock("../../utils/RequestUtil");
 
 let ACLGroupActions = require("../ACLGroupActions");
-let ActionTypes = require("../../constants/ActionTypes");
+let ACLActionTypes = require("../../constants/ACLActionTypes");
 var AppDispatcher = require("../AppDispatcher");
 let Config = require("../../config/Config");
 let RequestUtil = require("../../utils/RequestUtil");
@@ -32,7 +32,7 @@ describe("ACLGroupActions", function () {
       let id = AppDispatcher.register(function (payload) {
         let action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUPS_SUCCESS);
+        expect(action.type).toEqual(ACLActionTypes.REQUEST_ACL_GROUPS_SUCCESS);
       });
 
       this.configuration.success({foo: "bar"});

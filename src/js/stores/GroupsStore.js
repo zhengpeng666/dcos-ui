@@ -1,4 +1,5 @@
 import ACLGroupActions from "../events/ACLGroupActions";
+import ACLActionTypes from "../constants/ACLActionTypes";
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "../events/AppDispatcher";
 import EventTypes from "../constants/EventTypes";
@@ -31,11 +32,11 @@ const GroupsStore = Store.createStore({
         items: groups
       })
     });
-    this.emit(EventTypes.ACL_GROUPS_CHANGE);
+    this.emit(ACLActionTypes.ACL_GROUPS_CHANGE);
   },
 
   processGroupsError: function () {
-    this.emit(EventTypes.ACL_GROUPS_REQUEST_ERROR);
+    this.emit(ACLActionTypes.ACL_GROUPS_REQUEST_ERROR);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -47,10 +48,10 @@ const GroupsStore = Store.createStore({
     let action = payload.action;
 
     switch (action.type) {
-      case ActionTypes.REQUEST_ACL_GROUPS_SUCCESS:
+      case ACLActionTypes.REQUEST_ACL_GROUPS_SUCCESS:
         GroupsStore.processGroups(action.data);
         break;
-      case ActionTypes.REQUEST_ACL_GROUPS_ERROR:
+      case ACLActionTypes.REQUEST_ACL_GROUPS_ERROR:
         GroupsStore.processGroupsError();
         break;
     }

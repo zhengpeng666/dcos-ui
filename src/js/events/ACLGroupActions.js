@@ -1,4 +1,4 @@
-import ActionTypes from "../constants/ActionTypes";
+import ACLActionTypes from "../constants/ACLActionTypes";
 import AppDispatcher from "./AppDispatcher";
 import Config from "../config/Config";
 import RequestUtil from "../utils/RequestUtil";
@@ -11,13 +11,13 @@ const ACLGroupActions = {
       url: `${Config.rootUrl}${Config.apiPrefix}/groups`,
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
+          type: ACLActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
           data: response
         });
       },
       error: function (e) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUPS_ERROR,
+          type: ACLActionTypes.REQUEST_ACL_GROUPS_ERROR,
           data: e.message
         });
       }
@@ -29,7 +29,7 @@ const ACLGroupActions = {
 if (Config.useFixtures) {
   ACLGroupActions.fetch = function () {
     AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
+      type: ACLActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
       data: groupsFixture
     });
   };

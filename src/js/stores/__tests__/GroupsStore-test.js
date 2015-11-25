@@ -13,7 +13,7 @@ jest.dontMock("../../utils/Util");
 jest.dontMock("../../../../tests/_fixtures/acl/groups-unicode.json");
 
 let _ = require("underscore");
-let ActionTypes = require("../../constants/ActionTypes");
+let ACLActionTypes = require("../../constants/ACLActionTypes");
 let AppDispatcher = require("../../events/AppDispatcher");
 let Config = require("../../config/Config");
 let groupsFixture = require("../../../../tests/_fixtures/acl/groups-unicode.json");
@@ -53,7 +53,7 @@ describe("GroupsStore", function () {
 
     it("stores groups when event is dispatched", function () {
       AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
+        type: ACLActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
         data: [{gid: "foo", bar: "baz"}]
       })
 
