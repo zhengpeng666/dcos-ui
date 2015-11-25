@@ -25,22 +25,13 @@ describe("TabsMixin", function () {
     });
 
     it("should return an element containing a link", function () {
-      expect(TestUtils.isElementOfType(this.instance.props.children, Link))
+      expect(TestUtils.isElementOfType(this.instance, Link))
         .toEqual(true);
     });
 
     it("should add custom class to link", function () {
-      expect(this.instance.props.children.props.className)
+      expect(this.instance.props.className)
         .toEqual("foo");
-    });
-
-    it("should return an li with an active class", function () {
-      expect(this.instance.props.className).toEqual("active");
-    });
-
-    it("should return an li without an active class", function () {
-      this.instance = TabsMixin.tabs_getRoutedItem(null, "baz", false);
-      expect(this.instance.props.className).toEqual("");
     });
   });
 
@@ -54,21 +45,12 @@ describe("TabsMixin", function () {
     });
 
     it("should return an element containing a span", function () {
-      expect(this.instance.props.children.type).toEqual("span");
+      expect(this.instance.type).toEqual("span");
     });
 
     it("should add custom class to span", function () {
-      expect(this.instance.props.children.props.className)
+      expect(this.instance.props.className)
         .toEqual("hux");
-    });
-
-    it("should return an li with an active class", function () {
-      expect(this.instance.props.className).toEqual("active");
-    });
-
-    it("should return an li without an active class", function () {
-      this.instance = TabsMixin.tabs_getUnroutedItem(null, "baz", false);
-      expect(this.instance.props.className).toEqual("");
     });
   });
 
@@ -93,9 +75,9 @@ describe("TabsMixin", function () {
       TabsMixin.tabs_getUnroutedTabs("quix");
 
       expect(TabsMixin.tabs_getUnroutedItem.argsForCall).toEqual([
-        ["quix", "foo", false, 0],
-        ["quix", "baz", true, 1],
-        ["quix", "corge", false, 2]
+        ["quix", "foo", 0],
+        ["quix", "baz", 1],
+        ["quix", "corge", 2]
       ]);
     });
   });
@@ -121,9 +103,9 @@ describe("TabsMixin", function () {
       TabsMixin.tabs_getRoutedTabs("quilt");
 
       expect(TabsMixin.tabs_getRoutedItem.argsForCall).toEqual([
-        ["quilt", "foo", true, 0],
-        ["quilt", "baz", false, 1],
-        ["quilt", "corge", false, 2]
+        ["quilt", "foo", 0],
+        ["quilt", "baz", 1],
+        ["quilt", "corge", 2]
       ]);
     });
   });

@@ -26,13 +26,29 @@ describe("TabsUtil", function () {
       expect(result.length).toEqual(3);
     });
 
+    it("should return li's", function () {
+      var result = TabsUtil.getTabs(this.tabs, "baz", this.getElement);
+
+      expect(result[0].type).toEqual("li");
+      expect(result[1].type).toEqual("li");
+      expect(result[2].type).toEqual("li");
+    });
+
+    it("should return element's with one active class", function () {
+      var result = TabsUtil.getTabs(this.tabs, "baz", this.getElement);
+
+      expect(result[0].props.className).toEqual("");
+      expect(result[1].props.className).toEqual("active");
+      expect(result[2].props.className).toEqual("");
+    });
+
     it("should call getElement with appropriate arguments", function () {
       TabsUtil.getTabs(this.tabs, "baz", this.getElement);
 
       expect(this.getElement.argsForCall).toEqual([
-        ["foo", false, 0],
-        ["baz", true, 1],
-        ["corge", false, 2]
+        ["foo", 0],
+        ["baz", 1],
+        ["corge", 2]
       ]);
     });
 
@@ -52,9 +68,9 @@ describe("TabsUtil", function () {
       TabsUtil.getTabs(this.tabs, "notHere", this.getElement);
 
       expect(this.getElement.argsForCall).toEqual([
-        ["foo", false, 0],
-        ["baz", false, 1],
-        ["corge", false, 2]
+        ["foo", 0],
+        ["baz", 1],
+        ["corge", 2]
       ]);
     });
   });
