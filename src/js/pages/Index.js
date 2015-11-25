@@ -263,4 +263,43 @@ var Index = React.createClass({
   }
 });
 
+var formDefinition = [
+  {
+    fieldName: "username",
+    value: "string",
+    validation: function (arg) {
+      return arg.length < 8;
+    },
+    placeholder: "What's up?",
+    fieldType: "text",
+    errorText: "Must be less than 8 characters",
+    required: true,
+    showLabel: true,
+    writeType: "edit"
+  },
+  [
+    {
+      fieldName: "address",
+      value: "string",
+      validation: /^[a-zA-Z\s\d\/]*\d[a-zA-Z\s\d\/]*$/,
+      placeholder: "",
+      fieldType: "text",
+      errorText: "must be a valid address",
+      required: true,
+      showLabel: true,
+      showError: true,
+      writeType: "edit"
+    },
+    {
+      fieldName: "password",
+      value: "string",
+      validation: function (arg) { return true; },
+      placeholder: "",
+      fieldType: "password",
+      required: true,
+      writeType: "input"
+    }
+  ]
+];
+
 module.exports = Index;
