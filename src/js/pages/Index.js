@@ -293,7 +293,7 @@ var formDefinition = [
       required: true,
       showLabel: true,
       showError: true,
-      writeType: "input"
+      writeType: "edit"
     },
     {
       fieldName: "password",
