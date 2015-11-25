@@ -55,15 +55,13 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
     }
   }
 
-  getClassSet(isActive) {
-    return classNames({
+  getRoutedItem(tab, isActive) {
+    let tabClass = classNames({
       "active": isActive
     });
-  }
 
-  getLink(tab, isActive) {
     return (
-      <li className={this.getClassSet(isActive)} key={tab}>
+      <li className={tabClass} key={tab}>
         <Link
           to={tab}
           className="h1 page-header-title inverse flush">
@@ -82,7 +80,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
         {TabsUtil.getTabLinks(
           SETTINGS_PAGES,
           currentRoute,
-          this.getLink.bind(this)
+          this.getRoutedItem.bind(this)
         )}
       </ul>
     );

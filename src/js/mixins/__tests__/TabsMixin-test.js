@@ -12,12 +12,12 @@ var TabsUtil = require("../../utils/TabsUtil");
 
 describe("TabsMixin", function () {
   beforeEach(function () {
-    TabsMixin.tabs = {foo: "bar", baz: "qux", corge: "Grault"};
+    TabsMixin.tabs_tabs = {foo: "bar", baz: "qux", corge: "Grault"};
   });
 
-  describe("#tabs_getLink", function () {
+  describe("#tabs_getRoutedItem", function () {
     beforeEach(function () {
-      this.instance = TabsMixin.tabs_getLink("foo", "baz", true);
+      this.instance = TabsMixin.tabs_getRoutedItem("foo", "baz", true);
     });
 
     it("should return an element", function () {
@@ -39,14 +39,14 @@ describe("TabsMixin", function () {
     });
 
     it("should return an li without an active class", function () {
-      this.instance = TabsMixin.tabs_getLink(null, "baz", false);
+      this.instance = TabsMixin.tabs_getRoutedItem(null, "baz", false);
       expect(this.instance.props.className).toEqual("");
     });
   });
 
-  describe("#tabs_getSpan", function () {
+  describe("#tabs_getUnroutedItem", function () {
     beforeEach(function () {
-      this.instance = TabsMixin.tabs_getSpan("hux", "baz", true);
+      this.instance = TabsMixin.tabs_getUnroutedItem("hux", "baz", true);
     });
 
     it("should return an element", function () {
@@ -67,7 +67,7 @@ describe("TabsMixin", function () {
     });
 
     it("should return an li without an active class", function () {
-      this.instance = TabsMixin.tabs_getSpan(null, "baz", false);
+      this.instance = TabsMixin.tabs_getUnroutedItem(null, "baz", false);
       expect(this.instance.props.className).toEqual("");
     });
   });
@@ -77,22 +77,22 @@ describe("TabsMixin", function () {
       TabsMixin.state = {currentTab: "baz"};
     });
 
-    it("should call getTabLinks with appropriate arguments", function () {
-      spyOn(TabsUtil, "getTabLinks");
+    it("should call getTabs with appropriate arguments", function () {
+      spyOn(TabsUtil, "getTabs");
       TabsMixin.tabs_getTabs(null);
 
-      expect(TabsUtil.getTabLinks).toHaveBeenCalledWith(
+      expect(TabsUtil.getTabs).toHaveBeenCalledWith(
         {foo: "bar", baz: "qux", corge: "Grault"},
         "baz",
         _.noop
       );
     });
 
-    it("should call tabs_getSpan with appropriate arguments", function () {
-      spyOn(TabsMixin, "tabs_getSpan");
+    it("should call tabs_getUnroutedItem with appropriate arguments", function () {
+      spyOn(TabsMixin, "tabs_getUnroutedItem");
       TabsMixin.tabs_getTabs("quix");
 
-      expect(TabsMixin.tabs_getSpan.argsForCall).toEqual([
+      expect(TabsMixin.tabs_getUnroutedItem.argsForCall).toEqual([
         ["quix", "foo", false, 0],
         ["quix", "baz", true, 1],
         ["quix", "corge", false, 2]
@@ -100,27 +100,27 @@ describe("TabsMixin", function () {
     });
   });
 
-  describe("#tabs_getTabLinks", function () {
+  describe("#tabs_getRoutedTabs", function () {
     beforeEach(function () {
       TabsMixin.state = {currentTab: "foo"};
     });
 
-    it("should call getTabLinks with appropriate arguments", function () {
-      spyOn(TabsUtil, "getTabLinks");
-      TabsMixin.tabs_getTabLinks(null);
+    it("should call getTabs with appropriate arguments", function () {
+      spyOn(TabsUtil, "getTabs");
+      TabsMixin.tabs_getRoutedTabs(null);
 
-      expect(TabsUtil.getTabLinks).toHaveBeenCalledWith(
+      expect(TabsUtil.getTabs).toHaveBeenCalledWith(
         {foo: "bar", baz: "qux", corge: "Grault"},
         "foo",
         _.noop
       );
     });
 
-    it("should call tabs_getLink with appropriate arguments", function () {
-      spyOn(TabsMixin, "tabs_getLink");
-      TabsMixin.tabs_getTabLinks("quilt");
+    it("should call tabs_getRoutedItem with appropriate arguments", function () {
+      spyOn(TabsMixin, "tabs_getRoutedItem");
+      TabsMixin.tabs_getRoutedTabs("quilt");
 
-      expect(TabsMixin.tabs_getLink.argsForCall).toEqual([
+      expect(TabsMixin.tabs_getRoutedItem.argsForCall).toEqual([
         ["quilt", "foo", true, 0],
         ["quilt", "baz", false, 1],
         ["quilt", "corge", false, 2]
