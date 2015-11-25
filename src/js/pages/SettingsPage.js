@@ -32,12 +32,12 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
 
   updateCurrentTab() {
     let routes = this.context.router.getCurrentRoutes();
-    let currentRoute = routes[routes.length - 1].name;
+    let currentTab = routes[routes.length - 1].name;
 
     let pageKeys = Object.keys(SETTINGS_TABS);
 
     // Organization Tabs
-    if (currentRoute.indexOf(pageKeys[0]) >= 0) {
+    if (currentTab.indexOf(pageKeys[0]) >= 0) {
       this.tabs_tabs = {
         "settings-organization-users": "Users",
         "settings-organization-groups": "Groups"
@@ -45,15 +45,13 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
     }
 
     // System Tabs
-    if (currentRoute.indexOf(pageKeys[1]) >= 0) {
+    if (currentTab.indexOf(pageKeys[1]) >= 0) {
       this.tabs_tabs = {
         "settings-system-overview": "Overview"
       };
     }
 
-    if (Object.keys(this.tabs_tabs).indexOf(currentRoute) >= 0) {
-      this.setState({currentTab: currentRoute});
-    }
+    this.setState({currentTab});
   }
 
   getRoutedItem(tab) {
