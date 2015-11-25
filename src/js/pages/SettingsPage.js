@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Link, RouteHandler } from "react-router";
+import {Link, RouteHandler} from "react-router";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
