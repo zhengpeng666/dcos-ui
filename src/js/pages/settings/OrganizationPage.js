@@ -10,7 +10,6 @@ import TabsMixin from "../../mixins/TabsMixin";
 import Util from "../../utils/Util";
 
 export default class OrganizationPage extends Util.mixin(TabsMixin) {
-
   constructor() {
     super();
 
