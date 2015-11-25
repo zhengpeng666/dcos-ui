@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import {Link, RouteHandler} from "react-router";
 /*eslint-disable no-unused-vars*/
 import React from "react";
@@ -37,6 +36,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
 
     let pageKeys = Object.keys(SETTINGS_TABS);
 
+    // Organization Tabs
     if (currentRoute.indexOf(pageKeys[0]) >= 0) {
       this.tabs_tabs = {
         "settings-organization-users": "Users",
@@ -44,6 +44,7 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
       };
     }
 
+    // System Tabs
     if (currentRoute.indexOf(pageKeys[1]) >= 0) {
       this.tabs_tabs = {
         "settings-system-overview": "Overview"
@@ -55,19 +56,13 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
     }
   }
 
-  getRoutedItem(tab, isActive) {
-    let tabClass = classNames({
-      "active": isActive
-    });
-
+  getRoutedItem(tab) {
     return (
-      <li className={tabClass} key={tab}>
-        <Link
-          to={tab}
-          className="h1 page-header-title inverse flush">
-          {SETTINGS_TABS[tab]}
-        </Link>
-      </li>
+      <Link
+        to={tab}
+        className="h1 page-header-title inverse flush">
+        {SETTINGS_TABS[tab]}
+      </Link>
     );
   }
 
