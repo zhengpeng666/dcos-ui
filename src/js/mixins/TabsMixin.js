@@ -14,9 +14,8 @@ const TabsMixin = {
     });
 
     return (
-      <li className={tabClass}>
+      <li className={tabClass} key={tab}>
         <Link
-          key={tab}
           to={tab}
           className={customClasses}
           onClick={this.tabs_handleTabClick.bind(this, tab)}>
@@ -32,9 +31,8 @@ const TabsMixin = {
     });
 
     return (
-      <li className={tabClass}>
+      <li className={tabClass} key={tab}>
         <span
-          key={tab}
           className={customClasses}
           onClick={this.tabs_handleTabClick.bind(this, tab)}>
           {this.tabs_tabs[tab]}
