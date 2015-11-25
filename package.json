@@ -98,6 +98,7 @@
       "/.module-cache/"
     ],
     "unmockedModulePathPatterns": [
+      "classnames",
       "events",
       "structs",
       "MD5",
