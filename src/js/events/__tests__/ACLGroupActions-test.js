@@ -27,7 +27,8 @@ describe("ACLGroupActions", function () {
     it("fetches data from the correct URL", function () {
       spyOn(RequestUtil, "json");
       ACLGroupActions.fetch();
-      expect(RequestUtil.json.mostRecentCall.args[0].url).toEqual("http://mesosserver/groups");
+      expect(RequestUtil.json.mostRecentCall.args[0].url)
+        .toEqual("http://mesosserver/groups");
     });
 
   });
