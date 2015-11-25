@@ -50,7 +50,7 @@ describe("ACLGroupsStore", function () {
     expect(groups.length).toEqual(this.groupsFixture.length);
   });
 
-  describe("dispatcher", function() {
+  describe("dispatcher", function () {
 
     it("stores groups when event is dispatched", function () {
       AppDispatcher.handleServerAction({
@@ -74,7 +74,7 @@ describe("ACLGroupsStore", function () {
       expect(mockedFn.mock.calls.length).toEqual(1);
     });
 
-    it.only("dispatches the correct event upon error", function () {
+    it("dispatches the correct event upon error", function () {
       let mockedFn = jest.genMockFunction();
       ACLGroupsStore.addChangeListener(
         EventTypes.ACL_GROUPS_REQUEST_ERROR,
@@ -88,6 +88,6 @@ describe("ACLGroupsStore", function () {
       expect(mockedFn.mock.calls.length).toEqual(1);
     });
 
-  })
+  });
 
 });
