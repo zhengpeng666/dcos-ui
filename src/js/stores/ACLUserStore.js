@@ -1,11 +1,11 @@
 import _ from "underscore";
 
+import ACLUsersActions from "../events/ACLUsersActions";
 import AppDispatcher from "../events/AppDispatcher";
 import ActionTypes from "../constants/ActionTypes";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
 import User from "../structs/User";
-import UserActions from "../events/UserActions";
 import Store from "../utils/Store";
 
 /**
@@ -57,9 +57,9 @@ var UserDetailStore = Store.createStore({
     usersFetching[userID] = {user: false, groups: false, permissions: false};
     this.set({usersFetching});
 
-    UserActions.fetchUser(userID);
-    UserActions.fetchUserGroups(userID);
-    UserActions.fetchUserPermissions(userID);
+    ACLUsersActions.fetchUser(userID);
+    ACLUsersActions.fetchUserGroups(userID);
+    ACLUsersActions.fetchUserPermissions(userID);
   },
 
   /**

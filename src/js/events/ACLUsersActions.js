@@ -3,7 +3,7 @@ import AppDispatcher from "./AppDispatcher";
 import Config from "../config/Config";
 import RequestUtil from "../utils/RequestUtil";
 
-var UserActions = {
+var ACLUsersActions = {
 
   fetchUser: function (userID) {
     RequestUtil.json({
@@ -71,14 +71,14 @@ if (Config.useFixtures) {
   let userDetailsFixture =
     require("json!../../../tests/_fixtures/acl/user-with-details.json");
 
-  UserActions.fetchUser = function () {
+  ACLUsersActions.fetchUser = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_USER_SUCCESS,
       data: userFixture
     });
   };
 
-  UserActions.fetchUserGroups = function () {
+  ACLUsersActions.fetchUserGroups = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS,
       data: userDetailsFixture.groups,
@@ -86,7 +86,7 @@ if (Config.useFixtures) {
     });
   };
 
-  UserActions.fetchUserPermissions = function () {
+  ACLUsersActions.fetchUserPermissions = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS,
       data: userDetailsFixture.permissions,
@@ -95,4 +95,4 @@ if (Config.useFixtures) {
   };
 }
 
-module.exports = UserActions;
+module.exports = ACLUsersActions;

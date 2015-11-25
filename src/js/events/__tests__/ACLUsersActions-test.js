@@ -1,25 +1,22 @@
-var _ = require("underscore");
-
 jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../AppDispatcher");
 jest.dontMock("../../config/Config");
 jest.dontMock("../../utils/RequestUtil");
-jest.dontMock("../UserActions");
+jest.dontMock("../ACLUsersActions");
 
 var ActionTypes = require("../../constants/ActionTypes");
 var AppDispatcher = require("../AppDispatcher");
-var Config = require("../../config/Config");
 var RequestUtil = require("../../utils/RequestUtil");
-var UserActions = require("../UserActions");
+var ACLUsersActions = require("../ACLUsersActions");
 
-describe("UserActions", function () {
+describe("ACLUsersActions", function () {
 
   beforeEach(function () {
     this.configuration = null;
     this.requestUtilJSON = RequestUtil.json;
     RequestUtil.json = (configuration) => {
       this.configuration = configuration;
-    }
+    };
   });
 
   afterEach(function () {
@@ -29,7 +26,7 @@ describe("UserActions", function () {
   describe("#fetchUser", function () {
 
     beforeEach(function () {
-      UserActions.fetchUser("foo");
+      ACLUsersActions.fetchUser("foo");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -77,7 +74,7 @@ describe("UserActions", function () {
   describe("#fetchUserGroups", function () {
 
     beforeEach(function () {
-      UserActions.fetchUserGroups("foo");
+      ACLUsersActions.fetchUserGroups("foo");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -146,7 +143,7 @@ describe("UserActions", function () {
   describe("#fetchUserPermissions", function () {
 
     beforeEach(function () {
-      UserActions.fetchUserPermissions("foo");
+      ACLUsersActions.fetchUserPermissions("foo");
     });
 
     it("dispatches the correct action when successful", function () {
