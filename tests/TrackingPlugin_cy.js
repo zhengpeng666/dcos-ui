@@ -1,4 +1,4 @@
-describe("Tracking Plugin [02w]", function() {
+describe("Tracking Plugin Enabled [02w]", function() {
 
   beforeEach(function() {
     cy
@@ -8,13 +8,17 @@ describe("Tracking Plugin [02w]", function() {
       .route(/history\/last/, "fx:marathon-1-task/summary")
       .route(/state-summary/, "fx:marathon-1-task/summary")
       .route(/state/, "fx:marathon-1-task/state")
-      .route(/ui-config/, "fx:config/config")
+      .route(/ui-config/, "fx:config/tracking-enabled")
       .visit("http://localhost:4200/", {
       onBeforeLoad: function(contentWindow) {
         contentWindow.localStorage.setItem("email", "ui-bot@mesosphere.io");
+        contentWindow.analytics = {
+          initialized: true,
+          page: function(){},
+          track: function(){}
+        };
       }
     });
-    cy.fixture("config/Config.js");
   });
 
   context("Sidebar [02x]", function() {
@@ -28,56 +32,52 @@ describe("Tracking Plugin [02w]", function() {
   //     cy.get("button[data-tip-content='Talk with us']").as("intercomButton");
   //   });
   //
-  //   it("should identify users with Segment analytics"), function() {
-  //    // TODO
-  //   });
-  //
   //   it("should add intercom script to body [02u]", function() {
   //     // cy.get("button[data-behavior='show-tip']").click();
   //     cy.get("#intercom-container");
   //   });
   //
-  //   context("Closed -> Opened [036]", function() {
-  //     beforeEach(function() {
-  //       Intercom("hide");
-  //     });
-  //
-  //     it("should not display Intercom when sidebar button is inactive [039]",
-  //       function() {
-  //         cy.get("@intercomButton").find(".icon")
-  //           .should("not.have.class", "icon-sprite-medium-color");
-  //         cy.get("#intercom-messenger").should("have.class", "intercom-messenger-inactive");
-  //       }
-  //     );
-  //
-  //     it("should display Intercom when inactive sidebar button clicked [033]",
-  //       function() {
-  //         cy.get("@intercomButton").click();
-  //         cy.get("#intercom-messenger").should("have.class", "intercom-messenger-active");
-  //       }
-  //     );
-  //   });
-  //
-  //   context("Open -> Closed [03a]", function() {
-  //     beforeEach(function() {
-  //       Intercom("show");
-  //     });
-  //
-  //     it("should display Intercom when sidebar button is active [038]",
-  //       function() {
-  //         cy.get("@intercomButton").find(".icon")
-  //           .should("have.class", "icon-sprite-medium-color");
-  //         cy.get("#intercom-messenger").should("have.class", "intercom-messenger-active");
-  //       }
-  //     );
-  //
-  //     it("should hide Intercom when active sidebar button clicked [03b]", function() {
-  //       cy.get("@intercomButton").click();
-  //       cy.get("#intercom-messenger").should("have.class", "intercom-messenger-active");
-  //     });
-  //   });
+    // context("Closed -> Opened [036]", function() {
+    //   beforeEach(function() {
+    //     Intercom("hide");
+    //   });
+    //
+    //   it("should not display Intercom when sidebar button is inactive [039]",
+    //     function() {
+    //       cy.get("@intercomButton").find(".icon")
+    //         .should("not.have.class", "icon-sprite-medium-color");
+    //       cy.get("#intercom-messenger").should("have.class", "intercom-messenger-inactive");
+    //     }
+    //   );
+    //
+    //   it("should display Intercom when inactive sidebar button clicked [033]",
+    //     function() {
+    //       cy.get("@intercomButton").click();
+    //       cy.get("#intercom-messenger").should("have.class", "intercom-messenger-active");
+    //     }
+    //   );
+    // });
+    //
+    // context("Open -> Closed [03a]", function() {
+    //   beforeEach(function() {
+    //     Intercom("show");
+    //   });
+    //
+    //   it("should display Intercom when sidebar button is active [038]",
+    //     function() {
+    //       cy.get("@intercomButton").find(".icon")
+    //         .should("have.class", "icon-sprite-medium-color");
+    //       cy.get("#intercom-messenger").should("have.class", "intercom-messenger-active");
+    //     }
+    //   );
+    //
+    //   it("should hide Intercom when active sidebar button clicked [03b]", function() {
+    //     cy.get("@intercomButton").click();
+    //     cy.get("#intercom-messenger").should("have.class", "intercom-messenger-active");
+    //   });
+    // });
   // });
-  //
+
   // context("Chameleon", function() {
   //   it("should add Chameleon 'Getting Started'"), function() {
   //    // TODO
@@ -88,20 +88,70 @@ describe("Tracking Plugin [02w]", function() {
   //   });
   // });
 
-  // context("Welcome Modal [02z]", function() {
-  //   it("should not show modal when 'email' in localStorage [030]", function() {
-  //     cy.get(".modal").should("not");
-  //   });
-  //
-  //   context("New User [037]", function() {
-  //     beforeEach(function() {
-  //       cy.clearLocalStorage().visit("http://localhost:4200/");
-  //     });
-  //
-  //     it("should show modal when no 'email' in localStorage [031]", function() {
-  //       cy.get(".modal");
-  //     });
-  //   });
-  //
-  // });
+  context("Welcome Modal [02z]", function() {
+    it("should not show modal when 'email' in localStorage [030]", function() {
+      cy.get(".modal").should("not");
+    });
+
+    context("New User [037]", function() {
+      beforeEach(function() {
+        cy.clearLocalStorage().visit("http://localhost:4200/");
+      });
+
+      it("should show modal when no 'email' in localStorage [031]", function() {
+        cy.get(".modal");
+      });
+    });
+
+  });
+});
+
+describe("Tracking Plugin Disabled [03d]", function() {
+
+  beforeEach(function() {
+    cy
+      .server()
+      .route(/apps/, "fx:marathon-1-task/app")
+      .route(/history\/minute/, "fx:marathon-1-task/history-minute")
+      .route(/history\/last/, "fx:marathon-1-task/summary")
+      .route(/state-summary/, "fx:marathon-1-task/summary")
+      .route(/state/, "fx:marathon-1-task/state")
+      .route(/ui-config/, "fx:config/tracking-disabled")
+      .clearLocalStorage()
+      .visit("http://localhost:4200/");
+  });
+
+  context("Sidebar [03c]", function() {
+    it("should have no sidebar icons [03e]", function() {
+      cy.get(".sidebar-footer").find(".button").should("to.have.length", 0);
+    })
+  });
+
+  context("Welcome Modal [03f]", function() {
+    it("should not show modal when no email in localStorage [03g]", function() {
+      cy.get(".modal").should("not");
+    });
+
+    context("Email in localStorage [03h]", function() {
+      beforeEach(function() {
+        cy.visit("http://localhost:4200/", {
+          onBeforeLoad: function(contentWindow) {
+            contentWindow.localStorage.setItem("email", "ui-bot@mesosphere.io");
+            contentWindow.analytics = {
+              initialized: true,
+              page: function(){},
+              track: function(){}
+            };
+          }
+        });
+      });
+
+      it("should not show modal when 'email' in localStorage [03i]",
+        function() {
+          cy.get(".modal").should("not");
+        }
+      );
+    });
+
+  });
 });
