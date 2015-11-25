@@ -1,56 +1,90 @@
 import classNames from "classnames";
-import { Link } from "react-router";
+import {Link} from "react-router";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
+import TabsUtil from "../utils/TabsUtil";
+
 const TabsMixin = {
 
-  getTabClassSet(customClasses) {
-    return Object.keys(this.tabs).map(function (tab) {
-      let classSet = classNames({
-        "button button-link": true,
-        "button-primary": this.state.currentTab === tab,
-        [customClasses]: customClasses
-      });
+  /**
+   * Returns a tab that has a callback when clicked.
+   * @see #tabs_handleTabClick
+   *
+   * @param  {String} customClasses to be added to the Link item
+   * @param  {String} tab key of tab to render
+   * @return {Component} React component to render
+   */
+  tabs_getUnroutedItem(customClasses, tab) {
+    let tabLabelClass = classNames(customClasses, {"tab-item-label": true});
 
-      return classSet;
-    }, this);
+    return (
+      <span
+        className={tabLabelClass}
+        onClick={this.tabs_handleTabClick.bind(this, tab)}>
+        {this.tabs_tabs[tab]}
+      </span>
+    );
   },
 
-  tabs_getTabs(customClasses) {
-    let tabSet = Object.keys(this.tabs);
-
-    return this.getTabClassSet(customClasses).map(function (classSet, i) {
-      return (
-        <div
-          key={i}
-          className={classSet}
-          onClick={this.tabs_handleTabClick.bind(this, tabSet[i])}>
-          {this.tabs[tabSet[i]]}
-        </div>
-      );
-    }, this);
+  /**
+   * Will return an array of tabs to be rendered.
+   * Will only have onClick handlers, as these tabs are not routable.
+   *
+   * @param  {String} customClasses to be added to the active component
+   * @return {Array} of tabs to render
+   */
+  tabs_getUnroutedTabs(customClasses) {
+    return TabsUtil.getTabs(
+      this.tabs_tabs,
+      this.state.currentTab,
+      this.tabs_getUnroutedItem.bind(this, customClasses)
+    );
   },
 
-  tabs_getTabLinks(customClasses) {
-    let tabSet = Object.keys(this.tabs);
+  /**
+   * Returns a Link for a given tab. This tab is expected to be routable.
+   *
+   * @param  {String} customClasses to be added to the Link item
+   * @param  {String} tab key of tab to render
+   * @return {Component} React component to render
+   */
+  tabs_getRoutedItem(customClasses, tab) {
+    let tabLabelClass = classNames(customClasses, {"tab-item-label": true});
 
-    return this.getTabClassSet(customClasses).map(function (classSet, i) {
-      return (
-        <Link
-          key={i}
-          to={tabSet[i]}
-          className={classSet}
-          onClick={this.tabs_handleTabClick.bind(this, tabSet[i])}>
-            {this.tabs[tabSet[i]]}
-        </Link>
-      );
-    }, this);
+    return (
+      <Link
+        to={tab}
+        className={tabLabelClass}
+        onClick={this.tabs_handleTabClick.bind(this, tab)}>
+        {this.tabs_tabs[tab]}
+      </Link>
+    );
   },
 
+  /**
+   * Will return an array of routed tabs to be rendered.
+   * Will have onClick handlers and active Link components with routes
+   *
+   * @param  {String} customClasses to be added to the active component
+   * @return {Array} of tabs to render
+   */
+  tabs_getRoutedTabs(customClasses) {
+    return TabsUtil.getTabs(
+      this.tabs_tabs,
+      this.state.currentTab,
+      this.tabs_getRoutedItem.bind(this, customClasses)
+    );
+  },
+
+  /**
+   * Calls the function to render the active tab
+   *
+   * @return {Component} the result of the appropriate render function
+   */
   tabs_getTabView() {
-    let currentTab = this.tabs[this.state.currentTab];
+    let currentTab = this.tabs_tabs[this.state.currentTab];
     let renderFunction = this[`render${currentTab}TabView`];
 
     if (renderFunction == null) {

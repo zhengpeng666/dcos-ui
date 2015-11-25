@@ -14,10 +14,13 @@ var Page = React.createClass({
 
   propTypes: {
     title: React.PropTypes.oneOfType([
-        React.PropTypes.object,
-        React.PropTypes.string
-      ]),
-    renderNavigation: React.PropTypes.func
+      React.PropTypes.object,
+      React.PropTypes.string
+    ]),
+    navigation: React.PropTypes.oneOfType([
+      React.PropTypes.object,
+      React.PropTypes.string
+    ])
   },
 
   componentDidMount: function () {
@@ -28,11 +31,16 @@ var Page = React.createClass({
   },
 
   getNavigation: function () {
-    if (_.isFunction(this.props.renderNavigation)) {
-      return this.props.renderNavigation();
-    } else {
-      return <div className="page-header-navigation" />;
+    let navigation = this.props.navigation;
+    if (!navigation) {
+      return null;
     }
+
+    return (
+      <div className="page-header-navigation">
+        {this.props.navigation}
+      </div>
+    );
   },
 
   getChildren: function () {

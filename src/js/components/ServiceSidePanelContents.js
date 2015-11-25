@@ -22,7 +22,7 @@ export default class ServiceSidePanelContents extends SidePanelContents {
     super(...arguments);
 
     this.state = {
-      currentTab: Object.keys(this.tabs).shift()
+      currentTab: Object.keys(this.tabs_tabs).shift()
     };
 
     this.store_listeners = [
@@ -236,9 +236,9 @@ export default class ServiceSidePanelContents extends SidePanelContents {
             </div>
           </div>
           {this.getOpenServiceButton()}
-          <div className="side-panel-tabs">
-            {this.tabs_getTabs()}
-          </div>
+          <ul className="tabs list-inline flush-bottom">
+            {this.tabs_getUnroutedTabs()}
+          </ul>
         </div>
         {this.tabs_getTabView()}
       </div>

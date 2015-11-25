@@ -22,7 +22,7 @@ export default class SidePanelContents extends
 
     this.store_listeners = [];
 
-    this.tabs = {
+    this.tabs_tabs = {
       tasks: "Tasks",
       details: "Details"
     };
