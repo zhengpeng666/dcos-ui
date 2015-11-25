@@ -23,16 +23,6 @@ var Page = React.createClass({
     ])
   },
 
-  getInitialState: function () {
-    let currentTab;
-
-    if (_.isObject(this.props.navigation)) {
-      currentTab = Object.keys(this.props.navigation).shift();
-    }
-
-    return {currentTab};
-  },
-
   componentDidMount: function () {
     this.internalStorage_set({
       rendered: true
