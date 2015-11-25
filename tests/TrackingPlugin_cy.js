@@ -27,67 +27,6 @@ describe("Tracking Plugin Enabled [02w]", function() {
     })
   });
 
-  // context("Intercom [02t]", function() {
-  //   beforeEach(function() {
-  //     cy.get("button[data-tip-content='Talk with us']").as("intercomButton");
-  //   });
-  //
-  //   it("should add intercom script to body [02u]", function() {
-  //     // cy.get("button[data-behavior='show-tip']").click();
-  //     cy.get("#intercom-container");
-  //   });
-  //
-    // context("Closed -> Opened [036]", function() {
-    //   beforeEach(function() {
-    //     Intercom("hide");
-    //   });
-    //
-    //   it("should not display Intercom when sidebar button is inactive [039]",
-    //     function() {
-    //       cy.get("@intercomButton").find(".icon")
-    //         .should("not.have.class", "icon-sprite-medium-color");
-    //       cy.get("#intercom-messenger").should("have.class", "intercom-messenger-inactive");
-    //     }
-    //   );
-    //
-    //   it("should display Intercom when inactive sidebar button clicked [033]",
-    //     function() {
-    //       cy.get("@intercomButton").click();
-    //       cy.get("#intercom-messenger").should("have.class", "intercom-messenger-active");
-    //     }
-    //   );
-    // });
-    //
-    // context("Open -> Closed [03a]", function() {
-    //   beforeEach(function() {
-    //     Intercom("show");
-    //   });
-    //
-    //   it("should display Intercom when sidebar button is active [038]",
-    //     function() {
-    //       cy.get("@intercomButton").find(".icon")
-    //         .should("have.class", "icon-sprite-medium-color");
-    //       cy.get("#intercom-messenger").should("have.class", "intercom-messenger-active");
-    //     }
-    //   );
-    //
-    //   it("should hide Intercom when active sidebar button clicked [03b]", function() {
-    //     cy.get("@intercomButton").click();
-    //     cy.get("#intercom-messenger").should("have.class", "intercom-messenger-active");
-    //   });
-    // });
-  // });
-
-  // context("Chameleon", function() {
-  //   it("should add Chameleon 'Getting Started'"), function() {
-  //    // TODO
-  //   });
-  //
-  //   it("should start tour when 'Getting Started' button is clicked"), function() {
-  //    // TODO
-  //   });
-  // });
-
   context("Welcome Modal [02z]", function() {
     it("should not show modal when 'email' in localStorage [030]", function() {
       cy.get(".modal").should("not");
