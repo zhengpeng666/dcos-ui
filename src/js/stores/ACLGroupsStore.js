@@ -35,7 +35,7 @@ const GroupsStore = Store.createStore({
   },
 
   processGroupsError: function () {
-    this.emit(ActionTypes.ACL_GROUPS_REQUEST_ERROR);
+    this.emit(EventTypes.ACL_GROUPS_REQUEST_ERROR);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
