@@ -7,6 +7,7 @@ var AnimatedLogo = require("../components/AnimatedLogo");
 var Config = require("../config/Config");
 import ConfigStore from "../stores/ConfigStore";
 var EventTypes = require("../constants/EventTypes");
+import Form from "../components/Form";
 import HistoryStore from "../stores/HistoryStore";
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var IntercomStore = require("../stores/IntercomStore");
@@ -247,20 +248,46 @@ var Index = React.createClass({
       }
     }
 
+        // <a id="start-tour"></a>
+        // <div id="canvas" className={classSet}>
+        //   {this.getScreenOverlays(showLoadingScreen, showErrorScreen)}
+        //   <Sidebar />
+        //   <RouteHandler />
+        // </div>
+        // <Modals
+        //   showErrorModal={this.state.showErrorModal}
+        //   modalErrorMsg={this.state.modalErrorMsg} />
     return (
-      <div>
-        <a id="start-tour"></a>
-        <div id="canvas" className={classSet}>
-          {this.getScreenOverlays(showLoadingScreen, showErrorScreen)}
-          <Sidebar />
-          <RouteHandler />
-        </div>
-        <Modals
-          showErrorModal={this.state.showErrorModal}
-          modalErrorMsg={this.state.modalErrorMsg} />
+      <div styles={{background: "white"}}>
+        <Form definition={formDefinition} onSubmit={function (arg) {console.log("index.js onsubmit", arg); }} />
       </div>
     );
   }
 });
+
+var formDefinition = [
+  {
+    fieldName: "username",
+    value: "string",
+    validation: function (arg) {
+      return arg.length < 8;
+    },
+    placeholder: "What's up?",
+    fieldType: "text",
+    errorText: "Must be less than 8 characters",
+    required: true,
+    showLabel: true,
+    writeType: "edit"
+  },
+  {
+    fieldName: "address",
+    value: "string",
+    validation: function (arg) { return true; },
+    placeholder: "",
+    fieldType: "password",
+    required: true,
+    writeType: "input"
+  }
+];
 
 module.exports = Index;
