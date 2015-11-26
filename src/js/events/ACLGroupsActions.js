@@ -21,7 +21,7 @@ const ACLGroupDetailActions = {
         });
       }
     });
-  }
+  },
 
   fetchGroup: function (groupID) {
     RequestUtil.json({
