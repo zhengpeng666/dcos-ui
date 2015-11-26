@@ -23,6 +23,45 @@ describe("ACLUsersActions", function () {
     RequestUtil.json = this.requestUtilJSON;
   });
 
+  describe("#fetch", function () {
+
+    it("dispatches the correct action when successful", function () {
+      ACLUsersActions.fetch();
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USERS_SUCCESS);
+      });
+
+      this.configuration.success({foo: "bar"});
+    });
+
+    it("dispatches the correct action when unsuccessful", function () {
+      ACLUsersActions.fetch();
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USERS_ERROR);
+      });
+
+      this.configuration.error({message: "bar"});
+    });
+
+    it("calls #json from the RequestUtil", function () {
+      spyOn(RequestUtil, "json");
+      ACLUsersActions.fetch();
+      expect(RequestUtil.json).toHaveBeenCalled();
+    });
+
+    it("fetches data from the correct URL", function () {
+      spyOn(RequestUtil, "json");
+      ACLUsersActions.fetch();
+      expect(RequestUtil.json.mostRecentCall.args[0].url)
+        .toEqual("/api/v1/users");
+    });
+
+  });
+
   describe("#fetchUser", function () {
 
     beforeEach(function () {
