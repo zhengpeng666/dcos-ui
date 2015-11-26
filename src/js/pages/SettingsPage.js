@@ -18,7 +18,6 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
     super();
 
     this.tabs_tabs = {};
-
     this.state = {};
   }
 

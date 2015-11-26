@@ -5,19 +5,15 @@ import ACLGroupsStore from "../../stores/ACLGroupsStore";
 import EventTypes from "../../constants/EventTypes";
 import FilterHeadline from "../../components/FilterHeadline";
 import FilterInputText from "../../components/FilterInputText";
+import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import ResourceTableUtil from "../../utils/ResourceTableUtil";
 import {Table} from "reactjs-components";
 import TableUtil from "../../utils/TableUtil";
 
 const METHODS_TO_BIND = [
-  "getColGroup",
-  "getColumns",
-  "getLoadingScreen",
-  "getTable",
-  "getTableHeader",
-  "getVisibleGroups",
   "handleGroupsChange",
-  "handleSearchStringChange"
+  "handleSearchStringChange",
+  "onMesosStateChange"
 ];
 
 export default class GroupsTab extends React.Component {
@@ -39,7 +35,13 @@ export default class GroupsTab extends React.Component {
       EventTypes.ACL_GROUPS_CHANGE,
       this.handleGroupsChange
     );
+
     ACLGroupsStore.fetchGroups();
+
+    MesosSummaryStore.addChangeListener(
+      EventTypes.MESOS_SUMMARY_CHANGE,
+      this.onMesosStateChange
+    );
   }
 
   componentWillUnmount() {
@@ -47,6 +49,15 @@ export default class GroupsTab extends React.Component {
       EventTypes.ACL_GROUPS_CHANGE,
       this.handleGroupsChange
     );
+
+    MesosSummaryStore.removeChangeListener(
+      EventTypes.MESOS_SUMMARY_CHANGE,
+      this.onMesosStateChange
+    );
+  }
+
+  onMesosStateChange() {
+    this.forceUpdate();
   }
 
   getColGroup() {
@@ -92,7 +103,7 @@ export default class GroupsTab extends React.Component {
 
   getTable() {
     return (
-      <div className="groups-table" style={{"flex-grow": "1"}}>
+      <div className="page-content-fill flex-grow flex-container-col">
         <Table
           className="table inverse table-borderless-outer
             table-borderless-inner-columns flush-bottom"
@@ -101,7 +112,8 @@ export default class GroupsTab extends React.Component {
           data={this.getVisibleGroups()}
           idAttribute="gid"
           itemHeight={TableUtil.getRowHeight()}
-          sortBy={{ prop: "description", order: "asc" }}
+          sortBy={{prop: "description", order: "asc"}}
+          useFlex={true}
           transition={false} />
       </div>
     );
@@ -149,21 +161,21 @@ export default class GroupsTab extends React.Component {
   }
 
   resetFilter() {
-    console.log('reset');
+    this.setState({
+      searchString: ""
+    });
   }
 
   render() {
-    if (!this.state.groups.length) {
+    if (!this.state.groups.length ||
+      !MesosSummaryStore.get("statesProcessed")) {
       return this.getLoadingScreen();
     }
 
-    let tableHeader = this.getTableHeader();
-    let table = this.getTable();
-
     return (
       <div className="flex-container-col">
-        {tableHeader}
-        {table}
+        {this.getTableHeader()}
+        {this.getTable()}
       </div>
     );
   }
