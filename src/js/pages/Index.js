@@ -275,7 +275,7 @@ var Index = React.createClass({
 
 var formDefinition = [
   {
-    fieldName: "username",
+    name: "username",
     value: "string",
     validation: function (arg) {
       return arg.length < 15;
@@ -289,7 +289,7 @@ var formDefinition = [
   },
   [
     {
-      fieldName: "address",
+      name: "address",
       value: "string",
       validation: /(?:.*(?:\b(?:cat|dog)\b)){2}/,
       placeholder: "",
@@ -301,7 +301,7 @@ var formDefinition = [
       writeType: "edit"
     },
     {
-      fieldName: "password",
+      name: "password",
       value: "string",
       validation: function (arg) { return true; },
       placeholder: "",
