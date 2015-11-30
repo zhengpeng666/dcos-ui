@@ -266,7 +266,7 @@ var Index = React.createClass({
           inputClass="form-control"
           formControlClass="form-group"
           helpBlockClass="form-help-block"
-          triggerSubmit={function (arg) {}}
+          triggerSubmit={function (arg) {this.triggerSubmit = arg;}.bind(this)}
           onSubmit={function (model) {console.log(model, "submitted"); }} />
       </div>
     );
@@ -282,9 +282,10 @@ var formDefinition = [
     },
     placeholder: "What's up?",
     fieldType: "text",
-    errorText: "Must be less than 8 characters",
+    validationErrorText: "Must be less than 8 characters.",
     required: true,
     showLabel: true,
+    showError: "This started out fucked up.",
     writeType: "edit"
   },
   [
@@ -294,15 +295,15 @@ var formDefinition = [
       validation: /(?:.*(?:\b(?:cat|dog)\b)){2}/,
       placeholder: "",
       fieldType: "text",
-      errorText: "must be a valid address",
+      validationErrorText: "must be a valid address",
       required: true,
       showLabel: true,
-      showError: true,
+      showError: "This started out fucked up.",
       writeType: "edit"
     },
     {
       name: "password",
-      value: "string",
+      value: "",
       validation: function (arg) { return true; },
       placeholder: "",
       fieldType: "password",
