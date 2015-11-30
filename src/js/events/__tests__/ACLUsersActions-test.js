@@ -108,6 +108,16 @@ describe("ACLUsersActions", function () {
       this.configuration.error({message: "bar"});
     });
 
+    it("dispatches with the userID when unsucessful", function () {
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.userID).toEqual("foo");
+      });
+
+      this.configuration.error({message: "bar"});
+    });
+
   });
 
   describe("#fetchUserGroups", function () {

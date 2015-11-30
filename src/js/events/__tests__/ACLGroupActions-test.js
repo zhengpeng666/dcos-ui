@@ -69,6 +69,16 @@ describe("ACLGroupsActions", function () {
       this.configuration.error({message: "bar"});
     });
 
+    it("dispatches with the groupID when unsucessful", function () {
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.groupID).toEqual("foo");
+      });
+
+      this.configuration.error({message: "bar"});
+    });
+
   });
 
   describe("#fetchGroupUsers", function () {
