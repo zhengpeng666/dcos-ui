@@ -2,7 +2,6 @@ import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "./AppDispatcher";
 import Config from "../config/Config";
 import RequestUtil from "../utils/RequestUtil";
-import groupsFixture from "json!../../../tests/_fixtures/acl/groups-unicode.json";
 
 const ACLGroupsActions = {
 
@@ -22,15 +21,98 @@ const ACLGroupsActions = {
         });
       }
     });
+  },
+
+  fetchGroup: function (groupID) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}`,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
+          data: response
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_ERROR,
+          data: e.message,
+          groupID
+        });
+      }
+    });
+  },
+
+  fetchGroupPermissions: function (groupID) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}/permissions`,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
+          data: response,
+          groupID
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR,
+          data: e.message,
+          groupID
+        });
+      }
+    });
+  },
+
+  fetchGroupUsers: function (groupID) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}/users`,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
+          data: response,
+          groupID
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR,
+          data: e.message,
+          groupID
+        });
+      }
+    });
   }
 
 };
 
 if (Config.useFixtures) {
+  let groupFixture = require("json!../../../tests/_fixtures/acl/group-unicode.json");
+  let groupDetailsFixture = require("json!../../../tests/_fixtures/acl/group-with-details.json");
+  let groupsFixture = require("json!../../../tests/_fixtures/acl/groups-unicode.json");
+
   ACLGroupsActions.fetch = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
       data: groupsFixture
+    });
+  };
+  ACLGroupsActions.fetchGroup = function () {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
+      data: groupFixture
+    });
+  };
+  ACLGroupsActions.fetchGroupPermissions = function () {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
+      data: groupDetailsFixture.permissions,
+      groupID: groupFixture.gid
+    });
+  };
+  ACLGroupsActions.fetchGroupUsers = function () {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
+      data: groupDetailsFixture.users,
+      groupID: groupFixture.gid
     });
   };
 }
