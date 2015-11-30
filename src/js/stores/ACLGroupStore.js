@@ -8,6 +8,9 @@ import GetSetMixin from "../mixins/GetSetMixin";
 import Group from "../structs/Group";
 import Store from "../utils/Store";
 
+/**
+ * This store will keep track of groups and their details
+ */
 let GroupDetailStore = Store.createStore({
   storeID: "groupDetail",
 
@@ -15,6 +18,8 @@ let GroupDetailStore = Store.createStore({
 
   getSet_data: {
     groups: {},
+    // A hash of groupIDs that we're fetching
+    // The value is a list of requests that have been received
     groupsFetching: {}
   },
 
@@ -40,6 +45,12 @@ let GroupDetailStore = Store.createStore({
     this.set(groups);
   },
 
+  /**
+   * Will fetch a group and their details.
+   * Will make a request to various different endpoints to get all details
+   *
+   * @param  {Number} groupID
+   */
   fetchGroupWithDetails: function (groupID) {
     let groupsFetching = this.get("groupsFetching");
 
@@ -51,6 +62,13 @@ let GroupDetailStore = Store.createStore({
     ACLGroupsActions.fetchGroupUsers(groupID);
   },
 
+  /**
+   * Validates if the details for a group have been successfuly fetched
+   *
+   * @param  {Number} groupID
+   * @param  {String} type The type of detail that has been successfuly
+   *   received
+   */
   validateGroupWithDetailsFetch: function (groupID, type) {
     let groupsFetching = this.get("groupsFetching");
     if (groupsFetching[groupID] == null) {
@@ -73,6 +91,12 @@ let GroupDetailStore = Store.createStore({
     }
   },
 
+  /**
+   * Emits error if we're in the process of fetching details for a group
+   * but one of the requests fails.
+   *
+   * @param  {Number} userID
+   */
   invalidateGroupWithDetailsFetch: function (groupID) {
     let groupsFetching = this.get("groupsFetching");
     if (groupsFetching[groupID] == null) {
@@ -84,6 +108,11 @@ let GroupDetailStore = Store.createStore({
     this.emit(EventTypes.ACL_GROUP_DETAILS_FETCHED_ERROR, groupID);
   },
 
+  /**
+   * Process a group response
+   *
+   * @param  {Object} groupData see /acl/groups/group schema
+   */
   processGroup: function (groupData) {
     let group = this.getGroupRaw(groupData.gid) || {};
 
@@ -100,11 +129,18 @@ let GroupDetailStore = Store.createStore({
     this.invalidateGroupWithDetailsFetch(groupID, "group");
   },
 
+  /**
+   * Process a group permissions response
+   *
+   * @param  {Object} groupID
+   * @param  {Object} permissions see /acl/groups/group/permissions schema
+   */
   processGroupPermissions: function (groupID, permissions) {
     let group = this.getGroupRaw(groupID) || {};
 
     group.permissions = permissions;
 
+    // Use groupID throughout as the group may not have been previously set
     this.setGroup(groupID, group);
     this.emit(EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE, groupID);
 
@@ -116,11 +152,18 @@ let GroupDetailStore = Store.createStore({
     this.invalidateGroupWithDetailsFetch(groupID, "permissions");
   },
 
+  /**
+   * Process a grup users response
+   *
+   * @param  {Object} groupID
+   * @param  {Object} users see /acl/groups/group/users schema
+   */
   processGroupUsers: function (groupID, users) {
     let group = this.getGroupRaw(groupID) || {};
 
     group.users = users;
 
+    // Use groupID throughout as the group may not have been previously set
     this.setGroup(groupID, group);
     this.emit(EventTypes.ACL_GROUP_DETAILS_USERS_CHANGE, groupID);
 
