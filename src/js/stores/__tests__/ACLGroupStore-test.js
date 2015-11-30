@@ -81,11 +81,11 @@ describe("ACLGroupStore", function () {
 
   describe("dispatcher", function () {
 
-    describe("group", function () {
+    afterEach(function () {
+      ACLGroupStore.removeAllListeners();
+    });
 
-      afterEach(function () {
-        ACLGroupStore.removeAllListeners();
-      });
+    describe("group", function () {
 
       it("stores group when event is dispatched", function () {
         AppDispatcher.handleServerAction({
@@ -116,7 +116,6 @@ describe("ACLGroupStore", function () {
           EventTypes.ACL_GROUP_DETAILS_GROUP_ERROR,
           function (id) {
             expect(id).toEqual("foo");
-            ACLGroupStore.removeAllListeners();
           }
         );
 
@@ -146,7 +145,6 @@ describe("ACLGroupStore", function () {
           EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
-            ACLGroupStore.removeAllListeners();
           }
         );
 
@@ -161,7 +159,6 @@ describe("ACLGroupStore", function () {
           EventTypes.ACL_GROUP_DETAILS_USERS_ERROR,
           function (id) {
             expect(id).toEqual("foo");
-            ACLGroupStore.removeAllListeners();
           }
         );
 
@@ -191,7 +188,6 @@ describe("ACLGroupStore", function () {
           EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
-            ACLGroupStore.removeAllListeners();
           }
         );
 
@@ -206,7 +202,6 @@ describe("ACLGroupStore", function () {
           EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
           function (id) {
             expect(id).toEqual("foo");
-            ACLGroupStore.removeAllListeners();
           }
         );
 
