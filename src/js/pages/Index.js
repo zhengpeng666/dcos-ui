@@ -272,9 +272,10 @@ var formDefinition = [
     },
     placeholder: "What's up?",
     fieldType: "text",
-    errorText: "Must be less than 8 characters",
+    validationErrorText: "Must be less than 8 characters.",
     required: true,
     showLabel: true,
+    showError: "This started out fucked up.",
     writeType: "edit"
   },
   [
@@ -284,10 +285,10 @@ var formDefinition = [
       validation: /^[a-zA-Z\s\d\/]*\d[a-zA-Z\s\d\/]*$/,
       placeholder: "",
       fieldType: "text",
-      errorText: "must be a valid address",
+      validationErrorText: "must be a valid address",
       required: true,
       showLabel: true,
-      showError: true,
+      showError: "This started out fucked up.",
       writeType: "edit"
     },
     {
