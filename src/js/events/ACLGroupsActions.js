@@ -3,7 +3,7 @@ import AppDispatcher from "./AppDispatcher";
 import Config from "../config/Config";
 import RequestUtil from "../utils/RequestUtil";
 
-const ACLGroupDetailActions = {
+const ACLGroupsActions = {
 
   fetch: function () {
     RequestUtil.json({
@@ -94,20 +94,20 @@ if (Config.useFixtures) {
       data: groupsFixture
     });
   };
-  ACLGroupDetailActions.fetchGroup = function () {
+  ACLGroupsActions.fetchGroup = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
       data: groupFixture
     });
   };
-  ACLGroupDetailActions.fetchGroupPermissions = function () {
+  ACLGroupsActions.fetchGroupPermissions = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
       data: groupDetailsFixture.permissions,
       groupID: groupFixture.gid
     });
   };
-  ACLGroupDetailActions.fetchGroupUsers = function () {
+  ACLGroupsActions.fetchGroupUsers = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
       data: groupDetailsFixture.users,
@@ -116,4 +116,4 @@ if (Config.useFixtures) {
   };
 }
 
-export default ACLGroupDetailActions;
+export default ACLGroupsActions;
