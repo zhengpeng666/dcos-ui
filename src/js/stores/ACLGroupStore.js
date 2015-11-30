@@ -126,7 +126,7 @@ let GroupDetailStore = Store.createStore({
 
   processGroupError: function (groupID) {
     this.emit(EventTypes.ACL_GROUP_DETAILS_GROUP_ERROR, groupID);
-    this.invalidateGroupWithDetailsFetch(groupID, "group");
+    this.invalidateGroupWithDetailsFetch(groupID);
   },
 
   /**
@@ -149,7 +149,7 @@ let GroupDetailStore = Store.createStore({
 
   processGroupPermissionsError: function (groupID) {
     this.emit(EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR, groupID);
-    this.invalidateGroupWithDetailsFetch(groupID, "permissions");
+    this.invalidateGroupWithDetailsFetch(groupID);
   },
 
   /**
@@ -172,7 +172,7 @@ let GroupDetailStore = Store.createStore({
 
   processGroupUsersError: function (groupID) {
     this.emit(EventTypes.ACL_GROUP_DETAILS_USERS_ERROR, groupID);
-    this.invalidateGroupWithDetailsFetch(groupID, "users");
+    this.invalidateGroupWithDetailsFetch(groupID);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
