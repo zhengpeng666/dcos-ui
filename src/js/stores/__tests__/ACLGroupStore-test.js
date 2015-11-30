@@ -34,7 +34,7 @@ describe("ACLGroupStore", function () {
 
   describe("#getGroup", function () {
 
-    it("returns the group that was set", function () {
+    it("returns an instance of Group", function () {
       ACLGroupStore.set({groups: {foo: {bar: "baz"}}});
       expect(ACLGroupStore.getGroup("foo") instanceof Group).toBeTruthy();
     });
@@ -83,6 +83,10 @@ describe("ACLGroupStore", function () {
 
     describe("group", function () {
 
+      afterEach(function () {
+        ACLGroupStore.removeAllListeners();
+      });
+
       it("stores group when event is dispatched", function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
@@ -98,7 +102,6 @@ describe("ACLGroupStore", function () {
           EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
-            ACLGroupStore.removeAllListeners();
           }
         );
 
