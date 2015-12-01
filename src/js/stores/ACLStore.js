@@ -23,71 +23,22 @@ const ACLStore = Store.createStore({
     this.removeListener(eventName, callback);
   },
 
-  fetchServices: ACLActions.fetchACLs.bind(this, "service"),
+  fetchServices: ACLActions.fetchACLs,
 
-  grantUserActionToResource:
-    ACLActions.grantUserActionToResource.bind(this, "access"),
+  grantUserActionToResource: ACLActions.grantUserActionToResource,
 
-  revokeUserActionToResource:
-    ACLActions.revokeUserActionToResource.bind(this, "access"),
+  revokeUserActionToResource: ACLActions.revokeUserActionToResource,
 
-  grantGroupActionToResource:
-    ACLActions.grantGroupActionToResource.bind(this, "access"),
+  grantGroupActionToResource: ACLActions.grantGroupActionToResource,
 
-  revokeGroupActionToResource:
-    ACLActions.revokeGroupActionToResource.bind(this, "access"),
+  revokeGroupActionToResource: ACLActions.revokeGroupActionToResource,
 
   processServiceResources: function (services) {
     this.set({
       services: new ACLList({items: services})
     });
 
-    this.emit(EventTypes.ACL_CHANGE);
-  },
-
-  processResourcesError: function (...args) {
-    args.unshift(EventTypes.ACL_REQUEST_ERROR);
-    this.emit.apply(this, args);
-  },
-
-  processGrantUserAccess: function (...args) {
-    args.unshift(EventTypes.ACL_GRANT_USER_ACTION_CHANGE);
-    this.emit.apply(this, args);
-  },
-
-  processGrantUserAccessError: function (...args) {
-    args.unshift(EventTypes.ACL_GRANT_USER_ACTION_REQUEST_ERROR);
-    this.emit.apply(this, args);
-  },
-
-  processRevokeUserAccess: function (...args) {
-    args.unshift(EventTypes.ACL_REVOKE_USER_ACTION_CHANGE);
-    this.emit.apply(this, args);
-  },
-
-  processRevokeUserAccessError: function (...args) {
-    args.unshift(EventTypes.ACL_REVOKE_USER_ACTION_REQUEST_ERROR);
-    this.emit.apply(this, args);
-  },
-
-  processGrantGroupAccess: function (...args) {
-    args.unshift(EventTypes.ACL_GRANT_GROUP_ACTION_CHANGE);
-    this.emit.apply(this, args);
-  },
-
-  processGrantGroupAccessError: function (...args) {
-    args.unshift(EventTypes.ACL_GRANT_GROUP_ACTION_REQUEST_ERROR);
-    this.emit.apply(this, args);
-  },
-
-  processRevokeGroupAccess: function (...args) {
-    args.unshift(EventTypes.ACL_REVOKE_GROUP_ACTION_CHANGE);
-    this.emit.apply(this, args);
-  },
-
-  processRevokeGroupAccessError: function (...args) {
-    args.unshift(EventTypes.ACL_REVOKE_GROUP_ACTION_REQUEST_ERROR);
-    this.emit.apply(this, args);
+    this.emit(EventTypes.ACL_RESOURCE_CHANGE);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -99,51 +50,35 @@ const ACLStore = Store.createStore({
     let action = payload.action;
 
     switch (action.type) {
-      case ActionTypes.REQUEST_ACL_SUCCESS:
+      case ActionTypes.REQUEST_ACL_RESOURCE_SUCCESS:
         ACLStore.processServiceResources(action.data);
         break;
-      case ActionTypes.REQUEST_ACL_ERROR:
-        ACLStore.processResourcesError();
+      case ActionTypes.REQUEST_ACL_RESOURCE_ERROR:
+        ACLStore.emit(EventTypes.ACL_REQUEST_RESOURCE_ERROR, action.data);
         break;
       case ActionTypes.REQUEST_ACL_GRANT_USER_ACTION_SUCCESS:
-        ACLStore.processGrantUserAccess(action.userID, action.resourceID);
+        ACLStore.emit(EventTypes.ACL_USER_GRANT_ACTION_CHANGE, action.data);
         break;
       case ActionTypes.REQUEST_ACL_GRANT_USER_ACTION_ERROR:
-        ACLStore.processGrantUserAccessError(
-          action.data,
-          action.userID,
-          action.resourceID
-        );
+        ACLStore.emit(EventTypes.ACL_USER_GRANT_ACTION_REQUEST_ERROR, action.data);
         break;
       case ActionTypes.REQUEST_ACL_REVOKE_USER_ACTION_SUCCESS:
-        ACLStore.processRevokeUserAccess(action.userID, action.resourceID);
+        ACLStore.emit(EventTypes.ACL_USER_REVOKE_ACTION_CHANGE, action.data);
         break;
       case ActionTypes.REQUEST_ACL_REVOKE_USER_ACTION_ERROR:
-        ACLStore.processRevokeUserAccessError(
-          action.data,
-          action.userID,
-          action.resourceID
-        );
+        ACLStore.emit(EventTypes.ACL_USER_REVOKE_ACTION_REQUEST_ERROR, action.data);
         break;
       case ActionTypes.REQUEST_ACL_GRANT_GROUP_ACTION_SUCCESS:
-        ACLStore.processGrantGroupAccess(action.groupID, action.resourceID);
+        ACLStore.emit(EventTypes.ACL_GROUP_GRANT_ACTION_CHANGE, action.data);
         break;
       case ActionTypes.REQUEST_ACL_GRANT_GROUP_ACTION_ERROR:
-        ACLStore.processGrantGroupAccessError(
-          action.data,
-          action.groupID,
-          action.resourceID
-        );
+        ACLStore.emit(EventTypes.ACL_GROUP_GRANT_ACTION_REQUEST_ERROR, action.data);
         break;
       case ActionTypes.REQUEST_ACL_REVOKE_GROUP_ACTION_SUCCESS:
-        ACLStore.processRevokeGroupAccess(action.groupID, action.resourceID);
+        ACLStore.emit(EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE, action.data);
         break;
       case ActionTypes.REQUEST_ACL_REVOKE_GROUP_ACTION_ERROR:
-        ACLStore.processRevokeGroupAccessError(
-          action.data,
-          action.groupID,
-          action.resourceID
-        );
+        ACLStore.emit(EventTypes.ACL_GROUP_REVOKE_ACTION_REQUEST_ERROR, action.data);
         break;
     }
 
