@@ -1,3 +1,5 @@
+import _ from "underscore";
+
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "./AppDispatcher";
 import Config from "../config/Config";
@@ -84,7 +86,7 @@ const ACLUsersActions = {
 
   addUser: function (data) {
     let userID = data.uid;
-    delete data.uid;
+    data = _.omit(data, "uid");
 
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}`,
