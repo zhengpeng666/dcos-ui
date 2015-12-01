@@ -272,7 +272,7 @@ var formDefinition = [
     },
     placeholder: "What's up?",
     fieldType: "text",
-    validationErrorText: "Must be less than 8 characters.",
+    validationErrorText: "Must be less than 15 characters.",
     required: true,
     showLabel: true,
     showError: "This started out fucked up.",
