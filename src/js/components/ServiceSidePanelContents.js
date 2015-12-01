@@ -4,12 +4,12 @@ const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
 import DateUtil from "../utils/DateUtil";
-import SidePanelContents from "./SidePanelContents";
 import HealthLabels from "../constants/HealthLabels";
 import HealthStatus from "../constants/HealthStatus";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
 import TaskView from "./TaskView";
 

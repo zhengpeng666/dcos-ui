@@ -64,9 +64,15 @@ var routes = (
 
         <Redirect from="/settings/system/?" to="settings-system-overview" />
       </Route>
+
       <Route name="settings-organization" path="organization/?">
-        <Route name="settings-organization-users" path="users/?" handler={UsersTab} />
-        <Route name="settings-organization-groups" path="groups/?" handler={GroupsTab} />
+        <Route name="settings-organization-users" path="users/?" handler={UsersTab}>
+          <Route name="settings-organization-users-user" path=":userID" />
+        </Route>
+
+        <Route name="settings-organization-groups" path="groups/?" handler={GroupsTab}>
+          <Route name="settings-organization-groups-group" path=":groupID" />
+        </Route>
 
         <Redirect from="/settings/organization/?" to="settings-organization-users" />
       </Route>

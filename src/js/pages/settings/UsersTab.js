@@ -1,4 +1,12 @@
+/*eslint-disable no-unused-vars*/
 import React from "react";
+/*eslint-enable no-unused-vars*/
+
+import InternalStorageMixin from "../../mixins/InternalStorageMixin";
+import SidePanels from "../../components/SidePanels";
+import Util from "../../utils/Util";
+
+export default class UsersTab extends Util.mixin(InternalStorageMixin) {
 
 const METHODS_TO_BIND = ["handleNewUserClick"];
 
@@ -22,7 +30,6 @@ export default class UsersTab extends React.Component {
   render() {
     return (
       <div>
-        <h3 className="flush">No access.</h3>
         <div className="button-collection">
           <a
             className="button button-success"
@@ -30,6 +37,9 @@ export default class UsersTab extends React.Component {
             + New User
           </a>
         </div>
+        <SidePanels
+          params={this.props.params}
+          openedPage="settings-organization-users" />
       </div>
     );
   }
