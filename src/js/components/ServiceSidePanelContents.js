@@ -223,12 +223,10 @@ export default class ServiceSidePanelContents extends SidePanelContents {
 
     return (
       <div className="flex-container-col">
-        <div className="container container-pod container-pod-divider-bottom
-            container-pod-divider-inverse side-panel-section
-            container-pod-short-top flush-bottom
-            side-panel-content-header container container-pod
-            container-fluid container-pod-divider-bottom
-            container-pod-divider-bottom-align-right flush-bottom">
+        <div className="container container-fluid container-pod
+          container-pod-divider-bottom container-pod-divider-bottom-align-right
+          container-pod-divider-inverse container-pod-short-top flush-bottom
+          side-panel-content-header side-panel-section">
           {this.getBasicInfo()}
           <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
             <div className="row">
