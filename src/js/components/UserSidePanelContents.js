@@ -67,6 +67,19 @@ export default class UserSidePanelContents extends SidePanelContents {
       );
     }
 
+    getLoadingScreen() {
+      return (
+        <div className="container container-fluid container-pod text-align-center
+          vertical-center inverse">
+          <div className="row">
+            <div className="ball-scale">
+              <div />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     getUserInfo() {
       let user = this.state.user;
       let imageTag = (
@@ -105,8 +118,8 @@ export default class UserSidePanelContents extends SidePanelContents {
     }
 
     render() {
-      if (this.state.user == null) {
-        return (<div />);
+      if (this.state.user == null || !MesosSummaryStore.get("statesProcessed")) {
+        return this.getLoadingScreen();
       }
 
       return (
