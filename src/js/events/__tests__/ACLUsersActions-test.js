@@ -1,13 +1,11 @@
 jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../AppDispatcher");
-jest.dontMock("../../config/Config");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../ACLUsersActions");
 
 var ActionTypes = require("../../constants/ActionTypes");
 var ACLUsersActions = require("../ACLUsersActions");
 var AppDispatcher = require("../AppDispatcher");
-let Config = require("../../config/Config");
 var RequestUtil = require("../../utils/RequestUtil");
 
 describe("ACLUsersActions", function () {
