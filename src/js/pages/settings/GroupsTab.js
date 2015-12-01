@@ -1,5 +1,6 @@
 import _ from "underscore";
 import React from "react";
+import {Table} from "reactjs-components";
 
 import ACLGroupsStore from "../../stores/ACLGroupsStore";
 import EventTypes from "../../constants/EventTypes";
@@ -7,13 +8,13 @@ import FilterHeadline from "../../components/FilterHeadline";
 import FilterInputText from "../../components/FilterInputText";
 import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import ResourceTableUtil from "../../utils/ResourceTableUtil";
-import {Table} from "reactjs-components";
 import TableUtil from "../../utils/TableUtil";
 
 const METHODS_TO_BIND = [
   "handleGroupsChange",
   "handleSearchStringChange",
-  "onMesosStateChange"
+  "onMesosStateChange",
+  "resetFilter"
 ];
 
 export default class GroupsTab extends React.Component {
@@ -54,6 +55,18 @@ export default class GroupsTab extends React.Component {
       EventTypes.MESOS_SUMMARY_CHANGE,
       this.onMesosStateChange
     );
+  }
+
+  handleGroupsChange() {
+    this.setState({
+      groups: ACLGroupsStore.get("groups").getItems()
+    });
+  }
+
+  handleSearchStringChange(searchString) {
+    this.setState({
+      searchString
+    });
   }
 
   onMesosStateChange() {
@@ -124,7 +137,7 @@ export default class GroupsTab extends React.Component {
       <div className="groups-table-header">
         <FilterHeadline
           onReset={this.resetFilter}
-          name="Nodes"
+          name="Groups"
           currentLength={this.getVisibleGroups().length}
           totalLength={this.state.groups.length} />
         <FilterInputText
@@ -138,37 +151,22 @@ export default class GroupsTab extends React.Component {
   getVisibleGroups() {
     let searchString = this.state.searchString.toLowerCase();
 
-    if (searchString === "") {
-      return this.state.groups;
-    } else {
+    if (searchString !== "") {
       return _.filter(this.state.groups, function (group) {
         let description = group.get("description").toLowerCase();
         return description.indexOf(searchString) > -1;
       });
     }
-  }
 
-  handleGroupsChange() {
-    this.setState({
-      groups: ACLGroupsStore.get("groups").getItems()
-    });
-  }
-
-  handleSearchStringChange(searchString) {
-    this.setState({
-      searchString
-    });
+    return this.state.groups;
   }
 
   resetFilter() {
-    this.setState({
-      searchString: ""
-    });
+    this.setState({searchString: ""});
   }
 
   render() {
-    if (!this.state.groups.length ||
-      !MesosSummaryStore.get("statesProcessed")) {
+    if (!MesosSummaryStore.get("statesProcessed")) {
       return this.getLoadingScreen();
     }
 
