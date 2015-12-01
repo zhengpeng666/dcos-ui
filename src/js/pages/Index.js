@@ -7,7 +7,6 @@ var AnimatedLogo = require("../components/AnimatedLogo");
 var Config = require("../config/Config");
 import ConfigStore from "../stores/ConfigStore";
 var EventTypes = require("../constants/EventTypes");
-import Form from "../components/Form";
 import HistoryStore from "../stores/HistoryStore";
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var IntercomStore = require("../stores/IntercomStore");
@@ -248,64 +247,20 @@ var Index = React.createClass({
       }
     }
 
-        // <a id="start-tour"></a>
-        // <div id="canvas" className={classSet}>
-        //   {this.getScreenOverlays(showLoadingScreen, showErrorScreen)}
-        //   <Sidebar />
-        //   <RouteHandler />
-        // </div>
-        // <Modals
-        //   showErrorModal={this.state.showErrorModal}
-        //   modalErrorMsg={this.state.modalErrorMsg} />
     return (
-      <div styles={{background: "white"}}>
-        <Form
-          definition={formDefinition}
-          triggerSubmit={function () {}}
-          onSubmit={function (model) {console.log(model, "submitted"); }} />
+      <div>
+        <a id="start-tour"></a>
+        <div id="canvas" className={classSet}>
+          {this.getScreenOverlays(showLoadingScreen, showErrorScreen)}
+          <Sidebar />
+          <RouteHandler />
+        </div>
+        <Modals
+          showErrorModal={this.state.showErrorModal}
+          modalErrorMsg={this.state.modalErrorMsg} />
       </div>
     );
   }
 });
-
-var formDefinition = [
-  {
-    name: "username",
-    value: "string",
-    validation: function (arg) {
-      return arg.length < 15;
-    },
-    placeholder: "What's up?",
-    fieldType: "text",
-    validationErrorText: "Must be less than 15 characters.",
-    required: true,
-    showLabel: true,
-    showError: "This started out fucked up.",
-    writeType: "edit"
-  },
-  [
-    {
-      name: "address",
-      value: "string",
-      validation: /(?:.*(?:\b(?:cat|dog)\b)){2}/,
-      placeholder: "",
-      fieldType: "text",
-      validationErrorText: "must be a valid address",
-      required: true,
-      showLabel: true,
-      showError: "This started out fucked up.",
-      writeType: "edit"
-    },
-    {
-      name: "password",
-      value: "",
-      validation: function () { return true; },
-      placeholder: "",
-      fieldType: "password",
-      required: true,
-      writeType: "input"
-    }
-  ]
-];
 
 module.exports = Index;
