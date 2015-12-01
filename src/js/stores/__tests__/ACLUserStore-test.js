@@ -81,6 +81,10 @@ describe("ACLUserStore", function () {
 
   describe("dispatcher", function () {
 
+    afterEach(function () {
+      ACLUserStore.removeAllListeners();
+    });
+
     describe("user", function () {
 
       it("stores user when event is dispatched", function () {
@@ -97,7 +101,6 @@ describe("ACLUserStore", function () {
         ACLUserStore.addChangeListener(EventTypes.ACL_USER_DETAILS_USER_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
-            ACLUserStore.removeAllListeners();
           }
         );
 
@@ -111,7 +114,6 @@ describe("ACLUserStore", function () {
         ACLUserStore.addChangeListener(EventTypes.ACL_USER_DETAILS_USER_ERROR,
           function (id) {
             expect(id).toEqual("foo");
-            ACLUserStore.removeAllListeners();
           }
         );
 
@@ -141,7 +143,6 @@ describe("ACLUserStore", function () {
           EventTypes.ACL_USER_DETAILS_GROUPS_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
-            ACLUserStore.removeAllListeners();
           }
         );
 
@@ -156,7 +157,6 @@ describe("ACLUserStore", function () {
           EventTypes.ACL_USER_DETAILS_GROUPS_ERROR,
           function (id) {
             expect(id).toEqual("foo");
-            ACLUserStore.removeAllListeners();
           }
         );
 
@@ -186,7 +186,6 @@ describe("ACLUserStore", function () {
           EventTypes.ACL_USER_DETAILS_PERMISSIONS_CHANGE,
           function (id) {
             expect(id).toEqual("foo");
-            ACLUserStore.removeAllListeners();
           }
         );
 
@@ -201,13 +200,102 @@ describe("ACLUserStore", function () {
           EventTypes.ACL_USER_DETAILS_PERMISSIONS_ERROR,
           function (id) {
             expect(id).toEqual("foo");
-            ACLUserStore.removeAllListeners();
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR,
           userID: "foo"
+        });
+      });
+
+    });
+
+    describe("create", function () {
+
+      it("emits event after success event is dispatched", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_CREATE_SUCCESS,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS
+        });
+      });
+
+      it("emits event after error event is dispatched", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_CREATE_ERROR,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_CREATE_ERROR
+        });
+      });
+
+    });
+
+    describe("update", function () {
+
+      it("emits event after success event is dispatched", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_UPDATE_SUCCESS,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS
+        });
+      });
+
+      it("emits event after error event is dispatched", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_UPDATE_ERROR,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR
+        });
+      });
+
+    });
+
+    describe("delete", function () {
+
+      it("emits event after success event is dispatched", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_DELETE_SUCCESS,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS
+        });
+      });
+
+      it("emits event after error event is dispatched", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_DELETE_ERROR,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_DELETE_ERROR
         });
       });
 

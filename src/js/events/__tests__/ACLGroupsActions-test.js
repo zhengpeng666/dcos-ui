@@ -13,20 +13,17 @@ let RequestUtil = require("../../utils/RequestUtil");
 describe("ACLGroupsActions", function () {
 
   beforeEach(function () {
-    this.configuration = null;
-    this.requestUtilJSON = RequestUtil.json;
-    RequestUtil.json = configuration => {
-      this.configuration = configuration;
-    };
     Config.rootUrl = "http://mesosserver";
     Config.useFixtures = false;
   });
 
-  afterEach(function () {
-    RequestUtil.json = this.requestUtilJSON;
-  });
-
   describe("#fetch", function () {
+
+    beforeEach(function () {
+      spyOn(RequestUtil, "json");
+      ACLGroupsActions.fetch();
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+    });
 
     it("dispatches the correct action when successful", function () {
       ACLGroupsActions.fetch();
@@ -51,15 +48,13 @@ describe("ACLGroupsActions", function () {
     });
 
     it("calls #json from the RequestUtil", function () {
-      spyOn(RequestUtil, "json");
       ACLGroupsActions.fetch();
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
     it("fetches data from the correct URL", function () {
-      spyOn(RequestUtil, "json");
       ACLGroupsActions.fetch();
-      expect(RequestUtil.json.mostRecentCall.args[0].url)
+      expect(this.configuration.url)
         .toEqual("http://mesosserver/api/v1/groups");
     });
 
@@ -68,7 +63,9 @@ describe("ACLGroupsActions", function () {
   describe("#fetchGroup", function () {
 
     beforeEach(function () {
+      spyOn(RequestUtil, "json");
       ACLGroupsActions.fetchGroup("foo");
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
     it("dispatches the correct action when successful", function () {
@@ -126,7 +123,9 @@ describe("ACLGroupsActions", function () {
   describe("#fetchGroupUsers", function () {
 
     beforeEach(function () {
+      spyOn(RequestUtil, "json");
       ACLGroupsActions.fetchGroupUsers("foo");
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
     it("dispatches the correct action when successful", function () {
@@ -196,7 +195,9 @@ describe("ACLGroupsActions", function () {
   describe("#fetchGroupPermissions", function () {
 
     beforeEach(function () {
+      spyOn(RequestUtil, "json");
       ACLGroupsActions.fetchGroupPermissions("foo");
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
     it("dispatches the correct action when successful", function () {

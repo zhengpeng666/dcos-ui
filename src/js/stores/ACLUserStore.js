@@ -45,6 +45,14 @@ var UserDetailStore = Store.createStore({
     this.set({users});
   },
 
+  fetchUser: ACLUsersActions.fetchUser,
+
+  addUser: ACLUsersActions.addUser,
+
+  updateUser: ACLUsersActions.updateUser,
+
+  deleteUser: ACLUsersActions.deleteUser,
+
   /**
    * Will fetch a user and their details.
    * Will make a request to various different endpoints to get all details
@@ -199,6 +207,26 @@ var UserDetailStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR:
         UserDetailStore.processUserPermissionsError(action.userID);
+        break;
+      case ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS:
+        UserDetailStore.emit(EventTypes.ACL_USER_CREATE_SUCCESS);
+        break;
+      case ActionTypes.REQUEST_ACL_USER_CREATE_ERROR:
+        UserDetailStore.emit(EventTypes.ACL_USER_CREATE_ERROR);
+        break;
+      case ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS:
+        UserDetailStore
+          .emit(EventTypes.ACL_USER_UPDATE_SUCCESS, action.userID);
+        break;
+      case ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR:
+        UserDetailStore.emit(EventTypes.ACL_USER_UPDATE_ERROR, action.userID);
+        break;
+      case ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS:
+        UserDetailStore
+          .emit(EventTypes.ACL_USER_DELETE_SUCCESS, action.userID);
+        break;
+      case ActionTypes.REQUEST_ACL_USER_DELETE_ERROR:
+        UserDetailStore.emit(EventTypes.ACL_USER_DELETE_ERROR, action.userID);
         break;
     }
 

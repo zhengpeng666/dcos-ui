@@ -80,6 +80,69 @@ const ACLUsersActions = {
         });
       }
     });
+  },
+
+  addUser: function (data) {
+    let userID = data.uid;
+    delete data.uid;
+
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}`,
+      type: "PUT",
+      data,
+      success: function () {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_CREATE_ERROR,
+          data: e.message
+        });
+      }
+    });
+  },
+
+  updateUser: function (userID, patchData) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}`,
+      type: "PATCH",
+      patchData,
+      success: function () {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS,
+          userID
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR,
+          data: e.message,
+          userID
+        });
+      }
+    });
+  },
+
+  deleteUser: function (userID) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}`,
+      type: "DELETE",
+      success: function () {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS,
+          userID
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_DELETE_ERROR,
+          data: e.message,
+          userID
+        });
+      }
+    });
   }
 
 };
@@ -117,6 +180,26 @@ if (Config.useFixtures) {
       type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS,
       data: userDetailsFixture.permissions,
       userID: userFixture.uid
+    });
+  };
+
+  ACLUsersActions.addUser = function () {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS
+    });
+  };
+
+  ACLUsersActions.updateUser = function (userID) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS,
+      userID
+    });
+  };
+
+  ACLUsersActions.deleteUser = function (userID) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS,
+      userID
     });
   };
 }
