@@ -12,7 +12,7 @@ var RequestUtil = require("../../utils/RequestUtil");
 
 describe("ACLUsersActions", function () {
 
-  describe.only("#fetch", function () {
+  describe("#fetch", function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, "json");
