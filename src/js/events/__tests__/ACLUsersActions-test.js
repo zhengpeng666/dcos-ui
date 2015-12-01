@@ -311,7 +311,7 @@ describe("ACLUsersActions", function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, "json");
-      ACLUsersActions.updateUser({uid: "foo"});
+      ACLUsersActions.updateUser("foo");
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
@@ -385,7 +385,7 @@ describe("ACLUsersActions", function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, "json");
-      ACLUsersActions.updateUser({uid: "foo"});
+      ACLUsersActions.deleteUser("foo");
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
