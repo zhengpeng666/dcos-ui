@@ -18,7 +18,7 @@ const ACLActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_ERROR,
-          data: e.message
+          data: e
         });
       }
     });
@@ -28,10 +28,9 @@ const ACLActions = {
     RequestUtil.json({
       type: "PUT",
       url: `${Config.rootUrl}/acls/${resourceID}/users/${userID}/${action}`,
-      success: function (response) {
+      success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GRANT_USER_ACTION_SUCCESS,
-          data: response,
           userID,
           resourceID
         });
@@ -39,7 +38,7 @@ const ACLActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GRANT_USER_ACTION_ERROR,
-          data: e.message,
+          data: e,
           userID,
           resourceID
         });
@@ -51,10 +50,9 @@ const ACLActions = {
     RequestUtil.json({
       type: "DELETE",
       url: `${Config.rootUrl}/acls/${resourceID}/users/${userID}/${action}`,
-      success: function (response) {
+      success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_REVOKE_USER_ACTION_SUCCESS,
-          data: response,
           userID,
           resourceID
         });
@@ -62,7 +60,7 @@ const ACLActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_REVOKE_USER_ACTION_ERROR,
-          data: e.message,
+          data: e,
           userID,
           resourceID
         });
@@ -73,7 +71,7 @@ const ACLActions = {
   grantGroupActionToResource: function (action, groupID, resourceID) {
     RequestUtil.json({
       type: "PUT",
-      url: `${Config.rootUrl}/acls/${resourceID}/users/${groupID}/${action}`,
+      url: `${Config.rootUrl}/acls/${resourceID}/groups/${groupID}/${action}`,
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GRANT_GROUP_ACTION_SUCCESS,
@@ -84,7 +82,7 @@ const ACLActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GRANT_GROUP_ACTION_ERROR,
-          data: e.message,
+          data: e,
           groupID,
           resourceID
         });
@@ -95,7 +93,7 @@ const ACLActions = {
   revokeGroupActionToResource: function (action, groupID, resourceID) {
     RequestUtil.json({
       type: "DELETE",
-      url: `${Config.rootUrl}/acls/${resourceID}/users/${groupID}/${action}`,
+      url: `${Config.rootUrl}/acls/${resourceID}/groups/${groupID}/${action}`,
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_REVOKE_GROUP_ACTION_SUCCESS,
@@ -106,7 +104,7 @@ const ACLActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_REVOKE_GROUP_ACTION_ERROR,
-          data: e.message,
+          data: e,
           groupID,
           resourceID
         });
