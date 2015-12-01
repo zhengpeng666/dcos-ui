@@ -58,15 +58,11 @@ export default class GroupsTab extends React.Component {
   }
 
   handleGroupsChange() {
-    this.setState({
-      groups: ACLGroupsStore.get("groups").getItems()
-    });
+    this.setState({groups: ACLGroupsStore.get("groups").getItems()});
   }
 
   handleSearchStringChange(searchString) {
-    this.setState({
-      searchString
-    });
+    this.setState({searchString});
   }
 
   onMesosStateChange() {
