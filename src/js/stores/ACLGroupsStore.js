@@ -6,7 +6,7 @@ import GetSetMixin from "../mixins/GetSetMixin";
 import GroupsList from "../structs/GroupsList";
 import Store from "../utils/Store";
 
-const GroupsStore = Store.createStore({
+const ACLGroupsStore = Store.createStore({
   storeID: "groups",
 
   mixins: [GetSetMixin],
@@ -48,10 +48,10 @@ const GroupsStore = Store.createStore({
 
     switch (action.type) {
       case ActionTypes.REQUEST_ACL_GROUPS_SUCCESS:
-        GroupsStore.processGroups(action.data);
+        ACLGroupsStore.processGroups(action.data);
         break;
       case ActionTypes.REQUEST_ACL_GROUPS_ERROR:
-        GroupsStore.processGroupsError();
+        ACLGroupsStore.processGroupsError();
         break;
     }
 
@@ -60,4 +60,4 @@ const GroupsStore = Store.createStore({
 
 });
 
-export default GroupsStore;
+export default ACLGroupsStore;

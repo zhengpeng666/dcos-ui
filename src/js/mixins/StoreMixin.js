@@ -1,5 +1,9 @@
 import _ from "underscore";
 
+import ACLGroupsStore from "../stores/ACLGroupsStore";
+import ACLGroupStore from "../stores/ACLGroupStore";
+import ACLUsersStore from "../stores/ACLUsersStore";
+import ACLUserStore from "../stores/ACLUserStore";
 import EventTypes from "../constants/EventTypes";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
@@ -54,6 +58,66 @@ const ListenersDescription = {
       if (event === "success") {
         return store.hasProcessedApps();
       }
+    },
+    listenAlways: true
+  },
+
+  groups: {
+    store: ACLGroupsStore,
+    events: {
+      success: EventTypes.ACL_GROUPS_CHANGE,
+      error: EventTypes.ACL_GROUPS_REQUEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
+  group: {
+    store: ACLGroupStore,
+    events: {
+      success: EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE,
+      error: EventTypes.ACL_GROUP_DETAILS_GROUP_ERROR,
+      permissionsSuccess: EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
+      permissionsError: EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
+      usersSuccess: EventTypes.ACL_GROUP_DETAILS_USERS_CHANGE,
+      usersError: EventTypes.ACL_GROUP_DETAILS_USERS_ERROR,
+      fetchedDetailsSuccess: EventTypes.ACL_GROUP_DETAILS_FETCHED_SUCCESS,
+      fetchedDetailsError: EventTypes.ACL_GROUP_DETAILS_FETCHED_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
+  users: {
+    store: ACLUsersStore,
+    events: {
+      success: EventTypes.ACL_USERS_CHANGE,
+      error: EventTypes.ACL_USERS_REQUEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
+  user: {
+    store: ACLUserStore,
+    events: {
+      success: EventTypes.ACL_USER_DETAILS_USER_CHANGE,
+      error: EventTypes.ACL_USER_DETAILS_USER_ERROR,
+      permissionsSuccess: EventTypes.ACL_USER_DETAILS_PERMISSIONS_CHANGE,
+      permissionsError: EventTypes.ACL_USER_DETAILS_PERMISSIONS_ERROR,
+      groupsSuccess: EventTypes.ACL_USER_DETAILS_GROUPS_CHANGE,
+      groupsError: EventTypes.ACL_USER_DETAILS_GROUPS_ERROR,
+      fetchedDetailsSuccess: EventTypes.ACL_USER_DETAILS_FETCHED_SUCCESS,
+      fetchedDetailsError: EventTypes.ACL_USER_DETAILS_FETCHED_ERROR
+    },
+    unmountWhen: function () {
+      return true;
     },
     listenAlways: true
   }

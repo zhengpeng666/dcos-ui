@@ -6,7 +6,7 @@ import GetSetMixin from "../mixins/GetSetMixin";
 import UsersList from "../structs/UsersList";
 import Store from "../utils/Store";
 
-const UsersStore = Store.createStore({
+const ACLUsersStore = Store.createStore({
   storeID: "users",
 
   mixins: [GetSetMixin],
@@ -48,10 +48,10 @@ const UsersStore = Store.createStore({
 
     switch (action.type) {
       case ActionTypes.REQUEST_ACL_USERS_SUCCESS:
-        UsersStore.processUsers(action.data);
+        ACLUsersStore.processUsers(action.data);
         break;
       case ActionTypes.REQUEST_ACL_USERS_ERROR:
-        UsersStore.processUsersError();
+        ACLUsersStore.processUsersError();
         break;
     }
 
@@ -60,4 +60,4 @@ const UsersStore = Store.createStore({
 
 });
 
-export default UsersStore;
+export default ACLUsersStore;

@@ -11,8 +11,8 @@ import Store from "../utils/Store";
 /**
  * This store will keep track of users and their details
  */
-var UserDetailStore = Store.createStore({
-  storeID: "userDetail",
+var ACLUserStore = Store.createStore({
+  storeID: "user",
 
   mixins: [GetSetMixin],
 
@@ -191,22 +191,22 @@ var UserDetailStore = Store.createStore({
     var action = payload.action;
     switch (action.type) {
       case ActionTypes.REQUEST_ACL_USER_SUCCESS:
-        UserDetailStore.processUser(action.data);
+        ACLUserStore.processUser(action.data);
         break;
       case ActionTypes.REQUEST_ACL_USER_ERROR:
-        UserDetailStore.processUserError(action.userID);
+        ACLUserStore.processUserError(action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS:
-        UserDetailStore.processUserGroups(action.userID, action.data);
+        ACLUserStore.processUserGroups(action.userID, action.data);
         break;
       case ActionTypes.REQUEST_ACL_USER_GROUPS_ERROR:
-        UserDetailStore.processUserGroupsError(action.userID);
+        ACLUserStore.processUserGroupsError(action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS:
-        UserDetailStore.processUserPermissions(action.userID, action.data);
+        ACLUserStore.processUserPermissions(action.userID, action.data);
         break;
       case ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR:
-        UserDetailStore.processUserPermissionsError(action.userID);
+        ACLUserStore.processUserPermissionsError(action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS:
         UserDetailStore.emit(EventTypes.ACL_USER_CREATE_SUCCESS);
@@ -235,4 +235,4 @@ var UserDetailStore = Store.createStore({
 
 });
 
-module.exports = UserDetailStore;
+module.exports = ACLUserStore;

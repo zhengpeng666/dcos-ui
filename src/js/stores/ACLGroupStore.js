@@ -11,8 +11,8 @@ import Store from "../utils/Store";
 /**
  * This store will keep track of groups and their details
  */
-let GroupDetailStore = Store.createStore({
-  storeID: "groupDetail",
+let ACLGroupStore = Store.createStore({
+  storeID: "group",
 
   mixins: [GetSetMixin],
 
@@ -185,22 +185,22 @@ let GroupDetailStore = Store.createStore({
 
     switch (action.type) {
       case ActionTypes.REQUEST_ACL_GROUP_SUCCESS:
-        GroupDetailStore.processGroup(action.data);
+        ACLGroupStore.processGroup(action.data);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_ERROR:
-        GroupDetailStore.processGroupError(action.groupID);
+        ACLGroupStore.processGroupError(action.groupID);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS:
-        GroupDetailStore.processGroupPermissions(action.groupID, action.data);
+        ACLGroupStore.processGroupPermissions(action.groupID, action.data);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR:
-        GroupDetailStore.processGroupPermissionsError(action.groupID);
+        ACLGroupStore.processGroupPermissionsError(action.groupID);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS:
-        GroupDetailStore.processGroupUsers(action.groupID, action.data);
+        ACLGroupStore.processGroupUsers(action.groupID, action.data);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR:
-        GroupDetailStore.processGroupUsersError(action.groupID);
+        ACLGroupStore.processGroupUsersError(action.groupID);
         break;
     }
 
@@ -209,4 +209,4 @@ let GroupDetailStore = Store.createStore({
 
 });
 
-export default GroupDetailStore;
+export default ACLGroupStore;
