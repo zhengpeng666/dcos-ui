@@ -256,6 +256,20 @@ describe("ACLUserStore", function () {
         });
       });
 
+      it("emits success event with the userID", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_DELETE_SUCCESS,
+          function (userID) {
+            expect(userID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS,
+          userID: "foo"
+        });
+      });
+
       it("emits event after error event is dispatched", function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_UPDATE_ERROR,
@@ -266,6 +280,20 @@ describe("ACLUserStore", function () {
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR
+        });
+      });
+
+      it("emits error event with the userID", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_DELETE_SUCCESS,
+          function (userID) {
+            expect(userID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR,
+          userID: "foo"
         });
       });
 
@@ -286,6 +314,20 @@ describe("ACLUserStore", function () {
         });
       });
 
+      it("emits success event with the userID", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_DELETE_SUCCESS,
+          function (userID) {
+            expect(userID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS,
+          userID: "foo"
+        });
+      });
+
       it("emits event after error event is dispatched", function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_DELETE_ERROR,
@@ -296,6 +338,20 @@ describe("ACLUserStore", function () {
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_ERROR
+        });
+      });
+
+      it("emits error event with the userID", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_DELETE_SUCCESS,
+          function (userID) {
+            expect(userID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_DELETE_ERROR,
+          userID: "foo"
         });
       });
 
