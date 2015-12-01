@@ -26,30 +26,30 @@ describe("ACLActions", function () {
     RequestUtil.json = this.requestUtilJSON;
   });
 
-  describe("#fetchACLs", function () {
+  describe("#fetchACLsForResource", function () {
 
     it("dispatches the correct action when successful", function () {
-      ACLActions.fetchACLs("foo");
+      ACLActions.fetchACLsForResource("foo");
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action).toEqual({
-          type: ActionTypes.REQUEST_ACL_RESOURCE_SUCCESS,
-          data: {foo: "foo"}
+          type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
+          data: {response: {bar: "baz"}, type: "foo"}
         });
       });
 
-      this.configuration.success({foo: "foo"});
+      this.configuration.success({bar: "baz"});
     });
 
     it("dispatches the correct action when unsuccessful", function () {
-      ACLActions.fetchACLs("bar");
+      ACLActions.fetchACLsForResource("bar");
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action).toEqual({
-          type: ActionTypes.REQUEST_ACL_RESOURCE_ERROR,
-          data: {error: "bar"}
+          type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_ERROR,
+          data: {error: {error: "bar"}, type: "bar"}
         });
       });
 
@@ -58,13 +58,13 @@ describe("ACLActions", function () {
 
     it("calls #json from the RequestUtil", function () {
       spyOn(RequestUtil, "json");
-      ACLActions.fetchACLs("foo");
+      ACLActions.fetchACLsForResource("foo");
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
     it("fetches data from the correct URL", function () {
       spyOn(RequestUtil, "json");
-      ACLActions.fetchACLs("bar");
+      ACLActions.fetchACLsForResource("bar");
       expect(RequestUtil.json.mostRecentCall.args[0].url)
         .toEqual("http://mesosserver/api/v1/acls?type=bar");
     });
@@ -73,7 +73,7 @@ describe("ACLActions", function () {
   describe("#grantUserActionToResource", function () {
 
     beforeEach(function () {
-      ACLActions.grantUserActionToResource("foo", "bar", "access");
+      ACLActions.grantUserActionToResource("foo", "access", "bar");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -83,7 +83,7 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
-            data: {userID: "foo", resourceID: "bar", action: "access"}
+            data: {userID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -99,8 +99,8 @@ describe("ACLActions", function () {
             type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_ERROR,
             data: {
               userID: "foo",
-              resourceID: "bar",
               action: "access",
+              resourceID: "bar",
               error: {error: "bar"}
             }
           });
@@ -111,7 +111,7 @@ describe("ACLActions", function () {
 
     it("sends data to the correct URL", function () {
       spyOn(RequestUtil, "json");
-      ACLActions.grantUserActionToResource("foo", "bar", "access");
+      ACLActions.grantUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
         .toEqual("http://mesosserver/api/v1/acls/bar/users/foo/access");
@@ -119,7 +119,7 @@ describe("ACLActions", function () {
 
     it("sends a PUT request", function () {
       spyOn(RequestUtil, "json");
-      ACLActions.grantUserActionToResource("foo", "bar", "access");
+      ACLActions.grantUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.type).toEqual("PUT");
     });
@@ -129,7 +129,7 @@ describe("ACLActions", function () {
   describe("#revokeUserActionToResource", function () {
 
     beforeEach(function () {
-      ACLActions.revokeUserActionToResource("foo", "bar", "access");
+      ACLActions.revokeUserActionToResource("foo", "access", "bar");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -139,7 +139,7 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
-            data: {userID: "foo", resourceID: "bar", action: "access"}
+            data: {userID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -155,8 +155,8 @@ describe("ACLActions", function () {
             type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_ERROR,
             data: {
               userID: "foo",
-              resourceID: "bar",
               action: "access",
+              resourceID: "bar",
               error: {error: "bar"}
             }
           });
@@ -167,7 +167,7 @@ describe("ACLActions", function () {
 
     it("sends data to the correct URL", function () {
       spyOn(RequestUtil, "json");
-      ACLActions.revokeUserActionToResource("foo", "bar", "access");
+      ACLActions.revokeUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
         .toEqual("http://mesosserver/api/v1/acls/bar/users/foo/access");
@@ -175,7 +175,7 @@ describe("ACLActions", function () {
 
     it("sends a DELETE request", function () {
       spyOn(RequestUtil, "json");
-      ACLActions.revokeUserActionToResource("foo", "bar", "access");
+      ACLActions.revokeUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.type).toEqual("DELETE");
     });
@@ -185,7 +185,7 @@ describe("ACLActions", function () {
   describe("#grantGroupActionToResource", function () {
 
     beforeEach(function () {
-      ACLActions.grantGroupActionToResource("foo", "bar", "access");
+      ACLActions.grantGroupActionToResource("foo", "access", "bar");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -195,7 +195,7 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
-            data: {groupID: "foo", resourceID: "bar", action: "access"}
+            data: {groupID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -211,8 +211,8 @@ describe("ACLActions", function () {
             type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_ERROR,
             data: {
               groupID: "foo",
-              resourceID: "bar",
               action: "access",
+              resourceID: "bar",
               error: {error: "bar"}
             }
           });
@@ -223,7 +223,7 @@ describe("ACLActions", function () {
 
     it("sends data to the correct URL", function () {
       spyOn(RequestUtil, "json");
-      ACLActions.grantGroupActionToResource("foo", "bar", "access");
+      ACLActions.grantGroupActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
         .toEqual("http://mesosserver/api/v1/acls/bar/groups/foo/access");
@@ -231,7 +231,7 @@ describe("ACLActions", function () {
 
     it("sends a PUT request", function () {
       spyOn(RequestUtil, "json");
-      ACLActions.grantGroupActionToResource("foo", "bar", "access");
+      ACLActions.grantGroupActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.type).toEqual("PUT");
     });
@@ -241,7 +241,7 @@ describe("ACLActions", function () {
   describe("#revokeGroupActionToResource", function () {
 
     beforeEach(function () {
-      ACLActions.revokeGroupActionToResource("foo", "bar", "access");
+      ACLActions.revokeGroupActionToResource("foo", "access", "bar");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -251,7 +251,7 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
-            data: {groupID: "foo", resourceID: "bar", action: "access"}
+            data: {groupID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -279,7 +279,7 @@ describe("ACLActions", function () {
 
     it("sends data to the correct URL", function () {
       spyOn(RequestUtil, "json");
-      ACLActions.revokeGroupActionToResource("foo", "bar", "access");
+      ACLActions.revokeGroupActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
         .toEqual("http://mesosserver/api/v1/acls/bar/groups/foo/access");
@@ -287,7 +287,7 @@ describe("ACLActions", function () {
 
     it("sends a DELETE request", function () {
       spyOn(RequestUtil, "json");
-      ACLActions.revokeUserActionToResource("foo", "bar", "access");
+      ACLActions.revokeUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.type).toEqual("DELETE");
     });

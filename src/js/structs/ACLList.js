@@ -1,16 +1,16 @@
 import List from "./List";
-import ACL from "./ACL";
+import Item from "./Item";
 
-export default class ACLsList extends List {
+export default class ACLList extends List {
   constructor() {
     super(...arguments);
 
-    // Replace list items instances of ACL.
+    // Replace list items instances of Item.
     this.list = this.list.map(function (item) {
-      if (item instanceof ACL) {
+      if (item instanceof Item) {
         return item;
       } else {
-        return new ACL(item);
+        return new Item(item);
       }
     });
   }
