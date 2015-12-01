@@ -95,7 +95,7 @@ let GroupDetailStore = Store.createStore({
    * Emits error if we're in the process of fetching details for a group
    * but one of the requests fails.
    *
-   * @param  {Number} userID
+   * @param  {Number} groupID
    */
   invalidateGroupWithDetailsFetch: function (groupID) {
     let groupsFetching = this.get("groupsFetching");
