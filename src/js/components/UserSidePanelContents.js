@@ -71,7 +71,7 @@ export default class UserSidePanelContents extends SidePanelContents {
       let user = this.state.user;
       let imageTag = (
         <div className="side-panel-icon icon icon-large icon-image-container icon-user-container">
-          image here
+          <img src="./img/layout/icon-user-default-64x64@2x.png" />
         </div>
       );
 
