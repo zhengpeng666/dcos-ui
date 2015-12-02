@@ -207,16 +207,36 @@ let ACLGroupStore = Store.createStore({
         ACLGroupStore.processGroupUsersError(action.groupID);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS:
-        ACLGroupStore.emit(EventTypes.ACL_GROUP_USERS_CHANGED);
+        ACLGroupStore.emit(
+          EventTypes.ACL_GROUP_USERS_CHANGED,
+          action.groupID,
+          action.userID,
+          action.data
+        );
         break;
       case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR:
-        ACLGroupStore.emit(EventTypes.ACL_GROUP_ADD_USER_ERROR);
+        ACLGroupStore.emit(
+          EventTypes.ACL_GROUP_ADD_USER_ERROR,
+          action.groupID,
+          action.userID,
+          action.data
+        );
         break;
       case ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS:
-        ACLGroupStore.emit(EventTypes.ACL_GROUP_USERS_CHANGED);
+        ACLGroupStore.emit(
+          EventTypes.ACL_GROUP_USERS_CHANGED,
+          action.groupID,
+          action.userID,
+          action.data
+        );
         break;
       case ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR:
-        ACLGroupStore.emit(EventTypes.ACL_GROUP_REMOVE_USER_ERROR);
+        ACLGroupStore.emit(
+          EventTypes.ACL_GROUP_REMOVE_USER_ERROR,
+          action.groupID,
+          action.userID,
+          action.data
+        );
         break;
     }
 
