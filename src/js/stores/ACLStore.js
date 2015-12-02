@@ -59,7 +59,7 @@ const ACLStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS:
         ACLStore.emit(
-          EventTypes.ACL_USER_GRANT_ACTION_ACLS_CHANGE,
+          EventTypes.ACL_USER_GRANT_ACTION_CHANGE,
           action.data
         );
         break;
