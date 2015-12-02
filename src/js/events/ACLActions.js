@@ -104,11 +104,10 @@ const ACLActions = {
 import aclsFixture from "json!../../../tests/_fixtures/acl/acls-unicode.json";
 
 if (Config.useFixtures) {
-
-  ACLActions.fetchACLs = function (type) {
+  ACLActions.fetchACLsForResource = function (type) {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
-      data: {aclsFixture, type}
+      data: {response: aclsFixture, type}
     });
   };
 

@@ -57,40 +57,40 @@ const ACLStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_RESOURCE_ACLS_ERROR:
         ACLStore.emit(EventTypes.ACL_REQUEST_RESOURCE_ACLS_ERROR, action.data);
         break;
-      case ActionTypes.REQUEST_ACL_GRANT_USER_ACTION_SUCCESS:
+      case ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS:
         ACLStore.emit(
           EventTypes.ACL_USER_GRANT_ACTION_ACLS_CHANGE,
           action.data
         );
         break;
-      case ActionTypes.REQUEST_ACL_GRANT_USER_ACTION_ERROR:
+      case ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_ERROR:
         ACLStore.emit(
           EventTypes.ACL_USER_GRANT_ACTION_REQUEST_ERROR,
           action.data
         );
         break;
-      case ActionTypes.REQUEST_ACL_REVOKE_USER_ACTION_SUCCESS:
+      case ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS:
         ACLStore.emit(EventTypes.ACL_USER_REVOKE_ACTION_CHANGE, action.data);
         break;
-      case ActionTypes.REQUEST_ACL_REVOKE_USER_ACTION_ERROR:
+      case ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_ERROR:
         ACLStore.emit(
           EventTypes.ACL_USER_REVOKE_ACTION_REQUEST_ERROR,
           action.data
         );
         break;
-      case ActionTypes.REQUEST_ACL_GRANT_GROUP_ACTION_SUCCESS:
+      case ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS:
         ACLStore.emit(EventTypes.ACL_GROUP_GRANT_ACTION_CHANGE, action.data);
         break;
-      case ActionTypes.REQUEST_ACL_GRANT_GROUP_ACTION_ERROR:
+      case ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_ERROR:
         ACLStore.emit(
           EventTypes.ACL_GROUP_GRANT_ACTION_REQUEST_ERROR,
           action.data
         );
         break;
-      case ActionTypes.REQUEST_ACL_REVOKE_GROUP_ACTION_SUCCESS:
+      case ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS:
         ACLStore.emit(EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE, action.data);
         break;
-      case ActionTypes.REQUEST_ACL_REVOKE_GROUP_ACTION_ERROR:
+      case ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR:
         ACLStore.emit(
           EventTypes.ACL_GROUP_REVOKE_ACTION_REQUEST_ERROR,
           action.data
