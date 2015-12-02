@@ -12,7 +12,7 @@ const ACLGroupsStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    groups: []
+    groups: new GroupsList()
   },
 
   addChangeListener: function (eventName, callback) {
