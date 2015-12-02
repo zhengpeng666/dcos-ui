@@ -36,6 +36,7 @@ export default class User extends Item {
         uniqueUrls.push(url);
         return true;
       }
+
       return false;
     });
   }

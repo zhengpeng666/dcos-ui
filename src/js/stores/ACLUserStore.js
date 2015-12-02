@@ -41,6 +41,7 @@ var ACLUserStore = Store.createStore({
     if (rawUser) {
       return new User(rawUser);
     }
+
     return null;
   },
 
