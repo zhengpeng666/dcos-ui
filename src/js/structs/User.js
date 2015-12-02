@@ -26,21 +26,21 @@ export default class User extends Item {
   uniquePermissions() {
     let permissions = this.getPermissions();
     let uniquePermissions = [];
-    let aclUrls = new Set();
+    let aclUrls = [];
 
     permissions.direct.forEach(function (service) {
       let url = service.aclurl;
-      if (!aclUrls.has(url)) {
+      if (aclUrls.indexOf(url) < 0) {
         uniquePermissions.push(service);
-        aclUrls.add(url);
+        aclUrls.push(url);
       }
     });
 
     permissions.groups.forEach(function (service) {
       let url = service.aclurl;
-      if (!aclUrls.has(url)) {
+      if (aclUrls.indexOf(url) < 0) {
         uniquePermissions.push(service);
-        aclUrls.add(url);
+        aclUrls.push(url);
       }
     });
 
