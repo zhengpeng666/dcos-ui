@@ -37,6 +37,11 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
     }, this);
   }
 
+  componentDidMount() {
+    super.componentDidMount();
+    ACLGroupsStore.fetchGroups();
+  }
+
   onGroupsSuccess() {
     if (this.state.hasError) {
       this.setState({hasError: false});
@@ -45,10 +50,6 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
 
   onGroupsError() {
     this.setState({hasError: true});
-  }
-
-  componentDidMount() {
-    ACLGroupsStore.fetchGroups();
   }
 
   handleSearchStringChange(searchString) {
