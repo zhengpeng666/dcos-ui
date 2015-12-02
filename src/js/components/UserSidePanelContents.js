@@ -6,6 +6,7 @@ import ACLUserStore from "../stores/ACLUserStore";
 import EventTypes from "../constants/EventTypes";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import SidePanelContents from "./SidePanelContents";
+import StringUtil from "../utils/StringUtil";
 
 const METHODS_TO_BIND = [
   "handleUserDetails",
@@ -107,8 +108,8 @@ export default class UserSidePanelContents extends SidePanelContents {
     getSubHeader(user) {
       let groupCount = user.getGroupCount();
       let serviceCount = user.getPermissionCount();
-      let groupLabel = "group" + (groupCount === 1 ? "" : "s");
-      let serviceLabel = "Service" + (serviceCount === 1 ? "" : "s");
+      let groupLabel = StringUtil.pluralize("group", groupCount);
+      let serviceLabel = StringUtil.pluralize("Service", serviceCount);
 
       return (
         <div>
