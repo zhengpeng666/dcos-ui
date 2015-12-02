@@ -4,7 +4,23 @@ import React from "react";
 
 import Form from "./Form";
 
+const METHODS_TO_BIND = ["getTriggerSubmit"];
+
 export default class FormModal extends React.Component {
+  constructor() {
+    super();
+    this.triggerSubmit = function () {};
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  getTriggerSubmit(trigger) {
+    this.triggerSubmit = trigger;
+    this.forceUpdate();
+  }
+
   getFooter() {
     let closeButtonClassSet = classNames({
       "button button-large": true,
@@ -15,8 +31,6 @@ export default class FormModal extends React.Component {
       "button button-success button-large": true,
       "disabled": this.props.disabled
     });
-
-    console.log(this.props.disabled);
 
     return (
       <div className="container container-pod container-pod-short">
@@ -29,7 +43,7 @@ export default class FormModal extends React.Component {
           </a>
           <a
             className={createButtonClassSet}
-            onClick={this.props.onSubmit}>Create</a>
+            onClick={this.triggerSubmit}>Create</a>
         </div>
       </div>
     );
@@ -63,7 +77,7 @@ export default class FormModal extends React.Component {
       <div className="container container-pod flush-top flush-bottom">
         <Form
           definition={this.props.definition}
-          triggerSubmit={function () {}}
+          triggerSubmit={this.getTriggerSubmit}
           onSubmit={this.props.onSubmit} />
       </div>
     );
