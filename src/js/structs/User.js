@@ -25,25 +25,18 @@ export default class User extends Item {
 
   uniquePermissions() {
     let permissions = this.getPermissions();
-    let uniquePermissions = [];
-    let aclUrls = [];
+    permissions = permissions.direct.concat(permissions.groups);
 
-    permissions.direct.forEach(function (service) {
+    let uniqueUrls = [];
+
+    return permissions.filter(function (service) {
       let url = service.aclurl;
-      if (aclUrls.indexOf(url) < 0) {
-        uniquePermissions.push(service);
-        aclUrls.push(url);
-      }
-    });
 
-    permissions.groups.forEach(function (service) {
-      let url = service.aclurl;
-      if (aclUrls.indexOf(url) < 0) {
-        uniquePermissions.push(service);
-        aclUrls.push(url);
+      if (uniqueUrls.indexOf(url) < 0) {
+        uniqueUrls.push(url);
+        return true;
       }
+      return false;
     });
-
-    return uniquePermissions;
   }
 }

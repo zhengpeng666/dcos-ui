@@ -12,10 +12,6 @@ export default class UserSidePanelContents extends SidePanelContents {
     constructor() {
       super();
 
-      this.state = {
-        user: null
-      };
-
       this.store_listeners = [
         {name: "summary", events: ["success"], listenAlways: false},
         {name: "user", events: ["fetchedDetailsSuccess"]}
@@ -23,6 +19,8 @@ export default class UserSidePanelContents extends SidePanelContents {
     }
 
     componentDidMount() {
+      super.componentDidMount();
+
       ACLUserStore.fetchUserWithDetails(this.props.itemID);
     }
 
@@ -72,7 +70,7 @@ export default class UserSidePanelContents extends SidePanelContents {
         <div className="flex-container-col">
           <div className="container container-fluid container-pod
             container-pod-divider-bottom container-pod-divider-bottom-align-right
-            container-pod-divider-inverse container-pod-short-top flush-bottom
+            container-pod-divider-inverse container-pod-short-top
             side-panel-content-header side-panel-section">
             {this.getUserInfo(user)}
           </div>

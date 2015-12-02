@@ -70,9 +70,7 @@ var routes = (
           <Route name="settings-organization-users-user-panel" path=":userID" />
         </Route>
 
-        <Route name="settings-organization-groups" path="groups/?" handler={GroupsTab}>
-          <Route name="settings-organization-groups-group-panel" path=":groupID" />
-        </Route>
+        <Route name="settings-organization-groups" path="groups/?" handler={GroupsTab} />
 
         <Redirect from="/settings/organization/?" to="settings-organization-users" />
       </Route>
