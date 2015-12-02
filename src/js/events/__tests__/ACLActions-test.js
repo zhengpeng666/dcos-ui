@@ -35,7 +35,8 @@ describe("ACLActions", function () {
         AppDispatcher.unregister(id);
         expect(action).toEqual({
           type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
-          data: {response: {bar: "baz"}, type: "foo"}
+          data: {bar: "baz"},
+          resourceType: "foo"
         });
       });
 
@@ -49,7 +50,8 @@ describe("ACLActions", function () {
         AppDispatcher.unregister(id);
         expect(action).toEqual({
           type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_ERROR,
-          data: {error: {error: "bar"}, type: "bar"}
+          data: "bar",
+          resourceType: "bar"
         });
       });
 
@@ -83,7 +85,8 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
-            data: {userID: "foo", action: "access", resourceID: "bar"}
+            data: {bar: "baz"},
+            triple: {userID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -97,12 +100,8 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_ERROR,
-            data: {
-              userID: "foo",
-              action: "access",
-              resourceID: "bar",
-              error: {error: "bar"}
-            }
+            data: "bar",
+            triple: {userID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -139,7 +138,8 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
-            data: {userID: "foo", action: "access", resourceID: "bar"}
+            data: {bar: "baz"},
+            triple: {userID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -153,12 +153,8 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_ERROR,
-            data: {
-              userID: "foo",
-              action: "access",
-              resourceID: "bar",
-              error: {error: "bar"}
-            }
+            data: "bar",
+            triple: {userID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -195,7 +191,8 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
-            data: {groupID: "foo", action: "access", resourceID: "bar"}
+            data: {bar: "baz"},
+            triple: {groupID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -209,12 +206,8 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_ERROR,
-            data: {
-              groupID: "foo",
-              action: "access",
-              resourceID: "bar",
-              error: {error: "bar"}
-            }
+            data: "bar",
+            triple: {groupID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -251,7 +244,8 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
-            data: {groupID: "foo", action: "access", resourceID: "bar"}
+            data: {bar: "baz"},
+            triple: {groupID: "foo", action: "access", resourceID: "bar"}
           });
       });
 
@@ -265,12 +259,8 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR,
-            data: {
-              groupID: "foo",
-              resourceID: "bar",
-              action: "access",
-              error: {error: "bar"}
-            }
+            data: "bar",
+            triple: {groupID: "foo", resourceID: "bar", action: "access"}
           });
       });
 
