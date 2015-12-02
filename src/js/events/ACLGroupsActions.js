@@ -98,7 +98,8 @@ const ACLGroupsActions = {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
           data: e.message,
-          groupID
+          groupID,
+          userID
         });
       }
     });
