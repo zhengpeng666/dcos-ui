@@ -12,7 +12,7 @@ const ACLStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    services: []
+    services: new ACLList({items: []})
   },
 
   addChangeListener: function (eventName, callback) {
@@ -25,10 +25,6 @@ const ACLStore = Store.createStore({
 
   fetchACLsForResource: ACLActions.fetchACLsForResource,
 
-  getACLsForType: function (type) {
-    return new ACLList({items: this.get(type)});
-  },
-
   grantUserActionToResource: ACLActions.grantUserActionToResource,
 
   revokeUserActionToResource: ACLActions.revokeUserActionToResource,
@@ -37,8 +33,8 @@ const ACLStore = Store.createStore({
 
   revokeGroupActionToResource: ACLActions.revokeGroupActionToResource,
 
-  processResourcesACLs: function (services) {
-    this.set({services});
+  processResourcesACLs: function (items = []) {
+    this.set({services: new ACLList({items})});
     this.emit(EventTypes.ACL_RESOURCE_ACLS_CHANGE);
   },
 

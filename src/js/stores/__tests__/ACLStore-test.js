@@ -41,13 +41,13 @@ describe("ACLStore", function () {
 
     it("should return an instance of ACLList", function () {
       ACLStore.fetchACLsForResource("service");
-      var services = ACLStore.getACLsForType("services");
+      var services = ACLStore.get("services");
       expect(services instanceof ACLList).toBeTruthy();
     });
 
     it("should return all of the services it was given", function () {
       ACLStore.fetchACLsForResource("service");
-      var services = ACLStore.getACLsForType("services").getItems();
+      var services = ACLStore.get("services").getItems();
       expect(services.length).toEqual(this.aclsFixture.length);
     });
 
@@ -64,7 +64,7 @@ describe("ACLStore", function () {
           resourceType: "service"
         });
 
-        var services = ACLStore.getACLsForType("services").getItems();
+        var services = ACLStore.get("services").getItems();
         expect(services[0].get("rid")).toEqual("foo");
         expect(services[0].get("bar")).toEqual("baz");
       });
