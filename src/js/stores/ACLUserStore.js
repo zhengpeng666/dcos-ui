@@ -36,13 +36,7 @@ var ACLUserStore = Store.createStore({
   },
 
   getUser: function (userID) {
-    let rawUser = this.getUserRaw(userID);
-
-    if (rawUser) {
-      return new User(rawUser);
-    }
-
-    return null;
+    return new User(this.getUserRaw(userID) || {});
   },
 
   setUser: function (userID, user) {
