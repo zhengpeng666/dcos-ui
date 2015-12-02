@@ -17,7 +17,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUPS_ERROR,
-          data: e.message
+          data: e.error
         });
       }
     });
@@ -35,7 +35,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ERROR,
-          data: e.message,
+          data: e.error,
           groupID
         });
       }
@@ -55,7 +55,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR,
-          data: e.message,
+          data: e.error,
           groupID
         });
       }
@@ -75,7 +75,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR,
-          data: e.message,
+          data: e.error,
           groupID
         });
       }
@@ -97,7 +97,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
-          data: e.message,
+          data: e.error,
           groupID,
           userID
         });
@@ -120,7 +120,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
-          data: e.message,
+          data: e.error,
           groupID,
           userID
         });
