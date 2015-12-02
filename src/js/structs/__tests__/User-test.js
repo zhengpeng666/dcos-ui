@@ -22,15 +22,6 @@ describe("User", function () {
     this.instance = new User(userFixture);
   });
 
-  describe("#getPermissions", function () {
-
-    it("returns the permissions it was given", function () {
-      expect(this.instance.getPermissions())
-        .toEqual(this.userFixture.permissions);
-    });
-
-  });
-
   describe("#getGroups", function () {
 
     it("returns an instance of GroupsList", function () {
@@ -51,6 +42,42 @@ describe("User", function () {
         .toEqual(this.userFixture.groups[0].group.gid);
       expect(groups[1].get("gid"))
         .toEqual(this.userFixture.groups[1].group.gid);
+    });
+
+  });
+
+  describe("#getGroupCount", function () {
+
+    it("returns the number of groups", function () {
+      expect(this.instance.getGroupCount())
+        .toEqual(this.userFixture.groups.length);
+    });
+
+  });
+
+  describe("#getPermissions", function () {
+
+    it("returns the permissions it was given", function () {
+      expect(this.instance.getPermissions())
+        .toEqual(this.userFixture.permissions);
+    });
+
+  });
+
+  describe("#getPermissionCount", function () {
+
+    it("returns the number of groups", function () {
+      expect(this.instance.getPermissionCount()).toEqual(1);
+    });
+
+  });
+
+  describe("#uniquePermissions", function () {
+
+    it("returns an array of services user has permission to", function () {
+      let permissionList = this.instance.uniquePermissions();
+      expect(permissionList.length).toEqual(1);
+      expect(permissionList[0].rid).toEqual("service.marathon");
     });
 
   });
