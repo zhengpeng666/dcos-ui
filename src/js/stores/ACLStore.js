@@ -55,7 +55,7 @@ const ACLStore = Store.createStore({
         ACLStore.processResourcesACLs(action.data);
         break;
       case ActionTypes.REQUEST_ACL_RESOURCE_ACLS_ERROR:
-        ACLStore.emit(EventTypes.ACL_REQUEST_RESOURCE_ACLS_ERROR, action.data);
+        ACLStore.emit(EventTypes.ACL_RESOURCE_ACLS_REQUEST_ERROR, action.data);
         break;
       case ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS:
         ACLStore.emit(
