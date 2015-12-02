@@ -1,72 +1,58 @@
 import _ from "underscore";
+/*eslint-disable no-unused-vars*/
 import React from "react";
+/*eslint-enable no-unused-vars*/
 import {Table} from "reactjs-components";
 
 import ACLGroupsStore from "../../stores/ACLGroupsStore";
-import EventTypes from "../../constants/EventTypes";
 import FilterHeadline from "../../components/FilterHeadline";
 import FilterInputText from "../../components/FilterInputText";
 import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import ResourceTableUtil from "../../utils/ResourceTableUtil";
+import RequestErrorMsg from "../../components/RequestErrorMsg";
+import StoreMixin from "../../mixins/StoreMixin";
 import TableUtil from "../../utils/TableUtil";
+import Util from "../../utils/Util";
 
 const METHODS_TO_BIND = [
-  "handleGroupsChange",
   "handleSearchStringChange",
-  "onMesosStateChange",
+  "onGroupsSuccess",
+  "onGroupsError",
   "resetFilter"
 ];
 
-export default class GroupsTab extends React.Component {
+export default class GroupsTab extends Util.mixin(StoreMixin) {
   constructor() {
     super();
 
-    this.state = {
-      groups: [],
-      searchString: ""
-    };
+    this.store_listeners = [
+      {name: "marathon", events: ["success"]},
+      {name: "groups", events: ["success", "error"]}
+    ];
+
+    this.state = {hasError: false, searchString: ""};
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
     }, this);
   }
 
+  onGroupsSuccess() {
+    if (this.state.hasError) {
+      this.setState({hasError: false});
+    }
+  }
+
+  onGroupsError() {
+    this.setState({hasError: true});
+  }
+
   componentDidMount() {
-    ACLGroupsStore.addChangeListener(
-      EventTypes.ACL_GROUPS_CHANGE,
-      this.handleGroupsChange
-    );
-
     ACLGroupsStore.fetchGroups();
-
-    MesosSummaryStore.addChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE,
-      this.onMesosStateChange
-    );
-  }
-
-  componentWillUnmount() {
-    ACLGroupsStore.removeChangeListener(
-      EventTypes.ACL_GROUPS_CHANGE,
-      this.handleGroupsChange
-    );
-
-    MesosSummaryStore.removeChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE,
-      this.onMesosStateChange
-    );
-  }
-
-  handleGroupsChange() {
-    this.setState({groups: ACLGroupsStore.get("groups").getItems()});
   }
 
   handleSearchStringChange(searchString) {
     this.setState({searchString});
-  }
-
-  onMesosStateChange() {
-    this.forceUpdate();
   }
 
   getColGroup() {
@@ -123,7 +109,8 @@ export default class GroupsTab extends React.Component {
           itemHeight={TableUtil.getRowHeight()}
           sortBy={{prop: "description", order: "asc"}}
           useFlex={true}
-          transition={false} />
+          transition={false}
+          useScrollTable={false} />
       </div>
     );
   }
@@ -135,7 +122,7 @@ export default class GroupsTab extends React.Component {
           onReset={this.resetFilter}
           name="Groups"
           currentLength={this.getVisibleGroups().length}
-          totalLength={this.state.groups.length} />
+          totalLength={ACLGroupsStore.get("groups").getItems().length} />
         <FilterInputText
           searchString={this.state.searchString}
           handleFilterChange={this.handleSearchStringChange}
@@ -148,13 +135,13 @@ export default class GroupsTab extends React.Component {
     let searchString = this.state.searchString.toLowerCase();
 
     if (searchString !== "") {
-      return _.filter(this.state.groups, function (group) {
+      return _.filter(ACLGroupsStore.get("groups").getItems(), function (group) {
         let description = group.get("description").toLowerCase();
         return description.indexOf(searchString) > -1;
       });
     }
 
-    return this.state.groups;
+    return ACLGroupsStore.get("groups").getItems();
   }
 
   resetFilter() {
@@ -162,6 +149,12 @@ export default class GroupsTab extends React.Component {
   }
 
   render() {
+    if (this.state.hasError) {
+      return (
+        <RequestErrorMsg />
+      );
+    }
+
     if (!MesosSummaryStore.get("statesProcessed")) {
       return this.getLoadingScreen();
     }
