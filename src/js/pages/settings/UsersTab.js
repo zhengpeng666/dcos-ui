@@ -1,12 +1,8 @@
-/*eslint-disable no-unused-vars*/
 import React from "react";
-/*eslint-enable no-unused-vars*/
 
-import InternalStorageMixin from "../../mixins/InternalStorageMixin";
 import SidePanels from "../../components/SidePanels";
-import Util from "../../utils/Util";
 
-export default class UsersTab extends Util.mixin(InternalStorageMixin) {
+export default class UsersTab extends React.Component {
 
 const METHODS_TO_BIND = ["handleNewUserClick"];
 

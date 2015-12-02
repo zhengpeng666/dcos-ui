@@ -67,11 +67,11 @@ var routes = (
 
       <Route name="settings-organization" path="organization/?">
         <Route name="settings-organization-users" path="users/?" handler={UsersTab}>
-          <Route name="settings-organization-users-user" path=":userID" />
+          <Route name="settings-organization-users-user-panel" path=":userID" />
         </Route>
 
         <Route name="settings-organization-groups" path="groups/?" handler={GroupsTab}>
-          <Route name="settings-organization-groups-group" path=":groupID" />
+          <Route name="settings-organization-groups-group-panel" path=":groupID" />
         </Route>
 
         <Redirect from="/settings/organization/?" to="settings-organization-users" />
