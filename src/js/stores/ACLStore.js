@@ -37,8 +37,7 @@ const ACLStore = Store.createStore({
 
   revokeGroupActionToResource: ACLActions.revokeGroupActionToResource,
 
-  processResourcesACLs: function (data) {
-    let services = data.response;
+  processResourcesACLs: function (services) {
     this.set({services});
     this.emit(EventTypes.ACL_RESOURCE_ACLS_CHANGE);
   },
@@ -53,48 +52,69 @@ const ACLStore = Store.createStore({
 
     switch (action.type) {
       case ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS:
-        ACLStore.processResourcesACLs(action.data);
+        ACLStore.processResourcesACLs(action.data, action.resourceType);
         break;
       case ActionTypes.REQUEST_ACL_RESOURCE_ACLS_ERROR:
-        ACLStore.emit(EventTypes.ACL_RESOURCE_ACLS_REQUEST_ERROR, action.data);
+        ACLStore.emit(
+            EventTypes.ACL_RESOURCE_ACLS_REQUEST_ERROR,
+            action.data,
+            action.resourceType
+          );
         break;
       case ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS:
         ACLStore.emit(
           EventTypes.ACL_USER_GRANT_ACTION_CHANGE,
-          action.data
+          action.data,
+          action.triple
         );
         break;
       case ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_ERROR:
         ACLStore.emit(
           EventTypes.ACL_USER_GRANT_ACTION_REQUEST_ERROR,
-          action.data
+          action.data,
+          action.triple
         );
         break;
       case ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS:
-        ACLStore.emit(EventTypes.ACL_USER_REVOKE_ACTION_CHANGE, action.data);
+        ACLStore.emit(
+            EventTypes.ACL_USER_REVOKE_ACTION_CHANGE,
+            action.data,
+            action.triple
+          );
         break;
       case ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_ERROR:
         ACLStore.emit(
           EventTypes.ACL_USER_REVOKE_ACTION_REQUEST_ERROR,
-          action.data
+          action.data,
+          action.triple
         );
         break;
       case ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS:
-        ACLStore.emit(EventTypes.ACL_GROUP_GRANT_ACTION_CHANGE, action.data);
+        ACLStore.emit(
+            EventTypes.ACL_GROUP_GRANT_ACTION_CHANGE,
+            action.data,
+            action.triple
+          );
         break;
       case ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_ERROR:
         ACLStore.emit(
           EventTypes.ACL_GROUP_GRANT_ACTION_REQUEST_ERROR,
-          action.data
+          action.data,
+          action.triple
         );
         break;
       case ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS:
-        ACLStore.emit(EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE, action.data);
+        ACLStore.emit(
+            EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE,
+            action.data,
+            action.triple
+          );
         break;
       case ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR:
         ACLStore.emit(
           EventTypes.ACL_GROUP_REVOKE_ACTION_REQUEST_ERROR,
-          action.data
+          action.data,
+          action.triple
         );
         break;
     }

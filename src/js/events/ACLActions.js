@@ -5,19 +5,21 @@ import RequestUtil from "../utils/RequestUtil";
 
 const ACLActions = {
 
-  fetchACLsForResource: function (type) {
+  fetchACLsForResource: function (resourceType) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/acls?type=${type}`,
+      url: `${Config.rootUrl}${Config.apiPrefix}/acls?type=${resourceType}`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
-          data: {response, type}
+          data: response,
+          resourceType
         });
       },
-      error: function (error) {
+      error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_ERROR,
-          data: {error, type}
+          data: e.error,
+          resourceType
         });
       }
     });
@@ -27,16 +29,18 @@ const ACLActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/users/${userID}/${action}`,
       type: "PUT",
-      success: function () {
+      success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
-          data: {userID, action, resourceID}
+          data: response,
+          triple: {userID, action, resourceID}
         });
       },
-      error: function (error) {
+      error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_ERROR,
-          data: {userID, action, resourceID, error}
+          data: e.error,
+          triple: {userID, action, resourceID}
         });
       }
     });
@@ -46,16 +50,18 @@ const ACLActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/users/${userID}/${action}`,
       type: "DELETE",
-      success: function () {
+      success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
-          data: {userID, action, resourceID}
+          data: response,
+          triple: {userID, action, resourceID}
         });
       },
-      error: function (error) {
+      error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_ERROR,
-          data: {userID, action, resourceID, error}
+          data: e.error,
+          triple: {userID, action, resourceID}
         });
       }
     });
@@ -65,16 +71,18 @@ const ACLActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
       type: "PUT",
-      success: function () {
+      success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
-          data: {groupID, action, resourceID}
+          data: response,
+          triple: {groupID, action, resourceID}
         });
       },
-      error: function (error) {
+      error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_ERROR,
-          data: {groupID, action, resourceID, error}
+          data: e.error,
+          triple: {groupID, action, resourceID}
         });
       }
     });
@@ -84,16 +92,18 @@ const ACLActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
       type: "DELETE",
-      success: function () {
+      success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
-          data: {groupID, action, resourceID}
+          data: response,
+          triple: {groupID, action, resourceID}
         });
       },
-      error: function (error) {
+      error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR,
-          data: {groupID, action, resourceID, error}
+          data: e.error,
+          triple: {groupID, action, resourceID}
         });
       }
     });
@@ -104,10 +114,11 @@ const ACLActions = {
 import aclsFixture from "json!../../../tests/_fixtures/acl/acls-unicode.json";
 
 if (Config.useFixtures) {
-  ACLActions.fetchACLsForResource = function (type) {
+  ACLActions.fetchACLsForResource = function (resourceType) {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
-      data: {response: aclsFixture, type}
+      data: aclsFixture,
+      resourceType
     });
   };
 
@@ -115,7 +126,8 @@ if (Config.useFixtures) {
     function (userID, action, resourceID) {
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
-        data: {userID, action, resourceID}
+        data: {},
+        triple: {userID, action, resourceID}
       });
     };
 
@@ -123,7 +135,8 @@ if (Config.useFixtures) {
     function (userID, action, resourceID) {
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
-        data: {userID, action, resourceID}
+        data: {},
+        triple: {userID, action, resourceID}
       });
     };
 
@@ -131,7 +144,8 @@ if (Config.useFixtures) {
     function (groupID, action, resourceID) {
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
-        data: {groupID, action, resourceID}
+        data: {},
+        triple: {groupID, action, resourceID}
       });
     };
 
@@ -139,7 +153,8 @@ if (Config.useFixtures) {
     function (groupID, action, resourceID) {
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
-        data: {groupID, action, resourceID}
+        data: {},
+        triple: {groupID, action, resourceID}
       });
     };
 
