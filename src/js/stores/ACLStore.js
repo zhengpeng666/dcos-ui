@@ -37,7 +37,8 @@ const ACLStore = Store.createStore({
 
   revokeGroupActionToResource: ACLActions.revokeGroupActionToResource,
 
-  processResourcesACLs: function (services) {
+  processResourcesACLs: function (data) {
+    let services = data.response;
     this.set({services});
     this.emit(EventTypes.ACL_RESOURCE_ACLS_CHANGE);
   },
