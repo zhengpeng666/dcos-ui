@@ -120,7 +120,7 @@ const ListenersDescription = {
       updateSuccess: EventTypes.ACL_USER_UPDATE_SUCCESS,
       updateError: EventTypes.ACL_USER_UPDATE_ERROR,
       deleteSuccess: EventTypes.ACL_USER_DELETE_SUCCESS,
-      deleteError: EventTypes.ACL_USER_DELETE_ERROR,
+      deleteError: EventTypes.ACL_USER_DELETE_ERROR
     },
     unmountWhen: function () {
       return true;
