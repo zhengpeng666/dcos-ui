@@ -4,6 +4,7 @@ import React from "react";
 
 import ACLUserStore from "../stores/ACLUserStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
 
@@ -12,9 +13,13 @@ export default class UserSidePanelContents extends SidePanelContents {
     constructor() {
       super();
 
+      this.state = {
+        fetchedDetailsError: false
+      };
+
       this.store_listeners = [
         {name: "summary", events: ["success"], listenAlways: false},
-        {name: "user", events: ["fetchedDetailsSuccess"]}
+        {name: "user", events: ["fetchedDetailsSuccess", "fetchedDetailsError"]}
       ];
     }
 
@@ -22,6 +27,18 @@ export default class UserSidePanelContents extends SidePanelContents {
       super.componentDidMount();
 
       ACLUserStore.fetchUserWithDetails(this.props.itemID);
+    }
+
+    onUserStoreFetchedDetailsError() {
+      this.setState({fetchedDetailsError: true});
+    }
+
+    getErrorNotice() {
+      return (
+        <div className="container-pod">
+          <RequestErrorMsg />
+        </div>
+      );
     }
 
     getUserInfo(user) {
@@ -64,6 +81,10 @@ export default class UserSidePanelContents extends SidePanelContents {
       let user = ACLUserStore.getUser(this.props.itemID);
       if (user == null || !MesosSummaryStore.get("statesProcessed")) {
         return this.getLoadingScreen();
+      }
+
+      if (this.state.fetchedDetailsError) {
+        this.getErrorNotice();
       }
 
       return (
