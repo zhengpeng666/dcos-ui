@@ -97,7 +97,7 @@ export default class FormModal extends React.Component {
         footer={this.getFooter()}
         titleClass="modal-header-title text-align-center flush-top
           flush-bottom"
-        titleText="Create New Local User">
+        titleText={this.props.titleText}>
         {this.getContent()}
       </Modal>
     );
