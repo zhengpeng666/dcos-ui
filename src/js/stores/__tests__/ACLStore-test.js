@@ -70,7 +70,10 @@ describe("ACLStore", function () {
 
       it("dispatches the correct event upon success", function () {
         var mockedFn = jest.genMockFunction();
-        ACLStore.addChangeListener(EventTypes.ACL_RESOURCE_ACLS_CHANGE, mockedFn);
+        ACLStore.addChangeListener(
+          EventTypes.ACL_RESOURCE_ACLS_CHANGE,
+          mockedFn
+        );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
           data: {response: [{rid: "foo", bar: "baz"}], type: "service"}
