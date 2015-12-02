@@ -16,9 +16,6 @@ describe("Settings Page [05k]", function() {
       }
     });
 
-  });
-
-  beforeEach(function() {
     cy.get(".sidebar-menu-item").contains("Settings").click();
   });
 
@@ -27,6 +24,9 @@ describe("Settings Page [05k]", function() {
     beforeEach(function() {
       cy.get(".page-header-navigation .tab-item-label").contains("Groups")
         .click();
+      cy.get(".groups-table-header input[type='text']").as("filterTextbox");
+      cy.get(".page-content-fill .table tbody tr")
+        .as("tableRows");
     });
 
     it("routes to the group page [05p]", function() {
@@ -41,10 +41,6 @@ describe("Settings Page [05k]", function() {
     });
 
     it("hides groups when no groups match the string [05r]", function() {
-      cy.get(".groups-table-header input[type='text']").as("filterTextbox");
-      cy.get(".page-content-fill .gm-scroll-view .table tbody tr")
-        .as("tableRows");
-
       cy.get("@filterTextbox").type("foo_bar_baz_qux");
 
       cy.get("@tableRows").should(function ($tableRows) {
@@ -53,9 +49,6 @@ describe("Settings Page [05k]", function() {
     });
 
     it("displays 'No data' when it has filtered out all groups [05t]", function() {
-      cy.get(".groups-table-header input[type='text']").as("filterTextbox");
-      cy.get(".page-content-fill .gm-scroll-view .table tbody tr")
-        .as("tableRows");
       cy.get("@tableRows").get("td").as("tableRowCell");
 
       cy.get("@filterTextbox").type("foo_bar_baz_qux");
@@ -66,13 +59,8 @@ describe("Settings Page [05k]", function() {
     });
 
     it("shows all groups after clearing the filter [05s]", function() {
-      cy.get(".groups-table-header").as("groupsTableHeader");
-      cy.get("@groupsTableHeader").get("input[type='text']")
-        .as("filterTextbox");
-      cy.get("@groupsTableHeader").get(".form-control-group-add-on a")
+      cy.get(".groups-table-header .form-control-group-add-on a")
         .as("clearFilterButton");
-      cy.get(".page-content-fill .gm-scroll-view .table tbody tr")
-        .as("tableRows");
 
       cy.get("@filterTextbox").type("foo_bar_baz_qux");
       cy.get("@clearFilterButton").click();
@@ -83,19 +71,9 @@ describe("Settings Page [05k]", function() {
     });
 
     it("allows users to filter by unicode characters [05u]", function() {
-      cy.get(".groups-table-header").as("groupsTableHeader");
-      cy.get("@groupsTableHeader").get("input[type='text']")
-        .as("filterTextbox");
-
       cy.get("@filterTextbox").type("藍-遙 遥 悠 遼");
-
-      cy.get(".page-content-fill .gm-scroll-view .table tbody tr")
-        .as("tableRows");
-
       cy.get("@tableRows").should(function ($tableRows) {
-        // We expect the length to be 3 because of the spacer on the top and
-        // bottom of the actual table rows.
-        expect($tableRows.length).to.equal(3);
+        expect($tableRows.length).to.equal(1);
       });
     });
 
