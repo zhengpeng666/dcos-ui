@@ -78,6 +78,33 @@
   }
 }
 
+.page-content {
+
+  // When the content of pages need to fill the height of the page (and not
+  // exceed that height), the page content wrapper height needs to be explicitly
+  // 100%. We also want to set a sane minimum size.
+  .page-content-fit-height {
+    height: 100%;
+    min-height: 300px;
+
+    .page-content-fill {
+
+      // This targets the direct descendent of the element that is meant to fill
+      // the page's content. Specifically, this is necessary to target the
+      // generic div that wraps our table component.
+      > div {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+
+      .gm-scrollbar-container {
+        flex-grow: 1;
+      }
+    }
+  }
+}
+
 /* Screen Size: Mini (@screen-mini) and above */
 & when (@screen-mini-enabled) {
   @media (min-width: @screen-mini) {
