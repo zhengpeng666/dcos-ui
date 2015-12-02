@@ -264,4 +264,84 @@ describe("ACLGroupsActions", function () {
 
   });
 
+  describe("#addUser", function () {
+
+    beforeEach(function () {
+      spyOn(RequestUtil, "json");
+      ACLGroupsActions.addUser("foo", "bar");
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+    });
+
+    it("dispatches the correct action when successful", function () {
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action).toEqual({
+          type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
+          data: {bar: "baz"},
+          userID: "bar",
+          groupID: "foo"
+        });
+      });
+
+      this.configuration.success({bar: "baz"});
+    });
+
+    it("dispatches the correct action when unsucessful", function () {
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action).toEqual({
+          type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
+          data: "bar",
+          userID: "bar",
+          groupID: "foo"
+        });
+      });
+
+      this.configuration.error({error: "bar"});
+    });
+
+  });
+
+  describe("#removeUser", function () {
+
+    beforeEach(function () {
+      spyOn(RequestUtil, "json");
+      ACLGroupsActions.removeUser("foo", "bar");
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+    });
+
+    it("dispatches the correct action when successful", function () {
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action).toEqual({
+          type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
+          data: {bar: "baz"},
+          userID: "bar",
+          groupID: "foo"
+        });
+      });
+
+      this.configuration.success({bar: "baz"});
+    });
+
+    it("dispatches the correct action when unsucessful", function () {
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action).toEqual({
+          type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
+          data: "bar",
+          userID: "bar",
+          groupID: "foo"
+        });
+      });
+
+      this.configuration.error({error: "bar"});
+    });
+
+  });
+
 });
