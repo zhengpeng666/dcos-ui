@@ -45,6 +45,10 @@ let ACLGroupStore = Store.createStore({
     this.set(groups);
   },
 
+  addUser: ACLGroupsActions.addUser,
+
+  deleteUser: ACLGroupsActions.deleteUser,
+
   /**
    * Will fetch a group and their details.
    * Will make a request to various different endpoints to get all details
@@ -201,6 +205,18 @@ let ACLGroupStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR:
         ACLGroupStore.processGroupUsersError(action.groupID);
+        break;
+      case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS:
+        ACLGroupStore.emit(EventTypes.ACL_GROUP_USERS_CHANGED);
+        break;
+      case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR:
+        ACLGroupStore.emit(EventTypes.ACL_GROUP_ADD_USER_ERROR);
+        break;
+      case ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS:
+        ACLGroupStore.emit(EventTypes.ACL_GROUP_USERS_CHANGED);
+        break;
+      case ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR:
+        ACLGroupStore.emit(EventTypes.ACL_GROUP_REMOVE_USER_ERROR);
         break;
     }
 

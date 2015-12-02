@@ -80,8 +80,52 @@ const ACLGroupsActions = {
         });
       }
     });
-  }
+  },
 
+  addUser: function (groupID, userID) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}/users/${userID}`,
+      type: "PUT",
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
+          data: response,
+          groupID,
+          userID
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
+          data: e.message,
+          groupID
+        });
+      }
+    });
+  },
+
+  deleteUser: function (groupID, userID) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}/users/${userID}`,
+      type: "DELETE",
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
+          data: response,
+          groupID,
+          userID
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
+          data: e.message,
+          groupID,
+          userID
+        });
+      }
+    });
+  }
 };
 
 if (Config.useFixtures) {
@@ -113,6 +157,22 @@ if (Config.useFixtures) {
       type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
       data: groupDetailsFixture.users,
       groupID: groupFixture.gid
+    });
+  };
+  ACLGroupsActions.addUser = function (groupID, userID) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
+      data: groupDetailsFixture.permissions,
+      groupID,
+      userID
+    });
+  };
+  ACLGroupsActions.deleteUser = function (groupID, userID) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
+      data: groupDetailsFixture.users,
+      groupID,
+      userID
     });
   };
 }
