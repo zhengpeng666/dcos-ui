@@ -13463,7 +13463,7 @@
       "resolved": "http://registry.npmjs.org/react-zeroclipboard/-/react-zeroclipboard-0.4.1.tgz"
     },
     "reactjs-components": {
-      "version": "0.0.18",
+      "version": "0.0.19",
       "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.18.tgz",
       "dependencies": {
         "babel": {

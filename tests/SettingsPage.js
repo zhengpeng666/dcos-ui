@@ -82,6 +82,23 @@ describe("Settings Page [05k]", function() {
       });
     });
 
+    it("allows users to filter by unicode characters [05u]", function() {
+      cy.get(".groups-table-header").as("groupsTableHeader");
+      cy.get("@groupsTableHeader").get("input[type='text']")
+        .as("filterTextbox");
+
+      cy.get("@filterTextbox").type("藍-遙 遥 悠 遼");
+
+      cy.get(".page-content-fill .gm-scroll-view .table tbody tr")
+        .as("tableRows");
+
+      cy.get("@tableRows").should(function ($tableRows) {
+        // We expect the length to be 3 because of the spacer on the top and
+        // bottom of the actual table rows.
+        expect($tableRows.length).to.equal(3);
+      });
+    });
+
   });
 
 });
