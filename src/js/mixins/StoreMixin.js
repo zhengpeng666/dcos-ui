@@ -114,7 +114,13 @@ const ListenersDescription = {
       groupsSuccess: EventTypes.ACL_USER_DETAILS_GROUPS_CHANGE,
       groupsError: EventTypes.ACL_USER_DETAILS_GROUPS_ERROR,
       fetchedDetailsSuccess: EventTypes.ACL_USER_DETAILS_FETCHED_SUCCESS,
-      fetchedDetailsError: EventTypes.ACL_USER_DETAILS_FETCHED_ERROR
+      fetchedDetailsError: EventTypes.ACL_USER_DETAILS_FETCHED_ERROR,
+      createSuccess: EventTypes.ACL_USER_CREATE_SUCCESS,
+      createError: EventTypes.ACL_USER_CREATE_ERROR,
+      updateSuccess: EventTypes.ACL_USER_UPDATE_SUCCESS,
+      updateError: EventTypes.ACL_USER_UPDATE_ERROR,
+      deleteSuccess: EventTypes.ACL_USER_DELETE_SUCCESS,
+      deleteError: EventTypes.ACL_USER_DELETE_ERROR,
     },
     unmountWhen: function () {
       return true;

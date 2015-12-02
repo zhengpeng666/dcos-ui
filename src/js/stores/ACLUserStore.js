@@ -209,24 +209,24 @@ var ACLUserStore = Store.createStore({
         ACLUserStore.processUserPermissionsError(action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS:
-        UserDetailStore.emit(EventTypes.ACL_USER_CREATE_SUCCESS);
+        ACLUserStore.emit(EventTypes.ACL_USER_CREATE_SUCCESS);
         break;
       case ActionTypes.REQUEST_ACL_USER_CREATE_ERROR:
-        UserDetailStore.emit(EventTypes.ACL_USER_CREATE_ERROR);
+        ACLUserStore.emit(EventTypes.ACL_USER_CREATE_ERROR);
         break;
       case ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS:
-        UserDetailStore
+        ACLUserStore
           .emit(EventTypes.ACL_USER_UPDATE_SUCCESS, action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR:
-        UserDetailStore.emit(EventTypes.ACL_USER_UPDATE_ERROR, action.userID);
+        ACLUserStore.emit(EventTypes.ACL_USER_UPDATE_ERROR, action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS:
-        UserDetailStore
+        ACLUserStore
           .emit(EventTypes.ACL_USER_DELETE_SUCCESS, action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_DELETE_ERROR:
-        UserDetailStore.emit(EventTypes.ACL_USER_DELETE_ERROR, action.userID);
+        ACLUserStore.emit(EventTypes.ACL_USER_DELETE_ERROR, action.userID);
         break;
     }
 
