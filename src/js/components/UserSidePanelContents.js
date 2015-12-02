@@ -29,8 +29,10 @@ export default class UserSidePanelContents extends SidePanelContents {
       ACLUserStore.fetchUserWithDetails(this.props.itemID);
     }
 
-    onUserStoreFetchedDetailsError() {
-      this.setState({fetchedDetailsError: true});
+    onUserStoreFetchedDetailsError(userID) {
+      if (userID === this.props.itemID) {
+        this.setState({fetchedDetailsError: true});
+      }
     }
 
     getErrorNotice() {
@@ -79,12 +81,13 @@ export default class UserSidePanelContents extends SidePanelContents {
 
     render() {
       let user = ACLUserStore.getUser(this.props.itemID);
-      if (user == null || !MesosSummaryStore.get("statesProcessed")) {
-        return this.getLoadingScreen();
-      }
 
       if (this.state.fetchedDetailsError) {
-        this.getErrorNotice();
+        return this.getErrorNotice();
+      }
+
+      if (user == null || !MesosSummaryStore.get("statesProcessed")) {
+        return this.getLoadingScreen();
       }
 
       return (
