@@ -98,6 +98,19 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
     );
   }
 
+  getContents() {
+    if (!MesosSummaryStore.get("statesProcessed")) {
+      return this.getLoadingScreen();
+    }
+
+    return (
+      <div className="flex-container-col">
+        {this.getTableHeader()}
+        {this.getTable()}
+      </div>
+    );
+  }
+
   getTable() {
     return (
       <div className="page-content-fill flex-grow flex-container-col">
@@ -157,16 +170,9 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
       );
     }
 
-    if (!MesosSummaryStore.get("statesProcessed")) {
-      return this.getLoadingScreen();
-    }
-
     return (
       <div>
-        <div className="flex-container-col">
-          {this.getTableHeader()}
-          {this.getTable()}
-        </div>
+        {this.getContents()}
         <SidePanels
           params={this.props.params}
           openedPage="settings-organization-groups" />
