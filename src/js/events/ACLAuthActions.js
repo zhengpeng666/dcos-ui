@@ -1,5 +1,3 @@
-import _ from "underscore";
-
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "./AppDispatcher";
 import Config from "../config/Config";
@@ -24,7 +22,7 @@ const ACLAuthActions = {
         });
       }
     });
-  },
+  }
 
 };
 
