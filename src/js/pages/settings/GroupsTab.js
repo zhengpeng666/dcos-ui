@@ -10,6 +10,7 @@ import FilterInputText from "../../components/FilterInputText";
 import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import ResourceTableUtil from "../../utils/ResourceTableUtil";
 import RequestErrorMsg from "../../components/RequestErrorMsg";
+import SidePanels from "../../components/SidePanels";
 import StoreMixin from "../../mixins/StoreMixin";
 import TableUtil from "../../utils/TableUtil";
 import Util from "../../utils/Util";
@@ -161,9 +162,14 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
     }
 
     return (
-      <div className="flex-container-col">
-        {this.getTableHeader()}
-        {this.getTable()}
+      <div>
+        <div className="flex-container-col">
+          {this.getTableHeader()}
+          {this.getTable()}
+        </div>
+        <SidePanels
+          params={this.props.params}
+          openedPage="settings-organization-groups" />
       </div>
     );
   }
