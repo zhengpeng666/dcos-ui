@@ -84,7 +84,7 @@ const TabsMixin = {
    * @return {Component} the result of the appropriate render function
    */
   tabs_getTabView() {
-    let currentTab = this.tabs_tabs[this.state.currentTab];
+    let currentTab = this.tabs_tabs[this.state.currentTab].replace(" ", "");
     let renderFunction = this[`render${currentTab}TabView`];
 
     if (renderFunction == null) {
