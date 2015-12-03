@@ -60,7 +60,6 @@ const ACLStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS:
         ACLStore.emit(
           EventTypes.ACL_USER_GRANT_ACTION_CHANGE,
-          action.data,
           action.triple
         );
         break;
@@ -74,7 +73,6 @@ const ACLStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS:
         ACLStore.emit(
             EventTypes.ACL_USER_REVOKE_ACTION_CHANGE,
-            action.data,
             action.triple
           );
         break;
@@ -88,7 +86,6 @@ const ACLStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS:
         ACLStore.emit(
             EventTypes.ACL_GROUP_GRANT_ACTION_CHANGE,
-            action.data,
             action.triple
           );
         break;
@@ -102,7 +99,6 @@ const ACLStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS:
         ACLStore.emit(
             EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE,
-            action.data,
             action.triple
           );
         break;

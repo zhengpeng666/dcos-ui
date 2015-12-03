@@ -111,14 +111,11 @@ describe("ACLStore", function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
-          data: {bar: "baz"},
           triple: {userID: "foo", action: "access", resourceID: "marathon"}
         });
 
-        expect(mockedFn.mock.calls[0]).toEqual([
-          {bar: "baz"},
-          {userID: "foo", action: "access", resourceID: "marathon"}
-        ]);
+        expect(mockedFn.mock.calls[0][0])
+          .toEqual({userID: "foo", action: "access", resourceID: "marathon"});
       });
 
       it("dispatches the correct event upon error", function () {
@@ -151,14 +148,11 @@ describe("ACLStore", function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
-          data: {bar: "baz"},
           triple: {userID: "foo", action: "access", resourceID: "marathon"}
         });
 
-        expect(mockedFn.mock.calls[0]).toEqual([
-          {bar: "baz"},
-          {userID: "foo", action: "access", resourceID: "marathon"}
-        ]);
+        expect(mockedFn.mock.calls[0][0])
+          .toEqual({userID: "foo", action: "access", resourceID: "marathon"});
       });
 
       it("dispatches the correct event upon error", function () {
@@ -191,14 +185,11 @@ describe("ACLStore", function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
-          data: {bar: "baz"},
           triple: {groupID: "foo", action: "access", resourceID: "marathon"}
         });
 
-        expect(mockedFn.mock.calls[0]).toEqual([
-          {bar: "baz"},
-          {groupID: "foo", action: "access", resourceID: "marathon"}
-        ]);
+        expect(mockedFn.mock.calls[0][0])
+          .toEqual({groupID: "foo", action: "access", resourceID: "marathon"});
       });
 
       it("dispatches the correct event upon error", function () {
@@ -231,14 +222,11 @@ describe("ACLStore", function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
-          data: {bar: "baz"},
           triple: {groupID: "foo", action: "access", resourceID: "marathon"}
         });
 
-        expect(mockedFn.mock.calls[0]).toEqual([
-          {bar: "baz"},
-          {groupID: "foo", action: "access", resourceID: "marathon"}
-        ]);
+        expect(mockedFn.mock.calls[0][0])
+          .toEqual({groupID: "foo", action: "access", resourceID: "marathon"});
       });
 
       it("dispatches the correct event upon error", function () {

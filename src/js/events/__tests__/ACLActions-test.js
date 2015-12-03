@@ -85,7 +85,6 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
-            data: {bar: "baz"},
             triple: {userID: "foo", action: "access", resourceID: "bar"}
           });
       });
@@ -138,7 +137,6 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
-            data: {bar: "baz"},
             triple: {userID: "foo", action: "access", resourceID: "bar"}
           });
       });
@@ -191,7 +189,6 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
-            data: {bar: "baz"},
             triple: {groupID: "foo", action: "access", resourceID: "bar"}
           });
       });
@@ -244,7 +241,6 @@ describe("ACLActions", function () {
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
-            data: {bar: "baz"},
             triple: {groupID: "foo", action: "access", resourceID: "bar"}
           });
       });

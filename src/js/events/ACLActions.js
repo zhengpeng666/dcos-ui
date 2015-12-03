@@ -29,10 +29,9 @@ const ACLActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/users/${userID}/${action}`,
       type: "PUT",
-      success: function (response) {
+      success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
-          data: response,
           triple: {userID, action, resourceID}
         });
       },
@@ -50,10 +49,9 @@ const ACLActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/users/${userID}/${action}`,
       type: "DELETE",
-      success: function (response) {
+      success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
-          data: response,
           triple: {userID, action, resourceID}
         });
       },
@@ -71,10 +69,9 @@ const ACLActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
       type: "PUT",
-      success: function (response) {
+      success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
-          data: response,
           triple: {groupID, action, resourceID}
         });
       },
@@ -92,10 +89,9 @@ const ACLActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
       type: "DELETE",
-      success: function (response) {
+      success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
-          data: response,
           triple: {groupID, action, resourceID}
         });
       },
@@ -127,7 +123,6 @@ if (Config.useFixtures) {
     function (userID, action, resourceID) {
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
-        data: {},
         triple: {userID, action, resourceID}
       });
     };
@@ -136,7 +131,6 @@ if (Config.useFixtures) {
     function (userID, action, resourceID) {
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
-        data: {},
         triple: {userID, action, resourceID}
       });
     };
@@ -145,7 +139,6 @@ if (Config.useFixtures) {
     function (groupID, action, resourceID) {
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
-        data: {},
         triple: {groupID, action, resourceID}
       });
     };
@@ -154,7 +147,6 @@ if (Config.useFixtures) {
     function (groupID, action, resourceID) {
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
-        data: {},
         triple: {groupID, action, resourceID}
       });
     };
