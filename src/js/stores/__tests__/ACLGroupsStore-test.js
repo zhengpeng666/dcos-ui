@@ -12,15 +12,15 @@ jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../../../tests/_fixtures/acl/groups-unicode.json");
 
-let _ = require("underscore");
-let ACLGroupsStore = require("../ACLGroupsStore");
-let ActionTypes = require("../../constants/ActionTypes");
-let AppDispatcher = require("../../events/AppDispatcher");
-let Config = require("../../config/Config");
-let EventTypes = require("../../constants/EventTypes");
-let groupsFixture = require("../../../../tests/_fixtures/acl/groups-unicode.json");
-let GroupsList = require("../../structs/GroupsList");
-let RequestUtil = require("../../utils/RequestUtil");
+var _ = require("underscore");
+var ACLGroupsStore = require("../ACLGroupsStore");
+var ActionTypes = require("../../constants/ActionTypes");
+var AppDispatcher = require("../../events/AppDispatcher");
+var Config = require("../../config/Config");
+var EventTypes = require("../../constants/EventTypes");
+var groupsFixture = require("../../../../tests/_fixtures/acl/groups-unicode.json");
+var GroupsList = require("../../structs/GroupsList");
+var RequestUtil = require("../../utils/RequestUtil");
 
 describe("ACLGroupsStore", function () {
 
@@ -39,14 +39,14 @@ describe("ACLGroupsStore", function () {
   it("should return an instance of GroupsList", function () {
     Config.useFixtures = true;
     ACLGroupsStore.fetchGroups();
-    let groups = ACLGroupsStore.get("groups");
+    var groups = ACLGroupsStore.get("groups");
     expect(groups instanceof GroupsList).toBeTruthy();
   });
 
   it("should return all of the groups it was given", function () {
     Config.useFixtures = true;
     ACLGroupsStore.fetchGroups();
-    let groups = ACLGroupsStore.get("groups").getItems();
+    var groups = ACLGroupsStore.get("groups").getItems();
     expect(groups.length).toEqual(this.groupsFixture.length);
   });
 
@@ -58,13 +58,13 @@ describe("ACLGroupsStore", function () {
         data: [{gid: "foo", bar: "baz"}]
       });
 
-      let groups = ACLGroupsStore.get("groups").getItems();
+      var groups = ACLGroupsStore.get("groups").getItems();
       expect(groups[0].gid).toEqual("foo");
       expect(groups[0].bar).toEqual("baz");
     });
 
     it("dispatches the correct event upon success", function () {
-      let mockedFn = jest.genMockFunction();
+      var mockedFn = jest.genMockFunction();
       ACLGroupsStore.addChangeListener(EventTypes.ACL_GROUPS_CHANGE, mockedFn);
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
@@ -75,7 +75,7 @@ describe("ACLGroupsStore", function () {
     });
 
     it("dispatches the correct event upon error", function () {
-      let mockedFn = jest.genMockFunction();
+      var mockedFn = jest.genMockFunction();
       ACLGroupsStore.addChangeListener(
         EventTypes.ACL_GROUPS_REQUEST_ERROR,
         mockedFn

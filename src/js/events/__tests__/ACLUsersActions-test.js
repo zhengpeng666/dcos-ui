@@ -19,8 +19,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USERS_SUCCESS);
       });
@@ -29,8 +29,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when unsuccessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USERS_ERROR);
       });
@@ -57,8 +57,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USER_SUCCESS);
       });
@@ -67,8 +67,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the correct data when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.data).toEqual({bar: "baz"});
       });
@@ -77,8 +77,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when unsucessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USER_ERROR);
       });
@@ -87,8 +87,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the correct data when unsucessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.data).toEqual("bar");
       });
@@ -97,8 +97,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the userID when unsucessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });
@@ -117,8 +117,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS);
@@ -128,8 +128,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the correct data when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.data).toEqual({bar: "baz"});
       });
@@ -138,8 +138,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the userID successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });
@@ -148,8 +148,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when unsucessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USER_GROUPS_ERROR);
       });
@@ -158,8 +158,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the correct data when unsucessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });
@@ -168,8 +168,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the userID when unsucessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.data).toEqual("bar");
       });
@@ -188,8 +188,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS);
@@ -199,8 +199,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the correct data when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.data).toEqual({bar: "baz"});
       });
@@ -209,8 +209,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the userID successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });
@@ -219,8 +219,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when unsucessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR);
@@ -230,8 +230,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the correct data when unsucessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });
@@ -240,8 +240,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches with the userID when unsucessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.data).toEqual("bar");
       });
@@ -272,8 +272,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS);
@@ -283,8 +283,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the userID when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });
@@ -293,8 +293,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when unsuccessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_CREATE_ERROR);
@@ -304,8 +304,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct message when unsuccessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.data).toEqual("bar");
       });
@@ -314,8 +314,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the userID when unsuccessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });
@@ -346,8 +346,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS);
@@ -357,8 +357,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the userID when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });
@@ -367,8 +367,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when unsuccessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR);
@@ -378,8 +378,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct message when unsuccessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.data).toEqual("bar");
       });
@@ -388,8 +388,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the userID when unsuccessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });
@@ -420,8 +420,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS);
@@ -431,8 +431,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the userID when successful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });
@@ -441,8 +441,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct action when unsuccessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_DELETE_ERROR);
@@ -452,8 +452,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the correct message when unsuccessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.data).toEqual("bar");
       });
@@ -462,8 +462,8 @@ describe("ACLUsersActions", function () {
     });
 
     it("dispatches the userID when unsuccessful", function () {
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.userID).toEqual("foo");
       });

@@ -12,15 +12,15 @@ jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../../../tests/_fixtures/acl/users-unicode.json");
 
-let _ = require("underscore");
-let ACLUsersStore = require("../ACLUsersStore");
-let ActionTypes = require("../../constants/ActionTypes");
-let AppDispatcher = require("../../events/AppDispatcher");
-let Config = require("../../config/Config");
-let EventTypes = require("../../constants/EventTypes");
-let usersFixture = require("../../../../tests/_fixtures/acl/users-unicode.json");
-let UsersList = require("../../structs/UsersList");
-let RequestUtil = require("../../utils/RequestUtil");
+var _ = require("underscore");
+var ACLUsersStore = require("../ACLUsersStore");
+var ActionTypes = require("../../constants/ActionTypes");
+var AppDispatcher = require("../../events/AppDispatcher");
+var Config = require("../../config/Config");
+var EventTypes = require("../../constants/EventTypes");
+var usersFixture = require("../../../../tests/_fixtures/acl/users-unicode.json");
+var UsersList = require("../../structs/UsersList");
+var RequestUtil = require("../../utils/RequestUtil");
 
 describe("ACLUsersStore", function () {
 
@@ -39,14 +39,14 @@ describe("ACLUsersStore", function () {
   it("should return an instance of UsersList", function () {
     Config.useFixtures = true;
     ACLUsersStore.fetchUsers();
-    let users = ACLUsersStore.get("users");
+    var users = ACLUsersStore.get("users");
     expect(users instanceof UsersList).toBeTruthy();
   });
 
   it("should return all of the users it was given", function () {
     Config.useFixtures = true;
     ACLUsersStore.fetchUsers();
-    let users = ACLUsersStore.get("users").getItems();
+    var users = ACLUsersStore.get("users").getItems();
     expect(users.length).toEqual(this.usersFixture.length);
   });
 
@@ -58,13 +58,13 @@ describe("ACLUsersStore", function () {
         data: [{gid: "foo", bar: "baz"}]
       });
 
-      let users = ACLUsersStore.get("users").getItems();
+      var users = ACLUsersStore.get("users").getItems();
       expect(users[0].gid).toEqual("foo");
       expect(users[0].bar).toEqual("baz");
     });
 
     it("dispatches the correct event upon success", function () {
-      let mockedFn = jest.genMockFunction();
+      var mockedFn = jest.genMockFunction();
       ACLUsersStore.addChangeListener(EventTypes.ACL_USERS_CHANGE, mockedFn);
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_USERS_SUCCESS,
@@ -75,7 +75,7 @@ describe("ACLUsersStore", function () {
     });
 
     it("dispatches the correct event upon error", function () {
-      let mockedFn = jest.genMockFunction();
+      var mockedFn = jest.genMockFunction();
       ACLUsersStore.addChangeListener(
         EventTypes.ACL_USERS_REQUEST_ERROR,
         mockedFn
