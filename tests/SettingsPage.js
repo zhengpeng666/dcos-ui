@@ -80,7 +80,7 @@ describe("Settings Page [05k]", function() {
 
   });
 
-  context("User Details Sidepanel [05v]", function() {
+  context.only("User Details Sidepanel [05v]", function() {
 
     beforeEach(function() {
       cy.visit("http://localhost:4200/#/settings/organization/users/qüis");
@@ -128,18 +128,22 @@ describe("Settings Page [05k]", function() {
         .should("contain", "Permissions");
     });
 
-    it("displays the groups that the member belongs to [05x]", function() {
-      cy
-        .get("@sidePanel")
-        .get(".tabs .tab-item-label")
-        .contains("Group Membership")
-        .click();
+    context("Group Membership [05z]", function() {
 
-      cy
-        .get("@sidePanel")
-        .get(".table tbody").should(function ($tbody) {
-          expect($tbody.children().length).to.equal(2);
-        });
+      it("displays the groups that the member belongs to [05x]", function() {
+        cy
+          .get("@sidePanel")
+          .get(".tabs .tab-item-label")
+          .contains("Group Membership")
+          .click();
+
+        cy
+          .get("@sidePanel")
+          .get(".table tbody").should(function ($tbody) {
+            expect($tbody.children().length).to.equal(2);
+          });
+      });
+
     });
 
   });
