@@ -28,7 +28,7 @@ var UserSidePanelContents = require("../UserSidePanelContents");
 var User = require("../../structs/User");
 
 var userDetailsFixture =
-  require("json!../../../tests/_fixtures/acl/user-with-details.json");
+  require("../../../../tests/_fixtures/acl/user-with-details.json");
 
 describe("UserSidePanelContents", function () {
 
