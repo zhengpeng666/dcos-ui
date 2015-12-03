@@ -45,6 +45,14 @@ let ACLGroupStore = Store.createStore({
     this.set(groups);
   },
 
+  fetchGroup: ACLGroupsActions.fetchGroup,
+
+  addGroup: ACLGroupsActions.addGroup,
+
+  updateGroup: ACLGroupsActions.updateGroup,
+
+  deleteGroup: ACLGroupsActions.deleteGroup,
+
   addUser: ACLGroupsActions.addUser,
 
   deleteUser: ACLGroupsActions.deleteUser,
@@ -205,6 +213,27 @@ let ACLGroupStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR:
         ACLGroupStore.processGroupUsersError(action.groupID);
+        break;
+      case ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS:
+        ACLGroupStore
+          .emit(EventTypes.ACL_GROUP_CREATE_SUCCESS, action.groupID);
+        break;
+      case ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR:
+        ACLGroupStore.emit(EventTypes.ACL_GROUP_CREATE_ERROR, action.groupID);
+        break;
+      case ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS:
+        ACLGroupStore
+          .emit(EventTypes.ACL_GROUP_UPDATE_SUCCESS, action.groupID);
+        break;
+      case ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR:
+        ACLGroupStore.emit(EventTypes.ACL_GROUP_UPDATE_ERROR, action.groupID);
+        break;
+      case ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS:
+        ACLGroupStore
+          .emit(EventTypes.ACL_GROUP_DELETE_SUCCESS, action.groupID);
+        break;
+      case ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR:
+        ACLGroupStore.emit(EventTypes.ACL_GROUP_DELETE_ERROR, action.groupID);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS:
         ACLGroupStore.emit(
