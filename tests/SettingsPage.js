@@ -8,6 +8,7 @@ describe("Settings Page [05k]", function() {
       .route(/history\/last/, "fx:marathon-1-task/summary")
       .route(/state-summary/, "fx:marathon-1-task/summary")
       .route(/state/, "fx:marathon-1-task/state")
+      .route(/api\/v1\/users/, "fx:acl/users-unicode")
       .route(/api\/v1\/groups/, "fx:acl/groups-unicode")
       .route(/ui-config/, "fx:config/tracking-disabled")
       .visit("http://localhost:4200/", {
@@ -75,6 +76,31 @@ describe("Settings Page [05k]", function() {
       cy.get("@tableRows").should(function ($tableRows) {
         expect($tableRows.length).to.equal(1);
       });
+    });
+
+  });
+
+  context("User Details Sidepanel [05v]", function() {
+
+    beforeEach(function() {
+      cy.visit("http://localhost:4200/#/settings/organization/users/qüis");
+      cy.get(".side-panel").as("sidePanel");
+    });
+
+    it("displays the correct user [05w]", function() {
+      cy
+        .get("@sidePanel")
+        .get(".side-panel-content-header-label")
+        .should(function ($header) {
+          expect($header[0].textContent).to.equal("qüis");
+        });
+    });
+
+    it("sets the first tab as active [05y]", function() {
+      cy
+        .get("@sidePanel")
+        .get(".tabs .active")
+        .should("contain", "Permissions");
     });
 
   });
