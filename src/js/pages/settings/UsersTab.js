@@ -1,5 +1,7 @@
 import React from "react";
 
+import SidePanels from "../../components/SidePanels";
+
 const METHODS_TO_BIND = ["handleNewUserClick"];
 
 export default class UsersTab extends React.Component {
@@ -22,7 +24,6 @@ export default class UsersTab extends React.Component {
   render() {
     return (
       <div>
-        <h3 className="flush">No access.</h3>
         <div className="button-collection">
           <a
             className="button button-success"
@@ -30,6 +31,9 @@ export default class UsersTab extends React.Component {
             + New User
           </a>
         </div>
+        <SidePanels
+          params={this.props.params}
+          openedPage="settings-organization-users" />
       </div>
     );
   }

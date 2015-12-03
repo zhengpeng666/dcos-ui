@@ -22,15 +22,6 @@ describe("User", function () {
     this.instance = new User(userFixture);
   });
 
-  describe("#getPermissions", function () {
-
-    it("returns the permissions it was given", function () {
-      expect(this.instance.getPermissions())
-        .toEqual(this.userFixture.permissions);
-    });
-
-  });
-
   describe("#getGroups", function () {
 
     it("returns an instance of GroupsList", function () {
@@ -42,7 +33,7 @@ describe("User", function () {
       function () {
       let groups = this.instance.getGroups().getItems();
       expect(groups.length)
-        .toEqual(this.userFixture.groups.length);
+        .toEqual(2);
     });
 
     it("returns a GroupsList with the data we provided", function () {
@@ -51,6 +42,69 @@ describe("User", function () {
         .toEqual(this.userFixture.groups[0].group.gid);
       expect(groups[1].get("gid"))
         .toEqual(this.userFixture.groups[1].group.gid);
+    });
+
+  });
+
+  describe("#getGroupCount", function () {
+
+    it("returns the number of groups", function () {
+      expect(this.instance.getGroupCount())
+        .toEqual(2);
+    });
+
+  });
+
+  describe("#getPermissions", function () {
+
+    it("returns the permissions it was given", function () {
+      expect(this.instance.getPermissions())
+        .toEqual(this.userFixture.permissions);
+    });
+
+  });
+
+  describe("#getPermissionCount", function () {
+
+    it("returns the number of groups", function () {
+      expect(this.instance.getPermissionCount()).toEqual(1);
+    });
+
+  });
+
+  describe("#uniquePermissions", function () {
+
+    it("returns an array of services user has permission to", function () {
+      let permissionList = this.instance.uniquePermissions();
+
+      expect(permissionList.length).toEqual(1);
+      expect(permissionList[0].rid).toEqual("service.marathon");
+    });
+
+    it("returns empty array when user has no permissions", function () {
+      let user = new User([]);
+      let permissionList = user.uniquePermissions();
+
+      expect(permissionList).toEqual([]);
+    });
+
+    it("returns unique array when user has duplicate permissions", function () {
+      const rawUser = {
+        uid: "person",
+        permissions: {
+          direct:
+           [ { aclurl: "service-1" },
+             { aclurl: "service-2" },
+             { aclurl: "service-3" } ],
+          groups:
+           [ { aclurl: "service-2" } ]
+        }
+      };
+
+      let user = new User(rawUser);
+      let permissionList = user.uniquePermissions();
+
+      expect(permissionList.length).toEqual(3);
     });
 
   });
