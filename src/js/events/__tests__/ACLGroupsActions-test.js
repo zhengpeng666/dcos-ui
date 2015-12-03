@@ -44,7 +44,7 @@ describe("ACLGroupsActions", function () {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUPS_ERROR);
       });
 
-      this.configuration.error({message: "bar"});
+      this.configuration.error({error: "bar"});
     });
 
     it("calls #json from the RequestUtil", function () {
@@ -95,7 +95,7 @@ describe("ACLGroupsActions", function () {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUP_ERROR);
       });
 
-      this.configuration.error({message: "bar"});
+      this.configuration.error({error: "bar"});
     });
 
     it("dispatches with the correct data when unsucessful", function () {
@@ -105,7 +105,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual("bar");
       });
 
-      this.configuration.error({message: "bar"});
+      this.configuration.error({error: "bar"});
     });
 
     it("dispatches with the groupID when unsucessful", function () {
@@ -115,7 +115,7 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({message: "bar"});
+      this.configuration.error({error: "bar"});
     });
 
   });
@@ -167,7 +167,7 @@ describe("ACLGroupsActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR);
       });
 
-      this.configuration.error({message: "bar"});
+      this.configuration.error({error: "bar"});
     });
 
     it("dispatches with the correct data when unsucessful", function () {
@@ -177,7 +177,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual("bar");
       });
 
-      this.configuration.error({message: "bar"});
+      this.configuration.error({error: "bar"});
     });
 
     it("dispatches with the groupID when unsucessful", function () {
@@ -187,7 +187,7 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({message: "bar"});
+      this.configuration.error({error: "bar"});
     });
 
   });
@@ -239,7 +239,7 @@ describe("ACLGroupsActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR);
       });
 
-      this.configuration.error({message: "bar"});
+      this.configuration.error({error: "bar"});
     });
 
     it("dispatches with the correct data when unsucessful", function () {
@@ -249,7 +249,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual("bar");
       });
 
-      this.configuration.error({message: "bar"});
+      this.configuration.error({error: "bar"});
     });
 
     it("dispatches with the groupID when unsucessful", function () {
@@ -259,7 +259,87 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({message: "bar"});
+      this.configuration.error({error: "bar"});
+    });
+
+  });
+
+  describe("#addUser", function () {
+
+    beforeEach(function () {
+      spyOn(RequestUtil, "json");
+      ACLGroupsActions.addUser("foo", "bar");
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+    });
+
+    it("dispatches the correct action when successful", function () {
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action).toEqual({
+          type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
+          data: {bar: "baz"},
+          userID: "bar",
+          groupID: "foo"
+        });
+      });
+
+      this.configuration.success({bar: "baz"});
+    });
+
+    it("dispatches the correct action when unsucessful", function () {
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action).toEqual({
+          type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
+          data: "bar",
+          userID: "bar",
+          groupID: "foo"
+        });
+      });
+
+      this.configuration.error({error: "bar"});
+    });
+
+  });
+
+  describe("#removeUser", function () {
+
+    beforeEach(function () {
+      spyOn(RequestUtil, "json");
+      ACLGroupsActions.removeUser("foo", "bar");
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+    });
+
+    it("dispatches the correct action when successful", function () {
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action).toEqual({
+          type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
+          data: {bar: "baz"},
+          userID: "bar",
+          groupID: "foo"
+        });
+      });
+
+      this.configuration.success({bar: "baz"});
+    });
+
+    it("dispatches the correct action when unsucessful", function () {
+      let id = AppDispatcher.register(function (payload) {
+        let action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action).toEqual({
+          type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
+          data: "bar",
+          userID: "bar",
+          groupID: "foo"
+        });
+      });
+
+      this.configuration.error({error: "bar"});
     });
 
   });
