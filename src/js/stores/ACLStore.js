@@ -52,7 +52,7 @@ const ACLStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_RESOURCE_ACLS_ERROR:
         ACLStore.emit(
-            EventTypes.ACL_RESOURCE_ACLS_REQUEST_ERROR,
+            EventTypes.ACL_RESOURCE_ACLS_ERROR,
             action.data,
             action.resourceType
           );
@@ -65,7 +65,7 @@ const ACLStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_ERROR:
         ACLStore.emit(
-          EventTypes.ACL_USER_GRANT_ACTION_REQUEST_ERROR,
+          EventTypes.ACL_USER_GRANT_ACTION_ERROR,
           action.data,
           action.triple
         );
@@ -78,7 +78,7 @@ const ACLStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_ERROR:
         ACLStore.emit(
-          EventTypes.ACL_USER_REVOKE_ACTION_REQUEST_ERROR,
+          EventTypes.ACL_USER_REVOKE_ACTION_ERROR,
           action.data,
           action.triple
         );
@@ -91,7 +91,7 @@ const ACLStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_ERROR:
         ACLStore.emit(
-          EventTypes.ACL_GROUP_GRANT_ACTION_REQUEST_ERROR,
+          EventTypes.ACL_GROUP_GRANT_ACTION_ERROR,
           action.data,
           action.triple
         );
@@ -104,7 +104,7 @@ const ACLStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR:
         ACLStore.emit(
-          EventTypes.ACL_GROUP_REVOKE_ACTION_REQUEST_ERROR,
+          EventTypes.ACL_GROUP_REVOKE_ACTION_ERROR,
           action.data,
           action.triple
         );

@@ -87,7 +87,7 @@ describe("ACLStore", function () {
       it("dispatches the correct event upon error", function () {
         var mockedFn = jest.genMockFunction();
         ACLStore.addChangeListener(
-          EventTypes.ACL_RESOURCE_ACLS_REQUEST_ERROR,
+          EventTypes.ACL_RESOURCE_ACLS_ERROR,
           mockedFn
         );
         AppDispatcher.handleServerAction({
@@ -121,7 +121,7 @@ describe("ACLStore", function () {
       it("dispatches the correct event upon error", function () {
         var mockedFn = jest.genMockFunction();
         ACLStore.addChangeListener(
-          EventTypes.ACL_USER_GRANT_ACTION_REQUEST_ERROR,
+          EventTypes.ACL_USER_GRANT_ACTION_ERROR,
           mockedFn
         );
         AppDispatcher.handleServerAction({
@@ -158,7 +158,7 @@ describe("ACLStore", function () {
       it("dispatches the correct event upon error", function () {
         var mockedFn = jest.genMockFunction();
         ACLStore.addChangeListener(
-          EventTypes.ACL_USER_REVOKE_ACTION_REQUEST_ERROR,
+          EventTypes.ACL_USER_REVOKE_ACTION_ERROR,
           mockedFn
         );
         AppDispatcher.handleServerAction({
@@ -195,7 +195,7 @@ describe("ACLStore", function () {
       it("dispatches the correct event upon error", function () {
         var mockedFn = jest.genMockFunction();
         ACLStore.addChangeListener(
-          EventTypes.ACL_GROUP_GRANT_ACTION_REQUEST_ERROR,
+          EventTypes.ACL_GROUP_GRANT_ACTION_ERROR,
           mockedFn
         );
         AppDispatcher.handleServerAction({
@@ -232,7 +232,7 @@ describe("ACLStore", function () {
       it("dispatches the correct event upon error", function () {
         var mockedFn = jest.genMockFunction();
         ACLStore.addChangeListener(
-          EventTypes.ACL_GROUP_REVOKE_ACTION_REQUEST_ERROR,
+          EventTypes.ACL_GROUP_REVOKE_ACTION_ERROR,
           mockedFn
         );
         AppDispatcher.handleServerAction({
