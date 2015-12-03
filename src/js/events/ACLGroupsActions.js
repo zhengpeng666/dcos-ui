@@ -1,3 +1,5 @@
+import _ from "underscore";
+
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "./AppDispatcher";
 import Config from "../config/Config";
@@ -82,6 +84,71 @@ const ACLGroupsActions = {
     });
   },
 
+  addGroup: function (data) {
+    let groupID = data.gid;
+    data = _.omit(data, "gid");
+
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}`,
+      type: "PUT",
+      data,
+      success: function () {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS,
+          groupID
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR,
+          data: e.error,
+          groupID
+        });
+      }
+    });
+  },
+
+  updateGroup: function (groupID, patchData) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}`,
+      type: "PATCH",
+      patchData,
+      success: function () {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS,
+          groupID
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
+          data: e.error,
+          groupID
+        });
+      }
+    });
+  },
+
+  deleteGroup: function (groupID) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}`,
+      type: "DELETE",
+      success: function () {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS,
+          groupID
+        });
+      },
+      error: function (e) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR,
+          data: e.error,
+           groupID
+         });
+      }
+    });
+  },
+
   addUser: function (groupID, userID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}/users/${userID}`,
@@ -127,6 +194,7 @@ const ACLGroupsActions = {
       }
     });
   }
+
 };
 
 if (Config.useFixtures) {
@@ -140,12 +208,14 @@ if (Config.useFixtures) {
       data: groupsFixture
     });
   };
+
   ACLGroupsActions.fetchGroup = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
       data: groupFixture
     });
   };
+
   ACLGroupsActions.fetchGroupPermissions = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
@@ -153,6 +223,7 @@ if (Config.useFixtures) {
       groupID: groupFixture.gid
     });
   };
+
   ACLGroupsActions.fetchGroupUsers = function () {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
@@ -160,6 +231,27 @@ if (Config.useFixtures) {
       groupID: groupFixture.gid
     });
   };
+
+  ACLGroupsActions.addGroup = function () {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS
+    });
+  };
+
+  ACLGroupsActions.updateGroup = function (groupID) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS,
+      groupID
+    });
+  };
+
+  ACLGroupsActions.deleteGroup = function (groupID) {
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS,
+      groupID
+    });
+  };
+
   ACLGroupsActions.addUser = function (groupID, userID) {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
@@ -168,6 +260,7 @@ if (Config.useFixtures) {
       userID
     });
   };
+
   ACLGroupsActions.deleteUser = function (groupID, userID) {
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,

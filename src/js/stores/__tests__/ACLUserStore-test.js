@@ -226,6 +226,20 @@ describe("ACLUserStore", function () {
         });
       });
 
+      it("emits success event with the userID", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_CREATE_SUCCESS,
+          function (userID) {
+            expect(userID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS,
+          userID: "foo"
+        });
+      });
+
       it("emits event after error event is dispatched", function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_CREATE_ERROR,
@@ -236,6 +250,20 @@ describe("ACLUserStore", function () {
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_CREATE_ERROR
+        });
+      });
+
+      it("emits success event with the userID", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_CREATE_ERROR,
+          function (userID) {
+            expect(userID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_CREATE_ERROR,
+          userID: "foo"
         });
       });
 
@@ -258,7 +286,7 @@ describe("ACLUserStore", function () {
 
       it("emits success event with the userID", function () {
         ACLUserStore.addChangeListener(
-          EventTypes.ACL_USER_DELETE_SUCCESS,
+          EventTypes.ACL_USER_UPDATE_SUCCESS,
           function (userID) {
             expect(userID).toEqual("foo");
           }
@@ -285,7 +313,7 @@ describe("ACLUserStore", function () {
 
       it("emits error event with the userID", function () {
         ACLUserStore.addChangeListener(
-          EventTypes.ACL_USER_DELETE_SUCCESS,
+          EventTypes.ACL_USER_UPDATE_SUCCESS,
           function (userID) {
             expect(userID).toEqual("foo");
           }

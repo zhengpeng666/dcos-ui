@@ -213,6 +213,180 @@ describe("ACLGroupStore", function () {
 
     });
 
+    describe("create", function () {
+
+      it("emits event after success event is dispatched", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_CREATE_SUCCESS,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS
+        });
+      });
+
+      it("emits success event with the groupID", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_CREATE_SUCCESS,
+          function (groupID) {
+            expect(groupID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS,
+          groupID: "foo"
+        });
+      });
+
+      it("emits event after error event is dispatched", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_CREATE_ERROR,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR
+        });
+      });
+
+      it("emits error event with the groupID", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_CREATE_ERROR,
+          function (groupID) {
+            expect(groupID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR,
+          groupID: "foo"
+        });
+      });
+
+    });
+
+    describe("update", function () {
+
+      it("emits event after success event is dispatched", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_UPDATE_SUCCESS,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS
+        });
+      });
+
+      it("emits success event with the groupID", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_UPDATE_SUCCESS,
+          function (groupID) {
+            expect(groupID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS,
+          groupID: "foo"
+        });
+      });
+
+      it("emits event after error event is dispatched", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_UPDATE_ERROR,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR
+        });
+      });
+
+      it("emits error event with the groupID", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_UPDATE_SUCCESS,
+          function (groupID) {
+            expect(groupID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
+          groupID: "foo"
+        });
+      });
+
+    });
+
+    describe("delete", function () {
+
+      it("emits event after success event is dispatched", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_DELETE_SUCCESS,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS
+        });
+      });
+
+      it("emits success event with the groupID", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_DELETE_SUCCESS,
+          function (groupID) {
+            expect(groupID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS,
+          groupID: "foo"
+        });
+      });
+
+      it("emits event after error event is dispatched", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_DELETE_ERROR,
+          function () {
+            expect(true).toEqual(true);
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR
+        });
+      });
+
+      it("emits error event with the groupID", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_DELETE_SUCCESS,
+          function (groupID) {
+            expect(groupID).toEqual("foo");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR,
+          groupID: "foo"
+        });
+      });
+
+    });
+
     describe("adding user", function () {
 
       it("emits event after success event is dispatched", function () {
