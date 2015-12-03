@@ -2,8 +2,6 @@ import React from "react";
 
 import SidePanels from "../../components/SidePanels";
 
-export default class UsersTab extends React.Component {
-
 const METHODS_TO_BIND = ["handleNewUserClick"];
 
 export default class UsersTab extends React.Component {
