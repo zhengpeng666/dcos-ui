@@ -87,7 +87,8 @@ export default class UserFormModal extends React.Component {
         onClose={this.props.onClose}
         onSubmit={this.handleNewUserSubmit}
         open={this.props.open}
-        definition={this.getNewUserFormDefinition()} />
+        definition={this.getNewUserFormDefinition()}
+        titleText="Create New Local User" />
     );
   }
 }
