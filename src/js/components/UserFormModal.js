@@ -1,8 +1,8 @@
 import React from "react";
 
+import ACLUserStore from "../stores/ACLUserStore";
 import EventTypes from "../constants/EventTypes";
 import FormModal from "./FormModal";
-import ACLUserStore from "../stores/ACLUserStore";
 
 const METHODS_TO_BIND = [
   "handleNewUserSubmit",
@@ -46,36 +46,36 @@ export default class UserFormModal extends React.Component {
   getNewUserFormDefinition() {
     return [
       {
+        fieldType: "text",
         name: "description",
-        value: "",
-        validation: function () { return true; },
         placeholder: "Full name",
-        fieldType: "text",
         required: true,
-        showLabel: false,
         showError: false,
-        writeType: "input"
+        showLabel: false,
+        writeType: "input",
+        validation: function () { return true; },
+        value: ""
       },
       {
+        fieldType: "text",
         name: "username",
-        value: "",
-        validation: function () { return true; },
         placeholder: "Username",
-        fieldType: "text",
         required: true,
-        showLabel: false,
         showError: false,
-        writeType: "input"
+        showLabel: false,
+        writeType: "input",
+        validation: function () { return true; },
+        value: ""
       },
       {
-        name: "password",
-        value: "",
-        validation: function () { return true; },
-        placeholder: "Password",
         fieldType: "password",
+        name: "password",
+        placeholder: "Password",
         required: true,
         showLabel: false,
-        writeType: "input"
+        writeType: "input",
+        validation: function () { return true; },
+        value: ""
       }
     ];
   }
@@ -83,11 +83,11 @@ export default class UserFormModal extends React.Component {
   render() {
     return (
       <FormModal
+        definition={this.getNewUserFormDefinition()}
         disabled={this.state.disableNewUser}
         onClose={this.props.onClose}
         onSubmit={this.handleNewUserSubmit}
         open={this.props.open}
-        definition={this.getNewUserFormDefinition()}
         titleText="Create New Local User" />
     );
   }
