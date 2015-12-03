@@ -129,6 +129,17 @@ describe("TabsMixin", function () {
       expect(TabsMixin.renderGraultTabView).toHaveBeenCalled();
     });
 
+    it("should remove spaces and call render function", function () {
+      TabsMixin.tabs_tabs = {qux: "Quux Garply"};
+      TabsMixin.state = {currentTab: "qux"};
+      TabsMixin.renderQuuxGarplyTabView = function () {
+        return "test";
+      };
+      spyOn(TabsMixin, "renderQuuxGarplyTabView");
+      TabsMixin.tabs_getTabView();
+      expect(TabsMixin.renderQuuxGarplyTabView).toHaveBeenCalled();
+    });
+
     it("should return result of function when called", function () {
       var result = TabsMixin.tabs_getTabView();
       expect(result).toEqual("test");
