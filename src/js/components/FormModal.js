@@ -104,6 +104,15 @@ export default class FormModal extends React.Component {
   }
 }
 
+FormModal.defaultProps = {
+  disabled: false,
+  onClose: function () {},
+  open: false
+};
+
 FormModal.propTypes = {
-  onClose: React.PropTypes.func.isRequired
+  disabled: React.PropTypes.bool,
+  onClose: React.PropTypes.func.isRequired,
+  open: React.PropTypes.bool,
+  titleText: React.PropTypes.string
 };
