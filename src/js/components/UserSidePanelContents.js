@@ -15,8 +15,8 @@ export default class UserSidePanelContents extends SidePanelContents {
 
       this.tabs_tabs = {
         permissions: "Permissions",
-        details: "Details",
-        membership: "Group Membership"
+        membership: "Group Membership",
+        details: "Details"
       };
 
       this.state = {
