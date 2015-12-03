@@ -81,14 +81,14 @@ describe("User", function () {
       expect(permissionList[0].rid).toEqual("service.marathon");
     });
 
-    it("returns empty list when user has no permissions", function () {
+    it("returns empty array when user has no permissions", function () {
       let user = new User([]);
       let permissionList = user.uniquePermissions();
 
       expect(permissionList).toEqual([]);
     });
 
-    it("returns empty list when user has no permissions", function () {
+    it("returns unique array when user has duplicate permissions", function () {
       const rawUser = {
         uid: "person",
         permissions: {
