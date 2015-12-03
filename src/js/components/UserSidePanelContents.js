@@ -7,6 +7,7 @@ import MesosSummaryStore from "../stores/MesosSummaryStore";
 import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
+import UserSidePanelGroups from "./UserSidePanelGroups";
 
 export default class UserSidePanelContents extends SidePanelContents {
 
@@ -102,7 +103,9 @@ export default class UserSidePanelContents extends SidePanelContents {
     }
 
     renderGroupMembershipTabView() {
-      return null;
+      return (
+        <UserSidePanelGroups userDetails={ACLUserStore.getUser(this.props.itemID)} />
+      );
     }
 
     render() {
