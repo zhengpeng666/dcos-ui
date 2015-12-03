@@ -102,8 +102,7 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
   getNewGroupButton() {
     return (
       <div className="text-align-right">
-        <h3 className="flush">No access.</h3>
-        <div className="button-collection">
+        <div className="button-collection flush-bottom">
           <a
             className="button button-success"
             onClick={this.handleNewGroupClick}>
@@ -151,20 +150,27 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
 
   getTableHeader() {
     return (
-      <div className="groups-table-header row">
+      <div className="groups-table-header row row-flex">
         <div className="column-8">
-          <FilterHeadline
-            onReset={this.resetFilter}
-            name="Groups"
-            currentLength={this.getVisibleGroups().length}
-            totalLength={ACLGroupsStore.get("groups").getItems().length} />
-          <FilterInputText
-            searchString={this.state.searchString}
-            handleFilterChange={this.handleSearchStringChange}
-            inverseStyle={true} />
+          <div className="container container-pod container-pod-short
+            flush-top">
+            <FilterHeadline
+              onReset={this.resetFilter}
+              name="Groups"
+              currentLength={this.getVisibleGroups().length}
+              totalLength={ACLGroupsStore.get("groups").getItems().length} />
+            <FilterInputText
+              className="flush-bottom"
+              searchString={this.state.searchString}
+              handleFilterChange={this.handleSearchStringChange}
+              inverseStyle={true} />
+          </div>
         </div>
-        <div className="column-4">
-          {this.getNewGroupButton()}
+        <div className="column-4 flex-item-align-bottom">
+          <div className="container container-pod container-pod-short
+            container-fluid flush-top flush">
+            {this.getNewGroupButton()}
+          </div>
         </div>
       </div>
     );
