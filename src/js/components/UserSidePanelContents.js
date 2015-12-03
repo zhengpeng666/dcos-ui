@@ -37,7 +37,7 @@ export default class UserSidePanelContents extends SidePanelContents {
 
     getErrorNotice() {
       return (
-        <div className="container-pod">
+        <div className="container container-pod">
           <RequestErrorMsg />
         </div>
       );
