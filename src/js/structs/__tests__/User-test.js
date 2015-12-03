@@ -33,7 +33,7 @@ describe("User", function () {
       function () {
       let groups = this.instance.getGroups().getItems();
       expect(groups.length)
-        .toEqual(this.userFixture.groups.length);
+        .toEqual(2);
     });
 
     it("returns a GroupsList with the data we provided", function () {
@@ -50,7 +50,7 @@ describe("User", function () {
 
     it("returns the number of groups", function () {
       expect(this.instance.getGroupCount())
-        .toEqual(this.userFixture.groups.length);
+        .toEqual(2);
     });
 
   });
@@ -76,8 +76,35 @@ describe("User", function () {
 
     it("returns an array of services user has permission to", function () {
       let permissionList = this.instance.uniquePermissions();
+
       expect(permissionList.length).toEqual(1);
       expect(permissionList[0].rid).toEqual("service.marathon");
+    });
+
+    it("returns empty list when user has no permissions", function () {
+      let user = new User([]);
+      let permissionList = user.uniquePermissions();
+
+      expect(permissionList).toEqual([]);
+    });
+
+    it("returns empty list when user has no permissions", function () {
+      const rawUser = {
+        uid: "person",
+        permissions: {
+          direct:
+           [ { aclurl: "service-1" },
+             { aclurl: "service-2" },
+             { aclurl: "service-3" } ],
+          groups:
+           [ { aclurl: "service-2" } ]
+        }
+      };
+
+      let user = new User(rawUser);
+      let permissionList = user.uniquePermissions();
+
+      expect(permissionList.length).toEqual(3);
     });
 
   });
