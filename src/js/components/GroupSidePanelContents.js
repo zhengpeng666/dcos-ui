@@ -37,7 +37,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
 
     getErrorNotice() {
       return (
-        <div className="container-pod">
+        <div className="container container-pod">
           <RequestErrorMsg />
         </div>
       );
@@ -56,7 +56,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
           {imageTag}
           <div>
             <h1 className="side-panel-content-header-label flush">
-              {group.uid}
+              {group.gid}
             </h1>
             <div>
               {this.getSubHeader(group)}
@@ -67,17 +67,16 @@ export default class GroupSidePanelContents extends SidePanelContents {
     }
 
     getSubHeader(group) {
-      // let groupCount = group.getGroupCount();
-      // let serviceCount = group.getPermissionCount();
-      // let groupLabel = StringUtil.pluralize("group", groupCount);
-      // let serviceLabel = StringUtil.pluralize("Service", serviceCount);
-      //
-      // return (
-      //   <div>
-      //     {`${serviceCount} ${serviceLabel}, Member of ${groupCount} ${groupLabel}`}
-      //   </div>
-      // );
-      return (<div></div>);
+      let userCount = group.getUserCount();
+      let serviceCount = group.getPermissionCount();
+      let userLabel = StringUtil.pluralize("Member", userCount);
+      let serviceLabel = StringUtil.pluralize("Service", serviceCount);
+
+      return (
+        <div>
+          {`${serviceCount} ${serviceLabel}, ${userCount} ${userLabel}`}
+        </div>
+      );
     }
 
     render() {
