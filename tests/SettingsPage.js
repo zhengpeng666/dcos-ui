@@ -128,6 +128,20 @@ describe("Settings Page [05k]", function() {
         .should("contain", "Permissions");
     });
 
+    it("displays the groups that the member belongs to [05x]", function() {
+      cy
+        .get("@sidePanel")
+        .get(".tabs .tab-item-label")
+        .contains("Group Membership")
+        .click();
+
+      cy
+        .get("@sidePanel")
+        .get(".table tbody").should(function ($tbody) {
+          expect($tbody.children().length).to.equal(2);
+        });
+    });
+
   });
 
 });
