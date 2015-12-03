@@ -13,7 +13,14 @@ export default class UserSidePanelContents extends SidePanelContents {
     constructor() {
       super();
 
+      this.tabs_tabs = {
+        permissions: "Permissions",
+        details: "Details",
+        membership: "Group Membership"
+      };
+
       this.state = {
+        currentTab: Object.keys(this.tabs_tabs).shift(),
         fetchedDetailsError: false
       };
 
@@ -79,6 +86,18 @@ export default class UserSidePanelContents extends SidePanelContents {
       );
     }
 
+    renderDetailsTabView() {
+      return null;
+    }
+
+    renderPermissionsTabView() {
+      return null;
+    }
+
+    renderGroupMembershipTabView() {
+      return null;
+    }
+
     render() {
       let user = ACLUserStore.getUser(this.props.itemID);
 
@@ -95,9 +114,13 @@ export default class UserSidePanelContents extends SidePanelContents {
           <div className="container container-fluid container-pod
             container-pod-divider-bottom container-pod-divider-bottom-align-right
             container-pod-divider-inverse container-pod-short-top
-            side-panel-content-header side-panel-section">
+            side-panel-content-header side-panel-section flush-bottom">
             {this.getUserInfo(user)}
+            <ul className="tabs tall list-inline flush-bottom">
+              {this.tabs_getUnroutedTabs()}
+            </ul>
           </div>
+          {this.tabs_getTabView()}
         </div>
       );
     }
