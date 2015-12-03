@@ -1,6 +1,6 @@
-describe("Settings Page [05k]", function() {
+describe("Settings Page [05k]", function () {
 
-  beforeEach(function() {
+  beforeEach(function () {
     cy
       .server()
       .route(/apps/, "fx:marathon-1-task/app")
@@ -12,7 +12,7 @@ describe("Settings Page [05k]", function() {
       .route(/api\/v1\/groups/, "fx:acl/groups-unicode")
       .route(/ui-config/, "fx:config/tracking-disabled")
       .visit("http://localhost:4200/", {
-      onBeforeLoad: function(contentWindow) {
+      onBeforeLoad: function (contentWindow) {
         contentWindow.localStorage.setItem("email", "ui-bot@mesosphere.io");
       }
     });
@@ -20,9 +20,9 @@ describe("Settings Page [05k]", function() {
     cy.get(".sidebar-menu-item").contains("Settings").click();
   });
 
-  context("Groups Table [05l]", function() {
+  context("Groups Table [05l]", function () {
 
-    beforeEach(function() {
+    beforeEach(function () {
       cy.get(".page-header-navigation .tab-item-label").contains("Groups")
         .click();
       cy.get(".groups-table-header input[type='text']").as("filterTextbox");
@@ -30,18 +30,18 @@ describe("Settings Page [05k]", function() {
         .as("tableRows");
     });
 
-    it("routes to the group page [05p]", function() {
+    it("routes to the group page [05p]", function () {
       cy.get(".page-header-navigation .tab-item-label").contains("Groups")
         .click();
       cy.hash().should("match", /groups/);
     });
 
-    it("shows the groups tab as active [05q]", function() {
+    it("shows the groups tab as active [05q]", function () {
       cy.get(".page-header-navigation .active").as("activeTab");
       cy.get("@activeTab").should("contain", "Groups");
     });
 
-    it("hides groups when no groups match the string [05r]", function() {
+    it("hides groups when no groups match the string [05r]", function () {
       cy.get("@filterTextbox").type("foo_bar_baz_qux");
 
       cy.get("@tableRows").should(function ($tableRows) {
@@ -49,7 +49,7 @@ describe("Settings Page [05k]", function() {
       });
     });
 
-    it("displays 'No data' when it has filtered out all groups [05t]", function() {
+    it("displays 'No data' when it has filtered out all groups [05t]", function () {
       cy.get("@tableRows").get("td").as("tableRowCell");
 
       cy.get("@filterTextbox").type("foo_bar_baz_qux");
@@ -59,7 +59,7 @@ describe("Settings Page [05k]", function() {
       });
     });
 
-    it("shows all groups after clearing the filter [05s]", function() {
+    it("shows all groups after clearing the filter [05s]", function () {
       cy.get(".groups-table-header .form-control-group-add-on a")
         .as("clearFilterButton");
 
@@ -71,7 +71,67 @@ describe("Settings Page [05k]", function() {
       });
     });
 
-    it("allows users to filter by unicode characters [05u]", function() {
+    it("allows users to filter by unicode characters [05u]", function () {
+      cy.get("@filterTextbox").type("藍-遙 遥 悠 遼");
+      cy.get("@tableRows").should(function ($tableRows) {
+        expect($tableRows.length).to.equal(1);
+      });
+    });
+
+  });
+
+  context("Users Table [05v]", function () {
+
+    beforeEach(function () {
+      cy.get(".page-header-navigation .tab-item-label").contains("Users")
+        .click();
+      cy.get(".users-table-header input[type='text']").as("filterTextbox");
+      cy.get(".page-content-fill .table tbody tr")
+        .as("tableRows");
+    });
+
+    it("routes to the user page [05x]", function () {
+      cy.get(".page-header-navigation .tab-item-label").contains("Users")
+        .click();
+      cy.hash().should("match", /users/);
+    });
+
+    it("shows the users tab as active [05y]", function () {
+      cy.get(".page-header-navigation .active").as("activeTab");
+      cy.get("@activeTab").should("contain", "Users");
+    });
+
+    it("hides users when no users match the string [05z]", function () {
+      cy.get("@filterTextbox").type("foo_bar_baz_qux");
+
+      cy.get("@tableRows").should(function ($tableRows) {
+        expect($tableRows).length.to.be(1);
+      });
+    });
+
+    it("displays 'No data' when it has filtered out all users [06a]", function () {
+      cy.get("@tableRows").get("td").as("tableRowCell");
+
+      cy.get("@filterTextbox").type("foo_bar_baz_qux");
+
+      cy.get("@tableRowCell").should(function ($tableCell) {
+        expect($tableCell[0].textContent).to.equal("No data");
+      });
+    });
+
+    it("shows all users after clearing the filter [06b]", function () {
+      cy.get(".users-table-header .form-control-group-add-on a")
+        .as("clearFilterButton");
+
+      cy.get("@filterTextbox").type("foo_bar_baz_qux");
+      cy.get("@clearFilterButton").click();
+
+      cy.get("@tableRows").should(function ($tableRows) {
+        expect($tableRows).length.to.be.above(10);
+      });
+    });
+
+    it("allows users to filter by unicode characters [06c]", function () {
       cy.get("@filterTextbox").type("藍-遙 遥 悠 遼");
       cy.get("@tableRows").should(function ($tableRows) {
         expect($tableRows.length).to.equal(1);
