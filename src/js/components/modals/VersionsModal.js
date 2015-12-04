@@ -31,6 +31,7 @@ var VersionsModal = React.createClass({
         onClose={this.onClose}
         open={this.props.open}
         showCloseButton={false}
+        showHeader={true}
         showFooter={false}
         size="large"
         titleClass="modal-header-title text-align-center flush-top

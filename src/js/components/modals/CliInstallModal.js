@@ -105,6 +105,7 @@ var CliInstructionsModal = React.createClass({
         onClose={this.onClose}
         open={this.props.open}
         showCloseButton={false}
+        showHeader={true}
         showFooter={this.props.showFooter}
         subHeader={this.getSubHeader()}
         titleClass="modal-header-title text-align-center flush-top"
