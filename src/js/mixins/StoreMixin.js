@@ -79,6 +79,7 @@ const ListenersDescription = {
     events: {
       success: EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE,
       error: EventTypes.ACL_GROUP_DETAILS_GROUP_ERROR,
+      create: EventTypes.ACL_GROUP_CREATE_SUCCESS,
       permissionsSuccess: EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
       permissionsError: EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
       usersSuccess: EventTypes.ACL_GROUP_DETAILS_USERS_CHANGE,

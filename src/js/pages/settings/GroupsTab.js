@@ -7,6 +7,7 @@ import {Table} from "reactjs-components";
 import ACLGroupsStore from "../../stores/ACLGroupsStore";
 import FilterHeadline from "../../components/FilterHeadline";
 import FilterInputText from "../../components/FilterInputText";
+import GroupFormModal from "../../components/GroupFormModal";
 import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import ResourceTableUtil from "../../utils/ResourceTableUtil";
 import RequestErrorMsg from "../../components/RequestErrorMsg";
@@ -15,6 +16,8 @@ import TableUtil from "../../utils/TableUtil";
 import Util from "../../utils/Util";
 
 const METHODS_TO_BIND = [
+  "handleNewGroupClick",
+  "handleNewGroupClose",
   "handleSearchStringChange",
   "onGroupsSuccess",
   "onGroupsError",
@@ -30,7 +33,11 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
       {name: "groups", events: ["success", "error"]}
     ];
 
-    this.state = {hasError: false, searchString: ""};
+    this.state = {
+      hasError: false,
+      searchString: "",
+      openNewGroupModal: false
+    };
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
@@ -54,6 +61,14 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
 
   handleSearchStringChange(searchString) {
     this.setState({searchString});
+  }
+
+  handleNewGroupClick() {
+    this.setState({openNewGroupModal: true});
+  }
+
+  handleNewGroupClose() {
+    this.setState({openNewGroupModal: false});
   }
 
   getColGroup() {
@@ -82,6 +97,23 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
         heading
       }
     ];
+  }
+
+  getNewGroupButton() {
+    return (
+      <div className="text-align-right">
+        <div className="button-collection flush-bottom">
+          <a
+            className="button button-success"
+            onClick={this.handleNewGroupClick}>
+            + New Group
+          </a>
+        </div>
+        <GroupFormModal
+          open={this.state.openNewGroupModal}
+          onClose={this.handleNewGroupClose}/>
+      </div>
+    );
   }
 
   getLoadingScreen() {
@@ -118,16 +150,28 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
 
   getTableHeader() {
     return (
-      <div className="groups-table-header">
-        <FilterHeadline
-          onReset={this.resetFilter}
-          name="Groups"
-          currentLength={this.getVisibleGroups().length}
-          totalLength={ACLGroupsStore.get("groups").getItems().length} />
-        <FilterInputText
-          searchString={this.state.searchString}
-          handleFilterChange={this.handleSearchStringChange}
-          inverseStyle={true} />
+      <div className="groups-table-header row row-flex">
+        <div className="column-8">
+          <div className="container container-pod container-pod-short
+            flush-top">
+            <FilterHeadline
+              onReset={this.resetFilter}
+              name="Groups"
+              currentLength={this.getVisibleGroups().length}
+              totalLength={ACLGroupsStore.get("groups").getItems().length} />
+            <FilterInputText
+              className="flush-bottom"
+              searchString={this.state.searchString}
+              handleFilterChange={this.handleSearchStringChange}
+              inverseStyle={true} />
+          </div>
+        </div>
+        <div className="column-4 flex-item-align-bottom">
+          <div className="container container-pod container-pod-short
+            container-fluid flush-top flush">
+            {this.getNewGroupButton()}
+          </div>
+        </div>
       </div>
     );
   }

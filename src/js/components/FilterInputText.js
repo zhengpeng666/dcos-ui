@@ -76,8 +76,13 @@ var FilterInputText = React.createClass({
       "focus": this.state.focus
     });
 
+    let formGroupClasses = classNames(
+      "form-group",
+      this.props.className
+    );
+
     return (
-      <div className="form-group">
+      <div className={formGroupClasses}>
         <div className={inputContainerClasses}>
           <span className="form-control-group-add-on form-control-group-add-on-prepend">
             <i className={iconSearchClasses}></i>
