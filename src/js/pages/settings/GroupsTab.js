@@ -19,8 +19,8 @@ const METHODS_TO_BIND = [
   "handleNewGroupClick",
   "handleNewGroupClose",
   "handleSearchStringChange",
-  "onGroupsSuccess",
-  "onGroupsError",
+  "onGroupsStoreSuccess",
+  "onGroupsStoreError",
   "resetFilter"
 ];
 
@@ -49,13 +49,13 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
     ACLGroupsStore.fetchGroups();
   }
 
-  onGroupsSuccess() {
+  onGroupsStoreSuccess() {
     if (this.state.hasError) {
       this.setState({hasError: false});
     }
   }
 
-  onGroupsError() {
+  onGroupsStoreError() {
     this.setState({hasError: true});
   }
 
