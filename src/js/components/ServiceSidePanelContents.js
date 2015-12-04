@@ -228,7 +228,7 @@ export default class ServiceSidePanelContents extends SidePanelContents {
           container-pod-divider-inverse container-pod-short-top flush-bottom
           side-panel-content-header side-panel-section">
           {this.getBasicInfo()}
-          <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
+          <div className="side-panel-content-header-charts container-pod container-pod-short">
             <div className="row">
               {this.getCharts("Service", service)}
             </div>

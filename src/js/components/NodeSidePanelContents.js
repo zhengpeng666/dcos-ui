@@ -95,7 +95,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
       <div className="flex-container-col">
         <div className="side-panel-section side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo(node)}
-          <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
+          <div className="side-panel-content-header-charts container-pod container-pod-short">
             <div className="row">
               {this.getCharts("Node", node)}
             </div>
