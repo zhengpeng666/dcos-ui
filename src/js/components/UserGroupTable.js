@@ -81,7 +81,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
   getColumns() {
     let className = ResourceTableUtil.getClassName;
     let descriptionHeading = ResourceTableUtil.renderHeading({
-      description: "Description"
+      description: "Group Name"
     });
     let propSortFunction = ResourceTableUtil.getPropSortFunction("description");
 
