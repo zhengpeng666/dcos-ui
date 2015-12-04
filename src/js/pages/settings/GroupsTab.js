@@ -32,9 +32,9 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
       openNewGroupModal: false
     };
 
-    METHODS_TO_BIND.forEach(function (method) {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
-    }, this);
+    });
   }
 
   componentDidMount() {

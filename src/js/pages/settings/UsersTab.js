@@ -32,9 +32,9 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
       openNewUserModal: false
     };
 
-    METHODS_TO_BIND.forEach(function (method) {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
-    }, this);
+    });
   }
 
   componentDidMount() {
