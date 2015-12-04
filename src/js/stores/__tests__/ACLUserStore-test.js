@@ -256,7 +256,7 @@ describe("ACLUserStore", function () {
       it("emits success event with the userID", function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_CREATE_ERROR,
-          function (userID) {
+          function (errorMsg, userID) {
             expect(userID).toEqual("foo");
           }
         );
