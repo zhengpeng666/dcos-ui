@@ -80,7 +80,7 @@ describe("Settings Page [05k]", function() {
 
   });
 
-  context.only("User Details Sidepanel [05v]", function() {
+  context("User Details Sidepanel [05v]", function() {
 
     beforeEach(function() {
       cy.visit("http://localhost:4200/#/settings/organization/users/qüis");

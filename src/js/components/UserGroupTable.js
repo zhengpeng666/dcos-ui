@@ -70,7 +70,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
   getColGroup() {
     return (
       <colgroup>
-        <col />
+        <col style={{width: "50%"}} />
         <col />
       </colgroup>
     );
