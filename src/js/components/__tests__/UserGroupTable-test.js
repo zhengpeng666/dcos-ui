@@ -3,7 +3,6 @@ jest.autoMockOff();
 jest.dontMock("../RequestErrorMsg");
 jest.dontMock("../SidePanelContents");
 jest.dontMock("../UserGroupTable");
-jest.dontMock("../../constants/EventTypes");
 jest.dontMock("../../events/ACLUsersActions");
 jest.dontMock("../../events/MesosSummaryActions");
 jest.dontMock("../../mixins/GetSetMixin");
@@ -14,7 +13,6 @@ jest.dontMock("../../stores/ACLUserStore");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../structs/GroupsList");
 jest.dontMock("../../structs/User");
-jest.dontMock("../../utils/JestUtil");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/StringUtil");
@@ -24,9 +22,7 @@ var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var ACLUserStore = require("../../stores/ACLUserStore");
-var JestUtil = require("../../utils/JestUtil");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
-var EventTypes = require("../../constants/EventTypes");
 var UserGroupTable = require("../UserGroupTable");
 var User = require("../../structs/User");
 const userDetailsFixture =

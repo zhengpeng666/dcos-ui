@@ -28,16 +28,19 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     };
 
     this.store_listeners = [
-      {name: "group", events: ["deleteUserSuccess", "deleteUserError", "usersSuccess"]}
+      {
+        name: "group",
+        events: [
+          "deleteUserSuccess",
+          "deleteUserError",
+          "usersSuccess"
+        ]
+      }
     ];
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
-  }
-
-  componentDidMount() {
-    super.componentDidMount();
   }
 
   handleOpenConfirm(group) {
@@ -67,7 +70,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
   getColGroup() {
     return (
       <colgroup>
-        <col style={{width: "50%"}} />
+        <col />
         <col />
       </colgroup>
     );
