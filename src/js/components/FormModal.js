@@ -25,6 +25,10 @@ export default class FormModal extends React.Component {
     this.forceUpdate();
   }
 
+  handleNewButtonClick() {
+    this.triggerSubmit();
+  }
+
   getFooter() {
     let closeButtonClassSet = classNames({
       "button button-large": true,

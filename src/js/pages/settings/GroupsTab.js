@@ -94,7 +94,7 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
         newItemTitle="+ New Group"
         itemId="gid"
         itemName="groups"
-        newItemClicked={this.handleNewGroupClick}
+        handleNewItemClick={this.handleNewGroupClick}
         params={this.props.params} />
     );
   }
