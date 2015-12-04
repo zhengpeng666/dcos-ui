@@ -10,97 +10,97 @@ import StringUtil from "../utils/StringUtil";
 
 export default class GroupSidePanelContents extends SidePanelContents {
 
-    constructor() {
-      super();
+  constructor() {
+    super();
 
-      this.state = {
-        fetchedDetailsError: false
-      };
+    this.state = {
+      fetchedDetailsError: false
+    };
 
-      this.store_listeners = [
-        {name: "summary", events: ["success"], listenAlways: false},
-        {name: "group", events: [ "fetchedDetailsSuccess",
-                                  "fetchedDetailsError" ]}
-      ];
+    this.store_listeners = [
+      {name: "summary", events: ["success"], listenAlways: false},
+      {name: "group", events: [ "fetchedDetailsSuccess",
+                                "fetchedDetailsError" ]}
+    ];
+  }
+
+  componentDidMount() {
+    super.componentDidMount();
+
+    ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
+  }
+
+  onGroupStoreFetchedDetailsError(groupID) {
+    if (groupID === this.props.itemID) {
+      this.setState({fetchedDetailsError: true});
     }
+  }
 
-    componentDidMount() {
-      super.componentDidMount();
+  getErrorNotice() {
+    return (
+      <div className="container container-pod">
+        <RequestErrorMsg />
+      </div>
+    );
+  }
 
-      ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
-    }
+  getGroupInfo(group) {
+    let imageTag = (
+      <div className="side-panel-icon icon icon-large icon-image-container icon-group-container">
+        <img src="./img/layout/icon-group-default-64x64@2x.png" />
+      </div>
+    );
 
-    onGroupStoreFetchedDetailsError(groupID) {
-      if (groupID === this.props.itemID) {
-        this.setState({fetchedDetailsError: true});
-      }
-    }
-
-    getErrorNotice() {
-      return (
-        <div className="container container-pod">
-          <RequestErrorMsg />
-        </div>
-      );
-    }
-
-    getGroupInfo(group) {
-      let imageTag = (
-        <div className="side-panel-icon icon icon-large icon-image-container icon-group-container">
-          <img src="./img/layout/icon-group-default-64x64@2x.png" />
-        </div>
-      );
-
-      return (
-        <div className="side-panel-content-header-details flex-box
-          flex-box-align-vertical-center">
-          {imageTag}
-          <div>
-            <h1 className="side-panel-content-header-label flush">
-              {group.gid}
-            </h1>
-            <div>
-              {this.getSubHeader(group)}
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    getSubHeader(group) {
-      let userCount = group.getUserCount();
-      let serviceCount = group.getPermissionCount();
-      let userLabel = StringUtil.pluralize("Member", userCount);
-      let serviceLabel = StringUtil.pluralize("Service", serviceCount);
-
-      return (
+    return (
+      <div className="side-panel-content-header-details flex-box
+        flex-box-align-vertical-center">
+        {imageTag}
         <div>
-          {`${serviceCount} ${serviceLabel}, ${userCount} ${userLabel}`}
-        </div>
-      );
-    }
-
-    render() {
-      let group = ACLGroupStore.getGroup(this.props.itemID);
-
-      if (this.state.fetchedDetailsError) {
-        return this.getErrorNotice();
-      }
-
-      if (group.get("gid") == null ||
-          !MesosSummaryStore.get("statesProcessed")) {
-        return this.getLoadingScreen();
-      }
-
-      return (
-        <div className="flex-container-col">
-          <div className="container container-fluid container-pod
-            container-pod-divider-bottom container-pod-divider-bottom-align-right
-            container-pod-divider-inverse container-pod-short-top
-            side-panel-content-header side-panel-section">
-            {this.getGroupInfo(group)}
+          <h1 className="side-panel-content-header-label flush">
+            {group.gid}
+          </h1>
+          <div>
+            {this.getSubHeader(group)}
           </div>
         </div>
-      );
+      </div>
+    );
+  }
+
+  getSubHeader(group) {
+    let userCount = group.getUserCount();
+    let serviceCount = group.getPermissionCount();
+    let userLabel = StringUtil.pluralize("Member", userCount);
+    let serviceLabel = StringUtil.pluralize("Service", serviceCount);
+
+    return (
+      <div>
+        {`${serviceCount} ${serviceLabel}, ${userCount} ${userLabel}`}
+      </div>
+    );
+  }
+
+  render() {
+    let group = ACLGroupStore.getGroup(this.props.itemID);
+
+    if (this.state.fetchedDetailsError) {
+      return this.getErrorNotice();
     }
+
+    if (group.get("gid") == null ||
+        !MesosSummaryStore.get("statesProcessed")) {
+      return this.getLoadingScreen();
+    }
+
+    return (
+      <div className="flex-container-col">
+        <div className="container container-fluid container-pod
+          container-pod-divider-bottom container-pod-divider-bottom-align-right
+          container-pod-divider-inverse container-pod-short-top
+          side-panel-content-header side-panel-section">
+          {this.getGroupInfo(group)}
+        </div>
+      </div>
+    );
+  }
 }
