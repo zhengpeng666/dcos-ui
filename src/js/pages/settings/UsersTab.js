@@ -5,6 +5,7 @@ import SidePanels from "../../components/SidePanels";
 const METHODS_TO_BIND = ["handleNewUserClick"];
 
 export default class UsersTab extends React.Component {
+
   constructor() {
     super();
 

@@ -30,6 +30,15 @@ describe("Group", function () {
 
   });
 
+  describe("#getPermissionCount", function () {
+
+    it("returns the number of permissions group has access to", function () {
+      expect(this.instance.getPermissionCount())
+        .toEqual(1);
+    });
+
+  });
+
   describe("#getUsers", function () {
 
     it("returns an instance of UsersList", function () {
@@ -54,4 +63,12 @@ describe("Group", function () {
 
   });
 
+  describe("#getUserCount", function () {
+
+    it("returns the number of users in group", function () {
+      expect(this.instance.getUserCount())
+        .toEqual(2);
+    });
+
+  });
 });

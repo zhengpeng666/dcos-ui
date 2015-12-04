@@ -1,9 +1,9 @@
 jest.dontMock("../SidePanelContents");
-jest.dontMock("../UserSidePanelContents");
+jest.dontMock("../GroupSidePanelContents");
 jest.dontMock("../../events/MesosSummaryActions");
 jest.dontMock("../../stores/MesosSummaryStore");
-jest.dontMock("../../events/ACLUsersActions");
-jest.dontMock("../../stores/ACLUserStore");
+jest.dontMock("../../events/ACLGroupsActions");
+jest.dontMock("../../stores/ACLGroupStore");
 jest.dontMock("../../constants/EventTypes");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../mixins/InternalStorageMixin");
@@ -15,26 +15,26 @@ jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
-jest.dontMock("../../structs/User");
+jest.dontMock("../../structs/Group");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
-var ACLUserStore = require("../../stores/ACLUserStore");
+var ACLGroupStore = require("../../stores/ACLGroupStore");
 var JestUtil = require("../../utils/JestUtil");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var EventTypes = require("../../constants/EventTypes");
-var UserSidePanelContents = require("../UserSidePanelContents");
-var User = require("../../structs/User");
+var GroupSidePanelContents = require("../GroupSidePanelContents");
+var Group = require("../../structs/Group");
 
-var userDetailsFixture =
-  require("../../../../tests/_fixtures/acl/user-with-details.json");
+var groupDetailsFixture =
+  require("../../../../tests/_fixtures/acl/group-with-details.json");
 
-describe("UserSidePanelContents", function () {
+describe("GroupSidePanelContents", function () {
 
   beforeEach(function () {
     this.summaryGet = MesosSummaryStore.get;
-    this.userStoreGetUser = ACLUserStore.getUser;
+    this.groupStoreGetGroup = ACLGroupStore.getGroup;
 
     MesosSummaryStore.get = function (status) {
       if (status === "statesProcessed") {
@@ -42,29 +42,29 @@ describe("UserSidePanelContents", function () {
       }
     };
 
-    ACLUserStore.getUser = function (userID) {
-      if (userID === "unicode") {
-        return new User(userDetailsFixture);
+    ACLGroupStore.getGroup = function (groupID) {
+      if (groupID === "unicode") {
+        return new Group(groupDetailsFixture);
       }
     };
   });
 
   afterEach(function () {
     MesosSummaryStore.get = this.summaryGet;
-    ACLUserStore.getUser = this.userStoreGetUser;
+    ACLGroupStore.getGroup = this.groupStoreGetGroup;
   });
 
   describe("#render", function () {
 
     it("should return error message if fetch error was received", function () {
-      var userID = "unicode";
+      var groupID = "unicode";
 
       var instance = TestUtils.renderIntoDocument(
-        <UserSidePanelContents
-          itemID={userID}/>
+        <GroupSidePanelContents
+          itemID={groupID}/>
       );
 
-      ACLUserStore.emit(EventTypes.ACL_USER_DETAILS_FETCHED_ERROR, userID);
+      ACLGroupStore.emit(EventTypes.ACL_GROUP_DETAILS_FETCHED_ERROR, groupID);
 
       var text = JestUtil.renderAndFindTag(instance.render(), "h3");
       expect(text.getDOMNode().textContent)
@@ -77,11 +77,11 @@ describe("UserSidePanelContents", function () {
           return false;
         }
       };
-      var userID = "unicode";
+      var groupID = "unicode";
 
       var instance = TestUtils.renderIntoDocument(
-        <UserSidePanelContents
-          itemID={userID}/>
+        <GroupSidePanelContents
+          itemID={groupID}/>
       );
 
       var loading = TestUtils.scryRenderedDOMComponentsWithClass(
@@ -92,17 +92,17 @@ describe("UserSidePanelContents", function () {
       expect(loading).toEqual({});
     });
 
-    it("should not return error message or loading screen if user is found",
+    it("should not return error message or loading screen if group is found",
       function () {
-        var userID = "unicode";
+        var groupID = "unicode";
 
         var instance = TestUtils.renderIntoDocument(
-          <UserSidePanelContents
-            itemID={userID}/>
+          <GroupSidePanelContents
+            itemID={groupID}/>
         );
 
         var text = JestUtil.renderAndFindTag(instance.render(), "h1");
-        expect(text.getDOMNode().textContent).toEqual("藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe");
+        expect(text.getDOMNode().textContent).toEqual("藍-遙 遥 悠 遼 Größe");
       }
     );
 

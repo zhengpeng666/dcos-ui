@@ -25,8 +25,15 @@ export default class UserSidePanelContents extends SidePanelContents {
       };
 
       this.store_listeners = [
-        {name: "summary", events: ["success"], listenAlways: false},
-        {name: "user", events: ["fetchedDetailsSuccess", "fetchedDetailsError"]}
+        {
+          name: "summary",
+          events: ["success"], 
+          listenAlways: false
+        },
+        {
+          name: "user",
+          events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
+        }
       ];
     }
 
@@ -63,7 +70,7 @@ export default class UserSidePanelContents extends SidePanelContents {
           {imageTag}
           <div>
             <h1 className="side-panel-content-header-label flush">
-              {user.uid}
+              {user.description}
             </h1>
             <div>
               {this.getSubHeader(user)}
@@ -105,7 +112,8 @@ export default class UserSidePanelContents extends SidePanelContents {
         return this.getErrorNotice();
       }
 
-      if (user.get("uid") == null || !MesosSummaryStore.get("statesProcessed")) {
+      if (user.get("uid") == null ||
+          !MesosSummaryStore.get("statesProcessed")) {
         return this.getLoadingScreen();
       }
 
