@@ -3,7 +3,6 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLUsersStore from "../../stores/ACLUsersStore";
-
 import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import OrganizationTab from "./OrganizationTab";
 import RequestErrorMsg from "../../components/RequestErrorMsg";

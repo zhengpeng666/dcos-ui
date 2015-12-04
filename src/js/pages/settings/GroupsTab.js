@@ -4,7 +4,6 @@ import React from "react";
 
 import ACLGroupsStore from "../../stores/ACLGroupsStore";
 import GroupFormModal from "../../components/GroupFormModal";
-
 import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import OrganizationTab from "./OrganizationTab";
 import RequestErrorMsg from "../../components/RequestErrorMsg";
