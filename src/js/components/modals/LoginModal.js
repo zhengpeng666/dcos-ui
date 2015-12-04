@@ -83,6 +83,7 @@ var LoginModal = React.createClass({
         modalClassName="login-modal"
         open={this.props.open}
         showCloseButton={false}
+        showHeader={true}
         showFooter={true}
         subHeader={this.getSubHeader()}
         titleClass="modal-header-title text-align-center flush-top"

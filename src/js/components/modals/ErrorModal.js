@@ -23,6 +23,7 @@ var ErrorModal = React.createClass({
         onClose={this.onClose}
         open={this.props.open}
         showCloseButton={false}
+        showHeader={true}
         showFooter={false}
         subHeader=""
         titleClass="modal-header-title text-align-center flush-top flush-bottom"
