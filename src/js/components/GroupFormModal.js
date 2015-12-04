@@ -9,7 +9,8 @@ import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleNewGroupSubmit",
-  "onGroupStoreCreate"
+  "onGroupStoreCreate",
+  "onGroupStoreCreateError"
 ];
 
 export default class GroupFormModal extends Util.mixin(StoreMixin) {
@@ -17,11 +18,15 @@ export default class GroupFormModal extends Util.mixin(StoreMixin) {
     super();
 
     this.state = {
-      disableNewGroup: false
+      disableNewGroup: false,
+      errorMsg: false
     };
 
     this.store_listeners = [
-      {name: "group", events: ["create"], listenAlways: false}
+      {
+        name: "group",
+        events: ["create", "createError"]
+      }
     ];
 
     METHODS_TO_BIND.forEach((method) => {
@@ -32,6 +37,13 @@ export default class GroupFormModal extends Util.mixin(StoreMixin) {
   onGroupStoreCreate() {
     this.setState({disableNewGroup: false});
     this.props.onClose();
+  }
+
+  onGroupStoreCreateError(errorMsg) {
+    this.setState({
+      disableNewGroup: false,
+      errorMsg
+    });
   }
 
   handleNewGroupSubmit(model) {
@@ -46,7 +58,7 @@ export default class GroupFormModal extends Util.mixin(StoreMixin) {
         name: "description",
         placeholder: "Group name",
         required: true,
-        showError: false,
+        showError: this.state.errorMsg,
         showLabel: false,
         writeType: "input",
         validation: function () { return true; },
