@@ -143,8 +143,8 @@ const ACLGroupsActions = {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR,
           data: e.error,
-           groupID
-         });
+          groupID
+        });
       }
     });
   },
@@ -153,10 +153,9 @@ const ACLGroupsActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}/users/${userID}`,
       type: "PUT",
-      success: function (response) {
+      success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
-          data: response,
           groupID,
           userID
         });
@@ -176,10 +175,9 @@ const ACLGroupsActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}/users/${userID}`,
       type: "DELETE",
-      success: function (response) {
+      success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
-          data: response,
           groupID,
           userID
         });
@@ -202,73 +200,31 @@ if (Config.useFixtures) {
   let groupDetailsFixture = require("json!../../../tests/_fixtures/acl/group-with-details.json");
   let groupsFixture = require("json!../../../tests/_fixtures/acl/groups-unicode.json");
 
-  ACLGroupsActions.fetch = function () {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
-      data: groupsFixture
-    });
+  if (!global.actionTypes) {
+    global.actionTypes = {};
+  }
+
+  global.actionTypes.ACLGroupsActions = {
+    fetch: {event: "success", success: {response: groupsFixture}},
+    fetchGroup: {event: "success", success: {response: groupFixture}},
+    fetchGroupPermissions: {event: "success", success: {
+      response: groupDetailsFixture.permissions
+    }},
+    fetchGroupUsers: {event: "success", success: {
+      response: groupDetailsFixture.users
+    }},
+    addGroup: {event: "success"},
+    updateGroup: {event: "success"},
+    deleteGroup: {event: "success"},
+    addUser: {event: "success"},
+    deleteUser: {event: "success"}
   };
 
-  ACLGroupsActions.fetchGroup = function () {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
-      data: groupFixture
-    });
-  };
-
-  ACLGroupsActions.fetchGroupPermissions = function () {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
-      data: groupDetailsFixture.permissions,
-      groupID: groupFixture.gid
-    });
-  };
-
-  ACLGroupsActions.fetchGroupUsers = function () {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
-      data: groupDetailsFixture.users,
-      groupID: groupFixture.gid
-    });
-  };
-
-  ACLGroupsActions.addGroup = function () {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS
-    });
-  };
-
-  ACLGroupsActions.updateGroup = function (groupID) {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS,
-      groupID
-    });
-  };
-
-  ACLGroupsActions.deleteGroup = function (groupID) {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS,
-      groupID
-    });
-  };
-
-  ACLGroupsActions.addUser = function (groupID, userID) {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
-      data: groupDetailsFixture.permissions,
-      groupID,
-      userID
-    });
-  };
-
-  ACLGroupsActions.deleteUser = function (groupID, userID) {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
-      data: groupDetailsFixture.users,
-      groupID,
-      userID
-    });
-  };
+  Object.keys(global.actionTypes.ACLGroupsActions).forEach(function (method) {
+    ACLGroupsActions[method] = RequestUtil.stubRequest(
+      ACLGroupsActions, "ACLGroupsActions", method
+    );
+  });
 }
 
 export default ACLGroupsActions;

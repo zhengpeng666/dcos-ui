@@ -493,7 +493,6 @@ describe("ACLGroupsActions", function () {
         AppDispatcher.unregister(id);
         expect(action).toEqual({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
-          data: {bar: "baz"},
           userID: "bar",
           groupID: "foo"
         });
@@ -533,7 +532,6 @@ describe("ACLGroupsActions", function () {
         AppDispatcher.unregister(id);
         expect(action).toEqual({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
-          data: {bar: "baz"},
           userID: "bar",
           groupID: "foo"
         });
