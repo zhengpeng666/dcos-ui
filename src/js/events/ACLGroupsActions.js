@@ -171,7 +171,7 @@ const ACLGroupsActions = {
     });
   },
 
-  removeUser: function (groupID, userID) {
+  deleteUser: function (groupID, userID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}/users/${userID}`,
       type: "DELETE",
