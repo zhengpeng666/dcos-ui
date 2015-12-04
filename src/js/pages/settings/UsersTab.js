@@ -20,7 +20,7 @@ const METHODS_TO_BIND = [
 
 export default class UsersTab extends Util.mixin(StoreMixin) {
   constructor() {
-    super(arguments);
+    super(...arguments);
 
     this.store_listeners = [
       {name: "marathon", events: ["success"]},
