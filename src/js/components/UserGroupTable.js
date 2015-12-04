@@ -17,7 +17,7 @@ const METHODS_TO_BIND = [
   "renderButton"
 ];
 
-export default class UserSidePanelGroups extends Util.mixin(StoreMixin) {
+export default class UserGroupTable extends Util.mixin(StoreMixin) {
   constructor() {
     super();
 
