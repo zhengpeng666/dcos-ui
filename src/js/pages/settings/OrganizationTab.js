@@ -7,7 +7,6 @@ import {Table} from "reactjs-components";
 import FilterHeadline from "../../components/FilterHeadline";
 import FilterInputText from "../../components/FilterInputText";
 import ResourceTableUtil from "../../utils/ResourceTableUtil";
-import SidePanels from "../../components/SidePanels";
 import StringUtil from "../../utils/StringUtil";
 import TableUtil from "../../utils/TableUtil";
 
@@ -122,9 +121,6 @@ export default class OrganizationTab extends React.Component {
             transition={false}
             useScrollTable={false} />
         </div>
-        <SidePanels
-          params={this.props.params}
-          openedPage={`settings-organization-${itemName}`} />
       </div>
     );
   }

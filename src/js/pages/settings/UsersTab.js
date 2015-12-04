@@ -98,8 +98,7 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
         newItemTitle="+ New User"
         itemId="uid"
         itemName="users"
-        newItemClicked={this.handleNewUserClick}
-        params={this.props.params} />
+        newItemClicked={this.handleNewUserClick} />
     );
   }
 
