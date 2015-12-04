@@ -87,15 +87,12 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
   }
 
   render() {
-    let props = {
-      currentTab: this.state.currentTab
-    };
 
     return (
       <Page
         title={this.getTitle()}
         navigation={this.getNavigation()}>
-        <RouteHandler {...props} />
+        <RouteHandler currentTab={this.state.currentTab} />
       </Page>
     );
   }
