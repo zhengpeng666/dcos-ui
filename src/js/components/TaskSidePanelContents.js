@@ -4,7 +4,6 @@ const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
 import SidePanelContents from "./SidePanelContents";
-import HistoryStore from "../stores/HistoryStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import ResourceTypes from "../constants/ResourceTypes";
@@ -51,37 +50,6 @@ export default class TaskSidePanelContents extends SidePanelContents {
         this.tabs_tabs = _.clone(TABS);
       }
     }
-  }
-
-  componentDidUpdate() {
-    // Next tick so that the history actually updates correctly
-    setTimeout(() => {
-      this.internalStorage_update({
-        prevHistoryPath: HistoryStore.getHistoryAt(-1)
-      });
-    });
-  }
-
-  handlePanelClose() {
-    var prevPath = this.internalStorage_get().prevHistoryPath;
-
-    if (prevPath == null) {
-      return super.handlePanelClose();
-    }
-
-    this.context.router.transitionTo(prevPath);
-  }
-
-  getHeader() {
-    return (
-      <div className="side-panel-header-actions side-panel-header-actions-primary">
-        <span className="side-panel-header-action"
-          onClick={this.handlePanelClose}>
-          <i className="icon icon-sprite icon-sprite-small icon-back icon-sprite-small-white"></i>
-          Back
-        </span>
-      </div>
-    );
   }
 
   getResources(task) {
