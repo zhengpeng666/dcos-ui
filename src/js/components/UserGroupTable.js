@@ -118,9 +118,6 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
 
     let userName = userDetails.description;
     let error = null;
-    let copy = (
-      <p>{`Are you sure you want to remove ${userName} from ${groupLabel}?`}</p>
-    );
 
     if (state.userUpdateError != null) {
       error = (
@@ -130,7 +127,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
 
     return (
       <div className="container-pod text-align-center">
-        {copy}
+        <p>{`Are you sure you want to remove ${userName} from ${groupLabel}?`}</p>
         {error}
       </div>
     );
