@@ -12,7 +12,7 @@ const ACLUsersStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    users: []
+    users: new UsersList()
   },
 
   addChangeListener: function (eventName, callback) {
