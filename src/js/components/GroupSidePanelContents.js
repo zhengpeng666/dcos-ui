@@ -18,9 +18,15 @@ export default class GroupSidePanelContents extends SidePanelContents {
     };
 
     this.store_listeners = [
-      {name: "summary", events: ["success"], listenAlways: false},
-      {name: "group", events: [ "fetchedDetailsSuccess",
-                                "fetchedDetailsError" ]}
+      {
+        name: "summary",
+        events: ["success"],
+        listenAlways: false
+      },
+      {
+        name: "group",
+        events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
+      }
     ];
   }
 
