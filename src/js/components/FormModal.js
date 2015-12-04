@@ -4,7 +4,7 @@ import React from "react";
 
 import Form from "./Form";
 
-const METHODS_TO_BIND = ["getTriggerSubmit"];
+const METHODS_TO_BIND = ["getTriggerSubmit", "handleTriggerSubmit"];
 
 export default class FormModal extends React.Component {
   constructor() {
@@ -14,6 +14,10 @@ export default class FormModal extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+  }
+
+  handleTriggerSubmit() {
+    this.triggerSubmit();
   }
 
   getTriggerSubmit(trigger) {
@@ -43,7 +47,7 @@ export default class FormModal extends React.Component {
           </a>
           <a
             className={createButtonClassSet}
-            onClick={this.triggerSubmit}>Create</a>
+            onClick={this.handleTriggerSubmit}>Create</a>
         </div>
       </div>
     );
@@ -95,6 +99,7 @@ export default class FormModal extends React.Component {
         showCloseButton={false}
         showHeader={true}
         showFooter={true}
+        showHeader={true}
         footer={this.getFooter()}
         titleClass="modal-header-title text-align-center flush-top
           flush-bottom"

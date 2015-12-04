@@ -212,7 +212,9 @@ var ACLUserStore = Store.createStore({
         ACLUserStore.emit(EventTypes.ACL_USER_CREATE_SUCCESS, action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_CREATE_ERROR:
-        ACLUserStore.emit(EventTypes.ACL_USER_CREATE_ERROR, action.userID);
+        ACLUserStore.emit(
+          EventTypes.ACL_USER_CREATE_ERROR, action.data, action.userID
+        );
         break;
       case ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS:
         ACLUserStore
