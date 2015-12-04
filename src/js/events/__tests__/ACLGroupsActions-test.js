@@ -518,11 +518,11 @@ describe("ACLGroupsActions", function () {
 
   });
 
-  describe("#removeUser", function () {
+  describe("#deleteUser", function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, "json");
-      ACLGroupsActions.removeUser("foo", "bar");
+      ACLGroupsActions.deleteUser("foo", "bar");
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 

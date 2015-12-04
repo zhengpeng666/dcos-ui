@@ -253,7 +253,7 @@ let ACLGroupStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS:
         ACLGroupStore.emit(
-          EventTypes.ACL_GROUP_USERS_CHANGED,
+          EventTypes.ACL_GROUP_REMOVE_USER_SUCCESS,
           action.groupID,
           action.userID,
           action.data
