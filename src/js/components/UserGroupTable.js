@@ -24,6 +24,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     this.state = {
       groupID: null,
       openConfirm: false,
+      pendingRequest: false,
       userUpdateError: null
     };
 
@@ -53,6 +54,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
 
   handleButtonConfirm() {
     ACLGroupStore.deleteUser(this.state.groupID, this.props.userID);
+    this.setState({pendingRequest: true});
   }
 
   handleButtonCancel() {
@@ -60,11 +62,11 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
   }
 
   onGroupStoreDeleteUserError(groupID, userID, error) {
-    this.setState({userUpdateError: error});
+    this.setState({pendingRequest: false, userUpdateError: error});
   }
 
   onGroupStoreDeleteUserSuccess() {
-    this.setState({groupID: null, openConfirm: false});
+    this.setState({groupID: null, openConfirm: false, pendingRequest: false});
   }
 
   getColGroup() {
@@ -154,10 +156,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     let groupData = userDetails.groups.map(function (group) {
       return group.group;
     });
-    let modalDisabled = false;
-    if (this.state.userUpdateError != null) {
-      modalDisabled = true;
-    }
+    let modalDisabled = this.state.pendingRequest;
 
     return (
       <div>
