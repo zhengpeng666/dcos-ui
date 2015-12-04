@@ -156,12 +156,11 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     let groupData = userDetails.groups.map(function (group) {
       return group.group;
     });
-    let modalDisabled = this.state.pendingRequest;
 
     return (
       <div>
         <Confirm
-          disabled={modalDisabled}
+          disabled={this.state.pendingRequest}
           footerClass="modal-footer container container-pod container-pod-fluid"
           open={this.state.openConfirm}
           onClose={this.handleButtonCancel}
