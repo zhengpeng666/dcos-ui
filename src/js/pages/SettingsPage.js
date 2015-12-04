@@ -87,20 +87,9 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
   }
 
   render() {
-    // let itemName = this.tabs_tabs[this.state.currentTab].toLowerCase();
     let props = {
       currentTab: this.state.currentTab
     };
-
-    // if (itemName === "users") {
-    //   props.id = "uid";
-    //   props.newItemTitle = "+ New User";
-    // }
-
-    // if (itemName === "groups") {
-    //   props.id = "gid";
-    //   props.newItemTitle = "+ New Group";
-    // }
 
     return (
       <Page
