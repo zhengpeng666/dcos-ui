@@ -102,7 +102,7 @@ describe("UserSidePanelContents", function () {
         );
 
         var text = JestUtil.renderAndFindTag(instance.render(), "h1");
-        expect(text.getDOMNode().textContent).toEqual("qüis");
+        expect(text.getDOMNode().textContent).toEqual("藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe");
       }
     );
 

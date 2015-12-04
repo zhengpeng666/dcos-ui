@@ -102,7 +102,7 @@ describe("GroupSidePanelContents", function () {
         );
 
         var text = JestUtil.renderAndFindTag(instance.render(), "h1");
-        expect(text.getDOMNode().textContent).toEqual("ölis");
+        expect(text.getDOMNode().textContent).toEqual("藍-遙 遥 悠 遼 Größe");
       }
     );
 
