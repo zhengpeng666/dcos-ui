@@ -1,15 +1,18 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
+/* eslint-enable no-unused-vars */
 
-import EventTypes from "../constants/EventTypes";
-import FormModal from "./FormModal";
 import ACLGroupStore from "../stores/ACLGroupStore";
+import FormModal from "./FormModal";
+import StoreMixin from "../mixins/StoreMixin";
+import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleNewGroupSubmit",
-  "handleGroupCreation"
+  "onGroupStoreCreate"
 ];
 
-export default class GroupFormModal extends React.Component {
+export default class GroupFormModal extends Util.mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -17,44 +20,37 @@ export default class GroupFormModal extends React.Component {
       disableNewGroup: false
     };
 
+    this.store_listeners = [
+      {name: "group", events: ["create"], listenAlways: false}
+    ];
+
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  handleGroupCreation() {
-    ACLGroupStore.removeChangeListener(
-      EventTypes.ACL_GROUP_CREATE_SUCCESS,
-      this.handleGroupCreation
-    );
-
+  onGroupStoreCreate() {
     this.setState({disableNewGroup: false});
     this.props.onClose();
   }
 
   handleNewGroupSubmit(model) {
     this.setState({disableNewGroup: true});
-
-    ACLGroupStore.addChangeListener(
-      EventTypes.ACL_GROUP_CREATE_SUCCESS,
-      this.handleGroupCreation
-    );
-
     ACLGroupStore.addGroup(model);
   }
 
   getNewGroupFormDefinition() {
     return [
       {
-        name: "description",
-        value: "",
-        validation: function () { return true; },
-        placeholder: "Group name",
         fieldType: "text",
+        name: "description",
+        placeholder: "Group name",
         required: true,
-        showLabel: false,
         showError: false,
-        writeType: "input"
+        showLabel: false,
+        writeType: "input",
+        validation: function () { return true; },
+        value: ""
       }
     ];
   }
