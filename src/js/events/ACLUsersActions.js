@@ -157,55 +157,29 @@ if (Config.useFixtures) {
   let userDetailsFixture =
     require("json!../../../tests/_fixtures/acl/user-with-details.json");
 
-  ACLUsersActions.fetch = function () {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_USERS_SUCCESS,
-      data: usersFixture
-    });
+  if (!global.actionTypes) {
+    global.actionTypes = {};
+  }
+
+  global.actionTypes.ACLUsersActions = {
+    fetch: {event: "success", success: {response: usersFixture}},
+    fetchUser: {event: "success", success: {response: userFixture}},
+    fetchUserGroups: {event: "success", success: {
+      response: userDetailsFixture.groups
+    }},
+    fetchUserPermissions: {event: "success", success: {
+      response: userDetailsFixture.permissions
+    }},
+    addUser: {event: "success"},
+    updateUser: {event: "success"},
+    deleteUser: {event: "success"}
   };
 
-  ACLUsersActions.fetchUser = function () {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_USER_SUCCESS,
-      data: userFixture
-    });
-  };
-
-  ACLUsersActions.fetchUserGroups = function () {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS,
-      data: userDetailsFixture.groups,
-      userID: userFixture.uid
-    });
-  };
-
-  ACLUsersActions.fetchUserPermissions = function () {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS,
-      data: userDetailsFixture.permissions,
-      userID: userFixture.uid
-    });
-  };
-
-  ACLUsersActions.addUser = function () {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS
-    });
-  };
-
-  ACLUsersActions.updateUser = function (userID) {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS,
-      userID
-    });
-  };
-
-  ACLUsersActions.deleteUser = function (userID) {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS,
-      userID
-    });
-  };
+  Object.keys(global.actionTypes.ACLUsersActions).forEach(function (method) {
+    ACLUsersActions[method] = RequestUtil.stubRequest(
+      ACLUsersActions, "ACLUsersActions", method
+    );
+  });
 }
 
 export default ACLUsersActions;

@@ -111,46 +111,25 @@ if (Config.useFixtures) {
   let aclsFixture =
     require("json!../../../tests/_fixtures/acl/acls-unicode.json");
 
-  ACLActions.fetchACLsForResource = function (resourceType) {
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
-      data: aclsFixture,
-      resourceType
-    });
+  if (!global.actionTypes) {
+    global.actionTypes = {};
+  }
+
+  global.actionTypes.ACLActions = {
+    fetchACLsForResource: {event: "success", success: {
+      response: aclsFixture
+    }},
+    grantUserActionToResource: {event: "success"},
+    revokeUserActionToResource: {event: "success"},
+    grantGroupActionToResource: {event: "success"},
+    revokeGroupActionToResource: {event: "success"}
   };
 
-  ACLActions.grantUserActionToResource =
-    function (userID, action, resourceID) {
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
-        triple: {userID, action, resourceID}
-      });
-    };
-
-  ACLActions.revokeUserActionToResource =
-    function (userID, action, resourceID) {
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
-        triple: {userID, action, resourceID}
-      });
-    };
-
-  ACLActions.grantGroupActionToResource =
-    function (groupID, action, resourceID) {
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
-        triple: {groupID, action, resourceID}
-      });
-    };
-
-  ACLActions.revokeGroupActionToResource =
-    function (groupID, action, resourceID) {
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
-        triple: {groupID, action, resourceID}
-      });
-    };
-
+  Object.keys(global.actionTypes.ACLActions).forEach(function (method) {
+    ACLActions[method] = RequestUtil.stubRequest(
+      ACLActions, "ACLActions", method
+    );
+  });
 }
 
 export default ACLActions;

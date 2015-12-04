@@ -90,6 +90,37 @@ var RequestUtil = {
       return callback.apply(options.context, arguments);
       /* eslint-enable consistent-return */
     };
+  },
+
+  stubRequest: function (actionsHash, actionsHashName, methodName) {
+    let originalFunction = actionsHash[methodName];
+
+    return function () {
+      let requestUtilJSON = RequestUtil.json;
+      let configuration = null;
+      let methodConfig = global.actionTypes[actionsHashName][methodName];
+
+      RequestUtil.json = function (object) {
+        configuration = object;
+      };
+
+      let eventType = methodConfig.event;
+      // Setup configuration
+      originalFunction.apply(actionsHash, arguments);
+
+      // Restore request Util
+      RequestUtil.json = requestUtilJSON;
+
+      let response = {};
+
+      if (methodConfig[eventType] && methodConfig[eventType].response) {
+        response = methodConfig[eventType].response;
+      } else if (eventType === "error") {
+        response = {error: "Some generic error"};
+      }
+
+      configuration[eventType](response);
+    };
   }
 };
 
