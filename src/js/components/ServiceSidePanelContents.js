@@ -125,7 +125,7 @@ export default class ServiceSidePanelContents extends SidePanelContents {
     // We are not using react-router's Link tag due to reactjs-component's
     // Portal going outside of React's render tree.
     return (
-      <div className="side-panel-content-header-actions container-pod container-pod-short">
+      <div className="side-panel-content-header-actions container-pod container-pod-short flush-top">
         <div className="button-collection flush-bottom">
           <a className="button button-large button-primary"
             onClick={this.handleOpenServiceButtonClick}>
@@ -228,7 +228,7 @@ export default class ServiceSidePanelContents extends SidePanelContents {
           container-pod-divider-inverse container-pod-short-top flush-bottom
           side-panel-content-header side-panel-section">
           {this.getBasicInfo()}
-          <div className="side-panel-content-header-charts container-pod container-pod-short-top flush-bottom">
+          <div className="side-panel-content-header-charts container-pod container-pod-short">
             <div className="row">
               {this.getCharts("Service", service)}
             </div>
