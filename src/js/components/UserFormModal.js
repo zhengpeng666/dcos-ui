@@ -1,15 +1,18 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
+/* eslint-enable no-unused-vars */
 
 import ACLUserStore from "../stores/ACLUserStore";
-import EventTypes from "../constants/EventTypes";
 import FormModal from "./FormModal";
+import Util from "../utils/Util";
+import StoreMixin from "../mixins/StoreMixin";
 
 const METHODS_TO_BIND = [
   "handleNewUserSubmit",
-  "handleUserCreation"
+  "onUserStoreCreateSuccess"
 ];
 
-export default class UserFormModal extends React.Component {
+export default class UserFormModal extends Util.mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -17,29 +20,22 @@ export default class UserFormModal extends React.Component {
       disableNewUser: false
     };
 
+    this.store_listeners = [
+      {name: "user", events: ["createSuccess"], listenAlways: false}
+    ];
+
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  handleUserCreation() {
-    ACLUserStore.removeChangeListener(
-      EventTypes.ACL_USER_CREATE_SUCCESS,
-      this.handleUserCreation
-    );
-
+  onUserStoreCreateSuccess() {
     this.setState({disableNewUser: false});
     this.props.onClose();
   }
 
   handleNewUserSubmit(model) {
     this.setState({disableNewUser: true});
-
-    ACLUserStore.addChangeListener(
-      EventTypes.ACL_USER_CREATE_SUCCESS,
-      this.handleUserCreation
-    );
-
     ACLUserStore.addUser(model);
   }
 
