@@ -130,17 +130,33 @@ describe("Settings Page [05k]", function() {
 
     context("Group Membership [05z]", function() {
 
-      it("displays the groups that the member belongs to [05x]", function() {
+      beforeEach(function () {
         cy
           .get("@sidePanel")
           .get(".tabs .tab-item-label")
           .contains("Group Membership")
           .click();
+      });
 
+      it("displays the groups that the member belongs to [05x]", function() {
         cy
           .get("@sidePanel")
-          .get(".table tbody").should(function ($tbody) {
+          .get(".table tbody")
+          .should(function ($tbody) {
             expect($tbody.children().length).to.equal(2);
+          });
+      });
+
+      it("displays the confirmation modal when clicking remove [060]", function() {
+        cy
+          .get("@sidePanel")
+          .get(".table tbody tr:first-child button")
+          .click();
+
+        cy
+          .get(".confirm-modal")
+          .should(function ($modal) {
+            expect($modal.length).to.equal(1);
           });
       });
 
