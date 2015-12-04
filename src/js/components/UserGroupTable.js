@@ -1,7 +1,7 @@
+import {Confirm, Table} from "reactjs-components";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
-import {Confirm, Table} from "reactjs-components";
 
 import ACLGroupStore from "../stores/ACLGroupStore";
 import ACLUserStore from "../stores/ACLUserStore";
