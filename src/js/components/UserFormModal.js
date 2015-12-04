@@ -4,8 +4,8 @@ import React from "react";
 
 import ACLUserStore from "../stores/ACLUserStore";
 import FormModal from "./FormModal";
-import Util from "../utils/Util";
 import StoreMixin from "../mixins/StoreMixin";
+import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleNewUserSubmit",
