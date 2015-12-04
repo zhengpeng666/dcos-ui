@@ -24,8 +24,7 @@ export default class UserFormModal extends Util.mixin(StoreMixin) {
     this.store_listeners = [
       {
         name: "user",
-        events: ["createSuccess", "createError"],
-        listenAlways: false
+        events: ["createSuccess", "createError"]
       }
     ];
 
