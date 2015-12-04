@@ -13,7 +13,13 @@ export default class GroupSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
+    this.tabs_tabs = {
+      permissions: "Permissions",
+      members: "Members"
+    };
+
     this.state = {
+      currentTab: Object.keys(this.tabs_tabs).shift(),
       fetchedDetailsError: false
     };
 
@@ -86,6 +92,14 @@ export default class GroupSidePanelContents extends SidePanelContents {
     );
   }
 
+  renderPermissionsTabView() {
+    return null;
+  }
+
+  renderMembersView() {
+    return null;
+  }
+
   render() {
     let group = ACLGroupStore.getGroup(this.props.itemID);
 
@@ -103,9 +117,13 @@ export default class GroupSidePanelContents extends SidePanelContents {
         <div className="container container-fluid container-pod
           container-pod-divider-bottom container-pod-divider-bottom-align-right
           container-pod-divider-inverse container-pod-short-top
-          side-panel-content-header side-panel-section">
+          side-panel-content-header side-panel-section flush-bottom">
           {this.getGroupInfo(group)}
+          <ul className="tabs tall list-inline flush-bottom">
+            {this.tabs_getUnroutedTabs()}
+          </ul>
         </div>
+        {this.tabs_getTabView()}
       </div>
     );
   }
