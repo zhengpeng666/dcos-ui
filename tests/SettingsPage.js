@@ -144,23 +144,51 @@ describe("Settings Page [05k]", function () {
 
     beforeEach(function() {
       cy.visit("http://localhost:4200/#/settings/organization/users/qüis");
-      cy.get(".side-panel").as("sidePanel");
     });
 
     it("displays the correct user [05w]", function() {
       cy
-        .get("@sidePanel")
-        .get(".side-panel-content-header-label")
+        .get(".side-panel .side-panel-content-header-label")
         .should(function ($header) {
-          expect($header[0].textContent).to.equal("qüis");
+          expect($header[0].textContent).to.equal("藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe");
         });
     });
 
     it("sets the first tab as active [05y]", function() {
       cy
-        .get("@sidePanel")
-        .get(".tabs .active")
+        .get(".side-panel .tabs .active")
         .should("contain", "Permissions");
+    });
+
+    context("Group Membership [05z]", function() {
+
+      beforeEach(function () {
+        cy
+          .get(".side-panel .tabs .tab-item-label")
+          .contains("Group Membership")
+          .click();
+      });
+
+      it("displays the groups that the member belongs to [05x]", function() {
+        cy
+          .get(".side-panel .table tbody")
+          .should(function ($tbody) {
+            expect($tbody.children().length).to.equal(2);
+          });
+      });
+
+      it("displays the confirmation modal when clicking remove [060]", function() {
+        cy
+          .get(".side-panel .table tbody tr:first-child button")
+          .click();
+
+        cy
+          .get(".confirm-modal")
+          .should(function ($modal) {
+            expect($modal.length).to.equal(1);
+          });
+      });
+
     });
 
   });
@@ -169,48 +197,43 @@ describe("Settings Page [05k]", function () {
 
     beforeEach(function() {
       cy.visit("http://localhost:4200/#/settings/organization/groups/ölis");
-      cy.get(".side-panel").as("sidePanel");
     });
 
     it("displays the correct group [040]", function() {
       cy
-        .get("@sidePanel")
-        .get(".side-panel-content-header-label")
+        .get(".side-panel .side-panel-content-header-label")
         .should(function ($header) {
-          expect($header[0].textContent).to.equal("ölis");
+          expect($header[0].textContent).to.equal("藍-遙 遥 悠 遼 Größe");
         });
     });
 
     it("sets the first tab as active [041]", function() {
       cy
-        .get("@sidePanel")
-        .get(".tabs .active")
+        .get(".side-panel .tabs .active")
         .should("contain", "Permissions");
     });
 
-    context("Group Membership [05z]", function() {
+    context("User Membership [05z]", function() {
 
       beforeEach(function () {
         cy
-          .get("@sidePanel")
-          .get(".tabs .tab-item-label")
-          .contains("Group Membership")
+          .get(".side-panel .tabs .tab-item-label")
+          .contains("Members")
           .click();
       });
 
-      it("displays the groups that the member belongs to [05x]", function() {
+      it("displays the users belong to the group [061]", function() {
         cy
-          .get("@sidePanel")
-          .get(".table tbody")
+          .get(".side-panel .table tbody")
           .should(function ($tbody) {
+            console.log($tbody);
             expect($tbody.children().length).to.equal(2);
           });
       });
 
       it("displays the confirmation modal when clicking remove [060]", function() {
         cy
-          .get("@sidePanel")
-          .get(".table tbody tr:first-child button")
+          .get(".side-panel .table tbody tr:first-child button")
           .click();
 
         cy
