@@ -27,7 +27,7 @@ export default class UserSidePanelContents extends SidePanelContents {
       this.store_listeners = [
         {
           name: "summary",
-          events: ["success"], 
+          events: ["success"],
           listenAlways: false
         },
         {
