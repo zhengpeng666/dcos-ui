@@ -105,7 +105,8 @@ export default class UserSidePanelContents extends SidePanelContents {
         return this.getErrorNotice();
       }
 
-      if (user.get("uid") == null || !MesosSummaryStore.get("statesProcessed")) {
+      if (user.get("uid") == null ||
+          !MesosSummaryStore.get("statesProcessed")) {
         return this.getLoadingScreen();
       }
 

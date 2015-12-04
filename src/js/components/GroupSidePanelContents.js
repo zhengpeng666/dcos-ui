@@ -19,7 +19,8 @@ export default class GroupSidePanelContents extends SidePanelContents {
 
       this.store_listeners = [
         {name: "summary", events: ["success"], listenAlways: false},
-        {name: "group", events: ["fetchedDetailsSuccess", "fetchedDetailsError"]}
+        {name: "group", events: [ "fetchedDetailsSuccess",
+                                  "fetchedDetailsError" ]}
       ];
     }
 
@@ -86,7 +87,8 @@ export default class GroupSidePanelContents extends SidePanelContents {
         return this.getErrorNotice();
       }
 
-      if (group.get("gid") == null || !MesosSummaryStore.get("statesProcessed")) {
+      if (group.get("gid") == null ||
+          !MesosSummaryStore.get("statesProcessed")) {
         return this.getLoadingScreen();
       }
 
