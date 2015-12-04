@@ -1,8 +1,14 @@
+/*eslint-disable no-unused-vars*/
 import React from "react";
+/*eslint-enable no-unused-vars*/
 import {Confirm, Table} from "reactjs-components";
 
+import ACLGroupStore from "../stores/ACLGroupStore";
+import ACLUserStore from "../stores/ACLUserStore";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
+import StoreMixin from "../mixins/StoreMixin";
 import TableUtil from "../utils/TableUtil";
+import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleOpenConfirm",
@@ -11,35 +17,51 @@ const METHODS_TO_BIND = [
   "renderButton"
 ];
 
-export default class UserSidePanelGroups extends React.Component {
+export default class UserSidePanelGroups extends Util.mixin(StoreMixin) {
   constructor() {
     super();
 
     this.state = {
       groupID: null,
-      openConfirm: false
+      openConfirm: false,
+      userUpdateError: null
     };
+
+    this.store_listeners = [
+      {name: "group", events: ["deleteUserSuccess", "deleteUserError", "usersSuccess"]}
+    ];
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  handleOpenConfirm(groupID) {
-    console.log(groupID);
-    this.setState({groupID, openConfirm: true});
+  componentDidMount() {
+    super.componentDidMount();
+  }
+
+  handleOpenConfirm(group) {
+    this.setState({
+      groupID: group.gid,
+      openConfirm: true,
+      userUpdateError: null
+    });
   }
 
   handleButtonConfirm() {
-    this.setState({openConfirm: false});
+    ACLGroupStore.deleteUser(this.state.groupID, this.props.userID);
   }
 
   handleButtonCancel() {
-    this.setState({openConfirm: false});
+    this.setState({groupID: null, openConfirm: false});
   }
 
-  handleGroupRemoval(group) {
-    console.log(group);
+  onGroupStoreDeleteUserError(groupID, userID, error) {
+    this.setState({userUpdateError: error});
+  }
+
+  onGroupStoreDeleteUserSuccess() {
+    this.setState({groupID: null, openConfirm: false});
   }
 
   getColGroup() {
@@ -63,7 +85,7 @@ export default class UserSidePanelGroups extends React.Component {
         className,
         headerClassName: className,
         prop: "description",
-        render: this.renderGroup,
+        render: this.renderGroupLabel,
         sortable: true,
         sortFunction: propSortFunction,
         heading: descriptionHeading
@@ -80,7 +102,36 @@ export default class UserSidePanelGroups extends React.Component {
     ];
   }
 
-  renderGroup(prop, group) {
+  getConfirmModalContent(userDetails) {
+    let state = this.state;
+    let groupLabel = "this group";
+    userDetails.groups.forEach(function (group) {
+      if (group.group.gid === state.groupID) {
+        groupLabel = group.group.description;
+      }
+    });
+
+    let userName = userDetails.description;
+    let error = null;
+    let copy = (
+      <p>{`Are you sure you want to remove ${userName} from ${groupLabel}?`}</p>
+    );
+
+    if (state.userUpdateError != null) {
+      error = (
+        <p className="text-error-state">{state.userUpdateError}</p>
+      );
+    }
+
+    return (
+      <div className="container-pod text-align-center">
+        {copy}
+        {error}
+      </div>
+    );
+  }
+
+  renderGroupLabel(prop, group) {
     return group[prop];
   }
 
@@ -88,7 +139,7 @@ export default class UserSidePanelGroups extends React.Component {
     return (
       <div className="text-align-right">
         <button className="button button-danger button-stroke button-small"
-          onClick={this.handleOpenConfirm.bind(this, group.gid)}>
+          onClick={this.handleOpenConfirm.bind(this, group)}>
           Remove
         </button>
       </div>
@@ -96,20 +147,25 @@ export default class UserSidePanelGroups extends React.Component {
   }
 
   render() {
-    let groupData = this.props.userDetails.groups.map(function (group) {
+    let userDetails = ACLUserStore.getUser(this.props.userID);
+    let groupData = userDetails.groups.map(function (group) {
       return group.group;
     });
+    let modalDisabled = false;
+    if (this.state.userUpdateError != null) {
+      modalDisabled = true;
+    }
 
     return (
       <div>
         <Confirm
+          disabled={modalDisabled}
+          footerClass="modal-footer container container-pod container-pod-fluid"
           open={this.state.openConfirm}
           onClose={this.handleButtonCancel}
           leftButtonCallback={this.handleButtonCancel}
           rightButtonCallback={this.handleButtonConfirm}>
-          <div className="container-pod">
-            Would you like to perform this action?
-          </div>
+          {this.getConfirmModalContent(userDetails)}
         </Confirm>
         <div className="container container-fluid container-pod">
           <Table
