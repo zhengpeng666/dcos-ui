@@ -4,6 +4,7 @@ import React from "react";
 
 import ACLUserStore from "../stores/ACLUserStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import PermissionsView from "./PermissionsView";
 import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
@@ -98,8 +99,25 @@ export default class UserSidePanelContents extends SidePanelContents {
       return null;
     }
 
-    renderPermissionsTabView() {
-      return null;
+    renderPermissionsTabView(user) {
+      return (
+        <div className="
+          side-panel-tab-content
+          side-panel-section
+          container
+          container-fluid
+          container-pod
+          container-pod-short-top
+          container-fluid
+          flex-container-col
+          flush-bottom
+          flex-grow
+          no-overflow">
+          <PermissionsView
+            user={user}
+            parentRouter={this.props.parentRouter} />
+        </div>
+      );
     }
 
     renderGroupMembershipTabView() {
@@ -131,7 +149,7 @@ export default class UserSidePanelContents extends SidePanelContents {
               {this.tabs_getUnroutedTabs()}
             </ul>
           </div>
-          {this.tabs_getTabView()}
+          {this.tabs_getTabView(user)}
         </div>
       );
     }
