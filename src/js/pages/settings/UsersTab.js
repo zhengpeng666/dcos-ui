@@ -78,6 +78,8 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
   }
 
   getContents() {
+    // We want to always render the portals (side panel and modal),
+    // so only this part is showing loading and error screend
     if (this.state.hasError) {
       return (
         <RequestErrorMsg />
