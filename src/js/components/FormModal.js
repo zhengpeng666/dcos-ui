@@ -103,7 +103,6 @@ export default class FormModal extends React.Component {
         showCloseButton={false}
         showHeader={true}
         showFooter={true}
-        showHeader={true}
         footer={this.getFooter()}
         titleClass="modal-header-title text-align-center flush-top
           flush-bottom"
