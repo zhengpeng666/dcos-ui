@@ -63,7 +63,7 @@ export default class UserSidePanelContents extends SidePanelContents {
           {imageTag}
           <div>
             <h1 className="side-panel-content-header-label flush">
-              {user.uid}
+              {user.description}
             </h1>
             <div>
               {this.getSubHeader(user)}

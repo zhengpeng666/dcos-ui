@@ -57,7 +57,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
         {imageTag}
         <div>
           <h1 className="side-panel-content-header-label flush">
-            {group.gid}
+            {group.description}
           </h1>
           <div>
             {this.getSubHeader(group)}
