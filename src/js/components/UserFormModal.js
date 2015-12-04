@@ -17,11 +17,16 @@ export default class UserFormModal extends Util.mixin(StoreMixin) {
     super();
 
     this.state = {
-      disableNewUser: false
+      disableNewUser: false,
+      errorMsg: false
     };
 
     this.store_listeners = [
-      {name: "user", events: ["createSuccess"], listenAlways: false}
+      {
+        name: "user",
+        events: ["createSuccess", "createError"],
+        listenAlways: false
+      }
     ];
 
     METHODS_TO_BIND.forEach((method) => {
@@ -32,6 +37,13 @@ export default class UserFormModal extends Util.mixin(StoreMixin) {
   onUserStoreCreateSuccess() {
     this.setState({disableNewUser: false});
     this.props.onClose();
+  }
+
+  onUserStoreCreateError(errorMsg) {
+    this.setState({
+      disableNewUser: false,
+      errorMsg
+    });
   }
 
   handleNewUserSubmit(model) {
@@ -68,6 +80,7 @@ export default class UserFormModal extends Util.mixin(StoreMixin) {
         name: "password",
         placeholder: "Password",
         required: true,
+        showError: this.state.errorMsg,
         showLabel: false,
         writeType: "input",
         validation: function () { return true; },
