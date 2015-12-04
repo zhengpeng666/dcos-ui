@@ -105,14 +105,14 @@ describe("Settings Page [05k]", function() {
 
   });
 
-  context("Group Details Sidepanel", function() {
+  context("Group Details Sidepanel [03z]", function() {
 
     beforeEach(function() {
       cy.visit("http://localhost:4200/#/settings/organization/groups/ölis");
       cy.get(".side-panel").as("sidePanel");
     });
 
-    it("displays the correct group", function() {
+    it("displays the correct group [040]", function() {
       cy
         .get("@sidePanel")
         .get(".side-panel-content-header-label")
@@ -121,7 +121,7 @@ describe("Settings Page [05k]", function() {
         });
     });
 
-    it("sets the first tab as active", function() {
+    it("sets the first tab as active [041]", function() {
       cy
         .get("@sidePanel")
         .get(".tabs .active")
