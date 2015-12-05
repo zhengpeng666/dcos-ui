@@ -123,7 +123,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
     }
 
     return (
-      <div className="flex-container-col flex-grow no-overflow">
+      <div className="flex-container-col flex-grow">
         <div className="flex-box control-group">
         </div>
           <Dropdown
