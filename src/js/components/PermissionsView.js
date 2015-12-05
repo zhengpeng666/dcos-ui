@@ -5,17 +5,14 @@ import React from "react";
 import ACLStore from "../stores/ACLStore";
 import {Dropdown} from "reactjs-components";
 import RequestErrorMsg from "./RequestErrorMsg";
-import Service from "../structs/Service";
+import Item from "../structs/Item";
 import StoreMixin from "../mixins/StoreMixin";
 import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleServiceSelection",
   "onAclStoreSuccess",
-  "onAclStoreError",
-  // "getItemHtml",
-  // "getSelectedId",
-  "getDropdownItems"
+  "onAclStoreError"
 ];
 
 const DEFAULT_ID = "DEFAULT";
@@ -28,8 +25,8 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
 
     this.state = {
       hasError: null,
-      selectedService: null,
-      services: []
+      selectedACL: null,
+      serviceACLs: []
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -43,12 +40,12 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   }
 
   onAclStoreSuccess() {
-    let services = ACLStore.get("services").getItems();
-    let totalServices = services.length;
+    let serviceACLs = ACLStore.get("services").getItems();
+    let totalServiceACLs = serviceACLs.length;
     this.setState({
       hasError: false,
-      services,
-      totalServices
+      serviceACLs,
+      totalServiceACLs
     });
   }
 
@@ -56,8 +53,8 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
     this.setState({hasError: true});
   }
 
-  handleServiceSelection(selectedService) {
-    this.setState({selectedService});
+  handleServiceSelection(selectedACL) {
+    this.setState({selectedACL: selectedACL.id});
   }
 
   getPermissionTable() {
@@ -78,20 +75,20 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   }
 
   getDropdownItems() {
-    let defaultItem = new Service({
+    let defaultItem = new Item({
       rid: DEFAULT_ID,
-      name: "Add Service"
+      description: "Add Service"
     });
 
-    let items = [defaultItem].concat(this.state.services);
+    let items = [defaultItem].concat(this.state.serviceACLs);
 
-    return items.map((service) => {
-      let selectedHtml = this.getItemHtml(service);
+    return items.map((serviceACL) => {
+      let selectedHtml = this.getItemHtml(serviceACL);
       let html = (<a>{selectedHtml}</a>);
 
       let item = {
-        id: service.get("rid"),
-        name: service.get("description"),
+        id: serviceACL.get("rid"),
+        description: serviceACL.get("description"),
         html,
         selectedHtml
       };
@@ -108,14 +105,13 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
     return id;
   }
 
-  getItemHtml(service) {
+  getItemHtml(serviceACL) {
     return (
-      <span>{service.get("name")}</span>
+      <span>{serviceACL.get("description")}</span>
     );
   }
 
   render() {
-
     let state = this.state;
 
     if (state.hasError === true) {
@@ -138,7 +134,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
             wrapperClassName="dropdown"
             items={this.getDropdownItems()}
             onItemSelection={this.handleServiceSelection}
-            selectedID={this.getSelectedId(this.state.selectedService)}
+            selectedID={this.getSelectedId(this.state.selectedACL)}
             transition={true}
             transitionName="dropdown-menu" />
         {this.getPermissionTable()}
