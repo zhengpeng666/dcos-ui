@@ -14,7 +14,6 @@ var TestUtils = React.addons.TestUtils;
 
 var ActionTypes = require("../../constants/ActionTypes");
 var ACLGroupStore = require("../../stores/ACLGroupStore");
-var ACLUserStore = require("../../stores/ACLUserStore");
 var AppDispatcher = require("../../events/AppDispatcher");
 var GroupUserTable = require("../GroupUserTable");
 var Group = require("../../structs/Group");
