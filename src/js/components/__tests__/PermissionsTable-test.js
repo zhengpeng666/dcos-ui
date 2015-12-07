@@ -1,14 +1,13 @@
-jest.autoMockOff();
-// jest.dontMock("../PermissionsTable");
-// jest.dontMock("../../constants/ActionTypes");
-// jest.dontMock("../../events/ACLUsersActions");
-// jest.dontMock("../../events/AppDispatcher");
-// jest.dontMock("../../mixins/StoreMixin");
-// jest.dontMock("../../stores/ACLStore");
-// jest.dontMock("../../utils/ResourceTableUtil");
-// jest.dontMock("../../utils/Store");
-// jest.dontMock("../../utils/StringUtil");
-// jest.dontMock("../../utils/Util");
+jest.dontMock("../PermissionsTable");
+jest.dontMock("../../constants/ActionTypes");
+jest.dontMock("../../events/ACLUsersActions");
+jest.dontMock("../../events/AppDispatcher");
+jest.dontMock("../../mixins/StoreMixin");
+jest.dontMock("../../stores/ACLStore");
+jest.dontMock("../../utils/ResourceTableUtil");
+jest.dontMock("../../utils/Store");
+jest.dontMock("../../utils/StringUtil");
+jest.dontMock("../../utils/Util");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
