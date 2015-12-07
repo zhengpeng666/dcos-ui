@@ -1,10 +1,12 @@
 import {Confirm, Dropdown} from "reactjs-components";
 /*eslint-disable no-unused-vars*/
+import {Dropdown} from "reactjs-components";
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLStore from "../stores/ACLStore";
 import Item from "../structs/Item";
+import PermissionsTable from "./PermissionsTable";
 import RequestErrorMsg from "./RequestErrorMsg";
 import StoreMixin from "../mixins/StoreMixin";
 import StringUtil from "../utils/StringUtil";
@@ -106,7 +108,11 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   }
 
   getPermissionTable() {
-    return null;
+    return (
+      <PermissionsTable
+        permissions={this.props.user.uniquePermissions()}
+        userID={this.props.user.uid} />
+    );
   }
 
   getLoadingScreen() {
