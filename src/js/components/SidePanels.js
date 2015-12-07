@@ -262,7 +262,9 @@ export default class SidePanels extends Util.mixin(StoreMixin) {
           open={this.state.openDeleteConfirmation}
           onClose={this.handleDeleteCancel}
           leftButtonCallback={this.handleDeleteCancel}
-          rightButtonCallback={this.handleDeleteUser}>
+          rightButtonCallback={this.handleDeleteUser}
+          rightButtonClassName="button button-danger"
+          rightButtonText="Delete">
           {this.getDeleteModalContent()}
         </Confirm>
       </div>
