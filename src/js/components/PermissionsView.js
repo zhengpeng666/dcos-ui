@@ -86,14 +86,12 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
       let selectedHtml = this.getItemHtml(serviceACL);
       let html = (<a>{selectedHtml}</a>);
 
-      let item = {
+      return {
         id: serviceACL.get("rid"),
         description: serviceACL.get("description"),
         html,
         selectedHtml
       };
-
-      return item;
     });
   }
 
@@ -144,5 +142,5 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
 }
 
 PermissionsView.propTypes = {
-  permissions: React.PropTypes.array
+  user: React.PropTypes.object.isRequired
 };
