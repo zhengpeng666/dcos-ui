@@ -63,10 +63,10 @@ export default class SidePanels extends Util.mixin(StoreMixin) {
   }
 
   handleDeleteUser() {
-    ACLUserStore.deleteUser(this.state.itemID);
     this.setState({
       pendingRequest: true
     });
+    ACLUserStore.deleteUser(this.state.itemID);
   }
 
   handlePanelClose(closeInfo) {
@@ -106,7 +106,7 @@ export default class SidePanels extends Util.mixin(StoreMixin) {
     let user = ACLUserStore.getUser(this.state.itemID);
     return (
       <div className="container-pod text-align-center">
-        <h4>Are you sure?</h4>
+        <h3>Are you sure?</h3>
         <p>{`${StringUtil.capitalize(user.description)} will be deleted.`}</p>
         {error}
       </div>
@@ -231,6 +231,7 @@ export default class SidePanels extends Util.mixin(StoreMixin) {
       openDeleteConfirmation: false,
       pendingRequest: false
     });
+    this.context.router.transitionTo("settings-organization-users");
   }
 
   render() {
@@ -246,7 +247,7 @@ export default class SidePanels extends Util.mixin(StoreMixin) {
     return (
       <div>
         <SidePanel className="side-panel-detail"
-          header={this.getHeader(userID, groupID)}
+          header={this.getHeader(userID)}
           headerContainerClass="container
             container-fluid container-fluid-narrow container-pod
             container-pod-short"

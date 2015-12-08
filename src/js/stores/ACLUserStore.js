@@ -228,7 +228,7 @@ var ACLUserStore = Store.createStore({
           .emit(EventTypes.ACL_USER_DELETE_SUCCESS, action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_DELETE_ERROR:
-        ACLUserStore.emit(EventTypes.ACL_USER_DELETE_ERROR, action.userID);
+        ACLUserStore.emit(EventTypes.ACL_USER_DELETE_ERROR, action.userID, action.data);
         break;
     }
 
