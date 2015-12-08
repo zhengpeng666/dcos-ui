@@ -319,7 +319,6 @@ describe("Settings Page [05k]", function () {
         cy
           .get(".side-panel .table tbody")
           .should(function ($tbody) {
-            console.log($tbody);
             expect($tbody.children().length).to.equal(2);
           });
       });

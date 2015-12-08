@@ -14,6 +14,8 @@ var TestUtils = React.addons.TestUtils;
 
 var ActionTypes = require("../../constants/ActionTypes");
 var ACLGroupStore = require("../../stores/ACLGroupStore");
+var ACLGroupsStore = require("../../stores/ACLGroupsStore");
+var ACLUsersStore = require("../../stores/ACLUsersStore");
 var AppDispatcher = require("../../events/AppDispatcher");
 var GroupUserTable = require("../GroupUserTable");
 var Group = require("../../structs/Group");
@@ -98,7 +100,7 @@ describe("GroupUserTable", function () {
         "p"
       );
       expect(paragraphs[0].props.children)
-        .toEqual("Are you sure you want to remove qux from foo?");
+        .toEqual("qux will be removed from the foo group.");
     });
 
     it("returns a message containing the error that was received",
@@ -143,6 +145,66 @@ describe("GroupUserTable", function () {
       expect(this.instance.handleOpenConfirm.mock.calls[0][0]).toEqual(
         {uid: "bar"}
       );
+    });
+
+  });
+
+  describe("add users dropdown", function () {
+
+    beforeEach(function () {
+      this.usersStoreGet = ACLUsersStore.get;
+      this.groupStoreAddUser = ACLGroupStore.addUser;
+
+      ACLGroupStore.addUser = jest.genMockFunction();
+      ACLUsersStore.get = function (key) {
+        if (key === "users") {
+          return {
+            getItems: function () {
+              return [
+                {
+                  description: "foo",
+                  uid: "bar",
+                },
+                {
+                  description: "bar",
+                  uid: "baz",
+                },
+                {
+                  description: "baz",
+                  uid: "qux",
+                }
+              ];
+            }
+          }
+        }
+      }
+
+      this.instance.setState({requestUsersSuccess: true});
+
+      this.instance.dropdownButton = TestUtils
+        .scryRenderedDOMComponentsWithClass(this.instance, "dropdown-toggle");
+
+      TestUtils.Simulate.click(this.instance.dropdownButton[0].getDOMNode());
+
+      this.instance.selectableElements = TestUtils
+        .scryRenderedDOMComponentsWithClass(this.instance, "is-selectable");
+      TestUtils.Simulate.click(this.instance.selectableElements[1]
+        .getDOMNode());
+    });
+
+    afterEach(function () {
+      ACLGroupsStore.get = this.usersStoreGet;
+      ACLGroupStore.addUser = this.groupStoreAddUser;
+    });
+
+    it("should call the handler when selecting a user", function () {
+      expect(ACLGroupStore.addUser.mock.calls.length).toEqual(1);
+    });
+
+    it("should call #addUser with the proper arguments when selecting a user",
+      function () {
+      expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual("unicode");
+      expect(ACLGroupStore.addUser.mock.calls[0][1]).toEqual("bar");
     });
 
   });
