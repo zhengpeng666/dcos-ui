@@ -111,7 +111,8 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
     return (
       <PermissionsTable
         permissions={this.props.user.uniquePermissions()}
-        userID={this.props.user.uid} />
+        ownerID={this.props.user.uid}
+        ownerType={this.props.ownerType} />
     );
   }
 
@@ -215,5 +216,6 @@ PermissionsView.defaultPropTypes = {
 
 PermissionsView.propTypes = {
   itemID: React.PropTypes.string.isRequired,
+  itemType: React.PropTypes.string,
   permissions: React.PropTypes.array
 };
