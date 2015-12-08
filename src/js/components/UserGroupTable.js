@@ -177,14 +177,12 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     return items.map(function (group) {
       let selectedHtml = group.description;
 
-      let item = {
+      return {
         id: group.gid,
         name: selectedHtml,
         html: selectedHtml,
         selectedHtml
       };
-
-      return item;
     });
   }
 
