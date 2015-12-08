@@ -196,12 +196,12 @@ describe("UserGroupTable", function () {
       ACLGroupStore.addUser = this.groupStoreAddUser;
     });
 
-    it.only("should call the handler when selecting a group", function () {
+    it("should call the handler when selecting a group", function () {
       expect(ACLGroupStore.addUser.mock.calls.length).toEqual(1);
     });
 
-    it.only("should call the handler with the correct groupID when selecting " +
-      "a group", function () {
+    it("should call the handler with the correct groupID when selecting a " +
+      "group", function () {
       expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual("bar");
     });
 
