@@ -47,6 +47,7 @@ const ACLStore = Store.createStore({
     let action = payload.action;
 
     switch (action.type) {
+      // Get ACLs for resource
       case ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS:
         ACLStore.processResourcesACLs(action.data, action.resourceType);
         break;
@@ -57,6 +58,7 @@ const ACLStore = Store.createStore({
             action.resourceType
           );
         break;
+      // Grant permission for user
       case ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS:
         ACLStore.emit(
           EventTypes.ACL_USER_GRANT_ACTION_CHANGE,
@@ -70,6 +72,7 @@ const ACLStore = Store.createStore({
           action.triple
         );
         break;
+      // Revoke permission for user
       case ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS:
         ACLStore.emit(
             EventTypes.ACL_USER_REVOKE_ACTION_CHANGE,
@@ -83,6 +86,7 @@ const ACLStore = Store.createStore({
           action.triple
         );
         break;
+      // Grant permission for group
       case ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS:
         ACLStore.emit(
             EventTypes.ACL_GROUP_GRANT_ACTION_CHANGE,
@@ -96,6 +100,7 @@ const ACLStore = Store.createStore({
           action.triple
         );
         break;
+      // Revoke permission for group
       case ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS:
         ACLStore.emit(
             EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE,

@@ -190,24 +190,28 @@ var ACLUserStore = Store.createStore({
 
     var action = payload.action;
     switch (action.type) {
+      // Get user details
       case ActionTypes.REQUEST_ACL_USER_SUCCESS:
         ACLUserStore.processUser(action.data);
         break;
       case ActionTypes.REQUEST_ACL_USER_ERROR:
         ACLUserStore.processUserError(action.userID);
         break;
+      // Get groups for user
       case ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS:
         ACLUserStore.processUserGroups(action.userID, action.data);
         break;
       case ActionTypes.REQUEST_ACL_USER_GROUPS_ERROR:
         ACLUserStore.processUserGroupsError(action.userID);
         break;
+      // Get ACLs for user
       case ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS:
         ACLUserStore.processUserPermissions(action.userID, action.data);
         break;
       case ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR:
         ACLUserStore.processUserPermissionsError(action.userID);
         break;
+      // Add user
       case ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS:
         ACLUserStore.emit(EventTypes.ACL_USER_CREATE_SUCCESS, action.userID);
         break;
@@ -216,6 +220,7 @@ var ACLUserStore = Store.createStore({
           EventTypes.ACL_USER_CREATE_ERROR, action.data, action.userID
         );
         break;
+      // Update user
       case ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS:
         ACLUserStore
           .emit(EventTypes.ACL_USER_UPDATE_SUCCESS, action.userID);
@@ -223,6 +228,7 @@ var ACLUserStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR:
         ACLUserStore.emit(EventTypes.ACL_USER_UPDATE_ERROR, action.userID);
         break;
+      // Delete user
       case ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS:
         ACLUserStore
           .emit(EventTypes.ACL_USER_DELETE_SUCCESS, action.userID);
