@@ -7,7 +7,7 @@ var ErrorModal = require("./modals/ErrorModal");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
-var LoginModal = require("./modals/LoginModal");
+var IdentifyModal = require("./modals/IdentifyModal");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 import Plugins from "../plugins/Plugins";
 var SidebarStore = require("../stores/SidebarStore");
@@ -129,11 +129,11 @@ var Modals = React.createClass({
     });
   },
 
-  getLoginModal: function (hasIdentity) {
+  getIdentifyModal: function (hasIdentity) {
     let statesReady = MesosSummaryStore.get("statesProcessed");
     let isOpen = Plugins.applyFilter(
-      "openLoginModal",
-      (!hasIdentity && !Config.disableLoginModal && statesReady)
+      "openIdentifyModal",
+      (!hasIdentity && statesReady)
     );
 
     if (isOpen) {
@@ -144,7 +144,7 @@ var Modals = React.createClass({
       });
     }
     return (
-      <LoginModal
+      <IdentifyModal
         onLogin={this.onLogin}
         open={isOpen} />
     );
@@ -281,7 +281,7 @@ var Modals = React.createClass({
 
     return (
       <div>
-        {this.getLoginModal(this.state.hasIdentity)}
+        {this.getIdentifyModal(this.state.hasIdentity)}
         {this.getCliInstallModal(showCliModal)}
         {this.getVersionsModal(this.state.showingVersionsModal)}
         {this.getErrorModal(this.state.showErrorModal)}

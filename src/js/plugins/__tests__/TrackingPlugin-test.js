@@ -55,7 +55,7 @@ describe("TrackingPlugin", function () {
         ["footerButtonSet", TrackingPlugin.footerButtonSet]
       );
       expect(this.Plugins.addFilter.mock.calls[1]).toEqual(
-        ["openLoginModal", TrackingPlugin.openLoginModal]
+        ["openIdentifyModal", TrackingPlugin.openIdentifyModal]
       );
     });
   });
@@ -105,16 +105,16 @@ describe("TrackingPlugin", function () {
       });
     });
 
-    describe("#openLoginModal", function () {
+    describe("#openIdentifyModal", function () {
       it("returns the value given to it if plugin enabled", function () {
         processConfigState(true);
-        var result = Plugins.applyFilter("openLoginModal", "hello");
+        var result = Plugins.applyFilter("openIdentifyModal", "hello");
         expect(result).toEqual("hello");
       });
 
       it("returns false if plugin disabled", function () {
         processConfigState(false);
-        var result = Plugins.applyFilter("openLoginModal", "hello");
+        var result = Plugins.applyFilter("openIdentifyModal", "hello");
         expect(result).toEqual(false);
       });
     });

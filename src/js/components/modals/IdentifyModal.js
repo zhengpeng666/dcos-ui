@@ -5,9 +5,9 @@ var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
 import {Modal} from "reactjs-components";
 var Validator = require("../../utils/Validator");
 
-var LoginModal = React.createClass({
+var IdentifyModal = React.createClass({
 
-  displayName: "LoginModal",
+  displayName: "IdentifyModal",
 
   propTypes: {
     onLogin: React.PropTypes.func.isRequired
@@ -106,4 +106,4 @@ var LoginModal = React.createClass({
   }
 });
 
-module.exports = LoginModal;
+module.exports = IdentifyModal;
