@@ -200,9 +200,10 @@ describe("UserGroupTable", function () {
       expect(ACLGroupStore.addUser.mock.calls.length).toEqual(1);
     });
 
-    it("should call the handler with the correct groupID when selecting a " +
-      "group", function () {
+    it("should call #addUser with the proper arguments when selecting a group",
+      function () {
       expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual("bar");
+      expect(ACLGroupStore.addUser.mock.calls[0][1]).toEqual("unicode");
     });
 
   });
