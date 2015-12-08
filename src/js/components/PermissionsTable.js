@@ -167,7 +167,6 @@ export default class PermissionsTable extends Util.mixin(StoreMixin) {
     );
   }
 
-  // needs more updates
   render() {
     let permissions = this.props.permissions;
 
