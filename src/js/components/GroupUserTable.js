@@ -15,6 +15,7 @@ const METHODS_TO_BIND = [
   "handleOpenConfirm",
   "handleButtonConfirm",
   "handleButtonCancel",
+  "onUserSelection",
   "renderButton"
 ];
 
@@ -26,6 +27,7 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
       userID: null,
       openConfirm: false,
       pendingRequest: false,
+      requestUsersError: false,
       requestUsersSuccess: false,
       groupUpdateError: null
     };
@@ -55,8 +57,6 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
     this.setState({
       userID: user.uid,
       openConfirm: true,
-      requestUsersSuccess: false,
-      requestUsersError: false,
       groupUpdateError: null
     });
   }
@@ -70,19 +70,6 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
     this.setState({openConfirm: false, userID: null});
   }
 
-  onUsersStoreError() {
-    this.setState({
-      requestUsersError: false
-    });
-  }
-
-  onUsersStoreSuccess() {
-    this.setState({
-      requestUsersSuccess: true,
-      requestUsersError: false
-    });
-  }
-
   onGroupStoreDeleteUserError(groupID, userID, error) {
     this.setState({groupUpdateError: error, pendingRequest: false});
   }
@@ -91,8 +78,21 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
     this.setState({openConfirm: false, pendingRequest: false, userID: null});
   }
 
-  onUserSelection() {
+  onUserSelection(user) {
+    ACLGroupStore.addUser(this.props.groupID, user.id);
+  }
 
+  onUsersStoreError() {
+    this.setState({
+      requestUsersError: true
+    });
+  }
+
+  onUsersStoreSuccess() {
+    this.setState({
+      requestUsersSuccess: true,
+      requestUsersError: false
+    });
   }
 
   getColGroup() {
@@ -153,7 +153,8 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
 
     return (
       <div className="container-pod text-align-center">
-        <p>{`Are you sure you want to remove ${userLabel} from ${groupLabel}?`}</p>
+        <h3 className="flush-top">Are you sure?</h3>
+        <p>{`${userLabel} will be removed from the ${groupLabel} group.`}</p>
         {error}
       </div>
     );
@@ -165,8 +166,6 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
       uid: "default-placeholder-user-id"
     };
     let items = [defaultItem].concat(users);
-
-    console.log(items);
 
     return items.map(function (user) {
       let selectedHtml = user.description;
@@ -209,8 +208,12 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
   }
 
   render() {
-    if (this.state.requestGroupsError) {
-      return <RequestErrorMsg />;
+    if (this.state.requestUsersError) {
+      return (
+        <div className="container container-fluid container-pod flush-bottom">
+          <RequestErrorMsg />
+        </div>
+      );
     }
 
     if (!this.state.requestUsersSuccess) {
@@ -241,7 +244,7 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
             dropdownMenuClassName="dropdown-menu"
             dropdownMenuListClassName="dropdown-menu-list"
             items={this.getDropdownItems(allUsers)}
-            onItemSelection={this.onGroupSelection}
+            onItemSelection={this.onUserSelection}
             selectedID="default-placeholder-user-id"
             transition={true}
             wrapperClassName="dropdown" />
