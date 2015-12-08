@@ -230,7 +230,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     });
 
     return (
-      <div className="whatever">
+      <div>
         <Confirm
           disabled={this.state.pendingRequest}
           footerClass="modal-footer container container-pod container-pod-fluid"
