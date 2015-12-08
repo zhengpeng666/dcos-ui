@@ -147,7 +147,6 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
     );
   }
 
-  // needs more updates
   render() {
     let groupDetails = ACLGroupStore.getGroup(this.props.groupID);
     let userData = groupDetails.users.map(function (user) {
