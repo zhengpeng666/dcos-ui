@@ -170,10 +170,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
   getDropdownItems(groups) {
     let defaultItem = {
       description: "Add Group",
-      gid: "default-group-id",
-      name: "Add Group",
-      selectedHtml: "Add Group",
-      html: "Add Group"
+      gid: "default-placeholder-group-id"
     };
     let items = [defaultItem].concat(groups);
 
@@ -182,7 +179,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
 
       let item = {
         id: group.gid,
-        name: group.description,
+        name: selectedHtml,
         html: selectedHtml,
         selectedHtml
       };
@@ -228,14 +225,14 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
       return this.getLoadingScreen();
     }
 
+    let allGroups = ACLGroupsStore.get("groups").getItems();
     let userDetails = ACLUserStore.getUser(this.props.userID);
-    let groupData = userDetails.groups.map(function (group) {
+    let userGroups = userDetails.groups.map(function (group) {
       return group.group;
     });
-    let groups = ACLGroupsStore.get("groups").getItems();
 
     return (
-      <div>
+      <div className="whatever">
         <Confirm
           disabled={this.state.pendingRequest}
           footerClass="modal-footer container container-pod container-pod-fluid"
@@ -250,20 +247,21 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
           <Dropdown buttonClassName="button dropdown-toggle"
             dropdownMenuClassName="dropdown-menu"
             dropdownMenuListClassName="dropdown-menu-list"
-            items={this.getDropdownItems(groups)}
+            items={this.getDropdownItems(allGroups)}
             onItemSelection={this.onGroupSelection}
-            selectedID="default-group-id"
+            selectedID="default-placeholder-group-id"
             transition={true}
             wrapperClassName="dropdown" />
         </div>
-        <div className="container container-fluid container-pod">
+        <div className="container container-fluid container-pod
+          container-pod-short">
           <Table
             className="table table-borderless-outer
               table-borderless-inner-columns flush-bottom no-overflow
               flush-bottom"
             columns={this.getColumns()}
             colGroup={this.getColGroup()}
-            data={groupData}
+            data={userGroups}
             idAttribute="gid"
             itemHeight={TableUtil.getRowHeight()}
             sortBy={{prop: "description", order: "asc"}}
