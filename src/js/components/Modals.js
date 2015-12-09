@@ -7,7 +7,7 @@ var ErrorModal = require("./modals/ErrorModal");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var LocalStorageUtil = require("../utils/LocalStorageUtil");
-var IdentifyModal = require("./modals/IdentifyModal");
+import IdentifyModal from "./modals/IdentifyModal";
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 import Plugins from "../plugins/Plugins";
 var SidebarStore = require("../stores/SidebarStore");
