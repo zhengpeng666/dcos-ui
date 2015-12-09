@@ -13,7 +13,7 @@ const METHODS_TO_BIND = [
   "onUserStoreUpdateSuccess"
 ];
 
-export default class UserGroupTable extends Util.mixin(StoreMixin) {
+export default class UserDetails extends Util.mixin(StoreMixin) {
   constructor() {
     super();
 
