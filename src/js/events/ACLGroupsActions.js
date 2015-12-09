@@ -19,7 +19,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUPS_ERROR,
-          data: e.error
+          data: e.responseJSON.error
         });
       }
     });
@@ -37,7 +37,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           groupID
         });
       }
@@ -57,7 +57,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           groupID
         });
       }
@@ -77,7 +77,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           groupID
         });
       }
@@ -101,7 +101,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           groupID
         });
       }
@@ -122,7 +122,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           groupID
         });
       }
@@ -142,7 +142,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           groupID
         });
       }
@@ -163,7 +163,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           groupID,
           userID
         });
@@ -185,7 +185,7 @@ const ACLGroupsActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           groupID,
           userID
         });

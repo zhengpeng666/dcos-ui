@@ -19,7 +19,7 @@ const ACLUsersActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USERS_ERROR,
-          data: e.error
+          data: e.responseJSON.error
         });
       }
     });
@@ -37,7 +37,7 @@ const ACLUsersActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           userID
         });
       }
@@ -57,7 +57,7 @@ const ACLUsersActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GROUPS_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           userID
         });
       }
@@ -77,7 +77,7 @@ const ACLUsersActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           userID
         });
       }
@@ -101,7 +101,7 @@ const ACLUsersActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_CREATE_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           userID
         });
       }
@@ -122,7 +122,7 @@ const ACLUsersActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           userID
         });
       }
@@ -142,7 +142,7 @@ const ACLUsersActions = {
       error: function (e) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_ERROR,
-          data: e.error,
+          data: e.responseJSON.error,
           userID
         });
       }
