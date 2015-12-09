@@ -113,7 +113,9 @@ export default class UserSidePanelContents extends SidePanelContents {
           flush-bottom
           flex-grow">
           <PermissionsView
-            user={user}
+            permissions={user.uniquePermissions()}
+            itemID={this.props.itemID}
+            itemType="user"
             parentRouter={this.props.parentRouter} />
         </div>
       );

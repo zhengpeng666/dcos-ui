@@ -1,3 +1,4 @@
+import {Confirm} from "reactjs-components";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -7,12 +8,15 @@ import {Dropdown} from "reactjs-components";
 import RequestErrorMsg from "./RequestErrorMsg";
 import Item from "../structs/Item";
 import StoreMixin from "../mixins/StoreMixin";
+import StringUtil from "../utils/StringUtil";
 import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
-  "handleServiceSelection",
-  "onAclStoreSuccess",
-  "onAclStoreError"
+  "handleResourceSelection",
+  "handleDismissError",
+  "getErrorModalContent",
+  "onAclStoreError",
+  "onAclStoreSuccess"
 ];
 
 const DEFAULT_ID = "DEFAULT";
@@ -21,17 +25,31 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
-    this.store_listeners = [{name: "acl", events: ["success", "error"]}];
+    let itemType = this.props.itemType;
+
+    this.store_listeners = [{
+      name: "acl",
+      events: [
+        "success",
+        "error",
+        `${itemType}GrantSuccess`,
+        `${itemType}GrantError`
+      ]
+    }];
 
     this.state = {
       hasError: null,
-      selectedACL: null,
-      serviceACLs: []
+      resourceErrorMessage: null,
+      resourceList: ACLStore.get("services")
     };
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+
+    itemType = StringUtil.capitalize(itemType);
+    this[`onAclStore${itemType}GrantError`] = this.onAclStoreItemTypeGrantError;
+    this[`onAclStore${itemType}GrantSuccess`] = this.onAclStoreItemTypeGrantSuccess;
   }
 
   componentDidMount() {
@@ -40,12 +58,9 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   }
 
   onAclStoreSuccess() {
-    let serviceACLs = ACLStore.get("services").getItems();
-    let totalServiceACLs = serviceACLs.length;
     this.setState({
       hasError: false,
-      serviceACLs,
-      totalServiceACLs
+      resourceList: ACLStore.get("services")
     });
   }
 
@@ -53,8 +68,39 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
     this.setState({hasError: true});
   }
 
-  handleServiceSelection(selectedACL) {
-    this.setState({selectedACL: selectedACL.id});
+  onAclStoreItemTypeGrantError(data, triple) {
+    let props = this.props;
+    let itemID = triple[`${props.itemType}ID`];
+    if (itemID === props.itemID) {
+      let resource = this.state.resourceList.getItem(triple.resourceID);
+
+      this.setState({
+        resouceErrorMessage: `Could not grant user ${itemID} ${triple.action} to ${resource.get("description")}`
+      });
+    }
+  }
+
+  onAclStoreItemTypeGrantSuccess(triple) {
+    let props = this.props;
+    let itemType = props.itemType;
+    if (triple[`${itemType}ID`] === props.itemID) {
+      this.forceUpdate();
+    }
+  }
+
+  handleResourceSelection(resource) {
+    let itemType = StringUtil.capitalize(this.props.itemType);
+    // Fire request for item type
+
+    ACLStore[`grant${itemType}ActionToResource`](
+      this.props.itemID,
+      "access",
+      resource.id
+    );
+  }
+
+  handleDismissError() {
+    this.setState({resouceErrorMessage: null});
   }
 
   getPermissionTable() {
@@ -75,37 +121,38 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   }
 
   getDropdownItems() {
-    let defaultItem = new Item({
+    let permissions = this.props.permissions;
+    let filteredResources =
+      this.state.resourceList.getItems().filter(function (resource) {
+        // Filter out any resource which is in permissions
+        let rid = resource.get("rid");
+        return !permissions.some(function (permission) {
+          return permission.rid === rid;
+        });
+      });
+
+    let items = [new Item({
       rid: DEFAULT_ID,
       description: "Add Service"
-    });
+    })].concat(filteredResources);
 
-    let items = [defaultItem].concat(this.state.serviceACLs);
-
-    return items.map((serviceACL) => {
-      let selectedHtml = this.getItemHtml(serviceACL);
-      let html = (<a>{selectedHtml}</a>);
+    return items.map((resource) => {
+      let description = resource.get("description");
 
       return {
-        id: serviceACL.get("rid"),
-        description: serviceACL.get("description"),
-        html,
-        selectedHtml
+        id: resource.get("rid"),
+        description,
+        html: <a>{description}</a>,
+        selectedHtml: <span>{description}</span>
       };
     });
   }
 
-  getSelectedId(id) {
-    if (id == null) {
-      return DEFAULT_ID;
-    }
-
-    return id;
-  }
-
-  getItemHtml(serviceACL) {
+  getErrorModalContent(resouceErrorMessage) {
     return (
-      <span>{serviceACL.get("description")}</span>
+      <div className="container-pod text-align-center">
+        <p>{resouceErrorMessage}</p>
+      </div>
     );
   }
 
@@ -120,10 +167,11 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
       return this.getLoadingScreen();
     }
 
+    let resouceErrorMessage = state.resouceErrorMessage;
+
     return (
       <div className="flex-container-col flex-grow">
         <div className="flex-box control-group">
-        </div>
           <Dropdown
             buttonClassName="button dropdown-toggle"
             dropdownMenuClassName="dropdown-menu"
@@ -131,16 +179,31 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
             dropdownMenuListItemClassName="clickable"
             wrapperClassName="dropdown"
             items={this.getDropdownItems()}
-            onItemSelection={this.handleServiceSelection}
-            selectedID={this.getSelectedId(this.state.selectedACL)}
+            onItemSelection={this.handleResourceSelection}
+            selectedID={DEFAULT_ID}
             transition={true}
             transitionName="dropdown-menu" />
+        </div>
         {this.getPermissionTable()}
+        <Confirm
+          footerClass="modal-footer container container-pod container-pod-fluid"
+          open={!!resouceErrorMessage}
+          onClose={this.handleDismissError}
+          leftButtonClassName="hidden"
+          rightButtonText="Ok"
+          rightButtonCallback={this.handleDismissError}>
+          {this.getErrorModalContent(resouceErrorMessage)}
+        </Confirm>
       </div>
     );
   }
 }
 
+PermissionsView.defaultPropTypes = {
+  permissions: []
+};
+
 PermissionsView.propTypes = {
-  user: React.PropTypes.object.isRequired
+  itemID: React.PropTypes.string.isRequired,
+  permissions: React.PropTypes.array
 };

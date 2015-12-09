@@ -14,4 +14,10 @@ export default class ACLList extends List {
       }
     });
   }
+
+  getItem(rid) {
+    return this.list.find(function (item) {
+      return item.get("rid") === rid;
+    });
+  }
 }
