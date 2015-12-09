@@ -77,9 +77,10 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
   }
 
   isOpen() {
-    let params = this.props.params;
-
-    return (params.groupID != null && MesosSummaryStore.get("statesProcessed"));
+    return (
+      this.props.params.groupID != null
+      && MesosSummaryStore.get("statesProcessed")
+    );
   }
 
   getDeleteModalContent() {
