@@ -1,10 +1,10 @@
+jest.dontMock("../../mixins/StoreMixin");
+jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../stores/ACLStore");
+jest.dontMock("../../structs/ACLList");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../utils/StringUtil");
-jest.dontMock("../../mixins/StoreMixin");
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../structs/ACLList");
 jest.dontMock("../PermissionsView");
 
 var React = require("react/addons");

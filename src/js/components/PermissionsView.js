@@ -5,8 +5,8 @@ import React from "react";
 
 import ACLStore from "../stores/ACLStore";
 import {Dropdown} from "reactjs-components";
-import RequestErrorMsg from "./RequestErrorMsg";
 import Item from "../structs/Item";
+import RequestErrorMsg from "./RequestErrorMsg";
 import StoreMixin from "../mixins/StoreMixin";
 import StringUtil from "../utils/StringUtil";
 import Util from "../utils/Util";
@@ -14,7 +14,6 @@ import Util from "../utils/Util";
 const METHODS_TO_BIND = [
   "handleResourceSelection",
   "handleDismissError",
-  "getErrorModalContent",
   "onAclStoreError",
   "onAclStoreSuccess"
 ];
@@ -39,8 +38,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
 
     this.state = {
       hasError: null,
-      resourceErrorMessage: null,
-      resourceList: ACLStore.get("services")
+      resourceErrorMessage: null
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -48,8 +46,10 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
     });
 
     itemType = StringUtil.capitalize(itemType);
-    this[`onAclStore${itemType}GrantError`] = this.onAclStoreItemTypeGrantError;
-    this[`onAclStore${itemType}GrantSuccess`] = this.onAclStoreItemTypeGrantSuccess;
+    this[`onAclStore${itemType}GrantError`] =
+      this.onAclStoreItemTypeGrantError;
+    this[`onAclStore${itemType}GrantSuccess`] =
+      this.onAclStoreItemTypeGrantSuccess;
   }
 
   componentDidMount() {
@@ -59,8 +59,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
 
   onAclStoreSuccess() {
     this.setState({
-      hasError: false,
-      resourceList: ACLStore.get("services")
+      hasError: false
     });
   }
 
@@ -72,10 +71,10 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
     let props = this.props;
     let itemID = triple[`${props.itemType}ID`];
     if (itemID === props.itemID) {
-      let resource = this.state.resourceList.getItem(triple.resourceID);
+      let resource = ACLStore.get("services").getItem(triple.resourceID);
 
       this.setState({
-        resouceErrorMessage: `Could not grant user ${itemID} ${triple.action} to ${resource.get("description")}`
+        resourceErrorMessage: `Could not grant user ${itemID} ${triple.action} to ${resource.get("description")}`
       });
     }
   }
@@ -94,8 +93,8 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
     }
 
     let itemType = StringUtil.capitalize(this.props.itemType);
-    // Fire request for item type
 
+    // Fire request for item type
     ACLStore[`grant${itemType}ActionToResource`](
       this.props.itemID,
       "access",
@@ -104,7 +103,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   }
 
   handleDismissError() {
-    this.setState({resouceErrorMessage: null});
+    this.setState({resourceErrorMessage: null});
   }
 
   getPermissionTable() {
@@ -127,7 +126,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   getDropdownItems() {
     let permissions = this.props.permissions;
     let filteredResources =
-      this.state.resourceList.getItems().filter(function (resource) {
+      ACLStore.get("services").getItems().filter(function (resource) {
         // Filter out any resource which is in permissions
         let rid = resource.get("rid");
         return !permissions.some(function (permission) {
@@ -140,7 +139,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
       description: "Add Service"
     })].concat(filteredResources);
 
-    return items.map((resource) => {
+    return items.map(function (resource) {
       let description = resource.get("description");
 
       return {
@@ -152,10 +151,10 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
     });
   }
 
-  getErrorModalContent(resouceErrorMessage) {
+  getErrorModalContent(resourceErrorMessage) {
     return (
       <div className="container-pod text-align-center">
-        <p>{resouceErrorMessage}</p>
+        <p>{resourceErrorMessage}</p>
       </div>
     );
   }
@@ -171,7 +170,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
       return this.getLoadingScreen();
     }
 
-    let resouceErrorMessage = state.resouceErrorMessage;
+    let resourceErrorMessage = state.resourceErrorMessage;
 
     return (
       <div className="flex-container-col flex-grow">
@@ -191,12 +190,12 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
         {this.getPermissionTable()}
         <Confirm
           footerClass="modal-footer container container-pod container-pod-fluid"
-          open={!!resouceErrorMessage}
+          open={!!resourceErrorMessage}
           onClose={this.handleDismissError}
           leftButtonClassName="hidden"
           rightButtonText="Ok"
           rightButtonCallback={this.handleDismissError}>
-          {this.getErrorModalContent(resouceErrorMessage)}
+          {this.getErrorModalContent(resourceErrorMessage)}
         </Confirm>
       </div>
     );

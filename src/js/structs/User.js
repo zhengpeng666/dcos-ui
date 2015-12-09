@@ -20,10 +20,10 @@ export default class User extends Item {
   }
 
   getPermissionCount() {
-    return this.uniquePermissions().length;
+    return this.getUniquePermissions().length;
   }
 
-  uniquePermissions() {
+  getUniquePermissions() {
     let permissions = this.getPermissions();
     let uniqueUrls = [];
 
