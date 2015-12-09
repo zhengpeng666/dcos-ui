@@ -163,21 +163,21 @@ describe("GroupUserTable", function () {
               return [
                 {
                   description: "foo",
-                  uid: "bar",
+                  uid: "bar"
                 },
                 {
                   description: "bar",
-                  uid: "baz",
+                  uid: "baz"
                 },
                 {
                   description: "baz",
-                  uid: "qux",
+                  uid: "qux"
                 }
               ];
             }
-          }
+          };
         }
-      }
+      };
 
       this.instance.setState({requestUsersSuccess: true});
 
