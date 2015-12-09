@@ -111,7 +111,9 @@ const ListenersDescription = {
       fetchedDetailsSuccess: EventTypes.ACL_GROUP_DETAILS_FETCHED_SUCCESS,
       fetchedDetailsError: EventTypes.ACL_GROUP_DETAILS_FETCHED_ERROR,
       deleteUserSuccess: EventTypes.ACL_GROUP_REMOVE_USER_SUCCESS,
-      deleteUserError: EventTypes.ACL_GROUP_REMOVE_USER_ERROR
+      deleteUserError: EventTypes.ACL_GROUP_REMOVE_USER_ERROR,
+      deleteSuccess: EventTypes.ACL_GROUP_DELETE_SUCCESS,
+      deleteError: EventTypes.ACL_GROUP_DELETE_ERROR
     },
     unmountWhen: function () {
       return true;
