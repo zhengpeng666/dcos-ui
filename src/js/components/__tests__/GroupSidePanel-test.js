@@ -14,7 +14,6 @@ jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../structs/SummaryList");
-// jest.autoMockOff();
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;

@@ -77,12 +77,10 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
   }
 
   isOpen() {
-    let params = this.props.params;
-
     return (
-      params.userID != null ||
-      params.groupID != null
-    ) && MesosSummaryStore.get("statesProcessed");
+      this.props.params.userID != null
+      && MesosSummaryStore.get("statesProcessed")
+    );
   }
 
   getDeleteModalContent() {
@@ -173,8 +171,7 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
   }
 
   render() {
-    let props = this.props;
-    let userID = props.params.userID;
+    let userID = this.props.params.userID;
 
     return (
       <div>
