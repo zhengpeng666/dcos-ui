@@ -30,31 +30,31 @@ describe("Group Details Sidepanel [02k]", function () {
     it("displays 'Add Service' in the dropdown box [02x]", function () {
       cy
         .get("@sidePanel")
-        .get(".dropdown .dropdown-toggle > span")
+        .get(".dropdown .dropdown-toggle")
         .should("contain", "Add Service");
     });
 
     it("displays the selected element in the dropdown box [02y]", function () {
       cy
         .get("@sidePanel")
-        .get(".dropdown .dropdown-toggle > span")
+        .get(".dropdown .dropdown-toggle")
         .click();
 
       cy
         .get("@sidePanel")
-        .get(".dropdown-menu-list > .clickable:last-child > a")
-        .click({multiple: true});
+        .get(".dropdown-menu-list > .clickable:last-child")
+        .click();
 
       cy
         .get("@sidePanel")
-        .get(".dropdown .dropdown-toggle > span")
+        .get(".dropdown .dropdown-toggle")
         .should("contain", "Shelia Ike Bressette");
     });
 
     it("shouldn't contain services that are already in permissions [02z]", function () {
       cy
         .get("@sidePanel")
-        .get(".dropdown .dropdown-toggle > span")
+        .get(".dropdown .dropdown-toggle")
         .click();
 
       cy
