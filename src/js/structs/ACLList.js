@@ -1,3 +1,4 @@
+import _ from "underscore";
 import List from "./List";
 import Item from "./Item";
 
@@ -16,7 +17,7 @@ export default class ACLList extends List {
   }
 
   getItem(rid) {
-    return this.list.find(function (item) {
+    return _.find(this.list, function (item) {
       return item.get("rid") === rid;
     });
   }
