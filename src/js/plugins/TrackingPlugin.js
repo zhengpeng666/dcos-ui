@@ -22,7 +22,9 @@ const TrackingPlugin = {
    * @param  {Object} Plugins The Plugins API
    */
   initialize: function (Plugins) {
-    Plugins.addFilter("footerButtonSet", this.footerButtonSet.bind(this));
+    Plugins.addFilter(
+      "sidebarFooterButtonSet", this.sidebarFooterButtonSet.bind(this)
+    );
     Plugins.addFilter("openIdentifyModal", this.openIdentifyModal.bind(this));
     Plugins.addAction("pluginsConfigured", this.pluginsConfigured.bind(this));
     Plugins.addAction("receivedUserEmail", this.receivedUserEmail.bind(this));
@@ -73,7 +75,7 @@ const TrackingPlugin = {
     return value;
   },
 
-  footerButtonSet: function (value) {
+  sidebarFooterButtonSet: function (value) {
     if (this.isEnabled() !== true) {
       return [];
     }

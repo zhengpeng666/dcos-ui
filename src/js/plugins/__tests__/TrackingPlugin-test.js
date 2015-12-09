@@ -52,7 +52,7 @@ describe("TrackingPlugin", function () {
         ["receivedUserEmail", TrackingPlugin.pluginsConfigured]
       );
       expect(this.Plugins.addFilter.mock.calls[0]).toEqual(
-        ["footerButtonSet", TrackingPlugin.footerButtonSet]
+        ["sidebarFooterButtonSet", TrackingPlugin.sidebarFooterButtonSet]
       );
       expect(this.Plugins.addFilter.mock.calls[1]).toEqual(
         ["openIdentifyModal", TrackingPlugin.openIdentifyModal]
@@ -119,16 +119,16 @@ describe("TrackingPlugin", function () {
       });
     });
 
-    describe("#footerButtonSet", function () {
+    describe("#sidebarFooterButtonSet", function () {
       it("returns the value given to it if plugin enabled", function () {
         processConfigState(true);
-        var result = Plugins.applyFilter("footerButtonSet", "hello");
+        var result = Plugins.applyFilter("sidebarFooterButtonSet", "hello");
         expect(result).toEqual("hello");
       });
 
       it("returns an empty array if plugin disabled", function () {
         processConfigState(false);
-        var result = Plugins.applyFilter("footerButtonSet", "hello");
+        var result = Plugins.applyFilter("sidebarFooterButtonSet", "hello");
         expect(result).toEqual([]);
       });
     });
