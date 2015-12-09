@@ -1,10 +1,9 @@
-import {Confirm} from "reactjs-components";
+import {Confirm, Dropdown} from "reactjs-components";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLStore from "../stores/ACLStore";
-import {Dropdown} from "reactjs-components";
 import Item from "../structs/Item";
 import RequestErrorMsg from "./RequestErrorMsg";
 import StoreMixin from "../mixins/StoreMixin";
@@ -145,8 +144,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
       return {
         id: resource.get("rid"),
         description,
-        html: <a>{description}</a>,
-        selectedHtml: <span>{description}</span>
+        html: description
       };
     });
   }
@@ -193,7 +191,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
           open={!!resourceErrorMessage}
           onClose={this.handleDismissError}
           leftButtonClassName="hidden"
-          rightButtonText="Ok"
+          rightButtonText="OK"
           rightButtonCallback={this.handleDismissError}>
           {this.getErrorModalContent(resourceErrorMessage)}
         </Confirm>
