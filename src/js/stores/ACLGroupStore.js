@@ -196,7 +196,7 @@ let ACLGroupStore = Store.createStore({
     let action = payload.action;
 
     switch (action.type) {
-      // Get user details
+      // Get group details
       case ActionTypes.REQUEST_ACL_GROUP_SUCCESS:
         ACLGroupStore.processGroup(action.data);
         break;
@@ -217,7 +217,7 @@ let ACLGroupStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR:
         ACLGroupStore.processGroupUsersError(action.groupID);
         break;
-      // Add group
+      // Create group
       case ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS:
         ACLGroupStore
           .emit(EventTypes.ACL_GROUP_CREATE_SUCCESS, action.groupID);

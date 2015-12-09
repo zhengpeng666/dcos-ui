@@ -211,7 +211,7 @@ var ACLUserStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR:
         ACLUserStore.processUserPermissionsError(action.userID);
         break;
-      // Add user
+      // Create user
       case ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS:
         ACLUserStore.emit(EventTypes.ACL_USER_CREATE_SUCCESS, action.userID);
         break;
