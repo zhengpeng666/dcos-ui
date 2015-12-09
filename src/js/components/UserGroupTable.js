@@ -92,7 +92,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
 
   onGroupsStoreError() {
     this.setState({
-      requestGroupsError: false
+      requestGroupsError: true
     });
   }
 
@@ -167,7 +167,9 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     );
   }
 
-  getDropdownItems(groups) {
+  getDropdownItems() {
+    let groups = ACLGroupsStore.get("groups").getItems();
+
     let defaultItem = {
       description: "Add Group",
       gid: "default-placeholder-group-id"
@@ -223,7 +225,6 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
       return this.getLoadingScreen();
     }
 
-    let allGroups = ACLGroupsStore.get("groups").getItems();
     let userDetails = ACLUserStore.getUser(this.props.userID);
     let userGroups = userDetails.groups.map(function (group) {
       return group.group;
@@ -245,7 +246,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
           <Dropdown buttonClassName="button dropdown-toggle"
             dropdownMenuClassName="dropdown-menu"
             dropdownMenuListClassName="dropdown-menu-list"
-            items={this.getDropdownItems(allGroups)}
+            items={this.getDropdownItems()}
             onItemSelection={this.onGroupSelection}
             selectedID="default-placeholder-group-id"
             transition={true}
