@@ -9,84 +9,31 @@ global.addEventListener("beforeunload", function () {
   Actions.log({eventID: "Stint ended."});
 });
 
+import _ from "underscore";
 var React = require("react");
 var Router = require("react-router");
-var Route = Router.Route;
-var Redirect = Router.Redirect;
-var NotFoundRoute = Router.NotFoundRoute;
 
 require("./utils/MomentJSConfig");
 require("./utils/ReactSVG");
 var Config = require("./config/Config");
-var DashboardPage = require("./pages/DashboardPage");
-import GroupsTab from "./pages/settings/GroupsTab";
-var HostTable = require("./components/HostTable");
-var Index = require("./pages/Index");
-var NodesPage = require("./pages/NodesPage");
-var NodesGridView = require("./components/NodesGridView");
-var NotFoundPage = require("./pages/NotFoundPage");
-import OverviewTab from "./pages/settings/OverviewTab";
-var ServiceOverlay = require("./components/ServiceOverlay");
-var ServicesPage = require("./pages/ServicesPage");
-var SettingsPage = require("./pages/SettingsPage");
-import UsersTab from "./pages/settings/UsersTab";
+import appRoutes from "./routes/index";
 
-var routes = (
-  <Route name="home" path="/" handler={Index}>
-    <Route name="dashboard" path="dashboard/?" handler={DashboardPage}>
-      <Route name="dashboard-panel" path="service-detail/:serviceName" />
-      <Route name="dashboard-task-panel" path="task-detail/:taskID" />
-    </Route>
+function createRoutes(routes) {
+  return routes.map(function (route) {
+    let args = [route.type, _.omit(route, "type", "children")];
 
-    <Route name="services" path="services/?" handler={ServicesPage}>
-      <Route name="service-ui" path="ui/:serviceName" handler={ServiceOverlay} />
-      <Route name="services-panel" path="service-detail/:serviceName" />
-      <Route name="services-task-panel" path="task-detail/:taskID" />
-    </Route>
+    if (route.children) {
+      let children = createRoutes(route.children);
+      args = args.concat(children);
+    }
 
-    <Route name="nodes" path="nodes/?" handler={NodesPage}>
-      <Route name="nodes-list" path="list/?" handler={HostTable}>
-        <Route name="nodes-list-panel" path="node-detail/:nodeID" />
-        <Route name="nodes-list-task-panel" path="task-detail/:taskID" />
-      </Route>
+    return React.createElement.apply(null, args);
+  });
+}
 
-      <Route name="nodes-grid" path="grid/?" handler={NodesGridView}>
-        <Route name="nodes-grid-panel" path="node-detail/:nodeID" />
-        <Route name="nodes-grid-task-panel" path="task-detail/:taskID" />
-      </Route>
+let builtRoutes = createRoutes(appRoutes);
 
-      <Redirect from="/nodes/?" to="nodes-list" />
-    </Route>
-
-    <Route name="settings" path="settings/?" handler={SettingsPage}>
-      <Route name="settings-system" path="system/?">
-        <Route name="settings-system-overview" path="overview/?" handler={OverviewTab} />
-
-        <Redirect from="/settings/system/?" to="settings-system-overview" />
-      </Route>
-
-      <Route name="settings-organization" path="organization/?">
-        <Route name="settings-organization-users" path="users/?" handler={UsersTab}>
-          <Route name="settings-organization-users-user-panel" path=":userID" />
-        </Route>
-
-        <Route name="settings-organization-groups" path="groups/?" handler={GroupsTab}>
-          <Route name="settings-organization-groups-group-panel" path=":groupID" />
-        </Route>
-
-        <Redirect from="/settings/organization/?" to="settings-organization-users" />
-      </Route>
-
-      <Redirect from="/settings/?" to="settings-organization" />
-    </Route>
-
-    <Redirect from="/" to="dashboard" />
-
-    <NotFoundRoute handler={NotFoundPage}/>
-  </Route>
-);
-
-Router.run(routes, function (Handler, state) {
+Router.run(builtRoutes[0], function (Handler, state) {
   Config.setOverrides(state.query);
   React.render(<Handler state={state} />, document.getElementById("application"));
 });
