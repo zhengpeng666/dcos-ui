@@ -17,7 +17,7 @@ export default class ACLList extends List {
   }
 
   getItem(rid) {
-    return _.find(this.getList(), function (item) {
+    return _.find(this.getItems(), function (item) {
       return item.get("rid") === rid;
     });
   }

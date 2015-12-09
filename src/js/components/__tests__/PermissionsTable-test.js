@@ -26,7 +26,7 @@ describe("PermissionsTable", function () {
   beforeEach(function () {
     this.instance = TestUtils.renderIntoDocument(
       <PermissionsTable
-        permissions={(new User(userDetailsFixture)).uniquePermissions()}
+        permissions={(new User(userDetailsFixture)).getUniquePermissions()}
         ownerType="user"
         ownerID={userDetailsFixture.uid} />
     );
@@ -150,7 +150,7 @@ describe("PermissionsTable", function () {
     it("calls revokeGroup if ownerType is group", function () {
       var instance = TestUtils.renderIntoDocument(
         <PermissionsTable
-          permissions={(new User(userDetailsFixture)).uniquePermissions()}
+          permissions={(new User(userDetailsFixture)).getUniquePermissions()}
           ownerType="group"
           ownerID={userDetailsFixture.uid} />
       );
