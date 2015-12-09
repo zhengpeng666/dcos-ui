@@ -89,6 +89,10 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   }
 
   handleResourceSelection(resource) {
+    if (resource.id === DEFAULT_ID) {
+      return;
+    }
+
     let itemType = StringUtil.capitalize(this.props.itemType);
     // Fire request for item type
 
