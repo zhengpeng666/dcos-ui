@@ -245,32 +245,32 @@ let ACLGroupStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_USERS_CHANGED,
-          action.userID,
-          action.groupID
+          action.groupID,
+          action.userID
         );
         break;
       case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_ADD_USER_ERROR,
-          action.data,
           action.groupID,
-          action.userID
+          action.userID,
+          action.data
         );
         break;
       // Remove user from group
       case ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_REMOVE_USER_SUCCESS,
-          action.userID,
-          action.groupID
+          action.groupID,
+          action.userID
         );
         break;
       case ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_REMOVE_USER_ERROR,
-          action.data,
           action.groupID,
-          action.userID
+          action.userID,
+          action.data
         );
         break;
     }

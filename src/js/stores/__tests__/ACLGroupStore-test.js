@@ -392,13 +392,12 @@ describe("ACLGroupStore", function () {
       it("emits event after success event is dispatched", function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_USERS_CHANGED, function () {
-            expect(arguments).toEqual(["foo", "bar", "qui"]);
+            expect(arguments).toEqual(["foo", "bar"]);
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
-          data: "qui",
           groupID: "foo",
           userID: "bar"
         });
@@ -426,13 +425,12 @@ describe("ACLGroupStore", function () {
       it("emits event after success event is dispatched", function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_USERS_CHANGED, function () {
-            expect(arguments).toEqual(["foo", "bar", "qui"]);
+            expect(arguments).toEqual(["foo", "bar"]);
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
-          data: "qui",
           groupID: "foo",
           userID: "bar"
         });
