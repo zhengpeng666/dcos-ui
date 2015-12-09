@@ -313,14 +313,30 @@ describe("ACLUserStore", function () {
 
       it("emits error event with the userID", function () {
         ACLUserStore.addChangeListener(
-          EventTypes.ACL_USER_UPDATE_SUCCESS,
-          function (userID) {
+          EventTypes.ACL_USER_UPDATE_ERROR,
+          function (error, userID) {
             expect(userID).toEqual("foo");
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR,
+          data: "bar",
+          userID: "foo"
+        });
+      });
+
+      it("emits error event with the error message", function () {
+        ACLUserStore.addChangeListener(
+          EventTypes.ACL_USER_UPDATE_ERROR,
+          function (error, userID) {
+            expect(error).toEqual("bar");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR,
+          data: "bar",
           userID: "foo"
         });
       });
