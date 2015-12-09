@@ -31,8 +31,36 @@ Side Panel Detail
   --------------------------------------------------------------------------------
   ----------------------------------------------------------------------------- */
 
+  .side-panel-header {
+
+    .side-panel-header-container {
+
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .side-panel-header-actions {
+
+        flex-grow: 1;
+        flex-basis: 0;
+
+        &.side-panel-header-actions-primary {
+
+        }
+
+        &.side-panel-header-actions-secondary {
+
+        }
+      }
+    }
+  }
+
   .side-panel-content {
-    display: flex;
+
+    border: 0;
+    flex: 3 3 100%;
+    width: 100%;
 
     // We need to force the Gemini scrollbar view to fill its parent.
     > .gm-scroll-view {

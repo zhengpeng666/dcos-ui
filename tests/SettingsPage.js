@@ -143,7 +143,17 @@ describe("Settings Page [05k]", function () {
   context("User Details Sidepanel [05v]", function() {
 
     beforeEach(function() {
-      cy.visit("http://localhost:4200/#/settings/organization/users/qüis");
+      cy
+        .route(
+          /users\/quis/, "fx:acl/user-unicode"
+        )
+        .route(
+          /users\/quis\/groups/, []
+        )
+        .route(
+          /users\/quis\/permissions/, {direct: [], groups: []}
+        )
+        .visit("http://localhost:4200/#/settings/organization/users/quis");
     });
 
     it("displays the correct user [05w]", function() {
@@ -191,12 +201,54 @@ describe("Settings Page [05k]", function () {
 
     });
 
+    context("Delete User [042]", function() {
+      beforeEach(function () {
+        cy.get(".side-panel-header-actions-secondary").as("headerUserDelete");
+      });
+
+      it("shows delete modal when header delete button clicked [043]", function() {
+        cy.get("@headerUserDelete")
+          .find(".side-panel-header-action")
+          .click()
+        cy.get(".confirm-modal").should("to.have.length", 1);
+      });
+
+      it("returns to users page after user deleted [045]", function() {
+        cy.route({
+          method: "DELETE",
+          url: /users\/quis/,
+          status: 200,
+          response: {}
+        });
+        cy.get("@headerUserDelete")
+          .find(".side-panel-header-action")
+          .click();
+        cy.get(".button-danger").click();
+        cy.url().should("contain", "/settings/organization/users")
+      });
+
+      it("shows error when request to delete user fails [044]", function() {
+        cy.route({
+          method: "DELETE",
+          url: /users\/quis/,
+          status: 400,
+          response: {error: "There was an error."}
+        });
+        cy.get("@headerUserDelete")
+          .find(".side-panel-header-action")
+          .click();
+        cy.get(".button-danger").click();
+        cy.get(".text-error-state").should("contain", "There was an error.");
+      });
+
+    });
+
   });
 
   context("Group Details Sidepanel [03z]", function() {
 
     beforeEach(function() {
-      cy.visit("http://localhost:4200/#/settings/organization/groups/ölis");
+      cy.visit("http://localhost:4200/#/settings/organization/groups/olis");
     });
 
     it("displays the correct group [040]", function() {

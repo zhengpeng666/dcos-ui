@@ -3,7 +3,6 @@ jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../mixins/TabsMixin");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../stores/MesosSummaryStore");
-jest.dontMock("../../stores/MesosStateStore");
 jest.dontMock("../../stores/MarathonStore");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../events/MesosSummaryActions");
@@ -38,6 +37,7 @@ describe("SidePanels", function () {
     MesosSummaryStore.get = function () {
       return true;
     };
+
     MesosSummaryStore.init();
   });
 
@@ -47,7 +47,11 @@ describe("SidePanels", function () {
 
   describe("#isOpen", function () {
     beforeEach(function () {
-      this.params = {nodeID: null, serviceName: null, taskID: null};
+      this.params = {
+        nodeID: null,
+        serviceName: null,
+        taskID: null
+      };
       this.instance = TestUtils.renderIntoDocument(
         <SidePanels
           statesProcessed={true}
@@ -55,7 +59,7 @@ describe("SidePanels", function () {
       );
     });
 
-    it("should return false is all IDs are null", function () {
+    it("should return false if all IDs are null", function () {
       expect(this.instance.isOpen()).toEqual(false);
     });
 
@@ -69,7 +73,11 @@ describe("SidePanels", function () {
 
   describe("#getContents", function () {
     beforeEach(function () {
-      this.params = {nodeID: null, serviceName: null, taskID: null};
+      this.params = {
+        nodeID: null,
+        serviceName: null,
+        taskID: null
+      };
       this.instance = TestUtils.renderIntoDocument(
         <SidePanels
           statesProcessed={true}
@@ -105,5 +113,6 @@ describe("SidePanels", function () {
       expect(contents.type === ServiceSidePanelContents).toEqual(true);
       this.params.serviceName = null;
     });
+
   });
 });

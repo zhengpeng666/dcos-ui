@@ -6,9 +6,9 @@ import ACLUsersStore from "../../stores/ACLUsersStore";
 import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import OrganizationTab from "./OrganizationTab";
 import RequestErrorMsg from "../../components/RequestErrorMsg";
-import SidePanels from "../../components/SidePanels";
 import StoreMixin from "../../mixins/StoreMixin";
 import UserFormModal from "../../components/UserFormModal";
+import UserSidePanel from "../../components/UserSidePanel";
 import Util from "../../utils/Util";
 
 const METHODS_TO_BIND = [
@@ -106,7 +106,7 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
     return (
       <div>
         {this.getContents()}
-        <SidePanels
+        <UserSidePanel
           params={this.props.params}
           openedPage="settings-organization-users" />
         <UserFormModal

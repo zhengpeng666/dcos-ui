@@ -8,8 +8,6 @@ import NodeSidePanelContents from "./NodeSidePanelContents";
 import ServiceSidePanelContents from "./ServiceSidePanelContents";
 import StringUtil from "../utils/StringUtil";
 import TaskSidePanelContents from "./TaskSidePanelContents";
-import UserSidePanelContents from "./UserSidePanelContents";
-import GroupSidePanelContents from "./GroupSidePanelContents";
 
 const METHODS_TO_BIND = [
   "handlePanelClose"
@@ -45,9 +43,7 @@ export default class SidePanels extends React.Component {
     return (
       params.nodeID != null ||
       params.serviceName != null ||
-      params.taskID != null ||
-      params.userID != null ||
-      params.groupID != null
+      params.taskID != null
     ) && MesosSummaryStore.get("statesProcessed");
   }
 
@@ -88,7 +84,7 @@ export default class SidePanels extends React.Component {
       return null;
     }
 
-    let {nodeID, serviceName, taskID, userID, groupID} = ids;
+    let {nodeID, serviceName, taskID} = ids;
 
     if (nodeID != null) {
       return (
@@ -114,22 +110,6 @@ export default class SidePanels extends React.Component {
       );
     }
 
-    if (userID != null) {
-      return (
-        <UserSidePanelContents
-          itemID={userID}
-          parentRouter={this.context.router} />
-      );
-    }
-
-    if (groupID != null) {
-      return (
-        <GroupSidePanelContents
-          itemID={groupID}
-          parentRouter={this.context.router} />
-      );
-    }
-
     return null;
   }
 
@@ -140,8 +120,6 @@ export default class SidePanels extends React.Component {
     let nodeID = params.nodeID;
     let serviceName = params.serviceName;
     let taskID = params.taskID;
-    let userID = params.userID;
-    let groupID = params.groupID;
 
     return (
       <SidePanel className="side-panel-detail"
@@ -152,7 +130,7 @@ export default class SidePanels extends React.Component {
         bodyClass="side-panel-content flex-container-col"
         onClose={this.handlePanelClose}
         open={this.isOpen()}>
-        {this.getContents({nodeID, serviceName, taskID, userID, groupID})}
+        {this.getContents({nodeID, serviceName, taskID})}
       </SidePanel>
     );
   }
