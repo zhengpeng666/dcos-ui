@@ -239,7 +239,11 @@ let ACLGroupStore = Store.createStore({
           .emit(EventTypes.ACL_GROUP_DELETE_SUCCESS, action.groupID);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR:
-        ACLGroupStore.emit(EventTypes.ACL_GROUP_DELETE_ERROR, action.groupID);
+        ACLGroupStore.emit(
+          EventTypes.ACL_GROUP_DELETE_ERROR,
+          action.groupID,
+          action.data
+      );
         break;
       // Add user to group
       case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS:
