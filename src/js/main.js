@@ -15,8 +15,13 @@ var Router = require("react-router");
 
 require("./utils/MomentJSConfig");
 require("./utils/ReactSVG");
-var Config = require("./config/Config");
+
+import ApplicationLoader from "./pages/ApplicationLoader";
 import appRoutes from "./routes/index";
+var Config = require("./config/Config");
+import Plugins from "./plugins/Plugins";
+
+let domElement = document.getElementById("application");
 
 function createRoutes(routes) {
   return routes.map(function (route) {
@@ -31,9 +36,28 @@ function createRoutes(routes) {
   });
 }
 
-let builtRoutes = createRoutes(appRoutes);
+function onApplicationLoad() {
+  // Allow overriding of application contents
+  let contents = Plugins.applyFilter("applicationContents", null);
+  if (contents) {
+    React.render(contents, domElement);
+  } else {
+    setTimeout(function () {
+      let builtRoutes = createRoutes(
+        Plugins.applyFilter("applicationRoutes", appRoutes)
+      );
 
-Router.run(builtRoutes[0], function (Handler, state) {
-  Config.setOverrides(state.query);
-  React.render(<Handler state={state} />, document.getElementById("application"));
-});
+      Router.run(builtRoutes[0], function (Handler, state) {
+        Config.setOverrides(state.query);
+        React.render(<Handler state={state} />, domElement);
+      });
+    });
+  }
+
+  Plugins.doAction("applicationRendered");
+}
+
+React.render(
+  <ApplicationLoader onApplicationLoad={onApplicationLoad} />,
+  domElement
+);

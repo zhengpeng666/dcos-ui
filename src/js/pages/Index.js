@@ -12,7 +12,6 @@ var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var IntercomStore = require("../stores/IntercomStore");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var Modals = require("../components/Modals");
-import Plugins from "../plugins/Plugins";
 var RequestErrorMsg = require("../components/RequestErrorMsg");
 var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
@@ -30,19 +29,12 @@ var Index = React.createClass({
 
   mixins: [InternalStorageMixin],
 
-  actions_configuration: {
-    state: {
-      pluginsLoaded: {skip: true}
-    }
-  },
-
   getInitialState: function () {
     return {
       showIntercom: IntercomStore.get("isOpen"),
       mesosSummaryErrorCount: 0,
       showErrorModal: false,
       modalErrorMsg: "",
-      pluginsLoaded: false,
       configErrorCount: 0
     };
   },
@@ -68,16 +60,7 @@ var Index = React.createClass({
       EventTypes.CONFIG_ERROR, this.onConfigError
     );
 
-    Plugins.addChangeListener(
-      EventTypes.PLUGINS_CONFIGURED, this.onPluginsLoaded
-    );
-    Plugins.initialize();
-
     this.addMesosStateListeners();
-  },
-
-  componentDidUpdate: function () {
-    Plugins.doAction("applicationDidUpdate");
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
@@ -117,10 +100,6 @@ var Index = React.createClass({
       EventTypes.CONFIG_ERROR, this.onConfigError
     );
 
-    Plugins.removeChangeListener(
-      EventTypes.PLUGINS_CONFIGURED, this.onPluginsLoaded
-    );
-
     this.removeMesosStateListeners();
 
     MesosSummaryStore.unmount();
@@ -137,10 +116,6 @@ var Index = React.createClass({
     if (this.state.configErrorCount < Config.delayAfterErrorCount) {
       ConfigStore.fetchConfig();
     }
-  },
-
-  onPluginsLoaded: function () {
-    this.setState({pluginsLoaded: true});
   },
 
   handleIntercomChange: function () {
@@ -227,25 +202,13 @@ var Index = React.createClass({
     let showErrorScreen =
       (this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount)
       || (this.state.configErrorCount >= Config.delayAfterErrorCount);
-    let showLoadingScreen = (!isReady || !this.state.pluginsLoaded)
-      && !showErrorScreen;
+    let showLoadingScreen = !isReady && !showErrorScreen;
 
     var classSet = classNames({
       "canvas-sidebar-open": data.isOpen
     });
 
     this.renderIntercom();
-
-    if (this.state.pluginsLoaded) {
-      let contents = Plugins.applyFilter("applicationContents", null);
-
-      if (contents) {
-        // Clean out listeners
-        this.componentWillUnmount();
-
-        return contents;
-      }
-    }
 
     return (
       <div>

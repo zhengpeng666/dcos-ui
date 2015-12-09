@@ -5,16 +5,6 @@ import RequestUtil from "../utils/RequestUtil";
 
 const ConfigActions = {
   fetchConfig: function () {
-    let configFixture = Config.uiConfigurationFixture;
-    if (configFixture) {
-      AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_CONFIG_SUCCESS,
-        data: configFixture
-      });
-
-      return;
-    }
-
     RequestUtil.json({
       url: `${Config.rootUrl}/dcos-metadata/ui-config.json`,
       success: function (response) {
@@ -32,5 +22,23 @@ const ConfigActions = {
     });
   }
 };
+
+if (Config.useFixtures) {
+  if (!global.actionTypes) {
+    global.actionTypes = {};
+  }
+
+  global.actionTypes.ConfigActions = {
+    fetchConfig: {event: "success", success: {
+      response: Config.uiConfigurationFixture
+    }}
+  };
+
+  Object.keys(global.actionTypes.ConfigActions).forEach(function (method) {
+    ConfigActions[method] = RequestUtil.stubRequest(
+      ConfigActions, "ConfigActions", method
+    );
+  });
+}
 
 export default ConfigActions;

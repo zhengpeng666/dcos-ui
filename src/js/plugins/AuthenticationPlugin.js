@@ -14,6 +14,7 @@ const AuthenticationPlugin = {
   initialize: function (Plugins) {
     Plugins.addFilter("sidebarFooter", this.sidebarFooter.bind(this));
     Plugins.addFilter("openIdentifyModal", this.openIdentifyModal.bind(this));
+    Plugins.addFilter("applicationRoutes", this.applicationRoutes.bind(this));
   },
 
   configure: function (configuration) {
@@ -45,6 +46,10 @@ const AuthenticationPlugin = {
     return (
       <div className="text-align-center">[Drop up placeholder]</div>
     );
+  },
+
+  applicationRoutes: function (routes) {
+    return routes;
   }
 
 };

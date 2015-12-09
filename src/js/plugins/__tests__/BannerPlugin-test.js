@@ -28,7 +28,7 @@ describe("BannerPlugin", function () {
 
     it("should add one action and two filters", function () {
       expect(this.Plugins.addAction.mock.calls[0]).toEqual(
-        ["applicationDidUpdate", BannerPlugin.applicationDidUpdate]
+        ["applicationRendered", BannerPlugin.applicationRendered]
       );
       expect(this.Plugins.addFilter.mock.calls[0]).toEqual(
         ["applicationContents", BannerPlugin.applicationContents]
@@ -138,7 +138,7 @@ describe("BannerPlugin", function () {
 
   });
 
-  describe("#applicationDidUpdate", function () {
+  describe("#applicationRendered", function () {
     beforeEach(function () {
       this.iframe = document.createElement("iframe");
       document.getElementById = jasmine.createSpy("HTML Element")
@@ -149,12 +149,12 @@ describe("BannerPlugin", function () {
 
     it("should add event listener to iframe when enabled", function () {
       BannerPlugin.configure({headerTitle: "foo"});
-      BannerPlugin.applicationDidUpdate();
+      BannerPlugin.applicationRendered();
       expect(this.iframe.contentWindow.addEventListener).toHaveBeenCalled();
     });
 
     it("should not add event listener to iframe when not enabled", function () {
-      BannerPlugin.applicationDidUpdate();
+      BannerPlugin.applicationRendered();
       expect(this.iframe.contentWindow.addEventListener).not.toHaveBeenCalled();
     });
   });
