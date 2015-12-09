@@ -1,5 +1,6 @@
 import _ from "underscore";
 
+import ACLStore from "../stores/ACLStore";
 import ACLGroupsStore from "../stores/ACLGroupsStore";
 import ACLGroupStore from "../stores/ACLGroupStore";
 import ACLUsersStore from "../stores/ACLUsersStore";
@@ -13,6 +14,28 @@ import StringUtil from "../utils/StringUtil";
 const LISTENER_SUFFIX = "ListenerFn";
 
 const ListenersDescription = {
+
+  acl: {
+    store: ACLStore,
+    events: {
+      success: EventTypes.ACL_RESOURCE_ACLS_CHANGE,
+      error: EventTypes.ACL_RESOURCE_ACLS_ERROR,
+      userGrantSuccess: EventTypes.ACL_USER_GRANT_ACTION_CHANGE,
+      userGrantError: EventTypes.ACL_USER_GRANT_ACTION_ERROR,
+      userRevokeSuccess: EventTypes.ACL_USER_REVOKE_ACTION_CHANGE,
+      userRevokeError: EventTypes.ACL_USER_REVOKE_ACTION_ERROR,
+      groupGrantSuccess: EventTypes.ACL_GROUP_GRANT_ACTION_CHANGE,
+      groupGrantError: EventTypes.ACL_GROUP_GRANT_ACTION_ERROR,
+      groupRevokeSuccess: EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE,
+      groupRevokeError: EventTypes.ACL_GROUP_REVOKE_ACTION_ERROR
+
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
   summary: {
     // Which store to use
     store: MesosSummaryStore,
