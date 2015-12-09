@@ -114,7 +114,9 @@ export default class GroupSidePanelContents extends SidePanelContents {
         flush-bottom
         flex-grow">
         <PermissionsView
-          group={group}
+          permissions={group.uniquePermissions()}
+          itemID={this.props.itemID}
+          itemType="group"
           parentRouter={this.props.parentRouter} />
       </div>
     );
