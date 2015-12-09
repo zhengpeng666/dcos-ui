@@ -4,7 +4,6 @@ import React from "react";
 
 import ACLUserStore from "../stores/ACLUserStore";
 import Form from "./Form";
-import RequestErrorMsg from "./RequestErrorMsg";
 import StoreMixin from "../mixins/StoreMixin";
 import Util from "../utils/Util";
 
@@ -16,63 +15,15 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
   constructor() {
     super();
 
-    this.state = {
-      userDetailsRequestSuccess: false,
-      userDetailsRequestError: false
-    };
-
-    this.store_listeners = [
-      {
-        name: "user",
-        events: [
-          "fetchedDetailsSuccess",
-          "fetchedDetailsError"
-        ]
-      }
-    ];
-
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  componentDidMount() {
-    super.componentDidMount();
-
-    ACLUserStore.fetchUserWithDetails(this.props.userID);
-  }
-
-  onUserStoreFetchedDetailsError() {
-    this.setState({
-      userDetailsRequestSuccess: false,
-      userDetailsRequestError: true
-    });
-  }
-
-  onUserStoreFetchedDetailsSuccess() {
-    this.setState({
-      userDetailsRequestSuccess: true,
-      userDetailsRequestError: false
-    });
-  }
-
-  getLoadingScreen() {
-    return (
-      <div className="container container-fluid container-pod text-align-center
-        vertical-center inverse">
-        <div className="row">
-          <div className="ball-scale">
-            <div />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   handlePasswordSubmit(formData) {
     ACLUserStore.updateUser(this.props.userID, {
       uid: this.props.userID,
-      newuid: formData.uid
+      password: formData.password
     });
   }
 
@@ -91,17 +42,6 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
         value: ""
       }
     ];
-
-    if (!this.state.userDetailsRequestSuccess &&
-      !this.state.userDetailsRequestError) {
-      return this.getLoadingScreen();
-    } else if (this.state.userDetailsRequestError) {
-      return (
-        <div className="container container-fluid container-pod flush-bottom">
-          <RequestErrorMsg />
-        </div>
-      );
-    }
 
     return (
       <div className="container container-fluid container-pod
