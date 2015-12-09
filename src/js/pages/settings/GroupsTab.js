@@ -4,10 +4,10 @@ import React from "react";
 
 import ACLGroupsStore from "../../stores/ACLGroupsStore";
 import GroupFormModal from "../../components/GroupFormModal";
+import GroupSidePanel from "../../components/GroupSidePanel";
 import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import OrganizationTab from "./OrganizationTab";
 import RequestErrorMsg from "../../components/RequestErrorMsg";
-import SidePanels from "../../components/SidePanels";
 import StoreMixin from "../../mixins/StoreMixin";
 import Util from "../../utils/Util";
 
@@ -103,7 +103,7 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
     return (
       <div>
         {this.getContents()}
-        <SidePanels
+        <GroupSidePanel
           params={this.props.params}
           openedPage="settings-organization-groups" />
         <GroupFormModal
