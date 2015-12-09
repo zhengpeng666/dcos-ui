@@ -116,7 +116,7 @@ var RequestUtil = {
       if (methodConfig[eventType] && methodConfig[eventType].response) {
         response = methodConfig[eventType].response;
       } else if (eventType === "error") {
-        response = {error: "Some generic error"};
+        response = {responseJSON: {error: "Some generic error"}};
       }
 
       configuration[eventType](response);
