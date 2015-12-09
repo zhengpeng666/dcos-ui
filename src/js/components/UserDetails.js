@@ -67,8 +67,8 @@ export default class UserDetails extends Util.mixin(StoreMixin) {
     ];
 
     return (
-      <div className="container container-fluid container-pod
-        container-pod-short-top">
+      <div className="side-panel-content-user-details container container-fluid
+        container-pod container-pod-short-top">
         <div className="flex-container-col">
           <dl className="row flex-box">
             <dt className="column-3 emphasize">
