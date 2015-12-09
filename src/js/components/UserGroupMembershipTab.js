@@ -59,6 +59,7 @@ export default class UserGroupMembershipTab extends Util.mixin(StoreMixin) {
 
   onGroupsStoreError() {
     this.setState({
+      requestGroupsSuccess: false,
       requestGroupsError: true
     });
   }
