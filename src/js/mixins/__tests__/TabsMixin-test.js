@@ -129,6 +129,12 @@ describe("TabsMixin", function () {
       expect(TabsMixin.renderGraultTabView).toHaveBeenCalled();
     });
 
+    it("should call appropriate render function when called", function () {
+      spyOn(TabsMixin, "renderGraultTabView");
+      TabsMixin.tabs_getTabView("foo", "bar");
+      expect(TabsMixin.renderGraultTabView).toHaveBeenCalledWith("foo", "bar");
+    });
+
     it("should remove spaces and call render function", function () {
       TabsMixin.tabs_tabs = {qux: "Quux Garply"};
       TabsMixin.state = {currentTab: "qux"};

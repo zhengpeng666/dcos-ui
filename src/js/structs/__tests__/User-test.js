@@ -72,10 +72,10 @@ describe("User", function () {
 
   });
 
-  describe("#uniquePermissions", function () {
+  describe("#getUniquePermissions", function () {
 
     it("returns an array of services user has permission to", function () {
-      let permissionList = this.instance.uniquePermissions();
+      let permissionList = this.instance.getUniquePermissions();
 
       expect(permissionList.length).toEqual(1);
       expect(permissionList[0].rid).toEqual("service.marathon");
@@ -83,7 +83,7 @@ describe("User", function () {
 
     it("returns empty array when user has no permissions", function () {
       let user = new User([]);
-      let permissionList = user.uniquePermissions();
+      let permissionList = user.getUniquePermissions();
 
       expect(permissionList).toEqual([]);
     });
@@ -102,7 +102,7 @@ describe("User", function () {
       };
 
       let user = new User(rawUser);
-      let permissionList = user.uniquePermissions();
+      let permissionList = user.getUniquePermissions();
 
       expect(permissionList.length).toEqual(3);
     });

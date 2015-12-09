@@ -93,7 +93,7 @@ const TabsMixin = {
       return null;
     }
 
-    return renderFunction.apply(this);
+    return renderFunction.apply(this, arguments);
   },
 
   tabs_handleTabClick(nextTab) {

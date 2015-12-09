@@ -18,4 +18,29 @@ describe("ACLList", function () {
 
   });
 
+  describe("#getItem", function () {
+
+    it("returns an instance of Item", function () {
+      let items = [{rid: "bar"}];
+      let list = new ACLList({items});
+      let item = list.getItem("bar");
+      expect(item instanceof Item).toBeTruthy();
+    });
+
+    it("returns the item if it is in the list", function () {
+      let items = [{rid: "bar"}];
+      let list = new ACLList({items});
+      let item = list.getItem("bar");
+      expect(item.get("rid")).toBe("bar");
+    });
+
+    it("returns undefined if the item is not in the list", function () {
+      let items = [{rid: "bar"}];
+      let list = new ACLList({items});
+      let item = list.getItem("foo");
+      expect(item).toBe(undefined);
+    });
+
+  });
+
 });
