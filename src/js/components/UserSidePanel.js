@@ -131,7 +131,7 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
   getHeaderDelete(userID) {
     if (userID != null) {
       return (
-        <span className="side-panel-header-action"
+        <span className="side-panel-header-action text-align-right"
           onClick={this.handleDeleteModalOpen}>
           Delete
         </span>
