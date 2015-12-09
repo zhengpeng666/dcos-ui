@@ -2,19 +2,15 @@ jest.dontMock("../SidePanels");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../mixins/TabsMixin");
 jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../stores/ACLUserStore");
 jest.dontMock("../../stores/MesosSummaryStore");
-jest.dontMock("../../stores/MesosStateStore");
 jest.dontMock("../../stores/MarathonStore");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../events/MesosSummaryActions");
 jest.dontMock("../../events/MarathonActions");
 jest.dontMock("../SidePanelContents");
-jest.dontMock("../GroupSidePanelContents");
 jest.dontMock("../NodeSidePanelContents");
 jest.dontMock("../ServiceSidePanelContents");
 jest.dontMock("../TaskSidePanelContents");
-jest.dontMock("../UserSidePanelContents");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../utils/RequestUtil");
@@ -24,19 +20,15 @@ var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var MesosSummaryActions = require("../../events/MesosSummaryActions");
-var ACLUserStore = require("../../stores/ACLUserStore");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
 var NodeSidePanelContents = require("../NodeSidePanelContents");
-var GroupSidePanelContents = require("../GroupSidePanelContents");
 var TaskSidePanelContents = require("../TaskSidePanelContents");
 var ServiceSidePanelContents = require("../ServiceSidePanelContents");
-var UserSidePanelContents = require("../UserSidePanelContents");
 var SidePanels = require("../SidePanels");
 
 describe("SidePanels", function () {
   beforeEach(function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
-    this.userStore = ACLUserStore.getUser;
 
     MesosSummaryActions.fetchSummary = function () {
       return null;
@@ -46,20 +38,11 @@ describe("SidePanels", function () {
       return true;
     };
 
-    ACLUserStore.getUser = function () {
-      return {
-        "uid": "user",
-        "url": "/users/user",
-        "description": "user description"
-      };
-    };
-
     MesosSummaryStore.init();
   });
 
   afterEach(function () {
     MesosSummaryActions.fetchSummary = this.fetchSummary;
-    ACLUserStore.getUser = this.userStore;
   });
 
   describe("#isOpen", function () {
@@ -67,9 +50,7 @@ describe("SidePanels", function () {
       this.params = {
         nodeID: null,
         serviceName: null,
-        taskID: null,
-        userID: null,
-        groupID: null
+        taskID: null
       };
       this.instance = TestUtils.renderIntoDocument(
         <SidePanels
@@ -95,9 +76,7 @@ describe("SidePanels", function () {
       this.params = {
         nodeID: null,
         serviceName: null,
-        taskID: null,
-        userID: null,
-        groupID: null
+        taskID: null
       };
       this.instance = TestUtils.renderIntoDocument(
         <SidePanels
@@ -135,22 +114,5 @@ describe("SidePanels", function () {
       this.params.serviceName = null;
     });
 
-    it("should return UserSidePanelContents if userID is set",
-      function () {
-      this.params.userID = "set";
-      var contents = this.instance.getContents(this.params);
-
-      expect(contents.type === UserSidePanelContents).toEqual(true);
-      this.params.serviceName = null;
-    });
-
-    it("should return GroupSidePanelContents if groupID is set",
-      function () {
-      this.params.groupID = "set";
-      var contents = this.instance.getContents(this.params);
-
-      expect(contents.type === GroupSidePanelContents).toEqual(true);
-      this.params.serviceName = null;
-    });
   });
 });
