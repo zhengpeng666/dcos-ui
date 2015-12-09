@@ -8,12 +8,23 @@ import StoreMixin from "../mixins/StoreMixin";
 import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
-  "handlePasswordSubmit"
+  "handlePasswordSubmit",
+  "onUserStoreUpdateError",
+  "onUserStoreUpdateSuccess"
 ];
 
 export default class UserGroupTable extends Util.mixin(StoreMixin) {
   constructor() {
     super();
+
+    this.state = {userStoreError: false};
+
+    this.store_listeners = [
+      {
+        name: "user",
+        events: ["updateSuccess", "updateError"]
+      }
+    ];
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
@@ -27,6 +38,18 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     });
   }
 
+  onUserStoreUpdateError(error) {
+    this.setState({
+      userStoreError: error
+    });
+  }
+
+  onUserStoreUpdateSuccess() {
+    this.setState({
+      userStoreError: false
+    });
+  }
+
   render() {
     let userDetails = ACLUserStore.getUser(this.props.userID);
     let passwordDefinition = [
@@ -35,7 +58,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
         name: "password",
         placeholder: "Password",
         required: true,
-        showError: false,
+        showError: this.state.userStoreError,
         showLabel: false,
         writeType: "edit",
         validation: function () { return true; },
