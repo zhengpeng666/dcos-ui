@@ -39,7 +39,7 @@ export default class FieldPassword extends FieldInput {
       return (
         <input
           ref="inputElement"
-          className={this.props.inputClass}
+          className={`${this.props.inputClass} ${this.props.sharedClass}`}
           {...attributes}
           value={startValue} />
       );
@@ -49,7 +49,7 @@ export default class FieldPassword extends FieldInput {
       <span
         ref="inputElement"
         {...attributes}
-        className={this.props.readClass}
+        className={`${this.props.readClass} ${this.props.sharedClass}`}
         onClick={attributes.onFocus}>
         {attributes.defaultPasswordValue || DEFAULT_PASSWORD_TEXT}
       </span>
