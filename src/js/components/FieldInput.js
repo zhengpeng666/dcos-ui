@@ -85,13 +85,14 @@ export default class FieldInput extends React.Component {
   }
 
   getInputElement(attributes) {
+    let classes = classNames(this.props.inputClass, this.props.sharedClass);
     attributes = this.bindEvents(attributes);
 
     if (this.isEditing() || this.props.writeType === "input") {
       return (
         <input
           ref="inputElement"
-          className={`${this.props.inputClass} ${this.props.sharedClass}`}
+          className={classes}
           onKeyDown={this.handleKeyDown.bind(this)}
           {...attributes}
           value={attributes.startValue} />
@@ -102,7 +103,7 @@ export default class FieldInput extends React.Component {
       <span
         ref="inputElement"
         {...attributes}
-        className={`${this.props.readClass} ${this.props.sharedClass}`}
+        className={classes}
         onClick={attributes.onFocus}>
         {this.props.value || attributes.startValue}
       </span>
