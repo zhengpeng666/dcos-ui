@@ -163,21 +163,21 @@ describe("UserGroupTable", function () {
               return [
                 {
                   description: "foo",
-                  gid: "bar",
+                  gid: "bar"
                 },
                 {
                   description: "bar",
-                  gid: "baz",
+                  gid: "baz"
                 },
                 {
                   description: "baz",
-                  gid: "qux",
+                  gid: "qux"
                 }
               ];
             }
-          }
+          };
         }
-      }
+      };
 
       this.instance.setState({requestGroupsSuccess: true});
 
