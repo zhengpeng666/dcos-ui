@@ -226,7 +226,11 @@ var ACLUserStore = Store.createStore({
           .emit(EventTypes.ACL_USER_UPDATE_SUCCESS, action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR:
-        ACLUserStore.emit(EventTypes.ACL_USER_UPDATE_ERROR, action.userID);
+        ACLUserStore.emit(
+          EventTypes.ACL_USER_UPDATE_ERROR,
+          action.data,
+          action.userID
+        );
         break;
       // Delete user
       case ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS:
