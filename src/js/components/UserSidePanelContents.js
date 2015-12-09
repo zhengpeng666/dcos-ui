@@ -7,7 +7,7 @@ import MesosSummaryStore from "../stores/MesosSummaryStore";
 import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
-import UserGroupTable from "./UserGroupTable";
+import UserGroupMembershipTab from "./UserGroupMembershipTab";
 
 export default class UserSidePanelContents extends SidePanelContents {
 
@@ -104,7 +104,7 @@ export default class UserSidePanelContents extends SidePanelContents {
 
     renderGroupMembershipTabView() {
       return (
-        <UserGroupTable userID={this.props.itemID} />
+        <UserGroupMembershipTab userID={this.props.itemID} />
       );
     }
 

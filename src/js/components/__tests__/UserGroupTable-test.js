@@ -15,7 +15,6 @@ var TestUtils = React.addons.TestUtils;
 
 var ActionTypes = require("../../constants/ActionTypes");
 var ACLGroupStore = require("../../stores/ACLGroupStore");
-var ACLGroupsStore = require("../../stores/ACLGroupsStore");
 var ACLUserStore = require("../../stores/ACLUserStore");
 var AppDispatcher = require("../../events/AppDispatcher");
 var UserGroupTable = require("../UserGroupTable");
@@ -145,65 +144,6 @@ describe("UserGroupTable", function () {
       expect(this.instance.handleOpenConfirm.mock.calls[0][0]).toEqual(
         {gid: "bar"}
       );
-    });
-
-  });
-
-  describe("add groups dropdown", function () {
-
-    beforeEach(function () {
-      this.groupsStoreGet = ACLGroupsStore.get;
-      this.groupStoreAddUser = ACLGroupStore.addUser;
-
-      ACLGroupStore.addUser = jest.genMockFunction();
-      ACLGroupsStore.get = function (key) {
-        if (key === "groups") {
-          return {
-            getItems: function () {
-              return [
-                {
-                  description: "foo",
-                  gid: "bar"
-                },
-                {
-                  description: "bar",
-                  gid: "baz"
-                },
-                {
-                  description: "baz",
-                  gid: "qux"
-                }
-              ];
-            }
-          };
-        }
-      };
-
-      this.instance.setState({requestGroupsSuccess: true});
-
-      this.instance.dropdownButton = TestUtils
-        .scryRenderedDOMComponentsWithClass(this.instance, "dropdown-toggle");
-      TestUtils.Simulate.click(this.instance.dropdownButton[0].getDOMNode());
-
-      this.instance.selectableElements = TestUtils
-        .scryRenderedDOMComponentsWithClass(this.instance, "is-selectable");
-      TestUtils.Simulate.click(this.instance.selectableElements[1]
-        .getDOMNode());
-    });
-
-    afterEach(function () {
-      ACLGroupsStore.get = this.groupsStoreGet;
-      ACLGroupStore.addUser = this.groupStoreAddUser;
-    });
-
-    it("should call the handler when selecting a group", function () {
-      expect(ACLGroupStore.addUser.mock.calls.length).toEqual(1);
-    });
-
-    it("should call #addUser with the proper arguments when selecting a group",
-      function () {
-      expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual("bar");
-      expect(ACLGroupStore.addUser.mock.calls[0][1]).toEqual("unicode");
     });
 
   });

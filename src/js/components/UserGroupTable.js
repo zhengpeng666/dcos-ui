@@ -1,12 +1,10 @@
-import {Confirm, Dropdown, Table} from "reactjs-components";
+import {Confirm, Table} from "reactjs-components";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLGroupStore from "../stores/ACLGroupStore";
-import ACLGroupsStore from "../stores/ACLGroupsStore";
 import ACLUserStore from "../stores/ACLUserStore";
-import RequestErrorMsg from "../components/RequestErrorMsg";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import StoreMixin from "../mixins/StoreMixin";
 import TableUtil from "../utils/TableUtil";
@@ -16,7 +14,6 @@ const METHODS_TO_BIND = [
   "handleOpenConfirm",
   "handleButtonConfirm",
   "handleButtonCancel",
-  "onGroupSelection",
   "renderButton"
 ];
 
@@ -36,18 +33,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     this.store_listeners = [
       {
         name: "group",
-        events: [
-          "deleteUserSuccess",
-          "deleteUserError",
-          "usersSuccess"
-        ]
-      },
-      {
-        name: "groups",
-        events: [
-          "success",
-          "error"
-        ]
+        events: ["deleteUserSuccess", "deleteUserError", "usersSuccess"]
       }
     ];
 
@@ -58,7 +44,6 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount();
-    ACLGroupsStore.fetchGroups();
   }
 
   handleOpenConfirm(group) {
@@ -78,29 +63,12 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     this.setState({groupID: null, openConfirm: false});
   }
 
-  onGroupSelection(group) {
-    ACLGroupStore.addUser(group.id, this.props.userID);
-  }
-
   onGroupStoreDeleteUserError(groupID, userID, error) {
     this.setState({pendingRequest: false, userUpdateError: error});
   }
 
   onGroupStoreDeleteUserSuccess() {
     this.setState({groupID: null, openConfirm: false, pendingRequest: false});
-  }
-
-  onGroupsStoreError() {
-    this.setState({
-      requestGroupsError: true
-    });
-  }
-
-  onGroupsStoreSuccess() {
-    this.setState({
-      requestGroupsSuccess: true,
-      requestGroupsError: false
-    });
   }
 
   getColGroup() {
@@ -167,40 +135,6 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     );
   }
 
-  getDropdownItems() {
-    let groups = ACLGroupsStore.get("groups").getItems();
-
-    let defaultItem = {
-      description: "Add Group",
-      gid: "default-placeholder-group-id"
-    };
-    let items = [defaultItem].concat(groups);
-
-    return items.map(function (group) {
-      let selectedHtml = group.description;
-
-      return {
-        id: group.gid,
-        name: selectedHtml,
-        html: selectedHtml,
-        selectedHtml
-      };
-    });
-  }
-
-  getLoadingScreen() {
-    return (
-      <div className="container container-fluid container-pod text-align-center
-        vertical-center inverse">
-        <div className="row">
-          <div className="ball-scale">
-            <div />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   renderGroupLabel(prop, group) {
     return group[prop];
   }
@@ -217,14 +151,6 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
   }
 
   render() {
-    if (this.state.requestGroupsError) {
-      return <RequestErrorMsg />;
-    }
-
-    if (!this.state.requestGroupsSuccess) {
-      return this.getLoadingScreen();
-    }
-
     let userDetails = ACLUserStore.getUser(this.props.userID);
     let userGroups = userDetails.groups.map(function (group) {
       return group.group;
@@ -241,33 +167,19 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
           rightButtonCallback={this.handleButtonConfirm}>
           {this.getConfirmModalContent(userDetails)}
         </Confirm>
-        <div className="container container-fluid container-pod
-          container-pod-short flush-bottom">
-          <Dropdown buttonClassName="button dropdown-toggle"
-            dropdownMenuClassName="dropdown-menu"
-            dropdownMenuListClassName="dropdown-menu-list"
-            items={this.getDropdownItems()}
-            onItemSelection={this.onGroupSelection}
-            selectedID="default-placeholder-group-id"
-            transition={true}
-            wrapperClassName="dropdown" />
-        </div>
-        <div className="container container-fluid container-pod
-          container-pod-short">
-          <Table
-            className="table table-borderless-outer
-              table-borderless-inner-columns flush-bottom no-overflow
-              flush-bottom"
-            columns={this.getColumns()}
-            colGroup={this.getColGroup()}
-            data={userGroups}
-            idAttribute="gid"
-            itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: "description", order: "asc"}}
-            useFlex={true}
-            transition={false}
-            useScrollTable={false} />
-        </div>
+        <Table
+          className="table table-borderless-outer
+            table-borderless-inner-columns flush-bottom no-overflow
+            flush-bottom"
+          columns={this.getColumns()}
+          colGroup={this.getColGroup()}
+          data={userGroups}
+          idAttribute="gid"
+          itemHeight={TableUtil.getRowHeight()}
+          sortBy={{prop: "description", order: "asc"}}
+          useFlex={true}
+          transition={false}
+          useScrollTable={false} />
       </div>
     );
   }
