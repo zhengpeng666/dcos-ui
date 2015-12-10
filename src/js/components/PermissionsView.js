@@ -153,7 +153,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
 
   getErrorModalContent(resourceErrorMessage) {
     return (
-      <div className="container-pod text-align-center">
+      <div className="container-pod container-pod-short text-align-center">
         <p>{resourceErrorMessage}</p>
       </div>
     );

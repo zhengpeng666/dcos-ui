@@ -136,7 +136,7 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
     }
 
     return (
-      <div className="container-pod text-align-center">
+      <div className="container-pod container-pod-short text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
         <p>{`${userLabel} will be removed from the ${groupLabel} group.`}</p>
         {error}

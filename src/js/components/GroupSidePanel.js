@@ -107,7 +107,7 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
 
     let group = ACLGroupStore.getGroup(this.props.params.groupID);
     return (
-      <div className="container-pod text-align-center">
+      <div className="container-pod container-pod-short text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
         <p>{`${group.description} will be deleted.`}</p>
         {error}

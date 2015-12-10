@@ -145,8 +145,9 @@ export default class PermissionsTable extends Util.mixin(StoreMixin) {
     }
 
     return (
-      <div className="container-pod text-align-center">
-        <p>{`Are you sure you want to remove permission to ${serviceLabel}?`}</p>
+      <div className="container-pod container-pod-short text-align-center">
+        <h3 className="flush-top">Are you sure?</h3>
+        <p>{`Permission to ${serviceLabel} will be removed.`}</p>
         {error}
       </div>
     );
