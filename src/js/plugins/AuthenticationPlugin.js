@@ -30,12 +30,10 @@ const AuthenticationPlugin = {
   },
 
   openIdentifyModal: function (value) {
-    // If plugin is disabled then always return false
     if (this.isEnabled() !== true) {
       return value;
     }
 
-    // Else just pass the value along
     return false;
   },
 
