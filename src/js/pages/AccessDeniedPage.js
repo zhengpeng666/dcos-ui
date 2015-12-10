@@ -1,4 +1,3 @@
-import GeminiScrollbar from "react-gemini-scrollbar";
 import React from "react";
 
 import AlertPanel from "../components/AlertPanel";
@@ -8,9 +7,7 @@ export default class AccessDeniedPage extends React.Component {
   render() {
     return (
       <div className="flex-container-col">
-        <GeminiScrollbar
-          autoshow={true}
-          className="page-content container-scrollable inverse">
+        <div className="page-content container-scrollable inverse">
           <div className="container container-fluid container-pod
             flex-container-col">
             <AlertPanel
@@ -23,7 +20,7 @@ export default class AccessDeniedPage extends React.Component {
               </p>
             </AlertPanel>
           </div>
-        </GeminiScrollbar>
+        </div>
       </div>
     );
   }
