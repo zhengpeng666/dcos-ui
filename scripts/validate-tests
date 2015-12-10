@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+! egrep --quiet -R "describe\.only\(|it\.only\(" ./src
