@@ -65,7 +65,7 @@ export default class UserFormModal extends Util.mixin(StoreMixin) {
       },
       {
         fieldType: "text",
-        name: "username",
+        name: "uid",
         placeholder: "Username",
         required: true,
         showError: false,
