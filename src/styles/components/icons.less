@@ -72,6 +72,9 @@ Icon (Large)
 Icon (jumbo)
 ----------------------------------------------------------------------------- */
 
+@icon-jumbo-width:                                                              90px;
+@icon-jumbo-height:                                                             90px;
+
 @icon-sprite-jumbo-count-horizontal:                                            3;
 @icon-sprite-jumbo-count-vertical:                                              4;
 @icon-sprite-jumbo-border-radius:                                               7px;
@@ -1046,24 +1049,24 @@ Icon (jumbo)
     -------------------------------------------------------------------------------------------------------
     ---------------------------------------------------------------------------------------------------- */
 
-    .icon.icon-sprite.icon-sprite-large {
+    .icon.icon-sprite.icon-sprite-jumbo {
 
-      background-image: url("@{path-images}components/icons/icons-large.png");
-      line-height: @icon-large-height;
-      width: @icon-large-width;
-      height: @icon-large-height;
-      .background-size(floor(@icon-sprite-large-count-horizontal * @icon-large-width) floor(@icon-sprite-large-count-vertical * @icon-large-height));
-      background-position: floor(-@icon-sprite-large-variant-black-offset-horizontal) -(floor(@icon-large-height) * 0);
+      background-image: url("@{path-images}components/icons/icons-jumbo.png");
+      line-height: @icon-jumbo-height;
+      width: @icon-jumbo-width;
+      height: @icon-jumbo-height;
+      .background-size(floor(@icon-sprite-jumbo-count-horizontal * @icon-jumbo-width) floor(@icon-sprite-jumbo-count-vertical * @icon-jumbo-height));
+      background-position: floor(-@icon-sprite-jumbo-variant-black-offset-horizontal) -(floor(@icon-jumbo-height) * 0);
 
-      &.icon-sprite-large-white {
+      &.icon-sprite-jumbo-white {
 
-        background-position: floor(-@icon-sprite-large-variant-white-offset-horizontal) -(floor(@icon-large-height) * 0);
+        background-position: floor(-@icon-sprite-jumbo-variant-white-offset-horizontal) -(floor(@icon-jumbo-height) * 0);
 
       }
 
-      &.icon-sprite-large-color {
+      &.icon-sprite-jumbo-color {
 
-        background-position: floor(-@icon-sprite-large-variant-color-offset-horizontal) -(floor(@icon-large-height) * 0);
+        background-position: floor(-@icon-sprite-jumbo-variant-color-offset-horizontal) -(floor(@icon-jumbo-height) * 0);
 
       }
 
@@ -1116,6 +1119,7 @@ Icon (jumbo)
         &.icon-sprite-jumbo-white {
 
           background-position: floor(-@icon-sprite-jumbo-variant-white-offset-horizontal) -(floor(@icon-jumbo-height) * 3);
+          opacity: 0.4;
 
         }
 
