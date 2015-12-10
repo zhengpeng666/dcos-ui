@@ -10,7 +10,6 @@ import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
 import UserDetails from "./UserDetails";
 import UserGroupMembershipTab from "./UserGroupMembershipTab";
-import UserGroupTable from "./UserGroupTable";
 
 export default class UserSidePanelContents extends SidePanelContents {
 
