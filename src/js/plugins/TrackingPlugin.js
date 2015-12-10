@@ -23,7 +23,7 @@ const TrackingPlugin = {
    */
   initialize: function (Plugins) {
     Plugins.addFilter("footerButtonSet", this.footerButtonSet.bind(this));
-    Plugins.addFilter("openLoginModal", this.openLoginModal.bind(this));
+    Plugins.addFilter("openIdentifyModal", this.openIdentifyModal.bind(this));
     Plugins.addAction("pluginsConfigured", this.pluginsConfigured.bind(this));
     Plugins.addAction("receivedUserEmail", this.receivedUserEmail.bind(this));
   },
@@ -63,7 +63,7 @@ const TrackingPlugin = {
     LocalStorageUtil.set("email", email);
   },
 
-  openLoginModal: function (value) {
+  openIdentifyModal: function (value) {
     // If plugin is disabled then always return false
     if (this.isEnabled() !== true) {
       return false;
