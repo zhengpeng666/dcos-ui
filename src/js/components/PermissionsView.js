@@ -124,8 +124,10 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
 
   getDropdownItems() {
     let permissions = this.props.permissions;
-    let filteredResources =
-      ACLStore.get("services").getItems().filter(function (resource) {
+    let services = ACLStore.get("services").getItems().sort(
+      Util.getLocaleCompareSortFn("description")
+    );
+    let filteredResources = services.filter(function (resource) {
         // Filter out any resource which is in permissions
         let rid = resource.get("rid");
         return !permissions.some(function (permission) {
