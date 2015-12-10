@@ -371,17 +371,19 @@ describe("ACLGroupStore", function () {
         });
       });
 
-      it("emits error event with the groupID", function () {
+      it("emits error event with the groupID and error", function () {
         ACLGroupStore.addChangeListener(
-          EventTypes.ACL_GROUP_DELETE_SUCCESS,
-          function (groupID) {
+          EventTypes.ACL_GROUP_DELETE_ERROR,
+          function (groupID, error) {
             expect(groupID).toEqual("foo");
+            expect(error).toEqual("error");
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR,
-          groupID: "foo"
+          groupID: "foo",
+          data: "error"
         });
       });
 
