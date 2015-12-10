@@ -43,6 +43,12 @@ export default class GroupSidePanelContents extends SidePanelContents {
     ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
   }
 
+  onGroupStoreFetchedDetailsSuccess() {
+    if (this.state.fetchedDetailsError === true) {
+      this.setState({fetchedDetailsError: false});
+    }
+  }
+
   onGroupStoreFetchedDetailsError(groupID) {
     if (groupID === this.props.itemID) {
       this.setState({fetchedDetailsError: true});
