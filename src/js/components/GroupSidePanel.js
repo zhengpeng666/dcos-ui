@@ -73,6 +73,22 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
     HistoryStore.goBack(this.context.router);
   }
 
+  onGroupStoreDeleteError(groupID, error) {
+    this.setState({
+      deleteUpdateError: error,
+      pendingRequest: false
+    });
+  }
+
+  onGroupStoreDeleteSuccess() {
+    this.setState({
+      openDeleteConfirmation: false,
+      pendingRequest: false
+    });
+
+    this.context.router.transitionTo("settings-organization-groups");
+  }
+
   isOpen() {
     return (
       this.props.params.groupID != null
@@ -148,22 +164,6 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
         itemID={groupID}
         parentRouter={this.context.router} />
     );
-  }
-
-  onGroupStoreDeleteError(groupID, error) {
-    this.setState({
-      deleteUpdateError: error,
-      pendingRequest: false
-    });
-  }
-
-  onGroupStoreDeleteSuccess() {
-    this.setState({
-      openDeleteConfirmation: false,
-      pendingRequest: false
-    });
-
-    this.context.router.transitionTo("settings-organization-groups");
   }
 
   render() {

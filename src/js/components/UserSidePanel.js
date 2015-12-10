@@ -73,6 +73,22 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
     HistoryStore.goBack(this.context.router);
   }
 
+  onUserStoreDeleteError(userID, error) {
+    this.setState({
+      deleteUpdateError: error,
+      pendingRequest: false
+    });
+  }
+
+  onUserStoreDeleteSuccess() {
+    this.setState({
+      openDeleteConfirmation: false,
+      pendingRequest: false
+    });
+
+    this.context.router.transitionTo("settings-organization-users");
+  }
+
   isOpen() {
     return (
       this.props.params.userID != null
@@ -149,22 +165,6 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
         itemID={userID}
         parentRouter={this.context.router} />
     );
-  }
-
-  onUserStoreDeleteError(userID, error) {
-    this.setState({
-      deleteUpdateError: error,
-      pendingRequest: false
-    });
-  }
-
-  onUserStoreDeleteSuccess() {
-    this.setState({
-      openDeleteConfirmation: false,
-      pendingRequest: false
-    });
-
-    this.context.router.transitionTo("settings-organization-users");
   }
 
   render() {
