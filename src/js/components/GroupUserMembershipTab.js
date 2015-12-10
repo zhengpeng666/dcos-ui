@@ -63,7 +63,9 @@ export default class GroupUserMembershipTable extends Util.mixin(StoreMixin) {
   }
 
   getDropdownItems() {
-    let users = ACLUsersStore.get("users").getItems();
+    let users = ACLUsersStore.get("users").getItems().sort(
+      Util.getLocaleCompareSortFn("description")
+    );
 
     let defaultItem = {
       description: "Add User",
