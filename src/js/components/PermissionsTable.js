@@ -56,15 +56,15 @@ export default class PermissionsTable extends Util.mixin(StoreMixin) {
     this.setState({pendingRequest: true});
     let storeAction;
 
-    if (this.props.ownerType === "user") {
+    if (this.props.itemType === "user") {
       storeAction = ACLStore.revokeUserActionToResource.bind(ACLStore);
     }
 
-    if (this.props.ownerType === "group") {
+    if (this.props.itemType === "group") {
       storeAction = ACLStore.revokeGroupActionToResource.bind(ACLStore);
     }
 
-    storeAction(this.props.ownerID, "access", this.state.permissionID);
+    storeAction(this.props.itemID, "access", this.state.permissionID);
   }
 
   handleButtonCancel() {
@@ -204,6 +204,7 @@ export default class PermissionsTable extends Util.mixin(StoreMixin) {
 }
 
 PermissionsTable.propTypes = {
-  ownerID: React.PropTypes.string,
-  ownerType: React.PropTypes.string
+  permissions: React.PropTypes.array,
+  itemID: React.PropTypes.string,
+  itemType: React.PropTypes.string
 };

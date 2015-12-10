@@ -1,6 +1,5 @@
 import {Confirm, Dropdown} from "reactjs-components";
 /*eslint-disable no-unused-vars*/
-import {Dropdown} from "reactjs-components";
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
@@ -110,9 +109,9 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   getPermissionTable() {
     return (
       <PermissionsTable
-        permissions={this.props.user.uniquePermissions()}
-        ownerID={this.props.user.uid}
-        ownerType={this.props.ownerType} />
+        permissions={this.props.permissions}
+        itemID={this.props.itemID}
+        itemType={this.props.itemType} />
     );
   }
 
