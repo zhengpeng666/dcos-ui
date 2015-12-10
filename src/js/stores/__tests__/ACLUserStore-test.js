@@ -385,17 +385,19 @@ describe("ACLUserStore", function () {
         });
       });
 
-      it("emits error event with the userID", function () {
+      it("emits error event with the userID and error", function () {
         ACLUserStore.addChangeListener(
-          EventTypes.ACL_USER_DELETE_SUCCESS,
-          function (userID) {
+          EventTypes.ACL_USER_DELETE_ERROR,
+          function (userID, error) {
             expect(userID).toEqual("foo");
+            expect(error).toEqual("error");
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_ERROR,
-          userID: "foo"
+          userID: "foo",
+          data: "error"
         });
       });
 
