@@ -8,7 +8,9 @@ import PermissionsView from "./PermissionsView";
 import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
+import UserDetails from "./UserDetails";
 import UserGroupMembershipTab from "./UserGroupMembershipTab";
+import UserGroupTable from "./UserGroupTable";
 
 export default class UserSidePanelContents extends SidePanelContents {
 
@@ -96,7 +98,9 @@ export default class UserSidePanelContents extends SidePanelContents {
     }
 
     renderDetailsTabView() {
-      return null;
+      return (
+        <UserDetails userID={this.props.itemID} />
+      );
     }
 
     renderPermissionsTabView(user) {

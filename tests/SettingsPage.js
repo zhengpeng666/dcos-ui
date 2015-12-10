@@ -243,6 +243,47 @@ describe("Settings Page [05k]", function () {
 
     });
 
+    context("User Details [063]", function () {
+
+      beforeEach(function () {
+        cy
+          .get(".side-panel .tabs .tab-item-label")
+          .contains("Details")
+          .click();
+        cy
+          .get(".side-panel .side-panel-content-user-details .row").as("rows");
+      });
+
+      it("displays the username in the first row [064]", function () {
+        cy.get("@rows")
+          .should(function ($rows) {
+            var firstRow = $rows[0];
+            expect(firstRow.children[1].textContent).to.equal("quis");
+          });
+      });
+
+      it("displays the password form in the second row [065]", function () {
+        cy.get("@rows")
+          .should(function ($rows) {
+            var secondRow = $rows[1];
+            expect(secondRow.children[1].children[0].nodeName).to.equal("FORM");
+          });
+      });
+
+      it("switches the password label into a password input element [066]",
+        function () {
+        cy.get("form .read-only")
+          .click();
+
+        cy.get("form input")
+          .should(function ($input) {
+            expect($input.length).to.equal(1);
+            expect($input[0].type).to.equal("password");
+          });
+      });
+
+    });
+
   });
 
   context("Group Details Sidepanel [03z]", function() {
