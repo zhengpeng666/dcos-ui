@@ -3,7 +3,7 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLGroupStore from "../stores/ACLGroupStore";
-import GroupUserTable from "./GroupUserTable";
+import GroupUserMembershipTab from "./GroupUserMembershipTab";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import PermissionsView from "./PermissionsView";
 import RequestErrorMsg from "./RequestErrorMsg";
@@ -122,7 +122,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
 
   renderMembersTabView() {
     return (
-      <GroupUserTable groupID={this.props.itemID} />
+      <GroupUserMembershipTab groupID={this.props.itemID} />
     );
   }
 

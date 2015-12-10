@@ -1,11 +1,9 @@
-import {Confirm, Dropdown, Table} from "reactjs-components";
+import {Confirm, Table} from "reactjs-components";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLGroupStore from "../stores/ACLGroupStore";
-import ACLUsersStore from "../stores/ACLUsersStore";
-import RequestErrorMsg from "../components/RequestErrorMsg";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import StoreMixin from "../mixins/StoreMixin";
 import TableUtil from "../utils/TableUtil";
@@ -15,7 +13,6 @@ const METHODS_TO_BIND = [
   "handleOpenConfirm",
   "handleButtonConfirm",
   "handleButtonCancel",
-  "onUserSelection",
   "renderButton"
 ];
 
@@ -36,21 +33,12 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
       {
         name: "group",
         events: ["deleteUserSuccess", "deleteUserError", "usersSuccess"]
-      },
-      {
-        name: "users",
-        events: ["error", "success"]
       }
     ];
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
-  }
-
-  componentDidMount() {
-    super.componentDidMount();
-    ACLUsersStore.fetchUsers();
   }
 
   handleOpenConfirm(user) {
@@ -76,10 +64,6 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
 
   onGroupStoreDeleteUserSuccess() {
     this.setState({openConfirm: false, pendingRequest: false, userID: null});
-  }
-
-  onUserSelection(user) {
-    ACLGroupStore.addUser(this.props.groupID, user.id);
   }
 
   onUsersStoreError() {
@@ -160,25 +144,6 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
     );
   }
 
-  getDropdownItems(users) {
-    let defaultItem = {
-      description: "Add User",
-      uid: "default-placeholder-user-id"
-    };
-    let items = [defaultItem].concat(users);
-
-    return items.map(function (user) {
-      let selectedHtml = user.description;
-
-      return {
-        id: user.uid,
-        name: selectedHtml,
-        html: selectedHtml,
-        selectedHtml
-      };
-    });
-  }
-
   getLoadingScreen() {
     return (
       <div className="container container-fluid container-pod text-align-center
@@ -208,20 +173,6 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
   }
 
   render() {
-    if (this.state.requestUsersError) {
-      return (
-        <div className="container container-fluid container-pod flush-bottom">
-          <RequestErrorMsg />
-        </div>
-      );
-    }
-
-    if (!this.state.requestUsersSuccess) {
-      return this.getLoadingScreen();
-    }
-
-    let allUsers = ACLUsersStore.get("users").getItems();
-
     let groupDetails = ACLGroupStore.getGroup(this.props.groupID);
     let groupUsers = groupDetails.users.map(function (user) {
       return user.user;
@@ -238,32 +189,18 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
           rightButtonCallback={this.handleButtonConfirm}>
           {this.getConfirmModalContent(groupDetails)}
         </Confirm>
-        <div className="container container-fluid container-pod
-          container-pod-short flush-bottom">
-          <Dropdown buttonClassName="button dropdown-toggle"
-            dropdownMenuClassName="dropdown-menu"
-            dropdownMenuListClassName="dropdown-menu-list"
-            items={this.getDropdownItems(allUsers)}
-            onItemSelection={this.onUserSelection}
-            selectedID="default-placeholder-user-id"
-            transition={true}
-            wrapperClassName="dropdown" />
-        </div>
-        <div className="container container-fluid container-pod
-          container-pod-short">
-          <Table
-            className="table table-borderless-outer table-borderless-inner-columns
-              flush-bottom no-overflow flush-bottom"
-            columns={this.getColumns()}
-            colGroup={this.getColGroup()}
-            data={groupUsers}
-            idAttribute="uid"
-            itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: "description", order: "asc"}}
-            useFlex={true}
-            transition={false}
-            useScrollTable={false} />
-        </div>
+        <Table
+          className="table table-borderless-outer table-borderless-inner-columns
+            flush-bottom no-overflow flush-bottom"
+          columns={this.getColumns()}
+          colGroup={this.getColGroup()}
+          data={groupUsers}
+          idAttribute="uid"
+          itemHeight={TableUtil.getRowHeight()}
+          sortBy={{prop: "description", order: "asc"}}
+          useFlex={true}
+          transition={false}
+          useScrollTable={false} />
       </div>
     );
   }
