@@ -72,7 +72,9 @@ export default class UserGroupMembershipTab extends Util.mixin(StoreMixin) {
   }
 
   getDropdownItems() {
-    let groups = ACLGroupsStore.get("groups").getItems();
+    let groups = ACLGroupsStore.get("groups").getItems().sort(
+      Util.getLocaleCompareSortFn("description")
+    );
 
     let defaultItem = {
       description: "Add Group",
