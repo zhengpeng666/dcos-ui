@@ -98,7 +98,7 @@ describe("GroupUserTable", function () {
         "p"
       );
       expect(paragraphs[0].props.children)
-        .toEqual("Are you sure you want to remove qux from foo?");
+        .toEqual("qux will be removed from the foo group.");
     });
 
     it("returns a message containing the error that was received",

@@ -112,6 +112,12 @@ const Util = {
    */
   isArray: function (arg) {
     return Object.prototype.toString.call(arg) === "[object Array]";
+  },
+
+  getLocaleCompareSortFn: function (prop) {
+    return function (a, b) {
+      return a[prop].localeCompare(b[prop]);
+    };
   }
 };
 

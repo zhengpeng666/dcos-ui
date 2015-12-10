@@ -4,42 +4,33 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLGroupStore from "../stores/ACLGroupStore";
-import ACLGroupsStore from "../stores/ACLGroupsStore";
+import ACLUsersStore from "../stores/ACLUsersStore";
+import GroupUserTable from "./GroupUserTable";
 import RequestErrorMsg from "../components/RequestErrorMsg";
 import StoreMixin from "../mixins/StoreMixin";
-import UserGroupTable from "./UserGroupTable";
 import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
-  "onGroupSelection"
+  "onUserSelection"
 ];
 
-export default class UserGroupMembershipTab extends Util.mixin(StoreMixin) {
+export default class GroupUserMembershipTable extends Util.mixin(StoreMixin) {
   constructor() {
     super();
 
     this.state = {
+      userID: null,
+      openConfirm: false,
       pendingRequest: false,
-      requestGroupsSuccess: false,
-      requestGroupsError: false,
-      userUpdateError: null
+      requestUsersError: false,
+      requestUsersSuccess: false,
+      groupUpdateError: null
     };
 
     this.store_listeners = [
       {
-        name: "group",
-        events: [
-          "deleteUserSuccess",
-          "deleteUserError",
-          "usersSuccess"
-        ]
-      },
-      {
-        name: "groups",
-        events: [
-          "success",
-          "error"
-        ]
+        name: "users",
+        events: ["error", "success"]
       }
     ];
 
@@ -50,43 +41,43 @@ export default class UserGroupMembershipTab extends Util.mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount();
-    ACLGroupsStore.fetchGroups();
+    ACLUsersStore.fetchUsers();
   }
 
-  onGroupSelection(group) {
-    ACLGroupStore.addUser(group.id, this.props.userID);
+  onUserSelection(user) {
+    ACLGroupStore.addUser(this.props.groupID, user.id);
   }
 
-  onGroupsStoreError() {
+  onUsersStoreError() {
     this.setState({
-      requestGroupsSuccess: false,
-      requestGroupsError: true
+      requestUsersSuccess: false,
+      requestUsersError: true
     });
   }
 
-  onGroupsStoreSuccess() {
+  onUsersStoreSuccess() {
     this.setState({
-      requestGroupsSuccess: true,
-      requestGroupsError: false
+      requestUsersSuccess: true,
+      requestUsersError: false
     });
   }
 
   getDropdownItems() {
-    let groups = ACLGroupsStore.get("groups").getItems().sort(
+    let users = ACLUsersStore.get("users").getItems().sort(
       Util.getLocaleCompareSortFn("description")
     );
 
     let defaultItem = {
-      description: "Add Group",
-      gid: "default-placeholder-group-id"
+      description: "Add User",
+      uid: "default-placeholder-user-id"
     };
-    let items = [defaultItem].concat(groups);
+    let items = [defaultItem].concat(users);
 
-    return items.map(function (group) {
-      let selectedHtml = group.description;
+    return items.map(function (user) {
+      let selectedHtml = user.description;
 
       return {
-        id: group.gid,
+        id: user.uid,
         name: selectedHtml,
         html: selectedHtml,
         selectedHtml
@@ -107,12 +98,31 @@ export default class UserGroupMembershipTab extends Util.mixin(StoreMixin) {
     );
   }
 
+  renderUserLabel(prop, user) {
+    return user[prop];
+  }
+
+  renderButton(prop, user) {
+    return (
+      <div className="text-align-right">
+        <button className="button button-danger button-stroke button-small"
+          onClick={this.handleOpenConfirm.bind(this, user)}>
+          Remove
+        </button>
+      </div>
+    );
+  }
+
   render() {
-    if (this.state.requestGroupsError) {
-      return <RequestErrorMsg />;
+    if (this.state.requestUsersError) {
+      return (
+        <div className="container container-fluid container-pod flush-bottom">
+          <RequestErrorMsg />
+        </div>
+      );
     }
 
-    if (!this.state.requestGroupsSuccess) {
+    if (!this.state.requestUsersSuccess) {
       return this.getLoadingScreen();
     }
 
@@ -124,14 +134,14 @@ export default class UserGroupMembershipTab extends Util.mixin(StoreMixin) {
             dropdownMenuClassName="dropdown-menu"
             dropdownMenuListClassName="dropdown-menu-list"
             items={this.getDropdownItems()}
-            onItemSelection={this.onGroupSelection}
-            selectedID="default-placeholder-group-id"
+            onItemSelection={this.onUserSelection}
+            selectedID="default-placeholder-user-id"
             transition={true}
             wrapperClassName="dropdown" />
         </div>
         <div className="container container-fluid container-pod
           container-pod-short">
-          <UserGroupTable userID={this.props.userID} />
+          <GroupUserTable groupID={this.props.groupID} />
         </div>
       </div>
     );

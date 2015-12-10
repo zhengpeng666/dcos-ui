@@ -24,17 +24,15 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
       userID: null,
       openConfirm: false,
       pendingRequest: false,
+      requestUsersError: false,
+      requestUsersSuccess: false,
       groupUpdateError: null
     };
 
     this.store_listeners = [
       {
         name: "group",
-        events: [
-          "deleteUserSuccess",
-          "deleteUserError",
-          "usersSuccess"
-        ]
+        events: ["deleteUserSuccess", "deleteUserError", "usersSuccess"]
       }
     ];
 
@@ -66,6 +64,19 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
 
   onGroupStoreDeleteUserSuccess() {
     this.setState({openConfirm: false, pendingRequest: false, userID: null});
+  }
+
+  onUsersStoreError() {
+    this.setState({
+      requestUsersError: true
+    });
+  }
+
+  onUsersStoreSuccess() {
+    this.setState({
+      requestUsersSuccess: true,
+      requestUsersError: false
+    });
   }
 
   getColGroup() {
@@ -126,8 +137,22 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
 
     return (
       <div className="container-pod text-align-center">
-        <p>{`Are you sure you want to remove ${userLabel} from ${groupLabel}?`}</p>
+        <h3 className="flush-top">Are you sure?</h3>
+        <p>{`${userLabel} will be removed from the ${groupLabel} group.`}</p>
         {error}
+      </div>
+    );
+  }
+
+  getLoadingScreen() {
+    return (
+      <div className="container container-fluid container-pod text-align-center
+        vertical-center inverse">
+        <div className="row">
+          <div className="ball-scale">
+            <div />
+          </div>
+        </div>
       </div>
     );
   }
@@ -149,7 +174,7 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
 
   render() {
     let groupDetails = ACLGroupStore.getGroup(this.props.groupID);
-    let userData = groupDetails.users.map(function (user) {
+    let groupUsers = groupDetails.users.map(function (user) {
       return user.user;
     });
 
@@ -164,20 +189,18 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
           rightButtonCallback={this.handleButtonConfirm}>
           {this.getConfirmModalContent(groupDetails)}
         </Confirm>
-        <div className="container container-fluid container-pod">
-          <Table
-            className="table table-borderless-outer table-borderless-inner-columns
-              flush-bottom no-overflow flush-bottom"
-            columns={this.getColumns()}
-            colGroup={this.getColGroup()}
-            data={userData}
-            idAttribute="uid"
-            itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: "description", order: "asc"}}
-            useFlex={true}
-            transition={false}
-            useScrollTable={false} />
-        </div>
+        <Table
+          className="table table-borderless-outer table-borderless-inner-columns
+            flush-bottom no-overflow flush-bottom"
+          columns={this.getColumns()}
+          colGroup={this.getColGroup()}
+          data={groupUsers}
+          idAttribute="uid"
+          itemHeight={TableUtil.getRowHeight()}
+          sortBy={{prop: "description", order: "asc"}}
+          useFlex={true}
+          transition={false}
+          useScrollTable={false} />
       </div>
     );
   }
