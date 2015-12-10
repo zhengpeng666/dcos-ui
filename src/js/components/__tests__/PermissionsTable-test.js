@@ -85,7 +85,7 @@ describe("PermissionsTable", function () {
         "p"
       );
       expect(paragraphs[0].props.children)
-        .toEqual("Are you sure you want to remove permission to Marathon?");
+        .toEqual("Permission to Marathon will be removed.");
     });
 
     it("returns a message containing the error that was received",
