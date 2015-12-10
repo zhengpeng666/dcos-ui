@@ -104,7 +104,7 @@ export default class OrganizationTab extends React.Component {
         <div className={`${itemName}s-table-header`}>
           <FilterHeadline
             onReset={this.resetFilter}
-            name={`${capitalizedItemName}s`}
+            name={`${StringUtil.pluralize(capitalizedItemName)}`}
             currentLength={this.getVisibleItems(items).length}
             totalLength={items.length} />
           <ul className="list list-unstyled list-inline flush-bottom">
