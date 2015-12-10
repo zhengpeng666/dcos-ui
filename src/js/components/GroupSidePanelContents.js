@@ -5,6 +5,7 @@ import React from "react";
 import ACLGroupStore from "../stores/ACLGroupStore";
 import GroupUserTable from "./GroupUserTable";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import PermissionsView from "./PermissionsView";
 import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
@@ -99,8 +100,25 @@ export default class GroupSidePanelContents extends SidePanelContents {
     );
   }
 
-  renderPermissionsTabView() {
-    return null;
+  renderPermissionsTabView(group) {
+    return (
+      <div className="
+        side-panel-tab-content
+        side-panel-section
+        container
+        container-fluid
+        container-pod
+        container-pod-short-top
+        container-fluid
+        flex-container-col
+        flush-bottom
+        flex-grow">
+        <PermissionsView
+          permissions={group.getPermissions()}
+          itemID={this.props.itemID}
+          itemType="group" />
+      </div>
+    );
   }
 
   renderMembersTabView() {
@@ -132,7 +150,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
             {this.tabs_getUnroutedTabs()}
           </ul>
         </div>
-        {this.tabs_getTabView()}
+        {this.tabs_getTabView(group)}
       </div>
     );
   }

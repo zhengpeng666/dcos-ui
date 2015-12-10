@@ -73,7 +73,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
       let resource = ACLStore.get("services").getItem(triple.resourceID);
 
       this.setState({
-        resourceErrorMessage: `Could not grant user ${itemID} ${triple.action} to ${resource.get("description")}`
+        resourceErrorMessage: `Could not grant ${props.itemType} ${itemID} ${triple.action} to ${resource.get("description")}`
       });
     }
   }
