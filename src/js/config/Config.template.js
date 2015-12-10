@@ -6,12 +6,15 @@ var ConfigDev = {
   uiConfigurationFixture: {
     uiConfiguration: {
       plugins: {
-        banner: {},
-        tracking: {
-          enabled: true
-        },
         authentication: {
           enabled: false
+        },
+        banner: {},
+        settings: {
+          enabled: true
+        },
+        tracking: {
+          enabled: true
         }
       }
     }
