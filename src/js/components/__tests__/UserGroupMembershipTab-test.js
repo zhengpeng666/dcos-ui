@@ -95,7 +95,7 @@ describe("UserGroupMembershipTab", function () {
 
     it("should call #addUser with the proper arguments when selecting a group",
       function () {
-      expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual("bar");
+      expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual("baz");
       expect(ACLGroupStore.addUser.mock.calls[0][1]).toEqual("unicode");
     });
 
