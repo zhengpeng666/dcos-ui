@@ -58,6 +58,7 @@ export default class UserDetails extends Util.mixin(StoreMixin) {
         name: "password",
         placeholder: "Password",
         required: true,
+        sharedClass: "form-element-inline",
         showError: this.state.userStoreError,
         showLabel: false,
         writeType: "edit",
