@@ -3,6 +3,7 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLUserStore from "../stores/ACLUserStore";
+import Form from "./Form";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import PermissionsView from "./PermissionsView";
 import RequestErrorMsg from "./RequestErrorMsg";
@@ -77,9 +78,21 @@ export default class UserSidePanelContents extends SidePanelContents {
         flex-box-align-vertical-center">
         {imageTag}
         <div>
-          <h1 className="side-panel-content-header-label flush">
-            {user.description}
-          </h1>
+          <Form
+            definition= {
+              [{
+                fieldType: "text",
+                name: "text",
+                placeholder: "User's Name",
+                required: true,
+                sharedClass: "side-panel-content-header-label form-element-inline h1 flush",
+                showError: this.state.userStoreError,
+                showLabel: false,
+                writeType: "edit",
+                validation: function () { return true; },
+                value: user.description
+              }]
+            } />
           <div>
             {this.getSubHeader(user)}
           </div>
