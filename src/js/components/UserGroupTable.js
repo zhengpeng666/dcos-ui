@@ -25,17 +25,15 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
       groupID: null,
       openConfirm: false,
       pendingRequest: false,
+      requestGroupsSuccess: false,
+      requestGroupsError: false,
       userUpdateError: null
     };
 
     this.store_listeners = [
       {
         name: "group",
-        events: [
-          "deleteUserSuccess",
-          "deleteUserError",
-          "usersSuccess"
-        ]
+        events: ["deleteUserSuccess", "deleteUserError", "usersSuccess"]
       }
     ];
 
@@ -150,7 +148,7 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
 
   render() {
     let userDetails = ACLUserStore.getUser(this.props.userID);
-    let groupData = userDetails.groups.map(function (group) {
+    let userGroups = userDetails.groups.map(function (group) {
       return group.group;
     });
 
@@ -165,20 +163,19 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
           rightButtonCallback={this.handleButtonConfirm}>
           {this.getConfirmModalContent(userDetails)}
         </Confirm>
-        <div className="container container-fluid container-pod">
-          <Table
-            className="table table-borderless-outer table-borderless-inner-columns
-              flush-bottom no-overflow flush-bottom"
-            columns={this.getColumns()}
-            colGroup={this.getColGroup()}
-            data={groupData}
-            idAttribute="gid"
-            itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: "description", order: "asc"}}
-            useFlex={true}
-            transition={false}
-            useScrollTable={false} />
-        </div>
+        <Table
+          className="table table-borderless-outer
+            table-borderless-inner-columns flush-bottom no-overflow
+            flush-bottom"
+          columns={this.getColumns()}
+          colGroup={this.getColGroup()}
+          data={userGroups}
+          idAttribute="gid"
+          itemHeight={TableUtil.getRowHeight()}
+          sortBy={{prop: "description", order: "asc"}}
+          useFlex={true}
+          transition={false}
+          useScrollTable={false} />
       </div>
     );
   }

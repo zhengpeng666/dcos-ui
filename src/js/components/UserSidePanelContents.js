@@ -8,7 +8,7 @@ import PermissionsView from "./PermissionsView";
 import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
-import UserGroupTable from "./UserGroupTable";
+import UserGroupMembershipTab from "./UserGroupMembershipTab";
 
 export default class UserSidePanelContents extends SidePanelContents {
 
@@ -122,7 +122,7 @@ export default class UserSidePanelContents extends SidePanelContents {
 
     renderGroupMembershipTabView() {
       return (
-        <UserGroupTable userID={this.props.itemID} />
+        <UserGroupMembershipTab userID={this.props.itemID} />
       );
     }
 
@@ -134,7 +134,7 @@ export default class UserSidePanelContents extends SidePanelContents {
       }
 
       if (user.get("uid") == null ||
-          !MesosSummaryStore.get("statesProcessed")) {
+        !MesosSummaryStore.get("statesProcessed")) {
         return this.getLoadingScreen();
       }
 
