@@ -143,8 +143,10 @@ var RequestUtil = {
     }
 
     // Return a function so that we can use setTimeout in the end.
-    return function () {
-      setTimeout(closure, global.actionTypes.requestTimeout || 500);
+    return function (...args) {
+      setTimeout(function () {
+        closure.apply(null, args);
+      }, global.actionTypes.requestTimeout || 500);
     };
   }
 };
