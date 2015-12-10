@@ -13,11 +13,9 @@ jest.dontMock("../../utils/Util");
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
-var ActionTypes = require("../../constants/ActionTypes");
 var ACLGroupStore = require("../../stores/ACLGroupStore");
 var ACLGroupsStore = require("../../stores/ACLGroupsStore");
 var ACLUsersStore = require("../../stores/ACLUsersStore");
-var AppDispatcher = require("../../events/AppDispatcher");
 var GroupUserMembershipTab = require("../GroupUserMembershipTab");
 var Group = require("../../structs/Group");
 
