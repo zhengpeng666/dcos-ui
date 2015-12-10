@@ -23,6 +23,8 @@ import Plugins from "../plugins/Plugins";
 var SidebarActions = require("../events/SidebarActions");
 var TooltipMixin = require("../mixins/TooltipMixin");
 
+let defaultMenuItems = ["dashboard", "services", "nodes-list"];
+
 var Sidebar = React.createClass({
 
   displayName: "Sidebar",
@@ -196,8 +198,12 @@ var Sidebar = React.createClass({
   },
 
   getMenuItems: function () {
-    const menuItems = ["dashboard", "services", "nodes-list"];
     let currentPath = this.context.router.getLocation().getCurrentPath();
+
+    const menuItems = Plugins.applyFilter(
+      "sidebarNavigation",
+      defaultMenuItems
+    );
 
     return _.map(menuItems, function (routeKey) {
       var route = this.context.router.namedRoutes[routeKey];
