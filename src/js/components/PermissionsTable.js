@@ -174,7 +174,8 @@ export default class PermissionsTable extends Util.mixin(StoreMixin) {
       <div>
         <Confirm
           disabled={this.state.pendingRequest}
-          footerClass="modal-footer container container-pod container-pod-fluid"
+          footerContainerClass="container container-pod container-pod-short
+            container-pod-fluid"
           open={this.state.openConfirm}
           onClose={this.handleButtonCancel}
           leftButtonCallback={this.handleButtonCancel}

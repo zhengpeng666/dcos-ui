@@ -189,7 +189,8 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
         </div>
         {this.getPermissionTable()}
         <Confirm
-          footerClass="modal-footer container container-pod container-pod-fluid"
+          footerContainerClass="container container-pod container-pod-short
+            container-pod-fluid"
           open={!!resourceErrorMessage}
           onClose={this.handleDismissError}
           leftButtonClassName="hidden"

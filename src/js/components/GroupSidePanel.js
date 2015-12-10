@@ -184,7 +184,8 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
         <Confirm
           closeByBackdropClick={true}
           disabled={this.state.pendingRequest}
-          footerClass="modal-footer container container-pod container-pod-fluid"
+          footerContainerClass="container container-pod container-pod-short
+            container-pod-fluid"
           open={this.state.openDeleteConfirmation}
           onClose={this.handleDeleteCancel}
           leftButtonCallback={this.handleDeleteCancel}
