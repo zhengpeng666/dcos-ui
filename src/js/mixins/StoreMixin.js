@@ -10,7 +10,7 @@ import EventTypes from "../constants/EventTypes";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
-import StoreUtil from "../utils/StoreUtil";
+import StringUtil from "../utils/StringUtil";
 
 const LISTENER_SUFFIX = "ListenerFn";
 
@@ -289,7 +289,7 @@ const StoreMixin = {
     }
 
     // Call callback on component that implements mixin if it exists
-    let onChangeFn = StoreUtil.getChangeFunctionName(
+    let onChangeFn = this.store_getChangeFunctionName(
       listenerDetail.store.storeID, event
     );
 
@@ -299,6 +299,13 @@ const StoreMixin = {
 
     // Always forceUpdate no matter where the change came from
     this.forceUpdate();
+  },
+
+  store_getChangeFunctionName(storeID, event) {
+    let storeName = StringUtil.capitalize(storeID);
+    let eventName = StringUtil.capitalize(event);
+
+    return `on${storeName}Store${eventName}`;
   }
 };
 

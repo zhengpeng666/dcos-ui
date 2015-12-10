@@ -4,7 +4,6 @@ import React from "react";
 /* eslint-enable no-unused-vars */
 
 import StoreMixin from "../mixins/StoreMixin";
-import StoreUtil from "../utils/StoreUtil";
 import Util from "../utils/Util";
 
 const METHODS_TO_BIND = ["handleModalClose"];
@@ -21,9 +20,9 @@ function handleServerError(id, errorMessage) {
 function getEventsFromStoreListeners(storeListeners) {
   let events = [];
 
-  storeListeners.forEach(function (store) {
-    store.events.forEach(function (storeEvent) {
-      events.push(StoreUtil.getChangeFunctionName(store.name, storeEvent));
+  storeListeners.forEach((store) => {
+    store.events.forEach((storeEvent) => {
+      events.push(this.store_getChangeFunctionName(store.name, storeEvent));
     });
   });
 
@@ -44,7 +43,8 @@ export default class ServerErrorModal extends Util.mixin(StoreMixin) {
       {name: "group", events: ["updateError", "deleteError"]}
     ];
 
-    getEventsFromStoreListeners(this.store_listeners).forEach((event) => {
+    let events = getEventsFromStoreListeners.call(this, this.store_listeners);
+    events.forEach((event) => {
       this[event] = handleServerError.bind(this);
     });
 
