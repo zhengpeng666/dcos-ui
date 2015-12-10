@@ -1,21 +1,21 @@
 import React from "react/addons";
 import {Confirm, SidePanel} from "reactjs-components";
 
-import ACLUserStore from "../stores/ACLUserStore";
+import ACLGroupStore from "../stores/ACLGroupStore";
 import HistoryStore from "../stores/HistoryStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import StoreMixin from "../mixins/StoreMixin";
-import UserSidePanelContents from "./UserSidePanelContents";
+import GroupSidePanelContents from "./GroupSidePanelContents";
 import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleDeleteModalOpen",
   "handleDeleteCancel",
   "handlePanelClose",
-  "handleDeleteUser"
+  "handleDeleteGroup"
 ];
 
-export default class UserSidePanel extends Util.mixin(StoreMixin) {
+export default class GroupSidePanel extends Util.mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -31,7 +31,7 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "user",
+        name: "group",
         events: [
           "deleteSuccess",
           "deleteError"
@@ -53,11 +53,11 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
     });
   }
 
-  handleDeleteUser() {
+  handleDeleteGroup() {
     this.setState({
       pendingRequest: true
     });
-    ACLUserStore.deleteUser(this.props.params.userID);
+    ACLGroupStore.deleteGroup(this.props.params.groupID);
   }
 
   handlePanelClose(closeInfo) {
@@ -73,25 +73,25 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
     HistoryStore.goBack(this.context.router);
   }
 
-  onUserStoreDeleteError(userID, error) {
+  onGroupStoreDeleteError(groupID, error) {
     this.setState({
       deleteUpdateError: error,
       pendingRequest: false
     });
   }
 
-  onUserStoreDeleteSuccess() {
+  onGroupStoreDeleteSuccess() {
     this.setState({
       openDeleteConfirmation: false,
       pendingRequest: false
     });
 
-    this.context.router.transitionTo("settings-organization-users");
+    this.context.router.transitionTo("settings-organization-groups");
   }
 
   isOpen() {
     return (
-      this.props.params.userID != null
+      this.props.params.groupID != null
       && MesosSummaryStore.get("statesProcessed")
     );
   }
@@ -105,18 +105,17 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
       );
     }
 
-    let user = ACLUserStore.getUser(this.props.params.userID);
-
+    let group = ACLGroupStore.getGroup(this.props.params.groupID);
     return (
       <div className="container-pod text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
-        <p>{`${user.description} will be deleted.`}</p>
+        <p>{`${group.description} will be deleted.`}</p>
         {error}
       </div>
     );
   }
 
-  getHeader(userID) {
+  getHeader(groupID) {
     return (
       <div className="side-panel-header-container">
         <div className="side-panel-header-actions
@@ -135,17 +134,17 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
 
         <div className="side-panel-header-actions
           side-panel-header-actions-secondary">
-          {this.getHeaderDelete(userID)}
+          {this.getHeaderDelete(groupID)}
         </div>
 
       </div>
     );
   }
 
-  getHeaderDelete(userID) {
-    if (userID != null) {
+  getHeaderDelete(groupID) {
+    if (groupID != null) {
       return (
-        <span className="side-panel-header-action text-align-right"
+        <span className="side-panel-header-action"
           onClick={this.handleDeleteModalOpen}>
           Delete
         </span>
@@ -155,32 +154,32 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
     return null;
   }
 
-  getContents(userID) {
+  getContents(groupID) {
     if (!this.isOpen()) {
       return null;
     }
 
     return (
-      <UserSidePanelContents
-        itemID={userID}
+      <GroupSidePanelContents
+        itemID={groupID}
         parentRouter={this.context.router} />
     );
   }
 
   render() {
-    let userID = this.props.params.userID;
+    let groupID = this.props.params.groupID;
 
     return (
       <div>
         <SidePanel className="side-panel-detail"
-          header={this.getHeader(userID)}
+          header={this.getHeader(groupID)}
           headerContainerClass="container
             container-fluid container-fluid-narrow container-pod
             container-pod-short"
           bodyClass="side-panel-content flex-container-col"
           onClose={this.handlePanelClose}
           open={this.isOpen()}>
-          {this.getContents(userID)}
+          {this.getContents(groupID)}
         </SidePanel>
         <Confirm
           closeByBackdropClick={true}
@@ -189,7 +188,7 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
           open={this.state.openDeleteConfirmation}
           onClose={this.handleDeleteCancel}
           leftButtonCallback={this.handleDeleteCancel}
-          rightButtonCallback={this.handleDeleteUser}
+          rightButtonCallback={this.handleDeleteGroup}
           rightButtonClassName="button button-danger"
           rightButtonText="Delete">
           {this.getDeleteModalContent()}
@@ -199,10 +198,10 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
   }
 }
 
-UserSidePanel.contextTypes = {
+GroupSidePanel.contextTypes = {
   router: React.PropTypes.func
 };
 
-UserSidePanel.propTypes = {
+GroupSidePanel.propTypes = {
   params: React.PropTypes.object
 };
