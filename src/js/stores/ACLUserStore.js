@@ -249,10 +249,4 @@ var ACLUserStore = Store.createStore({
 
 });
 
-global.doError = function () {
-  ACLUserStore.emit(
-    EventTypes.ACL_USER_UPDATE_ERROR, "Generic error", "kennyt"
-  );
-};
-
 module.exports = ACLUserStore;
