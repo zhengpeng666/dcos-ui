@@ -42,10 +42,6 @@ export default class UserGroupTable extends Util.mixin(StoreMixin) {
     });
   }
 
-  componentDidMount() {
-    super.componentDidMount();
-  }
-
   handleOpenConfirm(group) {
     this.setState({
       groupID: group.gid,
