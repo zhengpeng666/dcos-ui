@@ -25,7 +25,6 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
 
     this.state = {
       deleteUpdateError: null,
-      itemID: null,
       openDeleteConfirmation: false,
       pendingRequest: false
     };
@@ -43,14 +42,12 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
 
   handleDeleteCancel() {
     this.setState({
-      itemID: null,
       openDeleteConfirmation: false
     });
   }
 
   handleDeleteModalOpen() {
     this.setState({
-      itemID: this.props.params.groupID,
       deleteUpdateError: null,
       openDeleteConfirmation: true
     });
@@ -60,7 +57,7 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
     this.setState({
       pendingRequest: true
     });
-    ACLGroupStore.deleteGroup(this.state.itemID);
+    ACLGroupStore.deleteGroup(this.props.params.groupID);
   }
 
   handlePanelClose(closeInfo) {
@@ -92,7 +89,7 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
       );
     }
 
-    let group = ACLGroupStore.getGroup(this.state.itemID);
+    let group = ACLGroupStore.getGroup(this.props.params.groupID);
     return (
       <div className="container-pod text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
@@ -162,7 +159,6 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
 
   onGroupStoreDeleteSuccess() {
     this.setState({
-      itemID: null,
       openDeleteConfirmation: false,
       pendingRequest: false
     });
@@ -171,8 +167,7 @@ export default class GroupSidePanel extends Util.mixin(StoreMixin) {
   }
 
   render() {
-    let props = this.props;
-    let groupID = props.params.groupID;
+    let groupID = this.props.params.groupID;
 
     return (
       <div>

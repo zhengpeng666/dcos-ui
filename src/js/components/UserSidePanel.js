@@ -25,7 +25,6 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
 
     this.state = {
       deleteUpdateError: null,
-      itemID: null,
       openDeleteConfirmation: false,
       pendingRequest: false
     };
@@ -43,14 +42,12 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
 
   handleDeleteCancel() {
     this.setState({
-      itemID: null,
       openDeleteConfirmation: false
     });
   }
 
   handleDeleteModalOpen() {
     this.setState({
-      itemID: this.props.params.userID,
       deleteUpdateError: null,
       openDeleteConfirmation: true
     });
@@ -60,7 +57,7 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
     this.setState({
       pendingRequest: true
     });
-    ACLUserStore.deleteUser(this.state.itemID);
+    ACLUserStore.deleteUser(this.props.params.userID);
   }
 
   handlePanelClose(closeInfo) {
@@ -92,7 +89,8 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
       );
     }
 
-    let user = ACLUserStore.getUser(this.state.itemID);
+    let user = ACLUserStore.getUser(this.props.params.userID);
+
     return (
       <div className="container-pod text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
@@ -162,7 +160,6 @@ export default class UserSidePanel extends Util.mixin(StoreMixin) {
 
   onUserStoreDeleteSuccess() {
     this.setState({
-      itemID: null,
       openDeleteConfirmation: false,
       pendingRequest: false
     });
