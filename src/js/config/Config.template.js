@@ -1,4 +1,4 @@
-// put in your config overrides here
+// Configuration overrides
 var ConfigDev = {
   analyticsKey: "39uhSEOoRHMw6cMR6st9tYXDbAL3JSaP",
   rootUrl: "http://dcos.local",
@@ -9,6 +9,9 @@ var ConfigDev = {
         banner: {},
         tracking: {
           enabled: true
+        },
+        authentication: {
+          enabled: false
         }
       }
     }

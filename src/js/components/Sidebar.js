@@ -243,7 +243,7 @@ var Sidebar = React.createClass({
     );
   },
 
-  getFooterButtons() {
+  getFooter() {
     var chatIconClassSet = classNames({
       "clickable": true,
       "icon": true,
@@ -283,15 +283,16 @@ var Sidebar = React.createClass({
       )
     ];
 
-    let buttonSet = Plugins.applyFilter("footerButtonSet", defaultButtonSet);
+    let buttonSet = Plugins.applyFilter(
+      "sidebarFooterButtonSet", defaultButtonSet
+    );
+    let footer = null;
 
     if (buttonSet && buttonSet.length) {
-      return (
-        <div className="icon-buttons">{defaultButtonSet}</div>
-      );
-    } else {
-      return null;
+      footer = <div className="icon-buttons">{defaultButtonSet}</div>;
     }
+
+    return Plugins.applyFilter("sidebarFooter", footer);
   },
 
   render: function () {
@@ -330,7 +331,7 @@ var Sidebar = React.createClass({
               </span>
             </p>
           </div>
-          {this.getFooterButtons()}
+          {this.getFooter()}
         </div>
       </div>
     );
