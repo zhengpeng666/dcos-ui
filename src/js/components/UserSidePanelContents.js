@@ -46,6 +46,12 @@ export default class UserSidePanelContents extends SidePanelContents {
       ACLUserStore.fetchUserWithDetails(this.props.itemID);
     }
 
+    onUserStoreFetchedDetailsSuccess() {
+      if (this.state.fetchedDetailsError === true) {
+        this.setState({fetchedDetailsError: false});
+      }
+    }
+
     onUserStoreFetchedDetailsError(userID) {
       if (userID === this.props.itemID) {
         this.setState({fetchedDetailsError: true});

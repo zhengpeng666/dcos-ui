@@ -87,7 +87,6 @@ export default class SettingsPage extends Util.mixin(TabsMixin) {
   }
 
   render() {
-
     return (
       <Page
         title={this.getTitle()}
