@@ -91,9 +91,8 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
     return (
       <OrganizationTab
         items={items}
-        newItemTitle="+ New Group"
-        itemId="gid"
-        itemName="groups"
+        itemID="gid"
+        itemName="group"
         handleNewItemClick={this.handleNewGroupClick} />
     );
   }
@@ -113,3 +112,7 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
     );
   }
 }
+
+GroupsTab.propTypes = {
+  params: React.PropTypes.object
+};

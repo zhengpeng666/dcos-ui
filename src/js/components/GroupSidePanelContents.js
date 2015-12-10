@@ -11,7 +11,6 @@ import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
 
 export default class GroupSidePanelContents extends SidePanelContents {
-
   constructor() {
     super();
 
