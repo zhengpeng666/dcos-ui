@@ -1,4 +1,5 @@
 import _ from "underscore";
+import {Link} from "react-router";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -12,6 +13,7 @@ import TableUtil from "../../utils/TableUtil";
 
 const METHODS_TO_BIND = [
   "handleSearchStringChange",
+  "renderHeadline",
   "resetFilter"
 ];
 
@@ -31,6 +33,19 @@ export default class OrganizationTab extends React.Component {
 
   handleSearchStringChange(searchString) {
     this.setState({searchString});
+  }
+
+  renderHeadline(prop, subject) {
+    let itemName = this.props.itemName;
+
+    return (
+      <div>
+        <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
+          params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}>
+          {subject.get("description")}
+        </Link>
+      </div>
+    );
   }
 
   getColGroup() {
@@ -81,14 +96,15 @@ export default class OrganizationTab extends React.Component {
   render() {
     let props = this.props;
     let itemName = props.itemName;
+    let capitalizedItemName = StringUtil.capitalize(itemName);
     let items = props.items;
 
     return (
       <div className="flex-container-col">
-        <div className={`${itemName}-table-header`}>
+        <div className={`${itemName}s-table-header`}>
           <FilterHeadline
             onReset={this.resetFilter}
-            name={StringUtil.capitalize(itemName)}
+            name={`${StringUtil.pluralize(capitalizedItemName)}`}
             currentLength={this.getVisibleItems(items).length}
             totalLength={items.length} />
           <ul className="list list-unstyled list-inline flush-bottom">
@@ -101,8 +117,8 @@ export default class OrganizationTab extends React.Component {
             <li className="button-collection list-item-aligned-right">
               <a
                 className="button button-success"
-                onClick={this.props.handleNewItemClick}>
-                {props.newItemTitle}
+                onClick={props.handleNewItemClick}>
+                {`+ New ${capitalizedItemName}`}
               </a>
             </li>
           </ul>
@@ -114,7 +130,7 @@ export default class OrganizationTab extends React.Component {
             columns={this.getColumns()}
             colGroup={this.getColGroup()}
             data={this.getVisibleItems(items)}
-            idAttribute={props.itemId}
+            idAttribute={props.itemID}
             itemHeight={TableUtil.getRowHeight()}
             sortBy={{prop: "description", order: "asc"}}
             useFlex={true}
@@ -125,3 +141,10 @@ export default class OrganizationTab extends React.Component {
     );
   }
 }
+
+OrganizationTab.propTypes = {
+  items: React.PropTypes.array.isRequired,
+  itemID: React.PropTypes.string.isRequired,
+  itemName: React.PropTypes.string.isRequired,
+  handleNewItemClick: React.PropTypes.func.isRequired
+};

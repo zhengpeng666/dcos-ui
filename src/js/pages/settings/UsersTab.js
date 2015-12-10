@@ -95,10 +95,9 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
     return (
       <OrganizationTab
         items={items}
-        newItemTitle="+ New User"
-        itemId="uid"
-        itemName="users"
-        newItemClicked={this.handleNewUserClick} />
+        itemID="uid"
+        itemName="user"
+        handleNewItemClick={this.handleNewUserClick} />
     );
   }
 
@@ -116,3 +115,7 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
     );
   }
 }
+
+UsersTab.propTypes = {
+  params: React.PropTypes.object
+};
