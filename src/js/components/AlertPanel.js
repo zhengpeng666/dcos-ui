@@ -12,7 +12,8 @@ var AlertPanel = React.createClass({
   mixins: [InternalStorageMixin],
 
   propTypes: {
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    iconClassName: React.PropTypes.string
   },
 
   componentWillMount: function () {
@@ -24,6 +25,13 @@ var AlertPanel = React.createClass({
     var width = DOMUtils.getComputedWidth(panel);
     this.internalStorage_set({height: width});
     this.forceUpdate();
+  },
+
+  getTitleClasses: function () {
+    return classNames({
+      inverse: true,
+      "flush-top": !this.props.iconClassName
+    });
   },
 
   render: function () {
@@ -43,7 +51,8 @@ var AlertPanel = React.createClass({
           <Panel ref="panel"
             style={{height: data.height}}
             className="vertical-center text-align-center flush">
-            <h3 className="inverse flush-top">
+            <i className={this.props.iconClassName + " flush-top"}></i>
+            <h3 className={this.getTitleClasses()}>
               {this.props.title}
             </h3>
             {this.props.children}

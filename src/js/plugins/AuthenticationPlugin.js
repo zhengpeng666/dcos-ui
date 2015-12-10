@@ -1,6 +1,9 @@
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
+import {Route} from "react-router";
+
+import AccessDeniedPage from "../pages/AccessDeniedPage";
 
 const AuthenticationPlugin = {
 
@@ -49,6 +52,16 @@ const AuthenticationPlugin = {
   },
 
   applicationRoutes: function (routes) {
+    if (this.isEnabled() === true) {
+      routes[0].children.unshift(
+        {
+          type: Route,
+          name: "access-denied",
+          path: "access-denied",
+          handler: AccessDeniedPage
+        }
+      );
+    }
     return routes;
   }
 
