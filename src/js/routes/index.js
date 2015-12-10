@@ -3,7 +3,6 @@ let Route = Router.Route;
 let Redirect = Router.Redirect;
 let NotFoundRoute = Router.NotFoundRoute;
 
-import Application from "../pages/Application";
 import dashboard from "./dashboard";
 import Index from "../pages/Index";
 import nodes from "./nodes";
@@ -15,7 +14,6 @@ let routes = [{
   type: Route,
   name: "home",
   path: "/",
-  handler: Application,
   children: [{
     type: Route,
     handler: Index,

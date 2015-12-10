@@ -21,8 +21,9 @@ const BannerPlugin = {
    * @param  {Object} Plugins The Plugins API
    */
   initialize: function (Plugins) {
-    Plugins.addAction("applicationDidUpdate",
-      this.applicationDidUpdate.bind(this)
+    Plugins.addAction(
+      "applicationRendered",
+      this.applicationRendered.bind(this)
     );
     Plugins.addFilter("applicationContents",
       this.applicationContents.bind(this)
@@ -54,7 +55,7 @@ const BannerPlugin = {
     banner.classList.toggle("display-full");
   },
 
-  applicationDidUpdate: function () {
+  applicationRendered: function () {
     if (this.isEnabled() === false || !DOMUtils.isTopFrame()) {
       return;
     }
