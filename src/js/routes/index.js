@@ -1,9 +1,5 @@
-import Router from "react-router";
-let Route = Router.Route;
-let Redirect = Router.Redirect;
-let NotFoundRoute = Router.NotFoundRoute;
+import {Route, Redirect, NotFoundRoute} from "react-router";
 
-import AccessDeniedPage from "../pages/AccessDeniedPage";
 import dashboard from "./dashboard";
 import Index from "../pages/Index";
 import nodes from "./nodes";
@@ -17,12 +13,6 @@ let routes = [
     name: "home",
     path: "/",
     children: [
-      {
-        type: Route,
-        name: "access-denied",
-        path: "access-denied",
-        handler: AccessDeniedPage
-      },
       {
         type: Route,
         handler: Index,
