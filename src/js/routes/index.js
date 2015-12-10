@@ -2,6 +2,7 @@ import {Route, Redirect, NotFoundRoute} from "react-router";
 
 import dashboard from "./dashboard";
 import Index from "../pages/Index";
+import Login from "../pages/Login";
 import nodes from "./nodes";
 import NotFoundPage from "../pages/NotFoundPage";
 import services from "./services";
@@ -12,7 +13,11 @@ let routes = [
     type: Route,
     name: "home",
     path: "/",
-    children: [
+    children: [{
+        handler: Login,
+        name: "login",
+        type: Route
+      },
       {
         type: Route,
         handler: Index,

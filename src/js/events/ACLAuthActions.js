@@ -30,6 +30,9 @@ if (Config.useFixtures) {
   ACLAuthActions.login = function () {
     global.document.cookie =
       "ACLMetadata=eyJkZXNjcmlwdGlvbiI6IkpvaG4gRG9lIn0=";
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.REQUEST_ACL_LOGIN_SUCCESS
+    });
   };
 }
 

@@ -1,8 +1,9 @@
 import _ from "underscore";
 
-import ACLStore from "../stores/ACLStore";
+import ACLAuthStore from "../stores/ACLAuthStore";
 import ACLGroupsStore from "../stores/ACLGroupsStore";
 import ACLGroupStore from "../stores/ACLGroupStore";
+import ACLStore from "../stores/ACLStore";
 import ACLUsersStore from "../stores/ACLUsersStore";
 import ACLUserStore from "../stores/ACLUserStore";
 import EventTypes from "../constants/EventTypes";
@@ -14,6 +15,19 @@ import StringUtil from "../utils/StringUtil";
 const LISTENER_SUFFIX = "ListenerFn";
 
 const ListenersDescription = {
+
+  auth: {
+    store: ACLAuthStore,
+    events: {
+      success: EventTypes.ACL_AUTH_USER_CHANGED,
+      error: EventTypes.ACL_AUTH_USER_LOGIN_ERROR,
+      logoutSuccess: EventTypes.ACL_AUTH_USER_LOGOUT
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
 
   acl: {
     store: ACLStore,
