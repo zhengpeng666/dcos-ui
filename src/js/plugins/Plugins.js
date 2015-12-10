@@ -57,7 +57,7 @@ var Plugins = _.extend({}, Events.EventEmitter.prototype, {
     var pluginsConfig = config.uiConfiguration.plugins;
 
     Object.keys(pluginsConfig).forEach(function (pluginID) {
-      if (pluginList[pluginID].configure != null) {
+      if (pluginList[pluginID] && pluginList[pluginID].configure != null) {
         pluginList[pluginID].configure(pluginsConfig[pluginID]);
       }
     });
