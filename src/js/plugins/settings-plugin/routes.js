@@ -2,10 +2,10 @@ import Router from "react-router";
 let Route = Router.Route;
 let Redirect = Router.Redirect;
 
-import GroupsTab from "../pages/settings/GroupsTab";
-import OverviewTab from "../pages/settings/OverviewTab";
-import SettingsPage from "../pages/SettingsPage";
-import UsersTab from "../pages/settings/UsersTab";
+import GroupsTab from "../../pages/settings/GroupsTab";
+import OverviewTab from "../../pages/settings/OverviewTab";
+import SettingsPage from "../../pages/SettingsPage";
+import UsersTab from "../../pages/settings/UsersTab";
 
 let settingsRoutes = {
   type: Route,

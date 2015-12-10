@@ -12,7 +12,7 @@ const ACLStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    services: new ACLList({items: []})
+    services: new ACLList()
   },
 
   addChangeListener: function (eventName, callback) {

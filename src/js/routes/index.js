@@ -5,7 +5,6 @@ import Index from "../pages/Index";
 import nodes from "./nodes";
 import NotFoundPage from "../pages/NotFoundPage";
 import services from "./services";
-import settings from "./settings";
 
 let routes = [
   {
@@ -13,6 +12,9 @@ let routes = [
     name: "home",
     path: "/",
     children: [
+      dashboard,
+      services,
+      nodes,
       {
         type: Route,
         authentication: true,
