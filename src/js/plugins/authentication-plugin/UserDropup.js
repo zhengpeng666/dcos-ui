@@ -17,8 +17,8 @@ const MENU_ITEMS = {
 };
 
 export default class UserDropup extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super(...arguments);
     this.displayName = "UserDropup";
 
     this.state = {
@@ -59,6 +59,8 @@ export default class UserDropup extends React.Component {
     ]);
 
     return items.map((item) => {
+      // Override classes and tooltip, and monkeypatch the onClick to close
+      // the dropdown
       let props = {
         className: "",
         "data-behavior": "",
@@ -109,10 +111,12 @@ export default class UserDropup extends React.Component {
       modalClass: "dropdown-menu"
     };
 
+    let userButton = this.getUserButton(user);
+
     return (
       <div>
         <div className="open">
-          {this.getUserButton(user)}
+          {userButton}
         </div>
         <Modal
           onClose={this.handleDropdownClose}
@@ -122,7 +126,7 @@ export default class UserDropup extends React.Component {
           showFooter={false}
           transitionName="dropdown-menu-up"
           {...modalClasses}>
-          {this.getUserButton(user)}
+          {userButton}
           <ul className="dropdown-menu-list">
             {this.getDropdownItems()}
           </ul>
@@ -137,7 +141,9 @@ UserDropup.contextTypes = {
 };
 
 UserDropup.defaultProps = {
+  items: []
 };
 
 UserDropup.propTypes = {
+  items: React.PropTypes.arrayOf(React.PropTypes.node)
 };
