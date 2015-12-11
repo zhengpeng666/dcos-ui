@@ -12,6 +12,12 @@ import StringUtil from "../utils/StringUtil";
 import UserDetails from "./UserDetails";
 import UserGroupMembershipTab from "./UserGroupMembershipTab";
 
+const METHODS_TO_BIND = [
+  "handleNameChange",
+  "onUserStoreUpdateSuccess",
+  "onUserStoreUpdateError"
+];
+
 export default class UserSidePanelContents extends SidePanelContents {
   constructor() {
     super();
@@ -24,7 +30,8 @@ export default class UserSidePanelContents extends SidePanelContents {
 
     this.state = {
       currentTab: Object.keys(this.tabs_tabs).shift(),
-      fetchedDetailsError: false
+      fetchedDetailsError: false,
+      userDescriptionChangeError: false
     };
 
     this.store_listeners = [
@@ -35,15 +42,28 @@ export default class UserSidePanelContents extends SidePanelContents {
       },
       {
         name: "user",
-        events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
+        events: [
+          "fetchedDetailsSuccess",
+          "fetchedDetailsError",
+          "updateSuccess",
+          "updateError"
+        ]
       }
     ];
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
   }
 
   componentDidMount() {
     super.componentDidMount();
 
     ACLUserStore.fetchUserWithDetails(this.props.itemID);
+  }
+
+  handleNameChange(model) {
+    ACLUserStore.updateUser(this.props.itemID, {description: model.text});
   }
 
   onUserStoreFetchedDetailsSuccess() {
@@ -58,6 +78,20 @@ export default class UserSidePanelContents extends SidePanelContents {
     }
   }
 
+  onUserStoreUpdateSuccess() {
+    if (this.state.userDescriptionChangeError) {
+      this.setState({
+        userDescriptionChangeError: false
+      });
+    }
+  }
+
+  onUserStoreUpdateError(error) {
+    this.setState({
+      userDescriptionChangeError: error
+    });
+  }
+
   getErrorNotice() {
     return (
       <div className="container container-pod">
@@ -67,6 +101,21 @@ export default class UserSidePanelContents extends SidePanelContents {
   }
 
   getUserInfo(user) {
+    let editNameFormDefinition = [
+      {
+        fieldType: "text",
+        name: "text",
+        placeholder: "User's Name",
+        required: true,
+        sharedClass: "form-element-inline h1 flush",
+        showError: this.state.userDescriptionChangeError,
+        showLabel: false,
+        writeType: "edit",
+        validation: function () { return true; },
+        value: user.description
+      }
+    ];
+
     let imageTag = (
       <div className="side-panel-icon icon icon-large icon-image-container icon-user-container">
         <img src="./img/layout/icon-user-default-64x64@2x.png" />
@@ -77,22 +126,10 @@ export default class UserSidePanelContents extends SidePanelContents {
       <div className="side-panel-content-header-details flex-box
         flex-box-align-vertical-center">
         {imageTag}
-        <div>
-          <Form
-            definition= {
-              [{
-                fieldType: "text",
-                name: "text",
-                placeholder: "User's Name",
-                required: true,
-                sharedClass: "side-panel-content-header-label form-element-inline h1 flush",
-                showError: this.state.userStoreError,
-                showLabel: false,
-                writeType: "edit",
-                validation: function () { return true; },
-                value: user.description
-              }]
-            } />
+        <div className="side-panel-content-header-label">
+          <Form definition={editNameFormDefinition}
+            formControlClass="row form-group flush-bottom"
+            onSubmit={this.handleNameChange} />
           <div>
             {this.getSubHeader(user)}
           </div>
