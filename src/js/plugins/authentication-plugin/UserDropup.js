@@ -35,7 +35,7 @@ export default class UserDropup extends React.Component {
   }
 
   handleDropdownClick() {
-    this.setState({open: true});
+    this.setState({open: !this.state.open});
   }
 
   handleSignOut() {
