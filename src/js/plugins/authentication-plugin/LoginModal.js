@@ -35,7 +35,7 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
 
   onAuthStoreSuccess() {
     this.setState({disableLogin: false});
-    debugger;
+
     let router = this.context.router;
     let loginRedirectRoute = ACLAuthStore.get("loginRedirectRoute");
     if (loginRedirectRoute) {
