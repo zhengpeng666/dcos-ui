@@ -70,7 +70,7 @@ var ACLAuthStore = Store.createStore({
     switch (action.type) {
       // Get ACLs for resource
       case ActionTypes.REQUEST_ACL_LOGIN_SUCCESS:
-        ACLAuthStore.emit(EventTypes.ACL_AUTH_USER_CHANGED);
+        ACLAuthStore.emit(EventTypes.ACL_AUTH_USER_LOGIN_CHANGED);
         break;
       // Get ACLs for resource
       case ActionTypes.REQUEST_ACL_LOGIN_ERROR:

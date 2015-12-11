@@ -19,7 +19,7 @@ const ListenersDescription = {
   auth: {
     store: ACLAuthStore,
     events: {
-      success: EventTypes.ACL_AUTH_USER_CHANGED,
+      success: EventTypes.ACL_AUTH_USER_LOGIN_CHANGED,
       error: EventTypes.ACL_AUTH_USER_LOGIN_ERROR,
       logoutSuccess: EventTypes.ACL_AUTH_USER_LOGOUT
     },
