@@ -3,7 +3,9 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 import {Route} from "react-router";
 
-import AccessDeniedPage from "../pages/AccessDeniedPage";
+import AccessDeniedPage from "./AccessDeniedPage";
+import Authenticated from "./Authenticated";
+import LoginPage from "./LoginPage";
 
 const AuthenticationPlugin = {
 
@@ -53,12 +55,26 @@ const AuthenticationPlugin = {
 
   applicationRoutes: function (routes) {
     if (this.isEnabled() === true) {
+
+      // Override handler of index to be "authenticated"
+      routes[0].children.forEach(function (child) {
+        if (child.authentication) {
+          child.handler = new Authenticated(child.handler);
+        }
+      });
+
+      // Add access denied and login pages
       routes[0].children.unshift(
         {
           type: Route,
           name: "access-denied",
           path: "access-denied",
           handler: AccessDeniedPage
+        },
+        {
+          handler: LoginPage,
+          name: "login",
+          type: Route
         }
       );
     }

@@ -1,6 +1,6 @@
 import React from "react";
 
-import AlertPanel from "../components/AlertPanel";
+import AlertPanel from "../../components/AlertPanel";
 
 export default class AccessDeniedPage extends React.Component {
 

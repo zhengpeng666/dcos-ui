@@ -1,9 +1,10 @@
-import ACLAuthStore from "../stores/ACLAuthStore";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
-import StoreMixin from "../mixins/StoreMixin";
-import Util from "../utils/Util";
+
+import ACLAuthStore from "../../stores/ACLAuthStore";
+import StoreMixin from "../../mixins/StoreMixin";
+import Util from "../../utils/Util";
 
 const METHODS_TO_BIND = ["handleLogin"];
 
