@@ -12,11 +12,7 @@ import StringUtil from "../utils/StringUtil";
 import UserDetails from "./UserDetails";
 import UserGroupMembershipTab from "./UserGroupMembershipTab";
 
-const METHODS_TO_BIND = [
-  "handleNameChange",
-  "onUserStoreUpdateSuccess",
-  "onUserStoreUpdateError"
-];
+const METHODS_TO_BIND = ["handleNameChange"];
 
 export default class UserSidePanelContents extends SidePanelContents {
   constructor() {
@@ -30,8 +26,7 @@ export default class UserSidePanelContents extends SidePanelContents {
 
     this.state = {
       currentTab: Object.keys(this.tabs_tabs).shift(),
-      fetchedDetailsError: false,
-      userDescriptionChangeError: false
+      fetchedDetailsError: false
     };
 
     this.store_listeners = [
@@ -42,12 +37,7 @@ export default class UserSidePanelContents extends SidePanelContents {
       },
       {
         name: "user",
-        events: [
-          "fetchedDetailsSuccess",
-          "fetchedDetailsError",
-          "updateSuccess",
-          "updateError"
-        ]
+        events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
       }
     ];
 
@@ -78,20 +68,6 @@ export default class UserSidePanelContents extends SidePanelContents {
     }
   }
 
-  onUserStoreUpdateSuccess() {
-    if (this.state.userDescriptionChangeError) {
-      this.setState({
-        userDescriptionChangeError: false
-      });
-    }
-  }
-
-  onUserStoreUpdateError(error) {
-    this.setState({
-      userDescriptionChangeError: error
-    });
-  }
-
   getErrorNotice() {
     return (
       <div className="container container-pod">
@@ -108,7 +84,7 @@ export default class UserSidePanelContents extends SidePanelContents {
         placeholder: "User's Name",
         required: true,
         sharedClass: "form-element-inline h1 flush",
-        showError: this.state.userDescriptionChangeError,
+        showError: false,
         showLabel: false,
         writeType: "edit",
         validation: function () { return true; },
