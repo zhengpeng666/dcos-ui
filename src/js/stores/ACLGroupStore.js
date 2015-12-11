@@ -231,7 +231,11 @@ let ACLGroupStore = Store.createStore({
           .emit(EventTypes.ACL_GROUP_UPDATE_SUCCESS, action.groupID);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR:
-        ACLGroupStore.emit(EventTypes.ACL_GROUP_UPDATE_ERROR, action.groupID);
+        ACLGroupStore.emit(
+          EventTypes.ACL_GROUP_UPDATE_ERROR,
+          action.groupID,
+          action.data
+        );
         break;
       // Delete group
       case ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS:

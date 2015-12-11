@@ -11,11 +11,7 @@ import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
 
-const METHODS_TO_BIND = [
-  "handleNameChange",
-  "onGroupStoreUpdateSuccess",
-  "onGroupStoreUpdateError"
-];
+const METHODS_TO_BIND = ["handleNameChange"];
 
 export default class GroupSidePanelContents extends SidePanelContents {
   constructor() {
@@ -40,12 +36,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
       },
       {
         name: "group",
-        events: [
-          "fetchedDetailsSuccess",
-          "fetchedDetailsError",
-          "updateSuccess",
-          "updateError"
-        ]
+        events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
       }
     ];
 
@@ -74,20 +65,6 @@ export default class GroupSidePanelContents extends SidePanelContents {
     if (groupID === this.props.itemID) {
       this.setState({fetchedDetailsError: true});
     }
-  }
-
-  onGroupStoreUpdateSuccess() {
-    if (this.state.userDescriptionChangeError) {
-      this.setState({
-        groupDescriptionChangeError: false
-      });
-    }
-  }
-
-  onGroupStoreUpdateError(error) {
-    this.setState({
-      groupDescriptionChangeError: error
-    });
   }
 
   getErrorNotice() {

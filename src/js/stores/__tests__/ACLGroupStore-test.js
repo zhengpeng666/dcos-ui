@@ -315,7 +315,7 @@ describe("ACLGroupStore", function () {
 
       it("emits error event with the groupID", function () {
         ACLGroupStore.addChangeListener(
-          EventTypes.ACL_GROUP_UPDATE_SUCCESS,
+          EventTypes.ACL_GROUP_UPDATE_ERROR,
           function (groupID) {
             expect(groupID).toEqual("foo");
           }
@@ -324,6 +324,22 @@ describe("ACLGroupStore", function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
           groupID: "foo"
+        });
+      });
+
+      it("emits error event with the groupID and error message", function () {
+        ACLGroupStore.addChangeListener(
+          EventTypes.ACL_GROUP_UPDATE_ERROR,
+          function (groupID, error) {
+            expect(groupID).toEqual("foo");
+            expect(error).toEqual("bar");
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
+          groupID: "foo",
+          data: "bar"
         });
       });
 

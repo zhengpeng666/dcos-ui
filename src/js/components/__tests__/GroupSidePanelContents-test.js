@@ -1,17 +1,3 @@
-jest.dontMock("../FormControl");
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../icons/IconEdit");
-jest.dontMock("../../mixins/InternalStorageMixin");
-jest.dontMock("../../mixins/StoreMixin");
-jest.dontMock("../../mixins/TabsMixin");
-jest.dontMock("../RequestErrorMsg");
-jest.dontMock("../../utils/JestUtil");
-jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../../utils/StringUtil");
-jest.dontMock("../../utils/Store");
-jest.dontMock("../../utils/Util");
-jest.dontMock("../../structs/User");
-
 jest.dontMock("../SidePanelContents");
 jest.dontMock("../GroupSidePanelContents");
 jest.dontMock("../../events/MesosSummaryActions");
@@ -24,6 +10,7 @@ jest.dontMock("../../constants/FieldTypes");
 jest.dontMock("../Form");
 jest.dontMock("../FormControl");
 jest.dontMock("../../mixins/GetSetMixin");
+jest.dontMock("../icons/IconEdit");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../mixins/StoreMixin");
 jest.dontMock("../../mixins/TabsMixin");
