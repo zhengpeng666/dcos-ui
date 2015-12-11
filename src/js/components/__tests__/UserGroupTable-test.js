@@ -20,8 +20,9 @@ var AppDispatcher = require("../../events/AppDispatcher");
 var UserGroupTable = require("../UserGroupTable");
 var User = require("../../structs/User");
 
-const userDetailsFixture =
+let userDetailsFixture =
   require("../../../../tests/_fixtures/acl/user-with-details.json");
+userDetailsFixture.groups = userDetailsFixture.groups.array;
 
 describe("UserGroupTable", function () {
 

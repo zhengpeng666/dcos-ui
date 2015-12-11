@@ -47,7 +47,7 @@ describe("ACLGroupsStore", function () {
     Config.useFixtures = true;
     ACLGroupsStore.fetchGroups();
     var groups = ACLGroupsStore.get("groups").getItems();
-    expect(groups.length).toEqual(this.groupsFixture.length);
+    expect(groups.length).toEqual(this.groupsFixture.array.length);
   });
 
   describe("dispatcher", function () {

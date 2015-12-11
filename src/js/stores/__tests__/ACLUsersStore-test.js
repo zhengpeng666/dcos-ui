@@ -47,7 +47,7 @@ describe("ACLUsersStore", function () {
     Config.useFixtures = true;
     ACLUsersStore.fetchUsers();
     var users = ACLUsersStore.get("users").getItems();
-    expect(users.length).toEqual(this.usersFixture.length);
+    expect(users.length).toEqual(this.usersFixture.array.length);
   });
 
   describe("dispatcher", function () {

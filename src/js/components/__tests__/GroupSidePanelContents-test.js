@@ -29,6 +29,8 @@ var Group = require("../../structs/Group");
 
 var groupDetailsFixture =
   require("../../../../tests/_fixtures/acl/group-with-details.json");
+groupDetailsFixture.permissions = groupDetailsFixture.permissions.array;
+groupDetailsFixture.users = groupDetailsFixture.users.array;
 
 describe("GroupSidePanelContents", function () {
 

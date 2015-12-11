@@ -40,7 +40,7 @@ describe("ACLActions", function () {
         });
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({array: {bar: "baz"}});
     });
 
     it("dispatches the correct action when unsuccessful", function () {

@@ -48,7 +48,7 @@ describe("ACLStore", function () {
     it("should return all of the services it was given", function () {
       ACLStore.fetchACLsForResource("service");
       var services = ACLStore.get("services").getItems();
-      expect(services.length).toEqual(this.aclsFixture.length);
+      expect(services.length).toEqual(this.aclsFixture.array.length);
     });
 
   });
