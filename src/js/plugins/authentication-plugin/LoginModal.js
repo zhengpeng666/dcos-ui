@@ -3,10 +3,10 @@ import React from "react";
 import Router from "react-router";
 /* eslint-enable no-unused-vars */
 
-import ACLAuthStore from "../stores/ACLAuthStore";
-import FormModal from "./FormModal";
-import StoreMixin from "../mixins/StoreMixin";
-import Util from "../utils/Util";
+import ACLAuthStore from "../../stores/ACLAuthStore";
+import FormModal from "../../components/FormModal";
+import StoreMixin from "../../mixins/StoreMixin";
+import Util from "../../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleLoginSubmit"
@@ -35,7 +35,16 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
 
   onAuthStoreSuccess() {
     this.setState({disableLogin: false});
-    this.context.router.transitionTo("dashboard");
+    debugger;
+    let router = this.context.router;
+    let loginRedirectRoute = ACLAuthStore.get("loginRedirectRoute");
+    if (loginRedirectRoute) {
+      // Go to redirect route if it is present
+      router.transitionTo(loginRedirectRoute);
+    } else {
+      // Go to home
+      router.transitionTo("/");
+    }
   }
 
   onAuthStoreError(errorMsg) {

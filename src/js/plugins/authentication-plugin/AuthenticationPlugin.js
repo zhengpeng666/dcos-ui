@@ -74,15 +74,8 @@ const AuthenticationPlugin = {
         {
           handler: LoginPage,
           name: "login",
-          type: Route
-        }
-      );
-      routes[0].children.unshift(
-        {
-          type: Route,
-          name: "login",
           path: "login",
-          handler: LoginPage
+          type: Route
         }
       );
     }

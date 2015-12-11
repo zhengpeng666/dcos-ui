@@ -28,14 +28,6 @@ var ACLAuthStore = Store.createStore({
 
   login: ACLAuthActions.login,
 
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
-  },
-
   isLoggedIn: function () {
     return !!getUserMetadata();
   },
