@@ -124,8 +124,10 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
 
   getDropdownItems() {
     let permissions = this.props.permissions;
-    let filteredResources =
-      ACLStore.get("services").getItems().filter(function (resource) {
+    let services = ACLStore.get("services").getItems().sort(
+      Util.getLocaleCompareSortFn("description")
+    );
+    let filteredResources = services.filter(function (resource) {
         // Filter out any resource which is in permissions
         let rid = resource.get("rid");
         return !permissions.some(function (permission) {
@@ -151,7 +153,7 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
 
   getErrorModalContent(resourceErrorMessage) {
     return (
-      <div className="container-pod text-align-center">
+      <div className="container-pod container-pod-short text-align-center">
         <p>{resourceErrorMessage}</p>
       </div>
     );
@@ -187,7 +189,8 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
         </div>
         {this.getPermissionTable()}
         <Confirm
-          footerClass="modal-footer container container-pod container-pod-fluid"
+          footerContainerClass="container container-pod container-pod-short
+            container-pod-fluid"
           open={!!resourceErrorMessage}
           onClose={this.handleDismissError}
           leftButtonClassName="hidden"

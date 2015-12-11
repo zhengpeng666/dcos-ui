@@ -119,8 +119,7 @@ export default class UserSidePanelContents extends SidePanelContents {
         container-fluid
         flex-container-col
         flush-bottom
-        flex-grow
-        no-overflow">
+        flex-grow">
         <PermissionsView
           permissions={user.getUniquePermissions()}
           itemID={this.props.itemID}

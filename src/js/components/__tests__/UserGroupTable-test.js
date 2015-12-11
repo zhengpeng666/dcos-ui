@@ -100,7 +100,7 @@ describe("UserGroupTable", function () {
         "p"
       );
       expect(paragraphs[0].props.children)
-        .toEqual("Are you sure you want to remove foo from qux?");
+        .toEqual("foo will be removed from qux.");
     });
 
     it("returns a message containing the error that was received",

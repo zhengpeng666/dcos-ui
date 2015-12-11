@@ -136,7 +136,7 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
     }
 
     return (
-      <div className="container-pod text-align-center">
+      <div className="container-pod container-pod-short text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
         <p>{`${userLabel} will be removed from the ${groupLabel} group.`}</p>
         {error}
@@ -182,7 +182,8 @@ export default class GroupUserTable extends Util.mixin(StoreMixin) {
       <div>
         <Confirm
           disabled={this.state.pendingRequest}
-          footerClass="modal-footer container container-pod container-pod-fluid"
+          footerContainerClass="container container-pod container-pod-short
+            container-pod-fluid"
           open={this.state.openConfirm}
           onClose={this.handleButtonCancel}
           leftButtonCallback={this.handleButtonCancel}
