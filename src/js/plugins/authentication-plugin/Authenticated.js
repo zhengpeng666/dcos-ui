@@ -20,10 +20,6 @@ export default (ComposedComponent) => {
       }
     }
 
-    constructor() {
-      super(...arguments);
-    }
-
     render() {
       return (
         <ComposedComponent {...this.props} />
