@@ -16,19 +16,6 @@ const LISTENER_SUFFIX = "ListenerFn";
 
 const ListenersDescription = {
 
-  auth: {
-    store: ACLAuthStore,
-    events: {
-      success: EventTypes.ACL_AUTH_USER_LOGIN_CHANGED,
-      error: EventTypes.ACL_AUTH_USER_LOGIN_ERROR,
-      logoutSuccess: EventTypes.ACL_AUTH_USER_LOGOUT
-    },
-    unmountWhen: function () {
-      return true;
-    },
-    listenAlways: true
-  },
-
   acl: {
     store: ACLStore,
     events: {
@@ -43,6 +30,19 @@ const ListenersDescription = {
       groupRevokeSuccess: EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE,
       groupRevokeError: EventTypes.ACL_GROUP_REVOKE_ACTION_ERROR
 
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
+  auth: {
+    store: ACLAuthStore,
+    events: {
+      success: EventTypes.ACL_AUTH_USER_LOGIN_CHANGED,
+      error: EventTypes.ACL_AUTH_USER_LOGIN_ERROR,
+      logoutSuccess: EventTypes.ACL_AUTH_USER_LOGOUT
     },
     unmountWhen: function () {
       return true;
