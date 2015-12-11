@@ -7,6 +7,7 @@ import AppDispatcher from "../events/AppDispatcher";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
 import Store from "../utils/Store";
+import User from "../structs/User";
 
 function getUserMetadata() {
   return cookie.parse(global.document.cookie)[ACLAuthConstants.userCookieKey];
@@ -52,7 +53,7 @@ var ACLAuthStore = Store.createStore({
     }
 
     try {
-      return JSON.parse(atob(userCode));
+      return new User(JSON.parse(atob(userCode)));
     } catch(err) {
       return null;
     }
