@@ -3,6 +3,7 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLUserStore from "../stores/ACLUserStore";
+import Form from "./Form";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import PermissionsView from "./PermissionsView";
 import RequestErrorMsg from "./RequestErrorMsg";
@@ -10,6 +11,8 @@ import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
 import UserDetails from "./UserDetails";
 import UserGroupMembershipTab from "./UserGroupMembershipTab";
+
+const METHODS_TO_BIND = ["handleNameChange"];
 
 export default class UserSidePanelContents extends SidePanelContents {
   constructor() {
@@ -37,12 +40,20 @@ export default class UserSidePanelContents extends SidePanelContents {
         events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
       }
     ];
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
   }
 
   componentDidMount() {
     super.componentDidMount();
 
     ACLUserStore.fetchUserWithDetails(this.props.itemID);
+  }
+
+  handleNameChange(model) {
+    ACLUserStore.updateUser(this.props.itemID, {description: model.text});
   }
 
   onUserStoreFetchedDetailsSuccess() {
@@ -66,6 +77,21 @@ export default class UserSidePanelContents extends SidePanelContents {
   }
 
   getUserInfo(user) {
+    let editNameFormDefinition = [
+      {
+        fieldType: "text",
+        name: "text",
+        placeholder: "User's Name",
+        required: true,
+        sharedClass: "form-element-inline h1 flush",
+        showError: false,
+        showLabel: false,
+        writeType: "edit",
+        validation: function () { return true; },
+        value: user.description
+      }
+    ];
+
     let imageTag = (
       <div className="side-panel-icon icon icon-large icon-image-container icon-user-container">
         <img src="./img/layout/icon-user-default-64x64@2x.png" />
@@ -76,10 +102,10 @@ export default class UserSidePanelContents extends SidePanelContents {
       <div className="side-panel-content-header-details flex-box
         flex-box-align-vertical-center">
         {imageTag}
-        <div>
-          <h1 className="side-panel-content-header-label flush">
-            {user.description}
-          </h1>
+        <div className="side-panel-content-header-label">
+          <Form definition={editNameFormDefinition}
+            formControlClass="row form-group flush-bottom"
+            onSubmit={this.handleNameChange} />
           <div>
             {this.getSubHeader(user)}
           </div>

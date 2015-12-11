@@ -180,10 +180,13 @@ export default class Form extends React.Component {
     let state = this.state;
     let classes = _.pick(
       this.props,
-      "readClass",
-      "inputClass",
       "formControlClass",
-      "helpBlockClass"
+      "helpBlockClass",
+      "inlineIconClass",
+      "inlineTextClass",
+      "inputClass",
+      "readClass",
+      "sharedClass"
     );
 
     return definition.map((formControlOption, i) => {
@@ -223,6 +226,8 @@ Form.propTypes = {
   className: PropTypes.string,
   formControlClass: PropTypes.string,
   helpBlockClass: PropTypes.string,
+  inlineIconClass: PropTypes.string,
+  inlineTextClass: PropTypes.string,
   inputClass: PropTypes.string,
   readClass: PropTypes.string,
   sharedClass: PropTypes.string,
@@ -239,6 +244,8 @@ Form.defaultProps = {
   className: "form flush-bottom",
   formControlClass: "row form-group",
   helpBlockClass: "form-help-block",
+  inlineIconClass: "form-element-inline-icon",
+  inlineTextClass: "form-element-inline-text",
   inputClass: "form-control",
   readClass: "read-only",
 

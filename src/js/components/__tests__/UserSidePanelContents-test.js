@@ -5,7 +5,12 @@ jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../events/ACLUsersActions");
 jest.dontMock("../../stores/ACLUserStore");
 jest.dontMock("../../constants/EventTypes");
+jest.dontMock("../FieldInput");
+jest.dontMock("../../constants/FieldTypes");
+jest.dontMock("../Form");
+jest.dontMock("../FormControl");
 jest.dontMock("../../mixins/GetSetMixin");
+jest.dontMock("../icons/IconEdit");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../mixins/StoreMixin");
 jest.dontMock("../../mixins/TabsMixin");
@@ -101,7 +106,11 @@ describe("UserSidePanelContents", function () {
             itemID={userID}/>
         );
 
-        var text = JestUtil.renderAndFindTag(instance.render(), "h1");
+        var text = TestUtils.findRenderedDOMComponentWithClass(
+          instance,
+          "form-element-inline-text"
+        );
+
         expect(text.getDOMNode().textContent).toEqual("藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe");
       }
     );

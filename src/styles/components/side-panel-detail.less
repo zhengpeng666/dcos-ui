@@ -57,10 +57,13 @@ Side Panel Detail
   }
 
   .side-panel-content {
-
     border: 0;
     flex: 3 3 100%;
     width: 100%;
+
+    .flex-container-col {
+      max-width: 100%;
+    }
 
     // We need to force the Gemini scrollbar view to fill its parent.
     > .gm-scroll-view {
@@ -86,11 +89,14 @@ Side Panel Detail
       .side-panel-content-header-details {
 
         .side-panel-icon {
-
           margin-right: @base-spacing-unit * 0.5;
-
         }
 
+      }
+
+      .side-panel-content-header-label {
+        min-width: 0;
+        width: 100%;
       }
 
     }
