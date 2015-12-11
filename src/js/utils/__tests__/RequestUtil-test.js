@@ -61,6 +61,31 @@ describe("RequestUtil", function () {
       expect(request).toEqual(undefined);
     });
 
+    it("stringifies data when not doing a GET request", function () {
+      RequestUtil.json({type: "PUT", data: {hello: "world"}});
+      expect($.ajax.calls[0].args[0].data).toEqual("{\"hello\":\"world\"}");
+    });
+
+    it("does not stringify when request is of type GET", function () {
+      RequestUtil.json({type: "GET", data: {hello: "world"}});
+      expect($.ajax.calls[0].args[0].data).toEqual({hello: "world"});
+    });
+
+    it("sets the correct datatype when doing a PUT request", function () {
+      RequestUtil.json({type: "PUT", data: {hello: "world"}});
+      expect($.ajax.calls[0].args[0].dataType).toEqual("text");
+    });
+
+    it("does not set the datatype when doing a GET request", function () {
+      RequestUtil.json({type: "GET", data: {hello: "world"}});
+      expect($.ajax.calls[0].args[0].dataType).toEqual("json");
+    });
+
+    it("does not set the datatype if it's already set", function () {
+      RequestUtil.json({type: "PUT", data: {hello: "world"}, dataType: "foo"});
+      expect($.ajax.calls[0].args[0].dataType).toEqual("foo");
+    });
+
   });
 
   describe("#debounceOnError", function () {

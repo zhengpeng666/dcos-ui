@@ -2,24 +2,26 @@
   "uid": "quis",
   "url": "/users/quis",
   "description": "藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe",
-  "groups": [
-    {
-      "membershipurl": "/groups/olis/users/quis",
-      "group": {
-        "gid": "ölis",
-        "url": "/groups/olis",
-        "description": "藍-遙 遥 悠 遼 Größe"
+  "groups": {
+    "array": [
+      {
+        "membershipurl": "/groups/olis/users/quis",
+        "group": {
+          "gid": "ölis",
+          "url": "/groups/olis",
+          "description": "藍-遙 遥 悠 遼 Größe"
+        }
+      },
+      {
+        "membershipurl": "/groups/geeks/users/quis",
+        "group": {
+          "gid": "geeks",
+          "url": "/groups/geeks",
+          "description": "These are the geeks, not the nerds."
+        }
       }
-    },
-    {
-      "membershipurl": "/groups/geeks/users/quis",
-      "group": {
-        "gid": "geeks",
-        "url": "/groups/geeks",
-        "description": "These are the geeks, not the nerds."
-      }
-    }
-  ],
+    ]
+  },
   "permissions": {
     "direct": [
       {

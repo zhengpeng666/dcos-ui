@@ -19,7 +19,8 @@ var ConfigDev = {
       }
     }
   },
-  useFixtures: false
+  useFixtures: false,
+  useUIConfigFixtures: false
 };
 
 module.exports = ConfigDev;

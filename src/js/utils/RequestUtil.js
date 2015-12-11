@@ -26,17 +26,26 @@ function setRequestState(requestID, state) {
 
 var RequestUtil = {
   json: function (options) {
-    if (options && _.isFunction(options.hangingRequestCallback)) {
-      let requestID = JSON.stringify(options);
-      options.success = createCallbackWrapper(options.success, requestID);
-      options.error = createCallbackWrapper(options.error, requestID);
+    if (options) {
+      if (_.isFunction(options.hangingRequestCallback)) {
+        let requestID = JSON.stringify(options);
+        options.success = createCallbackWrapper(options.success, requestID);
+        options.error = createCallbackWrapper(options.error, requestID);
 
-      if (isRequestActive(requestID)) {
-        options.hangingRequestCallback();
-        return;
-      } else {
-        setRequestState(requestID, true);
-        delete options.hangingRequestCallback;
+        if (isRequestActive(requestID)) {
+          options.hangingRequestCallback();
+          return;
+        } else {
+          setRequestState(requestID, true);
+          delete options.hangingRequestCallback;
+        }
+      }
+
+      if (options.type && options.type !== "GET" && options.data) {
+        options.data = JSON.stringify(options.data);
+        if (!options.dataType) {
+          options.dataType = "text";
+        }
       }
     }
 
