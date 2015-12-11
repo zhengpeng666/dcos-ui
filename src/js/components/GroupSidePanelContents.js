@@ -3,12 +3,19 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLGroupStore from "../stores/ACLGroupStore";
+import Form from "./Form";
 import GroupUserMembershipTab from "./GroupUserMembershipTab";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import PermissionsView from "./PermissionsView";
 import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
+
+const METHODS_TO_BIND = [
+  "handleNameChange",
+  "onGroupStoreUpdateSuccess",
+  "onGroupStoreUpdateError"
+];
 
 export default class GroupSidePanelContents extends SidePanelContents {
   constructor() {
@@ -21,7 +28,8 @@ export default class GroupSidePanelContents extends SidePanelContents {
 
     this.state = {
       currentTab: Object.keys(this.tabs_tabs).shift(),
-      fetchedDetailsError: false
+      fetchedDetailsError: false,
+      groupDescriptionChangeError: false
     };
 
     this.store_listeners = [
@@ -32,15 +40,28 @@ export default class GroupSidePanelContents extends SidePanelContents {
       },
       {
         name: "group",
-        events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
+        events: [
+          "fetchedDetailsSuccess",
+          "fetchedDetailsError",
+          "updateSuccess",
+          "updateError"
+        ]
       }
     ];
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
   }
 
   componentDidMount() {
     super.componentDidMount();
 
     ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
+  }
+
+  handleNameChange(model) {
+    ACLGroupStore.updateGroup(this.props.itemID, {description: model.text});
   }
 
   onGroupStoreFetchedDetailsSuccess() {
@@ -55,6 +76,20 @@ export default class GroupSidePanelContents extends SidePanelContents {
     }
   }
 
+  onGroupStoreUpdateSuccess() {
+    if (this.state.userDescriptionChangeError) {
+      this.setState({
+        groupDescriptionChangeError: false
+      });
+    }
+  }
+
+  onGroupStoreUpdateError(error) {
+    this.setState({
+      groupDescriptionChangeError: error
+    });
+  }
+
   getErrorNotice() {
     return (
       <div className="container container-pod">
@@ -64,6 +99,21 @@ export default class GroupSidePanelContents extends SidePanelContents {
   }
 
   getGroupInfo(group) {
+    let editNameFormDefinition = [
+      {
+        fieldType: "text",
+        name: "text",
+        placeholder: "Group Name",
+        required: true,
+        sharedClass: "form-element-inline h1 flush",
+        showError: this.state.groupDescriptionChangeError,
+        showLabel: false,
+        writeType: "edit",
+        validation: function () { return true; },
+        value: group.description
+      }
+    ];
+
     let imageTag = (
       <div className="side-panel-icon icon icon-large icon-image-container icon-group-container">
         <img src="./img/layout/icon-group-default-64x64@2x.png" />
@@ -74,10 +124,10 @@ export default class GroupSidePanelContents extends SidePanelContents {
       <div className="side-panel-content-header-details flex-box
         flex-box-align-vertical-center">
         {imageTag}
-        <div>
-          <h1 className="side-panel-content-header-label flush">
-            {group.description}
-          </h1>
+        <div className="side-panel-content-header-label">
+          <Form definition={editNameFormDefinition}
+            formControlClass="row form-group flush-bottom"
+            onSubmit={this.handleNameChange} />
           <div>
             {this.getSubHeader(group)}
           </div>
