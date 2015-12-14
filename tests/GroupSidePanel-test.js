@@ -1,4 +1,4 @@
-describe.only("Group Details Sidepanel [02k]", function () {
+describe("Group Details Sidepanel [02k]", function () {
 
   beforeEach(function () {
     cy
