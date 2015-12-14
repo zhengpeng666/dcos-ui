@@ -1,12 +1,6 @@
 {
   "uiConfiguration": {
     "plugins": {
-      "banner": {
-
-      },
-      "settings": {
-        "enabled": false
-      },
       "tracking": {
         "enabled": false
       }
