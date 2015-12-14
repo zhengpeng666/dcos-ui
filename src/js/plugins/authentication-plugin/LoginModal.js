@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
 import Router from "react-router";
-/* eslint-enable no-unused-vars */
 
 import ACLAuthStore from "../../stores/ACLAuthStore";
 import FormModal from "../../components/FormModal";
@@ -63,7 +61,7 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
     return [
       {
         fieldType: "text",
-        name: "description",
+        name: "uid",
         placeholder: "Full name",
         required: true,
         showError: false,
