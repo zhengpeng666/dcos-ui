@@ -77,14 +77,14 @@ describe("User Details Sidepanel [02k]", function () {
         });
     });
 
-    it("should have a table", function () {
+    it("should have a table with a row containing a service", function () {
       cy
         .get("@sidePanel")
         .get("table td")
         .should("contain", "Marathon");
     });
 
-    it.only("displays the confirmation modal when clicking remove [060]", function() {
+    it("displays the confirmation modal when clicking remove [060]", function() {
       cy
         .get("@sidePanel")
         .get(".table tbody tr:first-child button")
