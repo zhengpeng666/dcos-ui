@@ -27,8 +27,8 @@ describe("PermissionsTable", function () {
     this.instance = TestUtils.renderIntoDocument(
       <PermissionsTable
         permissions={(new User(userDetailsFixture)).getUniquePermissions()}
-        ownerType="user"
-        ownerID={userDetailsFixture.uid} />
+        itemType="user"
+        itemID={userDetailsFixture.uid} />
     );
 
     this.instance.handleOpenConfirm = jest.genMockFunction();
@@ -151,8 +151,8 @@ describe("PermissionsTable", function () {
       var instance = TestUtils.renderIntoDocument(
         <PermissionsTable
           permissions={(new User(userDetailsFixture)).getUniquePermissions()}
-          ownerType="group"
-          ownerID={userDetailsFixture.uid} />
+          itemType="group"
+          itemID={userDetailsFixture.uid} />
       );
       instance.handleButtonConfirm();
 

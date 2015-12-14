@@ -5,6 +5,7 @@ import React from "react";
 
 import ACLStore from "../stores/ACLStore";
 import Item from "../structs/Item";
+import PermissionsTable from "./PermissionsTable";
 import RequestErrorMsg from "./RequestErrorMsg";
 import StoreMixin from "../mixins/StoreMixin";
 import StringUtil from "../utils/StringUtil";
@@ -106,7 +107,12 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
   }
 
   getPermissionTable() {
-    return null;
+    return (
+      <PermissionsTable
+        permissions={this.props.permissions}
+        itemID={this.props.itemID}
+        itemType={this.props.itemType} />
+    );
   }
 
   getLoadingScreen() {
@@ -209,5 +215,6 @@ PermissionsView.defaultPropTypes = {
 
 PermissionsView.propTypes = {
   itemID: React.PropTypes.string.isRequired,
+  itemType: React.PropTypes.string,
   permissions: React.PropTypes.array
 };

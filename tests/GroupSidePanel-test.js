@@ -10,7 +10,11 @@ describe("Group Details Sidepanel [02k]", function () {
       .route(/state/, "fx:marathon-1-task/state")
       .route(/api\/v1\/users/, "fx:acl/users-unicode")
       .route(/api\/v1\/groups/, "fx:acl/groups-unicode")
-      .route(/ui-config/, "fx:config/tracking-disabled")
+      .route(/ui-config/, "fx:config/settings-enabled")
+      .route(/acls\?type=services/, "fx:acl/acls-unicode")
+      .route(/groups\/olis/, "fx:acl/group-unicode")
+      .route(/groups\/olis\/users/, "fx:acl/group-users")
+      .route(/groups\/olis\/permissions/, "fx:acl/group-permissions")
       .visit("http://localhost:4200/", {
       onBeforeLoad: function (contentWindow) {
         contentWindow.localStorage.setItem("email", "ui-bot@mesosphere.io");
@@ -70,6 +74,26 @@ describe("Group Details Sidepanel [02k]", function () {
           }
 
           expect(result).to.equal(false);
+        });
+    });
+
+    it("should have a table", function () {
+      cy
+        .get("@sidePanel")
+        .get("table td")
+        .should("contain", "Marathon");
+    });
+
+    it("displays the confirmation modal when clicking remove [060]", function() {
+      cy
+        .get("@sidePanel")
+        .get(".table tbody tr:first-child button")
+        .click();
+
+      cy
+        .get(".confirm-modal")
+        .should(function ($modal) {
+          expect($modal.length).to.equal(1);
         });
     });
 
