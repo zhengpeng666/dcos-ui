@@ -24,8 +24,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
 
     this.state = {
       currentTab: Object.keys(this.tabs_tabs).shift(),
-      fetchedDetailsError: false,
-      groupDescriptionChangeError: false
+      fetchedDetailsError: false
     };
 
     this.store_listeners = [
@@ -56,7 +55,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
   }
 
   onGroupStoreFetchedDetailsSuccess() {
-    if (this.state.fetchedDetailsError === true) {
+    if (this.state.fetchedDetailsError) {
       this.setState({fetchedDetailsError: false});
     }
   }
@@ -83,7 +82,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
         placeholder: "Group Name",
         required: true,
         sharedClass: "form-element-inline h1 flush",
-        showError: this.state.groupDescriptionChangeError,
+        showError: false,
         showLabel: false,
         writeType: "edit",
         validation: function () { return true; },

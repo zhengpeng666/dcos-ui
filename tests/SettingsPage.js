@@ -10,7 +10,7 @@ describe("Settings Page [05k]", function () {
       .route(/state/, "fx:marathon-1-task/state")
       .route(/api\/v1\/users/, "fx:acl/users-unicode")
       .route(/api\/v1\/groups/, "fx:acl/groups-unicode")
-      .route(/ui-config/, "fx:config/tracking-disabled")
+      .route(/ui-config/, "fx:config/settings-enabled")
       .visit("http://localhost:4200/", {
       onBeforeLoad: function (contentWindow) {
         contentWindow.localStorage.setItem("email", "ui-bot@mesosphere.io");
@@ -26,8 +26,7 @@ describe("Settings Page [05k]", function () {
       cy.get(".page-header-navigation .tab-item-label").contains("Groups")
         .click();
       cy.get(".groups-table-header input[type='text']").as("filterTextbox");
-      cy.get(".page-content-fill .table tbody tr")
-        .as("tableRows");
+      cy.get(".page-content-fill .table tbody tr").as("tableRows");
     });
 
     it("routes to the group page [05p]", function () {
@@ -86,8 +85,7 @@ describe("Settings Page [05k]", function () {
       cy.get(".page-header-navigation .tab-item-label").contains("Users")
         .click();
       cy.get(".users-table-header input[type='text']").as("filterTextbox");
-      cy.get(".page-content-fill .table tbody tr")
-        .as("tableRows");
+      cy.get(".page-content-fill .table tbody tr").as("tableRows");
     });
 
     it("routes to the user page [05x]", function () {
@@ -144,21 +142,16 @@ describe("Settings Page [05k]", function () {
 
     beforeEach(function() {
       cy
-        .route(
-          /users\/quis/, "fx:acl/user-unicode"
-        )
-        .route(
-          /users\/quis\/groups/, []
-        )
-        .route(
-          /users\/quis\/permissions/, {direct: [], groups: []}
-        )
+        .route(/acls\?type=services/, "fx:acl/acls-unicode")
+        .route(/users\/quis/, "fx:acl/user-unicode")
+        .route(/users\/quis\/groups/, "fx:acl/user-groups")
+        .route(/users\/quis\/permissions/, "fx:acl/user-permissions")
         .visit("http://localhost:4200/#/settings/organization/users/quis");
     });
 
     it("displays the correct user [05w]", function() {
       cy
-        .get(".side-panel .side-panel-content-header-label")
+        .get(".side-panel .side-panel-content-header-label .form-element-inline-text")
         .should(function ($header) {
           expect($header[0].textContent).to.equal("藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe");
         });
@@ -272,7 +265,7 @@ describe("Settings Page [05k]", function () {
 
       it("switches the password label into a password input element [066]",
         function () {
-        cy.get("form .read-only")
+        cy.get(".side-panel-content-user-details form .form-element-inline-text")
           .click();
 
         cy.get("form input")
@@ -289,12 +282,16 @@ describe("Settings Page [05k]", function () {
   context("Group Details Sidepanel [03z]", function() {
 
     beforeEach(function() {
-      cy.visit("http://localhost:4200/#/settings/organization/groups/olis");
+      cy
+        .route(/groups\/olis/, "fx:acl/group-unicode")
+        .route(/groups\/olis\/users/, "fx:acl/group-users")
+        .route(/groups\/olis\/permissions/, "fx:acl/group-permissions")
+        .visit("http://localhost:4200/#/settings/organization/groups/olis");
     });
 
     it("displays the correct group [040]", function() {
       cy
-        .get(".side-panel .side-panel-content-header-label")
+        .get(".side-panel .side-panel-content-header-label .form-element-inline-text")
         .should(function ($header) {
           expect($header[0].textContent).to.equal("藍-遙 遥 悠 遼 Größe");
         });
