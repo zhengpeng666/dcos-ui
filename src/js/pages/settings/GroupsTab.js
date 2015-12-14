@@ -28,7 +28,8 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
     ];
 
     this.state = {
-      hasError: false,
+      groupsStoreError: false,
+      groupsStoreSuccess: false,
       openNewGroupModal: false
     };
 
@@ -43,13 +44,17 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
   }
 
   onGroupsStoreSuccess() {
-    if (this.state.hasError) {
-      this.setState({hasError: false});
-    }
+    this.setState({
+      groupsStoreError: false,
+      groupsStoreSuccess: true
+    });
   }
 
   onGroupsStoreError() {
-    this.setState({hasError: true});
+    this.setState({
+      groupsStoreError: true,
+      groupsStoreSuccess: false
+    });
   }
 
   handleNewGroupClick() {
@@ -82,7 +87,8 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
       );
     }
 
-    if (!MesosSummaryStore.get("statesProcessed")) {
+    if (!MesosSummaryStore.get("statesProcessed") ||
+      !this.state.groupsStoreSuccess) {
       return this.getLoadingScreen();
     }
 
