@@ -1,5 +1,7 @@
 import _ from "underscore";
 
+let settingsRoutes = require("./routes");
+
 const SettingsPlugin = {
 
   configuration: {
@@ -11,7 +13,10 @@ const SettingsPlugin = {
    */
   initialize: function (Plugins) {
     Plugins.addFilter(
-      "sidebarNavigation", this.sidebarNavigationItems.bind(this)
+      "applicationRoutes", this.applicationRoutes.bind(this)
+    );
+    Plugins.addFilter(
+      "sidebarNavigation", this.sidebarNavigation.bind(this)
     );
   },
 
@@ -23,7 +28,18 @@ const SettingsPlugin = {
     return this.configuration.enabled;
   },
 
-  sidebarNavigationItems: function (value = []) {
+  applicationRoutes: function (routes) {
+    if (this.isEnabled() !== true) {
+      return routes;
+    }
+
+    // Append settings routes
+    routes[0].children[0].children.push(settingsRoutes);
+
+    return routes;
+  },
+
+  sidebarNavigation: function (value = []) {
     if (this.isEnabled() !== true) {
       return value;
     }

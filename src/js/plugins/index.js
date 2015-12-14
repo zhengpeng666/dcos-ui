@@ -1,6 +1,6 @@
 import AuthenticationPlugin from "./authentication-plugin/AuthenticationPlugin";
 import BannerPlugin from "./BannerPlugin";
-import SettingsPlugin from "./SettingsPlugin";
+import SettingsPlugin from "./settings-plugin/SettingsPlugin";
 import TrackingPlugin from "./TrackingPlugin";
 
 const pluginList = {
