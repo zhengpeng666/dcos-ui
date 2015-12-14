@@ -1,6 +1,4 @@
-import Router from "react-router";
-let Route = Router.Route;
-let Redirect = Router.Redirect;
+import {Route, Redirect} from "react-router";
 
 import GroupsTab from "../../pages/settings/GroupsTab";
 import OverviewTab from "../../pages/settings/OverviewTab";
