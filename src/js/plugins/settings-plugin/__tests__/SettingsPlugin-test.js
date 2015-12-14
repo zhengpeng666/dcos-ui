@@ -5,7 +5,6 @@ jest.dontMock("../../../constants/EventTypes");
 jest.dontMock("../../../events/AppDispatcher");
 jest.dontMock("../../../events/ConfigActions");
 jest.dontMock("../../../mixins/GetSetMixin");
-jest.dontMock("../../../stores/ConfigStore");
 jest.dontMock("../../../mixins/StoreMixin");
 jest.dontMock("../../../utils/Store");
 jest.dontMock("../../../utils/DOMUtils");
@@ -13,7 +12,6 @@ jest.dontMock("../../../utils/Util");
 
 var _ = require("underscore");
 
-var ConfigStore = require("../../../stores/ConfigStore");
 var Plugins = require("../../Plugins");
 var SettingsPlugin = require("../SettingsPlugin");
 

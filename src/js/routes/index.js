@@ -23,7 +23,6 @@ let routes = [
           dashboard,
           services,
           nodes,
-          settings,
           {
             type: Redirect,
             from: "/",
