@@ -2,34 +2,38 @@
   "gid": "olis",
   "url": "/groups/olis",
   "description": "藍-遙 遥 悠 遼 Größe",
-  "permissions": [
-    {
-      "rid": "service.marathon",
-      "description": "Marathon",
-      "aclurl": "/acls/service.marathon",
-      "actions": [
-        {
-          "name": "access",
-          "url": "/acls/service.marathon/groups/olis/access"
+  "permissions": {
+    "array": [
+      {
+        "rid": "service.marathon",
+        "description": "Marathon",
+        "aclurl": "/acls/service.marathon",
+        "actions": [
+          {
+            "name": "access",
+            "url": "/acls/service.marathon/groups/olis/access"
+          }
+        ]
+      }
+    ]
+  },
+  "users": {
+    "array": [
+      {
+        "membershipurl": "/groups/olis/users/velit",
+        "user": {
+          "uid": "velit",
+          "url": "/users/velit",
+          "description": "Velit Doe"
         }
-      ]
-    }
-  ],
-  "users": [
-    {
-      "membershipurl": "/groups/olis/users/velit",
-      "user": {
-        "uid": "velit",
-        "url": "/users/velit",
-        "description": "Velit Doe"
+      }, {
+        "membershipurl": "/groups/olis/users/quis",
+        "user": {
+          "uid": "qüis",
+          "url": "/users/quis",
+          "description": "藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe"
+        }
       }
-    }, {
-      "membershipurl": "/groups/olis/users/quis",
-      "user": {
-        "uid": "qüis",
-        "url": "/users/quis",
-        "description": "藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe"
-      }
-    }
-  ]
+    ]
+  }
 }

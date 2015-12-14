@@ -12,7 +12,7 @@ var cookie = require("cookie");
 var ACLAuthStore = require("../ACLAuthStore");
 var EventTypes = require("../../constants/EventTypes");
 var RequestUtil = require("../../utils/RequestUtil");
-const USER_COOKIE_KEY = "ACLMetadata";
+const USER_COOKIE_KEY = "dcos-acs-info-cookie";
 
 global.atob = global.atob || function () {
   return JSON.stringify({description: "John Doe"});

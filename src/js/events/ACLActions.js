@@ -11,7 +11,7 @@ const ACLActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
-          data: response,
+          data: response.array,
           resourceType
         });
       },

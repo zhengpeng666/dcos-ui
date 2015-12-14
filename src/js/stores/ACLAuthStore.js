@@ -7,7 +7,7 @@ import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
 import Store from "../utils/Store";
 
-const USER_COOKIE_KEY = "ACLMetadata";
+const USER_COOKIE_KEY = "dcos-acs-info-cookie";
 
 function getUserMetadata() {
   return cookie.parse(global.document.cookie)[USER_COOKIE_KEY];

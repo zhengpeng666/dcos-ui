@@ -34,6 +34,7 @@ var User = require("../../structs/User");
 
 var userDetailsFixture =
   require("../../../../tests/_fixtures/acl/user-with-details.json");
+userDetailsFixture.groups = userDetailsFixture.groups.array;
 
 describe("UserSidePanelContents", function () {
 

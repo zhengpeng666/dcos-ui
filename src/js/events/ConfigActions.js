@@ -23,7 +23,7 @@ const ConfigActions = {
   }
 };
 
-if (Config.useFixtures) {
+if (Config.useFixtures || Config.useUIConfigFixtures) {
   if (!global.actionTypes) {
     global.actionTypes = {};
   }

@@ -13,7 +13,7 @@ const ACLGroupsActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
-          data: response
+          data: response.array
         });
       },
       error: function (e) {
@@ -50,7 +50,7 @@ const ACLGroupsActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
-          data: response,
+          data: response.array,
           groupID
         });
       },
@@ -70,7 +70,7 @@ const ACLGroupsActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
-          data: response,
+          data: response.array,
           groupID
         });
       },

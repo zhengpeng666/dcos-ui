@@ -134,7 +134,7 @@ describe("ACLUsersActions", function () {
         expect(action.data).toEqual({bar: "baz"});
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({array: {bar: "baz"}});
     });
 
     it("dispatches with the userID successful", function () {

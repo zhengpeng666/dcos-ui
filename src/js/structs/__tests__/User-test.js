@@ -14,6 +14,7 @@ let _ = require("underscore");
 let GroupsList = require("../GroupsList");
 let User = require("../User");
 let userFixture = require(fixturePath);
+userFixture.groups = userFixture.groups.array;
 
 describe("User", function () {
 

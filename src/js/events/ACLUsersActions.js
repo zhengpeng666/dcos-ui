@@ -13,7 +13,7 @@ const ACLUsersActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USERS_SUCCESS,
-          data: response
+          data: response.array
         });
       },
       error: function (e) {
@@ -50,7 +50,7 @@ const ACLUsersActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS,
-          data: response,
+          data: response.array,
           userID
         });
       },

@@ -14,6 +14,9 @@ let Group = require("../Group");
 let groupFixture = require(fixturePath);
 let UsersList = require("../UsersList");
 
+groupFixture.permissions = groupFixture.permissions.array;
+groupFixture.users = groupFixture.users.array;
+
 describe("Group", function () {
 
   beforeEach(function () {

@@ -75,10 +75,10 @@ describe("ACLGroupsActions", function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual({bar: "baz"});
+        expect(action.data).toEqual({array: {bar: "baz"}});
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({array: {bar: "baz"}});
     });
 
     it("dispatches the correct action when unsucessful", function () {
@@ -139,7 +139,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual({bar: "baz"});
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({array: {bar: "baz"}});
     });
 
     it("dispatches with the groupID successful", function () {
@@ -211,7 +211,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual({bar: "baz"});
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({array: {bar: "baz"}});
     });
 
     it("dispatches with the groupID successful", function () {
