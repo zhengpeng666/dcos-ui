@@ -51,7 +51,10 @@ export default class GroupSidePanelContents extends SidePanelContents {
   }
 
   handleNameChange(model) {
-    ACLGroupStore.updateGroup(this.props.itemID, {description: model.text});
+    ACLGroupStore.updateGroup(
+      this.props.itemID,
+      {description: model.description}
+    );
   }
 
   onGroupStoreFetchedDetailsSuccess() {
@@ -78,7 +81,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
     let editNameFormDefinition = [
       {
         fieldType: "text",
-        name: "text",
+        name: "description",
         placeholder: "Group Name",
         required: true,
         sharedClass: "form-element-inline h1 flush",
