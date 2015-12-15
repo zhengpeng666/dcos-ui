@@ -34,24 +34,23 @@
   }
 }
 
-
-
-  // overflow: hidden;
 .user-dropdown-menu.dropdown {
-  position: absolute;
-  bottom: 0;
   display: none;
+  bottom: 0;
+  position: absolute;
   z-index: @z-index-modal + 1;
 
   .dropdown-menu {
     border-radius: 0;
+    // Make sure that this element is not floated, so it has a height
+    float: none;
     bottom: 0;
     padding-left: 0;
     padding-right: 0;
+    position: static;
     top: auto;
     transform-origin: bottom center;
     width: 100%;
-    z-index: @z-index-modal + 1;
 
     .dropdown-menu-list {
       // Override dropdown menu margins
@@ -105,12 +104,10 @@
 
 .user-dropdown-menu-enter {
   animation: user-dropdown-menu-fade-in 0.25s linear, user-dropdown-menu-enter 0.25s linear;
-  z-index: @z-index-modal + 1;
 }
 
 .user-dropdown-menu-leave {
   animation: user-dropdown-menu-fade-out 0.25s linear, user-dropdown-menu-leave 0.25s linear;
-  z-index: @z-index-modal + 1;
 }
 
 & when (@screen-medium-enabled) {
