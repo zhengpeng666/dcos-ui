@@ -61,7 +61,7 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
       {
         fieldType: "text",
         name: "uid",
-        placeholder: "Full name",
+        placeholder: "Username",
         required: true,
         showError: false,
         showLabel: false,
