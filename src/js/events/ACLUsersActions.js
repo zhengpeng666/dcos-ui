@@ -88,6 +88,10 @@ const ACLUsersActions = {
     let userID = data.uid;
     data = _.omit(data, "uid");
 
+    if (!userID && data.description) {
+      userID = data.description.replace(/\s+/g, "").toLowerCase();
+    }
+
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}`,
       type: "PUT",
@@ -112,7 +116,7 @@ const ACLUsersActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}`,
       type: "PATCH",
-      patchData,
+      data: patchData,
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS,

@@ -41,8 +41,11 @@ var RequestUtil = {
         }
       }
 
-      if (options.type && options.type !== "GET" && options.data) {
-        options.data = JSON.stringify(options.data);
+      if (options.type && options.type !== "GET" && !options.contentType) {
+        if (options.data) {
+          options.data = JSON.stringify(options.data);
+        }
+
         if (!options.dataType) {
           options.dataType = "text";
         }
