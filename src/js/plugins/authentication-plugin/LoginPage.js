@@ -2,53 +2,11 @@
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
-import ACLAuthStore from "../../stores/ACLAuthStore";
-import StoreMixin from "../../mixins/StoreMixin";
-import Util from "../../utils/Util";
+import LoginModal from "./LoginModal";
 
-const METHODS_TO_BIND = ["handleLogin"];
-
-export default class Login extends Util.mixin(StoreMixin) {
-  constructor() {
-    super(...arguments);
-    this.displayName = "Login";
-
-    this.store_listeners = [{
-      name: "auth",
-      events: ["success", "error"]
-    }];
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  onAuthStoreSuccess() {
-    let router = this.context.router;
-    let loginRedirectRoute = ACLAuthStore.get("loginRedirectRoute");
-    if (loginRedirectRoute) {
-      // Go to redirect route if it is present
-      router.transitionTo(loginRedirectRoute);
-    } else {
-      // Go to home
-      router.transitionTo("/");
-    }
-  }
-
-  onAuthStoreError() {
-    // TODO: Handle error
-  }
-
-  handleLogin() {
-    // TODO: Needs credentials
-    ACLAuthStore.login();
-  }
+export default class LoginPage extends React.Component {
 
   render() {
-    return <a onClick={this.handleLogin}>Login</a>;
+    return <LoginModal />;
   }
 }
-
-Login.contextTypes = {
-  router: React.PropTypes.func
-};

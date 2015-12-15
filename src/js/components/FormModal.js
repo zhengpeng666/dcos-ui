@@ -29,52 +29,44 @@ export default class FormModal extends React.Component {
     this.triggerSubmit();
   }
 
-  getFooter() {
-    let closeButtonClassSet = classNames({
-      "button button-large": true,
-      "disabled": this.props.disabled
-    });
+  getButtons() {
+    return this.props.buttonDefinition.map((buttonDefinition, i) => {
+      let buttonClassSet = {
+        "disabled": this.props.disabled
+      };
+      buttonClassSet[buttonDefinition.className] = true;
+      buttonClassSet = classNames(buttonClassSet);
 
-    let createButtonClassSet = classNames({
-      "button button-success button-large": true,
-      "disabled": this.props.disabled
-    });
+      let handleOnClick = function () {};
+      if (buttonDefinition.isClose) {
+        handleOnClick = this.props.onClose;
+      }
 
-    return (
-      <div className="container container-pod container-pod-short">
-        {this.getLoadingScreen()}
-        <div className="button-collection text-align-center">
-          <a
-            className={closeButtonClassSet}
-            onClick={this.props.onClose}>
-            Cancel
-          </a>
-          <a
-            className={createButtonClassSet}
-            onClick={this.handleTriggerSubmit}>Create</a>
-        </div>
-      </div>
-    );
+      if (buttonDefinition.isSubmit) {
+        handleOnClick = this.handleTriggerSubmit;
+      }
+
+      if (buttonDefinition.onClick) {
+        handleOnClick = buttonDefinition.onClick;
+      }
+
+      return (
+        <button
+          className={buttonClassSet}
+          disabled={this.props.disabled}
+          key={i}
+          onClick={handleOnClick}>
+          {buttonDefinition.text}
+        </button>
+      );
+    });
   }
 
-  getLoadingScreen() {
-    if (!this.props.disabled) {
-      return null;
-    }
-
+  getFooter() {
     return (
-      <div className="
-        container
-        container-pod
-        container-pod-short
-        text-align-center
-        vertical-center
-        inverse
-        flush-top">
-        <div className="row">
-          <div className="ball-scale">
-            <div />
-          </div>
+      <div className="container container-pod container-pod-short">
+        <div className="button-collection text-align-center">
+          {this.getButtons()}
         </div>
       </div>
     );
@@ -106,7 +98,8 @@ export default class FormModal extends React.Component {
         footer={this.getFooter()}
         titleClass="modal-header-title text-align-center flush-top
           flush-bottom"
-        titleText={this.props.titleText}>
+        titleText={this.props.titleText}
+        {...this.props.modalProps}>
         {this.getContent()}
       </Modal>
     );
@@ -114,13 +107,30 @@ export default class FormModal extends React.Component {
 }
 
 FormModal.defaultProps = {
+  buttonDefinition: [
+    {
+      text: "Close",
+      className: "button button-large",
+      isClose: true
+    },
+    {
+      text: "Create",
+      className: "button button-success button-large",
+      isSubmit: true
+    }
+  ],
   disabled: false,
   onClose: function () {},
-  open: false
+  open: false,
+  submitText: "Create",
+  cancelText: "Cancel",
+  modalProps: {}
 };
 
 FormModal.propTypes = {
+  buttonDefinition: React.PropTypes.array,
   disabled: React.PropTypes.bool,
+  modalProps: React.PropTypes.object,
   onClose: React.PropTypes.func.isRequired,
   open: React.PropTypes.bool,
   titleText: React.PropTypes.string

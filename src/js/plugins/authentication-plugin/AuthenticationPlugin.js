@@ -74,6 +74,7 @@ const AuthenticationPlugin = {
         {
           handler: LoginPage,
           name: "login",
+          path: "login",
           type: Route
         }
       );
