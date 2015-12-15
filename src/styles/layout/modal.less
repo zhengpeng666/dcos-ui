@@ -21,11 +21,16 @@
   }
 
   .modal-content {
+    background-color: @modal-content-background-color;
+    border-radius: @modal-border-radius;
+
+    &:before {
+      background-image: none;
+    }
+
     .modal-content-inner {
       padding-top: @base-spacing-unit;
     }
-    background-color: @modal-content-background-color;
-    border-radius: @modal-border-radius;
   }
 
   .modal-footer {
