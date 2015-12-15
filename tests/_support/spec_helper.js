@@ -40,9 +40,7 @@ Cypress.addParentCommand("visitUrl", function (options) {
       win.document.cookie = "dcos-acs-info-cookie=" +
         "eyJ1aWQiOiJqb2UiLCJkZXNjcmlwdGlvbiI6IkpvZSBEb2UifQ==";
     }
-  }
-
-  if (options.identify) {
+  } else if (options.identify) {
     callback = function (win) {
       win.localStorage.setItem("email", "ui-bot@mesosphere.io");
     }
