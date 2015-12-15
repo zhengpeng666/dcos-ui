@@ -91,7 +91,7 @@ export default class UserDropup extends React.Component {
               src="./img/layout/icon-user-default-64x64@2x.png" />
           </span>
           <span className="user-description">
-          {user.get("description")}
+            {user.get("description")}
           </span>
         </a>
       </div>
@@ -106,7 +106,7 @@ export default class UserDropup extends React.Component {
 
     let modalClasses = {
       bodyClass: "",
-      containerClass: "user-dropdown-menu dropdown up",
+      containerClass: "user-dropdown-menu dropdown",
       innerBodyClass: "",
       modalClass: "dropdown-menu"
     };
