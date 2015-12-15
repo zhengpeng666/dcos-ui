@@ -51,12 +51,13 @@ export default class FormModal extends React.Component {
       }
 
       return (
-        <a
+        <button
           className={buttonClassSet}
+          disabled={this.props.disabled}
           key={i}
           onClick={handleOnClick}>
           {buttonDefinition.text}
-        </a>
+        </button>
       );
     });
   }
