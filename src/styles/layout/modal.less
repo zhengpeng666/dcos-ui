@@ -21,6 +21,9 @@
   }
 
   .modal-content {
+    .modal-content-inner {
+      padding-top: @base-spacing-unit;
+    }
     background-color: @modal-content-background-color;
     border-radius: @modal-border-radius;
   }
@@ -92,12 +95,18 @@
 
 & when (@screen-small-enabled) {
   @media (min-width: @screen-small) {
-    .modal.modal-large {
-      width: 700px;
+    .modal {
+      .modal-content.modal-content-inner {
+        padding-top: @base-spacing-unit-screen-small;
+      }
 
-      .modal-content {
-        pre {
-          max-height: 500px;
+      &.modal.modal-large {
+        width: 700px;
+
+        .modal-content {
+          pre {
+            max-height: 500px;
+          }
         }
       }
     }
@@ -106,12 +115,18 @@
 
 & when (@screen-medium-enabled) {
   @media (min-width: @screen-medium) {
-    .modal.modal-large {
-      width: 800px;
+    .modal {
+      .modal-content.modal-content-inner {
+        padding-top: @base-spacing-unit-screen-medium;
+      }
 
-      .modal-content {
-        pre {
-          max-height: 600px;
+      &.modal-large {
+        width: 800px;
+
+        .modal-content {
+          pre {
+            max-height: 600px;
+          }
         }
       }
     }
@@ -120,8 +135,14 @@
 
 & when (@screen-large-enabled) {
   @media (min-width: @screen-large) {
-    .modal.modal-large {
-      width: 1000px;
+    .modal {
+      .modal-content.modal-content-inner {
+        padding-top: @base-spacing-unit-screen-small;
+      }
+
+      &.modal-large {
+        width: 1000px;
+      }
     }
   }
 }
