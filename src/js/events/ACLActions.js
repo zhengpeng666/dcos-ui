@@ -36,6 +36,7 @@ const ACLActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_ERROR,
           data: e.error,
@@ -56,6 +57,7 @@ const ACLActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_ERROR,
           data: e.error,
@@ -76,6 +78,7 @@ const ACLActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_ERROR,
           data: e.error,
@@ -96,6 +99,7 @@ const ACLActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR,
           data: e.error,

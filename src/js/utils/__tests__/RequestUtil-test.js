@@ -183,4 +183,19 @@ describe("RequestUtil", function () {
 
   });
 
+  describe("#parseResponseBody", function () {
+    it("should parse the object correctly", function () {
+      var originalObject = {name: "Kenny"};
+      var xhr = {
+        responseText: JSON.stringify(originalObject)
+      };
+
+      expect(RequestUtil.parseResponseBody(xhr)).toEqual(originalObject);
+    });
+
+    it("should return empty object if responseText doesnt exist", function () {
+      expect(RequestUtil.parseResponseBody({})).toEqual({});
+    });
+  });
+
 });

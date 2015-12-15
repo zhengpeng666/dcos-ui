@@ -157,6 +157,15 @@ var RequestUtil = {
         closure.apply(null, args);
       }, global.actionTypes.requestTimeout || 500);
     };
+  },
+
+  parseResponseBody: function (xhr) {
+    let responseText = xhr.responseText;
+    if (responseText) {
+      return JSON.parse(responseText);
+    }
+
+    return {};
   }
 };
 
