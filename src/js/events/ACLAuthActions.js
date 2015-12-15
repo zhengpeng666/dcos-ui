@@ -14,7 +14,7 @@ const ACLAuthActions = {
       type: "POST",
       data: credentials,
       success: function (response) {
-        if (response) {
+        if (Config.environment === "testing") {
           global.document.cookie =
             cookie.serialize(
               ACLAuthConstants.userCookieKey, btoa(JSON.stringify(response))

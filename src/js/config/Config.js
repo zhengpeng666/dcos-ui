@@ -22,6 +22,12 @@ if (Config.environment === "development") {
 
   Config.analyticsKey = ""; // Safeguard from developers logging to prod
   Config = _.extend(Config, ConfigDev);
+} else if (Config.environment === "testing") {
+  var _ = require("underscore");
+  var ConfigDev = require("./Config.test.js");
+
+  Config.analyticsKey = ""; // Safeguard from developers logging to prod
+  Config = _.extend(Config, ConfigDev);
 } else if (Config.environment === "production") {
   Config.useFixtures = false;
 }
