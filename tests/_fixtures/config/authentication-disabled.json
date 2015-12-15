@@ -1,8 +1,8 @@
 {
   "uiConfiguration": {
     "plugins": {
-      "tracking": {
-        "enabled": true
+      "authentication": {
+        "enabled": false
       }
     }
   }

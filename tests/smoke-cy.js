@@ -1,19 +1,10 @@
 describe("DCOS UI [00j]", function() {
 
   beforeEach(function() {
-    cy
-      .server()
-      .route(/apps/, "fx:marathon-1-task/app")
-      .route(/history\/minute/, "fx:marathon-1-task/history-minute")
-      .route(/history\/last/, "fx:marathon-1-task/summary")
-      .route(/state-summary/, "fx:marathon-1-task/summary")
-      .route(/state/, "fx:marathon-1-task/state")
-      .visit("http://localhost:4200/", {
-      onBeforeLoad: function(contentWindow) {
-        contentWindow.localStorage.setItem("email", "ui-bot@mesosphere.io");
-      }
-    });
-
+    cy.configureCluster({
+      mesos: "1-task-healthy"
+    })
+    .visitUrl({url: "/", identify: true, fakeAnalytics: true});
   });
 
   context("Dashboard [00k]", function() {

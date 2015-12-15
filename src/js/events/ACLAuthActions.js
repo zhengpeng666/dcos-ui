@@ -29,7 +29,8 @@ const ACLAuthActions = {
 if (Config.useFixtures) {
   ACLAuthActions.login = function () {
     global.document.cookie =
-      "dcos-acs-info-cookie=eyJ1aWQiOiAicmFmYSJ9=";
+      "dcos-acs-info-cookie=" +
+        "eyJ1aWQiOiJqb2UiLCJkZXNjcmlwdGlvbiI6IkpvZSBEb2UifQ==";
     AppDispatcher.handleServerAction({
       type: ActionTypes.REQUEST_ACL_LOGIN_SUCCESS
     });
