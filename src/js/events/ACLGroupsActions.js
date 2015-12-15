@@ -88,6 +88,10 @@ const ACLGroupsActions = {
     let groupID = data.gid;
     data = _.omit(data, "gid");
 
+    if (!groupID && data.description) {
+      groupID = data.description.replace(/\s+/g, "").toLowerCase();
+    }
+
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}`,
       type: "PUT",
@@ -112,7 +116,7 @@ const ACLGroupsActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}`,
       type: "PATCH",
-      patchData,
+      data: patchData,
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS,
