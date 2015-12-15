@@ -122,7 +122,7 @@ export default class UserDropup extends React.Component {
           showCloseButton={false}
           showHeader={false}
           showFooter={false}
-          transitionName="dropdown-menu-up"
+          transitionNameModal="user-dropdown-menu"
           {...modalClasses}>
           {userButton}
           <ul className="dropdown-menu-list">
