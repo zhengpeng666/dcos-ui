@@ -160,12 +160,16 @@ var RequestUtil = {
   },
 
   parseResponseBody: function (xhr) {
-    let responseText = xhr.responseText;
+    let {responseJSON, responseText} = xhr;
+    if (responseJSON) {
+      return responseJSON;
+    }
+
     if (responseText) {
       return JSON.parse(responseText);
     }
 
-    return {};
+    return xhr;
   }
 };
 
