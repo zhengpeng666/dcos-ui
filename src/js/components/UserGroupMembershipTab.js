@@ -125,7 +125,7 @@ export default class UserGroupMembershipTab extends Util.mixin(StoreMixin) {
             dropdownMenuListClassName="dropdown-menu-list"
             items={this.getDropdownItems()}
             onItemSelection={this.onGroupSelection}
-            selectedID="default-placeholder-group-id"
+            forceSelectedID="default-placeholder-group-id"
             transition={true}
             wrapperClassName="dropdown" />
         </div>

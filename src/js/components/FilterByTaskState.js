@@ -69,7 +69,7 @@ export default class FilterByTaskState extends React.Component {
         wrapperClassName="dropdown"
         items={this.getDropdownItems()}
         onItemSelection={this.onItemSelection}
-        selectedID={this.props.currentStatus}
+        forceSelectedID={this.props.currentStatus}
         transition={true}
         transitionName="dropdown-menu" />
     );
