@@ -1,4 +1,7 @@
+import cookie from "cookie";
+
 import ActionTypes from "../constants/ActionTypes";
+import ACLAuthConstants from "../constants/ACLAuthConstants";
 import AppDispatcher from "./AppDispatcher";
 import Config from "../config/Config";
 import RequestUtil from "../utils/RequestUtil";
@@ -10,7 +13,14 @@ const ACLAuthActions = {
       url: `${Config.rootUrl}${Config.apiPrefix}/auth/login`,
       type: "POST",
       data: credentials,
-      success: function () {
+      success: function (response) {
+        if (response) {
+          global.document.cookie =
+            cookie.serialize(
+              ACLAuthConstants.userCookieKey, btoa(JSON.stringify(response))
+            );
+        }
+
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_LOGIN_SUCCESS
         });

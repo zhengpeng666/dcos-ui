@@ -2,15 +2,14 @@ import cookie from "cookie";
 
 import ACLAuthActions from "../events/ACLAuthActions";
 import ActionTypes from "../constants/ActionTypes";
+import ACLAuthConstants from "../constants/ACLAuthConstants";
 import AppDispatcher from "../events/AppDispatcher";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
 import Store from "../utils/Store";
 
-const USER_COOKIE_KEY = "dcos-acs-info-cookie";
-
 function getUserMetadata() {
-  return cookie.parse(global.document.cookie)[USER_COOKIE_KEY];
+  return cookie.parse(global.document.cookie)[ACLAuthConstants.userCookieKey];
 }
 
 var ACLAuthStore = Store.createStore({
@@ -34,9 +33,9 @@ var ACLAuthStore = Store.createStore({
 
   logout: function () {
     // Set the cookie to an empty string.
-    global.document.cookie = cookie.serialize(USER_COOKIE_KEY, "", {
-      expires: new Date(1970)
-    });
+    global.document.cookie = cookie.serialize(
+      ACLAuthConstants.userCookieKey, "", {expires: new Date(1970)}
+    );
 
     this.emit(EventTypes.ACL_AUTH_USER_LOGOUT);
   },
