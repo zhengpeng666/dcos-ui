@@ -77,7 +77,7 @@ describe("Group Details Sidepanel [02k]", function () {
         });
     });
 
-    it("should have a table", function () {
+    it("should have a table [01a]", function () {
       cy
         .get("@sidePanel")
         .get("table td")

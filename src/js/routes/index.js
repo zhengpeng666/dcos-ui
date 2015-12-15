@@ -12,9 +12,6 @@ let routes = [
     name: "home",
     path: "/",
     children: [
-      dashboard,
-      services,
-      nodes,
       {
         type: Route,
         authentication: true,
