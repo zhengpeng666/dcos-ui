@@ -28,8 +28,9 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
     ];
 
     this.state = {
-      hasError: false,
-      openNewUserModal: false
+      openNewUserModal: false,
+      usersStoreError: false,
+      usersStoreSuccess: false
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -43,13 +44,17 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
   }
 
   onUsersStoreSuccess() {
-    if (this.state.hasError) {
-      this.setState({hasError: false});
-    }
+    this.setState({
+      usersStoreError: false,
+      usersStoreSuccess: true
+    });
   }
 
   onUsersStoreError() {
-    this.setState({hasError: true});
+    this.setState({
+      usersStoreError: true,
+      usersStoreSuccess: false
+    });
   }
 
   handleNewUserClick() {
@@ -79,14 +84,15 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
 
   getContents() {
     // We want to always render the portals (side panel and modal),
-    // so only this part is showing loading and error screend
-    if (this.state.hasError) {
+    // so only this part is showing loading and error screen.
+    if (this.state.usersStoreError) {
       return (
         <RequestErrorMsg />
       );
     }
 
-    if (!MesosSummaryStore.get("statesProcessed")) {
+    if (!MesosSummaryStore.get("statesProcessed") ||
+      !this.state.usersStoreSuccess) {
       return this.getLoadingScreen();
     }
 
