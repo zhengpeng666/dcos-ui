@@ -1,4 +1,4 @@
-describe.only("LoginModal", function () {
+describe("LoginModal", function () {
 
   beforeEach(function () {
     cy
