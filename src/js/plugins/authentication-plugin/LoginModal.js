@@ -84,9 +84,14 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
   }
 
   getLoginButtonDefinition() {
+    let buttonText = "Sign In";
+    if (this.state.disableLogin) {
+      buttonText = "Signing in...";
+    }
+
     return [
       {
-        text: "Sign in",
+        text: buttonText,
         className: "button button-primary button-wide",
         isSubmit: true
       }
