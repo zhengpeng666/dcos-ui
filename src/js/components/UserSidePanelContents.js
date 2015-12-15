@@ -31,6 +31,10 @@ export default class UserSidePanelContents extends SidePanelContents {
 
     this.store_listeners = [
       {
+        name: "group",
+        events: ["addUserSuccess", "deleteUserSuccess"]
+      },
+      {
         name: "summary",
         events: ["success"],
         listenAlways: false
@@ -54,6 +58,14 @@ export default class UserSidePanelContents extends SidePanelContents {
 
   handleNameChange(model) {
     ACLUserStore.updateUser(this.props.itemID, {description: model.text});
+  }
+
+  onGroupStoreAddUserSuccess() {
+    ACLUserStore.fetchUserWithDetails(this.props.itemID);
+  }
+
+  onGroupStoreDeleteUserSuccess() {
+    ACLUserStore.fetchUserWithDetails(this.props.itemID);
   }
 
   onUserStoreFetchedDetailsSuccess() {

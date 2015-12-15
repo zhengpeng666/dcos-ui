@@ -24,6 +24,7 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
 
     this.store_listeners = [
       {name: "marathon", events: ["success"]},
+      {name: "user", events: ["createSuccess", "deleteSuccess", "updateSuccess"]},
       {name: "users", events: ["success", "error"]}
     ];
 
@@ -40,6 +41,18 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount();
+    ACLUsersStore.fetchUsers();
+  }
+
+  onUserStoreCreateSuccess() {
+    ACLUsersStore.fetchUsers();
+  }
+
+  onUserStoreDeleteSuccess() {
+    ACLUsersStore.fetchUsers();
+  }
+
+  onUserStoreUpdateSuccess() {
     ACLUsersStore.fetchUsers();
   }
 
