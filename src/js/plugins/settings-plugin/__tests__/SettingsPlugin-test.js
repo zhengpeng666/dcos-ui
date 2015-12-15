@@ -100,8 +100,8 @@ describe("SettingsPlugin", function () {
     describe("#applicationRoutes", function () {
 
       beforeEach(function () {
-        this.routes = [{children: [{children: []}]}];
-        this.routesUnmodified = [{children: [{children: []}]}];
+        this.routes = [{children: [{id: "index", children: []}]}];
+        this.routesUnmodified = [{children: [{id: "index", children: []}]}];
       });
 
       it("returns the original value when disabled", function () {

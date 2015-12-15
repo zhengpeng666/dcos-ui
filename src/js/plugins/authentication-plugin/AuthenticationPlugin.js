@@ -3,8 +3,8 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 import {Route} from "react-router";
 
-import AccessDeniedPage from "./AccessDeniedPage";
-import Authenticated from "./Authenticated";
+import AccessDeniedPage from "./components/AccessDeniedPage";
+import Authenticated from "./components/Authenticated";
 import LoginPage from "./LoginPage";
 
 const AuthenticationPlugin = {
@@ -58,7 +58,7 @@ const AuthenticationPlugin = {
 
       // Override handler of index to be "authenticated"
       routes[0].children.forEach(function (child) {
-        if (child.authentication) {
+        if (child.id === "index") {
           child.handler = new Authenticated(child.handler);
         }
       });

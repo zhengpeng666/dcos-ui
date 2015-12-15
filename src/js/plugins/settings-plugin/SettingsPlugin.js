@@ -34,7 +34,11 @@ const SettingsPlugin = {
     }
 
     // Append settings routes
-    routes[0].children[0].children.push(settingsRoutes);
+    routes[0].children.forEach(function (child) {
+      if (child.id === "index") {
+        child.children.push(settingsRoutes);
+      }
+    });
 
     return routes;
   },
