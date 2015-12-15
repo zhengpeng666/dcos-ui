@@ -1,4 +1,4 @@
-describe.only("ServerErrorModal", function () {
+describe("ServerErrorModal", function () {
 
   beforeEach(function () {
     cy
