@@ -14,7 +14,7 @@ let routes = [
     children: [
       {
         type: Route,
-        authentication: true,
+        name: "index",
         handler: Index,
         children: [
           dashboard,
