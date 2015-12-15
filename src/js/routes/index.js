@@ -14,7 +14,7 @@ let routes = [
     children: [
       {
         type: Route,
-        name: "index",
+        id: "index",
         handler: Index,
         children: [
           dashboard,

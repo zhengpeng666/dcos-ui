@@ -58,7 +58,7 @@ const AuthenticationPlugin = {
 
       // Override handler of index to be "authenticated"
       routes[0].children.forEach(function (child) {
-        if (child.name === "index") {
+        if (child.id === "index") {
           child.handler = new Authenticated(child.handler);
         }
       });

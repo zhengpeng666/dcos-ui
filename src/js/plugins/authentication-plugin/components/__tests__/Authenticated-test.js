@@ -1,13 +1,13 @@
 jest.dontMock("../Authenticated");
-jest.dontMock("../../../mixins/GetSetMixin");
-jest.dontMock("../../../utils/Store");
-jest.dontMock("../../../stores/ACLAuthStore");
+jest.dontMock("../../../../mixins/GetSetMixin");
+jest.dontMock("../../../../utils/Store");
+jest.dontMock("../../../../stores/ACLAuthStore");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
 var Authenticated = require("../Authenticated");
-var ACLAuthStore = require("../../../stores/ACLAuthStore");
+var ACLAuthStore = require("../../../../stores/ACLAuthStore");
 
 class FakeComponent extends React.Component {
   render() {

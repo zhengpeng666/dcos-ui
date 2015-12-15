@@ -35,7 +35,7 @@ const SettingsPlugin = {
 
     // Append settings routes
     routes[0].children.forEach(function (child) {
-      if (child.name === "index") {
+      if (child.id === "index") {
         child.children.push(settingsRoutes);
       }
     });
