@@ -5,7 +5,12 @@ jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../events/ACLGroupsActions");
 jest.dontMock("../../stores/ACLGroupStore");
 jest.dontMock("../../constants/EventTypes");
+jest.dontMock("../FieldInput");
+jest.dontMock("../../constants/FieldTypes");
+jest.dontMock("../Form");
+jest.dontMock("../FormControl");
 jest.dontMock("../../mixins/GetSetMixin");
+jest.dontMock("../icons/IconEdit");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../mixins/StoreMixin");
 jest.dontMock("../../mixins/TabsMixin");
@@ -103,7 +108,11 @@ describe("GroupSidePanelContents", function () {
             itemID={groupID}/>
         );
 
-        var text = JestUtil.renderAndFindTag(instance.render(), "h1");
+        var text = TestUtils.findRenderedDOMComponentWithClass(
+          instance,
+          "form-element-inline-text"
+        );
+
         expect(text.getDOMNode().textContent).toEqual("藍-遙 遥 悠 遼 Größe");
       }
     );

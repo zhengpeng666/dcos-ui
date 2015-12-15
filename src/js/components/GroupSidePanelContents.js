@@ -3,12 +3,15 @@ import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLGroupStore from "../stores/ACLGroupStore";
+import Form from "./Form";
 import GroupUserMembershipTab from "./GroupUserMembershipTab";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import PermissionsView from "./PermissionsView";
 import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
+
+const METHODS_TO_BIND = ["handleNameChange"];
 
 export default class GroupSidePanelContents extends SidePanelContents {
   constructor() {
@@ -35,6 +38,10 @@ export default class GroupSidePanelContents extends SidePanelContents {
         events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
       }
     ];
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
   }
 
   componentDidMount() {
@@ -43,8 +50,15 @@ export default class GroupSidePanelContents extends SidePanelContents {
     ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
   }
 
+  handleNameChange(model) {
+    ACLGroupStore.updateGroup(
+      this.props.itemID,
+      {description: model.description}
+    );
+  }
+
   onGroupStoreFetchedDetailsSuccess() {
-    if (this.state.fetchedDetailsError === true) {
+    if (this.state.fetchedDetailsError) {
       this.setState({fetchedDetailsError: false});
     }
   }
@@ -64,6 +78,21 @@ export default class GroupSidePanelContents extends SidePanelContents {
   }
 
   getGroupInfo(group) {
+    let editNameFormDefinition = [
+      {
+        fieldType: "text",
+        name: "description",
+        placeholder: "Group Name",
+        required: true,
+        sharedClass: "form-element-inline h1 flush",
+        showError: false,
+        showLabel: false,
+        writeType: "edit",
+        validation: function () { return true; },
+        value: group.description
+      }
+    ];
+
     let imageTag = (
       <div className="side-panel-icon icon icon-large icon-image-container icon-group-container">
         <img src="./img/layout/icon-group-default-64x64@2x.png" />
@@ -74,10 +103,10 @@ export default class GroupSidePanelContents extends SidePanelContents {
       <div className="side-panel-content-header-details flex-box
         flex-box-align-vertical-center">
         {imageTag}
-        <div>
-          <h1 className="side-panel-content-header-label flush">
-            {group.description}
-          </h1>
+        <div className="side-panel-content-header-label">
+          <Form definition={editNameFormDefinition}
+            formControlClass="row form-group flush-bottom"
+            onSubmit={this.handleNameChange} />
           <div>
             {this.getSubHeader(group)}
           </div>
