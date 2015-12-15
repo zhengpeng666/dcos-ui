@@ -14,6 +14,7 @@ import Util from "../../utils/Util";
 const METHODS_TO_BIND = [
   "handleNewGroupClick",
   "handleNewGroupClose",
+  "onGroupStoreCreateSuccess",
   "onGroupsStoreSuccess",
   "onGroupsStoreError"
 ];
@@ -24,7 +25,8 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
 
     this.store_listeners = [
       {name: "marathon", events: ["success"]},
-      {name: "groups", events: ["success", "error"]}
+      {name: "groups", events: ["success", "error"]},
+      {name: "group", events: ["createSuccess", "deleteSuccess"]}
     ];
 
     this.state = {
@@ -40,6 +42,14 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount();
+    ACLGroupsStore.fetchGroups();
+  }
+
+  onGroupStoreCreateSuccess() {
+    ACLGroupsStore.fetchGroups();
+  }
+
+  onGroupStoreDeleteSuccess() {
     ACLGroupsStore.fetchGroups();
   }
 

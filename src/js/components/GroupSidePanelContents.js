@@ -35,7 +35,12 @@ export default class GroupSidePanelContents extends SidePanelContents {
       },
       {
         name: "group",
-        events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
+        events: [
+          "addUserSuccess",
+          "deleteUserSuccess",
+          "fetchedDetailsSuccess",
+          "fetchedDetailsError"
+        ]
       }
     ];
 
@@ -55,6 +60,14 @@ export default class GroupSidePanelContents extends SidePanelContents {
       this.props.itemID,
       {description: model.description}
     );
+  }
+
+  onGroupStoreAddUserSuccess() {
+    ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
+  }
+
+  onGroupStoreDeleteUserSuccess() {
+    ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
   }
 
   onGroupStoreFetchedDetailsSuccess() {
