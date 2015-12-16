@@ -169,7 +169,7 @@ var RequestUtil = {
       return JSON.parse(responseText);
     }
 
-    return xhr;
+    return {};
   }
 };
 

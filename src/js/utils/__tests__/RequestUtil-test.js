@@ -206,7 +206,7 @@ describe("RequestUtil", function () {
       function () {
         let originalObject = {status: 200};
         expect(RequestUtil.parseResponseBody(originalObject))
-          .toEqual(originalObject);
+          .toEqual({});
       }
     );
   });
