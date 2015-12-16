@@ -19,7 +19,6 @@ const MENU_ITEMS = {
 export default class UserDropup extends React.Component {
   constructor() {
     super(...arguments);
-    this.displayName = "UserDropup";
 
     this.state = {
       open: false
