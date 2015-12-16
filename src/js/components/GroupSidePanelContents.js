@@ -29,9 +29,11 @@ export default class GroupSidePanelContents extends SidePanelContents {
 
     this.store_listeners = [
       {
-        name: "summary",
-        events: ["success"],
-        listenAlways: false
+        name: "acl",
+        events: [
+          "groupGrantSuccess",
+          "groupRevokeSuccess"
+        ]
       },
       {
         name: "group",
@@ -41,6 +43,11 @@ export default class GroupSidePanelContents extends SidePanelContents {
           "fetchedDetailsSuccess",
           "fetchedDetailsError"
         ]
+      },
+      {
+        name: "summary",
+        events: ["success"],
+        listenAlways: false
       }
     ];
 
@@ -60,6 +67,14 @@ export default class GroupSidePanelContents extends SidePanelContents {
       this.props.itemID,
       {description: model.description}
     );
+  }
+
+  onAclStoreGroupGrantSuccess() {
+    ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
+  }
+
+  onAclStoreGroupRevokeSuccess() {
+    ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
   }
 
   onGroupStoreAddUserSuccess() {
