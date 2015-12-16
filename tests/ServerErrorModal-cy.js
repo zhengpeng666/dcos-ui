@@ -1,23 +1,12 @@
 describe("ServerErrorModal", function () {
 
   beforeEach(function () {
-    cy
-      .server()
-      .route(/apps/, "fx:marathon-1-task/app")
-      .route(/history\/minute/, "fx:marathon-1-task/history-minute")
-      .route(/history\/last/, "fx:marathon-1-task/summary")
-      .route(/state-summary/, "fx:marathon-1-task/summary")
-      .route(/state/, "fx:marathon-1-task/state")
-      .route(/ui-config/, "fx:config/settings-enabled.json")
-      .route(/acls\?type=services/, "fx:acl/acls-unicode")
-      .route(/api\/v1\/users/, "fx:acl/users-unicode")
-      .route(/api\/v1\/groups/, "fx:acl/groups-unicode")
-      .route(/groups\/olis/, "fx:acl/group-unicode")
-      .route(/groups\/olis\/users/, "fx:acl/group-users")
-      .route(/groups\/olis\/permissions/, "fx:acl/group-permissions")
-      .route(/users\/quis/, "fx:acl/user-unicode")
-      .route(/users\/quis\/groups/, "fx:acl/user-groups")
-      .route(/users\/quis\/permissions/, "fx:acl/user-permissions");
+    cy.configureCluster({
+      mesos: "1-task-healthy",
+      acl: true,
+      plugins: "settings-enabled"
+    })
+    .visitUrl({url: "/", logIn: true});
   });
 
   context("opens when group update error happens", function () {
@@ -28,7 +17,7 @@ describe("ServerErrorModal", function () {
         status: 422,
         response: {error: "There was an error."}
       })
-        .visit("http://localhost:4200/#/settings/organization/groups/olis")
+        .visitUrl({url: "/settings/organization/groups/olis"})
         .get(".side-panel .side-panel-content-header-label .form-element-inline-text")
         .click();
 
