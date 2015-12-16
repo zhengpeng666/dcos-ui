@@ -17,9 +17,7 @@ describe("UserDropup", function () {
       cy
         .get("@sidebarButton")
         .get(".user-description")
-        .should(function (title) {
-          expect(title[0].textContent).to.equal("Joe Doe");
-        });
+        .should("contain", "Joe Doe");
     });
   });
 
@@ -42,9 +40,7 @@ describe("UserDropup", function () {
       cy
         .get("@modal")
         .get(".user-description")
-        .should(function (title) {
-          expect(title[0].textContent).to.equal("Joe Doe");
-        });
+        .should("contain", "Joe Doe");
     });
 
     it("should list 4 menu items", function () {
