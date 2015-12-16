@@ -122,6 +122,8 @@ const ListenersDescription = {
       createError: EventTypes.ACL_GROUP_CREATE_ERROR,
       permissionsSuccess: EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
       permissionsError: EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
+      updateSuccess: EventTypes.ACL_GROUP_UPDATE_SUCCESS,
+      updateError: EventTypes.ACL_GROUP_UPDATE_ERROR,
       usersSuccess: EventTypes.ACL_GROUP_DETAILS_USERS_CHANGE,
       usersError: EventTypes.ACL_GROUP_DETAILS_USERS_ERROR,
       fetchedDetailsSuccess: EventTypes.ACL_GROUP_DETAILS_FETCHED_SUCCESS,
