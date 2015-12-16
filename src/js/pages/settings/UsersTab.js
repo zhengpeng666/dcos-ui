@@ -11,6 +11,12 @@ import UserFormModal from "../../components/UserFormModal";
 import UserSidePanel from "../../components/UserSidePanel";
 import Util from "../../utils/Util";
 
+const EXTERNAL_CHANGE_EVENTS = [
+  "onUserStoreCreateSuccess",
+  "onUserStoreDeleteSuccess",
+  "onUserStoreUpdateSuccess"
+];
+
 const METHODS_TO_BIND = [
   "handleNewUserClick",
   "handleNewUserClose",
@@ -34,6 +40,10 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
       usersStoreSuccess: false
     };
 
+    EXTERNAL_CHANGE_EVENTS.forEach((event) => {
+      this[event] = this.onUsersChange;
+    });
+
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
@@ -44,15 +54,7 @@ export default class UsersTab extends Util.mixin(StoreMixin) {
     ACLUsersStore.fetchUsers();
   }
 
-  onUserStoreCreateSuccess() {
-    ACLUsersStore.fetchUsers();
-  }
-
-  onUserStoreDeleteSuccess() {
-    ACLUsersStore.fetchUsers();
-  }
-
-  onUserStoreUpdateSuccess() {
+  onUsersChange() {
     ACLUsersStore.fetchUsers();
   }
 

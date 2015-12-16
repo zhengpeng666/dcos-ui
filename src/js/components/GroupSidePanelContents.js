@@ -11,6 +11,13 @@ import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
 
+const EXTERNAL_CHANGE_EVENTS = [
+  "onAclStoreGroupGrantSuccess",
+  "onAclStoreGroupRevokeSuccess",
+  "onGroupStoreAddUserSuccess",
+  "onGroupStoreDeleteUserSuccess"
+];
+
 const METHODS_TO_BIND = ["handleNameChange"];
 
 export default class GroupSidePanelContents extends SidePanelContents {
@@ -51,6 +58,10 @@ export default class GroupSidePanelContents extends SidePanelContents {
       }
     ];
 
+    EXTERNAL_CHANGE_EVENTS.forEach((event) => {
+      this[event] = this.onACLChange;
+    });
+
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
@@ -69,19 +80,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
     );
   }
 
-  onAclStoreGroupGrantSuccess() {
-    ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
-  }
-
-  onAclStoreGroupRevokeSuccess() {
-    ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
-  }
-
-  onGroupStoreAddUserSuccess() {
-    ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
-  }
-
-  onGroupStoreDeleteUserSuccess() {
+  onACLChange() {
     ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
   }
 

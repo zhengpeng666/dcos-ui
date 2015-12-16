@@ -12,6 +12,13 @@ import StringUtil from "../utils/StringUtil";
 import UserDetails from "./UserDetails";
 import UserGroupMembershipTab from "./UserGroupMembershipTab";
 
+const EXTERNAL_CHANGE_EVENTS = [
+  "onAclStoreUserGrantSuccess",
+  "onAclStoreUserRevokeSuccess",
+  "onGroupStoreAddUserSuccess",
+  "onGroupStoreDeleteUserSuccess"
+];
+
 const METHODS_TO_BIND = ["handleNameChange"];
 
 export default class UserSidePanelContents extends SidePanelContents {
@@ -52,6 +59,10 @@ export default class UserSidePanelContents extends SidePanelContents {
       }
     ];
 
+    EXTERNAL_CHANGE_EVENTS.forEach((event) => {
+      this[event] = this.onACLChange;
+    });
+
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
@@ -67,19 +78,7 @@ export default class UserSidePanelContents extends SidePanelContents {
     ACLUserStore.updateUser(this.props.itemID, {description: model.text});
   }
 
-  onAclStoreUserGrantSuccess() {
-    ACLUserStore.fetchUserWithDetails(this.props.itemID);
-  }
-
-  onAclStoreUserRevokeSuccess() {
-    ACLUserStore.fetchUserWithDetails(this.props.itemID);
-  }
-
-  onGroupStoreAddUserSuccess() {
-    ACLUserStore.fetchUserWithDetails(this.props.itemID);
-  }
-
-  onGroupStoreDeleteUserSuccess() {
+  onACLChange() {
     ACLUserStore.fetchUserWithDetails(this.props.itemID);
   }
 

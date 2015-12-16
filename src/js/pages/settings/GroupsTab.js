@@ -11,6 +11,12 @@ import RequestErrorMsg from "../../components/RequestErrorMsg";
 import StoreMixin from "../../mixins/StoreMixin";
 import Util from "../../utils/Util";
 
+const EXTERNAL_CHANGE_EVENTS = [
+  "onGroupStoreCreateSuccess",
+  "onGroupStoreDeleteSuccess",
+  "onGroupStoreUpdateSuccess"
+];
+
 const METHODS_TO_BIND = [
   "handleNewGroupClick",
   "handleNewGroupClose",
@@ -34,6 +40,10 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
       openNewGroupModal: false
     };
 
+    EXTERNAL_CHANGE_EVENTS.forEach((event) => {
+      this[event] = this.onGroupsChange;
+    });
+
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
@@ -44,15 +54,7 @@ export default class GroupsTab extends Util.mixin(StoreMixin) {
     ACLGroupsStore.fetchGroups();
   }
 
-  onGroupStoreCreateSuccess() {
-    ACLGroupsStore.fetchGroups();
-  }
-
-  onGroupStoreDeleteSuccess() {
-    ACLGroupsStore.fetchGroups();
-  }
-
-  onGroupStoreUpdateSuccess() {
+  onGroupsChange() {
     ACLGroupsStore.fetchGroups();
   }
 

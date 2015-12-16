@@ -96,7 +96,7 @@ export default class UserFormModal extends Util.mixin(StoreMixin) {
         onClose={this.props.onClose}
         onSubmit={this.handleNewUserSubmit}
         open={this.props.open}
-        titleText="Create New Local User" />
+        titleText="Create New User" />
     );
   }
 }
