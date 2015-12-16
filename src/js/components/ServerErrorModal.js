@@ -6,16 +6,7 @@ import React from "react";
 import StoreMixin from "../mixins/StoreMixin";
 import Util from "../utils/Util";
 
-const METHODS_TO_BIND = ["handleModalClose"];
-
-function handleServerError(id, errorMessage) {
-  let errors = this.state.errors.concat([errorMessage]);
-
-  this.setState({
-    errors,
-    isOpen: true
-  });
-}
+const METHODS_TO_BIND = ["handleModalClose", "handleServerError"];
 
 function getEventsFromStoreListeners(storeListeners) {
   let events = [];
@@ -43,13 +34,13 @@ export default class ServerErrorModal extends Util.mixin(StoreMixin) {
       {name: "group", events: ["updateError", "deleteError"]}
     ];
 
-    let events = getEventsFromStoreListeners.call(this, this.store_listeners);
-    events.forEach((event) => {
-      this[event] = handleServerError.bind(this);
-    });
-
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
+    });
+
+    let events = getEventsFromStoreListeners.call(this, this.store_listeners);
+    events.forEach((event) => {
+      this[event] = this.handleServerError;
     });
   }
 
@@ -57,6 +48,15 @@ export default class ServerErrorModal extends Util.mixin(StoreMixin) {
     this.setState({
       isOpen: false,
       errors: []
+    });
+  }
+
+  handleServerError(id, errorMessage) {
+    let errors = this.state.errors.concat([errorMessage]);
+
+    this.setState({
+      errors,
+      isOpen: true
     });
   }
 
