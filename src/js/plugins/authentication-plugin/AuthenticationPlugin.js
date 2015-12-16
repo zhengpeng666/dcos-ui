@@ -6,6 +6,7 @@ import {Route} from "react-router";
 import AccessDeniedPage from "./components/AccessDeniedPage";
 import Authenticated from "./components/Authenticated";
 import LoginPage from "./LoginPage";
+import UserDropup from "./UserDropup";
 
 const AuthenticationPlugin = {
 
@@ -49,7 +50,7 @@ const AuthenticationPlugin = {
     }
 
     return (
-      <div className="text-align-center">[Drop up placeholder]</div>
+      <UserDropup items={value.props.children} />
     );
   },
 

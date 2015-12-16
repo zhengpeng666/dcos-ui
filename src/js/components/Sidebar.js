@@ -271,21 +271,21 @@ var Sidebar = React.createClass({
         </a>
       ),
       (
-        <button key="button-intercom" className="button button-link"
+        <a key="button-intercom" className="button button-link"
           data-behavior="show-tip"
           data-tip-content="Talk with us"
           onClick={this.handleToggleIntercom}>
             <i className={chatIconClassSet}></i>
-        </button>
+        </a>
       ),
       (
-        <button key="button-tour" className="button button-link"
+        <a key="button-tour" className="button button-link"
           data-behavior="show-tip"
           data-tip-place="top-left"
           data-tip-content="Install CLI and Take Tour"
           onClick={this.handleStartTour}>
             <i className="icon icon-sprite icon-tour icon-sprite-medium clickable"></i>
-        </button>
+        </a>
       )
     ];
 
@@ -295,10 +295,10 @@ var Sidebar = React.createClass({
     let footer = null;
 
     if (buttonSet && buttonSet.length) {
-      footer = <div className="icon-buttons">{defaultButtonSet}</div>;
+      footer = <div className="icon-buttons">{buttonSet}</div>;
     }
 
-    return Plugins.applyFilter("sidebarFooter", footer);
+    return Plugins.applyFilter("sidebarFooter", footer, buttonSet);
   },
 
   render: function () {
