@@ -413,10 +413,14 @@ Sidebar
         align-items: center;
         display: flex;
 
+        .icon {
+          margin-right: (@base-spacing-unit * 0.5);
+        }
+
         .user-description {
           flex: 1;
           text-align: left;
-          display: none;
+          display: block;
         }
 
         &.dropdown-toggle:after {
@@ -773,6 +777,10 @@ Sidebar Open
 
             }
 
+          }
+
+          .user-dropdown .user-description {
+            display: none;
           }
 
         }
