@@ -160,6 +160,19 @@ var RequestUtil = {
         closure.apply(null, args);
       }, global.actionTypes.requestTimeout || 500);
     };
+  },
+
+  parseResponseBody: function (xhr) {
+    let {responseJSON, responseText} = xhr;
+    if (responseJSON) {
+      return responseJSON;
+    }
+
+    if (responseText) {
+      return JSON.parse(responseText);
+    }
+
+    return {};
   }
 };
 

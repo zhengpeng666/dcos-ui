@@ -17,9 +17,10 @@ const ACLGroupsActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUPS_ERROR,
-          data: e.responseJSON.error
+          data: e.error
         });
       }
     });
@@ -35,9 +36,10 @@ const ACLGroupsActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ERROR,
-          data: e.responseJSON.error,
+          data: e.error,
           groupID
         });
       }
@@ -55,9 +57,10 @@ const ACLGroupsActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR,
-          data: e.responseJSON.error,
+          data: e.error,
           groupID
         });
       }
@@ -75,9 +78,10 @@ const ACLGroupsActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR,
-          data: e.responseJSON.error,
+          data: e.error,
           groupID
         });
       }
@@ -103,9 +107,10 @@ const ACLGroupsActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR,
-          data: e.responseJSON.error,
+          data: e.error,
           groupID
         });
       }
@@ -124,9 +129,10 @@ const ACLGroupsActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
-          data: e.responseJSON.error,
+          data: e.error,
           groupID
         });
       }
@@ -144,9 +150,10 @@ const ACLGroupsActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR,
-          data: e.responseJSON.error,
+          data: e.error,
           groupID
         });
       }
@@ -165,9 +172,10 @@ const ACLGroupsActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
-          data: e.responseJSON.error,
+          data: e.error,
           groupID,
           userID
         });
@@ -187,9 +195,10 @@ const ACLGroupsActions = {
         });
       },
       error: function (e) {
+        e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
-          data: e.responseJSON.error,
+          data: e.error,
           groupID,
           userID
         });
