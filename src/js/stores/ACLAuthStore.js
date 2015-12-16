@@ -53,7 +53,7 @@ var ACLAuthStore = Store.createStore({
     }
 
     try {
-      return new User(JSON.parse(atob(userCode)));
+      return JSON.parse(atob(userCode));
     } catch(err) {
       return null;
     }
