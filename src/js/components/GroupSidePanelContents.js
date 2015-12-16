@@ -11,6 +11,13 @@ import RequestErrorMsg from "./RequestErrorMsg";
 import SidePanelContents from "./SidePanelContents";
 import StringUtil from "../utils/StringUtil";
 
+const EXTERNAL_CHANGE_EVENTS = [
+  "onAclStoreGroupGrantSuccess",
+  "onAclStoreGroupRevokeSuccess",
+  "onGroupStoreAddUserSuccess",
+  "onGroupStoreDeleteUserSuccess"
+];
+
 const METHODS_TO_BIND = ["handleNameChange"];
 
 export default class GroupSidePanelContents extends SidePanelContents {
@@ -29,15 +36,31 @@ export default class GroupSidePanelContents extends SidePanelContents {
 
     this.store_listeners = [
       {
-        name: "summary",
-        events: ["success"],
-        listenAlways: false
+        name: "acl",
+        events: [
+          "groupGrantSuccess",
+          "groupRevokeSuccess"
+        ]
       },
       {
         name: "group",
-        events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
+        events: [
+          "addUserSuccess",
+          "deleteUserSuccess",
+          "fetchedDetailsSuccess",
+          "fetchedDetailsError"
+        ]
+      },
+      {
+        name: "summary",
+        events: ["success"],
+        listenAlways: false
       }
     ];
+
+    EXTERNAL_CHANGE_EVENTS.forEach((event) => {
+      this[event] = this.onACLChange;
+    });
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
@@ -55,6 +78,10 @@ export default class GroupSidePanelContents extends SidePanelContents {
       this.props.itemID,
       {description: model.description}
     );
+  }
+
+  onACLChange() {
+    ACLGroupStore.fetchGroupWithDetails(this.props.itemID);
   }
 
   onGroupStoreFetchedDetailsSuccess() {
