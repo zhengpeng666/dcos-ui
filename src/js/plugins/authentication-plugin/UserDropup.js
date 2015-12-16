@@ -90,7 +90,7 @@ export default class UserDropup extends React.Component {
               src="./img/layout/icon-user-default-64x64@2x.png" />
           </span>
           <span className="user-description">
-            {user.get("description")}
+            {user.description}
           </span>
         </a>
       </div>

@@ -7,7 +7,6 @@ import AppDispatcher from "../events/AppDispatcher";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
 import Store from "../utils/Store";
-import User from "../structs/User";
 
 function getUserMetadata() {
   return cookie.parse(global.document.cookie)[ACLAuthConstants.userCookieKey];
