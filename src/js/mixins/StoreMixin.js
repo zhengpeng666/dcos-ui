@@ -120,10 +120,10 @@ const ListenersDescription = {
       addUserError: EventTypes.ACL_GROUP_ADD_USER_ERROR,
       createSuccess: EventTypes.ACL_GROUP_CREATE_SUCCESS,
       createError: EventTypes.ACL_GROUP_CREATE_ERROR,
+      updateError: EventTypes.ACL_GROUP_UPDATE_ERROR,
+      updateSuccess: EventTypes.ACL_GROUP_UPDATE_SUCCESS,
       permissionsSuccess: EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
       permissionsError: EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
-      updateSuccess: EventTypes.ACL_GROUP_UPDATE_SUCCESS,
-      updateError: EventTypes.ACL_GROUP_UPDATE_ERROR,
       usersSuccess: EventTypes.ACL_GROUP_DETAILS_USERS_CHANGE,
       usersError: EventTypes.ACL_GROUP_DETAILS_USERS_ERROR,
       fetchedDetailsSuccess: EventTypes.ACL_GROUP_DETAILS_FETCHED_SUCCESS,
@@ -289,15 +289,23 @@ const StoreMixin = {
     }
 
     // Call callback on component that implements mixin if it exists
-    let storeName = StringUtil.capitalize(listenerDetail.store.storeID);
-    let eventName = StringUtil.capitalize(event);
-    let onChangeFn = `on${storeName}Store${eventName}`;
+    let onChangeFn = this.store_getChangeFunctionName(
+      listenerDetail.store.storeID, event
+    );
+
     if (this[onChangeFn]) {
       this[onChangeFn].apply(this, args);
     }
 
     // Always forceUpdate no matter where the change came from
     this.forceUpdate();
+  },
+
+  store_getChangeFunctionName(storeID, event) {
+    let storeName = StringUtil.capitalize(storeID);
+    let eventName = StringUtil.capitalize(event);
+
+    return `on${storeName}Store${eventName}`;
   }
 };
 

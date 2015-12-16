@@ -13,6 +13,7 @@ var IntercomStore = require("../stores/IntercomStore");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 var Modals = require("../components/Modals");
 var RequestErrorMsg = require("../components/RequestErrorMsg");
+import ServerErrorModal from "../components/ServerErrorModal";
 var Sidebar = require("../components/Sidebar");
 var SidebarActions = require("../events/SidebarActions");
 var SidebarStore = require("../stores/SidebarStore");
@@ -221,6 +222,7 @@ var Index = React.createClass({
         <Modals
           showErrorModal={this.state.showErrorModal}
           modalErrorMsg={this.state.modalErrorMsg} />
+        <ServerErrorModal />
       </div>
     );
   }

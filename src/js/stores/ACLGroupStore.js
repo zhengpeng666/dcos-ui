@@ -247,7 +247,7 @@ let ACLGroupStore = Store.createStore({
           EventTypes.ACL_GROUP_DELETE_ERROR,
           action.groupID,
           action.data
-      );
+        );
         break;
       // Add user to group
       case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS:
