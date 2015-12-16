@@ -63,14 +63,14 @@ export default class ServerErrorModal extends Util.mixin(StoreMixin) {
   getContent() {
     let errors = this.state.errors.map(function (error, i) {
       return (
-        <p key={i}>
+        <p className="text-align-center" key={i}>
           {error}
         </p>
       );
     });
 
     return (
-      <div className="container container-pod">
+      <div className="container container-pod container-pod-short">
         {errors}
       </div>
     );
@@ -87,7 +87,7 @@ export default class ServerErrorModal extends Util.mixin(StoreMixin) {
         showCloseButton={false}
         showHeader={true}
         showFooter={false}
-        titleClass="modal-header-title text-align-center flush-top"
+        titleClass="modal-header-title text-align-center flush"
         titleText="An error has occurred">
         {this.getContent()}
       </Modal>
