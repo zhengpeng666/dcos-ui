@@ -211,4 +211,18 @@ describe("RequestUtil", function () {
     );
   });
 
+  describe("#getErrorFromXHR", function () {
+    it("should return the description property", function () {
+      let json = {responseJSON: {description: "bar"}};
+      expect(RequestUtil.getErrorFromXHR(json)).toEqual("bar");
+    });
+
+    it("should return the default error message when there is no description",
+      function () {
+      let json = {responseJSON: {foo: "bar"}};
+      expect(RequestUtil.getErrorFromXHR(json))
+        .toEqual("An error has occurred.");
+    });
+  });
+
 });

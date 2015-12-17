@@ -25,11 +25,10 @@ const ACLAuthActions = {
           type: ActionTypes.REQUEST_ACL_LOGIN_SUCCESS
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_LOGIN_ERROR,
-          data: e.description
+          data: RequestUtil.getErrorFromXHR(xhr)
         });
       }
     });

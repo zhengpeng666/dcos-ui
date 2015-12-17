@@ -44,7 +44,7 @@ describe("ACLAuthActions", function () {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_LOGIN_ERROR);
       });
 
-      this.configuration.error({error: "bar"});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches the correct error when unsuccessful", function () {

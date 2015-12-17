@@ -4,6 +4,7 @@ var _ = require("underscore");
 var Config = require("../config/Config");
 
 let activeRequests = {};
+const DEFAULT_ERROR_MESSAGE = "An error has occurred.";
 
 function createCallbackWrapper(callback, requestID) {
   return function () {
@@ -102,6 +103,11 @@ var RequestUtil = {
       return callback.apply(options.context, arguments);
       /* eslint-enable consistent-return */
     };
+  },
+
+  getErrorFromXHR: function (xhr) {
+    let response = this.parseResponseBody(xhr);
+    return response.description || DEFAULT_ERROR_MESSAGE;
   },
 
   /**

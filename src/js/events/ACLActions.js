@@ -15,10 +15,10 @@ const ACLActions = {
           resourceType
         });
       },
-      error: function (e) {
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           resourceType
         });
       }
@@ -35,11 +35,10 @@ const ACLActions = {
           triple: {userID, action, resourceID}
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           triple: {userID, action, resourceID}
         });
       }
@@ -56,11 +55,10 @@ const ACLActions = {
           triple: {userID, action, resourceID}
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           triple: {userID, action, resourceID}
         });
       }
@@ -77,11 +75,10 @@ const ACLActions = {
           triple: {groupID, action, resourceID}
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           triple: {groupID, action, resourceID}
         });
       }
@@ -98,11 +95,10 @@ const ACLActions = {
           triple: {groupID, action, resourceID}
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           triple: {groupID, action, resourceID}
         });
       }

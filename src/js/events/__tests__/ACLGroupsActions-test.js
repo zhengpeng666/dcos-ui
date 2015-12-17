@@ -37,7 +37,7 @@ describe("ACLGroupsActions", function () {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUPS_ERROR);
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("calls #json from the RequestUtil", function () {
@@ -88,7 +88,7 @@ describe("ACLGroupsActions", function () {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUP_ERROR);
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches with the correct data when unsucessful", function () {
@@ -98,7 +98,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual("bar");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches with the groupID when unsucessful", function () {
@@ -108,7 +108,7 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
   });
@@ -160,7 +160,7 @@ describe("ACLGroupsActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR);
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches with the correct data when unsucessful", function () {
@@ -170,7 +170,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual("bar");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches with the groupID when unsucessful", function () {
@@ -180,7 +180,7 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
   });
@@ -232,7 +232,7 @@ describe("ACLGroupsActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR);
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches with the correct data when unsucessful", function () {
@@ -242,7 +242,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual("bar");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches with the groupID when unsucessful", function () {
@@ -252,7 +252,7 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
   });
@@ -306,7 +306,7 @@ describe("ACLGroupsActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR);
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches the correct message when unsuccessful", function () {
@@ -316,7 +316,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual("bar");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches the correct groupID when unsuccessful", function () {
@@ -326,7 +326,7 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
   });
@@ -369,7 +369,7 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches the correct action when unsuccessful", function () {
@@ -380,7 +380,7 @@ describe("ACLGroupsActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR);
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches the correct message when unsuccessful", function () {
@@ -390,7 +390,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual("bar");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches the groupID when unsuccessful", function () {
@@ -400,7 +400,7 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
   });
@@ -443,7 +443,7 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches the correct action when unsuccessful", function () {
@@ -454,7 +454,7 @@ describe("ACLGroupsActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR);
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches the correct message when unsuccessful", function () {
@@ -464,7 +464,7 @@ describe("ACLGroupsActions", function () {
         expect(action.data).toEqual("bar");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("dispatches the groupID when unsuccessful", function () {
@@ -474,7 +474,7 @@ describe("ACLGroupsActions", function () {
         expect(action.groupID).toEqual("foo");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
   });
@@ -513,7 +513,7 @@ describe("ACLGroupsActions", function () {
         });
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
   });
@@ -552,7 +552,7 @@ describe("ACLGroupsActions", function () {
         });
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
   });

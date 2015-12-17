@@ -16,11 +16,10 @@ const ACLUsersActions = {
           data: response.array
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USERS_ERROR,
-          data: e.error
+          data: RequestUtil.getErrorFromXHR(xhr)
         });
       }
     });
@@ -35,11 +34,10 @@ const ACLUsersActions = {
           data: response
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           userID
         });
       }
@@ -56,11 +54,10 @@ const ACLUsersActions = {
           userID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GROUPS_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           userID
         });
       }
@@ -77,11 +74,10 @@ const ACLUsersActions = {
           userID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           userID
         });
       }
@@ -106,11 +102,10 @@ const ACLUsersActions = {
           userID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_CREATE_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           userID
         });
       }
@@ -128,11 +123,10 @@ const ACLUsersActions = {
           userID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           userID
         });
       }
@@ -149,11 +143,10 @@ const ACLUsersActions = {
           userID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           userID
         });
       }
