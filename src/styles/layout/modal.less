@@ -40,24 +40,23 @@
     border-radius: 0px 0px @modal-border-radius @modal-border-radius;
   }
 
-  .form-group {
+  .form-row-element {
+    &:first-child {
+      padding-left: 0;
+    }
 
     &:last-child {
-      margin-bottom: 0;
+      padding-right: 0;
     }
-  }
-
-  .form-row-element:first-child {
-    padding-left: 0;
-  }
-
-  .form-row-element:last-child {
-    padding-right: 0;
   }
 
   .row {
     margin-left: 0;
     margin-right: 0;
+
+    &:last-child .form-group {
+      margin-bottom: 0;
+    }
   }
 }
 
