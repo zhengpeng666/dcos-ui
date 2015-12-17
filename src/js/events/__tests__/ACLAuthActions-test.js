@@ -54,7 +54,7 @@ describe("ACLAuthActions", function () {
         expect(action.data).toEqual("bar");
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
   });

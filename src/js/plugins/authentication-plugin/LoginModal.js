@@ -1,6 +1,7 @@
 import React from "react";
 
 import ACLAuthStore from "../../stores/ACLAuthStore";
+import ClusterHeader from "../../components/ClusterHeader";
 import FormModal from "../../components/FormModal";
 import StoreMixin from "../../mixins/StoreMixin";
 import Util from "../../utils/Util";
@@ -106,7 +107,9 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
         disabled={this.state.disableLogin}
         onSubmit={this.handleLoginSubmit}
         open={true}
-        modalProps={{modalClass: "modal modal-narrow"}} />
+        modalProps={{modalClass: "modal modal-narrow"}}>
+        <ClusterHeader useClipboard={false} />
+      </FormModal>
     );
   }
 }

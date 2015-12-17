@@ -87,6 +87,10 @@ var TooltipMixin = {
     this.tip_updateTipContent(el);
 
     var tip = this.tips[el.dataset.tipID];
+    if (!tip) {
+      return;
+    }
+
     tip.show();
   },
 
@@ -100,6 +104,10 @@ var TooltipMixin = {
 
   tip_updateTipContent: function (el, content) {
     var tip = this.tips[el.dataset.tipID];
+    if (!tip) {
+      return;
+    }
+
     tip.content(content || el.dataset.tipContent);
   },
 

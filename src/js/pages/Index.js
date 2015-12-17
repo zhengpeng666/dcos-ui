@@ -42,7 +42,6 @@ var Index = React.createClass({
 
   componentWillMount: function () {
     HistoryStore.init();
-    MesosSummaryStore.init();
     SidebarStore.init();
     this.internalStorage_set(getSidebarState());
   },

@@ -32,6 +32,111 @@ Sidebar Variables
 
 
 
+/* -----------------------------------------------------------------------------
+Sidebar Header Image
+----------------------------------------------------------------------------- */
+
+.sidebar-header-image {
+
+  border: 1px solid fade(@black, 5%);
+  padding: 3px;
+  margin: 0 auto;
+  display: block;
+  width: 64px + (3 * 2) + 2;
+  height: 64px + (3 * 2) + 2;
+  background: @white;
+  .border-radius(50%);
+  overflow: hidden;
+  margin-bottom: (@base-spacing-unit * 0.25);
+
+  .sidebar-header-image-inner {
+
+    display: block;
+    width: 64px;
+    height: 64px;
+    background: color-lighten(@neutral, 80);
+    .border-radius(50%);
+    overflow: hidden;
+    margin-right: auto;
+    margin-left: auto;
+
+  }
+
+}
+
+/* -----------------------------------------------------------------------------
+Sidebar Header Label
+----------------------------------------------------------------------------- */
+
+.sidebar-header-label {
+
+  color: @black;
+
+}
+
+/* -----------------------------------------------------------------------------
+Sidebar Header Sub Label
+----------------------------------------------------------------------------- */
+
+.sidebar-header-sublabel {
+
+  display: flex;
+  justify-content: center;
+  margin-top: @base-spacing-unit * 0.25;
+
+  &:hover {
+
+    .icon-clipboard {
+
+      visibility: visible;
+
+    }
+
+  }
+
+  .icon-clipboard {
+
+    visibility: hidden;
+    opacity: 0.5;
+
+  }
+
+  .hostname {
+
+    margin-left: @icon-mini-width + (@base-spacing-unit * 0.25);
+    color: @purple;
+
+  }
+
+  .sidebar-header-sublabel-action {
+
+    margin-left: @base-spacing-unit * 0.25;
+    vertical-align: center;
+
+    .icon {
+
+      vertical-align: text-bottom;
+
+    }
+
+  }
+
+  .zeroclipboard-is-hover {
+
+    .icon-clipboard {
+
+      visibility: visible;
+      opacity: 1;
+      cursor: pointer;
+
+    }
+
+  }
+
+}
+
+
+
 
 /* -----------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -52,6 +157,7 @@ Sidebar
   height: 100%;
   margin-left: -((2 * (@grid-gutter-width * 1.0)) + @icon-medium-width);
   padding-left: ((2 * (@grid-gutter-width * 1.0)) + @icon-medium-width);
+  overflow: hidden;
   background: @white;
   z-index: @z-index-header;
   .transition(left 0.3s ease);
@@ -63,109 +169,6 @@ Sidebar
   ----------------------------------------------------------------------------- */
 
   .sidebar-header {
-
-    /* -----------------------------------------------------------------------------
-    Sidebar Header Image
-    ----------------------------------------------------------------------------- */
-
-    .sidebar-header-image {
-
-      border: 1px solid fade(@black, 5%);
-      padding: 3px;
-      margin: 0 auto;
-      display: block;
-      width: 64px + (3 * 2) + 2;
-      height: 64px + (3 * 2) + 2;
-      background: @white;
-      .border-radius(50%);
-      overflow: hidden;
-      margin-bottom: (@base-spacing-unit * 0.25);
-
-      .sidebar-header-image-inner {
-
-        display: block;
-        width: 64px;
-        height: 64px;
-        background: color-lighten(@neutral, 80);
-        .border-radius(50%);
-        overflow: hidden;
-        margin-right: auto;
-        margin-left: auto;
-
-      }
-
-    }
-
-    /* -----------------------------------------------------------------------------
-    Sidebar Header Label
-    ----------------------------------------------------------------------------- */
-
-    .sidebar-header-label {
-
-      color: @black;
-
-    }
-
-    /* -----------------------------------------------------------------------------
-    Sidebar Header Sub Label
-    ----------------------------------------------------------------------------- */
-
-    .sidebar-header-sublabel {
-
-      display: flex;
-      justify-content: center;
-      margin-top: @base-spacing-unit * 0.25;
-
-      &:hover {
-
-        .icon-clipboard {
-
-          visibility: visible;
-
-        }
-
-      }
-
-      .icon-clipboard {
-
-        visibility: hidden;
-        opacity: 0.5;
-
-      }
-
-      .hostname {
-
-        margin-left: @icon-mini-width + (@base-spacing-unit * 0.25);
-        color: @purple;
-
-      }
-
-      .sidebar-header-sublabel-action {
-
-        margin-left: @base-spacing-unit * 0.25;
-        vertical-align: center;
-
-        .icon {
-
-          vertical-align: text-bottom;
-
-        }
-
-      }
-
-      .zeroclipboard-is-hover {
-
-        .icon-clipboard {
-
-          visibility: visible;
-          opacity: 1;
-          cursor: pointer;
-
-        }
-
-      }
-
-    }
 
   }
 
