@@ -65,7 +65,7 @@ export default class FormModal extends React.Component {
   getFooter() {
     return (
       <div className="container container-pod container-pod-short">
-        <div className="button-collection text-align-center">
+        <div className="button-collection text-align-center flush-bottom">
           {this.getButtons()}
         </div>
       </div>
@@ -110,12 +110,12 @@ FormModal.defaultProps = {
   buttonDefinition: [
     {
       text: "Close",
-      className: "button button-large",
+      className: "button button-medium",
       isClose: true
     },
     {
       text: "Create",
-      className: "button button-success button-large",
+      className: "button button-success button-medium",
       isSubmit: true
     }
   ],
