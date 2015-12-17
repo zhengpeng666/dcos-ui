@@ -51,18 +51,6 @@ export default class UserDropup extends React.Component {
     }
   }
 
-  // (
-  //   <div className="icon-buttons">
-  //     <a className="user-dropdown button dropdown-toggle">
-  //       <span className="icon icon-medium icon-image-container
-  //         icon-user-container">
-  //         <img className="clickable"
-  //           src="./img/layout/icon-user-default-64x64@2x.png" />
-  //       </span>
-  //     </a>
-  //   </div>
-  // )
-
   getDropdownMenu(menuItems) {
     let defaultItem = [
       {
