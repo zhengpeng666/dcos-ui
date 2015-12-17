@@ -8,46 +8,52 @@ import Actions from "../actions/Actions";
 import MetadataStore from "../stores/MetadataStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import TooltipMixin from "../mixins/TooltipMixin";
-import Util from "../utils/Util";
 
-const METHODS_TO_BIND = [
-  "handleCopy",
-  "handleMouseOverCopyIcon",
-  "handleMouseOutCopyIcon",
-  "tip_handleContainerMouseMove"
-];
+var ClusterHeader = React.createClass({
+  displayName: "ClusterHeader",
 
-export default class ClusterHeader extends Util.mixin(TooltipMixin) {
-  constructor() {
-    super();
+  mixins: [TooltipMixin],
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
+  getDefaultProps: function () {
+    return {
+      useClipboard: true
+    };
+  },
 
   handleCopy() {
     this.tip_updateTipContent(
-      React.findDOMNode(this.refs.copyButton), "Copied!"
+      React.findDOMNode(this.refs.copyButton.getDOMNode()), "Copied!"
     );
     Actions.log({eventID: "Copied hostname from sidebar"});
-  }
+  },
 
   handleMouseOverCopyIcon() {
     var el = React.findDOMNode(this.refs.copyButton);
     this.tip_showTip(el);
-  }
+  },
 
   handleMouseOutCopyIcon() {
     this.tip_hideTip(React.findDOMNode(this.refs.copyButton));
-  }
+  },
 
   getFlashButton(content) {
+    let clipboard = null;
     var hasFlash = false;
+
     try {
       hasFlash = Boolean(new ActiveXObject("ShockwaveFlash.ShockwaveFlash"));
     } catch(exception) {
       hasFlash = navigator.mimeTypes["application/x-shockwave-flash"] != null;
+    }
+
+    if (this.props.useClipboard) {
+      clipboard = (
+        <ReactZeroClipboard
+          text={content}
+          onAfterCopy={this.handleCopy}>
+          <i className="icon icon-sprite icon-sprite-mini icon-clipboard icon-sprite-mini-color clickable" />
+        </ReactZeroClipboard>
+      );
     }
 
     if (hasFlash) {
@@ -58,17 +64,13 @@ export default class ClusterHeader extends Util.mixin(TooltipMixin) {
           onMouseOver={this.handleMouseOverCopyIcon}
           onMouseOut={this.handleMouseOutCopyIcon}
           ref="copyButton">
-          <ReactZeroClipboard
-            text={content}
-            onAfterCopy={this.handleCopy}>
-            <i className="icon icon-sprite icon-sprite-mini icon-clipboard icon-sprite-mini-color clickable" />
-          </ReactZeroClipboard>
+          {clipboard}
         </div>
       );
     }
 
     return null;
-  }
+  },
 
   getHostName(metadata) {
     if (!_.isObject(metadata) ||
@@ -88,7 +90,7 @@ export default class ClusterHeader extends Util.mixin(TooltipMixin) {
         </span>
       </div>
     );
-  }
+  },
 
   render() {
     let states = MesosSummaryStore.get("states");
@@ -114,4 +116,6 @@ export default class ClusterHeader extends Util.mixin(TooltipMixin) {
       </div>
     );
   }
-}
+});
+
+module.exports = ClusterHeader;

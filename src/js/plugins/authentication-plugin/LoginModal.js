@@ -100,7 +100,7 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
   }
 
   getPreContent() {
-    return <ClusterHeader />;
+    return <ClusterHeader useClipboard={false}/>;
   }
 
   render() {

@@ -10,14 +10,12 @@ var State = require("react-router").State;
 var ZeroClipboard = require("zeroclipboard");
 global.ZeroClipboard = ZeroClipboard;
 
-var Actions = require("../actions/Actions");
 import ClusterHeader from "./ClusterHeader";
 var EventTypes = require("../constants/EventTypes");
 var IntercomActions = require("../events/IntercomActions");
 var IntercomStore = require("../stores/IntercomStore");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
-var MetadataActions = require("../events/MetadataActions");
 var MetadataStore = require("../stores/MetadataStore");
 import Plugins from "../plugins/Plugins";
 var SidebarActions = require("../events/SidebarActions");

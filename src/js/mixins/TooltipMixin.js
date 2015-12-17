@@ -1,5 +1,4 @@
 var _ = require("underscore");
-import React from "react";
 
 var Tooltip = require("../vendor/tooltip");
 
@@ -9,7 +8,7 @@ var TooltipMixin = {
 
     this.tip_attachTips();
 
-    var container = React.findDOMNode(this);
+    var container = this.getDOMNode();
     container.addEventListener("mousemove", this.tip_handleContainerMouseMove);
   },
 
@@ -36,7 +35,7 @@ var TooltipMixin = {
   },
 
   tip_attachTips: function () {
-    var container = React.findDOMNode(this);
+    var container = this.getDOMNode();
     var selected = container.querySelectorAll("[data-behavior~=show-tip]");
     var el;
     var found = [];
@@ -88,6 +87,10 @@ var TooltipMixin = {
     this.tip_updateTipContent(el);
 
     var tip = this.tips[el.dataset.tipID];
+    if (!tip) {
+      return;
+    }
+
     tip.show();
   },
 
@@ -101,14 +104,17 @@ var TooltipMixin = {
 
   tip_updateTipContent: function (el, content) {
     var tip = this.tips[el.dataset.tipID];
+    if (!tip) {
+      return;
+    }
+
     tip.content(content || el.dataset.tipContent);
   },
 
   tip_destroyTip: function (tipID) {
     // Allows us to create a new tip for the element.
     // Useful when the element has tooltip -> doesn't -> then has it again.
-    var el = React.findDOMNode(this)
-      .querySelector("[data-tip-i-d=" + tipID + "]");
+    var el = this.getDOMNode().querySelector("[data-tip-i-d=" + tipID + "]");
     if (el && el.dataset) {
       delete el.dataset.tipID;
     }
