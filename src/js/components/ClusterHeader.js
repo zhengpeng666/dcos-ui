@@ -24,7 +24,7 @@ var ClusterHeader = React.createClass({
 
   handleCopy() {
     this.tip_updateTipContent(
-      React.findDOMNode(this.refs.copyButton.getDOMNode()), "Copied!"
+      React.findDOMNode(this.refs.copyButton), "Copied!"
     );
     Actions.log({eventID: "Copied hostname from sidebar"});
   },
