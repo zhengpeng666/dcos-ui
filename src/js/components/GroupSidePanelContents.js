@@ -132,7 +132,8 @@ export default class GroupSidePanelContents extends SidePanelContents {
         {imageTag}
         <div className="side-panel-content-header-label">
           <Form definition={editNameFormDefinition}
-            formControlClass="row form-group flush-bottom"
+            formRowClass="row"
+            formGroupClass="form-group flush-bottom"
             onSubmit={this.handleNameChange} />
           <div>
             {this.getSubHeader(group)}
