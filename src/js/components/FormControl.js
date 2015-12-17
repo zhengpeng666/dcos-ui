@@ -54,7 +54,7 @@ export default class FormControl extends React.Component {
     }
 
     return (
-      <div className={props.formControlClass}>
+      <div className={props.formRowClass}>
         {content}
       </div>
     );
