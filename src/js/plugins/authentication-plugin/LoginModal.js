@@ -106,7 +106,6 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
         disabled={this.state.disableLogin}
         onSubmit={this.handleLoginSubmit}
         open={true}
-        titleText="Login"
         modalProps={{modalClass: "modal modal-narrow"}} />
     );
   }

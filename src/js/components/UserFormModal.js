@@ -96,7 +96,11 @@ export default class UserFormModal extends Util.mixin(StoreMixin) {
         onClose={this.props.onClose}
         onSubmit={this.handleNewUserSubmit}
         open={this.props.open}
-        titleText="Create New User" />
+        titleText="Create New User">
+        <h2 className="modal-header-title text-align-center flush-top">
+          Create New User
+        </h2>
+      </FormModal>
     );
   }
 }
