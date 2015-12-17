@@ -35,28 +35,14 @@ var Sidebar = React.createClass({
     router: React.PropTypes.func
   },
 
-  componentWillMount: function () {
-    MetadataStore.init();
-    MetadataActions.fetch();
-
-    this.internalStorage_set({
-      mesosInfo: MesosSummaryStore.get("states").lastSuccessful(),
-      metadata: MetadataStore.get("metadata")
-    });
-  },
-
   componentDidMount: function () {
-    MesosSummaryStore.addChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE,
-      this.onMesosStateChange
-    );
+    this.internalStorage_update({
+      mesosInfo: MesosSummaryStore.get("states").lastSuccessful()
+    });
+
     MetadataStore.addChangeListener(
       EventTypes.DCOS_METADATA_CHANGE,
       this.onDCOSMetadataChange
-    );
-    MetadataStore.addChangeListener(
-      EventTypes.METADATA_CHANGE,
-      this.onMetadataChange
     );
     IntercomStore.addChangeListener(
       EventTypes.INTERCOM_CHANGE,
@@ -65,15 +51,9 @@ var Sidebar = React.createClass({
   },
 
   componentWillUnmount: function () {
-    this.removeMesosStateListener();
-
     MetadataStore.removeChangeListener(
       EventTypes.DCOS_METADATA_CHANGE,
       this.onDCOSMetadataChange
-    );
-    MetadataStore.removeChangeListener(
-      EventTypes.METADATA_CHANGE,
-      this.onMetadataChange
     );
     IntercomStore.removeChangeListener(
       EventTypes.INTERCOM_CHANGE,
@@ -81,35 +61,10 @@ var Sidebar = React.createClass({
     );
   },
 
-  removeMesosStateListener: function () {
-    MesosSummaryStore.removeChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE,
-      this.onMesosStateChange
-    );
-  },
-
-  onMesosStateChange: function () {
-    this.internalStorage_update({
-      mesosInfo: MesosSummaryStore.get("states").lastSuccessful()
-    });
-    this.forceUpdate();
-
-    // Datacenter info won't change often
-    // so let's not constantly update
-    this.removeMesosStateListener();
-  },
-
   onDCOSMetadataChange: function () {
     this.internalStorage_update(
       {dcosMetadata: MetadataStore.get("dcosMetadata")}
     );
-  },
-
-  onMetadataChange: function () {
-    let metadata = MetadataStore.get("metadata");
-    this.internalStorage_update({metadata});
-
-    Actions.setClusterID(metadata.CLUSTER_ID);
   },
 
   onIntercomChange: function () {
