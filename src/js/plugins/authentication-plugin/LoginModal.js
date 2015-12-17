@@ -108,7 +108,7 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
         onSubmit={this.handleLoginSubmit}
         open={true}
         modalProps={{modalClass: "modal modal-narrow"}}>
-        <ClusterHeader useClipboard={false}/>
+        <ClusterHeader useClipboard={false} />
       </FormModal>
     );
   }
