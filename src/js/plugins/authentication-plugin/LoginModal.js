@@ -99,10 +99,6 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
     ];
   }
 
-  getPreContent() {
-    return <ClusterHeader useClipboard={false}/>;
-  }
-
   render() {
     return (
       <FormModal
@@ -111,7 +107,9 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
         disabled={this.state.disableLogin}
         onSubmit={this.handleLoginSubmit}
         open={true}
-        modalProps={{modalClass: "modal modal-narrow"}} />
+        modalProps={{modalClass: "modal modal-narrow"}}>
+        <ClusterHeader useClipboard={false}/>
+      </FormModal>
     );
   }
 }
