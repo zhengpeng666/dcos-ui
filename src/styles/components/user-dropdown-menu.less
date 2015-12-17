@@ -34,10 +34,17 @@
   }
 }
 
+.user-dropdown {
+  display: flex;
+}
+
 .user-dropdown-menu.dropdown {
   bottom: 0;
   display: block;
+  margin-left: -37%;
+  padding-left: 37%;
   position: absolute;
+  width: 100%;
   z-index: @z-index-modal + 1;
 
   .dropdown-menu {
@@ -112,14 +119,61 @@
   animation: user-dropdown-menu-fade-out 0.25s linear, user-dropdown-menu-leave 0.25s linear;
 }
 
+.sidebar-footer-user-dropdown,
+.sidebar-footer-user-dropdown-button {
+  width: 100%;
+}
+
+.sidebar-footer-user-dropdown {
+  display: none;
+  position: relative;
+  // z-index has to be at least 10000 becase it will render underneath gemini
+  // otherwise.
+  z-index: 10000;
+
+  .dropdown-menu {
+    left: 8px;
+    margin-bottom: 8px;
+  }
+
+}
+
+.sidebar-footer-user-dropdown-button {
+  appearance: none;
+  background: none;
+  border: none;
+  border-top: 1px solid color-lighten(@neutral, 90%);
+  outline: none;
+  padding: 0;
+}
+
 & when (@screen-small-enabled) {
   @media (min-width: @screen-small) {
+    .user-dropdown {
+      display: none;
+    }
+
     .user-dropdown-menu.dropdown {
       display: none;
+      margin-left: 0;
+      padding-left: 0;
+      width: auto;
 
       .dropdown-menu {
 
         .icon-buttons .user-dropdown .user-description {
+          display: none;
+        }
+      }
+    }
+
+    .sidebar-footer-user-dropdown {
+      display: block;
+
+      .user-dropdown {
+        display: block;
+
+        &:after {
           display: none;
         }
       }
@@ -129,7 +183,11 @@
 
 & when (@screen-medium-enabled) {
   @media (min-width: @screen-medium) {
-  .user-dropdown-menu.dropdown {
+    .user-dropdown {
+      display: flex;
+    }
+
+    .user-dropdown-menu.dropdown {
       display: block;
 
       .dropdown-menu {
@@ -145,6 +203,10 @@
           }
         }
       }
+    }
+
+    .sidebar-footer-user-dropdown {
+      display: none;
     }
   }
 }

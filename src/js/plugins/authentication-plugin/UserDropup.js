@@ -1,5 +1,5 @@
+import {Dropdown, Modal} from "reactjs-components";
 import React from "react";
-import {Modal} from "reactjs-components";
 
 import ACLAuthStore from "../../stores/ACLAuthStore";
 
@@ -51,7 +51,65 @@ export default class UserDropup extends React.Component {
     }
   }
 
-  getDropdownItems() {
+  getDropdownMenu(menuItems) {
+    let defaultItem = [
+      {
+        className: "hidden",
+        html: "",
+        id: "default-item",
+        selectedHtml: this.getUserButton(null, function () {})
+      }
+    ];
+
+    return defaultItem.concat(menuItems.map(function (item, index) {
+      return {
+        className: "clickable",
+        html: item,
+        selectedHtml: item,
+        id: index
+      };
+    }));
+  }
+
+  getModalMenu(menuItems) {
+    return menuItems.map((item, index) => {
+      return (
+        <li className="clickable" key={index}>
+          {item}
+        </li>
+      );
+    });
+  }
+
+  getUserButton(user, clickHandler) {
+    let description;
+
+    if (user) {
+      description = (
+        <span className="user-description">
+          {user.description}
+        </span>
+      );
+    }
+
+    return (
+      <div className="icon-buttons">
+        <a
+          className="user-dropdown button dropdown-toggle"
+          onClick={clickHandler}>
+          <span className="icon icon-medium icon-image-container
+            icon-user-container">
+            <img
+              className="clickable"
+              src="./img/layout/icon-user-default-64x64@2x.png" />
+          </span>
+          {description}
+        </a>
+      </div>
+    );
+  }
+
+  getUserMenuItems() {
     let items = this.props.items.concat([
       <a onClick={this.handleSignOut} key="button-sign-out" />
     ]);
@@ -67,33 +125,8 @@ export default class UserDropup extends React.Component {
         onClick: this.handleMenuItemClick.bind(this, item.props.onClick)
       };
 
-      return (
-        <li key={item.key}>
-          {React.cloneElement(item, props, MENU_ITEMS[item.key])}
-        </li>
-      );
+      return React.cloneElement(item, props, MENU_ITEMS[item.key]);
     });
-  }
-
-  getUserButton(user) {
-    return (
-      <div className="icon-buttons">
-        <a
-          className="user-dropdown button dropdown-toggle"
-          onClick={this.handleDropdownClick}>
-          <span
-            className="icon icon-medium icon-image-container
-            icon-user-container">
-            <img
-              className="clickable"
-              src="./img/layout/icon-user-default-64x64@2x.png" />
-          </span>
-          <span className="user-description">
-            {user.description}
-          </span>
-        </a>
-      </div>
-    );
   }
 
   render() {
@@ -109,10 +142,18 @@ export default class UserDropup extends React.Component {
       modalClass: "dropdown-menu"
     };
 
-    let userButton = this.getUserButton(user);
+    let userButton = this.getUserButton(user, this.handleDropdownClick);
+    let userMenuItems = this.getUserMenuItems();
 
     return (
       <div>
+        <Dropdown buttonClassName="sidebar-footer-user-dropdown-button"
+          dropdownMenuClassName="dropdown-menu"
+          dropdownMenuListClassName="dropdown-menu-list"
+          items={this.getDropdownMenu(userMenuItems)}
+          initialID="default-item"
+          transition={true}
+          wrapperClassName="sidebar-footer-user-dropdown dropdown" />
         <div className="open">
           {userButton}
         </div>
@@ -126,7 +167,7 @@ export default class UserDropup extends React.Component {
           {...modalClasses}>
           {userButton}
           <ul className="dropdown-menu-list">
-            {this.getDropdownItems()}
+            {this.getModalMenu(userMenuItems)}
           </ul>
         </Modal>
       </div>
