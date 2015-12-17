@@ -74,8 +74,11 @@ export default class GroupFormModal extends Util.mixin(StoreMixin) {
         onClose={this.props.onClose}
         onSubmit={this.handleNewGroupSubmit}
         open={this.props.open}
-        definition={this.getNewGroupFormDefinition()}
-        titleText="Create New Group" />
+        definition={this.getNewGroupFormDefinition()}>
+        <h2 className="modal-header-title text-align-center flush-top">
+          Create New Group
+        </h2>
+      </FormModal>
     );
   }
 }

@@ -75,6 +75,7 @@ export default class FormModal extends React.Component {
   getContent() {
     return (
       <div className="container container-pod flush-top flush-bottom">
+        {this.props.children}
         <Form
           definition={this.props.definition}
           triggerSubmit={this.getTriggerSubmit}
@@ -93,12 +94,11 @@ export default class FormModal extends React.Component {
         onClose={this.props.onClose}
         open={this.props.open}
         showCloseButton={false}
-        showHeader={true}
+        showHeader={false}
         showFooter={true}
         footer={this.getFooter()}
         titleClass="modal-header-title text-align-center flush-top
           flush-bottom"
-        titleText={this.props.titleText}
         {...this.props.modalProps}>
         {this.getContent()}
       </Modal>
@@ -122,8 +122,6 @@ FormModal.defaultProps = {
   disabled: false,
   onClose: function () {},
   open: false,
-  submitText: "Create",
-  cancelText: "Cancel",
   modalProps: {}
 };
 
@@ -132,6 +130,5 @@ FormModal.propTypes = {
   disabled: React.PropTypes.bool,
   modalProps: React.PropTypes.object,
   onClose: React.PropTypes.func.isRequired,
-  open: React.PropTypes.bool,
-  titleText: React.PropTypes.string
+  open: React.PropTypes.bool
 };
