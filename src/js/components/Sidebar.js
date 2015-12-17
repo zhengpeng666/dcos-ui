@@ -5,11 +5,6 @@ var Link = require("react-router").Link;
 var React = require("react/addons");
 var State = require("react-router").State;
 
-// ReactZeroClipboard injects ZeroClipboard from a third-party server unless
-// global.ZeroClipboard is already defined:
-var ZeroClipboard = require("zeroclipboard");
-global.ZeroClipboard = ZeroClipboard;
-
 import ClusterHeader from "./ClusterHeader";
 var EventTypes = require("../constants/EventTypes");
 var IntercomActions = require("../events/IntercomActions");

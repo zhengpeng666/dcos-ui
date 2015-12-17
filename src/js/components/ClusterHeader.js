@@ -1,8 +1,10 @@
 import _ from "underscore";
-/* eslint-disable no-unused-vars */
 import React from "react/addons";
-/* eslint-enable no-unused-vars */
 import ReactZeroClipboard from "react-zeroclipboard";
+// ReactZeroClipboard injects ZeroClipboard from a third-party server unless
+// global.ZeroClipboard is already defined:
+import ZeroClipboard from "zeroclipboard";
+global.ZeroClipboard = ZeroClipboard;
 
 import Actions from "../actions/Actions";
 import MetadataStore from "../stores/MetadataStore";
