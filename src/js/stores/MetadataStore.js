@@ -4,13 +4,18 @@ var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
 var GetSetMixin = require("../mixins/GetSetMixin");
+import MetadataActions from "../events/MetadataActions";
 var Store = require("../utils/Store");
 
 var MetadataStore = Store.createStore({
   storeID: "metadata",
 
   init: function () {
-    this.set({metadata: {}});
+    this.set({
+      metadata: {},
+      initCalledAt: Date.now()
+    });
+    MetadataActions.fetch();
   },
 
   mixins: [GetSetMixin],

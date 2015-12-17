@@ -10,6 +10,7 @@ import EventTypes from "../constants/EventTypes";
 import MarathonStore from "../stores/MarathonStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
+import MetadataStore from "../stores/MetadataStore";
 import StringUtil from "../utils/StringUtil";
 
 const LISTENER_SUFFIX = "ListenerFn";
@@ -95,6 +96,18 @@ const ListenersDescription = {
       if (event === "success") {
         return store.hasProcessedApps();
       }
+    },
+    listenAlways: true
+  },
+
+  metadata: {
+    store: MetadataStore,
+    events: {
+      success: EventTypes.METADATA_CHANGE,
+      dcosSuccess: EventTypes.DCOS_METADATA_CHANGE
+    },
+    unmountWhen: function () {
+      return true;
     },
     listenAlways: true
   },

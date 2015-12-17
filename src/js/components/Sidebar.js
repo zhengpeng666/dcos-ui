@@ -9,9 +9,9 @@ var State = require("react-router").State;
 // global.ZeroClipboard is already defined:
 var ZeroClipboard = require("zeroclipboard");
 global.ZeroClipboard = ZeroClipboard;
-var ReactZeroClipboard = require("react-zeroclipboard");
 
 var Actions = require("../actions/Actions");
+import ClusterHeader from "./ClusterHeader";
 var EventTypes = require("../constants/EventTypes");
 var IntercomActions = require("../events/IntercomActions");
 var IntercomStore = require("../stores/IntercomStore");
@@ -135,68 +135,6 @@ var Sidebar = React.createClass({
     SidebarActions.showVersions();
   },
 
-  handleMouseOverCopyIcon: function () {
-    var el = this.refs.copyButton.getDOMNode();
-    this.tip_showTip(el);
-  },
-
-  handleMouseOutCopyIcon: function () {
-    this.tip_hideTip(this.refs.copyButton.getDOMNode());
-  },
-
-  handleCopy: function () {
-    this.tip_updateTipContent(this.refs.copyButton.getDOMNode(), "Copied!");
-    Actions.log({eventID: "Copied hostname from sidebar"});
-  },
-
-  getFlashButton: function (content) {
-    var hasFlash = false;
-    try {
-      hasFlash = Boolean(new ActiveXObject("ShockwaveFlash.ShockwaveFlash"));
-    } catch(exception) {
-      hasFlash = navigator.mimeTypes["application/x-shockwave-flash"] != null;
-    }
-
-    if (hasFlash) {
-      return (
-        <div data-behavior="show-tip"
-              data-tip-place="bottom"
-              data-tip-content="Copy to clipboard"
-              onMouseOver={this.handleMouseOverCopyIcon}
-              onMouseOut={this.handleMouseOutCopyIcon}
-              ref="copyButton">
-          <ReactZeroClipboard
-            text={content}
-            onAfterCopy={this.handleCopy}>
-            <i className="icon icon-sprite icon-sprite-mini icon-clipboard icon-sprite-mini-color clickable" />
-          </ReactZeroClipboard>
-        </div>
-      );
-    }
-
-    return null;
-  },
-
-  getHostName: function (data) {
-    if (!_.isObject(data.metadata) ||
-        data.metadata.PUBLIC_IPV4 == null ||
-        data.metadata.PUBLIC_IPV4.length === 0) {
-      return null;
-    }
-
-    return (
-      <div className="sidebar-header-sublabel"
-        title={data.metadata.PUBLIC_IPV4}>
-        <span className="hostname text-overflow">
-          {data.metadata.PUBLIC_IPV4}
-        </span>
-        <span className="sidebar-header-sublabel-action">
-          {this.getFlashButton(data.metadata.PUBLIC_IPV4)}
-        </span>
-      </div>
-    );
-  },
-
   getMenuItems: function () {
     let currentPath = this.context.router.getLocation().getCurrentPath();
 
@@ -303,20 +241,11 @@ var Sidebar = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-    let clusterName = data.mesosInfo.getClusterName();
 
     return (
       <div className="sidebar flex-container-col">
         <div className="sidebar-header">
-          <div className="container container-fluid container-fluid-narrow container-pod container-pod-short">
-            <div className="sidebar-header-image">
-              <img className="sidebar-header-image-inner" src="./img/layout/sidebar/sidebar-dcos-icon-medium.png" alt="sidebar header image"/>
-            </div>
-            <h3 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={clusterName}>
-              {clusterName}
-            </h3>
-            {this.getHostName(data)}
-          </div>
+          <ClusterHeader />
         </div>
         <GeminiScrollbar autoshow={true} className="sidebar-content container-scrollable">
           <nav>
