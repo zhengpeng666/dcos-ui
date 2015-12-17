@@ -55,7 +55,7 @@ describe("ACLActions", function () {
         });
       });
 
-      this.configuration.error({error: "bar"});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("calls #json from the RequestUtil", function () {
@@ -104,7 +104,7 @@ describe("ACLActions", function () {
           });
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("sends data to the correct URL", function () {
@@ -156,7 +156,7 @@ describe("ACLActions", function () {
           });
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("sends data to the correct URL", function () {
@@ -208,7 +208,7 @@ describe("ACLActions", function () {
           });
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("sends data to the correct URL", function () {
@@ -260,7 +260,7 @@ describe("ACLActions", function () {
           });
       });
 
-      this.configuration.error({responseJSON: {error: "bar"}});
+      this.configuration.error({responseJSON: {description: "bar"}});
     });
 
     it("sends data to the correct URL", function () {

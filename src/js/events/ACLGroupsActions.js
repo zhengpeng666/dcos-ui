@@ -16,11 +16,10 @@ const ACLGroupsActions = {
           data: response.array
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUPS_ERROR,
-          data: e.error
+          data: RequestUtil.getErrorFromXHR(xhr)
         });
       }
     });
@@ -28,18 +27,17 @@ const ACLGroupsActions = {
 
   fetchGroup: function (groupID) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}`,
+      url: `${Config.rootUrl}${Config.apiPrefix}/groups/${groupID}adsfasssdf`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
           data: response
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           groupID
         });
       }
@@ -56,11 +54,10 @@ const ACLGroupsActions = {
           groupID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           groupID
         });
       }
@@ -77,11 +74,10 @@ const ACLGroupsActions = {
           groupID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           groupID
         });
       }
@@ -106,11 +102,10 @@ const ACLGroupsActions = {
           groupID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           groupID
         });
       }
@@ -128,11 +123,10 @@ const ACLGroupsActions = {
           groupID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           groupID
         });
       }
@@ -149,11 +143,10 @@ const ACLGroupsActions = {
           groupID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           groupID
         });
       }
@@ -171,11 +164,10 @@ const ACLGroupsActions = {
           userID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           groupID,
           userID
         });
@@ -194,11 +186,10 @@ const ACLGroupsActions = {
           userID
         });
       },
-      error: function (e) {
-        e = RequestUtil.parseResponseBody(e);
+      error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
-          data: e.error,
+          data: RequestUtil.getErrorFromXHR(xhr),
           groupID,
           userID
         });
