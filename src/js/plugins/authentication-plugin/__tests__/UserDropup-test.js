@@ -48,8 +48,8 @@ describe("UserDropup", function () {
 
   describe("#getDropdownMenu", function () {
 
-    it ("returns the array it was passed with a default item at the beginning",
-      function() {
+    it("returns the array it was passed with a default item at the beginning",
+      function () {
       let dropdownMenu = this.instance.getDropdownMenu([
         {foo: "bar"},
         {bar: "baz"}
@@ -57,25 +57,6 @@ describe("UserDropup", function () {
 
       expect(dropdownMenu.length).toEqual(3);
       expect(dropdownMenu[0].id).toEqual("default-item");
-    });
-
-  });
-
-  describe("#getMenuItemEl", function () {
-
-    beforeEach(function () {
-      this.testElement = TestUtils.renderIntoDocument(
-        this.instance.getMenuItemEl('a', {foo: "bar"}, "baz")
-      );
-    });
-
-    it("should create a react element", function () {
-      expect(TestUtils.isCompositeComponent(this.testElement)).toEqual(true);
-    });
-
-    it("should create a react element with the supplied props and children",
-      function () {
-      expect(this.testElement.props).toEqual({foo: "bar", children: "baz"});
     });
 
   });

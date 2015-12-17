@@ -126,6 +126,10 @@
 
 .sidebar-footer-user-dropdown {
   display: none;
+  position: relative;
+  // z-index has to be at least 10000 becase it will render underneath gemini
+  // otherwise.
+  z-index: 10000;
 
   .dropdown-menu {
     left: 8px;

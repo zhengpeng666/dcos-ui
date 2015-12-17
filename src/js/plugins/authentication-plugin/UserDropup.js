@@ -51,27 +51,29 @@ export default class UserDropup extends React.Component {
     }
   }
 
+  // (
+  //   <div className="icon-buttons">
+  //     <a className="user-dropdown button dropdown-toggle">
+  //       <span className="icon icon-medium icon-image-container
+  //         icon-user-container">
+  //         <img className="clickable"
+  //           src="./img/layout/icon-user-default-64x64@2x.png" />
+  //       </span>
+  //     </a>
+  //   </div>
+  // )
+
   getDropdownMenu(menuItems) {
     let defaultItem = [
       {
         className: "hidden",
         html: "",
         id: "default-item",
-        selectedHtml: (
-          <div className="icon-buttons">
-            <a className="user-dropdown button dropdown-toggle">
-              <span className="icon icon-medium icon-image-container
-                icon-user-container">
-                <img className="clickable"
-                  src="./img/layout/icon-user-default-64x64@2x.png" />
-              </span>
-            </a>
-          </div>
-        )
+        selectedHtml: this.getUserButton(null, function () {})
       }
     ];
 
-    return defaultItem.concat(menuItems.map((item, index) => {
+    return defaultItem.concat(menuItems.map(function (item, index) {
       return {
         className: "clickable",
         html: item,
@@ -81,36 +83,39 @@ export default class UserDropup extends React.Component {
     }));
   }
 
-  getMenuItemEl(ElementType, props, children) {
-    return (
-      <ElementType {...props}>
-        {children}
-      </ElementType>
-    );
-  }
-
   getModalMenu(menuItems) {
     return menuItems.map((item, index) => {
-      return this.getMenuItemEl('li', {key: index}, item);
+      return (
+        <li className="clickable" key={index}>
+          {item}
+        </li>
+      );
     });
   }
 
-  getUserButton(user) {
+  getUserButton(user, clickHandler) {
+    let description;
+
+    if (user) {
+      description = (
+        <span className="user-description">
+          {user.description}
+        </span>
+      );
+    }
+
     return (
       <div className="icon-buttons">
         <a
           className="user-dropdown button dropdown-toggle"
-          onClick={this.handleDropdownClick}>
-          <span
-            className="icon icon-medium icon-image-container
+          onClick={clickHandler}>
+          <span className="icon icon-medium icon-image-container
             icon-user-container">
             <img
               className="clickable"
               src="./img/layout/icon-user-default-64x64@2x.png" />
           </span>
-          <span className="user-description">
-            {user.description}
-          </span>
+          {description}
         </a>
       </div>
     );
@@ -149,17 +154,15 @@ export default class UserDropup extends React.Component {
       modalClass: "dropdown-menu"
     };
 
-    let userButton = this.getUserButton(user);
+    let userButton = this.getUserButton(user, this.handleDropdownClick);
     let userMenuItems = this.getUserMenuItems();
-    let modalMenu = this.getModalMenu(userMenuItems);
-    let dropdownMenu = this.getDropdownMenu(userMenuItems);
 
     return (
       <div>
         <Dropdown buttonClassName="sidebar-footer-user-dropdown-button"
           dropdownMenuClassName="dropdown-menu"
           dropdownMenuListClassName="dropdown-menu-list"
-          items={dropdownMenu}
+          items={this.getDropdownMenu(userMenuItems)}
           initialID="default-item"
           transition={true}
           wrapperClassName="sidebar-footer-user-dropdown dropdown" />
@@ -176,7 +179,7 @@ export default class UserDropup extends React.Component {
           {...modalClasses}>
           {userButton}
           <ul className="dropdown-menu-list">
-            {modalMenu}
+            {this.getModalMenu(userMenuItems)}
           </ul>
         </Modal>
       </div>
