@@ -29,7 +29,7 @@ const ACLAuthActions = {
         e = RequestUtil.parseResponseBody(e);
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_LOGIN_ERROR,
-          data: e.error
+          data: e.description
         });
       }
     });
