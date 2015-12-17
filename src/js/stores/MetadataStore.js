@@ -12,8 +12,7 @@ var MetadataStore = Store.createStore({
 
   init: function () {
     this.set({
-      metadata: {},
-      initCalledAt: Date.now()
+      metadata: {}
     });
     MetadataActions.fetch();
   },
