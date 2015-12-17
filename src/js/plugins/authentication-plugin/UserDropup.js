@@ -30,11 +30,21 @@ export default class UserDropup extends React.Component {
   }
 
   handleDropdownClose() {
-    this.setState({open: false});
+    let open = this.state.open;
+    // Only close if we are open
+    if (open) {
+      window.removeEventListener("resize", this.handleDropdownClose);
+      this.setState({open: false});
+    }
   }
 
   handleDropdownClick() {
-    this.setState({open: !this.state.open});
+    let open = !this.state.open;
+    if (open) {
+      window.addEventListener("resize", this.handleDropdownClose);
+    }
+
+    this.setState({open});
   }
 
   handleSignOut() {
