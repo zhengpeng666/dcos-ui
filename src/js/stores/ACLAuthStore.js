@@ -18,10 +18,6 @@ var ACLAuthStore = Store.createStore({
 
   mixins: [GetSetMixin],
 
-  getSet_data: {
-    role: ACLUserRoles.default
-  },
-
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
   },
