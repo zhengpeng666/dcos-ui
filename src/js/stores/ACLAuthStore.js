@@ -88,8 +88,15 @@ var ACLAuthStore = Store.createStore({
   },
 
   processLoginSuccess() {
+    // Reset role before fetching new one
+    this.resetRole();
+
     let user = this.getUser();
-    this.fetchRole(user.uid);
+    if (user) {
+      this.fetchRole(user.uid);
+    } else {
+      this.makeDefaultRole();
+    }
     this.emit(EventTypes.ACL_AUTH_USER_LOGIN_CHANGED);
   },
 
