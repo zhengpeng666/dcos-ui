@@ -40,7 +40,7 @@ var files = {
 
 var webpackDevtool = "source-map";
 var webpackWatch = false;
-if (development) {
+if (development || process.env.NODE_ENV === "testing") {
   // eval-source-map is the same thing as source-map,
   // except with caching. Don't use in production.
   webpackDevtool = "eval-source-map";

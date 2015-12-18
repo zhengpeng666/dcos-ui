@@ -1,4 +1,4 @@
-describe("ServerErrorModal", function () {
+describe("ServerErrorModal [01n]", function () {
 
   beforeEach(function () {
     cy.configureCluster({
@@ -6,10 +6,10 @@ describe("ServerErrorModal", function () {
       acl: true,
       plugins: "settings-enabled"
     })
-    .visitUrl({url: "/", logIn: true});
+    .visitUrl({url: "/", identify: true});
   });
 
-  context("opens when group update error happens", function () {
+  context("opens when group update error happens [01o]", function () {
     beforeEach(function () {
       cy.route({
         method: "PATCH",
@@ -17,19 +17,19 @@ describe("ServerErrorModal", function () {
         status: 422,
         response: {error: "There was an error."}
       })
-        .visitUrl({url: "/settings/organization/groups/olis"})
+        .visitUrl({url: "/settings/organization/groups/olis", identify: true})
         .get(".side-panel .side-panel-content-header-label .form-element-inline-text")
         .click();
 
       cy.get(".side-panel").click();
     });
 
-    it("should open", function () {
+    it("should open [01p]", function () {
       cy.get(".modal-header-title").should("contain", "An error has occurred");
     });
   });
 
-  context("opens when group delete error happens", function () {
+  context("opens when group delete error happens [01q]", function () {
     beforeEach(function () {
       cy.route({
         method: "DELETE",
@@ -44,12 +44,12 @@ describe("ServerErrorModal", function () {
       cy.get(".modal-container .button-danger").click();
     });
 
-    it("should open", function () {
+    it("should open [01r]", function () {
       cy.get(".modal-header-title").should("contain", "An error has occurred");
     });
   });
 
-  context("opens when user update error happens", function () {
+  context("opens when user update error happens [01s]", function () {
     beforeEach(function () {
       cy.route({
         method: "PATCH",
@@ -64,12 +64,12 @@ describe("ServerErrorModal", function () {
       cy.get(".side-panel").click();
     });
 
-    it("should open", function () {
+    it("should open [01t]", function () {
       cy.get(".modal-header-title").should("contain", "An error has occurred");
     });
   });
 
-  context("opens when user delete error happens", function () {
+  context("opens when user delete error happens [01u]", function () {
     beforeEach(function () {
       cy.route({
         method: "DELETE",
@@ -84,7 +84,7 @@ describe("ServerErrorModal", function () {
       cy.get(".modal-container .button-danger").click();
     });
 
-    it("should open", function () {
+    it("should open [01v]", function () {
       cy.get(".modal-header-title").should("contain", "An error has occurred");
     });
   });
