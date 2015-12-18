@@ -18,6 +18,10 @@ var ACLAuthStore = Store.createStore({
 
   mixins: [GetSetMixin],
 
+  getSet_data: {
+    role: ACLUserRoles.default
+  },
+
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
   },
@@ -40,6 +44,7 @@ var ACLAuthStore = Store.createStore({
       ACLAuthConstants.userCookieKey, "", {expires: new Date(1970)}
     );
 
+    this.resetRole();
     this.emit(EventTypes.ACL_AUTH_USER_LOGOUT);
   },
 
@@ -66,7 +71,7 @@ var ACLAuthStore = Store.createStore({
     return this.get("role") === ACLUserRoles.admin;
   },
 
-  processRoleSuccess() {
+  makeAdmin() {
     let role = this.get("role");
     if (role !== ACLUserRoles.admin) {
       this.set({role: ACLUserRoles.admin});
@@ -74,7 +79,7 @@ var ACLAuthStore = Store.createStore({
     }
   },
 
-  processRoleError() {
+  resetRole() {
     let role = this.get("role");
     if (role !== ACLUserRoles.default) {
       this.set({role: ACLUserRoles.default});
@@ -101,11 +106,11 @@ var ACLAuthStore = Store.createStore({
         break;
       // Get role of current user
       case ActionTypes.REQUEST_ACL_ROLE_SUCCESS:
-        ACLAuthStore.processRoleSuccess();
+        ACLAuthStore.makeAdmin();
         break;
       // Get role of current user
       case ActionTypes.REQUEST_ACL_ROLE_ERROR:
-        ACLAuthStore.emit(EventTypes.ACL_AUTH_USER_ROLE_ERROR);
+        ACLAuthStore.resetRole();
         break;
     }
 
