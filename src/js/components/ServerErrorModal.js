@@ -30,8 +30,8 @@ export default class ServerErrorModal extends Util.mixin(StoreMixin) {
     };
 
     this.store_listeners = [
-      {name: "user", events: ["updateError", "deleteError"]},
-      {name: "group", events: ["updateError", "deleteError"]}
+      {name: "user", events: ["updateError"]},
+      {name: "group", events: ["updateError", "addUserError"]}
     ];
 
     METHODS_TO_BIND.forEach((method) => {

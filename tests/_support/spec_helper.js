@@ -32,7 +32,7 @@ Cypress.addParentCommand("configureCluster", function(configuration) {
   cy.route(/ui-config/, "fx:config/" + pluginsFixture + ".json");
 
   // Metadata
-  cy.route(/metadata/, "fx:dcos/metadata");
+  cy.route(/metadata$/, "fx:dcos/metadata");
 });
 
 Cypress.addParentCommand("visitUrl", function (options) {
@@ -63,5 +63,6 @@ Cypress.addParentCommand("visitUrl", function (options) {
   }
 
   var url = "http://localhost:4200/#" + options.url;
-  cy.visit(url, {onBeforeLoad: callback});
+  cy.visit(url, {onBeforeLoad: callback})
+  .wait(2000);
 });

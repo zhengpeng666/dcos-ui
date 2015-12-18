@@ -74,6 +74,21 @@ export default class PermissionsTable extends Util.mixin(StoreMixin) {
     });
   }
 
+  onAclStoreGroupRevokeError(error) {
+    this.setState({
+      permissionUpdateError: error,
+      pendingRequest: false
+    });
+  }
+
+  onAclStoreGroupRevokeSuccess() {
+    this.setState({
+      openConfirm: false,
+      permissionID: null,
+      pendingRequest: false
+    });
+  }
+
   onAclStoreUserRevokeError(error) {
     this.setState({
       permissionUpdateError: error,

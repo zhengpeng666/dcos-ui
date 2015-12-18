@@ -9,83 +9,56 @@ describe("ServerErrorModal [01n]", function () {
     .visitUrl({url: "/", identify: true});
   });
 
-  context("opens when group update error happens [01o]", function () {
-    beforeEach(function () {
-      cy.route({
-        method: "PATCH",
-        url: /api\/v1\/groups\/olis/,
-        status: 422,
-        response: {error: "There was an error."}
-      })
-        .visitUrl({url: "/settings/organization/groups/olis", identify: true})
-        .get(".side-panel .side-panel-content-header-label .form-element-inline-text")
-        .click();
+  it("opens when group update error happens [02e]", function () {
+    cy.route({
+      method: "PATCH",
+      url: /api\/v1\/groups\/olis/,
+      status: 422,
+      response: {error: "There was an error."}
+    })
+    .visitUrl({url: "/settings/organization/groups/olis", identify: true})
+    .get(".side-panel .side-panel-content-header-label .form-element-inline-text")
+    .click();
 
-      cy.get(".side-panel").click();
-    });
+    cy.get(".side-panel").click();
 
-    it("should open [01p]", function () {
-      cy.get(".modal-header-title").should("contain", "An error has occurred");
-    });
+    cy.get(".modal-header-title").should("contain", "An error has occurred");
   });
 
-  context("opens when group delete error happens [01q]", function () {
-    beforeEach(function () {
-      cy.route({
-        method: "DELETE",
-        url: /api\/v1\/groups\/olis/,
-        status: 422,
-        response: {error: "There was an error."}
-      })
-        .visit("http://localhost:4200/#/settings/organization/groups/olis")
-        .get(".side-panel-header-actions-secondary span")
-        .click();
+  it("opens when user update error happens [02f]", function () {
+    cy.route({
+      method: "PATCH",
+      url: /api\/v1\/users\/quis/,
+      status: 422,
+      response: {error: "There was an error."}
+    })
+    .visit("http://localhost:4200/#/settings/organization/users/quis")
+    .get(".side-panel .side-panel-content-header-label .form-element-inline-text")
+    .click();
 
-      cy.get(".modal-container .button-danger").click();
-    });
+    cy.get(".side-panel").click();
 
-    it("should open [01r]", function () {
-      cy.get(".modal-header-title").should("contain", "An error has occurred");
-    });
+    cy.get(".modal-header-title").should("contain", "An error has occurred");
   });
 
-  context("opens when user update error happens [01s]", function () {
-    beforeEach(function () {
-      cy.route({
-        method: "PATCH",
-        url: /api\/v1\/users\/quis/,
-        status: 422,
-        response: {error: "There was an error."}
-      })
-        .visit("http://localhost:4200/#/settings/organization/users/quis")
-        .get(".side-panel .side-panel-content-header-label .form-element-inline-text")
-        .click();
+  it("opens when group user add error happens [02g]", function () {
+    cy.route({
+      method: "PUT",
+      url: /api\/v1\/groups\/olis\/users\/quis/,
+      status: 422,
+      response: {error: "There was an error."}
+    })
+    .visit("http://localhost:4200/#/settings/organization/groups/olis")
+    .get(".tabs .tab-item")
+    .contains("Members")
+    .click();
 
-      cy.get(".side-panel").click();
-    });
+    cy.get(".dropdown-toggle").click();
 
-    it("should open [01t]", function () {
-      cy.get(".modal-header-title").should("contain", "An error has occurred");
-    });
-  });
+    cy.get(".dropdown-menu-list .is-selectable")
+      .contains("藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe")
+      .click();
 
-  context("opens when user delete error happens [01u]", function () {
-    beforeEach(function () {
-      cy.route({
-        method: "DELETE",
-        url: /api\/v1\/users\/quis/,
-        status: 422,
-        response: {error: "There was an error."}
-      })
-        .visit("http://localhost:4200/#/settings/organization/users/quis")
-        .get(".side-panel-header-actions-secondary span")
-        .click();
-
-      cy.get(".modal-container .button-danger").click();
-    });
-
-    it("should open [01v]", function () {
-      cy.get(".modal-header-title").should("contain", "An error has occurred");
-    });
+    cy.get(".modal-header-title").should("contain", "An error has occurred");
   });
 });
