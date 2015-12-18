@@ -40,6 +40,20 @@ describe("LoginModal [01i]", function () {
       cy.wait(150);
       cy.hash().should("eq", "#/dashboard/");
     });
+
+    it("redirects after successful login [02j]", function () {
+      cy.visit(
+        "http://localhost:4200/?redirect=%2Ffoo%2Fbar#/login"
+      );
+      cy.get(".modal-container input[type='text']").type("kennyt");
+      cy.get(".modal-container input[type='password']").type("1234");
+
+      cy.get(".modal-footer .button").click();
+
+      cy.wait(500).location()
+      .its("href").should("eq", "http://localhost:4200/foo/bar");
+    });
+
   });
 
 });

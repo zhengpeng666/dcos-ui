@@ -1,3 +1,4 @@
+import qs from "query-string";
 import React from "react";
 
 import ACLAuthStore from "../../stores/ACLAuthStore";
@@ -34,6 +35,16 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
   onAuthStoreSuccess() {
     let router = this.context.router;
     let loginRedirectRoute = ACLAuthStore.get("loginRedirectRoute");
+
+    // See if we need to redirect the user to a service UI
+    if (global.location.search) {
+      let parsedSearch = qs.parse(global.location.search);
+      if (parsedSearch.redirect) {
+        window.location.href = parsedSearch.redirect;
+        return;
+      }
+    }
+
     if (loginRedirectRoute) {
       // Go to redirect route if it is present
       router.transitionTo(loginRedirectRoute);

@@ -40,10 +40,6 @@ var ACLAuthStore = Store.createStore({
     this.emit(EventTypes.ACL_AUTH_USER_LOGOUT);
   },
 
-  saveLoginRedirectRoute: function (loginRedirectRoute) {
-    this.set({loginRedirectRoute});
-  },
-
   getUser: function () {
     let userCode = getUserMetadata();
 
