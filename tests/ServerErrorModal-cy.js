@@ -29,26 +29,6 @@ describe("ServerErrorModal [01n]", function () {
     });
   });
 
-  context("opens when group delete error happens [01q]", function () {
-    beforeEach(function () {
-      cy.route({
-        method: "DELETE",
-        url: /api\/v1\/groups\/olis/,
-        status: 422,
-        response: {error: "There was an error."}
-      })
-        .visit("http://localhost:4200/#/settings/organization/groups/olis")
-        .get(".side-panel-header-actions-secondary span")
-        .click();
-
-      cy.get(".modal-container .button-danger").click();
-    });
-
-    it("should open [01r]", function () {
-      cy.get(".modal-header-title").should("contain", "An error has occurred");
-    });
-  });
-
   context("opens when user update error happens [01s]", function () {
     beforeEach(function () {
       cy.route({
@@ -69,22 +49,27 @@ describe("ServerErrorModal [01n]", function () {
     });
   });
 
-  context("opens when user delete error happens [01u]", function () {
+  context("opens when group user add error happens [06t]", function () {
     beforeEach(function () {
       cy.route({
-        method: "DELETE",
-        url: /api\/v1\/users\/quis/,
+        method: "PUT",
+        url: /api\/v1\/groups\/olis\/users\/quis/,
         status: 422,
         response: {error: "There was an error."}
       })
-        .visit("http://localhost:4200/#/settings/organization/users/quis")
-        .get(".side-panel-header-actions-secondary span")
+        .visit("http://localhost:4200/#/settings/organization/groups/olis")
+        .get(".tabs .tab-item")
+        .contains("Members")
         .click();
 
-      cy.get(".modal-container .button-danger").click();
+      cy.get(".dropdown-toggle").click();
+
+      cy.get(".dropdown-menu-list .is-selectable")
+        .contains("藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe")
+        .click();
     });
 
-    it("should open [01v]", function () {
+    it("should open [06u]", function () {
       cy.get(".modal-header-title").should("contain", "An error has occurred");
     });
   });
