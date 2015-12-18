@@ -41,7 +41,7 @@ describe("LoginModal [01i]", function () {
       cy.hash().should("eq", "#/dashboard/");
     });
 
-    it.only("redirects after successful login [02j]", function () {
+    it("redirects after successful login [02j]", function () {
       cy.visit(
         "http://localhost:4200/?redirect=%2Ffoo%2Fbar#/login"
       );
