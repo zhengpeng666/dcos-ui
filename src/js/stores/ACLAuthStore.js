@@ -3,6 +3,7 @@ import cookie from "cookie";
 import ACLAuthActions from "../events/ACLAuthActions";
 import ActionTypes from "../constants/ActionTypes";
 import ACLAuthConstants from "../constants/ACLAuthConstants";
+import ACLUserRoles from "../constants/ACLUserRoles";
 import AppDispatcher from "../events/AppDispatcher";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
@@ -27,6 +28,8 @@ var ACLAuthStore = Store.createStore({
 
   login: ACLAuthActions.login,
 
+  fetchRole: ACLAuthActions.fetchRole,
+
   isLoggedIn: function () {
     return !!getUserMetadata();
   },
@@ -48,9 +51,34 @@ var ACLAuthStore = Store.createStore({
     }
 
     try {
-      return JSON.parse(atob(userCode));
+      let user = JSON.parse(atob(userCode));
+      if (!this.get("role")) {
+        this.fetchRole(user.uid);
+      }
+
+      return user;
     } catch(err) {
       return null;
+    }
+  },
+
+  isAdmin() {
+    return this.get("role") === ACLUserRoles.admin;
+  },
+
+  processRoleSuccess() {
+    let role = this.get("role");
+    if (role !== ACLUserRoles.admin) {
+      this.set({role: ACLUserRoles.admin});
+      this.emit(EventTypes.ACL_AUTH_USER_ROLE_CHANGED);
+    }
+  },
+
+  processRoleError() {
+    let role = this.get("role");
+    if (role !== ACLUserRoles.default) {
+      this.set({role: ACLUserRoles.default});
+      this.emit(EventTypes.ACL_AUTH_USER_ROLE_CHANGED);
     }
   },
 
@@ -70,6 +98,14 @@ var ACLAuthStore = Store.createStore({
       // Get ACLs for resource
       case ActionTypes.REQUEST_ACL_LOGIN_ERROR:
         ACLAuthStore.emit(EventTypes.ACL_AUTH_USER_LOGIN_ERROR, action.data);
+        break;
+      // Get role of current user
+      case ActionTypes.REQUEST_ACL_ROLE_SUCCESS:
+        ACLAuthStore.processRoleSuccess();
+        break;
+      // Get role of current user
+      case ActionTypes.REQUEST_ACL_ROLE_ERROR:
+        ACLAuthStore.emit(EventTypes.ACL_AUTH_USER_ROLE_ERROR);
         break;
     }
 
