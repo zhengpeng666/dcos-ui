@@ -1,4 +1,5 @@
 import React from "react";
+
 import ACLAuthStore from "../../../stores/ACLAuthStore";
 
 /*
@@ -13,7 +14,7 @@ export default (ComposedComponent) => {
       if (!ACLAuthStore.isLoggedIn()) {
 
         // Store the route we came from
-        ACLAuthStore.saveLoginRedirectRoute(transition.path);
+        ACLAuthStore.set({loginRedirectRoute: transition.path});
 
         // Go to login page
         transition.redirect("/login");
