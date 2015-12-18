@@ -29,7 +29,8 @@ const ListenersDescription = {
       groupGrantSuccess: EventTypes.ACL_GROUP_GRANT_ACTION_CHANGE,
       groupGrantError: EventTypes.ACL_GROUP_GRANT_ACTION_ERROR,
       groupRevokeSuccess: EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE,
-      groupRevokeError: EventTypes.ACL_GROUP_REVOKE_ACTION_ERROR
+      groupRevokeError: EventTypes.ACL_GROUP_REVOKE_ACTION_ERROR,
+      roleChange: EventTypes.ACL_AUTH_USER_ROLE_CHANGED
 
     },
     unmountWhen: function () {
