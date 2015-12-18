@@ -73,7 +73,7 @@ describe("LoginModal", function () {
     });
   });
 
-  describe("#onAuthStoreSuccess", function () {
+  describe("#onAuthStoreRoleChange", function () {
     beforeEach(function () {
       this.instance.context = {
         router: {
@@ -83,29 +83,43 @@ describe("LoginModal", function () {
 
       this.nextRoute = null;
       this.originalGet = ACLAuthStore.get;
+      this.originalIsAdmin = ACLAuthStore.isAdmin;
       ACLAuthStore.get = function () {
         return this.nextRoute;
       }.bind(this);
+      ACLAuthStore.isAdmin = function () { return true; };
     });
 
     afterEach(function () {
       ACLAuthStore.get = this.originalGet;
+      ACLAuthStore.isAdmin = this.originalIsAdmin;
     });
 
     it("should enable the modal", function () {
-      this.instance.onAuthStoreSuccess();
+      this.instance.onAuthStoreRoleChange();
       expect(this.instance.state.disableLogin).toEqual(false);
     });
 
-    it("should transitionTo '/'", function () {
-      this.instance.onAuthStoreSuccess();
+    it("should transitionTo 'access-denied' if not admin", function () {
+      var prevIsAdmin = ACLAuthStore.isAdmin;
+      ACLAuthStore.isAdmin = function () { return false; };
+
+      this.instance.onAuthStoreRoleChange();
+      expect(this.instance.context.router.transitionTo)
+        .toHaveBeenCalledWith("/access-denied");
+
+      ACLAuthStore.isAdmin = prevIsAdmin;
+    });
+
+    it("should transitionTo '/' if admin", function () {
+      this.instance.onAuthStoreRoleChange();
       expect(this.instance.context.router.transitionTo)
         .toHaveBeenCalledWith("/");
     });
 
     it("should transitionTo the redirect route if it exists", function () {
       this.nextRoute = "services";
-      this.instance.onAuthStoreSuccess();
+      this.instance.onAuthStoreRoleChange();
       expect(this.instance.context.router.transitionTo)
         .toHaveBeenCalledWith("services");
     });
