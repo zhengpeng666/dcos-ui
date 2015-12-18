@@ -35,6 +35,10 @@ describe("UserDropup [028]", function () {
           .as("sidebarButton")
         .click()
         .get(".user-dropdown-menu.dropdown .dropdown-menu").as("modal");
+
+      cy
+        .get("@modal")
+        .get(".dropdown-menu-list li").as("list");
     });
 
     it("should show the user [02c]", function () {
@@ -46,10 +50,6 @@ describe("UserDropup [028]", function () {
 
     it("should list 4 menu items [02d]", function () {
       cy
-        .get("@modal")
-        .get(".dropdown-menu-list li").as("list");
-
-      cy
         .get("@list").eq(0)
         .should("contain", "Documentation")
         .get("@list").eq(1)
@@ -60,6 +60,12 @@ describe("UserDropup [028]", function () {
         .should("contain", "Sign Out");
     });
 
+    it("should be able to sign out", function () {
+      cy
+        .get("@list").eq(3)
+        .click();
+      cy.hash().should("eq", "#/login");
+    });
   });
 
 });

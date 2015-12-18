@@ -19,7 +19,8 @@ export default class ApplicationLoader extends
 
     this.store_listeners = [
       {name: "summary", events: ["success"]},
-      {name: "metadata", events: ["success"]}
+      {name: "metadata", events: ["success"]},
+      {name: "auth", events: ["logoutSuccess"]}
     ];
 
     METHODS_TO_BIND.forEach(function (method) {
@@ -64,6 +65,10 @@ export default class ApplicationLoader extends
     this.loadApplicationIfLoaded();
   }
 
+  onAuthStoreLogoutSuccess() {
+    this.context.router.transitionTo("login");
+  }
+
   loadApplicationIfLoaded() {
     let data = this.internalStorage_get();
     if (data.pluginsLoaded && data.metadataLoaded
@@ -85,4 +90,8 @@ export default class ApplicationLoader extends
 
 ApplicationLoader.propTypes = {
   onApplicationLoad: React.PropTypes.func.isRequired
+};
+
+ApplicationLoader.contextTypes = {
+  router: React.PropTypes.func
 };
