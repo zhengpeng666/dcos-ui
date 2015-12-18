@@ -85,7 +85,7 @@ describe("User Details Sidepanel [02k]", function () {
         method: "DELETE",
         url: /users\/quis/,
         status: 400,
-        response: {error: "There was an error."}
+        response: {description: "There was an error."}
       });
       cy.get("@headerUserDelete")
         .find(".side-panel-header-action")

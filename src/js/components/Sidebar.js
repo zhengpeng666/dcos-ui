@@ -184,7 +184,7 @@ var Sidebar = React.createClass({
       footer = <div className="icon-buttons">{buttonSet}</div>;
     }
 
-    return Plugins.applyFilter("sidebarFooter", footer, buttonSet);
+    return Plugins.applyFilter("sidebarFooter", footer, defaultButtonSet);
   },
 
   render: function () {

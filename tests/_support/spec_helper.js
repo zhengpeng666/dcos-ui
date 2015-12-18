@@ -63,5 +63,6 @@ Cypress.addParentCommand("visitUrl", function (options) {
   }
 
   var url = "http://localhost:4200/#" + options.url;
-  cy.visit(url, {onBeforeLoad: callback});
+  cy.visit(url, {onBeforeLoad: callback})
+  .wait(2000);
 });

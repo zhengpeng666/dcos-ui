@@ -1,6 +1,6 @@
-describe("UserDropup", function () {
+describe("UserDropup [028]", function () {
 
-  context("Sidebar button", function () {
+  context("Sidebar button [029]", function () {
 
     beforeEach(function () {
       cy
@@ -13,7 +13,7 @@ describe("UserDropup", function () {
         .get(".sidebar .user-dropdown.dropdown-toggle").as("sidebarButton");
     });
 
-    it("should show the user", function () {
+    it("should show the user [02a]", function () {
       cy
         .get("@sidebarButton")
         .get(".user-description")
@@ -21,7 +21,7 @@ describe("UserDropup", function () {
     });
   });
 
-  context("Modal", function () {
+  context("Modal [02b]", function () {
 
     beforeEach(function () {
       cy
@@ -31,19 +31,20 @@ describe("UserDropup", function () {
           plugins: "authentication-enabled"
         })
         .visitUrl({url: "/dashboard", logIn: true})
-        .get(".sidebar .user-dropdown.dropdown-toggle").as("sidebarButton")
+        .get(".sidebar .open .user-dropdown.dropdown-toggle")
+          .as("sidebarButton")
         .click()
         .get(".user-dropdown-menu.dropdown .dropdown-menu").as("modal");
     });
 
-    it("should show the user", function () {
+    it("should show the user [02c]", function () {
       cy
         .get("@modal")
         .get(".user-description")
         .should("contain", "Joe Doe");
     });
 
-    it("should list 4 menu items", function () {
+    it("should list 4 menu items [02d]", function () {
       cy
         .get("@modal")
         .get(".dropdown-menu-list li").as("list");
