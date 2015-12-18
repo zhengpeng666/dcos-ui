@@ -67,7 +67,7 @@ var ACLAuthStore = Store.createStore({
     return this.get("role") === ACLUserRoles.admin;
   },
 
-  makeAdmin() {
+  makeAdminRole() {
     let role = this.get("role");
     if (role !== ACLUserRoles.admin) {
       this.set({role: ACLUserRoles.admin});
@@ -75,12 +75,22 @@ var ACLAuthStore = Store.createStore({
     }
   },
 
-  resetRole() {
+  makeDefaultRole() {
     let role = this.get("role");
     if (role !== ACLUserRoles.default) {
       this.set({role: ACLUserRoles.default});
       this.emit(EventTypes.ACL_AUTH_USER_ROLE_CHANGED);
     }
+  },
+
+  resetRole() {
+    this.set({role: undefined});
+  },
+
+  processLoginSuccess() {
+    let user = this.getUser();
+    this.fetchRole(user.uid);
+    this.emit(EventTypes.ACL_AUTH_USER_LOGIN_CHANGED);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -94,7 +104,7 @@ var ACLAuthStore = Store.createStore({
     switch (action.type) {
       // Get ACLs for resource
       case ActionTypes.REQUEST_ACL_LOGIN_SUCCESS:
-        ACLAuthStore.emit(EventTypes.ACL_AUTH_USER_LOGIN_CHANGED);
+        ACLAuthStore.processLoginSuccess();
         break;
       // Get ACLs for resource
       case ActionTypes.REQUEST_ACL_LOGIN_ERROR:
@@ -102,11 +112,11 @@ var ACLAuthStore = Store.createStore({
         break;
       // Get role of current user
       case ActionTypes.REQUEST_ACL_ROLE_SUCCESS:
-        ACLAuthStore.makeAdmin();
+        ACLAuthStore.makeAdminRole();
         break;
       // Get role of current user
       case ActionTypes.REQUEST_ACL_ROLE_ERROR:
-        ACLAuthStore.resetRole();
+        ACLAuthStore.makeDefaultRole();
         break;
     }
 

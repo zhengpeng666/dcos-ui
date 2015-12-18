@@ -116,7 +116,7 @@ describe("ACLAuthStore", function () {
 
     it("should not request to fetch role after success", function () {
       ACLAuthStore.getUser();
-      ACLAuthStore.makeAdmin();
+      ACLAuthStore.makeAdminRole();
       ACLAuthStore.getUser();
       ACLAuthStore.getUser();
       ACLAuthStore.getUser();
@@ -126,7 +126,7 @@ describe("ACLAuthStore", function () {
 
     it("should not request to fetch role after error", function () {
       ACLAuthStore.getUser();
-      ACLAuthStore.resetRole();
+      ACLAuthStore.makeDefaultRole();
       ACLAuthStore.getUser();
       ACLAuthStore.getUser();
       ACLAuthStore.getUser();
@@ -139,7 +139,7 @@ describe("ACLAuthStore", function () {
   describe("#isAdmin", function () {
 
     afterEach(function () {
-      ACLAuthStore.set({role: undefined});
+      ACLAuthStore.resetRole();
     });
 
     it("should return false before processing role", function () {
@@ -147,13 +147,13 @@ describe("ACLAuthStore", function () {
     });
 
     it("should return true after success", function () {
-      ACLAuthStore.makeAdmin();
+      ACLAuthStore.makeAdminRole();
 
       expect(ACLAuthStore.isAdmin()).toEqual(true);
     });
 
     it("should return false after error", function () {
-      ACLAuthStore.resetRole();
+      ACLAuthStore.makeDefaultRole();
 
       expect(ACLAuthStore.isAdmin()).toEqual(false);
     });
