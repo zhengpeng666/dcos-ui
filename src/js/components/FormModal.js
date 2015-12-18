@@ -4,7 +4,9 @@ import React from "react";
 
 import Form from "./Form";
 
-const METHODS_TO_BIND = ["getTriggerSubmit", "handleTriggerSubmit"];
+const METHODS_TO_BIND = [
+  "getTriggerSubmit", "handleTriggerSubmit", "handleError"
+];
 
 export default class FormModal extends React.Component {
   constructor() {
@@ -27,6 +29,10 @@ export default class FormModal extends React.Component {
 
   handleNewButtonClick() {
     this.triggerSubmit();
+  }
+
+  handleError() {
+    this.forceUpdate();
   }
 
   getButtons() {
@@ -79,7 +85,8 @@ export default class FormModal extends React.Component {
         <Form
           definition={this.props.definition}
           triggerSubmit={this.getTriggerSubmit}
-          onSubmit={this.props.onSubmit} />
+          onSubmit={this.props.onSubmit}
+          onError={this.handleError} />
       </div>
     );
   }
