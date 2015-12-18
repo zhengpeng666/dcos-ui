@@ -30,6 +30,9 @@ Cypress.addParentCommand("configureCluster", function(configuration) {
   // The app won't load until plugins are loaded
   var pluginsFixture = configuration.plugins || "no-plugins";
   cy.route(/ui-config/, "fx:config/" + pluginsFixture + ".json");
+
+  // Metadata
+  cy.route(/metadata/, "fx:dcos/metadata");
 });
 
 Cypress.addParentCommand("visitUrl", function (options) {
