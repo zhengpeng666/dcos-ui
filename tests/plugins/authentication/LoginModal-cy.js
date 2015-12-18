@@ -11,7 +11,14 @@ describe("LoginModal [01i]", function () {
         status: 201,
         url: /api\/v1\/auth\/login/,
         delay: 100,
-        response: {name: "John Doe"}
+        response: {uid: "joe", description: "Joe Doe"}
+      })
+      .route({
+        method: "GET",
+        status: 200,
+        url: /api\/v1\/users\/joe/,
+        delay: 100,
+        response: {uid: "joe", description: "Joe Doe"}
       })
       .visitUrl({url: "/", logIn: false});
   });
@@ -27,17 +34,23 @@ describe("LoginModal [01i]", function () {
       cy.get(".modal-container input[type='text']").type("kennyt");
       cy.get(".modal-container input[type='password']").type("1234");
 
-      cy.get(".modal-footer .button").click();
     });
 
     it("disables the buttons while request is pending on submit [01l]", function () {
-      cy.get(".modal-footer .button.disabled").should(function (button) {
-        expect(button.length).to.equal(1);
-      });
+      cy
+        .get(".modal-footer .button")
+        .click()
+        .get(".modal-footer .button.disabled").should(function (button) {
+          expect(button.length).to.equal(1);
+        });
     });
 
-    it("routes to dashboard after successful login [01m]", function () {
-      cy.wait(150);
+    it("routes to dashboard after login with admin [01m]", function () {
+      cy
+        .get(".modal-footer .button")
+        .click()
+        .wait(150);
+
       cy.hash().should("eq", "#/dashboard/");
     });
 
@@ -54,6 +67,22 @@ describe("LoginModal [01i]", function () {
       .its("href").should("eq", "http://localhost:4200/foo/bar");
     });
 
+    it("routes to access-denied after login with non admin login", function () {
+      cy
+        .route({
+          method: "GET",
+          status: 400,
+          url: /api\/v1\/users\/joe/,
+          delay: 100,
+          response: {description: "Some error"}
+        })
+        .wait(150);
+
+      cy
+        .get(".modal-footer .button")
+        .click()
+        .hash().should("eq", "#/access-denied");
+    });
   });
 
 });
