@@ -105,7 +105,7 @@ describe("ACLAuthStore", function () {
 
     it("should get the user", function () {
       expect(ACLAuthStore.getUser())
-      .toEqual({uid: "joe", description: "Joe Doe"});
+        .toEqual({uid: "joe", description: "Joe Doe"});
     });
 
     it("should make a request to fetch role", function () {
