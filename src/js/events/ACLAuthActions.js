@@ -13,11 +13,11 @@ const ACLAuthActions = {
       url: `${Config.rootUrl}${Config.apiPrefix}/auth/login`,
       type: "POST",
       data: credentials,
-      success: function (response) {
+      success: function () {
         if (Config.environment === "testing") {
           global.document.cookie =
-            cookie.serialize(
-              ACLAuthConstants.userCookieKey, btoa(JSON.stringify(response))
+            cookie.serialize(ACLAuthConstants.userCookieKey,
+              "eyJ1aWQiOiJqb2UiLCJkZXNjcmlwdGlvbiI6IkpvZSBEb2UifQ=="
             );
         }
 

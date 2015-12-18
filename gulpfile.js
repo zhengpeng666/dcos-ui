@@ -18,6 +18,8 @@ var webpack = require("webpack");
 var packageInfo = require("./package");
 
 var development = process.env.NODE_ENV === "development";
+var testing = process.env.NODE_ENV === "testing";
+var devBuild = development || testing;
 
 var dirs = {
   src: "src",
@@ -40,7 +42,7 @@ var files = {
 
 var webpackDevtool = "source-map";
 var webpackWatch = false;
-if (development || process.env.NODE_ENV === "testing") {
+if (devBuild) {
   // eval-source-map is the same thing as source-map,
   // except with caching. Don't use in production.
   webpackDevtool = "eval-source-map";
@@ -124,7 +126,7 @@ gulp.task("html", function () {
 
 gulp.task("less", function () {
   return gulp.src(dirs.styles + "/" + files.mainLess + ".less")
-    .pipe(gulpif(development, sourcemaps.init()))
+    .pipe(gulpif(devBuild, sourcemaps.init()))
     .pipe(less({
       paths: [dirs.styles], // @import paths
       plugins: [colorLighten]
@@ -134,9 +136,9 @@ gulp.task("less", function () {
         this.emit('end');
     })
     .pipe(autoprefixer())
-    .pipe(gulpif(development, sourcemaps.write(".")))
+    .pipe(gulpif(devBuild, sourcemaps.write(".")))
     .pipe(gulp.dest(dirs.dist + "/" + dirs.stylesDist))
-    .pipe(gulpif(development, browserSync.stream()));
+    .pipe(gulpif(devBuild, browserSync.stream()));
 });
 
 gulp.task("minify-css", ["less"], function () {

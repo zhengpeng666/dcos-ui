@@ -44,13 +44,18 @@ const AuthenticationPlugin = {
     return false;
   },
 
-  sidebarFooter: function (value) {
+  sidebarFooter: function (value, defaultButtonSet) {
     if (this.isEnabled() !== true) {
       return value;
     }
 
+    let buttonSet = defaultButtonSet;
+    if (value && value.props.children) {
+      buttonSet = value.props.children;
+    }
+
     return (
-      <UserDropup items={value.props.children} />
+      <UserDropup items={buttonSet} />
     );
   },
 

@@ -32,7 +32,7 @@ Cypress.addParentCommand("configureCluster", function(configuration) {
   cy.route(/ui-config/, "fx:config/" + pluginsFixture + ".json");
 
   // Metadata
-  cy.route(/metadata/, "fx:dcos/metadata");
+  cy.route(/metadata$/, "fx:dcos/metadata");
 });
 
 Cypress.addParentCommand("visitUrl", function (options) {
