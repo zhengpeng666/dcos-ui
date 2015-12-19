@@ -169,6 +169,10 @@ var RequestUtil = {
   },
 
   parseResponseBody: function (xhr) {
+    if (xhr.getResponseHeader("content-type").indexOf("text/html") >= 0) {
+      return {};
+    }
+
     let {responseJSON, responseText} = xhr;
     if (responseJSON) {
       return responseJSON;
