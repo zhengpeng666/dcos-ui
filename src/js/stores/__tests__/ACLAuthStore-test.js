@@ -2,7 +2,9 @@ jest.dontMock("../ACLAuthStore");
 jest.dontMock("../../config/Config");
 jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../events/ACLAuthActions");
+jest.dontMock("../../constants/ACLUserRoles");
 jest.dontMock("../../constants/EventTypes");
+jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
@@ -15,7 +17,7 @@ var RequestUtil = require("../../utils/RequestUtil");
 const USER_COOKIE_KEY = "dcos-acs-info-cookie";
 
 global.atob = global.atob || function () {
-  return JSON.stringify({description: "John Doe"});
+  return JSON.stringify({uid: "joe", description: "Joe Doe"});
 };
 
 describe("ACLAuthStore", function () {
@@ -85,13 +87,77 @@ describe("ACLAuthStore", function () {
   });
 
   describe("#getUser", function () {
-    cookie.parse = function () {
-      var cookieObj = {};
-      // {description: "John Doe"}
-      cookieObj[USER_COOKIE_KEY] = "eyJkZXNjcmlwdGlvbiI6IkpvaG4gRG9lIn0=";
-      return cookieObj;
-    };
+    beforeEach(function () {
+      cookie.parse = function () {
+        var cookieObj = {};
+        // {uid: "joe", description: "Joe Doe"}
+        cookieObj[USER_COOKIE_KEY] =
+          "eyJ1aWQiOiJqb2UiLCJkZXNjcmlwdGlvbiI6IkpvZSBEb2UifQ==";
+        return cookieObj;
+      };
 
-    expect(ACLAuthStore.getUser()).toEqual({description: "John Doe"});
+      ACLAuthStore.fetchRole = jasmine.createSpy();
+    });
+
+    afterEach(function () {
+      ACLAuthStore.set({role: undefined});
+    });
+
+    it("should get the user", function () {
+      expect(ACLAuthStore.getUser())
+        .toEqual({uid: "joe", description: "Joe Doe"});
+    });
+
+    it("should make a request to fetch role", function () {
+      ACLAuthStore.getUser();
+
+      expect(ACLAuthStore.fetchRole).toHaveBeenCalledWith("joe");
+    });
+
+    it("should not request to fetch role after success", function () {
+      ACLAuthStore.getUser();
+      ACLAuthStore.makeAdminRole();
+      ACLAuthStore.getUser();
+      ACLAuthStore.getUser();
+      ACLAuthStore.getUser();
+
+      expect(ACLAuthStore.fetchRole.callCount).toEqual(1);
+    });
+
+    it("should not request to fetch role after error", function () {
+      ACLAuthStore.getUser();
+      ACLAuthStore.makeDefaultRole();
+      ACLAuthStore.getUser();
+      ACLAuthStore.getUser();
+      ACLAuthStore.getUser();
+
+      expect(ACLAuthStore.fetchRole.callCount).toEqual(1);
+    });
+
   });
+
+  describe("#isAdmin", function () {
+
+    afterEach(function () {
+      ACLAuthStore.resetRole();
+    });
+
+    it("should return false before processing role", function () {
+      expect(ACLAuthStore.isAdmin()).toEqual(false);
+    });
+
+    it("should return true after success", function () {
+      ACLAuthStore.makeAdminRole();
+
+      expect(ACLAuthStore.isAdmin()).toEqual(true);
+    });
+
+    it("should return false after error", function () {
+      ACLAuthStore.makeDefaultRole();
+
+      expect(ACLAuthStore.isAdmin()).toEqual(false);
+    });
+
+  });
+
 });

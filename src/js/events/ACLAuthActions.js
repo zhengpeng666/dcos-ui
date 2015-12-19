@@ -8,6 +8,23 @@ import RequestUtil from "../utils/RequestUtil";
 
 const ACLAuthActions = {
 
+  fetchRole: function (uid) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.apiPrefix}/users/${uid}`,
+      success: function () {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_ROLE_SUCCESS
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_ROLE_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr)
+        });
+      }
+    });
+  },
+
   login: function (credentials) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.apiPrefix}/auth/login`,

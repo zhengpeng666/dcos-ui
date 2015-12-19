@@ -10,6 +10,45 @@ var RequestUtil = require("../../utils/RequestUtil");
 
 describe("ACLAuthActions", function () {
 
+  describe("#fetchRole", function () {
+
+    beforeEach(function () {
+      spyOn(RequestUtil, "json");
+      ACLAuthActions.fetchRole("foo");
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+    });
+
+    it("calls #json from the RequestUtil", function () {
+      expect(RequestUtil.json).toHaveBeenCalled();
+    });
+
+    it("fetches data from the correct URL", function () {
+      expect(this.configuration.url)
+        .toEqual("/api/v1/users/foo");
+    });
+
+    it("dispatches the correct action when successful", function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_ROLE_SUCCESS);
+      });
+
+      this.configuration.success();
+    });
+
+    it("dispatches the correct action when unsuccessful", function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(ActionTypes.REQUEST_ACL_ROLE_ERROR);
+      });
+
+      this.configuration.error({});
+    });
+
+  });
+
   describe("#login", function () {
 
     beforeEach(function () {

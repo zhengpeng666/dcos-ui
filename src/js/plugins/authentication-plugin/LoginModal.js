@@ -23,7 +23,7 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
     this.store_listeners = [
       {
         name: "auth",
-        events: ["success", "error"]
+        events: ["roleChange", "success", "error"]
       }
     ];
 
@@ -32,20 +32,13 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
     });
   }
 
-  onAuthStoreSuccess() {
+  onAuthStoreRoleChange() {
     let router = this.context.router;
     let loginRedirectRoute = ACLAuthStore.get("loginRedirectRoute");
 
-    // See if we need to redirect the user to a service UI
-    if (global.location.search) {
-      let parsedSearch = qs.parse(global.location.search);
-      if (parsedSearch.redirect) {
-        window.location.href = parsedSearch.redirect;
-        return;
-      }
-    }
-
-    if (loginRedirectRoute) {
+    if (!ACLAuthStore.isAdmin()) {
+      router.transitionTo("/access-denied");
+    } else if (loginRedirectRoute) {
       // Go to redirect route if it is present
       router.transitionTo(loginRedirectRoute);
     } else {
@@ -54,6 +47,17 @@ export default class LoginModal extends Util.mixin(StoreMixin) {
     }
 
     this.setState({disableLogin: false});
+  }
+
+  onAuthStoreSuccess() {
+    // See if we need to redirect the user to a service UI
+    if (global.location.search) {
+      let parsedSearch = qs.parse(global.location.search);
+      if (parsedSearch.redirect) {
+        window.location.href = parsedSearch.redirect;
+        return;
+      }
+    }
   }
 
   onAuthStoreError(errorMsg) {
