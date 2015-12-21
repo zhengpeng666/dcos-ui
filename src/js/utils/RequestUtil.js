@@ -169,7 +169,8 @@ var RequestUtil = {
   },
 
   parseResponseBody: function (xhr) {
-    if (xhr.getResponseHeader("content-type").indexOf("text/html") >= 0) {
+    if (typeof xhr.getResponseHeader === "function" &&
+      xhr.getResponseHeader("content-type").indexOf("text/html") >= 0) {
       return {};
     }
 
