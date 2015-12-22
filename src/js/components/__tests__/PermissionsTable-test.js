@@ -140,14 +140,19 @@ describe("PermissionsTable", function () {
       ACLStore.revokeGroupActionToResource = jest.genMockFunction();
     });
 
-    it("calls revokeUser if ownerType is user", function () {
-      this.instance.props.ownerType = "user";
-      this.instance.handleButtonConfirm();
+    it("calls revokeUser if itemType is user", function () {
+      var instance = TestUtils.renderIntoDocument(
+        <PermissionsTable
+          permissions={(new User(userDetailsFixture)).getUniquePermissions()}
+          itemType="user"
+          itemID={userDetailsFixture.uid} />
+      );
+      instance.handleButtonConfirm();
 
       expect(ACLStore.revokeUserActionToResource.mock.calls.length).toEqual(1);
     });
 
-    it("calls revokeGroup if ownerType is group", function () {
+    it("calls revokeGroup if itemType is group", function () {
       var instance = TestUtils.renderIntoDocument(
         <PermissionsTable
           permissions={(new User(userDetailsFixture)).getUniquePermissions()}
