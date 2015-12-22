@@ -30,9 +30,9 @@ describe("UserDropup", function () {
     };
 
     let dropdownItems = [
-      {foo: "bar", key: "foo", type: "a", props: mockProps},
-      {bar: "baz", key: "bar", type: "a", props: mockProps},
-      {baz: "qux", key: "baz", type: "a", props: mockProps}
+      <div foo="bar" key="foo" type="a" props={mockProps} />,
+      <div bar="baz" key="bar" type="a" props={mockProps} />,
+      <div baz="qux" key="baz" type="a" props={mockProps} />
     ];
 
     this.instance = TestUtils.renderIntoDocument(
@@ -51,8 +51,8 @@ describe("UserDropup", function () {
     it("returns the array it was passed with a default item at the beginning",
       function () {
       let dropdownMenu = this.instance.getDropdownMenu([
-        {foo: "bar"},
-        {bar: "baz"}
+        <div foo="bar" />,
+        <div bar="baz" />
       ]);
 
       expect(dropdownMenu.length).toEqual(3);
@@ -82,7 +82,7 @@ describe("UserDropup", function () {
 
   describe("#getUserMenuItems", function () {
 
-    it("should return all of the items passed, in addtion to a signout button",
+    it.only("should return all of the items passed, in addtion to a signout button",
       function () {
       let menuItems = this.instance.getUserMenuItems();
       let signoutButton = menuItems[menuItems.length - 1];
