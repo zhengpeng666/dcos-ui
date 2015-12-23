@@ -82,7 +82,7 @@ describe("UserDropup", function () {
 
   describe("#getUserMenuItems", function () {
 
-    it.only("should return all of the items passed, in addtion to a signout button",
+    it("should return all of the items passed, in addtion to a signout button",
       function () {
       let menuItems = this.instance.getUserMenuItems();
       let signoutButton = menuItems[menuItems.length - 1];
