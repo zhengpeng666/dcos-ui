@@ -169,6 +169,8 @@ var RequestUtil = {
   },
 
   parseResponseBody: function (xhr) {
+    // Handle html document returned with 404 gracefully,
+    // to not break functionality
     if (typeof xhr.getResponseHeader === "function" &&
       xhr.getResponseHeader("content-type").indexOf("text/html") >= 0) {
       return {};
