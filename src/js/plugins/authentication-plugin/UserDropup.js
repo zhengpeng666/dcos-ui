@@ -72,20 +72,20 @@ export default class UserDropup extends React.Component {
       }
     ];
 
-    return defaultItem.concat(menuItems.map(function (item, index) {
+    return defaultItem.concat(menuItems.map(function (item) {
       return {
         className: "clickable",
         html: item,
-        selectedHtml: item,
-        id: index
+        id: item.key,
+        selectedHtml: item
       };
     }));
   }
 
   getModalMenu(menuItems) {
-    return menuItems.map((item, index) => {
+    return menuItems.map(function (item) {
       return (
-        <li className="clickable" key={index}>
+        <li className="clickable" key={item.key}>
           {item}
         </li>
       );
