@@ -19,7 +19,7 @@
     "node": "0.8.x || 0.10.x"
   },
   "dependencies": {
-    "browser-info": "0.0.2",
+    "browser-info": "0.0.3",
     "canvas-ui": "^0.2.0",
     "classnames": "^2.2.1",
     "cookie": "^0.2.3",

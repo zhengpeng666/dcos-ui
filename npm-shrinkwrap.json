@@ -895,8 +895,8 @@
       }
     },
     "browser-info": {
-      "version": "0.0.2",
-      "resolved": "https://registry.npmjs.org/browser-info/-/browser-info-0.0.2.tgz"
+      "version": "0.0.3",
+      "resolved": "https://registry.npmjs.org/browser-info/-/browser-info-0.0.3.tgz"
     },
     "browser-sync": {
       "version": "2.7.13",
