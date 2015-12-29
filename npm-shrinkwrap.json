@@ -2239,8 +2239,8 @@
       "resolved": "https://registry.npmjs.org/cookie/-/cookie-0.2.3.tgz"
     },
     "d3": {
-      "version": "3.5.5",
-      "resolved": "http://registry.npmjs.org/d3/-/d3-3.5.5.tgz"
+      "version": "3.5.12",
+      "resolved": "https://registry.npmjs.org/d3/-/d3-3.5.12.tgz"
     },
     "envify": {
       "version": "3.4.0",
