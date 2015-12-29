@@ -7,9 +7,7 @@ const MesosLogActions = {
 
   fetchLog: function (slaveID, path, offset, length) {
     RequestUtil.json({
-      url: `${Config.rootUrl}/slave/${slaveID}/files/read.json?path=${path}&offset=${offset}&length=${length}&jsonp=?`,
-      jsonp: "callback",
-      dataType: "jsonp",
+      url: `${Config.rootUrl}/slave/${slaveID}/files/read.json?path=${path}&offset=${offset}&length=${length}`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_MESOS_LOG_SUCCESS,
