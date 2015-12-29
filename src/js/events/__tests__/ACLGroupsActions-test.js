@@ -1,11 +1,13 @@
 jest.dontMock("../ACLGroupsActions");
 jest.dontMock("../AppDispatcher");
+jest.dontMock("../../config/Config");
 jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../../utils/RequestUtil");
 
 var ACLGroupsActions = require("../ACLGroupsActions");
 var ActionTypes = require("../../constants/ActionTypes");
 var AppDispatcher = require("../AppDispatcher");
+var Config = require("../../config/Config");
 var RequestUtil = require("../../utils/RequestUtil");
 
 describe("ACLGroupsActions", function () {
@@ -48,7 +50,7 @@ describe("ACLGroupsActions", function () {
     it("fetches data from the correct URL", function () {
       ACLGroupsActions.fetch();
       expect(this.configuration.url)
-        .toEqual("/api/v1/groups");
+        .toEqual(Config.apiPrefix + "/groups");
     });
 
   });
@@ -270,7 +272,7 @@ describe("ACLGroupsActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual("/api/v1/groups/foo");
+      expect(this.configuration.url).toEqual(Config.apiPrefix + "/groups/foo");
     });
 
     it("uses PUT for the request method", function () {
@@ -344,7 +346,7 @@ describe("ACLGroupsActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual("/api/v1/groups/foo");
+      expect(this.configuration.url).toEqual(Config.apiPrefix + "/groups/foo");
     });
 
     it("uses PATCH for the request method", function () {
@@ -418,7 +420,7 @@ describe("ACLGroupsActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual("/api/v1/groups/foo");
+      expect(this.configuration.url).toEqual(Config.apiPrefix + "/groups/foo");
     });
 
     it("uses DELETE for the request method", function () {

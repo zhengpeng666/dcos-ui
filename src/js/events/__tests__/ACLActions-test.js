@@ -18,7 +18,7 @@ describe("ACLActions", function () {
     RequestUtil.json = function (configuration) {
       this.configuration = configuration;
     }.bind(this);
-    Config.rootUrl = "http://mesosserver";
+    Config.rootUrl = "";
     Config.useFixtures = false;
   });
 
@@ -68,7 +68,7 @@ describe("ACLActions", function () {
       spyOn(RequestUtil, "json");
       ACLActions.fetchACLsForResource("bar");
       expect(RequestUtil.json.mostRecentCall.args[0].url)
-        .toEqual("http://mesosserver/api/v1/acls?type=bar");
+        .toEqual(Config.apiPrefix + "/acls?type=bar");
     });
   });
 
@@ -112,7 +112,7 @@ describe("ACLActions", function () {
       ACLActions.grantUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual("http://mesosserver/api/v1/acls/bar/users/foo/access");
+        .toEqual(Config.apiPrefix + "/acls/bar/users/foo/access");
     });
 
     it("sends a PUT request", function () {
@@ -164,7 +164,7 @@ describe("ACLActions", function () {
       ACLActions.revokeUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual("http://mesosserver/api/v1/acls/bar/users/foo/access");
+        .toEqual(Config.apiPrefix + "/acls/bar/users/foo/access");
     });
 
     it("sends a DELETE request", function () {
@@ -216,7 +216,7 @@ describe("ACLActions", function () {
       ACLActions.grantGroupActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual("http://mesosserver/api/v1/acls/bar/groups/foo/access");
+        .toEqual(Config.apiPrefix + "/acls/bar/groups/foo/access");
     });
 
     it("sends a PUT request", function () {
@@ -268,7 +268,7 @@ describe("ACLActions", function () {
       ACLActions.revokeGroupActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual("http://mesosserver/api/v1/acls/bar/groups/foo/access");
+        .toEqual(Config.apiPrefix + "/acls/bar/groups/foo/access");
     });
 
     it("sends a DELETE request", function () {

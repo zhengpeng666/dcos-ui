@@ -24,7 +24,7 @@ describe("ACLAuthActions", function () {
 
     it("fetches data from the correct URL", function () {
       expect(this.configuration.url)
-        .toEqual("/api/v1/users/foo");
+        .toEqual("/acs/api/v1/users/foo");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -63,7 +63,7 @@ describe("ACLAuthActions", function () {
 
     it("fetches data from the correct URL", function () {
       expect(this.configuration.url)
-        .toEqual("/api/v1/auth/login");
+        .toEqual("/acs/api/v1/auth/login");
     });
 
     it("dispatches the correct action when successful", function () {

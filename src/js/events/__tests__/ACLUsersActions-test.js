@@ -1,11 +1,13 @@
 jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../AppDispatcher");
-jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../ACLUsersActions");
+jest.dontMock("../../config/Config");
+jest.dontMock("../../utils/RequestUtil");
 
 var ActionTypes = require("../../constants/ActionTypes");
 var ACLUsersActions = require("../ACLUsersActions");
 var AppDispatcher = require("../AppDispatcher");
+var Config = require("../../config/Config");
 var RequestUtil = require("../../utils/RequestUtil");
 
 describe("ACLUsersActions", function () {
@@ -43,7 +45,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual("/api/v1/users");
+      expect(this.configuration.url).toEqual(Config.apiPrefix + "/users");
     });
 
   });
@@ -264,7 +266,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual("/api/v1/users/foo");
+      expect(this.configuration.url).toEqual(Config.apiPrefix + "/users/foo");
     });
 
     it("uses PUT for the request method", function () {
@@ -338,7 +340,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual("/api/v1/users/foo");
+      expect(this.configuration.url).toEqual(Config.apiPrefix + "/users/foo");
     });
 
     it("uses PATCH for the request method", function () {
@@ -412,7 +414,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual("/api/v1/users/foo");
+      expect(this.configuration.url).toEqual(Config.apiPrefix + "/users/foo");
     });
 
     it("uses DELETE for the request method", function () {
