@@ -9,7 +9,7 @@ const ACLUsersActions = {
 
   fetch: function () {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/users`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/users`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USERS_SUCCESS,
@@ -27,7 +27,7 @@ const ACLUsersActions = {
 
   fetchUser: function (userID) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_SUCCESS,
@@ -46,7 +46,7 @@ const ACLUsersActions = {
 
   fetchUserGroups: function (userID) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}/groups`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}/groups`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS,
@@ -66,7 +66,7 @@ const ACLUsersActions = {
 
   fetchUserPermissions: function (userID) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}/permissions`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}/permissions`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS,
@@ -93,7 +93,7 @@ const ACLUsersActions = {
     }
 
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
       type: "PUT",
       data,
       success: function () {
@@ -114,7 +114,7 @@ const ACLUsersActions = {
 
   updateUser: function (userID, patchData) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
       type: "PATCH",
       data: patchData,
       success: function () {
@@ -135,7 +135,7 @@ const ACLUsersActions = {
 
   deleteUser: function (userID) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/users/${userID}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
       type: "DELETE",
       success: function () {
         AppDispatcher.handleServerAction({

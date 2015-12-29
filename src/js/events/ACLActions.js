@@ -7,7 +7,7 @@ const ACLActions = {
 
   fetchACLsForResource: function (resourceType) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/acls?type=${resourceType}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls?type=${resourceType}`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
@@ -27,7 +27,7 @@ const ACLActions = {
 
   grantUserActionToResource: function (userID, action, resourceID) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/users/${userID}/${action}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/users/${userID}/${action}`,
       type: "PUT",
       success: function () {
         AppDispatcher.handleServerAction({
@@ -47,7 +47,7 @@ const ACLActions = {
 
   revokeUserActionToResource: function (userID, action, resourceID) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/users/${userID}/${action}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/users/${userID}/${action}`,
       type: "DELETE",
       success: function () {
         AppDispatcher.handleServerAction({
@@ -67,7 +67,7 @@ const ACLActions = {
 
   grantGroupActionToResource: function (groupID, action, resourceID) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
       type: "PUT",
       success: function () {
         AppDispatcher.handleServerAction({
@@ -87,7 +87,7 @@ const ACLActions = {
 
   revokeGroupActionToResource: function (groupID, action, resourceID) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
       type: "DELETE",
       success: function () {
         AppDispatcher.handleServerAction({
