@@ -64,7 +64,10 @@ describe("UserDropup", function () {
   describe("#getModalMenu", function () {
 
     beforeEach(function () {
-      this.modalMenu = this.instance.getModalMenu([{foo: "bar"}, {bar: "baz"}]);
+      this.modalMenu = this.instance.getModalMenu([
+        <div key="foo" />,
+        <div key="bar" />
+      ]);
     });
 
     it("should return an array of the same length it received", function () {
