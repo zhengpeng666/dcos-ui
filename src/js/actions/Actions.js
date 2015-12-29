@@ -1,5 +1,5 @@
 var _ = require("underscore");
-var md5 = require("MD5");
+var md5 = require("md5");
 var RouterLocation = require("react-router").HashLocation;
 
 var Config = require("../config/Config");
