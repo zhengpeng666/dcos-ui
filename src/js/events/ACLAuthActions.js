@@ -10,7 +10,7 @@ const ACLAuthActions = {
 
   fetchRole: function (uid) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/users/${uid}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${uid}`,
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_ROLE_SUCCESS
@@ -27,7 +27,7 @@ const ACLAuthActions = {
 
   login: function (credentials) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.apiPrefix}/auth/login`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/auth/login`,
       type: "POST",
       data: credentials,
       success: function () {

@@ -1,11 +1,13 @@
 jest.dontMock("../ACLAuthActions");
 jest.dontMock("../AppDispatcher");
+jest.dontMock("../../config/Config");
 jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../../utils/RequestUtil");
 
 var ACLAuthActions = require("../ACLAuthActions");
 var ActionTypes = require("../../constants/ActionTypes");
 var AppDispatcher = require("../AppDispatcher");
+var Config = require("../../config/Config");
 var RequestUtil = require("../../utils/RequestUtil");
 
 describe("ACLAuthActions", function () {
@@ -24,7 +26,7 @@ describe("ACLAuthActions", function () {
 
     it("fetches data from the correct URL", function () {
       expect(this.configuration.url)
-        .toEqual("/acs/api/v1/users/foo");
+        .toEqual(Config.acsAPIPrefix + "/users/foo");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -63,7 +65,7 @@ describe("ACLAuthActions", function () {
 
     it("fetches data from the correct URL", function () {
       expect(this.configuration.url)
-        .toEqual("/acs/api/v1/auth/login");
+        .toEqual(Config.acsAPIPrefix + "/auth/login");
     });
 
     it("dispatches the correct action when successful", function () {

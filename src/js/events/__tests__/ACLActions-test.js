@@ -68,7 +68,7 @@ describe("ACLActions", function () {
       spyOn(RequestUtil, "json");
       ACLActions.fetchACLsForResource("bar");
       expect(RequestUtil.json.mostRecentCall.args[0].url)
-        .toEqual(Config.apiPrefix + "/acls?type=bar");
+        .toEqual(Config.acsAPIPrefix + "/acls?type=bar");
     });
   });
 
@@ -112,7 +112,7 @@ describe("ACLActions", function () {
       ACLActions.grantUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual(Config.apiPrefix + "/acls/bar/users/foo/access");
+        .toEqual(Config.acsAPIPrefix + "/acls/bar/users/foo/access");
     });
 
     it("sends a PUT request", function () {
@@ -164,7 +164,7 @@ describe("ACLActions", function () {
       ACLActions.revokeUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual(Config.apiPrefix + "/acls/bar/users/foo/access");
+        .toEqual(Config.acsAPIPrefix + "/acls/bar/users/foo/access");
     });
 
     it("sends a DELETE request", function () {
@@ -216,7 +216,7 @@ describe("ACLActions", function () {
       ACLActions.grantGroupActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual(Config.apiPrefix + "/acls/bar/groups/foo/access");
+        .toEqual(Config.acsAPIPrefix + "/acls/bar/groups/foo/access");
     });
 
     it("sends a PUT request", function () {
@@ -268,7 +268,7 @@ describe("ACLActions", function () {
       ACLActions.revokeGroupActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual(Config.apiPrefix + "/acls/bar/groups/foo/access");
+        .toEqual(Config.acsAPIPrefix + "/acls/bar/groups/foo/access");
     });
 
     it("sends a DELETE request", function () {

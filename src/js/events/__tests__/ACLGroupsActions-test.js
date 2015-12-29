@@ -50,7 +50,7 @@ describe("ACLGroupsActions", function () {
     it("fetches data from the correct URL", function () {
       ACLGroupsActions.fetch();
       expect(this.configuration.url)
-        .toEqual(Config.apiPrefix + "/groups");
+        .toEqual(Config.acsAPIPrefix + "/groups");
     });
 
   });
@@ -272,7 +272,7 @@ describe("ACLGroupsActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.apiPrefix + "/groups/foo");
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/groups/foo");
     });
 
     it("uses PUT for the request method", function () {
@@ -346,7 +346,7 @@ describe("ACLGroupsActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.apiPrefix + "/groups/foo");
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/groups/foo");
     });
 
     it("uses PATCH for the request method", function () {
@@ -420,7 +420,7 @@ describe("ACLGroupsActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.apiPrefix + "/groups/foo");
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/groups/foo");
     });
 
     it("uses DELETE for the request method", function () {

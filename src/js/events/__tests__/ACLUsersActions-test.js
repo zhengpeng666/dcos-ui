@@ -45,7 +45,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.apiPrefix + "/users");
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/users");
     });
 
   });
@@ -266,7 +266,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.apiPrefix + "/users/foo");
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/users/foo");
     });
 
     it("uses PUT for the request method", function () {
@@ -340,7 +340,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.apiPrefix + "/users/foo");
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/users/foo");
     });
 
     it("uses PATCH for the request method", function () {
@@ -414,7 +414,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.apiPrefix + "/users/foo");
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/users/foo");
     });
 
     it("uses DELETE for the request method", function () {
