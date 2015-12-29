@@ -108,7 +108,7 @@
       "classnames",
       "events",
       "structs",
-      "MD5",
+      "md5",
       "browser-info",
       "d3",
       "flux",
