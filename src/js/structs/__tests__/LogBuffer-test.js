@@ -32,11 +32,11 @@ describe("LogBuffer", function () {
     });
 
     it("uses default start option if nothing is provided", function () {
-      expect(this.logBuffer.options.start).toEqual(-1);
+      expect(this.logBuffer.getStart()).toEqual(-1);
     });
 
     it("uses default maxFileSize option if nothing is provided", function () {
-      expect(this.logBuffer.options.maxFileSize).toEqual(50000);
+      expect(this.logBuffer.configuration.maxFileSize).toEqual(50000);
     });
 
     it("uses default end option if nothing is provided", function () {
@@ -51,12 +51,12 @@ describe("LogBuffer", function () {
 
     it("uses default start option if nothing is provided", function () {
       this.logBuffer = new LogBuffer({start: 0});
-      expect(this.logBuffer.options.start).toEqual(0);
+      expect(this.logBuffer.getStart()).toEqual(0);
     });
 
     it("uses default maxFileSize option if nothing is provided", function () {
       this.logBuffer = new LogBuffer({maxFileSize: 2000});
-      expect(this.logBuffer.options.maxFileSize).toEqual(2000);
+      expect(this.logBuffer.configuration.maxFileSize).toEqual(2000);
     });
 
   });
@@ -83,7 +83,7 @@ describe("LogBuffer", function () {
     it("should start log at first newline when beginning log", function () {
       this.logBuffer.add(new Item({data: "foo\nbar\nquis", offset: 100}));
       // 100 + "foo\nbar\nquis".indexOf("\n") + 1
-      expect(this.logBuffer.options.start).toEqual(100 + 3 + 1);
+      expect(this.logBuffer.getStart()).toEqual(100 + 3 + 1);
     });
 
     it("should start log at end - maxFileSize when beginning log", function () {
@@ -94,7 +94,7 @@ describe("LogBuffer", function () {
       }));
       // 100 + "foo\nbar\nquisfoofoofoofoofoofoofoofoofoofoofoofoo".length -
       // "foo".length
-      expect(logBuffer.options.start).toEqual(logBuffer.getEnd() - 3);
+      expect(logBuffer.getStart()).toEqual(logBuffer.getEnd() - 3);
     });
 
     it("should add length to get new 'end' during logging", function () {
@@ -106,7 +106,7 @@ describe("LogBuffer", function () {
     it("should start log at first offset when file < maxFileSize", function () {
       this.logBuffer.add(new Item({data: "foo", offset: 100}));
       this.logBuffer.add(new Item({data: "\nbar\nquis", offset: 103}));
-      expect(this.logBuffer.options.start).toEqual(100);
+      expect(this.logBuffer.getStart()).toEqual(100);
     });
 
     it("should start log at end - maxFileSize during logging", function () {
@@ -118,7 +118,7 @@ describe("LogBuffer", function () {
       }));
       // 103 + "\nbar\nquisfoofoofoofoofoofoofoofoofoofoofoofoo".length -
       // "foo".length
-      expect(logBuffer.options.start).toEqual(logBuffer.getEnd() - 3);
+      expect(logBuffer.getStart()).toEqual(logBuffer.getEnd() - 3);
     });
 
     it("should cut the first item when not within maxFileSize", function () {
@@ -156,7 +156,7 @@ describe("LogBuffer", function () {
 
     it("should set start to 0 if offset < PAGE_SIZE", function () {
       this.logBuffer.initialize(new Item({data: "foo", offset: 100}));
-      expect(this.logBuffer.options.start).toEqual(0);
+      expect(this.logBuffer.getStart()).toEqual(0);
     });
 
     it("should set end to offset - PAGE_SIZE when > PAGE_SIZE", function () {
@@ -166,7 +166,7 @@ describe("LogBuffer", function () {
 
     it("should set start to offset - PAGE_SIZE when > PAGE_SIZE", function () {
       this.logBuffer.initialize(new Item({data: "foo", offset: PAGE_SIZE + 100}));
-      expect(this.logBuffer.options.start).toEqual(100);
+      expect(this.logBuffer.getStart()).toEqual(100);
     });
 
   });
