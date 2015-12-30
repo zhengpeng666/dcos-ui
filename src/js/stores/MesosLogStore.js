@@ -45,7 +45,7 @@ const MesosLogStore = Store.createStore({
 
     if (!logFile.getInitialized()) {
       logFile.initialize(entry);
-      MesosLogActions.fetchLog(slaveID, path, logFile.end, MAX_FILE_SIZE);
+      MesosLogActions.fetchLog(slaveID, path, logFile.getEnd(), MAX_FILE_SIZE);
       return;
     }
 
