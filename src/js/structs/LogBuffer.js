@@ -7,11 +7,11 @@ const PAGE_SIZE = 8 * 4096; // 8 "pages"
 const DEFAULT_OPTIONS = {
   end: -1,
   initialized: false,
-  maxFileSize: 5000,
+  maxFileSize: 50000,
   start: -1
 };
 
-export default class LogFile extends List {
+export default class LogBuffer extends List {
   constructor(options = {}) {
     super(...arguments);
 
