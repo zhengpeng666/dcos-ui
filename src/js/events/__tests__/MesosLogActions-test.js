@@ -34,7 +34,18 @@ describe("MesosLogActions", function () {
         expect(action.type).toEqual(ActionTypes.REQUEST_MESOS_LOG_SUCCESS);
       });
 
-      this.configuration.success();
+      this.configuration.success({data: "", offset: 0});
+    });
+    it("dispatches the correct information when successful", function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.data).toEqual({data: "", offset: 0});
+        expect(action.path).toEqual("bar");
+        expect(action.slaveID).toEqual("foo");
+      });
+
+      this.configuration.success({data: "", offset: 0});
     });
 
     it("dispatches the correct action when unsuccessful", function () {
@@ -42,6 +53,17 @@ describe("MesosLogActions", function () {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_MESOS_LOG_ERROR);
+      });
+
+      this.configuration.error({});
+    });
+
+    it("dispatches the correct information when unsuccessful", function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.path).toEqual("bar");
+        expect(action.slaveID).toEqual("foo");
       });
 
       this.configuration.error({});
