@@ -11,6 +11,69 @@ const DEFAULT_OPTIONS = {
   start: -1
 };
 
+/**
+ * Truncates the log from beginning of file, to be within
+ * boundaries given by maxFileSize
+ * It will also truncate the data of the 'oldest item to stay in log',
+ * to the first newline index
+ */
+function truncate() {
+  let end = this.getEnd();
+  let maxFileSize = getMaxFileSize.call(this);
+
+  if (end - this.getStart() < maxFileSize) {
+    // We are within size, so we don't have to truncate anything
+    return;
+  }
+
+  let items = this.getItems();
+  let index = items.length - 1;
+  let size = 0;
+  for (; index >= 0; index--) {
+    let item = items[index];
+    let itemData = item.get("data");
+    size += itemData.length;
+
+    if (size > maxFileSize) {
+      let sizeDiff = size - maxFileSize;
+      // Truncate to fit within maxFileSize
+      itemData = itemData.substring(sizeDiff);
+      // Truncate to first newline
+      let newLineIndex = itemData.indexOf("\n") + 1;
+      itemData = itemData.substring(newLineIndex);
+      // Update size accordingly
+      size -= sizeDiff + newLineIndex;
+      items[index] = new Item({
+        data: itemData,
+        offset: item.get("offset")
+      });
+      break;
+    }
+  }
+
+  // Update start to be the new end minus our file window
+  setStart.call(this, end - size);
+  if (index > 0) {
+    this.list = this.list.slice(index);
+  }
+}
+
+function getMaxFileSize() {
+  return this.options.maxFileSize;
+}
+
+function setEnd(end) {
+  this.options.end = end;
+}
+
+function setInitialized(initialized) {
+  this.options.initialized = initialized;
+}
+
+function setStart(start) {
+  this.options.start = start;
+}
+
 export default class LogBuffer extends List {
   constructor(options = {}) {
     super(...arguments);
@@ -30,10 +93,11 @@ export default class LogBuffer extends List {
     });
   }
 
+  // Public API
   initialize(entry) {
-    let end = this.options.end; // pointing to end of currently stored log
+    let end = this.getEnd(); // pointing to end of currently stored log
     let offset = entry.offset; // The point we are reading from in the log file
-    let start = this.options.start; // pointing to start of currently stored log
+    let start = this.getStart(); // pointing to start of currently stored log
 
     // Get the last page of data.
     if (offset > PAGE_SIZE) {
@@ -42,9 +106,9 @@ export default class LogBuffer extends List {
       start = end = 0;
     }
 
-    this.options.initialized = true;
-    this.options.start = start;
-    this.options.end = end;
+    setInitialized.call(this, true);
+    setStart.call(this, start);
+    setEnd.call(this, end);
   }
 
   add(entry) {
@@ -65,62 +129,13 @@ export default class LogBuffer extends List {
     }
 
     // Update end to be offset + new addition to the log
-    end = offset + data.length;
+    setEnd.call(this, offset + data.length);
+    setStart.call(this, start);
 
-    // Update options and add log entry
-    this.options.end = end;
-    this.options.start = start;
-
+    // Aadd log entry
     super.add(new Item({data, offset}));
     // Truncate log file to make sure we are within maxFileSize
-    this.truncate();
-  }
-
-  /**
-   * Truncates the log from beginning of file, to be within
-   * boundaries given by maxFileSize
-   * It will also truncate the data of the 'oldest item to stay in log',
-   * to the first newline index
-   */
-  truncate() {
-    let end = this.getEnd();
-    let maxFileSize = this.getMaxFileSize();
-
-    if (end - this.getStart() < maxFileSize) {
-      // We are within size, so we don't have to truncate anything
-      return;
-    }
-
-    let items = this.getItems();
-    let index = items.length - 1;
-    let size = 0;
-    for (; index >= 0; index--) {
-      let item = items[index];
-      let itemData = item.get("data");
-      size += itemData.length;
-
-      if (size > maxFileSize) {
-        let sizeDiff = size - maxFileSize;
-        // Truncate to fit within maxFileSize
-        itemData = itemData.substring(sizeDiff);
-        // Truncate to first newline
-        let newLineIndex = itemData.indexOf("\n") + 1;
-        itemData = itemData.substring(newLineIndex);
-        // Update size accordingly
-        size -= sizeDiff + newLineIndex;
-        items[index] = new Item({
-          data: itemData,
-          offset: item.get("offset")
-        });
-        break;
-      }
-    }
-
-    // Update start to be the new end minus our file window
-    this.options.start = end - size;
-    if (index > 0) {
-      this.list = this.list.slice(index);
-    }
+    truncate.call(this);
   }
 
   getEnd() {
@@ -131,10 +146,6 @@ export default class LogBuffer extends List {
     return this.getItems().map(function (item) {
       return item.get("data");
     }).join("");
-  }
-
-  getMaxFileSize() {
-    return this.options.maxFileSize;
   }
 
   getStart() {

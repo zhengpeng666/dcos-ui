@@ -121,10 +121,6 @@ describe("LogBuffer", function () {
       expect(logBuffer.options.start).toEqual(logBuffer.getEnd() - 3);
     });
 
-  });
-
-  describe("#truncate", function () {
-
     it("should cut the first item when not within maxFileSize", function () {
       let logBuffer = new LogBuffer({maxFileSize: 10});
       logBuffer.add(new Item({data: "foo", offset: 100}));
