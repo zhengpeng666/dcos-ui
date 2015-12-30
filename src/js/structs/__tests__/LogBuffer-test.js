@@ -28,7 +28,7 @@ describe("LogBuffer", function () {
     });
 
     it("uses default initialized option if nothing is provided", function () {
-      expect(this.logBuffer.getInitialized()).toEqual(false);
+      expect(this.logBuffer.isInitialized()).toEqual(false);
     });
 
     it("uses default start option if nothing is provided", function () {
@@ -36,7 +36,7 @@ describe("LogBuffer", function () {
     });
 
     it("uses default maxFileSize option if nothing is provided", function () {
-      expect(this.logBuffer.options.maxFileSize).toEqual(5000);
+      expect(this.logBuffer.options.maxFileSize).toEqual(50000);
     });
 
     it("uses default end option if nothing is provided", function () {
@@ -46,7 +46,7 @@ describe("LogBuffer", function () {
 
     it("uses default initialized option if nothing is provided", function () {
       this.logBuffer = new LogBuffer({initialized: true});
-      expect(this.logBuffer.getInitialized()).toEqual(true);
+      expect(this.logBuffer.isInitialized()).toEqual(true);
     });
 
     it("uses default start option if nothing is provided", function () {
