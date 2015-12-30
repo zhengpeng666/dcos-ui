@@ -133,16 +133,16 @@ export default class LogBuffer extends List {
     }).join("");
   }
 
-  getInitialized() {
-    return this.options.initialized;
-  }
-
   getMaxFileSize() {
     return this.options.maxFileSize;
   }
 
   getStart() {
     return this.options.start;
+  }
+
+  isInitialized() {
+    return this.options.initialized;
   }
 
 }
