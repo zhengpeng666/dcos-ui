@@ -7,18 +7,17 @@ const PAGE_SIZE = 8 * 4096; // 8 "pages"
 const DEFAULT_OPTIONS = {
   end: -1,
   initialized: false,
-  start: -1,
-  maxFileSize: 5000
+  maxFileSize: 5000,
+  start: -1
 };
 
 export default class LogFile extends List {
   constructor(options = {}) {
     super(...arguments);
 
-    this.options = _.extend(
-      {},
-      DEFAULT_OPTIONS,
-      _.pick(options, ...Object.keys(DEFAULT_OPTIONS))
+    this.options = _.defaults(
+      _.pick(options, ...Object.keys(DEFAULT_OPTIONS)),
+      DEFAULT_OPTIONS
     );
 
     // Replace list items instances of Item.
@@ -29,6 +28,23 @@ export default class LogFile extends List {
         return new Item(item);
       }
     });
+  }
+
+  initialize(entry) {
+    let end = this.options.end; // pointing to end of visible log
+    let offset = entry.offset; // The point we are reading from in the log file
+    let start = this.options.start; // pointing to start of visible log
+
+    // Get the last page of data.
+    if (offset > PAGE_SIZE) {
+      start = end = offset - PAGE_SIZE;
+    } else {
+      start = end = 0;
+    }
+
+    this.options.initialized = true;
+    this.options.start = start;
+    this.options.end = end;
   }
 
   add(entry) {
@@ -105,23 +121,6 @@ export default class LogFile extends List {
     if (index > 0) {
       this.list = this.list.slice(index);
     }
-  }
-
-  initialize(entry) {
-    let end = this.options.end; // pointing to end of visible log
-    let offset = entry.offset; // The point we are reading from in the log file
-    let start = this.options.start; // pointing to start of visible log
-
-    // Get the last page of data.
-    if (offset > PAGE_SIZE) {
-      start = end = offset - PAGE_SIZE;
-    } else {
-      start = end = 0;
-    }
-
-    this.options.initialized = true;
-    this.options.start = start;
-    this.options.end = end;
   }
 
   unInitialize() {
