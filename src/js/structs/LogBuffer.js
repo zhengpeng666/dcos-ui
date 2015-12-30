@@ -59,26 +59,26 @@ function truncate() {
 }
 
 function getMaxFileSize() {
-  return this.options.maxFileSize;
+  return this.configuration.maxFileSize;
 }
 
 function setEnd(end) {
-  this.options.end = end;
+  this.configuration.end = end;
 }
 
 function setInitialized(initialized) {
-  this.options.initialized = initialized;
+  this.configuration.initialized = initialized;
 }
 
 function setStart(start) {
-  this.options.start = start;
+  this.configuration.start = start;
 }
 
 export default class LogBuffer extends List {
   constructor(options = {}) {
     super(...arguments);
 
-    this.options = _.defaults(
+    this.configuration = _.defaults(
       _.pick(options, ...Object.keys(DEFAULT_OPTIONS)),
       DEFAULT_OPTIONS
     );
@@ -139,7 +139,7 @@ export default class LogBuffer extends List {
   }
 
   getEnd() {
-    return this.options.end;
+    return this.configuration.end;
   }
 
   getFullLog() {
@@ -149,11 +149,11 @@ export default class LogBuffer extends List {
   }
 
   getStart() {
-    return this.options.start;
+    return this.configuration.start;
   }
 
   isInitialized() {
-    return this.options.initialized;
+    return this.configuration.initialized;
   }
 
 }
