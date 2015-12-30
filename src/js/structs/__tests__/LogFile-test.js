@@ -63,18 +63,15 @@ describe("LogFile", function () {
 
   describe("#add", function () {
 
-    beforeEach(function () {
+    it("should call its super function", function () {
       this.originalAdd = List.prototype.add;
       List.prototype.add = jasmine.createSpy();
-    });
 
-    afterEach(function () {
-      List.prototype.add = this.originalAdd;
-    });
-
-    it("should call its super function", function () {
       this.logFile.add(new Item({data: "foo", offset: 100}));
       expect(List.prototype.add).toHaveBeenCalled();
+
+      // Reset add to original
+      List.prototype.add = this.originalAdd;
     });
 
     it("should add length to get new 'end' when beginning log", function () {
@@ -92,11 +89,12 @@ describe("LogFile", function () {
     it("should start log at end - maxFileSize when beginning log", function () {
       let logFile = new LogFile({maxFileSize: 10});
       logFile.add(new Item({
-        data: "foo\nbar\nquisfoofoofoofoofoofoofoofoofoofoofoofoo",
+        data: "foo\nbarquisfoofoofoofoofoofoofoofoofoofoofoo\nfoo",
         offset: 100
       }));
-      // 100 + "foo\nbar\nquisfoofoofoofoofoofoofoofoofoofoofoofoo".length - 10
-      expect(logFile.options.start).toEqual(logFile.getEnd() - 10);
+      // 100 + "foo\nbar\nquisfoofoofoofoofoofoofoofoofoofoofoofoo".length -
+      // "foo".length
+      expect(logFile.options.start).toEqual(logFile.getEnd() - 3);
     });
 
     it("should add length to get new 'end' during logging", function () {
@@ -113,13 +111,42 @@ describe("LogFile", function () {
 
     it("should start log at end - maxFileSize during logging", function () {
       let logFile = new LogFile({maxFileSize: 10});
-      this.logFile.add(new Item({data: "foo", offset: 100}));
+      logFile.add(new Item({data: "foo", offset: 100}));
       logFile.add(new Item({
-        data: "\nbar\nquisfoofoofoofoofoofoofoofoofoofoofoofoo",
+        data: "\nbarquisfoofoofoofoofoofoofoofoofoofoofoo\nfoo",
         offset: 103
       }));
-      // 103 + "\nbar\nquisfoofoofoofoofoofoofoofoofoofoofoofoo".length - 10
-      expect(logFile.options.start).toEqual(logFile.getEnd() - 10);
+      // 103 + "\nbar\nquisfoofoofoofoofoofoofoofoofoofoofoofoo".length -
+      // "foo".length
+      expect(logFile.options.start).toEqual(logFile.getEnd() - 3);
+    });
+
+  });
+
+  describe("#truncate", function () {
+
+    it("should cut the first item when not within maxFileSize", function () {
+      let logFile = new LogFile({maxFileSize: 10});
+      logFile.add(new Item({data: "foo", offset: 100}));
+      logFile.add(new Item({data: "foo", offset: 103}));
+      logFile.add(new Item({
+        data: "\nbarquisfoofoofoofoofoofoofoofoofoofoofoo\nfoo",
+        offset: 106
+      }));
+
+      expect(logFile.getItems().length).toEqual(1);
+    });
+
+    it("should keep all items when within maxFileSize", function () {
+      let logFile = new LogFile({maxFileSize: 200});
+      logFile.add(new Item({data: "foo", offset: 100}));
+      logFile.add(new Item({data: "foo", offset: 103}));
+      logFile.add(new Item({
+        data: "\nbarquisfoofoofoofoofoofoofoofoofoofoofoo\nfoo",
+        offset: 106
+      }));
+
+      expect(logFile.getItems().length).toEqual(3);
     });
 
   });
