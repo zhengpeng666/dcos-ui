@@ -3,7 +3,7 @@ jest.dontMock("../../config/Config");
 jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../events/MesosLogActions");
 jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../structs/LogFile");
+jest.dontMock("../../structs/LogBuffer");
 jest.dontMock("../../structs/Item");
 jest.dontMock("../../structs/List");
 jest.dontMock("../../utils/RequestUtil");
@@ -15,7 +15,7 @@ var ActionTypes = require("../../constants/ActionTypes");
 var AppDispatcher = require("../../events/AppDispatcher");
 var Config = require("../../config/Config");
 var EventTypes = require("../../constants/EventTypes");
-var LogFile = require("../../structs/LogFile");
+var LogBuffer = require("../../structs/LogBuffer");
 var RequestUtil = require("../../utils/RequestUtil");
 
 describe("MesosLogStore", function () {
@@ -32,19 +32,19 @@ describe("MesosLogStore", function () {
 
   describe("#startTailing", function () {
 
-    it("should return an instance of LogFile", function () {
-      var logFile = MesosLogStore.get("/bar");
-      expect(logFile instanceof LogFile).toBeTruthy();
+    it("should return an instance of LogBuffer", function () {
+      var logBuffer = MesosLogStore.get("/bar");
+      expect(logBuffer instanceof LogBuffer).toBeTruthy();
     });
 
   });
 
   describe("#stopTailing", function () {
 
-    it("should return an instance of LogFile", function () {
+    it("should return an instance of LogBuffer", function () {
       MesosLogStore.stopTailing("/bar");
-      var logFile = MesosLogStore.get("/bar");
-      expect(logFile).toEqual(undefined);
+      var logBuffer = MesosLogStore.get("/bar");
+      expect(logBuffer).toEqual(undefined);
     });
 
   });
@@ -57,16 +57,16 @@ describe("MesosLogStore", function () {
       // Two next processes will be stored
       MesosLogStore.processLogEntry("foo", "/bar", {data: "foo", offset: 100});
       MesosLogStore.processLogEntry("foo", "/bar", {data: "bar", offset: 103});
-      this.logFile = MesosLogStore.get("/bar");
+      this.logBuffer = MesosLogStore.get("/bar");
     });
 
     it("should return all of the log items it was given", function () {
-      let items = this.logFile.getItems();
+      let items = this.logBuffer.getItems();
       expect(items.length).toEqual(2);
     });
 
     it("should return the full log of items it was given", function () {
-      expect(this.logFile.getFullLog()).toEqual("foobar");
+      expect(this.logBuffer.getFullLog()).toEqual("foobar");
     });
 
     it("should call the fetch log 4 times", function (done) {
@@ -81,24 +81,24 @@ describe("MesosLogStore", function () {
   describe("#processLogError", function () {
 
     beforeEach(function () {
-      // First item will be used to initialize
-      MesosLogStore.processLogEntry("foo", "/bar", {data: "", offset: 100});
-      this.logFile = MesosLogStore.get("/bar");
+      this.logBuffer = MesosLogStore.get("/bar");
     });
 
-    it("should be initialized before error", function () {
-      expect(this.logFile.getInitialized()).toEqual(true);
+    it("should be initialized after initialize and before error", function () {
+      // First item will be used to initialize
+      MesosLogStore.processLogEntry("foo", "/bar", {data: "", offset: 100});
+      expect(this.logBuffer.isInitialized()).toEqual(true);
     });
 
     it("should not be initialized after error", function () {
       MesosLogStore.processLogError("foo", "/bar");
-      expect(this.logFile.getInitialized()).toEqual(false);
+      expect(this.logBuffer.isInitialized()).toEqual(false);
     });
 
     it("should try to restart the tailing after error", function (done) {
       MesosLogStore.processLogError("foo", "/bar");
       setTimeout(function () {
-        expect(RequestUtil.json.callCount).toEqual(3);
+        expect(RequestUtil.json.callCount).toEqual(2);
         done();
       }, Config.tailRefresh);
     });
