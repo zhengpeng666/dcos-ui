@@ -31,9 +31,9 @@ export default class LogFile extends List {
   }
 
   initialize(entry) {
-    let end = this.options.end; // pointing to end of visible log
+    let end = this.options.end; // pointing to end of currently stored log
     let offset = entry.offset; // The point we are reading from in the log file
-    let start = this.options.start; // pointing to start of visible log
+    let start = this.options.start; // pointing to start of currently stored log
 
     // Get the last page of data.
     if (offset > PAGE_SIZE) {
