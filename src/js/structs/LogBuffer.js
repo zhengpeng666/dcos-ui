@@ -123,10 +123,6 @@ export default class LogBuffer extends List {
     }
   }
 
-  unInitialize() {
-    this.options.initialized = false;
-  }
-
   getEnd() {
     return this.options.end;
   }
