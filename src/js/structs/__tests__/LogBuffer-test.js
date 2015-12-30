@@ -76,12 +76,14 @@ describe("LogBuffer", function () {
 
     it("should add length to get new 'end' when beginning log", function () {
       this.logBuffer.add(new Item({data: "foo\nbar\nquis", offset: 100}));
+      // Explanation of what is going on in the calculation:
       // 100 + "foo\nbar\nquis".indexOf("\n") + 1 + "bar\nquis".length
-      expect(this.logBuffer.getEnd()).toEqual(100 + "foo\nbar\nquis".length);
+      expect(this.logBuffer.getEnd()).toEqual(100 + 3 + 1 + 8);
     });
 
     it("should start log at first newline when beginning log", function () {
       this.logBuffer.add(new Item({data: "foo\nbar\nquis", offset: 100}));
+      // Explanation of what is going on in the calculation:
       // 100 + "foo\nbar\nquis".indexOf("\n") + 1
       expect(this.logBuffer.getStart()).toEqual(100 + 3 + 1);
     });
@@ -92,6 +94,7 @@ describe("LogBuffer", function () {
         data: "foo\nbarquisfoofoofoofoofoofoofoofoofoofoofoo\nfoo",
         offset: 100
       }));
+      // Explanation of what is going on in the calculation:
       // 100 + "foo\nbar\nquisfoofoofoofoofoofoofoofoofoofoofoofoo".length -
       // "foo".length
       expect(logBuffer.getStart()).toEqual(logBuffer.getEnd() - 3);
@@ -116,6 +119,7 @@ describe("LogBuffer", function () {
         data: "\nbarquisfoofoofoofoofoofoofoofoofoofoofoo\nfoo",
         offset: 103
       }));
+      // Explanation of what is going on in the calculation:
       // 103 + "\nbar\nquisfoofoofoofoofoofoofoofoofoofoofoofoo".length -
       // "foo".length
       expect(logBuffer.getStart()).toEqual(logBuffer.getEnd() - 3);
@@ -160,12 +164,16 @@ describe("LogBuffer", function () {
     });
 
     it("should set end to offset - PAGE_SIZE when > PAGE_SIZE", function () {
-      this.logBuffer.initialize(new Item({data: "foo", offset: PAGE_SIZE + 100}));
+      this.logBuffer.initialize(
+        new Item({data: "foo", offset: PAGE_SIZE + 100})
+      );
       expect(this.logBuffer.getEnd()).toEqual(100);
     });
 
     it("should set start to offset - PAGE_SIZE when > PAGE_SIZE", function () {
-      this.logBuffer.initialize(new Item({data: "foo", offset: PAGE_SIZE + 100}));
+      this.logBuffer.initialize(
+        new Item({data: "foo", offset: PAGE_SIZE + 100})
+      );
       expect(this.logBuffer.getStart()).toEqual(100);
     });
 
