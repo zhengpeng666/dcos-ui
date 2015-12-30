@@ -7,7 +7,7 @@ let Item = require("../Item");
 let List = require("../List");
 let LogBuffer = require("../LogBuffer");
 
-const PAGE_SIZE = 8 * 4096; // 8 "pages"
+const PAGE_SIZE = 8 * 4096; // 32kb of data or 8 "pages"
 
 describe("LogBuffer", function () {
 

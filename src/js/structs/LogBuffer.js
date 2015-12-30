@@ -3,7 +3,7 @@ import _ from "underscore";
 import List from "./List";
 import Item from "./Item";
 
-const PAGE_SIZE = 8 * 4096; // 8 "pages"
+const PAGE_SIZE = 8 * 4096;  // 32kb of data or 8 "pages"
 const DEFAULT_OPTIONS = {
   end: -1,
   initialized: false,
