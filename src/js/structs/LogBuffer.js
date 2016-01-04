@@ -69,7 +69,7 @@ export default class LogBuffer extends List {
     this.configuration.end = offset + data.length;
     this.configuration.start = start;
 
-    // Aadd log entry
+    // Add log entry
     super.add(new Item({data, offset}));
     // Truncate log file to make sure we are within maxFileSize
     this.truncate();
