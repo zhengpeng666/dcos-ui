@@ -11,69 +11,6 @@ const DEFAULT_OPTIONS = {
   start: -1
 };
 
-/**
- * Truncates the log from beginning of file, to be within
- * boundaries given by maxFileSize
- * It will also truncate the data of the 'oldest item to stay in log',
- * to the first newline index
- */
-function truncate() {
-  let end = this.getEnd();
-  let maxFileSize = getMaxFileSize.call(this);
-
-  if (end - this.getStart() < maxFileSize) {
-    // We are within size, so we don't have to truncate anything
-    return;
-  }
-
-  let items = this.getItems();
-  let index = items.length - 1;
-  let size = 0;
-  for (; index >= 0; index--) {
-    let item = items[index];
-    let itemData = item.get("data");
-    size += itemData.length;
-
-    if (size > maxFileSize) {
-      let sizeDiff = size - maxFileSize;
-      // Truncate to fit within maxFileSize
-      itemData = itemData.substring(sizeDiff);
-      // Truncate to first newline
-      let newLineIndex = itemData.indexOf("\n") + 1;
-      itemData = itemData.substring(newLineIndex);
-      // Update size accordingly
-      size -= sizeDiff + newLineIndex;
-      items[index] = new Item({
-        data: itemData,
-        offset: item.get("offset")
-      });
-      break;
-    }
-  }
-
-  // Update start to be the new end minus our file window
-  setStart.call(this, end - size);
-  if (index > 0) {
-    this.list = this.list.slice(index);
-  }
-}
-
-function getMaxFileSize() {
-  return this.configuration.maxFileSize;
-}
-
-function setEnd(end) {
-  this.configuration.end = end;
-}
-
-function setInitialized(initialized) {
-  this.configuration.initialized = initialized;
-}
-
-function setStart(start) {
-  this.configuration.start = start;
-}
-
 export default class LogBuffer extends List {
   constructor(options = {}) {
     super(...arguments);
@@ -106,9 +43,9 @@ export default class LogBuffer extends List {
       start = end = 0;
     }
 
-    setInitialized.call(this, true);
-    setStart.call(this, start);
-    setEnd.call(this, end);
+    this.setInitialized(true);
+    this.setStart(start);
+    this.setEnd(end);
   }
 
   add(entry) {
@@ -129,13 +66,17 @@ export default class LogBuffer extends List {
     }
 
     // Update end to be offset + new addition to the log
-    setEnd.call(this, offset + data.length);
-    setStart.call(this, start);
+    this.setEnd(offset + data.length);
+    this.setStart(start);
 
     // Aadd log entry
     super.add(new Item({data, offset}));
     // Truncate log file to make sure we are within maxFileSize
-    truncate.call(this);
+    this.truncate();
+  }
+
+  getMaxFileSize() {
+    return this.configuration.maxFileSize;
   }
 
   getEnd() {
@@ -154,6 +95,65 @@ export default class LogBuffer extends List {
 
   isInitialized() {
     return this.configuration.initialized;
+  }
+
+  setEnd(end) {
+    this.configuration.end = end;
+  }
+
+  setInitialized(initialized) {
+    this.configuration.initialized = initialized;
+  }
+
+  setStart(start) {
+    this.configuration.start = start;
+  }
+
+  /**
+   * Truncates the log from beginning of file, to be within
+   * boundaries given by maxFileSize
+   * It will also truncate the data of the 'oldest item to stay in log',
+   * to the first newline index
+   */
+  truncate() {
+    let end = this.getEnd();
+    let maxFileSize = this.getMaxFileSize();
+
+    if (end - this.getStart() < maxFileSize) {
+      // We are within size, so we don't have to truncate anything
+      return;
+    }
+
+    let items = this.getItems();
+    let index = items.length - 1;
+    let size = 0;
+    for (; index >= 0; index--) {
+      let item = items[index];
+      let itemData = item.get("data");
+      size += itemData.length;
+
+      if (size > maxFileSize) {
+        let sizeDiff = size - maxFileSize;
+        // Truncate to fit within maxFileSize
+        itemData = itemData.substring(sizeDiff);
+        // Truncate to first newline
+        let newLineIndex = itemData.indexOf("\n") + 1;
+        itemData = itemData.substring(newLineIndex);
+        // Update size accordingly
+        size -= sizeDiff + newLineIndex;
+        items[index] = new Item({
+          data: itemData,
+          offset: item.get("offset")
+        });
+        break;
+      }
+    }
+
+    // Update start to be the new end minus our file window
+    this.setStart(end - size);
+    if (index > 0) {
+      this.list = this.list.slice(index);
+    }
   }
 
 }
