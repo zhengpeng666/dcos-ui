@@ -43,9 +43,9 @@ export default class LogBuffer extends List {
       start = end = 0;
     }
 
-    this.setInitialized(true);
-    this.setStart(start);
-    this.setEnd(end);
+    this.configuration.initialized = true;
+    this.configuration.start = start;
+    this.configuration.end = end;
   }
 
   add(entry) {
@@ -66,17 +66,13 @@ export default class LogBuffer extends List {
     }
 
     // Update end to be offset + new addition to the log
-    this.setEnd(offset + data.length);
-    this.setStart(start);
+    this.configuration.end = offset + data.length;
+    this.configuration.start = start;
 
     // Aadd log entry
     super.add(new Item({data, offset}));
     // Truncate log file to make sure we are within maxFileSize
     this.truncate();
-  }
-
-  getMaxFileSize() {
-    return this.configuration.maxFileSize;
   }
 
   getEnd() {
@@ -97,18 +93,6 @@ export default class LogBuffer extends List {
     return this.configuration.initialized;
   }
 
-  setEnd(end) {
-    this.configuration.end = end;
-  }
-
-  setInitialized(initialized) {
-    this.configuration.initialized = initialized;
-  }
-
-  setStart(start) {
-    this.configuration.start = start;
-  }
-
   /**
    * Truncates the log from beginning of file, to be within
    * boundaries given by maxFileSize
@@ -117,7 +101,7 @@ export default class LogBuffer extends List {
    */
   truncate() {
     let end = this.getEnd();
-    let maxFileSize = this.getMaxFileSize();
+    let maxFileSize = this.configuration.maxFileSize;
 
     if (end - this.getStart() < maxFileSize) {
       // We are within size, so we don't have to truncate anything
@@ -150,7 +134,7 @@ export default class LogBuffer extends List {
     }
 
     // Update start to be the new end minus our file window
-    this.setStart(end - size);
+    this.configuration.start = end - size;
     if (index > 0) {
       this.list = this.list.slice(index);
     }
