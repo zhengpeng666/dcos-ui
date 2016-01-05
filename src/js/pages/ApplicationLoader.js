@@ -1,3 +1,4 @@
+import mixin from "reactjs-mixin";
 import React from "react";
 
 import AnimatedLogo from "../components/AnimatedLogo";
@@ -7,12 +8,11 @@ import MesosSummaryStore from "../stores/MesosSummaryStore";
 import MetadataStore from "../stores/MetadataStore";
 import Plugins from "../plugins/Plugins";
 import StoreMixin from "../mixins/StoreMixin";
-import Util from "../utils/Util";
 
 const METHODS_TO_BIND = ["onPluginsLoaded"];
 
 export default class ApplicationLoader extends
-  Util.mixin(StoreMixin, InternalStorageMixin) {
+  mixin(StoreMixin, InternalStorageMixin) {
 
   constructor() {
     super();

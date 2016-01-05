@@ -10,13 +10,14 @@ import ResourceTypes from "../constants/ResourceTypes";
 import TabsMixin from "../mixins/TabsMixin";
 import StoreMixin from "../mixins/StoreMixin";
 import Units from "../utils/Units";
-import Util from "../utils/Util";
+
+import mixin from "reactjs-mixin";
 
 // number to fit design of width vs. height ratio
 const WIDTH_HEIGHT_RATIO = 4.5;
 
 export default class SidePanelContents extends
-  Util.mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
+  mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
   constructor() {
     super(...arguments);
 

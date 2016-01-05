@@ -1,4 +1,5 @@
 import {Confirm, Dropdown} from "reactjs-components";
+import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -20,7 +21,7 @@ const METHODS_TO_BIND = [
 
 const DEFAULT_ID = "DEFAULT";
 
-export default class PermissionsView extends Util.mixin(StoreMixin) {
+export default class PermissionsView extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 

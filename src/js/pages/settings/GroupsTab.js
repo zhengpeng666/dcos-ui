@@ -1,3 +1,4 @@
+import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -9,7 +10,6 @@ import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import OrganizationTab from "./OrganizationTab";
 import RequestErrorMsg from "../../components/RequestErrorMsg";
 import StoreMixin from "../../mixins/StoreMixin";
-import Util from "../../utils/Util";
 
 const EXTERNAL_CHANGE_EVENTS = [
   "onGroupStoreCreateSuccess",
@@ -24,7 +24,7 @@ const METHODS_TO_BIND = [
   "onGroupsStoreError"
 ];
 
-export default class GroupsTab extends Util.mixin(StoreMixin) {
+export default class GroupsTab extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 

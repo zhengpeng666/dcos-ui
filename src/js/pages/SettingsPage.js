@@ -1,4 +1,5 @@
 import {Link, RouteHandler} from "react-router";
+import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -6,14 +7,13 @@ import React from "react";
 import Page from "../components/Page";
 import TabsUtil from "../utils/TabsUtil";
 import TabsMixin from "../mixins/TabsMixin";
-import Util from "../utils/Util";
 
 const SETTINGS_TABS = {
   "settings-organization": "Organization"
   // TODO: add "settings-system": "System"
 };
 
-export default class SettingsPage extends Util.mixin(TabsMixin) {
+export default class SettingsPage extends mixin(TabsMixin) {
   constructor() {
     super();
 

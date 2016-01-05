@@ -1,4 +1,5 @@
 import {Dropdown} from "reactjs-components";
+import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -14,7 +15,7 @@ const METHODS_TO_BIND = [
   "onGroupSelection"
 ];
 
-export default class UserGroupMembershipTab extends Util.mixin(StoreMixin) {
+export default class UserGroupMembershipTab extends mixin(StoreMixin) {
   constructor() {
     super();
 

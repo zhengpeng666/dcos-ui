@@ -5,15 +5,16 @@ jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/Util");
 
+var mixin = require("reactjs-mixin");
+
 var EventTypes = require("../../constants/EventTypes");
 var MarathonStore = require("../../stores/MarathonStore");
 var StoreMixin = require("../StoreMixin");
-var Util = require("../../utils/Util");
 
 describe("StoreMixin", function () {
 
   beforeEach(function () {
-    class MyClass extends Util.mixin(StoreMixin) {
+    class MyClass extends mixin(StoreMixin) {
       forceUpdate() {}
     }
     this.instance = new MyClass();

@@ -21054,6 +21054,10 @@
         }
       }
     },
+    "reactjs-mixin": {
+      "version": "0.0.2",
+      "resolved": "https://registry.npmjs.org/reactjs-mixin/-/reactjs-mixin-0.0.2.tgz"
+    },
     "source-map-loader": {
       "version": "0.1.3",
       "resolved": "https://registry.npmjs.org/source-map-loader/-/source-map-loader-0.1.3.tgz",
