@@ -1,11 +1,11 @@
-import Config from "../config/Config";
-import MesosLogActions from "../events/MesosLogActions";
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "../events/AppDispatcher";
+import Config from "../config/Config";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
 import Item from "../structs/Item";
 import LogBuffer from "../structs/LogBuffer";
+import MesosLogActions from "../events/MesosLogActions";
 import Store from "../utils/Store";
 
 const MAX_FILE_SIZE = 50000;
