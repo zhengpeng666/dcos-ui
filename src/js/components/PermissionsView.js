@@ -25,6 +25,12 @@ export default class PermissionsView extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentWillMount() {
     let itemType = this.props.itemType;
 
     this.store_listeners = [{
@@ -42,15 +48,13 @@ export default class PermissionsView extends mixin(StoreMixin) {
       resourceErrorMessage: null
     };
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-
     itemType = StringUtil.capitalize(itemType);
     this[`onAclStore${itemType}GrantError`] =
       this.onAclStoreItemTypeGrantError;
     this[`onAclStore${itemType}GrantSuccess`] =
       this.onAclStoreItemTypeGrantSuccess;
+
+    super.componentWillMount();
   }
 
   componentDidMount() {

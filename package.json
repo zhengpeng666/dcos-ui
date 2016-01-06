@@ -119,7 +119,8 @@
       "react-tools",
       "underscore",
       "jasmine-reporters",
-      "reactjs-components"
+      "reactjs-components",
+      "reactjs-mixin"
     ],
     "testPathIgnorePatterns": [
       "/tmp/",
