@@ -1,4 +1,5 @@
 import {Confirm, Table} from "reactjs-components";
+import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -8,7 +9,6 @@ import ACLUserStore from "../stores/ACLUserStore";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import StoreMixin from "../mixins/StoreMixin";
 import TableUtil from "../utils/TableUtil";
-import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleOpenConfirm",
@@ -17,7 +17,7 @@ const METHODS_TO_BIND = [
   "renderButton"
 ];
 
-export default class UserGroupTable extends Util.mixin(StoreMixin) {
+export default class UserGroupTable extends mixin(StoreMixin) {
   constructor() {
     super();
 

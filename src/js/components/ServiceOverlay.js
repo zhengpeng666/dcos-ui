@@ -1,3 +1,4 @@
+import mixin from "reactjs-mixin";
 import React from "react/addons";
 import _ from "underscore";
 
@@ -10,11 +11,10 @@ import MarathonStore from "../stores/MarathonStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import Plugins from "../plugins/Plugins";
 import StringUtil from "../utils/StringUtil";
-import Util from "../utils/Util";
 
 const PropTypes = React.PropTypes;
 
-export default class ServiceOverlay extends Util.mixin(InternalStorageMixin) {
+export default class ServiceOverlay extends mixin(InternalStorageMixin) {
 
   constructor() {
     super();

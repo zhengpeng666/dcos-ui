@@ -1,3 +1,4 @@
+import mixin from "reactjs-mixin";
 import qs from "query-string";
 import React from "react";
 
@@ -5,13 +6,12 @@ import ACLAuthStore from "../../stores/ACLAuthStore";
 import ClusterHeader from "../../components/ClusterHeader";
 import FormModal from "../../components/FormModal";
 import StoreMixin from "../../mixins/StoreMixin";
-import Util from "../../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleLoginSubmit"
 ];
 
-export default class LoginModal extends Util.mixin(StoreMixin) {
+export default class LoginModal extends mixin(StoreMixin) {
   constructor() {
     super();
 

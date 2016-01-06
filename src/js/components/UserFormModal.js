@@ -1,3 +1,4 @@
+import mixin from "reactjs-mixin";
 /* eslint-disable no-unused-vars */
 import React from "react";
 /* eslint-enable no-unused-vars */
@@ -5,14 +6,13 @@ import React from "react";
 import ACLUserStore from "../stores/ACLUserStore";
 import FormModal from "./FormModal";
 import StoreMixin from "../mixins/StoreMixin";
-import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleNewUserSubmit",
   "onUserStoreCreateSuccess"
 ];
 
-export default class UserFormModal extends Util.mixin(StoreMixin) {
+export default class UserFormModal extends mixin(StoreMixin) {
   constructor() {
     super();
 

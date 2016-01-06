@@ -1,10 +1,10 @@
 import {Modal} from "reactjs-components";
+import mixin from "reactjs-mixin";
 /* eslint-disable no-unused-vars */
 import React from "react";
 /* eslint-enable no-unused-vars */
 
 import StoreMixin from "../mixins/StoreMixin";
-import Util from "../utils/Util";
 
 const METHODS_TO_BIND = ["handleModalClose", "handleServerError"];
 
@@ -20,7 +20,7 @@ function getEventsFromStoreListeners(storeListeners) {
   return events;
 }
 
-export default class ServerErrorModal extends Util.mixin(StoreMixin) {
+export default class ServerErrorModal extends mixin(StoreMixin) {
   constructor() {
     super();
 

@@ -1,3 +1,4 @@
+import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -5,7 +6,6 @@ import React from "react";
 import ACLUserStore from "../stores/ACLUserStore";
 import Form from "./Form";
 import StoreMixin from "../mixins/StoreMixin";
-import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handlePasswordSubmit",
@@ -13,7 +13,7 @@ const METHODS_TO_BIND = [
   "onUserStoreUpdateSuccess"
 ];
 
-export default class UserDetails extends Util.mixin(StoreMixin) {
+export default class UserDetails extends mixin(StoreMixin) {
   constructor() {
     super();
 

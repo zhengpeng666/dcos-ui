@@ -1,3 +1,4 @@
+import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -9,7 +10,6 @@ import RequestErrorMsg from "../../components/RequestErrorMsg";
 import StoreMixin from "../../mixins/StoreMixin";
 import UserFormModal from "../../components/UserFormModal";
 import UserSidePanel from "../../components/UserSidePanel";
-import Util from "../../utils/Util";
 
 const EXTERNAL_CHANGE_EVENTS = [
   "onUserStoreCreateSuccess",
@@ -24,7 +24,7 @@ const METHODS_TO_BIND = [
   "onUsersStoreError"
 ];
 
-export default class UsersTab extends Util.mixin(StoreMixin) {
+export default class UsersTab extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 

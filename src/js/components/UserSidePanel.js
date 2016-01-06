@@ -1,3 +1,4 @@
+import mixin from "reactjs-mixin";
 import React from "react/addons";
 import {Confirm, SidePanel} from "reactjs-components";
 
@@ -6,7 +7,6 @@ import HistoryStore from "../stores/HistoryStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import StoreMixin from "../mixins/StoreMixin";
 import UserSidePanelContents from "./UserSidePanelContents";
-import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleDeleteModalOpen",
@@ -15,7 +15,7 @@ const METHODS_TO_BIND = [
   "handleDeleteUser"
 ];
 
-export default class UserSidePanel extends Util.mixin(StoreMixin) {
+export default class UserSidePanel extends mixin(StoreMixin) {
   constructor() {
     super();
 

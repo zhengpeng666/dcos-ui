@@ -36,6 +36,7 @@
     "react-tools": "^0.13.3",
     "react-zeroclipboard": "^0.4.1",
     "reactjs-components": "0.0.32",
+    "reactjs-mixin": "0.0.2",
     "underscore": "^1.7.0",
     "zeroclipboard": "^2.2.0"
   },
@@ -118,7 +119,8 @@
       "react-tools",
       "underscore",
       "jasmine-reporters",
-      "reactjs-components"
+      "reactjs-components",
+      "reactjs-mixin"
     ],
     "testPathIgnorePatterns": [
       "/tmp/",

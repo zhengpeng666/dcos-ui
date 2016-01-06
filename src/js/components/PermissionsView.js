@@ -1,4 +1,5 @@
 import {Confirm, Dropdown} from "reactjs-components";
+import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
@@ -20,10 +21,21 @@ const METHODS_TO_BIND = [
 
 const DEFAULT_ID = "DEFAULT";
 
-export default class PermissionsView extends Util.mixin(StoreMixin) {
+export default class PermissionsView extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
+    this.state = {
+      hasError: null,
+      resourceErrorMessage: null
+    };
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentWillMount() {
     let itemType = this.props.itemType;
 
     this.store_listeners = [{
@@ -36,20 +48,13 @@ export default class PermissionsView extends Util.mixin(StoreMixin) {
       ]
     }];
 
-    this.state = {
-      hasError: null,
-      resourceErrorMessage: null
-    };
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-
     itemType = StringUtil.capitalize(itemType);
     this[`onAclStore${itemType}GrantError`] =
       this.onAclStoreItemTypeGrantError;
     this[`onAclStore${itemType}GrantSuccess`] =
       this.onAclStoreItemTypeGrantSuccess;
+
+    super.componentWillMount();
   }
 
   componentDidMount() {

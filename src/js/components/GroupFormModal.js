@@ -1,3 +1,4 @@
+import mixin from "reactjs-mixin";
 /* eslint-disable no-unused-vars */
 import React from "react";
 /* eslint-enable no-unused-vars */
@@ -5,7 +6,6 @@ import React from "react";
 import ACLGroupStore from "../stores/ACLGroupStore";
 import FormModal from "./FormModal";
 import StoreMixin from "../mixins/StoreMixin";
-import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleNewGroupSubmit",
@@ -13,7 +13,7 @@ const METHODS_TO_BIND = [
   "onGroupStoreCreateError"
 ];
 
-export default class GroupFormModal extends Util.mixin(StoreMixin) {
+export default class GroupFormModal extends mixin(StoreMixin) {
   constructor() {
     super();
 
