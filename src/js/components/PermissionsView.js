@@ -25,6 +25,11 @@ export default class PermissionsView extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
+    this.state = {
+      hasError: null,
+      resourceErrorMessage: null
+    };
+
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
@@ -42,11 +47,6 @@ export default class PermissionsView extends mixin(StoreMixin) {
         `${itemType}GrantError`
       ]
     }];
-
-    this.state = {
-      hasError: null,
-      resourceErrorMessage: null
-    };
 
     itemType = StringUtil.capitalize(itemType);
     this[`onAclStore${itemType}GrantError`] =
