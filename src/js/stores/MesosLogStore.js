@@ -32,9 +32,7 @@ const MesosLogStore = Store.createStore({
   },
 
   stopTailing: function (path) {
-    let logBuffer = {};
-    logBuffer[path] = undefined;
-    this.set(logBuffer);
+    this.set({[path]: undefined});
   },
 
   processLogEntry: function (slaveID, path, entry) {
