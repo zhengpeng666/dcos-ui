@@ -31,9 +31,8 @@ export default class LogBuffer extends List {
   }
 
   // Public API
-  initialize(entry) {
+  initialize(offset) { // The point we are reading from in the log file
     let end = this.getEnd(); // pointing to end of currently stored log
-    let offset = entry.offset; // The point we are reading from in the log file
     let start = this.getStart(); // pointing to start of currently stored log
 
     // Get the last page of data.

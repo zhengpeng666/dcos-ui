@@ -53,7 +53,7 @@ describe("MesosLogStore", function () {
 
     beforeEach(function () {
       // First item will be used to initialize
-      MesosLogStore.processLogEntry("foo", "/bar", {data: "", offset: 100});
+      MesosLogStore.processInitialize("foo", "/bar", {data: "", offset: 100});
       // Two next processes will be stored
       MesosLogStore.processLogEntry("foo", "/bar", {data: "foo", offset: 100});
       MesosLogStore.processLogEntry("foo", "/bar", {data: "bar", offset: 103});
@@ -84,23 +84,39 @@ describe("MesosLogStore", function () {
       this.logBuffer = MesosLogStore.get("/bar");
     });
 
-    it("should be initialized after initialize and before error", function () {
-      // First item will be used to initialize
-      MesosLogStore.processLogEntry("foo", "/bar", {data: "", offset: 100});
-      expect(this.logBuffer.isInitialized()).toEqual(true);
-    });
-
-    it("should not be initialized after error", function () {
-      MesosLogStore.processLogError("foo", "/bar");
-      expect(this.logBuffer.isInitialized()).toEqual(false);
-    });
-
     it("should try to restart the tailing after error", function (done) {
       MesosLogStore.processLogError("foo", "/bar");
       setTimeout(function () {
         expect(RequestUtil.json.callCount).toEqual(2);
         done();
       }, Config.tailRefresh);
+    });
+
+  });
+
+  describe("#processInitializeError", function () {
+
+    beforeEach(function () {
+      this.logBuffer = MesosLogStore.get("/bar");
+    });
+
+    it("should not be initialized after error", function () {
+      MesosLogStore.processInitializeError("foo", "/bar");
+      expect(this.logBuffer.isInitialized()).toEqual(false);
+    });
+
+  });
+
+  describe("#processInitialize", function () {
+
+    beforeEach(function () {
+      this.logBuffer = MesosLogStore.get("/bar");
+    });
+
+    it("should be initialized after initialize and before error", function () {
+      // First item will be used to initialize
+      MesosLogStore.processInitialize("foo", "/bar", {data: "", offset: 100});
+      expect(this.logBuffer.isInitialized()).toEqual(true);
     });
 
   });

@@ -28,27 +28,39 @@ const MesosLogStore = Store.createStore({
     let state = {};
     state[path] = logBuffer;
     this.set(state);
-    MesosLogActions.fetchLog(slaveID, path, logBuffer.getEnd(), MAX_FILE_SIZE);
+    MesosLogActions.initialize(slaveID, path);
   },
 
   stopTailing: function (path) {
     this.set({[path]: undefined});
   },
 
-  processLogEntry: function (slaveID, path, entry) {
+  processInitialize: function (slaveID, path, entry) {
     let logBuffer = this.get(path);
     if (!logBuffer) {
       return;
     }
 
-    if (!logBuffer.isInitialized()) {
-      logBuffer.initialize(entry);
-      MesosLogActions.fetchLog(
-        slaveID,
-        path,
-        logBuffer.getEnd(),
-        MAX_FILE_SIZE
-      );
+    logBuffer.initialize(entry.offset);
+    // start tailing
+    MesosLogActions
+      .fetchLog(slaveID, path, logBuffer.getEnd(), MAX_FILE_SIZE);
+
+    MesosLogStore.emit(EventTypes.MESOS_INITIALIZE_LOG_CHANGE);
+  },
+
+  processInitializeError: function (slaveID, path) {
+    // Try to re-initialize from where we left off
+    setTimeout(function () {
+      MesosLogActions.initialize(slaveID, path);
+    }, Config.tailRefresh);
+
+    MesosLogStore.emit(EventTypes.MESOS_INITIALIZE_LOG_REQUEST_ERROR);
+  },
+
+  processLogEntry: function (slaveID, path, entry) {
+    let logBuffer = this.get(path);
+    if (!logBuffer) {
       return;
     }
 
@@ -73,16 +85,11 @@ const MesosLogStore = Store.createStore({
   },
 
   processLogError(slaveID, path) {
-    let logBuffer = this.get(path);
+    let end = this.get(path).getEnd();
 
     // Try to re-start from where we left off
     setTimeout(function () {
-      MesosLogActions.fetchLog(
-        slaveID,
-        path,
-        logBuffer.getEnd(),
-        MAX_FILE_SIZE
-      );
+      MesosLogActions.fetchLog(slaveID, path, end, MAX_FILE_SIZE);
     }, Config.tailRefresh);
 
     MesosLogStore.emit(EventTypes.MESOS_LOG_REQUEST_ERROR);
@@ -102,6 +109,12 @@ const MesosLogStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_MESOS_LOG_ERROR:
         MesosLogStore.processLogError(action.slaveID, action.path);
+        break;
+      case ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_SUCCESS:
+        MesosLogStore.processInitialize(action.slaveID, action.path, action.data);
+        break;
+      case ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_ERROR:
+        MesosLogStore.processInitializeError(action.slaveID, action.path);
         break;
     }
 

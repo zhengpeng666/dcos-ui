@@ -5,6 +5,28 @@ import RequestUtil from "../utils/RequestUtil";
 
 const MesosLogActions = {
 
+  initialize: function (slaveID, path) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}/slave/${slaveID}/files/read.json?path=${path}&offset=-1`,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_SUCCESS,
+          data: response,
+          path,
+          slaveID
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr),
+          path,
+          slaveID
+        });
+      }
+    });
+  },
+
   fetchLog: function (slaveID, path, offset, length) {
     RequestUtil.json({
       url: `${Config.rootUrl}/slave/${slaveID}/files/read.json?path=${path}&offset=${offset}&length=${length}`,

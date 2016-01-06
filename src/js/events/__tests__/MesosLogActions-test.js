@@ -10,6 +10,69 @@ var RequestUtil = require("../../utils/RequestUtil");
 
 describe("MesosLogActions", function () {
 
+  describe("#initialize", function () {
+
+    beforeEach(function () {
+      spyOn(RequestUtil, "json");
+      MesosLogActions.initialize("foo", "bar");
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+    });
+
+    it("calls #json from the RequestUtil", function () {
+      expect(RequestUtil.json).toHaveBeenCalled();
+    });
+
+    it("fetches data from the correct URL", function () {
+      expect(this.configuration.url)
+        .toEqual("/slave/foo/files/read.json?path=bar&offset=-1");
+    });
+
+    it("dispatches the correct action when successful", function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type)
+          .toEqual(ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_SUCCESS);
+      });
+
+      this.configuration.success({data: "", offset: 0});
+    });
+    it("dispatches the correct information when successful", function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.data).toEqual({data: "", offset: 0});
+        expect(action.path).toEqual("bar");
+        expect(action.slaveID).toEqual("foo");
+      });
+
+      this.configuration.success({data: "", offset: 0});
+    });
+
+    it("dispatches the correct action when unsuccessful", function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type)
+          .toEqual(ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_ERROR);
+      });
+
+      this.configuration.error({});
+    });
+
+    it("dispatches the correct information when unsuccessful", function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.path).toEqual("bar");
+        expect(action.slaveID).toEqual("foo");
+      });
+
+      this.configuration.error({});
+    });
+
+  });
+
   describe("#fetchLog", function () {
 
     beforeEach(function () {
