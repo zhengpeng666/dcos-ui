@@ -1,5 +1,6 @@
 import mixin from "reactjs-mixin";
 import React from "react";
+import {StoreMixin} from "mesosphere-shared-reactjs";
 
 import AnimatedLogo from "../components/AnimatedLogo";
 import EventTypes from "../constants/EventTypes";
@@ -7,7 +8,6 @@ import InternalStorageMixin from "../mixins/InternalStorageMixin";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import MetadataStore from "../stores/MetadataStore";
 import Plugins from "../plugins/Plugins";
-import StoreMixin from "../mixins/StoreMixin";
 
 const METHODS_TO_BIND = ["onPluginsLoaded"];
 

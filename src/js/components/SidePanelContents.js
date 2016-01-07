@@ -1,5 +1,6 @@
 import _ from "underscore";
 import React from "react/addons";
+import {StoreMixin} from "mesosphere-shared-reactjs";
 
 import BarChart from "./charts/BarChart";
 import Chart from "./charts/Chart";
@@ -8,7 +9,6 @@ import InternalStorageMixin from "../mixins/InternalStorageMixin";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import ResourceTypes from "../constants/ResourceTypes";
 import TabsMixin from "../mixins/TabsMixin";
-import StoreMixin from "../mixins/StoreMixin";
 import Units from "../utils/Units";
 
 import mixin from "reactjs-mixin";

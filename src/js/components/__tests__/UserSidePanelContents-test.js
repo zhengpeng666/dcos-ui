@@ -12,7 +12,6 @@ jest.dontMock("../FormControl");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../icons/IconEdit");
 jest.dontMock("../../mixins/InternalStorageMixin");
-jest.dontMock("../../mixins/StoreMixin");
 jest.dontMock("../../mixins/TabsMixin");
 jest.dontMock("../RequestErrorMsg");
 jest.dontMock("../../utils/JestUtil");
@@ -21,6 +20,8 @@ jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../structs/User");
+
+require("../../utils/StoreMixinConfig");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;

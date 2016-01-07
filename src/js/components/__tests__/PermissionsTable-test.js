@@ -2,12 +2,13 @@ jest.dontMock("../PermissionsTable");
 jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../../events/ACLUsersActions");
 jest.dontMock("../../events/AppDispatcher");
-jest.dontMock("../../mixins/StoreMixin");
 jest.dontMock("../../stores/ACLStore");
 jest.dontMock("../../utils/ResourceTableUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/Util");
+
+require("../../utils/StoreMixinConfig");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
@@ -51,7 +52,6 @@ describe("PermissionsTable", function () {
   });
 
   describe("#onAclStoreUserRevokeSuccess", function () {
-
     it("gets called when a success event is emitted", function () {
       this.instance.onAclStoreUserRevokeSuccess = jest.genMockFunction();
 

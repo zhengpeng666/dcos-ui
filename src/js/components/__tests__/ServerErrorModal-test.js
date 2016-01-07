@@ -1,7 +1,6 @@
 jest.dontMock("../ServerErrorModal");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../utils/StringUtil");
-jest.dontMock("../../mixins/StoreMixin");
 jest.dontMock("../../stores/ACLAuthStore");
 jest.dontMock("../../stores/ACLGroupsStore");
 jest.dontMock("../../stores/ACLGroupStore");
@@ -18,6 +17,8 @@ jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../constants/EventTypes");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../utils/Store");
+
+require("../../utils/StoreMixinConfig");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;

@@ -1,9 +1,12 @@
 jest.dontMock("../LoginModal");
+jest.dontMock("../../../components/ClusterHeader");
 jest.dontMock("../../../components/FormModal");
 jest.dontMock("../../../components/Form");
+jest.dontMock("../../../components/FormControl");
+jest.dontMock("../../../components/FieldInput");
+jest.dontMock("../../../components/FieldPassword");
 jest.dontMock("../../../utils/Util");
 jest.dontMock("../../../utils/StringUtil");
-jest.dontMock("../../../mixins/StoreMixin");
 jest.dontMock("../../../stores/ACLAuthStore");
 jest.dontMock("../../../stores/ACLGroupsStore");
 jest.dontMock("../../../stores/ACLGroupStore");
@@ -11,6 +14,7 @@ jest.dontMock("../../../stores/ACLStore");
 jest.dontMock("../../../stores/ACLUsersStore");
 jest.dontMock("../../../stores/ACLUserStore");
 jest.dontMock("../../../constants/EventTypes");
+jest.dontMock("../../../constants/FieldTypes");
 jest.dontMock("../../../stores/MarathonStore");
 jest.dontMock("../../../stores/MesosStateStore");
 jest.dontMock("../../../stores/MesosSummaryStore");
@@ -21,7 +25,7 @@ jest.dontMock("../../../constants/EventTypes");
 jest.dontMock("../../../mixins/GetSetMixin");
 jest.dontMock("../../../utils/Store");
 
-jest.autoMockOff();
+require("../../../utils/StoreMixinConfig");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;

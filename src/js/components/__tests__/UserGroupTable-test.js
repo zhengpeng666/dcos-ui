@@ -2,13 +2,14 @@ jest.dontMock("../UserGroupTable");
 jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../../events/ACLUsersActions");
 jest.dontMock("../../events/AppDispatcher");
-jest.dontMock("../../mixins/StoreMixin");
 jest.dontMock("../../stores/ACLGroupStore");
 jest.dontMock("../../stores/ACLGroupsStore");
 jest.dontMock("../../utils/ResourceTableUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/Util");
+
+require("../../utils/StoreMixinConfig");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
