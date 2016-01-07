@@ -1,4 +1,5 @@
 var _ = require("underscore");
+import {Store} from "mesosphere-shared-reactjs";
 
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
@@ -9,7 +10,6 @@ var MesosSummaryUtil = require("../utils/MesosSummaryUtil");
 var MesosSummaryActions = require("../events/MesosSummaryActions");
 var SummaryList = require("../structs/SummaryList");
 import StateSummary from "../structs/StateSummary";
-var Store = require("../utils/Store");
 var TimeScales = require("../constants/TimeScales");
 
 var requestInterval = null;

@@ -1,4 +1,5 @@
 import _ from "underscore";
+import {Store} from "mesosphere-shared-reactjs";
 
 import ACLGroupsActions from "../events/ACLGroupsActions";
 import ActionTypes from "../constants/ActionTypes";
@@ -6,7 +7,6 @@ import AppDispatcher from "../events/AppDispatcher";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
 import Group from "../structs/Group";
-import Store from "../utils/Store";
 
 /**
  * This store will keep track of groups and their details

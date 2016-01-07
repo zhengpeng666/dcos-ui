@@ -1,7 +1,7 @@
 import {HashLocation} from "react-router";
+import {Store} from "mesosphere-shared-reactjs";
 
 import GetSetMixin from "../mixins/GetSetMixin";
-import Store from "../utils/Store";
 
 var HistoryStore = Store.createStore({
   storeID: "history",

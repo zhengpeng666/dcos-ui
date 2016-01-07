@@ -1,9 +1,10 @@
+import {Store} from "mesosphere-shared-reactjs";
+
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "../events/AppDispatcher";
 import ConfigActions from "../events/ConfigActions";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
-import Store from "../utils/Store";
 
 var ConfigStore = Store.createStore({
   storeID: "config",
