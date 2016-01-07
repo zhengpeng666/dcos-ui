@@ -6,7 +6,6 @@ jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../events/ConfigActions");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../stores/ConfigStore");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/DOMUtils");
 
 var TrackingPlugin = require("../TrackingPlugin");

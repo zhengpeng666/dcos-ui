@@ -6,7 +6,6 @@ jest.dontMock("../../stores/MesosStateStore");
 jest.dontMock("../../events/MesosStateActions");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../utils/Util");
-jest.dontMock("../../utils/Store");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;

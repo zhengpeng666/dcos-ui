@@ -5,7 +5,6 @@ jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../structs/User");
 jest.dontMock("../../events/ACLUsersActions");
 jest.dontMock("../ACLUserStore");
-jest.dontMock("../../utils/Store");
 
 var ACLUsersActions = require("../../events/ACLUsersActions");
 var ACLUserStore = require("../ACLUserStore");

@@ -10,7 +10,6 @@ jest.dontMock("../../events/MarathonActions");
 jest.dontMock("../SidePanelContents");
 jest.dontMock("../UserSidePanel");
 jest.dontMock("../UserSidePanelContents");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../structs/SummaryList");

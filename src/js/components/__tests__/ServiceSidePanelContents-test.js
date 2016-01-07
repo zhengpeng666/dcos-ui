@@ -5,7 +5,6 @@ jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../utils/JestUtil");
 jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 
 require("../../utils/StoreMixinConfig");

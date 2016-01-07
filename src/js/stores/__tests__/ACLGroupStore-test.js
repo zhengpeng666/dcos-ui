@@ -5,7 +5,6 @@ jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../structs/User");
 jest.dontMock("../../events/ACLGroupsActions");
 jest.dontMock("../ACLGroupStore");
-jest.dontMock("../../utils/Store");
 
 var ACLGroupsActions = require("../../events/ACLGroupsActions");
 var ACLGroupStore = require("../ACLGroupStore");

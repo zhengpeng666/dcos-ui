@@ -1,7 +1,6 @@
 jest.dontMock("../../stores/MarathonStore");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/StringUtil");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 
 let Node = require("../Node");

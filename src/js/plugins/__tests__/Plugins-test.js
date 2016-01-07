@@ -5,7 +5,6 @@ jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../events/ConfigActions");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../stores/ConfigStore");
-jest.dontMock("../../utils/Store");
 
 jest.setMock("../index", {
   fakePlugin: {

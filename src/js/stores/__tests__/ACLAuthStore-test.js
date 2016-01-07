@@ -6,7 +6,6 @@ jest.dontMock("../../constants/ACLUserRoles");
 jest.dontMock("../../constants/EventTypes");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../utils/RequestUtil");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 
 var cookie = require("cookie");

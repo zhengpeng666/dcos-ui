@@ -4,7 +4,6 @@ jest.dontMock("../../events/ACLUsersActions");
 jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../stores/ACLStore");
 jest.dontMock("../../utils/ResourceTableUtil");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/StringUtil");
 jest.dontMock("../../utils/Util");
 

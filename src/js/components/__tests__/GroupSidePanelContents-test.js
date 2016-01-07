@@ -17,7 +17,6 @@ jest.dontMock("../RequestErrorMsg");
 jest.dontMock("../../utils/JestUtil");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/StringUtil");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../structs/Group");
 

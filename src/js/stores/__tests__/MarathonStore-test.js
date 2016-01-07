@@ -4,7 +4,6 @@ jest.dontMock("../MarathonStore");
 jest.dontMock("./fixtures/MockAppMetadata");
 jest.dontMock("./fixtures/MockMarathonResponse");
 jest.dontMock("./fixtures/MockParsedAppMetadata");
-jest.dontMock("../../utils/Store");
 
 var HealthLabels = require("../../constants/HealthLabels");
 var HealthTypes = require("../../constants/HealthTypes");

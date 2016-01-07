@@ -5,7 +5,6 @@ jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../events/MesosSummaryActions");
 jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../NodeSidePanelContents");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../TaskTable");
 jest.dontMock("../TaskView");
 jest.dontMock("../RequestErrorMsg");
