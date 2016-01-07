@@ -1,4 +1,3 @@
-jest.autoMockOff();
 jest.dontMock("../GroupUserMembershipTab");
 jest.dontMock("../GroupUserTable");
 jest.dontMock("../../constants/ActionTypes");
