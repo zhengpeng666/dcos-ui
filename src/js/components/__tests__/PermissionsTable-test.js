@@ -38,12 +38,6 @@ describe("PermissionsTable", function () {
   describe("#onAclStoreUserRevokeError", function () {
 
     it("updates state when an error event is emitted", function () {
-      var instance = TestUtils.renderIntoDocument(
-        <PermissionsTable
-          permissions={(new User(userDetailsFixture)).getUniquePermissions()}
-          itemType="user"
-          itemID={userDetailsFixture.uid} />
-      );
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_ERROR,
         data: "foo bar",
@@ -51,8 +45,8 @@ describe("PermissionsTable", function () {
         userID: "unicode"
       });
 
-      expect(instance.state.permissionUpdateError).toEqual("foo bar");
-      expect(instance.state.pendingRequest).toEqual(false);
+      expect(this.instance.state.permissionUpdateError).toEqual("foo bar");
+      expect(this.instance.state.pendingRequest).toEqual(false);
     });
 
   });
