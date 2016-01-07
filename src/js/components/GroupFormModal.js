@@ -2,10 +2,10 @@ import mixin from "reactjs-mixin";
 /* eslint-disable no-unused-vars */
 import React from "react";
 /* eslint-enable no-unused-vars */
+import {StoreMixin} from "mesosphere-shared-reactjs";
 
 import ACLGroupStore from "../stores/ACLGroupStore";
 import FormModal from "./FormModal";
-import StoreMixin from "../mixins/StoreMixin";
 
 const METHODS_TO_BIND = [
   "handleNewGroupSubmit",

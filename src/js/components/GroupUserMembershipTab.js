@@ -3,12 +3,12 @@ import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
+import {StoreMixin} from "mesosphere-shared-reactjs";
 
 import ACLGroupStore from "../stores/ACLGroupStore";
 import ACLUsersStore from "../stores/ACLUsersStore";
 import GroupUserTable from "./GroupUserTable";
 import RequestErrorMsg from "../components/RequestErrorMsg";
-import StoreMixin from "../mixins/StoreMixin";
 import Util from "../utils/Util";
 
 const METHODS_TO_BIND = [

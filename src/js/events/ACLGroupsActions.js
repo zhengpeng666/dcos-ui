@@ -200,6 +200,7 @@ const ACLGroupsActions = {
 };
 
 if (Config.useFixtures) {
+  console.log("\n\nWOAHHHHH\n\n");
   let groupFixture = require("json!../../../tests/_fixtures/acl/group-unicode.json");
   let groupDetailsFixture = require("json!../../../tests/_fixtures/acl/group-with-details.json");
   let groupsFixture = require("json!../../../tests/_fixtures/acl/groups-unicode.json");

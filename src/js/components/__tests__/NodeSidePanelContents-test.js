@@ -12,6 +12,8 @@ jest.dontMock("../RequestErrorMsg");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../utils/JestUtil");
 
+require("../../utils/StoreMixinConfig");
+
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 

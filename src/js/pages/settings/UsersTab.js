@@ -2,12 +2,12 @@ import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
+import {StoreMixin} from "mesosphere-shared-reactjs";
 
 import ACLUsersStore from "../../stores/ACLUsersStore";
 import MesosSummaryStore from "../../stores/MesosSummaryStore";
 import OrganizationTab from "./OrganizationTab";
 import RequestErrorMsg from "../../components/RequestErrorMsg";
-import StoreMixin from "../../mixins/StoreMixin";
 import UserFormModal from "../../components/UserFormModal";
 import UserSidePanel from "../../components/UserSidePanel";
 

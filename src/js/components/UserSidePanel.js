@@ -1,11 +1,11 @@
 import mixin from "reactjs-mixin";
 import React from "react/addons";
 import {Confirm, SidePanel} from "reactjs-components";
+import {StoreMixin} from "mesosphere-shared-reactjs";
 
 import ACLUserStore from "../stores/ACLUserStore";
 import HistoryStore from "../stores/HistoryStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
-import StoreMixin from "../mixins/StoreMixin";
 import UserSidePanelContents from "./UserSidePanelContents";
 
 const METHODS_TO_BIND = [

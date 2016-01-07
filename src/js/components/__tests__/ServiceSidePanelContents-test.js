@@ -8,6 +8,8 @@ jest.dontMock("../../utils/MesosSummaryUtil");
 jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 
+require("../../utils/StoreMixinConfig");
+
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 

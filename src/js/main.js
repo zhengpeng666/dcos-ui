@@ -15,6 +15,7 @@ var Router = require("react-router");
 
 require("./utils/MomentJSConfig");
 require("./utils/ReactSVG");
+require("./utils/StoreMixinConfig");
 
 import ApplicationLoader from "./pages/ApplicationLoader";
 import appRoutes from "./routes/index";

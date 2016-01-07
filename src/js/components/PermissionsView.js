@@ -3,12 +3,12 @@ import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
+import {StoreMixin} from "mesosphere-shared-reactjs";
 
 import ACLStore from "../stores/ACLStore";
 import Item from "../structs/Item";
 import PermissionsTable from "./PermissionsTable";
 import RequestErrorMsg from "./RequestErrorMsg";
-import StoreMixin from "../mixins/StoreMixin";
 import StringUtil from "../utils/StringUtil";
 import Util from "../utils/Util";
 
