@@ -48,7 +48,7 @@ describe("GroupUserTable", function () {
 
   describe("#onGroupStoreDeleteUserError", function () {
 
-    it.only("updates state when an error event is emitted", function () {
+    it("updates state when an error event is emitted", function () {
       ACLGroupStore.deleteUser = function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
