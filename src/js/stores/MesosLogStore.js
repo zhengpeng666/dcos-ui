@@ -38,6 +38,7 @@ const MesosLogStore = Store.createStore({
   processInitialize: function (slaveID, path, entry) {
     let logBuffer = this.get(path);
     if (!logBuffer) {
+      // Stop tailing
       return;
     }
 
@@ -50,6 +51,12 @@ const MesosLogStore = Store.createStore({
   },
 
   processInitializeError: function (slaveID, path) {
+    let logBuffer = this.get(path);
+    if (!logBuffer) {
+      // Stop tailing
+      return;
+    }
+
     // Try to re-initialize from where we left off
     setTimeout(function () {
       MesosLogActions.initialize(slaveID, path);
@@ -61,6 +68,7 @@ const MesosLogStore = Store.createStore({
   processLogEntry: function (slaveID, path, entry) {
     let logBuffer = this.get(path);
     if (!logBuffer) {
+      // Stop tailing
       return;
     }
 
@@ -85,11 +93,16 @@ const MesosLogStore = Store.createStore({
   },
 
   processLogError(slaveID, path) {
-    let end = this.get(path).getEnd();
+    let logBuffer = this.get(path);
+    if (!logBuffer) {
+      // Stop tailing
+      return;
+    }
 
     // Try to re-start from where we left off
     setTimeout(function () {
-      MesosLogActions.fetchLog(slaveID, path, end, MAX_FILE_SIZE);
+      MesosLogActions
+        .fetchLog(slaveID, path, logBuffer.getEnd(), MAX_FILE_SIZE);
     }, Config.tailRefresh);
 
     MesosLogStore.emit(EventTypes.MESOS_LOG_REQUEST_ERROR);

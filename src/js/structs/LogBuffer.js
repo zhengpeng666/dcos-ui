@@ -138,5 +138,4 @@ export default class LogBuffer extends List {
       this.list = this.list.slice(index);
     }
   }
-
 }
