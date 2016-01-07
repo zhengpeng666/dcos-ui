@@ -5,7 +5,6 @@ import React from "react";
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from "mesosphere-shared-reactjs";
 
-
 const METHODS_TO_BIND = ["handleModalClose", "handleServerError"];
 
 function getEventsFromStoreListeners(storeListeners) {
