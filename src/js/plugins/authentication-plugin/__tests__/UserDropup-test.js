@@ -6,7 +6,6 @@ jest.dontMock("../../../constants/ACLAuthConstants");
 jest.dontMock("../../../events/AppDispatcher");
 jest.dontMock("../../../constants/EventTypes");
 jest.dontMock("../../../mixins/GetSetMixin");
-jest.dontMock("../../../utils/Store");
 
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;

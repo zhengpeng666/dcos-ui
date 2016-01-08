@@ -5,7 +5,6 @@ jest.dontMock("../../../constants/EventTypes");
 jest.dontMock("../../../events/AppDispatcher");
 jest.dontMock("../../../events/ConfigActions");
 jest.dontMock("../../../mixins/GetSetMixin");
-jest.dontMock("../../../utils/Store");
 jest.dontMock("../../../utils/DOMUtils");
 jest.dontMock("../../../utils/Util");
 

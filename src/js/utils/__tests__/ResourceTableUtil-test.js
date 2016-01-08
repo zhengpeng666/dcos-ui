@@ -1,6 +1,5 @@
 jest.dontMock("../../constants/HealthSorting");
 jest.dontMock("../ResourceTableUtil");
-jest.dontMock("../../utils/Store");
 
 var _ = require("underscore");
 var MarathonStore = require("../../stores/MarathonStore");

@@ -16,7 +16,6 @@ jest.dontMock("../../constants/ActionTypes");
 jest.dontMock("../../events/AppDispatcher");
 jest.dontMock("../../constants/EventTypes");
 jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../utils/Store");
 
 require("../../utils/StoreMixinConfig");
 

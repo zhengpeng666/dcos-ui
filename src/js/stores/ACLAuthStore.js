@@ -1,4 +1,5 @@
 import cookie from "cookie";
+import {Store} from "mesosphere-shared-reactjs";
 
 import ACLAuthActions from "../events/ACLAuthActions";
 import ActionTypes from "../constants/ActionTypes";
@@ -7,7 +8,6 @@ import ACLUserRoles from "../constants/ACLUserRoles";
 import AppDispatcher from "../events/AppDispatcher";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
-import Store from "../utils/Store";
 
 function getUserMetadata() {
   return cookie.parse(global.document.cookie)[ACLAuthConstants.userCookieKey];

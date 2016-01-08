@@ -1,4 +1,5 @@
 import _ from "underscore";
+import {Store} from "mesosphere-shared-reactjs";
 
 import ACLUsersActions from "../events/ACLUsersActions";
 import AppDispatcher from "../events/AppDispatcher";
@@ -6,7 +7,6 @@ import ActionTypes from "../constants/ActionTypes";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
 import User from "../structs/User";
-import Store from "../utils/Store";
 
 /**
  * This store will keep track of users and their details

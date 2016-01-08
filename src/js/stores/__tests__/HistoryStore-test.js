@@ -1,5 +1,4 @@
 jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../HistoryStore");
 
 var HistoryStore = require("../HistoryStore");

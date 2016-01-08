@@ -1,11 +1,11 @@
 import _ from "underscore";
+import {Store} from "mesosphere-shared-reactjs";
 
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "../events/AppDispatcher";
 import Config from "../config/Config";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
-import Store from "../utils/Store";
 import TaskDirectoryActions from "../events/TaskDirectoryActions";
 
 var requestInterval = null;

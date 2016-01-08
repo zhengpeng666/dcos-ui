@@ -7,7 +7,6 @@ jest.dontMock("../../structs/LogBuffer");
 jest.dontMock("../../structs/Item");
 jest.dontMock("../../structs/List");
 jest.dontMock("../../utils/RequestUtil");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 
 var MesosLogStore = require("../MesosLogStore");

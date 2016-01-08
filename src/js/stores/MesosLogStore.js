@@ -1,3 +1,5 @@
+import {Store} from "mesosphere-shared-reactjs";
+
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "../events/AppDispatcher";
 import Config from "../config/Config";
@@ -6,7 +8,6 @@ import GetSetMixin from "../mixins/GetSetMixin";
 import Item from "../structs/Item";
 import LogBuffer from "../structs/LogBuffer";
 import MesosLogActions from "../events/MesosLogActions";
-import Store from "../utils/Store";
 
 const MAX_FILE_SIZE = 50000;
 

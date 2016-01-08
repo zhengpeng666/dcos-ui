@@ -11,7 +11,6 @@ jest.dontMock("../SidePanelContents");
 jest.dontMock("../NodeSidePanelContents");
 jest.dontMock("../ServiceSidePanelContents");
 jest.dontMock("../TaskSidePanelContents");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../structs/SummaryList");

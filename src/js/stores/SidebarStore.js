@@ -1,8 +1,9 @@
+import {Store} from "mesosphere-shared-reactjs";
+
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
 var EventTypes = require("../constants/EventTypes");
 var GetSetMixin = require("../mixins/GetSetMixin");
-var Store = require("../utils/Store");
 
 var SidebarStore = Store.createStore({
   storeID: "sidebar",

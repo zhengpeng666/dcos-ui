@@ -1,4 +1,5 @@
 var _ = require("underscore");
+import {Store} from "mesosphere-shared-reactjs";
 
 var AppDispatcher = require("../events/AppDispatcher");
 var ActionTypes = require("../constants/ActionTypes");
@@ -8,7 +9,6 @@ var GetSetMixin = require("../mixins/GetSetMixin");
 var HealthStatus = require("../constants/HealthStatus");
 var MarathonActions = require("../events/MarathonActions");
 var ServiceImages = require("../constants/ServiceImages");
-var Store = require("../utils/Store");
 
 var requestInterval = null;
 

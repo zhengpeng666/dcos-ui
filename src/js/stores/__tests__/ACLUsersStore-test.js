@@ -8,7 +8,6 @@ jest.dontMock("../../structs/UsersList");
 jest.dontMock("../../structs/Item");
 jest.dontMock("../../structs/List");
 jest.dontMock("../../utils/RequestUtil");
-jest.dontMock("../../utils/Store");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../../../tests/_fixtures/acl/users-unicode.json");
 

@@ -1,5 +1,4 @@
 jest.dontMock("../MesosStateStore");
-jest.dontMock("../../utils/Store");
 
 var MesosStateStore = require("../MesosStateStore");
 
