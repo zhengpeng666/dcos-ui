@@ -1,4 +1,6 @@
+import mixin from "reactjs-mixin";
 import React from "react";
+import {StoreMixin} from "mesosphere-shared-reactjs";
 
 import EventTypes from "../constants/EventTypes";
 import RequestErrorMsg from "./RequestErrorMsg";
@@ -7,7 +9,7 @@ import TaskDirectoryStore from "../stores/TaskDirectoryStore";
 
 const METHODS_TO_BIND = ["onDirectoryChange", "onDirectoryError"];
 
-export default class TaskDirectoryView extends React.Component {
+export default class TaskDirectoryView extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -153,7 +155,7 @@ export default class TaskDirectoryView extends React.Component {
           {this.getBreadcrumbs()}
         </div>
         <TaskDirectoryTable
-          files={directory}
+          files={directory.getItems()}
           onFileClick={this.handleFileClick.bind(this)}
           nodeID={this.props.task.slave_id} />
       </div>

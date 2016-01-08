@@ -7,8 +7,11 @@ import DateUtil from "../utils/DateUtil";
 import ResourceTableUtil from "../utils/ResourceTableUtil";
 import TaskDirectoryHeaderLabels from "../constants/TaskDirectoryHeaderLabels";
 import TaskDirectoryActions from "../events/TaskDirectoryActions";
-import TaskDirectoryUtil from "../utils/TaskDirectoryUtil";
 import Units from "../utils/Units";
+
+function baseRender(prop, file) {
+  return file.get(prop);
+}
 
 export default class TaskDirectoryTable extends React.Component {
   handleTaskClick(path) {
@@ -17,9 +20,9 @@ export default class TaskDirectoryTable extends React.Component {
 
   renderHeadline(prop, file) {
     let label;
-    let value = _.last(file[prop].split("/"));
+    let value = _.last(file.get(prop).split("/"));
 
-    if (TaskDirectoryUtil.isDirectory(file)) {
+    if (file.isDirectory()) {
       label = (
         <a
           className="emphasize clickable"
@@ -31,7 +34,10 @@ export default class TaskDirectoryTable extends React.Component {
       label = (
         <a
           className="emphasize"
-          href={TaskDirectoryActions.getDownloadURL(this.props.nodeID, file.path)}>
+          href={TaskDirectoryActions.getDownloadURL(
+            this.props.nodeID,
+            file.get("path")
+          )}>
           {value}
         </a>
       );
@@ -39,8 +45,8 @@ export default class TaskDirectoryTable extends React.Component {
 
     let iconClass = classNames({
       "icon icon-sprite icon-sprite-mini": true,
-      "icon-file": !TaskDirectoryUtil.isDirectory(file),
-      "icon-directory": TaskDirectoryUtil.isDirectory(file)
+      "icon-file": !file.isDirectory(),
+      "icon-directory": file.isDirectory()
     });
 
     return (
@@ -58,15 +64,15 @@ export default class TaskDirectoryTable extends React.Component {
   renderStats(prop, file) {
     return (
       <span>
-        {Units.filesize(file[prop], 1)}
+        {Units.filesize(file.get(prop), 1)}
       </span>
     );
   }
 
   renderDate(prop, file) {
     return (
-      <span title={DateUtil.msToDateStr(file[prop] * 1000)}>
-        {DateUtil.msToRelativeTime(file[prop])}
+      <span title={DateUtil.msToDateStr(file.get(prop) * 1000)}>
+        {DateUtil.msToRelativeTime(file.get(prop))}
       </span>
     );
   }
@@ -85,8 +91,8 @@ export default class TaskDirectoryTable extends React.Component {
   getDirectorySortFunction(baseProp, sortFunc) {
     return function (prop, order) {
       return function (a, b) {
-        let aIsDirectory = TaskDirectoryUtil.isDirectory(a);
-        let bIsDirectory = TaskDirectoryUtil.isDirectory(b);
+        let aIsDirectory = a.isDirectory();
+        let bIsDirectory = b.isDirectory();
 
         if (aIsDirectory && !bIsDirectory) {
           if (order === "desc") {
@@ -138,10 +144,12 @@ export default class TaskDirectoryTable extends React.Component {
         render: this.renderHeadline.bind(this)
       },
       {
-        prop: "mode"
+        prop: "mode",
+        render: baseRender
       },
       {
-        prop: "uid"
+        prop: "uid",
+        render: baseRender
       },
       {
         prop: "size",
