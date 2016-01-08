@@ -2,62 +2,38 @@ import mixin from "reactjs-mixin";
 import React from "react";
 import {StoreMixin} from "mesosphere-shared-reactjs";
 
-import EventTypes from "../constants/EventTypes";
 import RequestErrorMsg from "./RequestErrorMsg";
 import TaskDirectoryTable from "./TaskDirectoryTable";
 import TaskDirectoryStore from "../stores/TaskDirectoryStore";
 
-const METHODS_TO_BIND = ["onDirectoryChange", "onDirectoryError"];
+const METHODS_TO_BIND = ["onTaskDirectoryStoreError"];
 
 export default class TaskDirectoryView extends mixin(StoreMixin) {
   constructor() {
     super();
 
     this.state = {
-      directory: null,
       taskDirectoryErrorCount: 0
     };
+
+    this.store_listeners = [{
+      name: "taskDirectory",
+      events: ["success", "error"]
+    }];
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     TaskDirectoryStore.getDirectory(this.props.task);
-
-    TaskDirectoryStore.addChangeListener(
-      EventTypes.TASK_DIRECTORY_CHANGE,
-      this.onDirectoryChange
-    );
-
-    TaskDirectoryStore.addChangeListener(
-      EventTypes.TASK_DIRECTORY_ERROR,
-      this.onDirectoryError
-    );
   }
 
-  componentWillUnmount() {
-    TaskDirectoryStore.removeChangeListener(
-      EventTypes.TASK_DIRECTORY_CHANGE,
-      this.onDirectoryChange
-    );
-
-    TaskDirectoryStore.removeChangeListener(
-      EventTypes.TASK_DIRECTORY_ERROR,
-      this.onDirectoryError
-    );
-  }
-
-  onDirectoryError() {
+  onTaskDirectoryStoreError() {
     this.setState({
       taskDirectoryErrorCount: this.state.taskDirectoryErrorCount + 1
     });
-  }
-
-  onDirectoryChange() {
-    let directory = TaskDirectoryStore.get("directory");
-    this.setState({directory});
   }
 
   handleFileClick(path) {
@@ -143,9 +119,9 @@ export default class TaskDirectoryView extends mixin(StoreMixin) {
   }
 
   render() {
-    let directory = this.state.directory;
+    let directory = TaskDirectoryStore.get("directory");
 
-    if (directory == null || TaskDirectoryStore.get("directory") == null) {
+    if (directory == null) {
       return this.getLoadingScreen();
     }
 

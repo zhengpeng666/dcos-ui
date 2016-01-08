@@ -10,6 +10,7 @@ import MesosLogStore from "../stores/MesosLogStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import MetadataStore from "../stores/MetadataStore";
+import TaskDirectoryStore from "../stores/TaskDirectoryStore";
 
 const ListenersDescription = {
 
@@ -154,6 +155,18 @@ const ListenersDescription = {
       deleteUserError: EventTypes.ACL_GROUP_REMOVE_USER_ERROR,
       deleteSuccess: EventTypes.ACL_GROUP_DELETE_SUCCESS,
       deleteError: EventTypes.ACL_GROUP_DELETE_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
+  taskDirectory: {
+    store: TaskDirectoryStore,
+    events: {
+      success: EventTypes.TASK_DIRECTORY_CHANGE,
+      error: EventTypes.TASK_DIRECTORY_ERROR
     },
     unmountWhen: function () {
       return true;
