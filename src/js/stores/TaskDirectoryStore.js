@@ -37,8 +37,8 @@ var TaskDirectoryStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    innerPath: "",
-    directory: undefined
+    directory: null,
+    innerPath: ""
   },
 
   addChangeListener: function (eventName, callback) {
@@ -68,7 +68,7 @@ var TaskDirectoryStore = Store.createStore({
 
   getDirectory: function (task, deeperPath) {
     this.resetRequests();
-    this.set({directory: undefined});
+    this.set({directory: null});
     this.emit(EventTypes.TASK_DIRECTORY_CHANGE);
 
     startPolling(task, deeperPath);
