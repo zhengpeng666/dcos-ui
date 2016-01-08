@@ -3,7 +3,7 @@ import _ from "underscore";
 import List from "./List";
 import File from "./File";
 
-export default class TaskDirectory extends List {
+class TaskDirectory extends List {
   constructor() {
     super(...arguments);
 
@@ -24,3 +24,5 @@ export default class TaskDirectory extends List {
   }
 
 }
+
+module.exports = TaskDirectory;
