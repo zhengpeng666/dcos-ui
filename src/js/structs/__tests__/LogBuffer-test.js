@@ -154,26 +154,22 @@ describe("LogBuffer", function () {
   describe("#initialize", function () {
 
     it("should set end to 0 if offset < PAGE_SIZE", function () {
-      this.logBuffer.initialize(new Item({data: "foo", offset: 100}));
+      this.logBuffer.initialize(100);
       expect(this.logBuffer.getEnd()).toEqual(0);
     });
 
     it("should set start to 0 if offset < PAGE_SIZE", function () {
-      this.logBuffer.initialize(new Item({data: "foo", offset: 100}));
+      this.logBuffer.initialize(100);
       expect(this.logBuffer.getStart()).toEqual(0);
     });
 
     it("should set end to offset - PAGE_SIZE when > PAGE_SIZE", function () {
-      this.logBuffer.initialize(
-        new Item({data: "foo", offset: PAGE_SIZE + 100})
-      );
+      this.logBuffer.initialize(PAGE_SIZE + 100);
       expect(this.logBuffer.getEnd()).toEqual(100);
     });
 
     it("should set start to offset - PAGE_SIZE when > PAGE_SIZE", function () {
-      this.logBuffer.initialize(
-        new Item({data: "foo", offset: PAGE_SIZE + 100})
-      );
+      this.logBuffer.initialize(PAGE_SIZE + 100);
       expect(this.logBuffer.getStart()).toEqual(100);
     });
 
