@@ -20,7 +20,7 @@ export default class TaskDirectoryTable extends React.Component {
 
   renderHeadline(prop, directoryItem) {
     let label;
-    let value = _.last(directoryItem.get(prop).split("/"));
+    let value = directoryItem.getName();
 
     if (directoryItem.isDirectory()) {
       label = (

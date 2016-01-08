@@ -19,7 +19,7 @@ class TaskDirectory extends List {
 
   findFile(name) {
     return _.find(this.getItems(), function (file) {
-      return file.get("path").replace(/^.*\//, "") === name;
+      return file.getName() === name;
     });
   }
 
