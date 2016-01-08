@@ -9,7 +9,7 @@ import TaskDirectoryHeaderLabels from "../constants/TaskDirectoryHeaderLabels";
 import TaskDirectoryActions from "../events/TaskDirectoryActions";
 import Units from "../utils/Units";
 
-function baseRender(prop, file) {
+function renderByProperty(prop, file) {
   return file.get(prop);
 }
 
@@ -145,11 +145,11 @@ export default class TaskDirectoryTable extends React.Component {
       },
       {
         prop: "mode",
-        render: baseRender
+        render: renderByProperty
       },
       {
         prop: "uid",
-        render: baseRender
+        render: renderByProperty
       },
       {
         prop: "size",
