@@ -6,6 +6,7 @@ import AppDispatcher from "../events/AppDispatcher";
 import Config from "../config/Config";
 import EventTypes from "../constants/EventTypes";
 import GetSetMixin from "../mixins/GetSetMixin";
+import TaskDirectory from "../structs/TaskDirectory";
 import TaskDirectoryActions from "../events/TaskDirectoryActions";
 
 var requestInterval = null;
@@ -49,7 +50,7 @@ var TaskDirectoryStore = Store.createStore({
 
     if (_.isEmpty(this.listeners(EventTypes.TASK_DIRECTORY_CHANGE))) {
       this.resetRequests();
-      this.set({innerPath: "", directory: []});
+      this.set({innerPath: "", directory: new TaskDirectory()});
     }
   },
 
@@ -88,7 +89,7 @@ var TaskDirectoryStore = Store.createStore({
   },
 
   processStateSuccess: function (directory) {
-    this.set({directory});
+    this.set({directory: new TaskDirectory({items: directory})});
     this.emit(EventTypes.TASK_DIRECTORY_CHANGE);
   },
 
