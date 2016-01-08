@@ -5,12 +5,12 @@ import RequestUtil from "../utils/RequestUtil";
 
 const MesosLogActions = {
 
-  initialize: function (slaveID, path) {
+  requestOffset: function (slaveID, path) {
     RequestUtil.json({
       url: `${Config.rootUrl}/slave/${slaveID}/files/read.json?path=${path}&offset=-1`,
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_SUCCESS,
+          type: ActionTypes.REQUEST_MESOS_LOG_OFFSET_SUCCESS,
           data: response,
           path,
           slaveID
@@ -18,7 +18,7 @@ const MesosLogActions = {
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_ERROR,
+          type: ActionTypes.REQUEST_MESOS_LOG_OFFSET_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           path,
           slaveID

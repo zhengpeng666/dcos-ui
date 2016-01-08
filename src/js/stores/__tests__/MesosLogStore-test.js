@@ -53,7 +53,7 @@ describe("MesosLogStore", function () {
 
     beforeEach(function () {
       // First item will be used to initialize
-      MesosLogStore.processInitialize("foo", "/bar", {data: "", offset: 100});
+      MesosLogStore.processOffset("foo", "/bar", {data: "", offset: 100});
       // Two next processes will be stored
       MesosLogStore.processLogEntry("foo", "/bar", {data: "foo", offset: 100});
       MesosLogStore.processLogEntry("foo", "/bar", {data: "bar", offset: 103});
@@ -94,20 +94,20 @@ describe("MesosLogStore", function () {
 
   });
 
-  describe("#processInitializeError", function () {
+  describe("#processOffsetError", function () {
 
     beforeEach(function () {
       this.logBuffer = MesosLogStore.get("/bar");
     });
 
     it("should not be initialized after error", function () {
-      MesosLogStore.processInitializeError("foo", "/bar");
+      MesosLogStore.processOffsetError("foo", "/bar");
       expect(this.logBuffer.isInitialized()).toEqual(false);
     });
 
   });
 
-  describe("#processInitialize", function () {
+  describe("#processOffset", function () {
 
     beforeEach(function () {
       this.logBuffer = MesosLogStore.get("/bar");
@@ -115,7 +115,7 @@ describe("MesosLogStore", function () {
 
     it("should be initialized after initialize and before error", function () {
       // First item will be used to initialize
-      MesosLogStore.processInitialize("foo", "/bar", {data: "", offset: 100});
+      MesosLogStore.processOffset("foo", "/bar", {data: "", offset: 100});
       expect(this.logBuffer.isInitialized()).toEqual(true);
     });
 

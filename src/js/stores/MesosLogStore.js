@@ -28,14 +28,14 @@ const MesosLogStore = Store.createStore({
     let state = {};
     state[path] = logBuffer;
     this.set(state);
-    MesosLogActions.initialize(slaveID, path);
+    MesosLogActions.requestOffset(slaveID, path);
   },
 
   stopTailing: function (path) {
     this.set({[path]: undefined});
   },
 
-  processInitialize: function (slaveID, path, entry) {
+  processOffset: function (slaveID, path, entry) {
     let logBuffer = this.get(path);
     if (!logBuffer) {
       // Stop tailing
@@ -50,7 +50,7 @@ const MesosLogStore = Store.createStore({
     MesosLogStore.emit(EventTypes.MESOS_INITIALIZE_LOG_CHANGE);
   },
 
-  processInitializeError: function (slaveID, path) {
+  processOffsetError: function (slaveID, path) {
     let logBuffer = this.get(path);
     if (!logBuffer) {
       // Stop tailing
@@ -59,7 +59,7 @@ const MesosLogStore = Store.createStore({
 
     // Try to re-initialize from where we left off
     setTimeout(function () {
-      MesosLogActions.initialize(slaveID, path);
+      MesosLogActions.requestOffset(slaveID, path);
     }, Config.tailRefresh);
 
     MesosLogStore.emit(EventTypes.MESOS_INITIALIZE_LOG_REQUEST_ERROR);
@@ -123,11 +123,11 @@ const MesosLogStore = Store.createStore({
       case ActionTypes.REQUEST_MESOS_LOG_ERROR:
         MesosLogStore.processLogError(action.slaveID, action.path);
         break;
-      case ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_SUCCESS:
-        MesosLogStore.processInitialize(action.slaveID, action.path, action.data);
+      case ActionTypes.REQUEST_MESOS_LOG_OFFSET_SUCCESS:
+        MesosLogStore.processOffset(action.slaveID, action.path, action.data);
         break;
-      case ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_ERROR:
-        MesosLogStore.processInitializeError(action.slaveID, action.path);
+      case ActionTypes.REQUEST_MESOS_LOG_OFFSET_ERROR:
+        MesosLogStore.processOffsetError(action.slaveID, action.path);
         break;
     }
 

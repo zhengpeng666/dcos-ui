@@ -10,11 +10,11 @@ var RequestUtil = require("../../utils/RequestUtil");
 
 describe("MesosLogActions", function () {
 
-  describe("#initialize", function () {
+  describe("#requestOffset", function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, "json");
-      MesosLogActions.initialize("foo", "bar");
+      MesosLogActions.requestOffset("foo", "bar");
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
@@ -32,7 +32,7 @@ describe("MesosLogActions", function () {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
-          .toEqual(ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_SUCCESS);
+          .toEqual(ActionTypes.REQUEST_MESOS_LOG_OFFSET_SUCCESS);
       });
 
       this.configuration.success({data: "", offset: 0});
@@ -54,7 +54,7 @@ describe("MesosLogActions", function () {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type)
-          .toEqual(ActionTypes.REQUEST_MESOS_INITIALIZE_LOG_ERROR);
+          .toEqual(ActionTypes.REQUEST_MESOS_LOG_OFFSET_ERROR);
       });
 
       this.configuration.error({});
