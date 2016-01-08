@@ -17,7 +17,7 @@ import mixin from "reactjs-mixin";
 const WIDTH_HEIGHT_RATIO = 4.5;
 
 export default class SidePanelContents extends
-  mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
+  mixin(StoreMixin, InternalStorageMixin, TabsMixin) {
   constructor() {
     super(...arguments);
 

@@ -17,7 +17,6 @@ require("../../utils/StoreMixinConfig");
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
-var JestUtil = require("../../utils/JestUtil");
 var MesosStateStore = require("../../stores/MesosStateStore");
 var MesosSummaryActions = require("../../events/MesosSummaryActions");
 var MesosSummaryStore = require("../../stores/MesosSummaryStore");
@@ -138,8 +137,12 @@ describe("NodeSidePanelContents", function () {
         <NodeSidePanelContents itemID="existingNode" />
       );
 
-      let headline = JestUtil.renderAndFindTag(
-        instance.getKeyValuePairs({"foo": "bar"}, "baz"),
+      var keyValuePairs = TestUtils.renderIntoDocument(
+        instance.getKeyValuePairs({"foo": "bar"}, "baz")
+      );
+
+      var headline = TestUtils.findRenderedDOMComponentWithTag(
+        keyValuePairs,
         "h3"
       );
 
@@ -153,8 +156,8 @@ describe("NodeSidePanelContents", function () {
         <NodeSidePanelContents itemID="nonExistent" />
       );
 
-      let headline = JestUtil.renderAndFindTag(
-        instance.render(), "h3"
+      let headline = TestUtils.findRenderedDOMComponentWithTag(
+        instance, "h3"
       );
 
       expect(headline.getDOMNode().textContent).toBe("Error finding node");
