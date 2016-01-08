@@ -25,20 +25,20 @@ const MesosLogStore = Store.createStore({
 
   startTailing: function (slaveID, path) {
     let logBuffer = new LogBuffer({maxFileSize: MAX_FILE_SIZE});
-    let state = {};
-    state[path] = logBuffer;
-    this.set(state);
+    this.set({[path]: logBuffer});
+    // Request offset to initialize logBuffer
     MesosLogActions.requestOffset(slaveID, path);
   },
 
   stopTailing: function (path) {
+    // As soon as any request responds (success or error) the tailing will stop
     this.set({[path]: undefined});
   },
 
   processOffset: function (slaveID, path, entry) {
     let logBuffer = this.get(path);
     if (!logBuffer) {
-      // Stop tailing
+      // Stop tailing immediately if listener decided to call stopTailing
       return;
     }
 
@@ -53,7 +53,8 @@ const MesosLogStore = Store.createStore({
   processOffsetError: function (slaveID, path) {
     let logBuffer = this.get(path);
     if (!logBuffer) {
-      // Stop tailing
+      // Stop tailing immediately if listener decided to call stopTailing
+      // even if the initial offset request fails
       return;
     }
 
@@ -68,7 +69,7 @@ const MesosLogStore = Store.createStore({
   processLogEntry: function (slaveID, path, entry) {
     let logBuffer = this.get(path);
     if (!logBuffer) {
-      // Stop tailing
+      // Stop tailing immediately if listener decided to call stopTailing
       return;
     }
 
@@ -82,9 +83,7 @@ const MesosLogStore = Store.createStore({
     if (data.length === MAX_FILE_SIZE) {
       // Tail immediately if we received as much data as requested,
       // since that might mean that there is more data to show
-      setTimeout(function () {
-        MesosLogActions.fetchLog(slaveID, path, end, MAX_FILE_SIZE);
-      }, 0);
+      MesosLogActions.fetchLog(slaveID, path, end, MAX_FILE_SIZE);
     } else {
       setTimeout(function () {
         MesosLogActions.fetchLog(slaveID, path, end, MAX_FILE_SIZE);
@@ -95,7 +94,7 @@ const MesosLogStore = Store.createStore({
   processLogError(slaveID, path) {
     let logBuffer = this.get(path);
     if (!logBuffer) {
-      // Stop tailing
+      // Stop tailing immediately if listener decided to call stopTailing
       return;
     }
 
