@@ -6,7 +6,6 @@ import ACLUsersStore from "../stores/ACLUsersStore";
 import ACLUserStore from "../stores/ACLUserStore";
 import EventTypes from "./EventTypes";
 import MarathonStore from "../stores/MarathonStore";
-import MesosLogStore from "../stores/MesosLogStore";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import MetadataStore from "../stores/MetadataStore";
@@ -103,18 +102,6 @@ const ListenersDescription = {
     events: {
       success: EventTypes.METADATA_CHANGE,
       dcosSuccess: EventTypes.DCOS_METADATA_CHANGE
-    },
-    unmountWhen: function () {
-      return true;
-    },
-    listenAlways: true
-  },
-
-  mesosLog: {
-    store: MesosLogStore,
-    events: {
-      success: EventTypes.MESOS_LOG_CHANGE,
-      error: EventTypes.MESOS_LOG_REQUEST_ERROR
     },
     unmountWhen: function () {
       return true;
