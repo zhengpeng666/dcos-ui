@@ -29,7 +29,7 @@
     "less-color-lighten": "0.0.1",
     "md5": "^2.0.0",
     "mesosphere-shared-reactjs": "0.0.6",
-    "moment": "^2.10.6",
+    "moment": "^2.11.1",
     "query-string": "^3.0.0",
     "react": "^0.13.3",
     "react-gemini-scrollbar": "^1.1.1",

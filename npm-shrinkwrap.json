@@ -12479,8 +12479,8 @@
       "resolved": "https://registry.npmjs.org/mesosphere-shared-reactjs/-/mesosphere-shared-reactjs-0.0.6.tgz"
     },
     "moment": {
-      "version": "2.10.6",
-      "resolved": "https://registry.npmjs.org/moment/-/moment-2.10.6.tgz"
+      "version": "2.11.1",
+      "resolved": "https://registry.npmjs.org/moment/-/moment-2.11.1.tgz"
     },
     "node-libs-browser": {
       "version": "0.5.2",
