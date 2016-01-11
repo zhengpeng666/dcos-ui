@@ -1,6 +1,7 @@
+import mixin from "reactjs-mixin";
 import React from "react";
+import {StoreMixin} from "mesosphere-shared-reactjs";
 
-import EventTypes from "../constants/EventTypes";
 import MesosLogStore from "../stores/MesosLogStore";
 import RequestErrorMsg from "./RequestErrorMsg";
 
@@ -9,7 +10,7 @@ const METHODS_TO_BIND = [
   "onMesosLogStoreSuccess"
 ];
 
-export default class MesosLogView extends React.Component {
+export default class MesosLogView extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -17,23 +18,19 @@ export default class MesosLogView extends React.Component {
       hasLoadingError: 0
     };
 
+    this.store_listeners = [{
+      name: "mesosLog",
+      events: ["success", "error"]
+    }];
+
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
   componentDidMount() {
+    super.componentDidMount(...arguments);
     let {props} = this;
-
-    MesosLogStore.addChangeListener(
-      EventTypes.MESOS_LOG_CHANGE,
-      this.onMesosLogStoreSuccess
-    );
-    MesosLogStore.addChangeListener(
-      EventTypes.MESOS_LOG_REQUEST_ERROR,
-      this.onMesosLogStoreError
-    );
-
     MesosLogStore.startTailing(props.slaveID, props.filePath);
   }
 
@@ -46,21 +43,12 @@ export default class MesosLogView extends React.Component {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount(...arguments);
     MesosLogStore.stopTailing(this.props.filePath);
-
-    MesosLogStore.removeChangeListener(
-      EventTypes.MESOS_LOG_CHANGE,
-      this.onMesosLogStoreSuccess
-    );
-    MesosLogStore.removeChangeListener(
-      EventTypes.MESOS_LOG_REQUEST_ERROR,
-      this.onMesosLogStoreError
-    );
   }
 
   onMesosLogStoreError(path) {
-    // We cannot use StoreMixin, since we need to check
-    // the filePath before we reload
+    // Check the filePath before we reload
     if (path !== this.props.filePath) {
       // This event is not for our filePath
       return;
@@ -70,8 +58,7 @@ export default class MesosLogView extends React.Component {
   }
 
   onMesosLogStoreSuccess(path) {
-    // We cannot use StoreMixin, since we need to check
-    // the filePath before we reload
+    // Check the filePath before we reload
     let {filePath} = this.props;
     if (path !== filePath) {
       // This event is not for our filePath
@@ -116,8 +103,8 @@ export default class MesosLogView extends React.Component {
     }
 
     return (
-      <div className="log-view">
-        <pre>
+      <div className="log-view flex-grow flex-container-col">
+        <pre className="flex-grow flush-bottom">
           {this.state.fullLog}
         </pre>
       </div>
