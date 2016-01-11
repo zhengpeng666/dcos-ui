@@ -27973,8 +27973,8 @@
       "resolved": "http://registry.npmjs.org/transform-loader/-/transform-loader-0.2.2.tgz"
     },
     "underscore": {
-      "version": "1.8.2",
-      "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.2.tgz"
+      "version": "1.8.3",
+      "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
     },
     "webpack": {
       "version": "1.10.1",
