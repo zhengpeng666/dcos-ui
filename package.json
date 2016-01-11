@@ -21,7 +21,7 @@
   "dependencies": {
     "browser-info": "0.0.3",
     "canvas-ui": "^0.2.1",
-    "classnames": "^2.2.1",
+    "classnames": "^2.2.3",
     "cookie": "^0.2.3",
     "d3": "^3.5.12",
     "flux": "^2.1.1",
