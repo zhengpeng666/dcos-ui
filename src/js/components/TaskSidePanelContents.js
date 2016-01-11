@@ -100,7 +100,8 @@ export default class TaskSidePanelContents extends SidePanelContents {
   }
 
   getBasicInfo(task, node) {
-    if (task == null) {
+    // Hide when no task or when we are viewing debug tab
+    if (task == null || this.state.currentTab === "debug") {
       return null;
     }
 
@@ -179,6 +180,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
 
   renderDebugTabView() {
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+
     return (
       <TaskDebugView task={task} />
     );
