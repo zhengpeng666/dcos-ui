@@ -148,12 +148,9 @@ describe("NodeSidePanelContents", function () {
 
   describe("#render", function () {
     it("should show error if node is not to be found", function () {
-      var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents itemID="nonExistent" />
-      );
 
       let headline = JestUtil.renderAndFindTag(
-        instance.render(), "h3"
+        <NodeSidePanelContents itemID="nonExistent" />, "h3"
       );
 
       expect(headline.getDOMNode().textContent).toBe("Error finding node");
