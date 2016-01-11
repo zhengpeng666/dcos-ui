@@ -35,6 +35,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   componentWillReceiveProps(nextProps) {
+    super.componentWillReceiveProps(...arguments);
     let {props} = this;
     if (props.filePath !== nextProps.filePath) {
       MesosLogStore.stopTailing(props.filePath);
