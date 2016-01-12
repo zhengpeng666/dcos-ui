@@ -101,7 +101,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
   render() {
     let {props, state} = this;
     let directory = TaskDirectoryStore.get("directory");
-    if (directory == null) {
+    if (directory == null || this.hasLoadingError()) {
       return this.getLoadingScreen();
     }
 
