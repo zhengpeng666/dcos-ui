@@ -192,6 +192,13 @@ export default class TaskSidePanelContents extends SidePanelContents {
     );
   }
 
+  renderDebugTabView() {
+    let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+    return (
+      <TaskDebugView task={task} />
+    );
+  }
+
   render() {
     if (MesosStateStore.get("lastMesosState").slaves == null) {
       return null;
