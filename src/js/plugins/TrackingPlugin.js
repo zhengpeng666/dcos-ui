@@ -20,7 +20,6 @@ let interval = null;
 let tourHasBeenSetup = false;
 
 const TrackingPlugin = {
-
   configuration: {
     enabled: false
   },
@@ -186,7 +185,6 @@ const TrackingPlugin = {
       </div>
     );
   }
-
 };
 
-export default TrackingPlugin;
+module.exports = TrackingPlugin;

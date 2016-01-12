@@ -30,4 +30,4 @@ const TaskUtil = {
 
 };
 
-export default TaskUtil;
+module.exports = TaskUtil;

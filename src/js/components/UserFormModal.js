@@ -12,7 +12,7 @@ const METHODS_TO_BIND = [
   'onUserStoreCreateSuccess'
 ];
 
-export default class UserFormModal extends mixin(StoreMixin) {
+module.exports = class UserFormModal extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -106,4 +106,4 @@ export default class UserFormModal extends mixin(StoreMixin) {
       </FormModal>
     );
   }
-}
+};

@@ -1,7 +1,7 @@
 import List from './List';
 import Group from './Group';
 
-export default class GroupsList extends List {
+module.exports = class GroupsList extends List {
   constructor() {
     super(...arguments);
 
@@ -14,4 +14,4 @@ export default class GroupsList extends List {
       }
     });
   }
-}
+};

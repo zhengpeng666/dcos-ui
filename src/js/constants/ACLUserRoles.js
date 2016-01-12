@@ -3,4 +3,4 @@ const ACLUserRoles = {
   default: 'DEFAULT_ROLE'
 };
 
-export default ACLUserRoles;
+module.exports = ACLUserRoles;

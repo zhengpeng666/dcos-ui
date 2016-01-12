@@ -58,7 +58,6 @@ const ACLUsersStore = Store.createStore({
 
     return true;
   })
-
 });
 
-export default ACLUsersStore;
+module.exports = ACLUsersStore;

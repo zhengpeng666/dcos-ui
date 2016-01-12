@@ -94,4 +94,4 @@ let EventTypes = {};
   EventTypes[eventType] = eventType;
 });
 
-export default EventTypes;
+module.exports = EventTypes;

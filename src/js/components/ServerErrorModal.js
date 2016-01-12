@@ -19,7 +19,7 @@ function getEventsFromStoreListeners(storeListeners) {
   return events;
 }
 
-export default class ServerErrorModal extends mixin(StoreMixin) {
+module.exports = class ServerErrorModal extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -100,4 +100,4 @@ export default class ServerErrorModal extends mixin(StoreMixin) {
       </Modal>
     );
   }
-}
+};

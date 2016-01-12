@@ -38,7 +38,7 @@ let mergeObjectsById = function (newData, data) {
   });
 };
 
-export default class CompositeState {
+module.exports = class CompositeState {
   constructor(data = {}) {
     this.data = data;
   }
@@ -70,4 +70,4 @@ export default class CompositeState {
       items: this.data.frameworks
     });
   }
-}
+};

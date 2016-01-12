@@ -1,13 +1,8 @@
-let fixturePath = '../../../../tests/_fixtures/acl/user-with-details.json';
+let fixturePath = "../../../../tests/_fixtures/acl/user-with-details.json";
 
-jest.dontMock('underscore');
-jest.dontMock('../Group');
-jest.dontMock('../GroupsList');
-jest.dontMock('../Item');
-jest.dontMock('../List');
-jest.dontMock('../User');
-jest.dontMock('../UsersList');
-jest.dontMock('../../utils/Util');
+jest.mock("../UsersList")
+jest.dontMock("underscore");
+jest.dontMock("../../utils/Util");
 jest.dontMock(fixturePath);
 
 let _ = require('underscore');

@@ -25,4 +25,4 @@ let Core = {
   }
 };
 
-export default Core;
+module.exports = Core;

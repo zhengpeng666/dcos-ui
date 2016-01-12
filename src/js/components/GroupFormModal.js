@@ -13,7 +13,7 @@ const METHODS_TO_BIND = [
   'onGroupStoreCreateError'
 ];
 
-export default class GroupFormModal extends mixin(StoreMixin) {
+module.exports = class GroupFormModal extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -84,4 +84,4 @@ export default class GroupFormModal extends mixin(StoreMixin) {
       </FormModal>
     );
   }
-}
+};

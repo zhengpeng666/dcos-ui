@@ -15,7 +15,7 @@ const METHODS_TO_BIND = [
   'renderHeadline'
 ];
 
-export default class TaskTable extends React.Component {
+class TaskTable extends React.Component {
   constructor() {
     super(...arguments);
 
@@ -196,3 +196,5 @@ TaskTable.propTypes = {
 TaskTable.defaultProps = {
   tasks: []
 };
+
+module.exports = TaskTable;

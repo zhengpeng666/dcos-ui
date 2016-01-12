@@ -4,7 +4,7 @@ import {Dropdown} from 'reactjs-components';
 
 const defaultID = 'all';
 
-export default class FilterByTaskState extends React.Component {
+class FilterByTaskState extends React.Component {
 
   constructor() {
     super();
@@ -89,3 +89,5 @@ FilterByTaskState.defaultProps = {
   statuses: [],
   totalHostsCount: 0
 };
+
+module.exports = FilterByTaskState;

@@ -4,7 +4,7 @@ import MesosSummaryUtil from '../utils/MesosSummaryUtil';
 import ServicesList from './ServicesList';
 import NodesList from './NodesList';
 
-export default class StateSummary {
+module.exports = class StateSummary {
   constructor(options = {}) {
     this.snapshot = {
       frameworks: [],
@@ -79,4 +79,4 @@ export default class StateSummary {
   isSnapshotSuccessful() {
     return this.metadata.successfulSnapshot;
   }
-}
+};

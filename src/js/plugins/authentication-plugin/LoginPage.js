@@ -2,8 +2,8 @@ import React from 'react';
 
 import LoginModal from './LoginModal';
 
-export default class LoginPage extends React.Component {
+module.exports = class LoginPage extends React.Component {
   render() {
     return <LoginModal />;
   }
-}
+};

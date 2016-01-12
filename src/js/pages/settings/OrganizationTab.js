@@ -37,7 +37,7 @@ const METHODS_TO_BIND = [
 
 const FILTERS = ['all', 'local', 'external'];
 
-export default class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
+class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
   constructor() {
     super(arguments);
 
@@ -582,3 +582,5 @@ OrganizationTab.propTypes = {
   itemName: React.PropTypes.string.isRequired,
   handleNewItemClick: React.PropTypes.func.isRequired
 };
+
+module.exports = OrganizationTab;

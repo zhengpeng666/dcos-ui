@@ -10,4 +10,4 @@ const pluginList = {
   'tracking': TrackingPlugin
 };
 
-export default pluginList;
+module.exports = pluginList;

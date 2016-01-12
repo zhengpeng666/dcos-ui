@@ -24,7 +24,7 @@ const METHODS_TO_BIND = [
   'onGroupsStoreError'
 ];
 
-export default class GroupsTab extends mixin(StoreMixin) {
+class GroupsTab extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
@@ -137,3 +137,5 @@ export default class GroupsTab extends mixin(StoreMixin) {
 GroupsTab.propTypes = {
   params: React.PropTypes.object
 };
+
+module.exports = GroupsTab;

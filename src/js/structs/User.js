@@ -1,7 +1,7 @@
 import GroupsList from './GroupsList';
 import Item from './Item';
 
-export default class User extends Item {
+module.exports = class User extends Item {
 
   getGroups() {
     let groups = this.get('groups') || [];
@@ -52,4 +52,5 @@ export default class User extends Item {
   isRemote() {
     return this.get('is_remote');
   }
-}
+
+};

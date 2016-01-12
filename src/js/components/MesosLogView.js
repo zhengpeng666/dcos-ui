@@ -17,7 +17,7 @@ const METHODS_TO_BIND = [
   'onMesosLogStoreSuccess'
 ];
 
-export default class MesosLogView extends mixin(StoreMixin) {
+class MesosLogView extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -299,3 +299,5 @@ MesosLogView.propTypes = {
   logName: React.PropTypes.string,
   slaveID: React.PropTypes.string.isRequired
 };
+
+module.exports = MesosLogView;

@@ -53,3 +53,5 @@ ApplicationLoader.propTypes = {
 ApplicationLoader.contextTypes = {
   router: React.PropTypes.func
 };
+
+module.exports = ApplicationLoader;

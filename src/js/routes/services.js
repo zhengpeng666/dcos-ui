@@ -29,4 +29,4 @@ let servicesRoutes = {
   ]
 };
 
-export default servicesRoutes;
+module.exports = servicesRoutes;

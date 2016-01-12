@@ -2,7 +2,7 @@ import _ from 'underscore';
 import List from './List';
 import Item from './Item';
 
-export default class ACLList extends List {
+module.exports = class ACLList extends List {
   constructor() {
     super(...arguments);
 
@@ -21,4 +21,4 @@ export default class ACLList extends List {
       return item.get('rid') === rid;
     });
   }
-}
+};

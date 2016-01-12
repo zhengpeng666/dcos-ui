@@ -20,7 +20,7 @@ const METHODS_TO_BIND = [
   'showExpandButton'
 ];
 
-export default class SidePanelContents extends
+class SidePanelContents extends
   mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
   constructor() {
     super(...arguments);
@@ -235,3 +235,5 @@ SidePanelContents.propTypes = {
 };
 
 SidePanelContents.animationLengthSeconds = 0.5;
+
+module.exports = SidePanelContents;

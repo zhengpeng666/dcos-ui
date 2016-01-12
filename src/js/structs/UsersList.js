@@ -1,7 +1,7 @@
 import List from './List';
 import User from './User';
 
-export default class UsersList extends List {
+module.exports = class UsersList extends List {
   constructor() {
     super(...arguments);
 
@@ -14,4 +14,4 @@ export default class UsersList extends List {
       }
     });
   }
-}
+};

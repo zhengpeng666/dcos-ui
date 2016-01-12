@@ -5,7 +5,7 @@ import MesosSummaryUtil from '../utils/MesosSummaryUtil';
 import Service from './Service';
 import StringUtil from '../utils/StringUtil';
 
-export default class ServicesList extends List {
+module.exports = class ServicesList extends List {
   constructor() {
     super(...arguments);
 
@@ -78,4 +78,4 @@ export default class ServicesList extends List {
 
     return tasks;
   }
-}
+};

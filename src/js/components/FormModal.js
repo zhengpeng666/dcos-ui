@@ -6,7 +6,7 @@ const METHODS_TO_BIND = [
   'getTriggerSubmit', 'handleTriggerSubmit', 'handleError'
 ];
 
-export default class FormModal extends React.Component {
+class FormModal extends React.Component {
   constructor() {
     super();
     this.triggerSubmit = function () {};
@@ -140,3 +140,5 @@ FormModal.propTypes = {
   onClose: React.PropTypes.func.isRequired,
   open: React.PropTypes.bool
 };
+
+module.exports = FormModal;

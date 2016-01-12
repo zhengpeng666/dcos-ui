@@ -15,7 +15,7 @@ const METHODS_TO_BIND = [
   'handleDeleteUser'
 ];
 
-export default class UserSidePanel extends mixin(StoreMixin) {
+class UserSidePanel extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -207,3 +207,5 @@ UserSidePanel.contextTypes = {
 UserSidePanel.propTypes = {
   params: React.PropTypes.object
 };
+
+module.exports = UserSidePanel;

@@ -10,7 +10,6 @@ import LoginPage from './LoginPage';
 import UserDropup from './UserDropup';
 
 const AuthenticationPlugin = {
-
   configuration: {
     enabled: false
   },
@@ -115,7 +114,6 @@ const AuthenticationPlugin = {
   userLogoutSuccess: function () {
     window.location.href = '#/login';
   }
-
 };
 
-export default AuthenticationPlugin;
+module.exports = AuthenticationPlugin;

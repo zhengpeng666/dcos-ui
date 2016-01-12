@@ -13,7 +13,7 @@ function renderByProperty(prop, directoryItem) {
   return directoryItem.get(prop);
 }
 
-export default class TaskDirectoryTable extends React.Component {
+class TaskDirectoryTable extends React.Component {
   handleTaskClick(path) {
     this.props.onFileClick(path);
   }
@@ -204,3 +204,5 @@ TaskDirectoryTable.propTypes = {
 TaskDirectoryTable.defaultProps = {
   files: []
 };
+
+module.exports = TaskDirectoryTable;

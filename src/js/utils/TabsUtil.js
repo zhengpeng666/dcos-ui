@@ -34,4 +34,4 @@ const TabsUtil = {
 
 };
 
-export default TabsUtil;
+module.exports = TabsUtil;

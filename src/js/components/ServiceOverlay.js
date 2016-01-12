@@ -15,8 +15,7 @@ import StringUtil from '../utils/StringUtil';
 
 const PropTypes = React.PropTypes;
 
-export default class ServiceOverlay extends mixin(InternalStorageMixin) {
-
+class ServiceOverlay extends mixin(InternalStorageMixin) {
   constructor() {
     super();
 
@@ -217,3 +216,5 @@ ServiceOverlay.defaultProps = {
 ServiceOverlay.contextTypes = {
   router: React.PropTypes.func
 };
+
+module.exports = ServiceOverlay;

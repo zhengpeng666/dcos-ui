@@ -2,7 +2,7 @@ import List from './List';
 import MesosSummaryUtil from '../utils/MesosSummaryUtil';
 import StateSummary from './StateSummary';
 
-export default class SummaryList extends List {
+module.exports = class SummaryList extends List {
   constructor(options = {}) {
     super(...arguments);
     this.maxLength = options.maxLength || null;
@@ -84,4 +84,4 @@ export default class SummaryList extends List {
     return MesosSummaryUtil.stateResourcesToResourceStates(stateResources);
   }
 
-}
+};

@@ -21,7 +21,7 @@ const METHODS_TO_BIND = [
 
 const DEFAULT_ID = 'DEFAULT';
 
-export default class PermissionsView extends mixin(StoreMixin) {
+class PermissionsView extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
@@ -187,3 +187,5 @@ PermissionsView.propTypes = {
   itemType: React.PropTypes.string,
   permissions: React.PropTypes.array
 };
+
+module.exports = PermissionsView;

@@ -16,7 +16,7 @@ const MENU_ITEMS = {
   'button-sign-out': 'Sign Out'
 };
 
-export default class UserDropup extends React.Component {
+class UserDropup extends React.Component {
   constructor() {
     super(...arguments);
 
@@ -204,3 +204,5 @@ UserDropup.defaultProps = {
 UserDropup.propTypes = {
   items: React.PropTypes.arrayOf(React.PropTypes.node)
 };
+
+module.exports = UserDropup;

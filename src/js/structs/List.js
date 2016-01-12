@@ -1,6 +1,6 @@
 import Util from '../utils/Util';
 
-export default class List {
+module.exports = class List {
   constructor(options = {}) {
     this.list = [];
 
@@ -24,4 +24,4 @@ export default class List {
   last() {
     return this.list[this.list.length - 1];
   }
-}
+};
