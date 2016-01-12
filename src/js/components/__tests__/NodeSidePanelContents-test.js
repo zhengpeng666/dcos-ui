@@ -137,7 +137,7 @@ describe("NodeSidePanelContents", function () {
         <NodeSidePanelContents itemID="existingNode" />
       );
 
-      let headline = JestUtil.renderAndFindTag(
+      var headline = JestUtil.renderAndFindTag(
         instance.getKeyValuePairs({"foo": "bar"}, "baz"),
         "h3"
       );
@@ -148,11 +148,11 @@ describe("NodeSidePanelContents", function () {
 
   describe("#render", function () {
     it("should show error if node is not to be found", function () {
-
-      let headline = JestUtil.renderAndFindTag(
-        <NodeSidePanelContents itemID="nonExistent" />, "h3"
+      var instance = TestUtils.renderIntoDocument(
+        <NodeSidePanelContents itemID="nonExistent" />
       );
 
+      var headline = TestUtils.findRenderedDOMComponentWithTag(instance, "h3");
       expect(headline.getDOMNode().textContent).toBe("Error finding node");
     });
   });
