@@ -189,17 +189,17 @@ export default class TaskSidePanelContents extends SidePanelContents {
     let node = MesosStateStore.getNodeFromID(task.slave_id);
 
     return (
-      <div>
+      <div className="flex-container-col no-overflow">
         <div className="side-panel-content-header container container-pod
           container-fluid container-pod-divider-bottom
-          container-pod-divider-bottom-align-right flush-bottom">
+          container-pod-divider-bottom-align-right flush-bottom flex-no-shrink">
           {this.getBasicInfo(task, node)}
           <ul className="tabs list-inline container container-fluid container-pod
             flush flush-bottom flush-top">
             {this.tabs_getUnroutedTabs()}
           </ul>
         </div>
-        <div className="container container-fluid container-pod container-pod-short">
+        <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow no-overflow">
           {this.tabs_getTabView()}
         </div>
       </div>
