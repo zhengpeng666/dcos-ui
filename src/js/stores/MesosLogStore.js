@@ -44,11 +44,11 @@ const MesosLogStore = Store.createStore({
     }
 
     logBuffer.initialize(entry.offset);
-    // start tailing
+    // Start tailing
     MesosLogActions
       .fetchLog(slaveID, path, logBuffer.getEnd(), MAX_FILE_SIZE);
 
-    MesosLogStore.emit(EventTypes.MESOS_INITIALIZE_LOG_CHANGE);
+    this.emit(EventTypes.MESOS_INITIALIZE_LOG_CHANGE, path);
   },
 
   processOffsetError: function (slaveID, path) {
@@ -64,7 +64,7 @@ const MesosLogStore = Store.createStore({
       MesosLogActions.requestOffset(slaveID, path);
     }, Config.tailRefresh);
 
-    MesosLogStore.emit(EventTypes.MESOS_INITIALIZE_LOG_REQUEST_ERROR);
+    this.emit(EventTypes.MESOS_INITIALIZE_LOG_REQUEST_ERROR, path);
   },
 
   processLogEntry: function (slaveID, path, entry) {
@@ -105,7 +105,7 @@ const MesosLogStore = Store.createStore({
         .fetchLog(slaveID, path, logBuffer.getEnd(), MAX_FILE_SIZE);
     }, Config.tailRefresh);
 
-    MesosLogStore.emit(EventTypes.MESOS_LOG_REQUEST_ERROR);
+    this.emit(EventTypes.MESOS_LOG_REQUEST_ERROR, path);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {

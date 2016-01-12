@@ -12475,8 +12475,8 @@
       }
     },
     "mesosphere-shared-reactjs": {
-      "version": "0.0.2",
-      "resolved": "https://registry.npmjs.org/mesosphere-shared-reactjs/-/mesosphere-shared-reactjs-0.0.2.tgz"
+      "version": "0.0.6",
+      "resolved": "https://registry.npmjs.org/mesosphere-shared-reactjs/-/mesosphere-shared-reactjs-0.0.6.tgz"
     },
     "moment": {
       "version": "2.10.6",

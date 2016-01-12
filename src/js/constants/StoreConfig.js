@@ -119,7 +119,8 @@ const ListenersDescription = {
     unmountWhen: function () {
       return true;
     },
-    listenAlways: true
+    listenAlways: true,
+    suppressUpdate: true
   },
 
   groups: {
