@@ -179,7 +179,6 @@ export default class TaskTable extends React.Component {
           no-overflow"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
-        containerSelector=".gm-scroll-view"
         data={this.props.tasks.slice()}
         idAttribute="id"
         itemHeight={TableUtil.getRowHeight()}

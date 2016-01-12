@@ -205,7 +205,6 @@ export default class PermissionsTable extends mixin(StoreMixin) {
               flush-bottom no-overflow flush-bottom"
             columns={this.getColumns()}
             colGroup={this.getColGroup()}
-            containerSelector=".gm-scroll-view"
             data={permissions}
             idAttribute="rid"
             itemHeight={TableUtil.getRowHeight()}
