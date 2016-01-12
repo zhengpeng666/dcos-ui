@@ -3,6 +3,7 @@ import mixin from "reactjs-mixin";
 import React from "react";
 import {StoreMixin} from "mesosphere-shared-reactjs";
 
+import IconDownload from "./icons/IconDownload";
 import MesosLogView from "./MesosLogView";
 import RequestErrorMsg from "./RequestErrorMsg";
 import TaskDirectoryActions from "../events/TaskDirectoryActions";
@@ -117,7 +118,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
           <a
             className="button button-stroke"
             href={TaskDirectoryActions.getDownloadURL(nodeID, filePath)}>
-            {directoryItem.getName()}
+            <IconDownload />
           </a>
         </div>
         <MesosLogView
