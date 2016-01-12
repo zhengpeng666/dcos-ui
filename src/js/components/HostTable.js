@@ -167,6 +167,7 @@ var HostTable = React.createClass({
         className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
+        containerSelector=".gm-scroll-view"
         data={this.props.hosts.slice()}
         idAttribute="id"
         itemHeight={TableUtil.getRowHeight()}

@@ -44,6 +44,7 @@ export default class TaskTable extends React.Component {
     return [
       {
         className,
+        dontCache: true,
         heading,
         headerClassName: className,
         prop: "name",
@@ -53,6 +54,7 @@ export default class TaskTable extends React.Component {
       },
       {
         className,
+        dontCache: true,
         heading,
         headerClassName: className,
         prop: "updated",
