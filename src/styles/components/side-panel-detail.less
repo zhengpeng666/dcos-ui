@@ -175,9 +175,13 @@ Side Panel Detail
 
   }
 
-  .control-group > *:first-child {
+  .control-group > * {
 
     margin-right: @base-spacing-unit * 0.5;
+
+    &:last-child {
+      margin-right: 0;
+    }
 
   }
 
