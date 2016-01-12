@@ -110,7 +110,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     let filePath = directoryItem.get("path");
 
     return (
-      <div className="side-panel-section flex-container-col flex-grow no-overflow">
+      <div className="flex-container-col flex-grow no-overflow">
         <div className="control-group flex-align-right">
           <div className="button-group form-group">
             {this.getSelectionButtons()}
