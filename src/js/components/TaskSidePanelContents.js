@@ -4,6 +4,7 @@ const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
 import SidePanelContents from "./SidePanelContents";
+import TaskDebugView from "../components/TaskDebugView";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import ResourceTypes from "../constants/ResourceTypes";
@@ -14,7 +15,8 @@ import Units from "../utils/Units";
 
 const TABS = {
   files: "Files",
-  details: "Details"
+  details: "Details",
+  debug: "Debug"
 };
 
 export default class TaskSidePanelContents extends SidePanelContents {
@@ -173,6 +175,13 @@ export default class TaskSidePanelContents extends SidePanelContents {
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
 
     return <TaskDirectoryView task={task} />;
+  }
+
+  renderDebugTabView() {
+    let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+    return (
+      <TaskDebugView task={task} />
+    );
   }
 
   render() {
