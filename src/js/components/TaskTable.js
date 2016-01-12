@@ -44,6 +44,7 @@ export default class TaskTable extends React.Component {
     return [
       {
         className,
+        dontCache: true,
         heading,
         headerClassName: className,
         prop: "name",
@@ -53,6 +54,7 @@ export default class TaskTable extends React.Component {
       },
       {
         className,
+        dontCache: true,
         heading,
         headerClassName: className,
         prop: "updated",
@@ -177,6 +179,7 @@ export default class TaskTable extends React.Component {
           no-overflow"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
+        containerSelector=".gm-scroll-view"
         data={this.props.tasks.slice()}
         idAttribute="id"
         itemHeight={TableUtil.getRowHeight()}

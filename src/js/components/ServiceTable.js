@@ -149,6 +149,7 @@ var ServicesTable = React.createClass({
       },
       {
         className,
+        dontCache: true,
         headerClassName: className,
         prop: "health",
         render: this.renderHealth,
@@ -215,6 +216,7 @@ var ServicesTable = React.createClass({
           className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
+          containerSelector=".gm-scroll-view"
           data={this.props.services.slice()}
           idAttribute="id"
           itemHeight={TableUtil.getRowHeight()}

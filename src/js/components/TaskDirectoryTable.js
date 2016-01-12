@@ -157,6 +157,7 @@ export default class TaskDirectoryTable extends React.Component {
         sortFunction: statSortFunction
       },
       {
+        dontCache: true,
         prop: "mtime",
         render: this.renderDate,
         sortFunction: statSortFunction
@@ -187,6 +188,7 @@ export default class TaskDirectoryTable extends React.Component {
           flush-bottom"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
+        containerSelector=".gm-scroll-view"
         data={this.props.files}
         idAttribute="path"
         sortBy={{prop: "path", order: "desc"}}
@@ -202,4 +204,3 @@ TaskDirectoryTable.propTypes = {
 TaskDirectoryTable.defaultProps = {
   files: []
 };
-

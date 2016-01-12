@@ -171,6 +171,7 @@ export default class UserGroupTable extends mixin(StoreMixin) {
             flush-bottom"
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
+          containerSelector=".gm-scroll-view"
           data={userGroups}
           idAttribute="gid"
           itemHeight={TableUtil.getRowHeight()}

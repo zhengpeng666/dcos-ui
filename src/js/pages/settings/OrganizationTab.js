@@ -129,6 +129,7 @@ export default class OrganizationTab extends React.Component {
               table-borderless-inner-columns flush-bottom"
             columns={this.getColumns()}
             colGroup={this.getColGroup()}
+            containerSelector=".gm-scroll-view"
             data={this.getVisibleItems(items)}
             idAttribute={props.itemID}
             itemHeight={TableUtil.getRowHeight()}
