@@ -164,10 +164,9 @@ export default class GroupSidePanelContents extends SidePanelContents {
         container
         container-fluid
         container-pod
-        container-pod-short-top
+        container-pod-short
         container-fluid
         flex-container-col
-        flush-bottom
         flex-grow">
         <PermissionsView
           permissions={group.getPermissions()}

@@ -69,7 +69,7 @@ export default class UserDetails extends mixin(StoreMixin) {
 
     return (
       <div className="side-panel-content-user-details container container-fluid
-        container-pod container-pod-short-top">
+        container-pod container-pod-short">
         <div className="flex-container-col">
           <dl className="row flex-box">
             <dt className="column-3 emphasize">

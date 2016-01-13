@@ -50,7 +50,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
     }
 
     return (
-      <div className="side-panel-tab-content side-panel-section container container-fluid container-pod container-pod-short-top container-fluid flex-container-col flush-bottom flex-grow no-overflow">
+      <div className="side-panel-tab-content side-panel-section container container-fluid container-pod container-pod-short container-fluid flex-container-col flush-bottom flex-grow no-overflow">
         {contents}
       </div>
     );
@@ -75,7 +75,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
     };
 
     return (
-      <div className="side-panel-tab-content side-panel-section container container-fluid container-pod container-pod-short-top">
+      <div className="side-panel-tab-content side-panel-section container container-fluid container-pod container-pod-short">
         {this.getKeyValuePairs(headerValueMapping)}
         {this.getKeyValuePairs(node.attributes, "Attributes")}
       </div>

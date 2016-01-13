@@ -154,10 +154,9 @@ export default class ServiceSidePanelContents extends SidePanelContents {
         container
         container-fluid
         container-pod
-        container-pod-short-top
+        container-pod-short
         container-fluid
         flex-container-col
-        flush-bottom
         flex-grow
         no-overflow">
         {contents}
@@ -175,7 +174,7 @@ export default class ServiceSidePanelContents extends SidePanelContents {
       marathonService.snapshot == null ||
       service != null && service.name === "marathon") {
       return (
-        <div className="container container-fluid container-pod container-pod-short-top">
+        <div className="container container-fluid container-pod container-pod-short">
           <h2 className="flush-top">No information available.</h2>
         </div>
       );
@@ -208,7 +207,7 @@ export default class ServiceSidePanelContents extends SidePanelContents {
     });
 
     return (
-      <div className="container container-fluid container-pod container-pod-short-top">
+      <div className="container container-fluid container-pod container-pod-short">
         {info}
       </div>
     );
