@@ -1,5 +1,7 @@
+jest.dontMock("../charts/Chart");
 jest.dontMock("../SidePanelContents");
 jest.dontMock("../../mixins/GetSetMixin");
+jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../mixins/TabsMixin");
 jest.dontMock("../../stores/MesosSummaryStore");
 jest.dontMock("../../events/MesosSummaryActions");
