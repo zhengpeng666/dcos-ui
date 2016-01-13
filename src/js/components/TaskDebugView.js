@@ -15,7 +15,8 @@ const LOG_VIEWS = [
 ];
 
 const METHODS_TO_BIND = [
-  "onTaskDirectoryStoreError"
+  "onTaskDirectoryStoreError",
+  "onTaskDirectoryStoreSuccess"
 ];
 
 export default class TaskDebugView extends mixin(StoreMixin) {
@@ -44,6 +45,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
   }
 
   componentDidMount() {
+    super.componentDidMount(...arguments);
     TaskDirectoryStore.getDirectory(this.props.task);
   }
 
@@ -53,8 +55,12 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     });
   }
 
+  onTaskDirectoryStoreSuccess() {
+    this.setState({directory: TaskDirectoryStore.get("directory")});
+  }
+
   handleViewChange(index) {
-    this.setState({currentView: index});
+    this.setState({currentView: index, directory: undefined});
   }
 
   hasLoadingError() {
@@ -100,13 +106,13 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 
   render() {
     let {props, state} = this;
-    let directory = TaskDirectoryStore.get("directory");
-    if (directory == null || this.hasLoadingError()) {
+    if (state.directory == null || this.hasLoadingError()) {
       return this.getLoadingScreen();
     }
 
+    let currentView = LOG_VIEWS[state.currentView];
     let nodeID = props.task.slave_id;
-    let directoryItem = directory.findFile(LOG_VIEWS[state.currentView].name);
+    let directoryItem = state.directory.findFile(currentView.name);
     let filePath = directoryItem.get("path");
 
     return (
@@ -123,7 +129,8 @@ export default class TaskDebugView extends mixin(StoreMixin) {
         </div>
         <MesosLogView
           filePath={filePath}
-          slaveID={nodeID} />
+          slaveID={nodeID}
+          logName={currentView.displayName} />
       </div>
     );
   }
