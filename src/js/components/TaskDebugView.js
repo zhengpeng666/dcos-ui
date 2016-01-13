@@ -67,11 +67,11 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     return this.state.taskDirectoryErrorCount >= 3;
   }
 
-  getLoadingScreen() {
-    if (this.hasLoadingError()) {
-      return <RequestErrorMsg />;
-    }
+  getErrorScreen() {
+    return <RequestErrorMsg />;
+  }
 
+  getLoadingScreen() {
     return (
       <div className="container container-fluid container-pod text-align-center vertical-center
         inverse">
@@ -106,13 +106,17 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 
   render() {
     let {props, state} = this;
-    if (state.directory == null || this.hasLoadingError()) {
+    if (state.directory == null) {
       return this.getLoadingScreen();
     }
 
     let currentView = LOG_VIEWS[state.currentView];
     let nodeID = props.task.slave_id;
     let directoryItem = state.directory.findFile(currentView.name);
+    if (directoryItem == null || this.hasLoadingError()) {
+      return this.getErrorScreen();
+    }
+
     let filePath = directoryItem.get("path");
 
     return (
