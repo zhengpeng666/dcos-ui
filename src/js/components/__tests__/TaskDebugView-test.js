@@ -65,6 +65,26 @@ describe("TaskDebugView", function () {
 
   });
 
+  describe("#onTaskDirectoryStoreSuccess", function () {
+
+    it("should setState", function () {
+      this.instance.onTaskDirectoryStoreSuccess();
+      expect(this.instance.setState).toHaveBeenCalled();
+    });
+
+    it("should setState increment onTaskDirectoryStoreSuccess", function () {
+      var directory = new TaskDirectory({items: [{nlink: 1, path: "/stdout"}]});
+      // Let directory return something
+      TaskDirectoryStore.get = jasmine.createSpy("TaskDirectoryStore#get")
+        .andReturn(directory);
+
+      this.instance.onTaskDirectoryStoreSuccess();
+      expect(this.instance.setState)
+        .toHaveBeenCalledWith({directory});
+    });
+
+  });
+
   describe("#render", function () {
 
     it("should call getErrorScreen when error occured", function () {
