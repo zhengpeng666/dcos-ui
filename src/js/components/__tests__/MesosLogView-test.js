@@ -112,12 +112,6 @@ describe("MesosLogView", function () {
       expect(this.instance.setState).not.toHaveBeenCalled();
     });
 
-    it("shouldn't setState when fullLog matches", function () {
-      this.instance.state = {fullLog: "foo"};
-      this.instance.onMesosLogStoreSuccess("/some/file/path");
-      expect(this.instance.setState).not.toHaveBeenCalled();
-    });
-
   });
 
   describe("#getLog", function () {
