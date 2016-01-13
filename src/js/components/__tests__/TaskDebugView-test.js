@@ -24,11 +24,9 @@ describe("TaskDebugView", function () {
 
     // Store original versions
     this.storeGetDirectory = TaskDirectoryStore.getDirectory;
-    this.taskDirectoryStoreGet = TaskDirectoryStore.get;
 
     // Create spies
     TaskDirectoryStore.getDirectory = jasmine.createSpy("getDirectory");
-    TaskDirectoryStore.get = jasmine.createSpy("TaskDirectoryStore#get");
 
     this.instance = TestUtils.renderIntoDocument(
       <TaskDebugView task={{slave_id: "foo"}} />
@@ -41,7 +39,6 @@ describe("TaskDebugView", function () {
   afterEach(function () {
     // Restore original functions
     TaskDirectoryStore.getDirectory = this.storeGetDirectory;
-    TaskDirectoryStore.get = this.taskDirectoryStoreGet;
   });
 
   describe("#componentDidMount", function () {
@@ -70,16 +67,16 @@ describe("TaskDebugView", function () {
 
   describe("#render", function () {
 
-    it("should call getLoadingScreen when error occured", function () {
-      // Let directory return something
-      TaskDirectoryStore.get = jasmine.createSpy("TaskDirectoryStore#get")
-        .andReturn(new TaskDirectory({items: [{nlink: 1, path: "/stdout"}]}));
-
-      this.instance.state = {taskDirectoryErrorCount: 3};
-      this.instance.getLoadingScreen = jasmine.createSpy("getLoadingScreen");
+    it("should call getErrorScreen when error occured", function () {
+      this.instance.state = {
+        currentView: 0,
+        directory: new TaskDirectory({items: [{nlink: 1, path: "/stdout"}]}),
+        taskDirectoryErrorCount: 3
+      };
+      this.instance.getErrorScreen = jasmine.createSpy("getErrorScreen");
       this.instance.render();
 
-      expect(this.instance.getLoadingScreen).toHaveBeenCalled();
+      expect(this.instance.getErrorScreen).toHaveBeenCalled();
     });
 
     it("should call getLoadingScreen when directory is undefined", function () {
@@ -90,25 +87,32 @@ describe("TaskDebugView", function () {
     });
 
     it("ignores getLoadingScreen when directory is defined", function () {
-      // Let directory return something
-      TaskDirectoryStore.get = jasmine.createSpy("TaskDirectoryStore#get")
-        .andReturn(new TaskDirectory({items: [{nlink: 1, path: "/stdout"}]}));
-
+      this.instance.state = {
+        currentView: 0,
+        directory: new TaskDirectory({items: [{nlink: 1, path: "/stdout"}]})
+      };
       this.instance.getLoadingScreen = jasmine.createSpy("getLoadingScreen");
       this.instance.render();
 
       expect(this.instance.getLoadingScreen).not.toHaveBeenCalled();
     });
 
+    it("ignores getErrorScreen when directory is defined", function () {
+      this.instance.state = {
+        currentView: 0,
+        directory: new TaskDirectory({items: [{nlink: 1, path: "/stdout"}]})
+      };
+      this.instance.getErrorScreen = jasmine.createSpy("getErrorScreen");
+      this.instance.render();
+
+      expect(this.instance.getErrorScreen).not.toHaveBeenCalled();
+    });
+
     it("renders stdout on first render", function () {
-      // Let directory return something
-      TaskDirectoryStore.get = jasmine.createSpy("TaskDirectoryStore#get")
-        .andReturn(
-          new TaskDirectory({items: [
-            {nlink: 1, path: "/stdout"},
-            {nlink: 2, path: "/stderr"}
-          ]})
-        );
+      this.instance.state = {
+        currentView: 0,
+        directory: new TaskDirectory({items: [{nlink: 1, path: "/stdout"}]})
+      };
       TaskDirectoryActions.getDownloadURL =
         jasmine.createSpy("TaskDirectoryActions#getDownloadURL");
 
@@ -119,16 +123,13 @@ describe("TaskDebugView", function () {
     });
 
     it("renders stderr when view is changed", function () {
-      // Let directory return something
-      TaskDirectoryStore.get = jasmine.createSpy("TaskDirectoryStore#get")
-        .andReturn(
-          new TaskDirectory({items: [
-            {nlink: 1, path: "/stdout"},
-            {nlink: 2, path: "/stderr"}
-          ]})
-        );
-
-      this.instance.state = {currentView: 1};
+      this.instance.state = {
+        currentView: 1,
+        directory: new TaskDirectory({items: [
+          {nlink: 1, path: "/stdout"},
+          {nlink: 1, path: "/stderr"}
+        ]})
+      };
 
       // Setup spy after state has been configured
       TaskDirectoryActions.getDownloadURL =

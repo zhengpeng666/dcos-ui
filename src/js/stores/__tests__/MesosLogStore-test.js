@@ -123,8 +123,9 @@ describe("MesosLogStore", function () {
   describe("dispatcher", function () {
 
     it("stores log entry when event is dispatched", function () {
+      // Initializing call
       AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_MESOS_LOG_SUCCESS,
+        type: ActionTypes.REQUEST_MESOS_LOG_OFFSET_SUCCESS,
         data: {data: "", offset: 100},
         path: "/bar",
         slaveID: "foo"
@@ -146,7 +147,7 @@ describe("MesosLogStore", function () {
       MesosLogStore.addChangeListener(EventTypes.MESOS_LOG_CHANGE, mockedFn);
       // Initializing call
       AppDispatcher.handleServerAction({
-        type: ActionTypes.REQUEST_MESOS_LOG_SUCCESS,
+        type: ActionTypes.REQUEST_MESOS_LOG_OFFSET_SUCCESS,
         data: {data: "", offset: 100},
         path: "/bar",
         slaveID: "foo"
