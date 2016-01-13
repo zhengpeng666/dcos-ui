@@ -120,6 +120,22 @@ describe("MesosLogView", function () {
 
   });
 
+  describe("#getLog", function () {
+
+    it("should show empty log when fullLog is empty string", function () {
+      this.instance.state = {fullLog: ""};
+      var div = this.instance.getLog();
+      expect(TestUtils.isElementOfType(div, "div")).toEqual(true);
+    });
+
+    it("should show empty log when fullLog is populated", function () {
+      this.instance.state = {fullLog: "foo"};
+      var pre = this.instance.getLog();
+      expect(TestUtils.isElementOfType(pre, "pre")).toEqual(true);
+    });
+
+  });
+
   describe("#render", function () {
 
     it("should call getLoadingScreen when error occured", function () {
