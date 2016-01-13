@@ -79,6 +79,17 @@ describe("TaskDebugView", function () {
       expect(this.instance.getErrorScreen).toHaveBeenCalled();
     });
 
+    it("should call getErrorScreen when file is not found", function () {
+      this.instance.state = {
+        currentView: 0,
+        directory: new TaskDirectory({items: [{nlink: 1, path: "/foo"}]})
+      };
+      this.instance.getErrorScreen = jasmine.createSpy("getErrorScreen");
+      this.instance.render();
+
+      expect(this.instance.getErrorScreen).toHaveBeenCalled();
+    });
+
     it("should call getLoadingScreen when directory is undefined", function () {
       this.instance.getLoadingScreen = jasmine.createSpy("getLoadingScreen");
       this.instance.render();
