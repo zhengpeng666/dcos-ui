@@ -17,7 +17,8 @@ const LOG_VIEWS = [
 
 const METHODS_TO_BIND = [
   "onTaskDirectoryStoreError",
-  "onTaskDirectoryStoreSuccess"
+  "onTaskDirectoryStoreSuccess",
+  "handleSearchStringChange"
 ];
 
 export default class TaskDebugView extends mixin(StoreMixin) {
@@ -83,6 +84,10 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     this.setState({currentView: index, directory: null});
   }
 
+  handleSearchStringChange(searchString) {
+    this.setState({searchString});
+  }
+
   hasLoadingError() {
     return this.state.taskDirectoryErrorCount >= 3;
   }
@@ -130,6 +135,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     return (
       <MesosLogView
         filePath={filePath}
+        highlightText={state.searchString}
         slaveID={nodeID}
         logName={logName} />
     );
@@ -172,8 +178,13 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 
     return (
       <div className="flex-container-col flex-grow no-overflow">
-        <div className="control-group flex-align-right">
-          <div className="button-group form-group">
+        <div className="control-group form-group flex-align-right">
+          <FilterInputText
+            placeholder="Search"
+            searchString={state.searchString}
+            handleFilterChange={this.handleSearchStringChange}
+            inverseStyle={false} />
+          <div className="button-group">
             {this.getSelectionButtons()}
           </div>
           <a

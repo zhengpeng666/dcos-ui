@@ -1,3 +1,4 @@
+import Highlight from "react-highlighter";
 import mixin from "reactjs-mixin";
 import React from "react";
 import {StoreMixin} from "mesosphere-shared-reactjs";
@@ -19,8 +20,8 @@ export default class MesosLogView extends mixin(StoreMixin) {
     };
 
     this.store_listeners = [{
-      name: "mesosLog",
       events: ["success", "error"],
+      name: "mesosLog",
       suppressUpdate: true
     }];
 
@@ -110,7 +111,12 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
     return (
       <pre className="flex-grow flush-bottom">
-        {fullLog}
+        <Highlight
+          matchClass="highlight"
+          matchElement="span"
+          search={props.highlightText}>
+          {fullLog}
+        </Highlight>
       </pre>
     );
   }
@@ -151,9 +157,13 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 }
 
+MesosLogView.defaultProps = {
+  highlightText: ""
+};
+
 MesosLogView.propTypes = {
   filePath: React.PropTypes.string.isRequired,
-  logName: React.PropTypes.string,
   highlightText: React.PropTypes.string,
+  logName: React.PropTypes.string,
   slaveID: React.PropTypes.string.isRequired
 };

@@ -8272,6 +8272,10 @@
         }
       }
     },
+    "react-highlighter": {
+      "version": "0.2.2",
+      "resolved": "http://registry.npmjs.org/react-highlighter/-/react-highlighter-0.2.2.tgz"
+    },
     "react-router": {
       "version": "0.13.3",
       "resolved": "https://registry.npmjs.org/react-router/-/react-router-0.13.3.tgz",
