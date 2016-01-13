@@ -1,9 +1,9 @@
+import {Form} from "reactjs-components";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLUserStore from "../stores/ACLUserStore";
-import Form from "./Form";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import PermissionsView from "./PermissionsView";
 import RequestErrorMsg from "./RequestErrorMsg";

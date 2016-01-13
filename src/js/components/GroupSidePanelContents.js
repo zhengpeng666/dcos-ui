@@ -1,9 +1,9 @@
+import {Form} from "reactjs-components";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
 
 import ACLGroupStore from "../stores/ACLGroupStore";
-import Form from "./Form";
 import GroupUserMembershipTab from "./GroupUserMembershipTab";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import PermissionsView from "./PermissionsView";
@@ -116,7 +116,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
         showLabel: false,
         writeType: "edit",
         validation: function () { return true; },
-        value: group.description
+        value: "SLKDJFL:SKDJFL:SKF"
       }
     ];
 
