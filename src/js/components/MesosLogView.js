@@ -49,6 +49,20 @@ export default class MesosLogView extends mixin(StoreMixin) {
     MesosLogStore.stopTailing(this.props.filePath);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    let {props, state} = this;
+    // Check highlightText
+    return props.highlightText !== nextProps.highlightText ||
+      // Check filePath
+      props.filePath !== nextProps.filePath ||
+      // Check slaveID
+      props.slaveID !== nextProps.slaveID ||
+      // Check hasLoadingError
+      state.hasLoadingError !== nextState.hasLoadingError ||
+      // Check fullLog
+      state.fullLog !== nextState.fullLog;
+  }
+
   onMesosLogStoreError(path) {
     // Check the filePath before we reload
     if (path !== this.props.filePath) {
@@ -68,11 +82,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
     }
 
     let logBuffer = MesosLogStore.get(filePath);
-    // Necessary to not make the view reload over and over again
-    let fullLog = logBuffer.getFullLog();
-    if (this.state.fullLog !== fullLog) {
-      this.setState({fullLog});
-    }
+    this.setState({fullLog: logBuffer.getFullLog()});
   }
 
   getErrorScreen() {
