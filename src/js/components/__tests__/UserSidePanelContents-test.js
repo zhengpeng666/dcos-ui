@@ -6,7 +6,6 @@ jest.dontMock("../../events/ACLUsersActions");
 jest.dontMock("../../stores/ACLUserStore");
 jest.dontMock("../../constants/EventTypes");
 jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../icons/IconEdit");
 jest.dontMock("../../mixins/InternalStorageMixin");
 jest.dontMock("../../mixins/TabsMixin");
 jest.dontMock("../RequestErrorMsg");

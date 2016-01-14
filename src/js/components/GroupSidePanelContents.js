@@ -116,7 +116,7 @@ export default class GroupSidePanelContents extends SidePanelContents {
         showLabel: false,
         writeType: "edit",
         validation: function () { return true; },
-        value: "SLKDJFL:SKDJFL:SKF"
+        value: group.description
       }
     ];
 
