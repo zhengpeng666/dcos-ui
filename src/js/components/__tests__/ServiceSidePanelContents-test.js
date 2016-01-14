@@ -64,6 +64,45 @@ describe("ServiceSidePanelContents", function () {
 
   describe("getting info", function () {
 
+    beforeEach(function () {
+      this.mesosStateFetSchedulerTaskFromServiceName =
+        MesosStateStore.getSchedulerTaskFromServiceName;
+      MesosStateStore.getSchedulerTaskFromServiceName =
+        jasmine.createSpy("MesosStateStore#getSchedulerTaskFromServiceName");
+    });
+
+    beforeEach(function () {
+      MesosStateStore.getSchedulerTaskFromServiceName =
+        this.mesosStateFetSchedulerTaskFromServiceName;
+    });
+
+    describe("#getSchedulerDetails", function () {
+      it("should return null if task doesn't exist", function () {
+        var instance = TestUtils.renderIntoDocument(
+          <ServiceSidePanelContents
+            open={false}
+            itemID="service_that_exists"/>
+        );
+
+        expect(instance.getSchedulerDetails())
+          .toEqual(null);
+      });
+
+      it("should return an element if task exists", function () {
+        MesosStateStore.getSchedulerTaskFromServiceName =
+        jasmine.createSpy("MesosStateStore#getSchedulerTaskFromServiceName")
+          .andReturn({id: "foo", resources: {cpus: 0, mem: 0, disk: 0}});
+        var instance = TestUtils.renderIntoDocument(
+          <ServiceSidePanelContents
+            open={false}
+            itemID="service_that_exists"/>
+        );
+
+        var info = instance.getSchedulerDetails();
+        expect(TestUtils.isElement(info)).toEqual(true);
+      });
+    });
+
     describe("#renderDetailsTabView", function () {
       it("should return 'no info' if service doesn't exist", function () {
         var instance = TestUtils.renderIntoDocument(
