@@ -6,7 +6,6 @@ var Config = require("../config/Config");
 var ErrorModal = require("./modals/ErrorModal");
 var EventTypes = require("../constants/EventTypes");
 var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var LocalStorageUtil = require("../utils/LocalStorageUtil");
 import IdentifyModal from "./modals/IdentifyModal";
 var MesosSummaryStore = require("../stores/MesosSummaryStore");
 import Plugins from "../plugins/Plugins";
@@ -53,12 +52,9 @@ var Modals = React.createClass({
   },
 
   componentWillMount: function () {
-    var email = LocalStorageUtil.get("email");
-    if (email != null) {
-      this.setState({
-        hasIdentity: true
-      });
-    }
+    this.setState({
+      hasIdentity: Plugins.applyFilter("applicationHasIdentity", true)
+    });
   },
 
   componentDidMount: function () {
@@ -125,7 +121,7 @@ var Modals = React.createClass({
 
     this.setState({
       hasIdentity: true,
-      showingTourModal: true
+      showingTourModal: false
     });
   },
 
@@ -143,6 +139,7 @@ var Modals = React.createClass({
         referrer: "https://mesosphere.com/"
       });
     }
+
     return (
       <IdentifyModal
         onLogin={this.onLogin}

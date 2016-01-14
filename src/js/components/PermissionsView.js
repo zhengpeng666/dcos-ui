@@ -194,7 +194,7 @@ export default class PermissionsView extends mixin(StoreMixin) {
             wrapperClassName="dropdown"
             items={this.getDropdownItems()}
             onItemSelection={this.handleResourceSelection}
-            forceSelectedID={DEFAULT_ID}
+            persistentID={DEFAULT_ID}
             transition={true}
             transitionName="dropdown-menu" />
         </div>

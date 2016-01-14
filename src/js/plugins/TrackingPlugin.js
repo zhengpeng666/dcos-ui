@@ -28,6 +28,9 @@ const TrackingPlugin = {
     Plugins.addFilter("openIdentifyModal", this.openIdentifyModal.bind(this));
     Plugins.addAction("pluginsConfigured", this.pluginsConfigured.bind(this));
     Plugins.addAction("receivedUserEmail", this.receivedUserEmail.bind(this));
+    Plugins.addFilter(
+      "applicationHasIdentity", this.applicationHasIdentity.bind(this)
+    );
   },
 
   configure: function (configuration) {
@@ -73,6 +76,10 @@ const TrackingPlugin = {
 
     // Else just pass the value along
     return value;
+  },
+
+  applicationHasIdentity: function () {
+    return !!LocalStorageUtil.get("email");
   },
 
   sidebarFooterButtonSet: function (value) {

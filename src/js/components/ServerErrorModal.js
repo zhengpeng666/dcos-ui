@@ -78,7 +78,6 @@ export default class ServerErrorModal extends mixin(StoreMixin) {
   render() {
     return (
       <Modal
-        headerContainerClass="container container-pod container-pod-short"
         maxHeightPercentage={0.9}
         modalClass="modal"
         onClose={this.handleModalClose}
