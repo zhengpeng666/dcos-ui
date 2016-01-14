@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 # Prepares for community edition build
 
-EMPTY_OBJ_EXPORT="export default {};";
+EMPTY_OBJ_EXPORT="module.exports = {};";
 EMPTY_REACT_EXPORT="/*eslint-disable no-unused-vars*/
 import React from \"react\";
 /*eslint-enable no-unused-vars*/
-export default class extends React.Component {
+module.exports = class extends React.Component {
   render() {
     return null;
   }
-}
+};
 ";
 
 # Remove schemas
@@ -24,11 +24,15 @@ rm ./tests/User*
 # Components
 rm ./src/js/components/__tests__/Group*
 echo "$EMPTY_REACT_EXPORT" > ./src/js/components/GroupFormModal.js
+echo "$EMPTY_REACT_EXPORT" > ./src/js/components/GroupSidePanel.js
 echo "$EMPTY_REACT_EXPORT" > ./src/js/components/GroupSidePanelContents.js
+echo "$EMPTY_REACT_EXPORT" > ./src/js/components/GroupUserMembershipTab.js
 echo "$EMPTY_REACT_EXPORT" > ./src/js/components/GroupUserTable.js
 rm ./src/js/components/__tests__/Permissions*
 echo "$EMPTY_REACT_EXPORT" > ./src/js/components/PermissionsTable.js
 echo "$EMPTY_REACT_EXPORT" > ./src/js/components/PermissionsView.js
+echo "$EMPTY_REACT_EXPORT" > ./src/js/components/ServerErrorModal.js
+rm ./src/js/components/__tests__/ServerErrorModal-test.js
 rm ./src/js/components/__tests__/User*
 echo "$EMPTY_REACT_EXPORT" > ./src/js/components/UserDetails.js
 echo "$EMPTY_REACT_EXPORT" > ./src/js/components/UserFormModal.js
@@ -39,7 +43,10 @@ echo "$EMPTY_REACT_EXPORT" > ./src/js/components/UserSidePanelContents.js
 
 # Events
 rm ./src/js/events/__tests__/ACL*
-rm ./src/js/events/ACL*
+echo $EMPTY_OBJ_EXPORT > ./src/js/events/ACLActions.js
+echo $EMPTY_OBJ_EXPORT > ./src/js/events/ACLAuthActions.js
+echo $EMPTY_OBJ_EXPORT > ./src/js/events/ACLGroupsActions.js
+echo $EMPTY_OBJ_EXPORT > ./src/js/events/ACLUsersActions.js
 
 # Pages
 echo "$EMPTY_REACT_EXPORT" > ./src/js/pages/SettingsPage.js
