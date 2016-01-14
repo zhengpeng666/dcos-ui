@@ -141,7 +141,7 @@ describe("NodeSidePanelContents", function () {
 
       var headline = JestUtil.renderAndFindTag(
         instance.getKeyValuePairs({"foo": "bar"}, "baz"),
-        "h3"
+        "h6"
       );
 
       expect(TestUtils.isDOMComponent(headline)).toEqual(true);
