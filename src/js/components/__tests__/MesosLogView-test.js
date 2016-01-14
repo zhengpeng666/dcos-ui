@@ -138,16 +138,16 @@ describe("MesosLogView", function () {
 
   describe("#render", function () {
 
-    it("should call getLoadingScreen when error occured", function () {
+    it("should call getErrorScreen when error occured", function () {
       var instance = TestUtils.renderIntoDocument(
         <MesosLogView filePath="/some/file/path" slaveID="foo" />
       );
 
       instance.state = {hasLoadingError: true};
-      instance.getLoadingScreen = jasmine.createSpy("getLoadingScreen");
+      instance.getErrorScreen = jasmine.createSpy("getErrorScreen");
 
       instance.render();
-      expect(instance.getLoadingScreen).toHaveBeenCalled();
+      expect(instance.getErrorScreen).toHaveBeenCalled();
     });
 
     it("should call getLoadingScreen when logBuffer is undefined", function () {

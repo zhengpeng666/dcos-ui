@@ -99,15 +99,41 @@ describe("TaskDebugView", function () {
       expect(this.instance.getErrorScreen).toHaveBeenCalled();
     });
 
-    it("should call getErrorScreen when file is not found", function () {
+    it("should call getEmtyLogScreen when file is not found", function () {
       this.instance.state = {
         currentView: 0,
         directory: new TaskDirectory({items: [{nlink: 1, path: "/foo"}]})
       };
-      this.instance.getErrorScreen = jasmine.createSpy("getErrorScreen");
+      this.instance.getEmtyLogScreen = jasmine.createSpy("getEmtyLogScreen");
       this.instance.render();
 
-      expect(this.instance.getErrorScreen).toHaveBeenCalled();
+      expect(this.instance.getEmtyLogScreen).toHaveBeenCalled();
+    });
+
+    it("should set button disabled when file is not found", function () {
+      var instance = React.render(
+        <TaskDebugView task={{slave_id: "foo"}} />,
+        document.createElement("div")
+      );
+      instance.setState({
+        currentView: 0,
+        directory: new TaskDirectory({items: [{nlink: 1, path: "/foo"}]})
+      });
+      var btn = TestUtils.findRenderedDOMComponentWithTag(instance, "a");
+      expect(btn.props.disabled).toEqual(true);
+    });
+
+    it("should set button not disabled when file is found", function () {
+      var instance = React.render(
+        <TaskDebugView task={{slave_id: "foo"}} />,
+        document.createElement("div")
+      );
+      instance.setState({
+        currentView: 0,
+        directory: new TaskDirectory({items: [{nlink: 1, path: "/stdout"}]})
+      });
+      var btn = TestUtils.findRenderedDOMComponentWithTag(instance, "a");
+      expect(btn.props.disabled).toEqual(false);
     });
 
     it("should call getLoadingScreen when directory is undefined", function () {

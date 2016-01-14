@@ -75,6 +75,10 @@ export default class MesosLogView extends mixin(StoreMixin) {
     }
   }
 
+  getErrorScreen() {
+    return <RequestErrorMsg />;
+  }
+
   getLog() {
     let {props, state} = this;
     let fullLog = state.fullLog;
@@ -102,10 +106,6 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   getLoadingScreen() {
-    if (this.state.hasLoadingError) {
-      return <RequestErrorMsg />;
-    }
-
     return (
       <div className="
         container
@@ -123,10 +123,13 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   render() {
-    let logBuffer = MesosLogStore.get(this.props.filePath);
-    let showLoading = this.state.hasLoadingError || !logBuffer;
+    if (this.state.hasLoadingError) {
+      return this.getErrorScreen();
+    }
 
-    if (showLoading) {
+    let logBuffer = MesosLogStore.get(this.props.filePath);
+
+    if (!logBuffer) {
       return this.getLoadingScreen();
     }
 

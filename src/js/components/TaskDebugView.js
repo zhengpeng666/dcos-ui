@@ -84,6 +84,37 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     );
   }
 
+  getEmtyLogScreen(logName) {
+    return (
+      <div className="flex-grow vertical-center">
+        <h3 className="text-align-center flush-top">
+          {`${logName} Log is Currently Empty`}
+        </h3>
+        <p className="text-align-center flush-bottom">
+          Please try again later.
+        </p>
+      </div>
+    );
+  }
+
+  getLogView(logName, filePath, nodeID) {
+    let {state} = this;
+    if (!state.directory) {
+      return this.getLoadingScreen();
+    }
+
+    if (!filePath) {
+      return this.getEmtyLogScreen(logName);
+    }
+
+    return (
+      <MesosLogView
+        filePath={filePath}
+        slaveID={nodeID}
+        logName={logName} />
+    );
+  }
+
   getSelectionButtons() {
     let currentView = this.state.currentView;
 
@@ -105,19 +136,19 @@ export default class TaskDebugView extends mixin(StoreMixin) {
   }
 
   render() {
-    let {props, state} = this;
-    if (state.directory == null) {
-      return this.getLoadingScreen();
-    }
-
-    let currentView = LOG_VIEWS[state.currentView];
-    let nodeID = props.task.slave_id;
-    let directoryItem = state.directory.findFile(currentView.name);
-    if (directoryItem == null || this.hasLoadingError()) {
+    if (this.hasLoadingError()) {
       return this.getErrorScreen();
     }
 
-    let filePath = directoryItem.get("path");
+    let {props, state} = this;
+    let currentView = LOG_VIEWS[state.currentView];
+    let directory = state.directory;
+    let nodeID = props.task.slave_id;
+
+    // Only try to find file if directory exists
+    let directoryItem = directory && directory.findFile(currentView.name);
+    // Only try to get path if file exists
+    let filePath = directoryItem && directoryItem.get("path");
 
     return (
       <div className="flex-container-col flex-grow no-overflow">
@@ -127,14 +158,12 @@ export default class TaskDebugView extends mixin(StoreMixin) {
           </div>
           <a
             className="button button-stroke"
+            disabled={!filePath}
             href={TaskDirectoryActions.getDownloadURL(nodeID, filePath)}>
             <IconDownload />
           </a>
         </div>
-        <MesosLogView
-          filePath={filePath}
-          slaveID={nodeID}
-          logName={currentView.displayName} />
+        {this.getLogView(currentView.displayName, filePath, nodeID)}
       </div>
     );
   }
