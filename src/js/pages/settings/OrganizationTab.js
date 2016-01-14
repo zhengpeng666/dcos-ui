@@ -1,9 +1,9 @@
 import _ from "underscore";
+import {Form, Table} from "reactjs-components";
 import {Link} from "react-router";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
-import {Table} from "reactjs-components";
 
 import FilterHeadline from "../../components/FilterHeadline";
 import FilterInputText from "../../components/FilterInputText";
@@ -48,9 +48,62 @@ export default class OrganizationTab extends React.Component {
     );
   }
 
+  renderCheckbox(prop, row) {
+
+    return (
+      <Form
+        formGroupClass="form-group flush-bottom"
+        definition={[
+          {
+            fieldType: "checkbox",
+            name: row.uid,
+            value: [{
+              name: "select",
+              checked: false,
+              labelClass: "inverse"
+            }],
+            labelClass: "inverse"
+          }
+        ]}
+        onChange={this.handleCheckboxChange} />
+      );
+  }
+
+  renderHeadingCheckbox() {
+
+    return (
+      <Form
+        formGroupClass="form-group flush-bottom"
+        definition={[
+          {
+            fieldType: "checkbox",
+            name: "headingCheckbox",
+            value: [{
+              name: "selectBulk",
+              label: "",
+              checked: false,
+              indeterminate: false,
+              labelClass: "inverse"
+            }],
+            labelClass: "inverse"
+          }
+        ]}
+        onChange={this.handleHeadingCheckboxChange} />
+    );
+  }
+
+  handleCheckboxChange() {
+    return null;
+  }
+
+  handleHeadingCheckboxChange() {
+    return null;
+  }
+
   getColGroup() {
     return (
       <colgroup>
+        <col style={{width: "40px"}} />
         <col />
       </colgroup>
     );
@@ -64,6 +117,15 @@ export default class OrganizationTab extends React.Component {
     let propSortFunction = ResourceTableUtil.getPropSortFunction("description");
 
     return [
+      {
+        className,
+        headerClassName: className,
+        prop: "selected",
+        render: this.renderCheckbox,
+        sortable: false,
+        heading: this.renderHeadingCheckbox,
+        dontCache: true
+      },
       {
         className,
         headerClassName: className,
