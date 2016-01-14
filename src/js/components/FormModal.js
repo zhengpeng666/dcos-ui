@@ -1,8 +1,6 @@
 import classNames from "classnames";
-import {Modal} from "reactjs-components";
+import {Form, Modal} from "reactjs-components";
 import React from "react";
-
-import Form from "./Form";
 
 const METHODS_TO_BIND = [
   "getTriggerSubmit", "handleTriggerSubmit", "handleError"

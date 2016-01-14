@@ -1,3 +1,4 @@
+import {Form} from "reactjs-components";
 import mixin from "reactjs-mixin";
 /*eslint-disable no-unused-vars*/
 import React from "react";
@@ -5,7 +6,6 @@ import React from "react";
 import {StoreMixin} from "mesosphere-shared-reactjs";
 
 import ACLUserStore from "../stores/ACLUserStore";
-import Form from "./Form";
 
 const METHODS_TO_BIND = [
   "handlePasswordSubmit",
