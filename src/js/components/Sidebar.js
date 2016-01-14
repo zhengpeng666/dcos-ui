@@ -55,9 +55,7 @@ var Sidebar = React.createClass({
   },
 
   onDCOSMetadataChange: function () {
-    this.internalStorage_update(
-      {dcosMetadata: MetadataStore.get("dcosMetadata")}
-    );
+    this.forceUpdate();
   },
 
   onIntercomChange: function () {
@@ -123,15 +121,14 @@ var Sidebar = React.createClass({
     }, this);
   },
 
-  getVersion(data) {
-    if (data == null
-      || data.dcosMetadata == null
-      || data.dcosMetadata.version == null) {
+  getVersion() {
+    let data = MetadataStore.get("dcosMetadata");
+    if (data == null || data.version == null) {
       return null;
     }
 
     return (
-      <span className="version-number">v.{data.dcosMetadata.version}</span>
+      <span className="version-number">v.{data.version}</span>
     );
   },
 
@@ -188,8 +185,6 @@ var Sidebar = React.createClass({
   },
 
   render: function () {
-    var data = this.internalStorage_get();
-
     return (
       <div className="sidebar flex-container-col">
         <div className="sidebar-header">
@@ -210,7 +205,7 @@ var Sidebar = React.createClass({
             <p className="text-align-center flush-top flush-bottom mute small">
               <span className="clickable" onClick={this.handleVersionClick}>
                 <span className="company-name small">Mesosphere </span>
-                <span className="app-name small">DCOS {this.getVersion(data)}</span>
+                <span className="app-name small">DCOS {this.getVersion()}</span>
               </span>
             </p>
           </div>
