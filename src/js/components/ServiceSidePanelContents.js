@@ -152,6 +152,10 @@ class ServiceSidePanelContents extends SidePanelContents {
       this.props.itemID
     );
 
+    if (!schedulerTask) {
+      return null;
+    }
+
     let taskID = schedulerTask.id;
     let schedulerMapping = {
       ID: (
@@ -167,7 +171,11 @@ class ServiceSidePanelContents extends SidePanelContents {
       "Disk Space": schedulerTask.resources.disk
     };
 
-    return this.getKeyValuePairs(schedulerMapping, "Scheduler");
+    return (
+      <div className="container container-fluid container-pod container-pod-short-top">
+        {this.getKeyValuePairs(schedulerMapping, "Scheduler")}
+      </div>
+    );
   }
 
   renderTasksTabView() {
@@ -232,9 +240,7 @@ class ServiceSidePanelContents extends SidePanelContents {
         <div className="container container-fluid container-pod container-pod-short">
           {this.getSchedulerDetails()}
         </div>
-        <div className="container container-fluid container-pod container-pod-short-top">
-          {this.getKeyValuePairs(headerValueMapping, "Configuration")}
-        </div>
+        {this.getKeyValuePairs(headerValueMapping, "Configuration")}
       </div>
     );
   }
