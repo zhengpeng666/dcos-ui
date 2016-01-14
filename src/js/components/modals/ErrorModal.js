@@ -18,7 +18,6 @@ var ErrorModal = React.createClass({
   render: function () {
     return (
       <Modal
-        headerContainerClass="container container-pod container-pod-short"
         modalClass="modal"
         onClose={this.onClose}
         open={this.props.open}

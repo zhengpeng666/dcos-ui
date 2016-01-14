@@ -136,7 +136,7 @@ export default class GroupUserMembershipTable extends mixin(StoreMixin) {
             dropdownMenuListClassName="dropdown-menu-list"
             items={this.getDropdownItems()}
             onItemSelection={this.onUserSelection}
-            forceSelectedID="default-placeholder-user-id"
+            persistentID="default-placeholder-user-id"
             transition={true}
             wrapperClassName="dropdown" />
         </div>

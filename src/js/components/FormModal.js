@@ -95,7 +95,6 @@ export default class FormModal extends React.Component {
     return (
       <Modal
         closeByBackdropClick={!this.props.disabled}
-        headerContainerClass="container container-pod container-pod-short"
         headerClass="modal-header modal-header-white"
         modalClass="modal"
         onClose={this.props.onClose}

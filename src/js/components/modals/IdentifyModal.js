@@ -73,12 +73,11 @@ var IdentifyModal = React.createClass({
       "form-help-block": true,
       "hidden": !data.emailHasError
     });
+
     return (
       <Modal
         closeByBackdropClick={false}
         footer={this.getFooter()}
-        footerContainerClass="container container-pod container-pod-short"
-        headerContainerClass="container container-pod container-pod-short"
         modalClass="modal"
         modalClassName="login-modal"
         open={this.props.open}
