@@ -57,9 +57,9 @@ export default class SidePanelContents extends
     // Wrap in headline element and classes
     if (headline != null) {
       headline = (
-        <h5 className="flush-top">
+        <h6 className="flush-top">
           {headline}
-        </h5>
+        </h6>
       );
     }
 
