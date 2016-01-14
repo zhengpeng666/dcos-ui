@@ -1,6 +1,6 @@
 {
   "name": "dcos-ui",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "npm-shrinkwrap-version": "5.4.1",
   "node-version": "v0.10.40",
   "dependencies": {
