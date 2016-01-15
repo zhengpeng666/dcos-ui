@@ -1,8 +1,8 @@
-import Highlight from "react-highlighter";
 import mixin from "reactjs-mixin";
 import React from "react";
 import {StoreMixin} from "mesosphere-shared-reactjs";
 
+import Highlight from "./Highlight";
 import MesosLogStore from "../stores/MesosLogStore";
 import RequestErrorMsg from "./RequestErrorMsg";
 
