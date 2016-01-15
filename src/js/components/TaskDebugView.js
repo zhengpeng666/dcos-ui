@@ -55,16 +55,16 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     let nextTask = nextState.task;
 
     // Check task
-    return props.task !== nextProps.task ||
+    return (props.task !== nextProps.task) ||
       (task && nextTask && task.slave_id !== nextTask.slave_id) ||
       // Check current view
-      state.currentView !== nextState.currentView ||
+      (state.currentView !== nextState.currentView) ||
       // Check taskDirectoryErrorCount
-      state.taskDirectoryErrorCount !== nextState.taskDirectoryErrorCount ||
+      (state.taskDirectoryErrorCount !== nextState.taskDirectoryErrorCount) ||
       // Check searchString
-      state.searchString !== nextState.searchString ||
+      (state.searchString !== nextState.searchString) ||
       // Check directory
-      directory !== nextDirectory || (directory && nextDirectory &&
+      (directory !== nextDirectory) || (directory && nextDirectory &&
         directory.getItems().length !== nextDirectory.getItems().length);
   }
 
