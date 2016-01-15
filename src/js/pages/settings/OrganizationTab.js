@@ -71,7 +71,7 @@ export default class OrganizationTab extends React.Component {
         definition={[
           {
             fieldType: "checkbox",
-            name: row.uid,
+            name: row[this.props.itemID],
             value: [{
               name: "select",
               checked,
