@@ -37,6 +37,21 @@ export default class OrganizationTab extends React.Component {
     }, this);
   }
 
+  handleCheckboxChange(checkboxState) {
+    let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
+    this.setState({checkedCount: this.state.checkedCount + (isChecked || -1)});
+  }
+
+  handleHeadingCheckboxChange(checkboxState) {
+    let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
+
+    if (isChecked) {
+      this.setState({checkedCount: this.props.items.length});
+    } else if (isChecked === false) {
+      this.setState({checkedCount: 0});
+    }
+  }
+
   handleSearchStringChange(searchString) {
     this.setState({searchString});
   }
@@ -119,21 +134,6 @@ export default class OrganizationTab extends React.Component {
         ]}
         onChange={this.handleHeadingCheckboxChange} />
     );
-  }
-
-  handleCheckboxChange(checkboxState) {
-    let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
-    this.setState({checkedCount: this.state.checkedCount + (isChecked || -1)});
-  }
-
-  handleHeadingCheckboxChange(checkboxState) {
-    let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
-
-    if (isChecked) {
-      this.setState({checkedCount: this.props.items.length});
-    } else if (isChecked === false) {
-      this.setState({checkedCount: 0});
-    }
   }
 
   getColGroup() {
