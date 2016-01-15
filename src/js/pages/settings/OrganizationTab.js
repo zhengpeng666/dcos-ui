@@ -71,13 +71,12 @@ export default class OrganizationTab extends React.Component {
 
   renderCheckbox(prop, row) {
     let checked = null;
-    switch (this.state.checkedCount) {
-      case this.props.items.length:
-        checked = true;
-        break;
-      case 0:
-        checked = false;
-        break;
+    let checkedCount = this.state.checkedCount;
+
+    if (checkedCount === this.props.items.length) {
+      checked = true;
+    } else if (checkedCount === 0) {
+      checked = false;
     }
 
     return (
