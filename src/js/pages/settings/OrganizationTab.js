@@ -7,12 +7,17 @@ import React from "react";
 
 import FilterHeadline from "../../components/FilterHeadline";
 import FilterInputText from "../../components/FilterInputText";
+import FormUtil from "../../utils/FormUtil";
 import ResourceTableUtil from "../../utils/ResourceTableUtil";
 import StringUtil from "../../utils/StringUtil";
 import TableUtil from "../../utils/TableUtil";
 
 const METHODS_TO_BIND = [
   "handleSearchStringChange",
+  "handleCheckboxChange",
+  "handleHeadingCheckboxChange",
+  "renderCheckbox",
+  "renderHeadingCheckbox",
   "renderHeadline",
   "resetFilter"
 ];
@@ -22,6 +27,7 @@ export default class OrganizationTab extends React.Component {
     super(arguments);
 
     this.state = {
+      checkedCount: 0,
       openNewItemModal: false,
       searchString: ""
     };
@@ -49,6 +55,15 @@ export default class OrganizationTab extends React.Component {
   }
 
   renderCheckbox(prop, row) {
+    let checked = null;
+    switch (this.state.checkedCount) {
+      case this.props.items.length:
+        checked = true;
+        break;
+      case 0:
+        checked = false;
+        break;
+    }
 
     return (
       <Form
@@ -59,17 +74,31 @@ export default class OrganizationTab extends React.Component {
             name: row.uid,
             value: [{
               name: "select",
-              checked: false,
+              checked,
               labelClass: "inverse"
             }],
             labelClass: "inverse"
           }
         ]}
         onChange={this.handleCheckboxChange} />
-      );
+    );
   }
 
   renderHeadingCheckbox() {
+    let checked = false;
+    let indeterminate = false;
+
+    switch (this.state.checkedCount) {
+      case this.props.items.length:
+        checked = true;
+        break;
+      case 0:
+        checked = false;
+        break;
+      default:
+        indeterminate = true;
+        break;
+    }
 
     return (
       <Form
@@ -81,8 +110,8 @@ export default class OrganizationTab extends React.Component {
             value: [{
               name: "selectBulk",
               label: "",
-              checked: false,
-              indeterminate: false,
+              checked,
+              indeterminate,
               labelClass: "inverse"
             }],
             labelClass: "inverse"
@@ -92,12 +121,19 @@ export default class OrganizationTab extends React.Component {
     );
   }
 
-  handleCheckboxChange() {
-    return null;
+  handleCheckboxChange(checkboxState) {
+    let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
+    this.setState({checkedCount: this.state.checkedCount + (isChecked || -1)});
   }
 
-  handleHeadingCheckboxChange() {
-    return null;
+  handleHeadingCheckboxChange(checkboxState) {
+    let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
+
+    if (isChecked) {
+      this.setState({checkedCount: this.props.items.length});
+    } else if (isChecked === false) {
+      this.setState({checkedCount: 0});
+    }
   }
 
   getColGroup() {
