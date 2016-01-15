@@ -1,5 +1,3 @@
-var $ = require("jquery");
-
 jest.dontMock("../../config/Config");
 jest.dontMock("../../utils/RequestUtil");
 
@@ -7,87 +5,6 @@ var Config = require("../../config/Config");
 var RequestUtil = require("../../utils/RequestUtil");
 
 describe("RequestUtil", function () {
-
-  describe("#json", function () {
-
-    beforeEach(function () {
-      spyOn($, "ajax");
-    });
-
-    it("Should not make a request before called", function () {
-      expect($.ajax).not.toHaveBeenCalled();
-    });
-
-    it("Should try to make a request even if no args are provided", function () {
-      RequestUtil.json();
-      expect($.ajax).toHaveBeenCalled();
-      expect($.ajax.mostRecentCall.args[0].url).toEqual(null);
-    });
-
-    it("Should use defaults for a GET json request", function () {
-      RequestUtil.json({url: "lol"});
-      expect($.ajax).toHaveBeenCalled();
-      expect($.ajax.mostRecentCall.args[0].url).toEqual("lol");
-      expect($.ajax.mostRecentCall.args[0].contentType).toEqual("application/json; charset=utf-8");
-      expect($.ajax.mostRecentCall.args[0].dataType).toEqual("json");
-      expect($.ajax.mostRecentCall.args[0].timeout).toEqual(Config.stateRefresh);
-      expect($.ajax.mostRecentCall.args[0].type).toEqual("GET");
-    });
-
-    it("Should override defaults with options given", function () {
-      RequestUtil.json({type: "POST", contentType: "Yoghurt", dataType: "Bananas", timeout: 15});
-      expect($.ajax).toHaveBeenCalled();
-      expect($.ajax.mostRecentCall.args[0].contentType).toEqual("Yoghurt");
-      expect($.ajax.mostRecentCall.args[0].dataType).toEqual("Bananas");
-      expect($.ajax.mostRecentCall.args[0].timeout).toEqual(15);
-      expect($.ajax.mostRecentCall.args[0].type).toEqual("POST");
-    });
-
-    it("Should return a request that is able to be aborted", function () {
-      let prevAjax = $.ajax;
-      $.ajax = function () {return {fakeProp: "faked"}; };
-
-      var request = RequestUtil.json({url: "lolz"});
-      expect(typeof request).toEqual("object");
-      expect(request.fakeProp).toEqual("faked");
-
-      $.ajax = prevAjax;
-    });
-
-    it("Should return undefined if there is an ongoing request", function () {
-      RequestUtil.json({url: "double"});
-      let request = RequestUtil.json({url: "double"});
-
-      expect(request).toEqual(undefined);
-    });
-
-    it("stringifies data when not doing a GET request", function () {
-      RequestUtil.json({type: "PUT", data: {hello: "world"}});
-      expect($.ajax.calls[0].args[0].data).toEqual("{\"hello\":\"world\"}");
-    });
-
-    it("does not stringify when request is of type GET", function () {
-      RequestUtil.json({type: "GET", data: {hello: "world"}});
-      expect($.ajax.calls[0].args[0].data).toEqual({hello: "world"});
-    });
-
-    it("sets the correct datatype when doing a PUT request", function () {
-      RequestUtil.json({type: "PUT", data: {hello: "world"}});
-      expect($.ajax.calls[0].args[0].dataType).toEqual("text");
-    });
-
-    it("does not set the datatype when doing a GET request", function () {
-      RequestUtil.json({type: "GET", data: {hello: "world"}});
-      expect($.ajax.calls[0].args[0].dataType).toEqual("json");
-    });
-
-    it("does not set the datatype if it's already set", function () {
-      RequestUtil.json({type: "PUT", data: {hello: "world"}, dataType: "foo"});
-      expect($.ajax.calls[0].args[0].dataType).toEqual("foo");
-    });
-
-  });
-
   describe("#debounceOnError", function () {
     var successFn;
     var errorFn;
@@ -96,7 +13,7 @@ describe("RequestUtil", function () {
       successFn = jest.genMockFunction();
       errorFn = jest.genMockFunction();
 
-      spyOn($, "ajax").andCallFake(
+      spyOn(RequestUtil, "json").andCallFake(
         function (options) {
           // Trigger error for url "failRequest"
           if (/failRequest/.test(options.url)) {

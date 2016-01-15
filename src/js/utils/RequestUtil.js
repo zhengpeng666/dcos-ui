@@ -1,69 +1,10 @@
-var $ = require("jquery");
 var _ = require("underscore");
+var json = require("mesosphere-shared-reactjs").RequestUtil.json;
 
-var Config = require("../config/Config");
-
-let activeRequests = {};
 const DEFAULT_ERROR_MESSAGE = "An error has occurred.";
 
-function createCallbackWrapper(callback, requestID) {
-  return function () {
-    setRequestState(requestID, false);
-
-    if (_.isFunction(callback)) {
-      callback.apply(null, arguments);
-    }
-  };
-}
-
-function isRequestActive(requestID) {
-  return activeRequests.hasOwnProperty(requestID) &&
-    activeRequests[requestID] === true;
-}
-
-function setRequestState(requestID, state) {
-  activeRequests[requestID] = state;
-}
-
 var RequestUtil = {
-  json: function (options) {
-    if (options) {
-      if (_.isFunction(options.hangingRequestCallback)) {
-        let requestID = JSON.stringify(options);
-        options.success = createCallbackWrapper(options.success, requestID);
-        options.error = createCallbackWrapper(options.error, requestID);
-
-        if (isRequestActive(requestID)) {
-          options.hangingRequestCallback();
-          return;
-        } else {
-          setRequestState(requestID, true);
-          delete options.hangingRequestCallback;
-        }
-      }
-
-      if (options.type && options.type !== "GET" && !options.contentType) {
-        if (options.data) {
-          options.data = JSON.stringify(options.data);
-        }
-
-        if (!options.dataType) {
-          options.dataType = "text";
-        }
-      }
-    }
-
-    options = _.extend({}, {
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
-      timeout: Config.getRefreshRate(),
-      type: "GET"
-    }, options);
-
-    /* eslint-disable consistent-return */
-    return $.ajax(options);
-    /* eslint-enable consistent-return */
-  },
+  json,
 
   debounceOnError: function (interval, promiseFn, options) {
     var rejectionCount = 0;
