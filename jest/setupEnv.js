@@ -5,3 +5,8 @@ global.document.body.classList = {
   remove: function () {},
   toggle: function () {}
 };
+
+// Tests should just mock responses for the json API
+// so let's just default to a noop
+var RequestUtil = require("../src/js/utils/RequestUtil");
+RequestUtil.json = function () {}

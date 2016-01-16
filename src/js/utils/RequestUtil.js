@@ -112,9 +112,11 @@ var RequestUtil = {
   parseResponseBody: function (xhr) {
     // Handle html document returned with 404 gracefully,
     // to not break functionality
-    if (typeof xhr.getResponseHeader === "function" &&
-      xhr.getResponseHeader("content-type").indexOf("text/html") >= 0) {
-      return {};
+    if (typeof xhr.getResponseHeader === "function") {
+      let contentType = xhr.getResponseHeader("Content-Type");
+      if (contentType && contentType.indexOf("text/html") >= 0) {
+        return {};
+      }
     }
 
     let {responseJSON, responseText} = xhr;
