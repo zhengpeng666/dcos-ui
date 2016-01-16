@@ -1,18 +1,23 @@
 import _ from "underscore";
+import {Form, Table} from "reactjs-components";
 import {Link} from "react-router";
 /*eslint-disable no-unused-vars*/
 import React from "react";
 /*eslint-enable no-unused-vars*/
-import {Table} from "reactjs-components";
 
 import FilterHeadline from "../../components/FilterHeadline";
 import FilterInputText from "../../components/FilterInputText";
+import FormUtil from "../../utils/FormUtil";
 import ResourceTableUtil from "../../utils/ResourceTableUtil";
 import StringUtil from "../../utils/StringUtil";
 import TableUtil from "../../utils/TableUtil";
 
 const METHODS_TO_BIND = [
   "handleSearchStringChange",
+  "handleCheckboxChange",
+  "handleHeadingCheckboxChange",
+  "renderCheckbox",
+  "renderHeadingCheckbox",
   "renderHeadline",
   "resetFilter"
 ];
@@ -22,6 +27,7 @@ export default class OrganizationTab extends React.Component {
     super(arguments);
 
     this.state = {
+      checkedCount: 0,
       openNewItemModal: false,
       searchString: ""
     };
@@ -29,6 +35,21 @@ export default class OrganizationTab extends React.Component {
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
     }, this);
+  }
+
+  handleCheckboxChange(checkboxState) {
+    let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
+    this.setState({checkedCount: this.state.checkedCount + (isChecked || -1)});
+  }
+
+  handleHeadingCheckboxChange(checkboxState) {
+    let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
+
+    if (isChecked) {
+      this.setState({checkedCount: this.props.items.length});
+    } else if (isChecked === false) {
+      this.setState({checkedCount: 0});
+    }
   }
 
   handleSearchStringChange(searchString) {
@@ -48,9 +69,76 @@ export default class OrganizationTab extends React.Component {
     );
   }
 
+  renderCheckbox(prop, row) {
+    let checked = null;
+    let checkedCount = this.state.checkedCount;
+
+    if (checkedCount === this.props.items.length) {
+      checked = true;
+    } else if (checkedCount === 0) {
+      checked = false;
+    }
+
+    return (
+      <Form
+        formGroupClass="form-group flush-bottom"
+        definition={[
+          {
+            fieldType: "checkbox",
+            name: row[this.props.itemID],
+            value: [{
+              name: "select",
+              checked,
+              labelClass: "inverse"
+            }],
+            labelClass: "inverse"
+          }
+        ]}
+        onChange={this.handleCheckboxChange} />
+    );
+  }
+
+  renderHeadingCheckbox() {
+    let checked = false;
+    let indeterminate = false;
+
+    switch (this.state.checkedCount) {
+      case this.props.items.length:
+        checked = true;
+        break;
+      case 0:
+        checked = false;
+        break;
+      default:
+        indeterminate = true;
+        break;
+    }
+
+    return (
+      <Form
+        formGroupClass="form-group flush-bottom"
+        definition={[
+          {
+            fieldType: "checkbox",
+            name: "headingCheckbox",
+            value: [{
+              name: "selectBulk",
+              label: "",
+              checked,
+              indeterminate,
+              labelClass: "inverse"
+            }],
+            labelClass: "inverse"
+          }
+        ]}
+        onChange={this.handleHeadingCheckboxChange} />
+    );
+  }
+
   getColGroup() {
     return (
       <colgroup>
+        <col style={{width: "40px"}} />
         <col />
       </colgroup>
     );
@@ -64,6 +152,15 @@ export default class OrganizationTab extends React.Component {
     let propSortFunction = ResourceTableUtil.getPropSortFunction("description");
 
     return [
+      {
+        className,
+        headerClassName: className,
+        prop: "selected",
+        render: this.renderCheckbox,
+        sortable: false,
+        heading: this.renderHeadingCheckbox,
+        dontCache: true
+      },
       {
         className,
         headerClassName: className,
