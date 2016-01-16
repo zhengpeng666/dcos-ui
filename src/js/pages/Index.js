@@ -3,7 +3,6 @@ var classNames = require("classnames");
 var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
 
-var AnimatedLogo = require("../components/AnimatedLogo");
 var Config = require("../config/Config");
 import ConfigStore from "../stores/ConfigStore";
 var EventTypes = require("../constants/EventTypes");
@@ -156,31 +155,14 @@ var Index = React.createClass({
     });
   },
 
-  getLoadingScreen: function (showLoadingScreen) {
-    if (!showLoadingScreen) {
-      return null;
-    }
-
-    return <AnimatedLogo speed={500} scale={0.16} />;
-  },
-
   getErrorScreen: function (showErrorScreen) {
     if (!showErrorScreen) {
       return null;
     }
 
-    return <RequestErrorMsg />;
-  },
-
-  getScreenOverlays: function (showLoadingScreen, showErrorScreen) {
-    if (!showLoadingScreen && !showErrorScreen) {
-      return null;
-    }
-
     return (
       <div className="container container-pod vertical-center">
-        {this.getErrorScreen(showErrorScreen)}
-        {this.getLoadingScreen(showLoadingScreen)}
+        <RequestErrorMsg />;
       </div>
     );
   },
@@ -198,11 +180,9 @@ var Index = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-    var isReady = data.statesProcessed;
     let showErrorScreen =
       (this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount)
       || (this.state.configErrorCount >= Config.delayAfterErrorCount);
-    let showLoadingScreen = !isReady && !showErrorScreen;
 
     var classSet = classNames({
       "canvas-sidebar-open": data.isOpen
@@ -214,7 +194,7 @@ var Index = React.createClass({
       <div>
         <a id="start-tour"></a>
         <div id="canvas" className={classSet}>
-          {this.getScreenOverlays(showLoadingScreen, showErrorScreen)}
+          {this.getErrorScreen(showErrorScreen)}
           <Sidebar />
           <RouteHandler />
         </div>
