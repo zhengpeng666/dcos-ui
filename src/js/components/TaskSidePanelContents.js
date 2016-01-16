@@ -26,7 +26,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
       currentTab: Object.keys(this.tabs_tabs).shift()
     };
 
-    this.storesListeners = [
+    this.store_listeners = [
       {name: "state", events: ["success"]},
       {name: "summary", events: ["success"]}
     ];

@@ -7,6 +7,8 @@ jest.dontMock("../../events/MesosStateActions");
 jest.dontMock("../../mixins/GetSetMixin");
 jest.dontMock("../../utils/Util");
 
+require("../../utils/StoreMixinConfig");
+
 var React = require("react/addons");
 var TestUtils = React.addons.TestUtils;
 
