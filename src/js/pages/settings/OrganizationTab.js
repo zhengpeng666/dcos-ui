@@ -13,9 +13,9 @@ import StringUtil from '../../utils/StringUtil';
 import TableUtil from '../../utils/TableUtil';
 
 const METHODS_TO_BIND = [
-  'handleSearchStringChange',
   'handleCheckboxChange',
   'handleHeadingCheckboxChange',
+  'handleSearchStringChange',
   'renderCheckbox',
   'renderHeadingCheckbox',
   'renderHeadline',
