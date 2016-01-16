@@ -94,7 +94,7 @@ const ACLGroupsActions = {
 
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}`,
-      type: "PUT",
+      method: "PUT",
       data,
       success: function () {
         AppDispatcher.handleServerAction({
@@ -115,7 +115,7 @@ const ACLGroupsActions = {
   updateGroup: function (groupID, patchData) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}`,
-      type: "PATCH",
+      method: "PATCH",
       data: patchData,
       success: function () {
         AppDispatcher.handleServerAction({
@@ -136,7 +136,7 @@ const ACLGroupsActions = {
   deleteGroup: function (groupID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}`,
-      type: "DELETE",
+      method: "DELETE",
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS,
@@ -156,7 +156,7 @@ const ACLGroupsActions = {
   addUser: function (groupID, userID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}/users/${userID}`,
-      type: "PUT",
+      method: "PUT",
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
@@ -178,7 +178,7 @@ const ACLGroupsActions = {
   deleteUser: function (groupID, userID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}/users/${userID}`,
-      type: "DELETE",
+      method: "DELETE",
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,

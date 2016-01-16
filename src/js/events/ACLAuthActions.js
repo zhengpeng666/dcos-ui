@@ -28,7 +28,7 @@ const ACLAuthActions = {
   login: function (credentials) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/auth/login`,
-      type: "POST",
+      method: "POST",
       data: credentials,
       success: function () {
         if (Config.environment === "testing") {

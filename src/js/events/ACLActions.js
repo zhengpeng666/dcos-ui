@@ -28,7 +28,7 @@ const ACLActions = {
   grantUserActionToResource: function (userID, action, resourceID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/users/${userID}/${action}`,
-      type: "PUT",
+      method: "PUT",
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
@@ -48,7 +48,7 @@ const ACLActions = {
   revokeUserActionToResource: function (userID, action, resourceID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/users/${userID}/${action}`,
-      type: "DELETE",
+      method: "DELETE",
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
@@ -68,7 +68,7 @@ const ACLActions = {
   grantGroupActionToResource: function (groupID, action, resourceID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
-      type: "PUT",
+      method: "PUT",
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
@@ -88,7 +88,7 @@ const ACLActions = {
   revokeGroupActionToResource: function (groupID, action, resourceID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
-      type: "DELETE",
+      method: "DELETE",
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
