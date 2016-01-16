@@ -1,6 +1,6 @@
-import _ from 'underscore';
-import {Form, Table} from 'reactjs-components';
-import {Link} from 'react-router';
+import _ from "underscore";
+import {Dropdown, Form, Table} from "reactjs-components";
+import {Link} from "react-router";
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
@@ -13,6 +13,8 @@ import StringUtil from '../../utils/StringUtil';
 import TableUtil from '../../utils/TableUtil';
 
 const METHODS_TO_BIND = [
+  'getActionDropdown',
+  'handleActionSelection',
   'handleCheckboxChange',
   'handleHeadingCheckboxChange',
   'handleSearchStringChange',
@@ -28,7 +30,7 @@ export default class OrganizationTab extends React.Component {
 
     this.state = {
       checkedCount: 0,
-      openNewItemModal: false,
+      showActionDropdown: false,
       searchString: ''
     };
 
@@ -37,18 +39,33 @@ export default class OrganizationTab extends React.Component {
     }, this);
   }
 
+  handleActionSelection(action) {
+    console.log(action);
+  }
+
   handleCheckboxChange(checkboxState) {
     let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
-    this.setState({checkedCount: this.state.checkedCount + (isChecked || -1)});
+    let checkedCount = this.state.checkedCount + (isChecked || -1);
+
+    this.setState({
+      checkedCount,
+      showActionDropdown: (checkedCount > 0)
+    });
   }
 
   handleHeadingCheckboxChange(checkboxState) {
     let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
 
     if (isChecked) {
-      this.setState({checkedCount: this.props.items.length});
+      this.setState({
+        checkedCount: this.props.items.length,
+        showActionDropdown: isChecked
+      });
     } else if (isChecked === false) {
-      this.setState({checkedCount: 0});
+      this.setState({
+        checkedCount: 0,
+        showActionDropdown: isChecked
+      });
     }
   }
 
@@ -173,6 +190,55 @@ export default class OrganizationTab extends React.Component {
     ];
   }
 
+  getActionDropdown(itemName) {
+    if (!this.state.showActionDropdown) {
+      return null;
+    }
+
+    let actionPhrases = {};
+    let initialID = null;
+
+    if (itemName === "user") {
+      actionPhrases = {
+        add: "to Group",
+        remove: "from Group"
+      };
+    } else if (itemName === "group") {
+      actionPhrases = {
+        add: "User",
+        remove: "User"
+      };
+    }
+
+    initialID = _.reduce(actionPhrases, function (initial, value, key) {
+      return initial || key;
+    }, null);
+
+    return (
+      <Dropdown
+      buttonClassName="button button-inverse dropdown-toggle"
+      dropdownMenuClassName="dropdown-menu inverse"
+      dropdownMenuListClassName="dropdown-menu-list"
+      dropdownMenuListItemClassName="clickable"
+      initialID={initialID}
+      items={this.getActionsDropdownItems(actionPhrases)}
+      onItemSelection={this.handleActionSelection}
+      transition={true}
+      transitionName="dropdown-menu"
+      wrapperClassName="dropdown" />
+    );
+  }
+
+  getActionsDropdownItems(actionPhrases) {
+    return _.map(actionPhrases, function (phrase, action) {
+      return {
+        html: `${StringUtil.capitalize(action)} ${phrase}`,
+        id: action,
+        selectedHtml: "Actions"
+      };
+    });
+  }
+
   getVisibleItems(items) {
     let searchString = this.state.searchString.toLowerCase();
 
@@ -195,9 +261,13 @@ export default class OrganizationTab extends React.Component {
     let itemName = props.itemName;
     let capitalizedItemName = StringUtil.capitalize(itemName);
     let items = props.items;
+    let actionDropdown = this.getActionDropdown(props.itemName);
+    if (actionDropdown) {
+      actionDropdown = (<li>{actionDropdown}</li>);
+    }
 
     return (
-      <div className="flex-container-col">
+      <div className="flex-containe`r-col">
         <div className={`${itemName}s-table-header`}>
           <FilterHeadline
             onReset={this.resetFilter}
@@ -211,6 +281,7 @@ export default class OrganizationTab extends React.Component {
                 handleFilterChange={this.handleSearchStringChange}
                 inverseStyle={true} />
             </li>
+            {actionDropdown}
             <li className="button-collection list-item-aligned-right">
               <a
                 className="button button-success"
