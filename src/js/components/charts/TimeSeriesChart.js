@@ -187,14 +187,14 @@ var TimeSeriesChart = React.createClass({
     // we want to make it equal to the most recent successful value in order to
     // have a straight line on the graph.
     var y = this.props.y;
-    var value = firstSuccessful[y] || 0;
+    var value = firstSuccessful[y] || 0.1;
     var successfulValue = yScale(value);
 
     return d3.svg.line()
       .x(function (d) { return xTimeScale(d.date); })
       .y(function (d) {
         if (d[y] != null) {
-          successfulValue = yScale(d[y]);
+          successfulValue = yScale(d[y] || 0.1);
         }
 
         return successfulValue;
