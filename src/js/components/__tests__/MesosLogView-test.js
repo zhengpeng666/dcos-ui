@@ -3,6 +3,7 @@ jest.dontMock("../../stores/MesosLogStore");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../structs/SummaryList");
+jest.dontMock("../Highlight");
 jest.dontMock("../MesosLogView");
 
 require("../../utils/StoreMixinConfig");

@@ -114,7 +114,7 @@ export default class TaskDirectoryView extends mixin(StoreMixin) {
     });
 
     return (
-      <h3 className="breadcrumbs">{crumbs}</h3>
+      <h3 className="breadcrumbs flush-top">{crumbs}</h3>
     );
   }
 

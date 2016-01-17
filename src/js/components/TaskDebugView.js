@@ -16,9 +16,9 @@ const LOG_VIEWS = [
 ];
 
 const METHODS_TO_BIND = [
+  "handleSearchStringChange",
   "onTaskDirectoryStoreError",
-  "onTaskDirectoryStoreSuccess",
-  "handleSearchStringChange"
+  "onTaskDirectoryStoreSuccess"
 ];
 
 export default class TaskDebugView extends mixin(StoreMixin) {
@@ -54,8 +54,9 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     let task = state.task;
     let nextTask = nextState.task;
 
-    // Check task
-    return (props.task !== nextProps.task) ||
+    return !!(
+      // Check task
+      (props.task !== nextProps.task) ||
       (task && nextTask && task.slave_id !== nextTask.slave_id) ||
       // Check current view
       (state.currentView !== nextState.currentView) ||
@@ -65,7 +66,8 @@ export default class TaskDebugView extends mixin(StoreMixin) {
       (state.searchString !== nextState.searchString) ||
       // Check directory
       (directory !== nextDirectory) || (directory && nextDirectory &&
-        directory.getItems().length !== nextDirectory.getItems().length);
+        directory.getItems().length !== nextDirectory.getItems().length)
+    );
   }
 
   onTaskDirectoryStoreError() {
@@ -178,8 +180,9 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 
     return (
       <div className="flex-container-col flex-grow no-overflow">
-        <div className="control-group form-group flex-align-right">
+        <div className="control-group form-group flex-align-right flush-bottom">
           <FilterInputText
+            className="flex-grow"
             placeholder="Search"
             searchString={state.searchString}
             handleFilterChange={this.handleSearchStringChange}

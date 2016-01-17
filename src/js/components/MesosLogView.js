@@ -52,8 +52,9 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
   shouldComponentUpdate(nextProps, nextState) {
     let {props, state} = this;
-    // Check highlightText
-    return (props.highlightText !== nextProps.highlightText) ||
+    return !!(
+      // Check highlightText
+      (props.highlightText !== nextProps.highlightText) ||
       // Check filePath
       (props.filePath !== nextProps.filePath) ||
       // Check slaveID
@@ -61,7 +62,8 @@ export default class MesosLogView extends mixin(StoreMixin) {
       // Check hasLoadingError
       (state.hasLoadingError !== nextState.hasLoadingError) ||
       // Check fullLog
-      (state.fullLog !== nextState.fullLog);
+      (state.fullLog !== nextState.fullLog)
+    );
   }
 
   onMesosLogStoreError(path) {
