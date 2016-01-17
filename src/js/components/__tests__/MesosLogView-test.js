@@ -120,18 +120,34 @@ describe("MesosLogView", function () {
 
   });
 
+  describe("#getLog", function () {
+
+    it("should show empty log when fullLog is empty string", function () {
+      this.instance.state = {fullLog: ""};
+      var div = this.instance.getLog();
+      expect(TestUtils.isElementOfType(div, "div")).toEqual(true);
+    });
+
+    it("should show empty log when fullLog is populated", function () {
+      this.instance.state = {fullLog: "foo"};
+      var pre = this.instance.getLog();
+      expect(TestUtils.isElementOfType(pre, "pre")).toEqual(true);
+    });
+
+  });
+
   describe("#render", function () {
 
-    it("should call getLoadingScreen when error occured", function () {
+    it("should call getErrorScreen when error occured", function () {
       var instance = TestUtils.renderIntoDocument(
         <MesosLogView filePath="/some/file/path" slaveID="foo" />
       );
 
       instance.state = {hasLoadingError: true};
-      instance.getLoadingScreen = jasmine.createSpy("getLoadingScreen");
+      instance.getErrorScreen = jasmine.createSpy("getErrorScreen");
 
       instance.render();
-      expect(instance.getLoadingScreen).toHaveBeenCalled();
+      expect(instance.getErrorScreen).toHaveBeenCalled();
     });
 
     it("should call getLoadingScreen when logBuffer is undefined", function () {

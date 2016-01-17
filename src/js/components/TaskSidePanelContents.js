@@ -4,6 +4,7 @@ const React = require("react/addons");
 /*eslint-enable no-unused-vars*/
 
 import SidePanelContents from "./SidePanelContents";
+import TaskDebugView from "../components/TaskDebugView";
 import MesosStateStore from "../stores/MesosStateStore";
 import MesosSummaryStore from "../stores/MesosSummaryStore";
 import ResourceTypes from "../constants/ResourceTypes";
@@ -14,7 +15,8 @@ import Units from "../utils/Units";
 
 const TABS = {
   files: "Files",
-  details: "Details"
+  details: "Details",
+  debug: "Debug"
 };
 
 export default class TaskSidePanelContents extends SidePanelContents {
@@ -98,7 +100,8 @@ export default class TaskSidePanelContents extends SidePanelContents {
   }
 
   getBasicInfo(task, node) {
-    if (task == null) {
+    // Hide when no task or when we are viewing debug tab
+    if (task == null || this.state.currentTab === "debug") {
       return null;
     }
 
@@ -175,6 +178,14 @@ export default class TaskSidePanelContents extends SidePanelContents {
     return <TaskDirectoryView task={task} />;
   }
 
+  renderDebugTabView() {
+    let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+
+    return (
+      <TaskDebugView task={task} />
+    );
+  }
+
   render() {
     if (MesosStateStore.get("lastMesosState").slaves == null) {
       return null;
@@ -189,17 +200,17 @@ export default class TaskSidePanelContents extends SidePanelContents {
     let node = MesosStateStore.getNodeFromID(task.slave_id);
 
     return (
-      <div>
+      <div className="flex-container-col no-overflow">
         <div className="side-panel-content-header container container-pod
           container-fluid container-pod-divider-bottom
-          container-pod-divider-bottom-align-right flush-bottom">
+          container-pod-divider-bottom-align-right flush-bottom flex-no-shrink">
           {this.getBasicInfo(task, node)}
           <ul className="tabs list-inline container container-fluid container-pod
             flush flush-bottom flush-top">
             {this.tabs_getUnroutedTabs()}
           </ul>
         </div>
-        <div className="container container-fluid container-pod container-pod-short">
+        <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow no-overflow">
           {this.tabs_getTabView()}
         </div>
       </div>

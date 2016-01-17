@@ -15,7 +15,8 @@ const LOG_VIEWS = [
 ];
 
 const METHODS_TO_BIND = [
-  "onTaskDirectoryStoreError"
+  "onTaskDirectoryStoreError",
+  "onTaskDirectoryStoreSuccess"
 ];
 
 export default class TaskDebugView extends mixin(StoreMixin) {
@@ -44,6 +45,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
   }
 
   componentDidMount() {
+    super.componentDidMount(...arguments);
     TaskDirectoryStore.getDirectory(this.props.task);
   }
 
@@ -53,19 +55,23 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     });
   }
 
+  onTaskDirectoryStoreSuccess() {
+    this.setState({directory: TaskDirectoryStore.get("directory")});
+  }
+
   handleViewChange(index) {
-    this.setState({currentView: index});
+    this.setState({currentView: index, directory: undefined});
   }
 
   hasLoadingError() {
     return this.state.taskDirectoryErrorCount >= 3;
   }
 
-  getLoadingScreen() {
-    if (this.hasLoadingError()) {
-      return <RequestErrorMsg />;
-    }
+  getErrorScreen() {
+    return <RequestErrorMsg />;
+  }
 
+  getLoadingScreen() {
     return (
       <div className="container container-fluid container-pod text-align-center vertical-center
         inverse">
@@ -75,6 +81,37 @@ export default class TaskDebugView extends mixin(StoreMixin) {
           </div>
         </div>
       </div>
+    );
+  }
+
+  getEmtyLogScreen(logName) {
+    return (
+      <div className="flex-grow vertical-center">
+        <h3 className="text-align-center flush-top">
+          {`${logName} Log is Currently Empty`}
+        </h3>
+        <p className="text-align-center flush-bottom">
+          Please try again later.
+        </p>
+      </div>
+    );
+  }
+
+  getLogView(logName, filePath, nodeID) {
+    let {state} = this;
+    if (!state.directory) {
+      return this.getLoadingScreen();
+    }
+
+    if (!filePath) {
+      return this.getEmtyLogScreen(logName);
+    }
+
+    return (
+      <MesosLogView
+        filePath={filePath}
+        slaveID={nodeID}
+        logName={logName} />
     );
   }
 
@@ -99,15 +136,19 @@ export default class TaskDebugView extends mixin(StoreMixin) {
   }
 
   render() {
-    let {props, state} = this;
-    let directory = TaskDirectoryStore.get("directory");
-    if (directory == null || this.hasLoadingError()) {
-      return this.getLoadingScreen();
+    if (this.hasLoadingError()) {
+      return this.getErrorScreen();
     }
 
+    let {props, state} = this;
+    let currentView = LOG_VIEWS[state.currentView];
+    let directory = state.directory;
     let nodeID = props.task.slave_id;
-    let directoryItem = directory.findFile(LOG_VIEWS[state.currentView].name);
-    let filePath = directoryItem.get("path");
+
+    // Only try to find file if directory exists
+    let directoryItem = directory && directory.findFile(currentView.name);
+    // Only try to get path if file exists
+    let filePath = directoryItem && directoryItem.get("path");
 
     return (
       <div className="flex-container-col flex-grow no-overflow">
@@ -117,13 +158,12 @@ export default class TaskDebugView extends mixin(StoreMixin) {
           </div>
           <a
             className="button button-stroke"
+            disabled={!filePath}
             href={TaskDirectoryActions.getDownloadURL(nodeID, filePath)}>
             <IconDownload />
           </a>
         </div>
-        <MesosLogView
-          filePath={filePath}
-          slaveID={nodeID} />
+        {this.getLogView(currentView.displayName, filePath, nodeID)}
       </div>
     );
   }

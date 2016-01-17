@@ -20,7 +20,8 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
     this.store_listeners = [{
       name: "mesosLog",
-      events: ["success", "error"]
+      events: ["success", "error"],
+      suppressUpdate: true
     }];
 
     METHODS_TO_BIND.forEach((method) => {
@@ -67,18 +68,44 @@ export default class MesosLogView extends mixin(StoreMixin) {
     }
 
     let logBuffer = MesosLogStore.get(filePath);
-    let fullLog = logBuffer.getFullLog();
     // Necessary to not make the view reload over and over again
+    let fullLog = logBuffer.getFullLog();
     if (this.state.fullLog !== fullLog) {
       this.setState({fullLog});
     }
   }
 
-  getLoadingScreen() {
-    if (this.state.hasLoadingError) {
-      return <RequestErrorMsg />;
+  getErrorScreen() {
+    return <RequestErrorMsg />;
+  }
+
+  getLog() {
+    let {props, state} = this;
+    let fullLog = state.fullLog;
+    if (fullLog === "") {
+      // Append space if logName is defined
+      let logName = props.logName && (props.logName + " ");
+
+      return (
+        <div className="flex-grow vertical-center">
+          <h3 className="text-align-center flush-top">
+            {`${logName} Log is Currently Empty`}
+          </h3>
+          <p className="text-align-center flush-bottom">
+            Please try again later.
+          </p>
+        </div>
+      );
     }
 
+    return (
+      <pre className="flex-grow flush-bottom">
+        {fullLog}
+      </pre>
+    );
+  }
+
+  getLoadingScreen() {
     return (
       <div className="
         container
@@ -96,18 +123,19 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   render() {
-    let logBuffer = MesosLogStore.get(this.props.filePath);
-    var showLoading = this.state.hasLoadingError || !logBuffer;
+    if (this.state.hasLoadingError) {
+      return this.getErrorScreen();
+    }
 
-    if (showLoading) {
+    let logBuffer = MesosLogStore.get(this.props.filePath);
+
+    if (!logBuffer) {
       return this.getLoadingScreen();
     }
 
     return (
       <div className="log-view flex-grow flex-container-col">
-        <pre className="flex-grow flush-bottom">
-          {this.state.fullLog}
-        </pre>
+        {this.getLog()}
       </div>
     );
   }
@@ -115,5 +143,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
 MesosLogView.propTypes = {
   filePath: React.PropTypes.string.isRequired,
+  logName: React.PropTypes.string,
+  highlightText: React.PropTypes.string,
   slaveID: React.PropTypes.string.isRequired
 };
