@@ -3,6 +3,7 @@ import mixin from "reactjs-mixin";
 import React from "react";
 import {StoreMixin} from "mesosphere-shared-reactjs";
 
+import FilterInputText from "./FilterInputText";
 import IconDownload from "./icons/IconDownload";
 import MesosLogView from "./MesosLogView";
 import RequestErrorMsg from "./RequestErrorMsg";
@@ -15,6 +16,7 @@ const LOG_VIEWS = [
 ];
 
 const METHODS_TO_BIND = [
+  "handleSearchStringChange",
   "onTaskDirectoryStoreError",
   "onTaskDirectoryStoreSuccess"
 ];
@@ -24,18 +26,14 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     super();
 
     this.state = {
-      taskDirectoryErrorCount: 0,
-      currentView: 0
+      currentView: 0,
+      taskDirectoryErrorCount: 0
     };
 
     this.store_listeners = [{
-      name: "taskDirectory",
       events: ["success", "error"],
-      unmountWhen: function (store, event) {
-        if (event === "success") {
-          return TaskDirectoryStore.getDirectory(this.props.task) !== undefined;
-        }
-      }
+      name: "taskDirectory",
+      suppressUpdate: true
     }];
 
     METHODS_TO_BIND.forEach((method) => {
@@ -44,9 +42,32 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 
   }
 
-  componentDidMount() {
-    super.componentDidMount(...arguments);
+  componentWillMount() {
+    super.componentWillMount(...arguments);
     TaskDirectoryStore.getDirectory(this.props.task);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    let {props, state} = this;
+    let directory = state.directory;
+    let nextDirectory = nextState.directory;
+    let task = state.task;
+    let nextTask = nextState.task;
+
+    return !!(
+      // Check task
+      (props.task !== nextProps.task) ||
+      (task && nextTask && task.slave_id !== nextTask.slave_id) ||
+      // Check current view
+      (state.currentView !== nextState.currentView) ||
+      // Check taskDirectoryErrorCount
+      (state.taskDirectoryErrorCount !== nextState.taskDirectoryErrorCount) ||
+      // Check searchString
+      (state.searchString !== nextState.searchString) ||
+      // Check directory
+      (directory !== nextDirectory) || (directory && nextDirectory &&
+        directory.getItems().length !== nextDirectory.getItems().length)
+    );
   }
 
   onTaskDirectoryStoreError() {
@@ -56,11 +77,17 @@ export default class TaskDebugView extends mixin(StoreMixin) {
   }
 
   onTaskDirectoryStoreSuccess() {
-    this.setState({directory: TaskDirectoryStore.get("directory")});
+    if (this.state.directory == null) {
+      this.setState({directory: TaskDirectoryStore.get("directory")});
+    }
   }
 
   handleViewChange(index) {
-    this.setState({currentView: index, directory: undefined});
+    this.setState({currentView: index, directory: null});
+  }
+
+  handleSearchStringChange(searchString) {
+    this.setState({searchString});
   }
 
   hasLoadingError() {
@@ -110,6 +137,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     return (
       <MesosLogView
         filePath={filePath}
+        highlightText={state.searchString}
         slaveID={nodeID}
         logName={logName} />
     );
@@ -152,8 +180,14 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 
     return (
       <div className="flex-container-col flex-grow no-overflow">
-        <div className="control-group flex-align-right">
-          <div className="button-group form-group">
+        <div className="control-group form-group flex-align-right flush-bottom">
+          <FilterInputText
+            className="flex-grow"
+            placeholder="Search"
+            searchString={state.searchString}
+            handleFilterChange={this.handleSearchStringChange}
+            inverseStyle={false} />
+          <div className="button-group">
             {this.getSelectionButtons()}
           </div>
           <a

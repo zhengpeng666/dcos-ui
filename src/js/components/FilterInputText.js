@@ -8,13 +8,15 @@ var FilterInputText = React.createClass({
   propTypes: {
     handleFilterChange: React.PropTypes.func.isRequired,
     inverseStyle: React.PropTypes.bool,
+    placeholder: React.PropTypes.string,
     searchString: React.PropTypes.string.isRequired
   },
 
   getDefaultProps: function () {
     return {
-      searchString: "",
-      inverseStyle: false
+      inverseStyle: false,
+      placeholder: "Filter",
+      searchString: ""
     };
   },
 
@@ -90,7 +92,7 @@ var FilterInputText = React.createClass({
           <input
             type="text"
             className={inputClasses}
-            placeholder="Filter"
+            placeholder={this.props.placeholder}
             value={this.props.searchString}
             onBlur={this.handleBlur}
             onChange={this.handleChange}

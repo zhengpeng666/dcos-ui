@@ -2,6 +2,7 @@ import mixin from "reactjs-mixin";
 import React from "react";
 import {StoreMixin} from "mesosphere-shared-reactjs";
 
+import Highlight from "./Highlight";
 import MesosLogStore from "../stores/MesosLogStore";
 import RequestErrorMsg from "./RequestErrorMsg";
 
@@ -19,8 +20,8 @@ export default class MesosLogView extends mixin(StoreMixin) {
     };
 
     this.store_listeners = [{
-      name: "mesosLog",
       events: ["success", "error"],
+      name: "mesosLog",
       suppressUpdate: true
     }];
 
@@ -49,6 +50,22 @@ export default class MesosLogView extends mixin(StoreMixin) {
     MesosLogStore.stopTailing(this.props.filePath);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    let {props, state} = this;
+    return !!(
+      // Check highlightText
+      (props.highlightText !== nextProps.highlightText) ||
+      // Check filePath
+      (props.filePath !== nextProps.filePath) ||
+      // Check slaveID
+      (props.slaveID !== nextProps.slaveID) ||
+      // Check hasLoadingError
+      (state.hasLoadingError !== nextState.hasLoadingError) ||
+      // Check fullLog
+      (state.fullLog !== nextState.fullLog)
+    );
+  }
+
   onMesosLogStoreError(path) {
     // Check the filePath before we reload
     if (path !== this.props.filePath) {
@@ -68,11 +85,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
     }
 
     let logBuffer = MesosLogStore.get(filePath);
-    // Necessary to not make the view reload over and over again
-    let fullLog = logBuffer.getFullLog();
-    if (this.state.fullLog !== fullLog) {
-      this.setState({fullLog});
-    }
+    this.setState({fullLog: logBuffer.getFullLog()});
   }
 
   getErrorScreen() {
@@ -100,7 +113,12 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
     return (
       <pre className="flex-grow flush-bottom">
-        {fullLog}
+        <Highlight
+          matchClass="highlight"
+          matchElement="span"
+          search={props.highlightText}>
+          {fullLog}
+        </Highlight>
       </pre>
     );
   }
@@ -141,9 +159,13 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 }
 
+MesosLogView.defaultProps = {
+  highlightText: ""
+};
+
 MesosLogView.propTypes = {
   filePath: React.PropTypes.string.isRequired,
-  logName: React.PropTypes.string,
   highlightText: React.PropTypes.string,
+  logName: React.PropTypes.string,
   slaveID: React.PropTypes.string.isRequired
 };

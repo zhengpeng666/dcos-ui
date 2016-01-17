@@ -48,7 +48,7 @@ var TaskDirectoryStore = Store.createStore({
 
     if (_.isEmpty(this.listeners(EventTypes.TASK_DIRECTORY_CHANGE))) {
       this.resetRequests();
-      this.set({innerPath: "", directory: new TaskDirectory()});
+      this.set({innerPath: "", directory: null});
     }
   },
 

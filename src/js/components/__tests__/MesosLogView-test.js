@@ -3,6 +3,7 @@ jest.dontMock("../../stores/MesosLogStore");
 jest.dontMock("../../utils/Util");
 jest.dontMock("../../utils/RequestUtil");
 jest.dontMock("../../structs/SummaryList");
+jest.dontMock("../Highlight");
 jest.dontMock("../MesosLogView");
 
 require("../../utils/StoreMixinConfig");
@@ -109,12 +110,6 @@ describe("MesosLogView", function () {
 
     it("shouldn't setState when path doesn't match", function () {
       this.instance.onMesosLogStoreSuccess("/other/file/path");
-      expect(this.instance.setState).not.toHaveBeenCalled();
-    });
-
-    it("shouldn't setState when fullLog matches", function () {
-      this.instance.state = {fullLog: "foo"};
-      this.instance.onMesosLogStoreSuccess("/some/file/path");
       expect(this.instance.setState).not.toHaveBeenCalled();
     });
 
