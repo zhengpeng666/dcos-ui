@@ -14,10 +14,11 @@ import StringUtil from "../utils/StringUtil";
 import TaskView from "./TaskView";
 
 const METHODS_TO_BIND = [
-  "handleOpenServiceButtonClick"
+  "handleOpenServiceButtonClick",
+  "handleTaskClick"
 ];
 
-export default class ServiceSidePanelContents extends SidePanelContents {
+class ServiceSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
@@ -40,6 +41,16 @@ export default class ServiceSidePanelContents extends SidePanelContents {
     this.props.parentRouter.transitionTo(
       "service-ui",
       {serviceName: this.props.itemID}
+    );
+  }
+
+  handleTaskClick(taskID) {
+    let currentRoutes = this.props.parentRouter.getCurrentRoutes();
+    let currentPage = currentRoutes[currentRoutes.length - 2].name;
+
+    this.props.parentRouter.transitionTo(
+      `${currentPage}-task-panel`,
+      {taskID}
     );
   }
 
@@ -136,6 +147,33 @@ export default class ServiceSidePanelContents extends SidePanelContents {
     );
   }
 
+  getSchedulerDetails() {
+    let schedulerTask = MesosStateStore.getSchedulerTaskFromServiceName(
+      this.props.itemID
+    );
+
+    if (!schedulerTask) {
+      return null;
+    }
+
+    let taskID = schedulerTask.id;
+    let schedulerMapping = {
+      ID: (
+        <a
+          className="clickable text-overflow"
+          onClick={this.handleTaskClick.bind(this, taskID)}
+          title={taskID}>
+          {taskID}
+        </a>
+      ),
+      CPU: schedulerTask.resources.cpus,
+      Memory: schedulerTask.resources.mem,
+      "Disk Space": schedulerTask.resources.disk
+    };
+
+    return this.getKeyValuePairs(schedulerMapping, "Scheduler");
+  }
+
   renderTasksTabView() {
     let serviceName = this.props.itemID;
     let tasks = MesosStateStore.getTasksFromServiceName(serviceName);
@@ -193,22 +231,10 @@ export default class ServiceSidePanelContents extends SidePanelContents {
       [portTitle]: marathonService.snapshot.ports.join(", ")
     };
 
-    let info = Object.keys(headerValueMapping).map(function (header, i) {
-      return (
-        <p key={i} className="row flex-box">
-          <span className="column-4 emphasize">
-            {header}
-          </span>
-          <span className="column-12">
-            {headerValueMapping[header]}
-          </span>
-        </p>
-      );
-    });
-
     return (
-      <div className="container container-fluid container-pod container-pod-short">
-        {info}
+      <div className="container-fluid container-pod container-pod-short flush-top">
+        {this.getSchedulerDetails()}
+        {this.getKeyValuePairs(headerValueMapping, "Configuration")}
       </div>
     );
   }
@@ -242,3 +268,5 @@ export default class ServiceSidePanelContents extends SidePanelContents {
     );
   }
 }
+
+module.exports = ServiceSidePanelContents;

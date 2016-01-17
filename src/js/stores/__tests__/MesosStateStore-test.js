@@ -87,4 +87,35 @@ describe("MesosStateStore", function () {
       expect(result).toEqual({id: 2});
     });
   });
+
+  describe("#getSchedulerTaskFromServiceName", function () {
+    beforeEach(function () {
+      this.get = MesosStateStore.get;
+      MesosStateStore.get = function () {
+        return {
+          frameworks: [{
+            name: "marathon",
+            tasks: [{
+              id: 1,
+              labels: [{key: "DCOS_PACKAGE_FRAMEWORK_NAME", value: "foo"}]
+            }]
+          }]
+        };
+      };
+    });
+
+    afterEach(function () {
+      MesosStateStore.get = this.get;
+    });
+
+    it("should find a currently running task", function () {
+      var result = MesosStateStore.getSchedulerTaskFromServiceName("foo");
+      expect(result.id).toEqual(1);
+    });
+
+    it("shouldn't find a task", function () {
+      var result = MesosStateStore.getSchedulerTaskFromServiceName("bar");
+      expect(result).toEqual(undefined);
+    });
+  });
 });

@@ -106,6 +106,22 @@ var MesosStateStore = Store.createStore({
     return foundTask;
   },
 
+  getSchedulerTaskFromServiceName: function (serviceName) {
+    let frameworks = this.get("lastMesosState").frameworks;
+    let framework = _.findWhere(frameworks, {name: "marathon"});
+    if (!framework) {
+      return null;
+    }
+
+    let result = _.find(framework.tasks, function (task) {
+      return _.find(task.labels, function (label) {
+        return label.key === "DCOS_PACKAGE_FRAMEWORK_NAME";
+      }).value === serviceName;
+    });
+
+    return result;
+  },
+
   getTasksFromServiceName: function (serviceName) {
     let frameworks = this.get("lastMesosState").frameworks;
     let framework = _.findWhere(frameworks, {name: serviceName});

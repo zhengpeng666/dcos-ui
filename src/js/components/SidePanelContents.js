@@ -43,7 +43,7 @@ export default class SidePanelContents extends
 
     let items = Object.keys(hash).map(function (key) {
       return (
-        <dl key={key} className="row flex-box">
+        <dl key={key} className="flex-box row">
           <dt className="column-3 emphasize">
             {key}
           </dt>
@@ -57,14 +57,14 @@ export default class SidePanelContents extends
     // Wrap in headline element and classes
     if (headline != null) {
       headline = (
-        <h3 className="flush-top">
+        <h6 className="flush-top">
           {headline}
-        </h3>
+        </h6>
       );
     }
 
     return (
-      <div>
+      <div className="container container-fluid container-pod container-pod-short flush-bottom">
         {headline}
         {items}
       </div>
