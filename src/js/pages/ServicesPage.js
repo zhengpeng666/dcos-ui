@@ -212,7 +212,14 @@ var ServicesPage = React.createClass({
 
   getEmptyServicesPageContent: function () {
     return (
-      <AlertPanel title="No Services Installed"><p className="flush">Use the DCOS command line tools to find and install services.</p></AlertPanel>
+      <AlertPanel
+        title="No Services Installed"
+        iconClassName="icon icon-sprite icon-sprite-jumbo
+          icon-sprite-jumbo-white icon-services">
+        <p className="flush">
+          Use the DCOS command line tools to find and install services.
+        </p>
+      </AlertPanel>
     );
   },
 

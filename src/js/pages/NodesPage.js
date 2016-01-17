@@ -248,7 +248,14 @@ var NodesPage = React.createClass({
 
   getEmptyHostsPageContent: function () {
     return (
-      <AlertPanel title="Empty Datacenter"><p className="flush">Your datacenter is looking pretty empty. We don't see any nodes other than your master.</p></AlertPanel>
+      <AlertPanel
+        title="Empty Datacenter"
+        iconClassName="icon icon-sprite icon-sprite-jumbo
+          icon-sprite-jumbo-white icon-datacenter">
+        <p className="flush">
+          Your datacenter is looking pretty empty. We don't see any nodes other than your master.
+        </p>
+      </AlertPanel>
     );
   },
 
