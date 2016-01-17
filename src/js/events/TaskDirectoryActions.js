@@ -31,10 +31,10 @@ var TaskDirectoryActions = {
       return null;
     }
 
-    function executorSearch (executor) {
+    function executorSearch(executor) {
       let found = null;
 
-      function taskIDSearch (executorTask) {
+      function taskIDSearch(executorTask) {
         return executorTask.id === task.id;
       }
 
