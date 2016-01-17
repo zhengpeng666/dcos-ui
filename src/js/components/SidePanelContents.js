@@ -64,7 +64,7 @@ export default class SidePanelContents extends
     }
 
     return (
-      <div>
+      <div className="container container-fluid container-pod container-pod-short flush-bottom">
         {headline}
         {items}
       </div>

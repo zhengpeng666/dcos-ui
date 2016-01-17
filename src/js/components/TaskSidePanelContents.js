@@ -165,7 +165,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
     }
 
     return (
-      <div className="flex-container-col">
+      <div className="container-fluid container-pod container-pod-short flush-top">
         {this.getKeyValuePairs(headerValueMapping)}
         {this.getKeyValuePairs(labelMapping, "Labels")}
       </div>
@@ -175,14 +175,20 @@ export default class TaskSidePanelContents extends SidePanelContents {
   renderFilesTabView() {
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
 
-    return <TaskDirectoryView task={task} />;
+    return (
+      <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow no-overflow">
+        <TaskDirectoryView task={task} />;
+      </div>
+    );
   }
 
   renderDebugTabView() {
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
 
     return (
-      <TaskDebugView task={task} />
+      <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow no-overflow">
+        <TaskDebugView task={task} />
+      </div>
     );
   }
 
@@ -210,9 +216,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
             {this.tabs_getUnroutedTabs()}
           </ul>
         </div>
-        <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow no-overflow">
-          {this.tabs_getTabView()}
-        </div>
+        {this.tabs_getTabView()}
       </div>
     );
   }

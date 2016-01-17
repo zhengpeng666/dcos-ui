@@ -171,11 +171,7 @@ class ServiceSidePanelContents extends SidePanelContents {
       "Disk Space": schedulerTask.resources.disk
     };
 
-    return (
-      <div className="container container-fluid container-pod container-pod-short-top">
-        {this.getKeyValuePairs(schedulerMapping, "Scheduler")}
-      </div>
-    );
+    return this.getKeyValuePairs(schedulerMapping, "Scheduler");
   }
 
   renderTasksTabView() {
@@ -236,10 +232,8 @@ class ServiceSidePanelContents extends SidePanelContents {
     };
 
     return (
-      <div>
-        <div className="container container-fluid container-pod container-pod-short">
-          {this.getSchedulerDetails()}
-        </div>
+      <div className="container-fluid container-pod container-pod-short flush-top">
+        {this.getSchedulerDetails()}
         {this.getKeyValuePairs(headerValueMapping, "Configuration")}
       </div>
     );

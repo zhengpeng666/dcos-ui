@@ -75,7 +75,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
     };
 
     return (
-      <div className="side-panel-tab-content side-panel-section container container-fluid container-pod container-pod-short">
+      <div className="container-fluid container-pod container-pod-short flush-top">
         {this.getKeyValuePairs(headerValueMapping)}
         {this.getKeyValuePairs(node.attributes, "Attributes")}
       </div>
