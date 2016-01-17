@@ -123,6 +123,18 @@ const ListenersDescription = {
     suppressUpdate: true
   },
 
+  taskDirectory: {
+    store: TaskDirectoryStore,
+    events: {
+      success: EventTypes.TASK_DIRECTORY_CHANGE,
+      error: EventTypes.TASK_DIRECTORY_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
   groups: {
     store: ACLGroupsStore,
     events: {
@@ -156,18 +168,6 @@ const ListenersDescription = {
       deleteUserError: EventTypes.ACL_GROUP_REMOVE_USER_ERROR,
       deleteSuccess: EventTypes.ACL_GROUP_DELETE_SUCCESS,
       deleteError: EventTypes.ACL_GROUP_DELETE_ERROR
-    },
-    unmountWhen: function () {
-      return true;
-    },
-    listenAlways: true
-  },
-
-  taskDirectory: {
-    store: TaskDirectoryStore,
-    events: {
-      success: EventTypes.TASK_DIRECTORY_CHANGE,
-      error: EventTypes.TASK_DIRECTORY_ERROR
     },
     unmountWhen: function () {
       return true;

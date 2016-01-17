@@ -10,15 +10,13 @@ import TaskDirectory from "../structs/TaskDirectory";
 import TaskDirectoryActions from "../events/TaskDirectoryActions";
 
 var requestInterval = null;
-var request = null;
+var activeXHR = null;
 
 function fetchState(task, deeperPath) {
-  request = TaskDirectoryActions.fetchNodeState(
-    task,
-    function (response) {
-      request = TaskDirectoryActions.fetchDirectory(task, deeperPath, response);
-    }
-  );
+  activeXHR = TaskDirectoryActions.fetchNodeState(task, function (response) {
+    activeXHR = TaskDirectoryActions
+      .fetchDirectory(task, deeperPath, response);
+  });
 }
 
 function startPolling(task, deeperPath) {
@@ -60,9 +58,9 @@ var TaskDirectoryStore = Store.createStore({
       requestInterval = null;
     }
 
-    if (request != null) {
-      request.abort();
-      request = null;
+    if (activeXHR != null) {
+      activeXHR.abort();
+      activeXHR = null;
     }
   },
 

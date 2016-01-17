@@ -3,25 +3,21 @@ import _ from "underscore";
 import ActionTypes from "../constants/ActionTypes";
 import AppDispatcher from "./AppDispatcher";
 import Config from "../config/Config";
+// TODO for mlunoe: We shouldn't be including stores in these files. DCOS-4430
 import MesosStateStore from "../stores/MesosStateStore";
 import RequestUtil from "../utils/RequestUtil";
 
-const ROOT_URL = Config.rootUrl;
-
 var TaskDirectoryActions = {
-  getFilePathURL: function (nodeID) {
-    return `${ROOT_URL}/slave/${nodeID}/files/browse.json`;
-  },
-
   getDownloadURL: function (nodeID, path) {
-    return `${ROOT_URL}/slave/${nodeID}/files/download.json?path=${path}`;
+    return `${Config.rootUrl}/slave/${nodeID}/files/download.json?` +
+      `path=${path}`;
   },
 
   getNodeStateJSON: function (task) {
     let pid = MesosStateStore.getNodeFromID(task.slave_id).pid;
     let nodePID = pid.substring(0, pid.indexOf("@"));
 
-    return `${ROOT_URL}/slave/${task.slave_id}/${nodePID}/state.json`;
+    return `${Config.rootUrl}/slave/${task.slave_id}/${nodePID}/state.json`;
   },
 
   getInnerPath: function (nodeState, task, innerPath) {
@@ -35,14 +31,29 @@ var TaskDirectoryActions = {
       return null;
     }
 
-    let taskExecutor = _.find(taskFramework.executors, function (executor) {
-      return _.some(executor.tasks, function (executorTask) {
-        return executorTask.id === task.id;
-      });
-    });
+    function executorSearch (executor) {
+      let found = null;
 
+      function taskIDSearch (executorTask) {
+        return executorTask.id === task.id;
+      }
+
+      found = _.some(executor.tasks, taskIDSearch);
+      if (!found) {
+        found = _.some(executor.completed_tasks, taskIDSearch);
+      }
+
+      return found;
+    }
+
+    // Search running executors
+    let taskExecutor = _.find(taskFramework.executors, executorSearch);
     if (!taskExecutor) {
-      return null;
+      // Search completed executors
+      taskExecutor = _.find(taskFramework.completed_executors, executorSearch);
+      if (!taskExecutor) {
+        return null;
+      }
     }
 
     return `${taskExecutor.directory}/${innerPath}`;
@@ -58,15 +69,15 @@ var TaskDirectoryActions = {
             resolve();
             cb(response);
           },
-          error: function (e) {
-            if (e.statusText === "abort") {
+          error: function (xhr) {
+            if (xhr.statusText === "abort") {
               resolve();
               return;
             }
 
             AppDispatcher.handleServerAction({
               type: ActionTypes.REQUEST_TASK_DIRECTORY_ERROR,
-              data: e.message
+              data: xhr.message
             });
 
             reject();
@@ -79,7 +90,6 @@ var TaskDirectoryActions = {
 
   fetchDirectory: function (task, innerPath, nodeState) {
     innerPath = TaskDirectoryActions.getInnerPath(nodeState, task, innerPath);
-
     if (innerPath == null) {
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_TASK_DIRECTORY_ERROR
@@ -88,7 +98,7 @@ var TaskDirectoryActions = {
     }
 
     RequestUtil.json({
-      url: TaskDirectoryActions.getFilePathURL(task.slave_id),
+      url: `${Config.rootUrl}/slave/${task.slave_id}/files/browse.json`,
       data: {
         path: innerPath
       },
@@ -98,14 +108,14 @@ var TaskDirectoryActions = {
           data: directory
         });
       },
-      error: function (e) {
-        if (e.statusText === "abort") {
+      error: function (xhr) {
+        if (xhr.statusText === "abort") {
           return;
         }
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_TASK_DIRECTORY_ERROR,
-          data: e.message
+          data: xhr.message
         });
       }
     });
