@@ -1,9 +1,9 @@
-var d3 = require("d3");
-var React = require("react/addons");
+var d3 = require('d3');
+var React = require('react/addons');
 
 var AnitmationCircle = React.createClass({
 
-  displayName: "AnitmationCircle",
+  displayName: 'AnitmationCircle',
 
   propTypes: {
     className: React.PropTypes.string,
@@ -24,15 +24,15 @@ var AnitmationCircle = React.createClass({
 
   componentDidMount: function () {
     d3.select(this.getDOMNode())
-      .attr("transform", "translate(" + this.props.position + ")");
+      .attr('transform', 'translate(' + this.props.position + ')');
   },
 
   componentWillReceiveProps: function (props) {
     d3.select(this.getDOMNode())
       .transition()
       .duration(props.transitionTime)
-      .ease("linear")
-      .attr("transform", "translate(" + props.position + ")");
+      .ease('linear')
+      .attr('transform', 'translate(' + props.position + ')');
   },
 
   render: function () {

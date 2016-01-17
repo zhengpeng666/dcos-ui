@@ -1,10 +1,10 @@
-import classNames from "classnames";
-import {Link} from "react-router";
+import classNames from 'classnames';
+import {Link} from 'react-router';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import TabsUtil from "../utils/TabsUtil";
+import TabsUtil from '../utils/TabsUtil';
 
 const TabsMixin = {
 
@@ -17,7 +17,7 @@ const TabsMixin = {
    * @return {Component} React component to render
    */
   tabs_getUnroutedItem(customClasses, tab) {
-    let tabLabelClass = classNames(customClasses, {"tab-item-label": true});
+    let tabLabelClass = classNames(customClasses, {'tab-item-label': true});
 
     return (
       <span
@@ -51,7 +51,7 @@ const TabsMixin = {
    * @return {Component} React component to render
    */
   tabs_getRoutedItem(customClasses, tab) {
-    let tabLabelClass = classNames(customClasses, {"tab-item-label": true});
+    let tabLabelClass = classNames(customClasses, {'tab-item-label': true});
 
     return (
       <Link
@@ -86,7 +86,7 @@ const TabsMixin = {
   tabs_getTabView() {
     // Replace spaces in the currentTab string because we are calling the string
     // as a function on the component, and functions cannot have spaces.
-    let currentTab = this.tabs_tabs[this.state.currentTab].replace(" ", "");
+    let currentTab = this.tabs_tabs[this.state.currentTab].replace(' ', '');
     let renderFunction = this[`render${currentTab}TabView`];
 
     if (renderFunction == null) {

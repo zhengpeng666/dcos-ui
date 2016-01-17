@@ -1,15 +1,15 @@
-import mixin from "reactjs-mixin";
+import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React from 'react';
 /* eslint-enable no-unused-vars */
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLUserStore from "../stores/ACLUserStore";
-import FormModal from "./FormModal";
+import ACLUserStore from '../stores/ACLUserStore';
+import FormModal from './FormModal';
 
 const METHODS_TO_BIND = [
-  "handleNewUserSubmit",
-  "onUserStoreCreateSuccess"
+  'handleNewUserSubmit',
+  'onUserStoreCreateSuccess'
 ];
 
 export default class UserFormModal extends mixin(StoreMixin) {
@@ -23,8 +23,8 @@ export default class UserFormModal extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "user",
-        events: ["createSuccess", "createError"]
+        name: 'user',
+        events: ['createSuccess', 'createError']
       }
     ];
 
@@ -53,37 +53,37 @@ export default class UserFormModal extends mixin(StoreMixin) {
   getNewUserFormDefinition() {
     return [
       {
-        fieldType: "text",
-        name: "description",
-        placeholder: "Full name",
+        fieldType: 'text',
+        name: 'description',
+        placeholder: 'Full name',
         required: true,
         showError: false,
         showLabel: false,
-        writeType: "input",
+        writeType: 'input',
         validation: function () { return true; },
-        value: ""
+        value: ''
       },
       {
-        fieldType: "text",
-        name: "uid",
-        placeholder: "Username",
+        fieldType: 'text',
+        name: 'uid',
+        placeholder: 'Username',
         required: true,
         showError: false,
         showLabel: false,
-        writeType: "input",
+        writeType: 'input',
         validation: function () { return true; },
-        value: ""
+        value: ''
       },
       {
-        fieldType: "password",
-        name: "password",
-        placeholder: "Password",
+        fieldType: 'password',
+        name: 'password',
+        placeholder: 'Password',
         required: true,
         showError: this.state.errorMsg,
         showLabel: false,
-        writeType: "input",
+        writeType: 'input',
         validation: function () { return true; },
-        value: ""
+        value: ''
       }
     ];
   }

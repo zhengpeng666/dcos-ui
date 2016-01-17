@@ -1,13 +1,13 @@
-var Dispatcher = require("flux").Dispatcher;
-var _ = require("underscore");
+var _ = require('underscore');
+var Dispatcher = require('flux').Dispatcher;
 
-var ActionTypes = require("../constants/ActionTypes");
+var ActionTypes = require('../constants/ActionTypes');
 
 var AppDispatcher = _.extend(new Dispatcher(), {
 
   handleServerAction: function (action) {
     if (!action.type) {
-      console.warn("Empty action.type: you likely mistyped the action.");
+      console.warn('Empty action.type: you likely mistyped the action.');
     }
 
     this.dispatch({
@@ -18,7 +18,7 @@ var AppDispatcher = _.extend(new Dispatcher(), {
 
   handleSidebarAction: function (action) {
     if (!action.type) {
-      console.warn("Empty action.type: you likely mistyped the action.");
+      console.warn('Empty action.type: you likely mistyped the action.');
     }
 
     this.dispatch({
@@ -29,7 +29,7 @@ var AppDispatcher = _.extend(new Dispatcher(), {
 
   handleIntercomAction: function (action) {
     if (!action.type) {
-      console.warn("Empty action.type: you likely mistyped the action.");
+      console.warn('Empty action.type: you likely mistyped the action.');
     }
 
     this.dispatch({
@@ -37,6 +37,7 @@ var AppDispatcher = _.extend(new Dispatcher(), {
       action: action
     });
   }
+
 });
 
 module.exports = AppDispatcher;

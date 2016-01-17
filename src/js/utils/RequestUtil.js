@@ -1,7 +1,7 @@
-var _ = require("underscore");
-var json = require("mesosphere-shared-reactjs").RequestUtil.json;
+var _ = require('underscore');
+var json = require('mesosphere-shared-reactjs').RequestUtil.json;
 
-const DEFAULT_ERROR_MESSAGE = "An error has occurred.";
+const DEFAULT_ERROR_MESSAGE = 'An error has occurred.';
 
 var RequestUtil = {
   json,
@@ -94,8 +94,8 @@ var RequestUtil = {
 
       if (methodConfig[eventType] && methodConfig[eventType].response) {
         response = methodConfig[eventType].response;
-      } else if (eventType === "error") {
-        response = {responseJSON: {error: "Some generic error"}};
+      } else if (eventType === 'error') {
+        response = {responseJSON: {error: 'Some generic error'}};
       }
 
       configuration[eventType](response);
@@ -112,9 +112,9 @@ var RequestUtil = {
   parseResponseBody: function (xhr) {
     // Handle html document returned with 404 gracefully,
     // to not break functionality
-    if (typeof xhr.getResponseHeader === "function") {
-      let contentType = xhr.getResponseHeader("Content-Type");
-      if (contentType && contentType.indexOf("text/html") >= 0) {
+    if (typeof xhr.getResponseHeader === 'function') {
+      let contentType = xhr.getResponseHeader('Content-Type');
+      if (contentType && contentType.indexOf('text/html') >= 0) {
         return {};
       }
     }

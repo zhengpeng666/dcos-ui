@@ -1,18 +1,18 @@
-import mixin from "reactjs-mixin";
-import React from "react/addons";
-import {Confirm, SidePanel} from "reactjs-components";
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import mixin from 'reactjs-mixin';
+import React from 'react/addons';
+import {Confirm, SidePanel} from 'reactjs-components';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLUserStore from "../stores/ACLUserStore";
-import HistoryStore from "../stores/HistoryStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import UserSidePanelContents from "./UserSidePanelContents";
+import ACLUserStore from '../stores/ACLUserStore';
+import HistoryStore from '../stores/HistoryStore';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import UserSidePanelContents from './UserSidePanelContents';
 
 const METHODS_TO_BIND = [
-  "handleDeleteModalOpen",
-  "handleDeleteCancel",
-  "handlePanelClose",
-  "handleDeleteUser"
+  'handleDeleteModalOpen',
+  'handleDeleteCancel',
+  'handlePanelClose',
+  'handleDeleteUser'
 ];
 
 export default class UserSidePanel extends mixin(StoreMixin) {
@@ -31,10 +31,10 @@ export default class UserSidePanel extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "user",
+        name: 'user',
         events: [
-          "deleteSuccess",
-          "deleteError"
+          'deleteSuccess',
+          'deleteError'
         ]
       }
     ];
@@ -86,13 +86,13 @@ export default class UserSidePanel extends mixin(StoreMixin) {
       pendingRequest: false
     });
 
-    this.context.router.transitionTo("settings-organization-users");
+    this.context.router.transitionTo('settings-organization-users');
   }
 
   isOpen() {
     return (
       this.props.params.userID != null
-      && MesosSummaryStore.get("statesProcessed")
+      && MesosSummaryStore.get('statesProcessed')
     );
   }
 

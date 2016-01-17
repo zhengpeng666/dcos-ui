@@ -1,13 +1,13 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+var classNames = require('classnames');
+var React = require('react/addons');
 
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var DOMUtils = require("../utils/DOMUtils");
-var Panel = require("./Panel");
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
+var DOMUtils = require('../utils/DOMUtils');
+var Panel = require('./Panel');
 
 var AlertPanel = React.createClass({
 
-  displayName: "AlertPanel",
+  displayName: 'AlertPanel',
 
   mixins: [InternalStorageMixin],
 
@@ -30,14 +30,14 @@ var AlertPanel = React.createClass({
   getTitleClasses: function () {
     return classNames({
       inverse: true,
-      "flush-top": !this.props.iconClassName
+      'flush-top': !this.props.iconClassName
     });
   },
 
   render: function () {
     var data = this.internalStorage_get();
     var classes = {
-      "container container-fluid container-pod": true
+      'container container-fluid container-pod': true
     };
     if (this.props.className) {
       classes[this.props.className] = true;
@@ -51,7 +51,7 @@ var AlertPanel = React.createClass({
           <Panel ref="panel"
             style={{height: data.height}}
             className="vertical-center text-align-center flush">
-            <i className={this.props.iconClassName + " flush-top"}></i>
+            <i className={this.props.iconClassName + ' flush-top'}></i>
             <h3 className={this.getTitleClasses()}>
               {this.props.title}
             </h3>

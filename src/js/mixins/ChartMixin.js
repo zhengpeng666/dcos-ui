@@ -1,5 +1,5 @@
-var _ = require("underscore");
-var d3 = require("d3");
+var _ = require('underscore');
+var d3 = require('d3');
 
 var ChartMixin = {
   getXScale: function (data, width, refreshRate) {
@@ -31,7 +31,7 @@ var ChartMixin = {
   formatXAxis: function (d) {
     let hideMatch = this.props.axisConfiguration.x.hideMatch;
     if (hideMatch && hideMatch.test(d.toString())) {
-      return "";
+      return '';
     }
 
     if (parseInt(Math.abs(d)) > 0) {

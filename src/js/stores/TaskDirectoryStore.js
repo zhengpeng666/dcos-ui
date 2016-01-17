@@ -1,13 +1,13 @@
-import _ from "underscore";
-import {Store} from "mesosphere-shared-reactjs";
+import _ from 'underscore';
+import {Store} from 'mesosphere-shared-reactjs';
 
-import ActionTypes from "../constants/ActionTypes";
-import AppDispatcher from "../events/AppDispatcher";
-import Config from "../config/Config";
-import EventTypes from "../constants/EventTypes";
-import GetSetMixin from "../mixins/GetSetMixin";
-import TaskDirectory from "../structs/TaskDirectory";
-import TaskDirectoryActions from "../events/TaskDirectoryActions";
+import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from '../events/AppDispatcher';
+import Config from '../config/Config';
+import EventTypes from '../constants/EventTypes';
+import GetSetMixin from '../mixins/GetSetMixin';
+import TaskDirectory from '../structs/TaskDirectory';
+import TaskDirectoryActions from '../events/TaskDirectoryActions';
 
 var requestInterval = null;
 var activeXHR = null;
@@ -30,13 +30,13 @@ function startPolling(task, deeperPath) {
 }
 
 var TaskDirectoryStore = Store.createStore({
-  storeID: "taskDirectory",
+  storeID: 'taskDirectory',
 
   mixins: [GetSetMixin],
 
   getSet_data: {
     directory: null,
-    innerPath: ""
+    innerPath: ''
   },
 
   addChangeListener: function (eventName, callback) {
@@ -48,7 +48,7 @@ var TaskDirectoryStore = Store.createStore({
 
     if (_.isEmpty(this.listeners(EventTypes.TASK_DIRECTORY_CHANGE))) {
       this.resetRequests();
-      this.set({innerPath: "", directory: null});
+      this.set({innerPath: '', directory: null});
     }
   },
 
@@ -73,8 +73,8 @@ var TaskDirectoryStore = Store.createStore({
   },
 
   addPath: function (task, path) {
-    this.set({innerPath: this.get("innerPath") + "/" + path});
-    this.getDirectory(task, this.get("innerPath"));
+    this.set({innerPath: this.get('innerPath') + '/' + path});
+    this.getDirectory(task, this.get('innerPath'));
   },
 
   setPath: function (task, path) {

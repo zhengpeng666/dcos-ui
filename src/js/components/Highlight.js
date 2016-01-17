@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const MATCH_OPERATOR_RE = /[|\\{}()[\]^$+*?.]/g;
 
@@ -14,11 +14,11 @@ function regExpPropType(props, propName, componentName, location) {
 }
 
 function escapeStringRegexp(str) {
-  if (typeof str !== "string") {
-    throw new TypeError("Expected a string");
+  if (typeof str !== 'string') {
+    throw new TypeError('Expected a string');
   }
 
-  return str.replace(MATCH_OPERATOR_RE, "\\$&");
+  return str.replace(MATCH_OPERATOR_RE, '\\$&');
 }
 
 class Highlight extends React.Component {
@@ -43,7 +43,7 @@ class Highlight extends React.Component {
    * @return {Boolean} Whether there is a requested search or not
    */
   hasSearch() {
-    return (typeof this.props.search !== "undefined") && this.props.search;
+    return (typeof this.props.search !== 'undefined') && this.props.search;
   }
 
   /**
@@ -57,13 +57,13 @@ class Highlight extends React.Component {
       return this.props.search;
     }
 
-    let flags = "";
+    let flags = '';
     if (!this.props.caseSensitive) {
-      flags += "i";
+      flags += 'i';
     }
 
     let search = this.props.search;
-    if (typeof this.props.search === "string") {
+    if (typeof this.props.search === 'string') {
       search = escapeStringRegexp(search);
     }
 
@@ -80,7 +80,7 @@ class Highlight extends React.Component {
    *   The regex search query.
    *
    * @return {Object}
-   *   An object consisting of "first" and "last" properties representing the
+   *   An object consisting of 'first' and 'last' properties representing the
    *   indexes of the first and last characters of a matching string.
    */
   getMatchBoundaries(subject, search) {
@@ -203,8 +203,8 @@ class Highlight extends React.Component {
 
 Highlight.defaultProps = {
   caseSensitive: false,
-  matchElement: "strong",
-  matchClass: "highlight"
+  matchElement: 'strong',
+  matchClass: 'highlight'
 };
 
 Highlight.propTypes = {

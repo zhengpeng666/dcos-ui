@@ -1,16 +1,16 @@
-import ACLAuthStore from "../stores/ACLAuthStore";
-import ACLGroupsStore from "../stores/ACLGroupsStore";
-import ACLGroupStore from "../stores/ACLGroupStore";
-import ACLStore from "../stores/ACLStore";
-import ACLUsersStore from "../stores/ACLUsersStore";
-import ACLUserStore from "../stores/ACLUserStore";
-import EventTypes from "./EventTypes";
-import MarathonStore from "../stores/MarathonStore";
-import MesosLogStore from "../stores/MesosLogStore";
-import MesosStateStore from "../stores/MesosStateStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import MetadataStore from "../stores/MetadataStore";
-import TaskDirectoryStore from "../stores/TaskDirectoryStore";
+import ACLAuthStore from '../stores/ACLAuthStore';
+import ACLGroupsStore from '../stores/ACLGroupsStore';
+import ACLGroupStore from '../stores/ACLGroupStore';
+import ACLStore from '../stores/ACLStore';
+import ACLUsersStore from '../stores/ACLUsersStore';
+import ACLUserStore from '../stores/ACLUserStore';
+import EventTypes from './EventTypes';
+import MarathonStore from '../stores/MarathonStore';
+import MesosLogStore from '../stores/MesosLogStore';
+import MesosStateStore from '../stores/MesosStateStore';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import MetadataStore from '../stores/MetadataStore';
+import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 
 const ListenersDescription = {
 
@@ -61,8 +61,8 @@ const ListenersDescription = {
 
     // When to remove listener
     unmountWhen: function (store, event) {
-      if (event === "success") {
-        return store.get("statesProcessed");
+      if (event === 'success') {
+        return store.get('statesProcessed');
       }
     },
 
@@ -77,8 +77,8 @@ const ListenersDescription = {
       error: EventTypes.MESOS_STATE_REQUEST_ERROR
     },
     unmountWhen: function (store, event) {
-      if (event === "success") {
-        return Object.keys(store.get("lastMesosState")).length;
+      if (event === 'success') {
+        return Object.keys(store.get('lastMesosState')).length;
       }
     },
     listenAlways: true
@@ -91,7 +91,7 @@ const ListenersDescription = {
       error: EventTypes.MARATHON_APPS_ERROR
     },
     unmountWhen: function (store, event) {
-      if (event === "success") {
+      if (event === 'success') {
         return store.hasProcessedApps();
       }
     },

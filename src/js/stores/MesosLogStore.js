@@ -1,18 +1,18 @@
-import {Store} from "mesosphere-shared-reactjs";
+import {Store} from 'mesosphere-shared-reactjs';
 
-import ActionTypes from "../constants/ActionTypes";
-import AppDispatcher from "../events/AppDispatcher";
-import Config from "../config/Config";
-import EventTypes from "../constants/EventTypes";
-import GetSetMixin from "../mixins/GetSetMixin";
-import Item from "../structs/Item";
-import LogBuffer from "../structs/LogBuffer";
-import MesosLogActions from "../events/MesosLogActions";
+import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from '../events/AppDispatcher';
+import Config from '../config/Config';
+import EventTypes from '../constants/EventTypes';
+import GetSetMixin from '../mixins/GetSetMixin';
+import Item from '../structs/Item';
+import LogBuffer from '../structs/LogBuffer';
+import MesosLogActions from '../events/MesosLogActions';
 
 const MAX_FILE_SIZE = 50000;
 
 const MesosLogStore = Store.createStore({
-  storeID: "mesosLog",
+  storeID: 'mesosLog',
 
   mixins: [GetSetMixin],
 

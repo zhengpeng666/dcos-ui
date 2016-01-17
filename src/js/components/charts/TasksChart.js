@@ -1,14 +1,14 @@
-var _ = require("underscore");
-var classNames = require("classnames");
-var React = require("react/addons");
+var _ = require('underscore');
+var classNames = require('classnames');
+var React = require('react/addons');
 
-var Chart = require("./Chart");
-var DialChart = require("./DialChart");
+var Chart = require('./Chart');
+var DialChart = require('./DialChart');
 
 var tasksPerRow = 3;
 var taskInfo = {
-  "TASK_RUNNING": {label: "Tasks running", colorIndex: 4},
-  "TASK_STAGING": {label: "Tasks staging", colorIndex: 1}
+  'TASK_RUNNING': {label: 'Tasks running', colorIndex: 4},
+  'TASK_STAGING': {label: 'Tasks staging', colorIndex: 1}
 };
 
 function getEmptyTaskData() {
@@ -19,7 +19,7 @@ function getEmptyTaskData() {
 
 var TasksChart = React.createClass({
 
-  displayName: "TasksChart",
+  displayName: 'TasksChart',
 
   propTypes: {
     // {TASK_RUNNING: 0, TASK_STAGING: 4}
@@ -47,13 +47,13 @@ var TasksChart = React.createClass({
         task = { value: 0 };
       }
       var classes = {
-        "text-align-center": true
+        'text-align-center': true
       };
       // equalize columns for units
       if (numberOfTasks > tasksPerRow) {
-        classes["column-small-4"] = true;
+        classes['column-small-4'] = true;
       } else {
-        classes["column-small-" + 12 / numberOfTasks] = true;
+        classes['column-small-' + 12 / numberOfTasks] = true;
       }
       var classSet = classNames(classes);
       return (
@@ -61,7 +61,7 @@ var TasksChart = React.createClass({
           <p className="h1 unit inverse flush-top">
             {task.value}
           </p>
-          <p className={"unit-label short-top tall-bottom path-color-" + info.colorIndex}>
+          <p className={'unit-label short-top tall-bottom path-color-' + info.colorIndex}>
             {info.label}
           </p>
         </div>
@@ -104,7 +104,7 @@ var TasksChart = React.createClass({
     return (
       <div className="description">
         <span className="h1 h1-large inverse flush flush-top unit">{total}</span>
-        <span className="h4 unit-label short-top flush-bottom text-muted">{"Total Tasks"}</span>
+        <span className="h4 unit-label short-top flush-bottom text-muted">{'Total Tasks'}</span>
       </div>
     );
   },

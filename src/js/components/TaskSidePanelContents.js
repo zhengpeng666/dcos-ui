@@ -1,22 +1,22 @@
-import _ from "underscore";
+import _ from 'underscore';
 /*eslint-disable no-unused-vars*/
-const React = require("react/addons");
+const React = require('react/addons');
 /*eslint-enable no-unused-vars*/
 
-import SidePanelContents from "./SidePanelContents";
-import TaskDebugView from "../components/TaskDebugView";
-import MesosStateStore from "../stores/MesosStateStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import ResourceTypes from "../constants/ResourceTypes";
-import TaskDirectoryView from "./TaskDirectoryView";
-import TaskStates from "../constants/TaskStates";
-import TaskUtil from "../utils/TaskUtil";
-import Units from "../utils/Units";
+import SidePanelContents from './SidePanelContents';
+import TaskDebugView from '../components/TaskDebugView';
+import MesosStateStore from '../stores/MesosStateStore';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import ResourceTypes from '../constants/ResourceTypes';
+import TaskDirectoryView from './TaskDirectoryView';
+import TaskStates from '../constants/TaskStates';
+import TaskUtil from '../utils/TaskUtil';
+import Units from '../utils/Units';
 
 const TABS = {
-  files: "Files",
-  details: "Details",
-  debug: "Debug"
+  files: 'Files',
+  details: 'Details',
+  debug: 'Debug'
 };
 
 export default class TaskSidePanelContents extends SidePanelContents {
@@ -29,8 +29,8 @@ export default class TaskSidePanelContents extends SidePanelContents {
     };
 
     this.store_listeners = [
-      {name: "state", events: ["success"]},
-      {name: "summary", events: ["success"]}
+      {name: 'state', events: ['success']},
+      {name: 'summary', events: ['success']}
     ];
   }
 
@@ -43,7 +43,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
         return;
       }
 
-      let completed = TaskStates[task.state].stateTypes[0] === "completed";
+      let completed = TaskStates[task.state].stateTypes[0] === 'completed';
 
       if (completed) {
         delete this.tabs_tabs.files;
@@ -62,7 +62,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
     let resources = Object.keys(task.resources);
 
     return resources.map(function (resource) {
-      if (resource === "ports") {
+      if (resource === 'ports') {
         return null;
       }
 
@@ -101,7 +101,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
 
   getBasicInfo(task, node) {
     // Hide when no task or when we are viewing debug tab
-    if (task == null || this.state.currentTab === "debug") {
+    if (task == null || this.state.currentTab === 'debug') {
       return null;
     }
 
@@ -140,12 +140,12 @@ export default class TaskSidePanelContents extends SidePanelContents {
   renderDetailsTabView() {
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
 
-    if (task == null || !MesosSummaryStore.get("statesProcessed")) {
+    if (task == null || !MesosSummaryStore.get('statesProcessed')) {
       return null;
     }
 
     let node = MesosStateStore.getNodeFromID(task.slave_id);
-    let services = MesosSummaryStore.get("states")
+    let services = MesosSummaryStore.get('states')
       .lastSuccessful()
       .getServiceList();
     let service = services.filter({ids: [task.framework_id]}).last();
@@ -167,7 +167,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
     return (
       <div className="container-fluid container-pod container-pod-short flush-top">
         {this.getKeyValuePairs(headerValueMapping)}
-        {this.getKeyValuePairs(labelMapping, "Labels")}
+        {this.getKeyValuePairs(labelMapping, 'Labels')}
       </div>
     );
   }
@@ -193,14 +193,14 @@ export default class TaskSidePanelContents extends SidePanelContents {
   }
 
   render() {
-    if (MesosStateStore.get("lastMesosState").slaves == null) {
+    if (MesosStateStore.get('lastMesosState').slaves == null) {
       return null;
     }
 
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
 
     if (task == null) {
-      return this.getNotFound("task");
+      return this.getNotFound('task');
     }
 
     let node = MesosStateStore.getNodeFromID(task.slave_id);

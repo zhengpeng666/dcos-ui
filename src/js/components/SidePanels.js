@@ -1,16 +1,16 @@
-import _ from "underscore";
-import React from "react/addons";
-import {SidePanel} from "reactjs-components";
+import _ from 'underscore';
+import React from 'react/addons';
+import {SidePanel} from 'reactjs-components';
 
-import HistoryStore from "../stores/HistoryStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import NodeSidePanelContents from "./NodeSidePanelContents";
-import ServiceSidePanelContents from "./ServiceSidePanelContents";
-import StringUtil from "../utils/StringUtil";
-import TaskSidePanelContents from "./TaskSidePanelContents";
+import HistoryStore from '../stores/HistoryStore';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import NodeSidePanelContents from './NodeSidePanelContents';
+import ServiceSidePanelContents from './ServiceSidePanelContents';
+import StringUtil from '../utils/StringUtil';
+import TaskSidePanelContents from './TaskSidePanelContents';
 
 const METHODS_TO_BIND = [
-  "handlePanelClose"
+  'handlePanelClose'
 ];
 
 export default class SidePanels extends React.Component {
@@ -44,15 +44,15 @@ export default class SidePanels extends React.Component {
       params.nodeID != null ||
       params.serviceName != null ||
       params.taskID != null
-    ) && MesosSummaryStore.get("statesProcessed");
+    ) && MesosSummaryStore.get('statesProcessed');
   }
 
   getHeader() {
-    let text = "back";
+    let text = 'back';
     let prevPage = HistoryStore.getHistoryAt(-1);
 
     if (prevPage == null) {
-      text = "close";
+      text = 'close';
     }
 
     if (prevPage) {
@@ -60,7 +60,7 @@ export default class SidePanels extends React.Component {
       prevPage = _.last(matchedRoutes).name;
 
       if (this.props.openedPage === prevPage) {
-        text = "close";
+        text = 'close';
       }
     }
 

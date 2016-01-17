@@ -1,16 +1,16 @@
-import mixin from "reactjs-mixin";
-import React from "react/addons";
-import _ from "underscore";
+import mixin from 'reactjs-mixin';
+import React from 'react/addons';
+import _ from 'underscore';
 
-import Cluster from "../utils/Cluster";
-import EventTypes from "../constants/EventTypes";
-import HealthLabels from "../constants/HealthLabels";
-import HistoryStore from "../stores/HistoryStore";
-import InternalStorageMixin from "../mixins/InternalStorageMixin";
-import MarathonStore from "../stores/MarathonStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import Plugins from "../plugins/Plugins";
-import StringUtil from "../utils/StringUtil";
+import Cluster from '../utils/Cluster';
+import EventTypes from '../constants/EventTypes';
+import HealthLabels from '../constants/HealthLabels';
+import HistoryStore from '../stores/HistoryStore';
+import InternalStorageMixin from '../mixins/InternalStorageMixin';
+import MarathonStore from '../stores/MarathonStore';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import Plugins from '../plugins/Plugins';
+import StringUtil from '../utils/StringUtil';
 
 const PropTypes = React.PropTypes;
 
@@ -20,9 +20,9 @@ export default class ServiceOverlay extends mixin(InternalStorageMixin) {
     super();
 
     const methodsToBind = [
-      "handleServiceClose",
-      "onMesosSummaryChange",
-      "removeMesosStateListeners"
+      'handleServiceClose',
+      'onMesosSummaryChange',
+      'removeMesosStateListeners'
     ];
 
     methodsToBind.forEach(function (method) {
@@ -50,7 +50,7 @@ export default class ServiceOverlay extends mixin(InternalStorageMixin) {
       });
     });
 
-    if (MesosSummaryStore.get("statesProcessed")) {
+    if (MesosSummaryStore.get('statesProcessed')) {
       this.findAndRenderService(this.props.params.serviceName);
     } else {
       this.addMesosStateListeners();
@@ -79,7 +79,7 @@ export default class ServiceOverlay extends mixin(InternalStorageMixin) {
   }
 
   onMesosSummaryChange() {
-    if (MesosSummaryStore.get("statesProcessed")) {
+    if (MesosSummaryStore.get('statesProcessed')) {
       // Once we have the data we need (frameworks), stop listening for changes.
       this.removeMesosStateListeners();
       this.findAndRenderService();
@@ -109,8 +109,8 @@ export default class ServiceOverlay extends mixin(InternalStorageMixin) {
 
     // Did not find a service.
     if (!service) {
-      this.context.router.transitionTo("services");
-      this.context.router.transitionTo("services-panel", {serviceName});
+      this.context.router.transitionTo('services');
+      this.context.router.transitionTo('services-panel', {serviceName});
       return;
     }
 
@@ -129,21 +129,21 @@ export default class ServiceOverlay extends mixin(InternalStorageMixin) {
       </a>
     );
 
-    return Plugins.applyFilter("overlayNewWindowButton", link);
+    return Plugins.applyFilter('overlayNewWindowButton', link);
   }
 
   getServiceNav(service) {
     let appHealth = MarathonStore.getServiceHealth(service.name);
     let serviceHealth = HealthLabels[appHealth.key];
-    let taskCount = "";
+    let taskCount = '';
 
     if (_.isNumber(service.TASK_RUNNING)) {
-      let pluralized = StringUtil.pluralize("task", service.TASK_RUNNING);
+      let pluralized = StringUtil.pluralize('task', service.TASK_RUNNING);
       taskCount = ` (${service.TASK_RUNNING} ${pluralized})`;
     }
 
-    if (serviceHealth === "N/A") {
-      serviceHealth = "Health N/A";
+    if (serviceHealth === 'N/A') {
+      serviceHealth = 'Health N/A';
     }
 
     return (
@@ -178,8 +178,8 @@ export default class ServiceOverlay extends mixin(InternalStorageMixin) {
   renderService() {
     // Create a new div and append to body in order
     // to always be full screen.
-    let overlayEl = document.createElement("div");
-    overlayEl.className = "overlay overlay-service";
+    let overlayEl = document.createElement('div');
+    overlayEl.className = 'overlay overlay-service';
     document.body.appendChild(overlayEl);
 
     this.internalStorage_update({overlayEl});

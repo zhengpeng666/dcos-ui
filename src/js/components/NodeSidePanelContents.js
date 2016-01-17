@@ -1,21 +1,21 @@
 /*eslint-disable no-unused-vars*/
-const React = require("react/addons");
+const React = require('react/addons');
 /*eslint-enable no-unused-vars*/
 
-import DateUtil from "../utils/DateUtil";
-import SidePanelContents from "./SidePanelContents";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import MesosStateStore from "../stores/MesosStateStore";
-import StringUtil from "../utils/StringUtil";
-import TaskView from "./TaskView";
+import DateUtil from '../utils/DateUtil';
+import SidePanelContents from './SidePanelContents';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import MesosStateStore from '../stores/MesosStateStore';
+import StringUtil from '../utils/StringUtil';
+import TaskView from './TaskView';
 
 export default class NodeSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
     this.store_listeners = [
-      {name: "summary", events: ["success"]},
-      {name: "state", events: ["success"]}
+      {name: 'summary', events: ['success']},
+      {name: 'state', events: ['success']}
     ];
 
     this.state = {
@@ -24,8 +24,8 @@ export default class NodeSidePanelContents extends SidePanelContents {
   }
 
   getBasicInfo(node) {
-    let activeTasksCount = node.sumTaskTypesByState("active");
-    let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
+    let activeTasksCount = node.sumTaskTypesByState('active');
+    let activeTasksSubHeader = StringUtil.pluralize('Task', activeTasksCount);
 
     return (
       <div className="side-panel-content-header">
@@ -58,7 +58,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
 
   renderDetailsTabView() {
     let nodeID = this.props.itemID;
-    let last = MesosSummaryStore.get("states").lastSuccessful();
+    let last = MesosSummaryStore.get('states').lastSuccessful();
     let node = last.getNodesList().filter({ids: [nodeID]}).last();
 
     if (node == null) {
@@ -71,24 +71,24 @@ export default class NodeSidePanelContents extends SidePanelContents {
       Registered: DateUtil.msToDateStr(
         node.registered_time.toFixed(3) * 1000
       ),
-      "Master Version": MesosStateStore.get("lastMesosState").version
+      'Master Version': MesosStateStore.get('lastMesosState').version
     };
 
     return (
       <div className="container-fluid container-pod container-pod-short flush-top">
         {this.getKeyValuePairs(headerValueMapping)}
-        {this.getKeyValuePairs(node.attributes, "Attributes")}
+        {this.getKeyValuePairs(node.attributes, 'Attributes')}
       </div>
     );
   }
 
   render() {
     let nodeID = this.props.itemID;
-    let last = MesosSummaryStore.get("states").lastSuccessful();
+    let last = MesosSummaryStore.get('states').lastSuccessful();
     let node = last.getNodesList().filter({ids: [nodeID]}).last();
 
     if (node == null) {
-      return this.getNotFound("node");
+      return this.getNotFound('node');
     }
 
     return (
@@ -97,7 +97,7 @@ export default class NodeSidePanelContents extends SidePanelContents {
           {this.getBasicInfo(node)}
           <div className="side-panel-content-header-charts container-pod container-pod-short">
             <div className="row">
-              {this.getCharts("Node", node)}
+              {this.getCharts('Node', node)}
             </div>
           </div>
           <ul className="tabs list-inline flush-bottom">

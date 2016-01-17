@@ -1,11 +1,11 @@
-var _ = require("underscore");
-var React = require("react/addons");
+var _ = require('underscore');
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-jest.dontMock("../ChartStripes");
-var ChartStripes = require("../ChartStripes");
+jest.dontMock('../ChartStripes');
+var ChartStripes = require('../ChartStripes');
 
-describe("ChartStripes", function () {
+describe('ChartStripes', function () {
 
   beforeEach(function () {
     this.instance = TestUtils.renderIntoDocument(
@@ -16,16 +16,16 @@ describe("ChartStripes", function () {
     );
   });
 
-  it("should display the correct number of stripes", function () {
+  it('should display the correct number of stripes', function () {
     var stripes = TestUtils.scryRenderedDOMComponentsWithClass(
-      this.instance, "background"
+      this.instance, 'background'
     );
     expect(stripes.length).toEqual(6);
   });
 
-  it("should have correct width on each stripe", function () {
+  it('should have correct width on each stripe', function () {
     var stripes = TestUtils.scryRenderedDOMComponentsWithClass(
-      this.instance, "background"
+      this.instance, 'background'
     );
 
     _.each(stripes, function (stripe) {
@@ -34,9 +34,9 @@ describe("ChartStripes", function () {
     });
   });
 
-  it("should have correct x value on each stripe", function () {
+  it('should have correct x value on each stripe', function () {
     var stripes = TestUtils.scryRenderedDOMComponentsWithClass(
-      this.instance, "background"
+      this.instance, 'background'
     );
 
     _.each(stripes, function (stripe, i) {
@@ -45,16 +45,16 @@ describe("ChartStripes", function () {
     });
   });
 
-  it("should update to parameter change accordingly", function () {
+  it('should update to parameter change accordingly', function () {
     var stripes = TestUtils.scryRenderedDOMComponentsWithClass(
-      this.instance, "background"
+      this.instance, 'background'
     );
     expect(stripes.length).toEqual(6);
 
     this.instance.setProps({count: 5});
 
     stripes = TestUtils.scryRenderedDOMComponentsWithClass(
-      this.instance, "background"
+      this.instance, 'background'
     );
     expect(stripes.length).toEqual(5);
 

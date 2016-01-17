@@ -1,10 +1,10 @@
-import {HashLocation} from "react-router";
-import {Store} from "mesosphere-shared-reactjs";
+import {HashLocation} from 'react-router';
+import {Store} from 'mesosphere-shared-reactjs';
 
-import GetSetMixin from "../mixins/GetSetMixin";
+import GetSetMixin from '../mixins/GetSetMixin';
 
 var HistoryStore = Store.createStore({
-  storeID: "history",
+  storeID: 'history',
 
   mixins: [GetSetMixin],
 
@@ -21,11 +21,11 @@ var HistoryStore = Store.createStore({
   },
 
   onHashChange: function (change) {
-    let history = this.get("history");
+    let history = this.get('history');
 
-    if (change.type === "pop") {
+    if (change.type === 'pop') {
       history.pop();
-    } else if (change.type === "push") {
+    } else if (change.type === 'push') {
       history.push(change.path);
     }
 
@@ -40,7 +40,7 @@ var HistoryStore = Store.createStore({
    * @return {String|undefined} Path in history location if found
    */
   getHistoryAt: function (offset) {
-    let history = this.get("history");
+    let history = this.get('history');
     return history[history.length - 1 + offset];
   },
 
@@ -48,8 +48,8 @@ var HistoryStore = Store.createStore({
     let prevPath = HistoryStore.getHistoryAt(-1);
     if (prevPath) {
       router.transitionTo(prevPath);
-      HistoryStore.get("history").pop();
-      HistoryStore.get("history").pop();
+      HistoryStore.get('history').pop();
+      HistoryStore.get('history').pop();
       return;
     }
 

@@ -1,62 +1,62 @@
-var _ = require("underscore");
-var classNames = require("classnames");
-var React = require("react/addons");
-var Router = require("react-router");
+var _ = require('underscore');
+var classNames = require('classnames');
+var React = require('react/addons');
+var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var RouterLocation = Router.HashLocation;
 var Link = Router.Link;
 
-var AlertPanel = require("../components/AlertPanel");
-import Config from "../config/Config";
-var EventTypes = require("../constants/EventTypes");
-var FilterByService = require("../components/FilterByService");
-var FilterInputText = require("../components/FilterInputText");
-var FilterHeadline = require("../components/FilterHeadline");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var MesosSummaryStore = require("../stores/MesosSummaryStore");
-var Page = require("../components/Page");
-var ResourceBarChart = require("../components/charts/ResourceBarChart");
-var SidebarActions = require("../events/SidebarActions");
-import SidePanels from "../components/SidePanels";
+var AlertPanel = require('../components/AlertPanel');
+import Config from '../config/Config';
+var EventTypes = require('../constants/EventTypes');
+var FilterByService = require('../components/FilterByService');
+var FilterInputText = require('../components/FilterInputText');
+var FilterHeadline = require('../components/FilterHeadline');
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
+var MesosSummaryStore = require('../stores/MesosSummaryStore');
+var Page = require('../components/Page');
+var ResourceBarChart = require('../components/charts/ResourceBarChart');
+var SidebarActions = require('../events/SidebarActions');
+import SidePanels from '../components/SidePanels';
 
 var NODES_DISPLAY_LIMIT = 300;
 
 function getMesosHosts(state) {
-  let states = MesosSummaryStore.get("states");
+  let states = MesosSummaryStore.get('states');
   let lastState = states.lastSuccessful();
   let nodes = lastState.getNodesList();
-  let filters = _.pick(state, "searchString", "byServiceFilter");
+  let filters = _.pick(state, 'searchString', 'byServiceFilter');
   let filteredNodes = nodes.filter({
     service: filters.byServiceFilter,
     name: filters.searchString
   }).getItems();
-  let nodeIDs = _.pluck(filteredNodes, "id");
+  let nodeIDs = _.pluck(filteredNodes, 'id');
 
   return {
     nodes: filteredNodes,
     totalNodes: nodes.getItems().length,
     refreshRate: Config.getRefreshRate(),
     services: lastState.getServiceList().getItems(),
-    statesProcessed: MesosSummaryStore.get("statesProcessed"),
+    statesProcessed: MesosSummaryStore.get('statesProcessed'),
     totalHostsResources: states.getResourceStatesForNodeIDs(nodeIDs),
     totalResources: lastState.getSlaveTotalResources()
   };
 }
 
 var DEFAULT_FILTER_OPTIONS = {
-  searchString: "",
+  searchString: '',
   byServiceFilter: null
 };
 
 var NodesPage = React.createClass({
 
-  displayName: "NodesPage",
+  displayName: 'NodesPage',
 
   mixins: [InternalStorageMixin],
 
   statics: {
     // Static life cycle method from react router, that will be called
-    // "when a handler is about to render", i.e. on route change:
+    // 'when a handler is about to render', i.e. on route change:
     // https://github.com/rackt/react-router/
     // blob/master/docs/api/components/RouteHandler.md
     willTransitionTo: function () {
@@ -70,7 +70,7 @@ var NodesPage = React.createClass({
   },
 
   getInitialState: function () {
-    return _.extend({selectedResource: "cpus"}, DEFAULT_FILTER_OPTIONS);
+    return _.extend({selectedResource: 'cpus'}, DEFAULT_FILTER_OPTIONS);
   },
 
   componentWillMount: function () {
@@ -138,7 +138,7 @@ var NodesPage = React.createClass({
   },
 
   handleByServiceFilterChange: function (byServiceFilter) {
-    if (byServiceFilter === "") {
+    if (byServiceFilter === '') {
       byServiceFilter = null;
     }
 
@@ -173,15 +173,15 @@ var NodesPage = React.createClass({
 
   getViewTypeRadioButtons: function (resetFilter) {
     var buttonClasses = {
-      "button button-stroke button-inverse": true
+      'button button-stroke button-inverse': true
     };
 
     var listClassSet = classNames(_.extend({
-      "active": /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath())
+      'active': /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath())
     }, buttonClasses));
 
     var gridClassSet = classNames(_.extend({
-      "active": /\/nodes\/grid\/?/i.test(RouterLocation.getCurrentPath())
+      'active': /\/nodes\/grid\/?/i.test(RouterLocation.getCurrentPath())
     }, buttonClasses));
 
     return (
@@ -196,11 +196,11 @@ var NodesPage = React.createClass({
     var data = this.internalStorage_get();
     var state = this.state;
     var nodesList = _.first(data.nodes, NODES_DISPLAY_LIMIT);
-    var currentPage = "nodes-grid";
+    var currentPage = 'nodes-grid';
     var onNodesList = /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath());
 
     if (onNodesList) {
-      currentPage = "nodes-list";
+      currentPage = 'nodes-list';
     }
 
     return (

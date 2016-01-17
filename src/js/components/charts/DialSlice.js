@@ -1,9 +1,9 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+var classNames = require('classnames');
+var React = require('react/addons');
 
 var DialSlice = React.createClass({
 
-  displayName: "DialSlice",
+  displayName: 'DialSlice',
 
   propTypes: {
     colorIndex: React.PropTypes.node,
@@ -12,10 +12,10 @@ var DialSlice = React.createClass({
 
   render: function () {
     var classes = {
-      "arc": true
+      'arc': true
     };
     if (this.props.colorIndex != null) {
-      classes["path-color-" + this.props.colorIndex] = true;
+      classes['path-color-' + this.props.colorIndex] = true;
     }
     var classSet = classNames(classes);
     return (

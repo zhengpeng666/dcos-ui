@@ -1,10 +1,10 @@
-var React = require("react");
+var React = require('react');
 
-import {Modal} from "reactjs-components";
+import {Modal} from 'reactjs-components';
 
 var VersionsModal = React.createClass({
 
-  displayName: "VersionsModal",
+  displayName: 'VersionsModal',
 
   propTypes: {
     onClose: React.PropTypes.func.isRequired,

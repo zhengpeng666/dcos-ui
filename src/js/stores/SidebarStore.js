@@ -1,12 +1,12 @@
-import {Store} from "mesosphere-shared-reactjs";
+import {Store} from 'mesosphere-shared-reactjs';
 
-var AppDispatcher = require("../events/AppDispatcher");
-var ActionTypes = require("../constants/ActionTypes");
-var EventTypes = require("../constants/EventTypes");
-var GetSetMixin = require("../mixins/GetSetMixin");
+var AppDispatcher = require('../events/AppDispatcher');
+var ActionTypes = require('../constants/ActionTypes');
+var EventTypes = require('../constants/EventTypes');
+var GetSetMixin = require('../mixins/GetSetMixin');
 
 var SidebarStore = Store.createStore({
-  storeID: "sidebar",
+  storeID: 'sidebar',
 
   mixins: [GetSetMixin],
 
@@ -40,7 +40,7 @@ var SidebarStore = Store.createStore({
     switch (action.type) {
       case ActionTypes.REQUEST_SIDEBAR_CLOSE:
       case ActionTypes.REQUEST_SIDEBAR_OPEN:
-        var oldIsOpen = SidebarStore.get("isOpen");
+        var oldIsOpen = SidebarStore.get('isOpen');
         var isOpen = action.data;
 
         // only emitting on change

@@ -1,11 +1,11 @@
-var browserInfo = require("browser-info");
-var React = require("react");
+var browserInfo = require('browser-info');
+var React = require('react');
 
-import {Modal} from "reactjs-components";
+import {Modal} from 'reactjs-components';
 
 var CliInstructionsModal = React.createClass({
 
-  displayName: "CliInstructionsModal",
+  displayName: 'CliInstructionsModal',
 
   propTypes: {
     title: React.PropTypes.string.isRequired,
@@ -35,8 +35,8 @@ var CliInstructionsModal = React.createClass({
   getCliInstructions: function () {
     var hostname = window.location.hostname;
     var OS = browserInfo().os;
-    var requirements = "";
-    var cliSnippet = "";
+    var requirements = '';
+    var cliSnippet = '';
 
     var pythonInstructions = (
       <li>
@@ -49,7 +49,7 @@ var CliInstructionsModal = React.createClass({
       </li>
     );
 
-    if (OS === "Windows") {
+    if (OS === 'Windows') {
       requirements = (
         <ul>
           <li>
@@ -62,7 +62,7 @@ var CliInstructionsModal = React.createClass({
           </li>
         </ul>
       );
-      cliSnippet = ".\\install.ps1 . http://" + hostname;
+      cliSnippet = `.\\install.ps1 . http://${hostname}`;
     } else {
       requirements = (
         <ul>
@@ -71,7 +71,7 @@ var CliInstructionsModal = React.createClass({
           {installRequirements}
         </ul>
       );
-      cliSnippet = "mkdir -p dcos && cd dcos && \\\n  curl -O https://downloads.mesosphere.io/dcos-cli/install.sh && \\\n  bash ./install.sh . http://" + hostname + " && \\\n  source ./bin/env-setup";
+      cliSnippet = 'mkdir -p dcos && cd dcos && \n  curl -O https://downloads.mesosphere.io/dcos-cli/install.sh && \n  bash ./install.sh . http://' + hostname + ' && \n  source ./bin/env-setup';
     }
 
     return {

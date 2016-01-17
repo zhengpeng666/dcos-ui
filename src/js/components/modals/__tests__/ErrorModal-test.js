@@ -1,14 +1,14 @@
-jest.dontMock("../ErrorModal");
-jest.dontMock("../../../utils/DOMUtils");
+jest.dontMock('../ErrorModal');
+jest.dontMock('../../../utils/DOMUtils');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var ErrorModal = require("../ErrorModal");
+var ErrorModal = require('../ErrorModal');
 
-describe("ErrorModal", function () {
+describe('ErrorModal', function () {
 
-  describe("#onClose", function () {
+  describe('#onClose', function () {
     beforeEach(function () {
       this.callback = jasmine.createSpy();
       this.instance = TestUtils.renderIntoDocument(
@@ -17,11 +17,11 @@ describe("ErrorModal", function () {
       );
     });
 
-    it("shouldn't call the callback after initialization", function () {
+    it('shouldn\'t call the callback after initialization', function () {
       expect(this.callback).not.toHaveBeenCalled();
     });
 
-    it("should call the callback when #onClose is called", function () {
+    it('should call the callback when #onClose is called', function () {
       this.instance.onClose();
       expect(this.callback).toHaveBeenCalled();
     });

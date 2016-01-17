@@ -1,5 +1,5 @@
-var ActionTypes = require("../constants/ActionTypes");
-var AppDispatcher = require("./AppDispatcher");
+var ActionTypes = require('../constants/ActionTypes');
+var AppDispatcher = require('./AppDispatcher');
 
 var IntercomActions = {
 
@@ -16,6 +16,7 @@ var IntercomActions = {
       data: false
     });
   }
+
 };
 
 module.exports = IntercomActions;

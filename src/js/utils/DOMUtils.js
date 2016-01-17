@@ -1,9 +1,9 @@
-var _ = require("underscore");
+var _ = require('underscore');
 
 var DOMUtils = {
   appendScript: function (el, code) {
-    let scriptNode = document.createElement("script");
-    scriptNode.type = "text/javascript";
+    let scriptNode = document.createElement('script');
+    scriptNode.type = 'text/javascript';
 
     try {
       scriptNode.appendChild(document.createTextNode(code));
@@ -20,7 +20,7 @@ var DOMUtils = {
 
   getComputedDimensions: function (obj) {
     var compstyle;
-    if (typeof window.getComputedStyle === "undefined") {
+    if (typeof window.getComputedStyle === 'undefined') {
       compstyle = obj.currentStyle;
     } else {
       compstyle = window.getComputedStyle(obj);
@@ -36,13 +36,13 @@ var DOMUtils = {
     };
 
     var width = _.foldl(
-      ["paddingLeft", "paddingRight", "borderLeftWidth", "borderRightWidth"],
+      ['paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth'],
       computeInnerBound,
       obj.offsetWidth
     );
 
     var height = _.foldl(
-      ["paddingTop", "paddingBottom", "borderTopWidth", "borderBottomWidth"],
+      ['paddingTop', 'paddingBottom', 'borderTopWidth', 'borderBottomWidth'],
       computeInnerBound,
       obj.offsetHeight
     );
@@ -76,10 +76,10 @@ var DOMUtils = {
 
   whichTransitionEvent: function (el) {
     var transitions = {
-      "transition": "transitionend",
-      "OTransition": "oTransitionEnd",
-      "MozTransition": "transitionend",
-      "WebkitTransition": "webkitTransitionEnd"
+      'transition': 'transitionend',
+      'OTransition': 'oTransitionEnd',
+      'MozTransition': 'transitionend',
+      'WebkitTransition': 'webkitTransitionEnd'
     };
 
     for (var t in transitions) {

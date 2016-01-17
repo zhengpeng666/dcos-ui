@@ -1,10 +1,10 @@
-var React = require("react");
+var React = require('react');
 
-import {Modal} from "reactjs-components";
+import {Modal} from 'reactjs-components';
 
 var ErrorModal = React.createClass({
 
-  displayName: "ErrorModal",
+  displayName: 'ErrorModal',
 
   propTypes: {
     onClose: React.PropTypes.func.isRequired,

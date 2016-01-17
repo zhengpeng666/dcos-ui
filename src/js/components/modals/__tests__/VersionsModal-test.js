@@ -1,16 +1,16 @@
-jest.dontMock("../../../utils/DOMUtils");
-jest.dontMock("../../../utils/JestUtil");
-jest.dontMock("../VersionsModal");
+jest.dontMock('../../../utils/DOMUtils');
+jest.dontMock('../../../utils/JestUtil');
+jest.dontMock('../VersionsModal');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var JestUtil = require("../../../utils/JestUtil");
-var VersionsModal = require("../VersionsModal");
+var JestUtil = require('../../../utils/JestUtil');
+var VersionsModal = require('../VersionsModal');
 
-describe("VersionsModal", function () {
+describe('VersionsModal', function () {
 
-  describe("#onClose", function () {
+  describe('#onClose', function () {
     beforeEach(function () {
       this.callback = jasmine.createSpy();
       this.instance = TestUtils.renderIntoDocument(
@@ -18,37 +18,37 @@ describe("VersionsModal", function () {
       );
     });
 
-    it("shouldn't call the callback after initialization", function () {
+    it('shouldn\'t call the callback after initialization', function () {
       expect(this.callback).not.toHaveBeenCalled();
     });
 
-    it("should call the callback when #onClose is called", function () {
+    it('should call the callback when #onClose is called', function () {
       this.instance.onClose();
       expect(this.callback).toHaveBeenCalled();
     });
 
   });
 
-  describe("#getContent", function () {
+  describe('#getContent', function () {
     beforeEach(function () {
-      var data = {foo: "bar"};
+      var data = {foo: 'bar'};
       this.instance = TestUtils.renderIntoDocument(
         <VersionsModal onClose={function () {}} versionDump={data} open={true}/>
       );
     });
 
-    it("should return a pre element tag", function () {
+    it('should return a pre element tag', function () {
       var content = this.instance.getContent();
-      var result = JestUtil.renderAndFindTag(content, "pre");
+      var result = JestUtil.renderAndFindTag(content, 'pre');
 
-      expect(result.tagName).toBe("PRE");
+      expect(result.tagName).toBe('PRE');
     });
 
-    it("should return a pre element tag", function () {
+    it('should return a pre element tag', function () {
       var content = this.instance.getContent();
-      var result = JestUtil.renderAndFindTag(content, "pre");
+      var result = JestUtil.renderAndFindTag(content, 'pre');
 
-      expect(result.getDOMNode().innerHTML).toEqual("\n{\n  \"foo\": \"bar\"\n}");
+      expect(result.getDOMNode().innerHTML).toEqual('\n{\n  "foo": "bar"\n}');
     });
 
   });

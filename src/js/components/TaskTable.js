@@ -1,18 +1,18 @@
-import _ from "underscore";
-import classNames from "classnames";
-import React from "react/addons";
+import _ from 'underscore';
+import classNames from 'classnames';
+import React from 'react/addons';
 
-import ResourceTableUtil from "../utils/ResourceTableUtil";
-import {Table} from "reactjs-components";
-import TableUtil from "../utils/TableUtil";
-import TaskStates from "../constants/TaskStates";
-import TaskTableHeaderLabels from "../constants/TaskTableHeaderLabels";
-import TaskUtil from "../utils/TaskUtil";
-import Units from "../utils/Units";
+import ResourceTableUtil from '../utils/ResourceTableUtil';
+import {Table} from 'reactjs-components';
+import TableUtil from '../utils/TableUtil';
+import TaskStates from '../constants/TaskStates';
+import TaskTableHeaderLabels from '../constants/TaskTableHeaderLabels';
+import TaskUtil from '../utils/TaskUtil';
+import Units from '../utils/Units';
 
 const METHODS_TO_BIND = [
-  "handleTaskClick",
-  "renderHeadline"
+  'handleTaskClick',
+  'renderHeadline'
 ];
 
 export default class TaskTable extends React.Component {
@@ -33,9 +33,9 @@ export default class TaskTable extends React.Component {
   getColumns() {
     var className = ResourceTableUtil.getClassName;
     var heading = ResourceTableUtil.renderHeading(TaskTableHeaderLabels);
-    let propSortFunction = ResourceTableUtil.getPropSortFunction("name");
+    let propSortFunction = ResourceTableUtil.getPropSortFunction('name');
     let statSortFunction = ResourceTableUtil.getStatSortFunction(
-      "name",
+      'name',
       function (task, resource) {
         return task.resources[resource];
       }
@@ -47,7 +47,7 @@ export default class TaskTable extends React.Component {
         dontCache: true,
         heading,
         headerClassName: className,
-        prop: "name",
+        prop: 'name',
         render: this.renderHeadline,
         sortable: true,
         sortFunction: propSortFunction
@@ -57,7 +57,7 @@ export default class TaskTable extends React.Component {
         dontCache: true,
         heading,
         headerClassName: className,
-        prop: "updated",
+        prop: 'updated',
         render: ResourceTableUtil.renderUpdated,
         sortable: true,
         sortFunction: propSortFunction
@@ -66,7 +66,7 @@ export default class TaskTable extends React.Component {
         className,
         heading,
         headerClassName: className,
-        prop: "state",
+        prop: 'state',
         render: this.renderState,
         sortable: true,
         sortFunction: propSortFunction
@@ -75,7 +75,7 @@ export default class TaskTable extends React.Component {
         className,
         heading,
         headerClassName: className,
-        prop: "cpus",
+        prop: 'cpus',
         render: this.renderStats,
         sortable: true,
         sortFunction: statSortFunction
@@ -84,7 +84,7 @@ export default class TaskTable extends React.Component {
         className,
         heading,
         headerClassName: className,
-        prop: "mem",
+        prop: 'mem',
         render: this.renderStats,
         sortable: true,
         sortFunction: statSortFunction
@@ -96,10 +96,10 @@ export default class TaskTable extends React.Component {
     return (
       <colgroup>
         <col />
-        <col style={{width: "120px"}} />
-        <col style={{width: "120px"}} />
-        <col style={{width: "85px"}} />
-        <col style={{width: "110px"}} />
+        <col style={{width: '120px'}} />
+        <col style={{width: '120px'}} />
+        <col style={{width: '85px'}} />
+        <col style={{width: '110px'}} />
       </colgroup>
     );
   }
@@ -112,12 +112,12 @@ export default class TaskTable extends React.Component {
   }
 
   renderHeadline(prop, task) {
-    let dangerState = _.contains(TaskStates[task.state].stateTypes, "failure");
+    let dangerState = _.contains(TaskStates[task.state].stateTypes, 'failure');
 
-    let successState = _.contains(TaskStates[task.state].stateTypes, "success");
+    let successState = _.contains(TaskStates[task.state].stateTypes, 'success');
 
     let statusClass = classNames({
-      "dot": true,
+      'dot': true,
       success: successState,
       danger: dangerState
     });
@@ -182,7 +182,7 @@ export default class TaskTable extends React.Component {
         data={this.props.tasks.slice()}
         idAttribute="id"
         itemHeight={TableUtil.getRowHeight()}
-        sortBy={{prop: "name", order: "desc"}}
+        sortBy={{prop: 'name', order: 'desc'}}
         useFlex={true}
         transition={false} />
     );

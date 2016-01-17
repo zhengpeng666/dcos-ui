@@ -1,12 +1,12 @@
-import {Store} from "mesosphere-shared-reactjs";
+import {Store} from 'mesosphere-shared-reactjs';
 
-var AppDispatcher = require("../events/AppDispatcher");
-var ActionTypes = require("../constants/ActionTypes");
-var EventTypes = require("../constants/EventTypes");
-var GetSetMixin = require("../mixins/GetSetMixin");
+var AppDispatcher = require('../events/AppDispatcher');
+var ActionTypes = require('../constants/ActionTypes');
+var EventTypes = require('../constants/EventTypes');
+var GetSetMixin = require('../mixins/GetSetMixin');
 
 var IntercomStore = Store.createStore({
-  storeID: "intercom",
+  storeID: 'intercom',
 
   mixins: [GetSetMixin],
 
@@ -16,17 +16,17 @@ var IntercomStore = Store.createStore({
     var intercom = global.Intercom;
     if (intercom != null) {
       // make sure to hide Intercom on load
-      intercom("hide");
+      intercom('hide');
 
       // register events
-      intercom("onHide", this.handleChange.bind(this, false));
-      intercom("onShow", this.handleChange.bind(this, true));
+      intercom('onHide', this.handleChange.bind(this, false));
+      intercom('onShow', this.handleChange.bind(this, true));
     }
   },
 
   handleChange: function (isOpen) {
     // only handle change if there is one
-    if (this.get("isOpen") !== isOpen) {
+    if (this.get('isOpen') !== isOpen) {
       this.set({isOpen});
       this.emit(EventTypes.INTERCOM_CHANGE);
     }

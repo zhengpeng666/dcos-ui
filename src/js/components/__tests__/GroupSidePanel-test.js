@@ -1,31 +1,31 @@
-jest.dontMock("../../mixins/InternalStorageMixin");
-jest.dontMock("../../mixins/TabsMixin");
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../stores/ACLGroupStore");
-jest.dontMock("../../stores/MesosSummaryStore");
-jest.dontMock("../../stores/MarathonStore");
-jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../../events/MesosSummaryActions");
-jest.dontMock("../../events/MarathonActions");
-jest.dontMock("../SidePanelContents");
-jest.dontMock("../GroupSidePanel");
-jest.dontMock("../GroupSidePanelContents");
-jest.dontMock("../../utils/Util");
-jest.dontMock("../../utils/RequestUtil");
-jest.dontMock("../../structs/SummaryList");
+jest.dontMock('../../mixins/InternalStorageMixin');
+jest.dontMock('../../mixins/TabsMixin');
+jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../../stores/ACLGroupStore');
+jest.dontMock('../../stores/MesosSummaryStore');
+jest.dontMock('../../stores/MarathonStore');
+jest.dontMock('../../utils/MesosSummaryUtil');
+jest.dontMock('../../events/MesosSummaryActions');
+jest.dontMock('../../events/MarathonActions');
+jest.dontMock('../SidePanelContents');
+jest.dontMock('../GroupSidePanel');
+jest.dontMock('../GroupSidePanelContents');
+jest.dontMock('../../utils/Util');
+jest.dontMock('../../utils/RequestUtil');
+jest.dontMock('../../structs/SummaryList');
 
-require("../../utils/StoreMixinConfig");
+require('../../utils/StoreMixinConfig');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var MesosSummaryActions = require("../../events/MesosSummaryActions");
-var ACLGroupStore = require("../../stores/ACLGroupStore");
-var MesosSummaryStore = require("../../stores/MesosSummaryStore");
-var GroupSidePanel = require("../GroupSidePanel");
-var GroupSidePanelContents = require("../GroupSidePanelContents");
+var MesosSummaryActions = require('../../events/MesosSummaryActions');
+var ACLGroupStore = require('../../stores/ACLGroupStore');
+var MesosSummaryStore = require('../../stores/MesosSummaryStore');
+var GroupSidePanel = require('../GroupSidePanel');
+var GroupSidePanelContents = require('../GroupSidePanelContents');
 
-describe("GroupSidePanel", function () {
+describe('GroupSidePanel', function () {
   beforeEach(function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
     this.groupStore = ACLGroupStore.getGroup;
@@ -40,9 +40,9 @@ describe("GroupSidePanel", function () {
 
     ACLGroupStore.getGroup = function () {
       return {
-        "gid": "group",
-        "url": "/groups/group",
-        "description": "group description"
+        'gid': 'group',
+        'url': '/groups/group',
+        'description': 'group description'
       };
     };
 
@@ -54,7 +54,7 @@ describe("GroupSidePanel", function () {
     ACLGroupStore.getGroup = this.groupStore;
   });
 
-  describe("#isOpen", function () {
+  describe('#isOpen', function () {
     beforeEach(function () {
       this.params = {
         groupID: null
@@ -66,19 +66,19 @@ describe("GroupSidePanel", function () {
       );
     });
 
-    it("should return false if all IDs are null", function () {
+    it('should return false if all IDs are null', function () {
       expect(this.instance.isOpen()).toEqual(false);
     });
 
-    it("should return true if new groupID received", function () {
+    it('should return true if new groupID received', function () {
       var prevGroupID = this.params.groupID;
-      this.params.groupID = "groupname";
+      this.params.groupID = 'groupname';
       expect(this.instance.isOpen()).toEqual(true);
       this.params.groupID = prevGroupID;
     });
   });
 
-  describe("#getContents", function () {
+  describe('#getContents', function () {
     beforeEach(function () {
       this.params = {
         groupID: null
@@ -90,9 +90,9 @@ describe("GroupSidePanel", function () {
       );
     });
 
-    it("should return GroupSidePanelContents if groupID is set",
+    it('should return GroupSidePanelContents if groupID is set',
       function () {
-        this.params.groupID = "set";
+        this.params.groupID = 'set';
         var contents = this.instance.getContents(this.params.groupID);
 
         expect(contents.type === GroupSidePanelContents).toEqual(true);

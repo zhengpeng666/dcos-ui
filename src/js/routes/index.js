@@ -1,20 +1,20 @@
-import {Route, Redirect, NotFoundRoute} from "react-router";
+import {Route, Redirect, NotFoundRoute} from 'react-router';
 
-import dashboard from "./dashboard";
-import Index from "../pages/Index";
-import nodes from "./nodes";
-import NotFoundPage from "../pages/NotFoundPage";
-import services from "./services";
+import dashboard from './dashboard';
+import Index from '../pages/Index';
+import nodes from './nodes';
+import NotFoundPage from '../pages/NotFoundPage';
+import services from './services';
 
 let routes = [
   {
     type: Route,
-    name: "home",
-    path: "/",
+    name: 'home',
+    path: '/',
     children: [
       {
         type: Route,
-        id: "index",
+        id: 'index',
         handler: Index,
         children: [
           dashboard,
@@ -22,8 +22,8 @@ let routes = [
           nodes,
           {
             type: Redirect,
-            from: "/",
-            to: "dashboard"
+            from: '/',
+            to: 'dashboard'
           },
           {
             type: NotFoundRoute,

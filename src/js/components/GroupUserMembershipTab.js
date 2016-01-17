@@ -1,18 +1,18 @@
-import {Dropdown} from "reactjs-components";
-import mixin from "reactjs-mixin";
+import {Dropdown} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLGroupStore from "../stores/ACLGroupStore";
-import ACLUsersStore from "../stores/ACLUsersStore";
-import GroupUserTable from "./GroupUserTable";
-import RequestErrorMsg from "../components/RequestErrorMsg";
-import Util from "../utils/Util";
+import ACLGroupStore from '../stores/ACLGroupStore';
+import ACLUsersStore from '../stores/ACLUsersStore';
+import GroupUserTable from './GroupUserTable';
+import RequestErrorMsg from '../components/RequestErrorMsg';
+import Util from '../utils/Util';
 
 const METHODS_TO_BIND = [
-  "onUserSelection"
+  'onUserSelection'
 ];
 
 export default class GroupUserMembershipTable extends mixin(StoreMixin) {
@@ -30,8 +30,8 @@ export default class GroupUserMembershipTable extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "users",
-        events: ["error", "success"]
+        name: 'users',
+        events: ['error', 'success']
       }
     ];
 
@@ -64,13 +64,13 @@ export default class GroupUserMembershipTable extends mixin(StoreMixin) {
   }
 
   getDropdownItems() {
-    let users = ACLUsersStore.get("users").getItems().sort(
-      Util.getLocaleCompareSortFn("description")
+    let users = ACLUsersStore.get('users').getItems().sort(
+      Util.getLocaleCompareSortFn('description')
     );
 
     let defaultItem = {
-      description: "Add User",
-      uid: "default-placeholder-user-id"
+      description: 'Add User',
+      uid: 'default-placeholder-user-id'
     };
     let items = [defaultItem].concat(users);
 

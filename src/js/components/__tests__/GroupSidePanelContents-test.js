@@ -1,51 +1,51 @@
-jest.dontMock("../SidePanelContents");
-jest.dontMock("../GroupSidePanelContents");
-jest.dontMock("../../events/MesosSummaryActions");
-jest.dontMock("../../stores/MesosSummaryStore");
-jest.dontMock("../../events/ACLGroupsActions");
-jest.dontMock("../../stores/ACLGroupStore");
-jest.dontMock("../../constants/EventTypes");
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../mixins/InternalStorageMixin");
-jest.dontMock("../../mixins/TabsMixin");
-jest.dontMock("../RequestErrorMsg");
-jest.dontMock("../../utils/JestUtil");
-jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../../utils/StringUtil");
-jest.dontMock("../../utils/Util");
-jest.dontMock("../../structs/Group");
+jest.dontMock('../SidePanelContents');
+jest.dontMock('../GroupSidePanelContents');
+jest.dontMock('../../events/MesosSummaryActions');
+jest.dontMock('../../stores/MesosSummaryStore');
+jest.dontMock('../../events/ACLGroupsActions');
+jest.dontMock('../../stores/ACLGroupStore');
+jest.dontMock('../../constants/EventTypes');
+jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../../mixins/InternalStorageMixin');
+jest.dontMock('../../mixins/TabsMixin');
+jest.dontMock('../RequestErrorMsg');
+jest.dontMock('../../utils/JestUtil');
+jest.dontMock('../../utils/MesosSummaryUtil');
+jest.dontMock('../../utils/StringUtil');
+jest.dontMock('../../utils/Util');
+jest.dontMock('../../structs/Group');
 
-require("../../utils/StoreMixinConfig");
+require('../../utils/StoreMixinConfig');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var ACLGroupStore = require("../../stores/ACLGroupStore");
-var JestUtil = require("../../utils/JestUtil");
-var MesosSummaryStore = require("../../stores/MesosSummaryStore");
-var EventTypes = require("../../constants/EventTypes");
-var GroupSidePanelContents = require("../GroupSidePanelContents");
-var Group = require("../../structs/Group");
+var ACLGroupStore = require('../../stores/ACLGroupStore');
+var JestUtil = require('../../utils/JestUtil');
+var MesosSummaryStore = require('../../stores/MesosSummaryStore');
+var EventTypes = require('../../constants/EventTypes');
+var GroupSidePanelContents = require('../GroupSidePanelContents');
+var Group = require('../../structs/Group');
 
 var groupDetailsFixture =
-  require("../../../../tests/_fixtures/acl/group-with-details.json");
+  require('../../../../tests/_fixtures/acl/group-with-details.json');
 groupDetailsFixture.permissions = groupDetailsFixture.permissions.array;
 groupDetailsFixture.users = groupDetailsFixture.users.array;
 
-describe("GroupSidePanelContents", function () {
+describe('GroupSidePanelContents', function () {
 
   beforeEach(function () {
     this.summaryGet = MesosSummaryStore.get;
     this.groupStoreGetGroup = ACLGroupStore.getGroup;
 
     MesosSummaryStore.get = function (status) {
-      if (status === "statesProcessed") {
+      if (status === 'statesProcessed') {
         return true;
       }
     };
 
     ACLGroupStore.getGroup = function (groupID) {
-      if (groupID === "unicode") {
+      if (groupID === 'unicode') {
         return new Group(groupDetailsFixture);
       }
     };
@@ -56,10 +56,10 @@ describe("GroupSidePanelContents", function () {
     ACLGroupStore.getGroup = this.groupStoreGetGroup;
   });
 
-  describe("#render", function () {
+  describe('#render', function () {
 
-    it("should return error message if fetch error was received", function () {
-      var groupID = "unicode";
+    it('should return error message if fetch error was received', function () {
+      var groupID = 'unicode';
 
       var instance = TestUtils.renderIntoDocument(
         <GroupSidePanelContents
@@ -68,18 +68,18 @@ describe("GroupSidePanelContents", function () {
 
       ACLGroupStore.emit(EventTypes.ACL_GROUP_DETAILS_FETCHED_ERROR, groupID);
 
-      var text = JestUtil.renderAndFindTag(instance.render(), "h3");
+      var text = JestUtil.renderAndFindTag(instance.render(), 'h3');
       expect(text.getDOMNode().textContent)
-        .toEqual("Cannot Connect With The Server");
+        .toEqual('Cannot Connect With The Server');
     });
 
-    it("should show loading screen if still waiting on Store", function () {
+    it('should show loading screen if still waiting on Store', function () {
       MesosSummaryStore.get = function (status) {
-        if (status === "statesProcessed") {
+        if (status === 'statesProcessed') {
           return false;
         }
       };
-      var groupID = "unicode";
+      var groupID = 'unicode';
 
       var instance = TestUtils.renderIntoDocument(
         <GroupSidePanelContents
@@ -88,15 +88,15 @@ describe("GroupSidePanelContents", function () {
 
       var loading = TestUtils.scryRenderedDOMComponentsWithClass(
         instance.render(),
-        "ball-scale"
+        'ball-scale'
       );
 
       expect(loading).toEqual({});
     });
 
-    it("should not return error message or loading screen if group is found",
+    it('should not return error message or loading screen if group is found',
       function () {
-        var groupID = "unicode";
+        var groupID = 'unicode';
 
         var instance = TestUtils.renderIntoDocument(
           <GroupSidePanelContents
@@ -105,10 +105,10 @@ describe("GroupSidePanelContents", function () {
 
         var text = TestUtils.findRenderedDOMComponentWithClass(
           instance,
-          "form-element-inline-text"
+          'form-element-inline-text'
         );
 
-        expect(text.getDOMNode().textContent).toEqual("藍-遙 遥 悠 遼 Größe");
+        expect(text.getDOMNode().textContent).toEqual('藍-遙 遥 悠 遼 Größe');
       }
     );
 

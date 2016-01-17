@@ -1,16 +1,16 @@
-import {Link, RouteHandler} from "react-router";
-import mixin from "reactjs-mixin";
+import {Link, RouteHandler} from 'react-router';
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import Page from "../components/Page";
-import TabsUtil from "../utils/TabsUtil";
-import TabsMixin from "../mixins/TabsMixin";
+import Page from '../components/Page';
+import TabsUtil from '../utils/TabsUtil';
+import TabsMixin from '../mixins/TabsMixin';
 
 const SETTINGS_TABS = {
-  "settings-organization": "Organization"
-  // TODO: add "settings-system": "System"
+  'settings-organization': 'Organization'
+  // TODO: add 'settings-system': 'System'
 };
 
 export default class SettingsPage extends mixin(TabsMixin) {
@@ -38,15 +38,15 @@ export default class SettingsPage extends mixin(TabsMixin) {
     // Organization Tabs
     if (currentTab.indexOf(pageKeys[0]) >= 0) {
       this.tabs_tabs = {
-        "settings-organization-users": "Users",
-        "settings-organization-groups": "Groups"
+        'settings-organization-users': 'Users',
+        'settings-organization-groups': 'Groups'
       };
     }
 
     // System Tabs
     if (currentTab.indexOf(pageKeys[1]) >= 0) {
       this.tabs_tabs = {
-        "settings-system-overview": "Overview"
+        'settings-system-overview': 'Overview'
       };
     }
 
@@ -102,7 +102,7 @@ SettingsPage.contextTypes = {
 };
 
 SettingsPage.routeConfig = {
-  label: "Settings",
-  icon: "resources-settings",
+  label: 'Settings',
+  icon: 'resources-settings',
   matches: /^\/settings/
 };

@@ -1,20 +1,20 @@
-var React = require("react");
+var React = require('react');
 
-var Actions = require("../actions/Actions");
-var CliInstallModal = require("./modals/CliInstallModal");
-var Config = require("../config/Config");
-var ErrorModal = require("./modals/ErrorModal");
-var EventTypes = require("../constants/EventTypes");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-import IdentifyModal from "./modals/IdentifyModal";
-var MesosSummaryStore = require("../stores/MesosSummaryStore");
-import Plugins from "../plugins/Plugins";
-var SidebarStore = require("../stores/SidebarStore");
-var VersionsModal = require("./modals/VersionsModal");
+var Actions = require('../actions/Actions');
+var CliInstallModal = require('./modals/CliInstallModal');
+var Config = require('../config/Config');
+var ErrorModal = require('./modals/ErrorModal');
+var EventTypes = require('../constants/EventTypes');
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
+import IdentifyModal from './modals/IdentifyModal';
+var MesosSummaryStore = require('../stores/MesosSummaryStore');
+import Plugins from '../plugins/Plugins';
+var SidebarStore = require('../stores/SidebarStore');
+var VersionsModal = require('./modals/VersionsModal');
 
 var Modals = React.createClass({
 
-  displayName: "Modals",
+  displayName: 'Modals',
 
   mixins: [InternalStorageMixin],
 
@@ -26,7 +26,7 @@ var Modals = React.createClass({
   getDefaultProps: function () {
     return {
       showErrorModal: false,
-      modalErrorMsg: ""
+      modalErrorMsg: ''
     };
   },
 
@@ -53,7 +53,7 @@ var Modals = React.createClass({
 
   componentWillMount: function () {
     this.setState({
-      hasIdentity: Plugins.applyFilter("applicationHasIdentity", true)
+      hasIdentity: Plugins.applyFilter('applicationHasIdentity', true)
     });
   },
 
@@ -117,7 +117,7 @@ var Modals = React.createClass({
   },
 
   onLogin: function (email) {
-    Plugins.doAction("receivedUserEmail", email);
+    Plugins.doAction('receivedUserEmail', email);
 
     this.setState({
       hasIdentity: true,
@@ -126,17 +126,17 @@ var Modals = React.createClass({
   },
 
   getIdentifyModal: function (hasIdentity) {
-    let statesReady = MesosSummaryStore.get("statesProcessed");
+    let statesReady = MesosSummaryStore.get('statesProcessed');
     let isOpen = Plugins.applyFilter(
-      "openIdentifyModal",
+      'openIdentifyModal',
       (!hasIdentity && statesReady)
     );
 
     if (isOpen) {
       Actions.logFakePageView({
-        title: "Signup Modal",
-        path: "/v/beta-signup-modal-form",
-        referrer: "https://mesosphere.com/"
+        title: 'Signup Modal',
+        path: '/v/beta-signup-modal-form',
+        referrer: 'https://mesosphere.com/'
       });
     }
 
@@ -152,7 +152,7 @@ var Modals = React.createClass({
       onClose: function () {
           this.setState({showingCliModal: false});
         }.bind(this),
-      title: "Install the DCOS CLI",
+      title: 'Install the DCOS CLI',
       showFooter: false
     };
   },
@@ -166,9 +166,9 @@ var Modals = React.createClass({
       onClose();
 
       Actions.logFakePageView({
-        title: "Tour start",
-        path: "/v/tour-start",
-        referrer: "https://mesosphere.com/"
+        title: 'Tour start',
+        path: '/v/tour-start',
+        referrer: 'https://mesosphere.com/'
       });
 
       if (this.state.tourSetup === false) {
@@ -182,14 +182,14 @@ var Modals = React.createClass({
         this.setState({tourSetup: true});
       } else {
         // Awful hack.
-        document.getElementById("start-tour").click();
+        document.getElementById('start-tour').click();
       }
     }.bind(this);
 
     return {
       onClose: onClose,
-      title: "Welcome to the Mesosphere DCOS",
-      subHeaderContent: "In order to get started, you'll need to install our command-line tool by copying the snippet below. After that, you'll take our tour which will guide you through installing a web-app and continuous integration pipeline.",
+      title: 'Welcome to the Mesosphere DCOS',
+      subHeaderContent: 'In order to get started, you\'ll need to install our command-line tool by copying the snippet below. After that, you\'ll take our tour which will guide you through installing a web-app and continuous integration pipeline.',
       showFooter: true,
       footer: (
         <div className="tour-start-modal-footer">
@@ -200,7 +200,7 @@ var Modals = React.createClass({
           </div>
           <div className="row text-align-center">
             <a onClick={onClose} className="clickable skip-tour">
-              {"No thanks, I'll skip the tour."}
+              {'No thanks, I\'ll skip the tour.'}
             </a>
           </div>
         </div>
@@ -211,25 +211,25 @@ var Modals = React.createClass({
   getCliInstallModal: function (showModal) {
     var options = {
       onClose: function () {},
-      title: "",
-      subHeaderContent: "",
+      title: '',
+      subHeaderContent: '',
       showFooter: true,
       footer: {}
     };
 
     if (this.state.showingCliModal) {
       Actions.logFakePageView({
-        title: "CLI instructions",
-        path: "/v/cli-instructions",
-        referrer: "https://mesosphere.com/"
+        title: 'CLI instructions',
+        path: '/v/cli-instructions',
+        referrer: 'https://mesosphere.com/'
       });
 
       options = this.getCliModalOptions();
     } else if (this.state.showingTourModal) {
       Actions.logFakePageView({
-        title: "Tour prompt",
-        path: "/v/tour-prompt",
-        referrer: "https://mesosphere.com/"
+        title: 'Tour prompt',
+        path: '/v/tour-prompt',
+        referrer: 'https://mesosphere.com/'
       });
 
       options = this.getTourModalOptions();
@@ -245,7 +245,7 @@ var Modals = React.createClass({
       this.setState({showingVersionsModal: false});
     }.bind(this);
 
-    var versions = SidebarStore.get("versions");
+    var versions = SidebarStore.get('versions');
     return (
       <VersionsModal
         onClose={onClose}

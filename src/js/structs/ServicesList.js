@@ -1,9 +1,9 @@
-import _ from "underscore";
+import _ from 'underscore';
 
-import List from "./List";
-import MesosSummaryUtil from "../utils/MesosSummaryUtil";
-import Service from "./Service";
-import StringUtil from "../utils/StringUtil";
+import List from './List';
+import MesosSummaryUtil from '../utils/MesosSummaryUtil';
+import Service from './Service';
+import StringUtil from '../utils/StringUtil';
 
 export default class ServicesList extends List {
   constructor() {
@@ -30,7 +30,7 @@ export default class ServicesList extends List {
       }
 
       if (filters.name) {
-        services = StringUtil.filterByString(services, "name", filters.name);
+        services = StringUtil.filterByString(services, 'name', filters.name);
       }
 
       if (filters.health != null) {
@@ -45,7 +45,7 @@ export default class ServicesList extends List {
 
   sumUsedResources() {
     let services = this.getItems();
-    let resourcesList = _.pluck(services, "used_resources");
+    let resourcesList = _.pluck(services, 'used_resources');
     return MesosSummaryUtil.sumResources(resourcesList);
   }
 

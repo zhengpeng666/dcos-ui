@@ -1,9 +1,9 @@
-var d3 = require("d3");
-var React = require("react/addons");
+var d3 = require('d3');
+var React = require('react/addons');
 
 var TimeSeriesArea = React.createClass({
 
-  displayName: "TimeSeriesArea",
+  displayName: 'TimeSeriesArea',
 
   propTypes: {
     className: React.PropTypes.string,
@@ -19,17 +19,17 @@ var TimeSeriesArea = React.createClass({
     d3.select(this.getDOMNode())
       .transition()
       .duration(props.transitionTime)
-      .ease("linear")
-      .attr("transform", "translate(" + props.position + ")");
+      .ease('linear')
+      .attr('transform', 'translate(' + props.position + ')');
   },
 
   componentWillReceiveProps: function (props) {
     d3.select(this.getDOMNode()).interrupt()
-      .attr("transform", null)
+      .attr('transform', null)
       .transition()
       .duration(props.transitionTime)
-      .ease("linear")
-      .attr("transform", "translate(" + props.position + ")");
+      .ease('linear')
+      .attr('transform', 'translate(' + props.position + ')');
   },
 
   render: function () {
@@ -37,8 +37,8 @@ var TimeSeriesArea = React.createClass({
 
     return (
       <g>
-        <path className={"area " + className} d={this.props.path} />
-        <path className={"line " + className} d={this.props.line} />
+        <path className={'area ' + className} d={this.props.path} />
+        <path className={'line ' + className} d={this.props.line} />
       </g>
     );
   }

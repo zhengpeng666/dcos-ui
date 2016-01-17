@@ -1,6 +1,6 @@
-import classNames from "classnames";
+import classNames from 'classnames';
 /*eslint-disable no-unused-vars*/
-import React from "react/addons";
+import React from 'react/addons';
 /*eslint-enable no-unused-vars*/
 
 const TabsUtil = {
@@ -20,8 +20,8 @@ const TabsUtil = {
 
     return tabSet.map(function (tab, index) {
       let tabClass = classNames({
-        "tab-item": true,
-        "active": currentTab === tab
+        'tab-item': true,
+        'active': currentTab === tab
       });
 
       return (

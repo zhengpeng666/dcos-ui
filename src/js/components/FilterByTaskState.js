@@ -1,8 +1,8 @@
-import _ from "underscore";
-import React from "react/addons";
-import {Dropdown} from "reactjs-components";
+import _ from 'underscore';
+import React from 'react/addons';
+import {Dropdown} from 'reactjs-components';
 
-const defaultID = "all";
+const defaultID = 'all';
 
 export default class FilterByTaskState extends React.Component {
 
@@ -27,8 +27,8 @@ export default class FilterByTaskState extends React.Component {
   getDropdownItems() {
     let items = [{
       id: defaultID,
-      name: "All Tasks",
-      value: "all",
+      name: 'All Tasks',
+      value: 'all',
       count: this.props.totalTasksCount
     }].concat(this.props.statuses);
 

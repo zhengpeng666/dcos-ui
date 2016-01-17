@@ -1,12 +1,12 @@
-import _ from "underscore";
-import Events from "events";
+import _ from 'underscore';
+import Events from 'events';
 
-import ConfigStore from "../stores/ConfigStore";
-import EventTypes from "../constants/EventTypes";
-import pluginList from "./index";
+import ConfigStore from '../stores/ConfigStore';
+import EventTypes from '../constants/EventTypes';
+import pluginList from './index';
 
 function addListener(store, hook, listener, priority = 10) {
-  if (typeof priority !== "number") {
+  if (typeof priority !== 'number') {
     priority = 10;
   }
 
@@ -53,7 +53,7 @@ var Plugins = _.extend({}, Events.EventEmitter.prototype, {
   },
 
   onConfigurationReceived() {
-    var config = ConfigStore.get("config");
+    var config = ConfigStore.get('config');
     var pluginsConfig = config.uiConfiguration.plugins;
 
     Object.keys(pluginsConfig).forEach(function (pluginID) {
@@ -62,7 +62,7 @@ var Plugins = _.extend({}, Events.EventEmitter.prototype, {
       }
     });
 
-    this.doAction("pluginsConfigured");
+    this.doAction('pluginsConfigured');
     this.emit(EventTypes.PLUGINS_CONFIGURED);
   },
 

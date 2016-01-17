@@ -1,9 +1,9 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+var classNames = require('classnames');
+var React = require('react/addons');
 
 var FilterInputText = React.createClass({
 
-  displayName: "FilterInputText",
+  displayName: 'FilterInputText',
 
   propTypes: {
     handleFilterChange: React.PropTypes.func.isRequired,
@@ -15,8 +15,8 @@ var FilterInputText = React.createClass({
   getDefaultProps: function () {
     return {
       inverseStyle: false,
-      placeholder: "Filter",
-      searchString: ""
+      placeholder: 'Filter',
+      searchString: ''
     };
   },
 
@@ -33,7 +33,7 @@ var FilterInputText = React.createClass({
 
   handleClearInput: function (e) {
     e.preventDefault();
-    this.props.handleFilterChange("");
+    this.props.handleFilterChange('');
   },
 
   handleBlur: function () {
@@ -51,35 +51,35 @@ var FilterInputText = React.createClass({
   render: function () {
     var props = this.props;
     var clearIconContainerClasses = classNames({
-      "form-control-group-add-on form-control-group-add-on-append": true,
-      "hidden": props.searchString.length === 0
+      'form-control-group-add-on form-control-group-add-on-append': true,
+      'hidden': props.searchString.length === 0
     });
 
     var clearIconClasses = classNames({
-      "icon icon-sprite icon-sprite-mini icon-close": true,
-      "icon-sprite-mini-white": this.props.inverseStyle
+      'icon icon-sprite icon-sprite-mini icon-close': true,
+      'icon-sprite-mini-white': this.props.inverseStyle
     });
 
     var iconSearchClasses = classNames({
-      "icon icon-sprite icon-sprite-mini icon-search": true,
-      "icon-sprite-mini-white": this.props.inverseStyle,
-      "icon-sprite-mini-color": !this.props.inverseStyle && this.state.focus,
-      "active": this.state.focus
+      'icon icon-sprite icon-sprite-mini icon-search': true,
+      'icon-sprite-mini-white': this.props.inverseStyle,
+      'icon-sprite-mini-color': !this.props.inverseStyle && this.state.focus,
+      'active': this.state.focus
     });
 
     var inputClasses = classNames({
-      "form-control filter-input-text": true,
-      "form-control-inverse": this.props.inverseStyle
+      'form-control filter-input-text': true,
+      'form-control-inverse': this.props.inverseStyle
     });
 
     let inputContainerClasses = classNames({
-      "form-control form-control-group filter-input-text-group": true,
-      "form-control-inverse": this.props.inverseStyle,
-      "focus": this.state.focus
+      'form-control form-control-group filter-input-text-group': true,
+      'form-control-inverse': this.props.inverseStyle,
+      'focus': this.state.focus
     });
 
     let formGroupClasses = classNames(
-      "form-group",
+      'form-group',
       this.props.className
     );
 

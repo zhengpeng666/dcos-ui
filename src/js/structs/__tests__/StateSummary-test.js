@@ -1,24 +1,24 @@
-jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../../utils/Util");
+jest.dontMock('../../utils/MesosSummaryUtil');
+jest.dontMock('../../utils/Util');
 
-let ServicesList = require("../ServicesList");
-let NodesList = require("../NodesList");
-let StateSummary = require("../StateSummary");
+let ServicesList = require('../ServicesList');
+let NodesList = require('../NodesList');
+let StateSummary = require('../StateSummary');
 
-describe("StateSummary", function () {
+describe('StateSummary', function () {
 
-  describe("#constructor", function () {
+  describe('#constructor', function () {
 
-    it("constructs a state", function () {
+    it('constructs a state', function () {
       let instance = new StateSummary();
       expect(instance instanceof StateSummary).toEqual(true);
     });
 
   });
 
-  describe("#getSnapshotDate", function () {
+  describe('#getSnapshotDate', function () {
 
-    it("creates a date when initialized", function () {
+    it('creates a date when initialized', function () {
       let before = Date.now();
       let instance = new StateSummary();
       let after = Date.now();
@@ -27,7 +27,7 @@ describe("StateSummary", function () {
       expect(instance.getSnapshotDate() <= after).toBeTruthy();
     });
 
-    it("allows us to set the date", function () {
+    it('allows us to set the date', function () {
       let date = Date.now();
       let instance = new StateSummary({date});
       expect(instance.getSnapshotDate() === date).toBeTruthy();
@@ -35,14 +35,14 @@ describe("StateSummary", function () {
 
   });
 
-  describe("#getActiveSlaves", function () {
+  describe('#getActiveSlaves', function () {
 
-    it("returns 0 active slaves by default", function () {
+    it('returns 0 active slaves by default', function () {
       let instance = new StateSummary();
       expect(instance.getActiveSlaves().length).toEqual(0);
     });
 
-    it("correctly calculates active slaves", function () {
+    it('correctly calculates active slaves', function () {
       let snapshot = {
         frameworks: [],
         slaves: [
@@ -57,15 +57,15 @@ describe("StateSummary", function () {
 
   });
 
-  describe("#getServiceList", function () {
+  describe('#getServiceList', function () {
 
-    it("returns an instance of ServicesList", function () {
+    it('returns an instance of ServicesList', function () {
       let instance = new StateSummary();
       let services = instance.getServiceList();
       expect(services instanceof ServicesList).toBeTruthy();
     });
 
-    it("ServicesList contains instances of Service", function () {
+    it('ServicesList contains instances of Service', function () {
       let frameworks = [{a: 1}];
       let instance = new StateSummary({snapshot: {frameworks}});
       let services = instance.getServiceList();
@@ -75,15 +75,15 @@ describe("StateSummary", function () {
 
   });
 
-  describe("#getNodesList", function () {
+  describe('#getNodesList', function () {
 
-    it("returns an instance of NodesList", function () {
+    it('returns an instance of NodesList', function () {
       let instance = new StateSummary();
       let nodes = instance.getNodesList();
       expect(nodes instanceof NodesList).toBeTruthy();
     });
 
-    it("NodesList contains instances of Node", function () {
+    it('NodesList contains instances of Node', function () {
       let slaves = [{a: 1}];
       let instance = new StateSummary({snapshot: {slaves}});
       let nodes = instance.getNodesList();
@@ -93,15 +93,15 @@ describe("StateSummary", function () {
 
   });
 
-  describe("#getSlaveTotalResources", function () {
+  describe('#getSlaveTotalResources', function () {
 
-    it("defaults to 0 available resources if there's nothing", function () {
+    it('defaults to 0 available resources if there\'s nothing', function () {
       let instance = new StateSummary();
       let defaultSum = {cpus: 0, mem: 0, disk: 0};
       expect(instance.getSlaveTotalResources()).toEqual(defaultSum);
     });
 
-    it("calculates total resources available in slaves", function () {
+    it('calculates total resources available in slaves', function () {
       let snapshot = {
         frameworks: [],
         slaves: [
@@ -117,15 +117,15 @@ describe("StateSummary", function () {
 
   });
 
-  describe("#getSlaveUsedResources", function () {
+  describe('#getSlaveUsedResources', function () {
 
-    it("defaults to 0 available resources if there's nothing", function () {
+    it('defaults to 0 available resources if there\'s nothing', function () {
       let instance = new StateSummary();
       let defaultSum = {cpus: 0, mem: 0, disk: 0};
       expect(instance.getSlaveUsedResources()).toEqual(defaultSum);
     });
 
-    it("calculates used resources in slaves", function () {
+    it('calculates used resources in slaves', function () {
       let snapshot = {
         frameworks: [],
         slaves: [
@@ -141,15 +141,15 @@ describe("StateSummary", function () {
 
   });
 
-  describe("#getServiceUsedResources", function () {
+  describe('#getServiceUsedResources', function () {
 
-    it("defaults to 0 available resources if there's nothing", function () {
+    it('defaults to 0 available resources if there\'s nothing', function () {
       let instance = new StateSummary();
       let defaultSum = {cpus: 0, mem: 0, disk: 0};
       expect(instance.getServiceUsedResources()).toEqual(defaultSum);
     });
 
-    it("calculates total resources available in slaves", function () {
+    it('calculates total resources available in slaves', function () {
       let snapshot = {
         frameworks: [
           {used_resources: {cpus: 1, mem: 0, disk: 2}},

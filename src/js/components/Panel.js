@@ -1,9 +1,9 @@
-var classNames = require("classnames");
-var React = require("react/addons");
+var classNames = require('classnames');
+var React = require('react/addons');
 
 var Panel = React.createClass({
 
-  displayName: "Panel",
+  displayName: 'Panel',
 
   propTypes: {
     title: React.PropTypes.string,
@@ -12,7 +12,7 @@ var Panel = React.createClass({
 
   getHeading: function () {
     var title = this.props.title;
-    if (title == null || title === "") {
+    if (title == null || title === '') {
       return null;
     }
 
@@ -33,7 +33,7 @@ var Panel = React.createClass({
 
   render: function () {
     var classes = {
-      "panel": true
+      'panel': true
     };
     if (this.props.className) {
       classes[this.props.className] = true;

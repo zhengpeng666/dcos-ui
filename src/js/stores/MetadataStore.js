@@ -1,14 +1,14 @@
-var _ = require("underscore");
-import {Store} from "mesosphere-shared-reactjs";
+var _ = require('underscore');
+import {Store} from 'mesosphere-shared-reactjs';
 
-var AppDispatcher = require("../events/AppDispatcher");
-var ActionTypes = require("../constants/ActionTypes");
-var EventTypes = require("../constants/EventTypes");
-var GetSetMixin = require("../mixins/GetSetMixin");
-import MetadataActions from "../events/MetadataActions";
+var AppDispatcher = require('../events/AppDispatcher');
+var ActionTypes = require('../constants/ActionTypes');
+var EventTypes = require('../constants/EventTypes');
+var GetSetMixin = require('../mixins/GetSetMixin');
+import MetadataActions from '../events/MetadataActions';
 
 var MetadataStore = Store.createStore({
-  storeID: "metadata",
+  storeID: 'metadata',
 
   init: function () {
     this.set({
@@ -41,7 +41,7 @@ var MetadataStore = Store.createStore({
 
     switch (action.type) {
       case ActionTypes.REQUEST_METADATA:
-        var oldMetadata = MetadataStore.get("metadata");
+        var oldMetadata = MetadataStore.get('metadata');
         var metadata = action.data;
 
         // only emitting on change
@@ -51,7 +51,7 @@ var MetadataStore = Store.createStore({
         }
         break;
       case ActionTypes.REQUEST_DCOS_METADATA:
-        var oldDCOSMetadata = MetadataStore.get("dcosMetadata");
+        var oldDCOSMetadata = MetadataStore.get('dcosMetadata');
         var dcosMetadata = action.data;
 
         // only emitting on change

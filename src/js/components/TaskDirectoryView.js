@@ -1,12 +1,12 @@
-import mixin from "reactjs-mixin";
-import React from "react";
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import mixin from 'reactjs-mixin';
+import React from 'react';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import RequestErrorMsg from "./RequestErrorMsg";
-import TaskDirectoryTable from "./TaskDirectoryTable";
-import TaskDirectoryStore from "../stores/TaskDirectoryStore";
+import RequestErrorMsg from './RequestErrorMsg';
+import TaskDirectoryTable from './TaskDirectoryTable';
+import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 
-const METHODS_TO_BIND = ["onTaskDirectoryStoreError"];
+const METHODS_TO_BIND = ['onTaskDirectoryStoreError'];
 
 export default class TaskDirectoryView extends mixin(StoreMixin) {
   constructor() {
@@ -17,8 +17,8 @@ export default class TaskDirectoryView extends mixin(StoreMixin) {
     };
 
     this.store_listeners = [{
-      name: "taskDirectory",
-      events: ["success", "error"]
+      name: 'taskDirectory',
+      events: ['success', 'error']
     }];
 
     METHODS_TO_BIND.forEach((method) => {
@@ -66,8 +66,8 @@ export default class TaskDirectoryView extends mixin(StoreMixin) {
   }
 
   getBreadcrumbs() {
-    let innerPath = TaskDirectoryStore.get("innerPath").split("/");
-    let onClickPath = "";
+    let innerPath = TaskDirectoryStore.get('innerPath').split('/');
+    let onClickPath = '';
 
     let crumbs = innerPath.map((file, i) => {
       let textValue = file;
@@ -82,13 +82,13 @@ export default class TaskDirectoryView extends mixin(StoreMixin) {
         </i>
       );
 
-      // First breadcrumb is always "Working Directory".
+      // First breadcrumb is always 'Working Directory'.
       if (i === 0) {
-        textValue = "Working Directory";
+        textValue = 'Working Directory';
         icon = null;
       } else {
         // Build the path that the user goes to if clicked.
-        onClickPath += ("/" + file);
+        onClickPath += ('/' + file);
       }
 
       // Last breadcrumb. Don't make it a link.
@@ -119,7 +119,7 @@ export default class TaskDirectoryView extends mixin(StoreMixin) {
   }
 
   render() {
-    let directory = TaskDirectoryStore.get("directory");
+    let directory = TaskDirectoryStore.get('directory');
 
     if (directory == null) {
       return this.getLoadingScreen();

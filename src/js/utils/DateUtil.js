@@ -1,17 +1,17 @@
-import moment from "moment";
+import moment from 'moment';
 
 const DateUtil = {
   msToDateStr: function (ms) {
     let date = new Date(ms);
-    let dateStr = "";
+    let dateStr = '';
 
     if (isNaN(date.getTime())) {
       return dateStr;
     }
 
-    dateStr += date.getMonth() + 1 + "-";
-    dateStr += date.getDate() + "-";
-    dateStr += date.getFullYear() % 100 + " at ";
+    dateStr += date.getMonth() + 1 + '-';
+    dateStr += date.getDate() + '-';
+    dateStr += date.getFullYear() % 100 + ' at ';
     dateStr += DateUtil.formatAMPM(date);
 
     return dateStr;
@@ -25,9 +25,9 @@ const DateUtil = {
     let hours = date.getHours();
     let minutes = date.getMinutes();
 
-    let meridiem = "am";
+    let meridiem = 'am';
     if (hours >= 12) {
-      meridiem = "pm";
+      meridiem = 'pm';
     }
 
     hours = hours % 12;

@@ -1,9 +1,9 @@
-var d3 = require("d3");
-var React = require("react/addons");
+var d3 = require('d3');
+var React = require('react/addons');
 
 var Bar = React.createClass({
 
-  displayName: "Bar",
+  displayName: 'Bar',
 
   propTypes: {
     posX: React.PropTypes.number.isRequired,
@@ -28,7 +28,7 @@ var Bar = React.createClass({
     d3.select(this.getDOMNode()).interrupt()
       .transition()
       .duration(0)
-      .attr("transform", "translate(" + this.props.posX + ")");
+      .attr('transform', 'translate(' + this.props.posX + ')');
   },
 
   componentDidUpdate: function (props) {
@@ -44,8 +44,8 @@ var Bar = React.createClass({
       .transition()
         .delay(props.transitionDelay)
         .duration(props.transitionDuration)
-        .ease("linear")
-        .attr("transform", "translate(" + (props.posX - props.rectWidth) + ")");
+        .ease('linear')
+        .attr('transform', 'translate(' + (props.posX - props.rectWidth) + ')');
   },
 
   render: function () {
@@ -55,7 +55,7 @@ var Bar = React.createClass({
 
     return (
       <g className="bar"
-          transform={"translate(" + [props.posX, 0] + ")"}>
+          transform={'translate(' + [props.posX, 0] + ')'}>
         <line
             className={props.lineClass}
             x1={0}

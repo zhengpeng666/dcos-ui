@@ -1,12 +1,12 @@
-var _ = require("underscore");
-var React = require("react/addons");
+var _ = require('underscore');
+var React = require('react/addons');
 
-var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
-var DOMUtils = require("../../utils/DOMUtils");
+var InternalStorageMixin = require('../../mixins/InternalStorageMixin');
+var DOMUtils = require('../../utils/DOMUtils');
 
 var Chart = React.createClass({
 
-  displayName: "Chart",
+  displayName: 'Chart',
 
   mixins: [InternalStorageMixin],
 
@@ -38,11 +38,11 @@ var Chart = React.createClass({
     } else {
       this.updateWidth();
     }
-    window.addEventListener("resize", this.updateWidth);
+    window.addEventListener('resize', this.updateWidth);
   },
 
   componentWillUnmount: function () {
-    window.removeEventListener("resize", this.updateWidth);
+    window.removeEventListener('resize', this.updateWidth);
   },
 
   updateWidth: function () {

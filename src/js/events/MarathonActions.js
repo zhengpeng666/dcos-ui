@@ -1,7 +1,7 @@
-var ActionTypes = require("../constants/ActionTypes");
-var AppDispatcher = require("./AppDispatcher");
-var Config = require("../config/Config");
-var RequestUtil = require("../utils/RequestUtil");
+var ActionTypes = require('../constants/ActionTypes');
+var AppDispatcher = require('./AppDispatcher');
+var Config = require('../config/Config');
+var RequestUtil = require('../utils/RequestUtil');
 
 module.exports = {
 
@@ -9,7 +9,7 @@ module.exports = {
     Config.getRefreshRate(),
     function (resolve, reject) {
       return function () {
-        var url = Config.rootUrl + "/marathon/v2/apps";
+        var url = Config.rootUrl + '/marathon/v2/apps';
 
         RequestUtil.json({
           url: url,

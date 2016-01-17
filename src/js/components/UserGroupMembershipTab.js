@@ -1,18 +1,18 @@
-import {Dropdown} from "reactjs-components";
-import mixin from "reactjs-mixin";
+import {Dropdown} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLGroupStore from "../stores/ACLGroupStore";
-import ACLGroupsStore from "../stores/ACLGroupsStore";
-import RequestErrorMsg from "../components/RequestErrorMsg";
-import UserGroupTable from "./UserGroupTable";
-import Util from "../utils/Util";
+import ACLGroupStore from '../stores/ACLGroupStore';
+import ACLGroupsStore from '../stores/ACLGroupsStore';
+import RequestErrorMsg from '../components/RequestErrorMsg';
+import UserGroupTable from './UserGroupTable';
+import Util from '../utils/Util';
 
 const METHODS_TO_BIND = [
-  "onGroupSelection"
+  'onGroupSelection'
 ];
 
 export default class UserGroupMembershipTab extends mixin(StoreMixin) {
@@ -28,18 +28,18 @@ export default class UserGroupMembershipTab extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "group",
+        name: 'group',
         events: [
-          "deleteUserSuccess",
-          "deleteUserError",
-          "usersSuccess"
+          'deleteUserSuccess',
+          'deleteUserError',
+          'usersSuccess'
         ]
       },
       {
-        name: "groups",
+        name: 'groups',
         events: [
-          "success",
-          "error"
+          'success',
+          'error'
         ]
       }
     ];
@@ -73,13 +73,13 @@ export default class UserGroupMembershipTab extends mixin(StoreMixin) {
   }
 
   getDropdownItems() {
-    let groups = ACLGroupsStore.get("groups").getItems().sort(
-      Util.getLocaleCompareSortFn("description")
+    let groups = ACLGroupsStore.get('groups').getItems().sort(
+      Util.getLocaleCompareSortFn('description')
     );
 
     let defaultItem = {
-      description: "Add Group",
-      gid: "default-placeholder-group-id"
+      description: 'Add Group',
+      gid: 'default-placeholder-group-id'
     };
     let items = [defaultItem].concat(groups);
 

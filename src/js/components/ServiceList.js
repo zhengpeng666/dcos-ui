@@ -1,17 +1,17 @@
-const _ = require("underscore");
-import classNames from "classnames";
-import {List} from "reactjs-components";
-const React = require("react/addons");
+const _ = require('underscore');
+import classNames from 'classnames';
+import {List} from 'reactjs-components';
+const React = require('react/addons');
 
-const HealthLabels = require("../constants/HealthLabels");
-const HealthStatus = require("../constants/HealthStatus");
-const HealthTypesDescription = require("../constants/HealthTypesDescription");
-const MarathonStore = require("../stores/MarathonStore");
-const TooltipMixin = require("../mixins/TooltipMixin");
+const HealthLabels = require('../constants/HealthLabels');
+const HealthStatus = require('../constants/HealthStatus');
+const HealthTypesDescription = require('../constants/HealthTypesDescription');
+const MarathonStore = require('../stores/MarathonStore');
+const TooltipMixin = require('../mixins/TooltipMixin');
 
 let ServiceList = React.createClass({
 
-  displayName: "ServiceList",
+  displayName: 'ServiceList',
 
   propTypes: {
     services: React.PropTypes.array.isRequired,
@@ -38,7 +38,7 @@ let ServiceList = React.createClass({
   },
 
   handleServiceClick: function (serviceName) {
-    this.context.router.transitionTo("dashboard-panel", {serviceName});
+    this.context.router.transitionTo('dashboard-panel', {serviceName});
   },
 
   getServices: function (services, healthProcessed) {
@@ -50,17 +50,17 @@ let ServiceList = React.createClass({
       if (appHealth != null) {
         state = HealthStatus[appHealth.key];
 
-        attributes["data-behavior"] = "show-tip";
-        attributes["data-tip-place"] = "top-left";
+        attributes['data-behavior'] = 'show-tip';
+        attributes['data-tip-place'] = 'top-left';
 
         if (appHealth.key === HealthStatus.HEALTHY.key) {
-          attributes["data-tip-content"] = HealthTypesDescription.HEALTHY;
+          attributes['data-tip-content'] = HealthTypesDescription.HEALTHY;
         } else if (appHealth.key === HealthStatus.UNHEALTHY.key) {
-          attributes["data-tip-content"] = HealthTypesDescription.UNHEALTHY;
+          attributes['data-tip-content'] = HealthTypesDescription.UNHEALTHY;
         } else if (appHealth.key === HealthStatus.IDLE.key) {
-          attributes["data-tip-content"] = HealthTypesDescription.IDLE;
+          attributes['data-tip-content'] = HealthTypesDescription.IDLE;
         } else if (appHealth.key === HealthStatus.NA.key) {
-          attributes["data-tip-content"] = HealthTypesDescription.NA;
+          attributes['data-tip-content'] = HealthTypesDescription.NA;
         }
       }
 
@@ -76,7 +76,7 @@ let ServiceList = React.createClass({
       }
 
       let classSet = classNames(
-        "h4 inverse flush-top flush-bottom text-align-right",
+        'h4 inverse flush-top flush-bottom text-align-right',
         state.classNames
       );
 
@@ -91,7 +91,7 @@ let ServiceList = React.createClass({
                 {service.name}
               </a>
             ),
-            tag: "span"
+            tag: 'span'
           },
           {
             className: null,
@@ -100,7 +100,7 @@ let ServiceList = React.createClass({
                 {healthLabel}
               </div>
             ),
-            tag: "div"
+            tag: 'div'
           }
         ]
       };

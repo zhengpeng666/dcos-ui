@@ -1,14 +1,14 @@
-jest.dontMock("../TasksChart");
+jest.dontMock('../TasksChart');
 
-var _ = require("underscore");
-var React = require("react/addons");
+var _ = require('underscore');
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var TasksChart = require("../TasksChart");
+var TasksChart = require('../TasksChart');
 
-describe("TasksChart", function () {
+describe('TasksChart', function () {
 
-  describe("#getTaskInfo", function () {
+  describe('#getTaskInfo', function () {
 
     beforeEach(function () {
       this.instance = TestUtils.renderIntoDocument(
@@ -16,32 +16,32 @@ describe("TasksChart", function () {
       );
     });
 
-    it("renders two task info labels when there is no data", function () {
+    it('renders two task info labels when there is no data', function () {
       var rows = TestUtils.scryRenderedDOMComponentsWithClass(
-        this.instance, "row"
+        this.instance, 'row'
       );
       var unitsRow = _.last(rows);
       var taskLabels = TestUtils.scryRenderedDOMComponentsWithClass(
-        unitsRow, "unit"
+        unitsRow, 'unit'
       );
       expect(taskLabels.length).toEqual(2);
     });
 
-    it("renders two task info labels when there is only data for one", function () {
+    it('renders two task info labels when there is only data for one', function () {
       this.instance.setProps({tasks: {TASK_RUNNING: 1}});
       var rows = TestUtils.scryRenderedDOMComponentsWithClass(
-        this.instance, "row"
+        this.instance, 'row'
       );
       var unitsRow = _.last(rows);
       var taskLabels = TestUtils.scryRenderedDOMComponentsWithClass(
-        unitsRow, "unit"
+        unitsRow, 'unit'
       );
       expect(taskLabels.length).toEqual(2);
     });
 
   });
 
-  describe("#shouldComponentUpdate", function () {
+  describe('#shouldComponentUpdate', function () {
 
     beforeEach(function () {
       this.tasks = {TASK_RUNNING: 0};
@@ -51,13 +51,13 @@ describe("TasksChart", function () {
       );
     });
 
-    it("should allow update", function () {
+    it('should allow update', function () {
       this.tasks.TASK_STAGING = 1;
       var shouldUpdate = this.instance.shouldComponentUpdate(this.tasks);
       expect(shouldUpdate).toEqual(true);
     });
 
-    it("should not allow update", function () {
+    it('should not allow update', function () {
       var shouldUpdate = this.instance.shouldComponentUpdate(
         this.instance.props
       );
@@ -66,7 +66,7 @@ describe("TasksChart", function () {
 
   });
 
-  describe("#getDialChartChildren", function () {
+  describe('#getDialChartChildren', function () {
 
     beforeEach(function () {
       var parent = TestUtils.renderIntoDocument(
@@ -77,18 +77,18 @@ describe("TasksChart", function () {
       );
     });
 
-    it("renders its unit", function () {
+    it('renders its unit', function () {
       var unit = TestUtils.findRenderedDOMComponentWithClass(
-        this.instance, "unit"
+        this.instance, 'unit'
       );
-      expect(unit.getDOMNode().textContent).toEqual("100");
+      expect(unit.getDOMNode().textContent).toEqual('100');
     });
 
-    it("renders its label", function () {
+    it('renders its label', function () {
       var label = TestUtils.findRenderedDOMComponentWithClass(
-        this.instance, "unit-label"
+        this.instance, 'unit-label'
       );
-      expect(label.getDOMNode().textContent).toEqual("Total Tasks");
+      expect(label.getDOMNode().textContent).toEqual('Total Tasks');
     });
 
   });

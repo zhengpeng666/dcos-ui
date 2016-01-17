@@ -1,10 +1,10 @@
-var React = require("react/addons");
+var React = require('react/addons');
 
-var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
+var InternalStorageMixin = require('../../mixins/InternalStorageMixin');
 
 var ProgressBar = React.createClass({
 
-  displayName: "ProgressBar",
+  displayName: 'ProgressBar',
 
   mixins: [InternalStorageMixin],
 
@@ -44,8 +44,8 @@ var ProgressBar = React.createClass({
     return (
       <div className="progress-bar">
         <div key="bar" ref="bar"
-          className={"bar color-" + props.colorIndex}
-          style={{width: data.value + "%"}} />
+          className={'bar color-' + props.colorIndex}
+          style={{width: data.value + '%'}} />
       </div>
     );
   }

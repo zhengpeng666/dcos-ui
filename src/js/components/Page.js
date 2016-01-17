@@ -1,14 +1,14 @@
-var _ = require("underscore");
-var classNames = require("classnames");
-var GeminiScrollbar = require("react-gemini-scrollbar");
-var React = require("react/addons");
+var _ = require('underscore');
+var classNames = require('classnames');
+var GeminiScrollbar = require('react-gemini-scrollbar');
+var React = require('react/addons');
 
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var SidebarToggle = require("../components/SidebarToggle");
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
+var SidebarToggle = require('../components/SidebarToggle');
 
 var Page = React.createClass({
 
-  displayName: "Page",
+  displayName: 'Page',
 
   mixins: [InternalStorageMixin],
 
@@ -65,8 +65,8 @@ var Page = React.createClass({
 
   render: function () {
     var classes = {
-      "page": true,
-      "flex-container-col": true
+      'page': true,
+      'flex-container-col': true
     };
     if (this.props.className) {
       classes[this.props.className] = true;

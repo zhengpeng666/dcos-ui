@@ -1,24 +1,24 @@
-var classNames = require("classnames");
-import {Link} from "react-router";
-var React = require("react/addons");
+var classNames = require('classnames');
+import {Link} from 'react-router';
+var React = require('react/addons');
 
-var HostTableHeaderLabels = require("../constants/HostTableHeaderLabels");
-var ResourceTableUtil = require("../utils/ResourceTableUtil");
-var ProgressBar = require("./charts/ProgressBar");
-import {Table} from "reactjs-components";
-import TableUtil from "../utils/TableUtil";
-var TooltipMixin = require("../mixins/TooltipMixin");
+var HostTableHeaderLabels = require('../constants/HostTableHeaderLabels');
+var ResourceTableUtil = require('../utils/ResourceTableUtil');
+var ProgressBar = require('./charts/ProgressBar');
+import {Table} from 'reactjs-components';
+import TableUtil from '../utils/TableUtil';
+var TooltipMixin = require('../mixins/TooltipMixin');
 
 var HostTable = React.createClass({
 
-  displayName: "HostTable",
+  displayName: 'HostTable',
 
   mixins: [TooltipMixin],
 
   statics: {
     routeConfig: {
-      label: "Nodes",
-      icon: "datacenter",
+      label: 'Nodes',
+      icon: 'datacenter',
       matches: /^\/nodes/
     }
   },
@@ -40,23 +40,23 @@ var HostTable = React.createClass({
     if (!node.isActive()) {
       icon = <i className="icon icon-mini icon-mini-white icon-alert disable-pointer-events" />;
       toolTip = {
-        "data-behavior": "show-tip",
-        "data-tip-place": "top",
-        "data-tip-content": "Connection to node lost"
+        'data-behavior': 'show-tip',
+        'data-tip-place': 'top',
+        'data-tip-content': 'Connection to node lost'
       };
     }
 
     // Anything nested in elements hosting a tooltip needs to have
-    // "disable-pointer-events" in order for the tip to render correctly.
+    // 'disable-pointer-events' in order for the tip to render correctly.
     return (
       <div>
-        <Link params={{nodeID: node.get("id")}}
+        <Link params={{nodeID: node.get('id')}}
           to="nodes-list-panel"
           {...toolTip}>
           {icon}
         </Link>
         <Link className="headline emphasize"
-          params={{nodeID: node.get("id")}}
+          params={{nodeID: node.get('id')}}
           to="nodes-list-panel"
           {...toolTip}>
           {node.get(prop)}
@@ -84,9 +84,9 @@ var HostTable = React.createClass({
   getColumns: function () {
     let className = ResourceTableUtil.getClassName;
     let heading = ResourceTableUtil.renderHeading(HostTableHeaderLabels);
-    let propSortFunction = ResourceTableUtil.getPropSortFunction("hostname");
+    let propSortFunction = ResourceTableUtil.getPropSortFunction('hostname');
     let statSortFunction = ResourceTableUtil.getStatSortFunction(
-      "hostname",
+      'hostname',
       function (node, resource) {
         return node.getUsageStats(resource).percentage;
       }
@@ -96,7 +96,7 @@ var HostTable = React.createClass({
       {
         className,
         headerClassName: className,
-        prop: "hostname",
+        prop: 'hostname',
         render: this.renderHeadline,
         sortable: true,
         sortFunction: propSortFunction,
@@ -105,7 +105,7 @@ var HostTable = React.createClass({
       {
         className,
         headerClassName: className,
-        prop: "TASK_RUNNING",
+        prop: 'TASK_RUNNING',
         render: ResourceTableUtil.renderTask,
         sortable: true,
         sortFunction: propSortFunction,
@@ -114,7 +114,7 @@ var HostTable = React.createClass({
       {
         className,
         headerClassName: className,
-        prop: "cpus",
+        prop: 'cpus',
         render: this.renderStats,
         sortable: true,
         sortFunction: statSortFunction,
@@ -123,7 +123,7 @@ var HostTable = React.createClass({
       {
         className,
         headerClassName: className,
-        prop: "mem",
+        prop: 'mem',
         render: this.renderStats,
         sortable: true,
         sortFunction: statSortFunction,
@@ -132,7 +132,7 @@ var HostTable = React.createClass({
       {
         className,
         headerClassName: className,
-        prop: "disk",
+        prop: 'disk',
         render: this.renderStats,
         sortable: true,
         sortFunction: statSortFunction,
@@ -145,10 +145,10 @@ var HostTable = React.createClass({
     return (
       <colgroup>
         <col />
-        <col style={{width: "110px"}} />
-        <col className="hidden-mini" style={{width: "135px"}} />
-        <col className="hidden-mini" style={{width: "135px"}} />
-        <col className="hidden-mini" style={{width: "135px"}} />
+        <col style={{width: '110px'}} />
+        <col className="hidden-mini" style={{width: '135px'}} />
+        <col className="hidden-mini" style={{width: '135px'}} />
+        <col className="hidden-mini" style={{width: '135px'}} />
       </colgroup>
     );
   },
@@ -156,7 +156,7 @@ var HostTable = React.createClass({
   getRowAttributes: function (node) {
     return {
       className: classNames({
-        "danger": node.isActive() === false
+        'danger': node.isActive() === false
       })
     };
   },
@@ -171,7 +171,7 @@ var HostTable = React.createClass({
         data={this.props.hosts.slice()}
         idAttribute="id"
         itemHeight={TableUtil.getRowHeight()}
-        sortBy={{ prop: "hostname", order: "desc" }}
+        sortBy={{ prop: 'hostname', order: 'desc' }}
         buildRowOptions={this.getRowAttributes}
         transition={false} />
     );

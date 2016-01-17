@@ -1,16 +1,16 @@
-jest.dontMock("../TimeSeriesChart");
-jest.dontMock("../../../mixins/ChartMixin");
-jest.dontMock("../../../mixins/InternalStorageMixin");
+jest.dontMock('../TimeSeriesChart');
+jest.dontMock('../../../mixins/ChartMixin');
+jest.dontMock('../../../mixins/InternalStorageMixin');
 
-var _ = require("underscore");
-var React = require("react/addons");
+var _ = require('underscore');
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var TimeSeriesChart = require("../TimeSeriesChart");
+var TimeSeriesChart = require('../TimeSeriesChart');
 
-describe("TimeSeriesChart", function () {
+describe('TimeSeriesChart', function () {
 
-  describe("#shouldComponentUpdate", function () {
+  describe('#shouldComponentUpdate', function () {
 
     beforeEach(function () {
       var data = [{values: [{date: 0, y: 0}, {date: 1, y: 0}]}];
@@ -20,14 +20,14 @@ describe("TimeSeriesChart", function () {
       this.instance.renderAxis = jasmine.createSpy();
     });
 
-    it("should call #renderAxis", function () {
-      var props = _.extend({foo: "bar"}, this.instance.props);
+    it('should call #renderAxis', function () {
+      var props = _.extend({foo: 'bar'}, this.instance.props);
       this.instance.shouldComponentUpdate(props);
 
       expect(this.instance.renderAxis).toHaveBeenCalled();
     });
 
-    it("should not call #renderAxis", function () {
+    it('should not call #renderAxis', function () {
       this.instance.shouldComponentUpdate(
         this.instance.props
       );
@@ -35,14 +35,14 @@ describe("TimeSeriesChart", function () {
       expect(this.instance.renderAxis).not.toHaveBeenCalled();
     });
 
-    it("should return truthy", function () {
-      var props = _.extend({foo: "bar"}, this.instance.props);
+    it('should return truthy', function () {
+      var props = _.extend({foo: 'bar'}, this.instance.props);
       var _return = this.instance.shouldComponentUpdate(props);
 
       expect(_return).toEqual(true);
     });
 
-    it("should return truthy", function () {
+    it('should return truthy', function () {
       var data = [{values:
         [{date: 0, y: 0}, {date: 1, y: 0}, {date: 2, y: 0}]
       }];
@@ -52,7 +52,7 @@ describe("TimeSeriesChart", function () {
       expect(_return).toEqual(true);
     });
 
-    it("should return falsy", function () {
+    it('should return falsy', function () {
       var _return = this.instance.shouldComponentUpdate(this.instance.props);
 
       expect(_return).toEqual(false);

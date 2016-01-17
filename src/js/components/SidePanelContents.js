@@ -1,17 +1,17 @@
-import _ from "underscore";
-import React from "react/addons";
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import _ from 'underscore';
+import React from 'react/addons';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import BarChart from "./charts/BarChart";
-import Chart from "./charts/Chart";
-import Config from "../config/Config";
-import InternalStorageMixin from "../mixins/InternalStorageMixin";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import ResourceTypes from "../constants/ResourceTypes";
-import TabsMixin from "../mixins/TabsMixin";
-import Units from "../utils/Units";
+import BarChart from './charts/BarChart';
+import Chart from './charts/Chart';
+import Config from '../config/Config';
+import InternalStorageMixin from '../mixins/InternalStorageMixin';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import ResourceTypes from '../constants/ResourceTypes';
+import TabsMixin from '../mixins/TabsMixin';
+import Units from '../utils/Units';
 
-import mixin from "reactjs-mixin";
+import mixin from 'reactjs-mixin';
 
 // number to fit design of width vs. height ratio
 const WIDTH_HEIGHT_RATIO = 4.5;
@@ -24,8 +24,8 @@ export default class SidePanelContents extends
     this.store_listeners = [];
 
     this.tabs_tabs = {
-      tasks: "Tasks",
-      details: "Details"
+      tasks: 'Tasks',
+      details: 'Details'
     };
 
     this.state = {};
@@ -75,7 +75,7 @@ export default class SidePanelContents extends
     let colorIndex = ResourceTypes[resource].colorIndex;
     let resourceLabel = ResourceTypes[resource].label;
     let resourceData = [{
-      name: "Alloc",
+      name: 'Alloc',
       colorIndex: colorIndex,
       values: totalResources[resource]
     }];
@@ -87,7 +87,7 @@ export default class SidePanelContents extends
 
     let axisConfiguration = {
       x: {hideMatch: /^0$/},
-      y: {showPercentage: false, suffix: "%"}
+      y: {showPercentage: false, suffix: '%'}
     };
 
     let maxY = 5;
@@ -146,13 +146,13 @@ export default class SidePanelContents extends
       return null;
     }
 
-    let states = MesosSummaryStore.get("states");
+    let states = MesosSummaryStore.get('states');
     let resources = states[`getResourceStatesFor${itemType}IDs`]([item.id]);
 
     let charts = [
-      this.getResourceChart("cpus", resources),
-      this.getResourceChart("mem", resources),
-      this.getResourceChart("disk", resources)
+      this.getResourceChart('cpus', resources),
+      this.getResourceChart('mem', resources),
+      this.getResourceChart('disk', resources)
     ];
 
     return charts.map(function (chart, i) {

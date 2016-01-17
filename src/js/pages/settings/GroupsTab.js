@@ -1,27 +1,27 @@
-import mixin from "reactjs-mixin";
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLGroupsStore from "../../stores/ACLGroupsStore";
-import GroupFormModal from "../../components/GroupFormModal";
-import GroupSidePanel from "../../components/GroupSidePanel";
-import MesosSummaryStore from "../../stores/MesosSummaryStore";
-import OrganizationTab from "./OrganizationTab";
-import RequestErrorMsg from "../../components/RequestErrorMsg";
+import ACLGroupsStore from '../../stores/ACLGroupsStore';
+import GroupFormModal from '../../components/GroupFormModal';
+import GroupSidePanel from '../../components/GroupSidePanel';
+import MesosSummaryStore from '../../stores/MesosSummaryStore';
+import OrganizationTab from './OrganizationTab';
+import RequestErrorMsg from '../../components/RequestErrorMsg';
 
 const EXTERNAL_CHANGE_EVENTS = [
-  "onGroupStoreCreateSuccess",
-  "onGroupStoreDeleteSuccess",
-  "onGroupStoreUpdateSuccess"
+  'onGroupStoreCreateSuccess',
+  'onGroupStoreDeleteSuccess',
+  'onGroupStoreUpdateSuccess'
 ];
 
 const METHODS_TO_BIND = [
-  "handleNewGroupClick",
-  "handleNewGroupClose",
-  "onGroupsStoreSuccess",
-  "onGroupsStoreError"
+  'handleNewGroupClick',
+  'handleNewGroupClose',
+  'onGroupsStoreSuccess',
+  'onGroupsStoreError'
 ];
 
 export default class GroupsTab extends mixin(StoreMixin) {
@@ -29,9 +29,9 @@ export default class GroupsTab extends mixin(StoreMixin) {
     super(...arguments);
 
     this.store_listeners = [
-      {name: "marathon", events: ["success"]},
-      {name: "groups", events: ["success", "error"]},
-      {name: "group", events: ["createSuccess", "deleteSuccess", "updateSuccess"]}
+      {name: 'marathon', events: ['success']},
+      {name: 'groups', events: ['success', 'error']},
+      {name: 'group', events: ['createSuccess', 'deleteSuccess', 'updateSuccess']}
     ];
 
     this.state = {
@@ -102,12 +102,12 @@ export default class GroupsTab extends mixin(StoreMixin) {
       );
     }
 
-    if (!MesosSummaryStore.get("statesProcessed") ||
+    if (!MesosSummaryStore.get('statesProcessed') ||
       !this.state.groupsStoreSuccess) {
       return this.getLoadingScreen();
     }
 
-    let items = ACLGroupsStore.get("groups").getItems();
+    let items = ACLGroupsStore.get('groups').getItems();
 
     return (
       <OrganizationTab

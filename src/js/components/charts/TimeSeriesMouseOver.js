@@ -1,12 +1,12 @@
-var _ = require("underscore");
-var d3 = require("d3");
-var React = require("react/addons");
+var _ = require('underscore');
+var d3 = require('d3');
+var React = require('react/addons');
 
-var Maths = require("../../utils/Maths");
+var Maths = require('../../utils/Maths');
 
 var TimeSeriesMouseOver = React.createClass({
 
-  displayName: "TimeSeriesMouseOver",
+  displayName: 'TimeSeriesMouseOver',
 
   propTypes: {
     addMouseHandler: React.PropTypes.func.isRequired,
@@ -72,21 +72,21 @@ var TimeSeriesMouseOver = React.createClass({
     d3.select(this.refs.xMousePosition.getDOMNode())
       .transition()
         .duration(50)
-        .style("stroke", "rgba(255,255,255,0.5")
-        .attr("x1", mouse.x)
-        .attr("x2", mouse.x);
+        .style('stroke', 'rgba(255,255,255,0.5')
+        .attr('x1', mouse.x)
+        .attr('x2', mouse.x);
 
     d3.select(this.refs.yMousePosition.getDOMNode())
       .transition()
         .duration(50)
-        .style("stroke", "rgba(255,255,255,0.5")
-        .attr("y1", props.yScale(firstDataSet.values[index][props.y]))
-        .attr("y2", props.yScale(firstDataSet.values[index][props.y]));
+        .style('stroke', 'rgba(255,255,255,0.5')
+        .attr('y1', props.yScale(firstDataSet.values[index][props.y]))
+        .attr('y2', props.yScale(firstDataSet.values[index][props.y]));
 
     d3.select(this.refs.yAxisCurrent.getDOMNode())
       .transition()
       .duration(50)
-      .attr("y", props.yScale(firstDataSet.values[index][props.y]))
+      .attr('y', props.yScale(firstDataSet.values[index][props.y]))
       // Default to 0 if state is unsuccessful.
       .text((firstDataSet.values[index][props.y] || 0) + props.yCaption);
 
@@ -111,25 +111,25 @@ var TimeSeriesMouseOver = React.createClass({
     if (value === 0) {
       xPosition += characterWidth / 2;
     } else {
-      value = "-" + value + "s";
+      value = '-' + value + 's';
     }
     d3.select(this.refs.xAxisCurrent.getDOMNode())
       .transition()
       .duration(50)
-      .attr("x", xPosition)
+      .attr('x', xPosition)
       // Default to 0 if state is unsuccessful.
       .text(value || 0);
   },
 
   handleMouseOut: function () {
     d3.select(this.refs.yMousePosition.getDOMNode()).interrupt()
-      .style("stroke", "rgba(255,255,255,0");
+      .style('stroke', 'rgba(255,255,255,0');
     d3.select(this.refs.xMousePosition.getDOMNode()).interrupt()
-      .style("stroke", "rgba(255,255,255,0");
+      .style('stroke', 'rgba(255,255,255,0');
     d3.select(this.refs.xAxisCurrent.getDOMNode())
-      .text("");
+      .text('');
     d3.select(this.refs.yAxisCurrent.getDOMNode())
-      .text("");
+      .text('');
   },
 
   render: function () {
@@ -143,12 +143,12 @@ var TimeSeriesMouseOver = React.createClass({
           <text className="current-value" ref="xAxisCurrent"
             dy=".71em"
             y="9"
-            transform={"translate(0," + height + ")"}>
+            transform={'translate(0,' + height + ')'}>
           </text>
         </g>
         <g className="y axis">
           <text className="current-value shadow" ref="yAxisCurrent"
-            style={{textAnchor: "end"}}
+            style={{textAnchor: 'end'}}
             dy=".32em"
             x="-9">
           </text>

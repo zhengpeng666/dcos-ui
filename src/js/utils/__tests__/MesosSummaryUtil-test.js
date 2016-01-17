@@ -1,23 +1,23 @@
-jest.dontMock("../../config/Config");
-jest.dontMock("../../stores/MarathonStore");
-jest.dontMock("../Maths");
-jest.dontMock("../MesosSummaryUtil");
-jest.dontMock("../Util");
+jest.dontMock('../../config/Config');
+jest.dontMock('../../stores/MarathonStore');
+jest.dontMock('../Maths');
+jest.dontMock('../MesosSummaryUtil');
+jest.dontMock('../Util');
 
-let MesosSummaryUtil = require("../MesosSummaryUtil");
-let SummaryList = require("../../structs/SummaryList");
-let StateSummary = require("../../structs/StateSummary");
+let MesosSummaryUtil = require('../MesosSummaryUtil');
+let SummaryList = require('../../structs/SummaryList');
+let StateSummary = require('../../structs/StateSummary');
 
-describe("MesosSummaryUtil", function () {
+describe('MesosSummaryUtil', function () {
 
-  describe("#stateResourcesToResourceStates", function () {
+  describe('#stateResourcesToResourceStates', function () {
 
-    it("returns empty resource states lists", function () {
+    it('returns empty resource states lists', function () {
       let resourceStates = MesosSummaryUtil.stateResourcesToResourceStates([]);
       expect(resourceStates).toEqual({cpus: [], mem: [], disk: []});
     });
 
-    it("sets fields to null indicating unsuccessful snapshot", function () {
+    it('sets fields to null indicating unsuccessful snapshot', function () {
       let stateResources = [
         {
           date: 1,
@@ -49,7 +49,7 @@ describe("MesosSummaryUtil", function () {
       expect(resources).toEqual(expectedResult);
     });
 
-    it("transposes state resources to resource states", function () {
+    it('transposes state resources to resource states', function () {
       let stateResources = [{
         date: 1,
         resources: {cpus: 2, mem: 3, disk: 2},
@@ -68,7 +68,7 @@ describe("MesosSummaryUtil", function () {
       expect(resourceStates).toEqual(expectedResult);
     });
 
-    it("transposes multiple state resources to resource states", function () {
+    it('transposes multiple state resources to resource states', function () {
       let stateResources = [
         {
           date: 1,
@@ -104,23 +104,23 @@ describe("MesosSummaryUtil", function () {
 
   });
 
-  describe("#failureRateReturnsEpochDate", function () {
+  describe('#failureRateReturnsEpochDate', function () {
 
     let snapshot = {frameworks: []};
     let states = new SummaryList();
     states.addSnapshot(snapshot, Date.now());
     let epochDate = MesosSummaryUtil.getFailureRate(states.list[0], states.list[0]).date;
 
-    it("returns a number", function () {
-      expect(typeof epochDate).toEqual("number");
+    it('returns a number', function () {
+      expect(typeof epochDate).toEqual('number');
     });
 
-    it("returns a valid epoch time", function () {
+    it('returns a valid epoch time', function () {
       let date = new Date(epochDate);
       expect(isNaN(date.getTime())).toEqual(false);
     });
 
-    it("returns null for rate if state is unsuccessful", function () {
+    it('returns null for rate if state is unsuccessful', function () {
       let unsuccessfulState = new StateSummary({successful: false});
       let result = MesosSummaryUtil.getFailureRate(
         unsuccessfulState,
@@ -130,14 +130,14 @@ describe("MesosSummaryUtil", function () {
       expect(result).toEqual(null);
     });
 
-    it("returns a number for rate if state is successful", function () {
+    it('returns a number for rate if state is successful', function () {
       let successfulState = new StateSummary({successful: true});
       let result = MesosSummaryUtil.getFailureRate(
         successfulState,
         states.list[0]
       ).rate;
 
-      expect(typeof result).toEqual("number");
+      expect(typeof result).toEqual('number');
     });
   });
 });

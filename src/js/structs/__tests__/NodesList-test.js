@@ -1,17 +1,17 @@
-jest.dontMock("../../stores/MarathonStore");
-jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../../utils/StringUtil");
-jest.dontMock("../../utils/Util");
+jest.dontMock('../../stores/MarathonStore');
+jest.dontMock('../../utils/MesosSummaryUtil');
+jest.dontMock('../../utils/StringUtil');
+jest.dontMock('../../utils/Util');
 
-let Node = require("../Node");
-let NodesList = require("../NodesList");
+let Node = require('../Node');
+let NodesList = require('../NodesList');
 
-describe("NodesList", function () {
+describe('NodesList', function () {
 
-  describe("#constructor", function () {
+  describe('#constructor', function () {
 
-    it("creates instances of Node", function () {
-      let items = [{foo: "bar"}];
+    it('creates instances of Node', function () {
+      let items = [{foo: 'bar'}];
       let list = new NodesList({items});
       items = list.getItems();
       expect(items[0] instanceof Node).toBeTruthy();
@@ -19,70 +19,70 @@ describe("NodesList", function () {
 
   });
 
-  describe("#filter", function () {
+  describe('#filter', function () {
 
-    it("returns unfiltered list", function () {
+    it('returns unfiltered list', function () {
       let items = [{a: 1}, {b: 2}];
       let list = new NodesList({items});
       expect(list.filter().getItems().length).toEqual(2);
     });
 
-    it("filters by ids", function () {
+    it('filters by ids', function () {
       let items = [
-        {id: 1, hostname: "foo"},
-        {id: 2, hostname: "bar"},
-        {id: "3", hostname: "baz"}
+        {id: 1, hostname: 'foo'},
+        {id: 2, hostname: 'bar'},
+        {id: '3', hostname: 'baz'}
       ];
       let list = new NodesList({items});
-      let filteredList = list.filter({ids: [2, "3"]}).getItems();
+      let filteredList = list.filter({ids: [2, '3']}).getItems();
       expect(filteredList.length).toEqual(2);
-      expect(filteredList[0].get("hostname")).toEqual("bar");
-      expect(filteredList[1].get("hostname")).toEqual("baz");
+      expect(filteredList[0].get('hostname')).toEqual('bar');
+      expect(filteredList[1].get('hostname')).toEqual('baz');
     });
 
-    it("filters by hostname", function () {
+    it('filters by hostname', function () {
       let items = [
-        {hostname: "foo"},
-        {hostname: "bar"},
-        {hostname: "baz"}
+        {hostname: 'foo'},
+        {hostname: 'bar'},
+        {hostname: 'baz'}
       ];
       let list = new NodesList({items});
-      let filteredList = list.filter({name: "ba"}).getItems();
+      let filteredList = list.filter({name: 'ba'}).getItems();
       expect(filteredList.length).toEqual(2);
-      expect(filteredList[0].get("hostname")).toEqual("bar");
-      expect(filteredList[1].get("hostname")).toEqual("baz");
+      expect(filteredList[0].get('hostname')).toEqual('bar');
+      expect(filteredList[1].get('hostname')).toEqual('baz');
     });
 
-    it("filters by service", function () {
+    it('filters by service', function () {
       let items = [
-        {hostname: "foo", framework_ids: [1, 2]},
-        {hostname: "bar", framework_ids: [3]},
-        {hostname: "baz", framework_ids: [2]}
+        {hostname: 'foo', framework_ids: [1, 2]},
+        {hostname: 'bar', framework_ids: [3]},
+        {hostname: 'baz', framework_ids: [2]}
       ];
       let list = new NodesList({items});
       let filteredList = list.filter({service: 2}).getItems();
       expect(filteredList.length).toEqual(2);
-      expect(filteredList[0].get("hostname")).toEqual("foo");
-      expect(filteredList[1].get("hostname")).toEqual("baz");
+      expect(filteredList[0].get('hostname')).toEqual('foo');
+      expect(filteredList[1].get('hostname')).toEqual('baz');
     });
 
   });
 
-  describe("#sumUsedResources", function () {
+  describe('#sumUsedResources', function () {
 
-    it("returns all resources as 0 when there's no services", function () {
+    it('returns all resources as 0 when there\'s no services', function () {
       let list = new NodesList();
       expect(list.sumUsedResources()).toEqual({cpus: 0, mem: 0, disk: 0});
     });
 
-    it("returns used resources when there's one service", function () {
+    it('returns used resources when there\'s one service', function () {
       let list = new NodesList({items: [
         {used_resources: {cpus: 1, mem: 3, disk: 1}}
       ]});
       expect(list.sumUsedResources()).toEqual({cpus: 1, mem: 3, disk: 1});
     });
 
-    it("sums used resources for services", function () {
+    it('sums used resources for services', function () {
       let list = new NodesList({items: [
         {used_resources: {cpus: 1, mem: 3, disk: 1}},
         {used_resources: {cpus: 1, mem: 3, disk: 1}}

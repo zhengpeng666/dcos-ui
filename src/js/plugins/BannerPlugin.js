@@ -1,15 +1,15 @@
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import IconInfo from "../components/icons/IconInfo";
-import DOMUtils from "../utils/DOMUtils";
+import IconInfo from '../components/icons/IconInfo';
+import DOMUtils from '../utils/DOMUtils';
 
 const BannerPlugin = {
 
   configuration: {
-    backgroundColor: "#1E232F",
-    foregroundColor: "#FFFFFF",
+    backgroundColor: '#1E232F',
+    foregroundColor: '#FFFFFF',
     headerTitle: null,
     headerContent: null,
     footerContent: null,
@@ -22,13 +22,13 @@ const BannerPlugin = {
    */
   initialize: function (Plugins) {
     Plugins.addAction(
-      "applicationRendered",
+      'applicationRendered',
       this.applicationRendered.bind(this)
     );
-    Plugins.addFilter("applicationContents",
+    Plugins.addFilter('applicationContents',
       this.applicationContents.bind(this)
     );
-    Plugins.addFilter("overlayNewWindowButton",
+    Plugins.addFilter('overlayNewWindowButton',
       this.overlayNewWindowButton.bind(this)
     );
   },
@@ -51,8 +51,8 @@ const BannerPlugin = {
   },
 
   toggleFullContent: function () {
-    let banner = document.querySelector(".banner-plugin-wrapper");
-    banner.classList.toggle("display-full");
+    let banner = document.querySelector('.banner-plugin-wrapper');
+    banner.classList.toggle('display-full');
   },
 
   applicationRendered: function () {
@@ -60,7 +60,7 @@ const BannerPlugin = {
       return;
     }
 
-    let frame = document.getElementById("banner-plugin-iframe");
+    let frame = document.getElementById('banner-plugin-iframe');
 
     if (frame == null) {
       return;
@@ -75,7 +75,7 @@ const BannerPlugin = {
     let frameWindow = frame.contentWindow;
     let topWindow = window;
 
-    frameWindow.addEventListener("hashchange", function () {
+    frameWindow.addEventListener('hashchange', function () {
       topWindow.location.hash = frameWindow.location.hash;
     });
   },
@@ -117,7 +117,7 @@ const BannerPlugin = {
   getIcon: function () {
     let imagePath = this.configuration.imagePath;
 
-    if (imagePath == null || imagePath === "") {
+    if (imagePath == null || imagePath === '') {
       return null;
     }
 
@@ -135,7 +135,7 @@ const BannerPlugin = {
   getTitle: function () {
     let title = this.configuration.headerTitle;
 
-    if (title == null || title === "") {
+    if (title == null || title === '') {
       return null;
     }
 
@@ -151,7 +151,7 @@ const BannerPlugin = {
   getHeaderContent: function () {
     let content = this.configuration.headerContent;
 
-    if (content == null || content === "") {
+    if (content == null || content === '') {
       return null;
     }
 
@@ -194,7 +194,7 @@ const BannerPlugin = {
   getFooter: function () {
     let content = this.configuration.footerContent;
 
-    if (content == null || content === "") {
+    if (content == null || content === '') {
       return null;
     }
 

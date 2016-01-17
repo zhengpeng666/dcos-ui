@@ -1,6 +1,6 @@
-var _ = require("underscore");
+var _ = require('underscore');
 
-var Tooltip = require("../vendor/tooltip");
+var Tooltip = require('../vendor/tooltip');
 
 var TooltipMixin = {
   componentDidMount: function () {
@@ -9,7 +9,7 @@ var TooltipMixin = {
     this.tip_attachTips();
 
     var container = this.getDOMNode();
-    container.addEventListener("mousemove", this.tip_handleContainerMouseMove);
+    container.addEventListener('mousemove', this.tip_handleContainerMouseMove);
   },
 
   componentDidUpdate: function () {
@@ -23,9 +23,9 @@ var TooltipMixin = {
   tip_handleContainerMouseMove: function (e) {
     var el = e.target;
 
-    if (el.dataset && el.dataset.behavior && el.dataset.behavior === "show-tip") {
+    if (el.dataset && el.dataset.behavior && el.dataset.behavior === 'show-tip') {
       this.tip_showTip(el);
-      el.addEventListener("mouseleave", this.tip_handleMouseLeave);
+      el.addEventListener('mouseleave', this.tip_handleMouseLeave);
     }
   },
 
@@ -36,7 +36,7 @@ var TooltipMixin = {
 
   tip_attachTips: function () {
     var container = this.getDOMNode();
-    var selected = container.querySelectorAll("[data-behavior~=show-tip]");
+    var selected = container.querySelectorAll('[data-behavior~=show-tip]');
     var el;
     var found = [];
     var newTips = [];
@@ -64,7 +64,7 @@ var TooltipMixin = {
 
   tip_createTipForElement: function (el) {
     if (el.dataset) {
-      el.dataset.tipID = _.uniqueId("tooltip");
+      el.dataset.tipID = _.uniqueId('tooltip');
       var options = {};
       if (el.dataset.tipPlace) {
         options.place = el.dataset.tipPlace;
@@ -99,7 +99,7 @@ var TooltipMixin = {
       this.tips[el.dataset.tipID].hide();
     }
 
-    el.removeEventListener("mouseleave", this.tip_handleMouseLeave);
+    el.removeEventListener('mouseleave', this.tip_handleMouseLeave);
   },
 
   tip_updateTipContent: function (el, content) {
@@ -114,7 +114,7 @@ var TooltipMixin = {
   tip_destroyTip: function (tipID) {
     // Allows us to create a new tip for the element.
     // Useful when the element has tooltip -> doesn't -> then has it again.
-    var el = this.getDOMNode().querySelector("[data-tip-i-d=" + tipID + "]");
+    var el = this.getDOMNode().querySelector(`[data-tip-i-d="${tipID}]`);
     if (el && el.dataset) {
       delete el.dataset.tipID;
     }

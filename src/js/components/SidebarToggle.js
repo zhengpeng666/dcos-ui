@@ -1,19 +1,19 @@
-var React = require("react");
+var React = require('react');
 
-var EventTypes = require("../constants/EventTypes");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var SidebarActions = require("../events/SidebarActions");
-var SidebarStore = require("../stores/SidebarStore");
+var EventTypes = require('../constants/EventTypes');
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
+var SidebarActions = require('../events/SidebarActions');
+var SidebarStore = require('../stores/SidebarStore');
 
 function getSidebarState() {
   return {
-    isOpen: SidebarStore.get("isOpen")
+    isOpen: SidebarStore.get('isOpen')
   };
 }
 
 var SidebarToggle = React.createClass({
 
-  displayName: "SidebarToggle",
+  displayName: 'SidebarToggle',
 
   mixins: [InternalStorageMixin],
 

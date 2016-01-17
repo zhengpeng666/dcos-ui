@@ -1,13 +1,13 @@
-import _ from "underscore";
-import classNames from "classnames";
-import React from "react";
-import {Table} from "reactjs-components";
+import _ from 'underscore';
+import classNames from 'classnames';
+import React from 'react';
+import {Table} from 'reactjs-components';
 
-import DateUtil from "../utils/DateUtil";
-import ResourceTableUtil from "../utils/ResourceTableUtil";
-import TaskDirectoryHeaderLabels from "../constants/TaskDirectoryHeaderLabels";
-import TaskDirectoryActions from "../events/TaskDirectoryActions";
-import Units from "../utils/Units";
+import DateUtil from '../utils/DateUtil';
+import ResourceTableUtil from '../utils/ResourceTableUtil';
+import TaskDirectoryHeaderLabels from '../constants/TaskDirectoryHeaderLabels';
+import TaskDirectoryActions from '../events/TaskDirectoryActions';
+import Units from '../utils/Units';
 
 function renderByProperty(prop, directoryItem) {
   return directoryItem.get(prop);
@@ -36,7 +36,7 @@ export default class TaskDirectoryTable extends React.Component {
           className="emphasize"
           href={TaskDirectoryActions.getDownloadURL(
             this.props.nodeID,
-            directoryItem.get("path")
+            directoryItem.get('path')
           )}>
           {value}
         </a>
@@ -44,9 +44,9 @@ export default class TaskDirectoryTable extends React.Component {
     }
 
     let iconClass = classNames({
-      "icon icon-sprite icon-sprite-mini": true,
-      "icon-file": !directoryItem.isDirectory(),
-      "icon-directory": directoryItem.isDirectory()
+      'icon icon-sprite icon-sprite-mini': true,
+      'icon-file': !directoryItem.isDirectory(),
+      'icon-directory': directoryItem.isDirectory()
     });
 
     return (
@@ -79,12 +79,12 @@ export default class TaskDirectoryTable extends React.Component {
 
   getClassName(prop, sortBy, row) {
     let isHeader = row == null;
-    let propsToRight = ["uid", "size", "mtime"];
+    let propsToRight = ['uid', 'size', 'mtime'];
 
     return classNames({
-      "text-align-right": _.contains(propsToRight, prop),
-      "highlight": prop === sortBy.prop && isHeader,
-      "clickable": isHeader
+      'text-align-right': _.contains(propsToRight, prop),
+      'highlight': prop === sortBy.prop && isHeader,
+      'clickable': isHeader
     });
   }
 
@@ -95,7 +95,7 @@ export default class TaskDirectoryTable extends React.Component {
         let bIsDirectory = b.isDirectory();
 
         if (aIsDirectory && !bIsDirectory) {
-          if (order === "desc") {
+          if (order === 'desc') {
             return 1;
           }
 
@@ -103,7 +103,7 @@ export default class TaskDirectoryTable extends React.Component {
         }
 
         if (!aIsDirectory && bIsDirectory) {
-          if (order === "desc") {
+          if (order === 'desc') {
             return -1;
           }
 
@@ -118,16 +118,16 @@ export default class TaskDirectoryTable extends React.Component {
   getColumns() {
     let className = this.getClassName;
     let heading = ResourceTableUtil.renderHeading(TaskDirectoryHeaderLabels);
-    let propSortFunction = ResourceTableUtil.getPropSortFunction("path");
+    let propSortFunction = ResourceTableUtil.getPropSortFunction('path');
     let statSortFunction = ResourceTableUtil.getStatSortFunction(
-      "path",
+      'path',
       function (directoryItem, resource) {
         return directoryItem.get(resource);
       }
     );
 
-    propSortFunction = this.getDirectorySortFunction("path", propSortFunction);
-    statSortFunction = this.getDirectorySortFunction("path", statSortFunction);
+    propSortFunction = this.getDirectorySortFunction('path', propSortFunction);
+    statSortFunction = this.getDirectorySortFunction('path', statSortFunction);
 
     let defaultColumnSettings = {
       className,
@@ -140,25 +140,25 @@ export default class TaskDirectoryTable extends React.Component {
 
     return [
       {
-        prop: "path",
+        prop: 'path',
         render: this.renderHeadline.bind(this)
       },
       {
-        prop: "mode",
+        prop: 'mode',
         render: renderByProperty
       },
       {
-        prop: "uid",
+        prop: 'uid',
         render: renderByProperty
       },
       {
-        prop: "size",
+        prop: 'size',
         render: this.renderStats,
         sortFunction: statSortFunction
       },
       {
         dontCache: true,
-        prop: "mtime",
+        prop: 'mtime',
         render: this.renderDate,
         sortFunction: statSortFunction
       }
@@ -171,10 +171,10 @@ export default class TaskDirectoryTable extends React.Component {
     return (
       <colgroup>
         <col />
-        <col style={{width: "150px"}}/>
-        <col style={{width: "110px"}}/>
-        <col style={{width: "100px"}}/>
-        <col style={{width: "125px"}}/>
+        <col style={{width: '150px'}}/>
+        <col style={{width: '110px'}}/>
+        <col style={{width: '100px'}}/>
+        <col style={{width: '125px'}}/>
       </colgroup>
     );
   }
@@ -191,7 +191,7 @@ export default class TaskDirectoryTable extends React.Component {
         containerSelector=".gm-scroll-view"
         data={this.props.files}
         idAttribute="path"
-        sortBy={{prop: "path", order: "desc"}}
+        sortBy={{prop: 'path', order: 'desc'}}
         transition={false} />
     );
   }

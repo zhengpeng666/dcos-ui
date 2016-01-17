@@ -1,12 +1,12 @@
-jest.dontMock("../Authenticated");
-jest.dontMock("../../../../mixins/GetSetMixin");
-jest.dontMock("../../../../stores/ACLAuthStore");
+jest.dontMock('../Authenticated');
+jest.dontMock('../../../../mixins/GetSetMixin');
+jest.dontMock('../../../../stores/ACLAuthStore');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var Authenticated = require("../Authenticated");
-var ACLAuthStore = require("../../../../stores/ACLAuthStore");
+var Authenticated = require('../Authenticated');
+var ACLAuthStore = require('../../../../stores/ACLAuthStore');
 
 class FakeComponent extends React.Component {
   render() {
@@ -14,7 +14,7 @@ class FakeComponent extends React.Component {
   }
 }
 
-describe("Authenticated", function () {
+describe('Authenticated', function () {
   beforeEach(function () {
     this.originalWillTransitionTo = Authenticated.willTransitionTo;
     this.originalIsLoggedIn = ACLAuthStore.isLoggedIn;
@@ -31,15 +31,15 @@ describe("Authenticated", function () {
     ACLAuthStore.isLoggedIn = this.originalIsLoggedIn;
   });
 
-  it("should reditect to /login if user is not logged in", function () {
+  it('should reditect to /login if user is not logged in', function () {
     this.callback = jasmine.createSpy();
     this.instance.willTransitionTo({
       redirect: this.callback
     });
-    expect(this.callback).toHaveBeenCalledWith("/login");
+    expect(this.callback).toHaveBeenCalledWith('/login');
   });
 
-  it("shouldn't call redirect when user is not logged in", function () {
+  it('shouldn\'t call redirect when user is not logged in', function () {
     ACLAuthStore.isLoggedIn = function () {
       return true;
     };
@@ -50,11 +50,11 @@ describe("Authenticated", function () {
     expect(this.callback).not.toHaveBeenCalled();
   });
 
-  it("should render component when user is logged in", function () {
+  it('should render component when user is logged in', function () {
     var renderedComponent = TestUtils.renderIntoDocument(<this.instance />);
     var component =
-      TestUtils.findRenderedDOMComponentWithTag(renderedComponent, "div");
-    expect(component.getDOMNode().textContent).toBe("fakeComponent");
+      TestUtils.findRenderedDOMComponentWithTag(renderedComponent, 'div');
+    expect(component.getDOMNode().textContent).toBe('fakeComponent');
   });
 
 });

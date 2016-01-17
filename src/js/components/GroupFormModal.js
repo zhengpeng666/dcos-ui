@@ -1,16 +1,16 @@
-import mixin from "reactjs-mixin";
+import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React from 'react';
 /* eslint-enable no-unused-vars */
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLGroupStore from "../stores/ACLGroupStore";
-import FormModal from "./FormModal";
+import ACLGroupStore from '../stores/ACLGroupStore';
+import FormModal from './FormModal';
 
 const METHODS_TO_BIND = [
-  "handleNewGroupSubmit",
-  "onGroupStoreCreateSuccess",
-  "onGroupStoreCreateError"
+  'handleNewGroupSubmit',
+  'onGroupStoreCreateSuccess',
+  'onGroupStoreCreateError'
 ];
 
 export default class GroupFormModal extends mixin(StoreMixin) {
@@ -24,8 +24,8 @@ export default class GroupFormModal extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "group",
-        events: ["createSuccess", "createError"]
+        name: 'group',
+        events: ['createSuccess', 'createError']
       }
     ];
 
@@ -54,15 +54,15 @@ export default class GroupFormModal extends mixin(StoreMixin) {
   getNewGroupFormDefinition() {
     return [
       {
-        fieldType: "text",
-        name: "description",
-        placeholder: "Group name",
+        fieldType: 'text',
+        name: 'description',
+        placeholder: 'Group name',
         required: true,
         showError: this.state.errorMsg,
         showLabel: false,
-        writeType: "input",
+        writeType: 'input',
         validation: function () { return true; },
-        value: ""
+        value: ''
       }
     ];
   }

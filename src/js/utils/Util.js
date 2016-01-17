@@ -4,7 +4,7 @@ const Util = {
    * @return {Boolean} returns whether given arg is an array or not
    */
   isArray: function (arg) {
-    return Object.prototype.toString.call(arg) === "[object Array]";
+    return Object.prototype.toString.call(arg) === '[object Array]';
   },
 
   getLocaleCompareSortFn: function (prop) {

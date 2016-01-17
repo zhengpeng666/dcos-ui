@@ -1,14 +1,14 @@
-var _ = require("underscore");
-import {Store} from "mesosphere-shared-reactjs";
+var _ = require('underscore');
+import {Store} from 'mesosphere-shared-reactjs';
 
-var AppDispatcher = require("../events/AppDispatcher");
-var ActionTypes = require("../constants/ActionTypes");
-var Config = require("../config/Config");
-var EventTypes = require("../constants/EventTypes");
-var GetSetMixin = require("../mixins/GetSetMixin");
-var HealthStatus = require("../constants/HealthStatus");
-var MarathonActions = require("../events/MarathonActions");
-var ServiceImages = require("../constants/ServiceImages");
+var AppDispatcher = require('../events/AppDispatcher');
+var ActionTypes = require('../constants/ActionTypes');
+var Config = require('../config/Config');
+var EventTypes = require('../constants/EventTypes');
+var GetSetMixin = require('../mixins/GetSetMixin');
+var HealthStatus = require('../constants/HealthStatus');
+var MarathonActions = require('../events/MarathonActions');
+var ServiceImages = require('../constants/ServiceImages');
 
 var requestInterval = null;
 
@@ -29,7 +29,7 @@ function stopPolling() {
 }
 
 var MarathonStore = Store.createStore({
-  storeID: "marathon",
+  storeID: 'marathon',
 
   mixins: [GetSetMixin],
 
@@ -54,7 +54,7 @@ var MarathonStore = Store.createStore({
   },
 
   hasProcessedApps: function () {
-    return !!Object.keys(this.get("apps")).length;
+    return !!Object.keys(this.get('apps')).length;
   },
 
   getFrameworkHealth: function (app) {
@@ -74,7 +74,7 @@ var MarathonStore = Store.createStore({
 
   getServiceHealth: function (name) {
     let appName = name.toLowerCase();
-    let marathonApps = this.get("apps");
+    let marathonApps = this.get('apps');
 
     if (!marathonApps[appName]) {
       return HealthStatus.NA;
@@ -86,7 +86,7 @@ var MarathonStore = Store.createStore({
   getServiceImages: function (name) {
     let appName = name.toLowerCase();
     let appImages = null;
-    let marathonApps = this.get("apps");
+    let marathonApps = this.get('apps');
 
     if (marathonApps[appName]) {
       appImages = marathonApps[appName].images;
@@ -98,7 +98,7 @@ var MarathonStore = Store.createStore({
   getServiceInstalledTime: function (name) {
     let appName = name.toLowerCase();
     let appInstalledTime = null;
-    let marathonApps = this.get("apps");
+    let marathonApps = this.get('apps');
 
     if (marathonApps[appName]) {
       appInstalledTime = marathonApps[appName].snapshot.version;
@@ -109,7 +109,7 @@ var MarathonStore = Store.createStore({
 
   getServiceVersion: function (name) {
     let appName = name.toLowerCase();
-    let marathonApps = this.get("apps");
+    let marathonApps = this.get('apps');
 
     if (marathonApps[appName]) {
       return this.getVersion(marathonApps[appName].snapshot);
@@ -137,9 +137,9 @@ var MarathonStore = Store.createStore({
 
     var metadata = this.parseMetadata(app.labels.DCOS_PACKAGE_METADATA);
 
-    if (this.getImageSizeFromMetadata(metadata, "small") == null ||
-        this.getImageSizeFromMetadata(metadata, "medium") == null ||
-        this.getImageSizeFromMetadata(metadata, "large") == null) {
+    if (this.getImageSizeFromMetadata(metadata, 'small') == null ||
+        this.getImageSizeFromMetadata(metadata, 'medium') == null ||
+        this.getImageSizeFromMetadata(metadata, 'large') == null) {
       return ServiceImages.NA_IMAGES;
     }
 
@@ -157,7 +157,7 @@ var MarathonStore = Store.createStore({
   },
 
   getServiceFromName: function (name) {
-    return this.get("apps")[name];
+    return this.get('apps')[name];
   },
 
   processMarathonApps: function (data) {
@@ -182,9 +182,9 @@ var MarathonStore = Store.createStore({
     }, this);
 
     // Specific health check for Marathon
-    // We are setting the "marathon" key here, since we can safely assume,
-    // it to be "marathon" (we control it).
-    // This means that no other framework should be named "marathon".
+    // We are setting the 'marathon' key here, since we can safely assume,
+    // it to be 'marathon' (we control it).
+    // This means that no other framework should be named 'marathon'.
     apps.marathon = {
       health: this.getFrameworkHealth({
         // Make sure health check has a result
@@ -198,7 +198,7 @@ var MarathonStore = Store.createStore({
 
     this.set({apps});
 
-    this.emit(EventTypes.MARATHON_APPS_CHANGE, this.get("apps"));
+    this.emit(EventTypes.MARATHON_APPS_CHANGE, this.get('apps'));
   },
 
   processMarathonAppsError: function () {

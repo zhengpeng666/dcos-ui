@@ -1,25 +1,25 @@
-import {Confirm, Dropdown} from "reactjs-components";
-import mixin from "reactjs-mixin";
+import {Confirm, Dropdown} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLStore from "../stores/ACLStore";
-import Item from "../structs/Item";
-import PermissionsTable from "./PermissionsTable";
-import RequestErrorMsg from "./RequestErrorMsg";
-import StringUtil from "../utils/StringUtil";
-import Util from "../utils/Util";
+import ACLStore from '../stores/ACLStore';
+import Item from '../structs/Item';
+import PermissionsTable from './PermissionsTable';
+import RequestErrorMsg from './RequestErrorMsg';
+import StringUtil from '../utils/StringUtil';
+import Util from '../utils/Util';
 
 const METHODS_TO_BIND = [
-  "handleResourceSelection",
-  "handleDismissError",
-  "onAclStoreError",
-  "onAclStoreSuccess"
+  'handleResourceSelection',
+  'handleDismissError',
+  'onAclStoreError',
+  'onAclStoreSuccess'
 ];
 
-const DEFAULT_ID = "DEFAULT";
+const DEFAULT_ID = 'DEFAULT';
 
 export default class PermissionsView extends mixin(StoreMixin) {
   constructor() {
@@ -39,10 +39,10 @@ export default class PermissionsView extends mixin(StoreMixin) {
     let itemType = this.props.itemType;
 
     this.store_listeners = [{
-      name: "acl",
+      name: 'acl',
       events: [
-        "success",
-        "error",
+        'success',
+        'error',
         `${itemType}GrantSuccess`,
         `${itemType}GrantError`
       ]
@@ -59,7 +59,7 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount();
-    ACLStore.fetchACLsForResource("services");
+    ACLStore.fetchACLsForResource('services');
   }
 
   onAclStoreSuccess() {
@@ -76,10 +76,10 @@ export default class PermissionsView extends mixin(StoreMixin) {
     let props = this.props;
     let itemID = triple[`${props.itemType}ID`];
     if (itemID === props.itemID) {
-      let resource = ACLStore.get("services").getItem(triple.resourceID);
+      let resource = ACLStore.get('services').getItem(triple.resourceID);
 
       this.setState({
-        resourceErrorMessage: `Could not grant ${props.itemType} ${itemID} ${triple.action} to ${resource.get("description")}`
+        resourceErrorMessage: `Could not grant ${props.itemType} ${itemID} ${triple.action} to ${resource.get('description')}`
       });
     }
   }
@@ -102,7 +102,7 @@ export default class PermissionsView extends mixin(StoreMixin) {
     // Fire request for item type
     ACLStore[`grant${itemType}ActionToResource`](
       this.props.itemID,
-      "access",
+      'access',
       resource.id
     );
   }
@@ -135,12 +135,12 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
   getDropdownItems() {
     let permissions = this.props.permissions;
-    let services = ACLStore.get("services").getItems().sort(
-      Util.getLocaleCompareSortFn("description")
+    let services = ACLStore.get('services').getItems().sort(
+      Util.getLocaleCompareSortFn('description')
     );
     let filteredResources = services.filter(function (resource) {
         // Filter out any resource which is in permissions
-        let rid = resource.get("rid");
+        let rid = resource.get('rid');
         return !permissions.some(function (permission) {
           return permission.rid === rid;
         });
@@ -148,14 +148,14 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
     let items = [new Item({
       rid: DEFAULT_ID,
-      description: "Add Service"
+      description: 'Add Service'
     })].concat(filteredResources);
 
     return items.map(function (resource) {
-      let description = resource.get("description");
+      let description = resource.get('description');
 
       return {
-        id: resource.get("rid"),
+        id: resource.get('rid'),
         description,
         html: description
       };

@@ -1,9 +1,9 @@
-import _ from "underscore";
+import _ from 'underscore';
 
-import ActionTypes from "../constants/ActionTypes";
-import AppDispatcher from "./AppDispatcher";
-import Config from "../config/Config";
-import RequestUtil from "../utils/RequestUtil";
+import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from './AppDispatcher';
+import Config from '../config/Config';
+import RequestUtil from '../utils/RequestUtil';
 
 const ACLUsersActions = {
 
@@ -86,15 +86,15 @@ const ACLUsersActions = {
 
   addUser: function (data) {
     let userID = data.uid;
-    data = _.omit(data, "uid");
+    data = _.omit(data, 'uid');
 
     if (!userID && data.description) {
-      userID = data.description.replace(/\s+/g, "").toLowerCase();
+      userID = data.description.replace(/\s+/g, '').toLowerCase();
     }
 
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
-      method: "PUT",
+      method: 'PUT',
       data,
       success: function () {
         AppDispatcher.handleServerAction({
@@ -115,7 +115,7 @@ const ACLUsersActions = {
   updateUser: function (userID, patchData) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
-      method: "PATCH",
+      method: 'PATCH',
       data: patchData,
       success: function () {
         AppDispatcher.handleServerAction({
@@ -136,7 +136,7 @@ const ACLUsersActions = {
   deleteUser: function (userID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
-      method: "DELETE",
+      method: 'DELETE',
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS,
@@ -156,32 +156,32 @@ const ACLUsersActions = {
 };
 
 if (Config.useFixtures) {
-  let userFixture = require("json!../../../tests/_fixtures/acl/user-unicode.json");
-  let usersFixture = require("json!../../../tests/_fixtures/acl/users-unicode.json");
+  let userFixture = require('json!../../../tests/_fixtures/acl/user-unicode.json');
+  let usersFixture = require('json!../../../tests/_fixtures/acl/users-unicode.json');
   let userDetailsFixture =
-    require("json!../../../tests/_fixtures/acl/user-with-details.json");
+    require('json!../../../tests/_fixtures/acl/user-with-details.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};
   }
 
   global.actionTypes.ACLUsersActions = {
-    fetch: {event: "success", success: {response: usersFixture}},
-    fetchUser: {event: "success", success: {response: userFixture}},
-    fetchUserGroups: {event: "success", success: {
+    fetch: {event: 'success', success: {response: usersFixture}},
+    fetchUser: {event: 'success', success: {response: userFixture}},
+    fetchUserGroups: {event: 'success', success: {
       response: userDetailsFixture.groups
     }},
-    fetchUserPermissions: {event: "success", success: {
+    fetchUserPermissions: {event: 'success', success: {
       response: userDetailsFixture.permissions
     }},
-    addUser: {event: "success"},
-    updateUser: {event: "success"},
-    deleteUser: {event: "success"}
+    addUser: {event: 'success'},
+    updateUser: {event: 'success'},
+    deleteUser: {event: 'success'}
   };
 
   Object.keys(global.actionTypes.ACLUsersActions).forEach(function (method) {
     ACLUsersActions[method] = RequestUtil.stubRequest(
-      ACLUsersActions, "ACLUsersActions", method
+      ACLUsersActions, 'ACLUsersActions', method
     );
   });
 }

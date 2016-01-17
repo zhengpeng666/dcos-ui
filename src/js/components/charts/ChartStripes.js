@@ -1,9 +1,9 @@
-var _ = require("underscore");
-var React = require("react/addons");
+var _ = require('underscore');
+var React = require('react/addons');
 
 var ChartStripes = React.createClass({
 
-  displayName: "ChartStripes",
+  displayName: 'ChartStripes',
 
   propTypes: {
     count: React.PropTypes.number.isRequired,
@@ -23,7 +23,7 @@ var ChartStripes = React.createClass({
       return (
         <rect key={i}
           className="background"
-          x={position + "px"}
+          x={position + 'px'}
           y={0}
           height={props.height}
           width={width} />
