@@ -94,7 +94,7 @@ const ACLUsersActions = {
 
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
-      type: "PUT",
+      method: "PUT",
       data,
       success: function () {
         AppDispatcher.handleServerAction({
@@ -115,7 +115,7 @@ const ACLUsersActions = {
   updateUser: function (userID, patchData) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
-      type: "PATCH",
+      method: "PATCH",
       data: patchData,
       success: function () {
         AppDispatcher.handleServerAction({
@@ -136,7 +136,7 @@ const ACLUsersActions = {
   deleteUser: function (userID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
-      type: "DELETE",
+      method: "DELETE",
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS,

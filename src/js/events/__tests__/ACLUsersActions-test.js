@@ -270,7 +270,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("uses PUT for the request method", function () {
-      expect(this.configuration.type).toEqual("PUT");
+      expect(this.configuration.method).toEqual("PUT");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -344,7 +344,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("uses PATCH for the request method", function () {
-      expect(this.configuration.type).toEqual("PATCH");
+      expect(this.configuration.method).toEqual("PATCH");
     });
 
     it("dispatches the correct action when successful", function () {
@@ -418,7 +418,7 @@ describe("ACLUsersActions", function () {
     });
 
     it("uses DELETE for the request method", function () {
-      expect(this.configuration.type).toEqual("DELETE");
+      expect(this.configuration.method).toEqual("DELETE");
     });
 
     it("dispatches the correct action when successful", function () {

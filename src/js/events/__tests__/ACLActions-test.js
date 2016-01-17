@@ -119,7 +119,7 @@ describe("ACLActions", function () {
       spyOn(RequestUtil, "json");
       ACLActions.grantUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
-      expect(requestArgs.type).toEqual("PUT");
+      expect(requestArgs.method).toEqual("PUT");
     });
 
   });
@@ -171,7 +171,7 @@ describe("ACLActions", function () {
       spyOn(RequestUtil, "json");
       ACLActions.revokeUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
-      expect(requestArgs.type).toEqual("DELETE");
+      expect(requestArgs.method).toEqual("DELETE");
     });
 
   });
@@ -223,7 +223,7 @@ describe("ACLActions", function () {
       spyOn(RequestUtil, "json");
       ACLActions.grantGroupActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
-      expect(requestArgs.type).toEqual("PUT");
+      expect(requestArgs.method).toEqual("PUT");
     });
 
   });
@@ -275,7 +275,7 @@ describe("ACLActions", function () {
       spyOn(RequestUtil, "json");
       ACLActions.revokeUserActionToResource("foo", "access", "bar");
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
-      expect(requestArgs.type).toEqual("DELETE");
+      expect(requestArgs.method).toEqual("DELETE");
     });
 
   });

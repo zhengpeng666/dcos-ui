@@ -68,10 +68,8 @@ export default class FormModal extends React.Component {
 
   getFooter() {
     return (
-      <div className="container container-pod container-pod-short">
-        <div className="button-collection text-align-center flush-bottom">
-          {this.getButtons()}
-        </div>
+      <div className="button-collection text-align-center flush-bottom">
+        {this.getButtons()}
       </div>
     );
   }
