@@ -10,7 +10,7 @@ import FilterHeadline from "../../components/FilterHeadline";
 import FilterInputText from "../../components/FilterInputText";
 import FormUtil from "../../utils/FormUtil";
 import InternalStorageMixin from "../../mixins/InternalStorageMixin";
-import OrganizationActions from "../../constants/OrganizationActions";
+import BulkOptions from "../../constants/BulkOptions";
 import ResourceTableUtil from "../../utils/ResourceTableUtil";
 import StringUtil from "../../utils/StringUtil";
 import TableUtil from "../../utils/TableUtil";
@@ -229,7 +229,7 @@ export default class OrganizationTab extends React.Component {
       return null;
     }
 
-    let actionPhrases = {};
+    let actionPhrases = BulkOptions[itemName];
     let initialID = null;
 
     if (itemName === "user") {
@@ -337,7 +337,7 @@ export default class OrganizationTab extends React.Component {
             {actionDropdown}
             <ActionsModal
               action={state.selectedAction}
-              actionText={OrganizationActions[itemName][state.selectedAction]}
+              actionText={BulkOptions[itemName][state.selectedAction]}
               itemID={props.itemID}
               itemType={props.itemName}
               onClose={this.handleActionSelectionClose}
