@@ -5,12 +5,15 @@ import {Link} from "react-router";
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import FilterHeadline from '../../components/FilterHeadline';
-import FilterInputText from '../../components/FilterInputText';
-import FormUtil from '../../utils/FormUtil';
-import ResourceTableUtil from '../../utils/ResourceTableUtil';
-import StringUtil from '../../utils/StringUtil';
-import TableUtil from '../../utils/TableUtil';
+import ActionsModal from "../../components/modals/ActionsModal";
+import FilterHeadline from "../../components/FilterHeadline";
+import FilterInputText from "../../components/FilterInputText";
+import FormUtil from "../../utils/FormUtil";
+import InternalStorageMixin from "../../mixins/InternalStorageMixin";
+import OrganizationActions from "../../constants/OrganizationActions";
+import ResourceTableUtil from "../../utils/ResourceTableUtil";
+import StringUtil from "../../utils/StringUtil";
+import TableUtil from "../../utils/TableUtil";
 
 const METHODS_TO_BIND = [
   'handleActionSelection',
@@ -37,6 +40,27 @@ export default class OrganizationTab extends React.Component {
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
     }, this);
+
+    this.internalStorage_update({selectedIDSet: {}});
+  }
+
+  componentWillMount() {
+    let selectedIDSet = {};
+    let props = this.props;
+
+    // Initializing hash of items' IDs and corresponding checkbox state.
+    let itemIDs = _.pluck(props.items, props.itemID);
+    itemIDs.forEach(function (id) {
+      selectedIDSet[id] = false;
+    });
+
+    this.internalStorage_update({selectedIDSet});
+  }
+
+  handleActionSelection(dropdownItem) {
+    this.setState({
+      selectedAction: dropdownItem.id
+    });
   }
 
   handleActionSelection(action) {
@@ -46,6 +70,10 @@ export default class OrganizationTab extends React.Component {
   handleCheckboxChange(checkboxState) {
     let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
     let checkedCount = this.state.checkedCount + (isChecked || -1);
+    let selectedIDSet = this.internalStorage_get().selectedIDSet;
+
+    selectedIDSet[FormUtil.getRowName(checkboxState)] = isChecked;
+    this.internalStorage_update({selectedIDSet});
 
     this.setState({
       checkedCount,
@@ -55,6 +83,12 @@ export default class OrganizationTab extends React.Component {
 
   handleHeadingCheckboxChange(checkboxState) {
     let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
+    let selectedIDSet = this.internalStorage_get().selectedIDSet;
+
+    selectedIDSet.forEach(function (checked, id) {
+      selectedIDSet[id] = isChecked;
+    });
+    this.internalStorage_update({selectedIDSet});
 
     if (isChecked) {
       this.setState({
@@ -210,6 +244,7 @@ export default class OrganizationTab extends React.Component {
       };
     }
 
+    // Get first Action to set as initially selected option in dropdown.
     initialID = _.reduce(actionPhrases, function (initial, value, key) {
       return initial || key;
     }, null);
@@ -237,6 +272,26 @@ export default class OrganizationTab extends React.Component {
         selectedHtml: "Actions"
       };
     });
+  }
+
+  getCheckedItemObjects(items, itemIDName) {
+    if (this.state.selectedAction) {
+      let checkboxStates = this.internalStorage_get().selectedIDSet;
+      let selectedItems = {};
+
+      _.each(checkboxStates, function (isChecked, id) {
+        if (isChecked) {
+          selectedItems[id] = true;
+        }
+      });
+
+      return _.filter(items, function (item) {
+        let itemID = item[itemIDName];
+        return selectedItems[itemID] || false;
+      });
+    } else {
+      return null;
+    }
   }
 
   getVisibleItems(items) {
@@ -282,6 +337,13 @@ export default class OrganizationTab extends React.Component {
                 inverseStyle={true} />
             </li>
             {actionDropdown}
+            <ActionsModal
+              action={state.selectedAction}
+              actionText={OrganizationActions[itemName][state.selectedAction]}
+              itemID={props.itemID}
+              itemType={props.itemName}
+              onClose={this.handleActionSelectionClose}
+              selectedItems={checkedItemObjects} />
             <li className="button-collection list-item-aligned-right">
               <a
                 className="button button-success"

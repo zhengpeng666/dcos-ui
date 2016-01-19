@@ -6,10 +6,10 @@ import React from "react";
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from "mesosphere-shared-reactjs";
 
-import ACLGroupStore from "../stores/ACLGroupStore";
-import ACLGroupsStore from "../stores/ACLGroupsStore";
-import StringUtil from "../utils/StringUtil";
-import Util from "../utils/Util";
+import ACLGroupStore from "../../stores/ACLGroupStore";
+import ACLGroupsStore from "../../stores/ACLGroupsStore";
+import StringUtil from "../../utils/StringUtil";
+import Util from "../../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleButtonCancel",
@@ -183,7 +183,7 @@ export default class ActionsModal extends mixin(StoreMixin) {
       // TODO
     }
 
-    dropdownItems = _.map(items, function (itemInfo) {
+    dropdownItems = items.map(function (itemInfo) {
       return {
         html: itemInfo.description,
         id: itemInfo[itemID],
@@ -206,7 +206,7 @@ export default class ActionsModal extends mixin(StoreMixin) {
 
   getRequestErrorMessage(errors) {
     if (errors.length > 0) {
-      let errorMessages = _.map(errors, function (error, index) {
+      let errorMessages = errors.map(function (error, index) {
         return (
           <p className="text-error-state" key={index}>{error}</p>
         );
@@ -237,17 +237,17 @@ export default class ActionsModal extends mixin(StoreMixin) {
     if (selectedItem === null) {
       this.setState({validationError: "Select from dropdown."});
     } else {
-      let {action, itemId, itemType, selectedItems} = this.props;
-      let itemsById = _.pluck(selectedItems, itemId);
+      let {action, itemID, itemType, selectedItems} = this.props;
+      let itemsByID = _.pluck(selectedItems, itemID);
 
       if (itemType === "user") {
 
         if (action === "add") {
-          _.each(itemsById, function (userId) {
+          itemsByID.each(function (userId) {
             ACLGroupStore.addUser(selectedItem.id, userId);
           });
         } else if (action === "remove") {
-          _.each(itemsById, function (userId) {
+          itemsByID.each(function (userId) {
             ACLGroupStore.deleteUser(selectedItem.id, userId);
           });
         }
@@ -287,10 +287,15 @@ export default class ActionsModal extends mixin(StoreMixin) {
   }
 }
 
+ActionsModal.defaultProps = {
+  action: null,
+  actionText: null
+};
+
 ActionsModal.propTypes = {
   action: React.PropTypes.string,
   actionText: React.PropTypes.object,
-  itemId: React.PropTypes.string.isRequired,
+  itemID: React.PropTypes.string.isRequired,
   itemType: React.PropTypes.string.isRequired,
   onClose: React.PropTypes.func.isRequired,
   selectedItems: React.PropTypes.array.isRequired
