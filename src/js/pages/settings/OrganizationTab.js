@@ -216,16 +216,16 @@ export default class OrganizationTab extends React.Component {
 
     return (
       <Dropdown
-      buttonClassName="button button-inverse dropdown-toggle"
-      dropdownMenuClassName="dropdown-menu inverse"
-      dropdownMenuListClassName="dropdown-menu-list"
-      dropdownMenuListItemClassName="clickable"
-      initialID={initialID}
-      items={this.getActionsDropdownItems(actionPhrases)}
-      onItemSelection={this.handleActionSelection}
-      transition={true}
-      transitionName="dropdown-menu"
-      wrapperClassName="dropdown" />
+        buttonClassName="button button-inverse dropdown-toggle"
+        dropdownMenuClassName="dropdown-menu inverse"
+        dropdownMenuListClassName="dropdown-menu-list"
+        dropdownMenuListItemClassName="clickable"
+        initialID={initialID}
+        items={this.getActionsDropdownItems(actionPhrases)}
+        onItemSelection={this.handleActionSelection}
+        transition={true}
+        transitionName="dropdown-menu"
+        wrapperClassName="dropdown" />
     );
   }
 
