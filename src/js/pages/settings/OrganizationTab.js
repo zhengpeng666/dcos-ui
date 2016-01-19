@@ -85,7 +85,7 @@ export default class OrganizationTab extends React.Component {
     let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
     let selectedIDSet = this.internalStorage_get().selectedIDSet;
 
-    selectedIDSet.forEach(function (checked, id) {
+    _.each(selectedIDSet, function (checked, id) {
       selectedIDSet[id] = isChecked;
     });
     this.internalStorage_update({selectedIDSet});
@@ -245,9 +245,7 @@ export default class OrganizationTab extends React.Component {
     }
 
     // Get first Action to set as initially selected option in dropdown.
-    initialID = _.reduce(actionPhrases, function (initial, value, key) {
-      return initial || key;
-    }, null);
+    initialID = Object.keys(actionPhrases)[0] || null;
 
     return (
       <Dropdown

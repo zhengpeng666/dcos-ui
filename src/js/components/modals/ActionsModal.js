@@ -243,11 +243,11 @@ export default class ActionsModal extends mixin(StoreMixin) {
       if (itemType === "user") {
 
         if (action === "add") {
-          itemsByID.each(function (userId) {
+          itemsByID.forEach(function (userId) {
             ACLGroupStore.addUser(selectedItem.id, userId);
           });
         } else if (action === "remove") {
-          itemsByID.each(function (userId) {
+          itemsByID.forEach(function (userId) {
             ACLGroupStore.deleteUser(selectedItem.id, userId);
           });
         }
