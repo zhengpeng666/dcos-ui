@@ -13,8 +13,8 @@ import StringUtil from '../../utils/StringUtil';
 import TableUtil from '../../utils/TableUtil';
 
 const METHODS_TO_BIND = [
-  'getActionDropdown',
   'handleActionSelection',
+  'handleActionSelectionClose',
   'handleCheckboxChange',
   'handleHeadingCheckboxChange',
   'handleSearchStringChange',
