@@ -85,7 +85,7 @@ export default class OrganizationTab extends React.Component {
     let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
     let selectedIDSet = this.internalStorage_get().selectedIDSet;
 
-    _.each(selectedIDSet, function (checked, id) {
+    Object.keys(selectedIDSet).forEach(function (id) {
       selectedIDSet[id] = isChecked;
     });
     this.internalStorage_update({selectedIDSet});
@@ -263,9 +263,9 @@ export default class OrganizationTab extends React.Component {
   }
 
   getActionsDropdownItems(actionPhrases) {
-    return _.map(actionPhrases, function (phrase, action) {
+    return Object.keys(actionPhrases).map(function (action) {
       return {
-        html: `${StringUtil.capitalize(action)} ${phrase}`,
+        html: actionPhrases[action].dropdownOption,
         id: action,
         selectedHtml: "Actions"
       };
@@ -277,8 +277,8 @@ export default class OrganizationTab extends React.Component {
       let checkboxStates = this.internalStorage_get().selectedIDSet;
       let selectedItems = {};
 
-      _.each(checkboxStates, function (isChecked, id) {
-        if (isChecked) {
+      Object.keys(checkboxStates).forEach(function (id) {
+        if (checkboxStates[id] === true) {
           selectedItems[id] = true;
         }
       });
