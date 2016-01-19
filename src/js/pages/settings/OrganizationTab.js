@@ -248,17 +248,19 @@ export default class OrganizationTab extends React.Component {
     initialID = Object.keys(actionPhrases)[0] || null;
 
     return (
-      <Dropdown
-        buttonClassName="button button-inverse dropdown-toggle"
-        dropdownMenuClassName="dropdown-menu inverse"
-        dropdownMenuListClassName="dropdown-menu-list"
-        dropdownMenuListItemClassName="clickable"
-        initialID={initialID}
-        items={this.getActionsDropdownItems(actionPhrases)}
-        onItemSelection={this.handleActionSelection}
-        transition={true}
-        transitionName="dropdown-menu"
-        wrapperClassName="dropdown" />
+      <li>
+        <Dropdown
+          buttonClassName="button button-inverse dropdown-toggle"
+          dropdownMenuClassName="dropdown-menu inverse"
+          dropdownMenuListClassName="dropdown-menu-list"
+          dropdownMenuListItemClassName="clickable"
+          initialID={initialID}
+          items={this.getActionsDropdownItems(actionPhrases)}
+          onItemSelection={this.handleActionSelection}
+          transition={true}
+          transitionName="dropdown-menu"
+          wrapperClassName="dropdown" />
+      </li>
     );
   }
 
@@ -315,9 +317,8 @@ export default class OrganizationTab extends React.Component {
     let capitalizedItemName = StringUtil.capitalize(itemName);
     let items = props.items;
     let actionDropdown = this.getActionDropdown(props.itemName);
-    if (actionDropdown) {
-      actionDropdown = (<li>{actionDropdown}</li>);
-    }
+    let checkedItemObjects =
+      this.getCheckedItemObjects(props.items, props.itemID) || [];
 
     return (
       <div className="flex-containe`r-col">
