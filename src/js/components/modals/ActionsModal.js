@@ -117,13 +117,11 @@ export default class ActionsModal extends mixin(StoreMixin) {
     let selectedItemsShown = _.first(selectedItems, ITEMS_DISPLAYED + 1);
 
     // Create a string concatenating n-1 items
-    _.chain(selectedItemsShown)
-      .initial()
-      .pluck("description")
-      .each(function (itemDescription) {
-        selectedItemsString += `${itemDescription}, `;
-      })
-      .value();
+    let selectedItemsShownMinusOne = _.initial(selectedItemsShown);
+    let descriptionArray = _.pluck(selectedItemsShownMinusOne, "description");
+    descriptionArray.forEach(function (itemDescription) {
+      selectedItemsString += `${itemDescription}, `;
+    });
 
     // Handle grammar for nth element and concatenate to list
     if (selectedItems.length <= ITEMS_DISPLAYED) {
