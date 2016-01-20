@@ -39,7 +39,8 @@ export default class SettingsPage extends mixin(TabsMixin) {
     if (currentTab.indexOf(pageKeys[0]) >= 0) {
       this.tabs_tabs = {
         'settings-organization-users': 'Users',
-        'settings-organization-groups': 'Groups'
+        'settings-organization-groups': 'Groups',
+        'settings-organization-directories': 'External Directory'
       };
     }
 
