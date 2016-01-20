@@ -1,7 +1,7 @@
-import _ from "underscore";
+import _ from 'underscore';
 
-import DirectoryItem from "./DirectoryItem";
-import List from "./List";
+import DirectoryItem from './DirectoryItem';
+import List from './List';
 
 class TaskDirectory extends List {
   constructor() {

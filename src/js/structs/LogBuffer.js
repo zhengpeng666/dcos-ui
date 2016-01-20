@@ -1,9 +1,9 @@
-import _ from "underscore";
+import _ from 'underscore';
 
-import List from "./List";
-import Item from "./Item";
+import List from './List';
+import Item from './Item';
 
-const PAGE_SIZE = 8 * 4096;  // 32kb of data or 8 "pages"
+const PAGE_SIZE = 8 * 4096;  // 32kb of data or 8 'pages'
 const DEFAULT_OPTIONS = {
   end: -1,
   initialized: false,
@@ -48,17 +48,17 @@ export default class LogBuffer extends List {
   }
 
   add(entry) {
-    let data = entry.get("data");
+    let data = entry.get('data');
     let end = this.getEnd();
     // The point we are reading from in the log file
-    let offset = entry.get("offset");
+    let offset = entry.get('offset');
     let start = this.getStart();
 
     // Truncate to the first newline from beginning of received data,
     // if this is the first request and the data received is not from the
     // beginning of the log
     if (start === end && offset !== 0) {
-      let index = data.indexOf("\n") + 1;
+      let index = data.indexOf('\n') + 1;
       offset += index;
       data = data.substring(index);
       start = offset; // Adjust the actual start too!
@@ -80,8 +80,8 @@ export default class LogBuffer extends List {
 
   getFullLog() {
     return this.getItems().map(function (item) {
-      return item.get("data");
-    }).join("");
+      return item.get('data');
+    }).join('');
   }
 
   getStart() {
@@ -112,7 +112,7 @@ export default class LogBuffer extends List {
     let size = 0;
     for (; index >= 0; index--) {
       let item = items[index];
-      let itemData = item.get("data");
+      let itemData = item.get('data');
       size += itemData.length;
 
       if (size > maxFileSize) {
@@ -120,13 +120,13 @@ export default class LogBuffer extends List {
         // Truncate to fit within maxFileSize
         itemData = itemData.substring(sizeDiff);
         // Truncate to first newline
-        let newLineIndex = itemData.indexOf("\n") + 1;
+        let newLineIndex = itemData.indexOf('\n') + 1;
         itemData = itemData.substring(newLineIndex);
         // Update size accordingly
         size -= sizeDiff + newLineIndex;
         items[index] = new Item({
           data: itemData,
-          offset: item.get("offset")
+          offset: item.get('offset')
         });
         break;
       }

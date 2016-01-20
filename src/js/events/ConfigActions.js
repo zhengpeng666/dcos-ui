@@ -1,7 +1,7 @@
-import ActionTypes from "../constants/ActionTypes";
-import AppDispatcher from "./AppDispatcher";
-import Config from "../config/Config";
-import RequestUtil from "../utils/RequestUtil";
+import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from './AppDispatcher';
+import Config from '../config/Config';
+import RequestUtil from '../utils/RequestUtil';
 
 const ConfigActions = {
   fetchConfig: function () {
@@ -29,14 +29,14 @@ if (Config.useFixtures || Config.useUIConfigFixtures) {
   }
 
   global.actionTypes.ConfigActions = {
-    fetchConfig: {event: "success", success: {
+    fetchConfig: {event: 'success', success: {
       response: Config.uiConfigurationFixture
     }}
   };
 
   Object.keys(global.actionTypes.ConfigActions).forEach(function (method) {
     ConfigActions[method] = RequestUtil.stubRequest(
-      ConfigActions, "ConfigActions", method
+      ConfigActions, 'ConfigActions', method
     );
   });
 }

@@ -1,31 +1,31 @@
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../stores/ACLStore");
-jest.dontMock("../../structs/ACLList");
-jest.dontMock("../../utils/Util");
-jest.dontMock("../../utils/StringUtil");
-jest.dontMock("../PermissionsView");
+jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../../stores/ACLStore');
+jest.dontMock('../../structs/ACLList');
+jest.dontMock('../../utils/Util');
+jest.dontMock('../../utils/StringUtil');
+jest.dontMock('../PermissionsView');
 
-require("../../utils/StoreMixinConfig");
+require('../../utils/StoreMixinConfig');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var ACLList = require("../../structs/ACLList");
-var ACLStore = require("../../stores/ACLStore");
-var PermissionsView = require("../PermissionsView");
+var ACLList = require('../../structs/ACLList');
+var ACLStore = require('../../stores/ACLStore');
+var PermissionsView = require('../PermissionsView');
 
-describe("PermissionsView", function () {
+describe('PermissionsView', function () {
 
-  describe("#handleResourceSelection", function () {
+  describe('#handleResourceSelection', function () {
     beforeEach(function () {
       var permissions = new ACLList({items: [
         {
-          rid: "foo",
-          description: "foo description"
+          rid: 'foo',
+          description: 'foo description'
         },
         {
-          rid: "bar",
-          description: "bar description"
+          rid: 'bar',
+          description: 'bar description'
         }
       ]});
 
@@ -45,15 +45,15 @@ describe("PermissionsView", function () {
       ACLStore.grantUserActionToResource = this.prevGrantUserActionToResource;
     });
 
-    it("calls #grantUserActionToResource with an id", function () {
-      this.instance.handleResourceSelection({id: "foo"});
+    it('calls #grantUserActionToResource with an id', function () {
+      this.instance.handleResourceSelection({id: 'foo'});
 
       expect(ACLStore.grantUserActionToResource)
-        .toHaveBeenCalledWith("quis", "access", "foo");
+        .toHaveBeenCalledWith('quis', 'access', 'foo');
     });
 
-    it("shouldn't call #grantUserActionToResource when is default", function () {
-      this.instance.handleResourceSelection({id: "DEFAULT"});
+    it('shouldn\'t call #grantUserActionToResource when is default', function () {
+      this.instance.handleResourceSelection({id: 'DEFAULT'});
 
       expect(ACLStore.grantUserActionToResource).not.toHaveBeenCalled();
     });

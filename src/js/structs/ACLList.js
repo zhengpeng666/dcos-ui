@@ -1,6 +1,6 @@
-import _ from "underscore";
-import List from "./List";
-import Item from "./Item";
+import _ from 'underscore';
+import List from './List';
+import Item from './Item';
 
 export default class ACLList extends List {
   constructor() {
@@ -18,7 +18,7 @@ export default class ACLList extends List {
 
   getItem(rid) {
     return _.find(this.getItems(), function (item) {
-      return item.get("rid") === rid;
+      return item.get('rid') === rid;
     });
   }
 }

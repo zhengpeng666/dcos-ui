@@ -1,14 +1,14 @@
-import mixin from "reactjs-mixin";
-import qs from "query-string";
-import React from "react";
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import qs from 'query-string';
+import mixin from 'reactjs-mixin';
+import React from 'react';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLAuthStore from "../../stores/ACLAuthStore";
-import ClusterHeader from "../../components/ClusterHeader";
-import FormModal from "../../components/FormModal";
+import ACLAuthStore from '../../stores/ACLAuthStore';
+import ClusterHeader from '../../components/ClusterHeader';
+import FormModal from '../../components/FormModal';
 
 const METHODS_TO_BIND = [
-  "handleLoginSubmit"
+  'handleLoginSubmit'
 ];
 
 export default class LoginModal extends mixin(StoreMixin) {
@@ -22,8 +22,8 @@ export default class LoginModal extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "auth",
-        events: ["roleChange", "success", "error"]
+        name: 'auth',
+        events: ['roleChange', 'success', 'error']
       }
     ];
 
@@ -34,16 +34,16 @@ export default class LoginModal extends mixin(StoreMixin) {
 
   onAuthStoreRoleChange() {
     let router = this.context.router;
-    let loginRedirectRoute = ACLAuthStore.get("loginRedirectRoute");
+    let loginRedirectRoute = ACLAuthStore.get('loginRedirectRoute');
 
     if (!ACLAuthStore.isAdmin()) {
-      router.transitionTo("/access-denied");
+      router.transitionTo('/access-denied');
     } else if (loginRedirectRoute) {
       // Go to redirect route if it is present
       router.transitionTo(loginRedirectRoute);
     } else {
       // Go to home
-      router.transitionTo("/");
+      router.transitionTo('/');
     }
 
     this.setState({disableLogin: false});
@@ -75,40 +75,40 @@ export default class LoginModal extends mixin(StoreMixin) {
   getLoginFormDefinition() {
     return [
       {
-        fieldType: "text",
-        name: "uid",
-        placeholder: "Username",
+        fieldType: 'text',
+        name: 'uid',
+        placeholder: 'Username',
         required: true,
         showError: false,
         showLabel: false,
-        writeType: "input",
+        writeType: 'input',
         validation: function () { return true; },
-        value: ""
+        value: ''
       },
       {
-        fieldType: "password",
-        name: "password",
-        placeholder: "Password",
+        fieldType: 'password',
+        name: 'password',
+        placeholder: 'Password',
         required: true,
         showError: this.state.errorMsg,
         showLabel: false,
-        writeType: "input",
+        writeType: 'input',
         validation: function () { return true; },
-        value: ""
+        value: ''
       }
     ];
   }
 
   getLoginButtonDefinition() {
-    let buttonText = "Sign In";
+    let buttonText = 'Sign In';
     if (this.state.disableLogin) {
-      buttonText = "Signing in...";
+      buttonText = 'Signing in...';
     }
 
     return [
       {
         text: buttonText,
-        className: "button button-primary button-wide",
+        className: 'button button-primary button-wide',
         isSubmit: true
       }
     ];
@@ -122,7 +122,7 @@ export default class LoginModal extends mixin(StoreMixin) {
         disabled={this.state.disableLogin}
         onSubmit={this.handleLoginSubmit}
         open={true}
-        modalProps={{modalClass: "modal modal-narrow"}}>
+        modalProps={{modalClass: 'modal modal-narrow'}}>
         <ClusterHeader useClipboard={false} />
       </FormModal>
     );

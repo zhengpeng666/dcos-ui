@@ -1,19 +1,19 @@
-import {Confirm, Table} from "reactjs-components";
-import mixin from "reactjs-mixin";
+import {Confirm, Table} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLStore from "../stores/ACLStore";
-import ResourceTableUtil from "../utils/ResourceTableUtil";
-import TableUtil from "../utils/TableUtil";
+import ACLStore from '../stores/ACLStore';
+import ResourceTableUtil from '../utils/ResourceTableUtil';
+import TableUtil from '../utils/TableUtil';
 
 const METHODS_TO_BIND = [
-  "handleOpenConfirm",
-  "handleButtonConfirm",
-  "handleButtonCancel",
-  "renderButton"
+  'handleOpenConfirm',
+  'handleButtonConfirm',
+  'handleButtonCancel',
+  'renderButton'
 ];
 
 export default class PermissionsTable extends mixin(StoreMixin) {
@@ -29,12 +29,12 @@ export default class PermissionsTable extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "acl",
+        name: 'acl',
         events: [
-          "userRevokeSuccess",
-          "userRevokeError",
-          "groupRevokeSuccess",
-          "groupRevokeError"
+          'userRevokeSuccess',
+          'userRevokeError',
+          'groupRevokeSuccess',
+          'groupRevokeError'
         ]
       }
     ];
@@ -56,15 +56,15 @@ export default class PermissionsTable extends mixin(StoreMixin) {
     this.setState({pendingRequest: true});
     let storeAction;
 
-    if (this.props.itemType === "user") {
+    if (this.props.itemType === 'user') {
       storeAction = ACLStore.revokeUserActionToResource.bind(ACLStore);
     }
 
-    if (this.props.itemType === "group") {
+    if (this.props.itemType === 'group') {
       storeAction = ACLStore.revokeGroupActionToResource.bind(ACLStore);
     }
 
-    storeAction(this.props.itemID, "access", this.state.permissionID);
+    storeAction(this.props.itemID, 'access', this.state.permissionID);
   }
 
   handleButtonCancel() {
@@ -107,7 +107,7 @@ export default class PermissionsTable extends mixin(StoreMixin) {
   getColGroup() {
     return (
       <colgroup>
-        <col style={{width: "50%"}} />
+        <col style={{width: '50%'}} />
         <col />
       </colgroup>
     );
@@ -116,15 +116,15 @@ export default class PermissionsTable extends mixin(StoreMixin) {
   getColumns() {
     let className = ResourceTableUtil.getClassName;
     let descriptionHeading = ResourceTableUtil.renderHeading({
-      description: "Name"
+      description: 'Name'
     });
-    let propSortFunction = ResourceTableUtil.getPropSortFunction("description");
+    let propSortFunction = ResourceTableUtil.getPropSortFunction('description');
 
     return [
       {
         className,
         headerClassName: className,
-        prop: "description",
+        prop: 'description',
         render: this.renderPermissionLabel,
         sortable: true,
         sortFunction: propSortFunction,
@@ -133,18 +133,18 @@ export default class PermissionsTable extends mixin(StoreMixin) {
       {
         className,
         headerClassName: className,
-        prop: "remove",
+        prop: 'remove',
         render: this.renderButton,
         sortable: false,
         sortFunction: propSortFunction,
-        heading: ""
+        heading: ''
       }
     ];
   }
 
   getConfirmModalContent(permissions) {
     let state = this.state;
-    let serviceLabel = "this service";
+    let serviceLabel = 'this service';
     permissions.forEach(function (permission) {
       if (permission.rid === state.permissionID) {
         serviceLabel = permission.description;
@@ -208,7 +208,7 @@ export default class PermissionsTable extends mixin(StoreMixin) {
             data={permissions}
             idAttribute="rid"
             itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: "description", order: "asc"}}
+            sortBy={{prop: 'description', order: 'asc'}}
             useFlex={true}
             transition={false}
             useScrollTable={false} />

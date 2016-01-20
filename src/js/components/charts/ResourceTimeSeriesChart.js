@@ -1,13 +1,13 @@
-var React = require("react/addons");
-var Units = require("../../utils/Units");
+var React = require('react/addons');
+var Units = require('../../utils/Units');
 
-var Chart = require("./Chart");
-var TimeSeriesChart = require("./TimeSeriesChart");
-var TimeSeriesLabel = require("./TimeSeriesLabel");
+var Chart = require('./Chart');
+var TimeSeriesChart = require('./TimeSeriesChart');
+var TimeSeriesLabel = require('./TimeSeriesLabel');
 
 var ResourceTimeSeriesChart = React.createClass({
 
-  displayName: "ResourceTimeSeriesChart",
+  displayName: 'ResourceTimeSeriesChart',
 
   propTypes: {
     colorIndex: React.PropTypes.number.isRequired,
@@ -27,17 +27,17 @@ var ResourceTimeSeriesChart = React.createClass({
   getData: function () {
     var props = this.props;
     return [{
-      name: "Alloc",
+      name: 'Alloc',
       colorIndex: this.props.colorIndex,
       values: props.usedResourcesStates[props.mode]
     }];
   },
 
   getHeadline: function (usedValue, totalValue) {
-    if (this.props.mode === "cpus") {
-      return usedValue + " of " + totalValue + " Shares";
+    if (this.props.mode === 'cpus') {
+      return usedValue + ' of ' + totalValue + ' Shares';
     } else {
-      return Units.filesize(usedValue * 1024 * 1024, 0) + " of " +
+      return Units.filesize(usedValue * 1024 * 1024, 0) + ' of ' +
         Units.filesize(totalValue * 1024 * 1024, 0);
     }
   },

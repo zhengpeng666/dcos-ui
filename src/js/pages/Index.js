@@ -1,40 +1,40 @@
-var _ = require("underscore");
-var classNames = require("classnames");
-var React = require("react");
-var RouteHandler = require("react-router").RouteHandler;
+var _ = require('underscore');
+var classNames = require('classnames');
+var React = require('react');
+var RouteHandler = require('react-router').RouteHandler;
 
-var Config = require("../config/Config");
-import ConfigStore from "../stores/ConfigStore";
-var EventTypes = require("../constants/EventTypes");
-import HistoryStore from "../stores/HistoryStore";
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var IntercomStore = require("../stores/IntercomStore");
-var MesosSummaryStore = require("../stores/MesosSummaryStore");
-var Modals = require("../components/Modals");
-var RequestErrorMsg = require("../components/RequestErrorMsg");
-import ServerErrorModal from "../components/ServerErrorModal";
-var Sidebar = require("../components/Sidebar");
-var SidebarActions = require("../events/SidebarActions");
-var SidebarStore = require("../stores/SidebarStore");
+var Config = require('../config/Config');
+import ConfigStore from '../stores/ConfigStore';
+var EventTypes = require('../constants/EventTypes');
+import HistoryStore from '../stores/HistoryStore';
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
+var IntercomStore = require('../stores/IntercomStore');
+var MesosSummaryStore = require('../stores/MesosSummaryStore');
+var Modals = require('../components/Modals');
+var RequestErrorMsg = require('../components/RequestErrorMsg');
+import ServerErrorModal from '../components/ServerErrorModal';
+var Sidebar = require('../components/Sidebar');
+var SidebarActions = require('../events/SidebarActions');
+var SidebarStore = require('../stores/SidebarStore');
 
 function getSidebarState() {
   return {
-    isOpen: SidebarStore.get("isOpen")
+    isOpen: SidebarStore.get('isOpen')
   };
 }
 
 var Index = React.createClass({
 
-  displayName: "Index",
+  displayName: 'Index',
 
   mixins: [InternalStorageMixin],
 
   getInitialState: function () {
     return {
-      showIntercom: IntercomStore.get("isOpen"),
+      showIntercom: IntercomStore.get('isOpen'),
       mesosSummaryErrorCount: 0,
       showErrorModal: false,
-      modalErrorMsg: "",
+      modalErrorMsg: '',
       configErrorCount: 0
     };
   },
@@ -49,7 +49,7 @@ var Index = React.createClass({
     SidebarStore.addChangeListener(
       EventTypes.SIDEBAR_CHANGE, this.onSideBarChange
     );
-    window.addEventListener("resize", SidebarActions.close);
+    window.addEventListener('resize', SidebarActions.close);
 
     IntercomStore.addChangeListener(
       EventTypes.INTERCOM_CHANGE, this.handleIntercomChange
@@ -89,7 +89,7 @@ var Index = React.createClass({
     SidebarStore.removeChangeListener(
       EventTypes.SIDEBAR_CHANGE, this.onSideBarChange
     );
-    window.removeEventListener("resize", SidebarActions.close);
+    window.removeEventListener('resize', SidebarActions.close);
 
     IntercomStore.removeChangeListener(
       EventTypes.INTERCOM_CHANGE, this.handleIntercomChange
@@ -120,7 +120,7 @@ var Index = React.createClass({
   handleIntercomChange: function () {
     var intercom = global.Intercom;
     if (intercom != null) {
-      this.setState({showIntercom: IntercomStore.get("isOpen")});
+      this.setState({showIntercom: IntercomStore.get('isOpen')});
     } else {
       this.setState({
         showErrorModal: true,
@@ -134,7 +134,7 @@ var Index = React.createClass({
   },
 
   onMesosSummaryChange: function () {
-    let statesProcessed = MesosSummaryStore.get("statesProcessed");
+    let statesProcessed = MesosSummaryStore.get('statesProcessed');
     let prevStatesProcessed = this.internalStorage_get().statesProcessed;
     this.internalStorage_update({statesProcessed});
 
@@ -171,9 +171,9 @@ var Index = React.createClass({
     var intercom = global.Intercom;
     if (intercom != null) {
       if (this.state.showIntercom) {
-        intercom("show");
+        intercom('show');
       } else {
-        intercom("hide");
+        intercom('hide');
       }
     }
   },
@@ -185,7 +185,7 @@ var Index = React.createClass({
       || (this.state.configErrorCount >= Config.delayAfterErrorCount);
 
     var classSet = classNames({
-      "canvas-sidebar-open": data.isOpen
+      'canvas-sidebar-open': data.isOpen
     });
 
     this.renderIntercom();

@@ -1,11 +1,11 @@
-import {Modal} from "reactjs-components";
-import mixin from "reactjs-mixin";
+import {Modal} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React from 'react';
 /* eslint-enable no-unused-vars */
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-const METHODS_TO_BIND = ["handleModalClose", "handleServerError"];
+const METHODS_TO_BIND = ['handleModalClose', 'handleServerError'];
 
 function getEventsFromStoreListeners(storeListeners) {
   let events = [];
@@ -29,8 +29,8 @@ export default class ServerErrorModal extends mixin(StoreMixin) {
     };
 
     this.store_listeners = [
-      {name: "user", events: ["updateError"]},
-      {name: "group", events: ["updateError", "addUserError"]}
+      {name: 'user', events: ['updateError']},
+      {name: 'group', events: ['updateError', 'addUserError']}
     ];
 
     METHODS_TO_BIND.forEach((method) => {

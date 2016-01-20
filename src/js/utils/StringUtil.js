@@ -1,9 +1,9 @@
-var _ = require("underscore");
+var _ = require('underscore');
 
 const StringUtil = {
   filterByString: function (objects, key, searchString) {
     var regex = StringUtil.escapeForRegExp(searchString);
-    var searchPattern = new RegExp(regex, "i");
+    var searchPattern = new RegExp(regex, 'i');
 
     return _.filter(objects, function (obj) {
       return searchPattern.test(obj[key]);
@@ -11,7 +11,7 @@ const StringUtil = {
   },
 
   escapeForRegExp: function (str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
   },
 
   pluralize: function (string, arity) {
@@ -20,20 +20,20 @@ const StringUtil = {
     }
 
     if (string.length === 0) {
-      return "";
+      return '';
     }
 
     arity = parseInt(arity, 10);
 
     if (arity !== 1) {
-      string = string.replace(/y$/, "ie") + "s";
+      string = string.replace(/y$/, 'ie') + 's';
     }
 
     return string;
   },
 
   capitalize: function (string) {
-    if (typeof string !== "string") {
+    if (typeof string !== 'string') {
       return null;
     }
 

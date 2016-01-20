@@ -1,45 +1,45 @@
-jest.dontMock("../LoginModal");
-jest.dontMock("../../../components/ClusterHeader");
-jest.dontMock("../../../components/FormModal");
-jest.dontMock("../../../utils/Util");
-jest.dontMock("../../../utils/StringUtil");
-jest.dontMock("../../../stores/ACLAuthStore");
-jest.dontMock("../../../stores/ACLGroupsStore");
-jest.dontMock("../../../stores/ACLGroupStore");
-jest.dontMock("../../../stores/ACLStore");
-jest.dontMock("../../../stores/ACLUsersStore");
-jest.dontMock("../../../stores/ACLUserStore");
-jest.dontMock("../../../constants/EventTypes");
-jest.dontMock("../../../stores/MarathonStore");
-jest.dontMock("../../../stores/MesosStateStore");
-jest.dontMock("../../../stores/MesosSummaryStore");
-jest.dontMock("../../../events/ACLAuthActions");
-jest.dontMock("../../../constants/ActionTypes");
-jest.dontMock("../../../events/AppDispatcher");
-jest.dontMock("../../../constants/EventTypes");
-jest.dontMock("../../../mixins/GetSetMixin");
+jest.dontMock('../LoginModal');
+jest.dontMock('../../../components/ClusterHeader');
+jest.dontMock('../../../components/FormModal');
+jest.dontMock('../../../utils/Util');
+jest.dontMock('../../../utils/StringUtil');
+jest.dontMock('../../../stores/ACLAuthStore');
+jest.dontMock('../../../stores/ACLGroupsStore');
+jest.dontMock('../../../stores/ACLGroupStore');
+jest.dontMock('../../../stores/ACLStore');
+jest.dontMock('../../../stores/ACLUsersStore');
+jest.dontMock('../../../stores/ACLUserStore');
+jest.dontMock('../../../constants/EventTypes');
+jest.dontMock('../../../stores/MarathonStore');
+jest.dontMock('../../../stores/MesosStateStore');
+jest.dontMock('../../../stores/MesosSummaryStore');
+jest.dontMock('../../../events/ACLAuthActions');
+jest.dontMock('../../../constants/ActionTypes');
+jest.dontMock('../../../events/AppDispatcher');
+jest.dontMock('../../../constants/EventTypes');
+jest.dontMock('../../../mixins/GetSetMixin');
 
-require("../../../utils/StoreMixinConfig");
+require('../../../utils/StoreMixinConfig');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var ACLAuthStore = require("../../../stores/ACLAuthStore");
-var LoginModal = require("../LoginModal");
+var ACLAuthStore = require('../../../stores/ACLAuthStore');
+var LoginModal = require('../LoginModal');
 
-describe("LoginModal", function () {
+describe('LoginModal', function () {
   beforeEach(function () {
     this.instance = TestUtils.renderIntoDocument(
       <LoginModal />
     );
   });
 
-  describe("#handleLoginSubmit", function () {
+  describe('#handleLoginSubmit', function () {
     beforeEach(function () {
       this.originalLogin = ACLAuthStore.login;
       ACLAuthStore.login = jasmine.createSpy();
 
-      this.model = {name: "kenny"};
+      this.model = {name: 'kenny'};
       this.instance.handleLoginSubmit(this.model);
     });
 
@@ -47,31 +47,31 @@ describe("LoginModal", function () {
       ACLAuthStore.login = this.originalLogin;
     });
 
-    it("should set disable the login modal while request pending", function () {
+    it('should set disable the login modal while request pending', function () {
       expect(this.instance.state.disableLogin).toEqual(true);
     });
 
-    it("should call ACLAuthStore#login with the model", function () {
+    it('should call ACLAuthStore#login with the model', function () {
       expect(ACLAuthStore.login).toHaveBeenCalledWith(this.model);
     });
   });
 
-  describe("#onAuthStoreError", function () {
+  describe('#onAuthStoreError', function () {
     beforeEach(function () {
-      this.errorMsg = "Something went wrong";
+      this.errorMsg = 'Something went wrong';
       this.instance.onAuthStoreError(this.errorMsg);
     });
 
-    it("should enable the modal", function () {
+    it('should enable the modal', function () {
       expect(this.instance.state.disableLogin).toEqual(false);
     });
 
-    it("should set the errorMsg to state", function () {
+    it('should set the errorMsg to state', function () {
       expect(this.instance.state.errorMsg).toEqual(this.errorMsg);
     });
   });
 
-  describe("#onAuthStoreRoleChange", function () {
+  describe('#onAuthStoreRoleChange', function () {
     beforeEach(function () {
       this.instance.context = {
         router: {
@@ -93,33 +93,33 @@ describe("LoginModal", function () {
       ACLAuthStore.isAdmin = this.originalIsAdmin;
     });
 
-    it("should enable the modal", function () {
+    it('should enable the modal', function () {
       this.instance.onAuthStoreRoleChange();
       expect(this.instance.state.disableLogin).toEqual(false);
     });
 
-    it("should transitionTo 'access-denied' if not admin", function () {
+    it('should transitionTo \'access-denied\' if not admin', function () {
       var prevIsAdmin = ACLAuthStore.isAdmin;
       ACLAuthStore.isAdmin = function () { return false; };
 
       this.instance.onAuthStoreRoleChange();
       expect(this.instance.context.router.transitionTo)
-        .toHaveBeenCalledWith("/access-denied");
+        .toHaveBeenCalledWith('/access-denied');
 
       ACLAuthStore.isAdmin = prevIsAdmin;
     });
 
-    it("should transitionTo '/' if admin", function () {
+    it('should transitionTo \'/\' if admin', function () {
       this.instance.onAuthStoreRoleChange();
       expect(this.instance.context.router.transitionTo)
-        .toHaveBeenCalledWith("/");
+        .toHaveBeenCalledWith('/');
     });
 
-    it("should transitionTo the redirect route if it exists", function () {
-      this.nextRoute = "services";
+    it('should transitionTo the redirect route if it exists', function () {
+      this.nextRoute = 'services';
       this.instance.onAuthStoreRoleChange();
       expect(this.instance.context.router.transitionTo)
-        .toHaveBeenCalledWith("services");
+        .toHaveBeenCalledWith('services');
     });
   });
 });

@@ -1,18 +1,18 @@
-import _ from "underscore";
-import {Store} from "mesosphere-shared-reactjs";
+import _ from 'underscore';
+import {Store} from 'mesosphere-shared-reactjs';
 
-import ACLUsersActions from "../events/ACLUsersActions";
-import AppDispatcher from "../events/AppDispatcher";
-import ActionTypes from "../constants/ActionTypes";
-import EventTypes from "../constants/EventTypes";
-import GetSetMixin from "../mixins/GetSetMixin";
-import User from "../structs/User";
+import ACLUsersActions from '../events/ACLUsersActions';
+import AppDispatcher from '../events/AppDispatcher';
+import ActionTypes from '../constants/ActionTypes';
+import EventTypes from '../constants/EventTypes';
+import GetSetMixin from '../mixins/GetSetMixin';
+import User from '../structs/User';
 
 /**
  * This store will keep track of users and their details
  */
 var ACLUserStore = Store.createStore({
-  storeID: "user",
+  storeID: 'user',
 
   mixins: [GetSetMixin],
 
@@ -32,7 +32,7 @@ var ACLUserStore = Store.createStore({
   },
 
   getUserRaw: function (userID) {
-    return this.get("users")[userID];
+    return this.get('users')[userID];
   },
 
   getUser: function (userID) {
@@ -40,7 +40,7 @@ var ACLUserStore = Store.createStore({
   },
 
   setUser: function (userID, user) {
-    let users = this.get("users");
+    let users = this.get('users');
     users[userID] = user;
     this.set({users});
   },
@@ -60,7 +60,7 @@ var ACLUserStore = Store.createStore({
    * @param  {Number} userID
    */
   fetchUserWithDetails: function (userID) {
-    let usersFetching = this.get("usersFetching");
+    let usersFetching = this.get('usersFetching');
 
     usersFetching[userID] = {user: false, groups: false, permissions: false};
     this.set({usersFetching});
@@ -78,7 +78,7 @@ var ACLUserStore = Store.createStore({
    *   received
    */
   validateUserWithDetailsFetch: function (userID, type) {
-    let usersFetching = this.get("usersFetching");
+    let usersFetching = this.get('usersFetching');
     if (usersFetching[userID] == null) {
       return;
     }
@@ -106,7 +106,7 @@ var ACLUserStore = Store.createStore({
    * @param  {Number} userID
    */
   invalidateUserWithDetailsFetch: function (userID) {
-    let usersFetching = this.get("usersFetching");
+    let usersFetching = this.get('usersFetching');
     if (usersFetching[userID] == null) {
       return;
     }
@@ -129,7 +129,7 @@ var ACLUserStore = Store.createStore({
     this.setUser(user.uid, user);
     this.emit(EventTypes.ACL_USER_DETAILS_USER_CHANGE, user.uid);
 
-    this.validateUserWithDetailsFetch(user.uid, "user");
+    this.validateUserWithDetailsFetch(user.uid, 'user');
   },
 
   processUserError: function (userID) {
@@ -152,7 +152,7 @@ var ACLUserStore = Store.createStore({
     this.setUser(userID, user);
     this.emit(EventTypes.ACL_USER_DETAILS_GROUPS_CHANGE, userID);
 
-    this.validateUserWithDetailsFetch(userID, "groups");
+    this.validateUserWithDetailsFetch(userID, 'groups');
   },
 
   processUserGroupsError: function (userID) {
@@ -175,7 +175,7 @@ var ACLUserStore = Store.createStore({
     this.setUser(userID, user);
     this.emit(EventTypes.ACL_USER_DETAILS_PERMISSIONS_CHANGE, userID);
 
-    this.validateUserWithDetailsFetch(userID, "permissions");
+    this.validateUserWithDetailsFetch(userID, 'permissions');
   },
 
   processUserPermissionsError: function (userID) {

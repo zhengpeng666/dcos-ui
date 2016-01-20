@@ -1,18 +1,18 @@
-import mixin from "reactjs-mixin";
-import React from "react/addons";
-import {Confirm, SidePanel} from "reactjs-components";
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import mixin from 'reactjs-mixin';
+import React from 'react/addons';
+import {Confirm, SidePanel} from 'reactjs-components';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLGroupStore from "../stores/ACLGroupStore";
-import HistoryStore from "../stores/HistoryStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import GroupSidePanelContents from "./GroupSidePanelContents";
+import ACLGroupStore from '../stores/ACLGroupStore';
+import HistoryStore from '../stores/HistoryStore';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import GroupSidePanelContents from './GroupSidePanelContents';
 
 const METHODS_TO_BIND = [
-  "handleDeleteModalOpen",
-  "handleDeleteCancel",
-  "handlePanelClose",
-  "handleDeleteGroup"
+  'handleDeleteModalOpen',
+  'handleDeleteCancel',
+  'handlePanelClose',
+  'handleDeleteGroup'
 ];
 
 export default class GroupSidePanel extends mixin(StoreMixin) {
@@ -31,10 +31,10 @@ export default class GroupSidePanel extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "group",
+        name: 'group',
         events: [
-          "deleteSuccess",
-          "deleteError"
+          'deleteSuccess',
+          'deleteError'
         ]
       }
     ];
@@ -86,13 +86,13 @@ export default class GroupSidePanel extends mixin(StoreMixin) {
       pendingRequest: false
     });
 
-    this.context.router.transitionTo("settings-organization-groups");
+    this.context.router.transitionTo('settings-organization-groups');
   }
 
   isOpen() {
     return (
       this.props.params.groupID != null
-      && MesosSummaryStore.get("statesProcessed")
+      && MesosSummaryStore.get('statesProcessed')
     );
   }
 

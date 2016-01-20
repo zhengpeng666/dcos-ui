@@ -1,5 +1,5 @@
-import List from "./List";
-import Group from "./Group";
+import List from './List';
+import Group from './Group';
 
 export default class GroupsList extends List {
   constructor() {

@@ -1,12 +1,12 @@
-jest.dontMock("../Highlight");
+jest.dontMock('../Highlight');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
-var Highlight = require("../Highlight");
+var Highlight = require('../Highlight');
 
-describe("Highlight instance", function () {
+describe('Highlight instance', function () {
 
-  it("is what it says it is", function () {
+  it('is what it says it is', function () {
     var instance = TestUtils.renderIntoDocument(
       <Highlight search="world">
         Hello World
@@ -14,14 +14,14 @@ describe("Highlight instance", function () {
     );
 
     var matches =
-      TestUtils.scryRenderedDOMComponentsWithTag(instance, "strong");
+      TestUtils.scryRenderedDOMComponentsWithTag(instance, 'strong');
     expect(TestUtils.isCompositeComponent(instance)).toBe(true);
     expect(TestUtils.isCompositeComponentWithType(instance, Highlight))
       .toBe(true);
-    expect(React.findDOMNode(matches[0]).textContent).toEqual("World");
+    expect(React.findDOMNode(matches[0]).textContent).toEqual('World');
   });
 
-  it("should have children", function () {
+  it('should have children', function () {
     var instance = TestUtils.renderIntoDocument(
       <Highlight search="fox">
         The quick brown fox jumped over the lazy dog.
@@ -29,13 +29,13 @@ describe("Highlight instance", function () {
     );
 
     var matches =
-      TestUtils.scryRenderedDOMComponentsWithClass(instance, "highlight");
+      TestUtils.scryRenderedDOMComponentsWithClass(instance, 'highlight');
     expect(React.findDOMNode(instance).children.length).toEqual(3);
     expect(matches.length).toEqual(1);
 
   });
 
-  it("should support custom HTML tag for matching elements", function () {
+  it('should support custom HTML tag for matching elements', function () {
     var instance = TestUtils.renderIntoDocument(
       <Highlight matchElement="em" search="world">
         Hello World
@@ -43,11 +43,11 @@ describe("Highlight instance", function () {
     );
 
     var matches =
-      TestUtils.scryRenderedDOMComponentsWithTag(instance, "em");
+      TestUtils.scryRenderedDOMComponentsWithTag(instance, 'em');
     expect(matches.length).toEqual(1);
   });
 
-  it("should support custom className for matching element", function () {
+  it('should support custom className for matching element', function () {
     var instance = TestUtils.renderIntoDocument(
       <Highlight matchClass="fffffound" search="Seek">
         Hide and Seek
@@ -55,11 +55,11 @@ describe("Highlight instance", function () {
     );
 
     var matches =
-      TestUtils.scryRenderedDOMComponentsWithClass(instance, "fffffound");
+      TestUtils.scryRenderedDOMComponentsWithClass(instance, 'fffffound');
     expect(matches.length).toEqual(1);
   });
 
-  it("should support passing props to parent element", function () {
+  it('should support passing props to parent element', function () {
     var instance = TestUtils.renderIntoDocument(
       <Highlight className="myHighlighter" search="world">
         Hello World
@@ -67,13 +67,13 @@ describe("Highlight instance", function () {
     );
 
     var matches =
-      TestUtils.scryRenderedDOMComponentsWithTag(instance, "strong");
+      TestUtils.scryRenderedDOMComponentsWithTag(instance, 'strong');
 
-    expect(React.findDOMNode(instance).className).toEqual("myHighlighter");
-    expect(React.findDOMNode(matches[0]).className).toEqual("highlight");
+    expect(React.findDOMNode(instance).className).toEqual('myHighlighter');
+    expect(React.findDOMNode(matches[0]).className).toEqual('highlight');
   });
 
-  it("should support regular expressions in search", function () {
+  it('should support regular expressions in search', function () {
     var instance = TestUtils.renderIntoDocument(
       <Highlight className="myHighlighter" search={/[A-Za-z]+/}>
         Easy as 123, ABC...
@@ -81,13 +81,13 @@ describe("Highlight instance", function () {
     );
 
     var matches =
-      TestUtils.scryRenderedDOMComponentsWithTag(instance, "strong");
-    expect(React.findDOMNode(matches[0]).textContent).toEqual("Easy");
-    expect(React.findDOMNode(matches[1]).textContent).toEqual("as");
-    expect(React.findDOMNode(matches[2]).textContent).toEqual("ABC");
+      TestUtils.scryRenderedDOMComponentsWithTag(instance, 'strong');
+    expect(React.findDOMNode(matches[0]).textContent).toEqual('Easy');
+    expect(React.findDOMNode(matches[1]).textContent).toEqual('as');
+    expect(React.findDOMNode(matches[2]).textContent).toEqual('ABC');
   });
 
-  it("should support escaping arbitrary string in search", function () {
+  it('should support escaping arbitrary string in search', function () {
     var instance = TestUtils.renderIntoDocument(
       <Highlight className="myHighlighter" search="Test (">
         Test (should not throw)

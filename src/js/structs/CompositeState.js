@@ -1,6 +1,6 @@
-import _ from "underscore";
+import _ from 'underscore';
 
-import ServicesList from "./ServicesList";
+import ServicesList from './ServicesList';
 
 let mergeData = function (newData, data) {
   Object.keys(newData).forEach(function (key) {
@@ -19,7 +19,7 @@ let mergeData = function (newData, data) {
 };
 
 let mergeMesosArrays = function (newData, data, key) {
-  if (key === "frameworks" || key === "slaves") {
+  if (key === 'frameworks' || key === 'slaves') {
     // We need to merge the objects within the frameworks and slaves arrays.
     return mergeObjectsById(newData[key], data[key]);
   } else {

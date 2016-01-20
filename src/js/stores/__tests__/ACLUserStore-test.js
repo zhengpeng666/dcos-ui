@@ -1,19 +1,19 @@
-jest.dontMock("../../events/AppDispatcher");
-jest.dontMock("../../constants/ActionTypes");
-jest.dontMock("../../constants/EventTypes");
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../structs/User");
-jest.dontMock("../../events/ACLUsersActions");
-jest.dontMock("../ACLUserStore");
+jest.dontMock('../../events/AppDispatcher');
+jest.dontMock('../../constants/ActionTypes');
+jest.dontMock('../../constants/EventTypes');
+jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../../structs/User');
+jest.dontMock('../../events/ACLUsersActions');
+jest.dontMock('../ACLUserStore');
 
-var ACLUsersActions = require("../../events/ACLUsersActions");
-var ACLUserStore = require("../ACLUserStore");
-var AppDispatcher = require("../../events/AppDispatcher");
-var ActionTypes = require("../../constants/ActionTypes");
-var EventTypes = require("../../constants/EventTypes");
-var User = require("../../structs/User");
+var ACLUsersActions = require('../../events/ACLUsersActions');
+var ACLUserStore = require('../ACLUserStore');
+var AppDispatcher = require('../../events/AppDispatcher');
+var ActionTypes = require('../../constants/ActionTypes');
+var EventTypes = require('../../constants/EventTypes');
+var User = require('../../structs/User');
 
-describe("ACLUserStore", function () {
+describe('ACLUserStore', function () {
 
   beforeEach(function () {
     ACLUserStore.set({
@@ -22,55 +22,55 @@ describe("ACLUserStore", function () {
     });
   });
 
-  describe("#getUserRaw", function () {
+  describe('#getUserRaw', function () {
 
-    it("returns the user that was set", function () {
-      ACLUserStore.set({users: {foo: {bar: "baz"}}});
-      expect(ACLUserStore.getUserRaw("foo")).toEqual({bar: "baz"});
+    it('returns the user that was set', function () {
+      ACLUserStore.set({users: {foo: {bar: 'baz'}}});
+      expect(ACLUserStore.getUserRaw('foo')).toEqual({bar: 'baz'});
     });
 
   });
 
-  describe("#getUser", function () {
+  describe('#getUser', function () {
 
-    it("returns the user that was set", function () {
-      ACLUserStore.set({users: {foo: {bar: "baz"}}});
-      expect(ACLUserStore.getUser("foo") instanceof User).toBeTruthy();
+    it('returns the user that was set', function () {
+      ACLUserStore.set({users: {foo: {bar: 'baz'}}});
+      expect(ACLUserStore.getUser('foo') instanceof User).toBeTruthy();
     });
 
-    it("returns the correct user data", function () {
-      ACLUserStore.set({users: {foo: {bar: "baz"}}});
-      expect(ACLUserStore.getUser("foo").get()).toEqual({bar: "baz"});
-    });
-
-  });
-
-  describe("#setUser", function () {
-
-    it("sets user", function () {
-      ACLUserStore.setUser("foo", {bar: "baz"});
-      expect(ACLUserStore.get("users")).toEqual({foo: {bar: "baz"}});
+    it('returns the correct user data', function () {
+      ACLUserStore.set({users: {foo: {bar: 'baz'}}});
+      expect(ACLUserStore.getUser('foo').get()).toEqual({bar: 'baz'});
     });
 
   });
 
-  describe("#fetchUserWithDetails", function () {
+  describe('#setUser', function () {
+
+    it('sets user', function () {
+      ACLUserStore.setUser('foo', {bar: 'baz'});
+      expect(ACLUserStore.get('users')).toEqual({foo: {bar: 'baz'}});
+    });
+
+  });
+
+  describe('#fetchUserWithDetails', function () {
 
     beforeEach(function () {
-      spyOn(ACLUsersActions, "fetchUser");
-      spyOn(ACLUsersActions, "fetchUserGroups");
-      spyOn(ACLUsersActions, "fetchUserPermissions");
+      spyOn(ACLUsersActions, 'fetchUser');
+      spyOn(ACLUsersActions, 'fetchUserGroups');
+      spyOn(ACLUsersActions, 'fetchUserPermissions');
     });
 
-    it("tracks user as fetching", function () {
-      ACLUserStore.fetchUserWithDetails("foo");
-      expect(ACLUserStore.get("usersFetching")).toEqual({foo: {
+    it('tracks user as fetching', function () {
+      ACLUserStore.fetchUserWithDetails('foo');
+      expect(ACLUserStore.get('usersFetching')).toEqual({foo: {
         user: false, groups: false, permissions: false
       }});
     });
 
-    it("calls necessary APIs to fetch users details", function () {
-      ACLUserStore.fetchUserWithDetails("foo");
+    it('calls necessary APIs to fetch users details', function () {
+      ACLUserStore.fetchUserWithDetails('foo');
       expect(ACLUsersActions.fetchUser).toHaveBeenCalled();
       expect(ACLUsersActions.fetchUserGroups).toHaveBeenCalled();
       expect(ACLUsersActions.fetchUserPermissions).toHaveBeenCalled();
@@ -78,141 +78,141 @@ describe("ACLUserStore", function () {
 
   });
 
-  describe("dispatcher", function () {
+  describe('dispatcher', function () {
 
     afterEach(function () {
       ACLUserStore.removeAllListeners();
     });
 
-    describe("user", function () {
+    describe('user', function () {
 
-      it("stores user when event is dispatched", function () {
+      it('stores user when event is dispatched', function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_SUCCESS,
-          data: {uid: "foo", bar: "baz"}
+          data: {uid: 'foo', bar: 'baz'}
         });
 
-        expect(ACLUserStore.getUserRaw("foo"))
-          .toEqual({uid: "foo", bar: "baz"});
+        expect(ACLUserStore.getUserRaw('foo'))
+          .toEqual({uid: 'foo', bar: 'baz'});
       });
 
-      it("emits event after success event is dispatched", function () {
+      it('emits event after success event is dispatched', function () {
         ACLUserStore.addChangeListener(EventTypes.ACL_USER_DETAILS_USER_CHANGE,
           function (id) {
-            expect(id).toEqual("foo");
+            expect(id).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_SUCCESS,
-          data: {uid: "foo"}
+          data: {uid: 'foo'}
         });
       });
 
-      it("emits event after error event is dispatched", function () {
+      it('emits event after error event is dispatched', function () {
         ACLUserStore.addChangeListener(EventTypes.ACL_USER_DETAILS_USER_ERROR,
           function (id) {
-            expect(id).toEqual("foo");
+            expect(id).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_ERROR,
-          userID: "foo"
+          userID: 'foo'
         });
       });
 
     });
 
-    describe("groups", function () {
+    describe('groups', function () {
 
-      it("stores groups when event is dispatched", function () {
+      it('stores groups when event is dispatched', function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS,
-          data: {bar: "baz"},
-          userID: "foo"
+          data: {bar: 'baz'},
+          userID: 'foo'
         });
 
-        expect(ACLUserStore.getUserRaw("foo"))
-          .toEqual({groups: {bar: "baz"}});
+        expect(ACLUserStore.getUserRaw('foo'))
+          .toEqual({groups: {bar: 'baz'}});
       });
 
-      it("emits event after success event is dispatched", function () {
+      it('emits event after success event is dispatched', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_DETAILS_GROUPS_CHANGE,
           function (id) {
-            expect(id).toEqual("foo");
+            expect(id).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS,
-          userID: "foo"
+          userID: 'foo'
         });
       });
 
-      it("emits event after error event is dispatched", function () {
+      it('emits event after error event is dispatched', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_DETAILS_GROUPS_ERROR,
           function (id) {
-            expect(id).toEqual("foo");
+            expect(id).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GROUPS_ERROR,
-          userID: "foo"
+          userID: 'foo'
         });
       });
 
     });
 
-    describe("permissions", function () {
+    describe('permissions', function () {
 
-      it("stores permissions when event is dispatched", function () {
+      it('stores permissions when event is dispatched', function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS,
-          data: {bar: "baz"},
-          userID: "foo"
+          data: {bar: 'baz'},
+          userID: 'foo'
         });
 
-        expect(ACLUserStore.getUserRaw("foo"))
-          .toEqual({permissions: {bar: "baz"}});
+        expect(ACLUserStore.getUserRaw('foo'))
+          .toEqual({permissions: {bar: 'baz'}});
       });
 
-      it("emits event after success event is dispatched", function () {
+      it('emits event after success event is dispatched', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_DETAILS_PERMISSIONS_CHANGE,
           function (id) {
-            expect(id).toEqual("foo");
+            expect(id).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS,
-          userID: "foo"
+          userID: 'foo'
         });
       });
 
-      it("emits event after error event is dispatched", function () {
+      it('emits event after error event is dispatched', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_DETAILS_PERMISSIONS_ERROR,
           function (id) {
-            expect(id).toEqual("foo");
+            expect(id).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR,
-          userID: "foo"
+          userID: 'foo'
         });
       });
 
     });
 
-    describe("create", function () {
+    describe('create', function () {
 
-      it("emits event after success event is dispatched", function () {
+      it('emits event after success event is dispatched', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_CREATE_SUCCESS,
           function () {
@@ -225,21 +225,21 @@ describe("ACLUserStore", function () {
         });
       });
 
-      it("emits success event with the userID", function () {
+      it('emits success event with the userID', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_CREATE_SUCCESS,
           function (userID) {
-            expect(userID).toEqual("foo");
+            expect(userID).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS,
-          userID: "foo"
+          userID: 'foo'
         });
       });
 
-      it("emits event after error event is dispatched", function () {
+      it('emits event after error event is dispatched', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_CREATE_ERROR,
           function () {
@@ -252,25 +252,25 @@ describe("ACLUserStore", function () {
         });
       });
 
-      it("emits success event with the userID", function () {
+      it('emits success event with the userID', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_CREATE_ERROR,
           function (errorMsg, userID) {
-            expect(userID).toEqual("foo");
+            expect(userID).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_CREATE_ERROR,
-          userID: "foo"
+          userID: 'foo'
         });
       });
 
     });
 
-    describe("update", function () {
+    describe('update', function () {
 
-      it("emits event after success event is dispatched", function () {
+      it('emits event after success event is dispatched', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_UPDATE_SUCCESS,
           function () {
@@ -283,21 +283,21 @@ describe("ACLUserStore", function () {
         });
       });
 
-      it("emits success event with the userID", function () {
+      it('emits success event with the userID', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_UPDATE_SUCCESS,
           function (userID) {
-            expect(userID).toEqual("foo");
+            expect(userID).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS,
-          userID: "foo"
+          userID: 'foo'
         });
       });
 
-      it("emits event after error event is dispatched", function () {
+      it('emits event after error event is dispatched', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_UPDATE_ERROR,
           function () {
@@ -310,41 +310,41 @@ describe("ACLUserStore", function () {
         });
       });
 
-      it("emits error event with the userID", function () {
+      it('emits error event with the userID', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_UPDATE_ERROR,
           function (userID) {
-            expect(userID).toEqual("foo");
+            expect(userID).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR,
-          data: "bar",
-          userID: "foo"
+          data: 'bar',
+          userID: 'foo'
         });
       });
 
-      it("emits error event with the error message", function () {
+      it('emits error event with the error message', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_UPDATE_ERROR,
           function (userID, error) {
-            expect(error).toEqual("bar");
+            expect(error).toEqual('bar');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR,
-          data: "bar",
-          userID: "foo"
+          data: 'bar',
+          userID: 'foo'
         });
       });
 
     });
 
-    describe("delete", function () {
+    describe('delete', function () {
 
-      it("emits event after success event is dispatched", function () {
+      it('emits event after success event is dispatched', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_DELETE_SUCCESS,
           function () {
@@ -357,21 +357,21 @@ describe("ACLUserStore", function () {
         });
       });
 
-      it("emits success event with the userID", function () {
+      it('emits success event with the userID', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_DELETE_SUCCESS,
           function (userID) {
-            expect(userID).toEqual("foo");
+            expect(userID).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS,
-          userID: "foo"
+          userID: 'foo'
         });
       });
 
-      it("emits event after error event is dispatched", function () {
+      it('emits event after error event is dispatched', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_DELETE_ERROR,
           function () {
@@ -384,19 +384,19 @@ describe("ACLUserStore", function () {
         });
       });
 
-      it("emits error event with the userID and error", function () {
+      it('emits error event with the userID and error', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_DELETE_ERROR,
           function (userID, error) {
-            expect(userID).toEqual("foo");
-            expect(error).toEqual("error");
+            expect(userID).toEqual('foo');
+            expect(error).toEqual('error');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_ERROR,
-          userID: "foo",
-          data: "error"
+          userID: 'foo',
+          data: 'error'
         });
       });
 

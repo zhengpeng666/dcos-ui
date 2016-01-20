@@ -1,12 +1,12 @@
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../HistoryStore");
+jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../HistoryStore');
 
-var HistoryStore = require("../HistoryStore");
+var HistoryStore = require('../HistoryStore');
 
-describe("HistoryStore", function () {
+describe('HistoryStore', function () {
   beforeEach(function () {
     HistoryStore.init();
-    var routes = [{name: "home"}, {name: "dashboard"}];
+    var routes = [{name: 'home'}, {name: 'dashboard'}];
     this.routes = routes;
     this.router = {
       getCurrentRoutes: function () {
@@ -16,33 +16,33 @@ describe("HistoryStore", function () {
     };
   });
 
-  describe("#goBackToPage", function () {
-    it("should transition to dashboard", function () {
-      this.routes.push({name: "service-panel"});
+  describe('#goBackToPage', function () {
+    it('should transition to dashboard', function () {
+      this.routes.push({name: 'service-panel'});
       this.router.transitionTo = jasmine.createSpy();
 
       HistoryStore.goBackToPage(this.router);
-      expect(this.router.transitionTo).toHaveBeenCalledWith("dashboard");
+      expect(this.router.transitionTo).toHaveBeenCalledWith('dashboard');
     });
   });
 
-  describe("#goBack", function () {
+  describe('#goBack', function () {
     beforeEach(function () {
-      HistoryStore.set({history: ["home", "nodes", "nodes-list", "service-panel"]});
+      HistoryStore.set({history: ['home', 'nodes', 'nodes-list', 'service-panel']});
     });
 
-    it("should go back to previous page", function () {
+    it('should go back to previous page', function () {
       this.router.transitionTo = jasmine.createSpy();
       HistoryStore.goBack(this.router);
 
-      expect(this.router.transitionTo).toHaveBeenCalledWith("nodes-list");
+      expect(this.router.transitionTo).toHaveBeenCalledWith('nodes-list');
     });
 
-    it("should pop off two items from the history", function () {
+    it('should pop off two items from the history', function () {
       this.router.transitionTo = jasmine.createSpy();
       HistoryStore.goBack(this.router);
 
-      expect(HistoryStore.get("history").length).toEqual(2);
+      expect(HistoryStore.get('history').length).toEqual(2);
     });
   });
 });

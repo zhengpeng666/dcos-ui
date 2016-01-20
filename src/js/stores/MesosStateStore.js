@@ -1,13 +1,13 @@
-var _ = require("underscore");
-import {Store} from "mesosphere-shared-reactjs";
+var _ = require('underscore');
+import {Store} from 'mesosphere-shared-reactjs';
 
-var AppDispatcher = require("../events/AppDispatcher");
-var ActionTypes = require("../constants/ActionTypes");
-var Config = require("../config/Config");
-var EventTypes = require("../constants/EventTypes");
-var GetSetMixin = require("../mixins/GetSetMixin");
-var MesosStateActions = require("../events/MesosStateActions");
-var MesosStateUtil = require("../utils/MesosStateUtil");
+var AppDispatcher = require('../events/AppDispatcher');
+var ActionTypes = require('../constants/ActionTypes');
+var Config = require('../config/Config');
+var EventTypes = require('../constants/EventTypes');
+var GetSetMixin = require('../mixins/GetSetMixin');
+var MesosStateActions = require('../events/MesosStateActions');
+var MesosStateUtil = require('../utils/MesosStateUtil');
 
 var requestInterval = null;
 
@@ -28,7 +28,7 @@ function stopPolling() {
 }
 
 var MesosStateStore = Store.createStore({
-  storeID: "state",
+  storeID: 'state',
 
   mixins: [GetSetMixin],
 
@@ -51,22 +51,22 @@ var MesosStateStore = Store.createStore({
 
   getHostResourcesByFramework: function (filter) {
     return MesosStateUtil.getHostResourcesByFramework(
-      MesosStateStore.get("lastMesosState"), filter
+      MesosStateStore.get('lastMesosState'), filter
     );
   },
 
   getServiceFromName: function (name) {
-    let services = this.get("lastMesosState").frameworks;
+    let services = this.get('lastMesosState').frameworks;
     return _.findWhere(services, {name});
   },
 
   getNodeFromID: function (id) {
-    let nodes = this.get("lastMesosState").slaves;
+    let nodes = this.get('lastMesosState').slaves;
     return _.findWhere(nodes, {id});
   },
 
   getTasksFromNodeID: function (nodeID) {
-    let services = this.get("lastMesosState").frameworks || [];
+    let services = this.get('lastMesosState').frameworks || [];
     let memberTasks = {};
 
     services.forEach(function (service) {
@@ -86,7 +86,7 @@ var MesosStateStore = Store.createStore({
   },
 
   getTaskFromTaskID: function (taskID) {
-    let services = this.get("lastMesosState").frameworks;
+    let services = this.get('lastMesosState').frameworks;
     let foundTask = null;
 
     _.some(services, function (service) {
@@ -107,15 +107,15 @@ var MesosStateStore = Store.createStore({
   },
 
   getSchedulerTaskFromServiceName: function (serviceName) {
-    let frameworks = this.get("lastMesosState").frameworks;
-    let framework = _.findWhere(frameworks, {name: "marathon"});
+    let frameworks = this.get('lastMesosState').frameworks;
+    let framework = _.findWhere(frameworks, {name: 'marathon'});
     if (!framework) {
       return null;
     }
 
     let result = _.find(framework.tasks, function (task) {
       return _.find(task.labels, function (label) {
-        return label.key === "DCOS_PACKAGE_FRAMEWORK_NAME";
+        return label.key === 'DCOS_PACKAGE_FRAMEWORK_NAME';
       }).value === serviceName;
     });
 
@@ -123,7 +123,7 @@ var MesosStateStore = Store.createStore({
   },
 
   getTasksFromServiceName: function (serviceName) {
-    let frameworks = this.get("lastMesosState").frameworks;
+    let frameworks = this.get('lastMesosState').frameworks;
     let framework = _.findWhere(frameworks, {name: serviceName});
 
     if (framework) {

@@ -1,24 +1,24 @@
-import classNames from "classnames";
-import mixin from "reactjs-mixin";
-import React from "react";
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import classNames from 'classnames';
+import mixin from 'reactjs-mixin';
+import React from 'react';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import FilterInputText from "./FilterInputText";
-import IconDownload from "./icons/IconDownload";
-import MesosLogView from "./MesosLogView";
-import RequestErrorMsg from "./RequestErrorMsg";
-import TaskDirectoryActions from "../events/TaskDirectoryActions";
-import TaskDirectoryStore from "../stores/TaskDirectoryStore";
+import FilterInputText from './FilterInputText';
+import IconDownload from './icons/IconDownload';
+import MesosLogView from './MesosLogView';
+import RequestErrorMsg from './RequestErrorMsg';
+import TaskDirectoryActions from '../events/TaskDirectoryActions';
+import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 
 const LOG_VIEWS = [
-  {name: "stdout", displayName: "Output"},
-  {name: "stderr", displayName: "Error"}
+  {name: 'stdout', displayName: 'Output'},
+  {name: 'stderr', displayName: 'Error'}
 ];
 
 const METHODS_TO_BIND = [
-  "handleSearchStringChange",
-  "onTaskDirectoryStoreError",
-  "onTaskDirectoryStoreSuccess"
+  'handleSearchStringChange',
+  'onTaskDirectoryStoreError',
+  'onTaskDirectoryStoreSuccess'
 ];
 
 export default class TaskDebugView extends mixin(StoreMixin) {
@@ -31,8 +31,8 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     };
 
     this.store_listeners = [{
-      events: ["success", "error"],
-      name: "taskDirectory",
+      events: ['success', 'error'],
+      name: 'taskDirectory',
       suppressUpdate: true
     }];
 
@@ -78,7 +78,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 
   onTaskDirectoryStoreSuccess() {
     if (this.state.directory == null) {
-      this.setState({directory: TaskDirectoryStore.get("directory")});
+      this.setState({directory: TaskDirectoryStore.get('directory')});
     }
   }
 
@@ -148,8 +148,8 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 
     return LOG_VIEWS.map((view, index) => {
       let classes = classNames({
-        "button button-stroke": true,
-        "active": index === currentView
+        'button button-stroke': true,
+        'active': index === currentView
       });
 
       return (
@@ -176,7 +176,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     // Only try to find file if directory exists
     let directoryItem = directory && directory.findFile(currentView.name);
     // Only try to get path if file exists
-    let filePath = directoryItem && directoryItem.get("path");
+    let filePath = directoryItem && directoryItem.get('path');
 
     return (
       <div className="flex-container-col flex-grow no-overflow">

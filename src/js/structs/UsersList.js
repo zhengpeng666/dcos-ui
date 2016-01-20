@@ -1,5 +1,5 @@
-import List from "./List";
-import User from "./User";
+import List from './List';
+import User from './User';
 
 export default class UsersList extends List {
   constructor() {

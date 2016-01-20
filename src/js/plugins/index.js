@@ -1,13 +1,13 @@
-import AuthenticationPlugin from "./authentication-plugin/AuthenticationPlugin";
-import BannerPlugin from "./BannerPlugin";
-import SettingsPlugin from "./settings-plugin/SettingsPlugin";
-import TrackingPlugin from "./TrackingPlugin";
+import AuthenticationPlugin from './authentication-plugin/AuthenticationPlugin';
+import BannerPlugin from './BannerPlugin';
+import SettingsPlugin from './settings-plugin/SettingsPlugin';
+import TrackingPlugin from './TrackingPlugin';
 
 const pluginList = {
-  "authentication": AuthenticationPlugin,
-  "banner": BannerPlugin,
-  "settings": SettingsPlugin,
-  "tracking": TrackingPlugin
+  'authentication': AuthenticationPlugin,
+  'banner': BannerPlugin,
+  'settings': SettingsPlugin,
+  'tracking': TrackingPlugin
 };
 
 export default pluginList;

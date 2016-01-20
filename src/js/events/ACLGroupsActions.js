@@ -1,9 +1,9 @@
-import _ from "underscore";
+import _ from 'underscore';
 
-import ActionTypes from "../constants/ActionTypes";
-import AppDispatcher from "./AppDispatcher";
-import Config from "../config/Config";
-import RequestUtil from "../utils/RequestUtil";
+import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from './AppDispatcher';
+import Config from '../config/Config';
+import RequestUtil from '../utils/RequestUtil';
 
 const ACLGroupsActions = {
 
@@ -86,15 +86,15 @@ const ACLGroupsActions = {
 
   addGroup: function (data) {
     let groupID = data.gid;
-    data = _.omit(data, "gid");
+    data = _.omit(data, 'gid');
 
     if (!groupID && data.description) {
-      groupID = data.description.replace(/\s+/g, "").toLowerCase();
+      groupID = data.description.replace(/\s+/g, '').toLowerCase();
     }
 
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}`,
-      method: "PUT",
+      method: 'PUT',
       data,
       success: function () {
         AppDispatcher.handleServerAction({
@@ -115,7 +115,7 @@ const ACLGroupsActions = {
   updateGroup: function (groupID, patchData) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}`,
-      method: "PATCH",
+      method: 'PATCH',
       data: patchData,
       success: function () {
         AppDispatcher.handleServerAction({
@@ -136,7 +136,7 @@ const ACLGroupsActions = {
   deleteGroup: function (groupID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}`,
-      method: "DELETE",
+      method: 'DELETE',
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS,
@@ -156,7 +156,7 @@ const ACLGroupsActions = {
   addUser: function (groupID, userID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}/users/${userID}`,
-      method: "PUT",
+      method: 'PUT',
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
@@ -178,7 +178,7 @@ const ACLGroupsActions = {
   deleteUser: function (groupID, userID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}/users/${userID}`,
-      method: "DELETE",
+      method: 'DELETE',
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
@@ -200,33 +200,33 @@ const ACLGroupsActions = {
 };
 
 if (Config.useFixtures) {
-  let groupFixture = require("json!../../../tests/_fixtures/acl/group-unicode.json");
-  let groupDetailsFixture = require("json!../../../tests/_fixtures/acl/group-with-details.json");
-  let groupsFixture = require("json!../../../tests/_fixtures/acl/groups-unicode.json");
+  let groupFixture = require('json!../../../tests/_fixtures/acl/group-unicode.json');
+  let groupDetailsFixture = require('json!../../../tests/_fixtures/acl/group-with-details.json');
+  let groupsFixture = require('json!../../../tests/_fixtures/acl/groups-unicode.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};
   }
 
   global.actionTypes.ACLGroupsActions = {
-    fetch: {event: "success", success: {response: groupsFixture}},
-    fetchGroup: {event: "success", success: {response: groupFixture}},
-    fetchGroupPermissions: {event: "success", success: {
+    fetch: {event: 'success', success: {response: groupsFixture}},
+    fetchGroup: {event: 'success', success: {response: groupFixture}},
+    fetchGroupPermissions: {event: 'success', success: {
       response: groupDetailsFixture.permissions
     }},
-    fetchGroupUsers: {event: "success", success: {
+    fetchGroupUsers: {event: 'success', success: {
       response: groupDetailsFixture.users
     }},
-    addGroup: {event: "success"},
-    updateGroup: {event: "success"},
-    deleteGroup: {event: "success"},
-    addUser: {event: "success"},
-    deleteUser: {event: "success"}
+    addGroup: {event: 'success'},
+    updateGroup: {event: 'success'},
+    deleteGroup: {event: 'success'},
+    addUser: {event: 'success'},
+    deleteUser: {event: 'success'}
   };
 
   Object.keys(global.actionTypes.ACLGroupsActions).forEach(function (method) {
     ACLGroupsActions[method] = RequestUtil.stubRequest(
-      ACLGroupsActions, "ACLGroupsActions", method
+      ACLGroupsActions, 'ACLGroupsActions', method
     );
   });
 }

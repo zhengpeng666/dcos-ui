@@ -1,16 +1,16 @@
-var _ = require("underscore");
-import {Store} from "mesosphere-shared-reactjs";
+var _ = require('underscore');
+import {Store} from 'mesosphere-shared-reactjs';
 
-var AppDispatcher = require("../events/AppDispatcher");
-var ActionTypes = require("../constants/ActionTypes");
-var Config = require("../config/Config");
-var EventTypes = require("../constants/EventTypes");
-var GetSetMixin = require("../mixins/GetSetMixin");
-var MesosSummaryUtil = require("../utils/MesosSummaryUtil");
-var MesosSummaryActions = require("../events/MesosSummaryActions");
-var SummaryList = require("../structs/SummaryList");
-import StateSummary from "../structs/StateSummary";
-var TimeScales = require("../constants/TimeScales");
+var AppDispatcher = require('../events/AppDispatcher');
+var ActionTypes = require('../constants/ActionTypes');
+var Config = require('../config/Config');
+var EventTypes = require('../constants/EventTypes');
+var GetSetMixin = require('../mixins/GetSetMixin');
+var MesosSummaryUtil = require('../utils/MesosSummaryUtil');
+var MesosSummaryActions = require('../events/MesosSummaryActions');
+var SummaryList = require('../structs/SummaryList');
+import StateSummary from '../structs/StateSummary';
+var TimeScales = require('../constants/TimeScales');
 
 var requestInterval = null;
 
@@ -18,7 +18,7 @@ function startPolling() {
   if (requestInterval == null) {
     var timeScale;
 
-    if (!MesosSummaryStore.get("statesProcessed")) {
+    if (!MesosSummaryStore.get('statesProcessed')) {
       timeScale = TimeScales.MINUTE;
     }
 
@@ -37,13 +37,13 @@ function stopPolling() {
 }
 
 var MesosSummaryStore = Store.createStore({
-  storeID: "summary",
+  storeID: 'summary',
 
   mixins: [GetSetMixin],
 
   init: function () {
 
-    if (this.get("initCalledAt") != null) {
+    if (this.get('initCalledAt') != null) {
       return;
     }
 
@@ -78,16 +78,16 @@ var MesosSummaryStore = Store.createStore({
   },
 
   getServiceFromName: function (name) {
-    let services = this.get("states").lastSuccessful().getServiceList().getItems();
+    let services = this.get('states').lastSuccessful().getServiceList().getItems();
 
     return _.find(services, function (service) {
-      return service.get("name") === name;
+      return service.get('name') === name;
     });
   },
 
   hasServiceUrl: function (serviceName) {
     let service = MesosSummaryStore.getServiceFromName(serviceName);
-    let webuiUrl = service.get("webui_url");
+    let webuiUrl = service.get('webui_url');
 
     return service && !!webuiUrl && webuiUrl.length > 0;
   },
@@ -103,10 +103,10 @@ var MesosSummaryStore = Store.createStore({
   },
 
   notifySummaryProcessed: function () {
-    var initCalledAt = this.get("initCalledAt");
+    var initCalledAt = this.get('initCalledAt');
     // skip if state is processed, already loading or init has not been called
-    if (this.get("statesProcessed") ||
-        this.get("loading") != null ||
+    if (this.get('statesProcessed') ||
+        this.get('loading') != null ||
         initCalledAt == null) {
       this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
       return;
@@ -128,17 +128,17 @@ var MesosSummaryStore = Store.createStore({
   processFailureRate: function (state, prevState) {
     var currentFailureRate = MesosSummaryUtil.getFailureRate(state, prevState);
 
-    var taskFailureRate = this.get("taskFailureRate");
+    var taskFailureRate = this.get('taskFailureRate');
     taskFailureRate.push(currentFailureRate);
     taskFailureRate.shift();
     return taskFailureRate;
   },
 
   processSummary: function (data, options = {}) {
-    let states = this.get("states");
+    let states = this.get('states');
     let prevState = states.last();
 
-    if (typeof data.date !== "number") {
+    if (typeof data.date !== 'number') {
       data.date = Date.now();
     }
 
@@ -160,7 +160,7 @@ var MesosSummaryStore = Store.createStore({
 
   processSummaryError: function (options = {}) {
     let unsuccessfulSummary = new StateSummary({successful: false});
-    let states = this.get("states");
+    let states = this.get('states');
     let prevState = states.last();
 
     states.add(unsuccessfulSummary);

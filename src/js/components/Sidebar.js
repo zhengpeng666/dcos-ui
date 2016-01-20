@@ -1,26 +1,26 @@
-var _ = require("underscore");
-var classNames = require("classnames");
-var GeminiScrollbar = require("react-gemini-scrollbar");
-var Link = require("react-router").Link;
-var React = require("react/addons");
-var State = require("react-router").State;
+var _ = require('underscore');
+var classNames = require('classnames');
+var GeminiScrollbar = require('react-gemini-scrollbar');
+var Link = require('react-router').Link;
+var React = require('react/addons');
+var State = require('react-router').State;
 
-import ClusterHeader from "./ClusterHeader";
-var EventTypes = require("../constants/EventTypes");
-var IntercomActions = require("../events/IntercomActions");
-var IntercomStore = require("../stores/IntercomStore");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var MesosSummaryStore = require("../stores/MesosSummaryStore");
-var MetadataStore = require("../stores/MetadataStore");
-import Plugins from "../plugins/Plugins";
-var SidebarActions = require("../events/SidebarActions");
-var TooltipMixin = require("../mixins/TooltipMixin");
+import ClusterHeader from './ClusterHeader';
+var EventTypes = require('../constants/EventTypes');
+var IntercomActions = require('../events/IntercomActions');
+var IntercomStore = require('../stores/IntercomStore');
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
+var MesosSummaryStore = require('../stores/MesosSummaryStore');
+var MetadataStore = require('../stores/MetadataStore');
+import Plugins from '../plugins/Plugins';
+var SidebarActions = require('../events/SidebarActions');
+var TooltipMixin = require('../mixins/TooltipMixin');
 
-let defaultMenuItems = ["dashboard", "services", "nodes-list"];
+let defaultMenuItems = ['dashboard', 'services', 'nodes-list'];
 
 var Sidebar = React.createClass({
 
-  displayName: "Sidebar",
+  displayName: 'Sidebar',
 
   mixins: [State, InternalStorageMixin, TooltipMixin],
 
@@ -30,7 +30,7 @@ var Sidebar = React.createClass({
 
   componentDidMount: function () {
     this.internalStorage_update({
-      mesosInfo: MesosSummaryStore.get("states").lastSuccessful()
+      mesosInfo: MesosSummaryStore.get('states').lastSuccessful()
     });
 
     MetadataStore.addChangeListener(
@@ -68,7 +68,7 @@ var Sidebar = React.createClass({
   },
 
   handleToggleIntercom: function () {
-    if (IntercomStore.get("isOpen")) {
+    if (IntercomStore.get('isOpen')) {
       IntercomActions.close();
     } else {
       IntercomActions.open();
@@ -85,7 +85,7 @@ var Sidebar = React.createClass({
     let currentPath = this.context.router.getLocation().getCurrentPath();
 
     const menuItems = Plugins.applyFilter(
-      "sidebarNavigation",
+      'sidebarNavigation',
       defaultMenuItems
     );
 
@@ -95,16 +95,16 @@ var Sidebar = React.createClass({
       // Figure out if current route is active
       var isActive = route.handler.routeConfig.matches.test(currentPath);
       var iconClasses = {
-        "sidebar-menu-item-icon icon icon-sprite icon-sprite-medium": true,
-        "icon-sprite-medium-color": isActive,
-        "icon-sprite-medium-black": !isActive
+        'sidebar-menu-item-icon icon icon-sprite icon-sprite-medium': true,
+        'icon-sprite-medium-color': isActive,
+        'icon-sprite-medium-black': !isActive
       };
 
       iconClasses[`icon-${route.handler.routeConfig.icon}`] = true;
 
       var itemClassSet = classNames({
-        "sidebar-menu-item": true,
-        "selected": isActive
+        'sidebar-menu-item': true,
+        'selected': isActive
       });
 
       return (
@@ -122,7 +122,7 @@ var Sidebar = React.createClass({
   },
 
   getVersion() {
-    let data = MetadataStore.get("dcosMetadata");
+    let data = MetadataStore.get('dcosMetadata');
     if (data == null || data.version == null) {
       return null;
     }
@@ -134,12 +134,12 @@ var Sidebar = React.createClass({
 
   getFooter() {
     var chatIconClassSet = classNames({
-      "clickable": true,
-      "icon": true,
-      "icon-sprite": true,
-      "icon-chat": true,
-      "icon-sprite-medium": true,
-      "icon-sprite-medium-color": IntercomStore.get("isOpen")
+      'clickable': true,
+      'icon': true,
+      'icon-sprite': true,
+      'icon-chat': true,
+      'icon-sprite-medium': true,
+      'icon-sprite-medium-color': IntercomStore.get('isOpen')
     });
 
     let defaultButtonSet = [
@@ -173,7 +173,7 @@ var Sidebar = React.createClass({
     ];
 
     let buttonSet = Plugins.applyFilter(
-      "sidebarFooterButtonSet", defaultButtonSet
+      'sidebarFooterButtonSet', defaultButtonSet
     );
     let footer = null;
 
@@ -181,7 +181,7 @@ var Sidebar = React.createClass({
       footer = <div className="icon-buttons">{buttonSet}</div>;
     }
 
-    return Plugins.applyFilter("sidebarFooter", footer, defaultButtonSet);
+    return Plugins.applyFilter('sidebarFooter', footer, defaultButtonSet);
   },
 
   render: function () {

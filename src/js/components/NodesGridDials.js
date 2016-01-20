@@ -1,23 +1,23 @@
-var _ = require("underscore");
-var React = require("react/addons");
+var _ = require('underscore');
+var React = require('react/addons');
 
-var Chart = require("./charts/Chart");
-var DialChart = require("./charts/DialChart");
-var ResourceTypes = require("../constants/ResourceTypes");
-var TooltipMixin = require("../mixins/TooltipMixin");
+var Chart = require('./charts/Chart');
+var DialChart = require('./charts/DialChart');
+var ResourceTypes = require('../constants/ResourceTypes');
+var TooltipMixin = require('../mixins/TooltipMixin');
 
 var colors = {
   error: 2,
-  unused: "unused"
+  unused: 'unused'
 };
 
 var NodesGridDials = React.createClass({
 
-  displayName: "NodesGridDials",
+  displayName: 'NodesGridDials',
 
   propTypes: {
     hosts: React.PropTypes.array.isRequired,
-    // enum: ["cpus", "mem", "disk"]
+    // enum: ['cpus', 'mem', 'disk']
     selectedResource: React.PropTypes.string.isRequired,
     serviceColors: React.PropTypes.object.isRequired,
     showServices: React.PropTypes.bool.isRequired,
@@ -32,13 +32,13 @@ var NodesGridDials = React.createClass({
 
   handleDialClick: function (nodeID) {
     // Using handler, since Link in arrays cannot get router context
-    this.context.router.transitionTo("nodes-grid-panel", {nodeID});
+    this.context.router.transitionTo('nodes-grid-panel', {nodeID});
   },
 
   getServiceSlicesConfig: function (node) {
     var config = [];
     var props = this.props;
-    var resourcesByFramework = props.resourcesByFramework[node.get("id")];
+    var resourcesByFramework = props.resourcesByFramework[node.get('id')];
 
     if (!resourcesByFramework) {
       return config;
@@ -97,7 +97,7 @@ var NodesGridDials = React.createClass({
 
     config.push({
       colorIndex: colors.unused,
-      name: "Unused",
+      name: 'Unused',
       percentage: 100 - percentage
     });
 
@@ -111,7 +111,7 @@ var NodesGridDials = React.createClass({
     return [
       {
         colorIndex: colors.error,
-        name: "Error",
+        name: 'Error',
         percentage: 100
       }
     ];
@@ -125,10 +125,10 @@ var NodesGridDials = React.createClass({
       return {
         data: sliceData.data,
         description: [
-          <span className="unit" key={"unit"}>
+          <span className="unit" key={'unit'}>
             {sliceData.usedPercentage}%
           </span>,
-          <span className="unit-label text-muted" key={"unit-label"}>
+          <span className="unit-label text-muted" key={'unit-label'}>
             {resourceConfig.label}
           </span>
         ]
@@ -152,16 +152,16 @@ var NodesGridDials = React.createClass({
 
       if (!node.isActive()) {
         tooltipProps = {
-          "data-behavior": "show-tip",
-          "data-tip-place": "top",
-          "data-tip-content": "Connection to node lost"
+          'data-behavior': 'show-tip',
+          'data-tip-place': 'top',
+          'data-tip-content': 'Connection to node lost'
         };
       }
 
       return (
         <a className="nodes-grid-dials-item clickable"
-          onClick={this.handleDialClick.bind(this, node.get("id"))}
-          key={node.get("id")}>
+          onClick={this.handleDialClick.bind(this, node.get('id'))}
+          key={node.get('id')}>
           <div className="chart">
             <Chart calcHeight={function (w) { return w; }}>
               <DialChart data={config.data}

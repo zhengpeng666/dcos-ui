@@ -1,5 +1,5 @@
-var _ = require("underscore");
-var Actions = require("../actions/Actions");
+var _ = require('underscore');
+var Actions = require('../actions/Actions');
 
 var ActionsMixin = {
 
@@ -21,7 +21,7 @@ var ActionsMixin = {
    * Registers component instance in Actions singleton
    */
   actions_registerComponent: function () {
-    this.actions_componentID = this._rootNodeID + "-" +
+    this.actions_componentID = this._rootNodeID + '-' +
       this.constructor.displayName;
 
     Actions.registerComponent({
@@ -44,7 +44,7 @@ var ActionsMixin = {
   actions_setStateProxy: function (state) {
     // Get the diff as that's the only thing we want to log
     var stateDiff = _.reduce(state, function (memo, value, key) {
-      if (key === "children") {
+      if (key === 'children') {
         return memo;
       }
 
@@ -99,7 +99,7 @@ var ActionsMixin = {
       eventIDs.push(this.constructor.displayName, key);
 
       // Append custom ui event names if there's one
-      if (keyConfig && typeof keyConfig === "function") {
+      if (keyConfig && typeof keyConfig === 'function') {
         eventIDs.push(keyConfig.call(this, value));
       }
 

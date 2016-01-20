@@ -1,32 +1,32 @@
-import {Form} from "reactjs-components";
+import {Form} from 'reactjs-components';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import ACLGroupStore from "../stores/ACLGroupStore";
-import GroupUserMembershipTab from "./GroupUserMembershipTab";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import PermissionsView from "./PermissionsView";
-import RequestErrorMsg from "./RequestErrorMsg";
-import SidePanelContents from "./SidePanelContents";
-import StringUtil from "../utils/StringUtil";
+import ACLGroupStore from '../stores/ACLGroupStore';
+import GroupUserMembershipTab from './GroupUserMembershipTab';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import PermissionsView from './PermissionsView';
+import RequestErrorMsg from './RequestErrorMsg';
+import SidePanelContents from './SidePanelContents';
+import StringUtil from '../utils/StringUtil';
 
 const EXTERNAL_CHANGE_EVENTS = [
-  "onAclStoreGroupGrantSuccess",
-  "onAclStoreGroupRevokeSuccess",
-  "onGroupStoreAddUserSuccess",
-  "onGroupStoreDeleteUserSuccess"
+  'onAclStoreGroupGrantSuccess',
+  'onAclStoreGroupRevokeSuccess',
+  'onGroupStoreAddUserSuccess',
+  'onGroupStoreDeleteUserSuccess'
 ];
 
-const METHODS_TO_BIND = ["handleNameChange"];
+const METHODS_TO_BIND = ['handleNameChange'];
 
 export default class GroupSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
     this.tabs_tabs = {
-      permissions: "Permissions",
-      members: "Members"
+      permissions: 'Permissions',
+      members: 'Members'
     };
 
     this.state = {
@@ -36,24 +36,24 @@ export default class GroupSidePanelContents extends SidePanelContents {
 
     this.store_listeners = [
       {
-        name: "acl",
+        name: 'acl',
         events: [
-          "groupGrantSuccess",
-          "groupRevokeSuccess"
+          'groupGrantSuccess',
+          'groupRevokeSuccess'
         ]
       },
       {
-        name: "group",
+        name: 'group',
         events: [
-          "addUserSuccess",
-          "deleteUserSuccess",
-          "fetchedDetailsSuccess",
-          "fetchedDetailsError"
+          'addUserSuccess',
+          'deleteUserSuccess',
+          'fetchedDetailsSuccess',
+          'fetchedDetailsError'
         ]
       },
       {
-        name: "summary",
-        events: ["success"],
+        name: 'summary',
+        events: ['success'],
         listenAlways: false
       }
     ];
@@ -107,14 +107,14 @@ export default class GroupSidePanelContents extends SidePanelContents {
   getGroupInfo(group) {
     let editNameFormDefinition = [
       {
-        fieldType: "text",
-        name: "description",
-        placeholder: "Group Name",
+        fieldType: 'text',
+        name: 'description',
+        placeholder: 'Group Name',
         required: true,
-        sharedClass: "form-element-inline h1 flush",
+        sharedClass: 'form-element-inline h1 flush',
         showError: false,
         showLabel: false,
-        writeType: "edit",
+        writeType: 'edit',
         validation: function () { return true; },
         value: group.description
       }
@@ -146,8 +146,8 @@ export default class GroupSidePanelContents extends SidePanelContents {
   getSubHeader(group) {
     let userCount = group.getUserCount();
     let serviceCount = group.getPermissionCount();
-    let userLabel = StringUtil.pluralize("Member", userCount);
-    let serviceLabel = StringUtil.pluralize("Service", serviceCount);
+    let userLabel = StringUtil.pluralize('Member', userCount);
+    let serviceLabel = StringUtil.pluralize('Service', serviceCount);
 
     return (
       <div>
@@ -189,8 +189,8 @@ export default class GroupSidePanelContents extends SidePanelContents {
       return this.getErrorNotice();
     }
 
-    if (group.get("gid") == null ||
-        !MesosSummaryStore.get("statesProcessed")) {
+    if (group.get('gid') == null ||
+        !MesosSummaryStore.get('statesProcessed')) {
       return this.getLoadingScreen();
     }
 

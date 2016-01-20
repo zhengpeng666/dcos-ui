@@ -1,18 +1,18 @@
-import _ from "underscore";
-import React from "react/addons";
-import ReactZeroClipboard from "react-zeroclipboard";
+import _ from 'underscore';
+import React from 'react/addons';
+import ReactZeroClipboard from 'react-zeroclipboard';
 // ReactZeroClipboard injects ZeroClipboard from a third-party server unless
 // global.ZeroClipboard is already defined:
-import ZeroClipboard from "zeroclipboard";
+import ZeroClipboard from 'zeroclipboard';
 global.ZeroClipboard = ZeroClipboard;
 
-import Actions from "../actions/Actions";
-import MetadataStore from "../stores/MetadataStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import TooltipMixin from "../mixins/TooltipMixin";
+import Actions from '../actions/Actions';
+import MetadataStore from '../stores/MetadataStore';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import TooltipMixin from '../mixins/TooltipMixin';
 
 var ClusterHeader = React.createClass({
-  displayName: "ClusterHeader",
+  displayName: 'ClusterHeader',
 
   mixins: [TooltipMixin],
 
@@ -24,9 +24,9 @@ var ClusterHeader = React.createClass({
 
   handleCopy() {
     this.tip_updateTipContent(
-      React.findDOMNode(this.refs.copyButton), "Copied!"
+      React.findDOMNode(this.refs.copyButton), 'Copied!'
     );
-    Actions.log({eventID: "Copied hostname from sidebar"});
+    Actions.log({eventID: 'Copied hostname from sidebar'});
   },
 
   handleMouseOverCopyIcon() {
@@ -43,9 +43,9 @@ var ClusterHeader = React.createClass({
     var hasFlash = false;
 
     try {
-      hasFlash = Boolean(new ActiveXObject("ShockwaveFlash.ShockwaveFlash"));
+      hasFlash = Boolean(new ActiveXObject('ShockwaveFlash.ShockwaveFlash'));
     } catch(exception) {
-      hasFlash = navigator.mimeTypes["application/x-shockwave-flash"] != null;
+      hasFlash = navigator.mimeTypes['application/x-shockwave-flash'] != null;
     }
 
     if (this.props.useClipboard) {
@@ -95,8 +95,8 @@ var ClusterHeader = React.createClass({
   },
 
   render() {
-    let states = MesosSummaryStore.get("states");
-    let clusterName = "";
+    let states = MesosSummaryStore.get('states');
+    let clusterName = '';
 
     if (states) {
       let lastState = states.lastSuccessful();
@@ -114,7 +114,7 @@ var ClusterHeader = React.createClass({
         <h3 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={clusterName}>
           {clusterName}
         </h3>
-        {this.getHostName(MetadataStore.get("metadata"))}
+        {this.getHostName(MetadataStore.get('metadata'))}
       </div>
     );
   }

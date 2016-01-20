@@ -1,6 +1,6 @@
-var React = require("react");
+var React = require('react');
 
-var ActionsMixin = require("../mixins/ActionsMixin");
+var ActionsMixin = require('../mixins/ActionsMixin');
 
 function overrides() {
   var originalCreateClass = React.createClass;
@@ -13,7 +13,7 @@ function overrides() {
     }
 
     // We don't want to log actions from the router
-    if (specification.displayName !== "Router") {
+    if (specification.displayName !== 'Router') {
       specification.mixins.push(ActionsMixin);
     }
 

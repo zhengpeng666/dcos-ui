@@ -1,7 +1,7 @@
-import ActionTypes from "../constants/ActionTypes";
-import AppDispatcher from "./AppDispatcher";
-import Config from "../config/Config";
-import RequestUtil from "../utils/RequestUtil";
+import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from './AppDispatcher';
+import Config from '../config/Config';
+import RequestUtil from '../utils/RequestUtil';
 
 const ACLActions = {
 
@@ -28,7 +28,7 @@ const ACLActions = {
   grantUserActionToResource: function (userID, action, resourceID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/users/${userID}/${action}`,
-      method: "PUT",
+      method: 'PUT',
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
@@ -48,7 +48,7 @@ const ACLActions = {
   revokeUserActionToResource: function (userID, action, resourceID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/users/${userID}/${action}`,
-      method: "DELETE",
+      method: 'DELETE',
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
@@ -68,7 +68,7 @@ const ACLActions = {
   grantGroupActionToResource: function (groupID, action, resourceID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
-      method: "PUT",
+      method: 'PUT',
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
@@ -88,7 +88,7 @@ const ACLActions = {
   revokeGroupActionToResource: function (groupID, action, resourceID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}/groups/${groupID}/${action}`,
-      method: "DELETE",
+      method: 'DELETE',
       success: function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
@@ -109,25 +109,25 @@ const ACLActions = {
 
 if (Config.useFixtures) {
   let aclsFixture =
-    require("json!../../../tests/_fixtures/acl/acls-unicode.json");
+    require('json!../../../tests/_fixtures/acl/acls-unicode.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};
   }
 
   global.actionTypes.ACLActions = {
-    fetchACLsForResource: {event: "success", success: {
+    fetchACLsForResource: {event: 'success', success: {
       response: aclsFixture
     }},
-    grantUserActionToResource: {event: "success"},
-    revokeUserActionToResource: {event: "success"},
-    grantGroupActionToResource: {event: "success"},
-    revokeGroupActionToResource: {event: "success"}
+    grantUserActionToResource: {event: 'success'},
+    revokeUserActionToResource: {event: 'success'},
+    grantGroupActionToResource: {event: 'success'},
+    revokeGroupActionToResource: {event: 'success'}
   };
 
   Object.keys(global.actionTypes.ACLActions).forEach(function (method) {
     ACLActions[method] = RequestUtil.stubRequest(
-      ACLActions, "ACLActions", method
+      ACLActions, 'ACLActions', method
     );
   });
 }

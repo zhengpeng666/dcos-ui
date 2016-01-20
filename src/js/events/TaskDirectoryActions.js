@@ -1,11 +1,11 @@
-import _ from "underscore";
+import _ from 'underscore';
 
-import ActionTypes from "../constants/ActionTypes";
-import AppDispatcher from "./AppDispatcher";
-import Config from "../config/Config";
+import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from './AppDispatcher';
+import Config from '../config/Config';
 // TODO for mlunoe: We shouldn't be including stores in these files. DCOS-4430
-import MesosStateStore from "../stores/MesosStateStore";
-import RequestUtil from "../utils/RequestUtil";
+import MesosStateStore from '../stores/MesosStateStore';
+import RequestUtil from '../utils/RequestUtil';
 
 var TaskDirectoryActions = {
   getDownloadURL: function (nodeID, path) {
@@ -15,13 +15,13 @@ var TaskDirectoryActions = {
 
   getNodeStateJSON: function (task) {
     let pid = MesosStateStore.getNodeFromID(task.slave_id).pid;
-    let nodePID = pid.substring(0, pid.indexOf("@"));
+    let nodePID = pid.substring(0, pid.indexOf('@'));
 
     return `${Config.rootUrl}/slave/${task.slave_id}/${nodePID}/state.json`;
   },
 
   getInnerPath: function (nodeState, task, innerPath) {
-    innerPath = innerPath || "";
+    innerPath = innerPath || '';
 
     let taskFramework = _.find(nodeState.frameworks, function (framework) {
       return framework.id === task.framework_id;
@@ -70,7 +70,7 @@ var TaskDirectoryActions = {
             cb(response);
           },
           error: function (xhr) {
-            if (xhr.statusText === "abort") {
+            if (xhr.statusText === 'abort') {
               resolve();
               return;
             }
@@ -109,7 +109,7 @@ var TaskDirectoryActions = {
         });
       },
       error: function (xhr) {
-        if (xhr.statusText === "abort") {
+        if (xhr.statusText === 'abort') {
           return;
         }
 

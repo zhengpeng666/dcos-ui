@@ -1,19 +1,19 @@
-import _ from "underscore";
-import React from "react/addons";
+import _ from 'underscore';
+import React from 'react/addons';
 
-import EventTypes from "../constants/EventTypes";
-import FilterByTaskState from "./FilterByTaskState";
-import FilterInputText from "./FilterInputText";
-import MesosStateStore from "../stores/MesosStateStore";
-import RequestErrorMsg from "./RequestErrorMsg";
-import TaskTable from "./TaskTable";
-import StringUtil from "../utils/StringUtil";
-import TaskStates from "../constants/TaskStates";
+import EventTypes from '../constants/EventTypes';
+import FilterByTaskState from './FilterByTaskState';
+import FilterInputText from './FilterInputText';
+import MesosStateStore from '../stores/MesosStateStore';
+import RequestErrorMsg from './RequestErrorMsg';
+import TaskTable from './TaskTable';
+import StringUtil from '../utils/StringUtil';
+import TaskStates from '../constants/TaskStates';
 
 const METHODS_TO_BIND = [
-  "handleSearchStringChange",
-  "handleStatusFilterChange",
-  "onMesosStateRequestError"
+  'handleSearchStringChange',
+  'handleStatusFilterChange',
+  'onMesosStateRequestError'
 ];
 
 export default class TaskView extends React.Component {
@@ -22,8 +22,8 @@ export default class TaskView extends React.Component {
 
     this.state = {
       mesosStateErrorCount: 0,
-      searchString: "",
-      filterByStatus: "all"
+      searchString: '',
+      filterByStatus: 'all'
     };
 
     METHODS_TO_BIND.forEach(function (method) {
@@ -59,7 +59,7 @@ export default class TaskView extends React.Component {
 
   filterByCurrentStatus(tasks) {
     let status = this.state.filterByStatus;
-    if (status === "all") {
+    if (status === 'all') {
       return tasks;
     }
 
@@ -76,11 +76,11 @@ export default class TaskView extends React.Component {
     let statusCount = {active: 0, completed: 0};
 
     tasks.forEach(function (task) {
-      if (_.contains(TaskStates[task.state].stateTypes, "active")) {
+      if (_.contains(TaskStates[task.state].stateTypes, 'active')) {
         statusCount.active += 1;
       }
 
-      if (_.contains(TaskStates[task.state].stateTypes, "completed")) {
+      if (_.contains(TaskStates[task.state].stateTypes, 'completed')) {
         statusCount.completed += 1;
       }
     });
@@ -92,14 +92,14 @@ export default class TaskView extends React.Component {
     let statusCount = this.getStatusCounts(tasks);
     return [{
       count: statusCount.active,
-      id: "active",
-      name: "Active Tasks",
-      value: "active"
+      id: 'active',
+      name: 'Active Tasks',
+      value: 'active'
     }, {
       count: statusCount.completed,
-      id: "completed",
-      name: "Completed Tasks",
-      value: "completed"
+      id: 'completed',
+      name: 'Completed Tasks',
+      value: 'completed'
     }];
   }
 
@@ -133,18 +133,18 @@ export default class TaskView extends React.Component {
   getHeaderText(tasks) {
     let currentStatus = this.state.filterByStatus;
     let tasksLength = tasks.length;
-    if (currentStatus === "all") {
-      return `${tasksLength} ${StringUtil.pluralize("Task", tasksLength)}`;
+    if (currentStatus === 'all') {
+      return `${tasksLength} ${StringUtil.pluralize('Task', tasksLength)}`;
     }
 
     const displayNameMap = {
-      active: "Active",
-      completed: "Completed"
+      active: 'Active',
+      completed: 'Completed'
     };
 
     let statusCount = this.getStatusCounts(tasks)[currentStatus];
     let displayName = displayNameMap[currentStatus];
-    let pluralizedTasks = StringUtil.pluralize("Task", statusCount);
+    let pluralizedTasks = StringUtil.pluralize('Task', statusCount);
     return `${statusCount} ${displayName} ${pluralizedTasks}`;
   }
 
@@ -152,8 +152,8 @@ export default class TaskView extends React.Component {
     let state = this.state;
     let tasks = this.props.tasks || [];
 
-    if (state.searchString !== "") {
-      tasks = StringUtil.filterByString(tasks, "name", state.searchString);
+    if (state.searchString !== '') {
+      tasks = StringUtil.filterByString(tasks, 'name', state.searchString);
     }
 
     tasks = this.filterByCurrentStatus(tasks);
@@ -183,7 +183,7 @@ export default class TaskView extends React.Component {
 
   render() {
     var showLoading = this.hasLoadingError() ||
-      Object.keys(MesosStateStore.get("lastMesosState")).length === 0;
+      Object.keys(MesosStateStore.get('lastMesosState')).length === 0;
 
     if (showLoading) {
       return this.getLoadingScreen();

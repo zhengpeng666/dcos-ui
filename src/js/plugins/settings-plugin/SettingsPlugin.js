@@ -1,6 +1,6 @@
-import _ from "underscore";
+import _ from 'underscore';
 
-let settingsRoutes = require("./routes");
+let settingsRoutes = require('./routes');
 
 const SettingsPlugin = {
 
@@ -13,10 +13,10 @@ const SettingsPlugin = {
    */
   initialize: function (Plugins) {
     Plugins.addFilter(
-      "applicationRoutes", this.applicationRoutes.bind(this)
+      'applicationRoutes', this.applicationRoutes.bind(this)
     );
     Plugins.addFilter(
-      "sidebarNavigation", this.sidebarNavigation.bind(this)
+      'sidebarNavigation', this.sidebarNavigation.bind(this)
     );
   },
 
@@ -35,7 +35,7 @@ const SettingsPlugin = {
 
     // Append settings routes
     routes[0].children.forEach(function (child) {
-      if (child.id === "index") {
+      if (child.id === 'index') {
         child.children.push(settingsRoutes);
       }
     });
@@ -48,7 +48,7 @@ const SettingsPlugin = {
       return value;
     }
 
-    return value.concat(["settings"]);
+    return value.concat(['settings']);
   }
 
 };

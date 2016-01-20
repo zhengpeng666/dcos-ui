@@ -1,13 +1,13 @@
-var classNames = require("classnames");
-var React = require("react");
+var classNames = require('classnames');
+var React = require('react');
 
-var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
-import {Modal} from "reactjs-components";
-var Validator = require("../../utils/Validator");
+var InternalStorageMixin = require('../../mixins/InternalStorageMixin');
+import {Modal} from 'reactjs-components';
+var Validator = require('../../utils/Validator');
 
 var IdentifyModal = React.createClass({
 
-  displayName: "IdentifyModal",
+  displayName: 'IdentifyModal',
 
   propTypes: {
     onLogin: React.PropTypes.func.isRequired
@@ -18,7 +18,7 @@ var IdentifyModal = React.createClass({
   componentWillMount: function () {
     this.internalStorage_set({
       emailHasError: false,
-      email: ""
+      email: ''
     });
   },
 
@@ -64,14 +64,14 @@ var IdentifyModal = React.createClass({
   render: function () {
     var data = this.internalStorage_get();
     var emailClassSet = classNames({
-      "form-group": true,
-      "flush-bottom": true,
-      "form-group-error": data.emailHasError
+      'form-group': true,
+      'flush-bottom': true,
+      'form-group-error': data.emailHasError
     });
 
     var emailHelpBlock = classNames({
-      "form-help-block": true,
-      "hidden": !data.emailHasError
+      'form-help-block': true,
+      'hidden': !data.emailHasError
     });
 
     return (

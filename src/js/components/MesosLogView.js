@@ -1,14 +1,14 @@
-import mixin from "reactjs-mixin";
-import React from "react";
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import mixin from 'reactjs-mixin';
+import React from 'react';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import Highlight from "./Highlight";
-import MesosLogStore from "../stores/MesosLogStore";
-import RequestErrorMsg from "./RequestErrorMsg";
+import Highlight from './Highlight';
+import MesosLogStore from '../stores/MesosLogStore';
+import RequestErrorMsg from './RequestErrorMsg';
 
 const METHODS_TO_BIND = [
-  "onMesosLogStoreError",
-  "onMesosLogStoreSuccess"
+  'onMesosLogStoreError',
+  'onMesosLogStoreSuccess'
 ];
 
 export default class MesosLogView extends mixin(StoreMixin) {
@@ -20,8 +20,8 @@ export default class MesosLogView extends mixin(StoreMixin) {
     };
 
     this.store_listeners = [{
-      events: ["success", "error"],
-      name: "mesosLog",
+      events: ['success', 'error'],
+      name: 'mesosLog',
       suppressUpdate: true
     }];
 
@@ -95,9 +95,9 @@ export default class MesosLogView extends mixin(StoreMixin) {
   getLog() {
     let {props, state} = this;
     let fullLog = state.fullLog;
-    if (fullLog === "") {
+    if (fullLog === '') {
       // Append space if logName is defined
-      let logName = props.logName && (props.logName + " ");
+      let logName = props.logName && (props.logName + ' ');
 
       return (
         <div className="flex-grow vertical-center">
@@ -160,7 +160,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
 }
 
 MesosLogView.defaultProps = {
-  highlightText: ""
+  highlightText: ''
 };
 
 MesosLogView.propTypes = {

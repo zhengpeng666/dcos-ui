@@ -1,27 +1,27 @@
-jest.dontMock("../SidePanelContents");
-jest.dontMock("../TaskSidePanelContents");
-jest.dontMock("../TaskDirectoryView");
-jest.dontMock("../../constants/TaskStates");
-jest.dontMock("../../stores/MesosStateStore");
-jest.dontMock("../../events/MesosStateActions");
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../utils/Util");
+jest.dontMock('../SidePanelContents');
+jest.dontMock('../TaskSidePanelContents');
+jest.dontMock('../TaskDirectoryView');
+jest.dontMock('../../constants/TaskStates');
+jest.dontMock('../../stores/MesosStateStore');
+jest.dontMock('../../events/MesosStateActions');
+jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../../utils/Util');
 
-require("../../utils/StoreMixinConfig");
+require('../../utils/StoreMixinConfig');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var MesosStateStore = require("../../stores/MesosStateStore");
-var TaskSidePanelContents = require("../TaskSidePanelContents");
+var MesosStateStore = require('../../stores/MesosStateStore');
+var TaskSidePanelContents = require('../TaskSidePanelContents');
 
-describe("TaskSidePanelContents", function () {
+describe('TaskSidePanelContents', function () {
   beforeEach(function () {
     this.storeGet = MesosStateStore.get;
     this.storeChangeListener = MesosStateStore.addChangeListener;
 
     MesosStateStore.get = function (key) {
-      if (key === "lastMesosState") {
+      if (key === 'lastMesosState') {
         return {};
       }
     };
@@ -29,8 +29,8 @@ describe("TaskSidePanelContents", function () {
     MesosStateStore.addChangeListener = function () {};
     MesosStateStore.getTaskFromTaskID = function () {
       return {
-        id: "fake id",
-        state: "TASK_RUNNING"
+        id: 'fake id',
+        state: 'TASK_RUNNING'
       };
     };
   });
@@ -40,11 +40,11 @@ describe("TaskSidePanelContents", function () {
     MesosStateStore.addChangeListener = this.storeChangeListener;
   });
 
-  describe("#render", function () {
+  describe('#render', function () {
     beforeEach(function () {
       this.getNodeFromID = MesosStateStore.getNodeFromID;
       MesosStateStore.getNodeFromID = function () {
-        return {hostname: "hello"};
+        return {hostname: 'hello'};
       };
     });
 
@@ -52,17 +52,17 @@ describe("TaskSidePanelContents", function () {
       MesosStateStore.getNodeFromID = this.getNodeFromID;
     });
 
-    it("should return null if there are no nodes", function () {
+    it('should return null if there are no nodes', function () {
       var instance = TestUtils.renderIntoDocument(
         <TaskSidePanelContents open={true} />
       );
       expect(instance.render()).toEqual(null);
     });
 
-    it("should return an element if there is a node", function () {
+    it('should return an element if there is a node', function () {
       MesosStateStore.get = function () {
         return {
-          slaves: {fakeProp: "faked"}
+          slaves: {fakeProp: 'faked'}
         };
       };
 
@@ -74,23 +74,23 @@ describe("TaskSidePanelContents", function () {
     });
   });
 
-  describe("#getBasicInfo", function () {
+  describe('#getBasicInfo', function () {
     beforeEach(function () {
       this.instance = TestUtils.renderIntoDocument(
         <TaskSidePanelContents open={false} />
       );
     });
 
-    it("should return null if task is null", function () {
+    it('should return null if task is null', function () {
       var result = this.instance.getBasicInfo(null);
       expect(result).toEqual(null);
     });
 
-    it("should return an element if task is not null", function () {
+    it('should return an element if task is not null', function () {
       var result = this.instance.getBasicInfo({
-        id: "fade",
-        state: "TASK_RUNNING"
-      }, {hostname: "hello"});
+        id: 'fade',
+        state: 'TASK_RUNNING'
+      }, {hostname: 'hello'});
       expect(TestUtils.isElement(result)).toEqual(true);
     });
   });

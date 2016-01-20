@@ -1,6 +1,6 @@
-import CompositeState from "./CompositeState";
-import Config from "../config/Config";
-import SummaryList from "./SummaryList";
+import CompositeState from './CompositeState';
+import Config from '../config/Config';
+import SummaryList from './SummaryList';
 
 let Core = {
   compositeState: new CompositeState(),

@@ -1,21 +1,21 @@
-import classNames from "classnames";
+import classNames from 'classnames';
 /*eslint-disable no-unused-vars*/
-const React = require("react/addons");
+const React = require('react/addons');
 /*eslint-enable no-unused-vars*/
 
-import DateUtil from "../utils/DateUtil";
-import HealthLabels from "../constants/HealthLabels";
-import HealthStatus from "../constants/HealthStatus";
-import MarathonStore from "../stores/MarathonStore";
-import MesosStateStore from "../stores/MesosStateStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import SidePanelContents from "./SidePanelContents";
-import StringUtil from "../utils/StringUtil";
-import TaskView from "./TaskView";
+import DateUtil from '../utils/DateUtil';
+import HealthLabels from '../constants/HealthLabels';
+import HealthStatus from '../constants/HealthStatus';
+import MarathonStore from '../stores/MarathonStore';
+import MesosStateStore from '../stores/MesosStateStore';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import SidePanelContents from './SidePanelContents';
+import StringUtil from '../utils/StringUtil';
+import TaskView from './TaskView';
 
 const METHODS_TO_BIND = [
-  "handleOpenServiceButtonClick",
-  "handleTaskClick"
+  'handleOpenServiceButtonClick',
+  'handleTaskClick'
 ];
 
 class ServiceSidePanelContents extends SidePanelContents {
@@ -27,9 +27,9 @@ class ServiceSidePanelContents extends SidePanelContents {
     };
 
     this.store_listeners = [
-      {name: "marathon", events: ["success"]},
-      {name: "summary", events: ["success"]},
-      {name: "state", events: ["success"]}
+      {name: 'marathon', events: ['success']},
+      {name: 'summary', events: ['success']},
+      {name: 'state', events: ['success']}
     ];
 
     METHODS_TO_BIND.forEach(function (method) {
@@ -39,7 +39,7 @@ class ServiceSidePanelContents extends SidePanelContents {
 
   handleOpenServiceButtonClick() {
     this.props.parentRouter.transitionTo(
-      "service-ui",
+      'service-ui',
       {serviceName: this.props.itemID}
     );
   }
@@ -57,8 +57,8 @@ class ServiceSidePanelContents extends SidePanelContents {
   getSubHeader(service) {
     let appHealth = MarathonStore.getServiceHealth(service.name);
     let appVersion = MarathonStore.getServiceVersion(service.name);
-    let activeTasksCount = service.sumTaskTypesByState("active");
-    let activeTasksSubHeader = StringUtil.pluralize("Task", activeTasksCount);
+    let activeTasksCount = service.sumTaskTypesByState('active');
+    let activeTasksSubHeader = StringUtil.pluralize('Task', activeTasksCount);
     let subHeaderItems = [
       {
         classes:
@@ -67,12 +67,12 @@ class ServiceSidePanelContents extends SidePanelContents {
         shouldShow: appHealth.key != null
       },
       {
-        classes: "side-panel-subheader",
+        classes: 'side-panel-subheader',
         label: `Version ${appVersion}`,
         shouldShow: appVersion != null
       },
       {
-        classes: "side-panel-subheader",
+        classes: 'side-panel-subheader',
         label: `${activeTasksCount} Active ${activeTasksSubHeader}`,
         shouldShow: activeTasksCount != null && activeTasksSubHeader != null
       }
@@ -100,16 +100,16 @@ class ServiceSidePanelContents extends SidePanelContents {
 
     let imageTag = null;
     let appImages = MarathonStore.getServiceImages(service.name);
-    if (appImages && appImages["icon-large"]) {
+    if (appImages && appImages['icon-large']) {
       imageTag = (
         <div className="side-panel-icon icon icon-large icon-image-container icon-app-container">
-          <img src={appImages["icon-large"]} />
+          <img src={appImages['icon-large']} />
         </div>
       );
     }
 
     let containerClassSet = classNames({
-      "": imageTag != null
+      '': imageTag != null
     });
 
     return (
@@ -168,10 +168,10 @@ class ServiceSidePanelContents extends SidePanelContents {
       ),
       CPU: schedulerTask.resources.cpus,
       Memory: schedulerTask.resources.mem,
-      "Disk Space": schedulerTask.resources.disk
+      'Disk Space': schedulerTask.resources.disk
     };
 
-    return this.getKeyValuePairs(schedulerMapping, "Scheduler");
+    return this.getKeyValuePairs(schedulerMapping, 'Scheduler');
   }
 
   renderTasksTabView() {
@@ -210,7 +210,7 @@ class ServiceSidePanelContents extends SidePanelContents {
     if (service == null ||
       marathonService == null ||
       marathonService.snapshot == null ||
-      service != null && service.name === "marathon") {
+      service != null && service.name === 'marathon') {
       return (
         <div className="container container-fluid container-pod container-pod-short">
           <h2 className="flush-top">No information available.</h2>
@@ -220,21 +220,21 @@ class ServiceSidePanelContents extends SidePanelContents {
 
     let installedTime = MarathonStore.getServiceInstalledTime(serviceName);
     let portTitle = StringUtil.pluralize(
-      "Port", marathonService.snapshot.ports.length
+      'Port', marathonService.snapshot.ports.length
     );
     let headerValueMapping = {
-      "Host Name": service.hostname,
+      'Host Name': service.hostname,
       Tasks: service.tasks.length,
       Installed: DateUtil.msToDateStr(installedTime),
       Instances: marathonService.snapshot.instances,
       Command: marathonService.snapshot.cmd,
-      [portTitle]: marathonService.snapshot.ports.join(", ")
+      [portTitle]: marathonService.snapshot.ports.join(', ')
     };
 
     return (
       <div className="container-fluid container-pod container-pod-short flush-top">
         {this.getSchedulerDetails()}
-        {this.getKeyValuePairs(headerValueMapping, "Configuration")}
+        {this.getKeyValuePairs(headerValueMapping, 'Configuration')}
       </div>
     );
   }
@@ -243,7 +243,7 @@ class ServiceSidePanelContents extends SidePanelContents {
     let service = MesosSummaryStore.getServiceFromName(this.props.itemID);
 
     if (service == null) {
-      return this.getNotFound("service");
+      return this.getNotFound('service');
     }
 
     return (
@@ -255,7 +255,7 @@ class ServiceSidePanelContents extends SidePanelContents {
           {this.getBasicInfo()}
           <div className="side-panel-content-header-charts container-pod container-pod-short">
             <div className="row">
-              {this.getCharts("Service", service)}
+              {this.getCharts('Service', service)}
             </div>
           </div>
           {this.getOpenServiceButton()}

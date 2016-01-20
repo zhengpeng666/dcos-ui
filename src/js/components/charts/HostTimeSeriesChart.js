@@ -1,14 +1,14 @@
-var _ = require("underscore");
-var React = require("react/addons");
+var _ = require('underscore');
+var React = require('react/addons');
 
-var Chart = require("./Chart");
-var TimeSeriesChart = require("./TimeSeriesChart");
-var TimeSeriesLabel = require("./TimeSeriesLabel");
-var ValueTypes = require("../../constants/ValueTypes");
+var Chart = require('./Chart');
+var TimeSeriesChart = require('./TimeSeriesChart');
+var TimeSeriesLabel = require('./TimeSeriesLabel');
+var ValueTypes = require('../../constants/ValueTypes');
 
 var HostTimeSeriesChart = React.createClass({
 
-  displayName: "HostTimeSeriesChart",
+  displayName: 'HostTimeSeriesChart',
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
@@ -44,7 +44,7 @@ var HostTimeSeriesChart = React.createClass({
 
   getData: function (props) {
     return [{
-      name: "Nodes",
+      name: 'Nodes',
       colorIndex: 4,
       values: props.data
     }];
@@ -71,7 +71,7 @@ var HostTimeSeriesChart = React.createClass({
         <TimeSeriesLabel
           colorIndex={4}
           currentValue={props.currentValue}
-          subHeading={"Connected Nodes"}
+          subHeading={'Connected Nodes'}
           y="slavesCount" />
         {this.getChart(props)}
         <div className="timeseries-selector" />

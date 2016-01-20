@@ -1,31 +1,31 @@
-var _ = require("underscore");
-var React = require("react/addons");
-import {Link} from "react-router";
+var _ = require('underscore');
+var React = require('react/addons');
+import {Link} from 'react-router';
 
-import Config from "../config/Config";
-var EventTypes = require("../constants/EventTypes");
-var HealthSorting = require("../constants/HealthSorting");
-var HostTimeSeriesChart = require("../components/charts/HostTimeSeriesChart");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var MarathonStore = require("../stores/MarathonStore");
-var MesosSummaryStore = require("../stores/MesosSummaryStore");
-var Page = require("../components/Page");
-var Panel = require("../components/Panel");
-var ResourceTimeSeriesChart = require("../components/charts/ResourceTimeSeriesChart");
-var TaskFailureTimeSeriesChart = require("../components/charts/TaskFailureTimeSeriesChart");
-var ServiceList = require("../components/ServiceList");
-var TasksChart = require("../components/charts/TasksChart");
-var SidebarActions = require("../events/SidebarActions");
-import SidePanels from "../components/SidePanels";
+import Config from '../config/Config';
+var EventTypes = require('../constants/EventTypes');
+var HealthSorting = require('../constants/HealthSorting');
+var HostTimeSeriesChart = require('../components/charts/HostTimeSeriesChart');
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
+var MarathonStore = require('../stores/MarathonStore');
+var MesosSummaryStore = require('../stores/MesosSummaryStore');
+var Page = require('../components/Page');
+var Panel = require('../components/Panel');
+var ResourceTimeSeriesChart = require('../components/charts/ResourceTimeSeriesChart');
+var TaskFailureTimeSeriesChart = require('../components/charts/TaskFailureTimeSeriesChart');
+var ServiceList = require('../components/ServiceList');
+var TasksChart = require('../components/charts/TasksChart');
+var SidebarActions = require('../events/SidebarActions');
+import SidePanels from '../components/SidePanels';
 
 function getMesosState() {
-  let states = MesosSummaryStore.get("states");
+  let states = MesosSummaryStore.get('states');
   let last = states.lastSuccessful();
 
   return {
     // Need clone, modifying in place will make update components check for
     // change in the same array, in stead of two different references
-    taskFailureRate: _.clone(MesosSummaryStore.get("taskFailureRate")),
+    taskFailureRate: _.clone(MesosSummaryStore.get('taskFailureRate')),
     hostsCount: states.getActiveNodesByState(),
     refreshRate: Config.getRefreshRate(),
     services: last.getServiceList(),
@@ -33,25 +33,25 @@ function getMesosState() {
     usedResources: last.getSlaveUsedResources(),
     totalResources: last.getSlaveTotalResources(),
     activeSlaves: last.getActiveSlaves(),
-    statesProcessed: MesosSummaryStore.get("statesProcessed")
+    statesProcessed: MesosSummaryStore.get('statesProcessed')
   };
 }
 
 var DashboardPage = React.createClass({
 
-  displayName: "DashboardPage",
+  displayName: 'DashboardPage',
 
   mixins: [InternalStorageMixin],
 
   statics: {
     routeConfig: {
-      label: "Dashboard",
-      icon: "dashboard",
+      label: 'Dashboard',
+      icon: 'dashboard',
       matches: /^\/dashboard/
     },
 
     // Static life cycle method from react router, that will be called
-    // "when a handler is about to render", i.e. on route change:
+    // 'when a handler is about to render', i.e. on route change:
     // https://github.com/rackt/react-router/
     // blob/master/docs/api/components/RouteHandler.md
     willTransitionTo: function () {
@@ -132,10 +132,10 @@ var DashboardPage = React.createClass({
     // Pick out only the data we need.
     let servicesMap = services.map(function (service) {
       return {
-        name: service.get("name"),
-        webui_url: service.get("webui_url"),
-        TASK_RUNNING: service.get("TASK_RUNNING"),
-        id: service.get("id")
+        name: service.get('name'),
+        webui_url: service.get('webui_url'),
+        TASK_RUNNING: service.get('TASK_RUNNING'),
+        id: service.get('id')
       };
     });
 
@@ -158,11 +158,11 @@ var DashboardPage = React.createClass({
       return null;
     }
 
-    var textContent = "View all ";
+    var textContent = 'View all ';
     if (servicesCount > this.props.servicesListLength) {
-      textContent += servicesCount + " ";
+      textContent += servicesCount + ' ';
     }
-    textContent += "Services >";
+    textContent += 'Services >';
 
     return (
       <Link to="services"

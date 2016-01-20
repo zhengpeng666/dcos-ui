@@ -1,20 +1,20 @@
-import cookie from "cookie";
-import {Store} from "mesosphere-shared-reactjs";
+import cookie from 'cookie';
+import {Store} from 'mesosphere-shared-reactjs';
 
-import ACLAuthActions from "../events/ACLAuthActions";
-import ActionTypes from "../constants/ActionTypes";
-import ACLAuthConstants from "../constants/ACLAuthConstants";
-import ACLUserRoles from "../constants/ACLUserRoles";
-import AppDispatcher from "../events/AppDispatcher";
-import EventTypes from "../constants/EventTypes";
-import GetSetMixin from "../mixins/GetSetMixin";
+import ACLAuthActions from '../events/ACLAuthActions';
+import ActionTypes from '../constants/ActionTypes';
+import ACLAuthConstants from '../constants/ACLAuthConstants';
+import ACLUserRoles from '../constants/ACLUserRoles';
+import AppDispatcher from '../events/AppDispatcher';
+import EventTypes from '../constants/EventTypes';
+import GetSetMixin from '../mixins/GetSetMixin';
 
 function getUserMetadata() {
   return cookie.parse(global.document.cookie)[ACLAuthConstants.userCookieKey];
 }
 
 var ACLAuthStore = Store.createStore({
-  storeID: "auth",
+  storeID: 'auth',
 
   mixins: [GetSetMixin],
 
@@ -37,7 +37,7 @@ var ACLAuthStore = Store.createStore({
   logout: function () {
     // Set the cookie to an empty string.
     global.document.cookie = cookie.serialize(
-      ACLAuthConstants.userCookieKey, "", {expires: new Date(1970)}
+      ACLAuthConstants.userCookieKey, '', {expires: new Date(1970)}
     );
 
     this.resetRole();
@@ -53,7 +53,7 @@ var ACLAuthStore = Store.createStore({
 
     try {
       let user = JSON.parse(atob(userCode));
-      if (!this.get("role")) {
+      if (!this.get('role')) {
         this.fetchRole(user.uid);
       }
 
@@ -64,11 +64,11 @@ var ACLAuthStore = Store.createStore({
   },
 
   isAdmin() {
-    return this.get("role") === ACLUserRoles.admin;
+    return this.get('role') === ACLUserRoles.admin;
   },
 
   makeAdminRole() {
-    let role = this.get("role");
+    let role = this.get('role');
     if (role !== ACLUserRoles.admin) {
       this.set({role: ACLUserRoles.admin});
       this.emit(EventTypes.ACL_AUTH_USER_ROLE_CHANGED);
@@ -76,7 +76,7 @@ var ACLAuthStore = Store.createStore({
   },
 
   makeDefaultRole() {
-    let role = this.get("role");
+    let role = this.get('role');
     if (role !== ACLUserRoles.default) {
       this.set({role: ACLUserRoles.default});
       this.emit(EventTypes.ACL_AUTH_USER_ROLE_CHANGED);

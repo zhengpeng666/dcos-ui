@@ -1,19 +1,19 @@
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../ServiceList");
-jest.dontMock("../ServiceOverlay");
-jest.dontMock("../../stores/MarathonStore");
+jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../ServiceList');
+jest.dontMock('../ServiceOverlay');
+jest.dontMock('../../stores/MarathonStore');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var ServiceList = require("../ServiceList");
+var ServiceList = require('../ServiceList');
 
-describe("ServiceList", function () {
+describe('ServiceList', function () {
 
-  describe("#shouldComponentUpdate", function () {
+  describe('#shouldComponentUpdate', function () {
 
     beforeEach(function () {
-      var services = [{name: "foo"}];
+      var services = [{name: 'foo'}];
       this.instance = TestUtils.renderIntoDocument(
         <ServiceList
           services={services}
@@ -21,12 +21,12 @@ describe("ServiceList", function () {
       );
     });
 
-    it("should allow update", function () {
+    it('should allow update', function () {
       var shouldUpdate = this.instance.shouldComponentUpdate({a: 1});
       expect(shouldUpdate).toEqual(true);
     });
 
-    it("should not allow update", function () {
+    it('should not allow update', function () {
       var shouldUpdate = this.instance.shouldComponentUpdate(
         this.instance.props
       );
@@ -35,10 +35,10 @@ describe("ServiceList", function () {
 
   });
 
-  describe("#getServices", function () {
+  describe('#getServices', function () {
 
     beforeEach(function () {
-      var services = [{name: "foo"}];
+      var services = [{name: 'foo'}];
       this.instance = TestUtils.renderIntoDocument(
         <ServiceList
           services={services}
@@ -46,14 +46,14 @@ describe("ServiceList", function () {
       );
     });
 
-    it("returns services that have a value of two elements", function () {
+    it('returns services that have a value of two elements', function () {
       var services = [{
-        name: "foo"
+        name: 'foo'
       }];
       var result = this.instance.getServices(services, false);
 
-      expect(result[0].content[0].content.key).toEqual("title");
-      expect(result[0].content[1].content.key).toEqual("health");
+      expect(result[0].content[0].content.key).toEqual('title');
+      expect(result[0].content[1].content.key).toEqual('health');
     });
   });
 

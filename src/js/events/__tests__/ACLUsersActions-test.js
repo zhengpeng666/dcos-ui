@@ -1,124 +1,124 @@
-jest.dontMock("../../constants/ActionTypes");
-jest.dontMock("../AppDispatcher");
-jest.dontMock("../ACLUsersActions");
-jest.dontMock("../../config/Config");
-jest.dontMock("../../utils/RequestUtil");
+jest.dontMock('../../constants/ActionTypes');
+jest.dontMock('../AppDispatcher');
+jest.dontMock('../ACLUsersActions');
+jest.dontMock('../../config/Config');
+jest.dontMock('../../utils/RequestUtil');
 
-var ActionTypes = require("../../constants/ActionTypes");
-var ACLUsersActions = require("../ACLUsersActions");
-var AppDispatcher = require("../AppDispatcher");
-var Config = require("../../config/Config");
-var RequestUtil = require("../../utils/RequestUtil");
+var ActionTypes = require('../../constants/ActionTypes');
+var ACLUsersActions = require('../ACLUsersActions');
+var AppDispatcher = require('../AppDispatcher');
+var Config = require('../../config/Config');
+var RequestUtil = require('../../utils/RequestUtil');
 
-describe("ACLUsersActions", function () {
+describe('ACLUsersActions', function () {
 
-  describe("#fetch", function () {
+  describe('#fetch', function () {
 
     beforeEach(function () {
-      spyOn(RequestUtil, "json");
+      spyOn(RequestUtil, 'json');
       ACLUsersActions.fetch();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USERS_SUCCESS);
       });
 
-      this.configuration.success({foo: "bar"});
+      this.configuration.success({foo: 'bar'});
     });
 
-    it("dispatches the correct action when unsuccessful", function () {
+    it('dispatches the correct action when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USERS_ERROR);
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("calls #json from the RequestUtil", function () {
+    it('calls #json from the RequestUtil', function () {
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
-    it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/users");
+    it('fetches data from the correct URL', function () {
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + '/users');
     });
 
   });
 
-  describe("#fetchUser", function () {
+  describe('#fetchUser', function () {
 
     beforeEach(function () {
-      spyOn(RequestUtil, "json");
-      ACLUsersActions.fetchUser("foo");
+      spyOn(RequestUtil, 'json');
+      ACLUsersActions.fetchUser('foo');
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USER_SUCCESS);
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches with the correct data when successful", function () {
+    it('dispatches with the correct data when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual({bar: "baz"});
+        expect(action.data).toEqual({bar: 'baz'});
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches the correct action when unsucessful", function () {
+    it('dispatches the correct action when unsucessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USER_ERROR);
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches with the correct data when unsucessful", function () {
+    it('dispatches with the correct data when unsucessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual("bar");
+        expect(action.data).toEqual('bar');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches with the userID when unsucessful", function () {
+    it('dispatches with the userID when unsucessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
   });
 
-  describe("#fetchUserGroups", function () {
+  describe('#fetchUserGroups', function () {
 
     beforeEach(function () {
-      spyOn(RequestUtil, "json");
-      ACLUsersActions.fetchUserGroups("foo");
+      spyOn(RequestUtil, 'json');
+      ACLUsersActions.fetchUserGroups('foo');
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -126,70 +126,70 @@ describe("ACLUsersActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS);
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches with the correct data when successful", function () {
+    it('dispatches with the correct data when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual({bar: "baz"});
+        expect(action.data).toEqual({bar: 'baz'});
       });
 
-      this.configuration.success({array: {bar: "baz"}});
+      this.configuration.success({array: {bar: 'baz'}});
     });
 
-    it("dispatches with the userID successful", function () {
+    it('dispatches with the userID successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches the correct action when unsucessful", function () {
+    it('dispatches the correct action when unsucessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USER_GROUPS_ERROR);
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches with the correct data when unsucessful", function () {
+    it('dispatches with the correct data when unsucessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches with the userID when unsucessful", function () {
+    it('dispatches with the userID when unsucessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual("bar");
+        expect(action.data).toEqual('bar');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
   });
 
-  describe("#fetchUserPermissions", function () {
+  describe('#fetchUserPermissions', function () {
 
     beforeEach(function () {
-      spyOn(RequestUtil, "json");
-      ACLUsersActions.fetchUserPermissions("foo");
+      spyOn(RequestUtil, 'json');
+      ACLUsersActions.fetchUserPermissions('foo');
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -197,30 +197,30 @@ describe("ACLUsersActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS);
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches with the correct data when successful", function () {
+    it('dispatches with the correct data when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual({bar: "baz"});
+        expect(action.data).toEqual({bar: 'baz'});
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches with the userID successful", function () {
+    it('dispatches with the userID successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches the correct action when unsucessful", function () {
+    it('dispatches the correct action when unsucessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -228,52 +228,52 @@ describe("ACLUsersActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR);
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches with the correct data when unsucessful", function () {
+    it('dispatches with the correct data when unsucessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches with the userID when unsucessful", function () {
+    it('dispatches with the userID when unsucessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual("bar");
+        expect(action.data).toEqual('bar');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
   });
 
-  describe("#addUser", function () {
+  describe('#addUser', function () {
 
     beforeEach(function () {
-      spyOn(RequestUtil, "json");
-      ACLUsersActions.addUser({uid: "foo"});
+      spyOn(RequestUtil, 'json');
+      ACLUsersActions.addUser({uid: 'foo'});
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
-    it("calls #json from the RequestUtil", function () {
+    it('calls #json from the RequestUtil', function () {
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
-    it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/users/foo");
+    it('fetches data from the correct URL', function () {
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + '/users/foo');
     });
 
-    it("uses PUT for the request method", function () {
-      expect(this.configuration.method).toEqual("PUT");
+    it('uses PUT for the request method', function () {
+      expect(this.configuration.method).toEqual('PUT');
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -281,20 +281,20 @@ describe("ACLUsersActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS);
       });
 
-      this.configuration.success({foo: "bar"});
+      this.configuration.success({foo: 'bar'});
     });
 
-    it("dispatches the userID when successful", function () {
+    it('dispatches the userID when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.success({description: "bar"});
+      this.configuration.success({description: 'bar'});
     });
 
-    it("dispatches the correct action when unsuccessful", function () {
+    it('dispatches the correct action when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -302,52 +302,52 @@ describe("ACLUsersActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_USER_CREATE_ERROR);
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches the correct message when unsuccessful", function () {
+    it('dispatches the correct message when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual("bar");
+        expect(action.data).toEqual('bar');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches the userID when unsuccessful", function () {
+    it('dispatches the userID when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
   });
 
-  describe("#updateUser", function () {
+  describe('#updateUser', function () {
 
     beforeEach(function () {
-      spyOn(RequestUtil, "json");
-      ACLUsersActions.updateUser("foo");
+      spyOn(RequestUtil, 'json');
+      ACLUsersActions.updateUser('foo');
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
-    it("calls #json from the RequestUtil", function () {
+    it('calls #json from the RequestUtil', function () {
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
-    it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/users/foo");
+    it('fetches data from the correct URL', function () {
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + '/users/foo');
     });
 
-    it("uses PATCH for the request method", function () {
-      expect(this.configuration.method).toEqual("PATCH");
+    it('uses PATCH for the request method', function () {
+      expect(this.configuration.method).toEqual('PATCH');
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -355,20 +355,20 @@ describe("ACLUsersActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS);
       });
 
-      this.configuration.success({foo: "bar"});
+      this.configuration.success({foo: 'bar'});
     });
 
-    it("dispatches the userID when successful", function () {
+    it('dispatches the userID when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches the correct action when unsuccessful", function () {
+    it('dispatches the correct action when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -376,52 +376,52 @@ describe("ACLUsersActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR);
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches the correct message when unsuccessful", function () {
+    it('dispatches the correct message when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual("bar");
+        expect(action.data).toEqual('bar');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches the userID when unsuccessful", function () {
+    it('dispatches the userID when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
   });
 
-  describe("#deleteUser", function () {
+  describe('#deleteUser', function () {
 
     beforeEach(function () {
-      spyOn(RequestUtil, "json");
-      ACLUsersActions.deleteUser("foo");
+      spyOn(RequestUtil, 'json');
+      ACLUsersActions.deleteUser('foo');
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
-    it("calls #json from the RequestUtil", function () {
+    it('calls #json from the RequestUtil', function () {
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
-    it("fetches data from the correct URL", function () {
-      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + "/users/foo");
+    it('fetches data from the correct URL', function () {
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + '/users/foo');
     });
 
-    it("uses DELETE for the request method", function () {
-      expect(this.configuration.method).toEqual("DELETE");
+    it('uses DELETE for the request method', function () {
+      expect(this.configuration.method).toEqual('DELETE');
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -429,20 +429,20 @@ describe("ACLUsersActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS);
       });
 
-      this.configuration.success({foo: "bar"});
+      this.configuration.success({foo: 'bar'});
     });
 
-    it("dispatches the userID when successful", function () {
+    it('dispatches the userID when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches the correct action when unsuccessful", function () {
+    it('dispatches the correct action when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -450,27 +450,27 @@ describe("ACLUsersActions", function () {
           .toEqual(ActionTypes.REQUEST_ACL_USER_DELETE_ERROR);
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches the correct message when unsuccessful", function () {
+    it('dispatches the correct message when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual("bar");
+        expect(action.data).toEqual('bar');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("dispatches the userID when unsuccessful", function () {
+    it('dispatches the userID when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.userID).toEqual("foo");
+        expect(action.userID).toEqual('foo');
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
   });

@@ -1,16 +1,16 @@
-import _ from "underscore";
+import _ from 'underscore';
 
-import MesosSummaryUtil from "../utils/MesosSummaryUtil";
-import ServicesList from "./ServicesList";
-import NodesList from "./NodesList";
+import MesosSummaryUtil from '../utils/MesosSummaryUtil';
+import ServicesList from './ServicesList';
+import NodesList from './NodesList';
 
 export default class StateSummary {
   constructor(options = {}) {
     this.snapshot = {
       frameworks: [],
       slaves: [],
-      cluster: "",
-      hostname: ""
+      cluster: '',
+      hostname: ''
     };
 
     this.metadata = {
@@ -33,14 +33,14 @@ export default class StateSummary {
     // Store computed data – this is something we may not need to store
     this.metadata.slaveTotalResources = MesosSummaryUtil.sumResources(
       // We may only want to get the active slaves...
-      _.pluck(this.snapshot.slaves, "resources")
+      _.pluck(this.snapshot.slaves, 'resources')
     );
     this.metadata.slaveUsedResources = MesosSummaryUtil.sumResources(
       // We may only want to get the active slaves...
-      _.pluck(this.snapshot.slaves, "used_resources")
+      _.pluck(this.snapshot.slaves, 'used_resources')
     );
     this.metadata.serviceUsedResources = MesosSummaryUtil.sumResources(
-      _.pluck(this.snapshot.frameworks, "used_resources")
+      _.pluck(this.snapshot.frameworks, 'used_resources')
     );
   }
 

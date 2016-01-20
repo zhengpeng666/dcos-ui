@@ -1,11 +1,11 @@
-var _ = require("underscore");
+var _ = require('underscore');
 
 const MesosStateUtil = {
 
   /**
    * @param  {Object} state A document of mesos state.json
    * @param  {Array} filter Allows us to filter by framework id
-   *   All other frameworks will be put into an "other" category
+   *   All other frameworks will be put into an 'other' category
    * @returns {Object} A map of frameworks running on host
    */
   getHostResourcesByFramework: function (state, filter) {
@@ -17,10 +17,10 @@ const MesosStateUtil = {
 
         var frameworkKey = task.framework_id;
         if (_.contains(filter, framework.id)) {
-          frameworkKey = "other";
+          frameworkKey = 'other';
         }
 
-        var resources = _.pick(task.resources, "cpus", "disk", "mem");
+        var resources = _.pick(task.resources, 'cpus', 'disk', 'mem');
         if (memo[task.slave_id][frameworkKey] == null) {
           memo[task.slave_id][frameworkKey] = resources;
         } else {

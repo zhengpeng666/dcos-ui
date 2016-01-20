@@ -1,34 +1,34 @@
-import {Form} from "reactjs-components";
+import {Form} from 'reactjs-components';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import ACLUserStore from "../stores/ACLUserStore";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import PermissionsView from "./PermissionsView";
-import RequestErrorMsg from "./RequestErrorMsg";
-import SidePanelContents from "./SidePanelContents";
-import StringUtil from "../utils/StringUtil";
-import UserDetails from "./UserDetails";
-import UserGroupMembershipTab from "./UserGroupMembershipTab";
+import ACLUserStore from '../stores/ACLUserStore';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import PermissionsView from './PermissionsView';
+import RequestErrorMsg from './RequestErrorMsg';
+import SidePanelContents from './SidePanelContents';
+import StringUtil from '../utils/StringUtil';
+import UserDetails from './UserDetails';
+import UserGroupMembershipTab from './UserGroupMembershipTab';
 
 const EXTERNAL_CHANGE_EVENTS = [
-  "onAclStoreUserGrantSuccess",
-  "onAclStoreUserRevokeSuccess",
-  "onGroupStoreAddUserSuccess",
-  "onGroupStoreDeleteUserSuccess"
+  'onAclStoreUserGrantSuccess',
+  'onAclStoreUserRevokeSuccess',
+  'onGroupStoreAddUserSuccess',
+  'onGroupStoreDeleteUserSuccess'
 ];
 
-const METHODS_TO_BIND = ["handleNameChange"];
+const METHODS_TO_BIND = ['handleNameChange'];
 
 export default class UserSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
     this.tabs_tabs = {
-      permissions: "Permissions",
-      membership: "Group Membership",
-      details: "Details"
+      permissions: 'Permissions',
+      membership: 'Group Membership',
+      details: 'Details'
     };
 
     this.state = {
@@ -38,23 +38,23 @@ export default class UserSidePanelContents extends SidePanelContents {
 
     this.store_listeners = [
       {
-        name: "acl",
+        name: 'acl',
         events: [
-          "userGrantSuccess",
-          "userRevokeSuccess"
+          'userGrantSuccess',
+          'userRevokeSuccess'
         ]
       },
       {
-        name: "group",
-        events: ["addUserSuccess", "deleteUserSuccess"]
+        name: 'group',
+        events: ['addUserSuccess', 'deleteUserSuccess']
       },
       {
-        name: "user",
-        events: ["fetchedDetailsSuccess", "fetchedDetailsError"]
+        name: 'user',
+        events: ['fetchedDetailsSuccess', 'fetchedDetailsError']
       },
       {
-        name: "summary",
-        events: ["success"],
+        name: 'summary',
+        events: ['success'],
         listenAlways: false
       }
     ];
@@ -105,14 +105,14 @@ export default class UserSidePanelContents extends SidePanelContents {
   getUserInfo(user) {
     let editNameFormDefinition = [
       {
-        fieldType: "text",
-        name: "text",
-        placeholder: "User's Name",
+        fieldType: 'text',
+        name: 'text',
+        placeholder: 'User\'s Name',
         required: true,
-        sharedClass: "form-element-inline h1 flush",
+        sharedClass: 'form-element-inline h1 flush',
         showError: false,
         showLabel: false,
-        writeType: "edit",
+        writeType: 'edit',
         validation: function () { return true; },
         value: user.description
       }
@@ -144,8 +144,8 @@ export default class UserSidePanelContents extends SidePanelContents {
   getSubHeader(user) {
     let groupCount = user.getGroupCount();
     let serviceCount = user.getPermissionCount();
-    let groupLabel = StringUtil.pluralize("group", groupCount);
-    let serviceLabel = StringUtil.pluralize("Service", serviceCount);
+    let groupLabel = StringUtil.pluralize('group', groupCount);
+    let serviceLabel = StringUtil.pluralize('Service', serviceCount);
 
     return (
       <div>
@@ -193,8 +193,8 @@ export default class UserSidePanelContents extends SidePanelContents {
       return this.getErrorNotice();
     }
 
-    if (user.get("uid") == null ||
-      !MesosSummaryStore.get("statesProcessed")) {
+    if (user.get('uid') == null ||
+      !MesosSummaryStore.get('statesProcessed')) {
       return this.getLoadingScreen();
     }
 

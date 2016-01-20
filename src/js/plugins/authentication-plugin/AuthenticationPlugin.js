@@ -1,12 +1,12 @@
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
-import {Route} from "react-router";
+import {Route} from 'react-router';
 
-import AccessDeniedPage from "./components/AccessDeniedPage";
-import Authenticated from "./components/Authenticated";
-import LoginPage from "./LoginPage";
-import UserDropup from "./UserDropup";
+import AccessDeniedPage from './components/AccessDeniedPage';
+import Authenticated from './components/Authenticated';
+import LoginPage from './LoginPage';
+import UserDropup from './UserDropup';
 
 const AuthenticationPlugin = {
 
@@ -18,9 +18,9 @@ const AuthenticationPlugin = {
    * @param  {Object} Plugins The Plugins API
    */
   initialize: function (Plugins) {
-    Plugins.addFilter("sidebarFooter", this.sidebarFooter.bind(this));
-    Plugins.addFilter("openIdentifyModal", this.openIdentifyModal.bind(this));
-    Plugins.addFilter("applicationRoutes", this.applicationRoutes.bind(this));
+    Plugins.addFilter('sidebarFooter', this.sidebarFooter.bind(this));
+    Plugins.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
+    Plugins.addFilter('applicationRoutes', this.applicationRoutes.bind(this));
   },
 
   configure: function (configuration) {
@@ -62,9 +62,9 @@ const AuthenticationPlugin = {
   applicationRoutes: function (routes) {
     if (this.isEnabled() === true) {
 
-      // Override handler of index to be "authenticated"
+      // Override handler of index to be 'authenticated'
       routes[0].children.forEach(function (child) {
-        if (child.id === "index") {
+        if (child.id === 'index') {
           child.handler = new Authenticated(child.handler);
         }
       });
@@ -73,14 +73,14 @@ const AuthenticationPlugin = {
       routes[0].children.unshift(
         {
           type: Route,
-          name: "access-denied",
-          path: "access-denied",
+          name: 'access-denied',
+          path: 'access-denied',
           handler: AccessDeniedPage
         },
         {
           handler: LoginPage,
-          name: "login",
-          path: "login",
+          name: 'login',
+          path: 'login',
           type: Route
         }
       );

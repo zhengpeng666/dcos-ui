@@ -1,19 +1,19 @@
-var _ = require("underscore");
-var classNames = require("classnames");
-var React = require("react/addons");
+var _ = require('underscore');
+var classNames = require('classnames');
+var React = require('react/addons');
 
-var EventTypes = require("../constants/EventTypes");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var MesosStateStore = require("../stores/MesosStateStore");
-var NodesGridDials = require("./NodesGridDials");
-var RequestErrorMsg = require("./RequestErrorMsg");
+var EventTypes = require('../constants/EventTypes');
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
+var MesosStateStore = require('../stores/MesosStateStore');
+var NodesGridDials = require('./NodesGridDials');
+var RequestErrorMsg = require('./RequestErrorMsg');
 
 var MAX_SERVICES_TO_SHOW = 8;
 var OTHER_SERVICES_COLOR = 8;
 
 var NodesGridView = React.createClass({
 
-  displayName: "NodesGridView",
+  displayName: 'NodesGridView',
 
   propTypes: {
     hosts: React.PropTypes.array.isRequired,
@@ -67,7 +67,7 @@ var NodesGridView = React.createClass({
    * @param  {Object} props
    */
   componentWillReceiveProps: function (props) {
-    let ids = _.pluck(props.services, "id");
+    let ids = _.pluck(props.services, 'id');
     let serviceColors = this.internalStorage_get().serviceColors;
 
     if (!_.isEqual(Object.keys(serviceColors), ids)) {
@@ -98,7 +98,7 @@ var NodesGridView = React.createClass({
     var colors = {};
 
     services.forEach(function (service, index) {
-      // Drop all others into the same "other" color
+      // Drop all others into the same 'other' color
       if (index < MAX_SERVICES_TO_SHOW) {
         colors[service.id] = index;
       } else {
@@ -134,7 +134,7 @@ var NodesGridView = React.createClass({
     }
 
     var loadingClassSet = classNames({
-      "hidden": hasLoadingError
+      'hidden': hasLoadingError
     });
 
     return (
@@ -187,9 +187,9 @@ var NodesGridView = React.createClass({
         );
       });
 
-    // Add "Others" node to the list
+    // Add 'Others' node to the list
     if (activeServiceIds.length > MAX_SERVICES_TO_SHOW) {
-      var classNameOther = "service-legend-color service-color-" +
+      var classNameOther = 'service-legend-color service-color-' +
         OTHER_SERVICES_COLOR;
       items.push(
         <li key="other">
@@ -225,8 +225,8 @@ var NodesGridView = React.createClass({
     var state = this.state;
 
     var classSet = classNames({
-      "nodes-grid-legend": true,
-      "disabled": !state.showServices
+      'nodes-grid-legend': true,
+      'disabled': !state.showServices
     });
 
     return (
@@ -256,7 +256,7 @@ var NodesGridView = React.createClass({
 
   render: function () {
     var showLoading = this.hasLoadingError() ||
-      Object.keys(MesosStateStore.get("lastMesosState")).length === 0;
+      Object.keys(MesosStateStore.get('lastMesosState')).length === 0;
 
     if (showLoading) {
       return this.getLoadingScreen();

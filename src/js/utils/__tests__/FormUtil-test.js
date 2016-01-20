@@ -1,39 +1,39 @@
-jest.dontMock("../FormUtil");
+jest.dontMock('../FormUtil');
 
-var FormUtil = require("../FormUtil");
+var FormUtil = require('../FormUtil');
 
-describe("FormUtil", function () {
+describe('FormUtil', function () {
 
   beforeEach(function () {
     this.formState = {
-      "formName": [
+      'formName': [
         {
           checked: true,
           indeterminate: false,
-          labelClass: "labelClass",
-          name: "name"
+          labelClass: 'labelClass',
+          name: 'name'
         }
       ]
     };
   });
 
-  describe("getCheckboxInfo", function () {
+  describe('getCheckboxInfo', function () {
 
-    it("returns the field state of a Form with only one field", function () {
+    it('returns the field state of a Form with only one field', function () {
       expect(FormUtil.getCheckboxInfo(this.formState)).toEqual({
         checked: true,
         indeterminate: false,
-        labelClass: "labelClass",
-        name: "name"
+        labelClass: 'labelClass',
+        name: 'name'
       });
     });
 
   });
 
-  describe("getRowName", function () {
+  describe('getRowName', function () {
 
-    it("returns the row name of a Form with only one field", function () {
-      expect(FormUtil.getRowName(this.formState)).toEqual("formName");
+    it('returns the row name of a Form with only one field', function () {
+      expect(FormUtil.getRowName(this.formState)).toEqual('formName');
     });
 
   });

@@ -1,7 +1,7 @@
-var ActionTypes = require("../constants/ActionTypes");
-var AppDispatcher = require("./AppDispatcher");
-var Config = require("../config/Config");
-var RequestUtil = require("../utils/RequestUtil");
+var ActionTypes = require('../constants/ActionTypes');
+var AppDispatcher = require('./AppDispatcher');
+var Config = require('../config/Config');
+var RequestUtil = require('../utils/RequestUtil');
 
 var SidebarActions = {
 
@@ -34,8 +34,8 @@ var SidebarActions = {
   },
 
   showVersions: function () {
-    var host = Config.rootUrl.replace(/:[0-9]{0,4}$/, "");
-    var url = host + "/pkgpanda/active.buildinfo.full.json";
+    var host = Config.rootUrl.replace(/:[0-9]{0,4}$/, '');
+    var url = host + '/pkgpanda/active.buildinfo.full.json';
 
     RequestUtil.json({
       url: url,

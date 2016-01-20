@@ -1,16 +1,16 @@
-jest.dontMock("../ACLActions");
-jest.dontMock("../AppDispatcher");
-jest.dontMock("../../config/Config");
-jest.dontMock("../../constants/ActionTypes");
-jest.dontMock("../../utils/RequestUtil");
+jest.dontMock('../ACLActions');
+jest.dontMock('../AppDispatcher');
+jest.dontMock('../../config/Config');
+jest.dontMock('../../constants/ActionTypes');
+jest.dontMock('../../utils/RequestUtil');
 
-let ACLActions = require("../ACLActions");
-let ActionTypes = require("../../constants/ActionTypes");
-var AppDispatcher = require("../AppDispatcher");
-let Config = require("../../config/Config");
-let RequestUtil = require("../../utils/RequestUtil");
+let ACLActions = require('../ACLActions');
+let ActionTypes = require('../../constants/ActionTypes');
+var AppDispatcher = require('../AppDispatcher');
+let Config = require('../../config/Config');
+let RequestUtil = require('../../utils/RequestUtil');
 
-describe("ACLActions", function () {
+describe('ACLActions', function () {
 
   beforeEach(function () {
     this.configuration = null;
@@ -18,7 +18,7 @@ describe("ACLActions", function () {
     RequestUtil.json = function (configuration) {
       this.configuration = configuration;
     }.bind(this);
-    Config.rootUrl = "";
+    Config.rootUrl = '';
     Config.useFixtures = false;
   });
 
@@ -26,256 +26,256 @@ describe("ACLActions", function () {
     RequestUtil.json = this.requestUtilJSON;
   });
 
-  describe("#fetchACLsForResource", function () {
+  describe('#fetchACLsForResource', function () {
 
-    it("dispatches the correct action when successful", function () {
-      ACLActions.fetchACLsForResource("foo");
+    it('dispatches the correct action when successful', function () {
+      ACLActions.fetchACLsForResource('foo');
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action).toEqual({
           type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
-          data: {bar: "baz"},
-          resourceType: "foo"
+          data: {bar: 'baz'},
+          resourceType: 'foo'
         });
       });
 
-      this.configuration.success({array: {bar: "baz"}});
+      this.configuration.success({array: {bar: 'baz'}});
     });
 
-    it("dispatches the correct action when unsuccessful", function () {
-      ACLActions.fetchACLsForResource("bar");
+    it('dispatches the correct action when unsuccessful', function () {
+      ACLActions.fetchACLsForResource('bar');
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action).toEqual({
           type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_ERROR,
-          data: "bar",
-          resourceType: "bar"
+          data: 'bar',
+          resourceType: 'bar'
         });
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("calls #json from the RequestUtil", function () {
-      spyOn(RequestUtil, "json");
-      ACLActions.fetchACLsForResource("foo");
+    it('calls #json from the RequestUtil', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.fetchACLsForResource('foo');
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
-    it("fetches data from the correct URL", function () {
-      spyOn(RequestUtil, "json");
-      ACLActions.fetchACLsForResource("bar");
+    it('fetches data from the correct URL', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.fetchACLsForResource('bar');
       expect(RequestUtil.json.mostRecentCall.args[0].url)
-        .toEqual(Config.acsAPIPrefix + "/acls?type=bar");
+        .toEqual(Config.acsAPIPrefix + '/acls?type=bar');
     });
   });
 
-  describe("#grantUserActionToResource", function () {
+  describe('#grantUserActionToResource', function () {
 
     beforeEach(function () {
-      ACLActions.grantUserActionToResource("foo", "access", "bar");
+      ACLActions.grantUserActionToResource('foo', 'access', 'bar');
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
-            triple: {userID: "foo", action: "access", resourceID: "bar"}
+            triple: {userID: 'foo', action: 'access', resourceID: 'bar'}
           });
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches the correct action when unsuccessful", function () {
+    it('dispatches the correct action when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_GRANT_ACTION_ERROR,
-            data: "bar",
-            triple: {userID: "foo", action: "access", resourceID: "bar"}
+            data: 'bar',
+            triple: {userID: 'foo', action: 'access', resourceID: 'bar'}
           });
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("sends data to the correct URL", function () {
-      spyOn(RequestUtil, "json");
-      ACLActions.grantUserActionToResource("foo", "access", "bar");
+    it('sends data to the correct URL', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.grantUserActionToResource('foo', 'access', 'bar');
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual(Config.acsAPIPrefix + "/acls/bar/users/foo/access");
+        .toEqual(Config.acsAPIPrefix + '/acls/bar/users/foo/access');
     });
 
-    it("sends a PUT request", function () {
-      spyOn(RequestUtil, "json");
-      ACLActions.grantUserActionToResource("foo", "access", "bar");
+    it('sends a PUT request', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.grantUserActionToResource('foo', 'access', 'bar');
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
-      expect(requestArgs.method).toEqual("PUT");
+      expect(requestArgs.method).toEqual('PUT');
     });
 
   });
 
-  describe("#revokeUserActionToResource", function () {
+  describe('#revokeUserActionToResource', function () {
 
     beforeEach(function () {
-      ACLActions.revokeUserActionToResource("foo", "access", "bar");
+      ACLActions.revokeUserActionToResource('foo', 'access', 'bar');
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
-            triple: {userID: "foo", action: "access", resourceID: "bar"}
+            triple: {userID: 'foo', action: 'access', resourceID: 'bar'}
           });
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches the correct action when unsuccessful", function () {
+    it('dispatches the correct action when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_USER_REVOKE_ACTION_ERROR,
-            data: "bar",
-            triple: {userID: "foo", action: "access", resourceID: "bar"}
+            data: 'bar',
+            triple: {userID: 'foo', action: 'access', resourceID: 'bar'}
           });
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("sends data to the correct URL", function () {
-      spyOn(RequestUtil, "json");
-      ACLActions.revokeUserActionToResource("foo", "access", "bar");
+    it('sends data to the correct URL', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.revokeUserActionToResource('foo', 'access', 'bar');
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual(Config.acsAPIPrefix + "/acls/bar/users/foo/access");
+        .toEqual(Config.acsAPIPrefix + '/acls/bar/users/foo/access');
     });
 
-    it("sends a DELETE request", function () {
-      spyOn(RequestUtil, "json");
-      ACLActions.revokeUserActionToResource("foo", "access", "bar");
+    it('sends a DELETE request', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.revokeUserActionToResource('foo', 'access', 'bar');
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
-      expect(requestArgs.method).toEqual("DELETE");
+      expect(requestArgs.method).toEqual('DELETE');
     });
 
   });
 
-  describe("#grantGroupActionToResource", function () {
+  describe('#grantGroupActionToResource', function () {
 
     beforeEach(function () {
-      ACLActions.grantGroupActionToResource("foo", "access", "bar");
+      ACLActions.grantGroupActionToResource('foo', 'access', 'bar');
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
-            triple: {groupID: "foo", action: "access", resourceID: "bar"}
+            triple: {groupID: 'foo', action: 'access', resourceID: 'bar'}
           });
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches the correct action when unsuccessful", function () {
+    it('dispatches the correct action when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_GRANT_ACTION_ERROR,
-            data: "bar",
-            triple: {groupID: "foo", action: "access", resourceID: "bar"}
+            data: 'bar',
+            triple: {groupID: 'foo', action: 'access', resourceID: 'bar'}
           });
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("sends data to the correct URL", function () {
-      spyOn(RequestUtil, "json");
-      ACLActions.grantGroupActionToResource("foo", "access", "bar");
+    it('sends data to the correct URL', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.grantGroupActionToResource('foo', 'access', 'bar');
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual(Config.acsAPIPrefix + "/acls/bar/groups/foo/access");
+        .toEqual(Config.acsAPIPrefix + '/acls/bar/groups/foo/access');
     });
 
-    it("sends a PUT request", function () {
-      spyOn(RequestUtil, "json");
-      ACLActions.grantGroupActionToResource("foo", "access", "bar");
+    it('sends a PUT request', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.grantGroupActionToResource('foo', 'access', 'bar');
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
-      expect(requestArgs.method).toEqual("PUT");
+      expect(requestArgs.method).toEqual('PUT');
     });
 
   });
 
-  describe("#revokeGroupActionToResource", function () {
+  describe('#revokeGroupActionToResource', function () {
 
     beforeEach(function () {
-      ACLActions.revokeGroupActionToResource("foo", "access", "bar");
+      ACLActions.revokeGroupActionToResource('foo', 'access', 'bar');
     });
 
-    it("dispatches the correct action when successful", function () {
+    it('dispatches the correct action when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
-            triple: {groupID: "foo", action: "access", resourceID: "bar"}
+            triple: {groupID: 'foo', action: 'access', resourceID: 'bar'}
           });
       });
 
-      this.configuration.success({bar: "baz"});
+      this.configuration.success({bar: 'baz'});
     });
 
-    it("dispatches the correct action when unsuccessful", function () {
+    it('dispatches the correct action when unsuccessful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action)
           .toEqual({
             type: ActionTypes.REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR,
-            data: "bar",
-            triple: {groupID: "foo", resourceID: "bar", action: "access"}
+            data: 'bar',
+            triple: {groupID: 'foo', resourceID: 'bar', action: 'access'}
           });
       });
 
-      this.configuration.error({responseJSON: {description: "bar"}});
+      this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
-    it("sends data to the correct URL", function () {
-      spyOn(RequestUtil, "json");
-      ACLActions.revokeGroupActionToResource("foo", "access", "bar");
+    it('sends data to the correct URL', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.revokeGroupActionToResource('foo', 'access', 'bar');
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
       expect(requestArgs.url)
-        .toEqual(Config.acsAPIPrefix + "/acls/bar/groups/foo/access");
+        .toEqual(Config.acsAPIPrefix + '/acls/bar/groups/foo/access');
     });
 
-    it("sends a DELETE request", function () {
-      spyOn(RequestUtil, "json");
-      ACLActions.revokeUserActionToResource("foo", "access", "bar");
+    it('sends a DELETE request', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.revokeUserActionToResource('foo', 'access', 'bar');
       var requestArgs = RequestUtil.json.mostRecentCall.args[0];
-      expect(requestArgs.method).toEqual("DELETE");
+      expect(requestArgs.method).toEqual('DELETE');
     });
 
   });

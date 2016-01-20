@@ -1,6 +1,6 @@
-import List from "./List";
-import MesosSummaryUtil from "../utils/MesosSummaryUtil";
-import StateSummary from "./StateSummary";
+import List from './List';
+import MesosSummaryUtil from '../utils/MesosSummaryUtil';
+import StateSummary from './StateSummary';
 
 export default class SummaryList extends List {
   constructor(options = {}) {

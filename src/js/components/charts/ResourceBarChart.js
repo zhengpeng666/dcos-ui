@@ -1,17 +1,17 @@
-const _ = require("underscore");
-const classNames = require("classnames");
-const React = require("react/addons");
+const _ = require('underscore');
+const classNames = require('classnames');
+const React = require('react/addons');
 
-const BarChart = require("./BarChart");
-const Chart = require("./Chart");
-const ResourceTypes = require("../../constants/ResourceTypes");
+const BarChart = require('./BarChart');
+const Chart = require('./Chart');
+const ResourceTypes = require('../../constants/ResourceTypes');
 
 // number to fit design of width vs. height ratio
 const WIDTH_HEIGHT_RATIO = 4.5;
 
 let ResourceBarChart = React.createClass({
 
-  displayName: "ResourceBarChart",
+  displayName: 'ResourceBarChart',
 
   propTypes: {
     onResourceSelectionChange: React.PropTypes.func.isRequired,
@@ -27,9 +27,9 @@ let ResourceBarChart = React.createClass({
     return {
       itemCount: 0,
       totalResources: {},
-      y: "percentage",
+      y: 'percentage',
       refreshRate: 0,
-      resourceType: ""
+      resourceType: ''
     };
   },
 
@@ -42,8 +42,8 @@ let ResourceBarChart = React.createClass({
 
     let selectedResource = props.selectedResource;
     return [{
-        id: "used_resources",
-        name: selectedResource + " allocated",
+        id: 'used_resources',
+        name: selectedResource + ' allocated',
         colorIndex: ResourceTypes[selectedResource].colorIndex,
         values: props.resources[selectedResource]
     }];
@@ -66,14 +66,14 @@ let ResourceBarChart = React.createClass({
 
     return _.map(ResourceTypes, function (info, key) {
       let classSet = classNames({
-        "button button-stroke button-inverse": true,
-        "active": selectedResource === key
+        'button button-stroke button-inverse': true,
+        'active': selectedResource === key
       });
 
       return (
         <button
             key={key}
-            className={classSet + " path-color-" + info.colorIndex}
+            className={classSet + ' path-color-' + info.colorIndex}
             onClick={this.handleSelectedResourceChange.bind(this, key)}>
           {info.label}
         </button>
@@ -95,7 +95,7 @@ let ResourceBarChart = React.createClass({
   },
 
   getHeadline: function (info) {
-    let headline = info.label + " Allocation Rate";
+    let headline = info.label + ' Allocation Rate';
 
     return (
       <div>
@@ -103,7 +103,7 @@ let ResourceBarChart = React.createClass({
           {headline}
         </h4>
         <p className="flush inverse">
-          {this.props.itemCount + " Total " + this.props.resourceType}
+          {this.props.itemCount + ' Total ' + this.props.resourceType}
         </p>
       </div>
     );

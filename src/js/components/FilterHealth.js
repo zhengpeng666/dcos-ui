@@ -1,21 +1,21 @@
-var _ = require("underscore");
-var classNames = require("classnames");
-var React = require("react/addons");
+var _ = require('underscore');
+var classNames = require('classnames');
+var React = require('react/addons');
 
-var HealthLabels = require("../constants/HealthLabels");
-var HealthTypes = require("../constants/HealthTypes");
+var HealthLabels = require('../constants/HealthLabels');
+var HealthTypes = require('../constants/HealthTypes');
 
 var buttonMap = _.pick(
   HealthLabels,
-  "ALL",
-  "HEALTHY",
-  "UNHEALTHY",
-  "NA"
+  'ALL',
+  'HEALTHY',
+  'UNHEALTHY',
+  'NA'
 );
 
 var FilterHealth = React.createClass({
 
-  displayName: "FilterHealth",
+  displayName: 'FilterHealth',
 
   propTypes: {
     countByHealth: React.PropTypes.object.isRequired,
@@ -36,7 +36,7 @@ var FilterHealth = React.createClass({
   getCountByHealth: function (key) {
     var props = this.props;
     var count = 0;
-    if (key === "ALL") {
+    if (key === 'ALL') {
       count = props.servicesLength;
     }
     if (props.countByHealth[HealthTypes[key]] != null) {
@@ -55,17 +55,17 @@ var FilterHealth = React.createClass({
         health = null;
       }
       var classSet = classNames({
-        "button button-stroke button-inverse": true,
-        "active": mode === health
+        'button button-stroke button-inverse': true,
+        'active': mode === health
       });
 
       var dotClassSet = classNames({
-        "dot": _.contains([
+        'dot': _.contains([
           HealthTypes.UNHEALTHY,
           HealthTypes.HEALTHY,
           HealthTypes.NA], health),
-        "danger": HealthTypes.UNHEALTHY === health,
-        "success": HealthTypes.HEALTHY === health
+        'danger': HealthTypes.UNHEALTHY === health,
+        'success': HealthTypes.HEALTHY === health
       });
 
       return (

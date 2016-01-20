@@ -1,19 +1,19 @@
-import {Dropdown, Modal} from "reactjs-components";
-import React from "react";
+import {Dropdown, Modal} from 'reactjs-components';
+import React from 'react';
 
-import ACLAuthStore from "../../stores/ACLAuthStore";
+import ACLAuthStore from '../../stores/ACLAuthStore';
 
 const METHODS_TO_BIND = [
-  "handleDropdownClose",
-  "handleDropdownClick",
-  "handleSignOut"
+  'handleDropdownClose',
+  'handleDropdownClick',
+  'handleSignOut'
 ];
 
 const MENU_ITEMS = {
-  "button-docs": "Documentation",
-  "button-intercom": "Talk with us",
-  "button-tour": "Walkthrough",
-  "button-sign-out": "Sign Out"
+  'button-docs': 'Documentation',
+  'button-intercom': 'Talk with us',
+  'button-tour': 'Walkthrough',
+  'button-sign-out': 'Sign Out'
 };
 
 export default class UserDropup extends React.Component {
@@ -33,7 +33,7 @@ export default class UserDropup extends React.Component {
     let open = this.state.open;
     // Only close if we are open
     if (open) {
-      window.removeEventListener("resize", this.handleDropdownClose);
+      window.removeEventListener('resize', this.handleDropdownClose);
       this.setState({open: false});
     }
   }
@@ -41,7 +41,7 @@ export default class UserDropup extends React.Component {
   handleDropdownClick() {
     let open = !this.state.open;
     if (open) {
-      window.addEventListener("resize", this.handleDropdownClose);
+      window.addEventListener('resize', this.handleDropdownClose);
     }
 
     this.setState({open});
@@ -49,7 +49,7 @@ export default class UserDropup extends React.Component {
 
   handleSignOut() {
     ACLAuthStore.logout();
-    this.context.router.transitionTo("/login");
+    this.context.router.transitionTo('/login');
   }
 
   handleMenuItemClick(onClick, e) {
@@ -65,16 +65,16 @@ export default class UserDropup extends React.Component {
   getDropdownMenu(menuItems) {
     let defaultItem = [
       {
-        className: "hidden",
-        html: "",
-        id: "default-item",
+        className: 'hidden',
+        html: '',
+        id: 'default-item',
         selectedHtml: this.getUserButton(null, function () {})
       }
     ];
 
     return defaultItem.concat(menuItems.map(function (item) {
       return {
-        className: "clickable",
+        className: 'clickable',
         html: item,
         id: item.key,
         selectedHtml: item
@@ -129,10 +129,10 @@ export default class UserDropup extends React.Component {
       // Override classes and tooltip, and monkeypatch the onClick to close
       // the dropdown
       let props = {
-        className: "",
-        "data-behavior": "",
-        "data-tip-content": "",
-        "data-tip-place": "",
+        className: '',
+        'data-behavior': '',
+        'data-tip-content': '',
+        'data-tip-place': '',
         onClick: this.handleMenuItemClick.bind(this, item.props.onClick)
       };
 
@@ -147,10 +147,10 @@ export default class UserDropup extends React.Component {
     }
 
     let modalClasses = {
-      bodyClass: "",
-      containerClass: "user-dropdown-menu dropdown",
-      innerBodyClass: "",
-      modalClass: "dropdown-menu"
+      bodyClass: '',
+      containerClass: 'user-dropdown-menu dropdown',
+      innerBodyClass: '',
+      modalClass: 'dropdown-menu'
     };
 
     let userButton = this.getUserButton(user, this.handleDropdownClick);

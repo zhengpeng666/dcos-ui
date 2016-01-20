@@ -1,10 +1,10 @@
-var React = require("react/addons");
+var React = require('react/addons');
 
-var IntercomActions = require("../events/IntercomActions");
+var IntercomActions = require('../events/IntercomActions');
 
 var RequestErrorMsg = React.createClass({
 
-  displayName: "RequestErrorMsg",
+  displayName: 'RequestErrorMsg',
 
   render: function () {
     return (
@@ -14,9 +14,9 @@ var RequestErrorMsg = React.createClass({
             Cannot Connect With The Server
           </h3>
           <p className="inverse text-align-center flush-bottom">
-            {"We have been notified of the issue, but would love to know more. Talk with us using "}
+            {'We have been notified of the issue, but would love to know more. Talk with us using '}
             <a className="clickable" onClick={IntercomActions.open}>Intercom</a>
-            {". You can also join us on our "}
+            {'. You can also join us on our '}
             <a href="https://mesosphere.slack.com/messages/dcos-eap-public"
                 target="_blank">
               Slack channel

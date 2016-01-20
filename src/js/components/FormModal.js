@@ -1,9 +1,9 @@
-import classNames from "classnames";
-import {Form, Modal} from "reactjs-components";
-import React from "react";
+import classNames from 'classnames';
+import {Form, Modal} from 'reactjs-components';
+import React from 'react';
 
 const METHODS_TO_BIND = [
-  "getTriggerSubmit", "handleTriggerSubmit", "handleError"
+  'getTriggerSubmit', 'handleTriggerSubmit', 'handleError'
 ];
 
 export default class FormModal extends React.Component {
@@ -36,7 +36,7 @@ export default class FormModal extends React.Component {
   getButtons() {
     return this.props.buttonDefinition.map((buttonDefinition, i) => {
       let buttonClassSet = {
-        "disabled": this.props.disabled
+        'disabled': this.props.disabled
       };
       buttonClassSet[buttonDefinition.className] = true;
       buttonClassSet = classNames(buttonClassSet);
@@ -111,13 +111,13 @@ export default class FormModal extends React.Component {
 FormModal.defaultProps = {
   buttonDefinition: [
     {
-      text: "Close",
-      className: "button button-medium",
+      text: 'Close',
+      className: 'button button-medium',
       isClose: true
     },
     {
-      text: "Create",
-      className: "button button-success button-medium",
+      text: 'Create',
+      className: 'button button-success button-medium',
       isSubmit: true
     }
   ],

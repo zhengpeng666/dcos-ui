@@ -1,13 +1,13 @@
-var _ = require("underscore");
-var React = require("react/addons");
+var _ = require('underscore');
+var React = require('react/addons');
 
-var Chart = require("./Chart");
-var TimeSeriesChart = require("./TimeSeriesChart");
-var TimeSeriesLabel = require("./TimeSeriesLabel");
+var Chart = require('./Chart');
+var TimeSeriesChart = require('./TimeSeriesChart');
+var TimeSeriesLabel = require('./TimeSeriesLabel');
 
 var TaskFailureTimeSeriesChart = React.createClass({
 
-  displayName: "TaskFailureTimeSeriesChart",
+  displayName: 'TaskFailureTimeSeriesChart',
 
   propTypes: {
     data: React.PropTypes.array.isRequired,
@@ -16,7 +16,7 @@ var TaskFailureTimeSeriesChart = React.createClass({
 
   getData: function (props) {
     return [{
-        name: "Failure",
+        name: 'Failure',
         colorIndex: 2,
         values: props.data
       }];

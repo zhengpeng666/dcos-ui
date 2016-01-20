@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import ACLAuthStore from "../../../stores/ACLAuthStore";
+import ACLAuthStore from '../../../stores/ACLAuthStore';
 
 /*
  * Exports a higher-order component that checks if user is logged in using the
@@ -17,7 +17,7 @@ export default (ComposedComponent) => {
         ACLAuthStore.set({loginRedirectRoute: transition.path});
 
         // Go to login page
-        transition.redirect("/login");
+        transition.redirect('/login');
       }
     }
 

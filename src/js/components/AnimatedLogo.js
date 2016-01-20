@@ -1,12 +1,12 @@
-var _ = require("underscore");
-var d3 = require("d3");
-var React = require("react");
+var _ = require('underscore');
+var d3 = require('d3');
+var React = require('react');
 
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 
 var AnimatedLogo = React.createClass({
 
-  displayName: "AnimatedLogo",
+  displayName: 'AnimatedLogo',
 
   propTypes: {
     speed: React.PropTypes.number,
@@ -24,12 +24,12 @@ var AnimatedLogo = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set({
-      logoGradientID: _.uniqueId("logoGradient"),
+      logoGradientID: _.uniqueId('logoGradient'),
       intervalID: null,
       calcBrezierLine: d3.svg.line()
         .x(function (d) { return d[0]; })
         .y(function (d) { return d[1]; })
-        .interpolate("basis")
+        .interpolate('basis')
     });
   },
 
@@ -60,12 +60,12 @@ var AnimatedLogo = React.createClass({
   getGradientStyles: function () {
     return {
       start: {
-        stopColor: "rgb(147,81,229)",
-        stopOpacity: "1"
+        stopColor: 'rgb(147,81,229)',
+        stopOpacity: '1'
       },
       stop: {
-        stopColor: "rgb(239,70,139)",
-        stopOpacity: "1"
+        stopColor: 'rgb(239,70,139)',
+        stopOpacity: '1'
       }
     };
   },
@@ -75,28 +75,28 @@ var AnimatedLogo = React.createClass({
 
     d3.select(this.refs.center.getDOMNode())
       .transition()
-      .ease("in-out")
+      .ease('in-out')
       .duration(speed)
-      .attr("d", this.getTrianglePosition("center", _.random(180, 280)));
+      .attr('d', this.getTrianglePosition('center', _.random(180, 280)));
 
     d3.select(this.refs.left.getDOMNode())
       .transition()
-      .ease("in-out")
+      .ease('in-out')
       .duration(speed)
-      .attr("d", this.getTrianglePosition("left", _.random(160, 240)));
+      .attr('d', this.getTrianglePosition('left', _.random(160, 240)));
 
     d3.select(this.refs.right.getDOMNode())
       .transition()
-      .ease("in-out")
+      .ease('in-out')
       .duration(speed)
-      .attr("d", this.getTrianglePosition("right", _.random(140, 195)));
+      .attr('d', this.getTrianglePosition('right', _.random(140, 195)));
   },
 
   getTrianglePosition: function (position, constant) {
     var data = this.internalStorage_get();
     var pad = 10;
 
-    if (position === "center") {
+    if (position === 'center') {
       if (!constant) {
         constant = 280;
       }
@@ -118,7 +118,7 @@ var AnimatedLogo = React.createClass({
         // Curve coordinates
         [20, 28]
       ]);
-    } else if (position === "left") {
+    } else if (position === 'left') {
       if (!constant) {
         constant = 240;
       }
@@ -138,7 +138,7 @@ var AnimatedLogo = React.createClass({
         [pad, pad],
         [pad, 30]
       ]);
-    } else if (position === "right") {
+    } else if (position === 'right') {
       if (!constant) {
         constant = 195;
       }
@@ -162,7 +162,7 @@ var AnimatedLogo = React.createClass({
   },
 
   buildTriangles: function (strokeID) {
-    return _.map(["center", "right", "left"], function (position) {
+    return _.map(['center', 'right', 'left'], function (position) {
       return (
         <path ref={position}
           key={position}
@@ -178,7 +178,7 @@ var AnimatedLogo = React.createClass({
     var data = this.internalStorage_get();
     var props = this.props;
 
-    var scaleFunction = "scale(" + props.scale + ")";
+    var scaleFunction = 'scale(' + props.scale + ')';
     var svgStyle = {
       msTransform: scaleFunction,
       WebkitTransform: scaleFunction,
@@ -186,7 +186,7 @@ var AnimatedLogo = React.createClass({
     };
     var gradientStyles = this.getGradientStyles();
 
-    var strokeID = "url(#" + data.logoGradientID + ")";
+    var strokeID = 'url(#' + data.logoGradientID + ')';
     var triangles = this.buildTriangles(strokeID);
 
     return (

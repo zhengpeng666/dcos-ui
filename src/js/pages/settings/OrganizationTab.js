@@ -1,25 +1,25 @@
-import _ from "underscore";
-import {Form, Table} from "reactjs-components";
-import {Link} from "react-router";
+import _ from 'underscore';
+import {Form, Table} from 'reactjs-components';
+import {Link} from 'react-router';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import FilterHeadline from "../../components/FilterHeadline";
-import FilterInputText from "../../components/FilterInputText";
-import FormUtil from "../../utils/FormUtil";
-import ResourceTableUtil from "../../utils/ResourceTableUtil";
-import StringUtil from "../../utils/StringUtil";
-import TableUtil from "../../utils/TableUtil";
+import FilterHeadline from '../../components/FilterHeadline';
+import FilterInputText from '../../components/FilterInputText';
+import FormUtil from '../../utils/FormUtil';
+import ResourceTableUtil from '../../utils/ResourceTableUtil';
+import StringUtil from '../../utils/StringUtil';
+import TableUtil from '../../utils/TableUtil';
 
 const METHODS_TO_BIND = [
-  "handleSearchStringChange",
-  "handleCheckboxChange",
-  "handleHeadingCheckboxChange",
-  "renderCheckbox",
-  "renderHeadingCheckbox",
-  "renderHeadline",
-  "resetFilter"
+  'handleSearchStringChange',
+  'handleCheckboxChange',
+  'handleHeadingCheckboxChange',
+  'renderCheckbox',
+  'renderHeadingCheckbox',
+  'renderHeadline',
+  'resetFilter'
 ];
 
 export default class OrganizationTab extends React.Component {
@@ -29,7 +29,7 @@ export default class OrganizationTab extends React.Component {
     this.state = {
       checkedCount: 0,
       openNewItemModal: false,
-      searchString: ""
+      searchString: ''
     };
 
     METHODS_TO_BIND.forEach(function (method) {
@@ -63,7 +63,7 @@ export default class OrganizationTab extends React.Component {
       <div>
         <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
           params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}>
-          {subject.get("description")}
+          {subject.get('description')}
         </Link>
       </div>
     );
@@ -84,14 +84,14 @@ export default class OrganizationTab extends React.Component {
         formGroupClass="form-group flush-bottom"
         definition={[
           {
-            fieldType: "checkbox",
+            fieldType: 'checkbox',
             name: row[this.props.itemID],
             value: [{
-              name: "select",
+              name: 'select',
               checked,
-              labelClass: "inverse"
+              labelClass: 'inverse'
             }],
-            labelClass: "inverse"
+            labelClass: 'inverse'
           }
         ]}
         onChange={this.handleCheckboxChange} />
@@ -119,16 +119,16 @@ export default class OrganizationTab extends React.Component {
         formGroupClass="form-group flush-bottom"
         definition={[
           {
-            fieldType: "checkbox",
-            name: "headingCheckbox",
+            fieldType: 'checkbox',
+            name: 'headingCheckbox',
             value: [{
-              name: "selectBulk",
-              label: "",
+              name: 'selectBulk',
+              label: '',
               checked,
               indeterminate,
-              labelClass: "inverse"
+              labelClass: 'inverse'
             }],
-            labelClass: "inverse"
+            labelClass: 'inverse'
           }
         ]}
         onChange={this.handleHeadingCheckboxChange} />
@@ -138,7 +138,7 @@ export default class OrganizationTab extends React.Component {
   getColGroup() {
     return (
       <colgroup>
-        <col style={{width: "40px"}} />
+        <col style={{width: '40px'}} />
         <col />
       </colgroup>
     );
@@ -147,15 +147,15 @@ export default class OrganizationTab extends React.Component {
   getColumns() {
     let className = ResourceTableUtil.getClassName;
     let heading = ResourceTableUtil.renderHeading({
-      description: "Description"
+      description: 'Description'
     });
-    let propSortFunction = ResourceTableUtil.getPropSortFunction("description");
+    let propSortFunction = ResourceTableUtil.getPropSortFunction('description');
 
     return [
       {
         className,
         headerClassName: className,
-        prop: "selected",
+        prop: 'selected',
         render: this.renderCheckbox,
         sortable: false,
         heading: this.renderHeadingCheckbox,
@@ -164,7 +164,7 @@ export default class OrganizationTab extends React.Component {
       {
         className,
         headerClassName: className,
-        prop: "description",
+        prop: 'description',
         render: this.renderHeadline,
         sortable: true,
         sortFunction: propSortFunction,
@@ -176,9 +176,9 @@ export default class OrganizationTab extends React.Component {
   getVisibleItems(items) {
     let searchString = this.state.searchString.toLowerCase();
 
-    if (searchString !== "") {
+    if (searchString !== '') {
       return _.filter(items, function (item) {
-        let description = item.get("description").toLowerCase();
+        let description = item.get('description').toLowerCase();
         return description.indexOf(searchString) > -1;
       });
     }
@@ -187,7 +187,7 @@ export default class OrganizationTab extends React.Component {
   }
 
   resetFilter() {
-    this.setState({searchString: ""});
+    this.setState({searchString: ''});
   }
 
   render() {
@@ -230,7 +230,7 @@ export default class OrganizationTab extends React.Component {
             data={this.getVisibleItems(items)}
             idAttribute={props.itemID}
             itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: "description", order: "asc"}}
+            sortBy={{prop: 'description', order: 'asc'}}
             useFlex={true}
             transition={false}
             useScrollTable={false} />

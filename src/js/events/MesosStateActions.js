@@ -1,7 +1,7 @@
-var ActionTypes = require("../constants/ActionTypes");
-var AppDispatcher = require("./AppDispatcher");
-var Config = require("../config/Config");
-var RequestUtil = require("../utils/RequestUtil");
+var ActionTypes = require('../constants/ActionTypes');
+var AppDispatcher = require('./AppDispatcher');
+var Config = require('../config/Config');
+var RequestUtil = require('../utils/RequestUtil');
 
 var MesosStateActions = {
 

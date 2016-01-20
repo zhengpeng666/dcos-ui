@@ -1,19 +1,19 @@
-import {Confirm, Table} from "reactjs-components";
-import mixin from "reactjs-mixin";
+import {Confirm, Table} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLGroupStore from "../stores/ACLGroupStore";
-import ResourceTableUtil from "../utils/ResourceTableUtil";
-import TableUtil from "../utils/TableUtil";
+import ACLGroupStore from '../stores/ACLGroupStore';
+import ResourceTableUtil from '../utils/ResourceTableUtil';
+import TableUtil from '../utils/TableUtil';
 
 const METHODS_TO_BIND = [
-  "handleOpenConfirm",
-  "handleButtonConfirm",
-  "handleButtonCancel",
-  "renderButton"
+  'handleOpenConfirm',
+  'handleButtonConfirm',
+  'handleButtonCancel',
+  'renderButton'
 ];
 
 export default class GroupUserTable extends mixin(StoreMixin) {
@@ -31,8 +31,8 @@ export default class GroupUserTable extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "group",
-        events: ["deleteUserSuccess", "deleteUserError", "usersSuccess"]
+        name: 'group',
+        events: ['deleteUserSuccess', 'deleteUserError', 'usersSuccess']
       }
     ];
 
@@ -82,7 +82,7 @@ export default class GroupUserTable extends mixin(StoreMixin) {
   getColGroup() {
     return (
       <colgroup>
-        <col style={{width: "50%"}} />
+        <col style={{width: '50%'}} />
         <col />
       </colgroup>
     );
@@ -91,15 +91,15 @@ export default class GroupUserTable extends mixin(StoreMixin) {
   getColumns() {
     let className = ResourceTableUtil.getClassName;
     let descriptionHeading = ResourceTableUtil.renderHeading({
-      description: "Name"
+      description: 'Name'
     });
-    let propSortFunction = ResourceTableUtil.getPropSortFunction("description");
+    let propSortFunction = ResourceTableUtil.getPropSortFunction('description');
 
     return [
       {
         className,
         headerClassName: className,
-        prop: "description",
+        prop: 'description',
         render: this.renderUserLabel,
         sortable: true,
         sortFunction: propSortFunction,
@@ -108,18 +108,18 @@ export default class GroupUserTable extends mixin(StoreMixin) {
       {
         className,
         headerClassName: className,
-        prop: "remove",
+        prop: 'remove',
         render: this.renderButton,
         sortable: false,
         sortFunction: propSortFunction,
-        heading: ""
+        heading: ''
       }
     ];
   }
 
   getConfirmModalContent(groupDetails) {
     let state = this.state;
-    let userLabel = "this user";
+    let userLabel = 'this user';
     groupDetails.users.forEach(function (user) {
       if (user.user.uid === state.userID) {
         userLabel = user.user.description;
@@ -198,7 +198,7 @@ export default class GroupUserTable extends mixin(StoreMixin) {
           data={groupUsers}
           idAttribute="uid"
           itemHeight={TableUtil.getRowHeight()}
-          sortBy={{prop: "description", order: "asc"}}
+          sortBy={{prop: 'description', order: 'asc'}}
           useFlex={true}
           transition={false}
           useScrollTable={false} />

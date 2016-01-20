@@ -1,9 +1,9 @@
-var classNames = require("classnames");
-var React = require("react");
+var classNames = require('classnames');
+var React = require('react');
 
 var FilterHeadline = React.createClass({
 
-  displayName: "FilterHeadline",
+  displayName: 'FilterHeadline',
 
   propTypes: {
     onReset: React.PropTypes.func.isRequired,
@@ -23,18 +23,18 @@ var FilterHeadline = React.createClass({
     var totalLength = this.props.totalLength;
 
     var filteredClassSet = classNames({
-      "h4 inverse": true,
-      "hidden": filteredLength === totalLength
+      'h4 inverse': true,
+      'hidden': filteredLength === totalLength
     });
 
     var unfilteredClassSet = classNames({
-      "h4 inverse": true,
-      "hidden": filteredLength !== totalLength
+      'h4 inverse': true,
+      'hidden': filteredLength !== totalLength
     });
 
     var anchorClassSet = classNames({
-      "h4 inverse clickable": true,
-      "hidden": filteredLength === totalLength
+      'h4 inverse clickable': true,
+      'hidden': filteredLength === totalLength
     });
 
     return (

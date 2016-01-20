@@ -1,7 +1,7 @@
-import ActionTypes from "../constants/ActionTypes";
-import AppDispatcher from "./AppDispatcher";
-import Config from "../config/Config";
-import RequestUtil from "../utils/RequestUtil";
+import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from './AppDispatcher';
+import Config from '../config/Config';
+import RequestUtil from '../utils/RequestUtil';
 
 const MesosLogActions = {
 

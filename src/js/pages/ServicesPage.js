@@ -1,21 +1,21 @@
-var _ = require("underscore");
-var React = require("react/addons");
-import {RouteHandler} from "react-router";
+var _ = require('underscore');
+var React = require('react/addons');
+import {RouteHandler} from 'react-router';
 
-var AlertPanel = require("../components/AlertPanel");
-import Config from "../config/Config";
-var EventTypes = require("../constants/EventTypes");
-var FilterHealth = require("../components/FilterHealth");
-var FilterHeadline = require("../components/FilterHeadline");
-var FilterInputText = require("../components/FilterInputText");
-var InternalStorageMixin = require("../mixins/InternalStorageMixin");
-var Page = require("../components/Page");
-var MarathonStore = require("../stores/MarathonStore");
-var MesosSummaryStore = require("../stores/MesosSummaryStore");
-var ResourceBarChart = require("../components/charts/ResourceBarChart");
-var ServiceTable = require("../components/ServiceTable");
-var SidebarActions = require("../events/SidebarActions");
-import SidePanels from "../components/SidePanels";
+var AlertPanel = require('../components/AlertPanel');
+import Config from '../config/Config';
+var EventTypes = require('../constants/EventTypes');
+var FilterHealth = require('../components/FilterHealth');
+var FilterHeadline = require('../components/FilterHeadline');
+var FilterInputText = require('../components/FilterInputText');
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
+var Page = require('../components/Page');
+var MarathonStore = require('../stores/MarathonStore');
+var MesosSummaryStore = require('../stores/MesosSummaryStore');
+var ResourceBarChart = require('../components/charts/ResourceBarChart');
+var ServiceTable = require('../components/ServiceTable');
+var SidebarActions = require('../events/SidebarActions');
+import SidePanels from '../components/SidePanels';
 
 function getCountByHealth(frameworks) {
   return _.foldl(frameworks, function (acc, framework) {
@@ -30,21 +30,21 @@ function getCountByHealth(frameworks) {
 }
 
 function getMesosServices(state) {
-  let filters = _.pick(state, "searchString", "healthFilter");
-  let states = MesosSummaryStore.get("states");
+  let filters = _.pick(state, 'searchString', 'healthFilter');
+  let states = MesosSummaryStore.get('states');
   let lastState = states.lastSuccessful();
   let services = lastState.getServiceList();
   let filteredServices = services.filter({
     health: filters.healthFilter,
     name: filters.searchString
   }).getItems();
-  let serviceIDs = _.pluck(filteredServices, "id");
+  let serviceIDs = _.pluck(filteredServices, 'id');
 
   return {
     services: filteredServices,
     totalServices: services.getItems().length,
     countByHealth: getCountByHealth(services.getItems()),
-    statesProcessed: MesosSummaryStore.get("statesProcessed"),
+    statesProcessed: MesosSummaryStore.get('statesProcessed'),
     refreshRate: Config.getRefreshRate(),
     totalServiceResources: states.getResourceStatesForServiceIDs(serviceIDs),
     totalResources: lastState.getSlaveTotalResources()
@@ -52,25 +52,25 @@ function getMesosServices(state) {
 }
 
 var DEFAULT_FILTER_OPTIONS = {
-  searchString: "",
+  searchString: '',
   healthFilter: null
 };
 
 var ServicesPage = React.createClass({
 
-  displayName: "ServicesPage",
+  displayName: 'ServicesPage',
 
   mixins: [InternalStorageMixin],
 
   statics: {
     routeConfig: {
-      label: "Services",
-      icon: "services",
+      label: 'Services',
+      icon: 'services',
       matches: /^\/services/
     },
 
     // Static life cycle method from react router, that will be called
-    // "when a handler is about to render", i.e. on route change:
+    // 'when a handler is about to render', i.e. on route change:
     // https://github.com/rackt/react-router/
     // blob/master/docs/api/components/RouteHandler.md
     willTransitionTo: function () {
@@ -83,7 +83,7 @@ var ServicesPage = React.createClass({
   },
 
   getInitialState: function () {
-    return _.extend({selectedResource: "cpus"}, DEFAULT_FILTER_OPTIONS);
+    return _.extend({selectedResource: 'cpus'}, DEFAULT_FILTER_OPTIONS);
   },
 
   componentWillMount: function () {

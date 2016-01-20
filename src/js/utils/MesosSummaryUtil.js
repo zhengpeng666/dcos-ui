@@ -1,8 +1,8 @@
-var _ = require("underscore");
+var _ = require('underscore');
 
-var Config = require("../config/Config");
-var Maths = require("../utils/Maths");
-let MarathonStore = require("../stores/MarathonStore");
+var Config = require('../config/Config');
+var Maths = require('../utils/Maths');
+let MarathonStore = require('../stores/MarathonStore');
 
 const MesosSummaryUtil = {
 

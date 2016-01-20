@@ -1,70 +1,70 @@
-describe("UserDropup [028]", function () {
+describe('UserDropup [028]', function () {
 
-  context("Sidebar button [029]", function () {
+  context('Sidebar button [029]', function () {
 
     beforeEach(function () {
       cy
         .configureCluster({
-          mesos: "1-task-healthy",
+          mesos: '1-task-healthy',
           acl: true,
-          plugins: "authentication-enabled"
+          plugins: 'authentication-enabled'
         })
-        .visitUrl({url: "/dashboard", logIn: true})
-        .get(".sidebar .user-dropdown.dropdown-toggle").as("sidebarButton");
+        .visitUrl({url: '/dashboard', logIn: true})
+        .get('.sidebar .user-dropdown.dropdown-toggle').as('sidebarButton');
     });
 
-    it("should show the user [02a]", function () {
+    it('should show the user [02a]', function () {
       cy
         .get("@sidebarButton")
-        .get(".user-description")
-        .should("contain", "Joe Doe");
+        .get('.user-description')
+        .should('contain', 'Joe Doe');
     });
   });
 
-  context("Modal [02b]", function () {
+  context('Modal [02b]', function () {
 
     beforeEach(function () {
       cy
         .configureCluster({
-          mesos: "1-task-healthy",
+          mesos: '1-task-healthy',
           acl: true,
-          plugins: "authentication-enabled"
+          plugins: 'authentication-enabled'
         })
-        .visitUrl({url: "/dashboard", logIn: true})
-        .get(".sidebar .open .user-dropdown.dropdown-toggle")
-          .as("sidebarButton")
+        .visitUrl({url: '/dashboard', logIn: true})
+        .get('.sidebar .open .user-dropdown.dropdown-toggle')
+          .as('sidebarButton')
         .click()
-        .get(".user-dropdown-menu.dropdown .dropdown-menu").as("modal");
+        .get('.user-dropdown-menu.dropdown .dropdown-menu').as('modal');
 
       cy
         .get("@modal")
-        .get(".dropdown-menu-list li").as("list");
+        .get('.dropdown-menu-list li').as('list');
     });
 
-    it("should show the user [02c]", function () {
+    it('should show the user [02c]', function () {
       cy
         .get("@modal")
-        .get(".user-description")
-        .should("contain", "Joe Doe");
+        .get('.user-description')
+        .should('contain', 'Joe Doe');
     });
 
-    it("should list 4 menu items [02d]", function () {
+    it('should list 4 menu items [02d]', function () {
       cy
         .get("@list").eq(0)
-        .should("contain", "Documentation")
+        .should('contain', 'Documentation')
         .get("@list").eq(1)
-        .should("contain", "Talk with us")
+        .should('contain', 'Talk with us')
         .get("@list").eq(2)
-        .should("contain", "Walkthrough")
+        .should('contain', 'Walkthrough')
         .get("@list").eq(3)
-        .should("contain", "Sign Out");
+        .should('contain', 'Sign Out');
     });
 
-    it("should be able to sign out", function () {
+    it('should be able to sign out', function () {
       cy
         .get("@list").eq(3)
         .click();
-      cy.hash().should("eq", "#/login");
+      cy.hash().should('eq', '#/login');
     });
   });
 

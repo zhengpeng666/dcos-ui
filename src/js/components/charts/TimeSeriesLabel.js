@@ -1,12 +1,12 @@
-var _ = require("underscore");
-var classNames = require("classnames");
-var React = require("react/addons");
+var _ = require('underscore');
+var classNames = require('classnames');
+var React = require('react/addons');
 
-var ValueTypes = require("../../constants/ValueTypes");
+var ValueTypes = require('../../constants/ValueTypes');
 
 var TimeSeriesLabel = React.createClass({
 
-  displayName: "TimeSeriesLabel",
+  displayName: 'TimeSeriesLabel',
 
   propTypes: {
     colorIndex: React.PropTypes.number,
@@ -36,7 +36,7 @@ var TimeSeriesLabel = React.createClass({
     var props = this.props;
 
     var percentageClassSet = classNames({
-      "hidden": props.y !== ValueTypes.PERCENTAGE
+      'hidden': props.y !== ValueTypes.PERCENTAGE
     });
 
     return (
@@ -45,7 +45,7 @@ var TimeSeriesLabel = React.createClass({
           {props.currentValue}
           <sup className={percentageClassSet}>%</sup>
         </span>
-        <span className={"h4 unit-label short-top tall-bottom path-color-" + props.colorIndex}>
+        <span className={'h4 unit-label short-top tall-bottom path-color-' + props.colorIndex}>
           {props.subHeading}
         </span>
       </div>

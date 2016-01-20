@@ -1,8 +1,8 @@
 // Configuration overrides
 var ConfigDev = {
-  analyticsKey: "39uhSEOoRHMw6cMR6st9tYXDbAL3JSaP",
-  rootUrl: "http://dcos.local",
-  historyServer: "http://dcos.local",
+  analyticsKey: '39uhSEOoRHMw6cMR6st9tYXDbAL3JSaP',
+  rootUrl: 'http://dcos.local',
+  historyServer: 'http://dcos.local',
   uiConfigurationFixture: {
     uiConfiguration: {
       plugins: {

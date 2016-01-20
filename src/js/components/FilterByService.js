@@ -1,14 +1,14 @@
-var _ = require("underscore");
-var React = require("react/addons");
+var _ = require('underscore');
+var React = require('react/addons');
 
-var Dropdown = require("reactjs-components").Dropdown;
-var Service = require("../structs/Service");
+var Dropdown = require('reactjs-components').Dropdown;
+var Service = require('../structs/Service');
 
-var defaultId = "default";
+var defaultId = 'default';
 
 var FilterByService = React.createClass({
 
-  displayName: "FilterByService",
+  displayName: 'FilterByService',
 
   propTypes: {
     byServiceFilter: React.PropTypes.string,
@@ -37,7 +37,7 @@ var FilterByService = React.createClass({
   getItemHtml: function (service) {
     return (
       <span className="badge-container">
-        <span>{service.get("name")}</span>
+        <span>{service.get('name')}</span>
         <span className="badge">{service.getNodeIDs().length}</span>
       </span>
     );
@@ -46,7 +46,7 @@ var FilterByService = React.createClass({
   getDropdownItems: function () {
     let defaultItem = new Service({
       id: defaultId,
-      name: "All Services",
+      name: 'All Services',
       // This is literally the worst way of doing this.
       slave_ids: new Array(this.props.totalHostsCount)
     });
@@ -57,13 +57,13 @@ var FilterByService = React.createClass({
       var dropdownHtml = (<a>{selectedHtml}</a>);
 
       var item = {
-        id: service.get("id"),
-        name: service.get("name"),
+        id: service.get('id'),
+        name: service.get('name'),
         html: dropdownHtml,
         selectedHtml
       };
 
-      if (service.get("id") === defaultId) {
+      if (service.get('id') === defaultId) {
         item.selectedHtml = (
           <span className="badge-container">
             <span>Filter by Service</span>

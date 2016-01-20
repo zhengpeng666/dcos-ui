@@ -1,14 +1,14 @@
-import {Store} from "mesosphere-shared-reactjs";
+import {Store} from 'mesosphere-shared-reactjs';
 
-import ActionTypes from "../constants/ActionTypes";
-import ACLActions from "../events/ACLActions";
-import ACLList from "../structs/ACLList";
-import AppDispatcher from "../events/AppDispatcher";
-import EventTypes from "../constants/EventTypes";
-import GetSetMixin from "../mixins/GetSetMixin";
+import ActionTypes from '../constants/ActionTypes';
+import ACLActions from '../events/ACLActions';
+import ACLList from '../structs/ACLList';
+import AppDispatcher from '../events/AppDispatcher';
+import EventTypes from '../constants/EventTypes';
+import GetSetMixin from '../mixins/GetSetMixin';
 
 const ACLStore = Store.createStore({
-  storeID: "acl",
+  storeID: 'acl',
 
   mixins: [GetSetMixin],
 

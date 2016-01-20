@@ -1,10 +1,10 @@
-import Maths from "./Maths";
+import Maths from './Maths';
 
 const Units = {
   formatResource: function (resource, value) {
     value = Maths.round(value, 2);
 
-    if (resource !== "cpus") {
+    if (resource !== 'cpus') {
       value = Units.filesize(value * 1024 * 1024, 1);
     }
 
@@ -18,7 +18,7 @@ const Units = {
     }
     threshold = threshold || 800; // Steps to next unit if exceeded
     multiplier = multiplier || 1024;
-    units = units || ["B", "KiB", "MiB", "GiB", "TiB", "PiB"];
+    units = units || ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'];
 
     var factorize = 1;
     var unitIndex;
@@ -42,11 +42,11 @@ const Units = {
     filesize = filesize.toFixed(decimals);
 
     // This removes unnecessary 0 or . chars at the end of the string/decimals
-    if (filesize.indexOf(".") > -1) {
-      filesize = filesize.replace(/\.?0*$/, "");
+    if (filesize.indexOf('.') > -1) {
+      filesize = filesize.replace(/\.?0*$/, '');
     }
 
-    return filesize + " " + units[unitIndex];
+    return filesize + ' ' + units[unitIndex];
   }
 };
 

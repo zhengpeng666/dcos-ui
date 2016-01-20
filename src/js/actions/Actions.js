@@ -1,8 +1,8 @@
-var _ = require("underscore");
-var md5 = require("md5");
-var RouterLocation = require("react-router").HashLocation;
+var _ = require('underscore');
+var md5 = require('md5');
+var RouterLocation = require('react-router').HashLocation;
 
-var Config = require("../config/Config");
+var Config = require('../config/Config');
 
 var Actions = {
 
@@ -11,9 +11,9 @@ var Actions = {
    */
   components: {},
 
-  activePage: "",
+  activePage: '',
 
-  previousFakePageLog: "",
+  previousFakePageLog: '',
 
   clusterID: null,
 
@@ -22,7 +22,7 @@ var Actions = {
   initialize: function () {
     this.createdAt = Date.now();
     this.lastLogDate = this.createdAt;
-    this.stintID = md5("session_" + this.createdAt);
+    this.stintID = md5(`session_${this.createdAt}`);
 
     this.setActivePage(this.getActivePage());
 
@@ -65,7 +65,7 @@ var Actions = {
       return;
     }
 
-    if (path[path.length - 1] === "/") {
+    if (path[path.length - 1] === '/') {
       path = path.substring(0, path.length - 1);
     }
 
@@ -88,7 +88,7 @@ var Actions = {
 
     global.analytics.identify.apply(global.analytics, arguments);
     this.log({
-      eventID: "Logged in"
+      eventID: 'Logged in'
     });
   },
 
@@ -109,17 +109,17 @@ var Actions = {
     // Populates with basic data that all logs need
     var log = _.extend({
       appVersion: Config.version,
-      eventID: "",
+      eventID: '',
       date: Date.now(),
       CLUSTER_ID: this.clusterID,
       page: this.activePage,
       stintID: this.stintID,
-      version: "@@VERSION"
+      version: '@@VERSION'
     }, anything);
 
     log = this.prepareLog(log);
 
-    global.analytics.track("dcos-ui", log);
+    global.analytics.track('dcos-ui', log);
   },
 
   /**
@@ -139,8 +139,8 @@ var Actions = {
     // If the eventID is an array then prepend the current page
     // this assumes that we want a unique eventID for the log
     if (_.isArray(log.eventID)) {
-      log.eventID.unshift(this.activePage.replace(/^\//, ""));
-      log.eventID = log.eventID.join(".");
+      log.eventID.unshift(this.activePage.replace(/^\//, ''));
+      log.eventID = log.eventID.join('.');
     }
 
     // Calculate the time since the last event

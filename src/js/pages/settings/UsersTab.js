@@ -1,27 +1,27 @@
-import mixin from "reactjs-mixin";
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLUsersStore from "../../stores/ACLUsersStore";
-import MesosSummaryStore from "../../stores/MesosSummaryStore";
-import OrganizationTab from "./OrganizationTab";
-import RequestErrorMsg from "../../components/RequestErrorMsg";
-import UserFormModal from "../../components/UserFormModal";
-import UserSidePanel from "../../components/UserSidePanel";
+import ACLUsersStore from '../../stores/ACLUsersStore';
+import MesosSummaryStore from '../../stores/MesosSummaryStore';
+import OrganizationTab from './OrganizationTab';
+import RequestErrorMsg from '../../components/RequestErrorMsg';
+import UserFormModal from '../../components/UserFormModal';
+import UserSidePanel from '../../components/UserSidePanel';
 
 const EXTERNAL_CHANGE_EVENTS = [
-  "onUserStoreCreateSuccess",
-  "onUserStoreDeleteSuccess",
-  "onUserStoreUpdateSuccess"
+  'onUserStoreCreateSuccess',
+  'onUserStoreDeleteSuccess',
+  'onUserStoreUpdateSuccess'
 ];
 
 const METHODS_TO_BIND = [
-  "handleNewUserClick",
-  "handleNewUserClose",
-  "onUsersStoreSuccess",
-  "onUsersStoreError"
+  'handleNewUserClick',
+  'handleNewUserClose',
+  'onUsersStoreSuccess',
+  'onUsersStoreError'
 ];
 
 export default class UsersTab extends mixin(StoreMixin) {
@@ -29,9 +29,9 @@ export default class UsersTab extends mixin(StoreMixin) {
     super(...arguments);
 
     this.store_listeners = [
-      {name: "marathon", events: ["success"]},
-      {name: "user", events: ["createSuccess", "deleteSuccess", "updateSuccess"]},
-      {name: "users", events: ["success", "error"]}
+      {name: 'marathon', events: ['success']},
+      {name: 'user', events: ['createSuccess', 'deleteSuccess', 'updateSuccess']},
+      {name: 'users', events: ['success', 'error']}
     ];
 
     this.state = {
@@ -106,12 +106,12 @@ export default class UsersTab extends mixin(StoreMixin) {
       );
     }
 
-    if (!MesosSummaryStore.get("statesProcessed") ||
+    if (!MesosSummaryStore.get('statesProcessed') ||
       !this.state.usersStoreSuccess) {
       return this.getLoadingScreen();
     }
 
-    let items = ACLUsersStore.get("users").getItems();
+    let items = ACLUsersStore.get('users').getItems();
 
     return (
       <OrganizationTab

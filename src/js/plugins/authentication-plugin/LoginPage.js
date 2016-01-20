@@ -1,11 +1,8 @@
-/*eslint-disable no-unused-vars*/
-import React from "react";
-/*eslint-enable no-unused-vars*/
+import React from 'react';
 
-import LoginModal from "./LoginModal";
+import LoginModal from './LoginModal';
 
 export default class LoginPage extends React.Component {
-
   render() {
     return <LoginModal />;
   }

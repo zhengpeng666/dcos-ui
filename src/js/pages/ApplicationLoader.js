@@ -1,15 +1,15 @@
-import mixin from "reactjs-mixin";
-import React from "react";
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import mixin from 'reactjs-mixin';
+import React from 'react';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import AnimatedLogo from "../components/AnimatedLogo";
-import EventTypes from "../constants/EventTypes";
-import InternalStorageMixin from "../mixins/InternalStorageMixin";
-import MesosSummaryStore from "../stores/MesosSummaryStore";
-import MetadataStore from "../stores/MetadataStore";
-import Plugins from "../plugins/Plugins";
+import AnimatedLogo from '../components/AnimatedLogo';
+import EventTypes from '../constants/EventTypes';
+import InternalStorageMixin from '../mixins/InternalStorageMixin';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
+import MetadataStore from '../stores/MetadataStore';
+import Plugins from '../plugins/Plugins';
 
-const METHODS_TO_BIND = ["onPluginsLoaded"];
+const METHODS_TO_BIND = ['onPluginsLoaded'];
 
 export default class ApplicationLoader extends
   mixin(StoreMixin, InternalStorageMixin) {
@@ -18,9 +18,9 @@ export default class ApplicationLoader extends
     super();
 
     this.store_listeners = [
-      {name: "summary", events: ["success"]},
-      {name: "metadata", events: ["success"]},
-      {name: "auth", events: ["logoutSuccess"]}
+      {name: 'summary', events: ['success']},
+      {name: 'metadata', events: ['success']},
+      {name: 'auth', events: ['logoutSuccess']}
     ];
 
     METHODS_TO_BIND.forEach(function (method) {
@@ -52,7 +52,7 @@ export default class ApplicationLoader extends
   }
 
   onPluginsLoaded() {
-    this.internalStorage_update({"pluginsLoaded": true});
+    this.internalStorage_update({'pluginsLoaded': true});
     this.loadApplicationIfLoaded();
   }
 
@@ -61,18 +61,18 @@ export default class ApplicationLoader extends
   }
 
   onMetadataStoreSuccess() {
-    this.internalStorage_update({"metadataLoaded": true});
+    this.internalStorage_update({'metadataLoaded': true});
     this.loadApplicationIfLoaded();
   }
 
   onAuthStoreLogoutSuccess() {
-    this.context.router.transitionTo("login");
+    this.context.router.transitionTo('login');
   }
 
   loadApplicationIfLoaded() {
     let data = this.internalStorage_get();
     if (data.pluginsLoaded && data.metadataLoaded
-      && MesosSummaryStore.get("statesProcessed")) {
+      && MesosSummaryStore.get('statesProcessed')) {
       this.props.onApplicationLoad();
     }
   }

@@ -1,31 +1,31 @@
-jest.dontMock("../../mixins/InternalStorageMixin");
-jest.dontMock("../../mixins/TabsMixin");
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../stores/ACLUserStore");
-jest.dontMock("../../stores/MesosSummaryStore");
-jest.dontMock("../../stores/MarathonStore");
-jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../../events/MesosSummaryActions");
-jest.dontMock("../../events/MarathonActions");
-jest.dontMock("../SidePanelContents");
-jest.dontMock("../UserSidePanel");
-jest.dontMock("../UserSidePanelContents");
-jest.dontMock("../../utils/Util");
-jest.dontMock("../../utils/RequestUtil");
-jest.dontMock("../../structs/SummaryList");
+jest.dontMock('../../mixins/InternalStorageMixin');
+jest.dontMock('../../mixins/TabsMixin');
+jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../../stores/ACLUserStore');
+jest.dontMock('../../stores/MesosSummaryStore');
+jest.dontMock('../../stores/MarathonStore');
+jest.dontMock('../../utils/MesosSummaryUtil');
+jest.dontMock('../../events/MesosSummaryActions');
+jest.dontMock('../../events/MarathonActions');
+jest.dontMock('../SidePanelContents');
+jest.dontMock('../UserSidePanel');
+jest.dontMock('../UserSidePanelContents');
+jest.dontMock('../../utils/Util');
+jest.dontMock('../../utils/RequestUtil');
+jest.dontMock('../../structs/SummaryList');
 
-require("../../utils/StoreMixinConfig");
+require('../../utils/StoreMixinConfig');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var MesosSummaryActions = require("../../events/MesosSummaryActions");
-var ACLUserStore = require("../../stores/ACLUserStore");
-var MesosSummaryStore = require("../../stores/MesosSummaryStore");
-var UserSidePanel = require("../UserSidePanel");
-var UserSidePanelContents = require("../UserSidePanelContents");
+var MesosSummaryActions = require('../../events/MesosSummaryActions');
+var ACLUserStore = require('../../stores/ACLUserStore');
+var MesosSummaryStore = require('../../stores/MesosSummaryStore');
+var UserSidePanel = require('../UserSidePanel');
+var UserSidePanelContents = require('../UserSidePanelContents');
 
-describe("UserSidePanel", function () {
+describe('UserSidePanel', function () {
   beforeEach(function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
     this.userStore = ACLUserStore.getUser;
@@ -40,9 +40,9 @@ describe("UserSidePanel", function () {
 
     ACLUserStore.getUser = function () {
       return {
-        "uid": "user",
-        "url": "/users/user",
-        "description": "user description"
+        'uid': 'user',
+        'url': '/users/user',
+        'description': 'user description'
       };
     };
 
@@ -54,7 +54,7 @@ describe("UserSidePanel", function () {
     ACLUserStore.getUser = this.userStore;
   });
 
-  describe("#isOpen", function () {
+  describe('#isOpen', function () {
     beforeEach(function () {
       this.params = {
         userID: null
@@ -66,19 +66,19 @@ describe("UserSidePanel", function () {
       );
     });
 
-    it("should return false if all IDs are null", function () {
+    it('should return false if all IDs are null', function () {
       expect(this.instance.isOpen()).toEqual(false);
     });
 
-    it("should return true if new userID received", function () {
+    it('should return true if new userID received', function () {
       var prevUserID = this.params.userID;
-      this.params.userID = "username";
+      this.params.userID = 'username';
       expect(this.instance.isOpen()).toEqual(true);
       this.params.userID = prevUserID;
     });
   });
 
-  describe("#getContents", function () {
+  describe('#getContents', function () {
     beforeEach(function () {
       this.params = {
         userID: null
@@ -90,9 +90,9 @@ describe("UserSidePanel", function () {
       );
     });
 
-    it("should return UserSidePanelContents if userID is set",
+    it('should return UserSidePanelContents if userID is set',
       function () {
-        this.params.userID = "set";
+        this.params.userID = 'set';
         var contents = this.instance.getContents(this.params.userID);
 
         expect(contents.type === UserSidePanelContents).toEqual(true);

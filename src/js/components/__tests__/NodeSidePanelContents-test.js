@@ -1,30 +1,30 @@
-jest.dontMock("../charts/Chart");
-jest.dontMock("../SidePanelContents");
-jest.dontMock("../../mixins/GetSetMixin");
-jest.dontMock("../../mixins/InternalStorageMixin");
-jest.dontMock("../../mixins/TabsMixin");
-jest.dontMock("../../stores/MesosSummaryStore");
-jest.dontMock("../../events/MesosSummaryActions");
-jest.dontMock("../../utils/MesosSummaryUtil");
-jest.dontMock("../NodeSidePanelContents");
-jest.dontMock("../TaskTable");
-jest.dontMock("../TaskView");
-jest.dontMock("../RequestErrorMsg");
-jest.dontMock("../../utils/Util");
-jest.dontMock("../../utils/JestUtil");
+jest.dontMock('../charts/Chart');
+jest.dontMock('../SidePanelContents');
+jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../../mixins/InternalStorageMixin');
+jest.dontMock('../../mixins/TabsMixin');
+jest.dontMock('../../stores/MesosSummaryStore');
+jest.dontMock('../../events/MesosSummaryActions');
+jest.dontMock('../../utils/MesosSummaryUtil');
+jest.dontMock('../NodeSidePanelContents');
+jest.dontMock('../TaskTable');
+jest.dontMock('../TaskView');
+jest.dontMock('../RequestErrorMsg');
+jest.dontMock('../../utils/Util');
+jest.dontMock('../../utils/JestUtil');
 
-require("../../utils/StoreMixinConfig");
+require('../../utils/StoreMixinConfig');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var JestUtil = require("../../utils/JestUtil");
-var MesosStateStore = require("../../stores/MesosStateStore");
-var MesosSummaryActions = require("../../events/MesosSummaryActions");
-var MesosSummaryStore = require("../../stores/MesosSummaryStore");
-var NodeSidePanelContents = require("../NodeSidePanelContents");
+var JestUtil = require('../../utils/JestUtil');
+var MesosStateStore = require('../../stores/MesosStateStore');
+var MesosSummaryActions = require('../../events/MesosSummaryActions');
+var MesosSummaryStore = require('../../stores/MesosSummaryStore');
+var NodeSidePanelContents = require('../NodeSidePanelContents');
 
-describe("NodeSidePanelContents", function () {
+describe('NodeSidePanelContents', function () {
   beforeEach(function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
     this.getTasksFromNodeID = MesosStateStore.getTasksFromNodeID;
@@ -39,22 +39,22 @@ describe("NodeSidePanelContents", function () {
     };
 
     MesosStateStore.get = function (key) {
-      if (key === "lastMesosState") {
+      if (key === 'lastMesosState') {
         return {
-          version: "1"
+          version: '1'
         };
       }
 
     };
 
     MesosStateStore.getNodeFromID = function (id) {
-      if (id === "nonExistent") {
+      if (id === 'nonExistent') {
         return null;
       }
 
       return {
-        id: "existingNode",
-        version: "10",
+        id: 'existingNode',
+        version: '10',
         active: true,
         registered_time: 10
       };
@@ -63,12 +63,12 @@ describe("NodeSidePanelContents", function () {
     MesosSummaryStore.processSummary({
       slaves: [
         {
-          "id": "foo",
-          "hostname": "bar"
+          'id': 'foo',
+          'hostname': 'bar'
         },
         {
-          id: "existingNode",
-          version: "10",
+          id: 'existingNode',
+          version: '10',
           active: true,
           registered_time: 10,
           sumTaskTypesByState: function () { return 1; }
@@ -84,9 +84,9 @@ describe("NodeSidePanelContents", function () {
     MesosStateStore.getNodeFromID = this.storeGetNode;
   });
 
-  describe("#renderDetailsTabView", function () {
+  describe('#renderDetailsTabView', function () {
 
-    it("should return null if node does not exist", function () {
+    it('should return null if node does not exist', function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanelContents itemID="nonExistent" />
       );
@@ -95,7 +95,7 @@ describe("NodeSidePanelContents", function () {
       expect(result).toEqual(null);
     });
 
-    it("should return a node if node exists", function () {
+    it('should return a node if node exists', function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanelContents itemID="existingNode" />
       );
@@ -105,9 +105,9 @@ describe("NodeSidePanelContents", function () {
     });
   });
 
-  describe("#getKeyValuePairs", function () {
+  describe('#getKeyValuePairs', function () {
 
-    it("should return an empty set if node does not exist", function () {
+    it('should return an empty set if node does not exist', function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanelContents itemID="nonExistent" />
       );
@@ -116,7 +116,7 @@ describe("NodeSidePanelContents", function () {
       expect(result).toEqual(null);
     });
 
-    it("should return null if undefined is passed", function () {
+    it('should return null if undefined is passed', function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanelContents itemID="nonExistent" />
       );
@@ -125,37 +125,37 @@ describe("NodeSidePanelContents", function () {
       expect(result).toEqual(null);
     });
 
-    it("should return a node of elements if node exists", function () {
+    it('should return a node of elements if node exists', function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanelContents itemID="existingNode" />
       );
 
-      var result = instance.getKeyValuePairs({"foo": "bar"});
+      var result = instance.getKeyValuePairs({'foo': 'bar'});
       expect(TestUtils.isElement(result)).toEqual(true);
     });
 
-    it("should return a headline if headline string is given", function () {
+    it('should return a headline if headline string is given', function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanelContents itemID="existingNode" />
       );
 
       var headline = JestUtil.renderAndFindTag(
-        instance.getKeyValuePairs({"foo": "bar"}, "baz"),
-        "h6"
+        instance.getKeyValuePairs({'foo': 'bar'}, 'baz'),
+        'h6'
       );
 
       expect(TestUtils.isDOMComponent(headline)).toEqual(true);
     });
   });
 
-  describe("#render", function () {
-    it("should show error if node is not to be found", function () {
+  describe('#render', function () {
+    it('should show error if node is not to be found', function () {
       var instance = TestUtils.renderIntoDocument(
         <NodeSidePanelContents itemID="nonExistent" />
       );
 
-      var headline = TestUtils.findRenderedDOMComponentWithTag(instance, "h3");
-      expect(headline.getDOMNode().textContent).toBe("Error finding node");
+      var headline = TestUtils.findRenderedDOMComponentWithTag(instance, 'h3');
+      expect(headline.getDOMNode().textContent).toBe('Error finding node');
     });
   });
 });

@@ -1,16 +1,16 @@
-import {Form} from "reactjs-components";
-import mixin from "reactjs-mixin";
+import {Form} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
-import React from "react";
+import React from 'react';
 /*eslint-enable no-unused-vars*/
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLUserStore from "../stores/ACLUserStore";
+import ACLUserStore from '../stores/ACLUserStore';
 
 const METHODS_TO_BIND = [
-  "handlePasswordSubmit",
-  "onUserStoreUpdateError",
-  "onUserStoreUpdateSuccess"
+  'handlePasswordSubmit',
+  'onUserStoreUpdateError',
+  'onUserStoreUpdateSuccess'
 ];
 
 export default class UserDetails extends mixin(StoreMixin) {
@@ -21,8 +21,8 @@ export default class UserDetails extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {
-        name: "user",
-        events: ["updateSuccess", "updateError"]
+        name: 'user',
+        events: ['updateSuccess', 'updateError']
       }
     ];
 
@@ -54,16 +54,16 @@ export default class UserDetails extends mixin(StoreMixin) {
     let userDetails = ACLUserStore.getUser(this.props.userID);
     let passwordDefinition = [
       {
-        fieldType: "password",
-        name: "password",
-        placeholder: "Password",
+        fieldType: 'password',
+        name: 'password',
+        placeholder: 'Password',
         required: true,
-        sharedClass: "form-element-inline",
+        sharedClass: 'form-element-inline',
         showError: this.state.userStoreError,
         showLabel: false,
-        writeType: "edit",
+        writeType: 'edit',
         validation: function () { return true; },
-        value: ""
+        value: ''
       }
     ];
 

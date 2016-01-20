@@ -1,20 +1,20 @@
-jest.dontMock("../../constants/StoreConfig");
-jest.dontMock("../../stores/MesosLogStore");
-jest.dontMock("../../utils/Util");
-jest.dontMock("../../utils/RequestUtil");
-jest.dontMock("../../structs/SummaryList");
-jest.dontMock("../Highlight");
-jest.dontMock("../MesosLogView");
+jest.dontMock('../../constants/StoreConfig');
+jest.dontMock('../../stores/MesosLogStore');
+jest.dontMock('../../utils/Util');
+jest.dontMock('../../utils/RequestUtil');
+jest.dontMock('../../structs/SummaryList');
+jest.dontMock('../Highlight');
+jest.dontMock('../MesosLogView');
 
-require("../../utils/StoreMixinConfig");
+require('../../utils/StoreMixinConfig');
 
-var React = require("react/addons");
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
-var MesosLogStore = require("../../stores/MesosLogStore");
-var MesosLogView = require("../MesosLogView");
+var MesosLogStore = require('../../stores/MesosLogStore');
+var MesosLogView = require('../MesosLogView');
 
-describe("MesosLogView", function () {
+describe('MesosLogView', function () {
   beforeEach(function () {
 
     // Store original versions
@@ -23,18 +23,18 @@ describe("MesosLogView", function () {
     this.mesosLogStoreGet = MesosLogStore.get;
 
     // Create spies
-    MesosLogStore.startTailing = jasmine.createSpy("startTailing");
-    MesosLogStore.stopTailing = jasmine.createSpy("stopTailing");
+    MesosLogStore.startTailing = jasmine.createSpy('startTailing');
+    MesosLogStore.stopTailing = jasmine.createSpy('stopTailing');
 
     this.instance = TestUtils.renderIntoDocument(
       <MesosLogView filePath="/some/file/path" slaveID="foo" />
     );
 
-    this.instance.setState = jasmine.createSpy("setState");
+    this.instance.setState = jasmine.createSpy('setState');
 
-    MesosLogStore.get = jasmine.createSpy("MesosLogStore#get").andReturn({
+    MesosLogStore.get = jasmine.createSpy('MesosLogStore#get').andReturn({
       getFullLog: function () {
-        return "foo";
+        return 'foo';
       }
     });
   });
@@ -46,123 +46,123 @@ describe("MesosLogView", function () {
     MesosLogStore.get = this.mesosLogStoreGet;
   });
 
-  describe("#componentDidMount", function () {
+  describe('#componentDidMount', function () {
 
-    it("should call startTailing when component mounts", function () {
+    it('should call startTailing when component mounts', function () {
       expect(MesosLogStore.startTailing).toHaveBeenCalled();
     });
 
   });
 
-  describe("#componentWillReceiveProps", function () {
+  describe('#componentWillReceiveProps', function () {
 
-    it("should call startTailing when new path is provided", function () {
-      this.instance.componentWillReceiveProps({filePath: "/other/file/path"});
+    it('should call startTailing when new path is provided', function () {
+      this.instance.componentWillReceiveProps({filePath: '/other/file/path'});
       expect(MesosLogStore.startTailing.callCount).toEqual(2);
     });
 
-    it("should call stopTailing when new path is provided", function () {
-      this.instance.componentWillReceiveProps({filePath: "/other/file/path"});
+    it('should call stopTailing when new path is provided', function () {
+      this.instance.componentWillReceiveProps({filePath: '/other/file/path'});
       expect(MesosLogStore.stopTailing.callCount).toEqual(1);
     });
 
-    it("shouldn't call startTailing when same path is provided", function () {
-      this.instance.componentWillReceiveProps({filePath: "/some/file/path"});
+    it('shouldn\'t call startTailing when same path is provided', function () {
+      this.instance.componentWillReceiveProps({filePath: '/some/file/path'});
       expect(MesosLogStore.startTailing.callCount).toEqual(1);
     });
 
-    it("shouldn't call stopTailing when same path is provided", function () {
-      this.instance.componentWillReceiveProps({filePath: "/some/file/path"});
+    it('shouldn\'t call stopTailing when same path is provided', function () {
+      this.instance.componentWillReceiveProps({filePath: '/some/file/path'});
       expect(MesosLogStore.stopTailing.callCount).toEqual(0);
     });
 
   });
 
-  describe("#componentWillUnmount", function () {
+  describe('#componentWillUnmount', function () {
 
-    it("should call stopTailing when component unmounts", function () {
+    it('should call stopTailing when component unmounts', function () {
       this.instance.componentWillUnmount();
       expect(MesosLogStore.stopTailing).toHaveBeenCalled();
     });
 
   });
 
-  describe("#onMesosLogStoreError", function () {
+  describe('#onMesosLogStoreError', function () {
 
-    it("should setState when path matches", function () {
-      this.instance.onMesosLogStoreError("/some/file/path");
+    it('should setState when path matches', function () {
+      this.instance.onMesosLogStoreError('/some/file/path');
       expect(this.instance.setState).toHaveBeenCalled();
     });
 
-    it("shouldn't setState when path doesn't match", function () {
-      this.instance.onMesosLogStoreError("/other/file/path");
+    it('shouldn\'t setState when path doesn\'t match', function () {
+      this.instance.onMesosLogStoreError('/other/file/path');
       expect(this.instance.setState).not.toHaveBeenCalled();
     });
 
   });
 
-  describe("#onMesosLogStoreSuccess", function () {
+  describe('#onMesosLogStoreSuccess', function () {
 
-    it("should setState when path matches", function () {
-      this.instance.onMesosLogStoreSuccess("/some/file/path");
+    it('should setState when path matches', function () {
+      this.instance.onMesosLogStoreSuccess('/some/file/path');
       expect(this.instance.setState).toHaveBeenCalled();
     });
 
-    it("shouldn't setState when path doesn't match", function () {
-      this.instance.onMesosLogStoreSuccess("/other/file/path");
+    it('shouldn\'t setState when path doesn\'t match', function () {
+      this.instance.onMesosLogStoreSuccess('/other/file/path');
       expect(this.instance.setState).not.toHaveBeenCalled();
     });
 
   });
 
-  describe("#getLog", function () {
+  describe('#getLog', function () {
 
-    it("should show empty log when fullLog is empty string", function () {
-      this.instance.state = {fullLog: ""};
+    it('should show empty log when fullLog is empty string', function () {
+      this.instance.state = {fullLog: ''};
       var div = this.instance.getLog();
-      expect(TestUtils.isElementOfType(div, "div")).toEqual(true);
+      expect(TestUtils.isElementOfType(div, 'div')).toEqual(true);
     });
 
-    it("should show empty log when fullLog is populated", function () {
-      this.instance.state = {fullLog: "foo"};
+    it('should show empty log when fullLog is populated', function () {
+      this.instance.state = {fullLog: 'foo'};
       var pre = this.instance.getLog();
-      expect(TestUtils.isElementOfType(pre, "pre")).toEqual(true);
+      expect(TestUtils.isElementOfType(pre, 'pre')).toEqual(true);
     });
 
   });
 
-  describe("#render", function () {
+  describe('#render', function () {
 
-    it("should call getErrorScreen when error occured", function () {
+    it('should call getErrorScreen when error occured', function () {
       var instance = TestUtils.renderIntoDocument(
         <MesosLogView filePath="/some/file/path" slaveID="foo" />
       );
 
       instance.state = {hasLoadingError: true};
-      instance.getErrorScreen = jasmine.createSpy("getErrorScreen");
+      instance.getErrorScreen = jasmine.createSpy('getErrorScreen');
 
       instance.render();
       expect(instance.getErrorScreen).toHaveBeenCalled();
     });
 
-    it("should call getLoadingScreen when logBuffer is undefined", function () {
+    it('should call getLoadingScreen when logBuffer is undefined', function () {
       var instance = TestUtils.renderIntoDocument(
         <MesosLogView filePath="/some/file/path" slaveID="foo" />
       );
 
-      MesosLogStore.get = jasmine.createSpy("MesosLogStore#get");
-      instance.getLoadingScreen = jasmine.createSpy("getLoadingScreen");
+      MesosLogStore.get = jasmine.createSpy('MesosLogStore#get');
+      instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
 
       instance.render();
       expect(instance.getLoadingScreen).toHaveBeenCalled();
     });
 
-    it("ignores getLoadingScreen when logBuffer is defined", function () {
+    it('ignores getLoadingScreen when logBuffer is defined', function () {
       var instance = TestUtils.renderIntoDocument(
         <MesosLogView filePath="/some/file/path" slaveID="foo" />
       );
 
-      instance.getLoadingScreen = jasmine.createSpy("getLoadingScreen");
+      instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
 
       instance.render();
       expect(instance.getLoadingScreen).not.toHaveBeenCalled();

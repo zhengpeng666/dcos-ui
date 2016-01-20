@@ -1,4 +1,4 @@
-var React = require("react/addons");
+var React = require('react/addons');
 const TestUtils = React.addons.TestUtils;
 
 const JestUtil = {

@@ -1,4 +1,4 @@
-import TaskStates from "../constants/TaskStates";
+import TaskStates from '../constants/TaskStates';
 
 export default class Item {
   constructor(item = {}) {

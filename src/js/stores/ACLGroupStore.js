@@ -1,18 +1,18 @@
-import _ from "underscore";
-import {Store} from "mesosphere-shared-reactjs";
+import _ from 'underscore';
+import {Store} from 'mesosphere-shared-reactjs';
 
-import ACLGroupsActions from "../events/ACLGroupsActions";
-import ActionTypes from "../constants/ActionTypes";
-import AppDispatcher from "../events/AppDispatcher";
-import EventTypes from "../constants/EventTypes";
-import GetSetMixin from "../mixins/GetSetMixin";
-import Group from "../structs/Group";
+import ACLGroupsActions from '../events/ACLGroupsActions';
+import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from '../events/AppDispatcher';
+import EventTypes from '../constants/EventTypes';
+import GetSetMixin from '../mixins/GetSetMixin';
+import Group from '../structs/Group';
 
 /**
  * This store will keep track of groups and their details
  */
 let ACLGroupStore = Store.createStore({
-  storeID: "group",
+  storeID: 'group',
 
   mixins: [GetSetMixin],
 
@@ -32,7 +32,7 @@ let ACLGroupStore = Store.createStore({
   },
 
   getGroupRaw: function (groupID) {
-    return this.get("groups")[groupID];
+    return this.get('groups')[groupID];
   },
 
   getGroup: function (groupID) {
@@ -40,7 +40,7 @@ let ACLGroupStore = Store.createStore({
   },
 
   setGroup: function (groupID, group) {
-    let groups = this.get("groups");
+    let groups = this.get('groups');
     groups[groupID] = group;
     this.set(groups);
   },
@@ -64,7 +64,7 @@ let ACLGroupStore = Store.createStore({
    * @param  {Number} groupID
    */
   fetchGroupWithDetails: function (groupID) {
-    let groupsFetching = this.get("groupsFetching");
+    let groupsFetching = this.get('groupsFetching');
 
     groupsFetching[groupID] = {group: false, users: false, permissions: false};
     this.set(groupsFetching);
@@ -82,7 +82,7 @@ let ACLGroupStore = Store.createStore({
    *   received
    */
   validateGroupWithDetailsFetch: function (groupID, type) {
-    let groupsFetching = this.get("groupsFetching");
+    let groupsFetching = this.get('groupsFetching');
     if (groupsFetching[groupID] == null) {
       return;
     }
@@ -110,7 +110,7 @@ let ACLGroupStore = Store.createStore({
    * @param  {Number} groupID
    */
   invalidateGroupWithDetailsFetch: function (groupID) {
-    let groupsFetching = this.get("groupsFetching");
+    let groupsFetching = this.get('groupsFetching');
     if (groupsFetching[groupID] == null) {
       return;
     }
@@ -133,7 +133,7 @@ let ACLGroupStore = Store.createStore({
     this.setGroup(group.gid, group);
     this.emit(EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE, group.gid);
 
-    this.validateGroupWithDetailsFetch(group.gid, "group");
+    this.validateGroupWithDetailsFetch(group.gid, 'group');
   },
 
   processGroupError: function (groupID) {
@@ -156,7 +156,7 @@ let ACLGroupStore = Store.createStore({
     this.setGroup(groupID, group);
     this.emit(EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE, groupID);
 
-    this.validateGroupWithDetailsFetch(groupID, "permissions");
+    this.validateGroupWithDetailsFetch(groupID, 'permissions');
   },
 
   processGroupPermissionsError: function (groupID) {
@@ -179,7 +179,7 @@ let ACLGroupStore = Store.createStore({
     this.setGroup(groupID, group);
     this.emit(EventTypes.ACL_GROUP_DETAILS_USERS_CHANGE, groupID);
 
-    this.validateGroupWithDetailsFetch(groupID, "users");
+    this.validateGroupWithDetailsFetch(groupID, 'users');
   },
 
   processGroupUsersError: function (groupID) {

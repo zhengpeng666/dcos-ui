@@ -1,9 +1,9 @@
-var _ = require("underscore");
-var d3 = require("d3");
-var React = require("react/addons");
+var _ = require('underscore');
+var d3 = require('d3');
+var React = require('react/addons');
 
-var DialSlice = require("./DialSlice");
-var InternalStorageMixin = require("../../mixins/InternalStorageMixin");
+var DialSlice = require('./DialSlice');
+var InternalStorageMixin = require('../../mixins/InternalStorageMixin');
 
 // the data to render a single grey circle
 function getEmptyState() {
@@ -12,12 +12,12 @@ function getEmptyState() {
 
 var DialChart = React.createClass({
 
-  displayName: "DialChart",
+  displayName: 'DialChart',
 
   mixins: [InternalStorageMixin],
 
   propTypes: {
-    // [{colorIndex: 0, name: "Some Name", value: 4}]
+    // [{colorIndex: 0, name: 'Some Name', value: 4}]
     data: React.PropTypes.array.isRequired,
     slices: React.PropTypes.array,
     duration: React.PropTypes.number,
@@ -28,7 +28,7 @@ var DialChart = React.createClass({
     return {
       duration: 1000,
       slices: [],
-      value: "value"
+      value: 'value'
     };
   },
 
@@ -55,20 +55,20 @@ var DialChart = React.createClass({
       .each(function (d) {
         if (d.value > 0) {
           d3.select(this)
-            .style("visibility", "inherit");
+            .style('visibility', 'inherit');
         }
       }).transition()
       .duration(nextProps.duration)
-      .attrTween("d", function (d) {
+      .attrTween('d', function (d) {
         var interpolate = d3.interpolate(this._current, d);
         return function (t) {
           this._current = interpolate(t);
           return innerArc(this._current);
         }.bind(this);
-      }).each("end", function (d) {
+      }).each('end', function (d) {
         if (d.value === 0) {
           d3.select(this)
-            .style("visibility", "hidden");
+            .style('visibility', 'hidden');
         }
       });
   },
@@ -79,8 +79,8 @@ var DialChart = React.createClass({
     }
 
     // Zero-length defaults are populated with actual data if available
-    var namedSlices = _.indexBy(slices, "name");
-    var namedData = _.indexBy(data, "name");
+    var namedSlices = _.indexBy(slices, 'name');
+    var namedData = _.indexBy(data, 'name');
     var normalizedNamedData = _.extend(namedSlices, namedData);
     return _.values(normalizedNamedData);
   },
@@ -95,7 +95,7 @@ var DialChart = React.createClass({
   getSlice: function (props) {
     var data = this.internalStorage_get();
     var normalizedData = this.getNormalizedData(props.slices, props.data);
-    return d3.select(this.getDOMNode()).selectAll("path")
+    return d3.select(this.getDOMNode()).selectAll('path')
       .data(data.pie(normalizedData));
   },
 
@@ -118,8 +118,8 @@ var DialChart = React.createClass({
   },
 
   getPosition: function () {
-    return "translate(" +
-      this.props.width / 2 + "," + this.props.height / 2 + ")";
+    return 'translate(' +
+      this.props.width / 2 + ',' + this.props.height / 2 + ')';
   },
 
   getWedges: function () {

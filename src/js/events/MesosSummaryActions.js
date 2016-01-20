@@ -1,25 +1,24 @@
-var Actions = require("../actions/Actions");
-var ActionTypes = require("../constants/ActionTypes");
-var AppDispatcher = require("./AppDispatcher");
-var Config = require("../config/Config");
-var RequestUtil = require("../utils/RequestUtil");
+var Actions = require('../actions/Actions');
+var ActionTypes = require('../constants/ActionTypes');
+var AppDispatcher = require('./AppDispatcher');
+var Config = require('../config/Config');
+var RequestUtil = require('../utils/RequestUtil');
 
 var _historyServiceOnline = true;
 
 function getStateUrl(timeScale) {
-  timeScale = timeScale || "last";
+  timeScale = timeScale || 'last';
   if (_historyServiceOnline) {
-    return Config.historyServer +
-      "/dcos-history-service/history/" + timeScale;
+    return `${Config.historyServer}/dcos-history-service/history/${timeScale}`;
   } else {
-    return Config.rootUrl + "/mesos/master/state-summary";
+    return `${Config.rootUrl}/mesos/master/state-summary`;
   }
 }
 
 function registerServerError(message, type) {
   _historyServiceOnline = false;
   Actions.log({
-    eventID: "Server error",
+    eventID: 'Server error',
     type: type,
     error: message
   });

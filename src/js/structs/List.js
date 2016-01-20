@@ -1,4 +1,4 @@
-import Util from "../utils/Util";
+import Util from '../utils/Util';
 
 export default class List {
   constructor(options = {}) {
@@ -6,7 +6,7 @@ export default class List {
 
     if (options.items) {
       if (!Util.isArray(options.items)) {
-        throw "Expected an array.";
+        throw 'Expected an array.';
       }
 
       this.list = options.items;
