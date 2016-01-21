@@ -1,7 +1,10 @@
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+import ACLDirectoriesStore from '../../stores/ACLDirectoriesStore';
 import FormModal from '../../components/FormModal';
 
 const buttonDefinition = [
@@ -22,7 +25,7 @@ const METHODS_TO_BIND = [
   'handleModalSubmit'
 ];
 
-class DirectoriesTab extends React.Component {
+class DirectoriesTab extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
@@ -30,17 +33,33 @@ class DirectoriesTab extends React.Component {
       modalOpen: false
     };
 
+    this.store_listeners = [
+      {
+        name: 'aclDirectories',
+        events: ['fetchSuccess']
+      }
+    ];
+
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  changeModalOpenState(open) {
-    this.setState({modalOpen: open});
+  componentDidMount() {
+    super.componentDidMount(...arguments);
+    ACLDirectoriesStore.fetchDirectories();
+  }
+
+  onAclDirectoriesStoreFetchSuccess() {
+
   }
 
   handleModalSubmit() {
     this.changeModalOpenState(false);
+  }
+
+  changeModalOpenState(open) {
+    this.setState({modalOpen: open});
   }
 
   getModalFormDefinition() {
@@ -109,7 +128,13 @@ class DirectoriesTab extends React.Component {
     ];
   }
 
-  render() {
+  renderDirectory() {
+    return (
+      <div>I'm a directory</div>
+    );
+  }
+
+  renderAddDirectory() {
     return (
       <div>
         <button
@@ -130,6 +155,15 @@ class DirectoriesTab extends React.Component {
         </FormModal>
       </div>
     );
+  }
+
+  render() {
+    let directories = ACLDirectoriesStore.get('directories');
+    if (directories) {
+      return this.renderDirectory(directories[0]);
+    } else {
+      return this.renderAddDirectory();
+    }
   }
 }
 
