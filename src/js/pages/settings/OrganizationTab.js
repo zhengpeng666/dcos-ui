@@ -47,6 +47,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
   }
 
   componentWillMount() {
+    super.componentWillMount();
     let selectedIDSet = {};
     let props = this.props;
 

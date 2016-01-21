@@ -67,6 +67,24 @@ export default class ActionsModal extends mixin(StoreMixin) {
     }
   }
 
+  handleButtonCancel() {
+    this.setState({
+      pendingRequest: false,
+      requestErrorCount: null,
+      requestsRemaining: null,
+      selectedItem: null,
+      validationError: null
+    });
+    this.props.onClose();
+  }
+
+  handleItemSelection(item) {
+    this.setState({
+      validationError: null,
+      selectedItem: item
+    });
+  }
+
   onActionError() {
     this.setState({
       requestErrorCount: this.state.requestErrorCount + 1
@@ -152,24 +170,6 @@ export default class ActionsModal extends mixin(StoreMixin) {
         </div>
       );
     }
-  }
-
-  handleButtonCancel() {
-    this.setState({
-      pendingRequest: false,
-      requestErrorCount: null,
-      requestsRemaining: null,
-      selectedItem: null,
-      validationError: null
-    });
-    this.props.onClose();
-  }
-
-  handleItemSelection(item) {
-    this.setState({
-      validationError: null,
-      selectedItem: item
-    });
   }
 
   render() {

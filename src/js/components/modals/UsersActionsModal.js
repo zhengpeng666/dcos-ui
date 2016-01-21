@@ -47,29 +47,6 @@ export default class UserActionsModal extends ActionsModal {
     this.onActionSuccess();
   }
 
-  getDropdownItems() {
-    let itemID = 'gid';
-    let items = ACLGroupsStore.get('groups').getItems().sort(
-      Util.getLocaleCompareSortFn('description')
-    );
-
-    let dropdownItems = items.map(function (itemInfo) {
-      return {
-        html: itemInfo.description,
-        id: itemInfo[itemID],
-        selectedHtml: itemInfo.description
-      };
-    });
-
-    dropdownItems.unshift({
-      html: 'Choose a group',
-      id: 'DEFAULT',
-      selectable: false
-    });
-
-    return dropdownItems;
-  }
-
   handleButtonConfirm() {
     let selectedItem = this.state.selectedItem;
 
@@ -91,6 +68,29 @@ export default class UserActionsModal extends ActionsModal {
 
       this.setState({pendingRequest: true});
     }
+  }
+
+  getDropdownItems() {
+    let itemID = 'gid';
+    let items = ACLGroupsStore.get('groups').getItems().sort(
+      Util.getLocaleCompareSortFn('description')
+    );
+
+    let dropdownItems = items.map(function (itemInfo) {
+      return {
+        html: itemInfo.description,
+        id: itemInfo[itemID],
+        selectedHtml: itemInfo.description
+      };
+    });
+
+    dropdownItems.unshift({
+      html: 'Choose a group',
+      id: 'DEFAULT',
+      selectable: false
+    });
+
+    return dropdownItems;
   }
 
 }
