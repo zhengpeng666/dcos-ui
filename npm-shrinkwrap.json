@@ -8429,8 +8429,8 @@
       "resolved": "http://registry.npmjs.org/react-zeroclipboard/-/react-zeroclipboard-0.4.1.tgz"
     },
     "reactjs-components": {
-      "version": "0.0.36",
-      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.36.tgz",
+      "version": "0.0.38",
+      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.38.tgz",
       "dependencies": {
         "babel-cli": {
           "version": "6.4.0",
