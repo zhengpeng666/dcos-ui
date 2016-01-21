@@ -3,6 +3,7 @@ import _ from 'underscore';
 import React from 'react';
 /* eslint-enable no-unused-vars */
 
+import ACLUserStore from '../../stores/ACLUserStore';
 import ACLGroupStore from '../../stores/ACLGroupStore';
 import ACLGroupsStore from '../../stores/ACLGroupsStore';
 import ActionsModal from './ActionsModal';
@@ -25,6 +26,10 @@ export default class UsersActionsModal extends ActionsModal {
           'deleteUserError',
           'deleteUserSuccess'
         ]
+      },
+      {
+        name: 'user',
+        events: ['deleteError', 'deleteSuccess']
       }
     ];
 
@@ -44,6 +49,10 @@ export default class UsersActionsModal extends ActionsModal {
     this.onActionError(errorMessage);
   }
 
+  onUserStoreDeleteError(userID, errorMessage) {
+    this.onActionError(errorMessage);
+  }
+
   onGroupStoreAddUserSuccess() {
     this.onActionSuccess();
   }
@@ -52,13 +61,17 @@ export default class UsersActionsModal extends ActionsModal {
     this.onActionSuccess();
   }
 
+  onUserStoreDeleteSuccess() {
+    this.onActionSuccess();
+  }
+
   handleButtonConfirm() {
+    let {action, itemID, selectedItems} = this.props;
     let selectedItem = this.state.selectedItem;
 
-    if (selectedItem === null) {
+    if (selectedItem === null && action !== 'delete') {
       this.setState({validationError: 'Select from dropdown.'});
     } else {
-      let {action, itemID, selectedItems} = this.props;
       let itemsByID = _.pluck(selectedItems, itemID);
 
       if (action === 'add') {
@@ -68,6 +81,10 @@ export default class UsersActionsModal extends ActionsModal {
       } else if (action === 'remove') {
         itemsByID.forEach(function (userId) {
           ACLGroupStore.deleteUser(selectedItem.id, userId);
+        });
+      } else if (action === 'delete') {
+        itemsByID.forEach(function (userId) {
+          ACLUserStore.deleteUser(userId);
         });
       }
 
