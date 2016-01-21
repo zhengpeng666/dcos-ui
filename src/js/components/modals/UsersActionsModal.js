@@ -27,7 +27,12 @@ export default class UserActionsModal extends ActionsModal {
       },
       {
         name: 'group',
-        events: ['addUserError', 'addUserSuccess']
+        events: [
+          'addUserError',
+          'addUserSuccess',
+          'deleteUserError',
+          'deleteUserSuccess'
+        ]
       }
     ];
 
@@ -43,7 +48,15 @@ export default class UserActionsModal extends ActionsModal {
     this.onActionError(errorMessage);
   }
 
+  onGroupStoreDeleteUserError(groupId, userId, errorMessage) {
+    this.onActionError(errorMessage);
+  }
+
   onGroupStoreAddUserSuccess() {
+    this.onActionSuccess();
+  }
+
+  onGroupStoreDeleteUserSuccess() {
     this.onActionSuccess();
   }
 
