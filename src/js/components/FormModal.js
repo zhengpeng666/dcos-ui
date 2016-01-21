@@ -92,6 +92,7 @@ export default class FormModal extends React.Component {
       <Modal
         closeByBackdropClick={!this.props.disabled}
         headerClass="modal-header modal-header-white"
+        maxHeightPercentage={0.9}
         modalClass="modal"
         onClose={this.props.onClose}
         open={this.props.open}
@@ -129,6 +130,8 @@ FormModal.defaultProps = {
 
 FormModal.propTypes = {
   buttonDefinition: React.PropTypes.array,
+  children: React.PropTypes.node,
+  definition: React.PropTypes.array,
   disabled: React.PropTypes.bool,
   modalProps: React.PropTypes.object,
   onClose: React.PropTypes.func.isRequired,

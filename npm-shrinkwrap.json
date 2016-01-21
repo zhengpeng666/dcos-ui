@@ -2976,7 +2976,7 @@
                           "dependencies": {
                             "isarray": {
                               "version": "0.0.1",
-                              "resolved": "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                              "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
                             }
                           }
                         },
@@ -5640,7 +5640,7 @@
                         },
                         "concat-map": {
                           "version": "0.0.1",
-                          "resolved": "http://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
+                          "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
                         }
                       }
                     }
@@ -14556,7 +14556,7 @@
                     },
                     "isarray": {
                       "version": "0.0.1",
-                      "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                      "resolved": "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
                     },
                     "string_decoder": {
                       "version": "0.10.31",
@@ -15972,7 +15972,7 @@
                 },
                 "isarray": {
                   "version": "0.0.1",
-                  "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                  "resolved": "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
                 },
                 "process-nextick-args": {
                   "version": "1.0.3",
@@ -17468,7 +17468,7 @@
                         },
                         "isarray": {
                           "version": "0.0.1",
-                          "resolved": "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
                         },
                         "string_decoder": {
                           "version": "0.10.31",
@@ -17962,7 +17962,7 @@
                 },
                 "isarray": {
                   "version": "0.0.1",
-                  "resolved": "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                  "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
                 }
               }
             },
