@@ -8,7 +8,7 @@ import ACLGroupsStore from '../../stores/ACLGroupsStore';
 import ActionsModal from './ActionsModal';
 import Util from '../../utils/Util';
 
-export default class UserActionsModal extends ActionsModal {
+export default class UsersActionsModal extends ActionsModal {
   constructor() {
     super(...arguments);
 
@@ -108,7 +108,7 @@ export default class UserActionsModal extends ActionsModal {
 
 }
 
-UserActionsModal.propTypes = {
+UsersActionsModal.propTypes = {
   action: React.PropTypes.string.isRequired,
   actionText: React.PropTypes.object.isRequired,
   itemID: React.PropTypes.string.isRequired,
