@@ -67,10 +67,6 @@ export default class ActionsModal extends mixin(StoreMixin) {
     }
   }
 
-  onGroupStoreAddUserError(groupId, userId, errorMessage) {
-    this.onActionError(errorMessage);
-  }
-
   onActionError() {
     this.setState({
       requestErrorCount: this.state.requestErrorCount + 1
