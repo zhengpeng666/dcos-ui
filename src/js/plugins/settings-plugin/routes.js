@@ -1,5 +1,6 @@
 import {Route, Redirect} from 'react-router';
 
+import DirectoriesTab from '../../pages/settings/DirectoriesTab';
 import GroupsTab from '../../pages/settings/GroupsTab';
 import OverviewTab from '../../pages/settings/OverviewTab';
 import SettingsPage from '../../pages/SettingsPage';
@@ -54,6 +55,16 @@ let settingsRoutes = {
             type: Route,
             name: 'settings-organization-groups-group-panel',
             path: ':groupID'
+          }]
+        },
+        {
+          type: Route,
+          name: 'settings-organization-directories',
+          path: 'directories/?',
+          handler: DirectoriesTab,
+          children: [{
+            type: Route,
+            name: 'settings-organization-directories-panel'
           }]
         },
         {
