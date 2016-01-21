@@ -15,8 +15,8 @@ const METHODS_TO_BIND = [
   "handleButtonCancel",
   "handleButtonConfirm",
   "handleItemSelection",
-  "onGenericError",
-  "onGenericSuccess"
+  "onActionError",
+  "onActionSuccess"
 ];
 
 const DEFAULT_ID = "DEFAULT";
@@ -88,23 +88,23 @@ export default class ActionsModal extends mixin(StoreMixin) {
   }
 
   onGroupStoreAddUserError(groupId, userId, errorMessage) {
-    this.onGenericError(errorMessage);
+    this.onActionError(errorMessage);
   }
 
-  onGenericError() {
+  onActionError() {
     this.setState({
       requestErrorCount: this.state.requestErrorCount + 1
     });
   }
 
-  onGenericSuccess() {
+  onActionSuccess() {
     this.setState({
       requestsRemaining: this.state.requestsRemaining - 1
     });
   }
 
   onGroupStoreAddUserSuccess() {
-    this.onGenericSuccess();
+    this.onActionSuccess();
   }
 
   getActionsModalContents() {
