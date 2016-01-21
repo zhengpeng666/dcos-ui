@@ -5,7 +5,7 @@ import {Link} from "react-router";
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import ActionsModal from "../../components/modals/ActionsModal";
+import UsersActionsModal from "../../components/modals/UsersActionsModal";
 import FilterHeadline from "../../components/FilterHeadline";
 import FilterInputText from "../../components/FilterInputText";
 import FormUtil from "../../utils/FormUtil";
@@ -314,15 +314,18 @@ export default class OrganizationTab extends React.Component {
 
     let checkedItemObjects = this.getCheckedItemObjects(items, itemID) || [];
 
-    return (
-      <ActionsModal
-        action={action}
-        actionText={BulkOptions[itemName][action]}
-        itemID={itemID}
-        itemType={itemName}
-        onClose={this.handleActionSelectionClose}
-        selectedItems={checkedItemObjects} />
-    );
+    if (itemName === "user") {
+      return (
+        <UsersActionsModal
+          action={action}
+          actionText={BulkOptions[itemName][action]}
+          itemID={itemID}
+          itemType={itemName}
+          onClose={this.handleActionSelectionClose}
+          selectedItems={checkedItemObjects} />
+      );
+    }
+    return null;
   }
 
   resetFilter() {

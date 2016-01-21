@@ -6,10 +6,7 @@ import React from "react";
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from "mesosphere-shared-reactjs";
 
-import ACLGroupStore from "../../stores/ACLGroupStore";
-import ACLGroupsStore from "../../stores/ACLGroupsStore";
 import StringUtil from "../../utils/StringUtil";
-import Util from "../../utils/Util";
 
 const METHODS_TO_BIND = [
   "handleButtonCancel",
@@ -34,33 +31,16 @@ export default class ActionsModal extends mixin(StoreMixin) {
       validationError: null
     };
 
-    this.store_listeners = [
-      {
-        name: "groups",
-        events: ["success", "error"]
-      },
-      {
-        name: "group",
-        events: ["addUserError", "addUserSuccess"]
-      }
-    ];
-
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
   componentWillMount() {
-    super.componentWillMount(...arguments);
-
-    let {itemType, selectedItems} = this.props;
-
-    if (itemType === "user") {
-      ACLGroupsStore.fetchGroups();
-    }
+    super.componentWillMount();
 
     this.setState({
-      requestsRemaining: selectedItems.length
+      requestsRemaining: this.props.selectedItems.length
     });
   }
 
@@ -101,10 +81,6 @@ export default class ActionsModal extends mixin(StoreMixin) {
     this.setState({
       requestsRemaining: this.state.requestsRemaining - 1
     });
-  }
-
-  onGroupStoreAddUserSuccess() {
-    this.onActionSuccess();
   }
 
   getActionsModalContents() {
@@ -158,39 +134,6 @@ export default class ActionsModal extends mixin(StoreMixin) {
     );
   }
 
-  getDropdownItems(itemType) {
-    let items = null;
-    let itemID = null;
-    let dropdownItems = [];
-    let defaultItem = {
-      html: "",
-      id: DEFAULT_ID,
-      selectable: false
-    };
-
-    if (itemType === "user") {
-      items = ACLGroupsStore.get("groups").getItems().sort(
-        Util.getLocaleCompareSortFn("description")
-      );
-      itemID = "gid";
-      defaultItem.html = "Choose a group";
-    } else if (itemType === "group") {
-      // TODO
-    }
-
-    dropdownItems = items.map(function (itemInfo) {
-      return {
-        html: itemInfo.description,
-        id: itemInfo[itemID],
-        selectedHtml: itemInfo.description
-      };
-    });
-
-    dropdownItems.unshift(defaultItem);
-
-    return dropdownItems;
-  }
-
   getErrorMessage(error) {
     if (error != null) {
       return (
@@ -224,33 +167,6 @@ export default class ActionsModal extends mixin(StoreMixin) {
       validationError: null
     });
     this.props.onClose();
-  }
-
-  handleButtonConfirm() {
-    let selectedItem = this.state.selectedItem;
-
-    if (selectedItem === null) {
-      this.setState({validationError: "Select from dropdown."});
-    } else {
-      let {action, itemID, itemType, selectedItems} = this.props;
-      let itemsByID = _.pluck(selectedItems, itemID);
-
-      if (itemType === "user") {
-
-        if (action === "add") {
-          itemsByID.forEach(function (userId) {
-            ACLGroupStore.addUser(selectedItem.id, userId);
-          });
-        } else if (action === "remove") {
-          itemsByID.forEach(function (userId) {
-            ACLGroupStore.deleteUser(selectedItem.id, userId);
-          });
-        }
-
-      }
-
-      this.setState({pendingRequest: true});
-    }
   }
 
   handleItemSelection(item) {
