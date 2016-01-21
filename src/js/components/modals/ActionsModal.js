@@ -1,22 +1,22 @@
-import _ from "underscore";
-import {Confirm, Dropdown} from "reactjs-components";
-import mixin from "reactjs-mixin";
+import _ from 'underscore';
+import {Confirm, Dropdown} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React from 'react';
 /* eslint-enable no-unused-vars */
-import {StoreMixin} from "mesosphere-shared-reactjs";
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import StringUtil from "../../utils/StringUtil";
+import StringUtil from '../../utils/StringUtil';
 
 const METHODS_TO_BIND = [
-  "handleButtonCancel",
-  "handleButtonConfirm",
-  "handleItemSelection",
-  "onActionError",
-  "onActionSuccess"
+  'handleButtonCancel',
+  'handleButtonConfirm',
+  'handleItemSelection',
+  'onActionError',
+  'onActionSuccess'
 ];
 
-const DEFAULT_ID = "DEFAULT";
+const DEFAULT_ID = 'DEFAULT';
 const ITEMS_DISPLAYED = 10;
 
 export default class ActionsModal extends mixin(StoreMixin) {
@@ -85,13 +85,13 @@ export default class ActionsModal extends mixin(StoreMixin) {
 
   getActionsModalContents() {
     let {actionText, itemType, selectedItems} = this.props;
-    let selectedItemsString = "";
+    let selectedItemsString = '';
     // Truncate list of selected user/groups for ease of reading
     let selectedItemsShown = _.first(selectedItems, ITEMS_DISPLAYED + 1);
 
     // Create a string concatenating n-1 items
     let selectedItemsShownMinusOne = _.initial(selectedItemsShown);
-    let descriptionArray = _.pluck(selectedItemsShownMinusOne, "description");
+    let descriptionArray = _.pluck(selectedItemsShownMinusOne, 'description');
     descriptionArray.forEach(function (itemDescription) {
       selectedItemsString += `${itemDescription}, `;
     });

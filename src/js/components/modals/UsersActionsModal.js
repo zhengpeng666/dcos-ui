@@ -1,12 +1,12 @@
-import _ from "underscore";
+import _ from 'underscore';
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React from 'react';
 /* eslint-enable no-unused-vars */
 
-import ACLGroupStore from "../../stores/ACLGroupStore";
-import ACLGroupsStore from "../../stores/ACLGroupsStore";
-import ActionsModal from "./ActionsModal";
-import Util from "../../utils/Util";
+import ACLGroupStore from '../../stores/ACLGroupStore';
+import ACLGroupsStore from '../../stores/ACLGroupsStore';
+import ActionsModal from './ActionsModal';
+import Util from '../../utils/Util';
 
 export default class UserActionsModal extends ActionsModal {
   constructor() {
@@ -22,12 +22,12 @@ export default class UserActionsModal extends ActionsModal {
 
     this.store_listeners = [
       {
-        name: "groups",
-        events: ["success", "error"]
+        name: 'groups',
+        events: ['success', 'error']
       },
       {
-        name: "group",
-        events: ["addUserError", "addUserSuccess"]
+        name: 'group',
+        events: ['addUserError', 'addUserSuccess']
       }
     ];
 
@@ -48,9 +48,9 @@ export default class UserActionsModal extends ActionsModal {
   }
 
   getDropdownItems() {
-    let itemID = "gid";
-    let items = ACLGroupsStore.get("groups").getItems().sort(
-      Util.getLocaleCompareSortFn("description")
+    let itemID = 'gid';
+    let items = ACLGroupsStore.get('groups').getItems().sort(
+      Util.getLocaleCompareSortFn('description')
     );
 
     let dropdownItems = items.map(function (itemInfo) {
@@ -62,8 +62,8 @@ export default class UserActionsModal extends ActionsModal {
     });
 
     dropdownItems.unshift({
-      html: "Choose a group",
-      id: "DEFAULT",
+      html: 'Choose a group',
+      id: 'DEFAULT',
       selectable: false
     });
 
@@ -74,16 +74,16 @@ export default class UserActionsModal extends ActionsModal {
     let selectedItem = this.state.selectedItem;
 
     if (selectedItem === null) {
-      this.setState({validationError: "Select from dropdown."});
+      this.setState({validationError: 'Select from dropdown.'});
     } else {
       let {action, itemID, selectedItems} = this.props;
       let itemsByID = _.pluck(selectedItems, itemID);
 
-      if (action === "add") {
+      if (action === 'add') {
         itemsByID.forEach(function (userId) {
           ACLGroupStore.addUser(selectedItem.id, userId);
         });
-      } else if (action === "remove") {
+      } else if (action === 'remove') {
         itemsByID.forEach(function (userId) {
           ACLGroupStore.deleteUser(selectedItem.id, userId);
         });

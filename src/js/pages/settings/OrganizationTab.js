@@ -1,19 +1,20 @@
-import _ from "underscore";
-import {Dropdown, Form, Table} from "reactjs-components";
-import {Link} from "react-router";
+import _ from 'underscore';
+import {Dropdown, Form, Table} from 'reactjs-components';
+import {Link} from 'react-router';
+import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import UsersActionsModal from "../../components/modals/UsersActionsModal";
-import FilterHeadline from "../../components/FilterHeadline";
-import FilterInputText from "../../components/FilterInputText";
-import FormUtil from "../../utils/FormUtil";
-import InternalStorageMixin from "../../mixins/InternalStorageMixin";
-import BulkOptions from "../../constants/BulkOptions";
-import ResourceTableUtil from "../../utils/ResourceTableUtil";
-import StringUtil from "../../utils/StringUtil";
-import TableUtil from "../../utils/TableUtil";
+import UsersActionsModal from '../../components/modals/UsersActionsModal';
+import FilterHeadline from '../../components/FilterHeadline';
+import FilterInputText from '../../components/FilterInputText';
+import FormUtil from '../../utils/FormUtil';
+import InternalStorageMixin from '../../mixins/InternalStorageMixin';
+import BulkOptions from '../../constants/BulkOptions';
+import ResourceTableUtil from '../../utils/ResourceTableUtil';
+import StringUtil from '../../utils/StringUtil';
+import TableUtil from '../../utils/TableUtil';
 
 const METHODS_TO_BIND = [
   'handleActionSelection',
@@ -27,14 +28,15 @@ const METHODS_TO_BIND = [
   'resetFilter'
 ];
 
-export default class OrganizationTab extends React.Component {
+export default class OrganizationTab extends mixin(InternalStorageMixin) {
   constructor() {
     super(arguments);
 
     this.state = {
       checkedCount: 0,
       showActionDropdown: false,
-      searchString: ''
+      searchString: '',
+      selectedAction: null
     };
 
     METHODS_TO_BIND.forEach(function (method) {
@@ -63,8 +65,10 @@ export default class OrganizationTab extends React.Component {
     });
   }
 
-  handleActionSelection(action) {
-    console.log(action);
+  handleActionSelectionClose() {
+    this.setState({
+      selectedAction: null
+    });
   }
 
   handleCheckboxChange(checkboxState) {
@@ -232,18 +236,6 @@ export default class OrganizationTab extends React.Component {
     let actionPhrases = BulkOptions[itemName];
     let initialID = null;
 
-    if (itemName === "user") {
-      actionPhrases = {
-        add: "to Group",
-        remove: "from Group"
-      };
-    } else if (itemName === "group") {
-      actionPhrases = {
-        add: "User",
-        remove: "User"
-      };
-    }
-
     // Get first Action to set as initially selected option in dropdown.
     initialID = Object.keys(actionPhrases)[0] || null;
 
@@ -269,7 +261,7 @@ export default class OrganizationTab extends React.Component {
       return {
         html: actionPhrases[action].dropdownOption,
         id: action,
-        selectedHtml: "Actions"
+        selectedHtml: 'Actions'
       };
     });
   }
@@ -314,7 +306,7 @@ export default class OrganizationTab extends React.Component {
 
     let checkedItemObjects = this.getCheckedItemObjects(items, itemID) || [];
 
-    if (itemName === "user") {
+    if (itemName === 'user') {
       return (
         <UsersActionsModal
           action={action}
@@ -341,7 +333,7 @@ export default class OrganizationTab extends React.Component {
     let actionsModal = this.getActionsModal(action, items, itemID, itemName);
 
     return (
-      <div className="flex-containe`r-col">
+      <div className="flex-container-col">
         <div className={`${itemName}s-table-header`}>
           <FilterHeadline
             onReset={this.resetFilter}
@@ -351,7 +343,7 @@ export default class OrganizationTab extends React.Component {
           <ul className="list list-unstyled list-inline flush-bottom">
             <li>
               <FilterInputText
-                searchString={this.state.searchString}
+                searchString={state.searchString}
                 handleFilterChange={this.handleSearchStringChange}
                 inverseStyle={true} />
             </li>
