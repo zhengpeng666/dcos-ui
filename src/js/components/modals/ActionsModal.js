@@ -50,21 +50,18 @@ export default class ActionsModal extends mixin(StoreMixin) {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    super.componentWillReceiveProps(...arguments);
+  componentWillMount() {
+    super.componentWillMount(...arguments);
 
-    let diff = _.difference(nextProps.selectedItems, this.props.selectedItems);
-    let itemType = nextProps.itemType;
+    let {itemType, selectedItems} = this.props;
 
-    if (diff.length > 0) {
-      if (itemType === "user") {
-        ACLGroupsStore.fetchGroups();
-      }
-
-      this.setState({
-        requestsRemaining: nextProps.selectedItems.length
-      });
+    if (itemType === "user") {
+      ACLGroupsStore.fetchGroups();
     }
+
+    this.setState({
+      requestsRemaining: selectedItems.length
+    });
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -285,14 +282,9 @@ export default class ActionsModal extends mixin(StoreMixin) {
   }
 }
 
-ActionsModal.defaultProps = {
-  action: null,
-  actionText: null
-};
-
 ActionsModal.propTypes = {
-  action: React.PropTypes.string,
-  actionText: React.PropTypes.object,
+  action: React.PropTypes.string.isRequired,
+  actionText: React.PropTypes.object.isRequired,
   itemID: React.PropTypes.string.isRequired,
   itemType: React.PropTypes.string.isRequired,
   onClose: React.PropTypes.func.isRequired,

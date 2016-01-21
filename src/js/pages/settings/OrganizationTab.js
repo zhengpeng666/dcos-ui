@@ -307,18 +307,35 @@ export default class OrganizationTab extends React.Component {
     return items;
   }
 
+  getActionsModal(action, items, itemID, itemName) {
+    if (action === null) {
+      return null;
+    }
+
+    let checkedItemObjects = this.getCheckedItemObjects(items, itemID) || [];
+
+    return (
+      <ActionsModal
+        action={action}
+        actionText={BulkOptions[itemName][action]}
+        itemID={itemID}
+        itemType={itemName}
+        onClose={this.handleActionSelectionClose}
+        selectedItems={checkedItemObjects} />
+    );
+  }
+
   resetFilter() {
     this.setState({searchString: ''});
   }
 
   render() {
-    let props = this.props;
-    let itemName = props.itemName;
+    let {items, itemID, itemName, handleNewItemClick} = this.props;
+    let state = this.state;
+    let action = state.selectedAction;
     let capitalizedItemName = StringUtil.capitalize(itemName);
-    let items = props.items;
-    let actionDropdown = this.getActionDropdown(props.itemName);
-    let checkedItemObjects =
-      this.getCheckedItemObjects(props.items, props.itemID) || [];
+    let actionDropdown = this.getActionDropdown(itemName);
+    let actionsModal = this.getActionsModal(action, items, itemID, itemName);
 
     return (
       <div className="flex-containe`r-col">
@@ -336,17 +353,11 @@ export default class OrganizationTab extends React.Component {
                 inverseStyle={true} />
             </li>
             {actionDropdown}
-            <ActionsModal
-              action={state.selectedAction}
-              actionText={BulkOptions[itemName][state.selectedAction]}
-              itemID={props.itemID}
-              itemType={props.itemName}
-              onClose={this.handleActionSelectionClose}
-              selectedItems={checkedItemObjects} />
+            {actionsModal}
             <li className="button-collection list-item-aligned-right">
               <a
                 className="button button-success"
-                onClick={props.handleNewItemClick}>
+                onClick={handleNewItemClick}>
                 {`+ New ${capitalizedItemName}`}
               </a>
             </li>
@@ -360,7 +371,7 @@ export default class OrganizationTab extends React.Component {
             colGroup={this.getColGroup()}
             containerSelector=".gm-scroll-view"
             data={this.getVisibleItems(items)}
-            idAttribute={props.itemID}
+            idAttribute={itemID}
             itemHeight={TableUtil.getRowHeight()}
             sortBy={{prop: 'description', order: 'asc'}}
             useFlex={true}
