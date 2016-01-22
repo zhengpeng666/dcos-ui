@@ -16,6 +16,7 @@ import BulkOptions from '../../constants/BulkOptions';
 import ResourceTableUtil from '../../utils/ResourceTableUtil';
 import StringUtil from '../../utils/StringUtil';
 import TableUtil from '../../utils/TableUtil';
+import TooltipMixin from '../../mixins/TooltipMixin';
 
 const METHODS_TO_BIND = [
   'handleActionSelection',
@@ -27,10 +28,13 @@ const METHODS_TO_BIND = [
   'renderHeadingCheckbox',
   'renderHeadline',
   'renderUsername',
-  'resetFilter'
+  'resetFilter',
+  // Must bind these due to TooltipMixin legacy code
+  'tip_handleContainerMouseMove',
+  'tip_handleMouseLeave'
 ];
 
-export default class OrganizationTab extends mixin(InternalStorageMixin) {
+export default class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
   constructor() {
     super(arguments);
 
@@ -116,13 +120,32 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
 
   renderHeadline(prop, subject) {
     let itemName = this.props.itemName;
+    let badge = null;
+
+    if (typeof subject.isRemote === 'function' && subject.isRemote()) {
+      badge = (
+        <div className="grid-item column-small-3 column-large-3 column-x-large-2">
+          <span
+            className="badge text-align-right"
+            data-behavior="show-tip"
+            data-tip-place="top"
+            data-tip-content="This user is managed by an external LDAP directory." >
+            LDAP
+          </span>
+        </div>
+      );
+    }
 
     return (
-      <div>
-        <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
-          params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}>
+      <div className="grid">
+        <div className="grid-item column-small-9 column-large-9 column-x-large-10">
+          <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
+          params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}
+          className="">
           {subject.get('description')}
-        </Link>
+          </Link>
+        </div>
+        {badge}
       </div>
     );
   }
