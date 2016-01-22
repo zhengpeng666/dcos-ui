@@ -12,14 +12,6 @@ export default class UsersActionsModal extends ActionsModal {
   constructor() {
     super(...arguments);
 
-    this.state = {
-      pendingRequest: false,
-      requestErrorCount: null,
-      requestsRemaining: null,
-      selectedItem: null,
-      validationError: null
-    };
-
     this.store_listeners = [
       {
         name: 'groups',
