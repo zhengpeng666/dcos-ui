@@ -3,22 +3,14 @@ import _ from 'underscore';
 import React from 'react';
 /* eslint-enable no-unused-vars */
 
+import ActionsModal from './ActionsModal';
 import ACLGroupStore from '../../stores/ACLGroupStore';
 import ACLUsersStore from '../../stores/ACLUsersStore';
-import ActionsModal from './ActionsModal';
 import Util from '../../utils/Util';
 
 export default class GroupsActionsModal extends ActionsModal {
   constructor() {
     super(...arguments);
-
-    this.state = {
-      pendingRequest: false,
-      requestErrorCount: null,
-      requestsRemaining: null,
-      selectedItem: null,
-      validationError: null
-    };
 
     this.store_listeners = [
       {
@@ -71,7 +63,6 @@ export default class GroupsActionsModal extends ActionsModal {
   }
 
   getDropdownItems() {
-    let itemID = 'uid';
     let items = ACLUsersStore.get('users').getItems().sort(
       Util.getLocaleCompareSortFn('description')
     );
@@ -79,7 +70,7 @@ export default class GroupsActionsModal extends ActionsModal {
     let dropdownItems = items.map(function (itemInfo) {
       return {
         html: itemInfo.description,
-        id: itemInfo[itemID],
+        id: itemInfo.uid,
         selectedHtml: itemInfo.description
       };
     });
