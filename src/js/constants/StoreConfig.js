@@ -39,7 +39,11 @@ const ListenersDescription = {
     store: ACLDirectoriesStore,
     events: {
       fetchSuccess: EventTypes.ACL_DIRECTORIES_CHANGED,
-      fetchError: EventTypes.ACL_DIRECTORIES_ERROR
+      fetchError: EventTypes.ACL_DIRECTORIES_ERROR,
+      addSuccess: EventTypes.ACL_DIRECTORY_ADD_SUCCESS,
+      addError: EventTypes.ACL_DIRECTORY_ADD_ERROR,
+      deleteSuccess: EventTypes.ACL_DIRECTORY_DELETE_SUCCESS,
+      deleteError: EventTypes.ACL_DIRECTORY_DELETE_ERROR
     },
     unmountWhen: function () {
       return true;

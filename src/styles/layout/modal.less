@@ -6,6 +6,15 @@
   z-index: @z-index-modal;
 }
 
+.modal-generic-error {
+  .modal-backdrop {
+    z-index: @z-index-modal + 1;
+  }
+  .modal-container {
+    z-index: @z-index-modal + 2;
+  }
+}
+
 .modal {
   background-color: @modal-background-color;
   border-radius: @modal-border-radius;

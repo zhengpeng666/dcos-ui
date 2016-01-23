@@ -30,7 +30,8 @@ export default class ServerErrorModal extends mixin(StoreMixin) {
 
     this.store_listeners = [
       {name: 'user', events: ['updateError']},
-      {name: 'group', events: ['updateError', 'addUserError']}
+      {name: 'group', events: ['updateError', 'addUserError']},
+      {name: 'aclDirectories', events: ['addError']}
     ];
 
     METHODS_TO_BIND.forEach((method) => {
@@ -50,7 +51,21 @@ export default class ServerErrorModal extends mixin(StoreMixin) {
     });
   }
 
+  /**
+   * Adds error messages for display
+   *
+   * @param  {Mixed} id May be an id or an errorMessage
+   * @param  {Mixed} errorMessage
+   */
   handleServerError(id, errorMessage) {
+    if (!id && !errorMessage) {
+      throw 'No error message defined!';
+    }
+
+    if (!errorMessage) {
+      errorMessage = id;
+    }
+
     let errors = this.state.errors.concat([errorMessage]);
 
     this.setState({
@@ -78,8 +93,9 @@ export default class ServerErrorModal extends mixin(StoreMixin) {
   render() {
     return (
       <Modal
-        maxHeightPercentage={0.9}
+        modalWrapperClass="modal-generic-error"
         modalClass="modal"
+        maxHeightPercentage={0.9}
         onClose={this.handleModalClose}
         open={this.state.isOpen}
         showCloseButton={false}

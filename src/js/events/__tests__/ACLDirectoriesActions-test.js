@@ -77,4 +77,112 @@ describe('ACLDirectoriesActions', function () {
 
   });
 
+  describe('#addDirectory', function () {
+
+    it('calls #json from the RequestUtil', function () {
+      spyOn(RequestUtil, 'json');
+      ACLDirectoriesActions.addDirectory({port: 1});
+      expect(RequestUtil.json).toHaveBeenCalled();
+    });
+
+    it('uses PUT method', function () {
+      spyOn(RequestUtil, 'json');
+      ACLDirectoriesActions.addDirectory({port: 1});
+      expect(RequestUtil.json.mostRecentCall.args[0].method).toEqual('PUT');
+    });
+
+    it('puts data to correct URL', function () {
+      spyOn(RequestUtil, 'json');
+      ACLDirectoriesActions.addDirectory({port: 1});
+      expect(RequestUtil.json.mostRecentCall.args[0].url)
+        .toEqual(Config.acsAPIPrefix + '/ldap/config');
+    });
+
+    it('dispatches the correct action when successful', function () {
+      ACLDirectoriesActions.addDirectory({port: 1});
+
+      var id = AppDispatcher.register(function (payload) {
+        AppDispatcher.unregister(id);
+
+        expect(payload.action).toEqual({
+          type: ActionTypes.REQUEST_ACL_DIRECTORY_ADD_SUCCESS
+        });
+      });
+
+      this.configuration.success();
+    });
+
+    it('dispatches the correct action when unsuccessful', function () {
+      ACLDirectoriesActions.addDirectory({port: 1});
+
+      var id = AppDispatcher.register(function (payload) {
+        AppDispatcher.unregister(id);
+
+        expect(payload.action).toEqual({
+          type: ActionTypes.REQUEST_ACL_DIRECTORY_ADD_ERROR,
+          data: 'Foo'
+        });
+      });
+
+      this.configuration.error({responseJSON: {
+          description: 'Foo'
+      }});
+    });
+
+  });
+
+  describe('#deleteDirectory', function () {
+
+    it('calls #json from the RequestUtil', function () {
+      spyOn(RequestUtil, 'json');
+      ACLDirectoriesActions.deleteDirectory();
+      expect(RequestUtil.json).toHaveBeenCalled();
+    });
+
+    it('uses PUT method', function () {
+      spyOn(RequestUtil, 'json');
+      ACLDirectoriesActions.deleteDirectory();
+      expect(RequestUtil.json.mostRecentCall.args[0].method).toEqual('DELETE');
+    });
+
+    it('puts data to correct URL', function () {
+      spyOn(RequestUtil, 'json');
+      ACLDirectoriesActions.deleteDirectory();
+      expect(RequestUtil.json.mostRecentCall.args[0].url)
+        .toEqual(Config.acsAPIPrefix + '/ldap/config');
+    });
+
+    it('dispatches the correct action when successful', function () {
+      ACLDirectoriesActions.deleteDirectory();
+
+      var id = AppDispatcher.register(function (payload) {
+        AppDispatcher.unregister(id);
+
+        expect(payload.action).toEqual({
+          type: ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_SUCCESS
+        });
+      });
+
+      this.configuration.success();
+    });
+
+    it('dispatches the correct action when unsuccessful', function () {
+      ACLDirectoriesActions.deleteDirectory();
+
+      var id = AppDispatcher.register(function (payload) {
+        AppDispatcher.unregister(id);
+
+        expect(payload.action).toEqual({
+          type: ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_ERROR,
+          data: 'Foo'
+        });
+      });
+
+      this.configuration.error({responseJSON: {
+          description: 'Foo'
+      }});
+    });
+
+  });
+
 });

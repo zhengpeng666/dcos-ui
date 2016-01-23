@@ -20,6 +20,10 @@ var ACLDirectoriesStore = Store.createStore({
     this.removeListener(eventName, callback);
   },
 
+  addDirectory: ACLDirectoriesActions.addDirectory,
+
+  deleteDirectory: ACLDirectoriesActions.deleteDirectory,
+
   fetchDirectories: ACLDirectoriesActions.fetchDirectories,
 
   processDirectoriesSuccess(directories) {
@@ -44,6 +48,19 @@ var ACLDirectoriesStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_DIRECTORIES_ERROR:
         ACLDirectoriesStore.emit(EventTypes.ACL_DIRECTORIES_ERROR, data);
+        break;
+      case ActionTypes.REQUEST_ACL_DIRECTORY_ADD_SUCCESS:
+        ACLDirectoriesStore.emit(EventTypes.ACL_DIRECTORY_ADD_SUCCESS);
+        break;
+      case ActionTypes.REQUEST_ACL_DIRECTORY_ADD_ERROR:
+        ACLDirectoriesStore.emit(EventTypes.ACL_DIRECTORY_ADD_ERROR, data);
+        break;
+      case ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_SUCCESS:
+        ACLDirectoriesStore.set({directories: null});
+        ACLDirectoriesStore.emit(EventTypes.ACL_DIRECTORY_DELETE_SUCCESS);
+        break;
+      case ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_ERROR:
+        ACLDirectoriesStore.emit(EventTypes.ACL_DIRECTORY_DELETE_ERROR, data);
         break;
     }
 
