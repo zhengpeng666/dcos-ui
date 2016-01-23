@@ -8,17 +8,9 @@ import ACLGroupsStore from '../../stores/ACLGroupsStore';
 import ActionsModal from './ActionsModal';
 import Util from '../../utils/Util';
 
-export default class UserActionsModal extends ActionsModal {
+export default class UsersActionsModal extends ActionsModal {
   constructor() {
     super(...arguments);
-
-    this.state = {
-      pendingRequest: false,
-      requestErrorCount: null,
-      requestsRemaining: null,
-      selectedItem: null,
-      validationError: null
-    };
 
     this.store_listeners = [
       {
@@ -27,7 +19,12 @@ export default class UserActionsModal extends ActionsModal {
       },
       {
         name: 'group',
-        events: ['addUserError', 'addUserSuccess']
+        events: [
+          'addUserError',
+          'addUserSuccess',
+          'deleteUserError',
+          'deleteUserSuccess'
+        ]
       }
     ];
 
@@ -43,7 +40,15 @@ export default class UserActionsModal extends ActionsModal {
     this.onActionError(errorMessage);
   }
 
+  onGroupStoreDeleteUserError(groupId, userId, errorMessage) {
+    this.onActionError(errorMessage);
+  }
+
   onGroupStoreAddUserSuccess() {
+    this.onActionSuccess();
+  }
+
+  onGroupStoreDeleteUserSuccess() {
     this.onActionSuccess();
   }
 
@@ -95,7 +100,7 @@ export default class UserActionsModal extends ActionsModal {
 
 }
 
-UserActionsModal.propTypes = {
+UsersActionsModal.propTypes = {
   action: React.PropTypes.string.isRequired,
   actionText: React.PropTypes.object.isRequired,
   itemID: React.PropTypes.string.isRequired,
