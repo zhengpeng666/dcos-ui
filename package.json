@@ -27,7 +27,7 @@
     "flux": "^2.1.1",
     "less-color-lighten": "0.0.1",
     "md5": "^2.0.0",
-    "mesosphere-shared-reactjs": "0.0.7",
+    "mesosphere-shared-reactjs": "0.0.9",
     "moment": "^2.11.1",
     "query-string": "^3.0.0",
     "react": "^0.13.3",
