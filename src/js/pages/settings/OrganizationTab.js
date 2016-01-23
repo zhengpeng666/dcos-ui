@@ -6,6 +6,7 @@ import mixin from 'reactjs-mixin';
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
+import GroupsActionsModal from '../../components/modals/GroupsActionsModal';
 import UsersActionsModal from '../../components/modals/UsersActionsModal';
 import FilterHeadline from '../../components/FilterHeadline';
 import FilterInputText from '../../components/FilterInputText';
@@ -317,7 +318,18 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
           onClose={this.handleActionSelectionClose}
           selectedItems={checkedItemObjects} />
       );
+    } else if (itemName === 'group') {
+      return (
+        <GroupsActionsModal
+          action={action}
+          actionText={BulkOptions[itemName][action]}
+          itemID={itemID}
+          itemType={itemName}
+          onClose={this.handleActionSelectionClose}
+          selectedItems={checkedItemObjects} />
+      );
     }
+
     return null;
   }
 
