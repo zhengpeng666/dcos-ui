@@ -26,6 +26,7 @@ const METHODS_TO_BIND = [
   'renderCheckbox',
   'renderHeadingCheckbox',
   'renderHeadline',
+  'renderUsername',
   'resetFilter'
 ];
 
@@ -126,6 +127,19 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
     );
   }
 
+  renderUsername(prop, subject) {
+    let itemName = this.props.itemName;
+
+    return (
+      <div>
+        <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
+          params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}>
+          {subject.get('uid')}
+        </Link>
+      </div>
+    );
+  }
+
   renderCheckbox(prop, row) {
     let checked = null;
     let checkedCount = this.state.checkedCount;
@@ -192,42 +206,74 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
     );
   }
 
-  getColGroup() {
-    return (
-      <colgroup>
+  getColGroup(itemName) {
+    if (itemName === 'user') {
+      return (
+        <colgroup>
+        <col style={{width: '40px'}} />
+        <col style={{width: '45%'}}/>
+        <col />
+        </colgroup>
+      );
+    } else if (itemName === 'group') {
+      return (
+        <colgroup>
         <col style={{width: '40px'}} />
         <col />
-      </colgroup>
-    );
+        </colgroup>
+      );
+    }
+
+    return null;
   }
 
-  getColumns() {
+  getColumns(itemName) {
     let className = ResourceTableUtil.getClassName;
-    let heading = ResourceTableUtil.renderHeading({
-      description: 'Description'
+    let nameHeading = ResourceTableUtil.renderHeading({
+      description: 'NAME'
     });
     let propSortFunction = ResourceTableUtil.getPropSortFunction('description');
 
-    return [
+    let columns = [
       {
         className,
         headerClassName: className,
         prop: 'selected',
         render: this.renderCheckbox,
         sortable: false,
-        heading: this.renderHeadingCheckbox,
-        dontCache: true
+        heading: this.renderHeadingCheckbox
       },
       {
+        cacheCell: true,
         className,
         headerClassName: className,
         prop: 'description',
         render: this.renderHeadline,
         sortable: true,
         sortFunction: propSortFunction,
-        heading
+        heading: nameHeading
       }
     ];
+
+    if (itemName === 'user') {
+      let usernameHeading = ResourceTableUtil.renderHeading({
+        uid: 'USERNAME'
+      });
+      let usernameSort = ResourceTableUtil.getPropSortFunction('uid');
+
+      columns.push({
+        cacheCell: true,
+        className,
+        headerClassName: className,
+        prop: 'uid',
+        render: this.renderUsername,
+        sortable: true,
+        sortFunction: usernameSort,
+        heading: usernameHeading
+      });
+    }
+
+    return columns;
   }
 
   getActionDropdown(itemName) {
@@ -375,8 +421,8 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
           <Table
             className="table inverse table-borderless-outer
               table-borderless-inner-columns flush-bottom"
-            columns={this.getColumns()}
-            colGroup={this.getColGroup()}
+            columns={this.getColumns(itemName)}
+            colGroup={this.getColGroup(itemName)}
             containerSelector=".gm-scroll-view"
             data={this.getVisibleItems(items)}
             idAttribute={itemID}
