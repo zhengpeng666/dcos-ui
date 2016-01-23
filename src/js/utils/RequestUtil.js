@@ -129,7 +129,7 @@ var RequestUtil = {
         return JSON.parse(responseText);
       } catch (e) {
         return {
-          dscription: responseText
+          description: responseText
         };
       }
     }
