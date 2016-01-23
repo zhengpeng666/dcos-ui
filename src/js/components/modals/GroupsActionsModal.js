@@ -19,7 +19,12 @@ export default class GroupsActionsModal extends ActionsModal {
       },
       {
         name: 'group',
-        events: ['addUserError', 'addUserSuccess']
+        events: [
+          'addUserError',
+          'addUserSuccess',
+          'deleteError',
+          'deleteSuccess'
+        ]
       }
     ];
 
@@ -39,13 +44,21 @@ export default class GroupsActionsModal extends ActionsModal {
     this.onActionSuccess();
   }
 
+  onGroupStoreDeleteError(groupID, errorMessage) {
+    this.onActionError(errorMessage);
+  }
+
+  onGroupStoreDeleteSuccess() {
+    this.onActionSuccess();
+  }
+
   handleButtonConfirm() {
+    let {action, itemID, selectedItems} = this.props;
     let selectedItem = this.state.selectedItem;
 
-    if (selectedItem === null) {
+    if (selectedItem === null && action !== 'delete') {
       this.setState({validationError: 'Select from dropdown.'});
     } else {
-      let {action, itemID, selectedItems} = this.props;
       let itemsByID = _.pluck(selectedItems, itemID);
 
       if (action === 'add') {
@@ -55,6 +68,10 @@ export default class GroupsActionsModal extends ActionsModal {
       } else if (action === 'remove') {
         itemsByID.forEach(function (groupID) {
           ACLGroupStore.deleteUser(groupID, selectedItem.id);
+        });
+      } else if (action === 'delete') {
+        itemsByID.forEach(function (groupID) {
+          ACLGroupStore.deleteGroup(groupID);
         });
       }
 

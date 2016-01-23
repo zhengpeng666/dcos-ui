@@ -131,6 +131,10 @@ export default class ActionsModal extends mixin(StoreMixin) {
   }
 
   getDropdown(itemType) {
+    if (this.props.action === 'delete') {
+      return null;
+    }
+
     return (
       <div className="container container-pod container-pod-short">
         <Dropdown
