@@ -110,4 +110,13 @@ describe('User', function () {
 
   });
 
+  describe('#isRemote', function () {
+
+    it('returns if user is remote as a boolean', function () {
+      let isRemote = this.instance.isRemote();
+      console.log(isRemote);
+      expect(typeof isRemote).toEqual('boolean');
+    });
+  });
+
 });
