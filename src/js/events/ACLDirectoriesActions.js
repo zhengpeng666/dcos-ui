@@ -11,7 +11,7 @@ const ACLDirectoriesActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_DIRECTORIES_SUCCESS,
-          data: response
+          data: [response]
         });
       },
       error: function (xhr) {

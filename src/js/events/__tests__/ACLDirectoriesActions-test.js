@@ -49,7 +49,7 @@ describe('ACLDirectoriesActions', function () {
 
         expect(payload.action).toEqual({
           type: ActionTypes.REQUEST_ACL_DIRECTORIES_SUCCESS,
-          data: {foo: 'bar'}
+          data: [{foo: 'bar'}]
         });
       });
 
