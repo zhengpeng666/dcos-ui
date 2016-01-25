@@ -125,7 +125,13 @@ var RequestUtil = {
     }
 
     if (responseText) {
-      return JSON.parse(responseText);
+      try {
+        return JSON.parse(responseText);
+      } catch (e) {
+        return {
+          description: responseText
+        };
+      }
     }
 
     return {};
