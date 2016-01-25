@@ -159,7 +159,18 @@ describe('Settings Page [04x]', function () {
     context("LDAP Users [050]", function () {
 
       it("shows LDAP badge for LDAP users [051]", function () {
+        cy.get(".badge").should(function ($badge) {
+          expect($badge).length.to.be(2);
+        });
+      });
 
+
+      it("disables checkbox of LDAP users [052]", function () {
+        cy.get("@checkboxes").click({multiple: true});
+
+        cy.get("@checkboxes").should(function ($checkboxes) {
+          expect($checkboxes).length.to.be(2);
+        });
       });
 
     });
