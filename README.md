@@ -9,7 +9,7 @@ Node 0.10.x is **required** as versions 0.11 and 0.12 introduced compatibility i
 To install, run, and contribute to DCOS-UI on your local machine you will need to setup 3 different environments (listed below).  The DCOS UI is the actual application code that runs as a standalone server.  The DCOS UI Proxy is a simple Vagrant Machine that connects requests from your local DCOS UI Application Server to a DCOS Cluster (local or remote).  Optionally, you may also run a DCOS Image, also a simple Vagrant Machine, to act as a local install of the DCOS.
 
 * [DCOS Image](#dcos-image)
-* [DCOS UI Proxy](#dcos-ui-proxy)
+* [DCOS UI Proxy](#dcos-ui-proxy) (Optional)
 * [DCOS UI](#dcos-ui)
 
 ### DCOS UI Proxy
