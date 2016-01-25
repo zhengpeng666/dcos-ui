@@ -17,6 +17,12 @@ Cypress.addParentCommand('configureCluster', function(configuration) {
   if (configuration.acl) {
     cy
       .route(/acls\?type=services/, 'fx:acl/acls-unicode')
+      .route({
+        method: 'GET',
+        url: /api\/v1\/ldap\/config/,
+        status: 400,
+        response: 'fx:acl/acls-config-empty'
+      })
       .route(/api\/v1\/groups/, 'fx:acl/groups-unicode')
       .route(/groups\/olis/, 'fx:acl/group-unicode')
       .route(/groups\/olis\/users/, 'fx:acl/group-users')
@@ -25,6 +31,10 @@ Cypress.addParentCommand('configureCluster', function(configuration) {
       .route(/users\/quis/, 'fx:acl/user-unicode')
       .route(/users\/quis\/groups/, 'fx:acl/user-groups')
       .route(/users\/quis\/permissions/, 'fx:acl/user-permissions');
+
+    if (configuration.singleLDAP) {
+      cy.route(/api\/v1\/ldap\/config/, 'fx:acl/acls-config-1-server');
+    }
   }
 
   // The app won't load until plugins are loaded

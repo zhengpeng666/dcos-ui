@@ -1,4 +1,5 @@
 import ACLAuthStore from '../stores/ACLAuthStore';
+import ACLDirectoriesStore from '../stores/ACLDirectoriesStore';
 import ACLGroupsStore from '../stores/ACLGroupsStore';
 import ACLGroupStore from '../stores/ACLGroupStore';
 import ACLStore from '../stores/ACLStore';
@@ -27,7 +28,18 @@ const ListenersDescription = {
       groupGrantError: EventTypes.ACL_GROUP_GRANT_ACTION_ERROR,
       groupRevokeSuccess: EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE,
       groupRevokeError: EventTypes.ACL_GROUP_REVOKE_ACTION_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
 
+  aclDirectories: {
+    store: ACLDirectoriesStore,
+    events: {
+      fetchSuccess: EventTypes.ACL_DIRECTORIES_CHANGED,
+      fetchError: EventTypes.ACL_DIRECTORIES_ERROR
     },
     unmountWhen: function () {
       return true;
