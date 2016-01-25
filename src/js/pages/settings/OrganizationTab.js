@@ -39,6 +39,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     super(arguments);
 
     this.state = {
+      checkableCount: 0,
       checkedCount: 0,
       showActionDropdown: false,
       searchString: '',
@@ -55,15 +56,24 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
   componentWillMount() {
     super.componentWillMount();
     let selectedIDSet = {};
-    let props = this.props;
+    let remoteIDSet = {};
+    let {items, itemID} = this.props;
+    let checkableCount = 0;
 
     // Initializing hash of items' IDs and corresponding checkbox state.
-    let itemIDs = _.pluck(props.items, props.itemID);
-    itemIDs.forEach(function (id) {
-      selectedIDSet[id] = false;
+    items.forEach(function (item) {
+      let id = item.get(itemID);
+
+      if (typeof item.isRemote === 'function' && item.isRemote()) {
+        remoteIDSet[id] = true;
+      } else {
+        checkableCount += 1;
+        selectedIDSet[id] = false;
+      }
     });
 
-    this.internalStorage_update({selectedIDSet});
+    this.internalStorage_update({selectedIDSet, remoteIDSet});
+    this.setState({checkableCount});
   }
 
   handleActionSelection(dropdownItem) {
@@ -103,7 +113,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
     if (isChecked) {
       this.setState({
-        checkedCount: this.props.items.length,
+        checkedCount: this.state.checkableCount,
         showActionDropdown: isChecked
       });
     } else if (isChecked === false) {
@@ -164,13 +174,24 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
   }
 
   renderCheckbox(prop, row) {
+    let rowID = row[this.props.itemID];
+    let remoteIDSet = this.internalStorage_get().remoteIDSet;
+    let {checkableCount, checkedCount} = this.state;
     let checked = null;
-    let checkedCount = this.state.checkedCount;
 
-    if (checkedCount === this.props.items.length) {
-      checked = true;
-    } else if (checkedCount === 0) {
-      checked = false;
+    if (remoteIDSet[rowID] === true) {
+      return (
+        <input
+          ref="checkbox"
+          type="checkbox"
+          disabled={true} />
+        );
+    } else {
+      if (checkedCount === checkableCount) {
+        checked = true;
+      } else if (checkedCount === 0) {
+        checked = false;
+      }
     }
 
     return (
@@ -179,7 +200,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
         definition={[
           {
             fieldType: 'checkbox',
-            name: row[this.props.itemID],
+            name: rowID,
             value: [{
               name: 'select',
               checked,
@@ -197,7 +218,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     let indeterminate = false;
 
     switch (this.state.checkedCount) {
-      case this.props.items.length:
+      case this.state.checkableCount:
         checked = true;
         break;
       case 0:

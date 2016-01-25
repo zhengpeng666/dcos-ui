@@ -15,7 +15,7 @@ describe('TooltipMixin', function () {
       React.findDOMNode = function () {
         return node;
       };
-      
+
       this.instance = TooltipMixin;
     });
 
