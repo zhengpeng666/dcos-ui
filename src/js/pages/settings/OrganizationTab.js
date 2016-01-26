@@ -461,6 +461,10 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
   }
 
   getFilterButtons() {
+    if (this.props.itemName !== 'user') {
+      return null;
+    }
+
     let currentFilter = this.state.searchFilter;
 
     let buttons = FILTERS.map((filter) => {
