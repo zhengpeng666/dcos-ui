@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import classNames from 'classNames';
+import classNames from 'classnames';
 import {Dropdown, Form, Table} from 'reactjs-components';
 import {Link} from 'react-router';
 import mixin from 'reactjs-mixin';
