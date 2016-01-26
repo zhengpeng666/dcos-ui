@@ -17,6 +17,15 @@ describe('User Details Sidepanel [02k]', function () {
       });
   });
 
+  it('has LDAP in subheader when user is external [056]', function() {
+    cy
+      .get('.side-panel .side-panel-content-header-label div')
+      .should(function ($subheader) {
+        console.log($subheader);
+        expect($subheader[3].textContent).to.contain('External');
+      });
+  });
+
   it('sets the first tab as active [05y]', function() {
     cy
       .get('.side-panel .tabs .active')
