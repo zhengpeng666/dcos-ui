@@ -69,6 +69,9 @@ class DirectoriesTab extends mixin(StoreMixin) {
   }
 
   handleModalSubmit(formData) {
+    // There's deeply nested objects
+    formData = JSON.parse(JSON.stringify(formData));
+
     formData['enforce-starttls'] = !!formData['enforce-starttls'][0].checked;
     formData['use-ldaps'] = !!formData['use-ldaps'][0].checked;
 
