@@ -13,7 +13,16 @@ describe('User Details Sidepanel [02k]', function () {
     cy
       .get('.side-panel .side-panel-content-header-label .form-element-inline-text')
       .should(function ($header) {
-        expect($header[0].textContent).to.equal("藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe");
+        expect($header[0].textContent).to.equal('藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe');
+      });
+  });
+
+  it('has LDAP in subheader when user is external [056]', function() {
+    cy
+      .get('.side-panel .side-panel-content-header-label div')
+      .should(function ($subheader) {
+        console.log($subheader);
+        expect($subheader[3].textContent).to.contain('External');
       });
   });
 
@@ -60,7 +69,7 @@ describe('User Details Sidepanel [02k]', function () {
     });
 
     it('shows delete modal when header delete button clicked [043]', function() {
-      cy.get("@headerUserDelete")
+      cy.get('@headerUserDelete')
         .find('.side-panel-header-action')
         .click()
       cy.get('.confirm-modal').should('to.have.length', 1);
@@ -73,7 +82,7 @@ describe('User Details Sidepanel [02k]', function () {
         status: 200,
         response: {}
       });
-      cy.get("@headerUserDelete")
+      cy.get('@headerUserDelete')
         .find('.side-panel-header-action')
         .click();
       cy.get('.modal .button-danger').click();
@@ -87,7 +96,7 @@ describe('User Details Sidepanel [02k]', function () {
         status: 400,
         response: {description: 'There was an error.'}
       });
-      cy.get("@headerUserDelete")
+      cy.get('@headerUserDelete')
         .find('.side-panel-header-action')
         .click();
       cy.get('.modal .button-danger').click();
@@ -108,7 +117,7 @@ describe('User Details Sidepanel [02k]', function () {
     });
 
     it('displays the username in the first row [064]', function () {
-      cy.get("@rows")
+      cy.get('@rows')
         .should(function ($rows) {
           var firstRow = $rows[0];
           expect(firstRow.children[1].textContent).to.equal('quis');
@@ -116,7 +125,7 @@ describe('User Details Sidepanel [02k]', function () {
     });
 
     it('displays the password form in the second row [065]', function () {
-      cy.get("@rows")
+      cy.get('@rows')
         .should(function ($rows) {
           var secondRow = $rows[1];
           expect(secondRow.children[1].children[0].nodeName).to.equal('FORM');
@@ -143,38 +152,38 @@ describe('User Details Sidepanel [02k]', function () {
       cy.get('.side-panel').as('sidePanel');
     });
 
-    it('displays 'Add Service' in the dropdown box [02x]', function () {
+    it('displays "Add Service" in the dropdown box [02x]', function () {
       cy
-        .get("@sidePanel")
+        .get('@sidePanel')
         .get('.dropdown .dropdown-toggle')
         .should('contain', 'Add Service');
     });
 
     it('displays the selected element in the dropdown box [02y]', function () {
       cy
-        .get("@sidePanel")
+        .get('@sidePanel')
         .get('.dropdown .dropdown-toggle')
         .click();
 
       cy
-        .get("@sidePanel")
-        .get(".dropdown-menu-list > .clickable:last-child")
+        .get('@sidePanel')
+        .get('.dropdown-menu-list > .clickable:last-child')
         .click();
 
       cy
-        .get("@sidePanel")
+        .get('@sidePanel')
         .get('.dropdown .dropdown-toggle')
         .should('contain', 'Shelia Ike Bressette');
     });
 
-    it('shouldn't contain services that are already in permissions [02z]', function () {
+    it('shouldn\'t contain services that are already in permissions [02z]', function () {
       cy
-        .get("@sidePanel")
+        .get('@sidePanel')
         .get('.dropdown .dropdown-toggle')
         .click();
 
       cy
-        .get("@sidePanel")
+        .get('@sidePanel')
         .get('.dropdown-menu-list')
         .should(function (list) {
           var children = list.children();
@@ -191,14 +200,14 @@ describe('User Details Sidepanel [02k]', function () {
 
     it('should have a table with a row containing a service [01c]', function () {
       cy
-        .get("@sidePanel")
+        .get('@sidePanel')
         .get('table td')
         .should('contain', 'Marathon');
     });
 
     it('displays the confirmation modal when clicking remove [060]', function() {
       cy
-        .get("@sidePanel")
+        .get('@sidePanel')
         .get('.table tbody tr:first-child button')
         .click();
 

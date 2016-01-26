@@ -34,7 +34,7 @@
       "uid": "quis",
       "url": "/users/quis",
       "description": "藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe",
-      "is_remote": false
+      "is_remote": true
     },
     {
       "uid": "ccc86ef8-e2c9-481b-87a5-0d6f81930040",
