@@ -105,51 +105,77 @@ describe('Settings Page [05k]', function () {
       cy.get('@activeTab').should('contain', 'Users');
     });
 
-    it('hides users when no users match the string [05z]', function () {
-      cy.get('.users-table-header input[type="text"]').as('filterTextbox');
-      cy.get('.page-content-fill .table tbody tr').as('tableRows');
+    context('Filters [053]', function () {
 
-      cy.get('@filterTextbox').type('foo_bar_baz_qux');
+      it('hides users when no users match the string [05z]', function () {
+        cy.get('.users-table-header input[type="text"]').as('filterTextbox');
+        cy.get('.page-content-fill .table tbody tr').as('tableRows');
 
-      cy.get('@tableRows').should(function ($tableRows) {
-        expect($tableRows).length.to.be(1);
+        cy.get('@filterTextbox').type('foo_bar_baz_qux');
+
+        cy.get('@tableRows').should(function ($tableRows) {
+          expect($tableRows).length.to.be(1);
+        });
       });
-    });
 
-    it('displays \'No data\' when it has filtered out all users [06a]', function () {
-      cy.get('.users-table-header input[type="text"]').as('filterTextbox');
-      cy.get('.page-content-fill .table tbody tr').as('tableRows');
-      cy.get('@tableRows').get('td').as('tableRowCell');
+      it('displays \'No data\' when it has filtered out all users [06a]', function () {
+        cy.get('.users-table-header input[type="text"]').as('filterTextbox');
+        cy.get('.page-content-fill .table tbody tr').as('tableRows');
+        cy.get('@tableRows').get('td').as('tableRowCell');
 
-      cy.get('@filterTextbox').type('foo_bar_baz_qux');
+        cy.get('@filterTextbox').type('foo_bar_baz_qux');
 
-      cy.get('@tableRowCell').should(function ($tableCell) {
-        expect($tableCell[0].textContent).to.equal('No data');
+        cy.get('@tableRowCell').should(function ($tableCell) {
+          expect($tableCell[0].textContent).to.equal('No data');
+        });
       });
-    });
 
-    it('shows all users after clearing the filter [06b]', function () {
-      cy.get('.users-table-header input[type="text"]').as('filterTextbox');
-      cy.get('.page-content-fill .table tbody tr').as('tableRows');
-      cy.get('.users-table-header .form-control-group-add-on a')
+      it('shows all users after clearing the filter [06b]', function () {
+        cy.get('.users-table-header input[type="text"]').as('filterTextbox');
+        cy.get('.page-content-fill .table tbody tr').as('tableRows');
+        cy.get('.users-table-header .form-control-group-add-on a')
         .as('clearFilterButton');
 
-      cy.get('@filterTextbox').type('foo_bar_baz_qux');
-      cy.get('@clearFilterButton').click();
+        cy.get('@filterTextbox').type('foo_bar_baz_qux');
+        cy.get('@clearFilterButton').click();
 
-      cy.get('@tableRows').should(function ($tableRows) {
-        expect($tableRows).length.to.be.above(10);
+        cy.get('@tableRows').should(function ($tableRows) {
+          expect($tableRows).length.to.be.above(4);
+        });
       });
-    });
 
-    it('allows users to filter by unicode characters [06c]', function () {
-      cy.get('.users-table-header input[type="text"]').as('filterTextbox');
-      cy.get('.page-content-fill .table tbody tr').as('tableRows');
+      it('allows users to filter by unicode characters [06c]', function () {
+        cy.get('.users-table-header input[type="text"]').as('filterTextbox');
+        cy.get('.page-content-fill .table tbody tr').as('tableRows');
 
-      cy.get('@filterTextbox').type('藍-遙 遥 悠 遼');
-      cy.get('@tableRows').should(function ($tableRows) {
-        expect($tableRows.length).to.equal(1);
+        cy.get('@filterTextbox').type('藍-遙 遥 悠 遼');
+        cy.get('@tableRows').should(function ($tableRows) {
+          expect($tableRows.length).to.equal(1);
+        });
       });
+
+      it('filters by local users [054]', function () {
+        cy.get('.button-group').within(function () {
+          cy.get('button').eq(1).click();
+        });
+        cy.get('.page-content-fill .table tbody tr .highlight').as('tableRows');
+
+        cy.get('@tableRows').should(function ($tableRows) {
+          expect($tableRows[1].textContent).to.contain('a inventore');
+        });
+      });
+
+      it('filters by external users [055]', function () {
+        cy.get('.button-group').within(function () {
+          cy.get('button').eq(2).click();
+        });
+        cy.get('.page-content-fill .table tbody tr .highlight').as('tableRows');
+
+        cy.get('@tableRows').should(function ($tableRows) {
+          expect($tableRows[0].textContent).to.contain('a enim');
+        });
+      });
+
     });
 
   });
