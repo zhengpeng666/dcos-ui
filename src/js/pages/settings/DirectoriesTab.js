@@ -5,6 +5,7 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLDirectoriesStore from '../../stores/ACLDirectoriesStore';
+import DirectoryActionButtons from '../../components/DirectoryActionButtons';
 import FormModal from '../../components/FormModal';
 
 const buttonDefinition = [
@@ -83,6 +84,10 @@ class DirectoriesTab extends mixin(StoreMixin) {
     ACLDirectoriesStore.deleteDirectory();
   }
 
+  handleDirectoryTestConnection() {
+    ACLDirectoriesStore.testDirectoryConnection();
+  }
+
   changeModalOpenState(open) {
     this.setState({modalOpen: open, modalDisabled: false});
   }
@@ -146,7 +151,8 @@ class DirectoriesTab extends mixin(StoreMixin) {
         value: [
           {
             name: 'enforce-starttls-checkbox',
-            label: fieldDefinitions['enforce-starttls']
+            label: fieldDefinitions['enforce-starttls'],
+            checked: false
           }
         ]
       }
@@ -177,13 +183,13 @@ class DirectoriesTab extends mixin(StoreMixin) {
 
     return (
       <div>
-        <h4 className="inverse flush-top">External LDAP</h4>
+        <h4 className="inverse flush-top">External LDAP Configuration</h4>
         {fields}
-        <button
-          className="button button-danger"
-          onClick={this.handleDirectoryDelete}>
-          Delete Directory
-        </button>
+        <div className="row">
+          <div className="column-12">
+            <DirectoryActionButtons />
+          </div>
+        </div>
       </div>
     );
   }
@@ -196,6 +202,7 @@ class DirectoriesTab extends mixin(StoreMixin) {
           onClick={this.changeModalOpenState.bind(null, true)}>
           + Add Directory
         </button>
+
         <FormModal
           buttonDefinition={buttonDefinition}
           definition={this.getModalFormDefinition()}
