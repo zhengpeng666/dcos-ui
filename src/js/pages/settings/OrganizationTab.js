@@ -16,6 +16,7 @@ import BulkOptions from '../../constants/BulkOptions';
 import ResourceTableUtil from '../../utils/ResourceTableUtil';
 import StringUtil from '../../utils/StringUtil';
 import TableUtil from '../../utils/TableUtil';
+import TooltipMixin from '../../mixins/TooltipMixin';
 
 const METHODS_TO_BIND = [
   'handleActionSelection',
@@ -27,14 +28,18 @@ const METHODS_TO_BIND = [
   'renderHeadingCheckbox',
   'renderHeadline',
   'renderUsername',
-  'resetFilter'
+  'resetFilter',
+  // Must bind these due to TooltipMixin legacy code
+  'tip_handleContainerMouseMove',
+  'tip_handleMouseLeave'
 ];
 
-export default class OrganizationTab extends mixin(InternalStorageMixin) {
+export default class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
   constructor() {
     super(arguments);
 
     this.state = {
+      checkableCount: 0,
       checkedCount: 0,
       showActionDropdown: false,
       searchString: '',
@@ -51,15 +56,24 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
   componentWillMount() {
     super.componentWillMount();
     let selectedIDSet = {};
-    let props = this.props;
+    let remoteIDSet = {};
+    let {items, itemID} = this.props;
+    let checkableCount = 0;
 
     // Initializing hash of items' IDs and corresponding checkbox state.
-    let itemIDs = _.pluck(props.items, props.itemID);
-    itemIDs.forEach(function (id) {
-      selectedIDSet[id] = false;
+    items.forEach(function (item) {
+      let id = item.get(itemID);
+
+      if (typeof item.isRemote === 'function' && item.isRemote()) {
+        remoteIDSet[id] = true;
+      } else {
+        checkableCount += 1;
+        selectedIDSet[id] = false;
+      }
     });
 
-    this.internalStorage_update({selectedIDSet});
+    this.internalStorage_update({selectedIDSet, remoteIDSet});
+    this.setState({checkableCount});
   }
 
   handleActionSelection(dropdownItem) {
@@ -99,7 +113,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
 
     if (isChecked) {
       this.setState({
-        checkedCount: this.props.items.length,
+        checkedCount: this.state.checkableCount,
         showActionDropdown: isChecked
       });
     } else if (isChecked === false) {
@@ -116,13 +130,32 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
 
   renderHeadline(prop, subject) {
     let itemName = this.props.itemName;
+    let badge = null;
+
+    if (typeof subject.isRemote === 'function' && subject.isRemote()) {
+      badge = (
+        <div className="grid-item column-small-3 column-large-3 column-x-large-2">
+          <span
+            className="badge text-align-right"
+            data-behavior="show-tip"
+            data-tip-place="top"
+            data-tip-content="This user is managed by an external LDAP directory." >
+            LDAP
+          </span>
+        </div>
+      );
+    }
 
     return (
-      <div>
-        <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
-          params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}>
+      <div className="grid">
+        <div className="grid-item column-small-9 column-large-9 column-x-large-10">
+          <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
+          params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}
+          className="">
           {subject.get('description')}
-        </Link>
+          </Link>
+        </div>
+        {badge}
       </div>
     );
   }
@@ -141,13 +174,24 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
   }
 
   renderCheckbox(prop, row) {
+    let rowID = row[this.props.itemID];
+    let remoteIDSet = this.internalStorage_get().remoteIDSet;
+    let {checkableCount, checkedCount} = this.state;
     let checked = null;
-    let checkedCount = this.state.checkedCount;
 
-    if (checkedCount === this.props.items.length) {
-      checked = true;
-    } else if (checkedCount === 0) {
-      checked = false;
+    if (remoteIDSet[rowID] === true) {
+      return (
+        <input
+          ref="checkbox"
+          type="checkbox"
+          disabled={true} />
+        );
+    } else {
+      if (checkedCount === checkableCount) {
+        checked = true;
+      } else if (checkedCount === 0) {
+        checked = false;
+      }
     }
 
     return (
@@ -156,7 +200,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
         definition={[
           {
             fieldType: 'checkbox',
-            name: row[this.props.itemID],
+            name: rowID,
             value: [{
               name: 'select',
               checked,
@@ -174,7 +218,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin) {
     let indeterminate = false;
 
     switch (this.state.checkedCount) {
-      case this.props.items.length:
+      case this.state.checkableCount:
         checked = true;
         break;
       case 0:

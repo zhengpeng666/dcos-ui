@@ -1,3 +1,4 @@
+import React from 'react';
 var _ = require('underscore');
 
 var Tooltip = require('../vendor/tooltip');
@@ -8,7 +9,8 @@ var TooltipMixin = {
 
     this.tip_attachTips();
 
-    var container = this.getDOMNode();
+    var container = this.getNode();
+
     container.addEventListener('mousemove', this.tip_handleContainerMouseMove);
   },
 
@@ -18,6 +20,10 @@ var TooltipMixin = {
 
   componentWillUnmount: function () {
     this.tip_destroyAllTips();
+  },
+
+  getNode: function () {
+    return React.findDOMNode(this);
   },
 
   tip_handleContainerMouseMove: function (e) {
@@ -35,7 +41,7 @@ var TooltipMixin = {
   },
 
   tip_attachTips: function () {
-    var container = this.getDOMNode();
+    var container = this.getNode();
     var selected = container.querySelectorAll('[data-behavior~=show-tip]');
     var el;
     var found = [];
@@ -114,7 +120,7 @@ var TooltipMixin = {
   tip_destroyTip: function (tipID) {
     // Allows us to create a new tip for the element.
     // Useful when the element has tooltip -> doesn't -> then has it again.
-    var el = this.getDOMNode().querySelector(`[data-tip-i-d="${tipID}]`);
+    var el = this.getNode().querySelector(`[data-tip-i-d="${tipID}]`);
     if (el && el.dataset) {
       delete el.dataset.tipID;
     }

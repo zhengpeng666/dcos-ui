@@ -48,4 +48,8 @@ export default class User extends Item {
       return false;
     });
   }
+
+  isRemote() {
+    return this.get('is_remote');
+  }
 }
