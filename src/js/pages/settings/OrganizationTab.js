@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import classNames from 'classnames';
 import {Dropdown, Form, Table} from 'reactjs-components';
 import {Link} from 'react-router';
 import mixin from 'reactjs-mixin';
@@ -34,6 +35,8 @@ const METHODS_TO_BIND = [
   'tip_handleMouseLeave'
 ];
 
+const FILTERS = ['all', 'local', 'external'];
+
 export default class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
   constructor() {
     super(arguments);
@@ -42,6 +45,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
       checkableCount: 0,
       checkedCount: 0,
       showActionDropdown: false,
+      searchFilter: 'all',
       searchString: '',
       selectedAction: null
     };
@@ -379,7 +383,23 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
   }
 
   getVisibleItems(items) {
-    let searchString = this.state.searchString.toLowerCase();
+    let {searchFilter, searchString} = this.state;
+    searchString = searchString.toLowerCase();
+
+    switch (searchFilter) {
+      case 'all':
+        break;
+      case 'local':
+        items = _.filter(items, function (item) {
+          return !item.isRemote();
+        });
+        break;
+      case 'external':
+        items = _.filter(items, function (item) {
+          return item.isRemote();
+        });
+        break;
+    }
 
     if (searchString !== '') {
       return _.filter(items, function (item) {
@@ -423,8 +443,60 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     return null;
   }
 
+  getSearchFilterChangeHandler(searchFilter) {
+    return () => {
+      this.setState({searchFilter});
+    };
+  }
+
+  getStringFilter(searchString, changeHandler) {
+    return (
+      <li>
+        <FilterInputText
+          searchString={searchString}
+          handleFilterChange={changeHandler}
+          inverseStyle={true} />
+      </li>
+    );
+  }
+
+  getFilterButtons() {
+    if (this.props.itemName !== 'user') {
+      return null;
+    }
+
+    let currentFilter = this.state.searchFilter;
+
+    let buttons = FILTERS.map((filter) => {
+      let classSet = classNames({
+        'button button-stroke button-inverse': true,
+        'active': filter === currentFilter
+      });
+
+      return (
+        <button
+            key={filter}
+            className={classSet}
+            onClick={this.getSearchFilterChangeHandler(filter)}>
+          {StringUtil.capitalize(filter)}
+        </button>
+      );
+    });
+
+    return (
+      <li>
+        <div className="panel-options-left button-group">
+          {buttons}
+        </div>
+      </li>
+    );
+  }
+
   resetFilter() {
-    this.setState({searchString: ''});
+    this.setState({
+      searchString: '',
+      searchFilter: 'all'
+    });
   }
 
   render() {
@@ -432,6 +504,9 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     let state = this.state;
     let action = state.selectedAction;
     let capitalizedItemName = StringUtil.capitalize(itemName);
+    let filterButtons = this.getFilterButtons();
+    let filterInputText =
+      this.getStringFilter(state.searchString, this.handleSearchStringChange);
     let actionDropdown = this.getActionDropdown(itemName);
     let actionsModal = this.getActionsModal(action, items, itemID, itemName);
 
@@ -444,12 +519,8 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
             currentLength={this.getVisibleItems(items).length}
             totalLength={items.length} />
           <ul className="list list-unstyled list-inline flush-bottom">
-            <li>
-              <FilterInputText
-                searchString={state.searchString}
-                handleFilterChange={this.handleSearchStringChange}
-                inverseStyle={true} />
-            </li>
+            {filterButtons}
+            {filterInputText}
             {actionDropdown}
             {actionsModal}
             <li className="button-collection list-item-aligned-right">
