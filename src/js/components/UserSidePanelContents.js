@@ -146,10 +146,18 @@ export default class UserSidePanelContents extends SidePanelContents {
     let serviceCount = user.getPermissionCount();
     let groupLabel = StringUtil.pluralize('group', groupCount);
     let serviceLabel = StringUtil.pluralize('Service', serviceCount);
+    let remote = '';
+
+    if (user.isRemote()) {
+      remote = '. Managed by External LDAP';
+    }
 
     return (
       <div>
-        {`${serviceCount} ${serviceLabel}, Member of ${groupCount} ${groupLabel}`}
+        {
+          `${serviceCount} ${serviceLabel}, Member of ${groupCount}
+${groupLabel}${remote}`
+        }
       </div>
     );
   }
