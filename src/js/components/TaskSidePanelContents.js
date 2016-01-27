@@ -25,7 +25,9 @@ export default class TaskSidePanelContents extends SidePanelContents {
 
     this.tabs_tabs = _.clone(TABS);
     this.state = {
-      currentTab: Object.keys(this.tabs_tabs).shift()
+      currentTab: Object.keys(this.tabs_tabs).shift(),
+      expandClass: 'large',
+      showExpandButton: false
     };
 
     this.store_listeners = [
@@ -187,7 +189,9 @@ export default class TaskSidePanelContents extends SidePanelContents {
 
     return (
       <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow no-overflow">
-        <TaskDebugView task={task} />
+        <TaskDebugView
+          showExpandButton={this.showExpandButton}
+          task={task} />
       </div>
     );
   }
@@ -207,6 +211,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
 
     return (
       <div className="flex-container-col no-overflow">
+        {this.getExpandButton()}
         <div className="side-panel-content-header container container-pod
           container-fluid container-pod-divider-bottom
           container-pod-divider-bottom-align-right flush-bottom flex-no-shrink">

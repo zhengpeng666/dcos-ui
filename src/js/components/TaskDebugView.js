@@ -44,6 +44,8 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 
   componentWillMount() {
     super.componentWillMount(...arguments);
+
+    this.props.showExpandButton(true);
     TaskDirectoryStore.getDirectory(this.props.task);
   }
 
@@ -82,12 +84,12 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     }
   }
 
-  handleViewChange(index) {
-    this.setState({currentView: index, directory: null});
-  }
-
   handleSearchStringChange(searchString) {
     this.setState({searchString});
+  }
+
+  handleViewChange(index) {
+    this.setState({currentView: index, directory: null});
   }
 
   hasLoadingError() {
@@ -111,7 +113,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     );
   }
 
-  getEmtyLogScreen(logName) {
+  getEmptyLogScreen(logName) {
     return (
       <div className="flex-grow vertical-center">
         <h3 className="text-align-center flush-top">
@@ -131,7 +133,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     }
 
     if (!filePath) {
-      return this.getEmtyLogScreen(logName);
+      return this.getEmptyLogScreen(logName);
     }
 
     return (
@@ -204,6 +206,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 }
 
 TaskDebugView.propTypes = {
+  showExpandButton: React.PropTypes.func,
   task: React.PropTypes.object
 };
 

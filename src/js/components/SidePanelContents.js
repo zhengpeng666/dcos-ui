@@ -16,6 +16,11 @@ import mixin from 'reactjs-mixin';
 // number to fit design of width vs. height ratio
 const WIDTH_HEIGHT_RATIO = 4.5;
 
+const METHODS_TO_BIND = [
+  'handleExpand',
+  'showExpandButton'
+];
+
 export default class SidePanelContents extends
   mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
   constructor() {
@@ -28,12 +33,26 @@ export default class SidePanelContents extends
       details: 'Details'
     };
 
-    this.state = {};
+    METHODS_TO_BIND.forEach(function (method) {
+      this[method] = this[method].bind(this);
+    }, this);
   }
 
   componentDidMount() {
     super.componentDidMount();
     this.mountedAt = Date.now();
+  }
+
+  handleExpand() {
+    let expandClass = this.state.expandClass;
+    let newExpandClass = 'large';
+
+    if (expandClass === 'large') {
+      newExpandClass = 'xlarge';
+    }
+
+    this.props.handlePanelSizeChange(newExpandClass);
+    this.setState({expandClass: newExpandClass});
   }
 
   getKeyValuePairs(hash, headline) {
@@ -189,10 +208,37 @@ export default class SidePanelContents extends
       </div>
     );
   }
+
+  getExpandButtonArrow() {
+    if (this.state.expandClass === 'large') {
+      return '◀';
+    }
+    return '▶';
+  }
+
+  getExpandButton() {
+    if (!this.state.showExpandButton) {
+      return null;
+    }
+
+    return (
+      <button
+        className="button button-stroke button-expand"
+        onClick={this.handleExpand}>
+        {this.getExpandButtonArrow()}
+      </button>
+    );
+  }
+
+  showExpandButton(showExpandButton) {
+    this.setState({showExpandButton});
+  }
+
 }
 
 SidePanelContents.propTypes = {
   itemID: React.PropTypes.string,
+  handlePanelSizeChange: React.PropTypes.func,
   onClose: React.PropTypes.func,
   open: React.PropTypes.bool
 };
