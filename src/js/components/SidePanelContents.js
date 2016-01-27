@@ -33,7 +33,7 @@ export default class SidePanelContents extends
       details: 'Details'
     };
 
-    METHODS_TO_BIND.forEach(function (method) {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     }, this);
   }
@@ -209,13 +209,6 @@ export default class SidePanelContents extends
     );
   }
 
-  getExpandButtonArrow() {
-    if (this.state.expandClass === 'large') {
-      return '◀';
-    }
-    return '▶';
-  }
-
   getExpandButton() {
     if (!this.state.showExpandButton) {
       return null;
@@ -225,7 +218,6 @@ export default class SidePanelContents extends
       <button
         className="button button-stroke button-expand"
         onClick={this.handleExpand}>
-        {this.getExpandButtonArrow()}
       </button>
     );
   }
