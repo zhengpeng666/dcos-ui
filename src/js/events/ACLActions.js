@@ -5,7 +5,29 @@ import RequestUtil from '../utils/RequestUtil';
 
 const ACLActions = {
 
+  createACLForResource: function (resourceID, data) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls/${resourceID}`,
+      method: 'PUT',
+      data,
+      success: function () {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_CREATE_SUCCESS,
+          resourceID
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_CREATE_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr),
+          resourceID
+        });
+      }
+    });
+  },
+
   fetchACLsForResource: function (resourceType) {
+
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls?type=${resourceType}`,
       success: function (response) {

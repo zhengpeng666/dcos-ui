@@ -6,6 +6,7 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLStore from '../stores/ACLStore';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
 import Item from '../structs/Item';
 import PermissionsTable from './PermissionsTable';
 import RequestErrorMsg from './RequestErrorMsg';
@@ -59,7 +60,7 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount();
-    ACLStore.fetchACLsForResource('services');
+    ACLStore.fetchACLsForResource('service');
   }
 
   onAclStoreSuccess() {
@@ -135,7 +136,7 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
   getDropdownItems() {
     let permissions = this.props.permissions;
-    let services = ACLStore.get('services').getItems().sort(
+    let services = MesosSummaryStore.getServiceList().sort(
       Util.getLocaleCompareSortFn('description')
     );
     let filteredResources = services.filter(function (resource) {
@@ -148,11 +149,11 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
     let items = [new Item({
       rid: DEFAULT_ID,
-      description: 'Add Service'
+      name: 'Add Service'
     })].concat(filteredResources);
 
     return items.map(function (resource) {
-      let description = resource.get('description');
+      let description = resource.get('name');
 
       return {
         id: resource.get('rid'),
