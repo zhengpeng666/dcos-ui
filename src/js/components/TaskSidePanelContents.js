@@ -24,6 +24,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
     super(...arguments);
 
     this.tabs_tabs = _.clone(TABS);
+
     this.state = {
       currentTab: Object.keys(this.tabs_tabs).shift(),
       expandClass: 'large',

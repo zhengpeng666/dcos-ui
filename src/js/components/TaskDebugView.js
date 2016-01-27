@@ -211,5 +211,6 @@ TaskDebugView.propTypes = {
 };
 
 TaskDebugView.defaultProps = {
+  showExpandButton: function () {},
   task: {}
 };
