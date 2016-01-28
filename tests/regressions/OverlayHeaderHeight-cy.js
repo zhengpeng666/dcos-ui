@@ -20,11 +20,11 @@ describe('Overlay Header Height [00j]', function () {
       var overlayHeaderHeight = null;
 
       // Open the Marathon task.
-      cy.get("@tableRows').contains('marathon").click();
+      cy.get('@tableRows').contains('marathon').click();
       // Get the task panel's header.
       cy.get('.side-panel-header-container').as('sidePanelHeader');
 
-      cy.get("@sidePanelHeader").should(function ($sidePanelHeader) {
+      cy.get('@sidePanelHeader').should(function ($sidePanelHeader) {
         sidePanelHeaderHeight = $sidePanelHeader.outerHeight();
       });
 
@@ -36,7 +36,7 @@ describe('Overlay Header Height [00j]', function () {
       // Get the service overlay's header.
       cy.get('.overlay-header-container').as('overlayHeader');
 
-      cy.get("@overlayHeader").should(function ($overlayHeader) {
+      cy.get('@overlayHeader').should(function ($overlayHeader) {
         overlayHeaderHeight = $overlayHeader.outerHeight();
         expect(sidePanelHeaderHeight).to.eq(overlayHeaderHeight);
       });

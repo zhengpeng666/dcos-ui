@@ -151,7 +151,7 @@ describe('User Details Sidepanel [02k]', function () {
       cy.get('.side-panel').as('sidePanel');
     });
 
-    it('displays "Add Service" in the dropdown box [02x]', function () {
+    it('displays \'Add Service\' in the dropdown box [02x]', function () {
       cy
         .get('@sidePanel')
         .get('.dropdown .dropdown-toggle')
