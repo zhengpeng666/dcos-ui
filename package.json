@@ -82,8 +82,7 @@
     "testing": "NODE_ENV='testing' ./node_modules/.bin/gulp serve",
     "livereload": "NODE_ENV='development' ./node_modules/.bin/gulp livereload",
     "shrinkwrap": "npm-shrinkwrap --dev",
-    "test": "jest",
-    "testfile": "jest /src/js/stores/__tests__/ACLStore-test.js"
+    "test": "jest"
   },
   "jest": {
     "globals": {
