@@ -1,3 +1,4 @@
+
 describe('User Details Sidepanel [02k]', function () {
 
   beforeEach(function () {
@@ -9,7 +10,7 @@ describe('User Details Sidepanel [02k]', function () {
     .visitUrl({url: '/settings/organization/users/quis', identify: true});
   });
 
-  it('displays the correct user [05w]', function() {
+  it('displays the correct user [05w]', function () {
     cy
       .get('.side-panel .side-panel-content-header-label .form-element-inline-text')
       .should(function ($header) {
@@ -25,13 +26,13 @@ describe('User Details Sidepanel [02k]', function () {
       });
   });
 
-  it('sets the first tab as active [05y]', function() {
+  it('sets the first tab as active [05y]', function () {
     cy
       .get('.side-panel .tabs .active')
       .should('contain', 'Permissions');
   });
 
-  context('Group Membership [05z]', function() {
+  context('Group Membership [05z]', function () {
 
     beforeEach(function () {
       cy
@@ -40,7 +41,7 @@ describe('User Details Sidepanel [02k]', function () {
         .click();
     });
 
-    it('displays the groups that the member belongs to [05x]', function() {
+    it('displays the groups that the member belongs to [05x]', function () {
       cy
         .get('.side-panel .table tbody')
         .should(function ($tbody) {
@@ -48,7 +49,7 @@ describe('User Details Sidepanel [02k]', function () {
         });
     });
 
-    it('displays the confirmation modal when clicking remove [060]', function() {
+    it('displays the confirmation modal when clicking remove [060]', function () {
       cy
         .get('.side-panel .table tbody tr:first-child button')
         .click();
@@ -62,19 +63,19 @@ describe('User Details Sidepanel [02k]', function () {
 
   });
 
-  context('Delete User [042]', function() {
+  context('Delete User [042]', function () {
     beforeEach(function () {
       cy.get('.side-panel-header-actions-secondary').as('headerUserDelete');
     });
 
-    it('shows delete modal when header delete button clicked [043]', function() {
+    it('shows delete modal when header delete button clicked [043]', function () {
       cy.get('@headerUserDelete')
         .find('.side-panel-header-action')
-        .click()
+        .click();
       cy.get('.confirm-modal').should('to.have.length', 1);
     });
 
-    it('returns to users page after user deleted [045]', function() {
+    it('returns to users page after user deleted [045]', function () {
       cy.route({
         method: 'DELETE',
         url: /users\/quis/,
@@ -85,10 +86,10 @@ describe('User Details Sidepanel [02k]', function () {
         .find('.side-panel-header-action')
         .click();
       cy.get('.modal .button-danger').click();
-      cy.url().should('contain', '/settings/organization/users')
+      cy.url().should('contain', '/settings/organization/users');
     });
 
-    it('shows error when request to delete user fails [044]', function() {
+    it('shows error when request to delete user fails [044]', function () {
       cy.route({
         method: 'DELETE',
         url: /users\/quis/,
@@ -145,6 +146,32 @@ describe('User Details Sidepanel [02k]', function () {
 
   });
 
+  context('ACL [08d]', function () {
+
+    beforeEach(function () {
+      cy.configureCluster({
+        aclCreate: true
+      });
+      cy.get('.side-panel').as('sidePanel');
+    });
+
+    it('creates ACL & adds permission for service [08e]', function () {
+      cy.configureCluster({
+        aclsWithMarathon: true
+      });
+      cy
+        .get('@sidePanel')
+        .get('.dropdown .dropdown-toggle')
+        .get('contain', 'marathon')
+        .click();
+
+      cy
+        .get('@sidePanel')
+        .get('table td')
+        .should('contain', 'Marathon');
+    });
+  });
+
   context('Permissions tab [02v]', function () {
 
     beforeEach(function () {
@@ -188,7 +215,7 @@ describe('User Details Sidepanel [02k]', function () {
           var children = list.children();
           var result = false;
           for (var i = 0; i < children.length; i++) {
-            if (children[i].textContent === 'service.marathon') {
+            if (children[i].textContent === 'marathon') {
               result = true;
             }
           }
@@ -204,7 +231,7 @@ describe('User Details Sidepanel [02k]', function () {
         .should('contain', 'Marathon');
     });
 
-    it('displays the confirmation modal when clicking remove [060]', function() {
+    it('displays the confirmation modal when clicking remove [060]', function () {
       cy
         .get('@sidePanel')
         .get('.table tbody tr:first-child button')

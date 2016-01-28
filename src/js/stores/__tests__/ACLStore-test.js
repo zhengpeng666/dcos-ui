@@ -163,20 +163,27 @@ describe('ACLStore', function () {
           .toBeTruthy();
       });
 
-      it('executes waiting grant requests upon ACL creation', function () {
-        var mockedFn = jest.genMockFunction();
-        var mockedFn2 = jest.genMockFunction();
-        ACLStore.addOutstandingGrantRequest('service.foo', mockedFn);
-        ACLStore.addOutstandingGrantRequest('service.foo', mockedFn2);
-        AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
-          data: [{rid: 'service.foo', bar: 'baz'}],
-          resourceType: 'service'
-        });
+      it('executes multiple waiting grant requests upon ACL creation',
+        function () {
+          var mockedFn = jest.genMockFunction();
+          var mockedFn2 = jest.genMockFunction();
 
-        expect(mockedFn.mock.calls.length + mockedFn2.mock.calls.length)
-          .toEqual(2);
-      });
+          ACLStore.addOutstandingGrantRequest('service.foo', mockedFn);
+          ACLStore.addOutstandingGrantRequest('service.foo', mockedFn2);
+
+          AppDispatcher.handleServerAction({
+            type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
+            data: [
+              {rid: 'service.foo', bar: 'baz'},
+              {rid: 'service.baz', bar: 'foo'}
+            ],
+            resourceType: 'service'
+          });
+
+          expect(mockedFn.mock.calls.length === 1
+            && mockedFn2.mock.calls.length === 1)
+            .toBeTruthy();
+        });
 
     });
 

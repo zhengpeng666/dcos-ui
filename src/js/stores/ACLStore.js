@@ -63,7 +63,7 @@ const ACLStore = Store.createStore({
       aclAction(someID, action, resourceID);
       return;
     }
-    // add grant action to callback list and create ACL
+    // add grant request to callback list and create ACL
     ACLStore.addOutstandingGrantRequest(resourceID, function () {
       aclAction(someID, action, resourceID);
     });
