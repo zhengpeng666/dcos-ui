@@ -20,6 +20,14 @@ const buttonDefinition = [
   }
 ];
 
+const fieldDefinitions = {
+  host: 'Host',
+  port: 'Port',
+  dntemplate: 'Distinguished Name template',
+  'use-ldaps': 'Use SSL/TLS socket',
+  'enforce-starttls': 'Enforce StartTLS'
+};
+
 const METHODS_TO_BIND = [
   'changeModalOpenState',
   'handleModalSubmit'
@@ -30,13 +38,14 @@ class DirectoriesTab extends mixin(StoreMixin) {
     super(...arguments);
 
     this.state = {
+      modalDisabled: false,
       modalOpen: false
     };
 
     this.store_listeners = [
       {
         name: 'aclDirectories',
-        events: ['fetchSuccess']
+        events: ['fetchSuccess', 'addSuccess', 'addError', 'deleteSuccess']
       }
     ];
 
@@ -50,16 +59,32 @@ class DirectoriesTab extends mixin(StoreMixin) {
     ACLDirectoriesStore.fetchDirectories();
   }
 
-  onAclDirectoriesStoreFetchSuccess() {
-
+  onAclDirectoriesStoreAddSuccess() {
+    this.changeModalOpenState(false);
+    ACLDirectoriesStore.fetchDirectories();
   }
 
-  handleModalSubmit() {
-    this.changeModalOpenState(false);
+  onAclDirectoriesStoreAddError() {
+    this.setState({modalDisabled: false});
+  }
+
+  handleModalSubmit(formData) {
+    // There's deeply nested objects
+    formData = JSON.parse(JSON.stringify(formData));
+
+    formData['enforce-starttls'] = !!formData['enforce-starttls'][0].checked;
+    formData['use-ldaps'] = !!formData['use-ldaps'][0].checked;
+
+    ACLDirectoriesStore.addDirectory(formData);
+    this.setState({modalDisabled: true});
+  }
+
+  handleDirectoryDelete() {
+    ACLDirectoriesStore.deleteDirectory();
   }
 
   changeModalOpenState(open) {
-    this.setState({modalOpen: open});
+    this.setState({modalOpen: open, modalDisabled: false});
   }
 
   getModalFormDefinition() {
@@ -67,7 +92,7 @@ class DirectoriesTab extends mixin(StoreMixin) {
       {
         fieldType: 'text',
         name: 'host',
-        placeholder: 'Host',
+        placeholder: fieldDefinitions.host,
         required: true,
         showLabel: false,
         writeType: 'input',
@@ -77,7 +102,7 @@ class DirectoriesTab extends mixin(StoreMixin) {
       {
         fieldType: 'text',
         name: 'port',
-        placeholder: 'Port',
+        placeholder: fieldDefinitions.port,
         required: true,
         validationErrorText: 'Value should be numerical',
         showLabel: false,
@@ -88,7 +113,7 @@ class DirectoriesTab extends mixin(StoreMixin) {
       {
         fieldType: 'text',
         name: 'dntemplate',
-        placeholder: 'Distinguished Name template',
+        placeholder: fieldDefinitions.dntemplate,
         required: true,
         validationErrorText:
           'Value must contain username placeholder "%(username)s"',
@@ -106,8 +131,8 @@ class DirectoriesTab extends mixin(StoreMixin) {
         validation: function () { return true; },
         value: [
           {
-            name: 'use-ldaps',
-            label: 'Use SSL/TLS socket'
+            name: 'use-ldaps-checkbox',
+            label: fieldDefinitions['use-ldaps']
           }
         ]
       },
@@ -121,16 +146,45 @@ class DirectoriesTab extends mixin(StoreMixin) {
         value: [
           {
             name: 'enforce-starttls-checkbox',
-            label: 'Enforce StartTLS when SSL/TLS is not set'
+            label: fieldDefinitions['enforce-starttls']
           }
         ]
       }
     ];
   }
 
-  renderDirectory() {
+  renderDirectory(directory) {
+    let fields = Object.keys(fieldDefinitions).map(function (key) {
+      let value = directory[key];
+
+      if (value === true) {
+        value = 'Yes';
+      } else if (value === false) {
+        value = 'No';
+      }
+
+      return (
+        <dl key={key} className="flex-box row">
+          <dt className="column-3 emphasize inverse">
+            {fieldDefinitions[key]}
+          </dt>
+          <dd className="column-9 inverse">
+            {value}
+          </dd>
+        </dl>
+      );
+    });
+
     return (
-      <div>I'm a directory</div>
+      <div>
+        <h4 className="inverse flush-top">External LDAP</h4>
+        {fields}
+        <button
+          className="button button-danger"
+          onClick={this.handleDirectoryDelete}>
+          Delete Directory
+        </button>
+      </div>
     );
   }
 
@@ -145,7 +199,7 @@ class DirectoriesTab extends mixin(StoreMixin) {
         <FormModal
           buttonDefinition={buttonDefinition}
           definition={this.getModalFormDefinition()}
-          disabled={false}
+          disabled={this.state.modalDisabled}
           onClose={this.changeModalOpenState.bind(null, false)}
           onSubmit={this.handleModalSubmit}
           open={this.state.modalOpen}>
@@ -160,7 +214,7 @@ class DirectoriesTab extends mixin(StoreMixin) {
   render() {
     let directories = ACLDirectoriesStore.get('directories');
     if (directories) {
-      return this.renderDirectory(directories[0]);
+      return this.renderDirectory(directories.getItems()[0]);
     } else {
       return this.renderAddDirectory();
     }

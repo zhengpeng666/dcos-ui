@@ -43,6 +43,28 @@ describe('ServerErrorModal', function () {
     it('resets the error array', function () {
       expect(this.instance.state.errors).toEqual([]);
     });
+
+  });
+
+  describe('#handleServerError', function () {
+
+    it('doesn\'t throw when an id and errorMessage are passed', function () {
+      let fn = this.instance.handleServerError.bind(
+        this.instance, 'foo', 'bar'
+      );
+      expect(fn).not.toThrow();
+    });
+
+    it('doesn\'t throw when an id is passed', function () {
+      let fn = this.instance.handleServerError.bind(this.instance, 'foo');
+      expect(fn).not.toThrow();
+    });
+
+    it('throws an error when no id or errorMessage is passed', function () {
+      let fn = this.instance.handleServerError.bind(this.instance);
+      expect(fn).toThrow();
+    });
+
   });
 
   describe('#getContent', function () {
