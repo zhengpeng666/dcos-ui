@@ -21,6 +21,48 @@ Side Panel Detail
 --------------------------------------------------------------------------------
 ----------------------------------------------------------------------------- */
 
+.side-panel {
+
+  &.side-panel-xlarge {
+    max-width: 1200px;
+    width: 100%;
+
+    .button-expand {
+
+      &:after {
+      	border-top: 5px solid transparent;
+        border-right: 0;
+      	border-bottom: 5px solid transparent;
+        border-left: 5px solid color-lighten(@neutral, 50);
+        content: '';
+        font-size: 0;
+      }
+    }
+  }
+
+  .button-expand {
+
+    color: #666;
+    font-size: 10px;
+    height: auto;
+    line-height: 10px;
+    left: 8px;
+    padding: 1px 7px 5px 5px;
+    position: absolute;
+    top: 50%;
+    z-index: 2010;
+
+    &:after {
+    	border-top: 5px solid transparent;
+      border-right: 5px solid color-lighten(@neutral, 50);
+    	border-bottom: 5px solid transparent;
+      border-left: 0;
+      content: '';
+      font-size: 0;
+    }
+  }
+}
+
 .side-panel-detail {
 
   /* -----------------------------------------------------------------------------
@@ -64,6 +106,7 @@ Side Panel Detail
 
     .flex-container-col {
       max-width: 100%;
+      z-index: 2004;
     }
 
     // We need to force the Gemini scrollbar view to fill its parent.

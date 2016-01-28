@@ -10,7 +10,8 @@ import StringUtil from '../utils/StringUtil';
 import TaskSidePanelContents from './TaskSidePanelContents';
 
 const METHODS_TO_BIND = [
-  'handlePanelClose'
+  'handlePanelClose',
+  'handlePanelSizeChange'
 ];
 
 export default class SidePanels extends React.Component {
@@ -21,13 +22,21 @@ export default class SidePanels extends React.Component {
       this[method] = this[method].bind(this);
     }, this);
 
-    this.state = {};
+    this.state = {
+      sidePanelSize: 'large'
+    };
+  }
+
+  handlePanelSizeChange(sidePanelSize) {
+    this.setState({sidePanelSize});
   }
 
   handlePanelClose(closeInfo) {
     if (!this.isOpen()) {
       return;
     }
+
+    this.setState({sidePanelSize: 'large'});
 
     if (closeInfo && closeInfo.closedByBackdrop) {
       HistoryStore.goBackToPage(this.context.router);
@@ -97,6 +106,7 @@ export default class SidePanels extends React.Component {
     if (taskID != null) {
       return (
         <TaskSidePanelContents
+          handlePanelSizeChange={this.handlePanelSizeChange}
           itemID={taskID}
           parentRouter={this.context.router} />
       );
@@ -113,9 +123,12 @@ export default class SidePanels extends React.Component {
     return null;
   }
 
+  getSidePanelClass(size) {
+    return (`side-panel flex-container-col container container-pod container-pod-short flush-top flush-bottom side-panel-${size}`);
+  }
+
   render() {
-    let props = this.props;
-    let params = props.params;
+    let params = this.props.params;
 
     let nodeID = params.nodeID;
     let serviceName = params.serviceName;
@@ -129,7 +142,8 @@ export default class SidePanels extends React.Component {
           container-pod-short"
         bodyClass="side-panel-content flex-container-col"
         onClose={this.handlePanelClose}
-        open={this.isOpen()}>
+        open={this.isOpen()}
+        sidePanelClass={this.getSidePanelClass(this.state.sidePanelSize)}>
         {this.getContents({nodeID, serviceName, taskID})}
       </SidePanel>
     );

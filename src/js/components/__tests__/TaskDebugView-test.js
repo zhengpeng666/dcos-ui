@@ -99,15 +99,15 @@ describe('TaskDebugView', function () {
       expect(this.instance.getErrorScreen).toHaveBeenCalled();
     });
 
-    it('should call getEmtyLogScreen when file is not found', function () {
+    it('should call getEmptyLogScreen when file is not found', function () {
       this.instance.state = {
         currentView: 0,
         directory: new TaskDirectory({items: [{nlink: 1, path: '/foo'}]})
       };
-      this.instance.getEmtyLogScreen = jasmine.createSpy('getEmtyLogScreen');
+      this.instance.getEmptyLogScreen = jasmine.createSpy('getEmptyLogScreen');
       this.instance.render();
 
-      expect(this.instance.getEmtyLogScreen).toHaveBeenCalled();
+      expect(this.instance.getEmptyLogScreen).toHaveBeenCalled();
     });
 
     it('should set button disabled when file is not found', function () {
