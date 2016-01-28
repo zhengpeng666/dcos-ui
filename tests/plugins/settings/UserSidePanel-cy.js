@@ -146,7 +146,7 @@ describe('User Details Sidepanel [02k]', function () {
 
   });
 
-  context('ACL [08d]', function () {
+  context.only('ACL [08d]', function () {
 
     beforeEach(function () {
       cy.configureCluster({
@@ -156,9 +156,6 @@ describe('User Details Sidepanel [02k]', function () {
     });
 
     it('creates ACL & adds permission for service [08e]', function () {
-      cy.configureCluster({
-        aclsWithMarathon: true
-      });
       cy
         .get('@sidePanel')
         .get('.dropdown .dropdown-toggle')

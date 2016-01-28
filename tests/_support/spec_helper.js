@@ -8,7 +8,7 @@ Cypress.addParentCommand('configureCluster', function(configuration) {
   if (configuration.mesos === '1-task-healthy') {
     cy
       .route(/apps/, 'fx:marathon-1-task/app')
-      .route(/dcos-version/, 'fx:dcos/dcos-version\.json')
+      .route(/dcos-version/, 'fx:dcos/dcos-version')
       .route(/history\/minute/, 'fx:marathon-1-task/history-minute')
       .route(/history\/last/, 'fx:marathon-1-task/summary')
       .route(/state-summary/, 'fx:marathon-1-task/summary')
@@ -69,7 +69,7 @@ Cypress.addParentCommand('configureCluster', function(configuration) {
 
   if (configuration.aclCreate) {
     cy
-      .route(/acls\?type=service/, 'fx:acl/acls-empty')
+      .route(/acls\?type=service/, 'fx:acl/acls_empty')
       .route(/users\/quis\/permissions/, 'fx:acl/user-permissions-empty')
       .route({
         url: /acls\/service\.marathon/,
