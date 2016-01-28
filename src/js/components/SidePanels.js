@@ -10,7 +10,6 @@ import StringUtil from '../utils/StringUtil';
 import TaskSidePanelContents from './TaskSidePanelContents';
 
 const METHODS_TO_BIND = [
-  'getSidePanelClass',
   'handlePanelClose',
   'handlePanelSizeChange'
 ];
