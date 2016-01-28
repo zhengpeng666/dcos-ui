@@ -9,7 +9,7 @@ const HealthSorting = require('../constants/HealthSorting');
 const MarathonStore = require('../stores/MarathonStore');
 
 function leftAlignCaret(prop) {
-  return _.contains(['cpus', 'mem', 'disk', 'uid', 'size', 'mtime'], prop);
+  return _.contains(['cpus', 'mem', 'disk', 'size', 'mtime'], prop);
 }
 
 function compareValues(a, b) {

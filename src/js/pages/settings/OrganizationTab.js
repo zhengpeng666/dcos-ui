@@ -135,12 +135,14 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
   renderHeadline(prop, subject) {
     let itemName = this.props.itemName;
     let badge = null;
+    let nameColClassnames = 'column-small-12 column-large-12 column-x-large-12 text-overflow';
 
     if (typeof subject.isRemote === 'function' && subject.isRemote()) {
+      nameColClassnames = 'column-small-9 column-large-9 column-x-large-10 text-overflow';
       badge = (
-        <div className="grid-item column-small-3 column-large-3 column-x-large-2">
+        <div className="column-small-3 column-large-3 column-x-large-2 text-align-right">
           <span
-            className="badge text-align-right"
+            className="badge"
             data-behavior="show-tip"
             data-tip-place="top"
             data-tip-content="This user is managed by an external LDAP directory." >
@@ -152,7 +154,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
     return (
       <div className="grid">
-        <div className="grid-item column-small-9 column-large-9 column-x-large-10">
+        <div className={nameColClassnames}>
           <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
           params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}
           className="">
