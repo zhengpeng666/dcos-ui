@@ -13,7 +13,8 @@ const ACLStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    services: new ACLList()
+    services: new ACLList(),
+    outstandingGrants: {}
   },
 
   addChangeListener: function (eventName, callback) {
@@ -40,21 +41,23 @@ const ACLStore = Store.createStore({
 
   revokeGroupActionToResource: ACLActions.revokeGroupActionToResource,
 
-  _outstandingGrants: {},
-
   hasACL: function (resourceID) {
     return this.get('services').getItem(resourceID) !== undefined;
   },
 
   addOutstandingGrantRequest: function (resourceID, cb) {
-    if (!(resourceID in this._outstandingGrants)) {
-      this._outstandingGrants[resourceID] = [];
+    let osGrants = this.get('outstandingGrants');
+    if (!(resourceID in osGrants)) {
+      osGrants[resourceID] = [];
     }
-    this._outstandingGrants[resourceID].push(cb);
+    osGrants[resourceID].push(cb);
+    this.set({outstandingGrants: osGrants});
   },
 
   removeAllOutstandingGrantRequests: function (resourceID) {
-    delete this._outstandingGrants[resourceID];
+    let osGrants = this.get('outstandingGrants');
+    delete osGrants[resourceID];
+    this.set({'outstandingGrants': osGrants});
   },
 
   safeGrantRequest: function (aclAction, someID, action, resourceID) {
@@ -75,10 +78,11 @@ const ACLStore = Store.createStore({
 
   processOutstandingGrants: function () {
     let resourceID;
+    let osGrants = this.get('outstandingGrants');
     this.get('services').getItems().forEach(function (acl) {
-      if ((resourceID = acl.get('rid')) in ACLStore._outstandingGrants) {
+      if ((resourceID = acl.get('rid')) in osGrants) {
         // run grant requests now that we have an ACL
-        ACLStore._outstandingGrants[resourceID].forEach(function (cb) {
+        osGrants[resourceID].forEach(function (cb) {
           cb();
         });
         ACLStore.removeAllOutstandingGrantRequests(resourceID);

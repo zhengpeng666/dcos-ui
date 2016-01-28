@@ -16,8 +16,8 @@ import Util from '../utils/Util';
 const METHODS_TO_BIND = [
   'handleResourceSelection',
   'handleDismissError',
-  'onAclStoreError',
-  'onAclStoreSuccess'
+  'onAclStoreFetchResourceError',
+  'onAclStoreFetchResourceSuccess'
 ];
 
 const DEFAULT_ID = 'DEFAULT';
@@ -42,8 +42,8 @@ export default class PermissionsView extends mixin(StoreMixin) {
     this.store_listeners = [{
       name: 'acl',
       events: [
-        'success',
-        'error',
+        'fetchResourceSuccess',
+        'fetchResourceError',
         `${itemType}GrantSuccess`,
         `${itemType}GrantError`
       ]
@@ -63,13 +63,13 @@ export default class PermissionsView extends mixin(StoreMixin) {
     ACLStore.fetchACLsForResource('service');
   }
 
-  onAclStoreSuccess() {
+  onAclStoreFetchResourceSuccess() {
     this.setState({
       hasError: false
     });
   }
 
-  onAclStoreError() {
+  onAclStoreFetchResourceError() {
     this.setState({hasError: true});
   }
 

@@ -74,7 +74,8 @@ Cypress.addParentCommand('configureCluster', function(configuration) {
       .route({
         url: /acls\/service\.marathon/,
         method: 'PUT',
-        status: 200
+        status: 200,
+        response: ''
       });
   }
 
@@ -82,7 +83,6 @@ Cypress.addParentCommand('configureCluster', function(configuration) {
     cy
       .route(/acls\?type=service/, 'fx:acl/acls-unicode');
   }
-
 
   // The app won't load until plugins are loaded
   var pluginsFixture = configuration.plugins || 'no-plugins';

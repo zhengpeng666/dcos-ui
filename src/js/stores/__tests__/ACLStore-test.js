@@ -159,7 +159,7 @@ describe('ACLStore', function () {
           mockData.action,
           ID);
 
-        expect(typeof ACLStore._outstandingGrants[ID][0] == 'function')
+        expect(typeof ACLStore.get('outstandingGrants')[ID][0] == 'function')
           .toBeTruthy();
       });
 
@@ -182,6 +182,27 @@ describe('ACLStore', function () {
 
           expect(mockedFn.mock.calls.length === 1
             && mockedFn2.mock.calls.length === 1)
+            .toBeTruthy();
+        });
+
+      it('only executes outstanding grant requests related to new ACL',
+        function () {
+          var mockedFn = jest.genMockFunction();
+          var mockedFn2 = jest.genMockFunction();
+
+          ACLStore.addOutstandingGrantRequest('service.foo', mockedFn);
+          ACLStore.addOutstandingGrantRequest('service.baz', mockedFn2);
+
+          AppDispatcher.handleServerAction({
+            type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
+            data: [
+              {rid: 'service.foo', bar: 'baz'}
+            ],
+            resourceType: 'service'
+          });
+
+          expect(mockedFn.mock.calls.length === 1
+            && mockedFn2.mock.calls.length === 0)
             .toBeTruthy();
         });
 
