@@ -100,37 +100,6 @@ describe('ACLStore', function () {
 
     });
 
-    describe('ACL create', function () {
-      it('dispatches the correct event upon success', function () {
-        var mockedFn = jest.genMockFunction();
-        ACLStore.addChangeListener(
-          EventTypes.ACL_CREATE_SUCCESS,
-          mockedFn
-        );
-        AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_CREATE_SUCCESS,
-          resourceID: 'some.resource'
-        });
-
-        expect(mockedFn.mock.calls[0]).toEqual([
-          'some.resource'
-        ]);
-      });
-      it('dispatches the correct event upon error', function () {
-        var mockedFn = jest.genMockFunction();
-        ACLStore.addChangeListener(
-          EventTypes.ACL_CREATE_ERROR,
-          mockedFn
-        );
-        AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_CREATE_ERROR,
-          resourceID: 'some.resource'
-        });
-
-        expect(mockedFn.mock.calls.length).toEqual(1);
-      });
-    });
-
     describe('Grant Safe User action', function () {
 
       ACLStore.createACLForResource = jest.genMockFunction();
@@ -222,9 +191,9 @@ describe('ACLStore', function () {
             type: ActionTypes.REQUEST_ACL_CREATE_ERROR,
             resourceID: 'service.foo'
           });
-          let osGrants = ACLStore.get('outstandingGrants');
-          expect('service.foo' in osGrants).toBeFalsy();
-          expect(osGrants['service.baz'].length).toEqual(1);
+          let outstandingGrants = ACLStore.get('outstandingGrants');
+          expect('service.foo' in outstandingGrants).toBeFalsy();
+          expect(outstandingGrants['service.baz'].length).toEqual(1);
         });
 
     });

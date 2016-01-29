@@ -6,8 +6,8 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLStore from '../stores/ACLStore';
-import MesosSummaryStore from '../stores/MesosSummaryStore';
 import Item from '../structs/Item';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
 import PermissionsTable from './PermissionsTable';
 import RequestErrorMsg from './RequestErrorMsg';
 import StringUtil from '../utils/StringUtil';
@@ -26,8 +26,7 @@ export default class PermissionsView extends mixin(StoreMixin) {
     super(...arguments);
 
     this.state = {
-      hasError: null,
-      resourceErrorMessage: null
+      hasError: null
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -134,9 +133,13 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
     return items.map(function (resource) {
       let description = resource.get('name');
-
+      let ID = DEFAULT_ID;
+      if (resource.getResourceID &&
+        typeof resource.getResourceID === 'function') {
+        ID = resource.getResourceID();
+      }
       return {
-        id: resource.rid === DEFAULT_ID ? DEFAULT_ID : resource.getResourceID(),
+        id: ID,
         description,
         html: description
       };
