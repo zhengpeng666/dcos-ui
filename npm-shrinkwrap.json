@@ -2,7 +2,7 @@
   "name": "dcos-ui",
   "version": "1.1.9",
   "npm-shrinkwrap-version": "5.4.1",
-  "node-version": "v0.10.40",
+  "node-version": "v0.10.41",
   "dependencies": {
     "babel": {
       "version": "5.8.19",
@@ -8429,8 +8429,8 @@
       "resolved": "http://registry.npmjs.org/react-zeroclipboard/-/react-zeroclipboard-0.4.1.tgz"
     },
     "reactjs-components": {
-      "version": "0.0.38",
-      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.38.tgz",
+      "version": "0.0.39",
+      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.39.tgz",
       "dependencies": {
         "babel-cli": {
           "version": "6.4.0",
@@ -15878,7 +15878,7 @@
                 },
                 "isarray": {
                   "version": "0.0.1",
-                  "resolved": "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                  "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
                 },
                 "process-nextick-args": {
                   "version": "1.0.6",
@@ -16398,7 +16398,7 @@
               "dependencies": {
                 "isarray": {
                   "version": "0.0.1",
-                  "resolved": "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                  "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
                 }
               }
             },
