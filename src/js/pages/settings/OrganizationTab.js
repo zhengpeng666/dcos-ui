@@ -11,7 +11,6 @@ import GroupsActionsModal from '../../components/modals/GroupsActionsModal';
 import UsersActionsModal from '../../components/modals/UsersActionsModal';
 import FilterHeadline from '../../components/FilterHeadline';
 import FilterInputText from '../../components/FilterInputText';
-import FormUtil from '../../utils/FormUtil';
 import InternalStorageMixin from '../../mixins/InternalStorageMixin';
 import BulkOptions from '../../constants/BulkOptions';
 import ResourceTableUtil from '../../utils/ResourceTableUtil';
@@ -92,12 +91,12 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     });
   }
 
-  handleCheckboxChange(checkboxState) {
-    let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
+  handleCheckboxChange(prevCheckboxState, eventObject) {
+    let isChecked = eventObject.fieldValue.checked;
     let checkedCount = this.state.checkedCount + (isChecked || -1);
     let selectedIDSet = this.internalStorage_get().selectedIDSet;
 
-    selectedIDSet[FormUtil.getRowName(checkboxState)] = isChecked;
+    selectedIDSet[eventObject.fieldName] = isChecked;
     this.internalStorage_update({selectedIDSet});
 
     this.setState({
@@ -106,8 +105,8 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     });
   }
 
-  handleHeadingCheckboxChange(checkboxState) {
-    let isChecked = FormUtil.getCheckboxInfo(checkboxState).checked;
+  handleHeadingCheckboxChange(prevCheckboxState, eventObject) {
+    let isChecked = eventObject.fieldValue.checked;
     let selectedIDSet = this.internalStorage_get().selectedIDSet;
 
     Object.keys(selectedIDSet).forEach(function (id) {
@@ -184,20 +183,12 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     let remoteIDSet = this.internalStorage_get().remoteIDSet;
     let {checkableCount, checkedCount} = this.state;
     let checked = null;
+    let disabled = (remoteIDSet[rowID] === true);
 
-    if (remoteIDSet[rowID] === true) {
-      return (
-        <input
-          ref="checkbox"
-          type="checkbox"
-          disabled={true} />
-        );
-    } else {
-      if (checkedCount === checkableCount) {
-        checked = true;
-      } else if (checkedCount === 0) {
-        checked = false;
-      }
+    if (checkedCount === checkableCount) {
+      checked = true;
+    } else if (checkedCount === 0) {
+      checked = false;
     }
 
     return (
@@ -205,14 +196,12 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
         formGroupClass="form-group flush-bottom"
         definition={[
           {
+            checked,
+            disabled,
             fieldType: 'checkbox',
+            labelClass: 'inverse',
             name: rowID,
-            value: [{
-              name: 'select',
-              checked,
-              labelClass: 'inverse'
-            }],
-            labelClass: 'inverse'
+            showLabel: false
           }
         ]}
         onChange={this.handleCheckboxChange} />
@@ -240,16 +229,12 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
         formGroupClass="form-group flush-bottom"
         definition={[
           {
+            checked,
             fieldType: 'checkbox',
+            indeterminate,
+            labelClass: 'inverse',
             name: 'headingCheckbox',
-            value: [{
-              name: 'selectBulk',
-              label: '',
-              checked,
-              indeterminate,
-              labelClass: 'inverse'
-            }],
-            labelClass: 'inverse'
+            showLabel: false
           }
         ]}
         onChange={this.handleHeadingCheckboxChange} />
