@@ -141,6 +141,10 @@ describe('ACLStore', function () {
       };
       const ID = 'service.' + mockData.resourceID;
 
+      beforeEach(function () {
+        ACLStore.set({'outstandingGrants': {}});
+      });
+
       it('first creates ACL for resource if nonexistent', function () {
         ACLStore.grantUserActionToResource(
           mockData.ID,
@@ -204,6 +208,23 @@ describe('ACLStore', function () {
           expect(mockedFn.mock.calls.length === 1
             && mockedFn2.mock.calls.length === 0)
             .toBeTruthy();
+        });
+
+      it('removes outstanding grant requests when ACL creation fails',
+        function () {
+          var mockedFn = jest.genMockFunction();
+          var mockedFn2 = jest.genMockFunction();
+
+          ACLStore.addOutstandingGrantRequest('service.foo', mockedFn);
+          ACLStore.addOutstandingGrantRequest('service.baz', mockedFn2);
+
+          AppDispatcher.handleServerAction({
+            type: ActionTypes.REQUEST_ACL_CREATE_ERROR,
+            resourceID: 'service.foo'
+          });
+          let osGrants = ACLStore.get('outstandingGrants');
+          expect('service.foo' in osGrants).toBeFalsy();
+          expect(osGrants['service.baz'].length).toEqual(1);
         });
 
     });

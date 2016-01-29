@@ -242,10 +242,9 @@ describe('User Details Sidepanel [02k]', function () {
         .should(function ($tr) {
           expect($tr).to.have.length(0);
         });
+    });
 
-    })
-
-    it.only('creates ACL & adds permission for service [08e]', function () {
+    it('creates ACL & adds permission for service [08e]', function () {
       cy
         .wait(2000)
         .get('.side-panel .dropdown .dropdown-toggle')

@@ -1,4 +1,4 @@
-import {Confirm, Dropdown} from 'reactjs-components';
+import {Dropdown} from 'reactjs-components';
 import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
@@ -15,7 +15,6 @@ import Util from '../utils/Util';
 
 const METHODS_TO_BIND = [
   'handleResourceSelection',
-  'handleDismissError',
   'onAclStoreFetchResourceError',
   'onAclStoreFetchResourceSuccess'
 ];
@@ -44,14 +43,11 @@ export default class PermissionsView extends mixin(StoreMixin) {
       events: [
         'fetchResourceSuccess',
         'fetchResourceError',
-        `${itemType}GrantSuccess`,
-        `${itemType}GrantError`
+        `${itemType}GrantSuccess`
       ]
     }];
 
     itemType = StringUtil.capitalize(itemType);
-    this[`onAclStore${itemType}GrantError`] =
-      this.onAclStoreItemTypeGrantError;
     this[`onAclStore${itemType}GrantSuccess`] =
       this.onAclStoreItemTypeGrantSuccess;
 
@@ -71,18 +67,6 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
   onAclStoreFetchResourceError() {
     this.setState({hasError: true});
-  }
-
-  onAclStoreItemTypeGrantError(data, triple) {
-    let props = this.props;
-    let itemID = triple[`${props.itemType}ID`];
-    if (itemID === props.itemID) {
-      let resource = ACLStore.get('services').getItem(triple.resourceID);
-
-      this.setState({
-        resourceErrorMessage: `Could not grant ${props.itemType} ${itemID} ${triple.action} to ${resource.get('description')}`
-      });
-    }
   }
 
   onAclStoreItemTypeGrantSuccess(triple) {
@@ -106,10 +90,6 @@ export default class PermissionsView extends mixin(StoreMixin) {
       'access',
       resource.id
     );
-  }
-
-  handleDismissError() {
-    this.setState({resourceErrorMessage: null});
   }
 
   getPermissionTable() {
@@ -163,14 +143,6 @@ export default class PermissionsView extends mixin(StoreMixin) {
     });
   }
 
-  getErrorModalContent(resourceErrorMessage) {
-    return (
-      <div className="container-pod container-pod-short text-align-center">
-        <p>{resourceErrorMessage}</p>
-      </div>
-    );
-  }
-
   render() {
     let state = this.state;
 
@@ -181,8 +153,6 @@ export default class PermissionsView extends mixin(StoreMixin) {
     if (state.hasError !== false) {
       return this.getLoadingScreen();
     }
-
-    let resourceErrorMessage = state.resourceErrorMessage;
 
     return (
       <div className="flex-container-col flex-grow">
@@ -200,16 +170,6 @@ export default class PermissionsView extends mixin(StoreMixin) {
             transitionName="dropdown-menu" />
         </div>
         {this.getPermissionTable()}
-        <Confirm
-          footerContainerClass="container container-pod container-pod-short
-            container-pod-fluid"
-          open={!!resourceErrorMessage}
-          onClose={this.handleDismissError}
-          leftButtonClassName="hidden"
-          rightButtonText="OK"
-          rightButtonCallback={this.handleDismissError}>
-          {this.getErrorModalContent(resourceErrorMessage)}
-        </Confirm>
       </div>
     );
   }
