@@ -73,8 +73,11 @@ class DirectoriesTab extends mixin(StoreMixin) {
     // There's deeply nested objects
     formData = JSON.parse(JSON.stringify(formData));
 
-    formData['enforce-starttls'] = !!formData['enforce-starttls'][0].checked;
-    formData['use-ldaps'] = !!formData['use-ldaps'][0].checked;
+    var enforceStartTLS = formData['enforce-starttls'];
+    var useLDAPs = formData['use-ldaps'];
+    formData['enforce-starttls'] =
+      !!(enforceStartTLS && enforceStartTLS.checked);
+    formData['use-ldaps'] = !!(useLDAPs && useLDAPs.checked);
 
     ACLDirectoriesStore.addDirectory(formData);
     this.setState({modalDisabled: true});
@@ -132,29 +135,18 @@ class DirectoriesTab extends mixin(StoreMixin) {
         name: 'use-ldaps',
         required: false,
         showLabel: false,
+        label: fieldDefinitions['use-ldaps'],
         writeType: 'input',
-        validation: function () { return true; },
-        value: [
-          {
-            name: 'use-ldaps-checkbox',
-            label: fieldDefinitions['use-ldaps']
-          }
-        ]
+        validation: function () { return true; }
       },
       {
         fieldType: 'checkbox',
         name: 'enforce-starttls',
         required: false,
         showLabel: false,
+        label: fieldDefinitions['enforce-starttls'],
         writeType: 'input',
-        validation: function () { return true; },
-        value: [
-          {
-            name: 'enforce-starttls-checkbox',
-            label: fieldDefinitions['enforce-starttls'],
-            checked: false
-          }
-        ]
+        validation: function () { return true; }
       }
     ];
   }
