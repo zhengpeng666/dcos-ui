@@ -121,7 +121,7 @@ export default class PermissionsView extends mixin(StoreMixin) {
     );
     let filteredResources = services.filter(function (resource) {
         // Filter out any resource which is in permissions
-        let rid = resource.get('rid');
+        let rid = resource.getResourceID();
         return !permissions.some(function (permission) {
           return permission.rid === rid;
         });
@@ -136,7 +136,7 @@ export default class PermissionsView extends mixin(StoreMixin) {
       let description = resource.get('name');
 
       return {
-        id: resource.get('rid'),
+        id: resource.rid === DEFAULT_ID ? DEFAULT_ID : resource.getResourceID(),
         description,
         html: description
       };

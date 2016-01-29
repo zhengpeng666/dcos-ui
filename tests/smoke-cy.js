@@ -35,11 +35,11 @@ describe('DCOS UI [00j]', function() {
     });
 
     it('should display one row on the table [00p]', function() {
-      cy.get("@tableRows').should('to.have.length", 1);
+      cy.get('@tableRows').should('to.have.length', 3);
     });
 
     it('should list marathon in the table [00q]', function() {
-      cy.get("@tableRows').find('td').first().contains('marathon");
+      cy.get('table tbody tr').contains('marathon');
     });
 
   });
@@ -56,11 +56,11 @@ describe('DCOS UI [00j]', function() {
     });
 
     it('should display one row on the table [00t]', function() {
-      cy.get("@tableRows').should('to.have.length", 1);
+      cy.get('@tableRows').should('to.have.length', 3);
     });
 
     it('should list one node [00u]', function() {
-      cy.get("@tableRows').find('td').first().contains('dcos-01");
+      cy.get('@tableRows').contains('dcos-01');
     });
 
   });

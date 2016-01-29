@@ -5,13 +5,11 @@ const RID_PREFIX = 'service.';
 export default class Service extends Item {
   constructor() {
     super(...arguments);
-    this.setResourceID();
   }
 
-  setResourceID() {
+  getResourceID() {
     // strip non-alphanumeric chars from name for safety
-    let rid = RID_PREFIX + this.get('name').replace(/\W+/g, '');
-    this._itemData.rid = rid;
+    return RID_PREFIX + (this.get('name') || '').replace(/\W+/g, '');
   }
 
   getNodeIDs() {

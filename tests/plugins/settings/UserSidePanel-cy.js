@@ -47,13 +47,13 @@ describe('User Details Sidepanel [02k]', function () {
         cy
           .get('.side-panel .table tbody')
           .should(function ($tbody) {
-            expect($tbody.children().length).to.equal(2);
+            expect($tbody.children().length).to.equal(4);
           });
       });
 
       it('displays the confirmation modal when clicking remove [060]', function () {
         cy
-          .get('.side-panel .table tbody tr:first-child button')
+          .get('.side-panel .table tbody tr:eq(1) button')
           .click();
 
         cy
@@ -161,23 +161,6 @@ describe('User Details Sidepanel [02k]', function () {
           .should('contain', 'Add Service');
       });
 
-      it('displays the selected element in the dropdown box [02y]', function () {
-        cy
-          .get('@sidePanel')
-          .get('.dropdown .dropdown-toggle')
-          .click();
-
-        cy
-          .get('@sidePanel')
-          .get('.dropdown-menu-list > .clickable:last-child')
-          .click();
-
-        cy
-          .get('@sidePanel')
-          .get('.dropdown .dropdown-toggle')
-          .should('contain', 'Shelia Ike Bressette');
-      });
-
       it('shouldn\'t contain services that are already in permissions [02z]', function () {
         cy
           .get('@sidePanel')
@@ -209,8 +192,7 @@ describe('User Details Sidepanel [02k]', function () {
 
       it('displays the confirmation modal when clicking remove [060]', function () {
         cy
-          .get('@sidePanel')
-          .get('.table tbody tr:first-child button')
+          .get('.side-panel .table tbody tr:eq(1) button')
           .click();
 
         cy

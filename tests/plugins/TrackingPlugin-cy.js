@@ -16,7 +16,7 @@ describe('Tracking Plugin Enabled [02w]', function() {
   });
 
   context('Welcome Modal [02z]', function() {
-    it('should not show modal when 'email' in localStorage [030]', function() {
+    it('should not show modal when \'email\' in localStorage [030]', function() {
       cy.get('.modal').should('not');
     });
 
@@ -25,7 +25,7 @@ describe('Tracking Plugin Enabled [02w]', function() {
         cy.clearLocalStorage().visit('http://localhost:4200/');
       });
 
-      it('should show modal when no 'email' in localStorage [031]', function() {
+      it('should show modal when no \'email\' in localStorage [031]', function() {
         cy.get('.modal');
       });
     });
@@ -61,7 +61,7 @@ describe('Tracking Plugin Disabled [03d]', function() {
         cy.visitUrl({url: '/', identify: true, fakeAnalytics: true});
       });
 
-      it('should not show modal when 'email' in localStorage [03i]',
+      it('should not show modal when \'email\' in localStorage [03i]',
         function() {
           cy.get('.modal').should('not');
         }
