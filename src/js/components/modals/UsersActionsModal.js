@@ -75,16 +75,16 @@ export default class UsersActionsModal extends ActionsModal {
       let itemsByID = _.pluck(selectedItems, itemID);
 
       if (action === 'add') {
-        itemsByID.forEach(function (userId) {
-          ACLGroupStore.addUser(selectedItem.id, userId);
+        itemsByID.forEach(function (userID) {
+          ACLGroupStore.addUser(selectedItem.id, userID);
         });
       } else if (action === 'remove') {
-        itemsByID.forEach(function (userId) {
-          ACLGroupStore.deleteUser(selectedItem.id, userId);
+        itemsByID.forEach(function (userID) {
+          ACLGroupStore.deleteUser(selectedItem.id, userID);
         });
       } else if (action === 'delete') {
-        itemsByID.forEach(function (userId) {
-          ACLUserStore.deleteUser(userId);
+        itemsByID.forEach(function (userID) {
+          ACLUserStore.deleteUser(userID);
         });
       }
 
