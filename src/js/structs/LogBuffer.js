@@ -62,14 +62,10 @@ export default class LogBuffer extends List {
 
     let start = this.getStart();
     let end = this.getEnd();
-
-    let index = data.indexOf('\n') + 1;
-    offset += index;
-    data = data.substring(index);
-
     if (start === end && offset !== 0) {
       end = offset + data.length;
     }
+
     start = offset;
 
     this.list.unshift(new Item({data, start}));

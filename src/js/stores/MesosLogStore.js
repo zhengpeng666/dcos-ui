@@ -31,13 +31,18 @@ const MesosLogStore = Store.createStore({
       return;
     }
 
+    let startOffset = logBuffer.getStart() - MAX_FILE_SIZE;
+    if (startOffset < 0) {
+      startOffset = 0;
+    }
+
     MesosLogActions.fetchPreviousLog(
-      slaveID, path, logBuffer.getStart() - MAX_FILE_SIZE, MAX_FILE_SIZE
+      slaveID, path, startOffset, MAX_FILE_SIZE
     );
   },
 
   startTailing: function (slaveID, path) {
-    let logBuffer = new LogBuffer({maxFileSize: MAX_FILE_SIZE});
+    let logBuffer = new LogBuffer();
     this.set({[path]: logBuffer});
     // Request offset to initialize logBuffer
     MesosLogActions.requestOffset(slaveID, path);
