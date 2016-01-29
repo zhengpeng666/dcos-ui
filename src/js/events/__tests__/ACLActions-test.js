@@ -72,37 +72,6 @@ describe('ACLActions', function () {
     });
   });
 
-  // describe('#createACLForResource', function () {
-  //   it('dispatches the correct event upon success', function () {
-  //     var mockedFn = jest.genMockFunction();
-  //     ACLStore.addChangeListener(
-  //       EventTypes.ACL_CREATE_SUCCESS,
-  //       mockedFn
-  //     );
-  //     AppDispatcher.handleServerAction({
-  //       type: ActionTypes.REQUEST_ACL_CREATE_SUCCESS,
-  //       resourceID: 'some.resource'
-  //     });
-
-  //     expect(mockedFn.mock.calls[0]).toEqual([
-  //       'some.resource'
-  //     ]);
-  //   });
-  //   it('dispatches the correct event upon error', function () {
-  //     var mockedFn = jest.genMockFunction();
-  //     ACLStore.addChangeListener(
-  //       EventTypes.ACL_CREATE_ERROR,
-  //       mockedFn
-  //     );
-  //     AppDispatcher.handleServerAction({
-  //       type: ActionTypes.REQUEST_ACL_CREATE_ERROR,
-  //       resourceID: 'some.resource'
-  //     });
-
-  //     expect(mockedFn.mock.calls.length).toEqual(1);
-  //   });
-  // });
-
   describe('#createACLForResource', function () {
 
     beforeEach(function () {
