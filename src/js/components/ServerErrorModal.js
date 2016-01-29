@@ -31,7 +31,7 @@ export default class ServerErrorModal extends mixin(StoreMixin) {
     this.store_listeners = [
       {name: 'user', events: ['updateError']},
       {name: 'group', events: ['updateError', 'addUserError']},
-      {name: 'aclDirectories', events: ['addError']}
+      {name: 'aclDirectories', events: ['addError', 'testError']}
     ];
 
     METHODS_TO_BIND.forEach((method) => {
