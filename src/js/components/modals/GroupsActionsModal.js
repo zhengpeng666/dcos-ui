@@ -36,7 +36,7 @@ export default class GroupsActionsModal extends ActionsModal {
     ACLUsersStore.fetchUsers();
   }
 
-  onGroupStoreAddUserError(groupId, userId, errorMessage) {
+  onGroupStoreAddUserError(errorMessage) {
     this.onActionError(errorMessage);
   }
 
@@ -44,7 +44,7 @@ export default class GroupsActionsModal extends ActionsModal {
     this.onActionSuccess();
   }
 
-  onGroupStoreDeleteError(groupID, errorMessage) {
+  onGroupStoreDeleteError(errorMessage) {
     this.onActionError(errorMessage);
   }
 

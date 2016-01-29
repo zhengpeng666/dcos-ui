@@ -233,8 +233,8 @@ let ACLGroupStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_UPDATE_ERROR,
-          action.groupID,
-          action.data
+          action.data,
+          action.groupID
         );
         break;
       // Delete group
@@ -245,8 +245,8 @@ let ACLGroupStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_DELETE_ERROR,
-          action.groupID,
-          action.data
+          action.data,
+          action.groupID
         );
         break;
       // Add user to group
@@ -260,9 +260,9 @@ let ACLGroupStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_ADD_USER_ERROR,
+          action.data,
           action.groupID,
-          action.userID,
-          action.data
+          action.userID
         );
         break;
       // Remove user from group
@@ -276,9 +276,9 @@ let ACLGroupStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_REMOVE_USER_ERROR,
+          action.data,
           action.groupID,
-          action.userID,
-          action.data
+          action.userID
         );
         break;
     }
