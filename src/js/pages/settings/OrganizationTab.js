@@ -183,20 +183,12 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     let remoteIDSet = this.internalStorage_get().remoteIDSet;
     let {checkableCount, checkedCount} = this.state;
     let checked = null;
+    let disabled = (remoteIDSet[rowID] === true);
 
-    if (remoteIDSet[rowID] === true) {
-      return (
-        <input
-          ref="checkbox"
-          type="checkbox"
-          disabled={true} />
-        );
-    } else {
-      if (checkedCount === checkableCount) {
-        checked = true;
-      } else if (checkedCount === 0) {
-        checked = false;
-      }
+    if (checkedCount === checkableCount) {
+      checked = true;
+    } else if (checkedCount === 0) {
+      checked = false;
     }
 
     return (
@@ -204,15 +196,15 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
         formGroupClass="form-group flush-bottom"
         definition={[
           {
-            fieldType: 'checkbox',
-            name: rowID,
             checked,
-            showLabel: false,
-            labelClass: 'inverse'
+            disabled,
+            fieldType: 'checkbox',
+            labelClass: 'inverse',
+            name: rowID,
+            showLabel: false
           }
         ]}
-        onChange={this.handleCheckboxChange}
-         />
+        onChange={this.handleCheckboxChange} />
     );
   }
 
@@ -237,16 +229,15 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
         formGroupClass="form-group flush-bottom"
         definition={[
           {
-            fieldType: 'checkbox',
-            name: 'headingCheckbox',
             checked,
+            fieldType: 'checkbox',
             indeterminate,
-            showLabel: false,
-            labelClass: 'inverse'
+            labelClass: 'inverse',
+            name: 'headingCheckbox',
+            showLabel: false
           }
         ]}
-        onChange={this.handleHeadingCheckboxChange}
-         />
+        onChange={this.handleHeadingCheckboxChange} />
     );
   }
 
