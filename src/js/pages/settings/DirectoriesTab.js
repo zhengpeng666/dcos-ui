@@ -171,10 +171,10 @@ class DirectoriesTab extends mixin(StoreMixin) {
 
       return (
         <dl key={key} className="flex-box row">
-          <dt className="column-3 emphasize inverse">
+          <dt className="column-3 emphasize lead inverse">
             {fieldDefinitions[key]}
           </dt>
-          <dd className="column-9 inverse">
+          <dd className="column-9">
             {value}
           </dd>
         </dl>
