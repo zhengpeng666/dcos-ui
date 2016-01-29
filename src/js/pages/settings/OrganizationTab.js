@@ -89,6 +89,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     this.setState({
       selectedAction: null
     });
+    this.checkNone();
   }
 
   handleCheckboxChange(prevCheckboxState, eventObject) {
@@ -115,15 +116,9 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     this.internalStorage_update({selectedIDSet});
 
     if (isChecked) {
-      this.setState({
-        checkedCount: this.state.checkableCount,
-        showActionDropdown: isChecked
-      });
+      this.checkAll();
     } else if (isChecked === false) {
-      this.setState({
-        checkedCount: 0,
-        showActionDropdown: isChecked
-      });
+      this.checkNone();
     }
   }
 
@@ -432,6 +427,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
   getSearchFilterChangeHandler(searchFilter) {
     return () => {
+      this.checkNone();
       this.setState({searchFilter});
     };
   }
@@ -483,6 +479,21 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     this.setState({
       searchString: '',
       searchFilter: 'all'
+    });
+  }
+
+  checkAll() {
+    this.setState({
+      checkedCount: this.state.checkableCount,
+      showActionDropdown: true
+    });
+
+  }
+
+  checkNone() {
+    this.setState({
+      checkedCount: 0,
+      showActionDropdown: false
     });
   }
 
