@@ -191,7 +191,7 @@ var Modals = React.createClass({
     let subHeaderContent = '';
 
     if (OS !== 'Windows') {
-      subHeaderContent = 'To get started, you must install the DCOS command-line interface tool on your local system by copying and pasting the code snippet below into your terminal. You can also take our tour, which will introduce you to the DCOS web-based user interface.';
+      subHeaderContent = 'Install the DCOS command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal. You can also take our tour, which will introduce you to the DCOS web-based user interface.';
     }
 
     return {

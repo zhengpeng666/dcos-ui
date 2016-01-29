@@ -42,7 +42,7 @@ var CliInstructionsModal = React.createClass({
     if (OS === 'Windows') {
       requirements = (
         <p>
-          To get started administering your cluster, you must install the DCOS command-line interface tool on your local system by following <a href="https://docs.mesosphere.com/administration/introcli/cli/#windows" target="_blank">these instructions.</a> You can also take our tour, which will introduce you to the DCOS web-based user interface.
+          Install the DCOS command-line interface (CLI) tool on your local system by following <a href="https://docs.mesosphere.com/administration/introcli/cli/#windows" target="_blank">these instructions.</a>. You must install the CLI to administer your DCOS cluster. You can also take our tour, which will introduce you to the DCOS web-based user interface.
         </p>
       );
     } else {
