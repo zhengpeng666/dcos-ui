@@ -154,14 +154,14 @@ describe('LogBuffer', function () {
   describe('#prepend', function () {
     it('should subtract length from start', function () {
       this.logBuffer.prepend(new Item({data: 'foo\nbar\nquis', offset: 100}));
-      expect(this.logBuffer.getStart()).toEqual(104);
+      expect(this.logBuffer.getStart()).toEqual(100);
     });
 
     it('should be able to add then prepend', function () {
       this.logBuffer.add(new Item({data: 'foo', offset: 100}));
       this.logBuffer.prepend(new Item({data: '\nbar\nquis', offset: 92}));
       expect(this.logBuffer.getEnd()).toEqual(103);
-      expect(this.logBuffer.getStart()).toEqual(93);
+      expect(this.logBuffer.getStart()).toEqual(92);
     });
 
     it('should handle truncate correctly', function () {
