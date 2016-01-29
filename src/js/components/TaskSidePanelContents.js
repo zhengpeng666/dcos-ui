@@ -16,7 +16,7 @@ import Units from '../utils/Units';
 const TABS = {
   files: 'Files',
   details: 'Details',
-  debug: 'Debug'
+  debug: 'Log Viewer'
 };
 
 export default class TaskSidePanelContents extends SidePanelContents {
@@ -185,7 +185,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
     );
   }
 
-  renderDebugTabView() {
+  renderLogViewerTabView() {
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
 
     return (
