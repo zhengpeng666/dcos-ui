@@ -36,7 +36,6 @@ export default class MesosLogView extends mixin(StoreMixin) {
     );
 
     this.listenerAdded = false;
-    this.leftBeginning = false;
   }
 
   componentDidMount() {
@@ -97,14 +96,8 @@ export default class MesosLogView extends mixin(StoreMixin) {
     let distanceFromTop = container.pageYOffset || container.scrollTop || 0;
 
     if (distanceFromTop < 2000) {
-      if (this.leftBeginning) {
-        let {props} = this;
-        MesosLogStore.getPreviousLogs(props.slaveID, props.filePath);
-      }
-    } else {
-      if (this.leftBeginning === false) {
-        this.leftBeginning = true;
-      }
+      let {props} = this;
+      MesosLogStore.getPreviousLogs(props.slaveID, props.filePath);
     }
   }
 
