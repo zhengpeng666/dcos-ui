@@ -1,3 +1,4 @@
+var browserInfo = require('browser-info');
 var React = require('react');
 
 var Actions = require('../actions/Actions');
@@ -186,10 +187,17 @@ var Modals = React.createClass({
       }
     }.bind(this);
 
+    let OS = browserInfo().os;
+    let subHeaderContent = '';
+
+    if (OS !== 'Windows') {
+      subHeaderContent = 'Install the DCOS command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal. You can also take our tour, which will introduce you to the DCOS web-based user interface.';
+    }
+
     return {
       onClose: onClose,
       title: 'Welcome to the Mesosphere DCOS',
-      subHeaderContent: 'In order to get started, you\'ll need to install our command-line tool by copying the snippet below. After that, you\'ll take our tour which will guide you through installing a web-app and continuous integration pipeline.',
+      subHeaderContent,
       showFooter: true,
       footer: (
         <div className="tour-start-modal-footer">

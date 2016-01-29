@@ -1,4 +1,5 @@
 var browserInfo = require('browser-info');
+var classNames = require('classnames');
 var React = require('react');
 
 import {Modal} from 'reactjs-components';
@@ -38,63 +39,63 @@ var CliInstructionsModal = React.createClass({
     var requirements = '';
     var cliSnippet = '';
 
-    var pythonInstructions = (
-      <li>
-        Python 2.7.9 or 3.4 or later.
-      </li>
-    );
-    var installRequirements = (
-      <li>
-      Install <a href="http://curl.haxx.se/download.html" target="_blank">curl</a>, <a href="https://pip.pypa.io/en/latest/installing.html#install-pip" target="_blank">pip</a>, and <a href="https://virtualenv.pypa.io/en/latest/installation.html" target="_blank">virtualenv</a>.
-      </li>
-    );
-
     if (OS === 'Windows') {
       requirements = (
-        <ul>
-          <li>
-            A command-line environment, such as Terminal or Windows Powershell.
-          </li>
-          {pythonInstructions}
-          {installRequirements}
-          <li>
-            Download: <a href="https://downloads.mesosphere.io/dcos-cli/install.ps1" target="_blank">install.ps1</a>
-          </li>
-        </ul>
+        <p>
+          Install the DCOS command-line interface (CLI) tool on your local system by following <a href="https://docs.mesosphere.com/administration/introcli/cli/#windows" target="_blank">these instructions.</a>. You must install the CLI to administer your DCOS cluster. You can also take our tour, which will introduce you to the DCOS web-based user interface.
+        </p>
       );
-      cliSnippet = `.\\install.ps1 . http://${hostname}`;
     } else {
       requirements = (
-        <ul>
-          <li>A command-line environment, such as Terminal.</li>
-          {pythonInstructions}
-          {installRequirements}
-        </ul>
+        <div>
+          <h4 className="flush-top">Prerequisites:</h4>
+          <ul>
+            <li>A command-line environment, such as Terminal.</li>
+            <li>
+              Python 2.7.9 or 3.4.x. (Python 3.5.x will not work.)
+            </li>
+            <li>
+            <a href="http://curl.haxx.se/download.html" target="_blank">cURL</a>, <a href="https://pip.pypa.io/en/latest/installing.html#install-pip" target="_blank">pip</a>, and <a href="https://virtualenv.pypa.io/en/latest/installation.html" target="_blank">virtualenv</a>.
+            </li>
+          </ul>
+        </div>
       );
       cliSnippet = 'mkdir -p dcos && cd dcos && \n  curl -O https://downloads.mesosphere.io/dcos-cli/install.sh && \n  bash ./install.sh . http://' + hostname + ' && \n  source ./bin/env-setup';
     }
 
-    return {
-      requirements: requirements,
-      cliSnippet: cliSnippet
-    };
+    if (cliSnippet) {
+      cliSnippet = (
+        <div>
+          <h4 className="snippet-description">To install the CLI, copy and paste into your terminal:</h4>
+          <div className="flush-top snippet-wrapper">
+            <pre className="mute prettyprint flush-bottom prettyprinted">{cliSnippet}</pre>
+          </div>
+        </div>
+      );
+    }
+
+    return {requirements, cliSnippet};
   },
 
   getContent: function () {
     var instructions = this.getCliInstructions();
     return (
       <div className="install-cli-modal-content">
-        <h4 className="flush-top">Prerequisites:</h4>
         {instructions.requirements}
-        <h4 className="snippet-description">To install the CLI, copy and paste into your terminal:</h4>
-        <div className="flush-top snippet-wrapper">
-          <pre className="mute prettyprint flush-bottom prettyprinted">{instructions.cliSnippet}</pre>
-        </div>
+        {instructions.cliSnippet}
       </div>
     );
   },
 
   render: function () {
+    let isWindows = (browserInfo().os === 'Windows');
+    let titleClass = classNames({
+      'modal-header-title': true,
+      'text-align-center': true,
+      'flush-top': !isWindows,
+      'flush': isWindows
+    });
+
     return (
       <Modal
         footer={this.props.footer}
@@ -106,7 +107,7 @@ var CliInstructionsModal = React.createClass({
         showHeader={true}
         showFooter={this.props.showFooter}
         subHeader={this.getSubHeader()}
-        titleClass="modal-header-title text-align-center flush-top"
+        titleClass={titleClass}
         titleText={this.props.title}>
         {this.getContent()}
       </Modal>
