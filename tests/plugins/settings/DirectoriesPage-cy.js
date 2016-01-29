@@ -83,7 +83,7 @@ describe('Directories Page [02l]', function () {
       cy.get('@list').eq(4).contains('No');
     });
 
-    it.only('allows deleting a directory [0cj]', function () {
+    it('allows deleting a directory [0cj]', function () {
       cy.configureCluster({
         aclLDAPDeleteSuccess: true,
         acl: true // resets the singleLDAP configuration
