@@ -77,10 +77,10 @@ const ACLStore = Store.createStore({
   },
 
   processOutstandingGrants: function () {
-    let resourceID;
     let outstandingGrants = this.get('outstandingGrants');
     this.get('services').getItems().forEach(function (acl) {
-      if ((resourceID = acl.get('rid')) in outstandingGrants) {
+      let resourceID = acl.get('rid');
+      if (resourceID in outstandingGrants) {
         // Run grant requests now that we have an ACL
         outstandingGrants[resourceID].forEach(function (cb) {
           cb();
