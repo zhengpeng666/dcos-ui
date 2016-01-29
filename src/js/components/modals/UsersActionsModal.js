@@ -121,7 +121,6 @@ UsersActionsModal.propTypes = {
   action: React.PropTypes.string.isRequired,
   actionText: React.PropTypes.object.isRequired,
   itemID: React.PropTypes.string.isRequired,
-  itemType: React.PropTypes.string.isRequired,
   onClose: React.PropTypes.func.isRequired,
   selectedItems: React.PropTypes.array.isRequired
 };
