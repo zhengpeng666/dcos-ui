@@ -47,6 +47,15 @@ export default class LogBuffer extends List {
     this.configuration.end = end;
   }
 
+  prepend(entry) {
+    let data = entry.get('data');
+    let start = this.getStart();
+
+    this.list.unshift(new Item({data, start}));
+    start -= data.length;
+    this.configuration.start = start;
+  }
+
   add(entry) {
     let data = entry.get('data');
     let end = this.getEnd();
@@ -67,11 +76,8 @@ export default class LogBuffer extends List {
     // Update end to be offset + new addition to the log
     this.configuration.end = offset + data.length;
     this.configuration.start = start;
-
     // Add log entry
     super.add(new Item({data, offset}));
-    // Truncate log file to make sure we are within maxFileSize
-    this.truncate();
   }
 
   getEnd() {

@@ -47,6 +47,28 @@ const MesosLogActions = {
         });
       }
     });
+  },
+
+  fetchPreviousLog: function (slaveID, path, offset, length) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}/slave/${slaveID}/files/read.json?path=${path}&offset=${offset}&length=${length}`,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_PREVIOUS_MESOS_LOG_SUCCESS,
+          data: response,
+          path,
+          slaveID
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_MESOS_LOG_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr),
+          path,
+          slaveID
+        });
+      }
+    });
   }
 
 };

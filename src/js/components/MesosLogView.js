@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import mixin from 'reactjs-mixin';
 import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
@@ -8,7 +9,8 @@ import RequestErrorMsg from './RequestErrorMsg';
 
 const METHODS_TO_BIND = [
   'onMesosLogStoreError',
-  'onMesosLogStoreSuccess'
+  'onMesosLogStoreSuccess',
+  'handleLogContainerScroll'
 ];
 
 export default class MesosLogView extends mixin(StoreMixin) {
@@ -28,6 +30,13 @@ export default class MesosLogView extends mixin(StoreMixin) {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+
+    this.handleLogContainerScroll = _.throttle(
+      this.handleLogContainerScroll, 5000
+    );
+
+    this.listenerAdded = false;
+    this.leftBeginning = false;
   }
 
   componentDidMount() {
@@ -45,9 +54,26 @@ export default class MesosLogView extends mixin(StoreMixin) {
     }
   }
 
+  componentDidUpdate() {
+    let logContainer = this.refs.logContainer;
+    if (logContainer && this.listenerAdded === false) {
+      let logContainerNode = React.findDOMNode(logContainer);
+      this.listenerAdded = true;
+      logContainerNode.addEventListener(
+        'scroll', this.handleLogContainerScroll
+      );
+    }
+  }
+
   componentWillUnmount() {
     super.componentWillUnmount(...arguments);
     MesosLogStore.stopTailing(this.props.filePath);
+
+    if (this.listenerAdded) {
+      React.findDOMNode(this.refs.logContainer).removeEventListener(
+        'scroll', this.handleLogContainerScroll
+      );
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -64,6 +90,22 @@ export default class MesosLogView extends mixin(StoreMixin) {
       // Check fullLog
       (state.fullLog !== nextState.fullLog)
     );
+  }
+
+  handleLogContainerScroll(e) {
+    let container = e.target;
+    let distanceFromTop = container.pageYOffset || container.scrollTop || 0;
+
+    if (distanceFromTop < 2000) {
+      if (this.leftBeginning) {
+        let {props} = this;
+        MesosLogStore.getPreviousLogs(props.slaveID, props.filePath);
+      }
+    } else {
+      if (this.leftBeginning === false) {
+        this.leftBeginning = true;
+      }
+    }
   }
 
   onMesosLogStoreError(path) {
@@ -112,7 +154,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
     }
 
     return (
-      <pre className="flex-grow flush-bottom">
+      <pre ref="logContainer" className="flex-grow flush-bottom">
         <Highlight
           matchClass="highlight"
           matchElement="span"

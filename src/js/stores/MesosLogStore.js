@@ -24,6 +24,18 @@ const MesosLogStore = Store.createStore({
     this.removeListener(eventName, callback);
   },
 
+  getPreviousLogs: function (slaveID, path) {
+    let logBuffer = this.get(path);
+    if (!logBuffer) {
+      // Stop tailing immediately if listener decided to call stopTailing
+      return;
+    }
+
+    MesosLogActions.fetchPreviousLog(
+      slaveID, path, logBuffer.getStart() - MAX_FILE_SIZE, MAX_FILE_SIZE
+    );
+  },
+
   startTailing: function (slaveID, path) {
     let logBuffer = new LogBuffer({maxFileSize: MAX_FILE_SIZE});
     this.set({[path]: logBuffer});
@@ -42,7 +54,6 @@ const MesosLogStore = Store.createStore({
       // Stop tailing immediately if listener decided to call stopTailing
       return;
     }
-
     logBuffer.initialize(entry.offset);
     // Start tailing
     MesosLogActions
@@ -95,6 +106,21 @@ const MesosLogStore = Store.createStore({
     }
   },
 
+  processLogPrepend: function (slaveID, path, entry) {
+    let logBuffer = this.get(path);
+    if (!logBuffer) {
+      // Stop tailing immediately if listener decided to call stopTailing
+      return;
+    }
+
+    let data = entry.data;
+    if (data.length > 0) {
+      logBuffer.prepend(new Item(entry));
+    }
+
+    this.emit(EventTypes.MESOS_LOG_CHANGE, path);
+  },
+
   processLogError(slaveID, path) {
     let logBuffer = this.get(path);
     if (!logBuffer) {
@@ -107,6 +133,20 @@ const MesosLogStore = Store.createStore({
       MesosLogActions
         .fetchLog(slaveID, path, logBuffer.getEnd(), MAX_FILE_SIZE);
     }, Config.tailRefresh);
+
+    this.emit(EventTypes.MESOS_LOG_REQUEST_ERROR, path);
+  },
+
+  processLogPrependError(slaveID, path) {
+    let logBuffer = this.get(path);
+    if (!logBuffer) {
+      // Stop tailing immediately if listener decided to call stopTailing
+      return;
+    }
+
+    MesosLogActions.fetchLog(
+      slaveID, path, logBuffer.getStart() - MAX_FILE_SIZE, MAX_FILE_SIZE
+    );
 
     this.emit(EventTypes.MESOS_LOG_REQUEST_ERROR, path);
   },
@@ -125,6 +165,12 @@ const MesosLogStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_MESOS_LOG_ERROR:
         MesosLogStore.processLogError(action.slaveID, action.path);
+        break;
+      case ActionTypes.REQUEST_PREVIOUS_MESOS_LOG_SUCCESS:
+        MesosLogStore.processLogPrepend(action.slaveID, action.path, action.data);
+        break;
+      case ActionTypes.REQUEST_PREVIOUS_MESOS_LOG_ERROR:
+        MesosLogStore.processLogPrependError(action.slaveID, action.path);
         break;
       case ActionTypes.REQUEST_MESOS_LOG_OFFSET_SUCCESS:
         MesosLogStore.processOffset(action.slaveID, action.path, action.data);
