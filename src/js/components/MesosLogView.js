@@ -34,8 +34,6 @@ export default class MesosLogView extends mixin(StoreMixin) {
     this.handleLogContainerScroll = _.throttle(
       this.handleLogContainerScroll, 5000
     );
-
-    this.listenerAdded = false;
   }
 
   componentDidMount() {
@@ -53,26 +51,9 @@ export default class MesosLogView extends mixin(StoreMixin) {
     }
   }
 
-  componentDidUpdate() {
-    let logContainer = this.refs.logContainer;
-    if (logContainer && this.listenerAdded === false) {
-      let logContainerNode = React.findDOMNode(logContainer);
-      this.listenerAdded = true;
-      logContainerNode.addEventListener(
-        'scroll', this.handleLogContainerScroll
-      );
-    }
-  }
-
   componentWillUnmount() {
     super.componentWillUnmount(...arguments);
     MesosLogStore.stopTailing(this.props.filePath);
-
-    if (this.listenerAdded) {
-      React.findDOMNode(this.refs.logContainer).removeEventListener(
-        'scroll', this.handleLogContainerScroll
-      );
-    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -147,7 +128,9 @@ export default class MesosLogView extends mixin(StoreMixin) {
     }
 
     return (
-      <pre ref="logContainer" className="flex-grow flush-bottom">
+      <pre
+        onScroll={this.handleLogContainerScroll}
+        className="flex-grow flush-bottom">
         <Highlight
           matchClass="highlight"
           matchElement="span"

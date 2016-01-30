@@ -9,12 +9,13 @@ jest.dontMock('../../structs/List');
 jest.dontMock('../../utils/RequestUtil');
 jest.dontMock('../../utils/Util');
 
-var MesosLogStore = require('../MesosLogStore');
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../../events/AppDispatcher');
 var Config = require('../../config/Config');
 var EventTypes = require('../../constants/EventTypes');
 var LogBuffer = require('../../structs/LogBuffer');
+var MesosLogActions = require('../../events/MesosLogActions');
+var MesosLogStore = require('../MesosLogStore');
 var RequestUtil = require('../../utils/RequestUtil');
 
 describe('MesosLogStore', function () {
@@ -48,6 +49,42 @@ describe('MesosLogStore', function () {
 
   });
 
+  describe('#getPreviousLogs', function () {
+
+    beforeEach(function () {
+      this.MockMesosLogStore = {
+        get: function (key) {
+          if (key === 'exists') {
+            return {
+              getStart: function () { return 100; }
+            };
+          }
+        }
+      };
+
+      MesosLogActions.fetchPreviousLog = jasmine.createSpy();
+    });
+
+    it('does nothing if logBuffer doesn\'t exist', function () {
+      MesosLogStore.getPreviousLogs.call(
+        this.MockMesosLogStore, 'slaveID', 'nonExistantPath'
+      );
+
+      expect(MesosLogActions.fetchPreviousLog).not.toHaveBeenCalled();
+    });
+
+    it('calls #fetchPreviousLog with the correct args', function () {
+      MesosLogStore.getPreviousLogs.call(
+        this.MockMesosLogStore, 'slaveID', 'exists'
+      );
+
+      expect(MesosLogActions.fetchPreviousLog).toHaveBeenCalledWith(
+        'slaveID', 'exists', 0, 50000
+      );
+    });
+
+  });
+
   describe('#processLogEntry', function () {
 
     beforeEach(function () {
@@ -77,6 +114,53 @@ describe('MesosLogStore', function () {
 
   });
 
+  describe('#processLogPrepend', function () {
+
+    beforeEach(function () {
+      this.previousEmit = MesosLogStore.emit;
+      MesosLogStore.emit = jasmine.createSpy();
+      // First item will be used to initialize
+      MesosLogStore.processOffset('foo', '/bar', {data: '', offset: 100});
+      // Two next processes will be stored
+      MesosLogStore.processLogPrepend('foo', '/bar', {data: 'foo', offset: 100});
+      MesosLogStore.processLogPrepend('foo', '/bar', {data: 'bar', offset: 103});
+
+      this.logBuffer = MesosLogStore.get('/bar');
+    });
+
+    afterEach(function () {
+      MesosLogStore.emit = this.previousEmit;
+    });
+
+    it('should return all of the log items it was given', function () {
+      let items = this.logBuffer.getItems();
+      expect(items.length).toEqual(2);
+    });
+
+    it('should return the full log of items it was given', function () {
+      expect(this.logBuffer.getFullLog()).toEqual('barfoo');
+    });
+
+    it('should call the fetch log 4 times', function (done) {
+      setTimeout(function () {
+        expect(RequestUtil.json.callCount).toEqual(4);
+        done();
+      }, Config.tailRefresh);
+    });
+
+    it('should call emit with the correct event', function () {
+      expect(MesosLogStore.emit).toHaveBeenCalledWith(
+        EventTypes.MESOS_LOG_CHANGE, '/bar'
+      );
+    });
+
+    it('should not call emit with an non-existant path', function () {
+      MesosLogStore.emit = jasmine.createSpy();
+      MesosLogStore.processLogPrepend('foo', 'wtf', {data: '', offset: 100});
+      expect(MesosLogStore.emit).not.toHaveBeenCalled();
+    });
+  });
+
   describe('#processLogError', function () {
 
     beforeEach(function () {
@@ -91,6 +175,42 @@ describe('MesosLogStore', function () {
       }, Config.tailRefresh);
     });
 
+  });
+
+  describe('#processLogPrependError', function () {
+
+    beforeEach(function () {
+      this.previousEmit = MesosLogStore.emit;
+      MesosLogStore.emit = jasmine.createSpy();
+      this.logBuffer = MesosLogStore.get('/bar');
+      MesosLogStore.processLogPrependError(
+        'foo', '/bar', {data: 'bar', offset: 103}
+      );
+    });
+
+    afterEach(function () {
+      MesosLogStore.emit = this.previousEmit;
+    });
+
+    it('should try to restart the tailing after error', function (done) {
+      MesosLogStore.processLogPrependError('foo', '/bar');
+      setTimeout(function () {
+        expect(RequestUtil.json.callCount).toEqual(2);
+        done();
+      }, Config.tailRefresh);
+    });
+
+    it('should call emit with the correct event', function () {
+      expect(MesosLogStore.emit).toHaveBeenCalledWith(
+        EventTypes.MESOS_LOG_REQUEST_ERROR, '/bar'
+      );
+    });
+
+    it('should not call emit with an non-existant path', function () {
+      MesosLogStore.emit = jasmine.createSpy();
+      MesosLogStore.processLogPrepend('foo', 'wtf', {data: '', offset: 100});
+      expect(MesosLogStore.emit).not.toHaveBeenCalled();
+    });
   });
 
   describe('#processOffsetError', function () {

@@ -62,7 +62,7 @@ const MesosLogActions = {
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_MESOS_LOG_ERROR,
+          type: ActionTypes.REQUEST_PREVIOUS_MESOS_LOG_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           path,
           slaveID

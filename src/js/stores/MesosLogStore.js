@@ -149,6 +149,7 @@ const MesosLogStore = Store.createStore({
       return;
     }
 
+    // Try request again immediately.
     MesosLogActions.fetchLog(
       slaveID, path, logBuffer.getStart() - MAX_FILE_SIZE, MAX_FILE_SIZE
     );

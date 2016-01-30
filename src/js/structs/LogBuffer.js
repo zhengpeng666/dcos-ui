@@ -62,6 +62,8 @@ export default class LogBuffer extends List {
 
     let start = this.getStart();
     let end = this.getEnd();
+
+    // If first entry ever for the LogBuffer.
     if (start === end && offset !== 0) {
       end = offset + data.length;
     }
@@ -132,11 +134,14 @@ export default class LogBuffer extends List {
     let maxFileSize = this.configuration.maxFileSize;
     let sizeDiff = currentSize - maxFileSize;
 
-    if (sizeDiff < 0) {
+    if (sizeDiff <= 0) {
       return;
     }
 
     let items = this.getItems();
+
+    // This is the index of which item to truncate. If fromBack is not set,
+    // truncate the first item. If fromBack is set, truncate the last item.
     let index = 0;
     if (fromBack) {
       index = items.length - 1;
