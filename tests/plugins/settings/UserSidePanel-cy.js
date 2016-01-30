@@ -23,7 +23,6 @@ describe('User Details Sidepanel [02k]', function () {
       cy
         .get('.side-panel .side-panel-content-header-label div')
         .should(function ($subheader) {
-          console.log($subheader);
           expect($subheader[3].textContent).to.contain('External');
         });
     });
