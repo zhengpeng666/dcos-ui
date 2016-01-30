@@ -11,6 +11,8 @@ import RequestErrorMsg from '../components/RequestErrorMsg';
 import UserGroupTable from './UserGroupTable';
 import Util from '../utils/Util';
 
+const DEFAULT_ID = 'default-placeholder-group-id';
+
 const METHODS_TO_BIND = [
   'onGroupSelection'
 ];
@@ -55,6 +57,9 @@ export default class UserGroupMembershipTab extends mixin(StoreMixin) {
   }
 
   onGroupSelection(group) {
+    if (group.id === DEFAULT_ID) {
+      return;
+    }
     ACLGroupStore.addUser(group.id, this.props.userID);
   }
 
@@ -79,7 +84,7 @@ export default class UserGroupMembershipTab extends mixin(StoreMixin) {
 
     let defaultItem = {
       description: 'Add Group',
-      gid: 'default-placeholder-group-id'
+      gid: DEFAULT_ID
     };
     let items = [defaultItem].concat(groups);
 

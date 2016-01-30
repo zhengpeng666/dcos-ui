@@ -60,7 +60,7 @@ describe('UserDropup [028]', function () {
         .should('contain', 'Sign Out');
     });
 
-    it('should be able to sign out', function () {
+    it('should be able to sign out [08i]', function () {
       cy
         .get("@list").eq(3)
         .click();

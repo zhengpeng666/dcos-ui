@@ -77,8 +77,12 @@ var MesosSummaryStore = Store.createStore({
     this.removeListener(eventName, callback);
   },
 
+  getActiveServices: function () {
+    return this.get('states').lastSuccessful().getServiceList().getItems();
+  },
+
   getServiceFromName: function (name) {
-    let services = this.get('states').lastSuccessful().getServiceList().getItems();
+    let services = this.getActiveServices();
 
     return _.find(services, function (service) {
       return service.get('name') === name;

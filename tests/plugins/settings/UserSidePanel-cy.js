@@ -1,222 +1,249 @@
+
 describe('User Details Sidepanel [02k]', function () {
 
-  beforeEach(function () {
-    cy.configureCluster({
-      mesos: '1-task-healthy',
-      acl: true,
-      plugins: 'settings-enabled'
-    })
-    .visitUrl({url: '/settings/organization/users/quis', identify: true});
-  });
-
-  it('displays the correct user [05w]', function() {
-    cy
-      .get('.side-panel .side-panel-content-header-label .form-element-inline-text')
-      .should(function ($header) {
-        expect($header[0].textContent).to.equal('藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe');
-      });
-  });
-
-  it('has LDAP in subheader when user is external [056]', function() {
-    cy
-      .get('.side-panel .side-panel-content-header-label div')
-      .should(function ($subheader) {
-        expect($subheader[3].textContent).to.contain('External');
-      });
-  });
-
-  it('sets the first tab as active [05y]', function() {
-    cy
-      .get('.side-panel .tabs .active')
-      .should('contain', 'Permissions');
-  });
-
-  context('Group Membership [05z]', function() {
-
+  context('User [08f]', function () {
     beforeEach(function () {
-      cy
-        .get('.side-panel .tabs .tab-item-label')
-        .contains('Group Membership')
-        .click();
+      cy.configureCluster({
+        mesos: '1-task-healthy',
+        acl: true,
+        plugins: 'settings-enabled'
+      })
+      .visitUrl({url: '/settings/organization/users/quis', identify: true});
     });
 
-    it('displays the groups that the member belongs to [05x]', function() {
+    it('displays the correct user [05w]', function () {
       cy
-        .get('.side-panel .table tbody')
-        .should(function ($tbody) {
-          expect($tbody.children().length).to.equal(2);
+        .get('.side-panel .side-panel-content-header-label .form-element-inline-text')
+        .should(function ($header) {
+          expect($header[0].textContent).to.equal('藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe');
         });
     });
 
-    it('displays the confirmation modal when clicking remove [060]', function() {
+    it('has LDAP in subheader when user is external [056]', function() {
       cy
-        .get('.side-panel .table tbody tr:first-child button')
-        .click();
-
-      cy
-        .get('.confirm-modal')
-        .should(function ($modal) {
-          expect($modal.length).to.equal(1);
+        .get('.side-panel .side-panel-content-header-label div')
+        .should(function ($subheader) {
+          expect($subheader[3].textContent).to.contain('External');
         });
     });
 
-  });
-
-  context('Delete User [042]', function() {
-    beforeEach(function () {
-      cy.get('.side-panel-header-actions-secondary').as('headerUserDelete');
+    it('sets the first tab as active [05y]', function () {
+      cy
+        .get('.side-panel .tabs .active')
+        .should('contain', 'Permissions');
     });
 
-    it('shows delete modal when header delete button clicked [043]', function() {
-      cy.get('@headerUserDelete')
-        .find('.side-panel-header-action')
-        .click()
-      cy.get('.confirm-modal').should('to.have.length', 1);
-    });
+    context('Group Membership [05z]', function () {
 
-    it('returns to users page after user deleted [045]', function() {
-      cy.route({
-        method: 'DELETE',
-        url: /users\/quis/,
-        status: 200,
-        response: {}
+      beforeEach(function () {
+        cy
+          .get('.side-panel .tabs .tab-item-label')
+          .contains('Group Membership')
+          .click();
       });
-      cy.get('@headerUserDelete')
-        .find('.side-panel-header-action')
-        .click();
-      cy.get('.modal .button-danger').click();
-      cy.url().should('contain', '/settings/organization/users')
-    });
 
-    it('shows error when request to delete user fails [044]', function() {
-      cy.route({
-        method: 'DELETE',
-        url: /users\/quis/,
-        status: 400,
-        response: {description: 'There was an error.'}
+      it('displays the groups that the member belongs to [05x]', function () {
+        cy
+          .get('.side-panel .table tbody')
+          .should(function ($tbody) {
+            expect($tbody.children().length).to.equal(4);
+          });
       });
-      cy.get('@headerUserDelete')
-        .find('.side-panel-header-action')
-        .click();
-      cy.get('.modal .button-danger').click();
-      cy.get('.text-error-state').should('contain', 'There was an error.');
+
+      it('displays the confirmation modal when clicking remove [060]', function () {
+        cy
+          .get('.side-panel .table tbody tr:eq(1) button')
+          .click();
+
+        cy
+          .get('.confirm-modal')
+          .should(function ($modal) {
+            expect($modal.length).to.equal(1);
+          });
+      });
+
     });
 
-  });
+    context('Delete User [042]', function () {
+      beforeEach(function () {
+        cy.get('.side-panel-header-actions-secondary').as('headerUserDelete');
+      });
 
-  context('User Details [063]', function () {
+      it('shows delete modal when header delete button clicked [043]', function () {
+        cy.get('@headerUserDelete')
+          .find('.side-panel-header-action')
+          .click();
+        cy.get('.confirm-modal').should('to.have.length', 1);
+      });
 
-    beforeEach(function () {
-      cy
-        .get('.side-panel .tabs .tab-item-label')
-        .contains('Details')
-        .click();
-      cy
-        .get('.side-panel .side-panel-content-user-details .row').as('rows');
-    });
-
-    it('displays the username in the first row [064]', function () {
-      cy.get('@rows')
-        .should(function ($rows) {
-          var firstRow = $rows[0];
-          expect(firstRow.children[1].textContent).to.equal('quis');
+      it('returns to users page after user deleted [045]', function () {
+        cy.route({
+          method: 'DELETE',
+          url: /users\/quis/,
+          status: 200,
+          response: {}
         });
-    });
+        cy.get('@headerUserDelete')
+          .find('.side-panel-header-action')
+          .click();
+        cy.get('.modal .button-danger').click();
+        cy.url().should('contain', '/settings/organization/users');
+      });
 
-    it('displays the password form in the second row [065]', function () {
-      cy.get('@rows')
-        .should(function ($rows) {
-          var secondRow = $rows[1];
-          expect(secondRow.children[1].children[0].nodeName).to.equal('FORM');
+      it('shows error when request to delete user fails [044]', function () {
+        cy.route({
+          method: 'DELETE',
+          url: /users\/quis/,
+          status: 400,
+          response: {description: 'There was an error.'}
         });
+        cy.get('@headerUserDelete')
+          .find('.side-panel-header-action')
+          .click();
+        cy.get('.modal .button-danger').click();
+        cy.get('.text-error-state').should('contain', 'There was an error.');
+      });
+
     });
 
-    it('switches the password label into a password input element [066]',
-      function () {
-      cy.get('.side-panel-content-user-details form .form-element-inline-text')
-        .click();
+    context('User Details [063]', function () {
 
-      cy.get('form input')
-        .should(function ($input) {
-          expect($input.length).to.equal(1);
-          expect($input[0].type).to.equal('password');
-        });
+      beforeEach(function () {
+        cy
+          .get('.side-panel .tabs .tab-item-label')
+          .contains('Details')
+          .click();
+        cy
+          .get('.side-panel .side-panel-content-user-details .row').as('rows');
+      });
+
+      it('displays the username in the first row [064]', function () {
+        cy.get('@rows')
+          .should(function ($rows) {
+            var firstRow = $rows[0];
+            expect(firstRow.children[1].textContent).to.equal('quis');
+          });
+      });
+
+      it('displays the password form in the second row [065]', function () {
+        cy.get('@rows')
+          .should(function ($rows) {
+            var secondRow = $rows[1];
+            expect(secondRow.children[1].children[0].nodeName).to.equal('FORM');
+          });
+      });
+
+      it('switches the password label into a password input element [066]',
+        function () {
+        cy.get('.side-panel-content-user-details form .form-element-inline-text')
+          .click();
+
+        cy.get('form input')
+          .should(function ($input) {
+            expect($input.length).to.equal(1);
+            expect($input[0].type).to.equal('password');
+          });
+      });
+
     });
 
-  });
+    context('Permissions tab [02v]', function () {
 
-  context('Permissions tab [02v]', function () {
+      beforeEach(function () {
+        cy.get('.side-panel').as('sidePanel');
+      });
 
-    beforeEach(function () {
-      cy.get('.side-panel').as('sidePanel');
-    });
+      it('displays \'Add Service\' in the dropdown box [02x]', function () {
+        cy
+          .get('@sidePanel')
+          .get('.dropdown .dropdown-toggle')
+          .should('contain', 'Add Service');
+      });
 
-    it('displays "Add Service" in the dropdown box [02x]', function () {
-      cy
-        .get('@sidePanel')
-        .get('.dropdown .dropdown-toggle')
-        .should('contain', 'Add Service');
-    });
+      it('shouldn\'t contain services that are already in permissions [02z]', function () {
+        cy
+          .get('@sidePanel')
+          .get('.dropdown .dropdown-toggle')
+          .click();
 
-    it('displays the selected element in the dropdown box [02y]', function () {
-      cy
-        .get('@sidePanel')
-        .get('.dropdown .dropdown-toggle')
-        .click();
-
-      cy
-        .get('@sidePanel')
-        .get('.dropdown-menu-list > .clickable:last-child')
-        .click();
-
-      cy
-        .get('@sidePanel')
-        .get('.dropdown .dropdown-toggle')
-        .should('contain', 'Shelia Ike Bressette');
-    });
-
-    it('shouldn\'t contain services that are already in permissions [02z]', function () {
-      cy
-        .get('@sidePanel')
-        .get('.dropdown .dropdown-toggle')
-        .click();
-
-      cy
-        .get('@sidePanel')
-        .get('.dropdown-menu-list')
-        .should(function (list) {
-          var children = list.children();
-          var result = false;
-          for (var i = 0; i < children.length; i++) {
-            if (children[i].textContent === 'service.marathon') {
-              result = true;
+        cy
+          .get('@sidePanel')
+          .get('.dropdown-menu-list')
+          .should(function (list) {
+            var children = list.children();
+            var result = false;
+            for (var i = 0; i < children.length; i++) {
+              if (children[i].textContent === 'marathon') {
+                result = true;
+              }
             }
-          }
 
-          expect(result).to.equal(false);
+            expect(result).to.equal(false);
+          });
+      });
+
+      it('should have a table with a row containing a service [01c]', function () {
+        cy
+          .get('@sidePanel')
+          .get('table td')
+          .should('contain', 'Marathon');
+      });
+
+      it('displays the confirmation modal when clicking remove [060]', function () {
+        cy
+          .get('.side-panel .table tbody tr:eq(1) button')
+          .click();
+
+        cy
+          .get('.confirm-modal')
+          .should(function ($modal) {
+            expect($modal.length).to.equal(1);
+          });
+      });
+
+    });
+
+  });
+
+  context('ACL [08d]', function () {
+
+    beforeEach(function () {
+      cy.configureCluster({
+        mesos: '1-task-healthy',
+        acl: true,
+        aclCreate: true,
+        plugins: 'settings-enabled'
+      })
+      .visitUrl({url: '/settings/organization/users/quis', identify: true});
+    });
+
+    it('should have an empty table [08g]', function () {
+      cy
+        .get('.side-panel table tr')
+        .should(function ($tr) {
+          expect($tr).to.have.length(0);
         });
     });
 
-    it('should have a table with a row containing a service [01c]', function () {
+    it('creates ACL & adds permission for service [08e]', function () {
       cy
-        .get('@sidePanel')
-        .get('table td')
-        .should('contain', 'Marathon');
-    });
+        .wait(2000)
+        .get('.side-panel .dropdown .dropdown-toggle')
+        .click()
+        .wait(250);
 
-    it('displays the confirmation modal when clicking remove [060]', function() {
+      cy.configureCluster({acl: true});
+
       cy
-        .get('@sidePanel')
-        .get('.table tbody tr:first-child button')
+        .get('.dropdown .dropdown-menu-list li')
+        .contains('marathon')
         .click();
 
       cy
-        .get('.confirm-modal')
-        .should(function ($modal) {
-          expect($modal.length).to.equal(1);
-        });
-    });
+        .get('.side-panel table tr')
+        .should('contain', 'Marathon');
 
+    });
   });
 
 });

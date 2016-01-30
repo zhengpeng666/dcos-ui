@@ -72,6 +72,58 @@ describe('ACLActions', function () {
     });
   });
 
+  describe('#createACLForResource', function () {
+
+    beforeEach(function () {
+      ACLActions.createACLForResource('some.resource', {});
+    });
+
+    it('dispatches the correct action when successful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action)
+          .toEqual({
+            type: ActionTypes.REQUEST_ACL_CREATE_SUCCESS,
+            resourceID: 'some.resource'
+          });
+      });
+
+      this.configuration.success({bar: 'baz'});
+    });
+
+    it('dispatches the correct action when unsuccessful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action)
+          .toEqual({
+            type: ActionTypes.REQUEST_ACL_CREATE_ERROR,
+            resourceID: 'some.resource',
+            data: 'bar'
+          });
+      });
+
+      this.configuration.error({responseJSON: {description: 'bar'}});
+    });
+
+    it('sends data to the correct URL', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.createACLForResource('some.resource', {});
+      var requestArgs = RequestUtil.json.mostRecentCall.args[0];
+      expect(requestArgs.url)
+        .toEqual(Config.acsAPIPrefix + '/acls/some.resource');
+    });
+
+    it('sends a PUT request', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.createACLForResource('some.resource', {});
+      var requestArgs = RequestUtil.json.mostRecentCall.args[0];
+      expect(requestArgs.method).toEqual('PUT');
+    });
+
+  });
+
   describe('#grantUserActionToResource', function () {
 
     beforeEach(function () {

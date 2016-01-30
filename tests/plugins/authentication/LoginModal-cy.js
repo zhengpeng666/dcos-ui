@@ -31,8 +31,8 @@ describe('LoginModal [01i]', function () {
 
   context('logging in [01k]', function () {
     beforeEach(function () {
-      cy.get(".modal-container input[type='text']').type('kennyt");
-      cy.get(".modal-container input[type='password']').type('1234");
+      cy.get('.modal-container input[type=\'text\']').type('kennyt');
+      cy.get('.modal-container input[type=\'password\']').type('1234');
 
     });
 
@@ -58,8 +58,8 @@ describe('LoginModal [01i]', function () {
       cy.visit(
         "http://localhost:4200/?redirect=%2Ffoo%2Fbar#/login"
       );
-      cy.get(".modal-container input[type='text']').type('kennyt");
-      cy.get(".modal-container input[type='password']').type('1234");
+      cy.get('.modal-container input[type=\'text\']').type('kennyt');
+      cy.get('.modal-container input[type=\'password\']').type('1234');
 
       cy.get('.modal-footer .button').click();
 

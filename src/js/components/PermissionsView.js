@@ -1,4 +1,4 @@
-import {Confirm, Dropdown} from 'reactjs-components';
+import {Dropdown} from 'reactjs-components';
 import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
@@ -7,6 +7,7 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLStore from '../stores/ACLStore';
 import Item from '../structs/Item';
+import MesosSummaryStore from '../stores/MesosSummaryStore';
 import PermissionsTable from './PermissionsTable';
 import RequestErrorMsg from './RequestErrorMsg';
 import StringUtil from '../utils/StringUtil';
@@ -14,9 +15,8 @@ import Util from '../utils/Util';
 
 const METHODS_TO_BIND = [
   'handleResourceSelection',
-  'handleDismissError',
-  'onAclStoreError',
-  'onAclStoreSuccess'
+  'onAclStoreFetchResourceError',
+  'onAclStoreFetchResourceSuccess'
 ];
 
 const DEFAULT_ID = 'DEFAULT';
@@ -26,8 +26,7 @@ export default class PermissionsView extends mixin(StoreMixin) {
     super(...arguments);
 
     this.state = {
-      hasError: null,
-      resourceErrorMessage: null
+      hasError: null
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -41,16 +40,13 @@ export default class PermissionsView extends mixin(StoreMixin) {
     this.store_listeners = [{
       name: 'acl',
       events: [
-        'success',
-        'error',
-        `${itemType}GrantSuccess`,
-        `${itemType}GrantError`
+        'fetchResourceSuccess',
+        'fetchResourceError',
+        `${itemType}GrantSuccess`
       ]
     }];
 
     itemType = StringUtil.capitalize(itemType);
-    this[`onAclStore${itemType}GrantError`] =
-      this.onAclStoreItemTypeGrantError;
     this[`onAclStore${itemType}GrantSuccess`] =
       this.onAclStoreItemTypeGrantSuccess;
 
@@ -59,29 +55,17 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount();
-    ACLStore.fetchACLsForResource('services');
+    ACLStore.fetchACLsForResource('service');
   }
 
-  onAclStoreSuccess() {
+  onAclStoreFetchResourceSuccess() {
     this.setState({
       hasError: false
     });
   }
 
-  onAclStoreError() {
+  onAclStoreFetchResourceError() {
     this.setState({hasError: true});
-  }
-
-  onAclStoreItemTypeGrantError(data, triple) {
-    let props = this.props;
-    let itemID = triple[`${props.itemType}ID`];
-    if (itemID === props.itemID) {
-      let resource = ACLStore.get('services').getItem(triple.resourceID);
-
-      this.setState({
-        resourceErrorMessage: `Could not grant ${props.itemType} ${itemID} ${triple.action} to ${resource.get('description')}`
-      });
-    }
   }
 
   onAclStoreItemTypeGrantSuccess(triple) {
@@ -105,10 +89,6 @@ export default class PermissionsView extends mixin(StoreMixin) {
       'access',
       resource.id
     );
-  }
-
-  handleDismissError() {
-    this.setState({resourceErrorMessage: null});
   }
 
   getPermissionTable() {
@@ -135,12 +115,12 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
   getDropdownItems() {
     let permissions = this.props.permissions;
-    let services = ACLStore.get('services').getItems().sort(
+    let services = MesosSummaryStore.getActiveServices().sort(
       Util.getLocaleCompareSortFn('description')
     );
     let filteredResources = services.filter(function (resource) {
         // Filter out any resource which is in permissions
-        let rid = resource.get('rid');
+        let rid = resource.getResourceID();
         return !permissions.some(function (permission) {
           return permission.rid === rid;
         });
@@ -148,26 +128,22 @@ export default class PermissionsView extends mixin(StoreMixin) {
 
     let items = [new Item({
       rid: DEFAULT_ID,
-      description: 'Add Service'
+      name: 'Add Service'
     })].concat(filteredResources);
 
     return items.map(function (resource) {
-      let description = resource.get('description');
-
+      let description = resource.get('name');
+      let ID = DEFAULT_ID;
+      if (resource.getResourceID &&
+        typeof resource.getResourceID === 'function') {
+        ID = resource.getResourceID();
+      }
       return {
-        id: resource.get('rid'),
+        id: ID,
         description,
         html: description
       };
     });
-  }
-
-  getErrorModalContent(resourceErrorMessage) {
-    return (
-      <div className="container-pod container-pod-short text-align-center">
-        <p>{resourceErrorMessage}</p>
-      </div>
-    );
   }
 
   render() {
@@ -180,8 +156,6 @@ export default class PermissionsView extends mixin(StoreMixin) {
     if (state.hasError !== false) {
       return this.getLoadingScreen();
     }
-
-    let resourceErrorMessage = state.resourceErrorMessage;
 
     return (
       <div className="flex-container-col flex-grow">
@@ -199,16 +173,6 @@ export default class PermissionsView extends mixin(StoreMixin) {
             transitionName="dropdown-menu" />
         </div>
         {this.getPermissionTable()}
-        <Confirm
-          footerContainerClass="container container-pod container-pod-short
-            container-pod-fluid"
-          open={!!resourceErrorMessage}
-          onClose={this.handleDismissError}
-          leftButtonClassName="hidden"
-          rightButtonText="OK"
-          rightButtonCallback={this.handleDismissError}>
-          {this.getErrorModalContent(resourceErrorMessage)}
-        </Confirm>
       </div>
     );
   }

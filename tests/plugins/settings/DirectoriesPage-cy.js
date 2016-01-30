@@ -53,6 +53,7 @@ describe('Directories Page [02l]', function () {
 
   });
 
+
   context('LDAP config [02r]', function () {
 
     beforeEach(function () {
@@ -71,6 +72,7 @@ describe('Directories Page [02l]', function () {
 
     it('displays information about external LDAP configuration [0b6]', function() {
       var lists = cy.get('.page-content dl.row').as('list');
+
       cy.get('@list').eq(0).contains('Host');
       cy.get('@list').eq(0).contains('ipa.demo1.freeipa.org');
       cy.get('@list').eq(1).contains('Port');

@@ -36,87 +36,13 @@ describe('Group Details Sidepanel [02k]', function () {
       cy
         .get('.side-panel .table tbody')
         .should(function ($tbody) {
-          expect($tbody.children().length).to.equal(2);
+          expect($tbody.children().length).to.equal(4);
         });
     });
 
     it('displays the confirmation modal when clicking remove [060]', function() {
       cy
-        .get('.side-panel .table tbody tr:first-child button')
-        .click();
-
-      cy
-        .get('.confirm-modal')
-        .should(function ($modal) {
-          expect($modal.length).to.equal(1);
-        });
-    });
-
-  });
-
-  context('Permissions tab [02v]', function () {
-
-    beforeEach(function () {
-      cy.get('.side-panel').as('sidePanel');
-    });
-
-    it('displays 'Add Service' in the dropdown box [02x]', function () {
-      cy
-        .get("@sidePanel")
-        .get('.dropdown .dropdown-toggle')
-        .should('contain', 'Add Service');
-    });
-
-    it('displays the selected element in the dropdown box [02y]', function () {
-      cy
-        .get("@sidePanel")
-        .get('.dropdown .dropdown-toggle')
-        .click();
-
-      cy
-        .get("@sidePanel")
-        .get(".dropdown-menu-list > .clickable:last-child")
-        .click();
-
-      cy
-        .get("@sidePanel")
-        .get('.dropdown .dropdown-toggle')
-        .should('contain', 'Shelia Ike Bressette');
-    });
-
-    it('shouldn't contain services that are already in permissions [02z]', function () {
-      cy
-        .get("@sidePanel")
-        .get('.dropdown .dropdown-toggle')
-        .click();
-
-      cy
-        .get("@sidePanel")
-        .get('.dropdown-menu-list')
-        .should(function (list) {
-          var children = list.children();
-          var result = false;
-          for (var i = 0; i < children.length; i++) {
-            if (children[i].textContent === 'service.marathon') {
-              result = true;
-            }
-          }
-
-          expect(result).to.equal(false);
-        });
-    });
-
-    it('should have a table [01a]', function () {
-      cy
-        .get("@sidePanel")
-        .get('table td')
-        .should('contain', 'Marathon');
-    });
-
-    it('displays the confirmation modal when clicking remove [060]', function() {
-      cy
-        .get("@sidePanel")
-        .get('.table tbody tr:first-child button')
+        .get('.side-panel .table tbody tr:eq(1) button')
         .click();
 
       cy

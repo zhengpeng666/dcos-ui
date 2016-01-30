@@ -100,6 +100,104 @@ describe('ACLStore', function () {
 
     });
 
+    describe('Grant Safe User action', function () {
+
+      ACLStore.createACLForResource = jest.genMockFunction();
+      const mockData = {
+        ID: 'myname',
+        action: 'access',
+        resourceID: 'crazyname'
+      };
+      const ID = 'service.' + mockData.resourceID;
+
+      beforeEach(function () {
+        ACLStore.set({'outstandingGrants': {}});
+      });
+
+      it('first creates ACL for resource if nonexistent', function () {
+        ACLStore.grantUserActionToResource(
+          mockData.ID,
+          mockData.action,
+          ID);
+
+        expect(ACLStore.createACLForResource)
+          .toBeCalledWith(ID, {
+            description: mockData.resourceID + ' service'
+          });
+      });
+
+      it('adds grant request to callback list while creating ACL', function () {
+        ACLStore.grantUserActionToResource(
+          mockData.ID,
+          mockData.action,
+          ID);
+
+        expect(typeof ACLStore.get('outstandingGrants')[ID][0] == 'function')
+          .toBeTruthy();
+      });
+
+      it('executes multiple waiting grant requests upon ACL creation',
+        function () {
+          var mockedFn = jest.genMockFunction();
+          var mockedFn2 = jest.genMockFunction();
+
+          ACLStore.addOutstandingGrantRequest('service.foo', mockedFn);
+          ACLStore.addOutstandingGrantRequest('service.foo', mockedFn2);
+
+          AppDispatcher.handleServerAction({
+            type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
+            data: [
+              {rid: 'service.foo', bar: 'baz'},
+              {rid: 'service.baz', bar: 'foo'}
+            ],
+            resourceType: 'service'
+          });
+
+          expect(mockedFn.mock.calls.length === 1
+            && mockedFn2.mock.calls.length === 1)
+            .toBeTruthy();
+        });
+
+      it('only executes outstanding grant requests related to new ACL',
+        function () {
+          var mockedFn = jest.genMockFunction();
+          var mockedFn2 = jest.genMockFunction();
+
+          ACLStore.addOutstandingGrantRequest('service.foo', mockedFn);
+          ACLStore.addOutstandingGrantRequest('service.baz', mockedFn2);
+
+          AppDispatcher.handleServerAction({
+            type: ActionTypes.REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
+            data: [
+              {rid: 'service.foo', bar: 'baz'}
+            ],
+            resourceType: 'service'
+          });
+
+          expect(mockedFn.mock.calls.length === 1
+            && mockedFn2.mock.calls.length === 0)
+            .toBeTruthy();
+        });
+
+      it('removes outstanding grant requests when ACL creation fails',
+        function () {
+          var mockedFn = jest.genMockFunction();
+          var mockedFn2 = jest.genMockFunction();
+
+          ACLStore.addOutstandingGrantRequest('service.foo', mockedFn);
+          ACLStore.addOutstandingGrantRequest('service.baz', mockedFn2);
+
+          AppDispatcher.handleServerAction({
+            type: ActionTypes.REQUEST_ACL_CREATE_ERROR,
+            resourceID: 'service.foo'
+          });
+          let outstandingGrants = ACLStore.get('outstandingGrants');
+          expect('service.foo' in outstandingGrants).toBeFalsy();
+          expect(outstandingGrants['service.baz'].length).toEqual(1);
+        });
+
+    });
+
     describe('Grant User action', function () {
 
       it('dispatches the correct event upon success', function () {

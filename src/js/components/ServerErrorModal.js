@@ -29,6 +29,8 @@ export default class ServerErrorModal extends mixin(StoreMixin) {
     };
 
     this.store_listeners = [
+      {name: 'acl', events: ['createError', 'userGrantError',
+        'userRevokeError', 'groupGrantError', 'groupRevokeError']},
       {name: 'user', events: ['updateError']},
       {name: 'group', events: ['updateError', 'addUserError']},
       {name: 'aclDirectories', events: ['addError', 'testError']}
@@ -51,19 +53,9 @@ export default class ServerErrorModal extends mixin(StoreMixin) {
     });
   }
 
-  /**
-   * Adds error messages for display
-   *
-   * @param  {Mixed} id May be an id or an errorMessage
-   * @param  {Mixed} errorMessage
-   */
-  handleServerError(id, errorMessage) {
-    if (!id && !errorMessage) {
-      throw 'No error message defined!';
-    }
-
+  handleServerError(errorMessage) {
     if (!errorMessage) {
-      errorMessage = id;
+      throw 'No error message defined!';
     }
 
     let errors = this.state.errors.concat([errorMessage]);

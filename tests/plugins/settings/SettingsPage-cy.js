@@ -29,6 +29,7 @@ describe('Settings Page [05k]', function () {
     });
 
     it('hides groups when no groups match the string [05r]', function () {
+      cy.wait(250);
       cy.get('.groups-table-header input[type="text"]').as('filterTextbox');
       cy.get('.page-content-fill .table tbody tr').as('tableRows');
 
@@ -71,7 +72,7 @@ describe('Settings Page [05k]', function () {
 
       cy.get('@filterTextbox').type('藍-遙 遥 悠 遼');
       cy.get('@tableRows').should(function ($tableRows) {
-        expect($tableRows.length).to.equal(1);
+        expect($tableRows.length).to.equal(2);
       });
     });
 

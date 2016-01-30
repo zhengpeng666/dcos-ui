@@ -18,8 +18,10 @@ const ListenersDescription = {
   acl: {
     store: ACLStore,
     events: {
-      success: EventTypes.ACL_RESOURCE_ACLS_CHANGE,
-      error: EventTypes.ACL_RESOURCE_ACLS_ERROR,
+      createSuccess: EventTypes.ACL_CREATE_SUCCESS,
+      createError: EventTypes.ACL_CREATE_ERROR,
+      fetchResourceSuccess: EventTypes.ACL_RESOURCE_ACLS_CHANGE,
+      fetchResourceError: EventTypes.ACL_RESOURCE_ACLS_ERROR,
       userGrantSuccess: EventTypes.ACL_USER_GRANT_ACTION_CHANGE,
       userGrantError: EventTypes.ACL_USER_GRANT_ACTION_ERROR,
       userRevokeSuccess: EventTypes.ACL_USER_REVOKE_ACTION_CHANGE,
