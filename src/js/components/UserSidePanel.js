@@ -186,7 +186,7 @@ export default class UserSidePanel extends mixin(StoreMixin) {
           closeByBackdropClick={true}
           disabled={this.state.pendingRequest}
           footerContainerClass="container container-pod container-pod-short
-            container-pod-fluid"
+            container-pod-fluid flush-top flush-bottom"
           open={this.state.openDeleteConfirmation}
           onClose={this.handleDeleteCancel}
           leftButtonCallback={this.handleDeleteCancel}

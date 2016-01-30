@@ -158,7 +158,7 @@ export default class UserGroupTable extends mixin(StoreMixin) {
         <Confirm
           disabled={this.state.pendingRequest}
           footerContainerClass="container container-pod container-pod-short
-            container-pod-fluid"
+            container-pod-fluid flush-top flush-bottom"
           open={this.state.openConfirm}
           onClose={this.handleButtonCancel}
           leftButtonCallback={this.handleButtonCancel}
