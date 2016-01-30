@@ -313,7 +313,7 @@ describe('ACLUserStore', function () {
       it('emits error event with the userID', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_UPDATE_ERROR,
-          function (userID) {
+          function (data, userID) {
             expect(userID).toEqual('foo');
           }
         );
@@ -328,7 +328,7 @@ describe('ACLUserStore', function () {
       it('emits error event with the error message', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_UPDATE_ERROR,
-          function (userID, error) {
+          function (error, userID) {
             expect(error).toEqual('bar');
           }
         );
@@ -387,7 +387,7 @@ describe('ACLUserStore', function () {
       it('emits error event with the userID and error', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_DELETE_ERROR,
-          function (userID, error) {
+          function (error, userID) {
             expect(userID).toEqual('foo');
             expect(error).toEqual('error');
           }

@@ -59,7 +59,7 @@ export default class UserGroupTable extends mixin(StoreMixin) {
     this.setState({groupID: null, openConfirm: false});
   }
 
-  onGroupStoreDeleteUserError(groupID, userID, error) {
+  onGroupStoreDeleteUserError(error) {
     this.setState({pendingRequest: false, userUpdateError: error});
   }
 
