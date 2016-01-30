@@ -35,7 +35,10 @@ export default class GroupFormModal extends mixin(StoreMixin) {
   }
 
   onGroupStoreCreateSuccess() {
-    this.setState({disableNewGroup: false});
+    this.setState({
+      disableNewUser: false,
+      errorMsg: false
+    });
     this.props.onClose();
   }
 
