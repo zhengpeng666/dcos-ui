@@ -80,7 +80,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     this.setState({
       selectedAction: null
     });
-    this.checkNone();
+    this.bulkCheck(false);
   }
 
   handleCheckboxChange(prevCheckboxState, eventObject) {
@@ -99,18 +99,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
   handleHeadingCheckboxChange(prevCheckboxState, eventObject) {
     let isChecked = eventObject.fieldValue.checked;
-    let selectedIDSet = this.internalStorage_get().selectedIDSet;
-
-    Object.keys(selectedIDSet).forEach(function (id) {
-      selectedIDSet[id] = isChecked;
-    });
-    this.internalStorage_update({selectedIDSet});
-
-    if (isChecked) {
-      this.checkAll();
-    } else if (isChecked === false) {
-      this.checkNone();
-    }
+    this.bulkCheck(isChecked);
   }
 
   handleSearchStringChange(searchString) {
@@ -418,7 +407,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
   getSearchFilterChangeHandler(searchFilter) {
     return () => {
-      this.checkNone();
+      this.bulkCheck(false);
       this.setState({searchFilter});
     };
   }
@@ -466,17 +455,22 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     );
   }
 
-  checkAll() {
-    this.setState({
-      checkedCount: this.state.checkableCount,
-      showActionDropdown: true
-    });
-  }
+  bulkCheck(isChecked) {
+    let checkedCount = 0;
+    let selectedIDSet = this.internalStorage_get().selectedIDSet;
 
-  checkNone() {
+    Object.keys(selectedIDSet).forEach(function (id) {
+      selectedIDSet[id] = isChecked;
+    });
+    this.internalStorage_update({selectedIDSet});
+
+    if (isChecked) {
+      checkedCount = this.state.checkableCount;
+    }
+
     this.setState({
-      checkedCount: 0,
-      showActionDropdown: false
+      checkedCount,
+      showActionDropdown: isChecked
     });
   }
 
