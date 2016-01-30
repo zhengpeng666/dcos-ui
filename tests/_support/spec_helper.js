@@ -23,6 +23,17 @@ Cypress.addParentCommand('configureCluster', function(configuration) {
         status: 400,
         response: 'fx:acl/acls-config-empty'
       })
+      .route({
+        method: 'POST',
+        url: /api\/v1\/ldap\/config\/test/,
+        status: 400,
+        response: 'fx:acl/acls-config-server-test-error'
+      })
+      .route({
+        status: 400,
+        url: /api\/v1\/ldap\/config/,
+        response: ''
+      })
       .route(/api\/v1\/groups/, 'fx:acl/groups-unicode')
       .route(/groups\/olis/, 'fx:acl/group-unicode')
       .route(/groups\/olis\/users/, 'fx:acl/group-users')
@@ -35,6 +46,24 @@ Cypress.addParentCommand('configureCluster', function(configuration) {
     if (configuration.singleLDAP) {
       cy.route(/api\/v1\/ldap\/config/, 'fx:acl/acls-config-1-server');
     }
+  }
+
+  if (configuration.aclLDAPTestSuccessful) {
+    cy.route({
+      method: 'POST',
+      url: /api\/v1\/ldap\/config/,
+      status: 200,
+      response: 'fx:acl/acls-config-server-test-success'
+    });
+  }
+
+  if (configuration.aclLDAPDeleteSuccess) {
+    cy.route({
+      method: 'DELETE',
+      url: /api\/v1\/ldap\/config/,
+      status: 200,
+      response: ''
+    });
   }
 
   // The app won't load until plugins are loaded

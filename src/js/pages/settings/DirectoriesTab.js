@@ -5,6 +5,7 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLDirectoriesStore from '../../stores/ACLDirectoriesStore';
+import DirectoryActionButtons from '../../components/DirectoryActionButtons';
 import FormModal from '../../components/FormModal';
 
 const buttonDefinition = [
@@ -72,8 +73,11 @@ class DirectoriesTab extends mixin(StoreMixin) {
     // There's deeply nested objects
     formData = JSON.parse(JSON.stringify(formData));
 
-    formData['enforce-starttls'] = !!formData['enforce-starttls'][0].checked;
-    formData['use-ldaps'] = !!formData['use-ldaps'][0].checked;
+    var enforceStartTLS = formData['enforce-starttls'];
+    var useLDAPs = formData['use-ldaps'];
+    formData['enforce-starttls'] =
+      !!(enforceStartTLS && enforceStartTLS.checked);
+    formData['use-ldaps'] = !!(useLDAPs && useLDAPs.checked);
 
     ACLDirectoriesStore.addDirectory(formData);
     this.setState({modalDisabled: true});
@@ -81,6 +85,10 @@ class DirectoriesTab extends mixin(StoreMixin) {
 
   handleDirectoryDelete() {
     ACLDirectoriesStore.deleteDirectory();
+  }
+
+  handleDirectoryTestConnection() {
+    ACLDirectoriesStore.testDirectoryConnection();
   }
 
   changeModalOpenState(open) {
@@ -127,28 +135,18 @@ class DirectoriesTab extends mixin(StoreMixin) {
         name: 'use-ldaps',
         required: false,
         showLabel: false,
+        label: fieldDefinitions['use-ldaps'],
         writeType: 'input',
-        validation: function () { return true; },
-        value: [
-          {
-            name: 'use-ldaps-checkbox',
-            label: fieldDefinitions['use-ldaps']
-          }
-        ]
+        validation: function () { return true; }
       },
       {
         fieldType: 'checkbox',
         name: 'enforce-starttls',
         required: false,
         showLabel: false,
+        label: fieldDefinitions['enforce-starttls'],
         writeType: 'input',
-        validation: function () { return true; },
-        value: [
-          {
-            name: 'enforce-starttls-checkbox',
-            label: fieldDefinitions['enforce-starttls']
-          }
-        ]
+        validation: function () { return true; }
       }
     ];
   }
@@ -165,10 +163,10 @@ class DirectoriesTab extends mixin(StoreMixin) {
 
       return (
         <dl key={key} className="flex-box row">
-          <dt className="column-3 emphasize inverse">
+          <dt className="column-3 emphasize lead inverse">
             {fieldDefinitions[key]}
           </dt>
-          <dd className="column-9 inverse">
+          <dd className="column-9">
             {value}
           </dd>
         </dl>
@@ -177,13 +175,13 @@ class DirectoriesTab extends mixin(StoreMixin) {
 
     return (
       <div>
-        <h4 className="inverse flush-top">External LDAP</h4>
+        <h4 className="inverse flush-top">External LDAP Configuration</h4>
         {fields}
-        <button
-          className="button button-danger"
-          onClick={this.handleDirectoryDelete}>
-          Delete Directory
-        </button>
+        <div className="row">
+          <div className="column-12">
+            <DirectoryActionButtons />
+          </div>
+        </div>
       </div>
     );
   }
@@ -196,6 +194,7 @@ class DirectoriesTab extends mixin(StoreMixin) {
           onClick={this.changeModalOpenState.bind(null, true)}>
           + Add Directory
         </button>
+
         <FormModal
           buttonDefinition={buttonDefinition}
           definition={this.getModalFormDefinition()}

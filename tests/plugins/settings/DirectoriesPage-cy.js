@@ -1,6 +1,6 @@
 describe('Directories Page [02l]', function () {
 
-  it('allows navigating to External Directory page', function () {
+  it('allows navigating to External Directory page [02q]', function () {
     cy.configureCluster({
       mesos: '1-task-healthy',
       acl: true,
@@ -13,7 +13,7 @@ describe('Directories Page [02l]', function () {
     cy.hash().should('match', /settings\/organization\/directories/);
   });
 
-  let addDirectoryBtnnText = '+ Add Directory';
+  var addDirectoryBtnText = '+ Add Directory';
 
   context('No ldap config [02m]', function () {
 
@@ -31,7 +31,7 @@ describe('Directories Page [02l]', function () {
     it('displays the add directory button [02n]', function() {
       cy.get('@addDirectoryBtn')
         .should(function ($button) {
-          expect($button[0].textContent).to.equal(addDirectoryBtnnText);
+          expect($button[0].textContent).to.equal(addDirectoryBtnText);
         });
     });
 
@@ -53,7 +53,7 @@ describe('Directories Page [02l]', function () {
 
   });
 
-  context('LDAP config', function () {
+  context('LDAP config [02r]', function () {
 
     beforeEach(function () {
       cy.configureCluster({
@@ -66,15 +66,11 @@ describe('Directories Page [02l]', function () {
     });
 
     it('doesn\'t display the add button', function () {
-      cy.get('.page-content button').should('not.html', addDirectoryBtnnText);
+      cy.get('.page-content button').should('not.html', addDirectoryBtnText);
     });
 
-    it('has a delete directory button', function () {
-      cy.get('.page-content button').contains('Delete Directory');
-    });
-
-    it('displays information about external LDAP configuration', function() {
-      let lists = cy.get('.page-content dl.row').as('list');
+    it('displays information about external LDAP configuration [0b6]', function() {
+      var lists = cy.get('.page-content dl.row').as('list');
       cy.get('@list').eq(0).contains('Host');
       cy.get('@list').eq(0).contains('ipa.demo1.freeipa.org');
       cy.get('@list').eq(1).contains('Port');
@@ -85,6 +81,69 @@ describe('Directories Page [02l]', function () {
       cy.get('@list').eq(3).contains('Yes');
       cy.get('@list').eq(4).contains('Enforce StartTLS');
       cy.get('@list').eq(4).contains('No');
+    });
+
+    it('allows deleting a directory [0cj]', function () {
+      cy.configureCluster({
+        aclLDAPDeleteSuccess: true,
+        acl: true // resets the singleLDAP configuration
+      });
+
+      cy.get('.page-content button').contains('Delete Directory').click();
+
+      // Displays Add Directory button after deletino
+      cy.get('.page-content .button-success').should(function ($button) {
+        expect($button[0].textContent).to.equal(addDirectoryBtnText);
+      });
+    });
+
+  });
+
+  context('LDAP test [0b8]', function () {
+
+    beforeEach(function () {
+      cy.configureCluster({
+        mesos: '1-task-healthy',
+        acl: true,
+        plugins: 'settings-enabled',
+        singleLDAP: true
+      })
+      .visitUrl({url: '/settings/organization/directories', logIn: true});
+
+      cy.get('.page-content button').contains('Test Connection').click();
+    });
+
+    it('brings up a modal with fields [0b9]', function () {
+      cy.get('.modal .modal-header-title').contains('Test External Directory');
+    });
+
+    it('contains a form with two inputs [0be]', function () {
+      cy.get('.modal .form input').should(function ($inputs) {
+        expect($inputs).length.to.be(2);
+        var names = $inputs.map(function (i, el) {
+          return cy.$(el).attr('name');
+        });
+
+        expect(names.get()).to.deep.eq(['uid', 'password']);
+      });
+    });
+
+    it('shows error message on error test [0ca]', function () {
+      cy.get('.modal .form input').eq(0).type('foo');
+      cy.get('.modal .form input').eq(1).type('bar');
+      cy.get('.modal button').contains('Test Connection').click();
+      cy.get('.modal-generic-error .modal-content')
+        .contains('Connection test failed.');
+    });
+
+    it('shows successful message on successful test [0c4]', function () {
+      cy.configureCluster({aclLDAPTestSuccessful: true});
+
+      cy.get('.modal .form input').eq(0).type('foo');
+      cy.get('.modal .form input').eq(1).type('bar');
+      cy.get('.modal button').contains('Test Connection').click();
+      cy.get('.modal .modal-content')
+        .contains('Connection with LDAP server was successful');
     });
 
   });

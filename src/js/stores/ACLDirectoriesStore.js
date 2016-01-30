@@ -24,6 +24,8 @@ var ACLDirectoriesStore = Store.createStore({
 
   deleteDirectory: ACLDirectoriesActions.deleteDirectory,
 
+  testDirectoryConnection: ACLDirectoriesActions.testDirectoryConnection,
+
   fetchDirectories: ACLDirectoriesActions.fetchDirectories,
 
   processDirectoriesSuccess(directories) {
@@ -61,6 +63,12 @@ var ACLDirectoriesStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_ERROR:
         ACLDirectoriesStore.emit(EventTypes.ACL_DIRECTORY_DELETE_ERROR, data);
+        break;
+      case ActionTypes.REQUEST_ACL_DIRECTORY_TEST_SUCCESS:
+        ACLDirectoriesStore.emit(EventTypes.ACL_DIRECTORY_TEST_SUCCESS, data);
+        break;
+      case ActionTypes.REQUEST_ACL_DIRECTORY_TEST_ERROR:
+        ACLDirectoriesStore.emit(EventTypes.ACL_DIRECTORY_TEST_ERROR, data);
         break;
     }
 

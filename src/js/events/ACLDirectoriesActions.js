@@ -62,6 +62,26 @@ const ACLDirectoriesActions = {
         });
       }
     });
+  },
+
+  testDirectoryConnection: function () {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/ldap/config/test`,
+      method: 'POST',
+      data: {uid: 'admin', password: 'Secret123'},
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_DIRECTORY_TEST_SUCCESS,
+          data: response.description
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_DIRECTORY_TEST_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr)
+        });
+      }
+    });
   }
 
 };

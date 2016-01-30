@@ -43,7 +43,9 @@ const ListenersDescription = {
       addSuccess: EventTypes.ACL_DIRECTORY_ADD_SUCCESS,
       addError: EventTypes.ACL_DIRECTORY_ADD_ERROR,
       deleteSuccess: EventTypes.ACL_DIRECTORY_DELETE_SUCCESS,
-      deleteError: EventTypes.ACL_DIRECTORY_DELETE_ERROR
+      deleteError: EventTypes.ACL_DIRECTORY_DELETE_ERROR,
+      testSuccess: EventTypes.ACL_DIRECTORY_TEST_SUCCESS,
+      testError: EventTypes.ACL_DIRECTORY_TEST_ERROR
     },
     unmountWhen: function () {
       return true;
