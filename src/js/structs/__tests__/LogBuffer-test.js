@@ -36,7 +36,7 @@ describe('LogBuffer', function () {
     });
 
     it('uses default maxFileSize option if nothing is provided', function () {
-      expect(this.logBuffer.configuration.maxFileSize).toEqual(50000);
+      expect(this.logBuffer.configuration.maxFileSize).toEqual(250000000);
     });
 
     it('uses default end option if nothing is provided', function () {
@@ -149,6 +149,39 @@ describe('LogBuffer', function () {
       expect(logBuffer.getItems().length).toEqual(3);
     });
 
+  });
+
+  describe('#prepend', function () {
+    it('should subtract length from start', function () {
+      this.logBuffer.prepend(new Item({data: 'foo\nbar\nquis', offset: 100}));
+      expect(this.logBuffer.getStart()).toEqual(100);
+    });
+
+    it('should be able to add then prepend', function () {
+      this.logBuffer.add(new Item({data: 'foo', offset: 100}));
+      this.logBuffer.prepend(new Item({data: '\nbar\nquis', offset: 92}));
+      expect(this.logBuffer.getEnd()).toEqual(103);
+      expect(this.logBuffer.getStart()).toEqual(92);
+    });
+
+    it('should handle truncate correctly', function () {
+      let logBuffer = new LogBuffer({maxFileSize: 10});
+      logBuffer.prepend(new Item({
+        data: 'foo\nbarquisfoofoofoofoofoofoofoofoofoofoofoo\nfoo',
+        offset: 100
+      }));
+      expect(logBuffer.getStart()).toEqual(logBuffer.getEnd() - 3);
+    });
+
+    it('should handle truncate correctly after adding', function () {
+      let logBuffer = new LogBuffer({maxFileSize: 10});
+      logBuffer.add(new Item({data: 'foo', offset: 100}));
+      logBuffer.prepend(new Item({
+        data: 'foo\nbarquisfoofoofoofoofoofoofoofoofoofoofoo\nfoo',
+        offset: 52
+      }));
+      expect(logBuffer.getStart()).toEqual(logBuffer.getEnd() - 3);
+    });
   });
 
   describe('#initialize', function () {

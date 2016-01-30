@@ -115,6 +115,31 @@ describe('MesosLogView', function () {
 
   });
 
+  describe('#handleLogContainerScroll', function () {
+    beforeEach(function () {
+      this.previousGetPrevious = MesosLogStore.getPreviousLogs;
+      MesosLogStore.getPreviousLogs = jasmine.createSpy();
+    });
+
+    afterEach(function () {
+      MesosLogStore.getPreviousLogs = this.previousGetPrevious;
+    });
+
+    it('should not call getPreviousLogs if past 2000 pixels', function () {
+      var event = {target: {scrollTop: 4000}};
+      this.instance.handleLogContainerScroll(event);
+
+      expect(MesosLogStore.getPreviousLogs).not.toHaveBeenCalled();
+    });
+
+    it('should not call getPreviousLogs if below 2000 pixels', function () {
+      var event = {target: {scrollTop: 1000}};
+      this.instance.handleLogContainerScroll(event);
+
+      expect(MesosLogStore.getPreviousLogs).toHaveBeenCalled();
+    });
+  });
+
   describe('#getLog', function () {
 
     it('should show empty log when fullLog is empty string', function () {

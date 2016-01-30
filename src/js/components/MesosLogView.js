@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import mixin from 'reactjs-mixin';
 import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
@@ -8,7 +9,8 @@ import RequestErrorMsg from './RequestErrorMsg';
 
 const METHODS_TO_BIND = [
   'onMesosLogStoreError',
-  'onMesosLogStoreSuccess'
+  'onMesosLogStoreSuccess',
+  'handleLogContainerScroll'
 ];
 
 export default class MesosLogView extends mixin(StoreMixin) {
@@ -28,6 +30,10 @@ export default class MesosLogView extends mixin(StoreMixin) {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+
+    this.handleLogContainerScroll = _.throttle(
+      this.handleLogContainerScroll, 5000
+    );
   }
 
   componentDidMount() {
@@ -64,6 +70,16 @@ export default class MesosLogView extends mixin(StoreMixin) {
       // Check fullLog
       (state.fullLog !== nextState.fullLog)
     );
+  }
+
+  handleLogContainerScroll(e) {
+    let container = e.target;
+    let distanceFromTop = container.pageYOffset || container.scrollTop || 0;
+
+    if (distanceFromTop < 2000) {
+      let {props} = this;
+      MesosLogStore.getPreviousLogs(props.slaveID, props.filePath);
+    }
   }
 
   onMesosLogStoreError(path) {
@@ -112,7 +128,9 @@ export default class MesosLogView extends mixin(StoreMixin) {
     }
 
     return (
-      <pre className="flex-grow flush-bottom">
+      <pre
+        onScroll={this.handleLogContainerScroll}
+        className="flex-grow flush-bottom">
         <Highlight
           matchClass="highlight"
           matchElement="span"
