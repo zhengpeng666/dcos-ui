@@ -183,7 +183,7 @@ export default class GroupUserTable extends mixin(StoreMixin) {
         <Confirm
           disabled={this.state.pendingRequest}
           footerContainerClass="container container-pod container-pod-short
-            container-pod-fluid"
+            container-pod-fluid flush-top flush-bottom"
           open={this.state.openConfirm}
           onClose={this.handleButtonCancel}
           leftButtonCallback={this.handleButtonCancel}
@@ -192,7 +192,7 @@ export default class GroupUserTable extends mixin(StoreMixin) {
         </Confirm>
         <Table
           className="table table-borderless-outer table-borderless-inner-columns
-            flush-bottom no-overflow flush-bottom"
+            flush-bottom no-overflow"
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
           data={groupUsers}
