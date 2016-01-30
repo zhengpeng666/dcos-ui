@@ -13,7 +13,7 @@ describe('Directories Page [02l]', function () {
     cy.hash().should('match', /settings\/organization\/directories/);
   });
 
-  var addDirectoryBtnnText = '+ Add Directory';
+  var addDirectoryBtnText = '+ Add Directory';
 
   context('No ldap config [02m]', function () {
 
@@ -31,7 +31,7 @@ describe('Directories Page [02l]', function () {
     it('displays the add directory button [02n]', function() {
       cy.get('@addDirectoryBtn')
         .should(function ($button) {
-          expect($button[0].textContent).to.equal(addDirectoryBtnnText);
+          expect($button[0].textContent).to.equal(addDirectoryBtnText);
         });
     });
 
@@ -66,7 +66,7 @@ describe('Directories Page [02l]', function () {
     });
 
     it('doesn\'t display the add button', function () {
-      cy.get('.page-content button').should('not.html', addDirectoryBtnnText);
+      cy.get('.page-content button').should('not.html', addDirectoryBtnText);
     });
 
     it('displays information about external LDAP configuration [0b6]', function() {
@@ -93,7 +93,7 @@ describe('Directories Page [02l]', function () {
 
       // Displays Add Directory button after deletino
       cy.get('.page-content .button-success').should(function ($button) {
-        expect($button[0].textContent).to.equal(addDirectoryBtnnText);
+        expect($button[0].textContent).to.equal(addDirectoryBtnText);
       });
     });
 
