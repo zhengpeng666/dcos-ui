@@ -58,25 +58,16 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
   componentWillMount() {
     super.componentWillMount();
-    let selectedIDSet = {};
-    let remoteIDSet = {};
-    let {items, itemID} = this.props;
-    let checkableCount = 0;
+    this.resetTablewideCheckboxTabulations(this.props.items, this.props.itemID);
+  }
 
-    // Initializing hash of items' IDs and corresponding checkbox state.
-    items.forEach(function (item) {
-      let id = item.get(itemID);
+  componentWillReceiveProps(nextProps) {
+    super.componentWillReceiveProps(...arguments);
 
-      if (typeof item.isRemote === 'function' && item.isRemote()) {
-        remoteIDSet[id] = true;
-      } else {
-        checkableCount += 1;
-        selectedIDSet[id] = false;
-      }
-    });
-
-    this.internalStorage_update({selectedIDSet, remoteIDSet});
-    this.setState({checkableCount});
+    if (nextProps.items.length !== this.props.items.length) {
+      let {items, itemID} = nextProps;
+      this.resetTablewideCheckboxTabulations(items, itemID);
+    }
   }
 
   handleActionSelection(dropdownItem) {
@@ -475,25 +466,45 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     );
   }
 
-  resetFilter() {
-    this.setState({
-      searchString: '',
-      searchFilter: 'all'
-    });
-  }
-
   checkAll() {
     this.setState({
       checkedCount: this.state.checkableCount,
       showActionDropdown: true
     });
-
   }
 
   checkNone() {
     this.setState({
       checkedCount: 0,
       showActionDropdown: false
+    });
+  }
+
+  resetTablewideCheckboxTabulations(items, itemID) {
+    let selectedIDSet = {};
+    let remoteIDSet = {};
+    let checkableCount = 0;
+
+    // Initializing hash of items' IDs and corresponding checkbox state.
+    items.forEach(function (item) {
+      let id = item.get(itemID);
+
+      if (typeof item.isRemote === 'function' && item.isRemote()) {
+        remoteIDSet[id] = true;
+      } else {
+        checkableCount += 1;
+        selectedIDSet[id] = false;
+      }
+    });
+
+    this.internalStorage_update({selectedIDSet, remoteIDSet});
+    this.setState({checkableCount});
+  }
+
+  resetFilter() {
+    this.setState({
+      searchString: '',
+      searchFilter: 'all'
     });
   }
 
