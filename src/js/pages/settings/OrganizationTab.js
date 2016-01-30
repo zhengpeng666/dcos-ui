@@ -138,7 +138,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     }
 
     return (
-      <div className="grid">
+      <div className="row">
         <div className={nameColClassnames}>
           <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
           params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}
