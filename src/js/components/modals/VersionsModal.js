@@ -27,6 +27,7 @@ var VersionsModal = React.createClass({
   render: function () {
     return (
       <Modal
+        maxHeightPercentage={0.9}
         onClose={this.onClose}
         open={this.props.open}
         showCloseButton={false}
