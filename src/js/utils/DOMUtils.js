@@ -66,6 +66,10 @@ var DOMUtils = {
     );
   },
 
+  getDistanceFromTop: function (element) {
+    return element.pageYOffset || element.scrollTop || 0;
+  },
+
   isTopFrame: function () {
     try {
       return window.self === window.top;
