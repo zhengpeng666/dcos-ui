@@ -93,10 +93,11 @@ var DOMUtils = {
         if (distanceFromTop <= targetY) {
           requestAnimationFrame(step);
           scrollCount = scrollCount + 1;
-          scrollMargin = cosParameter - cosParameter * Math.cos(scrollCount * scrollStep);
+          scrollMargin = cosParameter -
+            (cosParameter * Math.cos(scrollCount * scrollStep));
           container.scrollTop = distanceFromTop + scrollMargin;
         }
-      }, 15 );
+      }, 15);
     }
   },
 

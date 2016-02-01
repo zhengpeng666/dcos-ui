@@ -24,7 +24,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
     this.state = {
       hasLoadingError: 0,
       fullLog: null,
-      isAtBottom: false
+      isAtBottom: true
     };
 
     this.store_listeners = [{
@@ -68,6 +68,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
     if (prevState.fullLog == null &&
       this.state.fullLog && this.state.fullLog.length) {
       logContainerNode.scrollTop = logContainerNode.scrollHeight;
+      return;
     }
 
     this.checkIfCloseToTop(logContainerNode);
@@ -115,7 +116,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
     let height = DOMUtils.getComputedDimensions(logContainerNode).height;
     DOMUtils.scrollTo(
-      logContainerNode, 2000, logContainerNode.scrollHeight - height
+      logContainerNode, 3000, logContainerNode.scrollHeight - height
     );
   }
 
