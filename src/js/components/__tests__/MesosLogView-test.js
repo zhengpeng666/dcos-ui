@@ -165,6 +165,22 @@ describe('MesosLogView', function () {
 
   });
 
+  describe('#getGoToBottomButton', function () {
+
+    it('should not return a button if currently at the bottom', function () {
+      this.instance.state = {isAtBottom: true};
+      var button = this.instance.getGoToBottomButton();
+      expect(button).toEqual(null);
+    });
+
+    it('should return a button if not at bottom', function () {
+      this.instance.state = {isAtBottom: false};
+      var button = this.instance.getGoToBottomButton();
+      expect(TestUtils.isElementOfType(button, 'button')).toEqual(true);
+    });
+
+  });
+
   describe('#render', function () {
 
     it('should call getErrorScreen when error occured', function () {
