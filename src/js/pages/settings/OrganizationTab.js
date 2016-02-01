@@ -104,6 +104,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
   handleSearchStringChange(searchString) {
     this.setState({searchString});
+    this.bulkCheck(false);
   }
 
   renderHeadline(prop, subject) {
@@ -412,12 +413,12 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     };
   }
 
-  getStringFilter(searchString, changeHandler) {
+  getStringFilter() {
     return (
       <li>
         <FilterInputText
-          searchString={searchString}
-          handleFilterChange={changeHandler}
+          searchString={this.state.searchString}
+          handleFilterChange={this.handleSearchStringChange}
           inverseStyle={true} />
       </li>
     );
@@ -508,8 +509,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     let action = state.selectedAction;
     let capitalizedItemName = StringUtil.capitalize(itemName);
     let filterButtons = this.getFilterButtons();
-    let filterInputText =
-      this.getStringFilter(state.searchString, this.handleSearchStringChange);
+    let filterInputText = this.getStringFilter();
     let actionDropdown = this.getActionDropdown(itemName);
     let actionsModal = this.getActionsModal(action, items, itemID, itemName);
 
