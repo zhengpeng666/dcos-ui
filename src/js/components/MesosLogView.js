@@ -113,7 +113,10 @@ export default class MesosLogView extends mixin(StoreMixin) {
       return;
     }
 
-    logContainerNode.scrollTop = logContainerNode.scrollHeight;
+    let height = DOMUtils.getComputedDimensions(logContainerNode).height;
+    DOMUtils.scrollTo(
+      logContainerNode, 2000, logContainerNode.scrollHeight - height
+    );
   }
 
   onMesosLogStoreError(path) {

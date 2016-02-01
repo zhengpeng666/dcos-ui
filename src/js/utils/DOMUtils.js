@@ -78,6 +78,28 @@ var DOMUtils = {
     }
   },
 
+  scrollTo: function (container, scrollDuration, targetY) {
+    let scrollHeight = container.scrollHeight;
+    let scrollStep = Math.PI / (scrollDuration / 15);
+    let cosParameter = scrollHeight / 2;
+    let scrollCount = 0;
+    let scrollMargin;
+
+    requestAnimationFrame(step);
+
+    function step() {
+      setTimeout(function () {
+        let distanceFromTop = DOMUtils.getDistanceFromTop(container);
+        if (distanceFromTop <= targetY) {
+          requestAnimationFrame(step);
+          scrollCount = scrollCount + 1;
+          scrollMargin = cosParameter - cosParameter * Math.cos(scrollCount * scrollStep);
+          container.scrollTop = distanceFromTop + scrollMargin;
+        }
+      }, 15 );
+    }
+  },
+
   whichTransitionEvent: function (el) {
     var transitions = {
       'transition': 'transitionend',
