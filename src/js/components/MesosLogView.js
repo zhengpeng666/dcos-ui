@@ -18,7 +18,8 @@ export default class MesosLogView extends mixin(StoreMixin) {
     super();
 
     this.state = {
-      hasLoadingError: 0
+      hasLoadingError: 0,
+      fullLog: null
     };
 
     this.store_listeners = [{
@@ -48,6 +49,14 @@ export default class MesosLogView extends mixin(StoreMixin) {
     if (props.filePath !== nextProps.filePath) {
       MesosLogStore.stopTailing(props.filePath);
       MesosLogStore.startTailing(nextProps.slaveID, nextProps.filePath);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.fullLog == null &&
+      this.state.fullLog && this.state.fullLog.length) {
+      let container = React.findDOMNode(this.refs.logContainer);
+      container.scrollTop = container.scrollHeight;
     }
   }
 
@@ -132,8 +141,9 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
     return (
       <pre
-        onScroll={this.handleLogContainerScroll}
-        className="flex-grow flush-bottom">
+        className="flex-grow flush-bottom"
+        ref="logContainer"
+        onScroll={this.handleLogContainerScroll}>
         <Highlight
           matchClass="highlight"
           matchElement="span"

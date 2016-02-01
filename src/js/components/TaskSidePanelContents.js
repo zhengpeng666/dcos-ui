@@ -180,7 +180,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
 
     return (
       <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow no-overflow">
-        <TaskDirectoryView task={task} />;
+        <TaskDirectoryView task={task} />
       </div>
     );
   }
