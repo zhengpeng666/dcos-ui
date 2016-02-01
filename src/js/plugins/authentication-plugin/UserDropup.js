@@ -169,6 +169,7 @@ export default class UserDropup extends React.Component {
           {userButton}
         </div>
         <Modal
+          maxHeightPercentage={0.9}
           onClose={this.handleDropdownClose}
           open={this.state.open}
           showCloseButton={false}

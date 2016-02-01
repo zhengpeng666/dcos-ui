@@ -18,6 +18,7 @@ var ErrorModal = React.createClass({
   render: function () {
     return (
       <Modal
+        maxHeightPercentage={0.9}
         modalClass="modal"
         onClose={this.onClose}
         open={this.props.open}

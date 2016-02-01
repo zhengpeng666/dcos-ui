@@ -78,6 +78,7 @@ var IdentifyModal = React.createClass({
       <Modal
         closeByBackdropClick={false}
         footer={this.getFooter()}
+        maxHeightPercentage={0.9}
         modalClass="modal"
         modalClassName="login-modal"
         open={this.props.open}
