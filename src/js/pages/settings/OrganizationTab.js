@@ -19,6 +19,7 @@ import TableUtil from '../../utils/TableUtil';
 import TooltipMixin from '../../mixins/TooltipMixin';
 
 const METHODS_TO_BIND = [
+  'getTableRowOptions',
   'handleActionSelection',
   'handleActionSelectionClose',
   'handleCheckboxChange',
@@ -456,6 +457,20 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     );
   }
 
+  getTableRowOptions(itemName) {
+    return (row) => {
+      let selectedIDSet = this.internalStorage_get().selectedIDSet;
+      let idAttribute = 'uid';
+      if (itemName === 'group') {
+        idAttribute = 'gid';
+      }
+      if (selectedIDSet[row[idAttribute]]) {
+        return {className: 'selected'};
+      }
+      return {};
+    };
+  }
+
   bulkCheck(isChecked) {
     let checkedCount = 0;
     let selectedIDSet = this.internalStorage_get().selectedIDSet;
@@ -537,6 +552,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
         </div>
         <div className="page-content-fill flex-grow flex-container-col">
           <Table
+            buildRowOptions={this.getTableRowOptions(itemName)}
             className="table inverse table-borderless-outer
               table-borderless-inner-columns flush-bottom"
             columns={this.getColumns(itemName)}
