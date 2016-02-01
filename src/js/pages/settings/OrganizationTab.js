@@ -58,25 +58,16 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
   componentWillMount() {
     super.componentWillMount();
-    let selectedIDSet = {};
-    let remoteIDSet = {};
-    let {items, itemID} = this.props;
-    let checkableCount = 0;
+    this.resetTablewideCheckboxTabulations(this.props.items, this.props.itemID);
+  }
 
-    // Initializing hash of items' IDs and corresponding checkbox state.
-    items.forEach(function (item) {
-      let id = item.get(itemID);
+  componentWillReceiveProps(nextProps) {
+    super.componentWillReceiveProps(...arguments);
 
-      if (typeof item.isRemote === 'function' && item.isRemote()) {
-        remoteIDSet[id] = true;
-      } else {
-        checkableCount += 1;
-        selectedIDSet[id] = false;
-      }
-    });
-
-    this.internalStorage_update({selectedIDSet, remoteIDSet});
-    this.setState({checkableCount});
+    if (nextProps.items.length !== this.props.items.length) {
+      let {items, itemID} = nextProps;
+      this.resetTablewideCheckboxTabulations(items, itemID);
+    }
   }
 
   handleActionSelection(dropdownItem) {
@@ -89,6 +80,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     this.setState({
       selectedAction: null
     });
+    this.bulkCheck(false);
   }
 
   handleCheckboxChange(prevCheckboxState, eventObject) {
@@ -107,24 +99,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
   handleHeadingCheckboxChange(prevCheckboxState, eventObject) {
     let isChecked = eventObject.fieldValue.checked;
-    let selectedIDSet = this.internalStorage_get().selectedIDSet;
-
-    Object.keys(selectedIDSet).forEach(function (id) {
-      selectedIDSet[id] = isChecked;
-    });
-    this.internalStorage_update({selectedIDSet});
-
-    if (isChecked) {
-      this.setState({
-        checkedCount: this.state.checkableCount,
-        showActionDropdown: isChecked
-      });
-    } else if (isChecked === false) {
-      this.setState({
-        checkedCount: 0,
-        showActionDropdown: isChecked
-      });
-    }
+    this.bulkCheck(isChecked);
   }
 
   handleSearchStringChange(searchString) {
@@ -152,7 +127,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     }
 
     return (
-      <div className="grid">
+      <div className="row">
         <div className={nameColClassnames}>
           <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
           params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}
@@ -432,6 +407,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
   getSearchFilterChangeHandler(searchFilter) {
     return () => {
+      this.bulkCheck(false);
       this.setState({searchFilter});
     };
   }
@@ -477,6 +453,46 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
         </div>
       </li>
     );
+  }
+
+  bulkCheck(isChecked) {
+    let checkedCount = 0;
+    let selectedIDSet = this.internalStorage_get().selectedIDSet;
+
+    Object.keys(selectedIDSet).forEach(function (id) {
+      selectedIDSet[id] = isChecked;
+    });
+    this.internalStorage_update({selectedIDSet});
+
+    if (isChecked) {
+      checkedCount = this.state.checkableCount;
+    }
+
+    this.setState({
+      checkedCount,
+      showActionDropdown: isChecked
+    });
+  }
+
+  resetTablewideCheckboxTabulations(items, itemID) {
+    let selectedIDSet = {};
+    let remoteIDSet = {};
+    let checkableCount = 0;
+
+    // Initializing hash of items' IDs and corresponding checkbox state.
+    items.forEach(function (item) {
+      let id = item.get(itemID);
+
+      if (typeof item.isRemote === 'function' && item.isRemote()) {
+        remoteIDSet[id] = true;
+      } else {
+        checkableCount += 1;
+        selectedIDSet[id] = false;
+      }
+    });
+
+    this.internalStorage_update({selectedIDSet, remoteIDSet});
+    this.setState({checkableCount});
   }
 
   resetFilter() {

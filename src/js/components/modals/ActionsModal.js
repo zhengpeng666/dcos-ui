@@ -17,7 +17,7 @@ const METHODS_TO_BIND = [
 ];
 
 const DEFAULT_ID = 'DEFAULT';
-const ITEMS_DISPLAYED = 10;
+const ITEMS_DISPLAYED = 3;
 
 export default class ActionsModal extends mixin(StoreMixin) {
   constructor() {
@@ -100,24 +100,29 @@ export default class ActionsModal extends mixin(StoreMixin) {
   getActionsModalContents() {
     let {actionText, itemType, selectedItems} = this.props;
     let selectedItemsString = '';
-    // Truncate list of selected user/groups for ease of reading
-    let selectedItemsShown = _.first(selectedItems, ITEMS_DISPLAYED + 1);
 
-    // Create a string concatenating n-1 items
-    let selectedItemsShownMinusOne = _.initial(selectedItemsShown);
-    let descriptionArray = _.pluck(selectedItemsShownMinusOne, 'description');
-    descriptionArray.forEach(function (itemDescription) {
-      selectedItemsString += `${itemDescription}, `;
-    });
-
-    // Handle grammar for nth element and concatenate to list
-    if (selectedItems.length <= ITEMS_DISPLAYED) {
-      selectedItemsString += `and ${_.last(selectedItems).description} `;
-    } else if (selectedItems.length === ITEMS_DISPLAYED + 1) {
-      selectedItemsString += `and 1 other `;
+    if (selectedItems.length === 1) {
+      selectedItemsString = selectedItems[0].description;
     } else {
-      let overflow = selectedItems.length - ITEMS_DISPLAYED;
-      selectedItemsString += `and ${overflow} others `;
+      // Truncate list of selected user/groups for ease of reading
+      let selectedItemsShown = _.first(selectedItems, ITEMS_DISPLAYED + 1);
+
+      // Create a string concatenating n-1 items
+      let selectedItemsShownMinusOne = _.initial(selectedItemsShown);
+      let descriptionArray = _.pluck(selectedItemsShownMinusOne, 'description');
+      descriptionArray.forEach(function (itemDescription) {
+        selectedItemsString += `${itemDescription}, `;
+      });
+
+      // Handle grammar for nth element and concatenate to list
+      if (selectedItems.length <= ITEMS_DISPLAYED) {
+        selectedItemsString += `and ${_.last(selectedItems).description} `;
+      } else if (selectedItems.length === ITEMS_DISPLAYED + 1) {
+        selectedItemsString += `and 1 other `;
+      } else {
+        let overflow = selectedItems.length - ITEMS_DISPLAYED;
+        selectedItemsString += `and ${overflow} others `;
+      }
     }
 
     return (

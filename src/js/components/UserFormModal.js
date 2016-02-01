@@ -34,7 +34,10 @@ export default class UserFormModal extends mixin(StoreMixin) {
   }
 
   onUserStoreCreateSuccess() {
-    this.setState({disableNewUser: false});
+    this.setState({
+      disableNewUser: false,
+      errorMsg: false
+    });
     this.props.onClose();
   }
 
