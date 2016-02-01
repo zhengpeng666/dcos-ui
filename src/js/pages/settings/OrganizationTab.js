@@ -457,18 +457,13 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     );
   }
 
-  getTableRowOptions(itemName) {
-    return (row) => {
-      let selectedIDSet = this.internalStorage_get().selectedIDSet;
-      let idAttribute = 'uid';
-      if (itemName === 'group') {
-        idAttribute = 'gid';
-      }
-      if (selectedIDSet[row[idAttribute]]) {
-        return {className: 'selected'};
-      }
-      return {};
-    };
+  getTableRowOptions(row) {
+    let selectedIDSet = this.internalStorage_get().selectedIDSet;
+    if (selectedIDSet[row[this.props.itemID]]) {
+      return {className: 'selected'};
+    }
+    return {};
+
   }
 
   bulkCheck(isChecked) {
@@ -552,7 +547,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
         </div>
         <div className="page-content-fill flex-grow flex-container-col">
           <Table
-            buildRowOptions={this.getTableRowOptions(itemName)}
+            buildRowOptions={this.getTableRowOptions}
             className="table inverse table-borderless-outer
               table-borderless-inner-columns flush-bottom"
             columns={this.getColumns(itemName)}
