@@ -73,7 +73,7 @@ export default class UserSidePanel extends mixin(StoreMixin) {
     HistoryStore.goBack(this.context.router);
   }
 
-  onUserStoreDeleteError(userID, error) {
+  onUserStoreDeleteError(error) {
     this.setState({
       deleteUpdateError: error,
       pendingRequest: false

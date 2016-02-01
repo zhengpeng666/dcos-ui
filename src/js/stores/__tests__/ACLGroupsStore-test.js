@@ -74,17 +74,18 @@ describe('ACLGroupsStore', function () {
     });
 
     it('dispatches the correct event upon error', function () {
-      var mockedFn = jest.genMockFunction();
+      var mockedFn = jasmine.createSpy('mockedFn');
       ACLGroupsStore.addChangeListener(
         EventTypes.ACL_GROUPS_REQUEST_ERROR,
         mockedFn
       );
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_GROUPS_ERROR,
-        message: 'foo'
+        data: 'foo'
       });
 
-      expect(mockedFn.mock.calls.length).toEqual(1);
+      expect(mockedFn.calls.length).toEqual(1);
+      expect(mockedFn.calls[0].args).toEqual(['foo']);
     });
 
   });

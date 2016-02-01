@@ -41,15 +41,15 @@ export default class UsersActionsModal extends ActionsModal {
     ACLGroupsStore.fetchGroups();
   }
 
-  onGroupStoreAddUserError(groupId, userId, errorMessage) {
+  onGroupStoreAddUserError(errorMessage) {
     this.onActionError(errorMessage);
   }
 
-  onGroupStoreDeleteUserError(groupId, userId, errorMessage) {
+  onGroupStoreDeleteUserError(errorMessage) {
     this.onActionError(errorMessage);
   }
 
-  onUserStoreDeleteError(userID, errorMessage) {
+  onUserStoreDeleteError(errorMessage) {
     this.onActionError(errorMessage);
   }
 

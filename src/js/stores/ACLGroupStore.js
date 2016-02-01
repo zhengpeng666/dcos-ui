@@ -136,18 +136,21 @@ let ACLGroupStore = Store.createStore({
     this.validateGroupWithDetailsFetch(group.gid, 'group');
   },
 
-  processGroupError: function (groupID) {
-    this.emit(EventTypes.ACL_GROUP_DETAILS_GROUP_ERROR, groupID);
+  processGroupError: function (data, groupID) {
+    this.emit(
+      EventTypes.ACL_GROUP_DETAILS_GROUP_ERROR,
+      data,
+      groupID);
     this.invalidateGroupWithDetailsFetch(groupID);
   },
 
   /**
    * Process a group permissions response
    *
-   * @param  {Object} groupID
    * @param  {Object} permissions see /acl/groups/group/permissions schema
+   * @param  {Object} groupID
    */
-  processGroupPermissions: function (groupID, permissions) {
+  processGroupPermissions: function (permissions, groupID) {
     let group = this.getGroupRaw(groupID) || {};
 
     group.permissions = permissions;
@@ -159,18 +162,21 @@ let ACLGroupStore = Store.createStore({
     this.validateGroupWithDetailsFetch(groupID, 'permissions');
   },
 
-  processGroupPermissionsError: function (groupID) {
-    this.emit(EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR, groupID);
+  processGroupPermissionsError: function (data, groupID) {
+    this.emit(
+      EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
+      data,
+      groupID);
     this.invalidateGroupWithDetailsFetch(groupID);
   },
 
   /**
    * Process a grup users response
    *
-   * @param  {Object} groupID
    * @param  {Object} users see /acl/groups/group/users schema
+   * @param  {Object} groupID
    */
-  processGroupUsers: function (groupID, users) {
+  processGroupUsers: function (users, groupID) {
     let group = this.getGroupRaw(groupID) || {};
 
     group.users = users;
@@ -182,8 +188,11 @@ let ACLGroupStore = Store.createStore({
     this.validateGroupWithDetailsFetch(groupID, 'users');
   },
 
-  processGroupUsersError: function (groupID) {
-    this.emit(EventTypes.ACL_GROUP_DETAILS_USERS_ERROR, groupID);
+  processGroupUsersError: function (data, groupID) {
+    this.emit(
+      EventTypes.ACL_GROUP_DETAILS_USERS_ERROR,
+      data,
+      groupID);
     this.invalidateGroupWithDetailsFetch(groupID);
   },
 
@@ -201,21 +210,23 @@ let ACLGroupStore = Store.createStore({
         ACLGroupStore.processGroup(action.data);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_ERROR:
-        ACLGroupStore.processGroupError(action.groupID);
+        ACLGroupStore.processGroupError(action.data, action.groupID);
         break;
       // Get ACL permissions of group
       case ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS:
-        ACLGroupStore.processGroupPermissions(action.groupID, action.data);
+        ACLGroupStore.processGroupPermissions(action.data, action.groupID);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR:
-        ACLGroupStore.processGroupPermissionsError(action.groupID);
+        ACLGroupStore.processGroupPermissionsError(
+          action.data,
+          action.groupID);
         break;
       // Get users members of group
       case ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS:
-        ACLGroupStore.processGroupUsers(action.groupID, action.data);
+        ACLGroupStore.processGroupUsers(action.data, action.groupID);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR:
-        ACLGroupStore.processGroupUsersError(action.groupID);
+        ACLGroupStore.processGroupUsersError(action.data, action.groupID);
         break;
       // Create group
       case ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS:
@@ -223,7 +234,11 @@ let ACLGroupStore = Store.createStore({
           .emit(EventTypes.ACL_GROUP_CREATE_SUCCESS, action.groupID);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR:
-        ACLGroupStore.emit(EventTypes.ACL_GROUP_CREATE_ERROR, action.groupID);
+        ACLGroupStore.emit(
+          EventTypes.ACL_GROUP_CREATE_ERROR,
+          action.data,
+          action.groupID
+        );
         break;
       // Update group
       case ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS:
@@ -233,8 +248,8 @@ let ACLGroupStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_UPDATE_ERROR,
-          action.groupID,
-          action.data
+          action.data,
+          action.groupID
         );
         break;
       // Delete group
@@ -245,8 +260,8 @@ let ACLGroupStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_DELETE_ERROR,
-          action.groupID,
-          action.data
+          action.data,
+          action.groupID
         );
         break;
       // Add user to group
@@ -260,9 +275,9 @@ let ACLGroupStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_ADD_USER_ERROR,
+          action.data,
           action.groupID,
-          action.userID,
-          action.data
+          action.userID
         );
         break;
       // Remove user from group
@@ -276,9 +291,9 @@ let ACLGroupStore = Store.createStore({
       case ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR:
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_REMOVE_USER_ERROR,
+          action.data,
           action.groupID,
-          action.userID,
-          action.data
+          action.userID
         );
         break;
     }

@@ -73,7 +73,7 @@ export default class GroupSidePanel extends mixin(StoreMixin) {
     HistoryStore.goBack(this.context.router);
   }
 
-  onGroupStoreDeleteError(groupID, error) {
+  onGroupStoreDeleteError(error) {
     this.setState({
       deleteUpdateError: error,
       pendingRequest: false

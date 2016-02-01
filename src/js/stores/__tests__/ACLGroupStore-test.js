@@ -99,8 +99,8 @@ describe('ACLGroupStore', function () {
       it('emits event after success event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE,
-          function (id) {
-            expect(id).toEqual('foo');
+          function (groupID) {
+            expect(groupID).toEqual('foo');
           }
         );
 
@@ -113,8 +113,8 @@ describe('ACLGroupStore', function () {
       it('emits event after error event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_DETAILS_GROUP_ERROR,
-          function (id) {
-            expect(id).toEqual('foo');
+          function (data, groupID) {
+            expect(groupID).toEqual('foo');
           }
         );
 
@@ -142,8 +142,8 @@ describe('ACLGroupStore', function () {
       it('emits event after success event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE,
-          function (id) {
-            expect(id).toEqual('foo');
+          function (groupID) {
+            expect(groupID).toEqual('foo');
           }
         );
 
@@ -156,8 +156,8 @@ describe('ACLGroupStore', function () {
       it('emits event after error event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_DETAILS_USERS_ERROR,
-          function (id) {
-            expect(id).toEqual('foo');
+          function (data, groupID) {
+            expect(groupID).toEqual('foo');
           }
         );
 
@@ -185,8 +185,8 @@ describe('ACLGroupStore', function () {
       it('emits event after success event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
-          function (id) {
-            expect(id).toEqual('foo');
+          function (groupID) {
+            expect(groupID).toEqual('foo');
           }
         );
 
@@ -199,14 +199,15 @@ describe('ACLGroupStore', function () {
       it('emits event after error event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
-          function (id) {
-            expect(id).toEqual('foo');
+          function (data, groupID) {
+            expect(groupID).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR,
-          groupID: 'foo'
+          groupID: 'foo',
+          data: 'bar'
         });
       });
 
@@ -257,14 +258,15 @@ describe('ACLGroupStore', function () {
       it('emits error event with the groupID', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_CREATE_ERROR,
-          function (groupID) {
+          function (data, groupID) {
             expect(groupID).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR,
-          groupID: 'foo'
+          groupID: 'foo',
+          data: 'bar'
         });
       });
 
@@ -315,21 +317,22 @@ describe('ACLGroupStore', function () {
       it('emits error event with the groupID', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_UPDATE_ERROR,
-          function (groupID) {
+          function (data, groupID) {
             expect(groupID).toEqual('foo');
           }
         );
 
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
-          groupID: 'foo'
+          groupID: 'foo',
+          data: 'bar'
         });
       });
 
       it('emits error event with the groupID and error message', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_UPDATE_ERROR,
-          function (groupID, error) {
+          function (error, groupID) {
             expect(groupID).toEqual('foo');
             expect(error).toEqual('bar');
           }
@@ -389,7 +392,7 @@ describe('ACLGroupStore', function () {
       it('emits error event with the groupID and error', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_DELETE_ERROR,
-          function (groupID, error) {
+          function (error, groupID) {
             expect(groupID).toEqual('foo');
             expect(error).toEqual('error');
           }
@@ -423,7 +426,7 @@ describe('ACLGroupStore', function () {
       it('emits event after error event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_ADD_USER_ERROR, function () {
-            expect(arguments).toEqual(['foo', 'bar', 'error']);
+            expect(arguments).toEqual(['error', 'foo', 'bar']);
           }
         );
 
@@ -456,7 +459,7 @@ describe('ACLGroupStore', function () {
       it('emits event after error event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_REMOVE_USER_ERROR, function () {
-            expect(arguments).toEqual(['foo', 'bar', 'error']);
+            expect(arguments).toEqual(['error', 'foo', 'bar']);
           }
         );
 
