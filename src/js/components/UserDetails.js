@@ -33,7 +33,6 @@ export default class UserDetails extends mixin(StoreMixin) {
 
   handlePasswordSubmit(formData) {
     ACLUserStore.updateUser(this.props.userID, {
-      uid: this.props.userID,
       password: formData.password
     });
   }
@@ -54,6 +53,7 @@ export default class UserDetails extends mixin(StoreMixin) {
     let userDetails = ACLUserStore.getUser(this.props.userID);
     let passwordDefinition = [
       {
+        defaultPasswordValue: '••••••••',
         fieldType: 'password',
         name: 'password',
         placeholder: 'Password',

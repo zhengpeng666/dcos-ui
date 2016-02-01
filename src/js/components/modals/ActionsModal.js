@@ -192,13 +192,13 @@ export default class ActionsModal extends mixin(StoreMixin) {
         disabled={this.state.pendingRequest}
         dynamicHeight={false}
         footerContainerClass="container container-pod container-pod-short
-          container-pod-fluid"
+          container-pod-fluid flush-top flush-bottom"
         open={!!action}
         onClose={this.handleButtonCancel}
         leftButtonCallback={this.handleButtonCancel}
         rightButtonCallback={this.handleButtonConfirm}
         rightButtonText={StringUtil.capitalize(action)}
-        useGemini={false} >
+        useGemini={false}>
         {this.getActionsModalContents()}
       </Confirm>
     );
