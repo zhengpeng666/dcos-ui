@@ -116,7 +116,7 @@ export default class PermissionsView extends mixin(StoreMixin) {
   getDropdownItems() {
     let permissions = this.props.permissions;
     let services = MesosSummaryStore.getActiveServices().sort(
-      Util.getLocaleCompareSortFn('description')
+      Util.getLocaleCompareSortFn('name')
     );
     let filteredResources = services.filter(function (resource) {
         // Filter out any resource which is in permissions

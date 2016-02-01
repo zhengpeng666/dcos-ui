@@ -328,7 +328,7 @@ describe('ACLUserStore', function () {
       it('emits error event with the error message', function () {
         ACLUserStore.addChangeListener(
           EventTypes.ACL_USER_UPDATE_ERROR,
-          function (error, userID) {
+          function (error) {
             expect(error).toEqual('bar');
           }
         );

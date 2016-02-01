@@ -147,10 +147,10 @@ let ACLGroupStore = Store.createStore({
   /**
    * Process a group permissions response
    *
-   * @param  {Object} groupID
    * @param  {Object} permissions see /acl/groups/group/permissions schema
+   * @param  {Object} groupID
    */
-  processGroupPermissions: function (groupID, permissions) {
+  processGroupPermissions: function (permissions, groupID) {
     let group = this.getGroupRaw(groupID) || {};
 
     group.permissions = permissions;
@@ -173,8 +173,8 @@ let ACLGroupStore = Store.createStore({
   /**
    * Process a grup users response
    *
-   * @param  {Object} groupID
    * @param  {Object} users see /acl/groups/group/users schema
+   * @param  {Object} groupID
    */
   processGroupUsers: function (users, groupID) {
     let group = this.getGroupRaw(groupID) || {};
@@ -214,7 +214,7 @@ let ACLGroupStore = Store.createStore({
         break;
       // Get ACL permissions of group
       case ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS:
-        ACLGroupStore.processGroupPermissions(action.groupID, action.data);
+        ACLGroupStore.processGroupPermissions(action.data, action.groupID);
         break;
       case ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR:
         ACLGroupStore.processGroupPermissionsError(
@@ -237,7 +237,8 @@ let ACLGroupStore = Store.createStore({
         ACLGroupStore.emit(
           EventTypes.ACL_GROUP_CREATE_ERROR,
           action.data,
-          action.groupID);
+          action.groupID
+        );
         break;
       // Update group
       case ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS:

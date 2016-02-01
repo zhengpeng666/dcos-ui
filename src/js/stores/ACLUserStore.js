@@ -140,10 +140,10 @@ var ACLUserStore = Store.createStore({
   /**
    * Process a user groups response
    *
-   * @param  {Object} userID
    * @param  {Object} groups see /acl/users/user/groups schema
+   * @param  {Object} userID
    */
-  processUserGroups: function (userID, groups) {
+  processUserGroups: function (groups, userID) {
     let user = this.getUserRaw(userID) || {};
 
     user.groups = groups;
@@ -163,10 +163,10 @@ var ACLUserStore = Store.createStore({
   /**
    * Process a user permissions response
    *
-   * @param  {Object} userID
    * @param  {Object} permissions see /acl/users/user/permissions schema
+   * @param  {Object} userID
    */
-  processUserPermissions: function (userID, permissions) {
+  processUserPermissions: function (permissions, userID) {
     let user = this.getUserRaw(userID) || {};
 
     user.permissions = permissions;
@@ -199,14 +199,14 @@ var ACLUserStore = Store.createStore({
         break;
       // Get groups for user
       case ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS:
-        ACLUserStore.processUserGroups(action.userID, action.data);
+        ACLUserStore.processUserGroups(action.data, action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_GROUPS_ERROR:
         ACLUserStore.processUserGroupsError(action.userID);
         break;
       // Get ACLs for user
       case ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS:
-        ACLUserStore.processUserPermissions(action.userID, action.data);
+        ACLUserStore.processUserPermissions(action.data, action.userID);
         break;
       case ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR:
         ACLUserStore.processUserPermissionsError(action.userID);

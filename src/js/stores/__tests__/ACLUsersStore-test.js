@@ -74,17 +74,18 @@ describe('ACLUsersStore', function () {
     });
 
     it('dispatches the correct event upon error', function () {
-      var mockedFn = jest.genMockFunction();
+      var mockedFn = jasmine.createSpy();
       ACLUsersStore.addChangeListener(
         EventTypes.ACL_USERS_REQUEST_ERROR,
         mockedFn
       );
       AppDispatcher.handleServerAction({
         type: ActionTypes.REQUEST_ACL_USERS_ERROR,
-        message: 'foo'
+        data: 'foo'
       });
 
-      expect(mockedFn.mock.calls.length).toEqual(1);
+      expect(mockedFn.calls.length).toEqual(1);
+      expect(mockedFn.calls[0].args).toEqual(['foo']);
     });
 
   });

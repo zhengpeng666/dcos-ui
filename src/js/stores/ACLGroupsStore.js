@@ -35,8 +35,8 @@ const ACLGroupsStore = Store.createStore({
     this.emit(EventTypes.ACL_GROUPS_CHANGE);
   },
 
-  processGroupsError: function () {
-    this.emit(EventTypes.ACL_GROUPS_REQUEST_ERROR);
+  processGroupsError: function (error) {
+    this.emit(EventTypes.ACL_GROUPS_REQUEST_ERROR, error);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -52,7 +52,7 @@ const ACLGroupsStore = Store.createStore({
         ACLGroupsStore.processGroups(action.data);
         break;
       case ActionTypes.REQUEST_ACL_GROUPS_ERROR:
-        ACLGroupsStore.processGroupsError();
+        ACLGroupsStore.processGroupsError(action.data);
         break;
     }
 

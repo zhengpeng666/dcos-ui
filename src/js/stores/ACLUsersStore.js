@@ -35,8 +35,8 @@ const ACLUsersStore = Store.createStore({
     this.emit(EventTypes.ACL_USERS_CHANGE);
   },
 
-  processUsersError: function () {
-    this.emit(EventTypes.ACL_USERS_REQUEST_ERROR);
+  processUsersError: function (error) {
+    this.emit(EventTypes.ACL_USERS_REQUEST_ERROR, error);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -52,7 +52,7 @@ const ACLUsersStore = Store.createStore({
         ACLUsersStore.processUsers(action.data);
         break;
       case ActionTypes.REQUEST_ACL_USERS_ERROR:
-        ACLUsersStore.processUsersError();
+        ACLUsersStore.processUsersError(action.data);
         break;
     }
 
