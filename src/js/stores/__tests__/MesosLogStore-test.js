@@ -73,6 +73,24 @@ describe('MesosLogStore', function () {
       expect(MesosLogActions.fetchPreviousLog).not.toHaveBeenCalled();
     });
 
+    it('does nothing if already at the beginning of history', function () {
+      var MockMesosLogStore = {
+        get: function (key) {
+          if (key === 'exists') {
+            return {
+              getStart: function () { return 0; }
+            };
+          }
+        }
+      };
+
+      MesosLogStore.getPreviousLogs.call(
+        MockMesosLogStore, 'slaveID', 'exists'
+      );
+
+      expect(MesosLogActions.fetchPreviousLog).not.toHaveBeenCalled();
+    });
+
     it('calls #fetchPreviousLog with the correct args', function () {
       MesosLogStore.getPreviousLogs.call(
         this.MockMesosLogStore, 'slaveID', 'exists'

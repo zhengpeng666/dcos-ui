@@ -32,7 +32,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
     });
 
     this.handleLogContainerScroll = _.throttle(
-      this.handleLogContainerScroll, 5000
+      this.handleLogContainerScroll, 500
     );
   }
 
@@ -74,8 +74,11 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
   handleLogContainerScroll(e) {
     let container = e.target;
-    let distanceFromTop = container.pageYOffset || container.scrollTop || 0;
+    if (!container) {
+      return;
+    }
 
+    let distanceFromTop = container.pageYOffset || container.scrollTop || 0;
     if (distanceFromTop < 2000) {
       let {props} = this;
       MesosLogStore.getPreviousLogs(props.slaveID, props.filePath);

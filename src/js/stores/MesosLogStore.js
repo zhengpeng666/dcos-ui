@@ -36,6 +36,11 @@ const MesosLogStore = Store.createStore({
       startOffset = 0;
     }
 
+    if (startOffset === 0 && logBuffer.getStart() === 0) {
+      // Already at the top.
+      return;
+    }
+
     MesosLogActions.fetchPreviousLog(
       slaveID, path, startOffset, MAX_FILE_SIZE
     );
