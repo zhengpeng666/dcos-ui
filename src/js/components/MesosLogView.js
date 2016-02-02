@@ -126,8 +126,8 @@ export default class MesosLogView extends mixin(StoreMixin) {
       // This allows the user to stay at the place of the log they were at
       // before the prepend.
       if (direction === 'prepend' && previousScrollHeight) {
-        let currentSrollHeight = logContainer.scrollHeight;
-        let heightDifference = currentSrollHeight - previousScrollHeight;
+        let currentScrollHeight = logContainer.scrollHeight;
+        let heightDifference = currentScrollHeight - previousScrollHeight;
         this.setScrollTop(previousScrollTop + heightDifference);
       }
     });
