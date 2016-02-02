@@ -153,7 +153,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
   checkIfAwayFromBottom(container) {
     let distanceFromTop = DOMUtils.getDistanceFromTop(container);
     let containerHeight = DOMUtils.getComputedDimensions(container).height;
-    var isAtBottom =
+    let isAtBottom =
       container.scrollHeight - (containerHeight + distanceFromTop) < 50;
 
     if (isAtBottom !== this.state.isAtBottom) {
@@ -162,7 +162,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   getLogContainerNode() {
-    var logContainer = this.refs.logContainer;
+    let logContainer = this.refs.logContainer;
     if (!logContainer) {
       return null;
     }
@@ -226,7 +226,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   getGoToBottomButton() {
-    var isAtBottom = this.state.isAtBottom;
+    let isAtBottom = this.state.isAtBottom;
 
     if (isAtBottom) {
       return null;
