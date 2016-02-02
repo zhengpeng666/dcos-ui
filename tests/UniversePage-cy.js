@@ -11,9 +11,5 @@ describe.only('Universe Page', function () {
   it('goes to Universe page when tab is clicked', function () {
     cy.get('.sidebar-menu-item').contains('Universe').click();
     cy.hash().should('match', /universe/);
-
-    // it('routes to the universe page', function () {
-    // });
-
   });
 });
