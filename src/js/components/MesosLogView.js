@@ -11,10 +11,10 @@ import RequestErrorMsg from './RequestErrorMsg';
 import Util from '../utils/Util';
 
 const METHODS_TO_BIND = [
-  'onMesosLogStoreError',
-  'onMesosLogStoreSuccess',
+  'handleGoToBottom',
   'handleLogContainerScroll',
-  'handleGoToBottom'
+  'onMesosLogStoreError',
+  'onMesosLogStoreSuccess'
 ];
 
 export default class MesosLogView extends mixin(StoreMixin) {
@@ -22,8 +22,8 @@ export default class MesosLogView extends mixin(StoreMixin) {
     super();
 
     this.state = {
-      hasLoadingError: 0,
       fullLog: null,
+      hasLoadingError: 0,
       isAtBottom: true
     };
 
@@ -58,7 +58,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    super.componentDidUpdate();
+    super.componentDidUpdate(...arguments);
 
     let logContainerNode = this.getLogContainerNode();
     if (logContainerNode == null) {
