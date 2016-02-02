@@ -463,7 +463,6 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
       return {className: 'selected'};
     }
     return {};
-
   }
 
   bulkCheck(isChecked) {
