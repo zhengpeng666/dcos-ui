@@ -162,7 +162,7 @@ var Index = React.createClass({
 
     return (
       <div className="container container-pod vertical-center">
-        <RequestErrorMsg />;
+        <RequestErrorMsg />
       </div>
     );
   },
