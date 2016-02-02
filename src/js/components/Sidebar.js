@@ -16,7 +16,7 @@ import Plugins from '../plugins/Plugins';
 var SidebarActions = require('../events/SidebarActions');
 var TooltipMixin = require('../mixins/TooltipMixin');
 
-let defaultMenuItems = ['dashboard', 'services', 'nodes-list'];
+let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'universe'];
 
 var Sidebar = React.createClass({
 

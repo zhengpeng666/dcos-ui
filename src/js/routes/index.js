@@ -5,6 +5,7 @@ import Index from '../pages/Index';
 import nodes from './nodes';
 import NotFoundPage from '../pages/NotFoundPage';
 import services from './services';
+import universe from './universe';
 
 let routes = [
   {
@@ -20,6 +21,7 @@ let routes = [
           dashboard,
           services,
           nodes,
+          universe,
           {
             type: Redirect,
             from: '/',
