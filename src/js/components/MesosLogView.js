@@ -1,5 +1,5 @@
 import mixin from 'reactjs-mixin';
-import React from 'react';
+import React from 'react/addons';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 const CSSTransitionGroup = React.addons.CSSTransitionGroup;
