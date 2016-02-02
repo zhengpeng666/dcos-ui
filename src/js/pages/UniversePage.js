@@ -1,9 +1,14 @@
 import React from 'react';
+import {RouteHandler} from 'react-router';
+
+import Page from '../components/Page';
 
 export default class UniversePage extends React.Component {
   render() {
     return (
-      <h1 className="inverse text-align-center">Dat Cosmos</h1>
+      <Page title="DCOS Universe">
+        <RouteHandler />
+      </Page>
     );
   }
 }
