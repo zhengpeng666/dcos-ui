@@ -124,7 +124,7 @@ class DirectoriesTab extends mixin(StoreMixin) {
         placeholder: fieldDefinitions.dntemplate,
         required: true,
         validationErrorText:
-          'Value must contain username placeholder "%(username)s"',
+          'Value must contain username placeholder "%(username)s". For example: uid=%(username)s,ou=users,dc=example,dc=com',
         showLabel: false,
         writeType: 'input',
         validation: /\%\(username\)s/,
