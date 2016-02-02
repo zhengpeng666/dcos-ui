@@ -71,7 +71,6 @@ export default class MesosLogView extends mixin(StoreMixin) {
       return;
     }
 
-    this.checkIfCloseToTop(logContainerNode);
     this.checkIfAwayFromBottom(logContainerNode);
   }
 
