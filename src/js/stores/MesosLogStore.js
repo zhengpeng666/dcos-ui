@@ -102,7 +102,7 @@ const MesosLogStore = Store.createStore({
 
     // Fire event always, so listener knows that we have received data
     // This way it is easier to tell whether we are for data or it was empty
-    this.emit(EventTypes.MESOS_LOG_CHANGE, path);
+    this.emit(EventTypes.MESOS_LOG_CHANGE, path, 'append');
 
     let end = logBuffer.getEnd();
     if (data.length === MAX_FILE_SIZE) {
@@ -128,7 +128,7 @@ const MesosLogStore = Store.createStore({
       logBuffer.prepend(new Item(entry));
     }
 
-    this.emit(EventTypes.MESOS_LOG_CHANGE, path);
+    this.emit(EventTypes.MESOS_LOG_CHANGE, path, 'prepend');
   },
 
   processLogError(slaveID, path) {
