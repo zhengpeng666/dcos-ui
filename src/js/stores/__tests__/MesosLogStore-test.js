@@ -168,7 +168,7 @@ describe('MesosLogStore', function () {
 
     it('should call emit with the correct event', function () {
       expect(MesosLogStore.emit).toHaveBeenCalledWith(
-        EventTypes.MESOS_LOG_CHANGE, '/bar'
+        EventTypes.MESOS_LOG_CHANGE, '/bar', 'prepend'
       );
     });
 

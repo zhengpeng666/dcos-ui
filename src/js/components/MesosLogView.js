@@ -104,7 +104,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
     this.setState({hasLoadingError: true});
   }
 
-  onMesosLogStoreSuccess(path) {
+  onMesosLogStoreSuccess(path, direction) {
     // Check the filePath before we reload
     let {filePath} = this.props;
     if (path !== filePath) {
@@ -112,8 +112,29 @@ export default class MesosLogView extends mixin(StoreMixin) {
       return;
     }
 
+    let logContainer = React.findDOMNode(this.refs.logContainer);
+    let previousScrollTop;
+    let previousScrollHeight;
+
+    if (logContainer) {
+      previousScrollTop = logContainer.scrollTop;
+      previousScrollHeight = logContainer.scrollHeight;
+    }
+
     let logBuffer = MesosLogStore.get(filePath);
-    this.setState({fullLog: logBuffer.getFullLog()});
+    this.setState({fullLog: logBuffer.getFullLog()}, () => {
+      // This allows the user to stay at the place of the log they were at
+      // before the prepend.
+      if (direction === 'prepend' && previousScrollHeight) {
+        let currentScrollHeight = logContainer.scrollHeight;
+        let heightDifference = currentScrollHeight - previousScrollHeight;
+        this.setScrollTop(previousScrollTop + heightDifference);
+      }
+    });
+  }
+
+  setScrollTop(scrollTop) {
+    React.findDOMNode(this.refs.logContainer).scrollTop = scrollTop;
   }
 
   getErrorScreen() {
