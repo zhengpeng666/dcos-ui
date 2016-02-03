@@ -78,6 +78,9 @@ var DOMUtils = {
     }
   },
 
+  // This will ease in and ease out of the transition.
+  // Code was modified from this answer:
+  // http://stackoverflow.com/questions/21474678/scrolltop-animation-without-jquery
   scrollTo: function (container, scrollDuration, targetY) {
     let scrollHeight = container.scrollHeight;
     let scrollStep = Math.PI / (scrollDuration / 15);
