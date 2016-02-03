@@ -1,5 +1,7 @@
 jest.dontMock('../LoginModal');
 jest.dontMock('../../../components/ClusterHeader');
+jest.dontMock('../../../components/DCOSLogo');
+jest.dontMock('../../../components/ClusterName');
 jest.dontMock('../../../components/FormModal');
 jest.dontMock('../../../utils/Util');
 jest.dontMock('../../../utils/StringUtil');
@@ -11,6 +13,7 @@ jest.dontMock('../../../stores/ACLUsersStore');
 jest.dontMock('../../../stores/ACLUserStore');
 jest.dontMock('../../../constants/EventTypes');
 jest.dontMock('../../../stores/MarathonStore');
+jest.dontMock('../../../stores/MetadataStore');
 jest.dontMock('../../../stores/MesosStateStore');
 jest.dontMock('../../../stores/MesosSummaryStore');
 jest.dontMock('../../../events/ACLAuthActions');
@@ -25,7 +28,10 @@ var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 
 var ACLAuthStore = require('../../../stores/ACLAuthStore');
+var MetadataStore = require('../../../stores/MetadataStore');
 var LoginModal = require('../LoginModal');
+
+MetadataStore.set({dcosMetadata: {}});
 
 describe('LoginModal', function () {
   beforeEach(function () {
