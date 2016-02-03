@@ -168,6 +168,17 @@ components/tables.less
 
               }
 
+              input[type="checkbox"][disabled] {
+
+                + .form-element-checkbox-decoy {
+
+                  background-color: @form-control-default-inverse-border-color;
+                  cursor: not-allowed;
+
+                }
+
+              }
+
             }
 
           }
