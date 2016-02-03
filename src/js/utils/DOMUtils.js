@@ -66,11 +66,41 @@ var DOMUtils = {
     );
   },
 
+  getDistanceFromTop: function (element) {
+    return element.pageYOffset || element.scrollTop || 0;
+  },
+
   isTopFrame: function () {
     try {
       return window.self === window.top;
     } catch (e) {
       return true;
+    }
+  },
+
+  // This will ease in and ease out of the transition.
+  // Code was modified from this answer:
+  // http://stackoverflow.com/questions/21474678/scrolltop-animation-without-jquery
+  scrollTo: function (container, scrollDuration, targetY) {
+    let scrollHeight = container.scrollHeight;
+    let scrollStep = Math.PI / (scrollDuration / 15);
+    let cosParameter = scrollHeight / 2;
+    let scrollCount = 0;
+    let scrollMargin;
+
+    requestAnimationFrame(step);
+
+    function step() {
+      setTimeout(function () {
+        let distanceFromTop = DOMUtils.getDistanceFromTop(container);
+        if (distanceFromTop <= targetY) {
+          requestAnimationFrame(step);
+          scrollCount = scrollCount + 1;
+          scrollMargin = cosParameter -
+            (cosParameter * Math.cos(scrollCount * scrollStep));
+          container.scrollTop = distanceFromTop + scrollMargin;
+        }
+      }, 15);
     }
   },
 

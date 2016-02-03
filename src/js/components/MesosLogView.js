@@ -1,16 +1,20 @@
-import _ from 'underscore';
 import mixin from 'reactjs-mixin';
-import React from 'react';
+import React from 'react/addons';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+const CSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+import DOMUtils from '../utils/DOMUtils';
 import Highlight from './Highlight';
 import MesosLogStore from '../stores/MesosLogStore';
 import RequestErrorMsg from './RequestErrorMsg';
+import Util from '../utils/Util';
 
 const METHODS_TO_BIND = [
+  'handleGoToBottom',
+  'handleLogContainerScroll',
   'onMesosLogStoreError',
-  'onMesosLogStoreSuccess',
-  'handleLogContainerScroll'
+  'onMesosLogStoreSuccess'
 ];
 
 export default class MesosLogView extends mixin(StoreMixin) {
@@ -18,8 +22,9 @@ export default class MesosLogView extends mixin(StoreMixin) {
     super();
 
     this.state = {
+      fullLog: null,
       hasLoadingError: 0,
-      fullLog: null
+      isAtBottom: true
     };
 
     this.store_listeners = [{
@@ -32,7 +37,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
       this[method] = this[method].bind(this);
     });
 
-    this.handleLogContainerScroll = _.throttle(
+    this.handleLogContainerScroll = Util.throttleScroll(
       this.handleLogContainerScroll, 500
     );
   }
@@ -53,11 +58,20 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    super.componentDidUpdate(...arguments);
+
+    let logContainerNode = this.getLogContainerNode();
+    if (logContainerNode == null) {
+      return;
+    }
+
     if (prevState.fullLog == null &&
       this.state.fullLog && this.state.fullLog.length) {
-      let container = React.findDOMNode(this.refs.logContainer);
-      container.scrollTop = container.scrollHeight;
+      logContainerNode.scrollTop = logContainerNode.scrollHeight;
+      return;
     }
+
+    this.checkIfAwayFromBottom(logContainerNode);
   }
 
   componentWillUnmount() {
@@ -77,7 +91,9 @@ export default class MesosLogView extends mixin(StoreMixin) {
       // Check hasLoadingError
       (state.hasLoadingError !== nextState.hasLoadingError) ||
       // Check fullLog
-      (state.fullLog !== nextState.fullLog)
+      (state.fullLog !== nextState.fullLog) ||
+      // Check isAtBottom
+      (state.isAtBottom !== nextState.isAtBottom)
     );
   }
 
@@ -87,11 +103,20 @@ export default class MesosLogView extends mixin(StoreMixin) {
       return;
     }
 
-    let distanceFromTop = container.pageYOffset || container.scrollTop || 0;
-    if (distanceFromTop < 2000) {
-      let {props} = this;
-      MesosLogStore.getPreviousLogs(props.slaveID, props.filePath);
+    this.checkIfCloseToTop(container);
+    this.checkIfAwayFromBottom(container);
+  }
+
+  handleGoToBottom() {
+    let logContainerNode = this.getLogContainerNode();
+    if (logContainerNode == null) {
+      return;
     }
+
+    let height = DOMUtils.getComputedDimensions(logContainerNode).height;
+    DOMUtils.scrollTo(
+      logContainerNode, 3000, logContainerNode.scrollHeight - height
+    );
   }
 
   onMesosLogStoreError(path) {
@@ -135,6 +160,34 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
   setScrollTop(scrollTop) {
     React.findDOMNode(this.refs.logContainer).scrollTop = scrollTop;
+  }
+
+  checkIfCloseToTop(container) {
+    let distanceFromTop = DOMUtils.getDistanceFromTop(container);
+    if (distanceFromTop < 2000) {
+      let {props} = this;
+      MesosLogStore.getPreviousLogs(props.slaveID, props.filePath);
+    }
+  }
+
+  checkIfAwayFromBottom(container) {
+    let distanceFromTop = DOMUtils.getDistanceFromTop(container);
+    let containerHeight = DOMUtils.getComputedDimensions(container).height;
+    let isAtBottom =
+      container.scrollHeight - (containerHeight + distanceFromTop) < 50;
+
+    if (isAtBottom !== this.state.isAtBottom) {
+      this.setState({isAtBottom});
+    }
+  }
+
+  getLogContainerNode() {
+    let logContainer = this.refs.logContainer;
+    if (!logContainer) {
+      return null;
+    }
+
+    return React.findDOMNode(logContainer);
   }
 
   getErrorScreen() {
@@ -192,6 +245,22 @@ export default class MesosLogView extends mixin(StoreMixin) {
     );
   }
 
+  getGoToBottomButton() {
+    let isAtBottom = this.state.isAtBottom;
+
+    if (isAtBottom) {
+      return null;
+    }
+
+    return (
+      <button
+        onClick={this.handleGoToBottom}
+        className="button button-inverse go-to-bottom-button" >
+        Go to bottom
+      </button>
+    );
+  }
+
   render() {
     if (this.state.hasLoadingError) {
       return this.getErrorScreen();
@@ -206,6 +275,12 @@ export default class MesosLogView extends mixin(StoreMixin) {
     return (
       <div className="log-view flex-grow flex-container-col">
         {this.getLog()}
+        <CSSTransitionGroup
+          transitionAppear={true}
+          transitionName="button"
+          component="div">
+          {this.getGoToBottomButton()}
+        </CSSTransitionGroup>
       </div>
     );
   }

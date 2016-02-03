@@ -83,4 +83,29 @@ describe('DOMUtils', function () {
 
   });
 
+  describe('#scrollTo', function () {
+    beforeEach(function () {
+      this.previousRequest = global.requestAnimationFrame;
+      global.requestAnimationFrame = function (func) {
+        setTimeout(func, 15);
+      };
+    });
+
+    afterEach(function () {
+      global.requestAnimationFrame = this.previousRequest;
+    });
+
+    it('doesn\'t do anything if already scrolled there', function () {
+      var container = {scrollTop: 500, scrollHeight: 1500};
+      DOMUtils.scrollTo(container, 1000, 500);
+      expect(container.scrollTop).toEqual(500);
+    });
+
+    it('begins heading towards the target pixel', function () {
+      var container = {scrollTop: 500, scrollHeight: 1500};
+      DOMUtils.scrollTo(container, 1000, 1000);
+      jest.runAllTimers();
+      expect(container.scrollTop).toBeGreaterThan(1000);
+    });
+  });
 });

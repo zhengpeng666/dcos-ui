@@ -1,6 +1,7 @@
 jest.dontMock('../../constants/StoreConfig');
 jest.dontMock('../../stores/MesosLogStore');
 jest.dontMock('../../utils/Util');
+jest.dontMock('../../utils/DOMUtils');
 jest.dontMock('../../utils/RequestUtil');
 jest.dontMock('../../structs/SummaryList');
 jest.dontMock('../Highlight');
@@ -13,6 +14,7 @@ var TestUtils = React.addons.TestUtils;
 
 var MesosLogStore = require('../../stores/MesosLogStore');
 var MesosLogView = require('../MesosLogView');
+var DOMUtil = require('../../utils/DOMUtils');
 
 describe('MesosLogView', function () {
   beforeEach(function () {
@@ -118,10 +120,17 @@ describe('MesosLogView', function () {
   describe('#handleLogContainerScroll', function () {
     beforeEach(function () {
       this.previousGetPrevious = MesosLogStore.getPreviousLogs;
+      this.previousGetComputed = DOMUtil.getComputedDimensions;
+
+      DOMUtil.getComputedDimensions = function () {
+        return {height: 100};
+      };
+
       MesosLogStore.getPreviousLogs = jasmine.createSpy();
     });
 
     afterEach(function () {
+      DOMUtil.getComputedDimensions = this.previousGetComputed;
       MesosLogStore.getPreviousLogs = this.previousGetPrevious;
     });
 
@@ -152,6 +161,22 @@ describe('MesosLogView', function () {
       this.instance.state = {fullLog: 'foo'};
       var pre = this.instance.getLog();
       expect(TestUtils.isElementOfType(pre, 'pre')).toEqual(true);
+    });
+
+  });
+
+  describe('#getGoToBottomButton', function () {
+
+    it('should not return a button if currently at the bottom', function () {
+      this.instance.state = {isAtBottom: true};
+      var button = this.instance.getGoToBottomButton();
+      expect(button).toEqual(null);
+    });
+
+    it('should return a button if not at bottom', function () {
+      this.instance.state = {isAtBottom: false};
+      var button = this.instance.getGoToBottomButton();
+      expect(TestUtils.isElementOfType(button, 'button')).toEqual(true);
     });
 
   });
