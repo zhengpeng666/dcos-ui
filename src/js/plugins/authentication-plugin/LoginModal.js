@@ -4,8 +4,10 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLAuthStore from '../../stores/ACLAuthStore';
-import ClusterHeader from '../../components/ClusterHeader';
+import ClusterName from '../../components/ClusterName';
+import DCOSLogo from '../../components/DCOSLogo';
 import FormModal from '../../components/FormModal';
+import MetadataStore from '../../stores/MetadataStore';
 
 const METHODS_TO_BIND = [
   'handleLoginSubmit'
@@ -76,6 +78,7 @@ export default class LoginModal extends mixin(StoreMixin) {
     return [
       {
         fieldType: 'text',
+        formGroupClass: 'form-group short-bottom',
         name: 'uid',
         placeholder: 'Username',
         required: true,
@@ -114,16 +117,43 @@ export default class LoginModal extends mixin(StoreMixin) {
     ];
   }
 
+  getMesosphereLogo() {
+    return (
+      <div className="mesosphere-footer-logo">
+        <img src="./img/components/icons/mesosphere-inverse-logo.png" width="148" height="20" />
+      </div>
+    );
+  }
+
   render() {
+    let data = MetadataStore.get('dcosMetadata');
+
+    let modalProps = {
+      innerBodyClass: 'modal-body container container-pod ' +
+        'container-pod-short flex-container-col',
+      modalClass: 'modal modal-narrow'
+    };
+
     return (
       <FormModal
         buttonDefinition={this.getLoginButtonDefinition()}
         definition={this.getLoginFormDefinition()}
         disabled={this.state.disableLogin}
+        extraFooterContent={this.getMesosphereLogo()}
         onSubmit={this.handleLoginSubmit}
         open={true}
-        modalProps={{modalClass: 'modal modal-narrow'}}>
-        <ClusterHeader useClipboard={false} />
+        modalProps={modalProps}>
+        <div className="container container-fluid container-fluid-narrow container-pod container-pod-short flush-top">
+          <div className="sidebar-header-image">
+            <DCOSLogo />
+          </div>
+          <div className="container container-pod container-pod-super-super-short flush-top">
+            <ClusterName />
+          </div>
+          <div className="text-small text-align-center text-muted">
+            Mesosphere DCOS v{data.version}
+          </div>
+        </div>
       </FormModal>
     );
   }
