@@ -120,7 +120,10 @@ export default class LoginModal extends mixin(StoreMixin) {
   getMesosphereLogo() {
     return (
       <div className="mesosphere-footer-logo">
-        <img src="./img/components/icons/mesosphere-inverse-logo.png" width="148" height="20" />
+        <img
+          height="20"
+          src="./img/components/icons/mesosphere-inverse-logo.png"
+          width="148" />
       </div>
     );
   }
@@ -143,11 +146,13 @@ export default class LoginModal extends mixin(StoreMixin) {
         onSubmit={this.handleLoginSubmit}
         open={true}
         modalProps={modalProps}>
-        <div className="container container-fluid container-fluid-narrow container-pod container-pod-short flush-top">
+        <div className="container container-fluid container-fluid-narrow
+          container-pod container-pod-short flush-top">
           <div className="sidebar-header-image">
             <DCOSLogo />
           </div>
-          <div className="container container-pod container-pod-super-super-short flush-top">
+          <div className="container container-pod
+            container-pod-super-super-short flush-top">
             <ClusterName />
           </div>
           <div className="text-small text-align-center text-muted">

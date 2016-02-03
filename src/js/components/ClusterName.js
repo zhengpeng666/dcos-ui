@@ -9,7 +9,6 @@ import MesosSummaryStore from '../stores/MesosSummaryStore';
 class ClusterName extends mixin(StoreMixin) {
   constructor() {
     super();
-    this.state = {};
 
     this.store_listeners = [{
       name: 'summary',
@@ -31,7 +30,10 @@ class ClusterName extends mixin(StoreMixin) {
     }
 
     return (
-      <h3 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={clusterName}>
+      <h3
+        className="sidebar-header-label flush-top text-align-center
+          text-overflow flush-bottom"
+        title={clusterName}>
         {clusterName}
       </h3>
     );
