@@ -16,9 +16,11 @@ const Util = {
   /**
    * @param {Function} func A callback function to be called
    * @param {Number} wait How long to wait
-   * @returns {Function} A function, that, as long as it continues to be
-   * invoked, will not be triggered. The function will be called
-   * after it stops being called for N milliseconds.
+   * @returns {Function} A function, that, after triggered the first time, will
+   * wait for a period of time before the next trigger. If triggered during the
+   * wait, the function will be invoked immediately after the wait is over.
+   * This function is specifically made for React events, hence the nativeEvent
+   * lookup.
    */
   throttleScroll: function (func, wait) {
     let canCall = true;
