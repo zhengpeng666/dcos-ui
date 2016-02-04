@@ -488,7 +488,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
     this.setState({
       checkedCount,
-      showActionDropdown: isChecked && checkedCount > 0
+      showActionDropdown: checkedCount > 0
     });
   }
 
