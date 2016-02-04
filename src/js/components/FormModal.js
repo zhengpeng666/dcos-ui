@@ -70,6 +70,7 @@ export default class FormModal extends React.Component {
     return (
       <div className="button-collection text-align-center flush-bottom">
         {this.getButtons()}
+        {this.props.extraFooterContent}
       </div>
     );
   }
@@ -123,6 +124,7 @@ FormModal.defaultProps = {
     }
   ],
   disabled: false,
+  extraFooterContent: null,
   onClose: function () {},
   open: false,
   modalProps: {}
@@ -133,6 +135,7 @@ FormModal.propTypes = {
   children: React.PropTypes.node,
   definition: React.PropTypes.array,
   disabled: React.PropTypes.bool,
+  extraFooterContent: React.PropTypes.node,
   modalProps: React.PropTypes.object,
   onClose: React.PropTypes.func.isRequired,
   open: React.PropTypes.bool

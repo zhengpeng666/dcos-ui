@@ -141,7 +141,7 @@ export default class ActionsModal extends mixin(StoreMixin) {
     }
 
     return (
-      <div className="container container-pod container-pod-short">
+      <div className="container container-pod container-pod-super-short">
         <Dropdown
           buttonClassName="button dropdown-toggle"
           dropdownMenuClassName="dropdown-menu"

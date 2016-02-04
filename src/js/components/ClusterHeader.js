@@ -7,8 +7,9 @@ import ZeroClipboard from 'zeroclipboard';
 global.ZeroClipboard = ZeroClipboard;
 
 import Actions from '../actions/Actions';
+import ClusterName from './ClusterName';
+import DCOSLogo from './DCOSLogo';
 import MetadataStore from '../stores/MetadataStore';
-import MesosSummaryStore from '../stores/MesosSummaryStore';
 import TooltipMixin from '../mixins/TooltipMixin';
 
 var ClusterHeader = React.createClass({
@@ -95,25 +96,12 @@ var ClusterHeader = React.createClass({
   },
 
   render() {
-    let states = MesosSummaryStore.get('states');
-    let clusterName = '';
-
-    if (states) {
-      let lastState = states.lastSuccessful();
-
-      if (lastState) {
-        clusterName = lastState.getClusterName();
-      }
-    }
-
     return (
       <div className="container container-fluid container-fluid-narrow container-pod container-pod-short">
         <div className="sidebar-header-image">
-          <img className="sidebar-header-image-inner" src="./img/layout/sidebar/sidebar-dcos-icon-medium.png" alt="sidebar header image"/>
+          <DCOSLogo />
         </div>
-        <h3 className="sidebar-header-label flush-top text-align-center text-overflow flush-bottom" title={clusterName}>
-          {clusterName}
-        </h3>
+        <ClusterName />
         {this.getHostName(MetadataStore.get('metadata'))}
       </div>
     );
