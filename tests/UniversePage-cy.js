@@ -4,12 +4,24 @@ describe.only('Universe Page', function () {
     cy.configureCluster({
       mesos: '1-task-healthy',
       acl: true
-    })
-    .visitUrl({url: '/'});
+    });
   });
 
   it('goes to Universe page when tab is clicked', function () {
-    cy.get('.sidebar-menu-item').contains('Universe').click();
+    cy
+      .visitUrl({url: '/'})
+      .get('.sidebar-menu-item')
+      .contains('Universe')
+      .click();
+    cy.hash().should('match', /universe\/packages/);
+  });
+
+  it('goes to Packages tab when tab is clicked', function () {
+    cy
+      .visitUrl({url: '/universe'})
+      .get('.tab-item-label')
+      .contains('Packages')
+      .click();
     cy.hash().should('match', /universe\/packages/);
   });
 });
