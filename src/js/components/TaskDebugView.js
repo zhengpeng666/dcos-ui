@@ -186,7 +186,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
 
     return (
       <div className="flex-container-col flex-grow no-overflow">
-        <div className="control-group form-group flex-shrink flex-align-right flush-bottom">
+        <div className="control-group form-group flex-no-shrink flex-align-right flush-bottom">
           <FilterInputText
             className="flex-grow"
             placeholder="Search"
