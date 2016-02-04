@@ -2,7 +2,6 @@ jest.dontMock('../LoginModal');
 jest.dontMock('../../../components/ClusterHeader');
 jest.dontMock('../../../components/DCOSLogo');
 jest.dontMock('../../../components/ClusterName');
-jest.dontMock('../../../components/FormModal');
 jest.dontMock('../../../utils/Util');
 jest.dontMock('../../../utils/StringUtil');
 jest.dontMock('../../../stores/ACLAuthStore');
@@ -26,6 +25,11 @@ require('../../../utils/StoreMixinConfig');
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
+
+jest.setMock('../../../components/FormModal', React.createClass({
+  displayName: 'mock',
+  render: function () { return null; }
+}));
 
 var ACLAuthStore = require('../../../stores/ACLAuthStore');
 var MetadataStore = require('../../../stores/MetadataStore');
