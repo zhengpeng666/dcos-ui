@@ -59,15 +59,23 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
   componentWillMount() {
     super.componentWillMount();
-    this.resetTablewideCheckboxTabulations(this.props.items, this.props.itemID);
+    this.resetTablewideCheckboxTabulations();
   }
 
   componentWillReceiveProps(nextProps) {
     super.componentWillReceiveProps(...arguments);
 
     if (nextProps.items.length !== this.props.items.length) {
-      let {items, itemID} = nextProps;
-      this.resetTablewideCheckboxTabulations(items, itemID);
+      this.resetTablewideCheckboxTabulations();
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    super.componentDidUpdate(...arguments);
+
+    if (prevState.searchFilter !== this.state.searchFilter ||
+        prevState.searchString !== this.state.searchString) {
+      this.resetTablewideCheckboxTabulations();
     }
   }
 
@@ -159,13 +167,13 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     let rowID = row[this.props.itemID];
     let remoteIDSet = this.internalStorage_get().remoteIDSet;
     let {checkableCount, checkedCount} = this.state;
-    let checked = null;
     let disabled = (remoteIDSet[rowID] === true);
+    let checked = null;
 
-    if (checkedCount === checkableCount) {
-      checked = true;
-    } else if (checkedCount === 0) {
+    if (disabled || checkedCount === 0) {
       checked = false;
+    } else if (checkedCount === checkableCount) {
+      checked = true;
     }
 
     return (
@@ -190,11 +198,11 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     let indeterminate = false;
 
     switch (this.state.checkedCount) {
-      case this.state.checkableCount:
-        checked = true;
-        break;
       case 0:
         checked = false;
+        break;
+      case this.state.checkableCount:
+        checked = true;
         break;
       default:
         indeterminate = true;
@@ -480,11 +488,13 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
 
     this.setState({
       checkedCount,
-      showActionDropdown: isChecked
+      showActionDropdown: checkedCount > 0
     });
   }
 
-  resetTablewideCheckboxTabulations(items, itemID) {
+  resetTablewideCheckboxTabulations() {
+    let {items, itemID} = this.props;
+    items = this.getVisibleItems(items);
     let selectedIDSet = {};
     let remoteIDSet = {};
     let checkableCount = 0;
@@ -517,7 +527,8 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
     let state = this.state;
     let action = state.selectedAction;
     let capitalizedItemName = StringUtil.capitalize(itemName);
-    let filterButtons = this.getFilterButtons();
+    let visibleItems = this.getVisibleItems(items);
+    let filterButtons = this.getFilterButtons(visibleItems);
     let filterInputText = this.getStringFilter();
     let actionDropdown = this.getActionDropdown(itemName);
     let actionsModal = this.getActionsModal(action, items, itemID, itemName);
@@ -528,7 +539,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
           <FilterHeadline
             onReset={this.resetFilter}
             name={`${StringUtil.pluralize(capitalizedItemName)}`}
-            currentLength={this.getVisibleItems(items).length}
+            currentLength={visibleItems.length}
             totalLength={items.length} />
           <ul className="list list-unstyled list-inline flush-bottom">
             {filterButtons}
@@ -552,7 +563,7 @@ export default class OrganizationTab extends mixin(InternalStorageMixin, Tooltip
             columns={this.getColumns(itemName)}
             colGroup={this.getColGroup(itemName)}
             containerSelector=".gm-scroll-view"
-            data={this.getVisibleItems(items)}
+            data={visibleItems}
             idAttribute={itemID}
             itemHeight={TableUtil.getRowHeight()}
             sortBy={{prop: 'description', order: 'asc'}}
