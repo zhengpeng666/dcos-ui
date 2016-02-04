@@ -5,6 +5,7 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLAuthStore from '../../stores/ACLAuthStore';
 import ClusterName from '../../components/ClusterName';
+import MesosphereLogo from '../../components/icons/MesosphereLogo';
 import DCOSLogo from '../../components/DCOSLogo';
 import FormModal from '../../components/FormModal';
 import MetadataStore from '../../stores/MetadataStore';
@@ -120,10 +121,7 @@ export default class LoginModal extends mixin(StoreMixin) {
   getMesosphereLogo() {
     return (
       <div className="mesosphere-footer-logo">
-        <img
-          height="20"
-          src="./img/components/icons/mesosphere-inverse-logo.png"
-          width="148" />
+        <MesosphereLogo height="20" width="148" />
       </div>
     );
   }
