@@ -1,0 +1,380 @@
+#%RAML 0.8
+title: Minuteman API Spec
+version: v1
+baseUri: /api/{version}/
+mediaType: application/json
+
+/vips:
+  displayName: VIPs
+  get:
+    description: Get a list of VIPs.
+    responses:
+      200:
+        description: Successful response.
+        body:
+          application/json:
+            schema: vips
+            example: |
+              [
+                {
+                  "ip": "1.2.3.4",
+                  "port": 5,
+                  "protocol": "tcp"
+                }
+              ]
+/vips/summary:
+  displayName: VIPs Summaries
+  get:
+    description: Get a list of VIP Summaries.
+    responses:
+      200:
+        description: Successful response.
+        body:
+          application/json:
+            schema: vipSummaries
+            example: |
+              [
+                {
+                  "vip": {
+                    "ip": "1.2.3.4",
+                    "port": 5,
+                    "protocol": "tcp"
+                  },
+                  "success_last_minute": 3234,
+                  "fail_last_minute": 12,
+                  "backends": 17
+                }
+              ]
+/vip/detail/{vip}/{protocol}/{port}:
+  displayName: VIP Detail
+  uriParameters:
+    vip:
+      description: Requested VIP.
+      type: string
+    protocol:
+      description: Protocol of the requested VIP.
+      type: string
+    port:
+      description: Port of ther requested VIP.
+  get:
+    description: Get a VIP's detail.
+    responses:
+      200:
+        description: Successful response.
+        body:
+          application/json:
+            schema: vipDetail
+            example: |
+              {
+                "backends": [
+                  {
+                  "request_success": {
+                    "1454007720": 32,
+                    "1454007660": 33
+                  },
+                  "request_fail": {
+                    "1454007720": 32,
+                    "1454007660": 33
+                  },
+                    "ip": "10.10.11.12",
+                    "port": 52342,
+                    "availability_pct": 98,
+                    "circuit_closed_pct": 3
+                  }
+                ],
+                "backends_reachable": {
+                  "100": 32,
+                  "50": 64,
+                  "25": 30,
+                  "24": 1
+                },
+                "backends_circuit_closed": {
+                  "100": 32,
+                  "50": 64,
+                  "43": 30,
+                  "25": 30
+                },
+                "backend_count": 127
+              }
+      404:
+        description: Not found.
+/vip/backend-connections/detail/{vip}/{protocol}/{port}:
+  displayName: Backend Connections
+  uriParameters:
+    vip:
+      description: Requested VIP.
+      type: string
+    protocol:
+      description: Protocol of the requested VIP.
+      type: string
+    port:
+      description: Port of ther requested VIP.
+  get:
+    description: Get a backend connection.
+    responses:
+      200:
+        description: Successful response.
+        body:
+          application/json:
+            schema: backendConnections
+            example: |
+              {
+                "clients": [
+                  {
+                    "request_success": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "request_fail": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "ip": "10.10.11.13",
+                    "available": true,
+                    "circuit_closed": false
+                  }
+                ]
+              }
+      404:
+        description: Not found.
+/membership:
+  displayName: Node Membership
+  get:
+    description: Get node memberships
+    responses:
+      200:
+        description: Successful response.
+        body:
+          application/json:
+            schema: nodeMembership
+            example: |
+              [
+                {
+                  "node": "minuteman@10.2.3.4",
+                  "metadata": {},
+                  "ip": "10.2.3.4",
+                  "active_view": [
+                    "cat@10.3.4.5",
+                    "dog@10.5.6.7"
+                  ],
+                  "passive_view": [
+                    "zat@10.3.4.6",
+                    "zog@10.5.6.8"
+                  ],
+                  "strongly_connected_components": [
+                    [
+                      "zog@10.5.6.8",
+                      "minuteman@4.3.2.1",
+                      "cat@10.3.4.5",
+                      "dog@10.5.6.7"
+                    ],
+                    [
+                      "zat@10.3.4.6",
+                      "zog@10.5.6.8"
+                    ]
+                  ]
+                }
+              ]
+schemas:
+  - vips: |
+      {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "ip": {
+                "type": "string"
+            },
+            "port": {
+                "type": "integer"
+            },
+            "protocol": {
+                "type": "string"
+            }
+          }
+        },
+        "required": ["items"]
+      }
+  - vipSummaries: |
+      {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "vip": {
+              "type": "object",
+              "properties": {
+                "ip": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "protocol": {
+                    "type": "string"
+                }
+              }
+            },
+            "success_last_minute": {
+              "type": "integer"
+            },
+            "fail_last_minute": {
+              "type": "integer"
+            },
+            "backends": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": ["items"]
+      }
+  - vipDetail: |
+      {
+        "type": "object",
+        "properties": {
+          "backends": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "request_success": {
+                  "type": "object",
+                  "patternProperties": {
+                    "[0-9]": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "request_fail": {
+                  "type": "object",
+                  "patternProperties": {
+                    "[0-9]": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "ip": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": "integer"
+                },
+                "availability_pct": {
+                  "type": "integer"
+                },
+                "circuit_closed_pct": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "backends_reachable": {
+            "type": "object",
+            "patternProperties": {
+              "[0-9]{1,3}": {
+                "type": "integer"
+              }
+            }
+          },
+          "backends_circuit_closed": {
+            "type": "object",
+            "patternProperties": {
+              "[0-9]{1,3}": {
+                "type": "integer"
+              }
+            }
+          },
+          "backend_count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "backends",
+          "backends_reachable",
+          "backends_circuit_closed",
+          "backend_count"
+        ]
+      }
+  - backendConnections: |
+      {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "type": "object",
+        "properties": {
+          "clients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "request_success": {
+                  "type": "object",
+                  "patternProperties": {
+                    "[0-9]": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "request_fail": {
+                  "type": "object",
+                  "patternProperties": {
+                    "[0-9]": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "ip": {
+                  "type": "string"
+                },
+                "available": {
+                  "type": "boolean"
+                },
+                "circuit_closed": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": ["clients"]
+      }
+  - nodeMembership: |
+      {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "node": {
+              "type": "string"
+            },
+            "metadata": {
+              "type": "object"
+            },
+            "ip": {
+              "type": "string"
+            },
+            "active_view": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "passive_view": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "strongly_connected_components": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": ["items"]
+      }
