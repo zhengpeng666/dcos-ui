@@ -24,8 +24,6 @@
     "eqeqeq": [2, "smart"],
     "quotes": [2, "single"],
     "indent": [2, 2],
-    "camelcase": [2, {"properties": "never"}],
-    // "camelcase": [2, {"properties": "always"}], This causes errors with mixin properties
     "strict": [2, "never"], // <-- fix
     "no-mixed-spaces-and-tabs": 2,
     "no-trailing-spaces": [2, { "skipBlankLines": false }],
