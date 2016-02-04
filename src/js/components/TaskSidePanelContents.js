@@ -197,6 +197,23 @@ export default class TaskSidePanelContents extends SidePanelContents {
     );
   }
 
+  tabs_handleTabClick(nextTab) {
+    let {currentTab} = this.state;
+
+    // Removing unnecessary listeners from debug tab
+    if (currentTab !== 'debug' && nextTab === 'debug') {
+      this.store_removeListeners();
+    }
+
+    // Re-adding listeners when navigating away from debug tab
+    if (currentTab === 'debug' && nextTab !== 'debug') {
+      this.store_addListeners();
+    }
+
+    // Only call super after we are done removing/adding listeners
+    super.tabs_handleTabClick(...arguments);
+  }
+
   render() {
     if (MesosStateStore.get('lastMesosState').slaves == null) {
       return null;

@@ -27,6 +27,7 @@ export default class TaskDirectoryView extends mixin(StoreMixin) {
   }
 
   componentDidMount() {
+    super.componentDidMount(...arguments);
     TaskDirectoryStore.getDirectory(this.props.task);
   }
 

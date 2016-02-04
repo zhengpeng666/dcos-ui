@@ -33,7 +33,11 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     this.store_listeners = [{
       events: ['success', 'error'],
       name: 'taskDirectory',
-      suppressUpdate: true
+      suppressUpdate: true,
+      unmountWhen: () => {
+        return this.state.directory != null;
+      },
+      listenAlways: false
     }];
 
     METHODS_TO_BIND.forEach((method) => {
