@@ -6,6 +6,7 @@ var Panel = React.createClass({
   displayName: 'Panel',
 
   propTypes: {
+    contentClass: React.PropTypes.string,
     title: React.PropTypes.string,
     style: React.PropTypes.object
   },
@@ -32,19 +33,22 @@ var Panel = React.createClass({
   },
 
   render: function () {
+    let {props} = this;
     var classes = {
       'panel': true
     };
-    if (this.props.className) {
-      classes[this.props.className] = true;
+    if (props.className) {
+      classes[props.className] = true;
     }
 
     var classSet = classNames(classes);
 
+    let contentClasses = classNames('panel-content', props.contentClass);
+
     return (
-      <div className={classSet} style={this.props.style}>
+      <div {...props} className={classSet} style={props.style}>
         {this.getHeading()}
-        <div className="panel-content">
+        <div className={contentClasses}>
           {this.getPanelContents()}
         </div>
       </div>
