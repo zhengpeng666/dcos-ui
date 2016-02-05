@@ -19,6 +19,10 @@ module.exports = class ServicesList extends List {
     });
   }
 
+  getService(serviceName) {
+    return this.filter({name: serviceName}).getItems()[0];
+  }
+
   filter(filters) {
     let services = this.getItems();
 
@@ -34,9 +38,9 @@ module.exports = class ServicesList extends List {
       }
 
       if (filters.health != null) {
-        services = MesosSummaryUtil.filterServicesByHealth(
-          services, filters.health
-        );
+        services = _.filter(services, function (service) {
+          return service.getHealth() === filters.health;
+        });
       }
     }
 

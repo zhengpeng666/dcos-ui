@@ -3,6 +3,7 @@ import {Store} from 'mesosphere-shared-reactjs';
 
 var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
+import CompositeState from '../structs/CompositeState';
 var Config = require('../config/Config');
 import EventTypes from '../constants/EventTypes';
 var GetSetMixin = require('../mixins/GetSetMixin');
@@ -155,6 +156,8 @@ var MesosSummaryStore = Store.createStore({
     if (typeof data.date !== 'number') {
       data.date = Date.now();
     }
+
+    CompositeState.addSummary(data);
 
     states.addSnapshot(data, data.date);
     this.setFailureRate(states.last(), prevState);

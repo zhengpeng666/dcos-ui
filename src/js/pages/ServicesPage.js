@@ -4,6 +4,7 @@ import {RouteHandler} from 'react-router';
 
 var AlertPanel = require('../components/AlertPanel');
 import Config from '../config/Config';
+import CompositeState from '../structs/CompositeState';
 import EventTypes from '../constants/EventTypes';
 var FilterHealth = require('../components/FilterHealth');
 var FilterHeadline = require('../components/FilterHeadline');
@@ -33,7 +34,7 @@ function getMesosServices(state) {
   let filters = _.pick(state, 'searchString', 'healthFilter');
   let states = MesosSummaryStore.get('states');
   let lastState = states.lastSuccessful();
-  let services = lastState.getServiceList();
+  let services = CompositeState.getServiceList();
   let filteredServices = services.filter({
     health: filters.healthFilter,
     name: filters.searchString

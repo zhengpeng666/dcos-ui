@@ -88,7 +88,7 @@ var ServicesTable = React.createClass({
   },
 
   renderHealth: function (prop, service) {
-    let appHealth = MarathonStore.getServiceHealth(service.name);
+    let appHealth = service.getHealth();
 
     if (!this.props.healthProcessed) {
       return (

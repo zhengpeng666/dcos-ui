@@ -3,6 +3,7 @@ import {Store} from 'mesosphere-shared-reactjs';
 
 var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
+import CompositeState from '../structs/CompositeState';
 var Config = require('../config/Config');
 import EventTypes from '../constants/EventTypes';
 var GetSetMixin = require('../mixins/GetSetMixin');
@@ -137,6 +138,7 @@ var MesosStateStore = Store.createStore({
   },
 
   processStateSuccess: function (lastMesosState) {
+    CompositeState.addState(lastMesosState);
     this.set({lastMesosState});
     this.emit(EventTypes.MESOS_STATE_CHANGE);
   },
