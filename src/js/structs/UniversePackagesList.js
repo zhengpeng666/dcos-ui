@@ -1,7 +1,7 @@
 import List from './List';
 import UniversePackage from './UniversePackage';
 
-export default class UniversePackagesList extends List {
+class UniversePackagesList extends List {
   constructor() {
     super(...arguments);
 
@@ -15,3 +15,5 @@ export default class UniversePackagesList extends List {
     });
   }
 }
+
+module.exports = UniversePackagesList;

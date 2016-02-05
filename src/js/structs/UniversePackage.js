@@ -1,7 +1,7 @@
 import Item from './Item';
 import ServiceImages from '../constants/ServiceImages';
 
-export default class UniversePackage extends Item {
+class UniversePackage extends Item {
   getIcons() {
     let resources = this.get('resources');
     if (resources && resources.images) {
@@ -11,3 +11,5 @@ export default class UniversePackage extends Item {
     return ServiceImages.NA_IMAGES;
   }
 }
+
+module.exports = UniversePackage;
