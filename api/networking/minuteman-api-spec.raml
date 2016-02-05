@@ -196,7 +196,8 @@ schemas:
               "type": "object",
               "properties": {
                 "ip": {
-                  "type": "string"
+                  "type": "string",
+                  "pattern": "^[\\w-\\.:@]+$"
                 },
                 "port": {
                   "type": "integer"
@@ -225,7 +226,8 @@ schemas:
                   "type": "object",
                   "properties": {
                     "ip": {
-                        "type": "string"
+                        "type": "string",
+                        "pattern": "^[\\w-\\.:@]+$"
                     },
                     "port": {
                         "type": "integer"
