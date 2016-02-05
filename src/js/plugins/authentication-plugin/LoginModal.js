@@ -40,7 +40,9 @@ export default class LoginModal extends mixin(StoreMixin) {
     let loginRedirectRoute = ACLAuthStore.get('loginRedirectRoute');
 
     if (!ACLAuthStore.isAdmin()) {
-      router.transitionTo('/access-denied');
+      setTimeout(function () {
+        router.transitionTo('/access-denied');
+      }, 1000);
     } else if (loginRedirectRoute) {
       // Go to redirect route if it is present
       router.transitionTo(loginRedirectRoute);
@@ -60,6 +62,17 @@ export default class LoginModal extends mixin(StoreMixin) {
         window.location.href = parsedSearch.redirect;
         return;
       }
+    }
+
+    if (global.location.hash) {
+      let parsedHash = qs.parse(global.location.hash);
+      Object.keys(parsedHash).forEach(function (key) {
+        if (/redirect/.test(key)) {
+          setTimeout(function () {
+            window.location.href = parsedHash[key];
+          });
+        }
+      });
     }
   }
 

@@ -1,7 +1,9 @@
 describe('LoginModal [01i]', function () {
 
-  beforeEach(function () {
-    cy.configureCluster({
+  context('logging in [01k]', function () {
+
+    beforeEach(function () {
+      cy.configureCluster({
         mesos: '1-task-healthy',
         acl: true,
         plugins: 'authentication-enabled'
@@ -21,19 +23,15 @@ describe('LoginModal [01i]', function () {
         response: {uid: 'joe', description: 'Joe Doe'}
       })
       .visitUrl({url: '/', logIn: false});
-  });
 
-  it('should open the modal [01j]', function () {
-    cy.get('.modal-container').should(function (modal) {
-      expect(modal.length).to.equal(1);
-    });
-  });
-
-  context('logging in [01k]', function () {
-    beforeEach(function () {
       cy.get('.modal-container input[type=\'text\']').type('kennyt');
       cy.get('.modal-container input[type=\'password\']').type('1234');
+    });
 
+    it('should open the modal [01j]', function () {
+      cy.get('.modal-container').should(function (modal) {
+        expect(modal.length).to.equal(1);
+      });
     });
 
     it('disables the buttons while request is pending on submit [01l]', function () {
@@ -67,7 +65,7 @@ describe('LoginModal [01i]', function () {
       .its('href').should('eq', 'http://localhost:4200/foo/bar');
     });
 
-    it('routes to access-denied after login with non admin login', function () {
+    it('routes to access-denied after login with non admin login [0d1]', function () {
       cy
         .route({
           method: 'GET',
@@ -83,6 +81,29 @@ describe('LoginModal [01i]', function () {
         .click()
         .hash().should('eq', '#/access-denied');
     });
+  });
+
+  context('automatic log out [0d2]', function () {
+
+    beforeEach(function () {
+      cy.configureCluster({
+        mesos: '1-task-healthy',
+        acl: true,
+        plugins: 'authentication-enabled'
+      })
+      .route({
+        method: 'GET',
+        status: 401,
+        url: /apps/,
+        response:''
+      })
+      .visitUrl({url: '/#/dashboard/', logIn: false});
+    });
+
+    it('logs users out on 401 response from server [0d3]', function () {
+      cy.hash().should('eq', '#/login');
+    });
+
   });
 
 });

@@ -113,6 +113,7 @@ describe('LoginModal', function () {
       ACLAuthStore.isAdmin = function () { return false; };
 
       this.instance.onAuthStoreRoleChange();
+      jest.runAllTimers();
       expect(this.instance.context.router.transitionTo)
         .toHaveBeenCalledWith('/access-denied');
 
