@@ -15,13 +15,15 @@ mediaType: application/json
           application/json:
             schema: vips
             example: |
-              [
-                {
-                  "ip": "1.2.3.4",
-                  "port": 5,
-                  "protocol": "tcp"
-                }
-              ]
+              {
+                "array": [
+                  {
+                    "ip": "1.2.3.4",
+                    "port": 5,
+                    "protocol": "tcp"
+                  }
+                ]
+              }
   /summary:
     displayName: VIPs Summaries
     get:
@@ -33,20 +35,21 @@ mediaType: application/json
             application/json:
               schema: vipSummaries
               example: |
-                [
-                  {
-                    "vip": {
-                      "ip": "1.2.3.4",
-                      "port": 5,
-                      "protocol": "tcp"
-                    },
-                    "success_last_minute": 3234,
-                    "fail_last_minute": 12,
-                    "backends": 17
-                  }
-                ]
-/vip:
-  /detail/{vip}/{protocol}/{port}:
+                {
+                  "array": [
+                    {
+                      "vip": {
+                        "ip": "1.2.3.4",
+                        "port": 5,
+                        "protocol": "tcp"
+                      },
+                      "success_last_minute": 3234,
+                      "fail_last_minute": 12,
+                      "backends": 17
+                    }
+                  ]
+                }
+  /{vip}/{protocol}/{port}:
     displayName: VIP Detail
     uriParameters:
       vip:
@@ -57,6 +60,7 @@ mediaType: application/json
         type: string
       port:
         description: Port of ther requested VIP.
+        type: integer
     get:
       description: Get a VIP's detail.
       responses:
@@ -99,7 +103,7 @@ mediaType: application/json
                 }
         404:
           description: Not found.
-  /backend-connections/detail/{vip}/{protocol}/{port}:
+  /backend-connections/{vip}/{protocol}/{port}:
     displayName: Backend Connections
     uriParameters:
       vip:
@@ -110,6 +114,7 @@ mediaType: application/json
         type: string
       port:
         description: Port of ther requested VIP.
+        type: integer
     get:
       description: Get a backend connection.
       responses:
@@ -149,90 +154,106 @@ mediaType: application/json
           application/json:
             schema: nodeMembership
             example: |
-              [
-                {
-                  "node": "minuteman@10.2.3.4",
-                  "metadata": {},
-                  "ip": "10.2.3.4",
-                  "active_view": [
-                    "cat@10.3.4.5",
-                    "dog@10.5.6.7"
-                  ],
-                  "passive_view": [
-                    "zat@10.3.4.6",
-                    "zog@10.5.6.8"
-                  ],
-                  "strongly_connected_components": [
-                    [
-                      "zog@10.5.6.8",
-                      "minuteman@4.3.2.1",
+              {
+                "array": [
+                  {
+                    "node": "minuteman@10.2.3.4",
+                    "metadata": {},
+                    "ip": "10.2.3.4",
+                    "active_view": [
                       "cat@10.3.4.5",
                       "dog@10.5.6.7"
                     ],
-                    [
+                    "passive_view": [
                       "zat@10.3.4.6",
                       "zog@10.5.6.8"
+                    ],
+                    "strongly_connected_components": [
+                      [
+                        "zog@10.5.6.8",
+                        "minuteman@4.3.2.1",
+                        "cat@10.3.4.5",
+                        "dog@10.5.6.7"
+                      ],
+                      [
+                        "zat@10.3.4.6",
+                        "zog@10.5.6.8"
+                      ]
                     ]
-                  ]
-                }
-              ]
+                  }
+                ]
+              }
 schemas:
   - vips: |
       {
         "$schema": "http://json-schema.org/draft-03/schema",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "ip": {
-                "type": "string"
-            },
-            "port": {
-                "type": "integer"
-            },
-            "protocol": {
-                "type": "string"
+        "id": "http://schema.dcos/networking/vips",
+        "type": "object",
+        "properties": {
+          "array": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ip": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": "integer"
+                },
+                "protocol": {
+                  "type": "string"
+                }
+              }
             }
           }
         },
-        "required": ["items"]
+        "required": ["array"]
       }
   - vipSummaries: |
       {
         "$schema": "http://json-schema.org/draft-03/schema",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "vip": {
+        "id": "http://schema.dcos/networking/vip-summaries",
+        "type": "object",
+        "properties": {
+          "array": {
+            "type": "array",
+            "items": {
               "type": "object",
               "properties": {
-                "ip": {
-                    "type": "string"
+                "vip": {
+                  "type": "object",
+                  "properties": {
+                    "ip": {
+                        "type": "string"
+                    },
+                    "port": {
+                        "type": "integer"
+                    },
+                    "protocol": {
+                        "type": "string"
+                    }
+                  }
                 },
-                "port": {
-                    "type": "integer"
+                "success_last_minute": {
+                  "type": "integer"
                 },
-                "protocol": {
-                    "type": "string"
+                "fail_last_minute": {
+                  "type": "integer"
+                },
+                "backends": {
+                  "type": "integer"
                 }
               }
-            },
-            "success_last_minute": {
-              "type": "integer"
-            },
-            "fail_last_minute": {
-              "type": "integer"
-            },
-            "backends": {
-              "type": "integer"
             }
           }
         },
-        "required": ["items"]
+        "required": ["array"]
       }
   - vipDetail: |
       {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "id": "http://schema.dcos/networking/vip-detail",
         "type": "object",
         "properties": {
           "backends": {
@@ -301,6 +322,7 @@ schemas:
   - backendConnections: |
       {
         "$schema": "http://json-schema.org/draft-03/schema",
+        "id": "http://schema.dcos/networking/backend-connections",
         "type": "object",
         "properties": {
           "clients": {
@@ -341,41 +363,48 @@ schemas:
       }
   - nodeMembership: |
       {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "node": {
-              "type": "string"
-            },
-            "metadata": {
-              "type": "object"
-            },
-            "ip": {
-              "type": "string"
-            },
-            "active_view": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "passive_view": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "strongly_connected_components": {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "id": "http://schema.dcos/networking/node-membership",
+        "type": "object",
+        "properties": {
+          "array": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "node": {
                   "type": "string"
+                },
+                "metadata": {
+                  "type": "object"
+                },
+                "ip": {
+                  "type": "string"
+                },
+                "active_view": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "passive_view": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "strongly_connected_components": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
           }
         },
-        "required": ["items"]
+        "required": ["array"]
       }
