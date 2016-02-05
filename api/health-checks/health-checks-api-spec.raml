@@ -1,0 +1,219 @@
+ #%RAML 0.8
+title: Component Health Checks API Spec
+version: v1
+baseUri: /api/{version}
+mediaType: application/json
+
+
+/health:
+  /components:
+    displayName: Components Health
+    get:
+      description: Get a list of components and their health status.
+      responses:
+        200:
+          description: Successful response.
+          body:
+            application/json:
+              schema: components
+              example: |
+                {
+                  "array": [
+                    {
+                      "id": "mesos",
+                      "name": "Mesos",
+                      "version": "0.27.1",
+                      "health": "sick"
+                    },
+                    {
+                      "id": "service_manager",
+                      "name": "Service Manage",
+                      "version": "0.0.1",
+                      "health": "healthy"
+                    }
+                  ]
+                }
+
+    /{component}:
+      displayName: Component Health
+      get:
+        description: Get a list of the component's node health summaries.
+        responses:
+          200:
+            description: Successful response.
+            body:
+              application/json:
+                schema: component
+                example: |
+                  {
+                    "id": "service_manager",
+                    "name": "Service Manager",
+                    "version": "0.0.1",
+                    "health": "healthy"
+                  }
+      /nodes:
+        displayName: Component Nodes Health
+        get:
+          description: Get a list of a component's nodes and their healths.
+          responses:
+            200:
+              description: Successful response.
+              body:
+                application/json:
+                  schema: nodes
+                  example: |
+                    {
+                      "array": [
+                        {
+                          "id": "srv1.hw.ca1.mesosphere.com",
+                          "type": "master",
+                          "health": "healthy"
+                        },
+                        {
+                          "id": "srv1.hw.ca1.mesosphere.com",
+                          "type": "agent",
+                          "health": "healthy"
+                        }
+                      ]
+                    }
+        /{node}:
+          displayName: Node Health
+          get:
+            description: Get a node's health status.
+            responses:
+              200:
+                description: Successful response.
+                body:
+                  application/json:
+                    schema: node
+                    example: |
+                      {
+                        "id": "srv1.hw.ca1.mesosphere.com",
+                        "description": "This is a node, it has a health check and a family.",
+                        "type": "agent",
+                        "health": "unknown",
+                        "health_check_name": "Infalliable Health Check",
+                        "output": "{\n\"path\": \"/health/cluster\"\n}"
+                      }
+
+  /report:
+    displayName: Health Report
+    get:
+      description: Get a full report of components health.
+      responses:
+        200:
+          description: Successful response.
+          body:
+            application/json:
+              schema: report
+              example: |
+                {
+                  "description": "A printout to help support help customers, I guess it can really be anything.",
+                  "components": [
+                    {
+                      "id": "service_manager",
+                      "name": "Service Manager",
+                      "version": "0.0.1",
+                      "health": "healthy"
+                    }
+                  ]
+                }
+
+schemas:
+  - components: |
+      {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "id": "http://schema.dcos/health/components",
+        "type": "object",
+        "properties": {
+          "array": {
+            "title": "List of components and their health statuses.",
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+  - component: |
+      {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "id": "http://schema.dcos/health/component",
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Component ID",
+            "type": "string",
+            "pattern": "^[a-zA-Z][\\w]*$"
+          },
+          "name": {
+            "title": "Component name",
+            "type": "string"
+          },
+          "version": {
+            "title": "Component version",
+            "type": "string"
+          },
+          "health": {
+            "title": "Component health status",
+            "type": "string",
+            "enum": ["healthy", "sick", "unknown"]
+          }
+        }
+      }
+  - nodes: |
+      {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "id": "http://schema.dcos/health/nodes",
+        "type": "object",
+        "properties": {
+          "array": {
+            "title": "List of nodes and their health statuses.",
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+  - node: |
+      {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "id": "http://schema.dcos/health/node",
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Node ID",
+            "type": "string",
+            "pattern": "^[a-zA-Z][\\w\\.]*$"
+          },
+          "description": {
+            "title": "Node description text",
+            "type": "string"
+          },
+          "type": {
+            "title": "Node ID",
+            "type": "string",
+            "enum": ["master", "agent"]
+          },
+          "health": {
+            "title": "Node health status",
+            "type": "string",
+            "enum": ["healthy", "sick", "unknown"]
+          },
+          "health_check_name": {
+            "title": "Node health check name",
+            "type": "string"
+          },
+          "output": {
+            "title": "Node health check output",
+            "type": "string"
+          }
+        }
+      }
+  - report: |
+      {
+        "$schema": "http://json-schema.org/draft-03/schema",
+        "id": "http://schema.dcos/health/report",
+        "type": "object"
+      }
