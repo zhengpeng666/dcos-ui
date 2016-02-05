@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema",
+  "id": "http://schema.dcos/networking/node-membership",
+  "type": "object",
+  "properties": {
+    "array": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "node": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "active_view": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "passive_view": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "strongly_connected_components": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["array"]
+}

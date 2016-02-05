@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema",
+  "id": "http://schema.dcos/networking/vip-summaries",
+  "type": "object",
+  "properties": {
+    "array": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "vip": {
+            "$ref": "vip"
+          },
+          "success_last_minute": {
+            "type": "integer"
+          },
+          "fail_last_minute": {
+            "type": "integer"
+          },
+          "backends": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "required": ["array"]
+}

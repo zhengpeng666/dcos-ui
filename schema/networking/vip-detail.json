@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema",
+  "id": "http://schema.dcos/networking/vip-detail",
+  "type": "object",
+  "properties": {
+    "backends": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "request_success": {
+            "type": "object",
+            "patternProperties": {
+              "[0-9]": {
+                "type": "integer"
+              }
+            }
+          },
+          "request_fail": {
+            "type": "object",
+            "patternProperties": {
+              "[0-9]": {
+                "type": "integer"
+              }
+            }
+          },
+          "ip": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "availability_pct": {
+            "type": "integer"
+          },
+          "circuit_closed_pct": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "backends_reachable": {
+      "type": "object",
+      "patternProperties": {
+        "[0-9]{1,3}": {
+          "type": "integer"
+        }
+      }
+    },
+    "backends_circuit_closed": {
+      "type": "object",
+      "patternProperties": {
+        "[0-9]{1,3}": {
+          "type": "integer"
+        }
+      }
+    },
+    "backend_count": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "backends",
+    "backends_reachable",
+    "backends_circuit_closed",
+    "backend_count"
+  ]
+}

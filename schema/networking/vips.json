@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema",
+  "id": "http://schema.dcos/networking/vips",
+  "type": "object",
+  "properties": {
+    "array": {
+      "type": "array",
+      "items": {
+        "$ref": "vip"
+      }
+    }
+  },
+  "required": ["array"]
+}

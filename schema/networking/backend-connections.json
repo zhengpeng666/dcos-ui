@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema",
+  "id": "http://schema.dcos/networking/backend-connections",
+  "type": "object",
+  "properties": {
+    "clients": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "request_success": {
+            "type": "object",
+            "patternProperties": {
+              "[0-9]": {
+                "type": "integer"
+              }
+            }
+          },
+          "request_fail": {
+            "type": "object",
+            "patternProperties": {
+              "[0-9]": {
+                "type": "integer"
+              }
+            }
+          },
+          "ip": {
+            "type": "string"
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "circuit_closed": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "required": ["clients"]
+}

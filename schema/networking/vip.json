@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema",
+  "id": "http://schema.dcos/networking/vip",
+  "type": "object",
+  "properties": {
+    "array": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string",
+          "pattern": "^[\\w-\\.:@]+$"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "protocol": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": ["ip", "port", "protocol"]
+}
