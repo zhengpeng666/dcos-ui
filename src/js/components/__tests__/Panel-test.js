@@ -12,6 +12,10 @@ describe('Panel', function () {
       <Panel
         className="foo"
         contentClass="bar"
+        footer="footer"
+        footerClass="qux"
+        heading="heading"
+        headingClass="norf"
         onClick={this.onClickSpy}>
         <div className="quis" />
       </Panel>
@@ -31,12 +35,68 @@ describe('Panel', function () {
       expect(panel.props.className).toBe('foo');
     });
 
-    it('should append className to content node', function () {
+    it('should override className to content node', function () {
       var content = TestUtils.findRenderedDOMComponentWithClass(
         this.instance,
+        'bar'
+      );
+      expect(content.props.className).toBe('bar');
+    });
+
+    it('should use default className to content node', function () {
+      var content = TestUtils.findRenderedDOMComponentWithClass(
+        TestUtils.renderIntoDocument(<Panel />),
         'panel-content'
       );
-      expect(content.props.className).toBe('panel-content bar');
+      expect(content.props.className).toBe('panel-content');
+    });
+
+    it('should override className to footer node', function () {
+      var footer = TestUtils.findRenderedDOMComponentWithClass(
+        this.instance,
+        'bar'
+      );
+      expect(footer.props.className).toBe('bar');
+    });
+
+    it('should use default className to footer node', function () {
+      var footer = TestUtils.findRenderedDOMComponentWithClass(
+        TestUtils.renderIntoDocument(<Panel footer="footer" />),
+        'panel-footer'
+      );
+      expect(footer.props.className).toBe('panel-footer');
+    });
+
+    it('should not render footer when none is given', function () {
+      var panel = TestUtils.renderIntoDocument(<Panel />);
+      expect(TestUtils.scryRenderedDOMComponentsWithClass(
+        panel,
+        'panel-footer'
+      ).length).toBe(0);
+    });
+
+    it('should override className to heading node', function () {
+      var heading = TestUtils.findRenderedDOMComponentWithClass(
+        this.instance,
+        'bar'
+      );
+      expect(heading.props.className).toBe('bar');
+    });
+
+    it('should use default className to heading node', function () {
+      var heading = TestUtils.findRenderedDOMComponentWithClass(
+        TestUtils.renderIntoDocument(<Panel heading="heading" />),
+        'panel-heading'
+      );
+      expect(heading.props.className).toBe('panel-heading');
+    });
+
+    it('should not render heading when none is given', function () {
+      var panel = TestUtils.renderIntoDocument(<Panel />);
+      expect(TestUtils.scryRenderedDOMComponentsWithClass(
+        panel,
+        'panel-heading'
+      ).length).toBe(0);
     });
 
     it('should be able to add an onClick to the panel node', function () {

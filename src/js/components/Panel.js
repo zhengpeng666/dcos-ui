@@ -1,4 +1,3 @@
-var classNames = require('classnames');
 var React = require('react/addons');
 
 var Panel = React.createClass({
@@ -6,51 +5,48 @@ var Panel = React.createClass({
   displayName: 'Panel',
 
   propTypes: {
+    heading: React.PropTypes.node,
+    footer: React.PropTypes.node,
+
+    // classes
     contentClass: React.PropTypes.string,
-    title: React.PropTypes.string,
-    style: React.PropTypes.object
+    headingClass: React.PropTypes.string,
+    footerClass: React.PropTypes.string
   },
 
-  getHeading: function () {
-    var title = this.props.title;
-    if (title == null || title === '') {
+  getDefaultProps: function () {
+    return {
+      className: 'panel',
+      contentClass: 'panel-content',
+      footerClass: 'panel-footer',
+      headingClass: 'panel-heading'
+    };
+  },
+
+  getNode: function (nodeName) {
+    let {props} = this;
+    let node = props[nodeName];
+    if (!node) {
       return null;
     }
 
     return (
-      <div className="panel-heading text-align-center">
-        <h5 className="panel-title inverse">
-          {title}
-        </h5>
+      <div className={props[nodeName + 'Class']}>
+        {node}
       </div>
     );
   },
 
-  getPanelContents: function () {
-    return React.Children.map(this.props.children, function (child) {
-      return child;
-    });
-  },
-
   render: function () {
     let {props} = this;
-    var classes = {
-      'panel': true
-    };
-    if (props.className) {
-      classes[props.className] = true;
-    }
-
-    var classSet = classNames(classes);
-
-    let contentClasses = classNames('panel-content', props.contentClass);
 
     return (
-      <div {...props} className={classSet} style={props.style}>
-        {this.getHeading()}
-        <div className={contentClasses}>
-          {this.getPanelContents()}
+      <div {...props}>
+        {this.getNode('heading')}
+        <div className={props.contentClass}>
+          {props.children}
         </div>
+        {this.getNode('footer')}
       </div>
     );
   }
