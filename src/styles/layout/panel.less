@@ -291,38 +291,6 @@ components/panels.less
     }
 
     /* -----------------------------------------------------------------------------
-    Panel (Frame)
-    ----------------------------------------------------------------------------- */
-
-    &.panel-frame {
-
-      margin: -@grid-gutter-width;
-      padding: @grid-gutter-width;
-      margin-bottom: -@grid-gutter-width + @base-spacing-unit;
-
-      &.panel-frame-pull-top {
-
-        margin-top: -(@container-pod-padding-vertical);
-        padding-top: (@container-pod-padding-vertical);
-
-      }
-
-      &.panel-frame-pull-bottom {
-
-        margin-bottom: -(@container-pod-padding-vertical) + @base-spacing-unit;
-        padding-bottom: (@container-pod-padding-vertical);
-
-      }
-
-      &.flush-bottom {
-
-        margin-bottom: -(@container-pod-padding-vertical);
-
-      }
-
-    }
-
-    /* -----------------------------------------------------------------------------
     Panel (Info)
     ----------------------------------------------------------------------------- */
 
@@ -396,24 +364,6 @@ components/panels.less
 
   }
 
-  /* -----------------------------------------------------------------------------
-  Panel (Link)
-  ----------------------------------------------------------------------------- */
-
-  a.panel {
-
-    .transition(e('box-shadow 0.2s ease, transform 0.2s ease'));
-
-    &:hover {
-
-      text-decoration: none;
-      .box-shadow(e('0px 2px 2px 0px rgba(0, 0, 0, 0.15), 0px 6px 10px 0px rgba(0, 0, 0, 0.1)'));
-      cursor: pointer;
-
-    }
-
-  }
-
 }
 
 
@@ -432,50 +382,6 @@ components/panels.less
   ----------------------------------------------------------------------------- */
 
   @media (min-width: @screen-mini) {
-
-    /* -----------------------------------------------------------------------------
-    --------------------------------------------------------------------------------
-
-    Panel
-
-    --------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------- */
-
-    .panel {
-
-      /* -----------------------------------------------------------------------------
-      Panel (Frame)
-      ----------------------------------------------------------------------------- */
-
-      &.panel-frame {
-
-        margin: -@base-spacing-unit-screen-mini;
-        padding: @base-spacing-unit-screen-mini;
-        margin-bottom: @base-spacing-unit-screen-mini;
-
-        &.panel-frame-pull-top {
-
-          margin-top: -(@container-pod-padding-vertical-screen-mini);
-          padding-top: (@container-pod-padding-vertical-screen-mini);
-
-        }
-
-        &.panel-frame-pull-bottom {
-
-          margin-bottom: -(@container-pod-padding-vertical-screen-mini) + @base-spacing-unit-screen-mini;
-          padding-bottom: (@container-pod-padding-vertical-screen-mini);
-
-        }
-
-        &.flush-bottom {
-
-          margin-bottom: -(@container-pod-padding-vertical-screen-mini);
-
-        }
-
-      }
-
-    }
 
   }
 
@@ -498,64 +404,6 @@ components/panels.less
 
   @media (min-width: @screen-small) {
 
-    /* -----------------------------------------------------------------------------
-    --------------------------------------------------------------------------------
-
-    Panel
-
-    --------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------- */
-
-    .panel {
-
-      /* -----------------------------------------------------------------------------
-      Panel (Frame)
-      ----------------------------------------------------------------------------- */
-
-      &.panel-frame {
-
-        padding: @grid-gutter-width-screen-small * 0.5;
-        margin: (-@grid-gutter-width-screen-small * 0.5) 0px;
-        margin-bottom: @base-spacing-unit-screen-small * 0.5;
-
-        &.panel-frame-pull-top {
-
-          margin-top: -((@grid-gutter-width-screen-small * 0.5) + @container-pod-padding-vertical-screen-small);
-          padding-top: ((@grid-gutter-width-screen-small * 0.5) + @container-pod-padding-vertical-screen-small);
-
-        }
-
-        &.panel-frame-pull-bottom {
-
-          margin-bottom: -((@grid-gutter-width-screen-small * 0.5) + @container-pod-padding-vertical-screen-small) + @base-spacing-unit-screen-small;
-          padding-bottom: ((@grid-gutter-width-screen-small * 0.5) + @container-pod-padding-vertical-screen-small);
-
-        }
-
-        &:flush-bottom {
-
-          margin-bottom: -((@grid-gutter-width-screen-small * 0.5) + @container-pod-padding-vertical-screen-small);
-
-        }
-
-        &.panel-frame-pull-left {
-
-          margin-left: -1000%;
-          padding-left: 1000%;
-
-        }
-
-        &.panel-frame-pull-right {
-
-          margin-right: -1000%;
-          padding-right: 1000%;
-
-        }
-
-      }
-
-    }
-
   }
 
 }
@@ -577,50 +425,6 @@ components/panels.less
 
   @media (min-width: @screen-medium) {
 
-    /* -----------------------------------------------------------------------------
-    --------------------------------------------------------------------------------
-
-    Panel
-
-    --------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------- */
-
-    .panel {
-
-      /* -----------------------------------------------------------------------------
-      Panel (Frame)
-      ----------------------------------------------------------------------------- */
-
-      &.panel-frame {
-
-        padding: @grid-gutter-width-screen-medium * 0.5;
-        margin: (-@grid-gutter-width-screen-medium * 0.5) 0px;
-        margin-bottom: @base-spacing-unit-screen-medium * 0.5;
-
-        &.panel-frame-pull-top {
-
-          margin-top: -((@grid-gutter-width-screen-medium * 0.5) + @container-pod-padding-vertical-screen-medium);
-          padding-top: ((@grid-gutter-width-screen-medium * 0.5) + @container-pod-padding-vertical-screen-medium);
-
-        }
-
-        &.panel-frame-pull-bottom {
-
-          margin-bottom: -((@grid-gutter-width-screen-medium * 0.5) + @container-pod-padding-vertical-screen-medium) + @base-spacing-unit-screen-medium;
-          padding-bottom: ((@grid-gutter-width-screen-medium * 0.5) + @container-pod-padding-vertical-screen-medium);
-
-        }
-
-        &:flush-bottom {
-
-          margin-bottom: -((@grid-gutter-width-screen-medium * 0.5) + @container-pod-padding-vertical-screen-medium);
-
-        }
-
-      }
-
-    }
-
   }
 
 }
@@ -641,50 +445,6 @@ components/panels.less
   ----------------------------------------------------------------------------- */
 
   @media (min-width: @screen-large) {
-
-    /* -----------------------------------------------------------------------------
-    --------------------------------------------------------------------------------
-
-    Panel
-
-    --------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------- */
-
-    .panel {
-
-      /* -----------------------------------------------------------------------------
-      Panel (Frame)
-      ----------------------------------------------------------------------------- */
-
-      &.panel-frame {
-
-        padding: @grid-gutter-width-screen-large * 0.5;
-        margin: (-@grid-gutter-width-screen-large * 0.5) 0px;
-        margin-bottom: @base-spacing-unit-screen-large * 0.5;
-
-        &.panel-frame-pull-top {
-
-          margin-top: -((@grid-gutter-width-screen-large * 0.5) + @container-pod-padding-vertical-screen-large);
-          padding-top: ((@grid-gutter-width-screen-large * 0.5) + @container-pod-padding-vertical-screen-large);
-
-        }
-
-        &.panel-frame-pull-bottom {
-
-          margin-bottom: -((@grid-gutter-width-screen-large * 0.5) + @container-pod-padding-vertical-screen-large) + @base-spacing-unit-screen-large;
-          padding-bottom: ((@grid-gutter-width-screen-large * 0.5) + @container-pod-padding-vertical-screen-large);
-
-        }
-
-        &:flush-bottom {
-
-          margin-bottom: -((@grid-gutter-width-screen-large * 0.5) + @container-pod-padding-vertical-screen-large);
-
-        }
-
-      }
-
-    }
 
   }
 
