@@ -1,4 +1,4 @@
-var React = require('react/addons');
+var React = require('react');
 var Units = require('../../utils/Units');
 
 var Chart = require('./Chart');

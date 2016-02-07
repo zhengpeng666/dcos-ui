@@ -23,8 +23,8 @@ jest.dontMock('../../../mixins/GetSetMixin');
 
 require('../../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 jest.setMock('../../../components/FormModal', React.createClass({
   displayName: 'mock',

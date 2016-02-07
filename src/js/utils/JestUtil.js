@@ -1,5 +1,4 @@
-var React = require('react/addons');
-const TestUtils = React.addons.TestUtils;
+const TestUtils = require('react-addons-test-utils');
 
 const JestUtil = {
   renderAndFindTag: function (instance, tag) {

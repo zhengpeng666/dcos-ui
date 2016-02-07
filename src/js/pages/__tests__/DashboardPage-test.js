@@ -6,8 +6,8 @@ jest.dontMock('../../mixins/InternalStorageMixin');
 jest.dontMock('../../utils/Util');
 jest.dontMock('../../constants/HealthSorting');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var DashboardPage = require('../DashboardPage');
 var MarathonStore = require('../../stores/MarathonStore');

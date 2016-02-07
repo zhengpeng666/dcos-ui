@@ -1,5 +1,5 @@
 import mixin from 'reactjs-mixin';
-import React from 'react/addons';
+import React from 'react';
 import {Confirm, SidePanel} from 'reactjs-components';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 

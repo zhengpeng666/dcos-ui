@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var d3 = require('d3');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 jest.dontMock('./fixtures/MockTimeSeriesData');
 jest.dontMock('../../../mixins/ChartMixin');

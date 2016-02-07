@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var d3 = require('d3');
-var React = require('react/addons');
+var React = require('react');
 
 var AnimationCircle = require('./AnimationCircle');
 var ChartMixin = require('../../mixins/ChartMixin');

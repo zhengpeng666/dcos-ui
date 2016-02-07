@@ -1,5 +1,6 @@
 import mixin from 'reactjs-mixin';
-import React from 'react/addons';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import _ from 'underscore';
 
 import Cluster from '../utils/Cluster';
@@ -187,7 +188,7 @@ export default class ServiceOverlay extends mixin(InternalStorageMixin) {
     let serviceName = this.props.params.serviceName;
     let service = MesosSummaryStore.getServiceFromName(serviceName);
 
-    React.render(
+    ReactDOM.render(
       <div className="overlay-container">
         {this.getServiceNav(service)}
         <iframe

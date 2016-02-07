@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import React from 'react/addons';
+import React from 'react';
 import {SidePanel} from 'reactjs-components';
 
 import HistoryStore from '../stores/HistoryStore';

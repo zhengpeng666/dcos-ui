@@ -12,8 +12,9 @@ jest.dontMock('../TaskDebugView');
 require('../../utils/StoreMixinConfig');
 
 var TaskDirectory = require('../../structs/TaskDirectory');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var TaskDirectoryActions = require('../../events/TaskDirectoryActions');
 var TaskDirectoryStore = require('../../stores/TaskDirectoryStore');
@@ -111,7 +112,7 @@ describe('TaskDebugView', function () {
     });
 
     it('should set button disabled when file is not found', function () {
-      var instance = React.render(
+      var instance = ReactDOM.render(
         <TaskDebugView task={{slave_id: 'foo'}} />,
         document.createElement('div')
       );
@@ -124,7 +125,7 @@ describe('TaskDebugView', function () {
     });
 
     it('should set button not disabled when file is found', function () {
-      var instance = React.render(
+      var instance = ReactDOM.render(
         <TaskDebugView task={{slave_id: 'foo'}} />,
         document.createElement('div')
       );

@@ -1,7 +1,8 @@
 jest.dontMock('../Highlight');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 var Highlight = require('../Highlight');
 
 describe('Highlight instance', function () {
@@ -18,7 +19,7 @@ describe('Highlight instance', function () {
     expect(TestUtils.isCompositeComponent(instance)).toBe(true);
     expect(TestUtils.isCompositeComponentWithType(instance, Highlight))
       .toBe(true);
-    expect(React.findDOMNode(matches[0]).textContent).toEqual('World');
+    expect(ReactDOM.findDOMNode(matches[0]).textContent).toEqual('World');
   });
 
   it('should have children', function () {
@@ -30,7 +31,7 @@ describe('Highlight instance', function () {
 
     var matches =
       TestUtils.scryRenderedDOMComponentsWithClass(instance, 'highlight');
-    expect(React.findDOMNode(instance).children.length).toEqual(3);
+    expect(ReactDOM.findDOMNode(instance).children.length).toEqual(3);
     expect(matches.length).toEqual(1);
 
   });
@@ -69,8 +70,8 @@ describe('Highlight instance', function () {
     var matches =
       TestUtils.scryRenderedDOMComponentsWithTag(instance, 'strong');
 
-    expect(React.findDOMNode(instance).className).toEqual('myHighlighter');
-    expect(React.findDOMNode(matches[0]).className).toEqual('highlight');
+    expect(ReactDOM.findDOMNode(instance).className).toEqual('myHighlighter');
+    expect(ReactDOM.findDOMNode(matches[0]).className).toEqual('highlight');
   });
 
   it('should support regular expressions in search', function () {
@@ -82,9 +83,9 @@ describe('Highlight instance', function () {
 
     var matches =
       TestUtils.scryRenderedDOMComponentsWithTag(instance, 'strong');
-    expect(React.findDOMNode(matches[0]).textContent).toEqual('Easy');
-    expect(React.findDOMNode(matches[1]).textContent).toEqual('as');
-    expect(React.findDOMNode(matches[2]).textContent).toEqual('ABC');
+    expect(ReactDOM.findDOMNode(matches[0]).textContent).toEqual('Easy');
+    expect(ReactDOM.findDOMNode(matches[1]).textContent).toEqual('as');
+    expect(ReactDOM.findDOMNode(matches[2]).textContent).toEqual('ABC');
   });
 
   it('should support escaping arbitrary string in search', function () {

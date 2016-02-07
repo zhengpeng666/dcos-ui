@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import classNames from 'classnames';
-import React from 'react/addons';
+import React from 'react';
 
 import ResourceTableUtil from '../utils/ResourceTableUtil';
 import {Table} from 'reactjs-components';

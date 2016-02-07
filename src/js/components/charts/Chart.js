@@ -1,5 +1,6 @@
 var _ = require('underscore');
-var React = require('react/addons');
+var cloneWithProps = require('react-addons-clone-with-props');
+var React = require('react');
 
 var InternalStorageMixin = require('../../mixins/InternalStorageMixin');
 var DOMUtils = require('../../utils/DOMUtils');
@@ -74,13 +75,13 @@ var Chart = React.createClass({
       if (_.isArray(children)) {
         height = height / children.length;
         return _.map(children, function (child) {
-          return React.addons.cloneWithProps(
+          return cloneWithProps(
             child,
             {width: width, height: height}
           );
         });
       } else {
-        return React.addons.cloneWithProps(
+        return cloneWithProps(
           children,
           {width: width, height: height}
         );

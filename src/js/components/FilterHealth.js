@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var classNames = require('classnames');
-var React = require('react/addons');
+var React = require('react');
 
 var HealthLabels = require('../constants/HealthLabels');
 var HealthTypes = require('../constants/HealthTypes');

@@ -4,8 +4,8 @@ jest.dontMock('../NodesGridView');
 jest.dontMock('../../stores/MesosStateStore');
 jest.dontMock('../../utils/Util');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var NodesGridView = require('../NodesGridView');
 var MesosStateStore = require('../../stores/MesosStateStore');

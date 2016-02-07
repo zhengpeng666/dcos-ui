@@ -3,8 +3,8 @@ jest.dontMock('../../../mixins/ChartMixin');
 jest.dontMock('../../../mixins/InternalStorageMixin');
 
 var _ = require('underscore');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var TimeSeriesChart = require('../TimeSeriesChart');
 

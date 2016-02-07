@@ -9,8 +9,8 @@ jest.dontMock('../MesosLogView');
 
 require('../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var MesosLogStore = require('../../stores/MesosLogStore');
 var MesosLogView = require('../MesosLogView');

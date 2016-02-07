@@ -1,2 +1,3 @@
-*-cy.js
-spec_helper.js
+**/*-cy.js
+**/spec_helper.js
+**/__tests__

@@ -2,7 +2,7 @@ var _ = require('underscore');
 var classNames = require('classnames');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var Link = require('react-router').Link;
-var React = require('react/addons');
+var React = require('react');
 var State = require('react-router').State;
 
 import ClusterHeader from './ClusterHeader';

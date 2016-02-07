@@ -3,8 +3,8 @@ jest.dontMock('../ServiceList');
 jest.dontMock('../ServiceOverlay');
 jest.dontMock('../../stores/MarathonStore');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var ServiceList = require('../ServiceList');
 

@@ -2,8 +2,8 @@ jest.dontMock('../Authenticated');
 jest.dontMock('../../../../mixins/GetSetMixin');
 jest.dontMock('../../../../stores/ACLAuthStore');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var Authenticated = require('../Authenticated');
 var ACLAuthStore = require('../../../../stores/ACLAuthStore');

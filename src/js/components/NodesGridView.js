@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var classNames = require('classnames');
-var React = require('react/addons');
+var React = require('react');
 
 var EventTypes = require('../constants/EventTypes');
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');

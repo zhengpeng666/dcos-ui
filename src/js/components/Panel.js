@@ -1,4 +1,5 @@
-var React = require('react/addons');
+var classNames = require('classnames');
+var React = require('react');
 
 var Panel = React.createClass({
 

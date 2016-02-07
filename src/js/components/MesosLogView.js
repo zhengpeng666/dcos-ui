@@ -1,8 +1,8 @@
+import CSSTransitionGroup from 'react-addons-css-transition-group';
 import mixin from 'reactjs-mixin';
-import React from 'react/addons';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
-
-const CSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 import DOMUtils from '../utils/DOMUtils';
 import Highlight from './Highlight';
@@ -147,7 +147,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
       return;
     }
 
-    let logContainer = React.findDOMNode(this.refs.logContainer);
+    let logContainer = ReactDOM.findDOMNode(this.refs.logContainer);
     let previousScrollTop;
     let previousScrollHeight;
 
@@ -169,7 +169,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   setScrollTop(scrollTop) {
-    React.findDOMNode(this.refs.logContainer).scrollTop = scrollTop;
+    ReactDOM.findDOMNode(this.refs.logContainer).scrollTop = scrollTop;
   }
 
   checkIfCloseToTop(container) {
@@ -197,7 +197,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
       return null;
     }
 
-    return React.findDOMNode(logContainer);
+    return ReactDOM.findDOMNode(logContainer);
   }
 
   getErrorScreen() {

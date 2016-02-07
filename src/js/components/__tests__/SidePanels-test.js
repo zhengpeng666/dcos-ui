@@ -15,8 +15,8 @@ jest.dontMock('../../utils/Util');
 jest.dontMock('../../utils/RequestUtil');
 jest.dontMock('../../structs/SummaryList');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var MesosSummaryActions = require('../../events/MesosSummaryActions');
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');

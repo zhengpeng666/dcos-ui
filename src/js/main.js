@@ -11,6 +11,7 @@ global.addEventListener('beforeunload', function () {
 
 import _ from 'underscore';
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Router = require('react-router');
 
 require('./utils/MomentJSConfig');
@@ -57,7 +58,7 @@ function onApplicationLoad() {
   // Allow overriding of application contents
   let contents = Plugins.applyFilter('applicationContents', null);
   if (contents) {
-    React.render(contents, domElement);
+    ReactDOM.render(contents, domElement);
   } else {
     setTimeout(function () {
       let builtRoutes = createRoutes(
@@ -66,7 +67,8 @@ function onApplicationLoad() {
 
       Router.run(builtRoutes[0], function (Handler, state) {
         Config.setOverrides(state.query);
-        React.render(<Handler state={state} />, domElement);
+        ReactDOM.render(
+          <Handler state={state} />, domElement);
       });
     });
   }
@@ -74,7 +76,7 @@ function onApplicationLoad() {
   Plugins.doAction('applicationRendered');
 }
 
-React.render(
+ReactDOM.render(
   <ApplicationLoader onApplicationLoad={onApplicationLoad} />,
   domElement
 );

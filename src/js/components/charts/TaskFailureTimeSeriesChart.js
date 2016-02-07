@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var React = require('react/addons');
+var React = require('react');
 
 var Chart = require('./Chart');
 var TimeSeriesChart = require('./TimeSeriesChart');

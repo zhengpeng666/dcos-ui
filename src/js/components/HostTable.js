@@ -1,6 +1,6 @@
 var classNames = require('classnames');
 import {Link} from 'react-router';
-var React = require('react/addons');
+var React = require('react');
 
 var HostTableHeaderLabels = require('../constants/HostTableHeaderLabels');
 var ResourceTableUtil = require('../utils/ResourceTableUtil');

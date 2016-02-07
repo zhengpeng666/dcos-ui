@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var classNames = require('classnames');
-var React = require('react/addons');
+var React = require('react');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var RouterLocation = Router.HashLocation;

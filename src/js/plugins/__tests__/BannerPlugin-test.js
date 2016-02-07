@@ -3,8 +3,8 @@ jest.dontMock('../../components/icons/IconInfo');
 jest.dontMock('../../utils/DOMUtils');
 
 var _ = require('underscore');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var BannerPlugin = require('../BannerPlugin');
 var defaultConfiguration = BannerPlugin.configuration;

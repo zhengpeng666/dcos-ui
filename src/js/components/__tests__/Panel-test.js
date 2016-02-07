@@ -1,7 +1,8 @@
 jest.dontMock('../Panel');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var Panel = require('../Panel');
 
@@ -102,7 +103,7 @@ describe('Panel', function () {
     it('should be able to add an onClick to the panel node', function () {
       var panel =
         TestUtils.findRenderedComponentWithType(this.instance, Panel);
-      TestUtils.Simulate.click(React.findDOMNode(panel));
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(panel));
       expect(this.onClickSpy).toHaveBeenCalled();
     });
   });

@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var classNames = require('classnames');
-var React = require('react/addons');
+var React = require('react');
 
 var Chart = require('./Chart');
 var DialChart = require('./DialChart');

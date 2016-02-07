@@ -2,10 +2,10 @@ jest.dontMock('../TabsMixin');
 jest.dontMock('../../utils/TabsUtil');
 
 var _ = require('underscore');
-var React = require('react/addons');
+var React = require('react');
 var Link = require('react-router').Link;
 
-var TestUtils = React.addons.TestUtils;
+var TestUtils = require('react-addons-test-utils');
 
 var TabsMixin = require('../TabsMixin');
 var TabsUtil = require('../../utils/TabsUtil');

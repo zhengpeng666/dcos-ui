@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var classNames = require('classnames');
 var d3 = require('d3');
-var React = require('react/addons');
+var React = require('react');
 
 var Bar = require('./Bar');
 var ChartMixin = require('../../mixins/ChartMixin');

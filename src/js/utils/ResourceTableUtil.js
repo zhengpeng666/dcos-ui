@@ -1,7 +1,7 @@
 const _ = require('underscore');
 const classNames = require('classnames');
 /*eslint-disable no-unused-vars*/
-const React = require('react/addons');
+const React = require('react');
 /*eslint-enable no-unused-vars*/
 
 import DateUtil from '../utils/DateUtil';

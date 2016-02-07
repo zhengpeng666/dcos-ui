@@ -10,8 +10,8 @@ jest.dontMock('../../utils/StringUtil');
 jest.dontMock('../../stores/__tests__/fixtures/state.json');
 jest.dontMock('../../utils/Util');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
 var ServiceTable = require('../ServiceTable');

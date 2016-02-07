@@ -59,7 +59,12 @@ var webpackConfig = {
     loaders: [
       {
         test: /\.js$/,
-        loader: "babel-loader?cacheDirectory"
+        loader: "babel",
+        query: {
+          plugins: ['transform-runtime'],
+          cacheDirectory: true,
+          presets: ['react', 'es2015']
+        }
       }
     ],
     preLoaders: [

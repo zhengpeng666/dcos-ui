@@ -11,8 +11,8 @@ jest.dontMock('../../utils/Util');
 
 require('../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var ACLGroupsStore = require('../../stores/ACLGroupsStore');

@@ -1,5 +1,6 @@
 import _ from 'underscore';
-import React from 'react/addons';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import ReactZeroClipboard from 'react-zeroclipboard';
 // ReactZeroClipboard injects ZeroClipboard from a third-party server unless
 // global.ZeroClipboard is already defined:
@@ -25,18 +26,18 @@ var ClusterHeader = React.createClass({
 
   handleCopy() {
     this.tip_updateTipContent(
-      React.findDOMNode(this.refs.copyButton), 'Copied!'
+      ReactDOM.findDOMNode(this.refs.copyButton), 'Copied!'
     );
     Actions.log({eventID: 'Copied hostname from sidebar'});
   },
 
   handleMouseOverCopyIcon() {
-    var el = React.findDOMNode(this.refs.copyButton);
+    var el = ReactDOM.findDOMNode(this.refs.copyButton);
     this.tip_showTip(el);
   },
 
   handleMouseOutCopyIcon() {
-    this.tip_hideTip(React.findDOMNode(this.refs.copyButton));
+    this.tip_hideTip(ReactDOM.findDOMNode(this.refs.copyButton));
   },
 
   getFlashButton(content) {

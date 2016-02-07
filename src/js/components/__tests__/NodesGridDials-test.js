@@ -2,8 +2,8 @@ jest.dontMock('../../constants/ResourceTypes');
 jest.dontMock('../NodesGridDials');
 
 var _ = require('underscore');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var NodesGridDials = require('../NodesGridDials');
 var ResourceTypes = require('../../constants/ResourceTypes');

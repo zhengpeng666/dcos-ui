@@ -1,5 +1,5 @@
 var classNames = require('classnames');
-var React = require('react/addons');
+var React = require('react');
 
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var DOMUtils = require('../utils/DOMUtils');

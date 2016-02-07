@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var React = require('react/addons');
+var React = require('react');
 import {RouteHandler} from 'react-router';
 
 var AlertPanel = require('../components/AlertPanel');
