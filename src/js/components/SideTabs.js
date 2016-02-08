@@ -6,7 +6,7 @@ export default class SideTabs extends React.Component {
     let selectedTab = this.props.selectedTab;
 
     return this.props.tabs.map((tab, i) => {
-      let classes = classNames('sidebar-menu-item', {
+      let classes = classNames('sidebar-menu-item', 'clickable', {
         selected: tab.name === selectedTab
       });
 
