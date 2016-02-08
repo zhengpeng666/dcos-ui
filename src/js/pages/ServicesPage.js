@@ -215,7 +215,7 @@ var ServicesPage = React.createClass({
       <AlertPanel
         title="No Services Installed"
         iconClassName="icon icon-sprite icon-sprite-jumbo
-          icon-sprite-jumbo-white icon-services">
+          icon-sprite-jumbo-white icon-services flush-top">
         <p className="flush">
           Use the DCOS command line tools to find and install services.
         </p>

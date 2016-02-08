@@ -2,11 +2,8 @@
   background-color: @panel-background-color;
   margin-bottom: @grid-gutter-width;
 
-  //.border-radius(@icon-medium-border-radius);
-
   .panel-heading {
     display: flex;
-    border-bottom: 1px solid @border-color-inverse;
     padding: @base-spacing-unit / 2;
     line-height: @heading-h3-text-line-height;
 
@@ -33,6 +30,15 @@
       }
     }
 
+    &.panel-heading-bottom-border {
+      border-bottom: 1px solid @border-color;
+
+      &.inverse {
+        border-bottom: 1px solid @border-color-inverse;
+      }
+    }
+
+
     &.panel-heading-large {
       padding: @base-spacing-unit @base-spacing-unit 0;
       border: 0;
@@ -42,6 +48,21 @@
   .panel-content {
     padding: @base-spacing-unit;
   }
+
+  .panel-footer {
+    &.panel-footer-no-top-border {
+      border-top: none;
+    }
+
+    &.inverse {
+      border-top: 1px solid @border-color-inverse;
+    }
+  }
+
+  &.clickable:hover {
+    background-color: color-lighten(@panel-background-color, 5);
+  }
+
   &.dashboard-panel {
     .panel-content {
       height: (@base-spacing-unit * 14) - @heading-h4-text-font-size;

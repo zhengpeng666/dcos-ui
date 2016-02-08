@@ -27,11 +27,28 @@ var AlertPanel = React.createClass({
     this.forceUpdate();
   },
 
-  getTitleClasses: function () {
-    return classNames({
+  getTitle: function () {
+    let classes = classNames({
       inverse: true,
       'flush-top': !this.props.iconClassName
     });
+
+    return (
+      <h3 className={classes}>
+        {this.props.title}
+      </h3>
+    );
+  },
+
+  getIcon: function () {
+    let classes = this.props.iconClassName;
+    if (!classes) {
+      return null;
+    }
+
+    return (
+      <i className={classes}></i>
+    );
   },
 
   render: function () {
@@ -50,11 +67,10 @@ var AlertPanel = React.createClass({
         <div className="column-small-offset-2 column-small-8 column-medium-offset-3 column-medium-6 column-large-offset-4 column-large-4">
           <Panel ref="panel"
             style={{height: data.height}}
-            className="vertical-center text-align-center flush">
-            <i className={this.props.iconClassName + ' flush-top'}></i>
-            <h3 className={this.getTitleClasses()}>
-              {this.props.title}
-            </h3>
+            className="panel vertical-center horizontal-center text-align-center flush"
+            heading={this.getIcon()}
+            headingClass="panel-heading flush-top">
+            {this.getTitle()}
             {this.props.children}
           </Panel>
         </div>
