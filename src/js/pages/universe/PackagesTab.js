@@ -95,15 +95,12 @@ let packages = new UniversePackagesList({items: [
 
 class PackagesTab extends React.Component {
   handleOpenDetail(pkg, event) {
-    // Discard button events
-    if (event.target.classList.contains('button')) {
-      return;
-    }
-
+    event.stopPropagation();
     // Handle open detail view
   }
 
   handleOpenInstallModal(pkg, event) {
+    event.stopPropagation();
     // Handle open install modal
   }
 
