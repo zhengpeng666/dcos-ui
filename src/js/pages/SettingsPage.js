@@ -9,8 +9,8 @@ import TabsUtil from '../utils/TabsUtil';
 import TabsMixin from '../mixins/TabsMixin';
 
 const SETTINGS_TABS = {
-  'settings-organization': 'Organization'
-  // TODO: add 'settings-system': 'System'
+  'settings-organization': 'Organization',
+  'settings-system': 'System'
 };
 
 export default class SettingsPage extends mixin(TabsMixin) {
@@ -47,7 +47,8 @@ export default class SettingsPage extends mixin(TabsMixin) {
     // System Tabs
     if (currentTab.indexOf(pageKeys[1]) >= 0) {
       this.tabs_tabs = {
-        'settings-system-overview': 'Overview'
+        'settings-system-overview': 'Overview',
+        'settings-system-components': 'Components'
       };
     }
 
