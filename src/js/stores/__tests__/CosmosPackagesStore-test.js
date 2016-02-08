@@ -53,6 +53,13 @@ describe('CosmosPackagesStore', function () {
       expect(packages.length).toEqual(this.packagesFixture.packages.length);
     });
 
+    it('should pass though query parameters', function () {
+      RequestUtil.json = jasmine.createSpy('RequestUtil#json');
+      CosmosPackagesStore.search('foo');
+      expect(RequestUtil.json.mostRecentCall.args[0].data)
+        .toEqual({query: 'foo'});
+    });
+
   });
 
   describe('dispatcher', function () {
