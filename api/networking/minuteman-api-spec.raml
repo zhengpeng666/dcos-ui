@@ -3,6 +3,12 @@ title: Minuteman API Spec
 version: v1
 baseUri: /api/{version}
 mediaType: application/json
+schemas:
+  - vips: !include ../../schema/networking/vips.json
+  - vipSummaries: !include ../../schema/networking/vip-summaries.json
+  - vipDetail: !include ../../schema/networking/vip-detail.json
+  - nodeMembership: !include ../../schema/networking/node-membership.json
+  - backendConnections: !include ../../schema/networking/backend-connections.json
 
 /vips:
   displayName: VIPs
@@ -183,9 +189,3 @@ mediaType: application/json
                   }
                 ]
               }
-schemas:
-  - vips: !include ../../schema/networking/vips.json
-  - vipSummaries: !include ../../schema/networking/vip-summaries.json
-  - vipDetail: !include ../../schema/networking/vip-detail.json
-  - nodeMembership: !include ../../schema/networking/node-membership.json
-  - backendConnections: !include ../../schema/networking/backend-connections.json
