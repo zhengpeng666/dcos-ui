@@ -3,15 +3,10 @@ jest.dontMock('../../config/Config');
 jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../events/CosmosPackagesActions');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../structs/UniversePackage');
-jest.dontMock('../../structs/UniversePackagesList');
-jest.dontMock('../../structs/Item');
-jest.dontMock('../../structs/List');
-jest.dontMock('../../utils/RequestUtil');
-jest.dontMock('../../utils/Util');
 jest.dontMock('./fixtures/MockPackagesSearchResponse.json');
 
 var _ = require('underscore');
+
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../../events/AppDispatcher');
 var Config = require('../../config/Config');
