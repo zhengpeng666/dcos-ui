@@ -1,7 +1,7 @@
 import React from 'react';
 
-import UniversePackagesList from '../../structs/UniversePackagesList';
 import Panel from '../../components/Panel';
+import UniversePackagesList from '../../structs/UniversePackagesList';
 
 // TODO (mlunoe): Remove the following mock data!
 let packages = new UniversePackagesList({items: [
