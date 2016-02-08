@@ -24,25 +24,35 @@ describe('CosmosPackagesStore', function () {
       handlers.success(_.clone(packagesFixture));
     };
     this.packagesFixture = _.clone(packagesFixture);
-    this.configUseFixture = Config.useFixtures;
-    Config.useFixtures = true;
   });
 
   afterEach(function () {
     RequestUtil.json = this.requestFn;
-    Config.useFixtures = this.configUseFixture;
   });
 
-  it('should return an instance of UniversePackagesList', function () {
-    CosmosPackagesStore.search();
-    var packages = CosmosPackagesStore.get('packages');
-    expect(packages instanceof UniversePackagesList).toBeTruthy();
-  });
+  describe('#search', function () {
 
-  it('should return all of the packages it was given', function () {
-    CosmosPackagesStore.search();
-    var packages = CosmosPackagesStore.get('packages').getItems();
-    expect(packages.length).toEqual(this.packagesFixture.packages.length);
+    beforeEach(function () {
+      this.configUseFixture = Config.useFixtures;
+      Config.useFixtures = true;
+    });
+
+    afterEach(function () {
+      Config.useFixtures = this.configUseFixture;
+    });
+
+    it('should return an instance of UniversePackagesList', function () {
+      CosmosPackagesStore.search();
+      var packages = CosmosPackagesStore.get('packages');
+      expect(packages instanceof UniversePackagesList).toBeTruthy();
+    });
+
+    it('should return all of the packages it was given', function () {
+      CosmosPackagesStore.search();
+      var packages = CosmosPackagesStore.get('packages').getItems();
+      expect(packages.length).toEqual(this.packagesFixture.packages.length);
+    });
+
   });
 
   describe('dispatcher', function () {
