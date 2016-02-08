@@ -28,13 +28,13 @@ schemas:
                       "id": "mesos",
                       "name": "Mesos",
                       "version": "0.27.1",
-                      "health": "sick"
+                      "health": "critical"
                     },
                     {
                       "id": "service_manager",
                       "name": "Service Manage",
                       "version": "0.0.1",
-                      "health": "healthy"
+                      "health": "ok"
                     }
                   ]
                 }
@@ -58,7 +58,7 @@ schemas:
                     "id": "service_manager",
                     "name": "Service Manager",
                     "version": "0.0.1",
-                    "health": "healthy"
+                    "health": "ok"
                   }
       /nodes:
         displayName: Component Nodes' Health
@@ -76,12 +76,12 @@ schemas:
                         {
                           "id": "srv1.hw.ca1.mesosphere.com",
                           "type": "master",
-                          "health": "healthy"
+                          "health": "ok"
                         },
                         {
                           "id": "srv1.hw.ca1.mesosphere.com",
                           "type": "agent",
-                          "health": "healthy"
+                          "health": "ok"
                         }
                       ]
                     }
@@ -127,7 +127,7 @@ schemas:
                       "id": "service_manager",
                       "name": "Service Manager",
                       "version": "0.0.1",
-                      "health": "healthy"
+                      "health": "ok"
                     }
                   ]
                 }

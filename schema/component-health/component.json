@@ -19,7 +19,7 @@
     "health": {
       "title": "Component health status",
       "type": "string",
-      "enum": ["healthy", "sick", "unknown"]
+      "enum": ["ok", "warn", "critical", "unknown"]
     }
   },
   "required": [
