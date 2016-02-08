@@ -21,5 +21,10 @@
       "type": "string",
       "enum": ["healthy", "sick", "unknown"]
     }
-  }
+  },
+  "required": [
+    "id",
+    "name",
+    "health"
+  ]
 }
