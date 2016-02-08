@@ -110,6 +110,15 @@ components/tables.less
 
     }
 
+    .table-cell-value {
+
+      // This property is necessary for table cells to respect the text-overflow
+      // property. http://stackoverflow.com/questions/9789723/css-text-overflow-in-a-table-cell
+
+      min-width: 0;
+
+    }
+
     .table-cell-task-dot {
 
       max-width: @body-text-font-size * 0.75 + @base-spacing-unit * 0.25;
