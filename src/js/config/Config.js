@@ -1,6 +1,7 @@
 var Config = {
   analyticsKey: '@@ANALYTICS_KEY',
   acsAPIPrefix: '/acs/api/v1',
+  cosmosAPIPrefix: '/packages',
   delayAfterErrorCount: 5,
   environment: '@@ENV',
   historyLength: 31,

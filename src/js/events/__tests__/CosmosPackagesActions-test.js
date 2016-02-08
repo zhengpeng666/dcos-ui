@@ -2,11 +2,11 @@ jest.dontMock('../CosmosPackagesActions');
 jest.dontMock('../AppDispatcher');
 jest.dontMock('../../config/Config');
 jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../utils/RequestUtil');
 
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../AppDispatcher');
 var CosmosPackagesActions = require('../CosmosPackagesActions');
+var Config = require('../../config/Config');
 var RequestUtil = require('../../utils/RequestUtil');
 
 describe('CosmosPackagesActions', function () {
@@ -61,6 +61,29 @@ describe('CosmosPackagesActions', function () {
       });
 
       this.configuration.error({responseJSON: {description: 'bar'}});
+    });
+
+    it('calls #json from the RequestUtil', function () {
+      expect(RequestUtil.json).toHaveBeenCalled();
+    });
+
+    it('fetches data from the correct URL', function () {
+      expect(this.configuration.url)
+        .toEqual(Config.cosmosAPIPrefix + '/search');
+    });
+
+    it('sends query in request body', function () {
+      expect(this.configuration.data).toEqual({query: 'foo'});
+    });
+
+    it('sends query in request body, even if it is undefined', function () {
+      CosmosPackagesActions.search();
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+      expect(this.configuration.data).toEqual({query: undefined});
+    });
+
+    it('sends a POST request', function () {
+      expect(this.configuration.method).toEqual('POST');
     });
 
   });

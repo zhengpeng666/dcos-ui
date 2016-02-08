@@ -5,9 +5,11 @@ import RequestUtil from '../utils/RequestUtil';
 
 const CosmosPackagesActions = {
 
-  search: function () {
+  search: function (query) {
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/packages/search`,
+      method: 'POST',
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/search`,
+      data: {query},
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS,
