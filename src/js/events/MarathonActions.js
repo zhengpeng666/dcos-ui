@@ -1,4 +1,4 @@
-var ActionTypes = require('../constants/ActionTypes');
+import ActionTypes from '../constants/ActionTypes';
 var AppDispatcher = require('./AppDispatcher');
 var Config = require('../config/Config');
 var RequestUtil = require('../utils/RequestUtil');
@@ -14,6 +14,7 @@ module.exports = {
         RequestUtil.json({
           url: url,
           success: function (response) {
+            console.log(response);
             AppDispatcher.handleServerAction({
               type: ActionTypes.REQUEST_MARATHON_APPS_SUCCESS,
               data: response

@@ -1,9 +1,8 @@
 var Actions = require('../actions/Actions');
-var ActionTypes = require('../constants/ActionTypes');
+import ActionTypes from '../constants/ActionTypes';
 var AppDispatcher = require('./AppDispatcher');
 var Config = require('../config/Config');
 var RequestUtil = require('../utils/RequestUtil');
-
 var _historyServiceOnline = true;
 
 function getStateUrl(timeScale) {

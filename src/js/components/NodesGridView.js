@@ -2,7 +2,7 @@ var _ = require('underscore');
 var classNames = require('classnames');
 var React = require('react');
 
-var EventTypes = require('../constants/EventTypes');
+import EventTypes from '../constants/EventTypes';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MesosStateStore = require('../stores/MesosStateStore');
 var NodesGridDials = require('./NodesGridDials');

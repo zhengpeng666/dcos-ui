@@ -1,7 +1,7 @@
 var overrides = require('./overrides');
 overrides.override();
 
-var Actions = require('./actions/Actions');
+import Actions from './actions/Actions';
 Actions.initialize();
 
 Actions.log({eventID: 'Stint started.', date: Actions.createdAt});
@@ -10,9 +10,9 @@ global.addEventListener('beforeunload', function () {
 });
 
 import _ from 'underscore';
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Router = require('react-router');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Router from 'react-router';
 
 require('./utils/MomentJSConfig');
 require('./utils/ReactSVG');
@@ -50,7 +50,7 @@ function createRoutes(routes) {
       args = args.concat(children);
     }
 
-    return React.createElement.apply(null, args);
+    return React.createElement(...args);
   });
 }
 

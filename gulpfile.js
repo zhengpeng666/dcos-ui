@@ -62,7 +62,6 @@ var webpackConfig = {
         loader: "babel",
         exclude: /node_modules/,
         query: {
-          plugins: ['transform-runtime'],
           cacheDirectory: true,
           presets: ['es2015', 'react', "stage-0"]
         }

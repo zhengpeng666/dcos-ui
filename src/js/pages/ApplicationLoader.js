@@ -21,6 +21,7 @@ export default class ApplicationLoader extends React.Component {
     Plugins.addChangeListener(
       EventTypes.PLUGINS_CONFIGURED, this.onPluginsLoaded
     );
+
     Plugins.initialize();
   }
 

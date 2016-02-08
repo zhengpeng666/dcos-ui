@@ -6,7 +6,7 @@ var RouteHandler = require('react-router').RouteHandler;
 var AnimatedLogo = require('../components/AnimatedLogo');
 var Config = require('../config/Config');
 import ConfigStore from '../stores/ConfigStore';
-var EventTypes = require('../constants/EventTypes');
+import EventTypes from '../constants/EventTypes';
 import HistoryStore from '../stores/HistoryStore';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var IntercomStore = require('../stores/IntercomStore');

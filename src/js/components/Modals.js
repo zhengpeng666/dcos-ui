@@ -4,7 +4,7 @@ var React = require('react');
 var Actions = require('../actions/Actions');
 var CliInstallModal = require('./modals/CliInstallModal');
 var ErrorModal = require('./modals/ErrorModal');
-var EventTypes = require('../constants/EventTypes');
+import EventTypes from '../constants/EventTypes';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 import IdentifyModal from './modals/IdentifyModal';
 var MesosSummaryStore = require('../stores/MesosSummaryStore');

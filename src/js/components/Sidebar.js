@@ -83,6 +83,7 @@ var Sidebar = React.createClass({
       var route = this.context.router.namedRoutes[routeKey];
 
       // Figure out if current route is active
+      debugger;
       var isActive = route.handler.routeConfig.matches.test(currentPath);
       var iconClasses = {
         'sidebar-menu-item-icon icon icon-sprite icon-sprite-medium': true,
