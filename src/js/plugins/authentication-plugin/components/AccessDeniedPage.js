@@ -13,7 +13,7 @@ export default class AccessDeniedPage extends React.Component {
             <AlertPanel
               title="Access Denied"
               iconClassName="icon icon-sprite icon-sprite-jumbo
-                icon-sprite-jumbo-white icon-lost-planet">
+                icon-sprite-jumbo-white icon-lost-planet flush-top">
               <p>
                 You do not have access to this service. <br />
                 Please contact your DCOS administrator.
