@@ -12,10 +12,10 @@ jest.dontMock('../../utils/Util');
 jest.dontMock('./fixtures/MockPackagesSearchResponse.json');
 
 var _ = require('underscore');
-var CosmosPackagesStore = require('../CosmosPackagesStore');
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../../events/AppDispatcher');
 var Config = require('../../config/Config');
+var CosmosPackagesStore = require('../CosmosPackagesStore');
 var EventTypes = require('../../constants/EventTypes');
 var packagesFixture = require('./fixtures/MockPackagesSearchResponse.json');
 var UniversePackagesList = require('../../structs/UniversePackagesList');

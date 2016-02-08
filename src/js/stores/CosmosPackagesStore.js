@@ -1,8 +1,8 @@
 import {Store} from 'mesosphere-shared-reactjs';
 
-import CosmosPackagesActions from '../events/CosmosPackagesActions';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../events/AppDispatcher';
+import CosmosPackagesActions from '../events/CosmosPackagesActions';
 import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import UniversePackagesList from '../structs/UniversePackagesList';
