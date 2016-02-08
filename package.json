@@ -40,7 +40,7 @@
     "react-router": "^0.13.5",
     "react-tools": "^0.13.3",
     "react-zeroclipboard": "^0.4.1",
-    "reactjs-components": "^0.14.0-beta.0",
+    "reactjs-components": "^0.14.0-beta.1",
     "reactjs-mixin": "0.0.2",
     "redux": "^3.3.1",
     "underscore": "^1.7.0",
