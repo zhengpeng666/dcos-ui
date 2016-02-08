@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema",
+  "id": "http://schema.dcos/health/component",
+  "type": "object",
+  "properties": {
+    "id": {
+      "title": "Component ID",
+      "type": "string",
+      "pattern": "^[\\w]+$"
+    },
+    "name": {
+      "title": "Component name",
+      "type": "string"
+    },
+    "version": {
+      "title": "Component version",
+      "type": "string"
+    },
+    "health": {
+      "title": "Component health status",
+      "type": "string",
+      "enum": ["ok", "warn", "critical", "unknown"]
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "health"
+  ]
+}

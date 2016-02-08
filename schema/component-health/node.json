@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema",
+  "id": "http://schema.dcos/health/node",
+  "type": "object",
+  "properties": {
+    "id": {
+      "title": "Node ID",
+      "type": "string",
+      "pattern": "^[\\w\\.]+$"
+    },
+    "description": {
+      "title": "Node description text",
+      "type": "string"
+    },
+    "type": {
+      "title": "Node ID",
+      "type": "string",
+      "enum": ["master", "agent"]
+    },
+    "health": {
+      "title": "Node health status",
+      "type": "string",
+      "enum": ["ok", "warn", "critical", "unknown"]
+    },
+    "health_check_name": {
+      "title": "Node health check name",
+      "type": "string"
+    },
+    "output": {
+      "title": "Node health check output",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "health",
+    "output"
+  ]
+}
