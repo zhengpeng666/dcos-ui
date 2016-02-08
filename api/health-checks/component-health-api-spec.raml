@@ -3,7 +3,12 @@ title: Component Health Checks API Spec
 version: v1
 baseUri: /api/{version}
 mediaType: application/json
-
+schemas:
+  - components: !include ../../schema/component-health/components.json
+  - component: !include ../../schema/component-health/component.json
+  - nodes: !include ../../schema/component-health/nodes.json
+  - node: !include ../../schema/component-health/node.json
+  - report: !include ../../schema/component-health/report.json
 
 /health:
   /components:
@@ -118,102 +123,3 @@ mediaType: application/json
                     }
                   ]
                 }
-
-schemas:
-  - components: |
-      {
-        "$schema": "http://json-schema.org/draft-03/schema",
-        "id": "http://schema.dcos/health/components",
-        "type": "object",
-        "properties": {
-          "array": {
-            "title": "List of components and their health statuses.",
-            "type": "array",
-            "items": {
-              "type": "object"
-            }
-          }
-        }
-      }
-  - component: |
-      {
-        "$schema": "http://json-schema.org/draft-03/schema",
-        "id": "http://schema.dcos/health/component",
-        "type": "object",
-        "properties": {
-          "id": {
-            "title": "Component ID",
-            "type": "string",
-            "pattern": "^[a-zA-Z][\\w]*$"
-          },
-          "name": {
-            "title": "Component name",
-            "type": "string"
-          },
-          "version": {
-            "title": "Component version",
-            "type": "string"
-          },
-          "health": {
-            "title": "Component health status",
-            "type": "string",
-            "enum": ["healthy", "sick", "unknown"]
-          }
-        }
-      }
-  - nodes: |
-      {
-        "$schema": "http://json-schema.org/draft-03/schema",
-        "id": "http://schema.dcos/health/nodes",
-        "type": "object",
-        "properties": {
-          "array": {
-            "title": "List of nodes and their health statuses.",
-            "type": "array",
-            "items": {
-              "type": "object"
-            }
-          }
-        }
-      }
-  - node: |
-      {
-        "$schema": "http://json-schema.org/draft-03/schema",
-        "id": "http://schema.dcos/health/node",
-        "type": "object",
-        "properties": {
-          "id": {
-            "title": "Node ID",
-            "type": "string",
-            "pattern": "^[a-zA-Z][\\w\\.]*$"
-          },
-          "description": {
-            "title": "Node description text",
-            "type": "string"
-          },
-          "type": {
-            "title": "Node ID",
-            "type": "string",
-            "enum": ["master", "agent"]
-          },
-          "health": {
-            "title": "Node health status",
-            "type": "string",
-            "enum": ["healthy", "sick", "unknown"]
-          },
-          "health_check_name": {
-            "title": "Node health check name",
-            "type": "string"
-          },
-          "output": {
-            "title": "Node health check output",
-            "type": "string"
-          }
-        }
-      }
-  - report: |
-      {
-        "$schema": "http://json-schema.org/draft-03/schema",
-        "id": "http://schema.dcos/health/report",
-        "type": "object"
-      }
