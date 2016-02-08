@@ -34,8 +34,9 @@
     "react-addons-clone-with-props": "^0.14.7",
     "react-addons-css-transition-group": "^0.14.7",
     "react-addons-test-utils": "^0.14.7",
+    "react-dom": "^0.14.7",
     "react-gemini-scrollbar": "^2.1.0",
-    "react-router": "^1.0.3",
+    "react-router": "^0.13.5",
     "react-tools": "^0.13.3",
     "react-zeroclipboard": "^0.4.1",
     "reactjs-components": "0.14.0",
@@ -52,6 +53,7 @@
     "babel-plugin-transform-runtime": "^6.4.3",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-0": "^6.5.0",
     "babel-runtime": "^6.3.19",
     "browser-sync": "^2.11.0",
     "envify": "^3.4.0",
@@ -71,7 +73,7 @@
     "gulp-util": "^3.0.6",
     "install": "^0.4.2",
     "jasmine-reporters": "^1.0.1",
-    "jest-cli": "^0.4.0",
+    "jest-cli": "^0.8.2",
     "json-loader": "^0.5.4",
     "jsx-loader": "^0.12.2",
     "localStorage": "^1.0.3",
@@ -133,7 +135,8 @@
       "src/js/constants",
       "src/js/utils",
       "structs",
-      "underscore"
+      "underscore",
+      "node_modules"
     ],
     "testPathIgnorePatterns": [
       "/tmp/",

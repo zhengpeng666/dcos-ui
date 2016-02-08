@@ -60,10 +60,11 @@ var webpackConfig = {
       {
         test: /\.js$/,
         loader: "babel",
+        exclude: /node_modules/,
         query: {
           plugins: ['transform-runtime'],
           cacheDirectory: true,
-          presets: ['react', 'es2015']
+          presets: ['es2015', 'react', "stage-0"]
         }
       }
     ],

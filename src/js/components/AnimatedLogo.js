@@ -73,19 +73,19 @@ var AnimatedLogo = React.createClass({
   animateTriangles: function () {
     var speed = this.props.speed;
 
-    d3.select(this.refs.center.getDOMNode())
+    d3.select(this.refs.center)
       .transition()
       .ease('in-out')
       .duration(speed)
       .attr('d', this.getTrianglePosition('center', _.random(180, 280)));
 
-    d3.select(this.refs.left.getDOMNode())
+    d3.select(this.refs.left)
       .transition()
       .ease('in-out')
       .duration(speed)
       .attr('d', this.getTrianglePosition('left', _.random(160, 240)));
 
-    d3.select(this.refs.right.getDOMNode())
+    d3.select(this.refs.right)
       .transition()
       .ease('in-out')
       .duration(speed)

@@ -8,7 +8,7 @@ var EventTypes = require('../constants/EventTypes');
 var GetSetMixin = require('../mixins/GetSetMixin');
 var MesosSummaryUtil = require('../utils/MesosSummaryUtil');
 var MesosSummaryActions = require('../events/MesosSummaryActions');
-var SummaryList = require('../structs/SummaryList');
+import SummaryList from '../structs/SummaryList';
 import StateSummary from '../structs/StateSummary';
 var TimeScales = require('../constants/TimeScales');
 
