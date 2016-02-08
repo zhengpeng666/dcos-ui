@@ -5,6 +5,7 @@ import ACLGroupStore from '../stores/ACLGroupStore';
 import ACLStore from '../stores/ACLStore';
 import ACLUsersStore from '../stores/ACLUsersStore';
 import ACLUserStore from '../stores/ACLUserStore';
+import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import EventTypes from './EventTypes';
 import MarathonStore from '../stores/MarathonStore';
 import MesosLogStore from '../stores/MesosLogStore';
@@ -67,6 +68,19 @@ const ListenersDescription = {
       return true;
     },
     listenAlways: true
+  },
+
+  cosmosPackages: {
+    store: CosmosPackagesStore,
+    events: {
+      success: EventTypes.COSMOS_PACKAGES_CHANGE,
+      error: EventTypes.COSMOS_PACKAGES_ERROR
+    },
+    unmountWhen: function (store, event) {
+      if (event === 'success') {
+        return !!store.get('packages');
+      }
+    }
   },
 
   summary: {
