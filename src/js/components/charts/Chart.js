@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var cloneWithProps = require('react-addons-clone-with-props');
 var React = require('react');
+import ReactDOM from 'react-dom';
 
 var InternalStorageMixin = require('../../mixins/InternalStorageMixin');
 var DOMUtils = require('../../utils/DOMUtils');
@@ -50,8 +51,8 @@ var Chart = React.createClass({
     if (!this.isMounted()) {
       return;
     }
-
-    var dimensions = DOMUtils.getComputedDimensions(this.getDOMNode());
+    var node = ReactDOM.findDOMNode(this);
+    var dimensions = DOMUtils.getComputedDimensions(node);
     var data = this.internalStorage_get();
 
     if (data.width !== dimensions.width || data.height !== dimensions.height) {

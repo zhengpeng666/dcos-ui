@@ -4,7 +4,7 @@ import {Store} from 'mesosphere-shared-reactjs';
 var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
 var Config = require('../config/Config');
-var EventTypes = require('../constants/EventTypes');
+import EventTypes from '../constants/EventTypes';
 var GetSetMixin = require('../mixins/GetSetMixin');
 var HealthStatus = require('../constants/HealthStatus');
 var MarathonActions = require('../events/MarathonActions');
