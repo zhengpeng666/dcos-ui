@@ -81,48 +81,164 @@ export default class MultipleForm extends React.Component {
 }
 
 MultipleForm.defaultProps = {
-  multipleDefinition: [
-    {
-      name: 'Application'
+  multipleDefinition: {
+    Application: {
+      title: 'Application',
+      description: 'Lorem ipsum dolor sit amet',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        },
+        {
+          fieldType: 'text',
+          name: 'CPU',
+          placeholder: 'CPU',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        },
+        {
+          fieldType: 'text',
+          name: 'Memory',
+          placeholder: 'Memory',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     },
-    {
-      name: 'JVM Configuration'
+    'JVM Configuration': {
+      title: 'JVM Configuration'
     },
-    {
-      name: 'Command Line Flags'
+    'Command Line Flags': {
+      title: 'Command Line Flags'
     },
-    {
-      name: 'Environment & Executor'
+    'Environment & Executor': {
+      title: 'Environment & Executor'
     },
-    {
-      name: 'Framework & Host'
+    'Framework & Host': {
+      title: 'Framework & Host',
+      description: 'Lorem ipsum dolor sit amet',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        },
+        {
+          fieldType: 'text',
+          name: 'CPU',
+          placeholder: 'CPU',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        },
+        {
+          fieldType: 'text',
+          name: 'Memory',
+          placeholder: 'Memory',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        },
+        {
+          fieldType: 'text',
+          name: 'CPU',
+          placeholder: 'CPU',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        },
+        {
+          fieldType: 'text',
+          name: 'Memory',
+          placeholder: 'Memory',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        },
+        {
+          fieldType: 'text',
+          name: 'CPU',
+          placeholder: 'CPU',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        },
+        {
+          fieldType: 'text',
+          name: 'Memory',
+          placeholder: 'Memory',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     },
-    {
-      name: 'Launch Tokens'
+    'Launch Tokens': {
+      title: 'Launch Tokens'
     },
-    {
-      name: 'Mesos Master'
+    'Mesos Master': {
+      title: 'Mesos Master'
     },
-    {
-      name: 'Mesos Configuration'
+    'Mesos Configuration': {
+      title: 'Mesos Configuration'
     },
-    {
-      name: 'Plugins'
+    'Plugins': {
+      title: 'Plugins'
     },
-    {
-      name: 'SSL'
+    'SSL': {
+      title: 'SSL'
     },
-    {
-      name: 'Zookeeper'
+    'Zookeeper': {
+      title: 'Zookeeper'
     }
-  ],
+  },
   serviceImage: './img/services/icon-service-marathon-large@2x.png',
   serviceName: 'Marathon',
   serviceVersion: '0.23.2'
 };
 
 MultipleForm.propTypes = {
-  multipleDefinition: React.PropTypes.array,
+  multipleDefinition: React.PropTypes.object,
   serviceImage: React.PropTypes.string,
   serviceName: React.PropTypes.string,
   serviceVersion: React.PropTypes.string
