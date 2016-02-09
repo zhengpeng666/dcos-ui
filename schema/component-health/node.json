@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-03/schema",
-  "id": "http://schema.dcos/health/node",
+  "id": "http://schema.dcos/system/health/node",
   "type": "object",
   "properties": {
     "id": {
@@ -19,8 +19,9 @@
     },
     "health": {
       "title": "Node health status",
-      "type": "string",
-      "enum": ["ok", "warn", "critical", "unknown"]
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
     },
     "health_check_name": {
       "title": "Node health check name",

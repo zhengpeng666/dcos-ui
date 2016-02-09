@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-03/schema",
-  "id": "http://schema.dcos/health/components",
+  "id": "http://schema.dcos/system/health/components",
   "type": "object",
   "properties": {
     "array": {
@@ -8,7 +8,7 @@
       "type": "array",
       "items": {
         "allOf": [
-          {"$ref": "http://schema.dcos/health/component"}
+          {"$ref": "http://schema.dcos/system/health/component"}
         ]
       }
     }

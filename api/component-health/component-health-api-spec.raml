@@ -1,0 +1,124 @@
+ #%RAML 0.8
+title: Component Health Checks API Spec
+version: v1
+baseUri: /api/{version}/system/health
+mediaType: application/json
+schemas:
+  - components: !include ../../schema/component-health/components.json
+  - component: !include ../../schema/component-health/component.json
+  - nodes: !include ../../schema/component-health/nodes.json
+  - node: !include ../../schema/component-health/node.json
+  - report: !include ../../schema/component-health/report.json
+
+/components:
+  displayName: Components' Health
+  get:
+    description: Get a list of components and their health status.
+    responses:
+      200:
+        description: Successful response.
+        body:
+          application/json:
+            schema: components
+            example: |
+              {
+                "array": [
+                  {
+                    "id": "mesos",
+                    "name": "Mesos",
+                    "version": "0.27.1",
+                    "health": 3
+                  },
+                  {
+                    "id": "service_manager",
+                    "name": "Service Manage",
+                    "version": "0.0.1",
+                    "health": 1
+                  }
+                ]
+              }
+
+  /{component}:
+    uriParameters:
+      component:
+        description: Requested component.
+        type: string
+    displayName: Component Health
+    get:
+      description: Get a list of the component's node health summaries.
+      responses:
+        200:
+          description: Successful response.
+          body:
+            application/json:
+              schema: component
+              example: |
+                {
+                  "id": "service_manager",
+                  "name": "Service Manager",
+                  "version": "0.0.1",
+                  "health": 1
+                }
+    /nodes:
+      displayName: Component Nodes' Health
+      get:
+        description: Get a list of a component's nodes and their healths.
+        responses:
+          200:
+            description: Successful response.
+            body:
+              application/json:
+                schema: nodes
+                example: |
+                  {
+                    "array": [
+                      {
+                        "id": "srv1.hw.ca1.mesosphere.com",
+                        "type": "master",
+                        "health": 1
+                      },
+                      {
+                        "id": "srv1.hw.ca1.mesosphere.com",
+                        "type": "agent",
+                        "health": 1
+                      }
+                    ]
+                  }
+      /{node}:
+        uriParameters:
+          node:
+            description: Requested node.
+            type: string
+        displayName: Node Health
+        get:
+          description: Get a node's health status.
+          responses:
+            200:
+              description: Successful response.
+              body:
+                application/json:
+                  schema: node
+                  example: |
+                    {
+                      "id": "srv1.hw.ca1.mesosphere.com",
+                      "description": "This is a node, it has a health check and a family.",
+                      "type": "agent",
+                      "health": 0,
+                      "health_check_name": "Infalliable Health Check",
+                      "output": "{\n\"path\": \"/health/cluster\"\n}"
+                    }
+
+/report:
+  displayName: Health Report
+  get:
+    description: Get a full report of components' health.
+    responses:
+      200:
+        description: Successful response.
+        headers:
+          Content-Disposition:
+            type: string
+            required: true
+            example: |
+              Content-Disposition:
+              attachment; filename="report.txt"

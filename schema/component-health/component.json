@@ -17,9 +17,10 @@
       "type": "string"
     },
     "health": {
-      "title": "Component health status",
-      "type": "string",
-      "enum": ["ok", "warn", "critical", "unknown"]
+      "title": "Node health status",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
     }
   },
   "required": [
