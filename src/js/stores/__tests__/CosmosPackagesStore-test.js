@@ -73,7 +73,9 @@ describe('CosmosPackagesStore', function () {
       it('stores describe when event is dispatched', function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
-          data: {gid: 'foo', bar: 'baz'}
+          data: {gid: 'foo', bar: 'baz'},
+          packageName: 'foo',
+          packageVersion: 'bar'
         });
 
         var pkg = CosmosPackagesStore.get('describe');
@@ -89,7 +91,9 @@ describe('CosmosPackagesStore', function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
-          data: {gid: 'foo', bar: 'baz'}
+          data: {gid: 'foo', bar: 'baz'},
+          packageName: 'foo',
+          packageVersion: 'bar'
         });
 
         expect(mockedFn.mock.calls.length).toEqual(1);
@@ -103,11 +107,13 @@ describe('CosmosPackagesStore', function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR,
-          data: 'foo'
+          data: 'error',
+          packageName: 'foo',
+          packageVersion: 'bar'
         });
 
         expect(mockedFn.calls.length).toEqual(1);
-        expect(mockedFn.calls[0].args).toEqual(['foo']);
+        expect(mockedFn.calls[0].args).toEqual(['error', 'foo', 'bar']);
       });
 
     });
@@ -152,7 +158,9 @@ describe('CosmosPackagesStore', function () {
       it('stores search when event is dispatched', function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
-          data: [{gid: 'foo', bar: 'baz'}]
+          data: [{gid: 'foo', bar: 'baz'}],
+          packageName: 'foo',
+          appId: 'bar'
         });
 
         var search = CosmosPackagesStore.get('search').getItems();
@@ -168,7 +176,9 @@ describe('CosmosPackagesStore', function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
-          data: [{gid: 'foo', bar: 'baz'}]
+          data: [{gid: 'foo', bar: 'baz'}],
+          packageName: 'foo',
+          appId: 'bar'
         });
 
         expect(mockedFn.mock.calls.length).toEqual(1);
@@ -182,11 +192,13 @@ describe('CosmosPackagesStore', function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_ERROR,
-          data: 'foo'
+          data: 'error',
+          packageName: 'foo',
+          appId: 'bar'
         });
 
         expect(mockedFn.calls.length).toEqual(1);
-        expect(mockedFn.calls[0].args).toEqual(['foo']);
+        expect(mockedFn.calls[0].args).toEqual(['error', 'foo', 'bar']);
       });
 
     });
@@ -231,7 +243,8 @@ describe('CosmosPackagesStore', function () {
       it('stores search when event is dispatched', function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS,
-          data: [{gid: 'foo', bar: 'baz'}]
+          data: [{gid: 'foo', bar: 'baz'}],
+          query: 'foo'
         });
 
         var search = CosmosPackagesStore.get('search').getItems();
@@ -247,7 +260,8 @@ describe('CosmosPackagesStore', function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS,
-          data: [{gid: 'foo', bar: 'baz'}]
+          data: [{gid: 'foo', bar: 'baz'}],
+          query: 'foo'
         });
 
         expect(mockedFn.mock.calls.length).toEqual(1);
@@ -261,11 +275,12 @@ describe('CosmosPackagesStore', function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_ERROR,
-          data: 'foo'
+          data: 'error',
+          query: 'foo'
         });
 
         expect(mockedFn.calls.length).toEqual(1);
-        expect(mockedFn.calls[0].args).toEqual(['foo']);
+        expect(mockedFn.calls[0].args).toEqual(['error', 'foo']);
       });
 
     });

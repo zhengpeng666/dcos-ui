@@ -13,13 +13,17 @@ const CosmosPackagesActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
-          data: response.package
+          data: response.package,
+          packageName,
+          packageVersion
         });
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr)
+          data: RequestUtil.getErrorFromXHR(xhr),
+          packageName,
+          packageVersion
         });
       }
     });
@@ -33,13 +37,17 @@ const CosmosPackagesActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
-          data: response.packages
+          data: response.packages,
+          packageName,
+          appId
         });
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr)
+          data: RequestUtil.getErrorFromXHR(xhr),
+          packageName,
+          appId
         });
       }
     });
@@ -53,13 +61,15 @@ const CosmosPackagesActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS,
-          data: response.packages
+          data: response.packages,
+          query
         });
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr)
+          data: RequestUtil.getErrorFromXHR(xhr),
+          query
         });
       }
     });
