@@ -1,5 +1,7 @@
+import {Modal} from 'reactjs-components';
 import React from 'react';
 
+import MultipleForm from '../../components/MultipleForm';
 import Panel from '../../components/Panel';
 import UniversePackagesList from '../../structs/UniversePackagesList';
 
@@ -93,7 +95,21 @@ let packages = new UniversePackagesList({items: [
   }
 ]});
 
+const METHODS_TO_BIND = ['handleButtonClick', 'handleAdvancedModalClose'];
+
 class PackagesTab extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      advancedModalOpen: false
+    };
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
   handleOpenDetail(pkg, event) {
     event.stopPropagation();
     // Handle open detail view
@@ -102,6 +118,14 @@ class PackagesTab extends React.Component {
   handleOpenInstallModal(pkg, event) {
     event.stopPropagation();
     // Handle open install modal
+  }
+
+  handleButtonClick() {
+    this.setState({advancedModalOpen: true});
+  }
+
+  handleAdvancedModalClose() {
+    this.setState({advancedModalOpen: false});
   }
 
   getFooter(pkg) {
@@ -151,7 +175,24 @@ class PackagesTab extends React.Component {
   render() {
     return (
       <div className="grid row">
+        <button
+          className="button button-success"
+          onClick={this.handleButtonClick}>
+          Open Advanced Configuration
+        </button><br/>
         {this.getPackages()}
+        <Modal
+          modalWrapperClass="modal-generic-error"
+          modalClass="modal modal-large"
+          maxHeightPercentage={0.9}
+          onClose={this.handleAdvancedModalClose}
+          open={this.state.advancedModalOpen}
+          showCloseButton={false}
+          showHeader={false}
+          showFooter={false}
+          titleClass="modal-header-title text-align-center flush">
+          <MultipleForm />
+        </Modal>
       </div>
     );
   }
