@@ -13,7 +13,7 @@ const CosmosPackagesActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
-          data: response
+          data: response.package
         });
       },
       error: function (xhr) {
