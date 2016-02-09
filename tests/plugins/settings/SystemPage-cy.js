@@ -11,8 +11,9 @@ describe('System Page [0dw]', function () {
     });
 
     it('goes to Component Health page when Component tab clicked [0dz]', function () {
-      cy.get('.page-header-navigation .tab-item-label').contains('Components')
-      .click();
+      cy.get('.page-header-navigation .tab-item-label')
+        .contains('Components')
+        .click();
       cy.hash().should('match', /components/);
     });
 
