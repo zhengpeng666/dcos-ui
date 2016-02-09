@@ -47,7 +47,8 @@ export default class SettingsPage extends mixin(TabsMixin) {
     // System Tabs
     if (currentTab.indexOf(pageKeys[1]) >= 0) {
       this.tabs_tabs = {
-        'settings-system-overview': 'Overview',
+        // todo: content for Overview Tab
+        // 'settings-system-overview': 'Overview',
         'settings-system-components': 'Components'
       };
     }

@@ -33,7 +33,7 @@ let settingsRoutes = {
         {
           type: Redirect,
           from: '/settings/system/?',
-          to: 'settings-system-overview'
+          to: 'settings-system-components'
         }
       ]
     },
