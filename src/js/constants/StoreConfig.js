@@ -73,8 +73,8 @@ const ListenersDescription = {
   cosmosPackages: {
     store: CosmosPackagesStore,
     events: {
-      describeSuccess: EventTypes.COSMOS_PACKAGES_CHANGE,
-      describeError: EventTypes.COSMOS_PACKAGES_ERROR,
+      describeSuccess: EventTypes.COSMOS_DESCRIBE_CHANGE,
+      describeError: EventTypes.COSMOS_DESCRIBE_ERROR,
       listSuccess: EventTypes.COSMOS_LIST_CHANGE,
       listError: EventTypes.COSMOS_LIST_ERROR,
       searchSuccess: EventTypes.COSMOS_SEARCH_CHANGE,

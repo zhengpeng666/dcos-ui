@@ -9,7 +9,7 @@ import UniversePackage from '../structs/UniversePackage';
 import UniversePackagesList from '../structs/UniversePackagesList';
 
 const CosmosPackagesStore = Store.createStore({
-  storeID: 'CosmosPackages',
+  storeID: 'cosmosPackages',
 
   mixins: [GetSetMixin],
 
