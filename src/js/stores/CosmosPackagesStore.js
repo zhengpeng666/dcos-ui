@@ -61,4 +61,4 @@ const CosmosPackagesStore = Store.createStore({
 
 });
 
-export default CosmosPackagesStore;
+module.exports = CosmosPackagesStore;

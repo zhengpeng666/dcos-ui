@@ -67,4 +67,4 @@ const CosmosPackagesActions = {
 
 };
 
-export default CosmosPackagesActions;
+module.exports = CosmosPackagesActions;
