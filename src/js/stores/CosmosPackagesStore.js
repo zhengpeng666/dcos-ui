@@ -91,47 +91,31 @@ const CosmosPackagesStore = Store.createStore({
     }
 
     let action = payload.action;
+    let args = [];
+    Object.keys(action).forEach(function (key) {
+      if (key !== 'type') {
+        args.push(action[key]);
+      }
+    });
 
     switch (action.type) {
       case ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS:
-        CosmosPackagesStore.processDescribeSuccess(
-          action.data,
-          action.packageName,
-          action.packageVersion
-        );
+        CosmosPackagesStore.processDescribeSuccess(...args);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR:
-        CosmosPackagesStore.processDescribeError(
-          action.data,
-          action.packageName,
-          action.packageVersion
-        );
+        CosmosPackagesStore.processDescribeError(...args);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_SUCCESS:
-        CosmosPackagesStore.processListSuccess(
-          action.data,
-          action.packageName,
-          action.appId
-        );
+        CosmosPackagesStore.processListSuccess(...args);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_ERROR:
-        CosmosPackagesStore.processListError(
-          action.data,
-          action.packageName,
-          action.appId
-        );
+        CosmosPackagesStore.processListError(...args);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS:
-        CosmosPackagesStore.processSearchSuccess(
-          action.data,
-          action.query
-        );
+        CosmosPackagesStore.processSearchSuccess(...args);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_ERROR:
-        CosmosPackagesStore.processSearchError(
-          action.data,
-          action.query
-        );
+        CosmosPackagesStore.processSearchError(...args);
         break;
     }
 
