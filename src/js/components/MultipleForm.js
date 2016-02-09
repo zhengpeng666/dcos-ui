@@ -1,5 +1,7 @@
+import _ from 'underscore';
 import React from 'react';
 
+// import FormPanel from './FormPanel';
 import SideTabs from './SideTabs';
 
 const METHODS_TO_BIND = ['handleFormChange', 'handleTabClick'];
@@ -20,7 +22,7 @@ export default class MultipleForm extends React.Component {
 
   componentWillMount() {
     this.setState({
-      currentTab: this.props.multipleDefinition[0].name
+      currentTab: Object.keys(this.props.multipleDefinition)[0]
     });
   }
 
@@ -71,13 +73,17 @@ export default class MultipleForm extends React.Component {
           <SideTabs
             onTabClick={this.handleTabClick}
             selectedTab={this.state.currentTab}
-            tabs={multipleDefinition} />
+            tabs={_.values(multipleDefinition)} />
         </div>
         <div className="column-8">
         </div>
       </div>
     );
   }
+          // <FormPanel
+          //   definition={selectedTabDefinition.definition}
+          //   description={selectedTabDefinition.description}
+          //   title={selectedTabDefinition.title} />
 }
 
 MultipleForm.defaultProps = {
