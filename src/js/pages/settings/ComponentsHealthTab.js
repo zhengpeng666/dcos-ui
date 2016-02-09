@@ -10,7 +10,7 @@ const METHODS_TO_BIND = [
   'renderHealth'
 ];
 
-export default class ComponentsHealthTab extends React.Component {
+class ComponentsHealthTab extends React.Component {
 
   constructor() {
     super();
@@ -49,20 +49,20 @@ export default class ComponentsHealthTab extends React.Component {
   getColGroup() {
     return (
       <colgroup>
-        <col />
-        <col />
+        <col style={{width: '75%'}} />
+        <col style={{width: '25%'}} />
       </colgroup>
     );
   }
 
   getColumns() {
-    let className = ResourceTableUtil.getClassName;
+    let classNameFn = ResourceTableUtil.getClassName;
 
-    let columns = [
+    return [
       {
         cacheCell: true,
-        className,
-        headerClassName: className,
+        className: classNameFn,
+        headerClassName: classNameFn,
         prop: 'name',
         render: this.renderComponent,
         sortable: true,
@@ -70,8 +70,8 @@ export default class ComponentsHealthTab extends React.Component {
         heading: ResourceTableUtil.renderHeading({name: 'NAME'})
       },
       {
-        className,
-        headerClassName: className,
+        className: classNameFn,
+        headerClassName: classNameFn,
         prop: 'health',
         render: this.renderHealth,
         sortable: true,
@@ -79,8 +79,6 @@ export default class ComponentsHealthTab extends React.Component {
         heading: ResourceTableUtil.renderHeading({health: 'HEALTH'})
       }
     ];
-
-    return columns;
   }
 
   getData() {
@@ -104,7 +102,7 @@ export default class ComponentsHealthTab extends React.Component {
   render() {
     return (
       <div className="flex-container-col">
-        <h3 className="h4 inverse flush-top">Components</h3>
+        <span className="h4 inverse flush-top">Components</span>
         <div className="page-content-fill flex-grow flex-container-col">
           <Table
             className="table inverse table-borderless-outer
@@ -122,3 +120,5 @@ export default class ComponentsHealthTab extends React.Component {
     );
   }
 }
+
+module.exports = ComponentsHealthTab;
