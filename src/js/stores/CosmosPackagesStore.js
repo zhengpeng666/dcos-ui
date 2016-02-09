@@ -36,9 +36,7 @@ const CosmosPackagesStore = Store.createStore({
 
   /* Reducers */
   processDescribeSuccess: function (pkg) {
-    this.set({
-      describe: new UniversePackage(pkg)
-    });
+    this.set({describe: new UniversePackage(pkg)});
 
     this.emit(
       EventTypes.COSMOS_DESCRIBE_CHANGE,
@@ -51,11 +49,7 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   processListSuccess: function (packages) {
-    this.set({
-      search: new UniversePackagesList({
-        items: packages
-      })
-    });
+    this.set({search: new UniversePackagesList({items: packages})});
 
     this.emit(
       EventTypes.COSMOS_LIST_CHANGE,
@@ -68,11 +62,7 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   processSearchSuccess: function (packages) {
-    this.set({
-      search: new UniversePackagesList({
-        items: packages
-      })
-    });
+    this.set({search: new UniversePackagesList({items: packages})});
 
     this.emit(
       EventTypes.COSMOS_SEARCH_CHANGE,
@@ -91,11 +81,10 @@ const CosmosPackagesStore = Store.createStore({
     }
 
     let action = payload.action;
-    let args = [];
-    Object.keys(action).forEach(function (key) {
-      if (key !== 'type') {
-        args.push(action[key]);
-      }
+
+    // Creating an array of arguments (without 'type')
+    let args = Object.keys(action).slice(1).map(function (key) {
+      return action[key];
     });
 
     switch (action.type) {
