@@ -14,7 +14,7 @@ const CosmosPackagesStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    describe: new UniversePackage(),
+    description: new UniversePackage(),
     list: new UniversePackagesList(),
     search: new UniversePackagesList()
   },
@@ -28,15 +28,15 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   /* API */
-  describe: CosmosPackagesActions.describe,
+  fetchDescription: CosmosPackagesActions.fetchDescription,
 
-  list: CosmosPackagesActions.list,
+  fetchList: CosmosPackagesActions.fetchList,
 
   search: CosmosPackagesActions.search,
 
   /* Reducers */
   processDescribeSuccess: function (pkg) {
-    this.set({describe: new UniversePackage(pkg)});
+    this.set({description: new UniversePackage(pkg)});
 
     this.emit(
       EventTypes.COSMOS_DESCRIBE_CHANGE,
@@ -49,7 +49,7 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   processListSuccess: function (packages) {
-    this.set({search: new UniversePackagesList({items: packages})});
+    this.set({list: new UniversePackagesList({items: packages})});
 
     this.emit(
       EventTypes.COSMOS_LIST_CHANGE,

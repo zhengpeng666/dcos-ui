@@ -32,7 +32,7 @@ describe('CosmosPackagesStore', function () {
     Config.useFixtures = this.configUseFixture;
   });
 
-  describe('#describe', function () {
+  describe('#fetchDescription', function () {
 
     beforeEach(function () {
       this.requestFn = RequestUtil.json;
@@ -47,14 +47,14 @@ describe('CosmosPackagesStore', function () {
     });
 
     it('should return an instance of UniversePackage', function () {
-      CosmosPackagesStore.describe('foo', 'bar');
-      var describe = CosmosPackagesStore.get('describe');
-      expect(describe instanceof UniversePackage).toBeTruthy();
+      CosmosPackagesStore.fetchDescription('foo', 'bar');
+      var description = CosmosPackagesStore.get('description');
+      expect(description instanceof UniversePackage).toBeTruthy();
     });
 
-    it('should return all of the describe it was given', function () {
-      CosmosPackagesStore.describe('foo', 'bar');
-      var pkg = CosmosPackagesStore.get('describe');
+    it('should return the description it was given', function () {
+      CosmosPackagesStore.fetchDescription('foo', 'bar');
+      var pkg = CosmosPackagesStore.get('description');
       expect(pkg.get('name'))
         .toEqual(this.packageDescribeFixture.package.name);
       expect(pkg.get('version'))
@@ -63,14 +63,14 @@ describe('CosmosPackagesStore', function () {
 
     it('should pass though query parameters', function () {
       RequestUtil.json = jasmine.createSpy('RequestUtil#json');
-      CosmosPackagesStore.describe('foo', 'bar');
+      CosmosPackagesStore.fetchDescription('foo', 'bar');
       expect(RequestUtil.json.mostRecentCall.args[0].data)
         .toEqual({packageName: 'foo', packageVersion: 'bar'});
     });
 
     describe('dispatcher', function () {
 
-      it('stores describe when event is dispatched', function () {
+      it('stores description when event is dispatched', function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
           data: {gid: 'foo', bar: 'baz'},
@@ -78,7 +78,7 @@ describe('CosmosPackagesStore', function () {
           packageVersion: 'bar'
         });
 
-        var pkg = CosmosPackagesStore.get('describe');
+        var pkg = CosmosPackagesStore.get('description');
         expect(pkg.get('gid')).toEqual('foo');
         expect(pkg.get('bar')).toEqual('baz');
       });
@@ -120,7 +120,7 @@ describe('CosmosPackagesStore', function () {
 
   });
 
-  describe('#list', function () {
+  describe('#fetchList', function () {
 
     beforeEach(function () {
       this.requestFn = RequestUtil.json;
@@ -135,27 +135,27 @@ describe('CosmosPackagesStore', function () {
     });
 
     it('should return an instance of UniversePackagesList', function () {
-      CosmosPackagesStore.list('foo', 'bar');
+      CosmosPackagesStore.fetchList('foo', 'bar');
       var list = CosmosPackagesStore.get('list');
       expect(list instanceof UniversePackagesList).toBeTruthy();
     });
 
     it('should return all of the list it was given', function () {
-      CosmosPackagesStore.list('foo', 'bar');
+      CosmosPackagesStore.fetchList('foo', 'bar');
       var list = CosmosPackagesStore.get('list').getItems();
       expect(list.length).toEqual(this.packagesListFixture.packages.length);
     });
 
     it('should pass though query parameters', function () {
       RequestUtil.json = jasmine.createSpy('RequestUtil#json');
-      CosmosPackagesStore.list('foo', 'bar');
+      CosmosPackagesStore.fetchList('foo', 'bar');
       expect(RequestUtil.json.mostRecentCall.args[0].data)
         .toEqual({packageName: 'foo', appId: 'bar'});
     });
 
     describe('dispatcher', function () {
 
-      it('stores search when event is dispatched', function () {
+      it('stores list when event is dispatched', function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
           data: [{gid: 'foo', bar: 'baz'}],
@@ -163,9 +163,9 @@ describe('CosmosPackagesStore', function () {
           appId: 'bar'
         });
 
-        var search = CosmosPackagesStore.get('search').getItems();
-        expect(search[0].get('gid')).toEqual('foo');
-        expect(search[0].get('bar')).toEqual('baz');
+        var list = CosmosPackagesStore.get('list').getItems();
+        expect(list[0].get('gid')).toEqual('foo');
+        expect(list[0].get('bar')).toEqual('baz');
       });
 
       it('dispatches the correct event upon success', function () {

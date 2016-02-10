@@ -11,11 +11,11 @@ var RequestUtil = require('../../utils/RequestUtil');
 
 describe('CosmosPackagesActions', function () {
 
-  describe('#describe', function () {
+  describe('#fetchDescription', function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, 'json');
-      CosmosPackagesActions.describe('foo', 'bar');
+      CosmosPackagesActions.fetchDescription('foo', 'bar');
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
@@ -78,7 +78,7 @@ describe('CosmosPackagesActions', function () {
     });
 
     it('sends query in request body, even if it is undefined', function () {
-      CosmosPackagesActions.describe();
+      CosmosPackagesActions.fetchDescription();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
       expect(this.configuration.data)
         .toEqual({packageName: undefined, packageVersion: undefined});
@@ -90,11 +90,11 @@ describe('CosmosPackagesActions', function () {
 
   });
 
-  describe('#list', function () {
+  describe('#fetchList', function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, 'json');
-      CosmosPackagesActions.list('foo', 'bar');
+      CosmosPackagesActions.fetchList('foo', 'bar');
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
@@ -157,7 +157,7 @@ describe('CosmosPackagesActions', function () {
     });
 
     it('sends query in request body, even if it is undefined', function () {
-      CosmosPackagesActions.list();
+      CosmosPackagesActions.fetchList();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
       expect(this.configuration.data)
         .toEqual({packageName: undefined, appId: undefined});

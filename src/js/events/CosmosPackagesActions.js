@@ -5,7 +5,7 @@ import RequestUtil from '../utils/RequestUtil';
 
 const CosmosPackagesActions = {
 
-  describe: function (packageName, packageVersion) {
+  fetchDescription: function (packageName, packageVersion) {
     RequestUtil.json({
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/describe`,
@@ -29,7 +29,7 @@ const CosmosPackagesActions = {
     });
   },
 
-  list: function (packageName, appId) {
+  fetchList: function (packageName, appId) {
     RequestUtil.json({
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/list`,
