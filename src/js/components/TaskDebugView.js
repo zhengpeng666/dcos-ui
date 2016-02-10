@@ -93,7 +93,7 @@ export default class TaskDebugView extends mixin(StoreMixin) {
   }
 
   handleViewChange(index) {
-    this.setState({currentView: index, directory: null});
+    this.setState({currentView: index});
   }
 
   hasLoadingError() {
@@ -104,41 +104,8 @@ export default class TaskDebugView extends mixin(StoreMixin) {
     return <RequestErrorMsg />;
   }
 
-  getLoadingScreen() {
-    return (
-      <div className="container container-fluid container-pod text-align-center vertical-center
-        inverse">
-        <div className="row">
-          <div className="ball-scale">
-            <div />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  getEmptyLogScreen(logName) {
-    return (
-      <div className="flex-grow vertical-center">
-        <h3 className="text-align-center flush-top">
-          {`${logName} Log is Currently Empty`}
-        </h3>
-        <p className="text-align-center flush-bottom">
-          Please try again later.
-        </p>
-      </div>
-    );
-  }
-
   getLogView(logName, filePath, nodeID) {
     let {state} = this;
-    if (!state.directory) {
-      return this.getLoadingScreen();
-    }
-
-    if (!filePath) {
-      return this.getEmptyLogScreen(logName);
-    }
 
     return (
       <MesosLogView

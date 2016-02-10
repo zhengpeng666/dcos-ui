@@ -99,15 +99,15 @@ describe('TaskDebugView', function () {
       expect(this.instance.getErrorScreen).toHaveBeenCalled();
     });
 
-    it('should call getEmptyLogScreen when file is not found', function () {
+    it('ignores getErrorScreen when error has not occured', function () {
       this.instance.state = {
         currentView: 0,
-        directory: new TaskDirectory({items: [{nlink: 1, path: '/foo'}]})
+        directory: new TaskDirectory({items: [{nlink: 1, path: '/stdout'}]})
       };
-      this.instance.getEmptyLogScreen = jasmine.createSpy('getEmptyLogScreen');
+      this.instance.getErrorScreen = jasmine.createSpy('getErrorScreen');
       this.instance.render();
 
-      expect(this.instance.getEmptyLogScreen).toHaveBeenCalled();
+      expect(this.instance.getErrorScreen).not.toHaveBeenCalled();
     });
 
     it('should set button disabled when file is not found', function () {
@@ -134,35 +134,6 @@ describe('TaskDebugView', function () {
       });
       var btn = TestUtils.findRenderedDOMComponentWithTag(instance, 'a');
       expect(btn.props.disabled).toEqual(false);
-    });
-
-    it('should call getLoadingScreen when directory is undefined', function () {
-      this.instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
-      this.instance.render();
-
-      expect(this.instance.getLoadingScreen).toHaveBeenCalled();
-    });
-
-    it('ignores getLoadingScreen when directory is defined', function () {
-      this.instance.state = {
-        currentView: 0,
-        directory: new TaskDirectory({items: [{nlink: 1, path: '/stdout'}]})
-      };
-      this.instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
-      this.instance.render();
-
-      expect(this.instance.getLoadingScreen).not.toHaveBeenCalled();
-    });
-
-    it('ignores getErrorScreen when directory is defined', function () {
-      this.instance.state = {
-        currentView: 0,
-        directory: new TaskDirectory({items: [{nlink: 1, path: '/stdout'}]})
-      };
-      this.instance.getErrorScreen = jasmine.createSpy('getErrorScreen');
-      this.instance.render();
-
-      expect(this.instance.getErrorScreen).not.toHaveBeenCalled();
     });
 
     it('renders stdout on first render', function () {

@@ -24,7 +24,8 @@ export default class MesosLogView extends mixin(StoreMixin) {
     this.state = {
       fullLog: null,
       hasLoadingError: 0,
-      isAtBottom: true
+      isAtBottom: true,
+      loading: true
     };
 
     this.store_listeners = [{
@@ -42,17 +43,27 @@ export default class MesosLogView extends mixin(StoreMixin) {
     );
   }
 
-  componentDidMount() {
-    super.componentDidMount(...arguments);
+  componentWillMount() {
+    super.componentWillMount(...arguments);
     let {props} = this;
-    MesosLogStore.startTailing(props.slaveID, props.filePath);
+    if (props.filePath) {
+      MesosLogStore.startTailing(props.slaveID, props.filePath);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     super.componentWillReceiveProps(...arguments);
     let {props} = this;
-    if (props.filePath !== nextProps.filePath) {
+    if (props.filePath === nextProps.filePath) {
+      return;
+    }
+
+    // Change to filePath has happened
+    this.setState({loading: true});
+    if (props.filePath) {
       MesosLogStore.stopTailing(props.filePath);
+    }
+    if (nextProps.filePath) {
       MesosLogStore.startTailing(nextProps.slaveID, nextProps.filePath);
     }
   }
@@ -81,6 +92,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
   shouldComponentUpdate(nextProps, nextState) {
     let {props, state} = this;
+
     return !!(
       // Check highlightText
       (props.highlightText !== nextProps.highlightText) ||
@@ -126,7 +138,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
       return;
     }
 
-    this.setState({hasLoadingError: true});
+    this.setState({hasLoadingError: this.state.hasLoadingError + 1});
   }
 
   onMesosLogStoreSuccess(path, direction) {
@@ -147,7 +159,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
     }
 
     let logBuffer = MesosLogStore.get(filePath);
-    this.setState({fullLog: logBuffer.getFullLog()}, () => {
+    this.setState({fullLog: logBuffer.getFullLog(), loading: false}, () => {
       // This allows the user to stay at the place of the log they were at
       // before the prepend.
       if (direction === 'prepend' && previousScrollHeight) {
@@ -230,12 +242,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
 
   getLoadingScreen() {
     return (
-      <div className="
-        container
-        container-pod
-        text-align-center
-        vertical-center
-        inverse">
+      <div className="container-pod text-align-center vertical-center inverse">
         <div className="row">
           <div className="ball-scale">
             <div />
@@ -262,13 +269,11 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   render() {
-    if (this.state.hasLoadingError) {
+    if (this.state.hasLoadingError >= 3) {
       return this.getErrorScreen();
     }
 
-    let logBuffer = MesosLogStore.get(this.props.filePath);
-
-    if (!logBuffer) {
+    if (this.state.loading || !this.props.filePath) {
       return this.getLoadingScreen();
     }
 
@@ -291,7 +296,7 @@ MesosLogView.defaultProps = {
 };
 
 MesosLogView.propTypes = {
-  filePath: React.PropTypes.string.isRequired,
+  filePath: React.PropTypes.string,
   highlightText: React.PropTypes.string,
   logName: React.PropTypes.string,
   slaveID: React.PropTypes.string.isRequired

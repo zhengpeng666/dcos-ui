@@ -184,38 +184,49 @@ describe('MesosLogView', function () {
   describe('#render', function () {
 
     it('should call getErrorScreen when error occured', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <MesosLogView filePath="/some/file/path" slaveID="foo" />
-      );
+      this.instance.state = {hasLoadingError: 3};
+      this.instance.getErrorScreen = jasmine.createSpy('getErrorScreen');
 
-      instance.state = {hasLoadingError: true};
-      instance.getErrorScreen = jasmine.createSpy('getErrorScreen');
-
-      instance.render();
-      expect(instance.getErrorScreen).toHaveBeenCalled();
+      this.instance.render();
+      expect(this.instance.getErrorScreen).toHaveBeenCalled();
     });
 
-    it('should call getLoadingScreen when logBuffer is undefined', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <MesosLogView filePath="/some/file/path" slaveID="foo" />
-      );
+    it('ignores getErrorScreen when error has not occured', function () {
+      this.instance.state = {hasLoadingError: 2};
+      this.instance.getErrorScreen = jasmine.createSpy('getErrorScreen');
 
+      this.instance.render();
+      expect(this.instance.getErrorScreen).not.toHaveBeenCalled();
+    });
+
+    it('should call getLoadingScreen when loading is true', function () {
+      this.instance.state = {loading: true};
       MesosLogStore.get = jasmine.createSpy('MesosLogStore#get');
-      instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
+      this.instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
 
-      instance.render();
-      expect(instance.getLoadingScreen).toHaveBeenCalled();
+      this.instance.render();
+      expect(this.instance.getLoadingScreen).toHaveBeenCalled();
     });
 
-    it('ignores getLoadingScreen when logBuffer is defined', function () {
+    it('ignores getLoadingScreen if loading is false', function () {
+      this.instance.state = {loading: false};
+      MesosLogStore.get = jasmine.createSpy('MesosLogStore#get');
+      this.instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
+
+      this.instance.render();
+      expect(this.instance.getLoadingScreen).not.toHaveBeenCalled();
+    });
+
+    it('should call getLoadingScreen when filePath is undefined', function () {
       var instance = TestUtils.renderIntoDocument(
-        <MesosLogView filePath="/some/file/path" slaveID="foo" />
+        <MesosLogView slaveID="foo" />
       );
+      instance.state = {loading: false};
 
       instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
-
       instance.render();
-      expect(instance.getLoadingScreen).not.toHaveBeenCalled();
+
+      expect(instance.getLoadingScreen).toHaveBeenCalled();
     });
 
   });
