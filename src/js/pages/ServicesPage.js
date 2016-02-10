@@ -31,13 +31,12 @@ function getCountByHealth(frameworks) {
 }
 
 function getMesosServices(state) {
-  let filters = _.pick(state, 'searchString', 'healthFilter');
   let states = MesosSummaryStore.get('states');
   let lastState = states.lastSuccessful();
   let services = CompositeState.getServiceList();
   let filteredServices = services.filter({
-    health: filters.healthFilter,
-    name: filters.searchString
+    health: state.healthFilter,
+    name: state.searchString
   }).getItems();
   let serviceIDs = _.pluck(filteredServices, 'id');
 
@@ -53,8 +52,8 @@ function getMesosServices(state) {
 }
 
 var DEFAULT_FILTER_OPTIONS = {
-  searchString: '',
-  healthFilter: null
+  healthFilter: null,
+  searchString: ''
 };
 
 var ServicesPage = React.createClass({
