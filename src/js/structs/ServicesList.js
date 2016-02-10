@@ -39,7 +39,7 @@ module.exports = class ServicesList extends List {
 
       if (filters.health != null) {
         services = _.filter(services, function (service) {
-          return service.getHealth() === filters.health;
+          return service.getHealth().value === filters.health;
         });
       }
     }
