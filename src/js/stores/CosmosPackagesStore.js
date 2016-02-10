@@ -83,28 +83,28 @@ const CosmosPackagesStore = Store.createStore({
     let action = payload.action;
 
     // Creating an array of arguments (without 'type')
-    let args = Object.keys(action).slice(1).map(function (key) {
+    let payloadValues = Object.keys(action).slice(1).map(function (key) {
       return action[key];
     });
 
     switch (action.type) {
       case ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS:
-        CosmosPackagesStore.processDescribeSuccess(...args);
+        CosmosPackagesStore.processDescribeSuccess(...payloadValues);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR:
-        CosmosPackagesStore.processDescribeError(...args);
+        CosmosPackagesStore.processDescribeError(...payloadValues);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_SUCCESS:
-        CosmosPackagesStore.processListSuccess(...args);
+        CosmosPackagesStore.processListSuccess(...payloadValues);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_ERROR:
-        CosmosPackagesStore.processListError(...args);
+        CosmosPackagesStore.processListError(...payloadValues);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS:
-        CosmosPackagesStore.processSearchSuccess(...args);
+        CosmosPackagesStore.processSearchSuccess(...payloadValues);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_ERROR:
-        CosmosPackagesStore.processSearchError(...args);
+        CosmosPackagesStore.processSearchError(...payloadValues);
         break;
     }
 
