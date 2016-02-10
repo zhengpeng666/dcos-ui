@@ -28,20 +28,12 @@ var ACLAuthStore = Store.createStore({
 
   login: ACLAuthActions.login,
 
+  logout: ACLAuthActions.logout,
+
   fetchRole: ACLAuthActions.fetchRole,
 
   isLoggedIn: function () {
     return !!getUserMetadata();
-  },
-
-  logout: function () {
-    // Set the cookie to an empty string.
-    global.document.cookie = cookie.serialize(
-      ACLAuthConstants.userCookieKey, '', {expires: new Date(1970)}
-    );
-
-    this.resetRole();
-    this.emit(EventTypes.ACL_AUTH_USER_LOGOUT);
   },
 
   getUser: function () {
@@ -93,6 +85,16 @@ var ACLAuthStore = Store.createStore({
     this.emit(EventTypes.ACL_AUTH_USER_LOGIN_CHANGED);
   },
 
+  processLogoutSuccess: function () {
+    // Set the cookie to an empty string.
+    global.document.cookie = cookie.serialize(
+      ACLAuthConstants.userCookieKey, '', {expires: new Date(1970)}
+    );
+
+    this.resetRole();
+    this.emit(EventTypes.ACL_AUTH_USER_LOGOUT_SUCCESS);
+  },
+
   dispatcherIndex: AppDispatcher.register(function (payload) {
     let source = payload.source;
     if (source !== ActionTypes.SERVER_ACTION) {
@@ -102,13 +104,17 @@ var ACLAuthStore = Store.createStore({
     let action = payload.action;
 
     switch (action.type) {
-      // Get ACLs for resource
       case ActionTypes.REQUEST_ACL_LOGIN_SUCCESS:
         ACLAuthStore.processLoginSuccess();
         break;
-      // Get ACLs for resource
       case ActionTypes.REQUEST_ACL_LOGIN_ERROR:
         ACLAuthStore.emit(EventTypes.ACL_AUTH_USER_LOGIN_ERROR, action.data);
+        break;
+      case ActionTypes.REQUEST_ACL_LOGOUT_SUCCESS:
+        ACLAuthStore.processLogoutSuccess();
+        break;
+      case ActionTypes.REQUEST_ACL_LOGOUT_ERROR:
+        ACLAuthStore.emit(EventTypes.ACL_AUTH_USER_LOGOUT_ERROR, action.data);
         break;
       // Get role of current user
       case ActionTypes.REQUEST_ACL_ROLE_SUCCESS:

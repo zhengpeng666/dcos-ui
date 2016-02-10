@@ -49,6 +49,23 @@ const ACLAuthActions = {
         });
       }
     });
+  },
+
+  logout: function () {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/auth/logout`,
+      success: function () {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_LOGOUT_SUCCESS
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_LOGOUT_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr)
+        });
+      }
+    });
   }
 
 };

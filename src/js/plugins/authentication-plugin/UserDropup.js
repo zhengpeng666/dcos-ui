@@ -49,7 +49,6 @@ export default class UserDropup extends React.Component {
 
   handleSignOut() {
     ACLAuthStore.logout();
-    this.context.router.transitionTo('/login');
   }
 
   handleMenuItemClick(onClick, e) {

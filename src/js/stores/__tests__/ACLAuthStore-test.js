@@ -11,6 +11,8 @@ jest.dontMock('../../utils/Util');
 var cookie = require('cookie');
 
 var ACLAuthStore = require('../ACLAuthStore');
+var ActionTypes = require('../../constants/ActionTypes');
+var AppDispatcher = require('../../events/AppDispatcher');
 var EventTypes = require('../../constants/EventTypes');
 var RequestUtil = require('../../utils/RequestUtil');
 const USER_COOKIE_KEY = 'dcos-acs-info-cookie';
@@ -23,6 +25,7 @@ describe('ACLAuthStore', function () {
 
   beforeEach(function () {
     this.cookieParse = cookie.parse;
+    global.document = {cookie: ''};
   });
 
   afterEach(function () {
@@ -49,13 +52,12 @@ describe('ACLAuthStore', function () {
     });
   });
 
-  describe('#logout', function () {
+  describe('#processLogoutSuccess', function () {
     beforeEach(function () {
       this.document = global.document;
-      cookie.serialize = jasmine.createSpy();
-      global.document = {cookie: ''};
-      ACLAuthStore.emit = jasmine.createSpy();
-      ACLAuthStore.logout();
+      spyOn(cookie, 'serialize');
+      spyOn(ACLAuthStore, 'emit');
+      ACLAuthStore.processLogoutSuccess();
     });
 
     afterEach(function () {
@@ -72,7 +74,7 @@ describe('ACLAuthStore', function () {
     it('should emit a logout event', function () {
       var args = ACLAuthStore.emit.mostRecentCall.args;
 
-      expect(args[0]).toEqual(EventTypes.ACL_AUTH_USER_LOGOUT);
+      expect(args[0]).toEqual(EventTypes.ACL_AUTH_USER_LOGOUT_SUCCESS);
     });
   });
 
@@ -127,6 +129,40 @@ describe('ACLAuthStore', function () {
       ACLAuthStore.makeDefaultRole();
 
       expect(ACLAuthStore.isAdmin()).toEqual(false);
+    });
+
+  });
+
+  describe('dispatcher', function () {
+
+    describe('logout', function () {
+
+      it('dispatches the correct event upon success', function () {
+        var mockedFn = jasmine.createSpy();
+        ACLAuthStore.addChangeListener(
+          EventTypes.ACL_AUTH_USER_LOGOUT_SUCCESS,
+          mockedFn
+        );
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_LOGOUT_SUCCESS
+        });
+
+        expect(mockedFn.calls.length).toEqual(1);
+      });
+
+      it('dispatches the correct event upon error', function () {
+        var mockedFn = jest.genMockFunction();
+        ACLAuthStore.addChangeListener(
+          EventTypes.ACL_AUTH_USER_LOGOUT_ERROR,
+          mockedFn
+        );
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_ACL_LOGOUT_ERROR
+        });
+
+        expect(mockedFn.mock.calls.length).toEqual(1);
+      });
+
     });
 
   });
