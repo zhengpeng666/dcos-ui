@@ -21,8 +21,8 @@ var RequestErrorMsg = React.createClass({
                 target="_blank">
               Slack channel
             </a> or send us an email at&nbsp;
-            <a href="mailto:support@mesosphere.io">
-              support@mesosphere.io
+            <a href="mailto:support@mesosphere.com">
+              support@mesosphere.com
             </a>.
           </p>
         </div>

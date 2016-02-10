@@ -102,7 +102,7 @@ Cypress.addParentCommand('visitUrl', function (options) {
     }
   } else if (options.identify) {
     callback = function (win) {
-      win.localStorage.setItem('email', 'ui-bot@mesosphere.io');
+      win.localStorage.setItem('email', 'ui-bot@mesosphere.com');
     }
   }
 
