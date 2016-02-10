@@ -8,6 +8,7 @@ jest.dontMock('../../../constants/EventTypes');
 jest.dontMock('../../../mixins/GetSetMixin');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var ACLAuthStore = require('../../../stores/ACLAuthStore');
@@ -76,7 +77,7 @@ describe('UserDropup', function () {
     it('should return an array of li elements', function () {
       this.modalMenu.forEach(function (item) {
         let domEl = TestUtils.renderIntoDocument(item);
-        expect(domEl.getDOMNode().nodeName).toEqual('LI');
+        expect(ReactDOM.findDOMNode(domEl).nodeName).toEqual('LI');
       });
     });
 

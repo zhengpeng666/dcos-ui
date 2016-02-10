@@ -1,5 +1,4 @@
 var _ = require('underscore');
-var cloneWithProps = require('react-addons-clone-with-props');
 var React = require('react');
 import ReactDOM from 'react-dom';
 
@@ -76,13 +75,13 @@ var Chart = React.createClass({
       if (_.isArray(children)) {
         height = height / children.length;
         return _.map(children, function (child) {
-          return cloneWithProps(
+          return React.cloneElement(
             child,
             {width: width, height: height}
           );
         });
       } else {
-        return cloneWithProps(
+        return React.cloneElement(
           children,
           {width: width, height: height}
         );

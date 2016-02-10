@@ -3,6 +3,7 @@ jest.dontMock('../../../utils/JestUtil');
 jest.dontMock('../VersionsModal');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var JestUtil = require('../../../utils/JestUtil');
@@ -48,7 +49,7 @@ describe('VersionsModal', function () {
       var content = this.instance.getContent();
       var result = JestUtil.renderAndFindTag(content, 'pre');
 
-      expect(result.getDOMNode().innerHTML).toEqual('\n{\n  "foo": "bar"\n}');
+      expect(ReactDOM.findDOMNode(result).innerHTML).toEqual('\n{\n  "foo": "bar"\n}');
     });
 
   });

@@ -19,7 +19,7 @@ describe('TimeSeriesLabel', function () {
     var title = TestUtils.findRenderedDOMComponentWithClass(
       this.instance, 'unit'
     );
-    expect(title.getDOMNode().textContent).toEqual('10%');
+    expect(ReactDOM.findDOMNode(title).textContent).toEqual('10%');
   });
 
   it('should display the correct sub heading', function () {
@@ -27,7 +27,7 @@ describe('TimeSeriesLabel', function () {
     var label = TestUtils.findRenderedDOMComponentWithClass(
       this.instance, 'unit-label'
     );
-    expect(label.getDOMNode().textContent).toBe('Foo');
+    expect(ReactDOM.findDOMNode(label).textContent).toBe('Foo');
   });
 
   it('should set sub heading text color', function () {

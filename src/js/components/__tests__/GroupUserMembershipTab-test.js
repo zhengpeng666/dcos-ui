@@ -81,12 +81,11 @@ describe('GroupUserMembershipTab', function () {
       this.instance.dropdownButton = TestUtils
         .scryRenderedDOMComponentsWithClass(this.instance, 'dropdown-toggle');
 
-      TestUtils.Simulate.click(this.instance.dropdownButton[0].getDOMNode());
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(this.instance.dropdownButton[0]));
 
       this.instance.selectableElements = TestUtils
         .scryRenderedDOMComponentsWithClass(this.instance, 'is-selectable');
-      TestUtils.Simulate.click(this.instance.selectableElements[1]
-        .getDOMNode());
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(this.instance.selectableElements[1]);
     });
 
     afterEach(function () {

@@ -61,7 +61,7 @@ describe('ServiceTable', function () {
         var healthlabel = TestUtils.renderIntoDocument(
           table.renderHealth(null, row)
         );
-        expect(healthlabel.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
+        expect(ReactDOM.findDOMNode(healthlabel).innerHTML).toEqual(HealthLabels.NA);
       });
     });
 

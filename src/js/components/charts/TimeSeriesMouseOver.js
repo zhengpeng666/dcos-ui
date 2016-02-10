@@ -69,21 +69,21 @@ var TimeSeriesMouseOver = React.createClass({
       (props.width);
     index = Math.round(index + hiddenDataPoints);
 
-    d3.select(this.refs.xMousePosition.getDOMNode())
+    d3.select(this.refs.xMousePosition)
       .transition()
         .duration(50)
         .style('stroke', 'rgba(255,255,255,0.5')
         .attr('x1', mouse.x)
         .attr('x2', mouse.x);
 
-    d3.select(this.refs.yMousePosition.getDOMNode())
+    d3.select(this.refs.yMousePosition)
       .transition()
         .duration(50)
         .style('stroke', 'rgba(255,255,255,0.5')
         .attr('y1', props.yScale(firstDataSet.values[index][props.y]))
         .attr('y2', props.yScale(firstDataSet.values[index][props.y]));
 
-    d3.select(this.refs.yAxisCurrent.getDOMNode())
+    d3.select(this.refs.yAxisCurrent)
       .transition()
       .duration(50)
       .attr('y', props.yScale(firstDataSet.values[index][props.y]))
@@ -113,7 +113,7 @@ var TimeSeriesMouseOver = React.createClass({
     } else {
       value = '-' + value + 's';
     }
-    d3.select(this.refs.xAxisCurrent.getDOMNode())
+    d3.select(this.refs.xAxisCurrent)
       .transition()
       .duration(50)
       .attr('x', xPosition)
@@ -122,13 +122,13 @@ var TimeSeriesMouseOver = React.createClass({
   },
 
   handleMouseOut: function () {
-    d3.select(this.refs.yMousePosition.getDOMNode()).interrupt()
+    d3.select(this.refs.yMousePosition).interrupt()
       .style('stroke', 'rgba(255,255,255,0');
-    d3.select(this.refs.xMousePosition.getDOMNode()).interrupt()
+    d3.select(this.refs.xMousePosition).interrupt()
       .style('stroke', 'rgba(255,255,255,0');
-    d3.select(this.refs.xAxisCurrent.getDOMNode())
+    d3.select(this.refs.xAxisCurrent)
       .text('');
-    d3.select(this.refs.yAxisCurrent.getDOMNode())
+    d3.select(this.refs.yAxisCurrent)
       .text('');
   },
 

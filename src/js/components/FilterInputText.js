@@ -28,7 +28,7 @@ var FilterInputText = React.createClass({
 
   handleChange: function (e) {
     e.preventDefault();
-    this.props.handleFilterChange(this.refs.filterInput.getDOMNode().value);
+    this.props.handleFilterChange(this.refs.filterInput.value);
   },
 
   handleClearInput: function (e) {

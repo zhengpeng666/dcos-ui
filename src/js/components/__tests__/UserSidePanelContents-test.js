@@ -68,7 +68,7 @@ describe('UserSidePanelContents', function () {
       ACLUserStore.emit(EventTypes.ACL_USER_DETAILS_FETCHED_ERROR, userID);
 
       var text = JestUtil.renderAndFindTag(instance.render(), 'h3');
-      expect(text.getDOMNode().textContent)
+      expect(ReactDOM.findDOMNode(text).textContent)
         .toEqual('Cannot Connect With The Server');
     });
 
@@ -107,7 +107,7 @@ describe('UserSidePanelContents', function () {
           'form-element-inline-text'
         );
 
-        expect(text.getDOMNode().textContent).toEqual('藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe');
+        expect(ReactDOM.findDOMNode(text).textContent).toEqual('藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe');
       }
     );
 

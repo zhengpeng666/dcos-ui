@@ -132,19 +132,19 @@ describe('UserGroupTable', function () {
   describe('#renderButton', function () {
 
     it('calls handleOpenConfirm with the proper arguments', function () {
-      // var buttonWrapper = TestUtils.renderIntoDocument(
-      //   this.instance.renderButton('foo', {gid: 'bar'})
-      // );
-      // var button = TestUtils.scryRenderedDOMComponentsWithClass(
-      //   buttonWrapper,
-      //   'button'
-      // )[0].getDOMNode();
+      var buttonWrapper = TestUtils.renderIntoDocument(
+        this.instance.renderButton('foo', {gid: 'bar'})
+      );
+      var button = TestUtils.scryRenderedDOMComponentsWithClass(
+        buttonWrapper,
+        'button'
+      )[0];
 
-      // TestUtils.Simulate.click(button);
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(button));
 
-      // expect(this.instance.handleOpenConfirm.mock.calls[0][0]).toEqual(
-      //   {gid: 'bar'}
-      // );
+      expect(this.instance.handleOpenConfirm.mock.calls[0][0]).toEqual(
+        {gid: 'bar'}
+      );
     });
 
   });

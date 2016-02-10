@@ -155,7 +155,7 @@ describe('NodeSidePanelContents', function () {
       );
 
       var headline = TestUtils.findRenderedDOMComponentWithTag(instance, 'h3');
-      expect(headline.getDOMNode().textContent).toBe('Error finding node');
+      expect(ReactDOM.findDOMNode(headline).textContent).toBe('Error finding node');
     });
   });
 });

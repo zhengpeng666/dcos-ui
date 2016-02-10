@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var d3 = require('d3');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 jest.dontMock('./fixtures/MockTimeSeriesData');
@@ -17,7 +18,7 @@ function checkPath(instance, props) {
   );
 
   var index = 1;
-  var points = area.getDOMNode().attributes.d.value.split(',');
+  var points = ReactDOM.findDOMNode(area).attributes.d.value.split(',');
   _.each(points, function (str, i) {
     // Disgard values after we've been through data
     // Also parseFloat and check with index (int) to make sure we exactly

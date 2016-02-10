@@ -3,6 +3,7 @@ jest.dontMock('../../../../mixins/GetSetMixin');
 jest.dontMock('../../../../stores/ACLAuthStore');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var Authenticated = require('../Authenticated');
@@ -54,7 +55,7 @@ describe('Authenticated', function () {
     var renderedComponent = TestUtils.renderIntoDocument(<this.instance />);
     var component =
       TestUtils.findRenderedDOMComponentWithTag(renderedComponent, 'div');
-    expect(component.getDOMNode().textContent).toBe('fakeComponent');
+    expect(ReactDOM.findDOMNode(component).textContent).toBe('fakeComponent');
   });
 
 });

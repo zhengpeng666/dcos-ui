@@ -21,7 +21,7 @@ var AlertPanel = React.createClass({
   },
 
   componentDidMount: function () {
-    var panel = this.refs.panel.getDOMNode();
+    var panel = this.refs.panel;
     var width = DOMUtils.getComputedWidth(panel);
     this.internalStorage_set({height: width});
     this.forceUpdate();

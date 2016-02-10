@@ -38,7 +38,7 @@ describe('FilterByService', function () {
       button, 'badge-container'
     );
 
-    expect(container.getDOMNode().textContent)
+    expect(ReactDOM.findDOMNode(container).textContent)
       .toEqual('Filter by Service');
   });
 
@@ -50,7 +50,7 @@ describe('FilterByService', function () {
         this.instance.getItemHtml(service)
       );
       var badge = TestUtils.findRenderedDOMComponentWithClass(item, 'badge');
-      expect(parseInt(badge.getDOMNode().textContent, 10))
+      expect(parseInt(ReactDOM.findDOMNode(badge).textContent, 10))
         .toEqual(MockFrameworks.frameworks[4].slave_ids.length);
     });
 

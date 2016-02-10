@@ -10,6 +10,7 @@ jest.dontMock('../../utils/Util');
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var ActionTypes = require('../../constants/ActionTypes');
@@ -138,9 +139,9 @@ describe('GroupUserTable', function () {
       var button = TestUtils.scryRenderedDOMComponentsWithClass(
         buttonWrapper,
         'button'
-      )[0].getDOMNode();
+      )[0];
 
-      TestUtils.Simulate.click(button);
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(button));
 
       expect(this.instance.handleOpenConfirm.mock.calls[0][0]).toEqual(
         {uid: 'bar'}

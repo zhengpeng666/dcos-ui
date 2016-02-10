@@ -194,7 +194,7 @@ var Modals = React.createClass({
       title: '',
       subHeaderContent: '',
       showFooter: true,
-      footer: {}
+      footer: <div></div>
     };
 
     if (this.state.showingCliModal) {

@@ -69,7 +69,7 @@ describe('GroupSidePanelContents', function () {
       ACLGroupStore.emit(EventTypes.ACL_GROUP_DETAILS_FETCHED_ERROR, groupID);
 
       var text = JestUtil.renderAndFindTag(instance.render(), 'h3');
-      expect(text.getDOMNode().textContent)
+      expect(text.textContent)
         .toEqual('Cannot Connect With The Server');
     });
 
@@ -108,7 +108,7 @@ describe('GroupSidePanelContents', function () {
           'form-element-inline-text'
         );
 
-        expect(text.getDOMNode().textContent).toEqual('藍-遙 遥 悠 遼 Größe');
+        expect(ReactDOM.findDOMNode(text).textContent).toEqual('藍-遙 遥 悠 遼 Größe');
       }
     );
 

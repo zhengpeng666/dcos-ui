@@ -122,9 +122,9 @@ describe('PermissionsTable', function () {
       var button = TestUtils.scryRenderedDOMComponentsWithClass(
         buttonWrapper,
         'button'
-      )[0].getDOMNode();
+      )[0];
 
-      TestUtils.Simulate.click(button);
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(button));
 
       expect(this.instance.handleOpenConfirm.mock.calls[0][0]).toEqual(
         {uid: 'bar'}

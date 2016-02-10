@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 jest.dontMock('../ChartStripes');
@@ -29,7 +30,7 @@ describe('ChartStripes', function () {
     );
 
     _.each(stripes, function (stripe) {
-      expect(parseInt(stripe.getDOMNode().attributes.width.value, 10))
+      expect(parseInt(ReactDOM.findDOMNode(stripe).attributes.width.value, 10))
         .toEqual(25);
     });
   });
@@ -40,7 +41,7 @@ describe('ChartStripes', function () {
     );
 
     _.each(stripes, function (stripe, i) {
-      expect(parseInt(stripe.getDOMNode().attributes.x.value, 10))
+      expect(parseInt(ReactDOM.findDOMNode(stripe).attributes.x.value, 10))
         .toEqual(25 + i * 50);
     });
   });
@@ -59,12 +60,12 @@ describe('ChartStripes', function () {
     expect(stripes.length).toEqual(5);
 
     _.each(stripes, function (stripe) {
-      expect(parseInt(stripe.getDOMNode().attributes.width.value, 10))
+      expect(parseInt(ReactDOM.findDOMNode(stripe).attributes.width.value, 10))
         .toEqual(30);
     });
 
     _.each(stripes, function (stripe, i) {
-      expect(parseInt(stripe.getDOMNode().attributes.x.value, 10))
+      expect(parseInt(ReactDOM.findDOMNode(stripe).attributes.x.value, 10))
         .toEqual(30 + i * 60);
     });
   });

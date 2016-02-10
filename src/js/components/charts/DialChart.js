@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var d3 = require('d3');
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var DialSlice = require('./DialSlice');
 var InternalStorageMixin = require('../../mixins/InternalStorageMixin');
@@ -95,7 +96,7 @@ var DialChart = React.createClass({
   getSlice: function (props) {
     var data = this.internalStorage_get();
     var normalizedData = this.getNormalizedData(props.slices, props.data);
-    return d3.select(this.getDOMNode()).selectAll('path')
+    return d3.select(ReactDOM.findDOMNode(this)).selectAll('path')
       .data(data.pie(normalizedData));
   },
 
