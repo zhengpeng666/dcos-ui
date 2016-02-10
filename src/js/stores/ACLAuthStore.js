@@ -52,12 +52,7 @@ var ACLAuthStore = Store.createStore({
     }
 
     try {
-      let user = JSON.parse(atob(userCode));
-      if (!this.get('role')) {
-        this.fetchRole(user.uid);
-      }
-
-      return user;
+      return JSON.parse(atob(userCode));
     } catch(err) {
       return null;
     }
@@ -92,9 +87,7 @@ var ACLAuthStore = Store.createStore({
     this.resetRole();
 
     let user = this.getUser();
-    if (user) {
-      this.fetchRole(user.uid);
-    } else {
+    if (!user) {
       this.makeDefaultRole();
     }
     this.emit(EventTypes.ACL_AUTH_USER_LOGIN_CHANGED);

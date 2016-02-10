@@ -5,8 +5,6 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import AnimatedLogo from '../components/AnimatedLogo';
 import EventTypes from '../constants/EventTypes';
 import InternalStorageMixin from '../mixins/InternalStorageMixin';
-import MesosSummaryStore from '../stores/MesosSummaryStore';
-import MetadataStore from '../stores/MetadataStore';
 import Plugins from '../plugins/Plugins';
 
 const METHODS_TO_BIND = ['onPluginsLoaded'];
@@ -18,8 +16,6 @@ export default class ApplicationLoader extends
     super();
 
     this.store_listeners = [
-      {name: 'summary', events: ['success']},
-      {name: 'metadata', events: ['success']},
       {name: 'auth', events: ['logoutSuccess']}
     ];
 
@@ -28,11 +24,6 @@ export default class ApplicationLoader extends
     }, this);
 
     this.state = {};
-  }
-
-  componentWillMount() {
-    MesosSummaryStore.init();
-    MetadataStore.init();
   }
 
   componentDidMount() {
@@ -52,29 +43,11 @@ export default class ApplicationLoader extends
   }
 
   onPluginsLoaded() {
-    this.internalStorage_update({'pluginsLoaded': true});
-    this.loadApplicationIfLoaded();
-  }
-
-  onSummaryStoreSuccess() {
-    this.loadApplicationIfLoaded();
-  }
-
-  onMetadataStoreSuccess() {
-    this.internalStorage_update({'metadataLoaded': true});
-    this.loadApplicationIfLoaded();
+    this.props.onApplicationLoad();
   }
 
   onAuthStoreLogoutSuccess() {
     this.context.router.transitionTo('login');
-  }
-
-  loadApplicationIfLoaded() {
-    let data = this.internalStorage_get();
-    if (data.pluginsLoaded && data.metadataLoaded
-      && MesosSummaryStore.get('statesProcessed')) {
-      this.props.onApplicationLoad();
-    }
   }
 
   render() {

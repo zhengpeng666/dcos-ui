@@ -44,15 +44,15 @@ const AuthenticationPlugin = {
     }
 
     let location = window.location.hash;
+    // Unauthorized
     if (xhr.status === 401 && !/login/.test(location)) {
       document.cookie = `${ACLAuthConstants.userCookieKey}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
       window.location.href = '#/login';
     }
 
+    // Forbidden
     if (xhr.status === 403 && !/access-denied/.test(location)) {
-      setTimeout(function () {
-        window.location.href = '#/access-denied';
-      }, 1000);
+      window.location.href = '#/access-denied';
     }
   },
 

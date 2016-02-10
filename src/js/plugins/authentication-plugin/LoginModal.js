@@ -4,11 +4,9 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLAuthStore from '../../stores/ACLAuthStore';
-import ClusterName from '../../components/ClusterName';
 import MesosphereLogo from '../../components/icons/MesosphereLogo';
 import DCOSLogo from '../../components/DCOSLogo';
 import FormModal from '../../components/FormModal';
-import MetadataStore from '../../stores/MetadataStore';
 
 const METHODS_TO_BIND = [
   'handleLoginSubmit'
@@ -40,9 +38,7 @@ export default class LoginModal extends mixin(StoreMixin) {
     let loginRedirectRoute = ACLAuthStore.get('loginRedirectRoute');
 
     if (!ACLAuthStore.isAdmin()) {
-      setTimeout(function () {
-        router.transitionTo('/access-denied');
-      }, 1000);
+      router.transitionTo('/access-denied');
     } else if (loginRedirectRoute) {
       // Go to redirect route if it is present
       router.transitionTo(loginRedirectRoute);
@@ -55,24 +51,34 @@ export default class LoginModal extends mixin(StoreMixin) {
   }
 
   onAuthStoreSuccess() {
-    // See if we need to redirect the user to a service UI
+    let didRedirect = false;
+
+    // This will match url instances like this:
+    // /?redirect=SOME_ADDRESS#/login
     if (global.location.search) {
       let parsedSearch = qs.parse(global.location.search);
       if (parsedSearch.redirect) {
+        didRedirect = true;
         window.location.href = parsedSearch.redirect;
         return;
       }
     }
 
+    // This will match url instances like this:
+    // /#/login?redirect=SOME_ADDRESS
     if (global.location.hash) {
       let parsedHash = qs.parse(global.location.hash);
       Object.keys(parsedHash).forEach(function (key) {
         if (/redirect/.test(key)) {
-          setTimeout(function () {
-            window.location.href = parsedHash[key];
-          });
+          didRedirect = true;
+          window.location.href = parsedHash[key];
         }
       });
+    }
+
+    if (!didRedirect) {
+      let user = ACLAuthStore.getUser();
+      ACLAuthStore.fetchRole(user.uid);
     }
   }
 
@@ -140,8 +146,6 @@ export default class LoginModal extends mixin(StoreMixin) {
   }
 
   render() {
-    let data = MetadataStore.get('dcosMetadata');
-
     let modalProps = {
       innerBodyClass: 'modal-body container container-pod ' +
         'container-pod-short flex-container-col',
@@ -159,15 +163,15 @@ export default class LoginModal extends mixin(StoreMixin) {
         modalProps={modalProps}>
         <div className="container container-fluid container-fluid-narrow
           container-pod container-pod-short flush-top">
-          <div className="sidebar-header-image">
+          <div className="sidebar-header-image flush-bottom">
             <DCOSLogo />
           </div>
           <div className="container container-pod
-            container-pod-super-super-short flush-top">
-            <ClusterName />
-          </div>
-          <div className="text-small text-align-center text-muted">
-            Mesosphere DCOS v{data.version}
+            container-pod-short flush-bottom">
+            <h3 className="sidebar-header-label flush-top text-align-center
+              text-overflow flush-bottom">
+              Sign In to Mesosphere DCOS
+            </h3>
           </div>
         </div>
       </FormModal>
