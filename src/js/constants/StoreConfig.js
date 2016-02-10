@@ -80,11 +80,10 @@ const ListenersDescription = {
       searchSuccess: EventTypes.COSMOS_SEARCH_CHANGE,
       searchError: EventTypes.COSMOS_SEARCH_ERROR
     },
-    unmountWhen: function (store, event) {
-      if (event === 'success') {
-        return !!store.get('packages');
-      }
-    }
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
   },
 
   summary: {
