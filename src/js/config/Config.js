@@ -9,7 +9,7 @@ var Config = {
   rootUrl: '',
   stateLoadDelay: 3000,
   stateRefresh: 2000,
-  tailRefresh: 2000,
+  tailRefresh: 10000,
   version: '@@VERSION'
 };
 
