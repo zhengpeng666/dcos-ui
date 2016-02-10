@@ -8,6 +8,18 @@ import MesosphereLogo from '../../components/icons/MesosphereLogo';
 import DCOSLogo from '../../components/DCOSLogo';
 import FormModal from '../../components/FormModal';
 
+function findRedirect(queryString) {
+  let redirectTo = false;
+
+  Object.keys(queryString).forEach(function (key) {
+    if (/redirect/.test(key)) {
+      redirectTo = queryString[key];
+    }
+  });
+
+  return redirectTo;
+}
+
 const METHODS_TO_BIND = [
   'handleLoginSubmit'
 ];
@@ -51,32 +63,23 @@ export default class LoginModal extends mixin(StoreMixin) {
   }
 
   onAuthStoreSuccess() {
-    let didRedirect = false;
+    let redirectTo = false;
 
     // This will match url instances like this:
     // /?redirect=SOME_ADDRESS#/login
     if (global.location.search) {
-      let parsedSearch = qs.parse(global.location.search);
-      if (parsedSearch.redirect) {
-        didRedirect = true;
-        window.location.href = parsedSearch.redirect;
-        return;
-      }
+      redirectTo = findRedirect(qs.parse(global.location.search));
     }
 
     // This will match url instances like this:
     // /#/login?redirect=SOME_ADDRESS
-    if (global.location.hash) {
-      let parsedHash = qs.parse(global.location.hash);
-      Object.keys(parsedHash).forEach(function (key) {
-        if (/redirect/.test(key)) {
-          didRedirect = true;
-          window.location.href = parsedHash[key];
-        }
-      });
+    if (!redirectTo && global.location.hash) {
+      redirectTo = findRedirect(qs.parse(global.location.hash));
     }
 
-    if (!didRedirect) {
+    if (redirectTo) {
+      window.location.href = redirectTo;
+    } else {
       let user = ACLAuthStore.getUser();
       ACLAuthStore.fetchRole(user.uid);
     }
