@@ -30,11 +30,11 @@ let oldJSON = RequestUtil.json;
 RequestUtil.json = function (options = {}) {
   // Proxy error function so that we can trigger a plugin event
   let oldHandler = options.error;
-  options.error = function (...args) {
+  options.error = function () {
     if (typeof oldHandler === 'function') {
-      oldHandler.apply(null, args);
+      oldHandler.apply(null, arguments);
     }
-    Plugins.doAction('AJAXRequestError', ...args);
+    Plugins.doAction('AJAXRequestError', ...arguments);
   };
 
   oldJSON(options);
