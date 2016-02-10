@@ -73,14 +73,17 @@ const ListenersDescription = {
   cosmosPackages: {
     store: CosmosPackagesStore,
     events: {
-      success: EventTypes.COSMOS_PACKAGES_CHANGE,
-      error: EventTypes.COSMOS_PACKAGES_ERROR
+      describeSuccess: EventTypes.COSMOS_DESCRIBE_CHANGE,
+      describeError: EventTypes.COSMOS_DESCRIBE_ERROR,
+      listSuccess: EventTypes.COSMOS_LIST_CHANGE,
+      listError: EventTypes.COSMOS_LIST_ERROR,
+      searchSuccess: EventTypes.COSMOS_SEARCH_CHANGE,
+      searchError: EventTypes.COSMOS_SEARCH_ERROR
     },
-    unmountWhen: function (store, event) {
-      if (event === 'success') {
-        return !!store.get('packages');
-      }
-    }
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
   },
 
   summary: {
