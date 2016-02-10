@@ -38,9 +38,9 @@ schemas:
                 ]
               }
 
-  /{component}:
+  /{component-id}:
     uriParameters:
-      component:
+      component-id:
         description: Requested component.
         type: string
     displayName: Component Health
@@ -84,9 +84,9 @@ schemas:
                       }
                     ]
                   }
-      /{node}:
+      /{node-id}:
         uriParameters:
-          node:
+          node-id:
             description: Requested node.
             type: string
         displayName: Node Health
