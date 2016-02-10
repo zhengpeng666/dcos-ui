@@ -89,10 +89,20 @@ describe('DOMUtils', function () {
       global.requestAnimationFrame = function (func) {
         setTimeout(func, 15);
       };
+
+      this.dateNow = Date.now;
+      // Will return 0, 15, 30, 45, 60, etc.
+      // adding setTimeout call time each time
+      var now = -15;
+      Date.now = function () {
+        now += 15;
+        return now;
+      };
     });
 
     afterEach(function () {
       global.requestAnimationFrame = this.previousRequest;
+      Date.now = this.dateNow;
     });
 
     it('doesn\'t do anything if already scrolled there', function () {
@@ -106,6 +116,21 @@ describe('DOMUtils', function () {
       DOMUtils.scrollTo(container, 1000, 1000);
       jest.runAllTimers();
       expect(container.scrollTop).toBeGreaterThan(1000);
+    });
+
+    it('stops after scrollDuration has passed', function () {
+      var container = {scrollTop: 500, scrollHeight: 1500};
+      DOMUtils.scrollTo(container, 1500, 1000);
+      var callCount = 0;
+      global.requestAnimationFrame = function (func) {
+        callCount++;
+        setTimeout(func, 15);
+        // Reset scrollTop to stay in the same spot
+        container.scrollTop = 500;
+      };
+      jest.runAllTimers();
+      // We expect the call count to be scrollDuration / timeout call time
+      expect(callCount).toEqual(1500 / 15);
     });
   });
 });

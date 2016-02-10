@@ -89,11 +89,12 @@ var DOMUtils = {
     let scrollMargin;
 
     requestAnimationFrame(step);
+    let endTime = Date.now() + scrollDuration;
 
     function step() {
       setTimeout(function () {
         let distanceFromTop = DOMUtils.getDistanceFromTop(container);
-        if (distanceFromTop <= targetY) {
+        if (distanceFromTop !== targetY && endTime >= Date.now()) {
           requestAnimationFrame(step);
           scrollCount = scrollCount + 1;
           scrollMargin = cosParameter -
