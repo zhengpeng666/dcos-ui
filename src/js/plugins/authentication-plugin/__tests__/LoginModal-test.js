@@ -66,6 +66,20 @@ describe('LoginModal', function () {
     });
   });
 
+  describe('#onAuthStoreSuccess', function () {
+
+    beforeEach(function () {
+      spyOn(ACLAuthStore, 'getUser').andReturn({uid: 'foo'});
+      ACLAuthStore.fetchRole = jasmine.createSpy();
+    });
+
+    it('calls fetch role', function () {
+      this.instance.onAuthStoreSuccess();
+      expect(ACLAuthStore.fetchRole.callCount).toEqual(1);
+    });
+
+  });
+
   describe('#onAuthStoreError', function () {
     beforeEach(function () {
       this.errorMsg = 'Something went wrong';

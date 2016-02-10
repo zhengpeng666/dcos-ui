@@ -21,8 +21,24 @@ import ApplicationLoader from './pages/ApplicationLoader';
 import appRoutes from './routes/index';
 var Config = require('./config/Config');
 import Plugins from './plugins/Plugins';
+import RequestUtil from './utils/RequestUtil';
 
 let domElement = document.getElementById('application');
+
+// Patch json
+let oldJSON = RequestUtil.json;
+RequestUtil.json = function (options = {}) {
+  // Proxy error function so that we can trigger a plugin event
+  let oldHandler = options.error;
+  options.error = function () {
+    if (typeof oldHandler === 'function') {
+      oldHandler.apply(null, arguments);
+    }
+    Plugins.doAction('AJAXRequestError', ...arguments);
+  };
+
+  oldJSON(options);
+};
 
 function createRoutes(routes) {
   return routes.map(function (route) {

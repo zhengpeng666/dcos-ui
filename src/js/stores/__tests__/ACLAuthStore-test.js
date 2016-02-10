@@ -94,8 +94,6 @@ describe('ACLAuthStore', function () {
           'eyJ1aWQiOiJqb2UiLCJkZXNjcmlwdGlvbiI6IkpvZSBEb2UifQ==';
         return cookieObj;
       };
-
-      ACLAuthStore.fetchRole = jasmine.createSpy();
     });
 
     afterEach(function () {
@@ -105,32 +103,6 @@ describe('ACLAuthStore', function () {
     it('should get the user', function () {
       expect(ACLAuthStore.getUser())
         .toEqual({uid: 'joe', description: 'Joe Doe'});
-    });
-
-    it('should make a request to fetch role', function () {
-      ACLAuthStore.getUser();
-
-      expect(ACLAuthStore.fetchRole).toHaveBeenCalledWith('joe');
-    });
-
-    it('should not request to fetch role after success', function () {
-      ACLAuthStore.getUser();
-      ACLAuthStore.makeAdminRole();
-      ACLAuthStore.getUser();
-      ACLAuthStore.getUser();
-      ACLAuthStore.getUser();
-
-      expect(ACLAuthStore.fetchRole.callCount).toEqual(1);
-    });
-
-    it('should not request to fetch role after error', function () {
-      ACLAuthStore.getUser();
-      ACLAuthStore.makeDefaultRole();
-      ACLAuthStore.getUser();
-      ACLAuthStore.getUser();
-      ACLAuthStore.getUser();
-
-      expect(ACLAuthStore.fetchRole.callCount).toEqual(1);
     });
 
   });

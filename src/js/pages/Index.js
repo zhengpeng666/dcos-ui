@@ -3,12 +3,14 @@ var classNames = require('classnames');
 var React = require('react');
 var RouteHandler = require('react-router').RouteHandler;
 
+var AnimatedLogo = require('../components/AnimatedLogo');
 var Config = require('../config/Config');
 import ConfigStore from '../stores/ConfigStore';
 var EventTypes = require('../constants/EventTypes');
 import HistoryStore from '../stores/HistoryStore';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var IntercomStore = require('../stores/IntercomStore');
+var MetadataStore = require('../stores/MetadataStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var Modals = require('../components/Modals');
 var RequestErrorMsg = require('../components/RequestErrorMsg');
@@ -41,8 +43,13 @@ var Index = React.createClass({
 
   componentWillMount: function () {
     HistoryStore.init();
+    MesosSummaryStore.init();
+    MetadataStore.init();
     SidebarStore.init();
-    this.internalStorage_set(getSidebarState());
+
+    let state = getSidebarState();
+    state.metadataLoaded = false;
+    this.internalStorage_set(state);
   },
 
   componentDidMount: function () {
@@ -57,6 +64,10 @@ var Index = React.createClass({
 
     ConfigStore.addChangeListener(
       EventTypes.CONFIG_ERROR, this.onConfigError
+    );
+
+    MetadataStore.addChangeListener(
+      EventTypes.METADATA_CHANGE, this.onMetadataStoreSuccess
     );
 
     this.addMesosStateListeners();
@@ -99,6 +110,10 @@ var Index = React.createClass({
       EventTypes.CONFIG_ERROR, this.onConfigError
     );
 
+    MetadataStore.removeChangeListener(
+      EventTypes.METADATA_CHANGE, this.onMetadataStoreSuccess
+    );
+
     this.removeMesosStateListeners();
 
     MesosSummaryStore.unmount();
@@ -107,6 +122,10 @@ var Index = React.createClass({
   onSideBarChange: function () {
     this.internalStorage_update(getSidebarState());
     this.forceUpdate();
+  },
+
+  onMetadataStoreSuccess: function () {
+    this.internalStorage_update({'metadataLoaded': true});
   },
 
   onConfigError: function () {
@@ -134,9 +153,7 @@ var Index = React.createClass({
   },
 
   onMesosSummaryChange: function () {
-    let statesProcessed = MesosSummaryStore.get('statesProcessed');
     let prevStatesProcessed = this.internalStorage_get().statesProcessed;
-    this.internalStorage_update({statesProcessed});
 
     // Reset count as we've just received a successful response
     if (this.state.mesosSummaryErrorCount > 0) {
@@ -155,14 +172,31 @@ var Index = React.createClass({
     });
   },
 
+  getLoadingScreen: function (showLoadingScreen) {
+    if (!showLoadingScreen) {
+      return null;
+    }
+
+    return <AnimatedLogo speed={500} scale={0.16} />;
+  },
+
   getErrorScreen: function (showErrorScreen) {
     if (!showErrorScreen) {
       return null;
     }
 
+    return <RequestErrorMsg />;
+  },
+
+  getScreenOverlays: function (showLoadingScreen, showErrorScreen) {
+    if (!showLoadingScreen && !showErrorScreen) {
+      return null;
+    }
+
     return (
       <div className="container container-pod vertical-center">
-        <RequestErrorMsg />
+        {this.getErrorScreen(showErrorScreen)}
+        {this.getLoadingScreen(showLoadingScreen)}
       </div>
     );
   },
@@ -183,6 +217,8 @@ var Index = React.createClass({
     let showErrorScreen =
       (this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount)
       || (this.state.configErrorCount >= Config.delayAfterErrorCount);
+    let showLoadingScreen = !showErrorScreen
+      && (!MesosSummaryStore.get('statesProcessed') || !data.metadataLoaded);
 
     var classSet = classNames({
       'canvas-sidebar-open': data.isOpen
@@ -194,7 +230,7 @@ var Index = React.createClass({
       <div>
         <a id="start-tour"></a>
         <div id="canvas" className={classSet}>
-          {this.getErrorScreen(showErrorScreen)}
+          {this.getScreenOverlays(showLoadingScreen, showErrorScreen)}
           <Sidebar />
           <RouteHandler />
         </div>

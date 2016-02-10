@@ -4,6 +4,7 @@ import React from 'react';
 import {Route} from 'react-router';
 
 import AccessDeniedPage from './components/AccessDeniedPage';
+import ACLAuthConstants from '../../constants/ACLAuthConstants';
 import Authenticated from './components/Authenticated';
 import LoginPage from './LoginPage';
 import UserDropup from './UserDropup';
@@ -18,6 +19,7 @@ const AuthenticationPlugin = {
    * @param  {Object} Plugins The Plugins API
    */
   initialize: function (Plugins) {
+    Plugins.addAction('AJAXRequestError', this.AJAXRequestError.bind(this));
     Plugins.addFilter('sidebarFooter', this.sidebarFooter.bind(this));
     Plugins.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
     Plugins.addFilter('applicationRoutes', this.applicationRoutes.bind(this));
@@ -34,6 +36,24 @@ const AuthenticationPlugin = {
 
   isEnabled: function () {
     return this.configuration.enabled;
+  },
+
+  AJAXRequestError: function (xhr) {
+    if (xhr.status !== 401 && xhr.status !== 403) {
+      return;
+    }
+
+    let location = window.location.hash;
+    // Unauthorized
+    if (xhr.status === 401 && !/login/.test(location)) {
+      document.cookie = `${ACLAuthConstants.userCookieKey}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      window.location.href = '#/login';
+    }
+
+    // Forbidden
+    if (xhr.status === 403 && !/access-denied/.test(location)) {
+      window.location.href = '#/access-denied';
+    }
   },
 
   openIdentifyModal: function (value) {

@@ -4,11 +4,21 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLAuthStore from '../../stores/ACLAuthStore';
-import ClusterName from '../../components/ClusterName';
 import MesosphereLogo from '../../components/icons/MesosphereLogo';
 import DCOSLogo from '../../components/DCOSLogo';
 import FormModal from '../../components/FormModal';
-import MetadataStore from '../../stores/MetadataStore';
+
+function findRedirect(queryString) {
+  let redirectTo = false;
+
+  Object.keys(queryString).forEach(function (key) {
+    if (/redirect/.test(key)) {
+      redirectTo = queryString[key];
+    }
+  });
+
+  return redirectTo;
+}
 
 const METHODS_TO_BIND = [
   'handleLoginSubmit'
@@ -53,13 +63,25 @@ export default class LoginModal extends mixin(StoreMixin) {
   }
 
   onAuthStoreSuccess() {
-    // See if we need to redirect the user to a service UI
+    let redirectTo = false;
+
+    // This will match url instances like this:
+    // /?redirect=SOME_ADDRESS#/login
     if (global.location.search) {
-      let parsedSearch = qs.parse(global.location.search);
-      if (parsedSearch.redirect) {
-        window.location.href = parsedSearch.redirect;
-        return;
-      }
+      redirectTo = findRedirect(qs.parse(global.location.search));
+    }
+
+    // This will match url instances like this:
+    // /#/login?redirect=SOME_ADDRESS
+    if (!redirectTo && global.location.hash) {
+      redirectTo = findRedirect(qs.parse(global.location.hash));
+    }
+
+    if (redirectTo) {
+      window.location.href = redirectTo;
+    } else {
+      let user = ACLAuthStore.getUser();
+      ACLAuthStore.fetchRole(user.uid);
     }
   }
 
@@ -127,8 +149,6 @@ export default class LoginModal extends mixin(StoreMixin) {
   }
 
   render() {
-    let data = MetadataStore.get('dcosMetadata');
-
     let modalProps = {
       innerBodyClass: 'modal-body container container-pod ' +
         'container-pod-short flex-container-col',
@@ -146,15 +166,15 @@ export default class LoginModal extends mixin(StoreMixin) {
         modalProps={modalProps}>
         <div className="container container-fluid container-fluid-narrow
           container-pod container-pod-short flush-top">
-          <div className="sidebar-header-image">
+          <div className="sidebar-header-image flush-bottom">
             <DCOSLogo />
           </div>
           <div className="container container-pod
-            container-pod-super-super-short flush-top">
-            <ClusterName />
-          </div>
-          <div className="text-small text-align-center text-muted">
-            Mesosphere DCOS v{data.version}
+            container-pod-short flush-bottom">
+            <h3 className="sidebar-header-label flush-top text-align-center
+              text-overflow flush-bottom">
+              Sign In to Mesosphere DCOS
+            </h3>
           </div>
         </div>
       </FormModal>
