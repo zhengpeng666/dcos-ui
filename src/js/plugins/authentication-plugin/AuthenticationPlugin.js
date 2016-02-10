@@ -4,8 +4,8 @@ import React from 'react';
 import {Route} from 'react-router';
 
 import AccessDeniedPage from './components/AccessDeniedPage';
-import Authenticated from './components/Authenticated';
 import ACLAuthConstants from '../../constants/ACLAuthConstants';
+import Authenticated from './components/Authenticated';
 import LoginPage from './LoginPage';
 import UserDropup from './UserDropup';
 

@@ -46,7 +46,10 @@ var Index = React.createClass({
     MesosSummaryStore.init();
     MetadataStore.init();
     SidebarStore.init();
-    this.internalStorage_set(getSidebarState());
+
+    let state = getSidebarState();
+    state.metadataLoaded = false;
+    this.internalStorage_set(state);
   },
 
   componentDidMount: function () {
@@ -61,6 +64,10 @@ var Index = React.createClass({
 
     ConfigStore.addChangeListener(
       EventTypes.CONFIG_ERROR, this.onConfigError
+    );
+
+    MetadataStore.addChangeListener(
+      EventTypes.METADATA_CHANGE, this.onMetadataStoreSuccess
     );
 
     this.addMesosStateListeners();
@@ -103,6 +110,10 @@ var Index = React.createClass({
       EventTypes.CONFIG_ERROR, this.onConfigError
     );
 
+    MetadataStore.removeChangeListener(
+      EventTypes.METADATA_CHANGE, this.onMetadataStoreSuccess
+    );
+
     this.removeMesosStateListeners();
 
     MesosSummaryStore.unmount();
@@ -111,6 +122,10 @@ var Index = React.createClass({
   onSideBarChange: function () {
     this.internalStorage_update(getSidebarState());
     this.forceUpdate();
+  },
+
+  onMetadataStoreSuccess: function () {
+    this.internalStorage_update({'metadataLoaded': true});
   },
 
   onConfigError: function () {
@@ -199,11 +214,11 @@ var Index = React.createClass({
 
   render: function () {
     var data = this.internalStorage_get();
-    var isReady = MesosSummaryStore.get('statesProcessed');
     let showErrorScreen =
       (this.state.mesosSummaryErrorCount >= Config.delayAfterErrorCount)
       || (this.state.configErrorCount >= Config.delayAfterErrorCount);
-    let showLoadingScreen = !isReady && !showErrorScreen;
+    let showLoadingScreen = !showErrorScreen
+      && (!MesosSummaryStore.get('statesProcessed') || !data.metadataLoaded);
 
     var classSet = classNames({
       'canvas-sidebar-open': data.isOpen
