@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import {Table} from 'reactjs-components';
 import React from 'react';
+import {Table} from 'reactjs-components';
 
 import ResourceTableUtil from '../../utils/ResourceTableUtil';
 import TableUtil from '../../utils/TableUtil';
