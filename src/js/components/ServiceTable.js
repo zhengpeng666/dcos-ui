@@ -14,9 +14,9 @@ import TableUtil from '../utils/TableUtil';
 var TooltipMixin = require('../mixins/TooltipMixin');
 var Units = require('../utils/Units');
 
-var ServicesTable = React.createClass({
+var ServiceTable = React.createClass({
 
-  displayName: 'ServicesTable',
+  displayName: 'ServiceTable',
 
   mixins: [TooltipMixin],
 
@@ -225,4 +225,4 @@ var ServicesTable = React.createClass({
   }
 });
 
-module.exports = ServicesTable;
+module.exports = ServiceTable;
