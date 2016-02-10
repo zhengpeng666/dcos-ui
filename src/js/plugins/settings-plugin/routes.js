@@ -1,5 +1,6 @@
 import {Route, Redirect} from 'react-router';
 
+import ComponentsHealthTab from '../../pages/settings/ComponentsHealthTab';
 import DirectoriesTab from '../../pages/settings/DirectoriesTab';
 import GroupsTab from '../../pages/settings/GroupsTab';
 import OverviewTab from '../../pages/settings/OverviewTab';
@@ -24,9 +25,15 @@ let settingsRoutes = {
           handler: OverviewTab
         },
         {
+          type: Route,
+          name: 'settings-system-components',
+          path: 'components/?',
+          handler: ComponentsHealthTab
+        },
+        {
           type: Redirect,
           from: '/settings/system/?',
-          to: 'settings-system-overview'
+          to: 'settings-system-components'
         }
       ]
     },
