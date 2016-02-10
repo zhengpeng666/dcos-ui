@@ -48,7 +48,7 @@ The DCOS Image will create a virtual machine on your computer. This machine will
 ##### Installation Instructions:
 
 1. `mkdir vagrant-dcos-image && cd vagrant-dcos-image`
-2. `curl https://downloads.mesosphere.io/dcos/testing/continuous/make_dcos_vagrant.sh > make_dcos_vagrant.sh`
+2. `curl https://downloads.mesosphere.com/dcos/testing/continuous/make_dcos_vagrant.sh > make_dcos_vagrant.sh`
 3. `chmod +x make_dcos_vagrant.sh`
 4. `./make_dcos_vagrant.sh`
 5. `vagrant up`
