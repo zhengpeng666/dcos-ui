@@ -61,7 +61,8 @@ const ListenersDescription = {
     events: {
       success: EventTypes.ACL_AUTH_USER_LOGIN_CHANGED,
       error: EventTypes.ACL_AUTH_USER_LOGIN_ERROR,
-      logoutSuccess: EventTypes.ACL_AUTH_USER_LOGOUT,
+      logoutSuccess: EventTypes.ACL_AUTH_USER_LOGOUT_SUCCESS,
+      logoutError: EventTypes.ACL_AUTH_USER_LOGOUT_ERROR,
       roleChange: EventTypes.ACL_AUTH_USER_ROLE_CHANGED
     },
     unmountWhen: function () {

@@ -1,23 +1,15 @@
 import mixin from 'reactjs-mixin';
 import React from 'react';
-import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import AnimatedLogo from '../components/AnimatedLogo';
 import EventTypes from '../constants/EventTypes';
-import InternalStorageMixin from '../mixins/InternalStorageMixin';
 import Plugins from '../plugins/Plugins';
 
 const METHODS_TO_BIND = ['onPluginsLoaded'];
 
-export default class ApplicationLoader extends
-  mixin(StoreMixin, InternalStorageMixin) {
-
+export default class ApplicationLoader extends React.Component {
   constructor() {
     super();
-
-    this.store_listeners = [
-      {name: 'auth', events: ['logoutSuccess']}
-    ];
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
@@ -27,8 +19,6 @@ export default class ApplicationLoader extends
   }
 
   componentDidMount() {
-    super.componentDidMount();
-
     Plugins.addChangeListener(
       EventTypes.PLUGINS_CONFIGURED, this.onPluginsLoaded
     );
@@ -36,7 +26,6 @@ export default class ApplicationLoader extends
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
     Plugins.removeChangeListener(
       EventTypes.PLUGINS_CONFIGURED, this.onPluginsLoaded
     );
@@ -44,10 +33,6 @@ export default class ApplicationLoader extends
 
   onPluginsLoaded() {
     this.props.onApplicationLoad();
-  }
-
-  onAuthStoreLogoutSuccess() {
-    this.context.router.transitionTo('login');
   }
 
   render() {

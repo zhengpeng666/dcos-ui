@@ -29,6 +29,12 @@ export default class UserDropup extends React.Component {
     });
   }
 
+  componentWillMount() {
+    if (!ACLAuthStore.hasRole()) {
+      ACLAuthStore.fetchRole();
+    }
+  }
+
   handleDropdownClose() {
     let open = this.state.open;
     // Only close if we are open
@@ -49,7 +55,6 @@ export default class UserDropup extends React.Component {
 
   handleSignOut() {
     ACLAuthStore.logout();
-    this.context.router.transitionTo('/login');
   }
 
   handleMenuItemClick(onClick, e) {
