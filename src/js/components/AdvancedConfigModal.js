@@ -82,7 +82,8 @@ export default class AdvancedConfigModal extends React.Component {
         open={this.props.open}
         leftButtonText={this.getLeftButtonText()}
         leftButtonCallback={this.getLeftButtonCallback()}
-        rightButtonClassName="button button-success"
+        leftButtonClassName="button button-large"
+        rightButtonClassName="button button-success button-large"
         rightButtonText={this.getRightButtonText()}
         rightButtonCallback={this.getRightButtonCallback()}
         titleClass="modal-header-title text-align-center flush">
