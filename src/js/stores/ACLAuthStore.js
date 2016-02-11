@@ -116,7 +116,6 @@ var ACLAuthStore = Store.createStore({
         ACLAuthStore.processLogoutSuccess();
         break;
       case ActionTypes.REQUEST_ACL_LOGOUT_ERROR:
-        ACLAuthStore.processLogoutSuccess();
         ACLAuthStore.emit(EventTypes.ACL_AUTH_USER_LOGOUT_ERROR, action.data);
         break;
       // Get role of current user
