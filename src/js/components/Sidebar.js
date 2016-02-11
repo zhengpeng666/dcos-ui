@@ -7,7 +7,6 @@ var State = require('react-router').State;
 
 import ClusterHeader from './ClusterHeader';
 var EventTypes = require('../constants/EventTypes');
-var IntercomActions = require('../events/IntercomActions');
 var IntercomStore = require('../stores/IntercomStore');
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
@@ -67,15 +66,6 @@ var Sidebar = React.createClass({
     SidebarActions.startTour();
   },
 
-  handleToggleIntercom: function () {
-    if (IntercomStore.get('isOpen')) {
-      IntercomActions.close();
-    } else {
-      IntercomActions.open();
-      SidebarActions.close();
-    }
-  },
-
   handleVersionClick: function () {
     SidebarActions.close();
     SidebarActions.showVersions();
@@ -133,15 +123,6 @@ var Sidebar = React.createClass({
   },
 
   getFooter() {
-    var chatIconClassSet = classNames({
-      'clickable': true,
-      'icon': true,
-      'icon-sprite': true,
-      'icon-chat': true,
-      'icon-sprite-medium': true,
-      'icon-sprite-medium-color': IntercomStore.get('isOpen')
-    });
-
     let defaultButtonSet = [
       (
         <a key="button-docs" className="button button-link"
@@ -151,14 +132,6 @@ var Sidebar = React.createClass({
           data-tip-place="top-right"
           data-tip-content="Documentation">
             <i className="icon icon-sprite icon-documents icon-sprite-medium clickable"></i>
-        </a>
-      ),
-      (
-        <a key="button-intercom" className="button button-link"
-          data-behavior="show-tip"
-          data-tip-content="Talk with us"
-          onClick={this.handleToggleIntercom}>
-            <i className={chatIconClassSet}></i>
         </a>
       ),
       (
