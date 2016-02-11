@@ -152,15 +152,36 @@ describe('MesosLogView', function () {
   describe('#getLog', function () {
 
     it('should show empty log when fullLog is empty string', function () {
-      this.instance.state = {fullLog: ''};
+      this.instance.state.fullLog = '';
       var div = this.instance.getLog();
       expect(TestUtils.isElementOfType(div, 'div')).toEqual(true);
     });
 
-    it('should show empty log when fullLog is populated', function () {
-      this.instance.state = {fullLog: 'foo'};
+    it('should not show empty log when fullLog is populated', function () {
+      this.instance.state.fullLog = 'foo';
       var pre = this.instance.getLog();
       expect(TestUtils.isElementOfType(pre, 'pre')).toEqual(true);
+    });
+
+    it('shouldn\'t call getLog when log is null', function () {
+      this.instance.state.fullLog = null;
+      this.instance.getLog = jasmine.createSpy('getLog');
+      this.instance.render();
+      expect(this.instance.getLog).not.toHaveBeenCalled();
+    });
+
+    it('should call getLog when log is empty', function () {
+      this.instance.state.fullLog = '';
+      this.instance.getLog = jasmine.createSpy('getLog');
+      this.instance.render();
+      expect(this.instance.getLog).toHaveBeenCalled();
+    });
+
+    it('should call getLog when log is populated', function () {
+      this.instance.state.fullLog = 'foo';
+      this.instance.getLog = jasmine.createSpy('getLog');
+      this.instance.render();
+      expect(this.instance.getLog).toHaveBeenCalled();
     });
 
   });
@@ -168,13 +189,13 @@ describe('MesosLogView', function () {
   describe('#getGoToBottomButton', function () {
 
     it('should not return a button if currently at the bottom', function () {
-      this.instance.state = {isAtBottom: true};
+      this.instance.state.isAtBottom = true;
       var button = this.instance.getGoToBottomButton();
       expect(button).toEqual(null);
     });
 
     it('should return a button if not at bottom', function () {
-      this.instance.state = {isAtBottom: false};
+      this.instance.state.isAtBottom = false;
       var button = this.instance.getGoToBottomButton();
       expect(TestUtils.isElementOfType(button, 'button')).toEqual(true);
     });
@@ -184,7 +205,7 @@ describe('MesosLogView', function () {
   describe('#render', function () {
 
     it('should call getErrorScreen when error occured', function () {
-      this.instance.state = {hasLoadingError: 3};
+      this.instance.state.hasLoadingError = 3;
       this.instance.getErrorScreen = jasmine.createSpy('getErrorScreen');
 
       this.instance.render();
@@ -192,15 +213,24 @@ describe('MesosLogView', function () {
     });
 
     it('ignores getErrorScreen when error has not occured', function () {
-      this.instance.state = {hasLoadingError: 2};
+      this.instance.state.hasLoadingError = 2;
       this.instance.getErrorScreen = jasmine.createSpy('getErrorScreen');
 
       this.instance.render();
       expect(this.instance.getErrorScreen).not.toHaveBeenCalled();
     });
 
-    it('should call getLoadingScreen when loading is true', function () {
-      this.instance.state = {loading: true};
+    it('shouldn\' call getLoadingScreen when fullLog is empty', function () {
+      this.instance.state.fullLog = '';
+      MesosLogStore.get = jasmine.createSpy('MesosLogStore#get');
+      this.instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
+
+      this.instance.render();
+      expect(this.instance.getLoadingScreen).not.toHaveBeenCalled();
+    });
+
+    it('should call getLoadingScreen when fullLog is null', function () {
+      this.instance.state.fullLog = null;
       MesosLogStore.get = jasmine.createSpy('MesosLogStore#get');
       this.instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
 
@@ -208,8 +238,8 @@ describe('MesosLogView', function () {
       expect(this.instance.getLoadingScreen).toHaveBeenCalled();
     });
 
-    it('ignores getLoadingScreen if loading is false', function () {
-      this.instance.state = {loading: false};
+    it('ignores getLoadingScreen if fullLog has data', function () {
+      this.instance.state.fullLog = 'foo';
       MesosLogStore.get = jasmine.createSpy('MesosLogStore#get');
       this.instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
 
@@ -221,7 +251,7 @@ describe('MesosLogView', function () {
       var instance = TestUtils.renderIntoDocument(
         <MesosLogView slaveID="foo" />
       );
-      instance.state = {loading: false};
+      instance.state.fullLog = null;
 
       instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
       instance.render();
