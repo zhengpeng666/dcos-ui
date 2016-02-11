@@ -23,6 +23,7 @@ const AuthenticationPlugin = {
     Plugins.addFilter('sidebarFooter', this.sidebarFooter.bind(this));
     Plugins.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
     Plugins.addFilter('applicationRoutes', this.applicationRoutes.bind(this));
+    Plugins.addAction('userLogoutSuccess', this.userLogoutSuccess.bind(this));
   },
 
   configure: function (configuration) {
@@ -44,14 +45,17 @@ const AuthenticationPlugin = {
     }
 
     let location = window.location.hash;
+    let onAccessDeniedPage = /access-denied/.test(location);
+    let onLoginPage = /login/.test(location);
+
     // Unauthorized
-    if (xhr.status === 401 && !/login/.test(location)) {
+    if (xhr.status === 401 && !onLoginPage) {
       document.cookie = `${ACLAuthConstants.userCookieKey}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
       window.location.href = '#/login';
     }
 
     // Forbidden
-    if (xhr.status === 403 && !/access-denied/.test(location)) {
+    if (xhr.status === 403 && !onLoginPage && !onAccessDeniedPage) {
       window.location.href = '#/access-denied';
     }
   },
@@ -106,6 +110,10 @@ const AuthenticationPlugin = {
       );
     }
     return routes;
+  },
+
+  userLogoutSuccess: function () {
+    window.location.href = '#/login';
   }
 
 };

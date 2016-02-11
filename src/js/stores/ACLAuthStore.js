@@ -8,6 +8,7 @@ import ACLUserRoles from '../constants/ACLUserRoles';
 import AppDispatcher from '../events/AppDispatcher';
 import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
+import Plugins from '../plugins/Plugins';
 
 function getUserMetadata() {
   return cookie.parse(global.document.cookie)[ACLAuthConstants.userCookieKey];
@@ -93,6 +94,7 @@ var ACLAuthStore = Store.createStore({
 
     this.resetRole();
     this.emit(EventTypes.ACL_AUTH_USER_LOGOUT_SUCCESS);
+    Plugins.doAction('userLogoutSuccess');
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -114,6 +116,7 @@ var ACLAuthStore = Store.createStore({
         ACLAuthStore.processLogoutSuccess();
         break;
       case ActionTypes.REQUEST_ACL_LOGOUT_ERROR:
+        ACLAuthStore.processLogoutSuccess();
         ACLAuthStore.emit(EventTypes.ACL_AUTH_USER_LOGOUT_ERROR, action.data);
         break;
       // Get role of current user
