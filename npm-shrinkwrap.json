@@ -2976,7 +2976,7 @@
                           "dependencies": {
                             "isarray": {
                               "version": "0.0.1",
-                              "resolved": "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                              "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
                             }
                           }
                         },
@@ -8429,8 +8429,8 @@
       "resolved": "http://registry.npmjs.org/react-zeroclipboard/-/react-zeroclipboard-0.4.1.tgz"
     },
     "reactjs-components": {
-      "version": "0.0.39",
-      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.39.tgz",
+      "version": "0.0.40",
+      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.0.40.tgz",
       "dependencies": {
         "babel-cli": {
           "version": "6.4.0",
@@ -14878,7 +14878,7 @@
                         },
                         "isarray": {
                           "version": "0.0.1",
-                          "resolved": "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
                         },
                         "string_decoder": {
                           "version": "0.10.31",
@@ -17468,7 +17468,7 @@
                         },
                         "isarray": {
                           "version": "0.0.1",
-                          "resolved": "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
+                          "resolved": "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz"
                         },
                         "string_decoder": {
                           "version": "0.10.31",
