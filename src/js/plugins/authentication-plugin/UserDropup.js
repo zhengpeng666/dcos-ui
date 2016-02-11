@@ -29,6 +29,12 @@ export default class UserDropup extends React.Component {
     });
   }
 
+  componentWillMount() {
+    if (!ACLAuthStore.hasRole()) {
+      ACLAuthStore.fetchRole();
+    }
+  }
+
   handleDropdownClose() {
     let open = this.state.open;
     // Only close if we are open

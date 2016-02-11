@@ -66,6 +66,15 @@ var MesosSummaryStore = Store.createStore({
   },
 
   unmount: function () {
+    this.set({
+      initCalledAt: null,
+      loading: null,
+      states: [],
+      prevMesosStatusesMap: {},
+      statesProcessed: false,
+      taskFailureRate: []
+    });
+
     stopPolling();
   },
 

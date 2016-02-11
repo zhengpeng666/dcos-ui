@@ -44,19 +44,19 @@ const AuthenticationPlugin = {
       return;
     }
 
-    let location = window.location.hash;
+    let location = global.location.hash;
     let onAccessDeniedPage = /access-denied/.test(location);
     let onLoginPage = /login/.test(location);
 
     // Unauthorized
     if (xhr.status === 401 && !onLoginPage) {
-      document.cookie = `${ACLAuthConstants.userCookieKey}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-      window.location.href = '#/login';
+      global.document.cookie = `${ACLAuthConstants.userCookieKey}=; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      global.location.href = '#/login';
     }
 
     // Forbidden
     if (xhr.status === 403 && !onLoginPage && !onAccessDeniedPage) {
-      window.location.href = '#/access-denied';
+      global.location.href = '#/access-denied';
     }
   },
 

@@ -51,6 +51,10 @@ var ACLAuthStore = Store.createStore({
     }
   },
 
+  hasRole() {
+    return !!this.get('role');
+  },
+
   isAdmin() {
     return this.get('role') === ACLUserRoles.admin;
   },
