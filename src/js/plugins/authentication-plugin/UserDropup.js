@@ -31,7 +31,8 @@ export default class UserDropup extends React.Component {
 
   componentWillMount() {
     if (!ACLAuthStore.hasRole()) {
-      ACLAuthStore.fetchRole();
+      let user = ACLAuthStore.getUser();
+      ACLAuthStore.fetchRole(user.uid);
     }
   }
 
