@@ -2,8 +2,6 @@ import {Confirm} from 'reactjs-components';
 import React from 'react';
 
 import MultipleForm from './MultipleForm';
-// Not implemented yet.
-// import ReviewConfig from './ReviewConfig';
 
 const METHODS_TO_BIND = [
   'changeReviewState',
@@ -75,9 +73,7 @@ class AdvancedConfigModal extends React.Component {
 
   getModalContents() {
     if (this.isReviewing()) {
-      // Not implemented yet.
-      // return <ReviewConfig multipleDefinition={this.props.multipleDefinition}/>;
-      return null;
+      return <h1>I'm reviewing the config</h1>;
     }
 
     return <MultipleForm multipleDefinition={this.props.multipleDefinition}/>;
