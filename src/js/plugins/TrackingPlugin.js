@@ -17,6 +17,7 @@ let segmentScript = `!function(){var analytics=window.analytics=window.analytics
 let chameleonScript = `(function(d,w,o){w.chmln=w.docent=o;var s=d.createElement('script');s.async=true;s.src='https://cdn.trychameleon.com/east/'+chmln.token+'/'+chmln.host+'.min.js.gz';d.head.appendChild(s);var n='setup alias track set'.split(' ');for(var i=0;i<n.length;i++){(function(){var t=o[n[i]+'_a']=[];o[n[i]]=function(){t.push(arguments);};})()}})(document,window,{token:'AygXvQUlEVrijBUcM-gzCNB7tISfDWWmHYplrY',host:'mesosphere.com'});`;
 
 let interval = null;
+let tourHasBeenSetup = false;
 
 const TrackingPlugin = {
 
@@ -30,6 +31,13 @@ const TrackingPlugin = {
   initialize: function (Plugins) {
     Plugins.addFilter(
       'sidebarFooterButtonSet', this.sidebarFooterButtonSet.bind(this)
+    );
+    Plugins.addFilter(
+      'installCLIModalAppendInstructions',
+      this.installCLIModalAppendInstructions.bind(this)
+    );
+    Plugins.addFilter(
+      'installCLIModalFooter', this.installCLIModalFooter.bind(this)
     );
     Plugins.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
     Plugins.addAction('pluginsConfigured', this.pluginsConfigured.bind(this));
@@ -123,6 +131,60 @@ const TrackingPlugin = {
     value.splice(1, 0, intercomButton);
 
     return value;
+  },
+
+  installCLIModalAppendInstructions: function (value) {
+    if (this.isEnabled() !== true) {
+      return value;
+    }
+
+    return 'You can also take our tour, which will introduce you to the DCOS web-based user interface.';
+  },
+
+  installCLIModalFooter: function (value, closeModalHandler) {
+    if (this.isEnabled() !== true) {
+      return value;
+    }
+
+    let handleBeginTour = function () {
+      closeModalHandler();
+
+      Actions.logFakePageView({
+        title: 'Tour start',
+        path: '/v/tour-start',
+        referrer: 'https://mesosphere.com/'
+      });
+
+      if (tourHasBeenSetup === false) {
+        // Setup with user info for their tracking
+        if (global.chmln && global.chmln.setup) {
+          global.chmln.setup({
+            uid: Actions.getStintID(),
+            version: Config.version
+          });
+        }
+
+        tourHasBeenSetup = true;
+      } else {
+        // Awful hack.
+        document.getElementById('start-tour').click();
+      }
+    };
+
+    return (
+      <div className="tour-start-modal-footer">
+        <div className="row text-align-center">
+          <button className="button button-primary button-large" onClick={handleBeginTour}>
+            Start The Tour
+          </button>
+        </div>
+        <div className="row text-align-center">
+          <a onClick={closeModalHandler} className="clickable skip-tour">
+            {'No thanks, I\'ll skip the tour.'}
+          </a>
+        </div>
+      </div>
+    );
   }
 
 };

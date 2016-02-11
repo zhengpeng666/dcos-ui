@@ -3,7 +3,6 @@ var React = require('react');
 
 var Actions = require('../actions/Actions');
 var CliInstallModal = require('./modals/CliInstallModal');
-var Config = require('../config/Config');
 var ErrorModal = require('./modals/ErrorModal');
 var EventTypes = require('../constants/EventTypes');
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
@@ -40,8 +39,7 @@ var Modals = React.createClass({
       showingCliModal: false,
       showingTourModal: false,
       showingVersionsModal: false,
-      showErrorModal: props.showErrorModal,
-      tourSetup: false
+      showErrorModal: props.showErrorModal
     };
   },
 
@@ -163,56 +161,30 @@ var Modals = React.createClass({
       this.setState({showingTourModal: false});
     }.bind(this);
 
-    var beginTour = function () {
-      onClose();
-
-      Actions.logFakePageView({
-        title: 'Tour start',
-        path: '/v/tour-start',
-        referrer: 'https://mesosphere.com/'
-      });
-
-      if (this.state.tourSetup === false) {
-        // Setup with user info for their tracking
-        if (global.chmln && global.chmln.setup) {
-          global.chmln.setup({
-            uid: Actions.getStintID(),
-            version: Config.version
-          });
-        }
-        this.setState({tourSetup: true});
-      } else {
-        // Awful hack.
-        document.getElementById('start-tour').click();
-      }
-    }.bind(this);
-
     let OS = browserInfo().os;
     let subHeaderContent = '';
 
     if (OS !== 'Windows') {
-      subHeaderContent = 'Install the DCOS command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal. You can also take our tour, which will introduce you to the DCOS web-based user interface.';
+      let appendText = Plugins.applyFilter(
+        'installCLIModalAppendInstructions', ''
+      );
+      subHeaderContent = `Install the DCOS command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal. ${appendText}`;
     }
 
     return {
-      onClose: onClose,
+      onClose,
       title: 'Welcome to the Mesosphere DCOS',
       subHeaderContent,
       showFooter: true,
-      footer: (
+      footer: Plugins.applyFilter('installCLIModalFooter', (
         <div className="tour-start-modal-footer">
           <div className="row text-align-center">
-            <button className="button button-primary button-large" onClick={beginTour}>
-              Start The Tour
+            <button className="button button-primary button-medium" onClick={onClose}>
+              Close
             </button>
           </div>
-          <div className="row text-align-center">
-            <a onClick={onClose} className="clickable skip-tour">
-              {'No thanks, I\'ll skip the tour.'}
-            </a>
-          </div>
         </div>
-      )
+      ), onClose)
     };
   },
 
