@@ -9,14 +9,19 @@ import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
 import MultipleForm from '../../components/MultipleForm';
 import Panel from '../../components/Panel';
 
-const METHODS_TO_BIND = ['handleButtonClick', 'handleAdvancedModalClose'];
+const METHODS_TO_BIND = [
+'handleAdvancedModalOpen',
+'handleAdvancedModalClose',
+'handleInstallModalClose'
+];
 
 class PackagesTab extends mixin(StoreMixin) {
   constructor() {
     super();
 
     this.state = {
-      advancedModalOpen: false
+      advancedModalOpen: false,
+      installModalPackage: false
     };
 
     this.store_listeners = [
@@ -34,29 +39,33 @@ class PackagesTab extends mixin(StoreMixin) {
     CosmosPackagesStore.search();
   }
 
-  handleOpenDetail(pkg, event) {
+  handleDetailOpen(pkg, event) {
     event.stopPropagation();
     // Handle open detail view
-  }
-
-  handleOpenInstallModal(pkg, event) {
-    event.stopPropagation();
-    // Handle open install modal
-  }
-
-  handleButtonClick() {
-    this.setState({advancedModalOpen: true});
   }
 
   handleAdvancedModalClose() {
     this.setState({advancedModalOpen: false});
   }
 
+  handleAdvancedModalOpen() {
+    this.setState({advancedModalOpen: true});
+  }
+
+  handleInstallModalClose() {
+    this.setState({installModalPackage: null});
+  }
+
+  handleInstallModalOpen(pkg, event) {
+    event.stopPropagation();
+    this.setState({installModalPackage: pkg});
+  }
+
   getFooter(pkg) {
     return (
       <button
         className="button button-success"
-        onClick={this.handleOpenInstallModal.bind(this, pkg)}>
+        onClick={this.handleInstallModalOpen.bind(this, pkg)}>
         Install Package
       </button>
     );
@@ -83,7 +92,7 @@ class PackagesTab extends mixin(StoreMixin) {
             footerClass="panel-footer horizontal-center panel-footer-no-top-border short"
             heading={this.getHeading(pkg)}
             headingClass="panel-heading horizontal-center"
-            onClick={this.handleOpenDetail.bind(this, pkg)}>
+            onClick={this.handleDetailOpen.bind(this, pkg)}>
             <div className="h2 inverse flush-top short-bottom">
               {pkg.get('packageName')}
             </div>
@@ -116,6 +125,18 @@ class PackagesTab extends mixin(StoreMixin) {
           showFooter={false}
           titleClass="modal-header-title text-align-center flush">
           <MultipleForm />
+        </Modal>
+        <Modal
+          modalWrapperClass="modal-generic-error"
+          modalClass="modal"
+          maxHeightPercentage={0.9}
+          onClose={this.handleInstallModalClose}
+          open={!!this.state.installModalPackage}
+          showCloseButton={false}
+          showHeader={false}
+          showFooter={false}
+          titleClass="modal-header-title text-align-center flush">
+          {this.state.installModalPackage ? this.state.installModalPackage.get('packageName') : null}
         </Modal>
       </div>
     );
