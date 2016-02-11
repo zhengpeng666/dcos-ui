@@ -1,22 +1,47 @@
 .multiple-form {
   height: 452px;
 
-  .column-4.gm-scrollbar-container {
-    width: 33%;
-    height: 100%;
-    padding: 0;
-  }
+  .multiple-form-modal {
+    .button-collection {
+      display: flex;
+      justify-content: space-between;
 
-  .column-8.gm-scrollbar-container {
-    width: 66%;
-    height: 100%;
-    overflow: auto;
-    padding-right: 0;
-  }
+      .button {
+        &:first-child {
+          align-self: flex-start;
+        }
 
-  .column-12.form-row-element {
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-bottom: 16px;
+        &:last-child {
+          align-self: flex-end;
+        }
+      }
+
+      &:after, &:before {
+        display: none;
+      }
+    }
+
+    .multiple-form {
+      height: 452px;
+
+      .column-4.gm-scrollbar-container {
+        width: 33%;
+        height: 100%;
+        padding: 0;
+      }
+
+      .column-8.gm-scrollbar-container {
+        width: 66%;
+        height: 100%;
+        overflow: auto;
+        padding-right: 0;
+      }
+
+      .column-12.form-row-element {
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-bottom: 16px;
+      }
+    }
   }
 }
