@@ -19,10 +19,6 @@ module.exports = class ServicesList extends List {
     });
   }
 
-  getService(serviceName) {
-    return this.filter({name: serviceName}).getItems()[0];
-  }
-
   filter(filters) {
     let services = this.getItems();
 

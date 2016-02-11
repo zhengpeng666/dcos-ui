@@ -50,6 +50,8 @@ class CompositeState {
     }
 
     this.data.frameworks.forEach(function (service) {
+      // Marathon data merged by service name because Marathon doesn't know id.
+      // See MarathonStore.processMarathonApps
       if (data[service.name]) {
         service._meta = _.extend({}, service._meta, {
           marathon: data[service.name]
