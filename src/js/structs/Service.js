@@ -1,3 +1,4 @@
+import HealthStatus from '../constants/HealthStatus';
 import Item from './Item';
 
 const RID_PREFIX = 'service.';
@@ -6,7 +7,7 @@ module.exports = class Service extends Item {
   getHealth() {
     let meta = this.get('_meta');
     if (!meta || !meta.marathon) {
-      return null;
+      return HealthStatus.NA;
     }
     return meta.marathon.health;
   }

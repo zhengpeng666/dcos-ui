@@ -1,28 +1,29 @@
 jest.dontMock('../ServiceOverlay');
 jest.dontMock('../ServiceTable');
+jest.dontMock('../../constants/HealthStatus');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../stores/MarathonStore');
 jest.dontMock('../../stores/MesosSummaryStore');
 jest.dontMock('../../utils/MesosSummaryUtil');
 jest.dontMock('../../utils/RequestUtil');
 jest.dontMock('../../utils/ResourceTableUtil');
 jest.dontMock('../../utils/StringUtil');
+jest.dontMock('../../structs/CompositeState');
 jest.dontMock('../../stores/__tests__/fixtures/state.json');
 jest.dontMock('../../utils/Util');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var CompositeState = require('../../structs/CompositeState');
+var HealthLabels = require('../../constants/HealthLabels');
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
 var ServiceTable = require('../ServiceTable');
-var HealthLabels = require('../../constants/HealthLabels');
 
 // That is a single snapshot from
-// http://srv5.hw.ca1.mesosphere.com:5050/master/state.json
+// http://dcos.mesosphere.com/dcos-history-service/history/last
 var stateJSON = require('../../stores/__tests__/fixtures/state.json');
 
-MesosSummaryStore.init();
-MesosSummaryStore.processSummary(stateJSON);
+CompositeState.addSummary(stateJSON);
 
 function getTable(isAppsProcessed, container) {
   return ReactDOM.render(
@@ -37,13 +38,12 @@ describe('ServiceTable', function () {
   describe('#renderHealth', function () {
 
     beforeEach(function () {
-      this.services = MesosSummaryStore.get('states').lastSuccessful().getServiceList().getItems();
+      this.services = CompositeState.getServiceList().getItems();
       this.container = document.createElement('div');
     });
 
     afterEach(function () {
       MesosSummaryStore.removeAllListeners();
-
       ReactDOM.unmountComponentAtNode(this.container);
     });
 
@@ -69,6 +69,8 @@ describe('ServiceTable', function () {
           table.renderHealth(null, row),
           this.container
         );
+        // because we get health from MarathonStore and MarathonStore hasn't
+        // been added to CompositeState, health will return as NA
         expect(ReactDOM.findDOMNode(healthlabel).innerHTML).toEqual(HealthLabels.NA);
       }, this);
     });
