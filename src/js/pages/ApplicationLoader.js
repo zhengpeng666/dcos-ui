@@ -1,4 +1,3 @@
-import mixin from 'reactjs-mixin';
 import React from 'react';
 
 import AnimatedLogo from '../components/AnimatedLogo';
