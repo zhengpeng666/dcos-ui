@@ -3,25 +3,24 @@ import Config from '../config/Config';
 import SummaryList from './SummaryList';
 
 let Core = {
-  compositeState: new CompositeState(),
 
   summary: new SummaryList({maxLength: Config.historyLength}),
 
   addState(data) {
-    this.compositeState.addState(data);
+    CompositeState.addState(data);
   },
 
   addMarathon(data) {
-    this.compositeState.addMarathon(data);
+    CompositeState.addMarathon(data);
   },
 
   addSummary(data) {
-    this.compositeState.addSummary(data);
+    CompositeState.addSummary(data);
     this.summary.addSnapshot(data);
   },
 
   getLatest() {
-    return this.compositeState;
+    return CompositeState;
   }
 };
 

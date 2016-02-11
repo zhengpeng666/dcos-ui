@@ -1,11 +1,11 @@
-jest.autoMockOff();
 
-let Core = require('../Core');
+var Core = require('../Core');
+var CompositeState = require('../CompositeState');
 
 describe('Core', function () {
 
   beforeEach(function () {
-    Core.compositeState.data = {};
+    CompositeState.constructor({});
     Core.summary.list = [];
   });
 
@@ -13,20 +13,20 @@ describe('Core', function () {
 
     it('adds an object to state', function () {
       Core.addState({foo: 'bar'});
-      expect(Core.compositeState.data).toEqual({foo: 'bar'});
+      expect(CompositeState.data).toEqual({foo: 'bar'});
     });
 
     it('merges old and new states', function () {
       Core.addState({foo: 'bar'});
       Core.addState({baz: 'qux'});
-      expect(Core.compositeState.data).toEqual({foo: 'bar', baz: 'qux'});
+      expect(CompositeState.data).toEqual({foo: 'bar', baz: 'qux'});
     });
 
     it('merges old and new states, overwriting old with new', function () {
       Core.addState({foo: 'bar'});
       Core.addState({baz: 'qux'});
       Core.addState({foo: 'baz'});
-      expect(Core.compositeState.data).toEqual({foo: 'baz', baz: 'qux'});
+      expect(CompositeState.data).toEqual({foo: 'baz', baz: 'qux'});
     });
 
   });
@@ -36,7 +36,8 @@ describe('Core', function () {
     it('adds properties to an existing framework', function () {
       Core.addState({
         frameworks: [{
-          id: 'foo',
+          id: 'foo-id',
+          name: 'foo',
           bar: 'baz'
         }]
       });
@@ -47,9 +48,10 @@ describe('Core', function () {
         }
       });
 
-      expect(Core.compositeState.data).toEqual({
+      expect(CompositeState.data).toEqual({
         frameworks: [{
-          id: 'foo',
+          id: 'foo-id',
+          name: 'foo',
           bar: 'baz',
           _meta: {
             marathon: {
@@ -88,7 +90,7 @@ describe('Core', function () {
         hostname: 'corge'
       });
 
-      expect(Core.compositeState.data).toEqual({
+      expect(CompositeState.data).toEqual({
         frameworks: [{id: 'foo', foo: 'bar'}],
         slaves: [{id: 'corge', bar: 'baz'}],
         cluster: 'qux',
