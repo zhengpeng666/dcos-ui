@@ -1,6 +1,6 @@
-jest.dontMock('../../constants/ComponentHealthTypes');
+jest.dontMock('../../constants/ComponentHealthStatus');
 
-var ComponentHealthTypes = require('../../constants/ComponentHealthTypes');
+var ComponentHealthStatus = require('../../constants/ComponentHealthStatus');
 var HealthComponent = require('../HealthComponent');
 
 describe('HealthComponent', function () {
@@ -16,16 +16,15 @@ describe('HealthComponent', function () {
       });
 
       expect(healthItem.getHealth()).toEqual({
-        key: 'HEALTHY',
-        value: ComponentHealthTypes.HEALTHY,
-        classNames: 'text-success',
-        title: 'Healthy'
+        title: 'Healthy',
+        value: 1,
+        classNames: 'text-success'
       });
     });
 
     it('returns NA when healthType not found', function () {
       var healthItem = new HealthComponent({});
-      expect(healthItem.getHealth().value).toEqual(ComponentHealthTypes.NA);
+      expect(healthItem.getHealth()).toEqual(ComponentHealthStatus.NA);
     });
 
   });

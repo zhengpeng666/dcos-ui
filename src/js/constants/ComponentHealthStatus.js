@@ -1,29 +1,23 @@
-import ComponentHealthTypes from './ComponentHealthTypes';
-
 const ComponentHealthStatus = {
   NA: {
-    key: 'NA',
-    value: ComponentHealthTypes.NA,
-    classNames: 'text-mute',
-    title: 'NA'
+    title: 'NA',
+    value: 0,
+    classNames: 'text-mute'
   },
   HEALTHY: {
-    key: 'HEALTHY',
-    value: ComponentHealthTypes.HEALTHY,
-    classNames: 'text-success',
-    title: 'Healthy'
-  },
-  UNHEALTHY: {
-    key: 'UNHEALTHY',
-    value: ComponentHealthTypes.UNHEALTHY,
-    classNames: 'text-danger',
-    title: 'Unhealthy'
+    title: 'Healthy',
+    value: 1,
+    classNames: 'text-success'
   },
   WARN: {
-    key: 'WARN',
-    value: ComponentHealthTypes.WARN,
-    classNames: 'text-warning',
-    title: 'Warning'
+    title: 'Warning',
+    value: 2,
+    classNames: 'text-warning'
+  },
+  UNHEALTHY: {
+    title: 'Unhealthy',
+    value: 3,
+    classNames: 'text-danger'
   }
 };
 
