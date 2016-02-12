@@ -2,6 +2,7 @@ import {Confirm} from 'reactjs-components';
 import React from 'react';
 
 import MultipleForm from './MultipleForm';
+import ReviewConfig from './ReviewConfig';
 
 const METHODS_TO_BIND = [
   'changeReviewState',
@@ -57,7 +58,7 @@ class AdvancedConfigModal extends React.Component {
 
   getRightButtonText() {
     if (this.isReviewing()) {
-      return 'Install';
+      return 'Install Package';
     }
 
     return 'Review and Install';
@@ -73,7 +74,7 @@ class AdvancedConfigModal extends React.Component {
 
   getModalContents() {
     if (this.isReviewing()) {
-      return <h1>I'm reviewing the config</h1>;
+      return <ReviewConfig multipleDefinition={this.props.multipleDefinition}/>;
     }
 
     return <MultipleForm multipleDefinition={this.props.multipleDefinition}/>;
@@ -131,13 +132,52 @@ AdvancedConfigModal.defaultProps = {
       ]
     },
     'JVM Configuration': {
-      title: 'JVM Configuration'
+      title: 'JVM Configuration',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     },
     'Command Line Flags': {
-      title: 'Command Line Flags'
+      title: 'Command Line Flags',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     },
     'Environment & Executor': {
-      title: 'Environment & Executor'
+      title: 'Environment & Executor',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     },
     'Framework & Host': {
       title: 'Framework & Host',
@@ -245,22 +285,100 @@ AdvancedConfigModal.defaultProps = {
       ]
     },
     'Launch Tokens': {
-      title: 'Launch Tokens'
+      title: 'Launch Tokens',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     },
     'Mesos Master': {
-      title: 'Mesos Master'
+      title: 'Mesos Master',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     },
     'Mesos Configuration': {
-      title: 'Mesos Configuration'
+      title: 'Mesos Configuration',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     },
     'Plugins': {
-      title: 'Plugins'
+      title: 'Plugins',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     },
     'SSL': {
-      title: 'SSL'
+      title: 'SSL',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     },
     'Zookeeper': {
-      title: 'Zookeeper'
+      title: 'Zookeeper',
+      definition: [
+        {
+          fieldType: 'text',
+          name: 'Name',
+          placeholder: 'Name',
+          required: false,
+          showError: false,
+          showLabel: true,
+          writeType: 'input',
+          validation: function () { return true; },
+          value: ''
+        }
+      ]
     }
   },
   onClose: function () {},
@@ -270,7 +388,10 @@ AdvancedConfigModal.defaultProps = {
 AdvancedConfigModal.propTypes = {
   multipleDefinition: React.PropTypes.object,
   onClose: React.PropTypes.func,
-  open: React.PropTypes.bool
+  open: React.PropTypes.bool,
+  serviceImage: React.PropTypes.string,
+  serviceName: React.PropTypes.string,
+  serviceVersion: React.PropTypes.string
 };
 
 module.exports = AdvancedConfigModal;
