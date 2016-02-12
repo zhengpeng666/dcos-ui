@@ -51,7 +51,7 @@ export default class TaskDirectoryTable extends React.Component {
 
     return (
       <div className="flex-box flex-box-align-vertical-center table-cell-flex-box">
-        <div className="table-cell-status-icon table-cell-status-icon-mini">
+        <div className="table-cell-icon table-cell-icon-mini">
           <i className={iconClass}></i>
         </div>
         <span title={value} className="table-cell-value text-overflow">

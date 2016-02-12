@@ -3,6 +3,7 @@ var classNames = require('classnames');
 import {Link} from 'react-router';
 var React = require('react/addons');
 
+import Cluster from '../utils/Cluster';
 var EventTypes = require('../constants/EventTypes');
 var HealthLabels = require('../constants/HealthLabels');
 var HealthTypes = require('../constants/HealthTypes');
@@ -63,16 +64,25 @@ var ServicesTable = React.createClass({
     }
 
     return (
-      <div className="">
+      <div className="flex-box flex-box-align-vertical-center
+        table-cell-flex-box">
         <Link to="services-panel"
+          className="table-cell-icon"
           params={{serviceName: service.name}}>
           {imageTag}
         </Link>
         <Link to="services-panel"
-          className="headline"
+          className="headline table-cell-value flex-box flex-box-col"
           params={{serviceName: service.name}}>
-          {service[prop]}
+          <span className="text-overflow">
+            {service[prop]}
+          </span>
         </Link>
+        <a href={Cluster.getServiceLink(service.name)} target="_blank"
+          title="Open in a new window">
+          <i className={'icon icon-align-right icon-margin-wide icon-sprite ' +
+            'icon-sprite-small icon-new-window icon-sprite-small-white'}></i>
+        </a>
       </div>
     );
   },
