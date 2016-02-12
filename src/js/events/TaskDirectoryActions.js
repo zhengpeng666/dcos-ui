@@ -22,38 +22,34 @@ var TaskDirectoryActions = {
 
   getInnerPath: function (nodeState, task, innerPath) {
     innerPath = innerPath || '';
-
-    let taskFramework = _.find(nodeState.frameworks, function (framework) {
+    function frameworkSearch(framework) {
       return framework.id === task.framework_id;
-    });
+    }
+
+    let taskFramework = _.find(nodeState.frameworks, frameworkSearch) ||
+      _.find(nodeState.completed_frameworks, frameworkSearch);
 
     if (!taskFramework) {
       return null;
     }
 
     function executorSearch(executor) {
-      let found = null;
-
       function taskIDSearch(executorTask) {
         return executorTask.id === task.id;
       }
 
-      found = _.some(executor.tasks, taskIDSearch);
-      if (!found) {
-        found = _.some(executor.completed_tasks, taskIDSearch);
-      }
+      let found = _.some(executor.tasks, taskIDSearch) ||
+        _.some(executor.completed_tasks, taskIDSearch);
 
       return found;
     }
 
     // Search running executors
-    let taskExecutor = _.find(taskFramework.executors, executorSearch);
+    let taskExecutor = _.find(taskFramework.executors, executorSearch) ||
+      _.find(taskFramework.completed_executors, executorSearch);
+
     if (!taskExecutor) {
-      // Search completed executors
-      taskExecutor = _.find(taskFramework.completed_executors, executorSearch);
-      if (!taskExecutor) {
-        return null;
-      }
+      return null;
     }
 
     return `${taskExecutor.directory}/${innerPath}`;
