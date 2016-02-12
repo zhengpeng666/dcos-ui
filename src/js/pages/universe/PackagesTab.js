@@ -10,9 +10,9 @@ import MultipleForm from '../../components/MultipleForm';
 import Panel from '../../components/Panel';
 
 const METHODS_TO_BIND = [
-'handleAdvancedModalOpen',
-'handleAdvancedModalClose',
-'handleInstallModalClose'
+  'handleAdvancedModalClose',
+  'handleAdvancedModalOpen',
+  'handleInstallModalClose'
 ];
 
 class PackagesTab extends mixin(StoreMixin) {
