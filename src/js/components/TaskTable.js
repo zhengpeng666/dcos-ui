@@ -127,7 +127,7 @@ export default class TaskTable extends React.Component {
     return (
       <div className="flex-box flex-box-align-vertical-center
         table-cell-flex-box">
-        <div className="table-cell-status-icon table-cell-task-dot
+        <div className="table-cell-icon table-cell-task-dot
           task-status-indicator">
           <span className={statusClass}></span>
         </div>
@@ -159,7 +159,7 @@ export default class TaskTable extends React.Component {
     return (
       <div className="flex-box flex-box-align-vertical-center
         table-cell-flex-box">
-        <div className="table-cell-status-icon table-cell-status-icon-mini">
+        <div className="table-cell-icon table-cell-icon-mini">
           {statusIcon}
         </div>
         <span className={statusLabelClasses}>
