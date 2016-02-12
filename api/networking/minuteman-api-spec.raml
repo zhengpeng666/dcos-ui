@@ -31,7 +31,7 @@ schemas:
                 ]
               }
   /summary:
-    displayName: VIPs Summaries
+    displayName: VIPs' Summaries
     get:
       description: Get a list of VIP Summaries.
       responses:
@@ -89,17 +89,17 @@ schemas:
                     },
                       "ip": "10.10.11.12",
                       "port": 52342,
-                      "availability_pct": 98,
-                      "circuit_closed_pct": 3
+                      "machine_reachable_pct": 98,
+                      "application_reachable_pct": 3
                     }
                   ],
-                  "backends_reachable": {
+                  "backend_machines_reachable": {
                     "100": 32,
                     "50": 64,
                     "25": 30,
                     "24": 1
                   },
-                  "backends_circuit_closed": {
+                  "backend_applications_reachable": {
                     "100": 32,
                     "50": 64,
                     "43": 30,
@@ -142,8 +142,8 @@ schemas:
                         "1454007660": 33
                       },
                       "ip": "10.10.11.13",
-                      "available": true,
-                      "circuit_closed": false
+                      "machine_reachable": true,
+                      "application_reachable": false
                     }
                   ]
                 }
@@ -152,7 +152,7 @@ schemas:
 /membership:
   displayName: Node Membership
   get:
-    description: Get node memberships
+    description: Get node memberships.
     responses:
       200:
         description: Successful response.

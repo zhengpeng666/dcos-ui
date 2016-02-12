@@ -1,16 +1,24 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
   "id": "http://schema.dcos/networking/backend-connections",
+  "description": "A list of backend connections.",
+  "title": "Backend Connections",
   "type": "object",
   "properties": {
     "clients": {
+      "description": "A list of client connnections.",
+      "title": "Clients",
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
           "request_success": {
+            "description": "Successful requests on this client.",
+            "title": "Successful Requests",
             "type": "object",
             "patternProperties": {
+              "description": "Timestamps of the number of successful requests.",
+              "title": "Timestamp",
               "[0-9]": {
                 "type": "integer"
               }
@@ -19,18 +27,23 @@
           "request_fail": {
             "type": "object",
             "patternProperties": {
+              "description": "Timestamps of the number of failed requests.",
+              "title": "Timestamp",
               "[0-9]": {
                 "type": "integer"
               }
             }
           },
           "ip": {
+            "title": "Client IP",
             "type": "string"
           },
-          "available": {
+          "machine_reachable": {
+            "title": "Machine Reachability",
             "type": "boolean"
           },
-          "circuit_closed": {
+          "application_reachable": {
+            "title": "Application Reachability",
             "type": "boolean"
           }
         }

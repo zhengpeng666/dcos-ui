@@ -1,9 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "A list of VIPs' summaries.",
+  "title": "VIPs' Summaries",
   "id": "http://schema.dcos/networking/vip-summaries",
   "type": "object",
   "properties": {
     "array": {
+      "description": "Array of VIPs' summaries.",
+      "title": "Array",
       "type": "array",
       "items": {
         "type": "object",
@@ -12,12 +16,18 @@
             "$ref": "vip"
           },
           "success_last_minute": {
+            "description": "Number of successful requests in the last minute on this VIP.",
+            "title": "Success Last Minute",
             "type": "integer"
           },
           "fail_last_minute": {
+            "description": "Number of failed requests in the last minute on this VIP.",
+            "title": "Failed Last Minute",
             "type": "integer"
           },
           "backends": {
+            "description": "Number of backends on this VIP.",
+            "title": "Backends",
             "type": "integer"
           }
         }
