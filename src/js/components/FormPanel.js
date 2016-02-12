@@ -15,11 +15,6 @@ class FormPanel extends React.Component {
     });
   }
 
-  getTriggerSubmit(trigger) {
-    this.triggerSubmit = trigger;
-    this.forceUpdate();
-  }
-
   handleError() {
     console.log('error');
   }
@@ -38,6 +33,11 @@ class FormPanel extends React.Component {
     });
 
     return flattenedDefinition;
+  }
+
+  getTriggerSubmit(trigger) {
+    this.triggerSubmit = trigger;
+    this.forceUpdate();
   }
 
   getSubHeader(name) {
