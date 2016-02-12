@@ -106,6 +106,8 @@ class PackagesTab extends mixin(StoreMixin) {
   }
 
   render() {
+    let {advancedModalOpen} = this.state;
+
     return (
       <div className="grid row">
         <button
@@ -119,24 +121,12 @@ class PackagesTab extends mixin(StoreMixin) {
           modalClass="modal modal-large"
           maxHeightPercentage={0.9}
           onClose={this.handleAdvancedModalClose}
-          open={this.state.advancedModalOpen}
+          open={advancedModalOpen}
           showCloseButton={false}
           showHeader={false}
           showFooter={false}
           titleClass="modal-header-title text-align-center flush">
           <MultipleForm />
-        </Modal>
-        <Modal
-          modalWrapperClass="modal-generic-error"
-          modalClass="modal"
-          maxHeightPercentage={0.9}
-          onClose={this.handleInstallModalClose}
-          open={!!this.state.installModalPackage}
-          showCloseButton={false}
-          showHeader={false}
-          showFooter={false}
-          titleClass="modal-header-title text-align-center flush">
-          {this.state.installModalPackage ? this.state.installModalPackage.get('packageName') : null}
         </Modal>
       </div>
     );
