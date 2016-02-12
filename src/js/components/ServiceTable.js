@@ -64,7 +64,7 @@ var ServicesTable = React.createClass({
     }
 
     return (
-      <div className="flex-box flex-box-align-vertical-center
+      <div className="service-table-heading flex-box flex-box-align-vertical-center
         table-cell-flex-box">
         <Link to="services-panel"
           className="table-cell-icon"
@@ -79,7 +79,7 @@ var ServicesTable = React.createClass({
           </span>
         </Link>
         <a href={Cluster.getServiceLink(service.name)} target="_blank"
-          title="Open in a new window">
+          title="Open in a new window" className="service-table-new-window">
           <i className="icon icon-align-right icon-margin-wide icon-sprite
             icon-sprite-small icon-new-window icon-sprite-small-white"></i>
         </a>
@@ -219,11 +219,18 @@ var ServicesTable = React.createClass({
     );
   },
 
+  getRowAttributes: function (service) {
+    return {
+      className: 'service-table-row'
+    }
+  },
+
   render: function () {
     return (
       <div>
         <Table
-          className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
+          buildRowOptions={this.getRowAttributes}
+          className="service-table table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
           data={this.props.services.slice()}
