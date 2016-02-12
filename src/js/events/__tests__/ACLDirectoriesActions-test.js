@@ -139,7 +139,7 @@ describe('ACLDirectoriesActions', function () {
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
-    it('uses PUT method', function () {
+    it('uses DELETE method', function () {
       spyOn(RequestUtil, 'json');
       ACLDirectoriesActions.deleteDirectory();
       expect(RequestUtil.json.mostRecentCall.args[0].method).toEqual('DELETE');
@@ -174,6 +174,73 @@ describe('ACLDirectoriesActions', function () {
 
         expect(payload.action).toEqual({
           type: ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_ERROR,
+          data: 'Foo'
+        });
+      });
+
+      this.configuration.error({responseJSON: {
+          description: 'Foo'
+      }});
+    });
+
+  });
+
+  describe('#testDirectoryConnection', function () {
+
+    it('calls #json from the RequestUtil', function () {
+      spyOn(RequestUtil, 'json');
+      ACLDirectoriesActions.testDirectoryConnection();
+      expect(RequestUtil.json).toHaveBeenCalled();
+    });
+
+    it('uses POST method', function () {
+      spyOn(RequestUtil, 'json');
+      ACLDirectoriesActions.testDirectoryConnection();
+      expect(RequestUtil.json.mostRecentCall.args[0].method).toEqual('POST');
+    });
+
+    it('passses in credentials', function () {
+      spyOn(RequestUtil, 'json');
+      ACLDirectoriesActions.testDirectoryConnection({
+        uid: 'foo',
+        password: 'bar'
+      });
+      expect(RequestUtil.json.mostRecentCall.args[0].data).toEqual({
+        uid: 'foo',
+        password: 'bar'
+      });
+    });
+
+    it('puts data to correct URL', function () {
+      spyOn(RequestUtil, 'json');
+      ACLDirectoriesActions.testDirectoryConnection();
+      expect(RequestUtil.json.mostRecentCall.args[0].url)
+        .toEqual(Config.acsAPIPrefix + '/ldap/config/test');
+    });
+
+    it('dispatches the correct action when successful', function () {
+      ACLDirectoriesActions.testDirectoryConnection();
+
+      var id = AppDispatcher.register(function (payload) {
+        AppDispatcher.unregister(id);
+
+        expect(payload.action).toEqual({
+          type: ActionTypes.REQUEST_ACL_DIRECTORY_TEST_SUCCESS,
+          data: 'foo'
+        });
+      });
+
+      this.configuration.success({description: 'foo'});
+    });
+
+    it('dispatches the correct action when unsuccessful', function () {
+      ACLDirectoriesActions.testDirectoryConnection();
+
+      var id = AppDispatcher.register(function (payload) {
+        AppDispatcher.unregister(id);
+
+        expect(payload.action).toEqual({
+          type: ActionTypes.REQUEST_ACL_DIRECTORY_TEST_ERROR,
           data: 'Foo'
         });
       });
