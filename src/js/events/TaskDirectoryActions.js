@@ -7,6 +7,19 @@ import Config from '../config/Config';
 import MesosStateStore from '../stores/MesosStateStore';
 import RequestUtil from '../utils/RequestUtil';
 
+function findWithID(stateObject, listProps, id) {
+  let idCondition = {id};
+  let framework;
+  for (let i = 0; i < listProps.length; i++) {
+    framework = _.findWhere(stateObject[listProps[i]], idCondition);
+    if (framework) {
+      return framework;
+    }
+  }
+
+  return null;
+}
+
 var TaskDirectoryActions = {
   getDownloadURL: function (nodeID, path) {
     return `${Config.rootUrl}/slave/${nodeID}/files/download.json?` +
@@ -22,37 +35,30 @@ var TaskDirectoryActions = {
 
   getInnerPath: function (nodeState, task, innerPath) {
     innerPath = innerPath || '';
-    function frameworkSearch(framework) {
-      return framework.id === task.framework_id;
-    }
 
-    let taskFramework = _.find(nodeState.frameworks, frameworkSearch) ||
-      _.find(nodeState.completed_frameworks, frameworkSearch);
+    // Search frameworks
+    let framework = findWithID(
+      nodeState,
+      ['frameworks', 'completed_frameworks'],
+      task.framework_id
+    );
 
-    if (!taskFramework) {
+    if (!framework) {
       return null;
     }
 
-    function executorSearch(executor) {
-      function taskIDSearch(executorTask) {
-        return executorTask.id === task.id;
-      }
+    // Search executors
+    let executor = findWithID(
+      framework,
+      ['executors', 'completed_executors'],
+      task.id
+    );
 
-      let found = _.some(executor.tasks, taskIDSearch) ||
-        _.some(executor.completed_tasks, taskIDSearch);
-
-      return found;
-    }
-
-    // Search running executors
-    let taskExecutor = _.find(taskFramework.executors, executorSearch) ||
-      _.find(taskFramework.completed_executors, executorSearch);
-
-    if (!taskExecutor) {
+    if (!executor) {
       return null;
     }
 
-    return `${taskExecutor.directory}/${innerPath}`;
+    return `${executor.directory}/${innerPath}`;
   },
 
   fetchNodeState: RequestUtil.debounceOnError(
