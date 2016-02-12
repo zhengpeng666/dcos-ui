@@ -88,7 +88,7 @@ export default class ReviewConfig extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="modal-body review-config">
         <div className="row">
           <div className="column-4">
             {this.getServiceHeader()}
