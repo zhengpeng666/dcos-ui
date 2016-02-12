@@ -64,11 +64,11 @@ const ACLDirectoriesActions = {
     });
   },
 
-  testDirectoryConnection: function () {
+  testDirectoryConnection: function (data) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/ldap/config/test`,
       method: 'POST',
-      data: {uid: 'admin', password: 'Secret123'},
+      data,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_ACL_DIRECTORY_TEST_SUCCESS,

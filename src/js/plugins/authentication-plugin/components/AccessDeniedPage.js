@@ -36,7 +36,7 @@ export default class AccessDeniedPage extends React.Component {
                   Please contact your DCOS administrator.
                 </p>
 
-                <div className="container container-pod container-pod-short-top flush-bottom">
+                <div className="container container-pod container-pod-short-top container-fluid flush-bottom">
                   <button className="button button-primary"
                     onClick={this.handleUserLogout}>
                     Log out
