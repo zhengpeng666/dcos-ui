@@ -5,7 +5,7 @@ const METHODS_TO_BIND = [
   'getTriggerSubmit', 'handleError'
 ];
 
-export default class FormPanel extends React.Component {
+class FormPanel extends React.Component {
   constructor() {
     super();
     this.triggerSubmit = function () {};
@@ -25,7 +25,7 @@ export default class FormPanel extends React.Component {
   }
 
   flattenDefinition(definition) {
-    var flattenedDefinition = [];
+    let flattenedDefinition = [];
 
     definition.forEach((field) => {
       let nestedDefinition = field.definition;
@@ -51,7 +51,7 @@ export default class FormPanel extends React.Component {
   }
 
   render() {
-    var definition = this.flattenDefinition(this.props.definition);
+    let definition = this.flattenDefinition(this.props.definition);
 
     return (
       <div className="row">
@@ -79,3 +79,5 @@ FormPanel.propTypes = {
     React.PropTypes.object
   ])
 };
+
+module.exports = FormPanel;
