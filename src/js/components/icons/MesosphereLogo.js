@@ -60,4 +60,4 @@ module.exports = class MesosphereLogo extends React.Component {
       </svg>
     );
   }
-}
+};
