@@ -13,9 +13,9 @@ const CosmosPackagesStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    description: new UniversePackage(),
-    list: new UniversePackagesList(),
-    search: new UniversePackagesList()
+    availablePackages: new UniversePackagesList(),
+    packageDetails: new UniversePackage(),
+    installedPackages: new UniversePackagesList()
   },
 
   addChangeListener: function (eventName, callback) {
@@ -27,50 +27,42 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   /* API */
-  fetchDescription: CosmosPackagesActions.fetchDescription,
+  fetchAvailablePackages: CosmosPackagesActions.fetchAvailablePackages,
 
-  fetchList: CosmosPackagesActions.fetchList,
+  fetchInstalledPackages: CosmosPackagesActions.fetchInstalledPackages,
 
-  search: CosmosPackagesActions.search,
+  fetchPackageDescription: CosmosPackagesActions.fetchPackageDescription,
 
   /* Reducers */
-  processDescribeSuccess: function (pkg) {
-    this.set({description: new UniversePackage(pkg)});
+  processAvailablePackagesSuccess: function (packages, query) {
+    this.set({availablePackages: new UniversePackagesList({items: packages})});
 
-    this.emit(
-      EventTypes.COSMOS_DESCRIBE_CHANGE,
-      ...Array.prototype.slice.call(arguments, 1)
-    );
+    this.emit(EventTypes.COSMOS_SEARCH_CHANGE, query);
   },
 
-  processDescribeError: function () {
-    this.emit(EventTypes.COSMOS_DESCRIBE_ERROR, ...arguments);
+  processAvailablePackagesError: function (error, query) {
+    this.emit(EventTypes.COSMOS_SEARCH_ERROR, error, query);
   },
 
-  processListSuccess: function (packages) {
-    this.set({list: new UniversePackagesList({items: packages})});
+  processInstalledPackagesSuccess: function (packages, name, appId) {
+    this.set({installedPackages: new UniversePackagesList({items: packages})});
 
-    this.emit(
-      EventTypes.COSMOS_LIST_CHANGE,
-      ...Array.prototype.slice.call(arguments, 1)
-    );
+    this.emit(EventTypes.COSMOS_LIST_CHANGE, packages, name, appId);
   },
 
-  processListError: function () {
-    this.emit(EventTypes.COSMOS_LIST_ERROR, ...arguments);
+  processInstalledPackagesError: function (packages, name, appId) {
+    this.emit(EventTypes.COSMOS_LIST_ERROR, packages, name, appId);
   },
 
-  processSearchSuccess: function (packages) {
-    this.set({search: new UniversePackagesList({items: packages})});
+  processPackageDescriptionSuccess: function (cosmosPackage, name, version) {
+    this.set({packageDetails: new UniversePackage(cosmosPackage)});
 
-    this.emit(
-      EventTypes.COSMOS_SEARCH_CHANGE,
-      ...Array.prototype.slice.call(arguments, 1)
-    );
+    this.emit(EventTypes.COSMOS_DESCRIBE_CHANGE, cosmosPackage, name, version);
   },
 
-  processSearchError: function () {
-    this.emit(EventTypes.COSMOS_SEARCH_ERROR, ...arguments);
+  processPackageDescriptionError:
+    function (cosmosPackage, name, version) {
+    this.emit(EventTypes.COSMOS_DESCRIBE_ERROR, cosmosPackage, name, version);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -80,30 +72,42 @@ const CosmosPackagesStore = Store.createStore({
     }
 
     let action = payload.action;
-
-    // Creating an array of arguments (without 'type')
-    let payloadValues = Object.keys(action).slice(1).map(function (key) {
-      return action[key];
-    });
+    let data = action.data;
 
     switch (action.type) {
       case ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS:
-        CosmosPackagesStore.processDescribeSuccess(...payloadValues);
+        CosmosPackagesStore.processPackageDescriptionSuccess(
+          data,
+          action.packageName,
+          action.packageVersion
+        );
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR:
-        CosmosPackagesStore.processDescribeError(...payloadValues);
+        CosmosPackagesStore.processPackageDescriptionError(
+          data,
+          action.packageName,
+          action.packageVersion
+        );
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_SUCCESS:
-        CosmosPackagesStore.processListSuccess(...payloadValues);
+        CosmosPackagesStore.processInstalledPackagesSuccess(
+          data,
+          action.packageName,
+          action.appId
+        );
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_ERROR:
-        CosmosPackagesStore.processListError(...payloadValues);
+        CosmosPackagesStore.processInstalledPackagesError(
+          data,
+          action.packageName,
+          action.appId
+        );
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS:
-        CosmosPackagesStore.processSearchSuccess(...payloadValues);
+        CosmosPackagesStore.processAvailablePackagesSuccess(data, action.query);
         break;
       case ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_ERROR:
-        CosmosPackagesStore.processSearchError(...payloadValues);
+        CosmosPackagesStore.processAvailablePackagesError(data, action.query);
         break;
     }
 
