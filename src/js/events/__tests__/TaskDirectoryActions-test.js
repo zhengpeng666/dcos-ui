@@ -1,12 +1,10 @@
 jest.dontMock('../TaskDirectoryActions');
 jest.dontMock('../AppDispatcher');
 jest.dontMock('../../config/Config');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../utils/RequestUtil');
 
-let TaskDirectoryActions = require('../TaskDirectoryActions');
-let Config = require('../../config/Config');
-let RequestUtil = require('../../utils/RequestUtil');
+var TaskDirectoryActions = require('../TaskDirectoryActions');
+var Config = require('../../config/Config');
+var RequestUtil = require('../../utils/RequestUtil');
 
 describe('TaskDirectoryActions', function () {
 
@@ -16,12 +14,16 @@ describe('TaskDirectoryActions', function () {
     RequestUtil.json = function (configuration) {
       this.configuration = configuration;
     }.bind(this);
+    this.configRootUrl = Config.rootUrl;
+    this.configUseFixtures = Config.useFixtures;
     Config.rootUrl = '';
     Config.useFixtures = false;
   });
 
   afterEach(function () {
     RequestUtil.json = this.requestUtilJSON;
+    Config.rootUrl = this.configRootUrl;
+    Config.useFixtures = this.configUseFixtures;
   });
 
   describe('#getInnerPath', function () {
