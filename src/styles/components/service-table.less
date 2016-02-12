@@ -1,16 +1,39 @@
-.service-table {
+& when (@screen-small-enabled) {
 
-  .service-table-new-window {
-    display: none;
-  }
+  /* -----------------------------------------------------------------------------
+  --------------------------------------------------------------------------------
 
-  .service-table-row {
+  Screen Size: Small (@screen-small) and above
 
-    &:hover {
+  --------------------------------------------------------------------------------
+  ----------------------------------------------------------------------------- */
+
+  @media (min-width: @screen-small) {
+
+    .service-table {
 
       .service-table-new-window {
-        display: block;
+
+        display: none;
+
       }
+
+      .service-table-row {
+
+        &:hover {
+
+          .service-table-new-window {
+
+            display: block;
+
+          }
+
+        }
+
+      }
+
     }
+
   }
+
 }
