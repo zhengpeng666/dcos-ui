@@ -1,8 +1,9 @@
 var browserInfo = require('browser-info');
 var classNames = require('classnames');
+import {Modal} from 'reactjs-components';
 var React = require('react');
 
-import {Modal} from 'reactjs-components';
+import Plugins from '../../plugins/Plugins';
 
 var CliInstructionsModal = React.createClass({
 
@@ -40,9 +41,12 @@ var CliInstructionsModal = React.createClass({
     var cliSnippet = '';
 
     if (OS === 'Windows') {
+      let appendText = Plugins.applyFilter(
+        'installCLIModalAppendInstructions', ''
+      );
       requirements = (
         <p>
-          Install the DCOS command-line interface (CLI) tool on your local system by following <a href="https://docs.mesosphere.com/administration/introcli/cli/#windows" target="_blank">these instructions.</a>. You must install the CLI to administer your DCOS cluster. You can also take our tour, which will introduce you to the DCOS web-based user interface.
+          Install the DCOS command-line interface (CLI) tool on your local system by following <a href="https://docs.mesosphere.com/administration/introcli/cli/#windows" target="_blank">these instructions</a>. You must install the CLI to administer your DCOS cluster. {appendText}
         </p>
       );
     } else {

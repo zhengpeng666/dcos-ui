@@ -34,31 +34,6 @@ function processConfigState(isEnabled) {
 
 describe('TrackingPlugin', function () {
 
-  describe('#initialize', function () {
-    beforeEach(function () {
-      this.Plugins = {
-        addAction: jest.genMockFunction(),
-        addFilter: jest.genMockFunction()
-      };
-      TrackingPlugin.initialize(this.Plugins);
-    });
-
-    it('should add two action and two filters', function () {
-      expect(this.Plugins.addAction.mock.calls[0]).toEqual(
-        ['pluginsConfigured', TrackingPlugin.pluginsConfigured]
-      );
-      expect(this.Plugins.addAction.mock.calls[1]).toEqual(
-        ['receivedUserEmail', TrackingPlugin.pluginsConfigured]
-      );
-      expect(this.Plugins.addFilter.mock.calls[0]).toEqual(
-        ['sidebarFooterButtonSet', TrackingPlugin.sidebarFooterButtonSet]
-      );
-      expect(this.Plugins.addFilter.mock.calls[1]).toEqual(
-        ['openIdentifyModal', TrackingPlugin.openIdentifyModal]
-      );
-    });
-  });
-
   describe('Setting and changing configuration', function () {
     beforeEach(function () {
       this.TrackingPlugin = _.clone(TrackingPlugin);
@@ -121,13 +96,13 @@ describe('TrackingPlugin', function () {
     describe('#sidebarFooterButtonSet', function () {
       it('returns the value given to it if plugin enabled', function () {
         processConfigState(true);
-        var result = Plugins.applyFilter('sidebarFooterButtonSet', 'hello');
-        expect(result).toEqual('hello');
+        var result = Plugins.applyFilter('sidebarFooterButtonSet', ['foo']);
+        expect(result).not.toEqual(['foo']);
       });
 
       it('returns an empty array if plugin disabled', function () {
         processConfigState(false);
-        var result = Plugins.applyFilter('sidebarFooterButtonSet', 'hello');
+        var result = Plugins.applyFilter('sidebarFooterButtonSet', []);
         expect(result).toEqual([]);
       });
     });
