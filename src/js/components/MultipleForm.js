@@ -76,8 +76,10 @@ class MultipleForm extends React.Component {
     if (this.state.useGemini) {
       return (
         <GeminiScrollbar autoshow={true} className="column-4">
-          {this.getServiceHeader()}
-          {tabs}
+          <div className="multiple-form-left-column">
+            {this.getServiceHeader()}
+            {tabs}
+          </div>
         </GeminiScrollbar>
       );
     }
@@ -100,7 +102,7 @@ class MultipleForm extends React.Component {
 
     if (this.state.useGemini) {
       return (
-        <GeminiScrollbar autoshow={true} className="column-8">
+        <GeminiScrollbar autoshow={true} className="column-8 multiple-form-right-column">
           {panel}
         </GeminiScrollbar>
       );

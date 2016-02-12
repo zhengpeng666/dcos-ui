@@ -1,47 +1,59 @@
-.multiple-form {
-  height: 452px;
+.multiple-form-modal {
+  .button-collection {
+    display: flex;
+    justify-content: space-between;
 
-  .multiple-form-modal {
-    .button-collection {
-      display: flex;
-      justify-content: space-between;
-
-      .button {
-        &:first-child {
-          align-self: flex-start;
-        }
-
-        &:last-child {
-          align-self: flex-end;
-        }
+    .button {
+      &:first-child {
+        align-self: flex-start;
       }
 
-      &:after, &:before {
-        display: none;
+      &:last-child {
+        align-self: flex-end;
       }
     }
 
-    .multiple-form {
-      height: 452px;
-
-      .column-4.gm-scrollbar-container {
-        width: 33%;
-        height: 100%;
-        padding: 0;
-      }
-
-      .column-8.gm-scrollbar-container {
-        width: 66%;
-        height: 100%;
-        overflow: auto;
-        padding-right: 0;
-      }
-
-      .column-12.form-row-element {
-        padding-left: 16px;
-        padding-right: 16px;
-        padding-bottom: 16px;
-      }
+    &:after, &:before {
+      display: none;
     }
   }
+
+  .multiple-form {
+    height: 452px;
+
+    .column-4.gm-scrollbar-container {
+      width: 33%;
+      height: 100%;
+      padding: 0;
+      border-right: 1px solid @neutral;
+    }
+
+    .column-8.gm-scrollbar-container {
+      width: 66%;
+      height: 100%;
+      overflow: auto;
+      padding-right: 0;
+      padding-top: @base-spacing-unit;
+      padding-bottom: @base-spacing-unit;
+    }
+
+    .column-12.form-row-element {
+      padding-left: 16px;
+      padding-right: 16px;
+      padding-bottom: 16px;
+    }
+
+    &-left-column {
+      padding: @base-spacing-unit 0 0 @base-spacing-unit;
+    }
+  }
+}
+
+
+.modal-body {
+  padding-right: 0;
+}
+
+.form-panel {
+  padding-right: @base-spacing-unit;
 }

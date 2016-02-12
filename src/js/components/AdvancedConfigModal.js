@@ -86,6 +86,7 @@ export default class AdvancedConfigModal extends React.Component {
   render() {
     return (
       <Confirm
+        innerBodyClass=""
         leftButtonCallback={this.getLeftButtonCallback()}
         leftButtonClassName="button button-large"
         leftButtonText={this.getLeftButtonText()}

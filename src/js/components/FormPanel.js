@@ -54,12 +54,13 @@ class FormPanel extends React.Component {
     let definition = this.flattenDefinition(this.props.definition);
 
     return (
-      <div className="row">
+      <div className="row form-panel">
         <div className="column-12">
           <h3 className="flush">{this.props.title}</h3>
           <p>{this.props.description}</p>
         </div>
         <Form
+          className="form"
           definition={definition}
           triggerSubmit={this.getTriggerSubmit}
           onSubmit={this.props.onSubmit}
