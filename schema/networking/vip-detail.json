@@ -45,20 +45,20 @@
             "type": "integer"
           },
           "machine_reachable_pct": {
-            "description": "Percentage of machines that can reach this backend.",
+            "description": "Percentage of clients that can reach this machine.",
             "title": "Machine Reachable Percentage",
             "type": "integer"
           },
           "application_reachable_pct": {
-            "description": "Percentage of applications that can reach this backend.",
-            "title": "Applicatino Reachable Percentage",
+            "description": "Percentage of clients that can reach this application.",
+            "title": "Application Reachable Percentage",
             "type": "integer"
           }
         }
       }
     },
     "backend_machines_reachable": {
-      "description": "Percentages of backends reachable by machines.",
+      "description": "Percentages of machines reachable by clients.",
       "title": "Backend Machines Reachable",
       "type": "object",
       "patternProperties": {
@@ -68,7 +68,7 @@
       }
     },
     "backend_applications_reachable": {
-      "description": "Percentages of backends reachable by applications.",
+      "description": "Percentages of applications reachable by clients.",
       "title": "Backend Applications Reachable",
       "type": "object",
       "patternProperties": {
