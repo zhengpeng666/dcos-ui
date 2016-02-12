@@ -80,8 +80,8 @@ var ServicesTable = React.createClass({
         </Link>
         <a href={Cluster.getServiceLink(service.name)} target="_blank"
           title="Open in a new window">
-          <i className={'icon icon-align-right icon-margin-wide icon-sprite ' +
-            'icon-sprite-small icon-new-window icon-sprite-small-white'}></i>
+          <i className="icon icon-align-right icon-margin-wide icon-sprite
+            icon-sprite-small icon-new-window icon-sprite-small-white"></i>
         </a>
       </div>
     );
