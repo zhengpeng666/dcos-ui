@@ -1,8 +1,5 @@
 jest.dontMock('../PackagesTab');
 jest.dontMock('../../../components/Panel');
-jest.dontMock('../../../constants/StoreConfig');
-jest.dontMock('../../../constants/ActionTypes');
-jest.dontMock('../../../constants/EventTypes');
 jest.dontMock('../../../events/AppDispatcher');
 jest.dontMock('../../../events/CosmosPackagesActions');
 jest.dontMock('../../../stores/CosmosPackagesStore');
@@ -22,9 +19,8 @@ var UniversePackagesList = require('../../../structs/UniversePackagesList');
 describe('PackagesTab', function () {
 
   beforeEach(function () {
-      var node = document.createElement('div');
-      this.instance = React.render(<PackagesTab />, node);
-    });
+    this.instance = TestUtils.renderIntoDocument(<PackagesTab />);
+  });
 
   describe('#handleDetailOpen', function () {
 
