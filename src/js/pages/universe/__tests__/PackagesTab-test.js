@@ -5,9 +5,12 @@ jest.dontMock('../../../events/CosmosPackagesActions');
 jest.dontMock('../../../stores/CosmosPackagesStore');
 jest.dontMock('../../../../../tests/_fixtures/cosmos/packages-search.json');
 
+// Setting useFixtures for when we load StoreMixinConfig
 var Config = require('../../../config/Config');
+var configUseFixtures = Config.useFixtures;
 Config.useFixtures = true;
 require('../../../utils/StoreMixinConfig');
+Config.useFixtures = configUseFixtures;
 
 var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
