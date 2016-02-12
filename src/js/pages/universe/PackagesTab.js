@@ -39,7 +39,7 @@ class PackagesTab extends mixin(StoreMixin) {
     CosmosPackagesStore.search();
   }
 
-  handleDetailOpen(pkg, event) {
+  handleDetailOpen(cosmosPackage, event) {
     event.stopPropagation();
     // Handle open detail view
   }
@@ -56,53 +56,55 @@ class PackagesTab extends mixin(StoreMixin) {
     this.setState({installModalPackage: null});
   }
 
-  handleInstallModalOpen(pkg, event) {
+  handleInstallModalOpen(cosmosPackage, event) {
     event.stopPropagation();
-    this.setState({installModalPackage: pkg});
+    this.setState({installModalPackage: cosmosPackage});
   }
 
-  getFooter(pkg) {
+  getFooter(cosmosPackage) {
     return (
       <button
         className="button button-success"
-        onClick={this.handleInstallModalOpen.bind(this, pkg)}>
+        onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
         Install Package
       </button>
     );
   }
 
-  getHeading(pkg) {
+  getHeading(cosmosPackage) {
     return (
       <div className="icon icon-jumbo icon-image-container icon-app-container">
-        <img src={pkg.getIcons()['icon-large']} />
+        <img src={cosmosPackage.getIcons()['icon-large']} />
       </div>
     );
   }
 
   getPackages() {
-    return CosmosPackagesStore.get('search').getItems().map((pkg, index) => {
-      return (
-        <div
-          className="grid-item column-small-6 column-medium-4 column-large-3"
-          key={index}>
-          <Panel
-            className="panel clickable"
-            contentClass="panel-content horizontal-center short"
-            footer={this.getFooter(pkg)}
-            footerClass="panel-footer horizontal-center panel-footer-no-top-border short"
-            heading={this.getHeading(pkg)}
-            headingClass="panel-heading horizontal-center"
-            onClick={this.handleDetailOpen.bind(this, pkg)}>
-            <div className="h2 inverse flush-top short-bottom">
-              {pkg.get('packageName')}
-            </div>
-            <p className="inverse flush-bottom">
-              {pkg.get('currentVersion')}
-            </p>
-          </Panel>
-        </div>
-      );
-    });
+    return CosmosPackagesStore.get('search').getItems()
+      .map((cosmosPackage, index) => {
+        return (
+          <div
+            className="grid-item column-small-6 column-medium-4 column-large-3"
+            key={index}>
+            <Panel
+              className="panel clickable"
+              contentClass="panel-content horizontal-center short"
+              footer={this.getFooter(cosmosPackage)}
+              footerClass="panel-footer horizontal-center panel-footer-no-top-border short"
+              heading={this.getHeading(cosmosPackage)}
+              headingClass="panel-heading horizontal-center"
+              onClick={this.handleDetailOpen.bind(this, cosmosPackage)}>
+              <div className="h2 inverse flush-top short-bottom">
+                {cosmosPackage.get('packageName')}
+              </div>
+              <p className="inverse flush-bottom">
+                {cosmosPackage.get('currentVersion')}
+              </p>
+            </Panel>
+          </div>
+        );
+      }
+    );
   }
 
   render() {
