@@ -11,6 +11,7 @@ jest.dontMock('../../utils/Util');
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var ACLGroupStore = require('../../stores/ACLGroupStore');
@@ -18,6 +19,9 @@ var ACLGroupsStore = require('../../stores/ACLGroupsStore');
 var ACLUsersStore = require('../../stores/ACLUsersStore');
 var GroupUserMembershipTab = require('../GroupUserMembershipTab');
 var Group = require('../../structs/Group');
+
+ACLGroupStore.setMaxListeners(100);
+ACLGroupsStore.setMaxListeners(100);
 
 const groupDetailsFixture =
   require('../../../../tests/_fixtures/acl/group-with-details.json');
@@ -78,14 +82,13 @@ describe('GroupUserMembershipTab', function () {
 
       this.instance.setState({requestUsersSuccess: true});
 
-      this.instance.dropdownButton = TestUtils
-        .scryRenderedDOMComponentsWithClass(this.instance, 'dropdown-toggle');
+      var node = ReactDOM.findDOMNode(this.instance);
 
-      TestUtils.Simulate.click(ReactDOM.findDOMNode(this.instance.dropdownButton[0]));
+      var dropdownButton = node.querySelector('.dropdown-toggle');
+      TestUtils.Simulate.click(dropdownButton);
 
-      this.instance.selectableElements = TestUtils
-        .scryRenderedDOMComponentsWithClass(this.instance, 'is-selectable');
-      TestUtils.Simulate.click(ReactDOM.findDOMNode(this.instance.selectableElements[1]);
+      var selectableElements = node.querySelectorAll('.is-selectable')[1];
+      TestUtils.Simulate.click(selectableElements);
     });
 
     afterEach(function () {
@@ -99,6 +102,7 @@ describe('GroupUserMembershipTab', function () {
 
     it('should call #addUser with the proper arguments when selecting a user',
       function () {
+        console.log(ACLGroupStore.addUser.mock.calls[0])
       expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual('unicode');
       expect(ACLGroupStore.addUser.mock.calls[0][1]).toEqual('baz');
     });

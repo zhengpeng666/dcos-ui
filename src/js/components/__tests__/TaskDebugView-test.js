@@ -20,6 +20,10 @@ var TaskDirectoryActions = require('../../events/TaskDirectoryActions');
 var TaskDirectoryStore = require('../../stores/TaskDirectoryStore');
 var TaskDebugView = require('../TaskDebugView');
 
+// Increase max listeners to avoid EventEmitter memory leak warning
+// for too many listeners listing to MESOS_LOG_CHANGE
+TaskDirectoryStore.setMaxListeners(100);
+
 describe('TaskDebugView', function () {
   beforeEach(function () {
 
@@ -121,7 +125,10 @@ describe('TaskDebugView', function () {
         directory: new TaskDirectory({items: [{nlink: 1, path: '/foo'}]})
       });
       var btn = TestUtils.findRenderedDOMComponentWithTag(instance, 'a');
-      expect(btn.props.disabled).toEqual(true);
+      // If btn.props.disabled = true, then disabled attribute will return an object.
+      // If btn.props.disabled = false, then disabled attribute will be undefined.
+      // So here we just test to see if attribute exists
+      expect(btn.attributes.disabled).toBeTruthy();
     });
 
     it('should set button not disabled when file is found', function () {
@@ -134,7 +141,8 @@ describe('TaskDebugView', function () {
         directory: new TaskDirectory({items: [{nlink: 1, path: '/stdout'}]})
       });
       var btn = TestUtils.findRenderedDOMComponentWithTag(instance, 'a');
-      expect(btn.props.disabled).toEqual(false);
+      // If btn.props.disabled = false, then disabled attribute will be undefined
+      expect(btn.attributes.disabled).toEqual(undefined);
     });
 
     it('renders stdout on first render', function () {

@@ -89,13 +89,13 @@ describe('TimeSeriesArea', function () {
     var area = this.areaDef(this.props.values);
     var valueLine = this.valueLineDef(this.props.values);
 
-    var props = {
-      line: valueLine,
-      path: area,
-      position: [-10, 0],
-      transitionTime: 10
-    };
-    this.instance.setProps(props);
+    this.instance = TestUtils.renderIntoDocument(
+      <TimeSeriesArea
+        line={valueLine}
+        path={area}
+        position={[-10, 0]}
+        transitionTime={10} />
+    );
 
     checkPath(this.instance, this.props);
   });

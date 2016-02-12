@@ -1,6 +1,5 @@
 jest.dontMock('../TasksChart');
 
-var _ = require('underscore');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
@@ -21,22 +20,20 @@ describe('TasksChart', function () {
       var rows = TestUtils.scryRenderedDOMComponentsWithClass(
         this.instance, 'row'
       );
-      var unitsRow = _.last(rows);
-      var taskLabels = TestUtils.scryRenderedDOMComponentsWithClass(
-        unitsRow, 'unit'
-      );
+      var node = ReactDOM.findDOMNode(rows[rows.length - 1]);
+      var taskLabels = node.querySelectorAll('.unit');
       expect(taskLabels.length).toEqual(2);
     });
 
     it('renders two task info labels when there is only data for one', function () {
-      this.instance.setProps({tasks: {TASK_RUNNING: 1}});
+      this.instance = TestUtils.renderIntoDocument(
+        <TasksChart tasks={{tasks: {TASK_RUNNING: 1}}} />
+      );
       var rows = TestUtils.scryRenderedDOMComponentsWithClass(
         this.instance, 'row'
       );
-      var unitsRow = _.last(rows);
-      var taskLabels = TestUtils.scryRenderedDOMComponentsWithClass(
-        unitsRow, 'unit'
-      );
+      var node = ReactDOM.findDOMNode(rows[rows.length - 1]);
+      var taskLabels = node.querySelectorAll('.unit');
       expect(taskLabels.length).toEqual(2);
     });
 
@@ -79,17 +76,15 @@ describe('TasksChart', function () {
     });
 
     it('renders its unit', function () {
-      var unit = TestUtils.findRenderedDOMComponentWithClass(
-        this.instance, 'unit'
-      );
-      expect(ReactDOM.findDOMNode(unit).textContent).toEqual('100');
+      var node = ReactDOM.findDOMNode(this.instance);
+      var unit = node.querySelector('.unit');
+      expect(unit.textContent).toEqual('100');
     });
 
     it('renders its label', function () {
-      var label = TestUtils.findRenderedDOMComponentWithClass(
-        this.instance, 'unit-label'
-      );
-      expect(ReactDOM.findDOMNode(label).textContent).toEqual('Total Tasks');
+      var node = ReactDOM.findDOMNode(this.instance);
+      var label = node.querySelector('.unit-label');
+      expect(label.textContent).toEqual('Total Tasks');
     });
 
   });

@@ -18,6 +18,7 @@ jest.dontMock('../../structs/User');
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var ACLUserStore = require('../../stores/ACLUserStore');
@@ -67,8 +68,10 @@ describe('UserSidePanelContents', function () {
 
       ACLUserStore.emit(EventTypes.ACL_USER_DETAILS_FETCHED_ERROR, userID);
 
-      var text = JestUtil.renderAndFindTag(instance.render(), 'h3');
-      expect(ReactDOM.findDOMNode(text).textContent)
+      var node = ReactDOM.findDOMNode(instance);
+      var text = node.querySelector('h3');
+
+      expect(text.textContent)
         .toEqual('Cannot Connect With The Server');
     });
 
@@ -85,12 +88,10 @@ describe('UserSidePanelContents', function () {
           itemID={userID}/>
       );
 
-      var loading = TestUtils.scryRenderedDOMComponentsWithClass(
-        instance.render(),
-        'ball-scale'
-      );
+      var node = ReactDOM.findDOMNode(instance);
+      var loading = node.querySelector('.ball-scale');
 
-      expect(loading).toEqual({});
+      expect(loading).toNotBe(null);
     });
 
     it('should not return error message or loading screen if user is found',
@@ -102,12 +103,10 @@ describe('UserSidePanelContents', function () {
             itemID={userID}/>
         );
 
-        var text = TestUtils.findRenderedDOMComponentWithClass(
-          instance,
-          'form-element-inline-text'
-        );
+        var node = ReactDOM.findDOMNode(instance);
+        var text = node.querySelector('.form-element-inline-text');
 
-        expect(ReactDOM.findDOMNode(text).textContent).toEqual('藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe');
+        expect(text.textContent).toEqual('藍-Schüler Zimmer verfügt über einen Schreibtisch, Telefon, Safe in Notebook-Größe');
       }
     );
 

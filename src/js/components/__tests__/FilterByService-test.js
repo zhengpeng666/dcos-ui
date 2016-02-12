@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 jest.dontMock('../FilterByService');
@@ -31,14 +32,13 @@ describe('FilterByService', function () {
   });
 
   it('should display \'Filter by Service\' as default item', function () {
-    var button = TestUtils.findRenderedDOMComponentWithClass(
-      this.instance, 'dropdown-toggle'
-    );
-    var container = TestUtils.findRenderedDOMComponentWithClass(
-      button, 'badge-container'
-    );
+    var node = ReactDOM.findDOMNode(this.instance);
+    var buttonNode = node.querySelector('.dropdown-toggle');
 
-    expect(ReactDOM.findDOMNode(container).textContent)
+    var badgeNode = ReactDOM.findDOMNode(buttonNode);
+    var text = badgeNode.querySelector('.badge-container');
+
+    expect(text.textContent)
       .toEqual('Filter by Service');
   });
 
@@ -49,8 +49,11 @@ describe('FilterByService', function () {
       var item = TestUtils.renderIntoDocument(
         this.instance.getItemHtml(service)
       );
-      var badge = TestUtils.findRenderedDOMComponentWithClass(item, 'badge');
-      expect(parseInt(ReactDOM.findDOMNode(badge).textContent, 10))
+
+      var node = ReactDOM.findDOMNode(item);
+      var text = node.querySelector('.badge');
+
+      expect(parseInt(text.textContent, 10))
         .toEqual(MockFrameworks.frameworks[4].slave_ids.length);
     });
 

@@ -33,7 +33,8 @@ describe('Panel', function () {
     it('should render with given className', function () {
       var panel =
         TestUtils.findRenderedComponentWithType(this.instance, Panel);
-      expect(panel.props.className).toBe('foo');
+      var node = ReactDOM.findDOMNode(panel);
+      expect(node.className).toBe('foo');
     });
 
     it('should override className to content node', function () {
@@ -41,7 +42,8 @@ describe('Panel', function () {
         this.instance,
         'bar'
       );
-      expect(content.props.className).toBe('bar');
+      var node = ReactDOM.findDOMNode(content);
+      expect(node.className).toBe('bar');
     });
 
     it('should use default className to content node', function () {
@@ -49,7 +51,8 @@ describe('Panel', function () {
         TestUtils.renderIntoDocument(<Panel />),
         'panel-content'
       );
-      expect(content.props.className).toBe('panel-content');
+      var node = ReactDOM.findDOMNode(content);
+      expect(node.className).toBe('panel-content');
     });
 
     it('should override className to footer node', function () {
@@ -57,7 +60,8 @@ describe('Panel', function () {
         this.instance,
         'bar'
       );
-      expect(footer.props.className).toBe('bar');
+      var node = ReactDOM.findDOMNode(footer);
+      expect(node.className).toBe('bar');
     });
 
     it('should use default className to footer node', function () {
@@ -65,7 +69,8 @@ describe('Panel', function () {
         TestUtils.renderIntoDocument(<Panel footer="footer" />),
         'panel-footer'
       );
-      expect(footer.props.className).toBe('panel-footer');
+      var node = ReactDOM.findDOMNode(footer);
+      expect(node.className).toBe('panel-footer');
     });
 
     it('should not render footer when none is given', function () {
@@ -81,7 +86,8 @@ describe('Panel', function () {
         this.instance,
         'bar'
       );
-      expect(heading.props.className).toBe('bar');
+      var node = ReactDOM.findDOMNode(heading);
+      expect(node.className).toBe('bar');
     });
 
     it('should use default className to heading node', function () {
@@ -89,7 +95,8 @@ describe('Panel', function () {
         TestUtils.renderIntoDocument(<Panel heading="heading" />),
         'panel-heading'
       );
-      expect(heading.props.className).toBe('panel-heading');
+      var node = ReactDOM.findDOMNode(heading);
+      expect(node.className).toBe('panel-heading');
     });
 
     it('should not render heading when none is given', function () {

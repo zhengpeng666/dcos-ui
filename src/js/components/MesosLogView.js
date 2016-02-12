@@ -1,4 +1,4 @@
-import CSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import mixin from 'reactjs-mixin';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -278,12 +278,15 @@ class MesosLogView extends mixin(StoreMixin) {
     return (
       <div className="log-view flex-grow flex-container-col">
         {this.getLog()}
-        <CSSTransitionGroup
+        <ReactCSSTransitionGroup
           transitionAppear={true}
           transitionName="button"
+          transitionAppearTimeout={350}
+          transitionEnterTimeout={350}
+          transitionLeaveTimeout={350}
           component="div">
           {this.getGoToBottomButton()}
-        </CSSTransitionGroup>
+        </ReactCSSTransitionGroup>
       </div>
     );
   }

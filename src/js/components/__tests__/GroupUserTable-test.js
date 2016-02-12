@@ -92,30 +92,35 @@ describe('GroupUserTable', function () {
 
     it('returns a message containing the group\'s name and user\'s name',
       function () {
-      this.instance.modalContent = this.instance.getConfirmModalContent({
+
+      var modalContent = this.instance.getConfirmModalContent({
         description: 'foo', users: [{user: {uid: 'bar', description: 'qux'}}]
       });
 
-      var paragraphs = TestUtils.scryRenderedDOMComponentsWithTag(
-        TestUtils.renderIntoDocument(this.instance.modalContent),
-        'p'
-      );
-      expect(paragraphs[0].props.children)
+      var component = TestUtils.renderIntoDocument(modalContent);
+      var node = ReactDOM.findDOMNode(component);
+
+      var paragraphs = node.querySelectorAll('p');
+
+      expect(paragraphs[0].textContent)
         .toEqual('qux will be removed from the foo group.');
     });
 
     it('returns a message containing the error that was received',
       function () {
+
       this.instance.state.groupUpdateError = 'quux';
-      this.instance.modalContent = this.instance.getConfirmModalContent({
+
+      var modalContent = this.instance.getConfirmModalContent({
         description: 'foo', users: [{user: {uid: 'bar', description: 'qux'}}]
       });
-      var paragraphs = TestUtils.scryRenderedDOMComponentsWithTag(
-        TestUtils.renderIntoDocument(this.instance.modalContent),
-        'p'
-      );
 
-      expect(paragraphs[1].props.children)
+      var component = TestUtils.renderIntoDocument(modalContent);
+      var node = ReactDOM.findDOMNode(component);
+
+      var paragraphs = node.querySelectorAll('p');
+
+      expect(paragraphs[1].textContent)
         .toEqual('quux');
     });
 
@@ -136,12 +141,10 @@ describe('GroupUserTable', function () {
       var buttonWrapper = TestUtils.renderIntoDocument(
         this.instance.renderButton('foo', {uid: 'bar'})
       );
-      var button = TestUtils.scryRenderedDOMComponentsWithClass(
-        buttonWrapper,
-        'button'
-      )[0];
+      var node = ReactDOM.findDOMNode(buttonWrapper);
+      var button = node.querySelector('button');
 
-      TestUtils.Simulate.click(ReactDOM.findDOMNode(button));
+      TestUtils.Simulate.click(button);
 
       expect(this.instance.handleOpenConfirm.mock.calls[0][0]).toEqual(
         {uid: 'bar'}

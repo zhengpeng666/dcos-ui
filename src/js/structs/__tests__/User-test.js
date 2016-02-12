@@ -1,14 +1,14 @@
-let fixturePath = "../../../../tests/_fixtures/acl/user-with-details.json";
+var fixturePath = "../../../../tests/_fixtures/acl/user-with-details.json";
 
 jest.mock("../UsersList")
 jest.dontMock("underscore");
 jest.dontMock("../../utils/Util");
 jest.dontMock(fixturePath);
 
-let _ = require('underscore');
-let GroupsList = require('../GroupsList');
-let User = require('../User');
-let userFixture = require(fixturePath);
+var _ = require('underscore');
+var GroupsList = require('../GroupsList');
+var User = require('../User');
+var userFixture = require(fixturePath);
 userFixture.groups = userFixture.groups.array;
 
 describe('User', function () {
@@ -21,19 +21,19 @@ describe('User', function () {
   describe('#getGroups', function () {
 
     it('returns an instance of GroupsList', function () {
-      let groups = this.instance.getGroups();
+      var groups = this.instance.getGroups();
       expect(groups instanceof GroupsList).toBeTruthy();
     });
 
     it('returns a GroupsList with the number of items we provided',
       function () {
-      let groups = this.instance.getGroups().getItems();
+      var groups = this.instance.getGroups().getItems();
       expect(groups.length)
         .toEqual(2);
     });
 
     it('returns a GroupsList with the data we provided', function () {
-      let groups = this.instance.getGroups().getItems();
+      var groups = this.instance.getGroups().getItems();
       expect(groups[0].get('gid'))
         .toEqual(this.userFixture.groups[0].group.gid);
       expect(groups[1].get('gid'))
@@ -71,15 +71,15 @@ describe('User', function () {
   describe('#getUniquePermissions', function () {
 
     it('returns an array of services user has permission to', function () {
-      let permissionList = this.instance.getUniquePermissions();
+      var permissionList = this.instance.getUniquePermissions();
 
       expect(permissionList.length).toEqual(1);
       expect(permissionList[0].rid).toEqual('service.marathon');
     });
 
     it('returns empty array when user has no permissions', function () {
-      let user = new User([]);
-      let permissionList = user.getUniquePermissions();
+      var user = new User([]);
+      var permissionList = user.getUniquePermissions();
 
       expect(permissionList).toEqual([]);
     });
@@ -97,8 +97,8 @@ describe('User', function () {
         }
       };
 
-      let user = new User(rawUser);
-      let permissionList = user.getUniquePermissions();
+      var user = new User(rawUser);
+      var permissionList = user.getUniquePermissions();
 
       expect(permissionList.length).toEqual(3);
     });
@@ -108,12 +108,12 @@ describe('User', function () {
   describe('#isRemote', function () {
 
     it('returns if user is remote as a boolean', function () {
-      let isRemote = this.instance.isRemote();
+      var isRemote = this.instance.isRemote();
       expect(typeof isRemote).toEqual('boolean');
     });
 
     it('returns true if user is remote', function () {
-      let user = new User({
+      var user = new User({
         is_remote: true
       });
 

@@ -6,6 +6,13 @@ var TestUtils = require('react-addons-test-utils');
 
 var CliInstallModal = require('../CliInstallModal');
 
+// Set a new Getter. Navigator doesn't have a Setter.
+function setUserAgent(agent) {
+  window.navigator.__defineGetter__('userAgent', function () {
+    return agent;
+  });
+}
+
 describe('CliInstallModal', function () {
 
   describe('#onClose', function () {
@@ -43,9 +50,11 @@ describe('CliInstallModal', function () {
     });
 
     it('it returns different data depending on OS', function () {
-      window.navigator.userAgent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
+
+      setUserAgent('Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)');
       var firstCall = this.instance.getCliInstructions();
-      window.navigator.userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36';
+
+      setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36');
       var secondCall = this.instance.getCliInstructions();
 
       expect(firstCall).not.toEqual(secondCall);

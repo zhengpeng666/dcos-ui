@@ -52,7 +52,12 @@ describe('ChartStripes', function () {
     );
     expect(stripes.length).toEqual(6);
 
-    this.instance.setProps({count: 5});
+    this.instance = TestUtils.renderIntoDocument(
+      <ChartStripes
+        count={5}
+        height={10}
+        width={300} />
+    );
 
     stripes = TestUtils.scryRenderedDOMComponentsWithClass(
       this.instance, 'background'

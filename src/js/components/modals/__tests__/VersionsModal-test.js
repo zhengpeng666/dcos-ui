@@ -40,16 +40,20 @@ describe('VersionsModal', function () {
 
     it('should return a pre element tag', function () {
       var content = this.instance.getContent();
-      var result = JestUtil.renderAndFindTag(content, 'pre');
+      var contentInstance = TestUtils.renderIntoDocument(content);
 
+      var node = ReactDOM.findDOMNode(contentInstance);
+      var result = node.querySelector('pre');
       expect(result.tagName).toBe('PRE');
     });
 
     it('should return a pre element tag', function () {
       var content = this.instance.getContent();
-      var result = JestUtil.renderAndFindTag(content, 'pre');
+      var contentInstance = TestUtils.renderIntoDocument(content);
 
-      expect(ReactDOM.findDOMNode(result).innerHTML).toEqual('\n{\n  "foo": "bar"\n}');
+      var node = ReactDOM.findDOMNode(contentInstance);
+      var result = node.querySelector('pre');
+      expect(result.innerHTML).toEqual('{\n  "foo": "bar"\n}');
     });
 
   });

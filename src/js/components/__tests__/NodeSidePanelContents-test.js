@@ -16,6 +16,7 @@ jest.dontMock('../../utils/JestUtil');
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var JestUtil = require('../../utils/JestUtil');
@@ -139,10 +140,12 @@ describe('NodeSidePanelContents', function () {
         <NodeSidePanelContents itemID="existingNode" />
       );
 
-      var headline = JestUtil.renderAndFindTag(
-        instance.getKeyValuePairs({'foo': 'bar'}, 'baz'),
-        'h6'
+      var headlineInstance = TestUtils.renderIntoDocument(
+        instance.getKeyValuePairs({'foo': 'bar'}, 'baz')
       );
+
+      var node = ReactDOM.findDOMNode(headlineInstance);
+      var headline = node.querySelector('h6');
 
       expect(TestUtils.isDOMComponent(headline)).toEqual(true);
     });

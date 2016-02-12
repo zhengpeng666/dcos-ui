@@ -11,6 +11,7 @@ jest.dontMock('../../stores/__tests__/fixtures/state.json');
 jest.dontMock('../../utils/Util');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
@@ -47,10 +48,8 @@ describe('ServiceTable', function () {
           table.renderHealth(null, row)
         );
 
-        var fn = TestUtils.findRenderedDOMComponentWithClass.bind(TestUtils,
-          healthlabel, 'loader-small'
-        );
-        expect(fn).not.toThrow();
+        var node = ReactDOM.findDOMNode(healthlabel);
+        expect(node.classList.contains('loader-small')).toBeTruthy();
       });
     });
 

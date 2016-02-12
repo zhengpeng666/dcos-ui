@@ -71,7 +71,7 @@ describe('ServerErrorModal', function () {
     it('should return the same number of children as errors', function () {
       this.instance.state.errors = [1, 2, 3];
       var contents = this.instance.getContent();
-      var result = contents._store.props.children;
+      var result = contents.props.children;
 
       expect(result.length).toEqual(3);
     });

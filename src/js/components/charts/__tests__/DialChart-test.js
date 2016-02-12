@@ -7,15 +7,20 @@ jest.dontMock('../../../mixins/InternalStorageMixin');
 jest.dontMock('classnames');
 var DialChart = require('../DialChart');
 
+var getInstanceWithProps = function (props) {
+  return TestUtils.renderIntoDocument(
+      <DialChart {...props} />
+    );
+};
+
 describe('DialChart', function () {
 
   beforeEach(function () {
-    this.instance = TestUtils.renderIntoDocument(
-      <DialChart
-        data={[]}
-        label={'Items'}
-        unit={100} />
-    );
+    this.instance = getInstanceWithProps({
+      data: [],
+      label: 'Items',
+      unit: 100
+    });
   });
 
   describe('#getNormalizedData', function () {
@@ -71,14 +76,14 @@ describe('DialChart', function () {
   describe('#render', function () {
 
     beforeEach(function () {
-      this.instance.setProps({data: [
+      this.instance = getInstanceWithProps({data: [
         {name: 'TASK_1', value: 3},
         {name: 'TASK_2', value: 1}
       ]});
     });
 
     it('when no data is present, it renders a single \'empty\' slice to the DOM', function () {
-      this.instance.setProps({
+      this.instance = getInstanceWithProps({
         slices: [ { name: 'TASK_1' }, { name: 'TASK_2' } ],
         data: []
       });
@@ -96,7 +101,7 @@ describe('DialChart', function () {
     });
 
     it('does not remove 0-length slices from the DOM', function () {
-      this.instance.setProps({
+      this.instance = getInstanceWithProps({
         slices: [ { name: 'TASK_1' }, { name: 'TASK_2' } ],
         data: [ { name: 'TASK_1', value: 4 } ]
       });

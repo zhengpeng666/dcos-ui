@@ -18,6 +18,7 @@ jest.dontMock('../../structs/Group');
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var ACLGroupStore = require('../../stores/ACLGroupStore');
@@ -68,7 +69,9 @@ describe('GroupSidePanelContents', function () {
 
       ACLGroupStore.emit(EventTypes.ACL_GROUP_DETAILS_FETCHED_ERROR, groupID);
 
-      var text = JestUtil.renderAndFindTag(instance.render(), 'h3');
+      var node = ReactDOM.findDOMNode(instance);
+      var text = node.querySelector('h3');
+
       expect(text.textContent)
         .toEqual('Cannot Connect With The Server');
     });
@@ -86,12 +89,10 @@ describe('GroupSidePanelContents', function () {
           itemID={groupID}/>
       );
 
-      var loading = TestUtils.scryRenderedDOMComponentsWithClass(
-        instance.render(),
-        'ball-scale'
-      );
+      var node = ReactDOM.findDOMNode(instance);
+      var loading = node.querySelector('.ball-scale');
 
-      expect(loading).toEqual({});
+      expect(loading);
     });
 
     it('should not return error message or loading screen if group is found',
@@ -103,12 +104,10 @@ describe('GroupSidePanelContents', function () {
             itemID={groupID}/>
         );
 
-        var text = TestUtils.findRenderedDOMComponentWithClass(
-          instance,
-          'form-element-inline-text'
-        );
+        var node = ReactDOM.findDOMNode(instance);
+        var text = node.querySelector('.form-element-inline-text');
 
-        expect(ReactDOM.findDOMNode(text).textContent).toEqual('藍-遙 遥 悠 遼 Größe');
+        expect(text.textContent).toEqual('藍-遙 遥 悠 遼 Größe');
       }
     );
 

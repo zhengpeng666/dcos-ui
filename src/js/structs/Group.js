@@ -1,5 +1,5 @@
-import Item from './Item';
 import UsersList from './UsersList';
+import Item from './Item';
 
 module.exports = class Group extends Item {
   getPermissions() {

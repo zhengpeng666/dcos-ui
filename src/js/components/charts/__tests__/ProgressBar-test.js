@@ -24,7 +24,9 @@ describe('ProgressBar', function () {
   });
 
   it('will recieve new property for percentage value', function () {
-    this.progressbar.setProps({value: 88});
+    this.progressbar = TestUtils.renderIntoDocument(
+      <ProgressBar colorIndex={2} value={88} />
+    );
 
     var bar = TestUtils.findRenderedDOMComponentWithClass(
       this.progressbar, 'bar'

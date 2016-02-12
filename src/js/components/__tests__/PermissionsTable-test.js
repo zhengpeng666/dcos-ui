@@ -10,6 +10,7 @@ jest.dontMock('../../utils/Util');
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var ActionTypes = require('../../constants/ActionTypes');
@@ -75,30 +76,29 @@ describe('PermissionsTable', function () {
 
     it('returns a message containing the group\'s name and user\'s name',
       function () {
-      this.instance.modalContent = this.instance.getConfirmModalContent(
+      var modalContent = this.instance.getConfirmModalContent(
         [{rid: 'service.marathon', description: 'Marathon'}]
       );
 
-      var paragraphs = TestUtils.scryRenderedDOMComponentsWithTag(
-        TestUtils.renderIntoDocument(this.instance.modalContent),
-        'p'
-      );
-      expect(paragraphs[0].props.children)
+      var instance = TestUtils.renderIntoDocument(modalContent);
+      var node = ReactDOM.findDOMNode(instance);
+      var paragraphs = node.querySelector('p');
+
+      expect(paragraphs.textContent)
         .toEqual('Permission to Marathon will be removed.');
     });
 
     it('returns a message containing the error that was received',
       function () {
       this.instance.state.permissionUpdateError = 'quux';
-      this.instance.modalContent = this.instance.getConfirmModalContent(
+      var modalContent = this.instance.getConfirmModalContent(
         [{rid: 'service.marathon', description: 'Marathon'}]
       );
-      var paragraphs = TestUtils.scryRenderedDOMComponentsWithTag(
-        TestUtils.renderIntoDocument(this.instance.modalContent),
-        'p'
-      );
+      var instance = TestUtils.renderIntoDocument(modalContent);
+      var node = ReactDOM.findDOMNode(instance);
+      var paragraphs = node.querySelectorAll('p');
 
-      expect(paragraphs[1].props.children)
+      expect(paragraphs[1].textContent)
         .toEqual('quux');
     });
 
@@ -119,12 +119,11 @@ describe('PermissionsTable', function () {
       var buttonWrapper = TestUtils.renderIntoDocument(
         this.instance.renderButton('foo', {uid: 'bar'})
       );
-      var button = TestUtils.scryRenderedDOMComponentsWithClass(
-        buttonWrapper,
-        'button'
-      )[0];
 
-      TestUtils.Simulate.click(ReactDOM.findDOMNode(button));
+      var node = ReactDOM.findDOMNode(buttonWrapper);
+      var button = node.querySelector('button');
+
+      TestUtils.Simulate.click(button);
 
       expect(this.instance.handleOpenConfirm.mock.calls[0][0]).toEqual(
         {uid: 'bar'}

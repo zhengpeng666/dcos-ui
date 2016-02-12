@@ -25,6 +25,9 @@ var MesosSummaryStore = require('../../stores/MesosSummaryStore');
 var UserSidePanel = require('../UserSidePanel');
 var UserSidePanelContents = require('../UserSidePanelContents');
 
+MesosSummaryStore.setMaxListeners(100);
+ACLUserStore.setMaxListeners(100);
+
 describe('UserSidePanel', function () {
   beforeEach(function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;

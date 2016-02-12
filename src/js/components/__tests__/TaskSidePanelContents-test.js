@@ -10,10 +10,13 @@ jest.dontMock('../../utils/Util');
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var MesosStateStore = require('../../stores/MesosStateStore');
-import {TaskSidePanelContents} from '../TaskSidePanelContents';
+var TaskSidePanelContents = require('../TaskSidePanelContents');
+
+MesosStateStore.setMaxListeners(100);
 
 describe('TaskSidePanelContents', function () {
   beforeEach(function () {
@@ -56,7 +59,8 @@ describe('TaskSidePanelContents', function () {
       var instance = TestUtils.renderIntoDocument(
         <TaskSidePanelContents open={true} />
       );
-      expect(instance.render()).toEqual(null);
+      var node = ReactDOM.findDOMNode(instance);
+      expect(node).toEqual(null);
     });
 
     it('should return an element if there is a node', function () {
@@ -70,7 +74,8 @@ describe('TaskSidePanelContents', function () {
         <TaskSidePanelContents open={true} />
       );
 
-      expect(TestUtils.isElement(instance.render())).toEqual(true);
+      var node = ReactDOM.findDOMNode(instance);
+      expect(TestUtils.isDOMComponent(node)).toEqual(true);
     });
   });
 
@@ -91,6 +96,7 @@ describe('TaskSidePanelContents', function () {
         id: 'fade',
         state: 'TASK_RUNNING'
       }, {hostname: 'hello'});
+
       expect(TestUtils.isElement(result)).toEqual(true);
     });
   });

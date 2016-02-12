@@ -13,13 +13,12 @@ describe('Highlight instance', function () {
         Hello World
       </Highlight>
     );
-
-    var matches =
-      TestUtils.scryRenderedDOMComponentsWithTag(instance, 'strong');
+    var node = ReactDOM.findDOMNode(instance);
+    var match = node.querySelector('strong');
     expect(TestUtils.isCompositeComponent(instance)).toBe(true);
     expect(TestUtils.isCompositeComponentWithType(instance, Highlight))
       .toBe(true);
-    expect(ReactDOM.findDOMNode(matches[0]).textContent).toEqual('World');
+    expect(match.textContent).toEqual('World');
   });
 
   it('should have children', function () {
@@ -29,9 +28,9 @@ describe('Highlight instance', function () {
       </Highlight>
     );
 
-    var matches =
-      TestUtils.scryRenderedDOMComponentsWithClass(instance, 'highlight');
-    expect(ReactDOM.findDOMNode(instance).children.length).toEqual(3);
+    var node = ReactDOM.findDOMNode(instance);
+    var matches = node.querySelectorAll('.highlight');
+    expect(node.children.length).toEqual(3);
     expect(matches.length).toEqual(1);
 
   });
@@ -43,8 +42,8 @@ describe('Highlight instance', function () {
       </Highlight>
     );
 
-    var matches =
-      TestUtils.scryRenderedDOMComponentsWithTag(instance, 'em');
+    var node = ReactDOM.findDOMNode(instance);
+    var matches = node.querySelectorAll('em');
     expect(matches.length).toEqual(1);
   });
 
@@ -55,8 +54,8 @@ describe('Highlight instance', function () {
       </Highlight>
     );
 
-    var matches =
-      TestUtils.scryRenderedDOMComponentsWithClass(instance, 'fffffound');
+    var node = ReactDOM.findDOMNode(instance);
+    var matches = node.querySelectorAll('.fffffound');
     expect(matches.length).toEqual(1);
   });
 
@@ -67,11 +66,11 @@ describe('Highlight instance', function () {
       </Highlight>
     );
 
-    var matches =
-      TestUtils.scryRenderedDOMComponentsWithTag(instance, 'strong');
+    var node = ReactDOM.findDOMNode(instance);
+    var match = node.querySelector('strong');
 
-    expect(ReactDOM.findDOMNode(instance).className).toEqual('myHighlighter');
-    expect(ReactDOM.findDOMNode(matches[0]).className).toEqual('highlight');
+    expect(node.className).toEqual('myHighlighter');
+    expect(match.className).toEqual('highlight');
   });
 
   it('should support regular expressions in search', function () {
@@ -81,11 +80,12 @@ describe('Highlight instance', function () {
       </Highlight>
     );
 
-    var matches =
-      TestUtils.scryRenderedDOMComponentsWithTag(instance, 'strong');
-    expect(ReactDOM.findDOMNode(matches[0]).textContent).toEqual('Easy');
-    expect(ReactDOM.findDOMNode(matches[1]).textContent).toEqual('as');
-    expect(ReactDOM.findDOMNode(matches[2]).textContent).toEqual('ABC');
+    var node = ReactDOM.findDOMNode(instance);
+    var matches = node.querySelectorAll('strong');
+
+    expect(matches[0].textContent).toEqual('Easy');
+    expect(matches[1].textContent).toEqual('as');
+    expect(matches[2].textContent).toEqual('ABC');
   });
 
   it('should support escaping arbitrary string in search', function () {

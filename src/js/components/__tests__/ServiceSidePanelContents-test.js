@@ -111,9 +111,11 @@ describe('ServiceSidePanelContents', function () {
             open={false}
             itemID="service_that_does_not_exist"/>
         );
+        var detailsInstance = TestUtils.renderIntoDocument(instance.renderDetailsTabView());
+        var node = ReactDOM.findDOMNode(detailsInstance);
+        var info = node.querySelector('h2');
 
-        var info = JestUtil.renderAndFindTag(instance.renderDetailsTabView(), 'h2');
-        expect(ReactDOM.findDOMNode(info).textContent)
+        expect(info.textContent)
           .toEqual('No information available.');
       });
 

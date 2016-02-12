@@ -4,6 +4,7 @@ jest.dontMock('../../utils/DOMUtils');
 
 var _ = require('underscore');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var BannerPlugin = require('../BannerPlugin');
@@ -114,25 +115,21 @@ describe('BannerPlugin', function () {
     });
 
     it('should call once with one click', function () {
-      var infoIcon = TestUtils.findRenderedDOMComponentWithClass(
-        this.instance,
-        'banner-plugin-info-icon'
-      );
+      var node = ReactDOM.findDOMNode(this.instance);
+      var el = node.querySelector('.banner-plugin-info-icon');
 
-      TestUtils.Simulate.click(infoIcon);
+      TestUtils.Simulate.click(el);
       expect(BannerPlugin.toggleFullContent.callCount).toEqual(1);
     });
 
     it('should call n times with n clicks', function () {
-      var infoIcon = TestUtils.findRenderedDOMComponentWithClass(
-        this.instance,
-        'banner-plugin-info-icon'
-      );
+      var node = ReactDOM.findDOMNode(this.instance);
+      var el = node.querySelector('.banner-plugin-info-icon');
 
-      TestUtils.Simulate.click(infoIcon);
-      TestUtils.Simulate.click(infoIcon);
-      TestUtils.Simulate.click(infoIcon);
-      TestUtils.Simulate.click(infoIcon);
+      TestUtils.Simulate.click(el);
+      TestUtils.Simulate.click(el);
+      TestUtils.Simulate.click(el);
+      TestUtils.Simulate.click(el);
       expect(BannerPlugin.toggleFullContent.callCount).toEqual(4);
     });
 
@@ -140,10 +137,14 @@ describe('BannerPlugin', function () {
 
   describe('#applicationRendered', function () {
     beforeEach(function () {
+      this.mockFn = jasmine.createSpy('ContentWindow Spy');
       this.iframe = document.createElement('iframe');
+      var mockFn = this.mockFn;
+      this.iframe.__defineGetter__('contentWindow', function () {
+          return {addEventListener: mockFn};
+        });
       document.getElementById = jasmine.createSpy('HTML Element')
         .andReturn(this.iframe);
-      spyOn(this.iframe.contentWindow, 'addEventListener');
 
     });
 
@@ -178,9 +179,9 @@ describe('BannerPlugin', function () {
       var instance = TestUtils.renderIntoDocument(
         BannerPlugin.applicationContents()
       );
-      var iframe = TestUtils.findRenderedDOMComponentWithTag(
-        instance, 'iframe'
-      );
+
+      var node = ReactDOM.findDOMNode(instance);
+      var iframe = node.querySelector('iframe');
 
       expect(TestUtils.isDOMComponent(iframe)).toBeTruthy();
     });
