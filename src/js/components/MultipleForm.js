@@ -1,7 +1,8 @@
 import _ from 'underscore';
+import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
 
-// import FormPanel from './FormPanel';
+import FormPanel from './FormPanel';
 import SideTabs from './SideTabs';
 
 const METHODS_TO_BIND = ['handleFormChange', 'handleTabClick'];
@@ -12,6 +13,7 @@ export default class MultipleForm extends React.Component {
 
     this.state = {
       currentTab: '',
+      useGemini: false,
       model: {}
     };
 
@@ -24,6 +26,10 @@ export default class MultipleForm extends React.Component {
     this.setState({
       currentTab: Object.keys(this.props.multipleDefinition)[0]
     });
+  }
+
+  componentDidMount() {
+    this.setState({useGemini: true});
   }
 
   handleTabClick(tab) {
@@ -59,6 +65,54 @@ export default class MultipleForm extends React.Component {
     );
   }
 
+  getSideTabs(multipleDefinition) {
+    var tabs = (
+      <SideTabs
+        onTabClick={this.handleTabClick}
+        selectedTab={this.state.currentTab}
+        tabs={_.values(multipleDefinition)} />
+    );
+
+    if (this.state.useGemini) {
+      return (
+        <GeminiScrollbar autoshow={true} className="column-4">
+          {this.getServiceHeader()}
+          {tabs}
+        </GeminiScrollbar>
+      );
+    }
+
+    return (
+      <div className="column-4">
+        {this.getServiceHeader()}
+        {tabs}
+      </div>
+    );
+  }
+
+  getFormPanel(selectedTabDefinition) {
+    var panel = (
+      <FormPanel
+        definition={selectedTabDefinition.definition}
+        description={selectedTabDefinition.description}
+        title={selectedTabDefinition.title} />
+    );
+
+    if (this.state.useGemini) {
+      return (
+        <GeminiScrollbar autoshow={true} className="column-8">
+          {panel}
+        </GeminiScrollbar>
+      );
+    }
+
+    return (
+      <div className="column-8">
+        {panel}
+      </div>
+    );
+  }
+
   render() {
     let multipleDefinition = this.props.multipleDefinition;
     let selectedTabDefinition = multipleDefinition[this.state.currentTab];
@@ -67,23 +121,12 @@ export default class MultipleForm extends React.Component {
     }
 
     return (
-      <div className="flex-row">
-        <div className="column-4">
-          {this.getServiceHeader()}
-          <SideTabs
-            onTabClick={this.handleTabClick}
-            selectedTab={this.state.currentTab}
-            tabs={_.values(multipleDefinition)} />
-        </div>
-        <div className="column-8">
-        </div>
+      <div className="row row-flex multiple-form">
+        {this.getSideTabs(multipleDefinition)}
+        {this.getFormPanel(selectedTabDefinition)}
       </div>
     );
   }
-          // <FormPanel
-          //   definition={selectedTabDefinition.definition}
-          //   description={selectedTabDefinition.description}
-          //   title={selectedTabDefinition.title} />
 }
 
 MultipleForm.defaultProps = {
@@ -113,17 +156,6 @@ MultipleForm.defaultProps = {
           writeType: 'input',
           validation: function () { return true; },
           value: ''
-        },
-        {
-          fieldType: 'text',
-          name: 'Memory',
-          placeholder: 'Memory',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
         }
       ]
     },
@@ -141,81 +173,103 @@ MultipleForm.defaultProps = {
       description: 'Lorem ipsum dolor sit amet',
       definition: [
         {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
+          name: 'Subheader',
+          definition: [
+            {
+              fieldType: 'text',
+              name: 'Framework Name',
+              placeholder: 'Framework Name',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: ''
+            }
+          ]
         },
+
         {
-          fieldType: 'text',
-          name: 'CPU',
-          placeholder: 'CPU',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        },
-        {
-          fieldType: 'text',
-          name: 'Memory',
-          placeholder: 'Memory',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        },
-        {
-          fieldType: 'text',
-          name: 'CPU',
-          placeholder: 'CPU',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        },
-        {
-          fieldType: 'text',
-          name: 'Memory',
-          placeholder: 'Memory',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        },
-        {
-          fieldType: 'text',
-          name: 'CPU',
-          placeholder: 'CPU',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        },
-        {
-          fieldType: 'text',
-          name: 'Memory',
-          placeholder: 'Memory',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
+          name: 'Subheader 2',
+          definition: [
+            {
+              fieldType: 'text',
+              name: 'Hostname',
+              placeholder: 'Hostname',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: ''
+            },
+            {
+              fieldType: 'text',
+              name: 'CPU',
+              placeholder: 'CPU',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: ''
+            },
+            {
+              fieldType: 'text',
+              name: 'Memory',
+              placeholder: 'Memory',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: ''
+            },
+            {
+              fieldType: 'text',
+              name: 'CPU',
+              placeholder: 'CPU',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: ''
+            },
+            {
+              fieldType: 'text',
+              name: 'Memory',
+              placeholder: 'Memory',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: ''
+            },
+            {
+              fieldType: 'text',
+              name: 'CPU',
+              placeholder: 'CPU',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: ''
+            },
+            {
+              fieldType: 'text',
+              name: 'Memory',
+              placeholder: 'Memory',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: ''
+            }
+          ]
         }
       ]
     },
