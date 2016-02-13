@@ -46,14 +46,7 @@ export default class TaskSidePanelContents extends SidePanelContents {
         return;
       }
 
-      let completed = TaskStates[task.state].stateTypes[0] === 'completed';
-
-      if (completed) {
-        delete this.tabs_tabs.files;
-        this.setState({currentTab: Object.keys(this.tabs_tabs)[0]});
-      } else {
-        this.tabs_tabs = _.clone(TABS);
-      }
+      this.tabs_tabs = _.clone(TABS);
     }
   }
 

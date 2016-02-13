@@ -7,6 +7,20 @@ import Config from '../config/Config';
 import MesosStateStore from '../stores/MesosStateStore';
 import RequestUtil from '../utils/RequestUtil';
 
+function findWithID(stateObject, listProps, id) {
+  let idCondition = {id};
+  let framework;
+  let length = listProps.length;
+  for (let i = 0; i < length; i++) {
+    framework = _.findWhere(stateObject[listProps[i]], idCondition);
+    if (framework) {
+      return framework;
+    }
+  }
+
+  return null;
+}
+
 var TaskDirectoryActions = {
   getDownloadURL: function (nodeID, path) {
     return `${Config.rootUrl}/slave/${nodeID}/files/download.json?` +
@@ -23,40 +37,29 @@ var TaskDirectoryActions = {
   getInnerPath: function (nodeState, task, innerPath) {
     innerPath = innerPath || '';
 
-    let taskFramework = _.find(nodeState.frameworks, function (framework) {
-      return framework.id === task.framework_id;
-    });
+    // Search frameworks
+    let framework = findWithID(
+      nodeState,
+      ['frameworks', 'completed_frameworks'],
+      task.framework_id
+    );
 
-    if (!taskFramework) {
+    if (!framework) {
       return null;
     }
 
-    function executorSearch(executor) {
-      let found = null;
+    // Search executors
+    let executor = findWithID(
+      framework,
+      ['executors', 'completed_executors'],
+      task.id
+    );
 
-      function taskIDSearch(executorTask) {
-        return executorTask.id === task.id;
-      }
-
-      found = _.some(executor.tasks, taskIDSearch);
-      if (!found) {
-        found = _.some(executor.completed_tasks, taskIDSearch);
-      }
-
-      return found;
+    if (!executor) {
+      return null;
     }
 
-    // Search running executors
-    let taskExecutor = _.find(taskFramework.executors, executorSearch);
-    if (!taskExecutor) {
-      // Search completed executors
-      taskExecutor = _.find(taskFramework.completed_executors, executorSearch);
-      if (!taskExecutor) {
-        return null;
-      }
-    }
-
-    return `${taskExecutor.directory}/${innerPath}`;
+    return `${executor.directory}/${innerPath}`;
   },
 
   fetchNodeState: RequestUtil.debounceOnError(
