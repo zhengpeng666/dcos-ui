@@ -219,10 +219,10 @@ var ServicesTable = React.createClass({
     );
   },
 
-  getRowAttributes: function (service) {
+  getRowAttributes: function () {
     return {
       className: 'service-table-row'
-    }
+    };
   },
 
   render: function () {
