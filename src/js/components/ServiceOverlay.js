@@ -94,7 +94,7 @@ class ServiceOverlay extends mixin(InternalStorageMixin) {
     }
 
     // Remove the div that we created at the root of the dom.
-    React.unmountComponentAtNode(overlayEl);
+    ReactDOM.unmountComponentAtNode(overlayEl);
     document.body.removeChild(overlayEl);
     this.internalStorage_update({overlayEl: null});
   }
