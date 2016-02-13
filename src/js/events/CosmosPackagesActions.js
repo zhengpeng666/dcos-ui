@@ -77,4 +77,26 @@ const CosmosPackagesActions = {
 
 };
 
+if (Config.useFixtures) {
+  let packageDescribeFixture = require('json!../../../tests/_fixtures/cosmos/package-describe.json');
+  let packagesListFixture = require('json!../../../tests/_fixtures/cosmos/packages-list.json');
+  let packagesSearchFixture = require('json!../../../tests/_fixtures/cosmos/packages-search.json');
+
+  if (!global.actionTypes) {
+    global.actionTypes = {};
+  }
+
+  global.actionTypes.CosmosPackagesActions = {
+    describe: {event: 'success', success: {response: packageDescribeFixture}},
+    list: {event: 'success', success: {response: packagesListFixture}},
+    search: {event: 'success', success: {response: packagesSearchFixture}}
+  };
+
+  Object.keys(global.actionTypes.CosmosPackagesActions).forEach(function (method) {
+    CosmosPackagesActions[method] = RequestUtil.stubRequest(
+      CosmosPackagesActions, 'CosmosPackagesActions', method
+    );
+  });
+}
+
 module.exports = CosmosPackagesActions;
