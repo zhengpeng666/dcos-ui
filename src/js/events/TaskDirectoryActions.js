@@ -10,7 +10,8 @@ import RequestUtil from '../utils/RequestUtil';
 function findWithID(stateObject, listProps, id) {
   let idCondition = {id};
   let framework;
-  for (let i = 0, len = listProps.length; i < len; i++) {
+  let length = listProps.length;
+  for (let i = 0; i < length; i++) {
     framework = _.findWhere(stateObject[listProps[i]], idCondition);
     if (framework) {
       return framework;
