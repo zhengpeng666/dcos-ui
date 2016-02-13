@@ -92,7 +92,7 @@ describe('GroupSidePanelContents', function () {
       var node = ReactDOM.findDOMNode(instance);
       var loading = node.querySelector('.ball-scale');
 
-      expect(loading);
+      expect(loading).toBeTruthy();
     });
 
     it('should not return error message or loading screen if group is found',

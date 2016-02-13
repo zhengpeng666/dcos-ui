@@ -210,13 +210,14 @@ var NodesGridView = React.createClass({
     var resourcesByFramework = this.internalStorage_get().resourcesByFramework;
     var serviceFilter = this.props.serviceFilter;
 
-    return _.mapObject(resourcesByFramework, function (host) {
+    return Object.entries(resourcesByFramework).reduce((obj, [key, host]) => {
       if (serviceFilter == null) {
-        return host;
+        obj[key] = host;
       } else {
-        return _.pick(host, serviceFilter);
+        obj[key] = _.pick(host, serviceFilter);
       }
-    });
+      return obj;
+    }, {});
   },
 
   getNodesGrid: function () {

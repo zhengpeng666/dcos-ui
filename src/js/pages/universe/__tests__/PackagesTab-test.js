@@ -12,8 +12,9 @@ Config.useFixtures = true;
 require('../../../utils/StoreMixinConfig');
 Config.useFixtures = configUseFixtures;
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var CosmosPackagesStore = require('../../../stores/CosmosPackagesStore');
 var PackagesTab = require('../PackagesTab');
@@ -33,7 +34,7 @@ describe('PackagesTab', function () {
     });
 
     it('should call handler when panel is clicked', function () {
-      var panel = React.findDOMNode(this.instance)
+      var panel = ReactDOM.findDOMNode(this.instance)
         .querySelector('.panel.clickable');
       TestUtils.Simulate.click(panel);
 
@@ -42,7 +43,7 @@ describe('PackagesTab', function () {
     });
 
     it('shouldn\'t call handler when panel button is clicked', function () {
-      var panelButton = React.findDOMNode(this.instance)
+      var panelButton = ReactDOM.findDOMNode(this.instance)
         .querySelector('.panel .button');
       TestUtils.Simulate.click(panelButton);
 
@@ -60,7 +61,7 @@ describe('PackagesTab', function () {
     });
 
     it('should call handler when panel button is clicked', function () {
-      var panelButton = React.findDOMNode(this.instance)
+      var panelButton = ReactDOM.findDOMNode(this.instance)
         .querySelector('.panel .button');
       TestUtils.Simulate.click(panelButton);
 
@@ -70,7 +71,7 @@ describe('PackagesTab', function () {
     });
 
     it('shouldn\'t call handler when panel is clicked', function () {
-      var panel = React.findDOMNode(this.instance)
+      var panel = ReactDOM.findDOMNode(this.instance)
         .querySelector('.panel.clickable');
       TestUtils.Simulate.click(panel);
 

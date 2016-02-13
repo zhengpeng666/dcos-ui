@@ -11,9 +11,6 @@ import RequestErrorMsg from '../components/RequestErrorMsg';
 import UserGroupTable from './UserGroupTable';
 import Util from '../utils/Util';
 
-ACLGroupStore.setMaxListeners(100);
-ACLGroupsStore.setMaxListeners(100);
-
 const DEFAULT_ID = 'default-placeholder-group-id';
 
 const METHODS_TO_BIND = [
