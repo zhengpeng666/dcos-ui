@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
@@ -20,7 +21,8 @@ class PackagesTab extends mixin(StoreMixin) {
 
     this.state = {
       advancedModalOpen: false,
-      installModalPackage: false
+      installModalPackage: false,
+      sortProp: 'packageName'
     };
 
     this.store_listeners = [
@@ -79,31 +81,36 @@ class PackagesTab extends mixin(StoreMixin) {
   }
 
   getPackages() {
-    return CosmosPackagesStore.get('availablePackages').getItems()
-      .map((cosmosPackage, index) => {
-        return (
-          <div
-            className="grid-item column-small-6 column-medium-4 column-large-3"
-            key={index}>
-            <Panel
-              className="panel clickable"
-              contentClass="panel-content horizontal-center short"
-              footer={this.getFooter(cosmosPackage)}
-              footerClass="panel-footer horizontal-center panel-footer-no-top-border short"
-              heading={this.getHeading(cosmosPackage)}
-              headingClass="panel-heading horizontal-center"
-              onClick={this.handleDetailOpen.bind(this, cosmosPackage)}>
-              <div className="h2 inverse flush-top short-bottom">
-                {cosmosPackage.get('packageName')}
-              </div>
-              <p className="inverse flush-bottom">
-                {cosmosPackage.get('currentVersion')}
-              </p>
-            </Panel>
-          </div>
-        );
+    let sortProp = this.state.sortProp;
+    return _.sortBy(
+      CosmosPackagesStore.get('availablePackages').getItems(),
+      function (cosmosPackage) {
+        return cosmosPackage.get(sortProp);
       }
-    );
+    )
+    .map((cosmosPackage, index) => {
+      return (
+        <div
+          className="grid-item column-small-6 column-medium-4 column-large-3"
+          key={index}>
+          <Panel
+            className="panel clickable"
+            contentClass="panel-content horizontal-center short"
+            footer={this.getFooter(cosmosPackage)}
+            footerClass="panel-footer horizontal-center panel-footer-no-top-border short"
+            heading={this.getHeading(cosmosPackage)}
+            headingClass="panel-heading horizontal-center"
+            onClick={this.handleDetailOpen.bind(this, cosmosPackage)}>
+            <div className="h2 inverse flush-top short-bottom">
+              {cosmosPackage.get('packageName')}
+            </div>
+            <p className="inverse flush-bottom">
+              {cosmosPackage.get('currentVersion')}
+            </p>
+          </Panel>
+        </div>
+      );
+    });
   }
 
   render() {
