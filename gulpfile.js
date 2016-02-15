@@ -51,7 +51,7 @@ gulp.task("connect:server", function () {
 
 // Create a function so we can use it inside of webpack's watch function.
 function eslintFn () {
-  return gulp.src([config.dirs.srcJS + "/**/*.?(js|jsx)"])
+  return gulp.src([config.dirs.srcJS + "/**/*.?(js|jsx)", '!**/__tests__/**/*'])
     .pipe(eslint())
     .pipe(eslint.formatEach("stylish", process.stderr));
 };
