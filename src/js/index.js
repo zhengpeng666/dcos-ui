@@ -10,9 +10,11 @@ global.addEventListener('beforeunload', function () {
 });
 
 import _ from 'underscore';
+import {Provider} from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Router from 'react-router';
+import PluginBridge from './pluginBridge/PluginBridge';
 
 require('./utils/MomentJSConfig');
 require('./utils/ReactSVG');
@@ -21,6 +23,7 @@ require('./utils/StoreMixinConfig');
 import ApplicationLoader from './pages/ApplicationLoader';
 import appRoutes from './routes/index';
 var Config = require('./config/Config');
+var PluginConfig = require('../../plugins/config');
 import Plugins from './plugins/Plugins';
 import RequestUtil from './utils/RequestUtil';
 
@@ -54,11 +57,17 @@ function createRoutes(routes) {
   });
 }
 
+PluginBridge.initialize(PluginConfig);
+
 function onApplicationLoad() {
   // Allow overriding of application contents
   let contents = Plugins.applyFilter('applicationContents', null);
   if (contents) {
-    ReactDOM.render(contents, domElement);
+    ReactDOM.render(
+      (<Provider store={PluginBridge.Store}>
+        contents
+      </Provider>),
+      domElement);
   } else {
     setTimeout(function () {
       let builtRoutes = createRoutes(
@@ -68,7 +77,10 @@ function onApplicationLoad() {
       Router.run(builtRoutes[0], function (Handler, state) {
         Config.setOverrides(state.query);
         ReactDOM.render(
-          <Handler state={state} />, domElement);
+          (<Provider store={PluginBridge.Store}>
+            <Handler state={state} />
+          </Provider>),
+          domElement);
       });
     });
   }
@@ -77,6 +89,8 @@ function onApplicationLoad() {
 }
 
 ReactDOM.render(
-  <ApplicationLoader onApplicationLoad={onApplicationLoad} />,
+  (<Provider store={PluginBridge.Store}>
+    <ApplicationLoader onApplicationLoad={onApplicationLoad} />
+  </Provider>),
   domElement
 );
