@@ -20,12 +20,11 @@ var TaskDirectoryActions = require('../../events/TaskDirectoryActions');
 var TaskDirectoryStore = require('../../stores/TaskDirectoryStore');
 var TaskDebugView = require('../TaskDebugView');
 
-// Increase max listeners to avoid EventEmitter memory leak warning
-// for too many listeners listing to MESOS_LOG_CHANGE
-TaskDirectoryStore.setMaxListeners(100);
-
 describe('TaskDebugView', function () {
   beforeEach(function () {
+    // Increase max listeners to avoid EventEmitter memory leak warning
+    // for too many listeners listing to MESOS_LOG_CHANGE
+    TaskDirectoryStore.setMaxListeners(100);
 
     // Store original versions
     this.storeGetDirectory = TaskDirectoryStore.getDirectory;

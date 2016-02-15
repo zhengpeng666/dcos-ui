@@ -16,10 +16,10 @@ var TestUtils = require('react-addons-test-utils');
 var MesosStateStore = require('../../stores/MesosStateStore');
 var TaskSidePanelContents = require('../TaskSidePanelContents');
 
-MesosStateStore.setMaxListeners(100);
-
 describe('TaskSidePanelContents', function () {
   beforeEach(function () {
+    MesosStateStore.setMaxListeners(100);
+
     this.storeGet = MesosStateStore.get;
     this.storeChangeListener = MesosStateStore.addChangeListener;
 

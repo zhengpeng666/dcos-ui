@@ -20,9 +20,6 @@ var ACLUsersStore = require('../../stores/ACLUsersStore');
 var GroupUserMembershipTab = require('../GroupUserMembershipTab');
 var Group = require('../../structs/Group');
 
-ACLGroupStore.setMaxListeners(100);
-ACLGroupsStore.setMaxListeners(100);
-
 const groupDetailsFixture =
   require('../../../../tests/_fixtures/acl/group-with-details.json');
 groupDetailsFixture.permissions = groupDetailsFixture.permissions.array;
@@ -31,6 +28,9 @@ groupDetailsFixture.users = groupDetailsFixture.users.array;
 describe('GroupUserMembershipTab', function () {
 
   beforeEach(function () {
+    ACLGroupStore.setMaxListeners(100);
+    ACLGroupsStore.setMaxListeners(100);
+
     this.groupStoreGetGroup = ACLGroupStore.getGroup;
 
     ACLGroupStore.getGroup = function (groupID) {
