@@ -1,12 +1,16 @@
-var _ = require('underscore');
-
 const StringUtil = {
-  filterByString: function (objects, key, searchString) {
+  filterByString: function (objects, getter, searchString) {
     var regex = StringUtil.escapeForRegExp(searchString);
     var searchPattern = new RegExp(regex, 'i');
 
-    return _.filter(objects, function (obj) {
-      return searchPattern.test(obj[key]);
+    if (typeof getter === 'function') {
+      return objects.filter(function (obj) {
+        return searchPattern.test(getter(obj));
+      });
+    }
+
+    return objects.filter(function (obj) {
+      return searchPattern.test(obj[getter]);
     });
   },
 
