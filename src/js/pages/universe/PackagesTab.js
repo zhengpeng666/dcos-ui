@@ -7,12 +7,14 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import AdvancedConfigModal from '../../components/AdvancedConfigModal';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
+import FilterInputText from '../../components/FilterInputText';
 import Panel from '../../components/Panel';
 
 const METHODS_TO_BIND = [
   'handleAdvancedModalClose',
   'handleAdvancedModalOpen',
-  'handleInstallModalClose'
+  'handleInstallModalClose',
+  'handleSearchStringChange'
 ];
 
 class PackagesTab extends mixin(StoreMixin) {
@@ -62,6 +64,10 @@ class PackagesTab extends mixin(StoreMixin) {
     this.setState({installModalPackage: cosmosPackage});
   }
 
+  handleSearchStringChange(searchString) {
+    this.setState({searchString});
+  }
+
   getFooter(cosmosPackage) {
     return (
       <button
@@ -81,14 +87,13 @@ class PackagesTab extends mixin(StoreMixin) {
   }
 
   getPackages() {
-    let sortProp = this.state.sortProp;
-    return _.sortBy(
-      CosmosPackagesStore.get('availablePackages').getItems(),
-      function (cosmosPackage) {
-        return cosmosPackage.get(sortProp);
-      }
-    )
-    .map((cosmosPackage, index) => {
+    let {searchString, sortProp} = this.state;
+    let packages = CosmosPackagesStore.get('availablePackages')
+      .filterItems(searchString);
+
+    return _.sortBy(packages.getItems(), function (cosmosPackage) {
+      return cosmosPackage.get(sortProp);
+    }).map((cosmosPackage, index) => {
       return (
         <div
           className="grid-item column-small-6 column-medium-4 column-large-3"
@@ -114,19 +119,29 @@ class PackagesTab extends mixin(StoreMixin) {
   }
 
   render() {
-    let {advancedModalOpen} = this.state;
+    let {state} = this;
 
     return (
-      <div className="grid row">
-        <button
-          className="button button-success"
-          onClick={this.handleAdvancedModalOpen}>
-          Open Advanced Configuration
-        </button><br/>
+      <div>
+        <div className="control-group form-group flex-no-shrink flex-align-right flush-bottom">
+          <FilterInputText
+            className="flex-grow"
+            placeholder="Search"
+            searchString={state.searchString}
+            handleFilterChange={this.handleSearchStringChange}
+            inverseStyle={true} />
+          <button
+            className="button button-success"
+            onClick={this.handleAdvancedModalOpen}>
+            Open Advanced Configuration
+          </button>
+        </div>
+        <div className="grid row">
+          {this.getPackages()}
+        </div>
         <AdvancedConfigModal
-          open={advancedModalOpen}
+          open={state.advancedModalOpen}
           onClose={this.handleAdvancedModalClose}/>
-        {this.getPackages()}
       </div>
     );
   }

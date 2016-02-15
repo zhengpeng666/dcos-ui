@@ -1,4 +1,5 @@
 import List from './List';
+import StringUtil from '../utils/StringUtil';
 import UniversePackage from './UniversePackage';
 
 class UniversePackagesList extends List {
@@ -13,6 +14,20 @@ class UniversePackagesList extends List {
         return new UniversePackage(item);
       }
     });
+  }
+
+  filterItems(filterText) {
+    let packages = this.getItems();
+
+    if (filterText) {
+      packages = StringUtil.filterByString(packages, function (cosmosPackage) {
+        return cosmosPackage.get('packageName') + ' '
+          + cosmosPackage.get('description') + ' '
+          + cosmosPackage.get('tags').join(' ');
+      }, filterText);
+    }
+
+    return new UniversePackagesList({items: packages});
   }
 }
 
