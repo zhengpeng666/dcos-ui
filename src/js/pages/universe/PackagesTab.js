@@ -113,7 +113,7 @@ class PackagesTab extends mixin(StoreMixin) {
       <div className="grid row">
         <button
           className="button button-success"
-          onClick={this.handleButtonClick}>
+          onClick={this.handleAdvancedModalOpen}>
           Open Advanced Configuration
         </button><br/>
         <AdvancedConfigModal
