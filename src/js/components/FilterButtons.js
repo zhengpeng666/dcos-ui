@@ -1,24 +1,20 @@
 import classNames from 'classnames';
 import React from 'react';
 
-export default class FilterButtons extends React.Component {
+class FilterButtons extends React.Component {
 
   getCountByKey(items, key) {
+    let counts = {};
     key = key.toLowerCase();
 
-    let counts = items.reduce(function (accumulated, item) {
+    items.forEach(function (item) {
       let value = item[key];
       if (typeof value === 'string') {
         value = value.toLowerCase();
       }
 
-      if (accumulated[value] === undefined) {
-        accumulated[value] = 1;
-      } else {
-        accumulated[value] += 1;
-      }
-      return accumulated;
-    }, {});
+      counts[value] = (counts[value] + 1) || 1;
+    });
 
     // Include a key 'all' that is the total itemList size.
     counts.all = items.length;
@@ -41,7 +37,7 @@ export default class FilterButtons extends React.Component {
           key={filter}
           className={classSet}
           onClick={this.props.getfilterChangeHandler(filter)}>
-          {this.props.buttonContent(filter, filterCount[filter])}
+          {this.props.buttonContentFunction(filter, filterCount[filter])}
         </button>
       );
     });
@@ -57,12 +53,12 @@ export default class FilterButtons extends React.Component {
 }
 
 FilterButtons.defaultProps = {
-  buttonContent: function (title) {return title; }
+  buttonContentFunction: function (title) {return title; }
 };
 
 FilterButtons.propTypes = {
   // Optional function to generate button text. args: (filter, count)
-  buttonContent: React.PropTypes.func,
+  buttonContentFunction: React.PropTypes.func,
   filters: React.PropTypes.array,
   // The key in itemList that is being filtered
   filterByKey: React.PropTypes.string.isRequired,
@@ -72,3 +68,5 @@ FilterButtons.propTypes = {
   // The filter in props.filters that is currently selected.
   selectedFilter: React.PropTypes.string
 };
+
+module.exports = FilterButtons;

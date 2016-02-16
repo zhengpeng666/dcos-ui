@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import classNames from 'classnames';
 import {Link} from 'react-router';
 import React from 'react';
 import {Table} from 'reactjs-components';
@@ -64,16 +65,11 @@ class ComponentsHealthTab extends React.Component {
   }
 
   getButtonContent(filterName, count) {
-    let dotClassSet = 'dot ';
-
-    switch (filterName) {
-      case 'healthy':
-        dotClassSet += 'success';
-        break;
-      case 'unhealthy':
-        dotClassSet += 'danger';
-        break;
-    }
+    let dotClassSet = classNames({
+      'dot': filterName !== 'all',
+      'danger': filterName === 'unhealthy',
+      'success': filterName === 'healthy'
+    });
 
     return (
       <span className="button-align-content">
@@ -200,7 +196,7 @@ class ComponentsHealthTab extends React.Component {
           <ul className="list list-unstyled list-inline flush-bottom">
             <li>
               <FilterButtons
-                buttonContent={this.getButtonContent}
+                buttonContentFunction={this.getButtonContent}
                 filters={['all', 'healthy', 'unhealthy']}
                 filterByKey={'title'}
                 getfilterChangeHandler={this.getHandleHealthFilterChange}
