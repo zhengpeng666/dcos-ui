@@ -1,29 +1,39 @@
 import _ from 'underscore';
 import AppReducer from './AppReducer';
 import Config from '../config/Config';
-import {createStore, combineReducers, applyMiddleware} from 'redux';
-// import createLogger from 'redux-logger';
+import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 
 const APP_NAMESPACE = 'app';
+const initialState = {};
 const middleware = [];
 const reducers = {
   [APP_NAMESPACE]: AppReducer
 };
 
-// Push Dev middleware to observe actions and state
+// Default pass through function when devTools are not enabled
+let devToolIfEnabled = f => f;
+
+// Inject middleware to observe actions and state
 if (Config.environment === 'development'
   && Config
   .uiConfigurationFixture
   .uiConfiguration
-  .enableDevTools) {
+  .enableDevTools
+  && window.devToolsExtension) {
 
-  // middleware.push(createLogger());
+  // Use Chrome extension if available
+  // https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
+  devToolIfEnabled = window.devToolsExtension();
 }
 
 // Create Redux Store
 const Store = createStore(
   combineReducers(reducers),
-  applyMiddleware(...middleware)
+  initialState,
+  compose(
+    applyMiddleware(...middleware),
+    devToolIfEnabled
+  )
 );
 
 /**
