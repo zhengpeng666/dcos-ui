@@ -1,6 +1,6 @@
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import mixin from 'reactjs-mixin';
 import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ReactDOM from 'react-dom';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
