@@ -1,6 +1,6 @@
-var _ = require('underscore');
 var React = require('react');
 
+var Util = require('../../utils/Util');
 var Chart = require('./Chart');
 var TimeSeriesChart = require('./TimeSeriesChart');
 var TimeSeriesLabel = require('./TimeSeriesLabel');
@@ -23,12 +23,9 @@ var TaskFailureTimeSeriesChart = React.createClass({
   },
 
   getLatestPercent: function (data) {
-    let index = data.length - 1;
-    for (; index >= 0; index--) {
-      if (data[index].rate != null) {
-        break;
-      }
-    }
+    let index = Util.findLastIndex(data, function (obj) {
+      return obj.rate != null;
+    });
 
     if (index < 0) {
       index = 0;

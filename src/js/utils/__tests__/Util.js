@@ -1,8 +1,59 @@
+var _ = require('underscore');
 jest.dontMock('../Util');
 
 var Util = require('../Util');
 
 describe('Util', function () {
+  describe('#mapObject', function () {
+    var obj = {a: 1, b: 2};
+
+    it('should map objects', function () {
+      var newObj = Util.mapObject(obj, function (val) {
+        return val * 2;
+      });
+      expect(_.isEqual(newObj, {a: 2, b: 4})).toBeTruthy();
+    });
+
+    it('should work on empty Objects', function () {
+      var newObj = Util.mapObject({}, function (val) {
+        return val + 2;
+      });
+      expect(_.isEqual(newObj, {})).toBeTruthy();
+    });
+
+  });
+
+  describe('#findLastIndex', function () {
+    it('should return -1 if empty array', function () {
+      var array = [];
+      var index = Util.findLastIndex(array, function (obj) {
+        return obj === 1;
+      });
+      expect(index).toEqual(-1);
+    });
+    it('should return -1 if not found', function () {
+      var array = [1, 2, 3, 4, 5];
+      var index = Util.findLastIndex(array, function (obj) {
+        return obj === 6;
+      });
+      expect(index).toEqual(-1);
+    });
+    it('should return 4', function () {
+      var array = [3, 3, 2, 3, 3, 5];
+      var index = Util.findLastIndex(array, function (obj) {
+        return obj === 3;
+      });
+      expect(index).toEqual(4);
+    });
+    it('should return 1', function () {
+      var array = [{a: 'a', b: 'bbb'}, {a: 'a', b: 'bbb'}, {a: 'a', b: 'b'}];
+      var index = Util.findLastIndex(array, function (obj) {
+        return obj.b === 'bbb';
+      });
+      expect(index).toEqual(1);
+    });
+  });
+
   describe('#isArray', function () {
     it('should return true if passed an array', function () {
       var result = Util.isArray([]);

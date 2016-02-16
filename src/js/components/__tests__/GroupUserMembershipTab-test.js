@@ -28,9 +28,6 @@ groupDetailsFixture.users = groupDetailsFixture.users.array;
 describe('GroupUserMembershipTab', function () {
 
   beforeEach(function () {
-    ACLGroupStore.setMaxListeners(100);
-    ACLGroupsStore.setMaxListeners(100);
-
     this.groupStoreGetGroup = ACLGroupStore.getGroup;
 
     ACLGroupStore.getGroup = function (groupID) {

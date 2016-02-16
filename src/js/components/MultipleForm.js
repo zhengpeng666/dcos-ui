@@ -7,7 +7,7 @@ import SideTabs from './SideTabs';
 
 const METHODS_TO_BIND = ['handleFormChange', 'handleTabClick'];
 
-export default class MultipleForm extends React.Component {
+class MultipleForm extends React.Component {
   constructor() {
     super();
 
@@ -303,3 +303,5 @@ MultipleForm.propTypes = {
   serviceName: React.PropTypes.string,
   serviceVersion: React.PropTypes.string
 };
+
+module.exports = MultipleForm;

@@ -22,10 +22,6 @@ var TaskDebugView = require('../TaskDebugView');
 
 describe('TaskDebugView', function () {
   beforeEach(function () {
-    // Increase max listeners to avoid EventEmitter memory leak warning
-    // for too many listeners listing to MESOS_LOG_CHANGE
-    TaskDirectoryStore.setMaxListeners(100);
-
     // Store original versions
     this.storeGetDirectory = TaskDirectoryStore.getDirectory;
 

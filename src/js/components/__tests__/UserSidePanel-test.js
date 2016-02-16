@@ -27,8 +27,6 @@ var UserSidePanelContents = require('../UserSidePanelContents');
 
 describe('UserSidePanel', function () {
   beforeEach(function () {
-    MesosSummaryStore.setMaxListeners(100);
-    ACLUserStore.setMaxListeners(100);
 
     this.fetchSummary = MesosSummaryActions.fetchSummary;
     this.userStore = ACLUserStore.getUser;

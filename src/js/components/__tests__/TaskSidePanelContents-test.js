@@ -18,7 +18,6 @@ var TaskSidePanelContents = require('../TaskSidePanelContents');
 
 describe('TaskSidePanelContents', function () {
   beforeEach(function () {
-    MesosStateStore.setMaxListeners(100);
 
     this.storeGet = MesosStateStore.get;
     this.storeChangeListener = MesosStateStore.addChangeListener;

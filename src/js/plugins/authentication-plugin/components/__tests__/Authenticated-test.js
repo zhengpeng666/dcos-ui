@@ -8,8 +8,6 @@ var TestUtils = require('react-addons-test-utils');
 
 var Authenticated = require('../Authenticated');
 var ACLAuthStore = require('../../../../stores/ACLAuthStore');
-var ACLGroupStore = require('../../../../stores/ACLGroupStore');
-var ACLGroupsStore = require('../../../../stores/ACLGroupsStore');
 
 class FakeComponent extends React.Component {
   render() {
@@ -19,8 +17,6 @@ class FakeComponent extends React.Component {
 
 describe('Authenticated', function () {
   beforeEach(function () {
-    ACLGroupStore.setMaxListeners(100);
-    ACLGroupsStore.setMaxListeners(100);
 
     this.originalWillTransitionTo = Authenticated.willTransitionTo;
     this.originalIsLoggedIn = ACLAuthStore.isLoggedIn;

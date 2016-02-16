@@ -18,9 +18,6 @@ var DOMUtil = require('../../utils/DOMUtils');
 
 describe('MesosLogView', function () {
   beforeEach(function () {
-    // Increase max listeners to avoid EventEmitter memory leak warning
-    // for too many listeners listing to MESOS_LOG_CHANGE
-    MesosLogStore.setMaxListeners(100);
 
     // Store original versions
     this.storeStartTailing = MesosLogStore.startTailing;

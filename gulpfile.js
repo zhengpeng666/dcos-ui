@@ -9,7 +9,7 @@ var gulpif = require("gulp-if");
 var gutil = require("gulp-util");
 var imagemin = require("gulp-imagemin");
 var less = require("gulp-less");
-var minifyCSS = require("gulp-minify-css");
+var minifyCSS = require("gulp-cssnano");
 var replace = require("gulp-replace");
 var sourcemaps = require("gulp-sourcemaps");
 var uglify = require("gulp-uglify");
@@ -163,7 +163,6 @@ gulp.task("webpack", function (callback) {
     }
   });
 });
-
 
 gulp.task("default", ["webpack", "eslint", "replace-js-strings", "less", "images", "swf", "html"]);
 
