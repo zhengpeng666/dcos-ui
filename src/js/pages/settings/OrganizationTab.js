@@ -568,7 +568,6 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
             colGroup={this.getColGroup(itemName)}
             containerSelector=".gm-scroll-view"
             data={visibleItems}
-            idAttribute={itemID}
             itemHeight={TableUtil.getRowHeight()}
             sortBy={{prop: 'description', order: 'asc'}}
             useFlex={true}
