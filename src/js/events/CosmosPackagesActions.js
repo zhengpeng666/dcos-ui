@@ -5,31 +5,29 @@ import RequestUtil from '../utils/RequestUtil';
 
 const CosmosPackagesActions = {
 
-  fetchDescription: function (packageName, packageVersion) {
+  fetchAvailablePackages: function (query) {
     RequestUtil.json({
       method: 'POST',
-      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/describe`,
-      data: {packageName, packageVersion},
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/search`,
+      data: {query},
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
-          data: response.package,
-          packageName,
-          packageVersion
+          type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS,
+          data: response.packages,
+          query
         });
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR,
+          type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
-          packageName,
-          packageVersion
+          query
         });
       }
     });
   },
 
-  fetchList: function (packageName, appId) {
+  fetchInstalledPackages: function (packageName, appId) {
     RequestUtil.json({
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/list`,
@@ -53,23 +51,25 @@ const CosmosPackagesActions = {
     });
   },
 
-  search: function (query) {
+  fetchPackageDescription: function (packageName, packageVersion) {
     RequestUtil.json({
       method: 'POST',
-      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/search`,
-      data: {query},
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/describe`,
+      data: {packageName, packageVersion},
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS,
-          data: response.packages,
-          query
+          type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
+          data: response.package,
+          packageName,
+          packageVersion
         });
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_ERROR,
+          type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
-          query
+          packageName,
+          packageVersion
         });
       }
     });
@@ -87,9 +87,12 @@ if (Config.useFixtures) {
   }
 
   global.actionTypes.CosmosPackagesActions = {
-    describe: {event: 'success', success: {response: packageDescribeFixture}},
-    list: {event: 'success', success: {response: packagesListFixture}},
-    search: {event: 'success', success: {response: packagesSearchFixture}}
+    fetchPackageDescription:
+      {event: 'success', success: {response: packageDescribeFixture}},
+    fetchInstalledPackages:
+      {event: 'success', success: {response: packagesListFixture}},
+    fetchAvailablePackages:
+      {event: 'success', success: {response: packagesSearchFixture}}
   };
 
   Object.keys(global.actionTypes.CosmosPackagesActions).forEach(function (method) {

@@ -74,12 +74,12 @@ const ListenersDescription = {
   cosmosPackages: {
     store: CosmosPackagesStore,
     events: {
-      describeSuccess: EventTypes.COSMOS_DESCRIBE_CHANGE,
-      describeError: EventTypes.COSMOS_DESCRIBE_ERROR,
-      listSuccess: EventTypes.COSMOS_LIST_CHANGE,
-      listError: EventTypes.COSMOS_LIST_ERROR,
-      searchSuccess: EventTypes.COSMOS_SEARCH_CHANGE,
-      searchError: EventTypes.COSMOS_SEARCH_ERROR
+      descriptionSuccess: EventTypes.COSMOS_DESCRIBE_CHANGE,
+      descriptionError: EventTypes.COSMOS_DESCRIBE_ERROR,
+      installedSuccess: EventTypes.COSMOS_LIST_CHANGE,
+      installedError: EventTypes.COSMOS_LIST_ERROR,
+      availableSuccess: EventTypes.COSMOS_SEARCH_CHANGE,
+      availableError: EventTypes.COSMOS_SEARCH_ERROR
     },
     unmountWhen: function () {
       return true;

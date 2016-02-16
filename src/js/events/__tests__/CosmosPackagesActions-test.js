@@ -11,11 +11,11 @@ var RequestUtil = require('../../utils/RequestUtil');
 
 describe('CosmosPackagesActions', function () {
 
-  describe('#fetchDescription', function () {
+  describe('#fetchAvailablePackages', function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, 'json');
-      CosmosPackagesActions.fetchDescription('foo', 'bar');
+      CosmosPackagesActions.fetchAvailablePackages('foo');
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
@@ -24,21 +24,21 @@ describe('CosmosPackagesActions', function () {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(
-          ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS
+          ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS
         );
       });
 
-      this.configuration.success({package: {bar: 'baz'}});
+      this.configuration.success({packages: [{bar: 'baz'}]});
     });
 
     it('dispatches with the correct data when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual({bar: 'baz'});
+        expect(action.data).toEqual([{bar: 'baz'}]);
       });
 
-      this.configuration.success({package: {bar: 'baz'}});
+      this.configuration.success({packages: [{bar: 'baz'}]});
     });
 
     it('dispatches the correct action when unsucessful', function () {
@@ -46,7 +46,7 @@ describe('CosmosPackagesActions', function () {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(
-          ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR
+          ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_ERROR
         );
       });
 
@@ -69,19 +69,17 @@ describe('CosmosPackagesActions', function () {
 
     it('fetches data from the correct URL', function () {
       expect(this.configuration.url)
-        .toEqual(Config.cosmosAPIPrefix + '/describe');
+        .toEqual(Config.cosmosAPIPrefix + '/search');
     });
 
     it('sends query in request body', function () {
-      expect(this.configuration.data)
-        .toEqual({packageName: 'foo', packageVersion: 'bar'});
+      expect(this.configuration.data).toEqual({query: 'foo'});
     });
 
     it('sends query in request body, even if it is undefined', function () {
-      CosmosPackagesActions.fetchDescription();
+      CosmosPackagesActions.fetchAvailablePackages();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
-      expect(this.configuration.data)
-        .toEqual({packageName: undefined, packageVersion: undefined});
+      expect(this.configuration.data).toEqual({query: undefined});
     });
 
     it('sends a POST request', function () {
@@ -90,11 +88,11 @@ describe('CosmosPackagesActions', function () {
 
   });
 
-  describe('#fetchList', function () {
+  describe('#fetchInstalledPackages', function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, 'json');
-      CosmosPackagesActions.fetchList('foo', 'bar');
+      CosmosPackagesActions.fetchInstalledPackages('foo', 'bar');
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
@@ -157,7 +155,7 @@ describe('CosmosPackagesActions', function () {
     });
 
     it('sends query in request body, even if it is undefined', function () {
-      CosmosPackagesActions.fetchList();
+      CosmosPackagesActions.fetchInstalledPackages();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
       expect(this.configuration.data)
         .toEqual({packageName: undefined, appId: undefined});
@@ -169,11 +167,11 @@ describe('CosmosPackagesActions', function () {
 
   });
 
-  describe('#search', function () {
+  describe('#fetchPackageDescription', function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, 'json');
-      CosmosPackagesActions.search('foo');
+      CosmosPackagesActions.fetchPackageDescription('foo', 'bar');
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
@@ -182,21 +180,21 @@ describe('CosmosPackagesActions', function () {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(
-          ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS
+          ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS
         );
       });
 
-      this.configuration.success({packages: [{bar: 'baz'}]});
+      this.configuration.success({package: {bar: 'baz'}});
     });
 
     it('dispatches with the correct data when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual([{bar: 'baz'}]);
+        expect(action.data).toEqual({bar: 'baz'});
       });
 
-      this.configuration.success({packages: [{bar: 'baz'}]});
+      this.configuration.success({package: {bar: 'baz'}});
     });
 
     it('dispatches the correct action when unsucessful', function () {
@@ -204,7 +202,7 @@ describe('CosmosPackagesActions', function () {
         var action = payload.action;
         AppDispatcher.unregister(id);
         expect(action.type).toEqual(
-          ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_ERROR
+          ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR
         );
       });
 
@@ -227,17 +225,19 @@ describe('CosmosPackagesActions', function () {
 
     it('fetches data from the correct URL', function () {
       expect(this.configuration.url)
-        .toEqual(Config.cosmosAPIPrefix + '/search');
+        .toEqual(Config.cosmosAPIPrefix + '/describe');
     });
 
     it('sends query in request body', function () {
-      expect(this.configuration.data).toEqual({query: 'foo'});
+      expect(this.configuration.data)
+        .toEqual({packageName: 'foo', packageVersion: 'bar'});
     });
 
     it('sends query in request body, even if it is undefined', function () {
-      CosmosPackagesActions.search();
+      CosmosPackagesActions.fetchPackageDescription();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
-      expect(this.configuration.data).toEqual({query: undefined});
+      expect(this.configuration.data)
+        .toEqual({packageName: undefined, packageVersion: undefined});
     });
 
     it('sends a POST request', function () {

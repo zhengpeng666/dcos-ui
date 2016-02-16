@@ -25,7 +25,7 @@ class PackagesTab extends mixin(StoreMixin) {
     };
 
     this.store_listeners = [
-      {name: 'cosmosPackages', events: ['searchError', 'searchSuccess']}
+      {name: 'cosmosPackages', events: ['availableError', 'availableSuccess']}
     ];
 
     METHODS_TO_BIND.forEach((method) => {
@@ -36,7 +36,7 @@ class PackagesTab extends mixin(StoreMixin) {
   componentDidMount() {
     super.componentDidMount(...arguments);
     // Get all packages
-    CosmosPackagesStore.search();
+    CosmosPackagesStore.fetchAvailablePackages();
   }
 
   handleDetailOpen(cosmosPackage, event) {
@@ -80,7 +80,7 @@ class PackagesTab extends mixin(StoreMixin) {
   }
 
   getPackages() {
-    return CosmosPackagesStore.get('search').getItems()
+    return CosmosPackagesStore.get('availablePackages').getItems()
       .map((cosmosPackage, index) => {
         return (
           <div
