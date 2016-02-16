@@ -10,7 +10,7 @@ const METHODS_TO_BIND = [
   'handleInstallClick'
 ];
 
-export default class AdvancedConfigModal extends React.Component {
+class AdvancedConfigModal extends React.Component {
   constructor() {
     super();
 
@@ -276,3 +276,5 @@ AdvancedConfigModal.propTypes = {
   onClose: React.PropTypes.func,
   open: React.PropTypes.bool
 };
+
+module.exports = AdvancedConfigModal;
