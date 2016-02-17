@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
@@ -6,12 +7,15 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import AdvancedConfigModal from '../../components/AdvancedConfigModal';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
+import FilterInputText from '../../components/FilterInputText';
 import Panel from '../../components/Panel';
+import RequestErrorMsg from '../../components/RequestErrorMsg';
 
 const METHODS_TO_BIND = [
   'handleAdvancedModalClose',
   'handleAdvancedModalOpen',
-  'handleInstallModalClose'
+  'handleInstallModalClose',
+  'handleSearchStringChange'
 ];
 
 class PackagesTab extends mixin(StoreMixin) {
@@ -20,7 +24,10 @@ class PackagesTab extends mixin(StoreMixin) {
 
     this.state = {
       advancedModalOpen: false,
-      installModalPackage: false
+      hasError: false,
+      installModalPackage: false,
+      isLoading: true,
+      sortProp: 'packageName'
     };
 
     this.store_listeners = [
@@ -34,8 +41,16 @@ class PackagesTab extends mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount(...arguments);
-    // Get all packages
     CosmosPackagesStore.fetchAvailablePackages();
+    // Get all packages
+  }
+
+  onCosmosPackagesStoreAvailableError() {
+    this.setState({hasError: true});
+  }
+
+  onCosmosPackagesStoreAvailableSuccess() {
+    this.setState({hasError: false, isLoading: false});
   }
 
   handleDetailOpen(cosmosPackage, event) {
@@ -60,6 +75,14 @@ class PackagesTab extends mixin(StoreMixin) {
     this.setState({installModalPackage: cosmosPackage});
   }
 
+  handleSearchStringChange(searchString) {
+    this.setState({searchString});
+  }
+
+  getErrorScreen() {
+    return <RequestErrorMsg />;
+  }
+
   getFooter(cosmosPackage) {
     return (
       <button
@@ -78,48 +101,82 @@ class PackagesTab extends mixin(StoreMixin) {
     );
   }
 
-  getPackages() {
-    return CosmosPackagesStore.get('availablePackages').getItems()
-      .map((cosmosPackage, index) => {
-        return (
-          <div
-            className="grid-item column-small-6 column-medium-4 column-large-3"
-            key={index}>
-            <Panel
-              className="panel clickable"
-              contentClass="panel-content horizontal-center short"
-              footer={this.getFooter(cosmosPackage)}
-              footerClass="panel-footer horizontal-center panel-footer-no-top-border short"
-              heading={this.getHeading(cosmosPackage)}
-              headingClass="panel-heading horizontal-center"
-              onClick={this.handleDetailOpen.bind(this, cosmosPackage)}>
-              <div className="h2 inverse flush-top short-bottom">
-                {cosmosPackage.get('packageName')}
-              </div>
-              <p className="inverse flush-bottom">
-                {cosmosPackage.get('currentVersion')}
-              </p>
-            </Panel>
+  getLoadingScreen() {
+    return (
+      <div className="container-pod text-align-center vertical-center inverse">
+        <div className="row">
+          <div className="ball-scale">
+            <div />
           </div>
-        );
-      }
+        </div>
+      </div>
     );
   }
 
+  getPackages() {
+    let {searchString, sortProp} = this.state;
+    let packages = CosmosPackagesStore.get('availablePackages')
+      .filterItems(searchString);
+
+    return _.sortBy(packages.getItems(), function (cosmosPackage) {
+      return cosmosPackage.get(sortProp);
+    }).map((cosmosPackage, index) => {
+      return (
+        <div
+          className="grid-item column-small-6 column-medium-4 column-large-3"
+          key={index}>
+          <Panel
+            className="panel clickable"
+            contentClass="panel-content horizontal-center short"
+            footer={this.getFooter(cosmosPackage)}
+            footerClass="panel-footer horizontal-center panel-footer-no-top-border short"
+            heading={this.getHeading(cosmosPackage)}
+            headingClass="panel-heading horizontal-center"
+            onClick={this.handleDetailOpen.bind(this, cosmosPackage)}>
+            <div className="h2 inverse flush-top short-bottom">
+              {cosmosPackage.get('packageName')}
+            </div>
+            <p className="inverse flush-bottom">
+              {cosmosPackage.get('currentVersion')}
+            </p>
+          </Panel>
+        </div>
+      );
+    });
+  }
+
   render() {
-    let {advancedModalOpen} = this.state;
+    let {state} = this;
+
+    if (state.hasError) {
+      return this.getErrorScreen();
+    }
+
+    if (state.isLoading) {
+      return this.getLoadingScreen();
+    }
 
     return (
-      <div className="grid row">
-        <button
-          className="button button-success"
-          onClick={this.handleAdvancedModalOpen}>
-          Open Advanced Configuration
-        </button><br/>
+      <div>
+        <div className="control-group form-group flex-no-shrink flex-align-right flush-bottom">
+          <FilterInputText
+            className="flex-grow"
+            placeholder="Search"
+            searchString={state.searchString}
+            handleFilterChange={this.handleSearchStringChange}
+            inverseStyle={true} />
+          <button
+            className="button button-success"
+            onClick={this.handleAdvancedModalOpen}>
+            Open Advanced Configuration
+          </button>
+        </div>
+        <div className="grid row">
+          {this.getPackages()}
+        </div>
         <AdvancedConfigModal
-          open={advancedModalOpen}
+          open={state.advancedModalOpen}
           onClose={this.handleAdvancedModalClose}/>
-        {this.getPackages()}
       </div>
     );
   }

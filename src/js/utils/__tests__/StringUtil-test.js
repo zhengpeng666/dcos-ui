@@ -4,6 +4,31 @@ var StringUtil = require('../StringUtil');
 
 describe('StringUtil', function () {
 
+  describe('#filterByString', function () {
+
+    it('filters using a key as getter', function () {
+      var _return = StringUtil.filterByString(
+        [{id: 0, foo: 'bar'}, {id: 1, foo: 'baz'}, {id: 2, foo: 'bar'}],
+        'foo',
+        'bar'
+      );
+
+      expect(_return).toEqual([{id: 0, foo: 'bar'}, {id: 2, foo: 'bar'}]);
+    });
+
+    it('filters using a function as getter', function () {
+      var _return = StringUtil.filterByString(
+        [{id: 0, foo: 'bar'}, {id: 1, foo: 'baz'}, {id: 2, foo: 'bar'}],
+        function (el) {
+          return el.foo;
+        },
+        'baz'
+      );
+      expect(_return).toEqual([{id: 1, foo: 'baz'}]);
+    });
+
+  });
+
   describe('#escapeForRegExp', function () {
 
     it('escapes string', function () {

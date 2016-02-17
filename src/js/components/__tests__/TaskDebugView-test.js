@@ -81,7 +81,7 @@ describe('TaskDebugView', function () {
 
       this.instance.onTaskDirectoryStoreSuccess();
       expect(this.instance.setState)
-        .toHaveBeenCalledWith({directory});
+        .toHaveBeenCalledWith({directory, taskDirectoryErrorCount : 0});
     });
 
   });
