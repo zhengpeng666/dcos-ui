@@ -83,6 +83,7 @@ module.exports = class UserGroupMembershipTab extends mixin(StoreMixin) {
     );
 
     let defaultItem = {
+      className: 'hidden',
       description: 'Add Group',
       gid: DEFAULT_ID
     };
@@ -92,6 +93,7 @@ module.exports = class UserGroupMembershipTab extends mixin(StoreMixin) {
       let selectedHtml = group.description;
 
       return {
+        className: group.className || '',
         id: group.gid,
         name: selectedHtml,
         html: selectedHtml,

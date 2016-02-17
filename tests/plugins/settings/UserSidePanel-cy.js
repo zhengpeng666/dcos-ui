@@ -160,6 +160,31 @@ describe('User Details Sidepanel [02k]', function () {
           .should('contain', 'Add Service');
       });
 
+      it('adds \'hidden\' class to \'Add Service\' item in the dropdown list', function () {
+        cy
+          .get('@sidePanel')
+          .get('.dropdown .dropdown-toggle')
+          .click();
+
+        cy
+          .get('@sidePanel')
+          .get('.dropdown .dropdown-menu-list')
+          .contains('Add Service')
+          .should('have.class', 'hidden');
+      });
+
+      it('displays \'No services to add.\' when they are in permissions', function () {
+        cy
+          .get('@sidePanel')
+          .get('.dropdown .dropdown-toggle')
+          .click();
+
+        cy
+          .get('@sidePanel')
+          .get('.dropdown .dropdown-menu-list')
+          .should('contain', 'No services to add.');
+      });
+
       it('shouldn\'t contain services that are already in permissions [02z]', function () {
         cy
           .get('@sidePanel')
