@@ -1,10 +1,14 @@
 import _ from 'underscore';
 import classNames from 'classnames';
 import {Link} from 'react-router';
+import mixin from 'reactjs-mixin';
+/*eslint-disable no-unused-vars*/
 import React from 'react';
+/*eslint-enable no-unused-vars*/
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 import {Table} from 'reactjs-components';
 
-import HealthComponentList from '../../structs/HealthComponentList';
+import ComponentHealthStore from '../../stores/ComponentHealthStore';
 import FilterHeadline from '../../components/FilterHeadline';
 import FilterButtons from '../../components/FilterButtons';
 import FilterInputText from '../../components/FilterInputText';
@@ -20,10 +24,17 @@ const METHODS_TO_BIND = [
   'resetFilter'
 ];
 
-class ComponentsHealthTab extends React.Component {
+class ComponentsHealthTab extends mixin(StoreMixin) {
 
   constructor() {
-    super();
+    super(...arguments);
+
+    this.store_listeners = [
+      {
+        name: 'componentHealth',
+        events: ['success', 'error', 'reportSuccess', 'reportError']
+      }
+    ];
 
     this.state = {
       healthFilter: 'all',
@@ -35,8 +46,14 @@ class ComponentsHealthTab extends React.Component {
     }, this);
   }
 
+  componentDidMount() {
+    super.componentDidMount();
+    ComponentHealthStore.fetchComponents();
+    ComponentHealthStore.fetchReport();
+  }
+
   handleHealthReportClick() {
-    console.log('clicked');
+    console.log(ComponentHealthStore.get('report'));
   }
 
   handleSearchStringChange(searchString) {
@@ -115,32 +132,6 @@ class ComponentsHealthTab extends React.Component {
     ];
   }
 
-  getData() {
-    // for demo until stores are created
-    let data = new HealthComponentList({items: [
-      {
-        'id': 'apache-zookeeper',
-        'name': 'Apache ZooKeeper',
-        'version': '3.4.6',
-        'health': 1
-      },
-      {
-        'id': 'mesos',
-        'name': 'Mesos',
-        'version': '0.27.1',
-        'health': 3
-      },
-      {
-        'id': 'service-manager',
-        'name': 'Service Manager',
-        'version': '0.0.1',
-        'health': 1
-      }
-    ]});
-
-    return data.getItems();
-  }
-
   getHandleHealthFilterChange(healthFilter) {
     return () => {
       this.setState({healthFilter});
@@ -177,7 +168,7 @@ class ComponentsHealthTab extends React.Component {
   }
 
   render() {
-    let data = this.getData();
+    let data = ComponentHealthStore.get('components').getItems();
     let state = this.state;
     let visibleData = this.getVisibleData(data);
     let pluralizedItemName = StringUtil.pluralize('Component', data.length);
