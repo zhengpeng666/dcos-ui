@@ -24,9 +24,9 @@ class PackagesTab extends mixin(StoreMixin) {
 
     this.state = {
       advancedModalOpen: false,
+      hasError: false,
       installModalPackage: false,
       isLoading: true,
-      packagesErrorCount: 0,
       sortProp: 'packageName'
     };
 
@@ -41,16 +41,16 @@ class PackagesTab extends mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount(...arguments);
-    // Get all packages
     CosmosPackagesStore.fetchAvailablePackages();
+    // Get all packages
   }
 
   onCosmosPackagesStoreAvailableError() {
-    this.setState({packagesErrorCount: this.state.packagesErrorCount + 1});
+    this.setState({hasError: true});
   }
 
   onCosmosPackagesStoreAvailableSuccess() {
-    this.setState({packagesErrorCount: 0, isLoading: false});
+    this.setState({hasError: false, isLoading: false});
   }
 
   handleDetailOpen(cosmosPackage, event) {
@@ -148,7 +148,7 @@ class PackagesTab extends mixin(StoreMixin) {
   render() {
     let {state} = this;
 
-    if (state.packagesErrorCount >= 3) {
+    if (state.hasError) {
       return this.getErrorScreen();
     }
 
