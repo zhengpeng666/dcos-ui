@@ -89,27 +89,37 @@ schemas:
                       },
                       "ip": "10.10.11.12",
                       "port": 52342,
-                      "machine_reachable_pct": {
-                        "1454007720": 98,
-                        "1454007660": 95
-                      },
-                      "application_reachable_pct": {
-                        "1454007720": 97,
-                        "1454007660": 99
-                      }
+                      "machine_reachable_pct": 98,
+                      "application_reachable_pct": 95
                     }
                   ],
                   "backend_machines_reachable": {
-                    "100": 32,
-                    "50": 64,
-                    "25": 30,
-                    "24": 1
+                    "1454007720": {
+                      "100": 32,
+                      "50": 64,
+                      "25": 30,
+                      "24": 1
+                    },
+                    "1454007660": {
+                      "100": 32,
+                      "50": 64,
+                      "25": 30,
+                      "24": 1
+                    }
                   },
                   "backend_applications_reachable": {
-                    "100": 32,
-                    "50": 64,
-                    "43": 30,
-                    "25": 30
+                    "1454007720": {
+                      "100": 32,
+                      "50": 64,
+                      "25": 30,
+                      "24": 1
+                    },
+                    "1454007660": {
+                      "100": 32,
+                      "50": 64,
+                      "25": 30,
+                      "24": 1
+                    }
                   },
                   "backend_count": 127
                 }
@@ -149,15 +159,7 @@ schemas:
                       },
                       "ip": "10.10.11.13",
                       "machine_reachable": true,
-                      "machine_reachable_pct": {
-                        "1454007720": 98,
-                        "1454007660": 95
-                      },
-                      "application_reachable": false,
-                      "application_reachable_pct": {
-                        "1454007720": 97,
-                        "1454007660": 99
-                      }
+                      "application_reachable": false
                     }
                   ]
                 }

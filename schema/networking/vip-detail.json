@@ -45,49 +45,49 @@
             "type": "integer"
           },
           "machine_reachable_pct": {
-            "description": "Percentage of clients that can reach this machine over time.",
+            "description": "Percentage of clients that can reach this machine.",
             "title": "Machine Reachable Percentage",
-            "type": "object",
-            "patternProperties": {
-              "description": "Timestamp of value.",
-              "title": "Timestamp",
-              "[0-9]": {
-                "type": "integer"
-              }
-            }
+            "type": "integer"
           },
           "application_reachable_pct": {
-            "description": "Percentage of clients that can reach this application over time.",
+            "description": "Percentage of clients that can reach this application.",
             "title": "Application Reachable Percentage",
-            "type": "object",
-            "patternProperties": {
-              "description": "Timestamp of value.",
-              "title": "Timestamp",
-              "[0-9]": {
-                "type": "integer"
-              }
-            }
+            "type": "integer"
           }
         }
       }
     },
     "backend_machines_reachable": {
-      "description": "Percentages of machines reachable by clients.",
+      "description": "Percentiles of machines reachable by clients over time.",
       "title": "Backend Machines Reachable",
       "type": "object",
       "patternProperties": {
-        "[0-9]{1,3}": {
-          "type": "integer"
+        "description": "Timestamps of the percentiles.",
+        "title": "Timestamp",
+        "[0-9]": {
+          "type": "object",
+          "patternProperties": {
+            "[0-9]{1,3}": {
+              "type": "integer"
+            }
+          }
         }
       }
     },
     "backend_applications_reachable": {
-      "description": "Percentages of applications reachable by clients.",
+      "description": "Percentiles of applications reachable by clients over time.",
       "title": "Backend Applications Reachable",
       "type": "object",
       "patternProperties": {
-        "[0-9]{1,3}": {
-          "type": "integer"
+        "description": "Timestamps of the percentiles.",
+        "title": "Timestamp",
+        "[0-9]": {
+          "type": "object",
+          "patternProperties": {
+            "[0-9]{1,3}": {
+              "type": "integer"
+            }
+          }
         }
       }
     },
