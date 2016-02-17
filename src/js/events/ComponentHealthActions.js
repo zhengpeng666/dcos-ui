@@ -49,7 +49,7 @@ if (Config.useFixtures) {
     global.actionTypes = {};
   }
 
-  global.actionTypes.ACLUsersActions = {
+  global.actionTypes.ComponentHealthActions = {
     fetchComponents: {event: 'success', success: {response: componentsFixture}}
   };
 }
