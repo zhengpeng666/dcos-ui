@@ -81,10 +81,10 @@ const ListenersDescription = {
       availableSuccess: EventTypes.COSMOS_SEARCH_CHANGE,
       availableError: EventTypes.COSMOS_SEARCH_ERROR
     },
-    unmountWhen: function () {
-      return true;
+    unmountWhen: function (store, event) {
+      return event === 'availableSuccess';
     },
-    listenAlways: true
+    listenAlways: false
   },
 
   summary: {

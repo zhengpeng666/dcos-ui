@@ -84,7 +84,10 @@ class TaskDebugView extends mixin(StoreMixin) {
 
   onTaskDirectoryStoreSuccess() {
     if (this.state.directory == null) {
-      this.setState({directory: TaskDirectoryStore.get('directory')});
+      this.setState({
+        directory: TaskDirectoryStore.get('directory'),
+        taskDirectoryErrorCount: 0
+      });
     }
   }
 

@@ -9,6 +9,7 @@ import AdvancedConfigModal from '../../components/AdvancedConfigModal';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
 import FilterInputText from '../../components/FilterInputText';
 import Panel from '../../components/Panel';
+import RequestErrorMsg from '../../components/RequestErrorMsg';
 
 const METHODS_TO_BIND = [
   'handleAdvancedModalClose',
@@ -24,6 +25,8 @@ class PackagesTab extends mixin(StoreMixin) {
     this.state = {
       advancedModalOpen: false,
       installModalPackage: false,
+      isLoading: true,
+      packagesErrorCount: 0,
       sortProp: 'packageName'
     };
 
@@ -40,6 +43,14 @@ class PackagesTab extends mixin(StoreMixin) {
     super.componentDidMount(...arguments);
     // Get all packages
     CosmosPackagesStore.fetchAvailablePackages();
+  }
+
+  onCosmosPackagesStoreAvailableError() {
+    this.setState({packagesErrorCount: this.state.packagesErrorCount + 1});
+  }
+
+  onCosmosPackagesStoreAvailableSuccess() {
+    this.setState({packagesErrorCount: 0, isLoading: false});
   }
 
   handleDetailOpen(cosmosPackage, event) {
@@ -68,6 +79,10 @@ class PackagesTab extends mixin(StoreMixin) {
     this.setState({searchString});
   }
 
+  getErrorScreen() {
+    return <RequestErrorMsg />;
+  }
+
   getFooter(cosmosPackage) {
     return (
       <button
@@ -86,6 +101,18 @@ class PackagesTab extends mixin(StoreMixin) {
     );
   }
 
+  getLoadingScreen() {
+    return (
+      <div className="container-pod text-align-center vertical-center inverse">
+        <div className="row">
+          <div className="ball-scale">
+            <div />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   getPackages() {
     let {searchString, sortProp} = this.state;
     let packages = CosmosPackagesStore.get('availablePackages')
@@ -93,7 +120,8 @@ class PackagesTab extends mixin(StoreMixin) {
 
     return _.sortBy(packages.getItems(), function (cosmosPackage) {
       return cosmosPackage.get(sortProp);
-    }).map((cosmosPackage, index) => {
+    })
+    .map((cosmosPackage, index) => {
       return (
         <div
           className="grid-item column-small-6 column-medium-4 column-large-3"
@@ -120,6 +148,14 @@ class PackagesTab extends mixin(StoreMixin) {
 
   render() {
     let {state} = this;
+
+    if (state.packagesErrorCount >= 3) {
+      return this.getErrorScreen();
+    }
+
+    if (state.isLoading) {
+      return this.getLoadingScreen();
+    }
 
     return (
       <div>
