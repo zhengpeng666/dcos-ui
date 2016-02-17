@@ -6,6 +6,7 @@ import ACLStore from '../stores/ACLStore';
 import ACLUsersStore from '../stores/ACLUsersStore';
 import ACLUserStore from '../stores/ACLUserStore';
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
+import ComponentHealthStore from '../stores/ComponentHealthStore';
 import EventTypes from './EventTypes';
 import MarathonStore from '../stores/MarathonStore';
 import MesosLogStore from '../stores/MesosLogStore';
@@ -64,6 +65,20 @@ const ListenersDescription = {
       logoutSuccess: EventTypes.ACL_AUTH_USER_LOGOUT_SUCCESS,
       logoutError: EventTypes.ACL_AUTH_USER_LOGOUT_ERROR,
       roleChange: EventTypes.ACL_AUTH_USER_ROLE_CHANGED
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
+  componentHealth: {
+    store: ComponentHealthStore,
+    events: {
+      success: EventTypes.HEALTH_COMPONENTS_CHANGE,
+      error: EventTypes.HEALTH_COMPONENTS_ERROR,
+      reportSuccess: EventTypes.HEALTH_REPORT_CHANGE,
+      reportError: EventTypes.HEALTH_REPORT_ERROR
     },
     unmountWhen: function () {
       return true;
