@@ -24,9 +24,6 @@ let ACLGroupStore = Store.createStore({
   },
 
   addChangeListener: function (eventName, callback) {
-    if (!eventName) {
-      a();
-    }
     this.on(eventName, callback);
   },
 
