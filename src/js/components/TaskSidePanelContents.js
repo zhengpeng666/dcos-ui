@@ -3,11 +3,12 @@ import _ from 'underscore';
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import SidePanelContents from './SidePanelContents';
-import TaskDebugView from '../components/TaskDebugView';
+import DescriptionList from '../components/DescriptionList';
 import MesosStateStore from '../stores/MesosStateStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import ResourceTypes from '../constants/ResourceTypes';
+import SidePanelContents from './SidePanelContents';
+import TaskDebugView from '../components/TaskDebugView';
 import TaskDirectoryView from './TaskDirectoryView';
 import TaskStates from '../constants/TaskStates';
 import TaskUtil from '../utils/TaskUtil';
@@ -162,8 +163,8 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
 
     return (
       <div className="container-fluid container-pod container-pod-short flush-top">
-        {this.getKeyValuePairs(headerValueMapping)}
-        {this.getKeyValuePairs(labelMapping, 'Labels')}
+        <DescriptionList hash={headerValueMapping} headline="Configuration" />
+        <DescriptionList hash={labelMapping} headline="Labels" />
       </div>
     );
   }

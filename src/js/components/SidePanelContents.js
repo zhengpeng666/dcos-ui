@@ -54,41 +54,6 @@ class SidePanelContents extends
     this.setState({expandClass: newExpandClass});
   }
 
-  getKeyValuePairs(hash, headline) {
-    if (_.isEmpty(hash)) {
-      return null;
-    }
-
-    let items = Object.keys(hash).map(function (key) {
-      return (
-        <dl key={key} className="flex-box row">
-          <dt className="column-3 emphasize">
-            {key}
-          </dt>
-          <dd className="column-9">
-            {hash[key]}
-          </dd>
-        </dl>
-      );
-    });
-
-    // Wrap in headline element and classes
-    if (headline != null) {
-      headline = (
-        <h6 className="flush-top">
-          {headline}
-        </h6>
-      );
-    }
-
-    return (
-      <div className="container container-fluid container-pod container-pod-short flush-bottom">
-        {headline}
-        {items}
-      </div>
-    );
-  }
-
   getResourceChart(resource, totalResources) {
     let colorIndex = ResourceTypes[resource].colorIndex;
     let resourceLabel = ResourceTypes[resource].label;
