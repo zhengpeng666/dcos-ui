@@ -1,28 +1,11 @@
 import React from 'react';
 
+// TODO: remove this. This is a fixture for development purposes.
+// import {jsonDocument} from './marathonConfigFixture';
+
 export default class ReviewConfig extends React.Component {
   getFieldTitle(title) {
-    return <h3>{title}</h3>;
-  }
-
-  getDefinitionReview() {
-    var elementsToRender = [];
-    let multipleDefinition = this.props.multipleDefinition;
-    let fields = Object.keys(multipleDefinition);
-
-    fields.forEach((field) => {
-      var fieldObj = multipleDefinition[field];
-
-      if (fieldObj.definition) {
-        elementsToRender.push(this.getFieldTitle(fieldObj.title));
-        this.renderFields(fieldObj.definition, elementsToRender);
-      } else {
-        elementsToRender.push(this.getFieldTitle(fieldObj.title));
-        elementsToRender.push(this.renderField(fieldObj));
-      }
-    });
-
-    return elementsToRender;
+    return <h3 key={`${title}-header`}>{title}</h3>;
   }
 
   getServiceHeader() {
@@ -47,32 +30,61 @@ export default class ReviewConfig extends React.Component {
   }
 
   getFieldSubheader(title) {
-    return (<h5>{title}</h5>);
+    return (<h5 key={`${title}-subheader`}>{title}</h5>);
   }
 
-  renderField(definition) {
+  renderField(key, value) {
     return (
-      <dl className="flex-box row">
+      <dl key={`${key}${value}`} className="flex-box row">
         <dt className="column-3 emphasize">
-          {definition.name}
+          {key}
         </dt>
         <dd className="column-9">
-          {definition.value || 'default value'}
+          {value}
         </dd>
       </dl>
     );
   }
 
-  renderFields(definition, elementsToRender) {
-    definition.forEach((fieldDefinition) => {
-      if (fieldDefinition.definition) {
-        elementsToRender.push(this.getFieldSubheader(fieldDefinition.name));
-        this.renderFields(fieldDefinition.definition, elementsToRender);
-        return;
-      }
+  getDefinitionReview() {
+    var elementsToRender = [];
+    let jsonDocument = this.props.jsonDocument;
+    let fields = Object.keys(jsonDocument);
 
-      elementsToRender.push(this.renderField(fieldDefinition));
+    fields.forEach((field) => {
+      var fieldObj = jsonDocument[field];
+      elementsToRender.push(this.getFieldTitle(field));
+
+      Object.keys(fieldObj).forEach((fieldKey) => {
+        let fieldValue = fieldObj[fieldKey];
+
+        if (typeof fieldValue === 'object' && !Array.isArray(fieldValue)) {
+          elementsToRender.push(this.getFieldSubheader(fieldKey));
+          elementsToRender = elementsToRender.concat(
+            this.renderFields(fieldValue)
+          );
+          return;
+        }
+
+        if (Array.isArray(fieldValue)) {
+          fieldValue = fieldValue.join(' ');
+        }
+
+        elementsToRender.push(this.renderField(fieldKey, fieldValue));
+      });
     });
+
+    return elementsToRender;
+  }
+
+  renderFields(obj) {
+    var elementsToRender = [];
+
+    Object.keys(obj).forEach((key) => {
+      elementsToRender.push(this.renderField(key, obj[key]));
+    });
+
+    return elementsToRender;
   }
 
   render() {
@@ -95,12 +107,15 @@ export default class ReviewConfig extends React.Component {
 }
 
 ReviewConfig.defaultProps = {
-  multipleDefinition: {},
+  jsonDocument: {},
   serviceImage: './img/services/icon-service-marathon-large@2x.png',
   serviceName: 'Marathon',
   serviceVersion: '0.23.2'
 };
 
 ReviewConfig.propTypes = {
-  multipleDefinition: React.PropTypes.object
+  jsonDocument: React.PropTypes.object,
+  serviceImage: React.PropTypes.string,
+  serviceName: React.PropTypes.string,
+  serviceVersion: React.PropTypes.string
 };
