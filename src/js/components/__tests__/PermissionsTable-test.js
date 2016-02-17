@@ -1,12 +1,9 @@
 jest.dontMock('../PermissionsTable');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../events/ACLUsersActions');
-jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../stores/ACLStore');
-jest.dontMock('../../utils/ResourceTableUtil');
-jest.dontMock('../../utils/StringUtil');
-jest.dontMock('../../utils/Util');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLStore']);
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
@@ -25,14 +22,20 @@ const userDetailsFixture =
 describe('PermissionsTable', function () {
 
   beforeEach(function () {
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <PermissionsTable
         permissions={(new User(userDetailsFixture)).getUniquePermissions()}
         itemType="user"
-        itemID={userDetailsFixture.uid} />
+        itemID={userDetailsFixture.uid} />,
+      this.container
     );
 
     this.instance.handleOpenConfirm = jest.genMockFunction();
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#onAclStoreUserRevokeError', function () {
@@ -72,6 +75,11 @@ describe('PermissionsTable', function () {
 
     beforeEach(function () {
       this.instance.state.permissionID = 'service.marathon';
+      this.container = document.createElement('div');
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('returns a message containing the group\'s name and user\'s name',
@@ -80,7 +88,7 @@ describe('PermissionsTable', function () {
         [{rid: 'service.marathon', description: 'Marathon'}]
       );
 
-      var instance = TestUtils.renderIntoDocument(modalContent);
+      var instance = ReactDOM.render(modalContent, this.container);
       var node = ReactDOM.findDOMNode(instance);
       var paragraphs = node.querySelector('p');
 
@@ -94,7 +102,7 @@ describe('PermissionsTable', function () {
       var modalContent = this.instance.getConfirmModalContent(
         [{rid: 'service.marathon', description: 'Marathon'}]
       );
-      var instance = TestUtils.renderIntoDocument(modalContent);
+      var instance = ReactDOM.render(modalContent, this.container);
       var node = ReactDOM.findDOMNode(instance);
       var paragraphs = node.querySelectorAll('p');
 
@@ -116,8 +124,9 @@ describe('PermissionsTable', function () {
   describe('#renderButton', function () {
 
     it('calls handleOpenConfirm with the proper arguments', function () {
-      var buttonWrapper = TestUtils.renderIntoDocument(
-        this.instance.renderButton('foo', {uid: 'bar'})
+      var buttonWrapper = ReactDOM.render(
+        this.instance.renderButton('foo', {uid: 'bar'}),
+        this.container
       );
 
       var node = ReactDOM.findDOMNode(buttonWrapper);
@@ -139,11 +148,12 @@ describe('PermissionsTable', function () {
     });
 
     it('calls revokeUser if itemType is user', function () {
-      var instance = TestUtils.renderIntoDocument(
+      var instance = ReactDOM.render(
         <PermissionsTable
           permissions={(new User(userDetailsFixture)).getUniquePermissions()}
           itemType="user"
-          itemID={userDetailsFixture.uid} />
+          itemID={userDetailsFixture.uid} />,
+        this.container
       );
       instance.handleButtonConfirm();
 
@@ -151,11 +161,12 @@ describe('PermissionsTable', function () {
     });
 
     it('calls revokeGroup if itemType is group', function () {
-      var instance = TestUtils.renderIntoDocument(
+      var instance = ReactDOM.render(
         <PermissionsTable
           permissions={(new User(userDetailsFixture)).getUniquePermissions()}
           itemType="group"
-          itemID={userDetailsFixture.uid} />
+          itemID={userDetailsFixture.uid} />,
+        this.container
       );
       instance.handleButtonConfirm();
 

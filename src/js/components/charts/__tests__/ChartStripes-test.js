@@ -9,12 +9,18 @@ var ChartStripes = require('../ChartStripes');
 describe('ChartStripes', function () {
 
   beforeEach(function () {
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <ChartStripes
         count={6}
         height={10}
-        width={300} />
+        width={300} />,
+      this.container
     );
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   it('should display the correct number of stripes', function () {
@@ -52,11 +58,12 @@ describe('ChartStripes', function () {
     );
     expect(stripes.length).toEqual(6);
 
-    this.instance = TestUtils.renderIntoDocument(
+    this.instance = ReactDOM.render(
       <ChartStripes
         count={5}
         height={10}
-        width={300} />
+        width={300} />,
+      this.container
     );
 
     stripes = TestUtils.scryRenderedDOMComponentsWithClass(

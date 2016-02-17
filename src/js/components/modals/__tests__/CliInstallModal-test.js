@@ -2,7 +2,11 @@ jest.dontMock('../CliInstallModal');
 jest.dontMock('../../../utils/DOMUtils');
 
 var React = require('react');
-var TestUtils = require('react-addons-test-utils');
+var ReactDOM = require('react-dom');
+
+var JestUtil = require('../../../utils/JestUtil');
+
+JestUtil.unMockStores([]);
 
 var CliInstallModal = require('../CliInstallModal');
 
@@ -18,13 +22,19 @@ describe('CliInstallModal', function () {
   describe('#onClose', function () {
     beforeEach(function () {
       this.callback = jasmine.createSpy();
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <CliInstallModal
           onClose={this.callback}
           showFooter={false}
           title=""
-          subHeaderContent="" />
+          subHeaderContent="" />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('shouldn\'t call the callback after initialization', function () {
@@ -40,13 +50,19 @@ describe('CliInstallModal', function () {
 
   describe('#getCliInstructions', function () {
     beforeEach(function () {
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <CliInstallModal
           onClose={function () {}}
           showFooter={false}
           title=""
-          subHeaderContent="" />
+          subHeaderContent="" />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('it returns different data depending on OS', function () {

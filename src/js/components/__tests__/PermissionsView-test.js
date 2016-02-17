@@ -1,14 +1,13 @@
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../stores/ACLStore');
-jest.dontMock('../../structs/ACLList');
-jest.dontMock('../../utils/Util');
-jest.dontMock('../../utils/StringUtil');
 jest.dontMock('../PermissionsView');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLStore']);
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
-var TestUtils = require('react-addons-test-utils');
+var ReactDOM = require('react-dom');
 
 var ACLList = require('../../structs/ACLList');
 var ACLStore = require('../../stores/ACLStore');
@@ -28,13 +27,14 @@ describe('PermissionsView', function () {
           description: 'bar description'
         }
       ]});
-
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <PermissionsView
           permissions={permissions.getItems()}
           itemID="quis"
           itemType="user"
-          parentRouter={null} />
+          parentRouter={null} />,
+        this.container
       );
 
       this.prevGrantUserActionToResource = ACLStore.grantUserActionToResource;
@@ -43,6 +43,8 @@ describe('PermissionsView', function () {
 
     afterEach(function () {
       ACLStore.grantUserActionToResource = this.prevGrantUserActionToResource;
+      ACLStore.removeAllListeners();
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('calls #grantUserActionToResource with an id', function () {

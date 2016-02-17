@@ -1,13 +1,12 @@
 jest.dontMock('../GroupUserMembershipTab');
 jest.dontMock('../GroupUserTable');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../events/ACLUsersActions');
-jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../utils/ResourceTableUtil');
-jest.dontMock('../../utils/StringUtil');
-jest.dontMock('../../utils/Util');
+jest.dontMock('../../stores/ACLGroupsStore');
+jest.dontMock('../../stores/ACLUsersStore');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLGroupStore', 'ACLGroupsStore', 'ACLUsersStore']);
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
@@ -35,9 +34,10 @@ describe('GroupUserMembershipTab', function () {
         return new Group(groupDetailsFixture);
       }
     };
-
-    this.instance = TestUtils.renderIntoDocument(
-      <GroupUserMembershipTab groupID={'unicode'}/>
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
+      <GroupUserMembershipTab groupID={'unicode'}/>,
+      this.container
     );
 
     this.instance.handleOpenConfirm = jest.genMockFunction();
@@ -45,6 +45,8 @@ describe('GroupUserMembershipTab', function () {
 
   afterEach(function () {
     ACLGroupStore.getGroup = this.groupStoreGetGroup;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('add users dropdown', function () {

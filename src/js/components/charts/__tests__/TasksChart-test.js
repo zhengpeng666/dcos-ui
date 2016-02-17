@@ -11,9 +11,15 @@ describe('TasksChart', function () {
   describe('#getTaskInfo', function () {
 
     beforeEach(function () {
-      this.instance = TestUtils.renderIntoDocument(
-        <TasksChart tasks={{}} />
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
+        <TasksChart tasks={{}} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('renders two task info labels when there is no data', function () {
@@ -26,8 +32,9 @@ describe('TasksChart', function () {
     });
 
     it('renders two task info labels when there is only data for one', function () {
-      this.instance = TestUtils.renderIntoDocument(
-        <TasksChart tasks={{tasks: {TASK_RUNNING: 1}}} />
+      this.instance = ReactDOM.render(
+        <TasksChart tasks={{tasks: {TASK_RUNNING: 1}}} />,
+        this.container
       );
       var rows = TestUtils.scryRenderedDOMComponentsWithClass(
         this.instance, 'row'
@@ -43,10 +50,15 @@ describe('TasksChart', function () {
 
     beforeEach(function () {
       this.tasks = {TASK_RUNNING: 0};
-
-      this.instance = TestUtils.renderIntoDocument(
-        <TasksChart tasks={this.tasks} />
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
+        <TasksChart tasks={this.tasks} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should allow update', function () {
@@ -67,12 +79,19 @@ describe('TasksChart', function () {
   describe('#getDialChartChildren', function () {
 
     beforeEach(function () {
-      var parent = TestUtils.renderIntoDocument(
-        <TasksChart tasks={{}} />
+      this.container = document.createElement('div');
+      var parent = ReactDOM.render(
+        <TasksChart tasks={{}} />,
+        this.container
       );
-      this.instance = TestUtils.renderIntoDocument(
-        parent.getDialChartChildren(100)
+      this.instance = ReactDOM.render(
+        parent.getDialChartChildren(100),
+        this.container
       );
+    });
+
+    afterEach(function() {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('renders its unit', function () {

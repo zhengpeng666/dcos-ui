@@ -4,9 +4,7 @@ jest.dontMock('../VersionsModal');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var TestUtils = require('react-addons-test-utils');
 
-var JestUtil = require('../../../utils/JestUtil');
 var VersionsModal = require('../VersionsModal');
 
 describe('VersionsModal', function () {
@@ -14,9 +12,16 @@ describe('VersionsModal', function () {
   describe('#onClose', function () {
     beforeEach(function () {
       this.callback = jasmine.createSpy();
-      this.instance = TestUtils.renderIntoDocument(
-        <VersionsModal onClose={this.callback} versionDump={{}} />
+
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
+        <VersionsModal onClose={this.callback} versionDump={{}} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('shouldn\'t call the callback after initialization', function () {
@@ -33,15 +38,20 @@ describe('VersionsModal', function () {
   describe('#getContent', function () {
     beforeEach(function () {
       var data = {foo: 'bar'};
-      this.instance = TestUtils.renderIntoDocument(
-        <VersionsModal onClose={function () {}} versionDump={data} open={true}/>
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
+        <VersionsModal onClose={function () {}} versionDump={data} open={true}/>,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should return a pre element tag', function () {
       var content = this.instance.getContent();
-      var contentInstance = TestUtils.renderIntoDocument(content);
-
+      var contentInstance = ReactDOM.render(content, this.container);
       var node = ReactDOM.findDOMNode(contentInstance);
       var result = node.querySelector('pre');
       expect(result.tagName).toBe('PRE');
@@ -49,8 +59,7 @@ describe('VersionsModal', function () {
 
     it('should return a pre element tag', function () {
       var content = this.instance.getContent();
-      var contentInstance = TestUtils.renderIntoDocument(content);
-
+      var contentInstance = ReactDOM.render(content, this.container);
       var node = ReactDOM.findDOMNode(contentInstance);
       var result = node.querySelector('pre');
       expect(result.innerHTML).toEqual('{\n  "foo": "bar"\n}');

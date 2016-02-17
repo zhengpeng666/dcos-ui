@@ -16,7 +16,7 @@ jest.dontMock('../../utils/RequestUtil');
 jest.dontMock('../../structs/SummaryList');
 
 var React = require('react');
-var TestUtils = require('react-addons-test-utils');
+var ReactDOM = require('react-dom');
 
 var MesosSummaryActions = require('../../events/MesosSummaryActions');
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
@@ -28,6 +28,7 @@ var SidePanels = require('../SidePanels');
 describe('SidePanels', function () {
   beforeEach(function () {
     this.fetchSummary = MesosSummaryActions.fetchSummary;
+    this.container = document.createElement('div');
 
     MesosSummaryActions.fetchSummary = function () {
       return null;
@@ -42,6 +43,8 @@ describe('SidePanels', function () {
 
   afterEach(function () {
     MesosSummaryActions.fetchSummary = this.fetchSummary;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#isOpen', function () {
@@ -51,11 +54,17 @@ describe('SidePanels', function () {
         serviceName: null,
         taskID: null
       };
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <SidePanels
           statesProcessed={true}
-          params={this.params} />
+          params={this.params} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should return false if all IDs are null', function () {
@@ -77,11 +86,17 @@ describe('SidePanels', function () {
         serviceName: null,
         taskID: null
       };
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <SidePanels
           statesProcessed={true}
-          params={this.params} />
+          params={this.params} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should return null if all IDs are null', function () {

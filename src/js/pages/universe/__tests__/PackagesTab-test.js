@@ -1,9 +1,11 @@
 jest.dontMock('../PackagesTab');
 jest.dontMock('../../../components/Panel');
-jest.dontMock('../../../events/AppDispatcher');
-jest.dontMock('../../../events/CosmosPackagesActions');
 jest.dontMock('../../../stores/CosmosPackagesStore');
 jest.dontMock('../../../../../tests/_fixtures/cosmos/packages-search.json');
+
+var JestUtil = require('../../../utils/JestUtil');
+
+JestUtil.unMockStores(['CosmosPackagesStore']);
 
 // Setting useFixtures for when we load StoreMixinConfig
 var Config = require('../../../config/Config');
@@ -23,7 +25,12 @@ var UniversePackagesList = require('../../../structs/UniversePackagesList');
 describe('PackagesTab', function () {
 
   beforeEach(function () {
-    this.instance = TestUtils.renderIntoDocument(<PackagesTab />);
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(<PackagesTab />, this.container);
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#handleDetailOpen', function () {

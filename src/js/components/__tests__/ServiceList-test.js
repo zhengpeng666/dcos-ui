@@ -4,7 +4,7 @@ jest.dontMock('../ServiceOverlay');
 jest.dontMock('../../stores/MarathonStore');
 
 var React = require('react');
-var TestUtils = require('react-addons-test-utils');
+var ReactDOM = require('react-dom');
 
 var ServiceList = require('../ServiceList');
 
@@ -14,11 +14,17 @@ describe('ServiceList', function () {
 
     beforeEach(function () {
       var services = [{name: 'foo'}];
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <ServiceList
           services={services}
-          healthProcessed={false} />
+          healthProcessed={false} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should allow update', function () {
@@ -39,11 +45,17 @@ describe('ServiceList', function () {
 
     beforeEach(function () {
       var services = [{name: 'foo'}];
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <ServiceList
           services={services}
-          healthProcessed={false} />
+          healthProcessed={false} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('returns services that have a value of two elements', function () {

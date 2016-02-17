@@ -1,14 +1,11 @@
-jest.dontMock('../../constants/StoreConfig');
-jest.dontMock('../../stores/TaskDirectoryStore');
-jest.dontMock('../../utils/Util');
-jest.dontMock('../../utils/RequestUtil');
-jest.dontMock('../../structs/TaskDirectory');
-jest.dontMock('../../structs/DirectoryItem');
 jest.dontMock('../icons/IconDownload');
 jest.dontMock('../MesosLogView');
 jest.dontMock('../RequestErrorMsg');
 jest.dontMock('../TaskDebugView');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['TaskDirectoryStore', 'MesosLogStore']);
 require('../../utils/StoreMixinConfig');
 
 var TaskDirectory = require('../../structs/TaskDirectory');
@@ -28,8 +25,10 @@ describe('TaskDebugView', function () {
     // Create spies
     TaskDirectoryStore.getDirectory = jasmine.createSpy('getDirectory');
 
-    this.instance = TestUtils.renderIntoDocument(
-      <TaskDebugView task={{slave_id: 'foo'}} />
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
+      <TaskDebugView task={{slave_id: 'foo'}} />,
+      this.container
     );
 
     this.instance.setState = jasmine.createSpy('setState');
@@ -39,6 +38,8 @@ describe('TaskDebugView', function () {
   afterEach(function () {
     // Restore original functions
     TaskDirectoryStore.getDirectory = this.storeGetDirectory;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#componentDidMount', function () {

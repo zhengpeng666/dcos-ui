@@ -1,34 +1,33 @@
 jest.dontMock('../ServerErrorModal');
-jest.dontMock('../../utils/Util');
-jest.dontMock('../../utils/StringUtil');
+jest.dontMock('../../mixins/GetSetMixin');
 jest.dontMock('../../stores/ACLAuthStore');
 jest.dontMock('../../stores/ACLGroupsStore');
 jest.dontMock('../../stores/ACLGroupStore');
 jest.dontMock('../../stores/ACLStore');
 jest.dontMock('../../stores/ACLUsersStore');
 jest.dontMock('../../stores/ACLUserStore');
-jest.dontMock('../../constants/EventTypes');
 jest.dontMock('../../stores/MarathonStore');
 jest.dontMock('../../stores/MesosStateStore');
 jest.dontMock('../../stores/MesosSummaryStore');
-jest.dontMock('../../events/ACLAuthActions');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../events/AppDispatcher');
-jest.dontMock('../../constants/EventTypes');
-jest.dontMock('../../mixins/GetSetMixin');
 
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
-var TestUtils = require('react-addons-test-utils');
+var ReactDOM = require('react-dom');
 
 var ServerErrorModal = require('../ServerErrorModal');
 
 describe('ServerErrorModal', function () {
   beforeEach(function () {
-    this.instance = TestUtils.renderIntoDocument(
-      <ServerErrorModal />
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
+      <ServerErrorModal />,
+      this.container
     );
+  });
+  afterEach(function () {
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#handleModalClose', function () {

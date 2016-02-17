@@ -1,6 +1,5 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var TestUtils = require('react-addons-test-utils');
 
 jest.dontMock('../FilterByService');
 jest.dontMock('../../mixins/GetSetMixin');
@@ -22,13 +21,18 @@ describe('FilterByService', function () {
     };
 
     let services = new ServicesList({items: MockFrameworks.frameworks});
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <FilterByService
         byServiceFilter={this.byServiceFilter}
         services={services.getItems()}
         totalHostsCount={10}
-        handleFilterChange={this.handleByServiceFilterChange} />
+        handleFilterChange={this.handleByServiceFilterChange} />,
+      this.container
     );
+  });
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   it('should display \'Filter by Service\' as default item', function () {
@@ -46,8 +50,9 @@ describe('FilterByService', function () {
 
     it('should display the badge correctly', function () {
       let service = new Service(MockFrameworks.frameworks[4]);
-      var item = TestUtils.renderIntoDocument(
-        this.instance.getItemHtml(service)
+      var item = ReactDOM.render(
+        this.instance.getItemHtml(service),
+        this.container
       );
 
       var node = ReactDOM.findDOMNode(item);

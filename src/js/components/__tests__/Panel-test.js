@@ -1,4 +1,4 @@
-jest.dontMock('../Panel');
+ jest.dontMock('../Panel');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -9,7 +9,8 @@ var Panel = require('../Panel');
 describe('Panel', function () {
   beforeEach(function () {
     this.onClickSpy = jasmine.createSpy('onClickSpy');
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <Panel
         className="foo"
         contentClass="bar"
@@ -19,8 +20,13 @@ describe('Panel', function () {
         headingClass="norf"
         onClick={this.onClickSpy}>
         <div className="quis" />
-      </Panel>
+      </Panel>,
+      this.container
     );
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#render', function () {
@@ -48,7 +54,7 @@ describe('Panel', function () {
 
     it('should use default className to content node', function () {
       var content = TestUtils.findRenderedDOMComponentWithClass(
-        TestUtils.renderIntoDocument(<Panel />),
+        ReactDOM.render(<Panel />, this.container),
         'panel-content'
       );
       var node = ReactDOM.findDOMNode(content);
@@ -66,7 +72,7 @@ describe('Panel', function () {
 
     it('should use default className to footer node', function () {
       var footer = TestUtils.findRenderedDOMComponentWithClass(
-        TestUtils.renderIntoDocument(<Panel footer="footer" />),
+        ReactDOM.render(<Panel footer="footer" />, this.container),
         'panel-footer'
       );
       var node = ReactDOM.findDOMNode(footer);
@@ -74,7 +80,7 @@ describe('Panel', function () {
     });
 
     it('should not render footer when none is given', function () {
-      var panel = TestUtils.renderIntoDocument(<Panel />);
+      var panel = ReactDOM.render(<Panel />, this.container);
       expect(TestUtils.scryRenderedDOMComponentsWithClass(
         panel,
         'panel-footer'
@@ -92,7 +98,7 @@ describe('Panel', function () {
 
     it('should use default className to heading node', function () {
       var heading = TestUtils.findRenderedDOMComponentWithClass(
-        TestUtils.renderIntoDocument(<Panel heading="heading" />),
+        ReactDOM.render(<Panel heading="heading" />, this.container),
         'panel-heading'
       );
       var node = ReactDOM.findDOMNode(heading);
@@ -100,7 +106,7 @@ describe('Panel', function () {
     });
 
     it('should not render heading when none is given', function () {
-      var panel = TestUtils.renderIntoDocument(<Panel />);
+      var panel = ReactDOM.render(<Panel />, this.container);
       expect(TestUtils.scryRenderedDOMComponentsWithClass(
         panel,
         'panel-heading'

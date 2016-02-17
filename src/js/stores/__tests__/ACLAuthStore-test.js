@@ -1,12 +1,10 @@
 jest.dontMock('../ACLAuthStore');
 jest.dontMock('../../config/Config');
-jest.dontMock('../../events/AppDispatcher');
-jest.dontMock('../../events/ACLAuthActions');
-jest.dontMock('../../constants/ACLUserRoles');
-jest.dontMock('../../constants/EventTypes');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../utils/RequestUtil');
-jest.dontMock('../../utils/Util');
+
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLAuthStore']);
 
 var cookie = require('cookie');
 

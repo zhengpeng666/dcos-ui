@@ -53,14 +53,20 @@ describe('TimeSeriesArea', function () {
       .interpolate('monotone');
     this.valueLine = this.valueLineDef(this.props.values);
 
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <TimeSeriesArea
         line={this.valueLine}
         path={this.area}
         position={[-10, 0]}
-        transitionTime={10} />
+        transitionTime={10} />,
+      this.container
     );
 
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   it('should render a path according to first data set', function () {
@@ -72,12 +78,13 @@ describe('TimeSeriesArea', function () {
     var area = this.areaDef(this.props.values);
     var valueLine = this.valueLineDef(this.props.values);
 
-    this.instance = TestUtils.renderIntoDocument(
+    this.instance = ReactDOM.render(
       <TimeSeriesArea
         line={valueLine}
         path={area}
         position={[-10, 0]}
-        transitionTime={10} />
+        transitionTime={10} />,
+      this.container
     );
 
     checkPath(this.instance, this.props);
@@ -89,12 +96,13 @@ describe('TimeSeriesArea', function () {
     var area = this.areaDef(this.props.values);
     var valueLine = this.valueLineDef(this.props.values);
 
-    this.instance = TestUtils.renderIntoDocument(
+    this.instance = ReactDOM.render(
       <TimeSeriesArea
         line={valueLine}
         path={area}
         position={[-10, 0]}
-        transitionTime={10} />
+        transitionTime={10} />,
+      this.container
     );
 
     checkPath(this.instance, this.props);

@@ -13,7 +13,12 @@ var defaultConfiguration = BannerPlugin.configuration;
 describe('BannerPlugin', function () {
 
   beforeEach(function () {
+    this.container = document.createElement('div');
     BannerPlugin.configuration = _.clone(defaultConfiguration);
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#initialize', function () {
@@ -105,8 +110,9 @@ describe('BannerPlugin', function () {
     beforeEach(function () {
       BannerPlugin.configure({headerTitle: 'foo'});
       spyOn(BannerPlugin, 'toggleFullContent');
-      this.instance = TestUtils.renderIntoDocument(
-        BannerPlugin.applicationContents()
+      this.instance = ReactDOM.render(
+        BannerPlugin.applicationContents(),
+        this.container
       );
     });
 
@@ -176,8 +182,9 @@ describe('BannerPlugin', function () {
     it('should render an iframe when enabled', function () {
       BannerPlugin.configure({headerTitle: 'foo'});
 
-      var instance = TestUtils.renderIntoDocument(
-        BannerPlugin.applicationContents()
+      var instance = ReactDOM.render(
+        BannerPlugin.applicationContents(),
+        this.container
       );
 
       var node = ReactDOM.findDOMNode(instance);

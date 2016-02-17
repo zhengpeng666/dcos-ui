@@ -7,11 +7,18 @@ var Highlight = require('../Highlight');
 
 describe('Highlight instance', function () {
 
+  beforeEach(function () {
+    this.container = document.createElement('div');
+  });
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
+  });
   it('is what it says it is', function () {
-    var instance = TestUtils.renderIntoDocument(
+    var instance = ReactDOM.render(
       <Highlight search="world">
         Hello World
-      </Highlight>
+      </Highlight>,
+      this.container
     );
     var node = ReactDOM.findDOMNode(instance);
     var match = node.querySelector('strong');
@@ -22,10 +29,11 @@ describe('Highlight instance', function () {
   });
 
   it('should have children', function () {
-    var instance = TestUtils.renderIntoDocument(
+    var instance = ReactDOM.render(
       <Highlight search="fox">
         The quick brown fox jumped over the lazy dog.
-      </Highlight>
+      </Highlight>,
+      this.container
     );
 
     var node = ReactDOM.findDOMNode(instance);
@@ -36,10 +44,11 @@ describe('Highlight instance', function () {
   });
 
   it('should support custom HTML tag for matching elements', function () {
-    var instance = TestUtils.renderIntoDocument(
+    var instance = ReactDOM.render(
       <Highlight matchElement="em" search="world">
         Hello World
-      </Highlight>
+      </Highlight>,
+      this.container
     );
 
     var node = ReactDOM.findDOMNode(instance);
@@ -48,10 +57,11 @@ describe('Highlight instance', function () {
   });
 
   it('should support custom className for matching element', function () {
-    var instance = TestUtils.renderIntoDocument(
+    var instance = ReactDOM.render(
       <Highlight matchClass="fffffound" search="Seek">
         Hide and Seek
-      </Highlight>
+      </Highlight>,
+      this.container
     );
 
     var node = ReactDOM.findDOMNode(instance);
@@ -60,10 +70,11 @@ describe('Highlight instance', function () {
   });
 
   it('should support passing props to parent element', function () {
-    var instance = TestUtils.renderIntoDocument(
+    var instance = ReactDOM.render(
       <Highlight className="myHighlighter" search="world">
         Hello World
-      </Highlight>
+      </Highlight>,
+      this.container
     );
 
     var node = ReactDOM.findDOMNode(instance);
@@ -74,10 +85,11 @@ describe('Highlight instance', function () {
   });
 
   it('should support regular expressions in search', function () {
-    var instance = TestUtils.renderIntoDocument(
+    var instance = ReactDOM.render(
       <Highlight className="myHighlighter" search={/[A-Za-z]+/}>
         Easy as 123, ABC...
-      </Highlight>
+      </Highlight>,
+      this.container
     );
 
     var node = ReactDOM.findDOMNode(instance);
@@ -89,13 +101,14 @@ describe('Highlight instance', function () {
   });
 
   it('should support escaping arbitrary string in search', function () {
-    var instance = TestUtils.renderIntoDocument(
+    var instance = ReactDOM.render(
       <Highlight className="myHighlighter" search="Test (">
         Test (should not throw)
-      </Highlight>
+      </Highlight>,
+      this.container
     );
 
-    expect(TestUtils.renderIntoDocument.bind(TestUtils, instance))
+    expect(ReactDOM.render.bind(TestUtils, instance))
       .not.toThrow(Error);
   });
 });

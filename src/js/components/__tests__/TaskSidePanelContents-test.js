@@ -1,12 +1,12 @@
 jest.dontMock('../SidePanelContents');
 jest.dontMock('../TaskSidePanelContents');
 jest.dontMock('../TaskDirectoryView');
-jest.dontMock('../../constants/TaskStates');
 jest.dontMock('../../stores/MesosStateStore');
-jest.dontMock('../../events/MesosStateActions');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../utils/Util');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['MesosStateStore', 'TaskDirectoryStore', 'MesosSummaryStore']);
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
@@ -48,15 +48,19 @@ describe('TaskSidePanelContents', function () {
       MesosStateStore.getNodeFromID = function () {
         return {hostname: 'hello'};
       };
+      this.container = document.createElement('div');
     });
 
     afterEach(function () {
       MesosStateStore.getNodeFromID = this.getNodeFromID;
+
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should return null if there are no nodes', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <TaskSidePanelContents open={true} />
+      var instance = ReactDOM.render(
+        <TaskSidePanelContents open={true} />,
+        this.container
       );
       var node = ReactDOM.findDOMNode(instance);
       expect(node).toEqual(null);
@@ -69,8 +73,9 @@ describe('TaskSidePanelContents', function () {
         };
       };
 
-      var instance = TestUtils.renderIntoDocument(
-        <TaskSidePanelContents open={true} />
+      var instance = ReactDOM.render(
+        <TaskSidePanelContents open={true} />,
+        this.container
       );
 
       var node = ReactDOM.findDOMNode(instance);
@@ -80,9 +85,15 @@ describe('TaskSidePanelContents', function () {
 
   describe('#getBasicInfo', function () {
     beforeEach(function () {
-      this.instance = TestUtils.renderIntoDocument(
-        <TaskSidePanelContents open={false} />
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
+        <TaskSidePanelContents open={false} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should return null if task is null', function () {

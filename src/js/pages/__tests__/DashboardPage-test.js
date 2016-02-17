@@ -6,8 +6,12 @@ jest.dontMock('../../mixins/InternalStorageMixin');
 jest.dontMock('../../utils/Util');
 jest.dontMock('../../constants/HealthSorting');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['MarathonStore', 'MesosSummaryStore']);
+
 var React = require('react');
-var TestUtils = require('react-addons-test-utils');
+var ReactDOM = require('react-dom');
 
 var DashboardPage = require('../DashboardPage');
 var MarathonStore = require('../../stores/MarathonStore');
@@ -30,9 +34,15 @@ describe('DashboardPage', function () {
 
     beforeEach(function () {
       MarathonStore.addChangeListener = function () {};
-      this.instance = TestUtils.renderIntoDocument(
-        <DashboardPage servicesListLength={5} params={{serviceName: ''}} />
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
+        <DashboardPage servicesListLength={5} params={{serviceName: ''}} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('gets list of services', function () {

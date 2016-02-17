@@ -10,9 +10,15 @@ var ProgressBar = require('../ProgressBar');
 describe('ProgressBar', function () {
 
   beforeEach(function () {
-    this.progressbar = TestUtils.renderIntoDocument(
-      <ProgressBar colorIndex={2} value={66} />
+    this.container = document.createElement('div');
+    this.progressbar = ReactDOM.render(
+      <ProgressBar colorIndex={2} value={66} />,
+      this.container
     );
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   it('has same style width as given percentage value', function () {

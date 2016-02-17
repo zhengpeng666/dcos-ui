@@ -1,23 +1,20 @@
 jest.dontMock('../../mixins/InternalStorageMixin');
 jest.dontMock('../../mixins/TabsMixin');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../stores/MesosSummaryStore');
-jest.dontMock('../../stores/MarathonStore');
-jest.dontMock('../../utils/MesosSummaryUtil');
-jest.dontMock('../../events/MesosSummaryActions');
-jest.dontMock('../../events/MarathonActions');
 jest.dontMock('../SidePanelContents');
 jest.dontMock('../GroupSidePanel');
 jest.dontMock('../GroupSidePanelContents');
-jest.dontMock('../../utils/Util');
-jest.dontMock('../../utils/RequestUtil');
-jest.dontMock('../../structs/SummaryList');
+jest.dontMock('../../stores/ACLGroupStore');
+jest.dontMock('../../stores/MesosSummaryStore');
+jest.dontMock('../../stores/MarathonStore');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLGroupStore', 'MesosSummaryStore', 'MarathonStore']);
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
-var TestUtils = require('react-addons-test-utils');
+var ReactDOM = require('react-dom');
 
 var MesosSummaryActions = require('../../events/MesosSummaryActions');
 var ACLGroupStore = require('../../stores/ACLGroupStore');
@@ -59,11 +56,17 @@ describe('GroupSidePanel', function () {
       this.params = {
         groupID: null
       };
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <GroupSidePanel
           params={this.params}
-          openedPage="settings-organization-groups" />
+          openedPage="settings-organization-groups" />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should return false if all IDs are null', function () {
@@ -83,11 +86,17 @@ describe('GroupSidePanel', function () {
       this.params = {
         groupID: null
       };
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <GroupSidePanel
           statesProcessed={true}
-          params={this.params} />
+          params={this.params} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should return GroupSidePanelContents if groupID is set',

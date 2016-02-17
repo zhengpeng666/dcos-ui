@@ -2,7 +2,6 @@ jest.dontMock('../SideTabs');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var TestUtils = require('react-addons-test-utils');
 
 var SideTabs = require('../SideTabs');
 
@@ -10,11 +9,17 @@ describe('SideTabs', function () {
   describe('#getTabs', function () {
     beforeEach(function () {
       this.tabs = [{title: 'Application'}, {title: 'Host'}];
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <SideTabs
           selectedTab="Application"
-          tabs={this.tabs} />
+          tabs={this.tabs} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('returns a list item for each tab', function () {

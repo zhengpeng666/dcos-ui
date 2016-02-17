@@ -8,11 +8,17 @@ var TimeSeriesLabel = require('../TimeSeriesLabel');
 describe('TimeSeriesLabel', function () {
 
   beforeEach(function () {
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <TimeSeriesLabel colorIndex={2}
         currentValue="10"
-        subHeading="Foo" />
+        subHeading="Foo" />,
+      this.container
     );
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   it('should display the correct label', function () {

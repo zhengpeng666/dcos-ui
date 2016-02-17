@@ -3,6 +3,7 @@ jest.dontMock('../NodesGridDials');
 
 var _ = require('underscore');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var NodesGridDials = require('../NodesGridDials');
@@ -24,14 +25,19 @@ describe('NodesGridDials', function () {
 
   beforeEach(function () {
     this.hosts = [new Node(_.clone(mockHost))];
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <NodesGridDials
         hosts={this.hosts}
         selectedResource="cpus"
         serviceColors={{}}
         showServices={false}
-        resourcesByFramework={{}} />
+        resourcesByFramework={{}} />,
+      this.container
     );
+  });
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#getActiveSliceData', function () {
@@ -139,13 +145,14 @@ describe('NodesGridDials', function () {
       let host = _.clone(this.hosts[0]);
       host.id = 'bar';
       this.hosts.push(new Node(host));
-      this.instance = TestUtils.renderIntoDocument(
+      this.instance = ReactDOM.render(
         <NodesGridDials
           hosts={this.hosts}
           selectedResource="cpus"
           serviceColors={{}}
           showServices={false}
-          resourcesByFramework={{}} />
+          resourcesByFramework={{}} />,
+        this.container
       );
 
       var elements = TestUtils.scryRenderedDOMComponentsWithClass(

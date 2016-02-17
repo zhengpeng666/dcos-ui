@@ -12,7 +12,6 @@ jest.dontMock('../../utils/Util');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var TestUtils = require('react-addons-test-utils');
 
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
 var ServiceTable = require('../ServiceTable');
@@ -25,10 +24,11 @@ var stateJSON = require('../../stores/__tests__/fixtures/state.json');
 MesosSummaryStore.init();
 MesosSummaryStore.processSummary(stateJSON);
 
-function getTable(isAppsProcessed) {
-  return TestUtils.renderIntoDocument(
+function getTable(isAppsProcessed, container) {
+  return ReactDOM.render(
     <ServiceTable services={[]}
-      healthProcessed={isAppsProcessed} />
+      healthProcessed={isAppsProcessed} />,
+    container
   );
 }
 
@@ -38,30 +38,39 @@ describe('ServiceTable', function () {
 
     beforeEach(function () {
       this.services = MesosSummaryStore.get('states').lastSuccessful().getServiceList().getItems();
+      this.container = document.createElement('div');
+    });
+
+    afterEach(function () {
+      MesosSummaryStore.removeAllListeners();
+
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should have loaders on all services', function () {
-      var table = getTable(false);
+      var table = getTable(false, this.container);
 
       this.services.slice(0).forEach(function (row) {
-        var healthlabel = TestUtils.renderIntoDocument(
-          table.renderHealth(null, row)
+        var healthlabel = ReactDOM.render(
+          table.renderHealth(null, row),
+          this.container
         );
 
         var node = ReactDOM.findDOMNode(healthlabel);
         expect(node.classList.contains('loader-small')).toBeTruthy();
-      });
+      }, this);
     });
 
     it('should have N/A health status on all services', function () {
-      var table = getTable(true);
+      var table = getTable(true, this.container);
 
       this.services.slice(0).forEach(function (row) {
-        var healthlabel = TestUtils.renderIntoDocument(
-          table.renderHealth(null, row)
+        var healthlabel = ReactDOM.render(
+          table.renderHealth(null, row),
+          this.container
         );
         expect(ReactDOM.findDOMNode(healthlabel).innerHTML).toEqual(HealthLabels.NA);
-      });
+      }, this);
     });
 
   });

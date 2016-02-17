@@ -1,13 +1,11 @@
 jest.dontMock('../UserGroupTable');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../events/ACLUsersActions');
-jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../stores/ACLGroupStore');
 jest.dontMock('../../stores/ACLGroupsStore');
-jest.dontMock('../../utils/ResourceTableUtil');
-jest.dontMock('../../utils/StringUtil');
-jest.dontMock('../../utils/Util');
+jest.dontMock('../../stores/ACLUserStore');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLGroupStore', 'ACLGroupsStore', 'ACLUserStore']);
 require('../../utils/StoreMixinConfig');
 
 var React = require('react');
@@ -35,16 +33,22 @@ describe('UserGroupTable', function () {
         return new User(userDetailsFixture);
       }
     };
+    this.container = document.createElement('div');
 
-    this.instance = TestUtils.renderIntoDocument(
-      <UserGroupTable userID={'unicode'}/>
+    this.instance = ReactDOM.render(
+      <UserGroupTable userID={'unicode'}/>,
+      this.container
     );
 
     this.instance.handleOpenConfirm = jest.genMockFunction();
   });
 
   afterEach(function () {
+    ACLUserStore.removeAllListeners();
+    ACLGroupStore.removeAllListeners();
     ACLUserStore.getUser = this.userStoreGetUser;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#onGroupStoreDeleteUserError', function () {

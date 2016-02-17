@@ -1,11 +1,13 @@
 jest.dontMock('./fixtures/MockTasks');
 jest.dontMock('../../utils/ResourceTableUtil');
+jest.dontMock('../../stores/MesosStateStore');
 jest.dontMock('../TaskTable');
 jest.dontMock('moment');
 
 var React = require('react');
-var TestUtils = require('react-addons-test-utils');
+var ReactDOM = require('react-dom');
 
+var MesosStateStore = require('../../stores/MesosStateStore');
 var TaskTable = require('../TaskTable');
 const Tasks = require('./fixtures/MockTasks').tasks;
 
@@ -16,10 +18,17 @@ describe('TaskTable', function () {
         return [{name: 'home'}, {name: 'dashboard'}, {name: 'service-detail'}];
       }
     };
-
-    this.instance = TestUtils.renderIntoDocument(
-      <TaskTable tasks={Tasks} parentRouter={this.parentRouter} />
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
+      <TaskTable tasks={Tasks} parentRouter={this.parentRouter} />,
+      this.container
     );
+  });
+
+  afterEach(function () {
+    MesosStateStore.getNodeFromID = this.getNodeFromID;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#getTaskPanelRoute', function () {
