@@ -1,17 +1,6 @@
 import React from 'react';
 
-const METHODS_TO_BIND = [
-];
-
 export default class ReviewConfig extends React.Component {
-  constructor() {
-    super();
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
   getFieldTitle(title) {
     return <h3>{title}</h3>;
   }
