@@ -120,8 +120,7 @@ class PackagesTab extends mixin(StoreMixin) {
 
     return _.sortBy(packages.getItems(), function (cosmosPackage) {
       return cosmosPackage.get(sortProp);
-    })
-    .map((cosmosPackage, index) => {
+    }).map((cosmosPackage, index) => {
       return (
         <div
           className="grid-item column-small-6 column-medium-4 column-large-3"
