@@ -168,7 +168,7 @@ class UserDropup extends React.Component {
           dropdownMenuClassName="dropdown-menu"
           dropdownMenuListClassName="dropdown-menu-list"
           items={this.getDropdownMenu(userMenuItems)}
-          initialID="default-item"
+          persistentID="default-item"
           transition={true}
           wrapperClassName="sidebar-footer-user-dropdown dropdown" />
         <div className="open">
