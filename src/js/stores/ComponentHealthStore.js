@@ -3,8 +3,8 @@ import {Store} from 'mesosphere-shared-reactjs';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../events/AppDispatcher';
 import ComponentHealthActions from '../events/ComponentHealthActions';
-import ComponentsList from '../structs/ComponentsList';
-import EventTypes from '..constants/EventTypes';
+import HealthComponentList from '../structs/HealthComponentList';
+import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 
 const ComponentHealthStore = Store.createStore({
@@ -27,7 +27,7 @@ const ComponentHealthStore = Store.createStore({
 
   processComponents: function (components) {
     this.set({
-      users: new ComponentsList({
+      components: new HealthComponentList({
         items: components
       })
     });
