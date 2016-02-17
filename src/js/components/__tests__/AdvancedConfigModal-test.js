@@ -1,7 +1,9 @@
 jest.dontMock('../AdvancedConfigModal');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+/* eslint-disable no-unused-vars */
+var React = require('react');
+/* eslint-enable no-unused-vars */
+var TestUtils = require('react-addons-test-utils');
 
 var AdvancedConfigModal = require('../AdvancedConfigModal');
 
@@ -38,11 +40,14 @@ describe('AdvancedConfigModal', function () {
 
     it('should return callback for right button that calls #onClose',
       function () {
-      this.instance.props.onClose = jasmine.createSpy();
-      var callback = this.instance.getLeftButtonCallback();
+      var spy = jasmine.createSpy();
+      var instance = TestUtils.renderIntoDocument(
+        <AdvancedConfigModal onClose={spy} />
+      );
+      var callback = instance.getLeftButtonCallback();
       callback();
 
-      expect(this.instance.props.onClose).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalled();
     });
   });
 
