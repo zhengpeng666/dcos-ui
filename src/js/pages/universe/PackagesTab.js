@@ -1,12 +1,11 @@
 import mixin from 'reactjs-mixin';
-import {Modal} from 'reactjs-components';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+import AdvancedConfigModal from '../../components/AdvancedConfigModal';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
-import MultipleForm from '../../components/MultipleForm';
 import Panel from '../../components/Panel';
 
 const METHODS_TO_BIND = [
@@ -114,22 +113,13 @@ class PackagesTab extends mixin(StoreMixin) {
       <div className="grid row">
         <button
           className="button button-success"
-          onClick={this.handleButtonClick}>
+          onClick={this.handleAdvancedModalOpen}>
           Open Advanced Configuration
         </button><br/>
-        {this.getPackages()}
-        <Modal
-          modalWrapperClass="modal-generic-error"
-          modalClass="modal modal-large"
-          maxHeightPercentage={0.9}
-          onClose={this.handleAdvancedModalClose}
+        <AdvancedConfigModal
           open={advancedModalOpen}
-          showCloseButton={false}
-          showHeader={false}
-          showFooter={false}
-          titleClass="modal-header-title text-align-center flush">
-          <MultipleForm />
-        </Modal>
+          onClose={this.handleAdvancedModalClose}/>
+        {this.getPackages()}
       </div>
     );
   }
