@@ -120,7 +120,7 @@ var TooltipMixin = {
   tip_destroyTip: function (tipID) {
     // Allows us to create a new tip for the element.
     // Useful when the element has tooltip -> doesn't -> then has it again.
-    var el = this.getNode().querySelector(`[data-tip-i-d="${tipID}]`);
+    var el = this.getNode().querySelector(`[data-tip-i-d="${tipID}"]`);
     if (el && el.dataset) {
       delete el.dataset.tipID;
     }
