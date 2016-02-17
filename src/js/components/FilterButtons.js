@@ -37,7 +37,7 @@ class FilterButtons extends React.Component {
           key={filter}
           className={classSet}
           onClick={this.props.getfilterChangeHandler(filter)}>
-          {this.props.buttonContentFunction(filter, filterCount[filter])}
+          {this.props.renterButtonContent(filter, filterCount[filter])}
         </button>
       );
     });
@@ -53,12 +53,12 @@ class FilterButtons extends React.Component {
 }
 
 FilterButtons.defaultProps = {
-  buttonContentFunction: function (title) {return title; }
+  renterButtonContent: function (title) {return title; }
 };
 
 FilterButtons.propTypes = {
   // Optional function to generate button text. args: (filter, count)
-  buttonContentFunction: React.PropTypes.func,
+  renterButtonContent: React.PropTypes.func,
   filters: React.PropTypes.array,
   // The key in itemList that is being filtered
   filterByKey: React.PropTypes.string.isRequired,

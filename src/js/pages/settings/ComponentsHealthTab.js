@@ -196,7 +196,7 @@ class ComponentsHealthTab extends React.Component {
           <ul className="list list-unstyled list-inline flush-bottom">
             <li>
               <FilterButtons
-                buttonContentFunction={this.getButtonContent}
+                renderButtonContent={this.getButtonContent}
                 filters={['all', 'healthy', 'unhealthy']}
                 filterByKey={'title'}
                 getfilterChangeHandler={this.getHandleHealthFilterChange}
