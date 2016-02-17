@@ -51,6 +51,44 @@ describe('Directories Page [02l]', function () {
       mod.should('be.null');
     });
 
+    it('does not allow selecting StartTLS when SSL/TLS is selected [0jv]', function () {
+      cy.get('@addDirectoryBtn').click();
+      cy.get('.modal .modal-content').contains('Use SSL/TLS socket').click();
+      cy.get('.modal .modal-content').contains('Enforce StartTLS')
+        .closest('label').children('input').should(function ($checkbox) {
+          expect($checkbox[0].disabled).to.be.true;
+        });
+    });
+
+    it('enables checkbox after unselecting SSL/TLS [0jj]', function () {
+      cy.get('@addDirectoryBtn').click();
+      cy.get('.modal .modal-content').contains('Use SSL/TLS socket').click();
+      cy.get('.modal .modal-content').contains('Use SSL/TLS socket').click();
+      cy.get('.modal .modal-content').contains('Enforce StartTLS')
+        .closest('label').children('input').should(function ($checkbox) {
+          expect($checkbox[0].disabled).to.not.be.true;
+        });
+    });
+
+    it('does not allow selecting SSL/TLS when StartTLS is selected [0jw]', function () {
+      cy.get('@addDirectoryBtn').click();
+      cy.get('.modal .modal-content').contains('Enforce StartTLS').click();
+      cy.get('.modal .modal-content').contains('Use SSL/TLS socket')
+        .closest('label').children('input').should(function ($checkbox) {
+          expect($checkbox[0].disabled).to.be.true;
+        });
+    });
+
+    it('enables checkbox after unselecting SSL/TLS [0jt]', function () {
+      cy.get('@addDirectoryBtn').click();
+      cy.get('.modal .modal-content').contains('Enforce StartTLS').click();
+      cy.get('.modal .modal-content').contains('Enforce StartTLS').click();
+      cy.get('.modal .modal-content').contains('Use SSL/TLS socket')
+        .closest('label').children('input').should(function ($checkbox) {
+          expect($checkbox[0].disabled).to.not.be.true;
+        });
+    });
+
   });
 
 
