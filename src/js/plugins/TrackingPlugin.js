@@ -36,6 +36,9 @@ const TrackingPlugin = {
       this.installCLIModalAppendInstructions.bind(this)
     );
     Plugins.addFilter(
+      'installCLIModalCLISnippet', this.installCLIModalCLISnippet.bind(this)
+    );
+    Plugins.addFilter(
       'installCLIModalFooter', this.installCLIModalFooter.bind(this)
     );
     Plugins.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
@@ -128,6 +131,14 @@ const TrackingPlugin = {
     );
 
     value.splice(1, 0, intercomButton);
+
+    return value;
+  },
+
+  installCLIModalCLISnippet: function (value) {
+    if (this.isEnabled() !== true) {
+      value += ' && \n  dcos config set core.reporting false';
+    }
 
     return value;
   },

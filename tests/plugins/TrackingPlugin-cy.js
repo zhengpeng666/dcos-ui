@@ -10,9 +10,18 @@ describe('Tracking Plugin Enabled [02w]', function() {
   });
 
   context('Sidebar [02x]', function() {
+
     it('should have three sidebar icons [02y]', function() {
       cy.get('.sidebar-footer').find('.button').should('to.have.length', 3);
     })
+
+    it('should not disable cli in instructions [0df]', function () {
+      cy.get('.sidebar-footer').find('.button').last().click();
+
+      cy.get('.install-cli-modal-content pre')
+        .should('not.contain', 'dcos config set core.reporting false');
+    });
+
   });
 
   context('Welcome Modal [02z]', function() {
@@ -21,6 +30,7 @@ describe('Tracking Plugin Enabled [02w]', function() {
     });
 
     context('New User [037]', function() {
+
       beforeEach(function() {
         cy.clearLocalStorage().visit('http://localhost:4200/');
       });
@@ -28,9 +38,11 @@ describe('Tracking Plugin Enabled [02w]', function() {
       it('should show modal when no \'email\' in localStorage [031]', function() {
         cy.get('.modal');
       });
+
     });
 
   });
+
 });
 
 describe('Tracking Plugin Disabled [03d]', function() {
@@ -46,12 +58,22 @@ describe('Tracking Plugin Disabled [03d]', function() {
   });
 
   context('Sidebar [03c]', function() {
+
     it('should have no sidebar icons [03e]', function() {
-      cy.get('.sidebar-footer').find('.button').should('to.have.length', 0);
-    })
+      cy.get('.sidebar-footer').find('.button').should('to.have.length', 2);
+    });
+
+    it('should disable cli in instructions [0de]', function () {
+      cy.get('.sidebar-footer').find('.button').last().click();
+
+      cy.get('.install-cli-modal-content pre')
+        .should('contain', 'dcos config set core.reporting false');
+    });
+
   });
 
   context('Welcome Modal [03f]', function() {
+
     it('should not show modal when no email in localStorage [03g]', function() {
       cy.get('.modal').should('not');
     });
@@ -66,7 +88,9 @@ describe('Tracking Plugin Disabled [03d]', function() {
           cy.get('.modal').should('not');
         }
       );
+
     });
 
   });
+
 });

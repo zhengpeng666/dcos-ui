@@ -64,7 +64,10 @@ var CliInstructionsModal = React.createClass({
           </ul>
         </div>
       );
-      cliSnippet = 'mkdir -p dcos && cd dcos && \n  curl -O https://downloads.mesosphere.com/dcos-cli/install.sh && \n  bash ./install.sh . http://' + hostname + ' && \n  source ./bin/env-setup';
+      cliSnippet = Plugins.applyFilter(
+        'installCLIModalCLISnippet',
+        'mkdir -p dcos && cd dcos && \n  curl -O https://downloads.mesosphere.com/dcos-cli/install.sh && \n  bash ./install.sh . http://' + hostname + ' && \n  source ./bin/env-setup'
+      );
     }
 
     if (cliSnippet) {
