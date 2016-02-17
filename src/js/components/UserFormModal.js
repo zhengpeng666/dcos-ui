@@ -58,7 +58,7 @@ export default class UserFormModal extends mixin(StoreMixin) {
       {
         fieldType: 'text',
         name: 'description',
-        placeholder: 'Full name',
+        placeholder: 'Full Name',
         required: true,
         showError: false,
         showLabel: false,

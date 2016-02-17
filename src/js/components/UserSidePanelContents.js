@@ -107,7 +107,7 @@ export default class UserSidePanelContents extends SidePanelContents {
       {
         fieldType: 'text',
         name: 'text',
-        placeholder: 'User\'s Name',
+        placeholder: 'User\'s Full Name',
         required: true,
         sharedClass: 'form-element-inline h1 flush',
         showError: false,
