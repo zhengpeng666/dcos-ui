@@ -45,14 +45,28 @@
             "type": "integer"
           },
           "machine_reachable_pct": {
-            "description": "Percentage of clients that can reach this machine.",
+            "description": "Percentage of clients that can reach this machine over time.",
             "title": "Machine Reachable Percentage",
-            "type": "integer"
+            "type": "object",
+            "patternProperties": {
+              "description": "Timestamp of value.",
+              "title": "Timestamp",
+              "[0-9]": {
+                "type": "integer"
+              }
+            }
           },
           "application_reachable_pct": {
-            "description": "Percentage of clients that can reach this application.",
+            "description": "Percentage of clients that can reach this application over time.",
             "title": "Application Reachable Percentage",
-            "type": "integer"
+            "type": "object",
+            "patternProperties": {
+              "description": "Timestamp of value.",
+              "title": "Timestamp",
+              "[0-9]": {
+                "type": "integer"
+              }
+            }
           }
         }
       }

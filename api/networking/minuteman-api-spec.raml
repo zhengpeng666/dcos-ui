@@ -89,8 +89,14 @@ schemas:
                       },
                       "ip": "10.10.11.12",
                       "port": 52342,
-                      "machine_reachable_pct": 98,
-                      "application_reachable_pct": 3
+                      "machine_reachable_pct": {
+                        "1454007720": 98,
+                        "1454007660": 95
+                      },
+                      "application_reachable_pct": {
+                        "1454007720": 97,
+                        "1454007660": 99
+                      }
                     }
                   ],
                   "backend_machines_reachable": {
@@ -143,7 +149,15 @@ schemas:
                       },
                       "ip": "10.10.11.13",
                       "machine_reachable": true,
-                      "application_reachable": false
+                      "machine_reachable_pct": {
+                        "1454007720": 98,
+                        "1454007660": 95
+                      },
+                      "application_reachable": false,
+                      "application_reachable_pct": {
+                        "1454007720": 97,
+                        "1454007660": 99
+                      }
                     }
                   ]
                 }
