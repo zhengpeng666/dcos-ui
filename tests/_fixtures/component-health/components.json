@@ -19,9 +19,9 @@
       "health": 1
     },
     {
-      "id": "apache-zookeeper",
-      "name": "Apache Zookeeper",
-      "version": "3.4.6",
+      "id": "mesos-DNS",
+      "name": "Mesos DNS",
+      "version": "0.1.1",
       "health": 0
     },
     {

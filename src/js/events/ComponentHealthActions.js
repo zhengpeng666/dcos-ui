@@ -52,6 +52,12 @@ if (Config.useFixtures) {
   global.actionTypes.ComponentHealthActions = {
     fetchComponents: {event: 'success', success: {response: componentsFixture}}
   };
+
+  Object.keys(global.actionTypes.ComponentHealthActions).forEach(function (method) {
+    ComponentHealthActions[method] = RequestUtil.stubRequest(
+      ComponentHealthActions, 'ComponentHealthActions', method
+    );
+  });
 }
 
 module.exports = ComponentHealthActions;

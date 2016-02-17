@@ -13,6 +13,10 @@ const ComponentHealthStore = Store.createStore({
 
   mixins: [GetSetMixin],
 
+  getSet_data: {
+    components: new HealthComponentList()
+  },
+
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
   },
