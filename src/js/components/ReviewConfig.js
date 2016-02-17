@@ -9,20 +9,21 @@ class ReviewConfig extends React.Component {
   }
 
   getServiceHeader() {
+    let {props} = this;
     return (
       <div className="media-object media-object-align-middle">
         <div className="media-object-icon media-object-icon-medium">
           <img
             className="icon icon-sprite icon-sprite-medium
               icon-sprite-medium-color"
-            src={this.props.serviceImage} />
+            src={props.serviceImage} />
         </div>
         <div className="media-object-content">
           <h4 className="flush-top flush-bottom text-color-neutral">
-            {this.props.serviceName}
+            {props.serviceName}
           </h4>
           <span className="side-panel-resource-label">
-            {this.props.serviceVersion}
+            {props.serviceVersion}
           </span>
         </div>
       </div>
