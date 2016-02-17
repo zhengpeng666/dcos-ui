@@ -1,7 +1,8 @@
 var _ = require('underscore');
 var classNames = require('classnames');
 var d3 = require('d3');
-var React = require('react/addons');
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var Bar = require('./Bar');
 var ChartMixin = require('../../mixins/ChartMixin');
@@ -111,7 +112,7 @@ var BarChart = React.createClass({
 
   createClipPath: function () {
     var data = this.internalStorage_get();
-    var el = this.getDOMNode();
+    var el = ReactDOM.findDOMNode(this);
 
     d3.select(el)
       .append('defs')
@@ -193,7 +194,7 @@ var BarChart = React.createClass({
         .ticks(xTicks)
         .tickFormat(this.formatXAxis)
         .orient('bottom');
-      d3.select(this.refs.xAxis.getDOMNode()).interrupt()
+      d3.select(this.refs.xAxis).interrupt()
         .attr('class', xAxisClass)
         .call(xAxis);
     }
@@ -207,11 +208,11 @@ var BarChart = React.createClass({
       .ticks(props.ticksY)
       .tickFormat(this.formatYAxis(props.ticksY, props.maxY))
       .orient('left');
-    d3.select(this.refs.yAxis.getDOMNode())
+    d3.select(this.refs.yAxis)
       .attr('class', yAxisClass)
       .call(yAxis);
 
-    d3.select(this.refs.yGrid.getDOMNode())
+    d3.select(this.refs.yGrid)
       .attr('class', 'grid y')
       .call(
         d3.svg.axis().scale(yScale)
@@ -225,7 +226,7 @@ var BarChart = React.createClass({
     if (props.xGridLines != null) {
       xGridLines = props.xGridLines;
     }
-    d3.select(this.refs.xGrid.getDOMNode())
+    d3.select(this.refs.xGrid)
       .attr('class', 'grid x')
       .call(
         d3.svg.axis().scale(xScale)
@@ -260,7 +261,7 @@ var BarChart = React.createClass({
     // the axis is reset right before we update the bar to the new value/position
     // prevents subsequent animations from animating from 0
     if (data.rectWidth) {
-      d3.select(this.refs.xAxis.getDOMNode()).interrupt()
+      d3.select(this.refs.xAxis).interrupt()
         .transition().delay(0)
         .attr('transform', 'translate(' + [0, props.height] + ')');
     }

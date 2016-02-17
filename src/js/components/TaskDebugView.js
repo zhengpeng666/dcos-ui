@@ -21,7 +21,7 @@ const METHODS_TO_BIND = [
   'onTaskDirectoryStoreSuccess'
 ];
 
-export default class TaskDebugView extends mixin(StoreMixin) {
+class TaskDebugView extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -185,3 +185,5 @@ TaskDebugView.defaultProps = {
   showExpandButton: function () {},
   task: {}
 };
+
+module.exports = TaskDebugView;

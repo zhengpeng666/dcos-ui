@@ -7,7 +7,7 @@ import {RouteHandler} from 'react-router';
 import Page from '../components/Page';
 import TabsMixin from '../mixins/TabsMixin';
 
-export default class UniversePage extends mixin(TabsMixin) {
+class UniversePage extends mixin(TabsMixin) {
   constructor() {
     super();
 
@@ -73,3 +73,5 @@ UniversePage.routeConfig = {
   icon: 'universe',
   matches: /^\/universe/
 };
+
+module.exports = UniversePage;

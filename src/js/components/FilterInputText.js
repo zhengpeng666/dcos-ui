@@ -1,5 +1,5 @@
 var classNames = require('classnames');
-var React = require('react/addons');
+var React = require('react');
 
 var FilterInputText = React.createClass({
 
@@ -28,7 +28,7 @@ var FilterInputText = React.createClass({
 
   handleChange: function (e) {
     e.preventDefault();
-    this.props.handleFilterChange(this.refs.filterInput.getDOMNode().value);
+    this.props.handleFilterChange(this.refs.filterInput.value);
   },
 
   handleClearInput: function (e) {

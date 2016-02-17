@@ -196,4 +196,4 @@ const MesosLogStore = Store.createStore({
 
 });
 
-export default MesosLogStore;
+module.exports = MesosLogStore;

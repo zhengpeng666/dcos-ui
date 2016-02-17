@@ -1,5 +1,6 @@
 var classNames = require('classnames');
-var React = require('react/addons');
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var DOMUtils = require('../utils/DOMUtils');
@@ -21,7 +22,7 @@ var AlertPanel = React.createClass({
   },
 
   componentDidMount: function () {
-    var panel = this.refs.panel.getDOMNode();
+    var panel = ReactDOM.findDOMNode(this.refs.panel);
     var width = DOMUtils.getComputedWidth(panel);
     this.internalStorage_set({height: width});
     this.forceUpdate();

@@ -58,7 +58,6 @@ const ACLGroupsStore = Store.createStore({
 
     return true;
   })
-
 });
 
-export default ACLGroupsStore;
+module.exports = ACLGroupsStore;

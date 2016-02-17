@@ -1,7 +1,7 @@
-import Item from './Item';
 import UsersList from './UsersList';
+import Item from './Item';
 
-export default class Group extends Item {
+module.exports = class Group extends Item {
   getPermissions() {
     return this.get('permissions');
   }
@@ -21,4 +21,4 @@ export default class Group extends Item {
   getUserCount() {
     return this.getUsers().getItems().length;
   }
-}
+};

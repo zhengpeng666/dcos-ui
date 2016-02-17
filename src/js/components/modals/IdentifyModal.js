@@ -25,7 +25,7 @@ var IdentifyModal = React.createClass({
   handleSubmit: function (e) {
     e.preventDefault();
 
-    var email = this.refs.email.getDOMNode().value.toLowerCase();
+    var email = this.refs.email.value.toLowerCase();
 
     if (!Validator.isEmail(email)) {
       this.internalStorage_update({

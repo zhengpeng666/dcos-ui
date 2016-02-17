@@ -6,7 +6,6 @@ import IconInfo from '../components/icons/IconInfo';
 import DOMUtils from '../utils/DOMUtils';
 
 const BannerPlugin = {
-
   configuration: {
     backgroundColor: '#1E232F',
     foregroundColor: '#FFFFFF',
@@ -206,7 +205,6 @@ const BannerPlugin = {
       </footer>
     );
   }
-
 };
 
-export default BannerPlugin;
+module.exports = BannerPlugin;

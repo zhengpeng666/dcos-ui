@@ -7,8 +7,13 @@ jest.dontMock('../../../events/AppDispatcher');
 jest.dontMock('../../../constants/EventTypes');
 jest.dontMock('../../../mixins/GetSetMixin');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var JestUtil = require('../../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLAuthStore']);
+
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var ACLAuthStore = require('../../../stores/ACLAuthStore');
 var UserDropup = require('../UserDropup');
@@ -34,8 +39,10 @@ describe('UserDropup', function () {
       <div baz="qux" key="baz" type="a" props={mockProps} />
     ];
 
-    this.instance = TestUtils.renderIntoDocument(
-      <UserDropup items={dropdownItems} />
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
+      <UserDropup items={dropdownItems} />,
+      this.container
     );
 
     this.instance.dropdownItems = dropdownItems;
@@ -43,6 +50,8 @@ describe('UserDropup', function () {
 
   afterEach(function () {
     ACLAuthStore.getUser = this.getUser;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#getDropdownMenu', function () {
@@ -75,9 +84,9 @@ describe('UserDropup', function () {
 
     it('should return an array of li elements', function () {
       this.modalMenu.forEach(function (item) {
-        let domEl = TestUtils.renderIntoDocument(item);
-        expect(domEl.getDOMNode().nodeName).toEqual('LI');
-      });
+        let domEl = ReactDOM.render(item, this.container);
+        expect(ReactDOM.findDOMNode(domEl).nodeName).toEqual('LI');
+      }, this);
     });
 
   });

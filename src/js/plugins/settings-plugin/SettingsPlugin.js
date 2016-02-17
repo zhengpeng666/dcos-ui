@@ -3,7 +3,6 @@ import _ from 'underscore';
 let settingsRoutes = require('./routes');
 
 const SettingsPlugin = {
-
   configuration: {
     enabled: false
   },
@@ -50,7 +49,6 @@ const SettingsPlugin = {
 
     return value.concat(['settings']);
   }
-
 };
 
-export default SettingsPlugin;
+module.exports = SettingsPlugin;

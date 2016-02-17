@@ -1,16 +1,14 @@
-jest.dontMock('../../constants/StoreConfig');
-jest.dontMock('../../stores/MesosLogStore');
-jest.dontMock('../../utils/Util');
-jest.dontMock('../../utils/DOMUtils');
-jest.dontMock('../../utils/RequestUtil');
-jest.dontMock('../../structs/SummaryList');
 jest.dontMock('../Highlight');
 jest.dontMock('../MesosLogView');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['MesosLogStore']);
 require('../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var MesosLogStore = require('../../stores/MesosLogStore');
 var MesosLogView = require('../MesosLogView');
@@ -28,8 +26,10 @@ describe('MesosLogView', function () {
     MesosLogStore.startTailing = jasmine.createSpy('startTailing');
     MesosLogStore.stopTailing = jasmine.createSpy('stopTailing');
 
-    this.instance = TestUtils.renderIntoDocument(
-      <MesosLogView filePath="/some/file/path" slaveID="foo" />
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
+      <MesosLogView filePath="/some/file/path" slaveID="foo" />,
+      this.container
     );
 
     this.instance.setState = jasmine.createSpy('setState');
@@ -46,6 +46,8 @@ describe('MesosLogView', function () {
     MesosLogStore.startTailing = this.storeStartTailing;
     MesosLogStore.stopTailing = this.storeStopTailing;
     MesosLogStore.get = this.mesosLogStoreGet;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#componentDidMount', function () {
@@ -248,8 +250,9 @@ describe('MesosLogView', function () {
     });
 
     it('should call getLoadingScreen when filePath is undefined', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <MesosLogView slaveID="foo" />
+      var instance = ReactDOM.render(
+        <MesosLogView slaveID="foo" />,
+        this.container
       );
       instance.state.fullLog = null;
 

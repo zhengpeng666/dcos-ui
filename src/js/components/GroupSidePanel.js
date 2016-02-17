@@ -1,5 +1,5 @@
 import mixin from 'reactjs-mixin';
-import React from 'react/addons';
+import React from 'react';
 import {Confirm, SidePanel} from 'reactjs-components';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
@@ -15,7 +15,7 @@ const METHODS_TO_BIND = [
   'handleDeleteGroup'
 ];
 
-export default class GroupSidePanel extends mixin(StoreMixin) {
+class GroupSidePanel extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -206,3 +206,5 @@ GroupSidePanel.contextTypes = {
 GroupSidePanel.propTypes = {
   params: React.PropTypes.object
 };
+
+module.exports = GroupSidePanel;

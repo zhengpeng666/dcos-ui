@@ -21,7 +21,7 @@ const EXTERNAL_CHANGE_EVENTS = [
 
 const METHODS_TO_BIND = ['handleNameChange'];
 
-export default class UserSidePanelContents extends SidePanelContents {
+module.exports = class UserSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
@@ -221,4 +221,4 @@ ${groupLabel}${remote}`
       </div>
     );
   }
-}
+};

@@ -152,4 +152,4 @@ var Plugins = _.extend({}, Events.EventEmitter.prototype, {
   }
 });
 
-export default Plugins;
+module.exports = Plugins;

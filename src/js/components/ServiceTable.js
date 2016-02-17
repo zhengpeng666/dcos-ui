@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var classNames = require('classnames');
 import {Link} from 'react-router';
-var React = require('react/addons');
+var React = require('react');
 
 import Cluster from '../utils/Cluster';
 var EventTypes = require('../constants/EventTypes');

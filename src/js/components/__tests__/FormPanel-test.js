@@ -1,7 +1,8 @@
 jest.dontMock('../FormPanel');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var FormPanel = require('../FormPanel');
 
@@ -36,12 +37,17 @@ describe('FormPanel', function () {
           value: ''
         }
       ];
-
-      var instance = TestUtils.renderIntoDocument(
-        <FormPanel />
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
+        <FormPanel />,
+        this.container
       );
 
-      this.flattenedDefinition = instance.flattenDefinition(definition);
+      this.flattenedDefinition = this.instance.flattenDefinition(definition);
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('flattens turns the 2nd level object to an item', function () {

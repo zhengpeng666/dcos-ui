@@ -10,8 +10,8 @@ jest.dontMock('../../utils/StringUtil');
 jest.dontMock('../../stores/__tests__/fixtures/state.json');
 jest.dontMock('../../utils/Util');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
 var ServiceTable = require('../ServiceTable');
@@ -24,10 +24,11 @@ var stateJSON = require('../../stores/__tests__/fixtures/state.json');
 MesosSummaryStore.init();
 MesosSummaryStore.processSummary(stateJSON);
 
-function getTable(isAppsProcessed) {
-  return TestUtils.renderIntoDocument(
+function getTable(isAppsProcessed, container) {
+  return ReactDOM.render(
     <ServiceTable services={[]}
-      healthProcessed={isAppsProcessed} />
+      healthProcessed={isAppsProcessed} />,
+    container
   );
 }
 
@@ -37,32 +38,39 @@ describe('ServiceTable', function () {
 
     beforeEach(function () {
       this.services = MesosSummaryStore.get('states').lastSuccessful().getServiceList().getItems();
+      this.container = document.createElement('div');
+    });
+
+    afterEach(function () {
+      MesosSummaryStore.removeAllListeners();
+
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should have loaders on all services', function () {
-      var table = getTable(false);
+      var table = getTable(false, this.container);
 
       this.services.slice(0).forEach(function (row) {
-        var healthlabel = TestUtils.renderIntoDocument(
-          table.renderHealth(null, row)
+        var healthlabel = ReactDOM.render(
+          table.renderHealth(null, row),
+          this.container
         );
 
-        var fn = TestUtils.findRenderedDOMComponentWithClass.bind(TestUtils,
-          healthlabel, 'loader-small'
-        );
-        expect(fn).not.toThrow();
-      });
+        var node = ReactDOM.findDOMNode(healthlabel);
+        expect(node.classList.contains('loader-small')).toBeTruthy();
+      }, this);
     });
 
     it('should have N/A health status on all services', function () {
-      var table = getTable(true);
+      var table = getTable(true, this.container);
 
       this.services.slice(0).forEach(function (row) {
-        var healthlabel = TestUtils.renderIntoDocument(
-          table.renderHealth(null, row)
+        var healthlabel = ReactDOM.render(
+          table.renderHealth(null, row),
+          this.container
         );
-        expect(healthlabel.getDOMNode().innerHTML).toEqual(HealthLabels.NA);
-      });
+        expect(ReactDOM.findDOMNode(healthlabel).innerHTML).toEqual(HealthLabels.NA);
+      }, this);
     });
 
   });

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 /*eslint-disable no-unused-vars*/
-import React from 'react/addons';
+import React from 'react';
 /*eslint-enable no-unused-vars*/
 
 const TabsUtil = {
@@ -34,4 +34,4 @@ const TabsUtil = {
 
 };
 
-export default TabsUtil;
+module.exports = TabsUtil;

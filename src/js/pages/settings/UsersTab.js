@@ -24,7 +24,7 @@ const METHODS_TO_BIND = [
   'onUsersStoreError'
 ];
 
-export default class UsersTab extends mixin(StoreMixin) {
+class UsersTab extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
@@ -140,3 +140,5 @@ export default class UsersTab extends mixin(StoreMixin) {
 UsersTab.propTypes = {
   params: React.PropTypes.object
 };
+
+module.exports = UsersTab;

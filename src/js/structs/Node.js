@@ -1,6 +1,6 @@
 import Item from './Item';
 
-export default class Node extends Item {
+module.exports = class Node extends Item {
   getServiceIDs() {
     return this.get('framework_ids');
   }
@@ -16,4 +16,4 @@ export default class Node extends Item {
 
     return {percentage, total, value};
   }
-}
+};

@@ -3,8 +3,8 @@ jest.dontMock('../../../mixins/ChartMixin');
 jest.dontMock('../../../mixins/InternalStorageMixin');
 
 var _ = require('underscore');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var TimeSeriesChart = require('../TimeSeriesChart');
 
@@ -14,10 +14,17 @@ describe('TimeSeriesChart', function () {
 
     beforeEach(function () {
       var data = [{values: [{date: 0, y: 0}, {date: 1, y: 0}]}];
-      this.instance = TestUtils.renderIntoDocument(
-        <TimeSeriesChart data={data} width={0} height={0} />
+
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
+        <TimeSeriesChart data={data} width={0} height={0} />,
+        this.container
       );
       this.instance.renderAxis = jasmine.createSpy();
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should call #renderAxis', function () {

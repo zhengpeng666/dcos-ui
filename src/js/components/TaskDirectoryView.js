@@ -8,7 +8,7 @@ import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 
 const METHODS_TO_BIND = ['onTaskDirectoryStoreError'];
 
-export default class TaskDirectoryView extends mixin(StoreMixin) {
+class TaskDirectoryView extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -147,3 +147,5 @@ TaskDirectoryView.propTypes = {
 TaskDirectoryView.defaultProps = {
   task: {}
 };
+
+module.exports = TaskDirectoryView;

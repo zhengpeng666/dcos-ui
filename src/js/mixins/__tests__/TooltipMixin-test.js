@@ -1,7 +1,8 @@
 jest.dontMock('../TooltipMixin');
 
 var _ = require('underscore');
-var React = require('react/addons');
+var React = require('react');
+var ReactDOM = require('react-dom');
 var TooltipMixin = require('../TooltipMixin');
 
 describe('TooltipMixin', function () {
@@ -11,8 +12,8 @@ describe('TooltipMixin', function () {
     beforeEach(function () {
       var node = document.createElement('div');
 
-      this.findDOMNode = React.findDOMNode;
-      React.findDOMNode = function () {
+      this.findDOMNode = ReactDOM.findDOMNode;
+      ReactDOM.findDOMNode = function () {
         return node;
       };
 
@@ -20,7 +21,7 @@ describe('TooltipMixin', function () {
     });
 
     afterEach(function () {
-      React.findDOMNode = this.findDOMNode;
+      ReactDOM.findDOMNode = this.findDOMNode;
     });
 
     it('should call #tip_attachTips', function () {
@@ -30,7 +31,7 @@ describe('TooltipMixin', function () {
     });
 
     it('should attach listen on mousemove', function () {
-      var node = React.findDOMNode(this.instance);
+      var node = ReactDOM.findDOMNode(this.instance);
       node.addEventListener = jasmine.createSpy();
       this.instance.componentDidMount();
 

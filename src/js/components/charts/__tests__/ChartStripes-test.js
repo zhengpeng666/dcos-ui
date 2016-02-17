@@ -1,6 +1,7 @@
 var _ = require('underscore');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 jest.dontMock('../ChartStripes');
 var ChartStripes = require('../ChartStripes');
@@ -8,12 +9,18 @@ var ChartStripes = require('../ChartStripes');
 describe('ChartStripes', function () {
 
   beforeEach(function () {
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <ChartStripes
         count={6}
         height={10}
-        width={300} />
+        width={300} />,
+      this.container
     );
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   it('should display the correct number of stripes', function () {
@@ -29,7 +36,7 @@ describe('ChartStripes', function () {
     );
 
     _.each(stripes, function (stripe) {
-      expect(parseInt(stripe.getDOMNode().attributes.width.value, 10))
+      expect(parseInt(ReactDOM.findDOMNode(stripe).attributes.width.value, 10))
         .toEqual(25);
     });
   });
@@ -40,7 +47,7 @@ describe('ChartStripes', function () {
     );
 
     _.each(stripes, function (stripe, i) {
-      expect(parseInt(stripe.getDOMNode().attributes.x.value, 10))
+      expect(parseInt(ReactDOM.findDOMNode(stripe).attributes.x.value, 10))
         .toEqual(25 + i * 50);
     });
   });
@@ -51,7 +58,13 @@ describe('ChartStripes', function () {
     );
     expect(stripes.length).toEqual(6);
 
-    this.instance.setProps({count: 5});
+    this.instance = ReactDOM.render(
+      <ChartStripes
+        count={5}
+        height={10}
+        width={300} />,
+      this.container
+    );
 
     stripes = TestUtils.scryRenderedDOMComponentsWithClass(
       this.instance, 'background'
@@ -59,12 +72,12 @@ describe('ChartStripes', function () {
     expect(stripes.length).toEqual(5);
 
     _.each(stripes, function (stripe) {
-      expect(parseInt(stripe.getDOMNode().attributes.width.value, 10))
+      expect(parseInt(ReactDOM.findDOMNode(stripe).attributes.width.value, 10))
         .toEqual(30);
     });
 
     _.each(stripes, function (stripe, i) {
-      expect(parseInt(stripe.getDOMNode().attributes.x.value, 10))
+      expect(parseInt(ReactDOM.findDOMNode(stripe).attributes.x.value, 10))
         .toEqual(30 + i * 60);
     });
   });

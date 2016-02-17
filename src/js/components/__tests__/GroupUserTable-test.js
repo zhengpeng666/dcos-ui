@@ -1,16 +1,14 @@
 jest.dontMock('../GroupUserTable');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../events/ACLUsersActions');
-jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../utils/ResourceTableUtil');
-jest.dontMock('../../utils/StringUtil');
-jest.dontMock('../../utils/Util');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLGroupStore']);
 require('../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var ActionTypes = require('../../constants/ActionTypes');
 var ACLGroupStore = require('../../stores/ACLGroupStore');
@@ -33,16 +31,20 @@ describe('GroupUserTable', function () {
         return new Group(groupDetailsFixture);
       }
     };
-
-    this.instance = TestUtils.renderIntoDocument(
-      <GroupUserTable groupID={'unicode'}/>
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
+      <GroupUserTable groupID={'unicode'}/>,
+      this.container
     );
 
     this.instance.handleOpenConfirm = jest.genMockFunction();
   });
 
   afterEach(function () {
+    ACLGroupStore.removeAllListeners();
     ACLGroupStore.getGroup = this.groupStoreGetGroup;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#onGroupStoreDeleteUserError', function () {
@@ -91,32 +93,37 @@ describe('GroupUserTable', function () {
 
     it('returns a message containing the group\'s name and user\'s name',
       function () {
-      this.instance.modalContent = this.instance.getConfirmModalContent({
-        description: 'foo', users: [{user: {uid: 'bar', description: 'qux'}}]
-      });
 
-      var paragraphs = TestUtils.scryRenderedDOMComponentsWithTag(
-        TestUtils.renderIntoDocument(this.instance.modalContent),
-        'p'
-      );
-      expect(paragraphs[0].props.children)
-        .toEqual('qux will be removed from the foo group.');
-    });
+        var modalContent = this.instance.getConfirmModalContent({
+          description: 'foo', users: [{user: {uid: 'bar', description: 'qux'}}]
+        });
+
+        var component = ReactDOM.render(modalContent, this.container);
+        var node = ReactDOM.findDOMNode(component);
+
+        var paragraphs = node.querySelectorAll('p');
+
+        expect(paragraphs[0].textContent)
+          .toEqual('qux will be removed from the foo group.');
+      });
 
     it('returns a message containing the error that was received',
       function () {
-      this.instance.state.groupUpdateError = 'quux';
-      this.instance.modalContent = this.instance.getConfirmModalContent({
-        description: 'foo', users: [{user: {uid: 'bar', description: 'qux'}}]
-      });
-      var paragraphs = TestUtils.scryRenderedDOMComponentsWithTag(
-        TestUtils.renderIntoDocument(this.instance.modalContent),
-        'p'
-      );
 
-      expect(paragraphs[1].props.children)
-        .toEqual('quux');
-    });
+        this.instance.state.groupUpdateError = 'quux';
+
+        var modalContent = this.instance.getConfirmModalContent({
+          description: 'foo', users: [{user: {uid: 'bar', description: 'qux'}}]
+        });
+
+        var component = ReactDOM.render(modalContent, this.container);
+        var node = ReactDOM.findDOMNode(component);
+
+        var paragraphs = node.querySelectorAll('p');
+
+        expect(paragraphs[1].textContent)
+          .toEqual('quux');
+      });
 
   });
 
@@ -132,13 +139,12 @@ describe('GroupUserTable', function () {
   describe('#renderButton', function () {
 
     it('calls handleOpenConfirm with the proper arguments', function () {
-      var buttonWrapper = TestUtils.renderIntoDocument(
-        this.instance.renderButton('foo', {uid: 'bar'})
+      var buttonWrapper = ReactDOM.render(
+        this.instance.renderButton('foo', {uid: 'bar'}),
+        this.container
       );
-      var button = TestUtils.scryRenderedDOMComponentsWithClass(
-        buttonWrapper,
-        'button'
-      )[0].getDOMNode();
+      var node = ReactDOM.findDOMNode(buttonWrapper);
+      var button = node.querySelector('button');
 
       TestUtils.Simulate.click(button);
 

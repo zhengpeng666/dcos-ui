@@ -27,7 +27,6 @@ const ACLActions = {
   },
 
   fetchACLsForResource: function (resourceType) {
-
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls?type=${resourceType}`,
       success: function (response) {
@@ -154,4 +153,4 @@ if (Config.useFixtures) {
   });
 }
 
-export default ACLActions;
+module.exports = ACLActions;

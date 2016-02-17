@@ -15,7 +15,7 @@ const METHODS_TO_BIND = [
   'onUserSelection'
 ];
 
-export default class GroupUserMembershipTable extends mixin(StoreMixin) {
+module.exports = class GroupUserMembershipTable extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -147,4 +147,4 @@ export default class GroupUserMembershipTable extends mixin(StoreMixin) {
       </div>
     );
   }
-}
+};

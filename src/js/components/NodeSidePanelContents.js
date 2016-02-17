@@ -1,5 +1,5 @@
 /*eslint-disable no-unused-vars*/
-const React = require('react/addons');
+const React = require('react');
 /*eslint-enable no-unused-vars*/
 
 import DateUtil from '../utils/DateUtil';
@@ -9,7 +9,7 @@ import MesosStateStore from '../stores/MesosStateStore';
 import StringUtil from '../utils/StringUtil';
 import TaskView from './TaskView';
 
-export default class NodeSidePanelContents extends SidePanelContents {
+class NodeSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
@@ -109,3 +109,5 @@ export default class NodeSidePanelContents extends SidePanelContents {
     );
   }
 }
+
+module.exports = NodeSidePanelContents;

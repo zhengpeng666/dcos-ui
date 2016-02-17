@@ -192,7 +192,6 @@ const ACLStore = Store.createStore({
 
     return true;
   })
-
 });
 
-export default ACLStore;
+module.exports = ACLStore;

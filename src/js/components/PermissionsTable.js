@@ -16,7 +16,7 @@ const METHODS_TO_BIND = [
   'renderButton'
 ];
 
-export default class PermissionsTable extends mixin(StoreMixin) {
+class PermissionsTable extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -223,3 +223,5 @@ PermissionsTable.propTypes = {
   itemID: React.PropTypes.string,
   itemType: React.PropTypes.string
 };
+
+module.exports = PermissionsTable;

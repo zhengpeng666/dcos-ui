@@ -1,8 +1,8 @@
 jest.dontMock('../ErrorModal');
 jest.dontMock('../../../utils/DOMUtils');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var ErrorModal = require('../ErrorModal');
 
@@ -11,10 +11,16 @@ describe('ErrorModal', function () {
   describe('#onClose', function () {
     beforeEach(function () {
       this.callback = jasmine.createSpy();
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <ErrorModal
-          onClose={this.callback} />
+          onClose={this.callback} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('shouldn\'t call the callback after initialization', function () {

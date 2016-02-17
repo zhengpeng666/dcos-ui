@@ -412,7 +412,7 @@ describe('ACLGroupStore', function () {
       it('emits event after success event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_USERS_CHANGED, function () {
-            expect(arguments).toEqual(['foo', 'bar']);
+            expect([].slice.call(arguments)).toEqual(['foo', 'bar']);
           }
         );
 
@@ -426,7 +426,7 @@ describe('ACLGroupStore', function () {
       it('emits event after error event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_ADD_USER_ERROR, function () {
-            expect(arguments).toEqual(['error', 'foo', 'bar']);
+            expect([].slice.call(arguments)).toEqual(['error', 'foo', 'bar']);
           }
         );
 
@@ -445,7 +445,7 @@ describe('ACLGroupStore', function () {
       it('emits event after success event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_USERS_CHANGED, function () {
-            expect(arguments).toEqual(['foo', 'bar']);
+            expect([].slice.call(arguments)).toEqual(['foo', 'bar']);
           }
         );
 
@@ -459,7 +459,7 @@ describe('ACLGroupStore', function () {
       it('emits event after error event is dispatched', function () {
         ACLGroupStore.addChangeListener(
           EventTypes.ACL_GROUP_REMOVE_USER_ERROR, function () {
-            expect(arguments).toEqual(['error', 'foo', 'bar']);
+            expect([].slice.call(arguments)).toEqual(['error', 'foo', 'bar']);
           }
         );
 

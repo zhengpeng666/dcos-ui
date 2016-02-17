@@ -1,23 +1,17 @@
 jest.dontMock('../../mixins/InternalStorageMixin');
 jest.dontMock('../../mixins/TabsMixin');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../stores/ACLUserStore');
-jest.dontMock('../../stores/MesosSummaryStore');
-jest.dontMock('../../stores/MarathonStore');
-jest.dontMock('../../utils/MesosSummaryUtil');
-jest.dontMock('../../events/MesosSummaryActions');
-jest.dontMock('../../events/MarathonActions');
 jest.dontMock('../SidePanelContents');
 jest.dontMock('../UserSidePanel');
 jest.dontMock('../UserSidePanelContents');
-jest.dontMock('../../utils/Util');
-jest.dontMock('../../utils/RequestUtil');
-jest.dontMock('../../structs/SummaryList');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLUserStore', 'MesosSummaryStore', 'MarathonStore']);
 require('../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var MesosSummaryActions = require('../../events/MesosSummaryActions');
 var ACLUserStore = require('../../stores/ACLUserStore');
@@ -27,8 +21,11 @@ var UserSidePanelContents = require('../UserSidePanelContents');
 
 describe('UserSidePanel', function () {
   beforeEach(function () {
+
     this.fetchSummary = MesosSummaryActions.fetchSummary;
     this.userStore = ACLUserStore.getUser;
+
+    this.container = document.createElement('div');
 
     MesosSummaryActions.fetchSummary = function () {
       return null;
@@ -52,6 +49,8 @@ describe('UserSidePanel', function () {
   afterEach(function () {
     MesosSummaryActions.fetchSummary = this.fetchSummary;
     ACLUserStore.getUser = this.userStore;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#isOpen', function () {
@@ -59,10 +58,11 @@ describe('UserSidePanel', function () {
       this.params = {
         userID: null
       };
-      this.instance = TestUtils.renderIntoDocument(
+      this.instance = ReactDOM.render(
         <UserSidePanel
           params={this.params}
-          openedPage="settings-organization-users" />
+          openedPage="settings-organization-users" />,
+        this.container
       );
     });
 
@@ -83,10 +83,11 @@ describe('UserSidePanel', function () {
       this.params = {
         userID: null
       };
-      this.instance = TestUtils.renderIntoDocument(
+      this.instance = ReactDOM.render(
         <UserSidePanel
           statesProcessed={true}
-          params={this.params} />
+          params={this.params} />,
+        this.container
       );
     });
 

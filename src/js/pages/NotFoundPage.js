@@ -1,5 +1,5 @@
 var Link = require('react-router').Link;
-var React = require('react/addons');
+var React = require('react');
 
 var AlertPanel = require('../components/AlertPanel');
 var Page = require('../components/Page');

@@ -1,5 +1,5 @@
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 jest.dontMock('../FilterByService');
 jest.dontMock('../../mixins/GetSetMixin');
@@ -21,24 +21,28 @@ describe('FilterByService', function () {
     };
 
     let services = new ServicesList({items: MockFrameworks.frameworks});
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <FilterByService
         byServiceFilter={this.byServiceFilter}
         services={services.getItems()}
         totalHostsCount={10}
-        handleFilterChange={this.handleByServiceFilterChange} />
+        handleFilterChange={this.handleByServiceFilterChange} />,
+      this.container
     );
+  });
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   it('should display \'Filter by Service\' as default item', function () {
-    var button = TestUtils.findRenderedDOMComponentWithClass(
-      this.instance, 'dropdown-toggle'
-    );
-    var container = TestUtils.findRenderedDOMComponentWithClass(
-      button, 'badge-container'
-    );
+    var node = ReactDOM.findDOMNode(this.instance);
+    var buttonNode = node.querySelector('.dropdown-toggle');
 
-    expect(container.getDOMNode().textContent)
+    var badgeNode = ReactDOM.findDOMNode(buttonNode);
+    var text = badgeNode.querySelector('.badge-container');
+
+    expect(text.textContent)
       .toEqual('Filter by Service');
   });
 
@@ -46,11 +50,15 @@ describe('FilterByService', function () {
 
     it('should display the badge correctly', function () {
       let service = new Service(MockFrameworks.frameworks[4]);
-      var item = TestUtils.renderIntoDocument(
-        this.instance.getItemHtml(service)
+      var item = ReactDOM.render(
+        this.instance.getItemHtml(service),
+        this.container
       );
-      var badge = TestUtils.findRenderedDOMComponentWithClass(item, 'badge');
-      expect(parseInt(badge.getDOMNode().textContent, 10))
+
+      var node = ReactDOM.findDOMNode(item);
+      var text = node.querySelector('.badge');
+
+      expect(parseInt(text.textContent, 10))
         .toEqual(MockFrameworks.frameworks[4].slave_ids.length);
     });
 

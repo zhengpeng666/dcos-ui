@@ -3,8 +3,9 @@ jest.dontMock('../../components/icons/IconInfo');
 jest.dontMock('../../utils/DOMUtils');
 
 var _ = require('underscore');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var BannerPlugin = require('../BannerPlugin');
 var defaultConfiguration = BannerPlugin.configuration;
@@ -12,7 +13,12 @@ var defaultConfiguration = BannerPlugin.configuration;
 describe('BannerPlugin', function () {
 
   beforeEach(function () {
+    this.container = document.createElement('div');
     BannerPlugin.configuration = _.clone(defaultConfiguration);
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#initialize', function () {
@@ -104,8 +110,9 @@ describe('BannerPlugin', function () {
     beforeEach(function () {
       BannerPlugin.configure({headerTitle: 'foo'});
       spyOn(BannerPlugin, 'toggleFullContent');
-      this.instance = TestUtils.renderIntoDocument(
-        BannerPlugin.applicationContents()
+      this.instance = ReactDOM.render(
+        BannerPlugin.applicationContents(),
+        this.container
       );
     });
 
@@ -114,25 +121,21 @@ describe('BannerPlugin', function () {
     });
 
     it('should call once with one click', function () {
-      var infoIcon = TestUtils.findRenderedDOMComponentWithClass(
-        this.instance,
-        'banner-plugin-info-icon'
-      );
+      var node = ReactDOM.findDOMNode(this.instance);
+      var el = node.querySelector('.banner-plugin-info-icon');
 
-      TestUtils.Simulate.click(infoIcon);
+      TestUtils.Simulate.click(el);
       expect(BannerPlugin.toggleFullContent.callCount).toEqual(1);
     });
 
     it('should call n times with n clicks', function () {
-      var infoIcon = TestUtils.findRenderedDOMComponentWithClass(
-        this.instance,
-        'banner-plugin-info-icon'
-      );
+      var node = ReactDOM.findDOMNode(this.instance);
+      var el = node.querySelector('.banner-plugin-info-icon');
 
-      TestUtils.Simulate.click(infoIcon);
-      TestUtils.Simulate.click(infoIcon);
-      TestUtils.Simulate.click(infoIcon);
-      TestUtils.Simulate.click(infoIcon);
+      TestUtils.Simulate.click(el);
+      TestUtils.Simulate.click(el);
+      TestUtils.Simulate.click(el);
+      TestUtils.Simulate.click(el);
       expect(BannerPlugin.toggleFullContent.callCount).toEqual(4);
     });
 
@@ -140,10 +143,14 @@ describe('BannerPlugin', function () {
 
   describe('#applicationRendered', function () {
     beforeEach(function () {
+      this.mockFn = jasmine.createSpy('ContentWindow Spy');
       this.iframe = document.createElement('iframe');
+      var mockFn = this.mockFn;
+      this.iframe.__defineGetter__('contentWindow', function () {
+          return {addEventListener: mockFn};
+        });
       document.getElementById = jasmine.createSpy('HTML Element')
         .andReturn(this.iframe);
-      spyOn(this.iframe.contentWindow, 'addEventListener');
 
     });
 
@@ -175,12 +182,13 @@ describe('BannerPlugin', function () {
     it('should render an iframe when enabled', function () {
       BannerPlugin.configure({headerTitle: 'foo'});
 
-      var instance = TestUtils.renderIntoDocument(
-        BannerPlugin.applicationContents()
+      var instance = ReactDOM.render(
+        BannerPlugin.applicationContents(),
+        this.container
       );
-      var iframe = TestUtils.findRenderedDOMComponentWithTag(
-        instance, 'iframe'
-      );
+
+      var node = ReactDOM.findDOMNode(instance);
+      var iframe = node.querySelector('iframe');
 
       expect(TestUtils.isDOMComponent(iframe)).toBeTruthy();
     });

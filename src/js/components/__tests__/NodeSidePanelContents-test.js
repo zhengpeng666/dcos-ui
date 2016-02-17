@@ -4,21 +4,20 @@ jest.dontMock('../../mixins/GetSetMixin');
 jest.dontMock('../../mixins/InternalStorageMixin');
 jest.dontMock('../../mixins/TabsMixin');
 jest.dontMock('../../stores/MesosSummaryStore');
-jest.dontMock('../../events/MesosSummaryActions');
-jest.dontMock('../../utils/MesosSummaryUtil');
 jest.dontMock('../NodeSidePanelContents');
 jest.dontMock('../TaskTable');
 jest.dontMock('../TaskView');
 jest.dontMock('../RequestErrorMsg');
-jest.dontMock('../../utils/Util');
-jest.dontMock('../../utils/JestUtil');
-
-require('../../utils/StoreMixinConfig');
-
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
 
 var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['MesosSummaryStore', 'MesosStateStore']);
+require('../../utils/StoreMixinConfig');
+
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
+
 var MesosStateStore = require('../../stores/MesosStateStore');
 var MesosSummaryActions = require('../../events/MesosSummaryActions');
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
@@ -30,6 +29,8 @@ describe('NodeSidePanelContents', function () {
     this.getTasksFromNodeID = MesosStateStore.getTasksFromNodeID;
     this.storeGet = MesosStateStore.get;
     this.storeGetNode = MesosStateStore.getNodeFromID;
+
+    this.container = document.createElement('div');
 
     MesosSummaryActions.fetchSummary = function () {
       return null;
@@ -82,13 +83,17 @@ describe('NodeSidePanelContents', function () {
     MesosStateStore.getTasksFromNodeID = this.getTasksFromNodeID;
     MesosStateStore.get = this.storeGet;
     MesosStateStore.getNodeFromID = this.storeGetNode;
+    MesosStateStore.removeAllListeners();
+    MesosSummaryStore.removeAllListeners();
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#renderDetailsTabView', function () {
 
     it('should return null if node does not exist', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents itemID="nonExistent" />
+      var instance = ReactDOM.render(
+        <NodeSidePanelContents itemID="nonExistent" />,
+        this.container
       );
 
       var result = instance.renderDetailsTabView();
@@ -96,8 +101,9 @@ describe('NodeSidePanelContents', function () {
     });
 
     it('should return a node if node exists', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents itemID="existingNode" />
+      var instance = ReactDOM.render(
+        <NodeSidePanelContents itemID="existingNode" />,
+        this.container
       );
 
       var result = instance.renderDetailsTabView();
@@ -108,8 +114,9 @@ describe('NodeSidePanelContents', function () {
   describe('#getKeyValuePairs', function () {
 
     it('should return an empty set if node does not exist', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents itemID="nonExistent" />
+      var instance = ReactDOM.render(
+        <NodeSidePanelContents itemID="nonExistent" />,
+        this.container
       );
 
       var result = instance.getKeyValuePairs({});
@@ -117,8 +124,9 @@ describe('NodeSidePanelContents', function () {
     });
 
     it('should return null if undefined is passed', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents itemID="nonExistent" />
+      var instance = ReactDOM.render(
+        <NodeSidePanelContents itemID="nonExistent" />,
+        this.container
       );
 
       var result = instance.getKeyValuePairs();
@@ -126,8 +134,9 @@ describe('NodeSidePanelContents', function () {
     });
 
     it('should return a node of elements if node exists', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents itemID="existingNode" />
+      var instance = ReactDOM.render(
+        <NodeSidePanelContents itemID="existingNode" />,
+        this.container
       );
 
       var result = instance.getKeyValuePairs({'foo': 'bar'});
@@ -135,14 +144,18 @@ describe('NodeSidePanelContents', function () {
     });
 
     it('should return a headline if headline string is given', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents itemID="existingNode" />
+      var instance = ReactDOM.render(
+        <NodeSidePanelContents itemID="existingNode" />,
+        this.container
       );
 
-      var headline = JestUtil.renderAndFindTag(
+      var headlineInstance = ReactDOM.render(
         instance.getKeyValuePairs({'foo': 'bar'}, 'baz'),
-        'h6'
+        this.container
       );
+
+      var node = ReactDOM.findDOMNode(headlineInstance);
+      var headline = node.querySelector('h6');
 
       expect(TestUtils.isDOMComponent(headline)).toEqual(true);
     });
@@ -150,12 +163,13 @@ describe('NodeSidePanelContents', function () {
 
   describe('#render', function () {
     it('should show error if node is not to be found', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <NodeSidePanelContents itemID="nonExistent" />
+      var instance = ReactDOM.render(
+        <NodeSidePanelContents itemID="nonExistent" />,
+        this.container
       );
 
       var headline = TestUtils.findRenderedDOMComponentWithTag(instance, 'h3');
-      expect(headline.getDOMNode().textContent).toBe('Error finding node');
+      expect(ReactDOM.findDOMNode(headline).textContent).toBe('Error finding node');
     });
   });
 });

@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var Dispatcher = require('flux').Dispatcher;
 
-var ActionTypes = require('../constants/ActionTypes');
+import ActionTypes from '../constants/ActionTypes';
 
 var AppDispatcher = _.extend(new Dispatcher(), {
 

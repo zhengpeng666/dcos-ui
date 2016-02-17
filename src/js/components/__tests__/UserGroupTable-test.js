@@ -1,17 +1,16 @@
 jest.dontMock('../UserGroupTable');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../events/ACLUsersActions');
-jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../stores/ACLGroupStore');
 jest.dontMock('../../stores/ACLGroupsStore');
-jest.dontMock('../../utils/ResourceTableUtil');
-jest.dontMock('../../utils/StringUtil');
-jest.dontMock('../../utils/Util');
+jest.dontMock('../../stores/ACLUserStore');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLGroupStore', 'ACLGroupsStore', 'ACLUserStore']);
 require('../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var ActionTypes = require('../../constants/ActionTypes');
 var ACLGroupStore = require('../../stores/ACLGroupStore');
@@ -34,16 +33,22 @@ describe('UserGroupTable', function () {
         return new User(userDetailsFixture);
       }
     };
+    this.container = document.createElement('div');
 
-    this.instance = TestUtils.renderIntoDocument(
-      <UserGroupTable userID={'unicode'}/>
+    this.instance = ReactDOM.render(
+      <UserGroupTable userID={'unicode'}/>,
+      this.container
     );
 
     this.instance.handleOpenConfirm = jest.genMockFunction();
   });
 
   afterEach(function () {
+    ACLUserStore.removeAllListeners();
+    ACLGroupStore.removeAllListeners();
     ACLUserStore.getUser = this.userStoreGetUser;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#onGroupStoreDeleteUserError', function () {
@@ -92,29 +97,30 @@ describe('UserGroupTable', function () {
 
     it('returns a message containing the user\'s name and group name',
       function () {
-      this.instance.modalContent = this.instance.getConfirmModalContent({
+      var modalContent = this.instance.getConfirmModalContent({
         description: 'foo', groups: [{group: {gid: 'bar', description: 'qux'}}]
       });
 
-      var paragraphs = TestUtils.scryRenderedDOMComponentsWithTag(
-        TestUtils.renderIntoDocument(this.instance.modalContent),
-        'p'
-      );
-      expect(paragraphs[0].props.children)
+      var component = TestUtils.renderIntoDocument(modalContent);
+      var node = ReactDOM.findDOMNode(component);
+      var paragraph = node.querySelector('p');
+
+      expect(paragraph.textContent)
         .toEqual('foo will be removed from qux.');
     });
 
     it('returns a message containing the error that was received',
       function () {
       this.instance.state.userUpdateError = 'quux';
-      this.instance.modalContent = this.instance.getConfirmModalContent({
+      var modalContent = this.instance.getConfirmModalContent({
         description: 'foo', groups: [{group: {gid: 'bar', description: 'qux'}}]
       });
-      var paragraphs = TestUtils.scryRenderedDOMComponentsWithTag(
-        TestUtils.renderIntoDocument(this.instance.modalContent),
-        'p'
-      );
-      expect(paragraphs[1].props.children)
+
+      var component = TestUtils.renderIntoDocument(modalContent);
+      var node = ReactDOM.findDOMNode(component);
+      var paragraphs = node.querySelectorAll('p');
+
+      expect(paragraphs[1].textContent)
         .toEqual('quux');
     });
 
@@ -135,12 +141,11 @@ describe('UserGroupTable', function () {
       var buttonWrapper = TestUtils.renderIntoDocument(
         this.instance.renderButton('foo', {gid: 'bar'})
       );
-      var button = TestUtils.scryRenderedDOMComponentsWithClass(
-        buttonWrapper,
-        'button'
-      )[0].getDOMNode();
 
-      TestUtils.Simulate.click(button);
+      var node = ReactDOM.findDOMNode(buttonWrapper);
+      var button = node.querySelector('button');
+
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(button));
 
       expect(this.instance.handleOpenConfirm.mock.calls[0][0]).toEqual(
         {gid: 'bar'}

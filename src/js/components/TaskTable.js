@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import classNames from 'classnames';
-import React from 'react/addons';
+import React from 'react';
 
 import ResourceTableUtil from '../utils/ResourceTableUtil';
 import {Table} from 'reactjs-components';
@@ -15,7 +15,7 @@ const METHODS_TO_BIND = [
   'renderHeadline'
 ];
 
-export default class TaskTable extends React.Component {
+class TaskTable extends React.Component {
   constructor() {
     super(...arguments);
 
@@ -196,3 +196,5 @@ TaskTable.propTypes = {
 TaskTable.defaultProps = {
   tasks: []
 };
+
+module.exports = TaskTable;

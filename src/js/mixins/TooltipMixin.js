@@ -1,4 +1,4 @@
-import React from 'react';
+var ReactDOM = require('react-dom');
 var _ = require('underscore');
 
 var Tooltip = require('../vendor/tooltip');
@@ -23,7 +23,7 @@ var TooltipMixin = {
   },
 
   getNode: function () {
-    return React.findDOMNode(this);
+    return ReactDOM.findDOMNode(this);
   },
 
   tip_handleContainerMouseMove: function (e) {

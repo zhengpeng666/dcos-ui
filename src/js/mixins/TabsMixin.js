@@ -7,7 +7,6 @@ import React from 'react';
 import TabsUtil from '../utils/TabsUtil';
 
 const TabsMixin = {
-
   /**
    * Returns a tab that has a callback when clicked.
    * @see #tabs_handleTabClick
@@ -101,4 +100,4 @@ const TabsMixin = {
   }
 };
 
-export default TabsMixin;
+module.exports = TabsMixin;

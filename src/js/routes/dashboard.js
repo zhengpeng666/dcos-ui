@@ -22,4 +22,4 @@ let dashboardRoutes = {
   ]
 };
 
-export default dashboardRoutes;
+module.exports = dashboardRoutes;

@@ -24,7 +24,7 @@ const METHODS_TO_BIND = [
   'handleLoginSubmit'
 ];
 
-export default class LoginModal extends mixin(StoreMixin) {
+class LoginModal extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -185,3 +185,5 @@ export default class LoginModal extends mixin(StoreMixin) {
 LoginModal.contextTypes = {
   router: React.PropTypes.func
 };
+
+module.exports = LoginModal;

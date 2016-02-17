@@ -89,4 +89,4 @@ let settingsRoutes = {
   ]
 };
 
-export default settingsRoutes;
+module.exports = settingsRoutes;

@@ -20,7 +20,7 @@ function truncateItemData(itemData, sizeDiff) {
   // Update currentSize accordingly
 }
 
-export default class LogBuffer extends List {
+class LogBuffer extends List {
   constructor(options = {}) {
     super(...arguments);
 
@@ -174,3 +174,5 @@ export default class LogBuffer extends List {
     }
   }
 }
+
+module.exports = LogBuffer;

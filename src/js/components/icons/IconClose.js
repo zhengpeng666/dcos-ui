@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class IconClose extends React.Component {
+module.exports = class IconClose extends React.Component {
   render() {
     return (
       <svg
@@ -14,4 +14,4 @@ export default class IconClose extends React.Component {
       </svg>
     );
   }
-}
+};

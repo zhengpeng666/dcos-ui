@@ -1,6 +1,6 @@
 import TaskStates from '../constants/TaskStates';
 
-export default class Item {
+module.exports = class Item {
   constructor(item = {}) {
     Object.keys(item).forEach(function (key) {
       this[key] = item[key];
@@ -31,4 +31,4 @@ export default class Item {
 
     return sum;
   }
-}
+};

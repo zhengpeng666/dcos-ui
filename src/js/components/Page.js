@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var classNames = require('classnames');
 var GeminiScrollbar = require('react-gemini-scrollbar');
-var React = require('react/addons');
+var React = require('react');
 
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var SidebarToggle = require('../components/SidebarToggle');

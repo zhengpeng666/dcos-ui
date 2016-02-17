@@ -300,7 +300,6 @@ let ACLGroupStore = Store.createStore({
 
     return true;
   })
-
 });
 
-export default ACLGroupStore;
+module.exports = ACLGroupStore;

@@ -7,7 +7,6 @@ import Config from '../config/Config';
 import RequestUtil from '../utils/RequestUtil';
 
 const ACLAuthActions = {
-
   fetchRole: function (uid) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${uid}`,
@@ -67,7 +66,6 @@ const ACLAuthActions = {
       }
     });
   }
-
 };
 
 if (Config.useFixtures) {
@@ -81,4 +79,4 @@ if (Config.useFixtures) {
   };
 }
 
-export default ACLAuthActions;
+module.exports = ACLAuthActions;

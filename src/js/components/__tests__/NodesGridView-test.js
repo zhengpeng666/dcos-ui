@@ -4,8 +4,8 @@ jest.dontMock('../NodesGridView');
 jest.dontMock('../../stores/MesosStateStore');
 jest.dontMock('../../utils/Util');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var NodesGridView = require('../NodesGridView');
 var MesosStateStore = require('../../stores/MesosStateStore');
@@ -49,14 +49,18 @@ describe('NodesGridView', function () {
           ]
         }
       ]});
-
-      this.instance = TestUtils.renderIntoDocument(
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
         <NodesGridView
           selectedResource={'mem'}
           hosts={this.hosts.getItems()}
           services={[]}
-          />
+          />,
+        this.container
       );
+    });
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should return a list of unique framwork_ids', function () {

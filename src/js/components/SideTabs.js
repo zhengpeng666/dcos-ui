@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 
-export default class SideTabs extends React.Component {
+class SideTabs extends React.Component {
   getTabs() {
     let selectedTab = this.props.selectedTab;
 
@@ -44,3 +44,5 @@ SideTabs.propTypes = {
   selectedTab: React.PropTypes.string,
   tabs: React.PropTypes.array
 };
+
+module.exports = SideTabs;

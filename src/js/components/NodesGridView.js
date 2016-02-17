@@ -1,13 +1,13 @@
 var _ = require('underscore');
 var classNames = require('classnames');
-var React = require('react/addons');
+var React = require('react');
 
-var EventTypes = require('../constants/EventTypes');
+import EventTypes from '../constants/EventTypes';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MesosStateStore = require('../stores/MesosStateStore');
 var NodesGridDials = require('./NodesGridDials');
 var RequestErrorMsg = require('./RequestErrorMsg');
-
+var Util = require('../utils/Util');
 var MAX_SERVICES_TO_SHOW = 8;
 var OTHER_SERVICES_COLOR = 8;
 
@@ -210,7 +210,7 @@ var NodesGridView = React.createClass({
     var resourcesByFramework = this.internalStorage_get().resourcesByFramework;
     var serviceFilter = this.props.serviceFilter;
 
-    return _.mapObject(resourcesByFramework, function (host) {
+    return Util.mapObject(resourcesByFramework, function (host) {
       if (serviceFilter == null) {
         return host;
       } else {

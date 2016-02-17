@@ -1,19 +1,17 @@
-jest.dontMock('../../constants/StoreConfig');
-jest.dontMock('../../stores/TaskDirectoryStore');
-jest.dontMock('../../utils/Util');
-jest.dontMock('../../utils/RequestUtil');
-jest.dontMock('../../structs/TaskDirectory');
-jest.dontMock('../../structs/DirectoryItem');
 jest.dontMock('../icons/IconDownload');
 jest.dontMock('../MesosLogView');
 jest.dontMock('../RequestErrorMsg');
 jest.dontMock('../TaskDebugView');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['TaskDirectoryStore', 'MesosLogStore']);
 require('../../utils/StoreMixinConfig');
 
 var TaskDirectory = require('../../structs/TaskDirectory');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var TaskDirectoryActions = require('../../events/TaskDirectoryActions');
 var TaskDirectoryStore = require('../../stores/TaskDirectoryStore');
@@ -21,15 +19,16 @@ var TaskDebugView = require('../TaskDebugView');
 
 describe('TaskDebugView', function () {
   beforeEach(function () {
-
     // Store original versions
     this.storeGetDirectory = TaskDirectoryStore.getDirectory;
 
     // Create spies
     TaskDirectoryStore.getDirectory = jasmine.createSpy('getDirectory');
 
-    this.instance = TestUtils.renderIntoDocument(
-      <TaskDebugView task={{slave_id: 'foo'}} />
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
+      <TaskDebugView task={{slave_id: 'foo'}} />,
+      this.container
     );
 
     this.instance.setState = jasmine.createSpy('setState');
@@ -39,6 +38,8 @@ describe('TaskDebugView', function () {
   afterEach(function () {
     // Restore original functions
     TaskDirectoryStore.getDirectory = this.storeGetDirectory;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#componentDidMount', function () {
@@ -111,7 +112,7 @@ describe('TaskDebugView', function () {
     });
 
     it('should set button disabled when file is not found', function () {
-      var instance = React.render(
+      var instance = ReactDOM.render(
         <TaskDebugView task={{slave_id: 'foo'}} />,
         document.createElement('div')
       );
@@ -120,11 +121,14 @@ describe('TaskDebugView', function () {
         directory: new TaskDirectory({items: [{nlink: 1, path: '/foo'}]})
       });
       var btn = TestUtils.findRenderedDOMComponentWithTag(instance, 'a');
-      expect(btn.props.disabled).toEqual(true);
+      // If btn.props.disabled = true, then disabled attribute will return an object.
+      // If btn.props.disabled = false, then disabled attribute will be undefined.
+      // So here we just test to see if attribute exists
+      expect(btn.attributes.disabled).toBeTruthy();
     });
 
     it('should set button not disabled when file is found', function () {
-      var instance = React.render(
+      var instance = ReactDOM.render(
         <TaskDebugView task={{slave_id: 'foo'}} />,
         document.createElement('div')
       );
@@ -133,7 +137,8 @@ describe('TaskDebugView', function () {
         directory: new TaskDirectory({items: [{nlink: 1, path: '/stdout'}]})
       });
       var btn = TestUtils.findRenderedDOMComponentWithTag(instance, 'a');
-      expect(btn.props.disabled).toEqual(false);
+      // If btn.props.disabled = false, then disabled attribute will be undefined
+      expect(btn.attributes.disabled).toEqual(undefined);
     });
 
     it('renders stdout on first render', function () {

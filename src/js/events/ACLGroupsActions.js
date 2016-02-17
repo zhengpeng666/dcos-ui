@@ -6,7 +6,6 @@ import Config from '../config/Config';
 import RequestUtil from '../utils/RequestUtil';
 
 const ACLGroupsActions = {
-
   fetch: function () {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups`,
@@ -196,7 +195,6 @@ const ACLGroupsActions = {
       }
     });
   }
-
 };
 
 if (Config.useFixtures) {
@@ -231,4 +229,4 @@ if (Config.useFixtures) {
   });
 }
 
-export default ACLGroupsActions;
+module.exports = ACLGroupsActions;

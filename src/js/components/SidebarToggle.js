@@ -1,6 +1,6 @@
 var React = require('react');
 
-var EventTypes = require('../constants/EventTypes');
+import EventTypes from '../constants/EventTypes';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var SidebarActions = require('../events/SidebarActions');
 var SidebarStore = require('../stores/SidebarStore');

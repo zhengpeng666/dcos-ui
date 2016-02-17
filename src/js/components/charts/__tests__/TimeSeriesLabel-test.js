@@ -1,5 +1,6 @@
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 jest.dontMock('../TimeSeriesLabel');
 var TimeSeriesLabel = require('../TimeSeriesLabel');
@@ -7,11 +8,17 @@ var TimeSeriesLabel = require('../TimeSeriesLabel');
 describe('TimeSeriesLabel', function () {
 
   beforeEach(function () {
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <TimeSeriesLabel colorIndex={2}
         currentValue="10"
-        subHeading="Foo" />
+        subHeading="Foo" />,
+      this.container
     );
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   it('should display the correct label', function () {
@@ -19,7 +26,7 @@ describe('TimeSeriesLabel', function () {
     var title = TestUtils.findRenderedDOMComponentWithClass(
       this.instance, 'unit'
     );
-    expect(title.getDOMNode().textContent).toEqual('10%');
+    expect(ReactDOM.findDOMNode(title).textContent).toEqual('10%');
   });
 
   it('should display the correct sub heading', function () {
@@ -27,7 +34,7 @@ describe('TimeSeriesLabel', function () {
     var label = TestUtils.findRenderedDOMComponentWithClass(
       this.instance, 'unit-label'
     );
-    expect(label.getDOMNode().textContent).toBe('Foo');
+    expect(ReactDOM.findDOMNode(label).textContent).toBe('Foo');
   });
 
   it('should set sub heading text color', function () {

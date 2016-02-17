@@ -73,4 +73,4 @@ const MesosLogActions = {
 
 };
 
-export default MesosLogActions;
+module.exports = MesosLogActions;

@@ -1,8 +1,8 @@
 import mixin from 'reactjs-mixin';
-import React from 'react/addons';
+import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactDOM from 'react-dom';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
-
-const CSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 import DOMUtils from '../utils/DOMUtils';
 import Highlight from './Highlight';
@@ -17,7 +17,7 @@ const METHODS_TO_BIND = [
   'onMesosLogStoreSuccess'
 ];
 
-export default class MesosLogView extends mixin(StoreMixin) {
+class MesosLogView extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -147,7 +147,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
       return;
     }
 
-    let logContainer = React.findDOMNode(this.refs.logContainer);
+    let logContainer = ReactDOM.findDOMNode(this.refs.logContainer);
     let previousScrollTop;
     let previousScrollHeight;
 
@@ -169,7 +169,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
   }
 
   setScrollTop(scrollTop) {
-    React.findDOMNode(this.refs.logContainer).scrollTop = scrollTop;
+    ReactDOM.findDOMNode(this.refs.logContainer).scrollTop = scrollTop;
   }
 
   checkIfCloseToTop(container) {
@@ -197,7 +197,7 @@ export default class MesosLogView extends mixin(StoreMixin) {
       return null;
     }
 
-    return React.findDOMNode(logContainer);
+    return ReactDOM.findDOMNode(logContainer);
   }
 
   getErrorScreen() {
@@ -278,12 +278,15 @@ export default class MesosLogView extends mixin(StoreMixin) {
     return (
       <div className="log-view flex-grow flex-container-col">
         {this.getLog()}
-        <CSSTransitionGroup
+        <ReactCSSTransitionGroup
           transitionAppear={true}
           transitionName="button"
+          transitionAppearTimeout={350}
+          transitionEnterTimeout={350}
+          transitionLeaveTimeout={350}
           component="div">
           {this.getGoToBottomButton()}
-        </CSSTransitionGroup>
+        </ReactCSSTransitionGroup>
       </div>
     );
   }
@@ -299,3 +302,5 @@ MesosLogView.propTypes = {
   logName: React.PropTypes.string,
   slaveID: React.PropTypes.string.isRequired
 };
+
+module.exports = MesosLogView;

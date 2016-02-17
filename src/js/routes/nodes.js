@@ -56,4 +56,4 @@ let nodesRoutes = {
   ]
 };
 
-export default nodesRoutes;
+module.exports = nodesRoutes;

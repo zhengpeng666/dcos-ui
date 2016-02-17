@@ -1,17 +1,17 @@
 jest.dontMock('../GroupUserMembershipTab');
 jest.dontMock('../GroupUserTable');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../events/ACLUsersActions');
-jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../utils/ResourceTableUtil');
-jest.dontMock('../../utils/StringUtil');
-jest.dontMock('../../utils/Util');
+jest.dontMock('../../stores/ACLGroupsStore');
+jest.dontMock('../../stores/ACLUsersStore');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLGroupStore', 'ACLGroupsStore', 'ACLUsersStore']);
 require('../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var ACLGroupsStore = require('../../stores/ACLGroupsStore');
@@ -34,9 +34,10 @@ describe('GroupUserMembershipTab', function () {
         return new Group(groupDetailsFixture);
       }
     };
-
-    this.instance = TestUtils.renderIntoDocument(
-      <GroupUserMembershipTab groupID={'unicode'}/>
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
+      <GroupUserMembershipTab groupID={'unicode'}/>,
+      this.container
     );
 
     this.instance.handleOpenConfirm = jest.genMockFunction();
@@ -44,6 +45,8 @@ describe('GroupUserMembershipTab', function () {
 
   afterEach(function () {
     ACLGroupStore.getGroup = this.groupStoreGetGroup;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('add users dropdown', function () {
@@ -78,15 +81,13 @@ describe('GroupUserMembershipTab', function () {
 
       this.instance.setState({requestUsersSuccess: true});
 
-      this.instance.dropdownButton = TestUtils
-        .scryRenderedDOMComponentsWithClass(this.instance, 'dropdown-toggle');
+      var node = ReactDOM.findDOMNode(this.instance);
 
-      TestUtils.Simulate.click(this.instance.dropdownButton[0].getDOMNode());
+      var dropdownButton = node.querySelector('.dropdown-toggle');
+      TestUtils.Simulate.click(dropdownButton);
 
-      this.instance.selectableElements = TestUtils
-        .scryRenderedDOMComponentsWithClass(this.instance, 'is-selectable');
-      TestUtils.Simulate.click(this.instance.selectableElements[1]
-        .getDOMNode());
+      var selectableElements = node.querySelectorAll('.is-selectable')[1];
+      TestUtils.Simulate.click(selectableElements);
     });
 
     afterEach(function () {

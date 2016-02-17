@@ -1,3 +1,4 @@
+/* eslint no-redeclare: 0 */
 var Config = {
   analyticsKey: '@@ANALYTICS_KEY',
   acsAPIPrefix: '/acs/api/v1',

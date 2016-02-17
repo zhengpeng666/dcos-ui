@@ -1,4 +1,4 @@
-var ActionTypes = require('../constants/ActionTypes');
+import ActionTypes from '../constants/ActionTypes';
 var AppDispatcher = require('./AppDispatcher');
 
 var IntercomActions = {

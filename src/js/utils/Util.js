@@ -1,4 +1,38 @@
+
 const Util = {
+  /**
+   * Returns the results of applying the iteratee to each element of the object.
+   * @param  {Object} obj
+   * @param  {Function} iteratee
+   * @return {Object} resulting mapped object
+   */
+  mapObject: function (obj, iteratee) {
+    var keys = Object.keys(obj),
+        length = keys.length,
+        results = {};
+    for (var index = 0; index < length; index++) {
+      var currentKey = keys[index];
+      results[currentKey] = iteratee(obj[currentKey], currentKey, obj);
+    }
+    return results;
+  },
+  /**
+   * Finds last index where condition returns true
+   * @param  {Array} array         Array to search
+   * @param  {Function} condition  Condition to find
+   * @return {Int}                 Index of last item or -1 if not found
+   */
+  findLastIndex: function (array, condition) {
+    let length = array.length;
+    let index = length - 1;
+    for (; index >= 0; index--) {
+      if (condition(array[index], index, array)) {
+        return index;
+      }
+    }
+    return -1;
+  },
+
   /**
    * @param  {Object} arg to determine whether is an array or not
    * @return {Boolean} returns whether given arg is an array or not
@@ -49,4 +83,4 @@ const Util = {
   }
 };
 
-export default Util;
+module.exports = Util;

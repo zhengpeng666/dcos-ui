@@ -1,7 +1,7 @@
 var overrides = require('./overrides');
 overrides.override();
 
-var Actions = require('./actions/Actions');
+import Actions from './actions/Actions';
 Actions.initialize();
 
 Actions.log({eventID: 'Stint started.', date: Actions.createdAt});
@@ -10,8 +10,9 @@ global.addEventListener('beforeunload', function () {
 });
 
 import _ from 'underscore';
-var React = require('react');
-var Router = require('react-router');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Router from 'react-router';
 
 require('./utils/MomentJSConfig');
 require('./utils/ReactSVG');
@@ -49,7 +50,7 @@ function createRoutes(routes) {
       args = args.concat(children);
     }
 
-    return React.createElement.apply(null, args);
+    return React.createElement(...args);
   });
 }
 
@@ -57,7 +58,7 @@ function onApplicationLoad() {
   // Allow overriding of application contents
   let contents = Plugins.applyFilter('applicationContents', null);
   if (contents) {
-    React.render(contents, domElement);
+    ReactDOM.render(contents, domElement);
   } else {
     setTimeout(function () {
       let builtRoutes = createRoutes(
@@ -66,7 +67,8 @@ function onApplicationLoad() {
 
       Router.run(builtRoutes[0], function (Handler, state) {
         Config.setOverrides(state.query);
-        React.render(<Handler state={state} />, domElement);
+        ReactDOM.render(
+          <Handler state={state} />, domElement);
       });
     });
   }
@@ -74,7 +76,7 @@ function onApplicationLoad() {
   Plugins.doAction('applicationRendered');
 }
 
-React.render(
+ReactDOM.render(
   <ApplicationLoader onApplicationLoad={onApplicationLoad} />,
   domElement
 );

@@ -19,7 +19,7 @@ const METHODS_TO_BIND = [
 const DEFAULT_ID = 'DEFAULT';
 const ITEMS_DISPLAYED = 3;
 
-export default class ActionsModal extends mixin(StoreMixin) {
+class ActionsModal extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
@@ -213,3 +213,5 @@ ActionsModal.propTypes = {
   onClose: React.PropTypes.func.isRequired,
   selectedItems: React.PropTypes.array.isRequired
 };
+
+module.exports = ActionsModal;

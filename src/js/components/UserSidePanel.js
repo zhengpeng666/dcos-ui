@@ -1,5 +1,5 @@
 import mixin from 'reactjs-mixin';
-import React from 'react/addons';
+import React from 'react';
 import {Confirm, SidePanel} from 'reactjs-components';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
@@ -15,7 +15,7 @@ const METHODS_TO_BIND = [
   'handleDeleteUser'
 ];
 
-export default class UserSidePanel extends mixin(StoreMixin) {
+class UserSidePanel extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -207,3 +207,5 @@ UserSidePanel.contextTypes = {
 UserSidePanel.propTypes = {
   params: React.PropTypes.object
 };
+
+module.exports = UserSidePanel;

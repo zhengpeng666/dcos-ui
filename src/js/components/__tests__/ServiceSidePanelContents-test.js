@@ -1,18 +1,19 @@
 jest.dontMock('../SidePanelContents');
 jest.dontMock('../ServiceSidePanelContents');
-jest.dontMock('../../events/MesosSummaryActions');
 jest.dontMock('../../stores/MesosSummaryStore');
+jest.dontMock('../../stores/MarathonStore');
+jest.dontMock('../../stores/MesosStateStore');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../utils/JestUtil');
-jest.dontMock('../../utils/MesosSummaryUtil');
-jest.dontMock('../../utils/Util');
-
-require('../../utils/StoreMixinConfig');
-
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
 
 var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['MesosSummaryStore', 'MesosStateStore', 'MarathonStore']);
+require('../../utils/StoreMixinConfig');
+
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
+
 var MarathonStore = require('../../stores/MarathonStore');
 var MesosSummaryActions = require('../../events/MesosSummaryActions');
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
@@ -29,6 +30,8 @@ describe('ServiceSidePanelContents', function () {
     this.marathonGetServiceFromName = MarathonStore.getServiceFromName;
     this.stateGetServiceFromName = MesosStateStore.getServiceFromName;
     this.getServiceHealth = MarathonStore.getServiceHealth;
+
+    this.container = document.createElement('div');
 
     function fakeFn(name) {
       if (name === 'service_that_exists') {
@@ -60,6 +63,8 @@ describe('ServiceSidePanelContents', function () {
     MesosStateStore.getServiceFromName = this.stateGetServiceFromName;
     MarathonStore.getServiceFromName = this.marathonGetServiceFromName;
     MarathonStore.getServiceHealth = this.getServiceHealth;
+
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('getting info', function () {
@@ -78,10 +83,11 @@ describe('ServiceSidePanelContents', function () {
 
     describe('#getSchedulerDetails', function () {
       it('should return null if task doesn\'t exist', function () {
-        var instance = TestUtils.renderIntoDocument(
+        var instance = ReactDOM.render(
           <ServiceSidePanelContents
             open={false}
-            itemID="service_that_exists"/>
+            itemID="service_that_exists"/>,
+          this.container
         );
 
         expect(instance.getSchedulerDetails())
@@ -92,10 +98,11 @@ describe('ServiceSidePanelContents', function () {
         MesosStateStore.getSchedulerTaskFromServiceName =
         jasmine.createSpy('MesosStateStore#getSchedulerTaskFromServiceName')
           .andReturn({id: 'foo', resources: {cpus: 0, mem: 0, disk: 0}});
-        var instance = TestUtils.renderIntoDocument(
+        var instance = ReactDOM.render(
           <ServiceSidePanelContents
             open={false}
-            itemID="service_that_exists"/>
+            itemID="service_that_exists"/>,
+          this.container
         );
 
         var info = instance.getSchedulerDetails();
@@ -105,22 +112,26 @@ describe('ServiceSidePanelContents', function () {
 
     describe('#renderDetailsTabView', function () {
       it('should return \'no info\' if service doesn\'t exist', function () {
-        var instance = TestUtils.renderIntoDocument(
+        var instance = ReactDOM.render(
           <ServiceSidePanelContents
             open={false}
-            itemID="service_that_does_not_exist"/>
+            itemID="service_that_does_not_exist"/>,
+          this.container
         );
+        var detailsInstance = ReactDOM.render(instance.renderDetailsTabView(), this.container);
+        var node = ReactDOM.findDOMNode(detailsInstance);
+        var info = node.querySelector('h2');
 
-        var info = JestUtil.renderAndFindTag(instance.renderDetailsTabView(), 'h2');
-        expect(info.getDOMNode().textContent)
+        expect(info.textContent)
           .toEqual('No information available.');
       });
 
       it('should return an element if service does exist', function () {
-        var instance = TestUtils.renderIntoDocument(
+        var instance = ReactDOM.render(
           <ServiceSidePanelContents
             open={false}
-            itemID="service_that_exists"/>
+            itemID="service_that_exists"/>,
+          this.container
         );
 
         var info = instance.renderDetailsTabView();
@@ -130,10 +141,11 @@ describe('ServiceSidePanelContents', function () {
 
     describe('#getBasicInfo', function () {
       it('should return null if service doesn\'t exist', function () {
-        var instance = TestUtils.renderIntoDocument(
+        var instance = ReactDOM.render(
           <ServiceSidePanelContents
             open={false}
-            itemID="service_that_does_not_exist"/>
+            itemID="service_that_does_not_exist"/>,
+          this.container
         );
 
         var info = instance.getBasicInfo();
@@ -141,10 +153,11 @@ describe('ServiceSidePanelContents', function () {
       });
 
       it('should return an element if service does exist', function () {
-        var instance = TestUtils.renderIntoDocument(
+        var instance = ReactDOM.render(
           <ServiceSidePanelContents
             open={false}
-            itemID="service_that_exists"/>
+            itemID="service_that_exists"/>,
+          this.container
         );
 
         var info = instance.getBasicInfo();

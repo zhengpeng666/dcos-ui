@@ -1,6 +1,6 @@
 const _ = require('underscore');
 const classNames = require('classnames');
-const React = require('react/addons');
+const React = require('react');
 
 const BarChart = require('./BarChart');
 const Chart = require('./Chart');

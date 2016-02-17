@@ -1,22 +1,24 @@
 jest.dontMock('../SidePanelContents');
 jest.dontMock('../TaskSidePanelContents');
 jest.dontMock('../TaskDirectoryView');
-jest.dontMock('../../constants/TaskStates');
 jest.dontMock('../../stores/MesosStateStore');
-jest.dontMock('../../events/MesosStateActions');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../utils/Util');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['MesosStateStore', 'TaskDirectoryStore', 'MesosSummaryStore']);
 require('../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var MesosStateStore = require('../../stores/MesosStateStore');
 var TaskSidePanelContents = require('../TaskSidePanelContents');
 
 describe('TaskSidePanelContents', function () {
   beforeEach(function () {
+
     this.storeGet = MesosStateStore.get;
     this.storeChangeListener = MesosStateStore.addChangeListener;
 
@@ -46,17 +48,22 @@ describe('TaskSidePanelContents', function () {
       MesosStateStore.getNodeFromID = function () {
         return {hostname: 'hello'};
       };
+      this.container = document.createElement('div');
     });
 
     afterEach(function () {
       MesosStateStore.getNodeFromID = this.getNodeFromID;
+
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should return null if there are no nodes', function () {
-      var instance = TestUtils.renderIntoDocument(
-        <TaskSidePanelContents open={true} />
+      var instance = ReactDOM.render(
+        <TaskSidePanelContents open={true} />,
+        this.container
       );
-      expect(instance.render()).toEqual(null);
+      var node = ReactDOM.findDOMNode(instance);
+      expect(node).toEqual(null);
     });
 
     it('should return an element if there is a node', function () {
@@ -66,19 +73,27 @@ describe('TaskSidePanelContents', function () {
         };
       };
 
-      var instance = TestUtils.renderIntoDocument(
-        <TaskSidePanelContents open={true} />
+      var instance = ReactDOM.render(
+        <TaskSidePanelContents open={true} />,
+        this.container
       );
 
-      expect(TestUtils.isElement(instance.render())).toEqual(true);
+      var node = ReactDOM.findDOMNode(instance);
+      expect(TestUtils.isDOMComponent(node)).toEqual(true);
     });
   });
 
   describe('#getBasicInfo', function () {
     beforeEach(function () {
-      this.instance = TestUtils.renderIntoDocument(
-        <TaskSidePanelContents open={false} />
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
+        <TaskSidePanelContents open={false} />,
+        this.container
       );
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('should return null if task is null', function () {
@@ -91,6 +106,7 @@ describe('TaskSidePanelContents', function () {
         id: 'fade',
         state: 'TASK_RUNNING'
       }, {hostname: 'hello'});
+
       expect(TestUtils.isElement(result)).toEqual(true);
     });
   });

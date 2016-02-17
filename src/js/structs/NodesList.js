@@ -5,7 +5,7 @@ import MesosSummaryUtil from '../utils/MesosSummaryUtil';
 import Node from './Node';
 import StringUtil from '../utils/StringUtil';
 
-export default class NodesList extends List {
+module.exports = class NodesList extends List {
   constructor() {
     super(...arguments);
 
@@ -54,4 +54,4 @@ export default class NodesList extends List {
 
     return MesosSummaryUtil.sumResources(resourcesList);
   }
-}
+};

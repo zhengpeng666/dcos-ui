@@ -1,5 +1,7 @@
 let EventTypes = {};
 [
+  'APP_NAMESPACE',
+  'APP_STORE_CHANGE',
   'ACL_AUTH_USER_LOGIN_SUCCESS',
   'ACL_AUTH_USER_LOGIN_ERROR',
   'ACL_AUTH_USER_LOGOUT_SUCCESS',
@@ -33,6 +35,7 @@ let EventTypes = {};
   'ACL_GROUP_DETAILS_USERS_ERROR',
   'ACL_GROUP_GRANT_ACTION_CHANGE',
   'ACL_GROUP_GRANT_ACTION_ERROR',
+  'ACL_GROUP_REMOVE_USER_SUCCESS',
   'ACL_GROUP_REMOVE_USER_ERROR',
   'ACL_GROUP_REVOKE_ACTION_CHANGE',
   'ACL_GROUP_REVOKE_ACTION_ERROR',
@@ -94,4 +97,4 @@ let EventTypes = {};
   EventTypes[eventType] = eventType;
 });
 
-export default EventTypes;
+module.exports = EventTypes;

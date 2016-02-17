@@ -1,9 +1,9 @@
 var _ = require('underscore');
-var React = require('react/addons');
+var React = require('react');
 import {Link} from 'react-router';
 
 import Config from '../config/Config';
-var EventTypes = require('../constants/EventTypes');
+import EventTypes from '../constants/EventTypes';
 var HealthSorting = require('../constants/HealthSorting');
 var HostTimeSeriesChart = require('../components/charts/HostTimeSeriesChart');
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');

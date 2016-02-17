@@ -23,8 +23,8 @@ jest.dontMock('../../../mixins/GetSetMixin');
 
 require('../../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 jest.setMock('../../../components/FormModal', React.createClass({
   displayName: 'mock',
@@ -39,9 +39,15 @@ MetadataStore.set({dcosMetadata: {}});
 
 describe('LoginModal', function () {
   beforeEach(function () {
-    this.instance = TestUtils.renderIntoDocument(
-      <LoginModal />
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
+      <LoginModal />,
+      this.container
     );
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#handleLoginSubmit', function () {

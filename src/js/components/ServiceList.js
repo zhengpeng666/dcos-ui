@@ -1,7 +1,7 @@
 const _ = require('underscore');
 import classNames from 'classnames';
 import {List} from 'reactjs-components';
-const React = require('react/addons');
+const React = require('react');
 
 const HealthLabels = require('../constants/HealthLabels');
 const HealthStatus = require('../constants/HealthStatus');

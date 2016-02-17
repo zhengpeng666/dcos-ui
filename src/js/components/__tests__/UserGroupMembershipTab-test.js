@@ -1,18 +1,16 @@
 jest.dontMock('../UserGroupMembershipTab');
 jest.dontMock('../UserGroupTable');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../events/ACLUsersActions');
-jest.dontMock('../../events/AppDispatcher');
-jest.dontMock('../../stores/ACLGroupStore');
 jest.dontMock('../../stores/ACLGroupsStore');
-jest.dontMock('../../utils/ResourceTableUtil');
-jest.dontMock('../../utils/StringUtil');
-jest.dontMock('../../utils/Util');
+jest.dontMock('../../stores/ACLGroupStore');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLGroupStore', 'ACLGroupsStore']);
 require('../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var ACLGroupsStore = require('../../stores/ACLGroupsStore');
@@ -32,7 +30,7 @@ describe('UserGroupMembershipTab', function () {
     this.groupStoreAddUser = ACLGroupStore.addUser;
     this.groupsStoreGet = ACLGroupsStore.get;
     this.userStoreGetUser = ACLUserStore.getUser;
-
+    this.container = document.createElement('div');
     ACLGroupsStore.get = function (key) {
       if (key === 'groups') {
         return {
@@ -64,8 +62,9 @@ describe('UserGroupMembershipTab', function () {
       }
     };
 
-    this.instance = TestUtils.renderIntoDocument(
-      <UserGroupMembershipTab userID={'unicode'}/>
+    this.instance = ReactDOM.render(
+      <UserGroupMembershipTab userID={'unicode'}/>,
+      this.container
     );
 
     this.instance.setState({requestGroupsSuccess: true});
@@ -75,6 +74,8 @@ describe('UserGroupMembershipTab', function () {
     ACLGroupStore.addUser = this.groupStoreAddUser;
     ACLGroupsStore.get = this.groupsStoreGet;
     ACLUserStore.getUser = this.userStoreGetUser;
+    ReactDOM.unmountComponentAtNode(this.container);
+
   });
 
   describe('add groups dropdown', function () {
@@ -82,12 +83,11 @@ describe('UserGroupMembershipTab', function () {
     beforeEach(function () {
       this.instance.dropdownButton = TestUtils
         .scryRenderedDOMComponentsWithClass(this.instance, 'dropdown-toggle');
-      TestUtils.Simulate.click(this.instance.dropdownButton[0].getDOMNode());
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(this.instance.dropdownButton[0]));
 
       this.instance.selectableElements = TestUtils
         .scryRenderedDOMComponentsWithClass(this.instance, 'is-selectable');
-      TestUtils.Simulate.click(this.instance.selectableElements[1]
-        .getDOMNode());
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(this.instance.selectableElements[1]));
     });
 
     it('should call the handler when selecting a group', function () {

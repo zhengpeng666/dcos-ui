@@ -1,16 +1,14 @@
 jest.dontMock('../PermissionsTable');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../events/ACLUsersActions');
-jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../stores/ACLStore');
-jest.dontMock('../../utils/ResourceTableUtil');
-jest.dontMock('../../utils/StringUtil');
-jest.dontMock('../../utils/Util');
 
+var JestUtil = require('../../utils/JestUtil');
+
+JestUtil.unMockStores(['ACLStore']);
 require('../../utils/StoreMixinConfig');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 
 var ActionTypes = require('../../constants/ActionTypes');
 var ACLStore = require('../../stores/ACLStore');
@@ -24,14 +22,20 @@ const userDetailsFixture =
 describe('PermissionsTable', function () {
 
   beforeEach(function () {
-    this.instance = TestUtils.renderIntoDocument(
+    this.container = document.createElement('div');
+    this.instance = ReactDOM.render(
       <PermissionsTable
         permissions={(new User(userDetailsFixture)).getUniquePermissions()}
         itemType="user"
-        itemID={userDetailsFixture.uid} />
+        itemID={userDetailsFixture.uid} />,
+      this.container
     );
 
     this.instance.handleOpenConfirm = jest.genMockFunction();
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(this.container);
   });
 
   describe('#onAclStoreUserRevokeError', function () {
@@ -71,34 +75,38 @@ describe('PermissionsTable', function () {
 
     beforeEach(function () {
       this.instance.state.permissionID = 'service.marathon';
+      this.container = document.createElement('div');
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(this.container);
     });
 
     it('returns a message containing the group\'s name and user\'s name',
       function () {
-      this.instance.modalContent = this.instance.getConfirmModalContent(
+      var modalContent = this.instance.getConfirmModalContent(
         [{rid: 'service.marathon', description: 'Marathon'}]
       );
 
-      var paragraphs = TestUtils.scryRenderedDOMComponentsWithTag(
-        TestUtils.renderIntoDocument(this.instance.modalContent),
-        'p'
-      );
-      expect(paragraphs[0].props.children)
+      var instance = ReactDOM.render(modalContent, this.container);
+      var node = ReactDOM.findDOMNode(instance);
+      var paragraphs = node.querySelector('p');
+
+      expect(paragraphs.textContent)
         .toEqual('Permission to Marathon will be removed.');
     });
 
     it('returns a message containing the error that was received',
       function () {
       this.instance.state.permissionUpdateError = 'quux';
-      this.instance.modalContent = this.instance.getConfirmModalContent(
+      var modalContent = this.instance.getConfirmModalContent(
         [{rid: 'service.marathon', description: 'Marathon'}]
       );
-      var paragraphs = TestUtils.scryRenderedDOMComponentsWithTag(
-        TestUtils.renderIntoDocument(this.instance.modalContent),
-        'p'
-      );
+      var instance = ReactDOM.render(modalContent, this.container);
+      var node = ReactDOM.findDOMNode(instance);
+      var paragraphs = node.querySelectorAll('p');
 
-      expect(paragraphs[1].props.children)
+      expect(paragraphs[1].textContent)
         .toEqual('quux');
     });
 
@@ -116,13 +124,13 @@ describe('PermissionsTable', function () {
   describe('#renderButton', function () {
 
     it('calls handleOpenConfirm with the proper arguments', function () {
-      var buttonWrapper = TestUtils.renderIntoDocument(
-        this.instance.renderButton('foo', {uid: 'bar'})
+      var buttonWrapper = ReactDOM.render(
+        this.instance.renderButton('foo', {uid: 'bar'}),
+        this.container
       );
-      var button = TestUtils.scryRenderedDOMComponentsWithClass(
-        buttonWrapper,
-        'button'
-      )[0].getDOMNode();
+
+      var node = ReactDOM.findDOMNode(buttonWrapper);
+      var button = node.querySelector('button');
 
       TestUtils.Simulate.click(button);
 
@@ -140,11 +148,12 @@ describe('PermissionsTable', function () {
     });
 
     it('calls revokeUser if itemType is user', function () {
-      var instance = TestUtils.renderIntoDocument(
+      var instance = ReactDOM.render(
         <PermissionsTable
           permissions={(new User(userDetailsFixture)).getUniquePermissions()}
           itemType="user"
-          itemID={userDetailsFixture.uid} />
+          itemID={userDetailsFixture.uid} />,
+        this.container
       );
       instance.handleButtonConfirm();
 
@@ -152,11 +161,12 @@ describe('PermissionsTable', function () {
     });
 
     it('calls revokeGroup if itemType is group', function () {
-      var instance = TestUtils.renderIntoDocument(
+      var instance = ReactDOM.render(
         <PermissionsTable
           permissions={(new User(userDetailsFixture)).getUniquePermissions()}
           itemType="group"
-          itemID={userDetailsFixture.uid} />
+          itemID={userDetailsFixture.uid} />,
+        this.container
       );
       instance.handleButtonConfirm();
 

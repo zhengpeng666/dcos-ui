@@ -1,5 +1,6 @@
 import mixin from 'reactjs-mixin';
-import React from 'react/addons';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import _ from 'underscore';
 
 import Cluster from '../utils/Cluster';
@@ -14,8 +15,7 @@ import StringUtil from '../utils/StringUtil';
 
 const PropTypes = React.PropTypes;
 
-export default class ServiceOverlay extends mixin(InternalStorageMixin) {
-
+class ServiceOverlay extends mixin(InternalStorageMixin) {
   constructor() {
     super();
 
@@ -94,7 +94,7 @@ export default class ServiceOverlay extends mixin(InternalStorageMixin) {
     }
 
     // Remove the div that we created at the root of the dom.
-    React.unmountComponentAtNode(overlayEl);
+    ReactDOM.unmountComponentAtNode(overlayEl);
     document.body.removeChild(overlayEl);
     this.internalStorage_update({overlayEl: null});
   }
@@ -187,7 +187,7 @@ export default class ServiceOverlay extends mixin(InternalStorageMixin) {
     let serviceName = this.props.params.serviceName;
     let service = MesosSummaryStore.getServiceFromName(serviceName);
 
-    React.render(
+    ReactDOM.render(
       <div className="overlay-container">
         {this.getServiceNav(service)}
         <iframe
@@ -216,3 +216,5 @@ ServiceOverlay.defaultProps = {
 ServiceOverlay.contextTypes = {
   router: React.PropTypes.func
 };
+
+module.exports = ServiceOverlay;

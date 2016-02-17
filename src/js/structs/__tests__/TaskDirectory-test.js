@@ -2,20 +2,20 @@ jest.dontMock('../DirectoryItem');
 jest.dontMock('../TaskDirectory');
 jest.dontMock('../../utils/Util');
 
-let DirectoryItem = require('../DirectoryItem');
-let TaskDirectory = require('../TaskDirectory');
+var DirectoryItem = require('../DirectoryItem');
+var TaskDirectory = require('../TaskDirectory');
 
 describe('TaskDirectory', function () {
 
   beforeEach(function () {
-    let items = [{path: '/some/path/to/bar'}];
+    var items = [{path: '/some/path/to/bar'}];
     this.directory = new TaskDirectory({items});
   });
 
   describe('#constructor', function () {
 
     it('creates instances of DirectoryItem', function () {
-      let items = this.directory.getItems();
+      var items = this.directory.getItems();
       expect(items[0] instanceof DirectoryItem).toBeTruthy();
     });
 

@@ -1,6 +1,6 @@
 import _ from 'underscore';
 /*eslint-disable no-unused-vars*/
-const React = require('react/addons');
+import React from 'react';
 /*eslint-enable no-unused-vars*/
 
 import SidePanelContents from './SidePanelContents';
@@ -19,7 +19,7 @@ const TABS = {
   debug: 'Log Viewer'
 };
 
-export default class TaskSidePanelContents extends SidePanelContents {
+module.exports = class TaskSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
@@ -236,4 +236,4 @@ export default class TaskSidePanelContents extends SidePanelContents {
       </div>
     );
   }
-}
+};

@@ -17,7 +17,7 @@ const METHODS_TO_BIND = [
   'renderButton'
 ];
 
-export default class UserGroupTable extends mixin(StoreMixin) {
+module.exports = class UserGroupTable extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -181,4 +181,4 @@ export default class UserGroupTable extends mixin(StoreMixin) {
       </div>
     );
   }
-}
+};

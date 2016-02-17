@@ -23,4 +23,4 @@ let universeRoutes = {
   ]
 };
 
-export default universeRoutes;
+module.exports = universeRoutes;

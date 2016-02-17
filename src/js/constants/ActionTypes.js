@@ -105,4 +105,4 @@ let ActionTypes = {};
   ActionTypes[actionType] = actionType;
 });
 
-export default ActionTypes;
+module.exports = ActionTypes;

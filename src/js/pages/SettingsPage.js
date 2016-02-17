@@ -13,7 +13,7 @@ const SETTINGS_TABS = {
   'settings-system': 'System'
 };
 
-export default class SettingsPage extends mixin(TabsMixin) {
+class SettingsPage extends mixin(TabsMixin) {
   constructor() {
     super();
 
@@ -109,3 +109,5 @@ SettingsPage.routeConfig = {
   icon: 'resources-settings',
   matches: /^\/settings/
 };
+
+module.exports = SettingsPage;

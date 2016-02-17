@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class MesosphereLogo extends React.Component {
+module.exports = class MesosphereLogo extends React.Component {
   render() {
     return (
       <svg
@@ -60,4 +60,4 @@ export default class MesosphereLogo extends React.Component {
       </svg>
     );
   }
-}
+};

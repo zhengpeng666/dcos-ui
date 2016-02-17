@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import React from 'react/addons';
+import React from 'react';
 import {SidePanel} from 'reactjs-components';
 
 import HistoryStore from '../stores/HistoryStore';
@@ -14,7 +14,7 @@ const METHODS_TO_BIND = [
   'handlePanelSizeChange'
 ];
 
-export default class SidePanels extends React.Component {
+class SidePanels extends React.Component {
   constructor() {
     super();
 
@@ -157,3 +157,5 @@ SidePanels.contextTypes = {
 SidePanels.propTypes = {
   params: React.PropTypes.object
 };
+
+module.exports = SidePanels;

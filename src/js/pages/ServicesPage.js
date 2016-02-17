@@ -1,10 +1,10 @@
 var _ = require('underscore');
-var React = require('react/addons');
+var React = require('react');
 import {RouteHandler} from 'react-router';
 
 var AlertPanel = require('../components/AlertPanel');
 import Config from '../config/Config';
-var EventTypes = require('../constants/EventTypes');
+import EventTypes from '../constants/EventTypes';
 var FilterHealth = require('../components/FilterHealth');
 var FilterHeadline = require('../components/FilterHeadline');
 var FilterInputText = require('../components/FilterInputText');

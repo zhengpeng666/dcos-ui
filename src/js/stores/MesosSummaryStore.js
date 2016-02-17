@@ -2,13 +2,13 @@ var _ = require('underscore');
 import {Store} from 'mesosphere-shared-reactjs';
 
 var AppDispatcher = require('../events/AppDispatcher');
-var ActionTypes = require('../constants/ActionTypes');
+import ActionTypes from '../constants/ActionTypes';
 var Config = require('../config/Config');
-var EventTypes = require('../constants/EventTypes');
+import EventTypes from '../constants/EventTypes';
 var GetSetMixin = require('../mixins/GetSetMixin');
 var MesosSummaryUtil = require('../utils/MesosSummaryUtil');
 var MesosSummaryActions = require('../events/MesosSummaryActions');
-var SummaryList = require('../structs/SummaryList');
+import SummaryList from '../structs/SummaryList';
 import StateSummary from '../structs/StateSummary';
 var TimeScales = require('../constants/TimeScales');
 
@@ -126,6 +126,7 @@ var MesosSummaryStore = Store.createStore({
     }
 
     var msLeftOfDelay = Config.stateLoadDelay - (Date.now() - initCalledAt);
+
     if (msLeftOfDelay < 0) {
       this.updateStateProcessed();
     } else {

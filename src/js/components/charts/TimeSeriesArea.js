@@ -1,5 +1,6 @@
 var d3 = require('d3');
-var React = require('react/addons');
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var TimeSeriesArea = React.createClass({
 
@@ -16,7 +17,7 @@ var TimeSeriesArea = React.createClass({
   componentDidMount: function () {
     var props = this.props;
 
-    d3.select(this.getDOMNode())
+    d3.select(ReactDOM.findDOMNode(this))
       .transition()
       .duration(props.transitionTime)
       .ease('linear')
@@ -24,7 +25,7 @@ var TimeSeriesArea = React.createClass({
   },
 
   componentWillReceiveProps: function (props) {
-    d3.select(this.getDOMNode()).interrupt()
+    d3.select(ReactDOM.findDOMNode(this)).interrupt()
       .attr('transform', null)
       .transition()
       .duration(props.transitionTime)

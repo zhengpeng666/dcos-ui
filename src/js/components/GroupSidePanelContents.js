@@ -20,7 +20,7 @@ const EXTERNAL_CHANGE_EVENTS = [
 
 const METHODS_TO_BIND = ['handleNameChange'];
 
-export default class GroupSidePanelContents extends SidePanelContents {
+module.exports = class GroupSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
@@ -209,4 +209,4 @@ export default class GroupSidePanelContents extends SidePanelContents {
       </div>
     );
   }
-}
+};

@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var classNames = require('classnames');
-var React = require('react/addons');
+var React = require('react');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var RouterLocation = Router.HashLocation;
@@ -8,7 +8,7 @@ var Link = Router.Link;
 
 var AlertPanel = require('../components/AlertPanel');
 import Config from '../config/Config';
-var EventTypes = require('../constants/EventTypes');
+import EventTypes from '../constants/EventTypes';
 var FilterByService = require('../components/FilterByService');
 var FilterInputText = require('../components/FilterInputText');
 var FilterHeadline = require('../components/FilterHeadline');

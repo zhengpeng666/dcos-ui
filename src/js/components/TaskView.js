@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import React from 'react/addons';
+import React from 'react';
 
 import EventTypes from '../constants/EventTypes';
 import FilterByTaskState from './FilterByTaskState';
@@ -16,7 +16,7 @@ const METHODS_TO_BIND = [
   'onMesosStateRequestError'
 ];
 
-export default class TaskView extends React.Component {
+class TaskView extends React.Component {
   constructor() {
     super();
 
@@ -196,3 +196,5 @@ export default class TaskView extends React.Component {
 TaskView.propTypes = {
   tasks: React.PropTypes.array
 };
+
+module.exports = TaskView;

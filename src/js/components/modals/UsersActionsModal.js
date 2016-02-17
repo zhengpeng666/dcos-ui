@@ -9,7 +9,7 @@ import ACLGroupsStore from '../../stores/ACLGroupsStore';
 import ActionsModal from './ActionsModal';
 import Util from '../../utils/Util';
 
-export default class UsersActionsModal extends ActionsModal {
+class UsersActionsModal extends ActionsModal {
   constructor() {
     super(...arguments);
 
@@ -124,3 +124,5 @@ UsersActionsModal.propTypes = {
   onClose: React.PropTypes.func.isRequired,
   selectedItems: React.PropTypes.array.isRequired
 };
+
+module.exports = UsersActionsModal;

@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import mixin from 'reactjs-mixin';
-import React from 'react/addons';
+import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import BarChart from './charts/BarChart';
@@ -20,7 +20,7 @@ const METHODS_TO_BIND = [
   'showExpandButton'
 ];
 
-export default class SidePanelContents extends
+class SidePanelContents extends
   mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
   constructor() {
     super(...arguments);
@@ -235,3 +235,5 @@ SidePanelContents.propTypes = {
 };
 
 SidePanelContents.animationLengthSeconds = 0.5;
+
+module.exports = SidePanelContents;

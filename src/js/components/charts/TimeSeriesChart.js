@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var d3 = require('d3');
-var React = require('react/addons');
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 var AnimationCircle = require('./AnimationCircle');
 var ChartMixin = require('../../mixins/ChartMixin');
@@ -108,7 +109,7 @@ var TimeSeriesChart = React.createClass({
 
   createClipPath: function (width, height) {
     var data = this.internalStorage_get();
-    var el = this.refs.movingEls.getDOMNode();
+    var el = this.refs.movingEls;
 
     // create clip path for areas and x-axis
     d3.select(el)
@@ -125,7 +126,7 @@ var TimeSeriesChart = React.createClass({
     let nextY = this.getNextXPosition(data, xTimeScale, transitionTime);
     let props = this.props;
     let width = props.width / data.length;
-    let maskDef = this.refs.maskDef.getDOMNode();
+    let maskDef = this.refs.maskDef;
     let d3MaskDef = d3.select(maskDef);
 
     // We remove the last batch of masks before we create the new ones.
@@ -281,7 +282,7 @@ var TimeSeriesChart = React.createClass({
       .tickValues(this.getXTickValues(xScale))
       .tickFormat(this.formatXAxis)
       .orient('bottom');
-    d3.select(this.refs.xAxis.getDOMNode()).interrupt()
+    d3.select(this.refs.xAxis).interrupt()
       .attr('transform', 'translate(0,' + height + ')')
       .call(xAxis);
 
@@ -290,10 +291,10 @@ var TimeSeriesChart = React.createClass({
       .ticks(props.ticksY)
       .tickFormat(this.formatYAxis(props))
       .orient('left');
-    d3.select(this.refs.yAxis.getDOMNode())
+    d3.select(this.refs.yAxis)
       .call(yAxis);
 
-    d3.select(this.refs.grid.getDOMNode())
+    d3.select(this.refs.grid)
       .call(
         d3.svg.axis().scale(yScale)
           .orient('left')
@@ -392,7 +393,7 @@ var TimeSeriesChart = React.createClass({
     var margin = props.margin;
 
     return function () {
-      var el = this.getDOMNode();
+      var el = ReactDOM.findDOMNode(this);
       var elPosition = el.getBoundingClientRect();
 
       return {
@@ -405,13 +406,13 @@ var TimeSeriesChart = React.createClass({
   },
 
   addMouseHandler: function (handleMouseMove, handleMouseOut) {
-    var el = this.getDOMNode();
+    var el = ReactDOM.findDOMNode(this);
     el.addEventListener('mousemove', handleMouseMove);
     el.addEventListener('mouseout', handleMouseOut);
   },
 
   removeMouseHandler: function (handleMouseMove, handleMouseOut) {
-    var el = this.getDOMNode();
+    var el = ReactDOM.findDOMNode(this);
     el.removeEventListener('mousemove', handleMouseMove);
     el.removeEventListener('mouseout', handleMouseOut);
   },
