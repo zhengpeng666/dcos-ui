@@ -47,7 +47,7 @@ class ComponentsHealthTab extends React.Component {
     return (
       <div>
         <Link to="settings-system-components"
-          className="headline" >
+          className="headline">
           {component[prop]}
         </Link>
       </div>
@@ -141,9 +141,9 @@ class ComponentsHealthTab extends React.Component {
     return data.getItems();
   }
 
-  getHandleHealthFilterChange(filter) {
+  getHandleHealthFilterChange(healthFilter) {
     return () => {
-      this.setState({healthFilter: filter});
+      this.setState({healthFilter});
     };
   }
 
