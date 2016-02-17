@@ -248,10 +248,13 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
   }
 
   getColumns(itemName) {
+    let description = 'NAME';
+    if (itemName === 'user') {
+      description = 'FULL NAME';
+    }
+
     let className = ResourceTableUtil.getClassName;
-    let nameHeading = ResourceTableUtil.renderHeading({
-      description: 'NAME'
-    });
+    let nameHeading = ResourceTableUtil.renderHeading({description});
     let propSortFunction = ResourceTableUtil.getPropSortFunction('description');
 
     let columns = [
