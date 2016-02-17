@@ -1,9 +1,9 @@
 import React from 'react';
 
 // TODO: remove this. This is a fixture for development purposes.
-// import {jsonDocument} from './marathonConfigFixture';
+// import {jsonDocument as boomski} from './marathonConfigFixture';
 
-export default class ReviewConfig extends React.Component {
+class ReviewConfig extends React.Component {
   getFieldTitle(title) {
     return <h3 key={`${title}-header`}>{title}</h3>;
   }
@@ -119,3 +119,5 @@ ReviewConfig.propTypes = {
   serviceName: React.PropTypes.string,
   serviceVersion: React.PropTypes.string
 };
+
+module.exports = ReviewConfig;
