@@ -1,9 +1,10 @@
 // This will change but allows us to provide a simple example.
 module.exports = {
-  examplePlugin: {
-    plugin: require('./examplePlugin'),
-    options: {
-      multiplier: 2
+  examplePluginName: {
+    plugin: require('./example/example'),
+    configOptions: {
+      multiplier: 2,
+      enabled: false
     }
   }
 };

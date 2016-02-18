@@ -1,13 +1,15 @@
 import _ from 'underscore';
-import AppReducer from './AppReducer';
-import Config from '../config/Config';
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 
-const APP_NAMESPACE = 'app';
+import {APPLICATION} from '../constants/PluginConstants';
+import AppReducer from './AppReducer';
+import Config from '../config/Config';
+
 const initialState = {};
 const middleware = [];
+
 const reducers = {
-  [APP_NAMESPACE]: AppReducer
+  [APPLICATION]: AppReducer
 };
 
 // Default pass through function when devTools are not enabled
@@ -37,7 +39,7 @@ const Store = createStore(
 );
 
 /**
- * Bootstraps plugins and adds new reducers to Store
+ * Bootstraps plugins and adds new reducers to Store.
  *
  * @param  {Object} pluginsConfiguration Associative Array of plugins to load
  */
@@ -45,6 +47,7 @@ const initialize = function (pluginsConfiguration) {
   Object.keys(pluginsConfiguration).forEach((pluginName) => {
     bootstrapPlugin(pluginName, pluginsConfiguration[pluginName]);
   });
+  // Replace all store reducers now that we have all plugin reducers
   Store.replaceReducer(
     combineReducers(reducers)
   );
@@ -72,13 +75,23 @@ const createDispatcher = function (name) {
  * @param  {Object} config Plugin configuration
  */
 const bootstrapPlugin = function (name, config) {
+  // Inject Application key constant and configOptions if specified
+  let options = {
+    APPLICATION: APPLICATION,
+    configOptions: config.configOptions || {}
+  };
+
   let pluginReducer = config.plugin(
     Store,
     createDispatcher(name),
     name,
-    config.options || {}
+    options
   );
+  // If plugin exported a reducer, add it to the reducers object
   if (pluginReducer) {
+    if (!_.isFunction(pluginReducer)) {
+      throw new Error(`Reducer for ${name} must be a function`);
+    }
     addPluginReducer(pluginReducer, name);
   }
 };
@@ -98,7 +111,7 @@ const addPluginReducer = function (reducer, pluginName) {
 
 module.exports = {
   Store: Store,
-  dispatch: createDispatcher(APP_NAMESPACE),
+  dispatch: createDispatcher(APPLICATION),
   initialize: initialize
 };
 

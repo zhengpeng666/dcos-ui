@@ -1,4 +1,6 @@
-const EXAMPLE = 'EXAMPLE';
+// Declare some constants for my plugin's event types.
+const EXAMPLE_PLUGIN_EVENT = 'EXAMPLE_PLUGIN_EVENT';
+
 const initialPluginState = {
   countSoFar: 0
 };
@@ -19,17 +21,22 @@ const performComplexMath = function (Store, prevState, action, factor) {
  * @param {Store} Store               OmniStore
  * @param {Function} dispatch         Personalized dispatch with injected {__origin: name}
  * @param {String} name               Plugin name
- * @param {Object} options            Options as specified in config
+ * @param {Object} options            Options
  * @return {Function} [optional]      RootReducer for handling Plugin's Store state
  */
 module.exports = function (Store, dispatch, name, options) {
 
-  setInterval(function () {
-    dispatch({
-      type: EXAMPLE,
-      payload: 1
-    });
-  }, 1000);
+  // options.configOptions = configOptions from plugin configuration file
+  // options.APPLICATION = Applications root key in Store.
+
+  if (options.configOptions.enabled) {
+    setInterval(function () {
+      dispatch({
+        type: EXAMPLE_PLUGIN_EVENT,
+        payload: 1
+      });
+    }, 5000);
+  }
 
   function RootReducer(state = initialPluginState, action) {
     // Prevent all other plugins from calling my actions and altering my state.
@@ -40,7 +47,7 @@ module.exports = function (Store, dispatch, name, options) {
     }
 
     switch (action.type) {
-      case EXAMPLE:
+      case EXAMPLE_PLUGIN_EVENT:
         return performComplexMath(Store, ...arguments, options.multiplier);
       default:
         return state;
