@@ -77,8 +77,13 @@ class NodeSidePanelContents extends SidePanelContents {
 
     return (
       <div className="container-fluid container-pod container-pod-short flush-top">
-        <DescriptionList hash={headerValueMapping} />
-        <DescriptionList hash={node.attributes} headline="Attributes" />
+        <DescriptionList
+          className="container container-fluid container-pod container-pod-short flush-bottom"
+          hash={headerValueMapping} />
+        <DescriptionList
+          className="container container-fluid container-pod container-pod-short flush-bottom"
+          hash={node.attributes}
+          headline="Attributes" />
       </div>
     );
   }
