@@ -19,6 +19,66 @@
         }
       }
     },
+    "application_reachability_90": {
+      "description": "90th percentile application reachability.",
+      "title": "90th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "application_reachability_75": {
+      "description": "75th percentile application reachability.",
+      "title": "75th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "application_reachability_90": {
+      "description": "90th percentile application reachability.",
+      "title": "90th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "application_reachability_95": {
+      "description": "95th percentile application reachability.",
+      "title": "95th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "application_reachability_99": {
+      "description": "99th percentile application reachability.",
+      "title": "99th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "machine_reachability_50": {
+      "description": "50th percentile machine reachability.",
+      "title": "50th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "machine_reachability_75": {
+      "description": "75th percentile machine reachability.",
+      "title": "75th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "machine_reachability_90": {
+      "description": "90th percentile machine reachability.",
+      "title": "90th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "machine_reachability_95": {
+      "description": "95th percentile machine reachability.",
+      "title": "95th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "machine_reachability_99": {
+      "description": "99th percentile machine reachability.",
+      "title": "99th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
     "backends": {
       "description": "A list of backends on this VIP.",
       "title": "VIP Backends",
@@ -57,70 +117,10 @@
             "title": "Machine Reachable Percentage",
             "type": "integer"
           },
-          "machine_reachability_50": {
-            "description": "50th percentile machine reachability.",
-            "title": "50th Percentile",
-            "type": "object",
-            "$ref": "timeseries-integers"
-          },
-          "machine_reachability_75": {
-            "description": "75th percentile machine reachability.",
-            "title": "75th Percentile",
-            "type": "object",
-            "$ref": "timeseries-integers"
-          },
-          "machine_reachability_90": {
-            "description": "90th percentile machine reachability.",
-            "title": "90th Percentile",
-            "type": "object",
-            "$ref": "timeseries-integers"
-          },
-          "machine_reachability_95": {
-            "description": "95th percentile machine reachability.",
-            "title": "95th Percentile",
-            "type": "object",
-            "$ref": "timeseries-integers"
-          },
-          "machine_reachability_99": {
-            "description": "99th percentile machine reachability.",
-            "title": "99th Percentile",
-            "type": "object",
-            "$ref": "timeseries-integers"
-          },
           "application_reachability_pct": {
             "description": "Percentage of clients that can reach this application.",
             "title": "Application Reachable Percentage",
             "type": "integer"
-          },
-          "application_reachability_90": {
-            "description": "90th percentile application reachability.",
-            "title": "90th Percentile",
-            "type": "object",
-            "$ref": "timeseries-integers"
-          },
-          "application_reachability_75": {
-            "description": "75th percentile application reachability.",
-            "title": "75th Percentile",
-            "type": "object",
-            "$ref": "timeseries-integers"
-          },
-          "application_reachability_90": {
-            "description": "90th percentile application reachability.",
-            "title": "90th Percentile",
-            "type": "object",
-            "$ref": "timeseries-integers"
-          },
-          "application_reachability_95": {
-            "description": "95th percentile application reachability.",
-            "title": "95th Percentile",
-            "type": "object",
-            "$ref": "timeseries-integers"
-          },
-          "application_reachability_99": {
-            "description": "99th percentile application reachability.",
-            "title": "99th Percentile",
-            "type": "object",
-            "$ref": "timeseries-integers"
           },
           "framework_id": {
             "title": "Framework ID",
