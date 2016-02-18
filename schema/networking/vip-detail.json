@@ -79,6 +79,36 @@
       "type": "object",
       "$ref": "timeseries-integers"
     },
+    "connection_latency_50": {
+      "description": "50th percentile connection latency.",
+      "title": "50th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "connection_latency_75": {
+      "description": "50th percentile connection latency.",
+      "title": "50th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "connection_latency_90": {
+      "description": "50th percentile connection latency.",
+      "title": "50th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "connection_latency_95": {
+      "description": "50th percentile connection latency.",
+      "title": "50th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "connection_latency_99": {
+      "description": "50th percentile connection latency.",
+      "title": "50th Percentile",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
     "backends": {
       "description": "A list of backends on this VIP.",
       "title": "VIP Backends",
