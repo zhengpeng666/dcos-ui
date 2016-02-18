@@ -9,9 +9,9 @@ var _ = require('underscore');
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../../events/AppDispatcher');
 var ComponentHealthStore = require('../ComponentHealthStore');
+var componentsFixture = require('../../../../tests/_fixtures/component-health/components.json');
 var Config = require('../../config/Config');
 var EventTypes = require('../../constants/EventTypes');
-var componentsFixture = require('../../../../tests/_fixtures/component-health/components.json');
 var HealthComponentList = require('../../structs/HealthComponentList');
 var RequestUtil = require('../../utils/RequestUtil');
 

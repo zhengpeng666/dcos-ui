@@ -3,9 +3,9 @@ import {Store} from 'mesosphere-shared-reactjs';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../events/AppDispatcher';
 import ComponentHealthActions from '../events/ComponentHealthActions';
-import HealthComponentList from '../structs/HealthComponentList';
 import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
+import HealthComponentList from '../structs/HealthComponentList';
 
 const ComponentHealthStore = Store.createStore({
 

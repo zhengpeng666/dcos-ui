@@ -1,12 +1,11 @@
-jest.dontMock('../../constants/ActionTypes');
 jest.dontMock('../AppDispatcher');
 jest.dontMock('../ComponentHealthActions');
 jest.dontMock('../../config/Config');
-jest.dontMock('../../utils/RequestUtil');
+jest.dontMock('../../constants/ActionTypes');
 
 var ActionTypes = require('../../constants/ActionTypes');
-var ComponentHealthActions = require('../ComponentHealthActions');
 var AppDispatcher = require('../AppDispatcher');
+var ComponentHealthActions = require('../ComponentHealthActions');
 var Config = require('../../config/Config');
 var RequestUtil = require('../../utils/RequestUtil');
 
