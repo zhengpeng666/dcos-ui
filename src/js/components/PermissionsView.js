@@ -20,6 +20,7 @@ const METHODS_TO_BIND = [
 ];
 
 const DEFAULT_ID = 'DEFAULT';
+const NO_SERVICES_INSTALLED_ID = 'NO_SERVICES_INSTALLED';
 
 class PermissionsView extends mixin(StoreMixin) {
   constructor() {
@@ -131,17 +132,37 @@ class PermissionsView extends mixin(StoreMixin) {
       name: 'Add Service'
     })].concat(filteredResources);
 
+    if (!filteredResources || filteredResources.length === 0) {
+      items.push(new Item({
+        rid: NO_SERVICES_INSTALLED_ID,
+        name: 'No services to add.'
+      }));
+    }
+
     return items.map(function (resource) {
       let description = resource.get('name');
-      let ID = DEFAULT_ID;
+      let className = null;
+      let selectable = true;
+      let ID = resource.rid || DEFAULT_ID;
+
       if (resource.getResourceID &&
         typeof resource.getResourceID === 'function') {
         ID = resource.getResourceID();
       }
+
+      if (ID === DEFAULT_ID) {
+        className = 'hidden';
+        selectable = false;
+      } else if (ID === NO_SERVICES_INSTALLED_ID) {
+        selectable = false;
+      }
+
       return {
+        className,
         id: ID,
         description,
-        html: description
+        html: description,
+        selectable
       };
     });
   }

@@ -69,6 +69,7 @@ module.exports = class GroupUserMembershipTable extends mixin(StoreMixin) {
     );
 
     let defaultItem = {
+      className: 'hidden',
       description: 'Add User',
       uid: 'default-placeholder-user-id'
     };
@@ -78,6 +79,7 @@ module.exports = class GroupUserMembershipTable extends mixin(StoreMixin) {
       let selectedHtml = user.description;
 
       return {
+        className: user.className || '',
         id: user.uid,
         name: selectedHtml,
         html: selectedHtml,

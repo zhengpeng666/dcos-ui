@@ -141,6 +141,7 @@ describe('UserGroupMembershipTab', function () {
 
     it('returns the default selected item first', function () {
       expect(this.instance.getDropdownItems()[0]).toEqual({
+        className: 'hidden',
         id: 'default-placeholder-group-id',
         name: 'Add Group',
         html: 'Add Group',
