@@ -28,7 +28,12 @@ let settingsRoutes = {
           type: Route,
           name: 'settings-system-components',
           path: 'components/?',
-          handler: ComponentsHealthTab
+          handler: ComponentsHealthTab,
+          children: [{
+            type: Route,
+            name: 'settings-system-components-health-panel',
+            path: ':componentID'
+          }]
         },
         {
           type: Redirect,

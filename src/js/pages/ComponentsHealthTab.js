@@ -8,14 +8,15 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 import {Table} from 'reactjs-components';
 
-import ComponentHealthStore from '../stores/ComponentHealthStore';
-import Config from '../config/Config';
-import FilterHeadline from '../components/FilterHeadline';
-import FilterButtons from '../components/FilterButtons';
-import FilterInputText from '../components/FilterInputText';
-import ResourceTableUtil from '../utils/ResourceTableUtil';
-import StringUtil from '../utils/StringUtil';
-import TableUtil from '../utils/TableUtil';
+import ComponentHealthSidePanel from '../../components/ComponentHealthSidePanel';
+import ComponentHealthStore from '../../stores/ComponentHealthStore';
+import Config from '../../config/Config';
+import FilterHeadline from '../../components/FilterHeadline';
+import FilterButtons from '../../components/FilterButtons';
+import FilterInputText from '../../components/FilterInputText';
+import ResourceTableUtil from '../../utils/ResourceTableUtil';
+import StringUtil from '../../utils/StringUtil';
+import TableUtil from '../../utils/TableUtil';
 
 const METHODS_TO_BIND = [
   'getHandleHealthFilterChange',
@@ -60,8 +61,9 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
   renderComponent(prop, component) {
     return (
       <div>
-        <Link to="settings-system-components"
-          className="headline">
+        <Link to="settings-system-components-health-panel"
+          params={{componentID: component.id}}
+          className="headline" >
           {component[prop]}
         </Link>
       </div>
@@ -217,6 +219,9 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
             sortBy={{prop: 'health', order: 'desc'}}
             />
         </div>
+        <ComponentHealthSidePanel
+          params={this.props.params}
+          openedPage="settings-system-components" />
       </div>
     );
   }
