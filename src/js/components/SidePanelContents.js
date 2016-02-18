@@ -93,10 +93,10 @@ class SidePanelContents extends
         container-pod-super-short
         flush-top">
         <div className="media-object media-object-align-middle">
-          <div className="media-object-icon media-object-icon-medium">
+          <div className="media-object-item media-object-item-spacing">
             <i className={resourceIconClasses}></i>
           </div>
-          <div className="media-object-content">
+          <div className="media-object-item media-object-item-spacing">
             <h4 className="flush-top flush-bottom text-color-neutral">
               {resourceValue}
             </h4>

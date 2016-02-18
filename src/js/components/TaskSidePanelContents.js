@@ -113,13 +113,13 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
           </h1>
 
           <div className="media-object media-object-align-middle media-object-inline">
-            <div className="media-object-icon media-object-icon-mini">
+            <div className="media-object-item media-object-item-spacing media-object-item-spacing-narrow">
               {statusIcon}
             </div>
-            <div className="media-object-content">
-            <span className={statusClassName}>
-              {TaskStates[task.state].displayName}
-            </span>
+            <div className="media-object-item media-object-item-spacing">
+              <span className={statusClassName}>
+                {TaskStates[task.state].displayName}
+              </span>
             </div>
           </div>
 
