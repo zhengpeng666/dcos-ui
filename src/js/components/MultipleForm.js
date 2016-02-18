@@ -47,13 +47,13 @@ class MultipleForm extends React.Component {
   getServiceHeader() {
     return (
       <div className="media-object media-object-align-middle">
-        <div className="media-object-icon media-object-icon-medium">
+        <div className="media-object-item media-object-item-spacing">
           <img
             className="icon icon-sprite icon-sprite-medium
               icon-sprite-medium-color"
             src={this.props.serviceImage} />
         </div>
-        <div className="media-object-content">
+        <div className="media-object-item media-object-item-spacing">
           <h4 className="flush-top flush-bottom text-color-neutral">
             {this.props.serviceName}
           </h4>
