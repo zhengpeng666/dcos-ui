@@ -1,5 +1,3 @@
-jest.dontMock('underscore');
-jest.dontMock('redux');
 jest.dontMock('../AppReducer');
 jest.dontMock('../PluginBridge');
 jest.dontMock('../../config/Config');

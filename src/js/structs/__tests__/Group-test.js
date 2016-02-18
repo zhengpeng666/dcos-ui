@@ -1,6 +1,5 @@
 var fixturePath = '../../../../tests/_fixtures/acl/group-with-details.json';
 
-jest.dontMock('underscore');
 jest.dontMock('../Group');
 jest.dontMock('../Item');
 jest.dontMock('../List');

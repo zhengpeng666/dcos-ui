@@ -48,7 +48,7 @@ module.exports = function (Store, dispatch, name, options) {
 
     switch (action.type) {
       case EXAMPLE_PLUGIN_EVENT:
-        return performComplexMath(Store, ...arguments, options.multiplier);
+        return performComplexMath(Store, ...arguments, options.configOptions.multiplier);
       default:
         return state;
     }

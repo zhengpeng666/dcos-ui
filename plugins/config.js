@@ -4,7 +4,7 @@ module.exports = {
     plugin: require('./example/example'),
     configOptions: {
       multiplier: 2,
-      enabled: false
+      enabled: true
     }
   }
 };

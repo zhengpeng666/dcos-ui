@@ -1,5 +1,3 @@
-jest.dontMock('underscore');
-jest.dontMock('redux');
 jest.dontMock('../AppReducer');
 jest.dontMock('../PluginBridge');
 jest.dontMock('../../config/Config');
@@ -7,9 +5,9 @@ jest.dontMock('../../mixins/GetSetMixin');
 
 var _ = require('underscore');
 
-var PluginConstants = require('../../constants/PluginConstants');
 var EventTypes = require('../../constants/EventTypes');
 var PluginBridge = require('../PluginBridge');
+var PluginConstants = require('../../constants/PluginConstants');
 
 // Get State specific to Application
 function getApplicationState() {
@@ -23,7 +21,7 @@ describe('AppReducer', function () {
     qux: {foo: 'bar'}
   };
 
-  it('should alter state for correctly for storeID', function () {
+  it('should alter state correctly for storeID', function () {
     PluginBridge.dispatch({
       type: EventTypes.APP_STORE_CHANGE,
       storeID: 'foo',
