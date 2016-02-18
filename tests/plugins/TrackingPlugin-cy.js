@@ -19,7 +19,7 @@ describe('Tracking Plugin Enabled [02w]', function() {
       cy.get('.sidebar-footer').find('.button').last().click();
 
       cy.get('.install-cli-modal-content pre')
-        .should('not.contain', 'dcos config set core.reporting false');
+        .should('not.contain', 'https://downloads.mesosphere.com/dcos-cli/install-optout.sh');
     });
 
   });
@@ -67,7 +67,7 @@ describe('Tracking Plugin Disabled [03d]', function() {
       cy.get('.sidebar-footer').find('.button').last().click();
 
       cy.get('.install-cli-modal-content pre')
-        .should('contain', 'dcos config set core.reporting false');
+        .should('contain', 'https://downloads.mesosphere.com/dcos-cli/install-optout.sh');
     });
 
   });
