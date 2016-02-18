@@ -87,36 +87,36 @@
             "type": "object",
             "$ref": "timeseries-integers"
           },
-          "app_reachability_pct": {
+          "application_reachability_pct": {
             "description": "Percentage of clients that can reach this application.",
             "title": "Application Reachable Percentage",
             "type": "integer"
           },
-          "app_reachability_90": {
+          "application_reachability_90": {
             "description": "90th percentile application reachability.",
             "title": "90th Percentile",
             "type": "object",
             "$ref": "timeseries-integers"
           },
-          "app_reachability_75": {
+          "application_reachability_75": {
             "description": "75th percentile application reachability.",
             "title": "75th Percentile",
             "type": "object",
             "$ref": "timeseries-integers"
           },
-          "app_reachability_90": {
+          "application_reachability_90": {
             "description": "90th percentile application reachability.",
             "title": "90th Percentile",
             "type": "object",
             "$ref": "timeseries-integers"
           },
-          "app_reachability_95": {
+          "application_reachability_95": {
             "description": "95th percentile application reachability.",
             "title": "95th Percentile",
             "type": "object",
             "$ref": "timeseries-integers"
           },
-          "app_reachability_99": {
+          "application_reachability_99": {
             "description": "99th percentile application reachability.",
             "title": "99th Percentile",
             "type": "object",
