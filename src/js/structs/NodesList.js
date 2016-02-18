@@ -36,6 +36,19 @@ module.exports = class NodesList extends List {
       if (filters.service != null) {
         hosts = MesosSummaryUtil.filterHostsByService(hosts, filters.service);
       }
+
+      // Component Health API below
+      if (filters.id) {
+        hosts = StringUtil.filterByString(hosts, 'id', filters.id);
+      }
+
+      if (filters.health && filters.health !== 'all') {
+        let health = filters.health.toLowerCase();
+
+        hosts = _.filter(hosts, function (datum) {
+          return datum.getHealth().title.toLowerCase() === health;
+        });
+      }
     }
 
     return new NodesList({items: hosts});

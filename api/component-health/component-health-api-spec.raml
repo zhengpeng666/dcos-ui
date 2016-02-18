@@ -65,15 +65,15 @@ schemas:
             application/json:
               schema: component
               example: |
-                # Example query for nginx_service in a 3-master cluster would return the component 
-                # health on the 3 masters on which that component runs. 
+                # Example query for nginx_service in a 3-master cluster would return the component
+                # health on the 3 masters on which that component runs.
                 {
                   "component_id": "nginx_service",
                   "component_description": "nginx service",
                   "component_health": 0,
                   "component_check_output": "OK"
                 }
-              
+
     /nodes:
       displayName: Component Nodes Health
       get:
@@ -100,8 +100,8 @@ schemas:
                       }
                     ]
                   }
-      # Must ensure all node_id's contain are hyphened and not "." separated. Only matters if we go 
-      # through a proxy of some sort, but generally not great to "." separate in our URL requested. 
+      # Must ensure all node_id's contain are hyphened and not "." separated. Only matters if we go
+      # through a proxy of some sort, but generally not great to "." separate in our URL requested.
       /{node-id}:
         uriParameters:
           node-id:
@@ -125,7 +125,7 @@ schemas:
                       "component_check_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
                     }
 
-# This is possibly just a 301 -> /nodes, lets disucss. 
+# This is possibly just a 301 -> /nodes, lets disucss.
 /report:
   displayName: Health Report
   get:

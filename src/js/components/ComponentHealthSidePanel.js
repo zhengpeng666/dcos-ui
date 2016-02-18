@@ -50,9 +50,7 @@ class ComponentHealthSidePanel extends mixin(StoreMixin) {
           side-panel-header-actions-primary">
           <span className="side-panel-header-action"
             onClick={this.handlePanelClose}>
-            <i className={`icon icon-sprite
-              icon-sprite-small
-              icon-close
+            <i className={`icon icon-sprite icon-sprite-small icon-close
               icon-sprite-small-white`}></i>
             Close
           </span>
