@@ -5,6 +5,20 @@
   "title": "Backend Connections",
   "type": "object",
   "properties": {
+    "details": {
+      "description": "Details for the given VIP.",
+      "title": "VIP Details",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "patternProperties": {
+          "description": "An unlimited number of deatils.",
+          ".+": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "clients": {
       "description": "A list of client connnections.",
       "title": "Clients",
@@ -34,41 +48,79 @@
               }
             }
           },
+          "machine_reachability_pct": {
+            "description": "Percentage of clients that can reach this machine.",
+            "title": "Machine Reachable Percentage",
+            "type": "integer"
+          },
+          "machine_reachability_50": {
+            "description": "50th percentile machine reachability.",
+            "title": "50th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "machine_reachability_75": {
+            "description": "75th percentile machine reachability.",
+            "title": "75th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "machine_reachability_90": {
+            "description": "90th percentile machine reachability.",
+            "title": "90th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "machine_reachability_95": {
+            "description": "95th percentile machine reachability.",
+            "title": "95th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "machine_reachability_99": {
+            "description": "99th percentile machine reachability.",
+            "title": "99th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "app_reachability_pct": {
+            "description": "Percentage of clients that can reach this application.",
+            "title": "Application Reachable Percentage",
+            "type": "integer"
+          },
+          "app_reachability_90": {
+            "description": "90th percentile application reachability.",
+            "title": "90th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "app_reachability_75": {
+            "description": "75th percentile application reachability.",
+            "title": "75th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "app_reachability_90": {
+            "description": "90th percentile application reachability.",
+            "title": "90th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "app_reachability_95": {
+            "description": "95th percentile application reachability.",
+            "title": "95th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "app_reachability_99": {
+            "description": "99th percentile application reachability.",
+            "title": "99th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
           "ip": {
             "title": "Client IP",
             "type": "string"
-          },
-          "machine_reachable": {
-            "title": "Machine Reachability",
-            "type": "boolean"
-          },
-          "machine_reachable_pct": {
-            "description": "Percentage of clients that can reach this machine over time.",
-            "title": "Machine Reachable Percentage",
-            "type": "object",
-            "patternProperties": {
-              "description": "Timestamp of value.",
-              "title": "Timestamp",
-              "[0-9]": {
-                "type": "integer"
-              }
-            }
-          },
-          "application_reachable": {
-            "title": "Application Reachability",
-            "type": "boolean"
-          },
-          "application_reachable_pct": {
-            "description": "Percentage of clients that can reach this application over time.",
-            "title": "Application Reachable Percentage",
-            "type": "object",
-            "patternProperties": {
-              "description": "Timestamp of value.",
-              "title": "Timestamp",
-              "[0-9]": {
-                "type": "integer"
-              }
-            }
           }
         }
       }

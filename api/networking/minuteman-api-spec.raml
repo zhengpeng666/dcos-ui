@@ -51,7 +51,10 @@ schemas:
                     },
                     "success_last_minute": 3234,
                     "fail_last_minute": 12,
-                    "backends": 17
+                    "backends": 17,
+                    "app_reachability_pct": 92,
+                    "machine_reachability_pct": 98,
+                    "p99_latency_ms": 14
                   }
                 ]
               }
@@ -77,6 +80,20 @@ schemas:
             schema: vipDetail
             example: |
               {
+                "details": [
+                  {
+                    "name": "some section name",
+                    "labels": {
+                      "some label": "some value"
+                    }
+                  },
+                  {
+                    "name": "some other name",
+                    "labels": {
+                      "another label": "another value"
+                    }
+                  }
+                ],
                 "backends": [
                   {
                     "request_success": {
@@ -89,38 +106,53 @@ schemas:
                     },
                     "ip": "10.10.11.12",
                     "port": 52342,
-                    "machine_reachable_pct": 98,
-                    "application_reachable_pct": 95
+                    "machine_reachability_pct": 98,
+                    "machine_reachability_50": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "machine_reachability_75": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "machine_reachability_90": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "machine_reachability_95": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "machine_reachability_99": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "app_reachability_pct": 95,
+                    "app_reachability_50": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "app_reachability_75": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "app_reachability_90": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "app_reachability_95": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "app_reachability_99": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "framework_id": "afe04867ec7a3845145579a95f72eca7",
+                    "task_id": "b4b9b02e6f09a9bd760f388b67351e2b",
+                    "p99_latency_ms": 30
                   }
                 ],
-                "backend_machines_reachable": {
-                  "1454007720": {
-                    "100": 32,
-                    "50": 64,
-                    "25": 30,
-                    "24": 1
-                  },
-                  "1454007660": {
-                    "100": 32,
-                    "50": 64,
-                    "25": 30,
-                    "24": 1
-                  }
-                },
-                "backend_applications_reachable": {
-                  "1454007720": {
-                    "100": 32,
-                    "50": 64,
-                    "25": 30,
-                    "24": 1
-                  },
-                  "1454007660": {
-                    "100": 32,
-                    "50": 64,
-                    "25": 30,
-                    "24": 1
-                  }
-                },
                 "backend_count": 127
               }
       404:
@@ -147,6 +179,20 @@ schemas:
             schema: backendConnections
             example: |
               {
+                "details": [
+                  {
+                    "name": "some section name",
+                    "labels": {
+                      "some label": "some value"
+                    }
+                  },
+                  {
+                    "name": "some other name",
+                    "labels": {
+                      "another label": "another value"
+                    }
+                  }
+                ],
                 "clients": [
                   {
                     "request_success": {
@@ -157,9 +203,52 @@ schemas:
                       "1454007720": 32,
                       "1454007660": 33
                     },
+                    "machine_reachability_pct": 98,
+                    "machine_reachability_50": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "machine_reachability_75": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "machine_reachability_90": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "machine_reachability_95": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "machine_reachability_99": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "app_reachability_pct": 95,
+                    "app_reachability_50": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "app_reachability_75": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "app_reachability_90": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "app_reachability_95": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
+                    "app_reachability_99": {
+                      "1454007720": 32,
+                      "1454007660": 33
+                    },
                     "ip": "10.10.11.13",
-                    "machine_reachable": true,
-                    "application_reachable": false
+                    "framework_id": "afe04867ec7a3845145579a95f72eca7",
+                    "task_id": "b4b9b02e6f09a9bd760f388b67351e2b",
+                    "p99_latency_ms": 30
                   }
                 ]
               }

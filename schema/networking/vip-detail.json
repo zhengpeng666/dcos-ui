@@ -5,6 +5,20 @@
   "title": "VIP Details",
   "type": "object",
   "properties": {
+    "details": {
+      "description": "Details for the given VIP.",
+      "title": "VIP Details",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "patternProperties": {
+          "description": "An unlimited number of deatils.",
+          ".+": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "backends": {
       "description": "A list of backends on this VIP.",
       "title": "VIP Backends",
@@ -16,13 +30,7 @@
             "description": "Successful requests on this backend.",
             "title": "Successful Requests",
             "type": "object",
-            "patternProperties": {
-              "description": "Timestamps of the number of successful requests.",
-              "title": "Timestamp",
-              "[0-9]": {
-                "type": "integer"
-              }
-            }
+            "$ref": "timeseries-integers"
           },
           "request_fail": {
             "description": "Failed requests on this backend.",
@@ -44,49 +52,88 @@
             "title": "Port",
             "type": "integer"
           },
-          "machine_reachable_pct": {
+          "machine_reachability_pct": {
             "description": "Percentage of clients that can reach this machine.",
             "title": "Machine Reachable Percentage",
             "type": "integer"
           },
-          "application_reachable_pct": {
+          "machine_reachability_50": {
+            "description": "50th percentile machine reachability.",
+            "title": "50th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "machine_reachability_75": {
+            "description": "75th percentile machine reachability.",
+            "title": "75th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "machine_reachability_90": {
+            "description": "90th percentile machine reachability.",
+            "title": "90th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "machine_reachability_95": {
+            "description": "95th percentile machine reachability.",
+            "title": "95th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "machine_reachability_99": {
+            "description": "99th percentile machine reachability.",
+            "title": "99th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "app_reachability_pct": {
             "description": "Percentage of clients that can reach this application.",
             "title": "Application Reachable Percentage",
             "type": "integer"
-          }
-        }
-      }
-    },
-    "backend_machines_reachable": {
-      "description": "Percentiles of machines reachable by clients over time.",
-      "title": "Backend Machines Reachable",
-      "type": "object",
-      "patternProperties": {
-        "description": "Timestamps of the percentiles.",
-        "title": "Timestamp",
-        "[0-9]": {
-          "type": "object",
-          "patternProperties": {
-            "[0-9]{1,3}": {
-              "type": "integer"
-            }
-          }
-        }
-      }
-    },
-    "backend_applications_reachable": {
-      "description": "Percentiles of applications reachable by clients over time.",
-      "title": "Backend Applications Reachable",
-      "type": "object",
-      "patternProperties": {
-        "description": "Timestamps of the percentiles.",
-        "title": "Timestamp",
-        "[0-9]": {
-          "type": "object",
-          "patternProperties": {
-            "[0-9]{1,3}": {
-              "type": "integer"
-            }
+          },
+          "app_reachability_90": {
+            "description": "90th percentile application reachability.",
+            "title": "90th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "app_reachability_75": {
+            "description": "75th percentile application reachability.",
+            "title": "75th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "app_reachability_90": {
+            "description": "90th percentile application reachability.",
+            "title": "90th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "app_reachability_95": {
+            "description": "95th percentile application reachability.",
+            "title": "95th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "app_reachability_99": {
+            "description": "99th percentile application reachability.",
+            "title": "99th Percentile",
+            "type": "object",
+            "$ref": "timeseries-integers"
+          },
+          "framework_id": {
+            "title": "Framework ID",
+            "type": "string"
+          },
+          "task_id": {
+            "title": "Task ID",
+            "type": "string"
+          },
+          "p99_latency_ms": {
+            "description": "99th percentile latency.",
+            "title": "P99 Latency",
+            "type": "integer"
           }
         }
       }
@@ -99,8 +146,6 @@
   },
   "required": [
     "backends",
-    "backend_machines_reachable",
-    "backend_applications_reachable",
     "backend_count"
   ]
 }
