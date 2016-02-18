@@ -35,7 +35,7 @@ class DescriptionList extends React.Component {
     }
 
     return (
-      <div className="container container-fluid container-pod container-pod-short flush-bottom">
+      <div className={this.props.className}>
         {this.getHeadline()}
         {this.getItems()}
       </div>
@@ -43,7 +43,12 @@ class DescriptionList extends React.Component {
   }
 }
 
+DescriptionList.defaultProps = {
+  className: ''
+};
+
 DescriptionList.propTypes = {
+  className: React.PropTypes.string,
   headline: React.PropTypes.node,
   hash: React.PropTypes.object
 };

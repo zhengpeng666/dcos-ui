@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 /*eslint-disable no-unused-vars*/
 const React = require('react');
 /*eslint-enable no-unused-vars*/
@@ -109,15 +108,11 @@ class ServiceSidePanelContents extends SidePanelContents {
       );
     }
 
-    let containerClassSet = classNames({
-      '': imageTag != null
-    });
-
     return (
       <div className="side-panel-content-header-details flex-box
         flex-box-align-vertical-center">
         {imageTag}
-        <div className={containerClassSet}>
+        <div>
           <h1 className="side-panel-content-header-label flush">
             {service.name}
           </h1>
@@ -173,7 +168,10 @@ class ServiceSidePanelContents extends SidePanelContents {
     };
 
     return (
-      <DescriptionList hash={schedulerMapping} headline="Scheduler" />
+      <DescriptionList
+        className="container container-fluid container-pod container-pod-short flush-bottom"
+        hash={schedulerMapping}
+        headline="Scheduler" />
     );
   }
 
@@ -237,7 +235,10 @@ class ServiceSidePanelContents extends SidePanelContents {
     return (
       <div className="container-fluid container-pod container-pod-short flush-top">
         {this.getSchedulerDetails()}
-        <DescriptionList hash={headerValueMapping} headline="Configuration" />
+        <DescriptionList
+          className="container container-fluid container-pod container-pod-short flush-bottom"
+          hash={headerValueMapping}
+          headline="Configuration" />
       </div>
     );
   }

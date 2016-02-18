@@ -163,8 +163,14 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
 
     return (
       <div className="container-fluid container-pod container-pod-short flush-top">
-        <DescriptionList hash={headerValueMapping} headline="Configuration" />
-        <DescriptionList hash={labelMapping} headline="Labels" />
+        <DescriptionList
+          className="container container-fluid container-pod container-pod-short flush-bottom"
+          hash={headerValueMapping}
+          headline="Configuration" />
+        <DescriptionList
+          className="container container-fluid container-pod container-pod-short flush-bottom"
+          hash={labelMapping}
+          headline="Labels" />
       </div>
     );
   }
