@@ -29,13 +29,13 @@ class DescriptionList extends React.Component {
   }
 
   render() {
-    let {hash} = this.props;
+    let {hash, className} = this.props;
     if (!hash || Object.keys(hash).length === 0) {
       return null;
     }
 
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         {this.getHeadline()}
         {this.getItems()}
       </div>
