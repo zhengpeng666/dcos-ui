@@ -3,6 +3,7 @@ const React = require('react');
 /*eslint-enable no-unused-vars*/
 
 import DateUtil from '../utils/DateUtil';
+import DescriptionList from './DescriptionList';
 import SidePanelContents from './SidePanelContents';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import MesosStateStore from '../stores/MesosStateStore';
@@ -76,8 +77,8 @@ class NodeSidePanelContents extends SidePanelContents {
 
     return (
       <div className="container-fluid container-pod container-pod-short flush-top">
-        {this.getKeyValuePairs(headerValueMapping)}
-        {this.getKeyValuePairs(node.attributes, 'Attributes')}
+        <DescriptionList hash={headerValueMapping} />
+        <DescriptionList hash={node.attributes} headline="Attributes" />
       </div>
     );
   }

@@ -4,6 +4,7 @@ const React = require('react');
 /*eslint-enable no-unused-vars*/
 
 import DateUtil from '../utils/DateUtil';
+import DescriptionList from './DescriptionList';
 import HealthLabels from '../constants/HealthLabels';
 import HealthStatus from '../constants/HealthStatus';
 import MarathonStore from '../stores/MarathonStore';
@@ -171,7 +172,9 @@ class ServiceSidePanelContents extends SidePanelContents {
       'Disk Space': schedulerTask.resources.disk
     };
 
-    return this.getKeyValuePairs(schedulerMapping, 'Scheduler');
+    return (
+      <DescriptionList hash={schedulerMapping} headline="Scheduler" />
+    );
   }
 
   renderTasksTabView() {
@@ -234,7 +237,7 @@ class ServiceSidePanelContents extends SidePanelContents {
     return (
       <div className="container-fluid container-pod container-pod-short flush-top">
         {this.getSchedulerDetails()}
-        {this.getKeyValuePairs(headerValueMapping, 'Configuration')}
+        <DescriptionList hash={headerValueMapping} headline="Configuration" />
       </div>
     );
   }

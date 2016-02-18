@@ -111,56 +111,6 @@ describe('NodeSidePanelContents', function () {
     });
   });
 
-  describe('#getKeyValuePairs', function () {
-
-    it('should return an empty set if node does not exist', function () {
-      var instance = ReactDOM.render(
-        <NodeSidePanelContents itemID="nonExistent" />,
-        this.container
-      );
-
-      var result = instance.getKeyValuePairs({});
-      expect(result).toEqual(null);
-    });
-
-    it('should return null if undefined is passed', function () {
-      var instance = ReactDOM.render(
-        <NodeSidePanelContents itemID="nonExistent" />,
-        this.container
-      );
-
-      var result = instance.getKeyValuePairs();
-      expect(result).toEqual(null);
-    });
-
-    it('should return a node of elements if node exists', function () {
-      var instance = ReactDOM.render(
-        <NodeSidePanelContents itemID="existingNode" />,
-        this.container
-      );
-
-      var result = instance.getKeyValuePairs({'foo': 'bar'});
-      expect(TestUtils.isElement(result)).toEqual(true);
-    });
-
-    it('should return a headline if headline string is given', function () {
-      var instance = ReactDOM.render(
-        <NodeSidePanelContents itemID="existingNode" />,
-        this.container
-      );
-
-      var headlineInstance = ReactDOM.render(
-        instance.getKeyValuePairs({'foo': 'bar'}, 'baz'),
-        this.container
-      );
-
-      var node = ReactDOM.findDOMNode(headlineInstance);
-      var headline = node.querySelector('h6');
-
-      expect(TestUtils.isDOMComponent(headline)).toEqual(true);
-    });
-  });
-
   describe('#render', function () {
     it('should show error if node is not to be found', function () {
       var instance = ReactDOM.render(
