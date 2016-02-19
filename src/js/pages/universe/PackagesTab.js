@@ -56,7 +56,7 @@ class PackagesTab extends mixin(StoreMixin) {
   handleDetailOpen(cosmosPackage, event) {
     event.stopPropagation();
     let {packageName, currentVersion} = cosmosPackage;
-    let params = ['universe-package-detail', {packageName}];
+    let params = ['universe-packages-detail', {packageName}];
 
     if (currentVersion) {
       params.push({packageVersion: currentVersion});

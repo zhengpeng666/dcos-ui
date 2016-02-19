@@ -18,7 +18,7 @@ let universeRoutes = {
     },
     {
       type: Route,
-      name: 'universe-package-detail',
+      name: 'universe-packages-detail',
       path: 'packages/:packageName?:packageVersion?',
       handler: PackageDetailTab
     },
