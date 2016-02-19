@@ -1,12 +1,12 @@
 import {Store} from 'mesosphere-shared-reactjs';
 
-import AppDispatcher from '../events/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from '../events/AppDispatcher';
 import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import NetworkingActions from '../events/NetworkingActions';
 
-var NetworkingNodeMembershipsStore = Store.createStore({
+let NetworkingNodeMembershipsStore = Store.createStore({
   storeID: 'networkingNodeMemberships',
 
   mixins: [GetSetMixin],
