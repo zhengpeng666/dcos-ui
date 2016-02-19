@@ -1,7 +1,7 @@
 import Item from './Item';
 import ServiceUtil from '../utils/ServiceUtil';
 
-function getPropertyInObject(obj = {}, propList = []) {
+function getNestedPropertyInObject(obj = {}, propList = []) {
   return propList.reduce(function (current, nextProp) {
     if (!current) {
       return current;
@@ -14,12 +14,15 @@ function getPropertyInObject(obj = {}, propList = []) {
 class UniversePackage extends Item {
   getIcons() {
     return ServiceUtil.getServiceImages(
-      getPropertyInObject(this.get('resource'), ['images'])
+      getNestedPropertyInObject(this.get('resource'), ['images'])
     );
   }
 
   getScreenshots() {
-    return getPropertyInObject(this.get('resource'), ['images', 'screenshots']);
+    return getNestedPropertyInObject(
+      this.get('resource'),
+      ['images', 'screenshots']
+    );
   }
 }
 
