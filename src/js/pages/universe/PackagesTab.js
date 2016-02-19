@@ -62,7 +62,7 @@ class PackagesTab extends mixin(StoreMixin) {
       params.push({packageVersion: currentVersion});
     }
 
-    this.context.router.transitionTo.apply(null, ...[params]);
+    this.context.router.transitionTo.apply(null, params);
   }
 
   handleAdvancedModalClose() {
