@@ -50,7 +50,8 @@ if (Config.useFixtures) {
   }
 
   global.actionTypes.ComponentHealthActions = {
-    fetchComponents: {event: 'success', success: {response: componentsFixture}}
+    fetchComponents: {event: 'success', success: {response: componentsFixture}},
+    fetchReport: {event: 'success', success: {response: 'I am health report'}}
   };
 
   Object.keys(global.actionTypes.ComponentHealthActions).forEach(function (method) {
