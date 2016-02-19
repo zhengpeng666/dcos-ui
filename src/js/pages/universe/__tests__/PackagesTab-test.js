@@ -68,6 +68,11 @@ describe('PackagesTab', function () {
     beforeEach(function () {
       this.instance.handleInstallModalOpen =
         jasmine.createSpy('handleInstallModalOpen');
+      this.instance.context = {
+        router: {
+          transitionTo: jasmine.createSpy()
+        }
+      };
       jest.runAllTimers();
     });
 
