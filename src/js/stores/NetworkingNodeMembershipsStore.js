@@ -7,7 +7,7 @@ import GetSetMixin from '../mixins/GetSetMixin';
 import NetworkingActions from '../events/NetworkingActions';
 
 var NetworkingNodeMembershipsStore = Store.createStore({
-  storeID: 'networking',
+  storeID: 'networkingNodeMemberships',
 
   mixins: [GetSetMixin],
 
