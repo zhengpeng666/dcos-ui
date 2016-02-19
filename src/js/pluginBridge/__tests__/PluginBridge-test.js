@@ -130,11 +130,6 @@ describe('PluginBridge', function () {
       expect(typeof store.getState).toEqual('function');
     });
 
-    it('should call plugin with name as third arg', function () {
-      var name = this.mockPlugin.mock.calls[0][2];
-      expect(name).toEqual('fakePlugin3');
-    });
-
     it('should call plugin with personal dispatch as second arg', function () {
       var store = this.mockPlugin.mock.calls[0][0];
       var dispatch = this.mockPlugin.mock.calls[0][1];
@@ -155,6 +150,11 @@ describe('PluginBridge', function () {
         dispatchedObject)).toEqual(true);
       // Undo
       store.dispatch = storeDispatch;
+    });
+
+    it('should call plugin with name as third arg', function () {
+      var name = this.mockPlugin.mock.calls[0][2];
+      expect(name).toEqual('fakePlugin3');
     });
 
     it('should call plugin with options as fourth arg', function () {
