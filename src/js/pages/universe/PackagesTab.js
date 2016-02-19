@@ -25,7 +25,7 @@ class PackagesTab extends mixin(StoreMixin) {
     this.state = {
       advancedModalOpen: false,
       hasError: false,
-      installModalPackage: false,
+      installModalPackage: null,
       isLoading: true,
       sortProp: 'packageName'
     };
@@ -103,7 +103,7 @@ class PackagesTab extends mixin(StoreMixin) {
   getHeading(cosmosPackage) {
     return (
       <div className="icon icon-jumbo icon-image-container icon-app-container">
-        <img src={cosmosPackage.getIcons()['icon-large']} />
+        <img src={cosmosPackage.getIcons()['icon-medium']} />
       </div>
     );
   }
