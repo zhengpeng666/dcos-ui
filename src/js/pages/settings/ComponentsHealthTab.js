@@ -1,13 +1,23 @@
+import _ from 'underscore';
 import classNames from 'classnames';
+import {Link} from 'react-router';
 import React from 'react';
 import {Table} from 'reactjs-components';
 
+import HealthComponentList from '../../structs/HealthComponentList';
+import FilterHeadline from '../../components/FilterHeadline';
+import FilterButtons from '../../components/FilterButtons';
+import FilterInputText from '../../components/FilterInputText';
 import ResourceTableUtil from '../../utils/ResourceTableUtil';
+import StringUtil from '../../utils/StringUtil';
 import TableUtil from '../../utils/TableUtil';
 
 const METHODS_TO_BIND = [
+  'getHandleHealthFilterChange',
+  'handleSearchStringChange',
   'renderComponent',
-  'renderHealth'
+  'renderHealth',
+  'resetFilter'
 ];
 
 class ComponentsHealthTab extends React.Component {
@@ -15,33 +25,57 @@ class ComponentsHealthTab extends React.Component {
   constructor() {
     super();
 
+    this.state = {
+      healthFilter: 'all',
+      searchString: ''
+    };
+
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     }, this);
   }
 
+  handleHealthReportClick() {
+    console.log('clicked');
+  }
+
+  handleSearchStringChange(searchString) {
+    this.setState({searchString});
+  }
+
   renderComponent(prop, component) {
     return (
       <div>
-        {component[prop]}
+        <Link to="settings-system-components"
+          className="headline">
+          {component[prop]}
+        </Link>
       </div>
     );
   }
 
   renderHealth(prop, component) {
+    let health = component.getHealth();
 
-    let health = component[prop];
+    return (
+      <span className={health.classNames}>
+        {StringUtil.capitalize(health.title)}
+      </span>
+    );
+  }
 
-    let statusClassSet = classNames({
-      'text-success': health === 'ok',
-      'text-warning': health === 'warn',
-      'text-danger': health === 'critical',
-      'text-mute': health === 'unknown'
+  getButtonContent(filterName, count) {
+    let dotClassSet = classNames({
+      'dot': filterName !== 'all',
+      'danger': filterName === 'unhealthy',
+      'success': filterName === 'healthy'
     });
 
     return (
-      <span className={statusClassSet}>
-        {component[prop]}
+      <span className="button-align-content">
+        <span className={dotClassSet}></span>
+        <span className="label">{StringUtil.capitalize(filterName)}</span>
+        <span className="badge">{count}</span>
       </span>
     );
   }
@@ -83,26 +117,107 @@ class ComponentsHealthTab extends React.Component {
 
   getData() {
     // for demo until stores are created
-    return [
+    let data = new HealthComponentList({items: [
+      {
+        'id': 'apache-zookeeper',
+        'name': 'Apache ZooKeeper',
+        'version': '3.4.6',
+        'health': 1
+      },
       {
         'id': 'mesos',
         'name': 'Mesos',
         'version': '0.27.1',
-        'health': 'critical'
+        'health': 3
       },
       {
         'id': 'service-manager',
         'name': 'Service Manager',
         'version': '0.0.1',
-        'health': 'ok'
+        'health': 1
       }
-    ];
+    ]});
+
+    return data.getItems();
+  }
+
+  getHandleHealthFilterChange(healthFilter) {
+    return () => {
+      this.setState({healthFilter});
+    };
+  }
+
+  getVisibleData(data) {
+    let {healthFilter, searchString} = this.state;
+    let filteredData = data;
+    healthFilter = healthFilter.toLowerCase();
+    searchString = searchString.toLowerCase();
+
+    if (healthFilter !== 'all') {
+      filteredData = _.filter(filteredData, function (datum) {
+        return datum.getHealth().title.toLowerCase() === healthFilter;
+      });
+    }
+
+    if (searchString !== '') {
+      filteredData = _.filter(filteredData, function (datum) {
+        let name = datum.get('name').toLowerCase();
+        return name.indexOf(searchString) > -1;
+      });
+    }
+
+    return filteredData;
+  }
+
+  resetFilter() {
+    this.setState({
+      searchString: '',
+      healthFilter: 'all'
+    });
   }
 
   render() {
+    let data = this.getData();
+    let state = this.state;
+    let visibleData = this.getVisibleData(data);
+    let pluralizedItemName = StringUtil.pluralize('Component', data.length);
+    let dataHealth = data.map(function (component) {
+      return component.getHealth();
+    });
+
     return (
       <div className="flex-container-col">
-        <span className="h4 inverse flush-top">Components</span>
+        <div className="components-health-table-header">
+          <FilterHeadline
+            onReset={this.resetFilter}
+            name={pluralizedItemName}
+            currentLength={visibleData.length}
+            totalLength={data.length} />
+          <ul className="list list-unstyled list-inline flush-bottom">
+            <li>
+              <FilterButtons
+                renderButtonContent={this.getButtonContent}
+                filters={['all', 'healthy', 'unhealthy']}
+                filterByKey={'title'}
+                getfilterChangeHandler={this.getHandleHealthFilterChange}
+                itemList={dataHealth}
+                selectedFilter={state.healthFilter} />
+            </li>
+            <li>
+              <FilterInputText
+                searchString={state.searchString}
+                handleFilterChange={this.handleSearchStringChange}
+                inverseStyle={true} />
+            </li>
+            <li className="button-collection list-item-aligned-right">
+              <a
+                className="button button-primary"
+                onClick={this.handleHealthReportClick}>
+                Download Health
+              </a>
+            </li>
+          </ul>
+        </div>
         <div className="page-content-fill flex-grow flex-container-col">
           <Table
             className="table inverse table-borderless-outer
@@ -110,7 +225,7 @@ class ComponentsHealthTab extends React.Component {
             columns={this.getColumns()}
             colGroup={this.getColGroup()}
             containerSelector=".gm-scroll-view"
-            data={this.getData().slice()}
+            data={visibleData}
             idAttribute="id"
             itemHeight={TableUtil.getRowHeight()}
             sortBy={{prop: 'health', order: 'desc'}}
