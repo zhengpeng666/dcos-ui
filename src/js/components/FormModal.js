@@ -83,6 +83,7 @@ class FormModal extends React.Component {
           definition={this.props.definition}
           triggerSubmit={this.getTriggerSubmit}
           onSubmit={this.props.onSubmit}
+          onChange={this.props.onChange}
           onError={this.handleError} />
       </div>
     );
@@ -125,6 +126,7 @@ FormModal.defaultProps = {
   ],
   disabled: false,
   extraFooterContent: null,
+  onChange: function () {},
   onClose: function () {},
   open: false,
   modalProps: {}
@@ -137,6 +139,7 @@ FormModal.propTypes = {
   disabled: React.PropTypes.bool,
   extraFooterContent: React.PropTypes.node,
   modalProps: React.PropTypes.object,
+  onChange: React.PropTypes.func,
   onClose: React.PropTypes.func.isRequired,
   open: React.PropTypes.bool
 };

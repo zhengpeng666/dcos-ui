@@ -31,6 +31,7 @@ const fieldDefinitions = {
 
 const METHODS_TO_BIND = [
   'changeModalOpenState',
+  'hangleFormChange',
   'handleModalSubmit'
 ];
 
@@ -40,7 +41,15 @@ class DirectoriesTab extends mixin(StoreMixin) {
 
     this.state = {
       modalDisabled: false,
-      modalOpen: false
+      modalOpen: false,
+      fieldUseLDAPs: {
+        checked: false,
+        disabled: false
+      },
+      fieldEnforceStartTLS: {
+        checked: false,
+        disabled: false
+      }
     };
 
     this.store_listeners = [
@@ -69,6 +78,37 @@ class DirectoriesTab extends mixin(StoreMixin) {
     this.setState({modalDisabled: false});
   }
 
+  hangleFormChange(formData, change) {
+    switch (change.fieldName) {
+      case 'use-ldaps':
+        this.setState({
+          fieldUseLDAPs: {
+            checked: change.fieldValue.checked,
+            disabled: false
+          },
+          fieldEnforceStartTLS: {
+            checked: false,
+            disabled: change.fieldValue.checked
+          }
+        });
+        break;
+      case 'enforce-starttls':
+        this.setState({
+          fieldUseLDAPs: {
+            checked: false,
+            disabled: change.fieldValue.checked
+          },
+          fieldEnforceStartTLS: {
+            checked: change.fieldValue.checked,
+            disabled: false
+          }
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
   handleModalSubmit(formData) {
     // There's deeply nested objects
     formData = JSON.parse(JSON.stringify(formData));
@@ -80,7 +120,11 @@ class DirectoriesTab extends mixin(StoreMixin) {
     formData['use-ldaps'] = !!(useLDAPs && useLDAPs.checked);
 
     ACLDirectoriesStore.addDirectory(formData);
-    this.setState({modalDisabled: true});
+    this.setState({
+      modalDisabled: true,
+      fieldUseLDAPs: {checked: false, disabled: false},
+      fieldEnforceStartTLS: {checked: false, disabled: false}
+    });
   }
 
   handleDirectoryDelete() {
@@ -137,6 +181,8 @@ class DirectoriesTab extends mixin(StoreMixin) {
         showLabel: false,
         label: fieldDefinitions['use-ldaps'],
         writeType: 'input',
+        checked: this.state.fieldUseLDAPs.checked,
+        disabled: this.state.fieldUseLDAPs.disabled,
         validation: function () { return true; }
       },
       {
@@ -146,6 +192,8 @@ class DirectoriesTab extends mixin(StoreMixin) {
         showLabel: false,
         label: fieldDefinitions['enforce-starttls'],
         writeType: 'input',
+        checked: this.state.fieldEnforceStartTLS.checked,
+        disabled: this.state.fieldEnforceStartTLS.disabled,
         validation: function () { return true; }
       }
     ];
@@ -200,6 +248,7 @@ class DirectoriesTab extends mixin(StoreMixin) {
           definition={this.getModalFormDefinition()}
           disabled={this.state.modalDisabled}
           onClose={this.changeModalOpenState.bind(null, false)}
+          onChange={this.hangleFormChange}
           onSubmit={this.handleModalSubmit}
           open={this.state.modalOpen}>
           <h2 className="modal-header-title text-align-center flush-top">
