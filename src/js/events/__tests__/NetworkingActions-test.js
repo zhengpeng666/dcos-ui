@@ -112,7 +112,7 @@ describe('NetworkingActions', function () {
         expect(action).toEqual({
           type: ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_SUCCESS,
           data: {bar: 'baz'},
-          vip: 'bar:foo:baz'
+          vip: 'foo:bar:baz'
         });
       });
 
@@ -127,7 +127,7 @@ describe('NetworkingActions', function () {
         expect(action).toEqual({
           type: ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_ERROR,
           data: {bar: 'baz'},
-          vip: 'bar:foo:baz'
+          vip: 'foo:bar:baz'
         });
       });
 
@@ -143,7 +143,7 @@ describe('NetworkingActions', function () {
     it('fetches data from the correct URL', function () {
       NetworkingActions.fetchVIPDetail('foo', 'bar', 'baz');
       expect(this.configuration.url).toEqual(
-        Config.networkingAPIPrefix + '/foo/bar/baz'
+        Config.networkingAPIPrefix + '/bar/foo/baz'
       );
     });
 
@@ -159,7 +159,7 @@ describe('NetworkingActions', function () {
         expect(action).toEqual({
           type: ActionTypes.REQUEST_NETWORKING_BACKEND_CONNECTIONS_SUCCESS,
           data: {bar: 'baz'},
-          vip: 'bar:foo:baz'
+          vip: 'foo:bar:baz'
         });
       });
 
@@ -174,7 +174,7 @@ describe('NetworkingActions', function () {
         expect(action).toEqual({
           type: ActionTypes.REQUEST_NETWORKING_BACKEND_CONNECTIONS_ERROR,
           data: {bar: 'baz'},
-          vip: 'bar:foo:baz'
+          vip: 'foo:bar:baz'
         });
       });
 
@@ -190,7 +190,7 @@ describe('NetworkingActions', function () {
     it('fetches data from the correct URL', function () {
       NetworkingActions.fetchVIPBackendConnections('foo', 'bar', 'baz');
       expect(this.configuration.url).toEqual(
-        Config.networkingAPIPrefix + '/backend-connections/foo/bar/baz'
+        Config.networkingAPIPrefix + '/backend-connections/bar/foo/baz'
       );
     });
 

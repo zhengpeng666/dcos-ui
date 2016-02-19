@@ -41,7 +41,7 @@ var NetworkingActions = {
     });
   },
 
-  fetchVIPDetail: function (vip, protocol, port) {
+  fetchVIPDetail: function (protocol, vip, port) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.networkingAPIPrefix}/${vip}/${protocol}/${port}`,
       success: function (response) {
@@ -61,7 +61,7 @@ var NetworkingActions = {
     });
   },
 
-  fetchVIPBackendConnections: function (vip, protocol, port) {
+  fetchVIPBackendConnections: function (protocol, vip, port) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.networkingAPIPrefix}/backend-connections/${vip}/${protocol}/${port}`,
       success: function (response) {
