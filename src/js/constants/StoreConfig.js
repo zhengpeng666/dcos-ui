@@ -111,7 +111,7 @@ const ListenersDescription = {
     events: {
       backendConnectionsSuccess: EventTypes.NETWORKING_BACKEND_CONNECTIONS_CHANGE,
       backendConnectionsError: EventTypes.NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR
-    }},
+    },
     unmountWhen: function () {
       return true;
     },
@@ -123,7 +123,7 @@ const ListenersDescription = {
     events: {
       nodeMembershipsSuccess: EventTypes.NETWORKING_BACKEND_CONNECTIONS_CHANGE,
       nodeMembershipsError: EventTypes.NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR
-    }},
+    },
     unmountWhen: function () {
       return true;
     },
@@ -137,7 +137,7 @@ const ListenersDescription = {
       vipsError: EventTypes.NETWORKING_VIPS_REQUEST_ERROR,
       vipDetailSuccess: EventTypes.NETWORKING_VIP_DETAIL_CHANGE,
       vipDetailError: EventTypes.NETWORKING_VIP_DETAIL_REQUEST_ERROR
-    }},
+    },
     unmountWhen: function () {
       return true;
     },
@@ -145,11 +145,11 @@ const ListenersDescription = {
   },
 
   networkingVIPSummaries: {
-    store: NetworkingVIPsStore,
+    store: NetworkingVIPSummariesStore,
     events: {
       vipSummariesSuccess: EventTypes.NETWORKING_VIP_SUMMARIES_CHANGE,
       vipSummariesError: EventTypes.NETWORKING_VIP_SUMMARIES_ERROR
-    }},
+    },
     unmountWhen: function () {
       return true;
     },
