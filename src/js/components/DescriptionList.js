@@ -35,7 +35,7 @@ class DescriptionList extends React.Component {
     }
 
     return (
-      <div className={className}>
+      <div className={className} key={this.props.key}>
         {this.getHeadline()}
         {this.getItems()}
       </div>
@@ -44,13 +44,15 @@ class DescriptionList extends React.Component {
 }
 
 DescriptionList.defaultProps = {
-  className: ''
+  className: '',
+  key: ''
 };
 
 DescriptionList.propTypes = {
   className: React.PropTypes.string,
   headline: React.PropTypes.node,
-  hash: React.PropTypes.object
+  hash: React.PropTypes.object,
+  key: React.PropTypes.string
 };
 
 module.exports = DescriptionList;

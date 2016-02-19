@@ -58,10 +58,10 @@ describe('AdvancedConfigModal', function () {
       expect(result).toEqual('Review and Install');
     });
 
-    it('should have right button text \'Install\' if reviewing', function () {
+    it('should have right button text \'Install Package\' if reviewing', function () {
       this.instance.state = {reviewingConfig: true};
       var result = this.instance.getRightButtonText();
-      expect(result).toEqual('Install');
+      expect(result).toEqual('Install Package');
     });
 
     it('should return callback for right button that sets reviewing to true',
