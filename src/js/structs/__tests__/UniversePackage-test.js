@@ -9,7 +9,7 @@ describe('UniversePackage', function () {
 
     it('returns a hash of icons', function () {
       var pkg = new UniversePackage({
-        'resources': {
+        'resource': {
           'images': {
             'icon-small': 'small.png',
             'icon-medium': 'medium.png',
