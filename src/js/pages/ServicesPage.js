@@ -14,7 +14,7 @@ var Page = require('../components/Page');
 var MarathonStore = require('../stores/MarathonStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var ResourceBarChart = require('../components/charts/ResourceBarChart');
-var ServiceTable = require('../components/ServiceTable');
+var ServicesTable = require('../components/ServicesTable');
 var SidebarActions = require('../events/SidebarActions');
 import SidePanels from '../components/SidePanels';
 
@@ -200,7 +200,7 @@ var ServicesPage = React.createClass({
               inverseStyle={true} />
           </li>
         </ul>
-        <ServiceTable
+        <ServicesTable
           services={data.services}
           healthProcessed={appsProcessed} />
         <SidePanels

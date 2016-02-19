@@ -1,5 +1,5 @@
 jest.dontMock('../ServiceOverlay');
-jest.dontMock('../ServiceTable');
+jest.dontMock('../ServicesTable');
 jest.dontMock('../../constants/HealthStatus');
 jest.dontMock('../../mixins/GetSetMixin');
 jest.dontMock('../../stores/MesosSummaryStore');
@@ -7,7 +7,6 @@ jest.dontMock('../../utils/MesosSummaryUtil');
 jest.dontMock('../../utils/RequestUtil');
 jest.dontMock('../../utils/ResourceTableUtil');
 jest.dontMock('../../utils/StringUtil');
-jest.dontMock('../../structs/CompositeState');
 jest.dontMock('../../stores/__tests__/fixtures/state.json');
 jest.dontMock('../../utils/Util');
 
@@ -17,7 +16,7 @@ var ReactDOM = require('react-dom');
 var CompositeState = require('../../structs/CompositeState');
 var HealthLabels = require('../../constants/HealthLabels');
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
-var ServiceTable = require('../ServiceTable');
+var ServicesTable = require('../ServicesTable');
 
 // That is a single snapshot from
 // http://dcos.mesosphere.com/dcos-history-service/history/last
@@ -27,13 +26,13 @@ CompositeState.addSummary(stateJSON);
 
 function getTable(isAppsProcessed, container) {
   return ReactDOM.render(
-    <ServiceTable services={[]}
+    <ServicesTable services={[]}
       healthProcessed={isAppsProcessed} />,
     container
   );
 }
 
-describe('ServiceTable', function () {
+describe('ServicesTable', function () {
 
   describe('#renderHealth', function () {
 
