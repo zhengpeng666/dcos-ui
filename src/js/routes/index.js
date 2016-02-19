@@ -2,6 +2,7 @@ import {Route, Redirect, NotFoundRoute} from 'react-router';
 
 import dashboard from './dashboard';
 import Index from '../pages/Index';
+import network from './network';
 import nodes from './nodes';
 import NotFoundPage from '../pages/NotFoundPage';
 import services from './services';
@@ -21,6 +22,7 @@ let routes = [
           dashboard,
           services,
           nodes,
+          network,
           universe,
           {
             type: Redirect,
