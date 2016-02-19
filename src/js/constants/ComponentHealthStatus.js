@@ -1,6 +1,6 @@
 const ComponentHealthStatus = {
   NA: {
-    title: 'NA',
+    title: 'N/A',
     value: 0,
     classNames: 'text-mute'
   },

@@ -10,6 +10,7 @@ import {Table} from 'reactjs-components';
 
 import ComponentHealthSidePanel from '../../components/ComponentHealthSidePanel';
 import ComponentHealthStore from '../../stores/ComponentHealthStore';
+import ComponentHealthUtil from '../../utils/ComponentHealthUtil';
 import Config from '../../config/Config';
 import FilterHeadline from '../../components/FilterHeadline';
 import FilterButtons from '../../components/FilterButtons';
@@ -62,9 +63,9 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
     return (
       <div>
         <Link to="settings-system-components-health-panel"
-          params={{componentID: component.id}}
-          className="headline" >
-          {component[prop]}
+          params={{componentID: component.get('id')}}
+          className="headline">
+          {component.get(prop)}
         </Link>
       </div>
     );
@@ -125,7 +126,7 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
         prop: 'health',
         render: this.renderHealth,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('health'),
+        sortFunction: ComponentHealthUtil.getHealthSortFunction(),
         heading: ResourceTableUtil.renderHeading({health: 'HEALTH'})
       }
     ];
