@@ -5,7 +5,7 @@
       "description": "A distributed free and open-source database with a flexible data model for documents, graphs, and key-values. Build high performance applications using a convenient SQL-like query language or JavaScript extensions.",
       "framework": true,
       "packageName": "arangodb",
-      "resources": {
+      "resource": {
         "images": {
           "icon-small": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-small.png",
           "icon-medium": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-medium.png",

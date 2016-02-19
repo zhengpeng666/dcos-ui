@@ -1,15 +1,25 @@
 import Item from './Item';
 import ServiceUtil from '../utils/ServiceUtil';
 
-class UniversePackage extends Item {
-  getIcons() {
-    let images;
-    let resources = this.get('resources');
-    if (resources && resources.images) {
-      images = resources.images;
+function getPropertyInObject(obj = {}, propList = []) {
+  return propList.reduce(function (current, nextProp) {
+    if (!current) {
+      return current;
     }
 
-    return ServiceUtil.getServiceImages(images);
+    return current[nextProp];
+  }, obj);
+}
+
+class UniversePackage extends Item {
+  getIcons() {
+    return ServiceUtil.getServiceImages(
+      getPropertyInObject(this.get('resource'), ['images'])
+    );
+  }
+
+  getScreenshots() {
+    return getPropertyInObject(this.get('resource'), ['images', 'screenshots']);
   }
 }
 
