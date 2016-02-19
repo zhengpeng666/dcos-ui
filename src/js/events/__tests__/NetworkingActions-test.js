@@ -1,8 +1,6 @@
 jest.dontMock('../AppDispatcher');
 jest.dontMock('../NetworkingActions');
 jest.dontMock('../../config/Config');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../utils/RequestUtil');
 
 let ActionTypes = require('../../constants/ActionTypes');
 let AppDispatcher = require('../AppDispatcher');
@@ -15,14 +13,18 @@ describe('NetworkingActions', function () {
   beforeEach(function () {
     this.configuration = null;
     this.requestUtilJSON = RequestUtil.json;
+    this.rootUrl = Config.rootUrl;
+    this.useFixtures = Config.useFixtures;
+    Config.useFixtures = false;
+    Config.rootUrl = '';
     RequestUtil.json = function (configuration) {
       this.configuration = configuration;
     }.bind(this);
-    Config.rootUrl = '';
-    Config.useFixtures = false;
   });
 
   afterEach(function () {
+    Config.rootUrl = this.rootUrl;
+    Config.useFixtures = this.useFixtures;
     RequestUtil.json = this.requestUtilJSON;
   });
 

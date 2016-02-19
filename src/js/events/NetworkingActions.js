@@ -3,7 +3,7 @@ import AppDispatcher from './AppDispatcher';
 import Config from '../config/Config';
 import RequestUtil from '../utils/RequestUtil';
 
-var NetworkingActions = {
+let NetworkingActions = {
 
   fetchVIPs: function () {
     RequestUtil.json({
