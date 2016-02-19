@@ -155,7 +155,7 @@ class TaskDebugView extends mixin(StoreMixin) {
     let filePath = directoryItem && directoryItem.get('path');
 
     return (
-      <div className="flex-container-col flex-grow no-overflow">
+      <div className="flex-container-col flex-grow">
         <div className="control-group form-group flex-no-shrink flex-align-right flush-bottom">
           <FilterInputText
             className="flex-grow"

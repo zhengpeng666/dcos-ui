@@ -196,8 +196,7 @@ class ServiceSidePanelContents extends SidePanelContents {
         container-pod-short
         container-fluid
         flex-container-col
-        flex-grow
-        no-overflow">
+        flex-grow">
         {contents}
       </div>
     );

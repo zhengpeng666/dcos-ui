@@ -179,7 +179,7 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
 
     return (
-      <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow no-overflow">
+      <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow">
         <TaskDirectoryView task={task} />
       </div>
     );
@@ -189,7 +189,7 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
     let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
 
     return (
-      <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow no-overflow">
+      <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow">
         <TaskDebugView
           showExpandButton={this.showExpandButton}
           task={task} />
@@ -228,7 +228,7 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
     let node = MesosStateStore.getNodeFromID(task.slave_id);
 
     return (
-      <div className="flex-container-col no-overflow">
+      <div className="flex-container-col">
         {this.getExpandButton()}
         <div className="side-panel-content-header container container-pod
           container-fluid container-pod-divider-bottom

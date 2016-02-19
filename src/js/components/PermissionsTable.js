@@ -202,7 +202,7 @@ class PermissionsTable extends mixin(StoreMixin) {
           container-pod-short flush-horizontal">
           <Table
             className="table table-borderless-outer table-borderless-inner-columns
-              flush-bottom no-overflow flush-bottom"
+              flush-bottom flush-bottom"
             columns={this.getColumns()}
             colGroup={this.getColGroup()}
             data={permissions}

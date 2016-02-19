@@ -127,7 +127,7 @@ class TaskDirectoryView extends mixin(StoreMixin) {
     }
 
     return (
-      <div className="side-panel-section flex-container-col flex-grow no-overflow">
+      <div className="side-panel-section flex-container-col flex-grow">
         <div className="flex-box control-group">
           {this.getBreadcrumbs()}
         </div>

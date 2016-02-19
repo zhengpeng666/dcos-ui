@@ -74,7 +74,8 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
     super.componentDidUpdate(...arguments);
 
     if (prevState.searchFilter !== this.state.searchFilter ||
-        prevState.searchString !== this.state.searchString) {
+        prevState.searchString !== this.state.searchString ||
+        prevProps.items.length !== this.props.items.length) {
       this.resetTablewideCheckboxTabulations();
     }
   }

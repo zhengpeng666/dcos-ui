@@ -167,7 +167,7 @@ module.exports = class UserGroupTable extends mixin(StoreMixin) {
         </Confirm>
         <Table
           className="table table-borderless-outer
-            table-borderless-inner-columns flush-bottom no-overflow
+            table-borderless-inner-columns flush-bottom
             flush-bottom"
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
