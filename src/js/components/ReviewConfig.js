@@ -1,13 +1,11 @@
 import React from 'react';
 
 // TODO: remove this. This is a fixture for development purposes.
-// import {jsonDocument as boomski} from './marathonConfigFixture';
+import {jsonDocument as boomski} from './marathonConfigFixture';
+
+import DescriptionList from './DescriptionList';
 
 class ReviewConfig extends React.Component {
-  getFieldTitle(title) {
-    return <h3 key={`${title}-header`}>{title}</h3>;
-  }
-
   getServiceHeader() {
     let {props} = this;
     return (
@@ -30,21 +28,12 @@ class ReviewConfig extends React.Component {
     );
   }
 
-  getFieldSubheader(title) {
-    return (<h5 key={`${title}-subheader`}>{title}</h5>);
+  getFieldTitle(title) {
+    return <h3 key={`${title}-header`}>{title}</h3>;
   }
 
-  renderField(key, value) {
-    return (
-      <dl key={`${key}${value}`} className="flex-box row">
-        <dt className="column-3 emphasize">
-          {key}
-        </dt>
-        <dd className="column-9">
-          {value}
-        </dd>
-      </dl>
-    );
+  getFieldSubheader(title) {
+    return (<h5 key={`${title}-subheader`}>{title}</h5>);
   }
 
   getDefinitionReview() {
@@ -52,17 +41,18 @@ class ReviewConfig extends React.Component {
     let jsonDocument = this.props.jsonDocument;
     let fields = Object.keys(jsonDocument);
 
-    fields.forEach((field) => {
+    fields.forEach((field, i) => {
       var fieldObj = jsonDocument[field];
       elementsToRender.push(this.getFieldTitle(field));
 
       Object.keys(fieldObj).forEach((fieldKey) => {
         let fieldValue = fieldObj[fieldKey];
+        let uniqueKey = `${i}${fieldKey}`;
 
         if (typeof fieldValue === 'object' && !Array.isArray(fieldValue)) {
           elementsToRender.push(this.getFieldSubheader(fieldKey));
-          elementsToRender = elementsToRender.concat(
-            this.renderFields(fieldValue)
+          elementsToRender = elementsToRender.push(
+            this.renderFields(fieldValue, uniqueKey)
           );
           return;
         }
@@ -71,21 +61,19 @@ class ReviewConfig extends React.Component {
           fieldValue = fieldValue.join(' ');
         }
 
-        elementsToRender.push(this.renderField(fieldKey, fieldValue));
+        elementsToRender.push(
+          this.renderFields({[fieldKey]: fieldValue}, uniqueKey)
+        );
       });
     });
 
     return elementsToRender;
   }
 
-  renderFields(obj) {
-    var elementsToRender = [];
-
-    Object.keys(obj).forEach((key) => {
-      elementsToRender.push(this.renderField(key, obj[key]));
-    });
-
-    return elementsToRender;
+  renderFields(hash, key) {
+    return (
+      <DescriptionList hash={hash} key={key} />
+    );
   }
 
   render() {
@@ -108,7 +96,7 @@ class ReviewConfig extends React.Component {
 }
 
 ReviewConfig.defaultProps = {
-  jsonDocument: {},
+  jsonDocument: boomski,
   serviceImage: './img/services/icon-service-marathon-large@2x.png',
   serviceName: 'Marathon',
   serviceVersion: '0.23.2'
