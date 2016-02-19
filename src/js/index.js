@@ -27,7 +27,9 @@ import Plugins from './plugins/Plugins';
 import RequestUtil from './utils/RequestUtil';
 
 let domElement = document.getElementById('application');
-PluginBridge.init();
+
+PluginBridge.listenForConfigChange();
+
 // Patch json
 let oldJSON = RequestUtil.json;
 RequestUtil.json = function (options = {}) {

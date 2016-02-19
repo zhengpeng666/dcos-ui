@@ -123,7 +123,7 @@ const addPluginReducer = function (reducer, pluginID) {
 const listenForConfigChange = function () {
   let unSubscribe = Store.subscribe(function () {
     let configStore = Store.getState()[APPLICATION].config;
-    if (configStore.config && configStore.config.uiConfiguration) {
+    if (configStore && configStore.config && configStore.config.uiConfiguration) {
       // unsubscribe once we have the config
       unSubscribe();
       initialize(configStore.config.uiConfiguration.plugins);
@@ -134,6 +134,6 @@ const listenForConfigChange = function () {
 module.exports = {
   Store: Store,
   dispatch: createDispatcher(APPLICATION),
-  init: listenForConfigChange
+  listenForConfigChange: listenForConfigChange
 };
 

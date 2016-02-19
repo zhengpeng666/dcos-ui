@@ -27,7 +27,7 @@ describe('PluginBridge', function () {
         );
 
         Plugins.__setMockPlugins({fakePlugin1: this.mockPlugin});
-        PluginBridge.init();
+        PluginBridge.listenForConfigChange();
         ConfigStore.set({config: {
           uiConfiguration: {
             plugins: {
@@ -55,7 +55,7 @@ describe('PluginBridge', function () {
           }
         );
         Plugins.__setMockPlugins({fakePlugin2: this.mockPlugin});
-        PluginBridge.init();
+        PluginBridge.listenForConfigChange();
         ConfigStore.set({config: {
           uiConfiguration: {
             plugins: {
@@ -79,7 +79,7 @@ describe('PluginBridge', function () {
           }
         );
         Plugins.__setMockPlugins({badFakePlugin: mockPlugin});
-        PluginBridge.init();
+        PluginBridge.listenForConfigChange();
         expect(function () {
           ConfigStore.set({config: {
             uiConfiguration: {
@@ -101,7 +101,7 @@ describe('PluginBridge', function () {
       this.mockPlugin = jest.genMockFunction();
 
       Plugins.__setMockPlugins({fakePlugin3: this.mockPlugin});
-      PluginBridge.init();
+      PluginBridge.listenForConfigChange();
       ConfigStore.set({config: {
         uiConfiguration: {
           plugins: {
@@ -201,7 +201,7 @@ describe('PluginBridge', function () {
       this.mockReducer = mockReducer;
 
       Plugins.__setMockPlugins({anotherFakePlugin: this.mockPlugin});
-      PluginBridge.init();
+      PluginBridge.listenForConfigChange();
       ConfigStore.set({config: {
         uiConfiguration: {
           plugins: {
