@@ -55,7 +55,14 @@ class PackagesTab extends mixin(StoreMixin) {
 
   handleDetailOpen(cosmosPackage, event) {
     event.stopPropagation();
-    // Handle open detail view
+    let {packageName, currentVersion} = cosmosPackage;
+    let params = ['universe-package-detail', {packageName}];
+
+    if (currentVersion) {
+      params.push({packageVersion: currentVersion});
+    }
+
+    this.context.router.transitionTo.apply(null, ...[params]);
   }
 
   handleAdvancedModalClose() {
@@ -181,5 +188,9 @@ class PackagesTab extends mixin(StoreMixin) {
     );
   }
 }
+
+PackagesTab.contextTypes = {
+  router: React.PropTypes.func
+};
 
 module.exports = PackagesTab;
