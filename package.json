@@ -135,7 +135,9 @@
       "src/js/utils",
       "structs",
       "underscore",
-      "babel-runtime"
+      "babel-runtime",
+      "redux",
+      "AppReducer"
     ],
     "testPathIgnorePatterns": [
       "/tmp/",
