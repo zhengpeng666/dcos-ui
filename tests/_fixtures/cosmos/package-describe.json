@@ -358,7 +358,7 @@
       "icon-small": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-small.png",
       "icon-medium": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-medium.png",
       "icon-large": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-large.png",
-      "screenshots": null
+      "screenshots": ["https://mesosphere.com/wp-content/themes/mesosphere/library/images/assets/marathon-0.6.0/mesosphere-marathon-app-list.png", "https://beingasysadmin.files.wordpress.com/2014/06/marathon2.png", "https://mesosphere.github.io/presentations/mug-ericsson-2014/assets/marathon-logo.jpg", "https://mesosphere.com/wp-content/themes/mesosphere/library/images/assets/marathon-0.6.0/mesosphere-marathon-app-list.png", "https://beingasysadmin.files.wordpress.com/2014/06/marathon2.png", "https://mesosphere.github.io/presentations/mug-ericsson-2014/assets/marathon-logo.jpg"]
     }
   }
 }
