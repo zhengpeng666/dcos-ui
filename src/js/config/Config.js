@@ -2,6 +2,7 @@
 var Config = {
   analyticsKey: '@@ANALYTICS_KEY',
   acsAPIPrefix: '/acs/api/v1',
+  networkingAPIPrefix: '/networking/api/v1',
   cosmosAPIPrefix: '/packages',
   componentHealthAPIPrefix: '/api/v1/system/health',
   delayAfterErrorCount: 5,
