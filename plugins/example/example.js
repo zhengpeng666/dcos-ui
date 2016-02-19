@@ -26,10 +26,10 @@ const performComplexMath = function (Store, prevState, action, factor) {
  */
 module.exports = function (Store, dispatch, name, options) {
 
-  // options.configOptions = configOptions from plugin configuration file
+  // options.config = config from plugin configuration file
   // options.APPLICATION = Applications root key in Store.
 
-  if (options.configOptions.enabled) {
+  if (options.config.enabled) {
     setInterval(function () {
       dispatch({
         type: EXAMPLE_PLUGIN_EVENT,
@@ -48,7 +48,7 @@ module.exports = function (Store, dispatch, name, options) {
 
     switch (action.type) {
       case EXAMPLE_PLUGIN_EVENT:
-        return performComplexMath(Store, ...arguments, options.configOptions.multiplier);
+        return performComplexMath(Store, ...arguments, options.config.multiplier);
       default:
         return state;
     }

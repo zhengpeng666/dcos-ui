@@ -23,12 +23,11 @@ require('./utils/StoreMixinConfig');
 import ApplicationLoader from './pages/ApplicationLoader';
 import appRoutes from './routes/index';
 var Config = require('./config/Config');
-var PluginConfig = require('../../plugins/config');
 import Plugins from './plugins/Plugins';
 import RequestUtil from './utils/RequestUtil';
 
 let domElement = document.getElementById('application');
-
+PluginBridge.init();
 // Patch json
 let oldJSON = RequestUtil.json;
 RequestUtil.json = function (options = {}) {
@@ -56,8 +55,6 @@ function createRoutes(routes) {
     return React.createElement(...args);
   });
 }
-
-PluginBridge.initialize(PluginConfig);
 
 function onApplicationLoad() {
   // Allow overriding of application contents

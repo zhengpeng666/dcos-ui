@@ -4,6 +4,7 @@ import Config from '../config/Config';
 import RequestUtil from '../utils/RequestUtil';
 
 const ConfigActions = {
+
   fetchConfig: function () {
     RequestUtil.json({
       url: `${Config.rootUrl}/dcos-metadata/ui-config.json`,

@@ -4,6 +4,7 @@ import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import {APPLICATION} from '../constants/PluginConstants';
 import AppReducer from './AppReducer';
 import Config from '../config/Config';
+import Plugins from '../../../plugins/index';
 
 const initialState = {};
 const middleware = [];
@@ -41,11 +42,21 @@ const Store = createStore(
 /**
  * Bootstraps plugins and adds new reducers to Store.
  *
- * @param  {Object} pluginsConfiguration Associative Array of plugins to load
+ * @param {Object} pluginsConfig Plugin configuration from Store
  */
-const initialize = function (pluginsConfiguration) {
-  Object.keys(pluginsConfiguration).forEach((pluginName) => {
-    bootstrapPlugin(pluginName, pluginsConfiguration[pluginName]);
+const initialize = function (pluginsConfig) {
+  let pluginList = Plugins.getAvailablePlugins();
+
+  Object.keys(pluginsConfig).forEach(function (pluginID) {
+    // Make sure plugin is bundled
+    if (!(pluginID in pluginList)) {
+      console.warn(`Plugin ${pluginID} not available in bundle`);
+      return;
+    }
+    // Bootstrap if plugin enabled
+    if (pluginsConfig[pluginID].enabled) {
+      bootstrapPlugin(pluginID, pluginList[pluginID], pluginsConfig[pluginID]);
+    }
   });
   // Replace all store reducers now that we have all plugin reducers
   Store.replaceReducer(
@@ -72,16 +83,17 @@ const createDispatcher = function (name) {
  * Bootstraps a plugin
  *
  * @param  {String} name   Plugin's name from config
+ * @param  {Module} plugin Plugin module
  * @param  {Object} config Plugin configuration
  */
-const bootstrapPlugin = function (name, config) {
+const bootstrapPlugin = function (name, plugin, config) {
   // Inject Application key constant and configOptions if specified
   let options = {
     APPLICATION: APPLICATION,
-    configOptions: config.configOptions || {}
+    config: config || {}
   };
 
-  let pluginReducer = config.plugin(
+  let pluginReducer = plugin(
     Store,
     createDispatcher(name),
     name,
@@ -89,9 +101,6 @@ const bootstrapPlugin = function (name, config) {
   );
   // If plugin exported a reducer, add it to the reducers object
   if (pluginReducer) {
-    if (!_.isFunction(pluginReducer)) {
-      throw new Error(`Reducer for ${name} must be a function`);
-    }
     addPluginReducer(pluginReducer, name);
   }
 };
@@ -100,18 +109,31 @@ const bootstrapPlugin = function (name, config) {
  * Adds a plugin's reducer to the reducers Object
  *
  * @param {Function} reducer    Reducer function to manage plugins state in Store
- * @param {String} pluginName   Plugin's name
+ * @param {String} pluginID     Plugin's ID
  */
-const addPluginReducer = function (reducer, pluginName) {
+const addPluginReducer = function (reducer, pluginID) {
   if (typeof reducer !== 'function') {
-    throw new Error(`Reducer for ${pluginName} must be a function`);
+    throw new Error(`Reducer for ${pluginID} must be a function`);
   }
-  reducers[pluginName] = reducer;
+  reducers[pluginID] = reducer;
+};
+
+// Subscribe to Store config change and call initialize with
+// new plugin configuration
+const listenForConfigChange = function () {
+  let unSubscribe = Store.subscribe(function () {
+    let configStore = Store.getState()[APPLICATION].config;
+    if (configStore.config && configStore.config.uiConfiguration) {
+      // unsubscribe once we have the config
+      unSubscribe();
+      initialize(configStore.config.uiConfiguration.plugins);
+    }
+  });
 };
 
 module.exports = {
   Store: Store,
   dispatch: createDispatcher(APPLICATION),
-  initialize: initialize
+  init: listenForConfigChange
 };
 

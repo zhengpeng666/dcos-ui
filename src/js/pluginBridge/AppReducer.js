@@ -7,11 +7,8 @@ const initialState = {};
 // Compute new state based on action
 function updateState(prevState, action) {
   // Peel away Structs and assign to State tree rooted at storeID
-  let newState = {
-    [action.storeID]: StructUtil.copyRawObject(action.data)
-  };
-  // Clone everything
-  return Object.assign({}, prevState, newState);
+  prevState[action.storeID] = StructUtil.copyRawObject(action.data);
+  return prevState;
 }
 
 // Clones state from application stores and maps it into the OmniStore

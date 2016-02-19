@@ -2,10 +2,13 @@ jest.dontMock('../AppReducer');
 jest.dontMock('../PluginBridge');
 jest.dontMock('../../config/Config');
 jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../../stores/ConfigStore');
 
 var _ = require('underscore');
-
+var ConfigStore = require('../../stores/ConfigStore');
 var PluginConstants = require('../../constants/PluginConstants');
+var Plugins = require('../../../../plugins/index');
+
 var PluginBridge = require('../PluginBridge');
 
 describe('PluginBridge', function () {
@@ -22,15 +25,21 @@ describe('PluginBridge', function () {
             // Don't return anything
           }
         );
-        this.PluginConfig = {
-          fakePlugin: {
-            plugin: this.mockPlugin
+
+        Plugins.__setMockPlugins({fakePlugin1: this.mockPlugin});
+        PluginBridge.init();
+        ConfigStore.set({config: {
+          uiConfiguration: {
+            plugins: {
+              fakePlugin1: {
+                enabled: true
+              }
+            }
           }
-        };
-        PluginBridge.initialize(this.PluginConfig);
+        }});
 
         var state = PluginBridge.Store.getState();
-        expect(_.isEqual(state, {APPLICATION: {}})).toEqual(true);
+        expect(state.fakePlugin1).toEqual(undefined);
       });
 
       it('should create a namespace in Store for plugin if reducer returned',
@@ -45,18 +54,19 @@ describe('PluginBridge', function () {
             };
           }
         );
-        this.PluginConfig = {
-          fakePlugin: {
-            plugin: this.mockPlugin
+        Plugins.__setMockPlugins({fakePlugin2: this.mockPlugin});
+        PluginBridge.init();
+        ConfigStore.set({config: {
+          uiConfiguration: {
+            plugins: {
+              fakePlugin2: {
+                enabled: true
+              }
+            }
           }
-        };
-        PluginBridge.initialize(this.PluginConfig);
-
+        }});
         var state = PluginBridge.Store.getState();
-        expect(_.isEqual(state, {
-          APPLICATION: {},
-          fakePlugin: {foo: 'bar'}
-        })).toEqual(true);
+        expect(_.isEqual(state.fakePlugin2, {foo: 'bar'})).toEqual(true);
       });
 
       it('should throw error if reducer is not a function',
@@ -65,17 +75,22 @@ describe('PluginBridge', function () {
         var mockPlugin = jest.genMockFunction().mockImplementation(
           function () {
             // Return invalid reducer
-            return this;
+            return {};
           }
         );
-        var PluginConfig = {
-          fakePlugin: {
-            plugin: mockPlugin
-          }
-        };
+        Plugins.__setMockPlugins({badFakePlugin: mockPlugin});
+        PluginBridge.init();
         expect(function () {
-          PluginBridge.initialize(PluginConfig);
-        }).toThrow(new Error('Reducer for fakePlugin must be a function'));
+          ConfigStore.set({config: {
+            uiConfiguration: {
+              plugins: {
+                badFakePlugin: {
+                  enabled: true
+                }
+              }
+            }
+          }});
+        }).toThrow(new Error('Reducer for badFakePlugin must be a function'));
       });
     });
   });
@@ -84,15 +99,19 @@ describe('PluginBridge', function () {
 
     beforeEach(function () {
       this.mockPlugin = jest.genMockFunction();
-      this.PluginConfig = {
-        fakePlugin: {
-          plugin: this.mockPlugin,
-          configOptions: {
-            foo: 'bar'
+
+      Plugins.__setMockPlugins({fakePlugin3: this.mockPlugin});
+      PluginBridge.init();
+      ConfigStore.set({config: {
+        uiConfiguration: {
+          plugins: {
+            fakePlugin3: {
+              enabled: true,
+              foo: 'bar'
+            }
           }
         }
-      };
-      PluginBridge.initialize(this.PluginConfig);
+      }});
     });
 
     it('should call plugin', function () {
@@ -113,7 +132,7 @@ describe('PluginBridge', function () {
 
     it('should call plugin with name as third arg', function () {
       var name = this.mockPlugin.mock.calls[0][2];
-      expect(name).toEqual('fakePlugin');
+      expect(name).toEqual('fakePlugin3');
     });
 
     it('should call plugin with personal dispatch as second arg', function () {
@@ -134,7 +153,7 @@ describe('PluginBridge', function () {
       expect(store.dispatch.mock.calls.length).toEqual(1);
       expect(_.isEqual(store.dispatch.mock.calls[0][0],
         dispatchedObject)).toEqual(true);
-      // Undo monkeypatch
+      // Undo
       store.dispatch = storeDispatch;
     });
 
@@ -142,7 +161,8 @@ describe('PluginBridge', function () {
       var options = this.mockPlugin.mock.calls[0][3];
       var expectedOptions = {
         APPLICATION: PluginConstants.APPLICATION,
-        configOptions: {
+        config: {
+          enabled: true,
           foo: 'bar'
         }
       };
@@ -179,15 +199,20 @@ describe('PluginBridge', function () {
       );
       this.testArgs = testArgs;
       this.mockReducer = mockReducer;
-      this.PluginConfig = {
-        anotherFakePlugin: {
-          plugin: this.mockPlugin,
-          configOptions: {
-            foo: 'bar'
+
+      Plugins.__setMockPlugins({anotherFakePlugin: this.mockPlugin});
+      PluginBridge.init();
+      ConfigStore.set({config: {
+        uiConfiguration: {
+          plugins: {
+            anotherFakePlugin: {
+              enabled: true,
+              foo: 'bar'
+            }
           }
         }
-      };
-      PluginBridge.initialize(this.PluginConfig);
+      }});
+
     });
 
     it('should call reducer to get initial state', function () {
