@@ -1,0 +1,98 @@
+{
+  "details": [
+    {
+      "name": "some section name",
+      "labels": {
+        "some label": "some value"
+      }
+    },
+    {
+      "name": "some other name",
+      "labels": {
+        "another label": "another value"
+      }
+    }
+  ],
+  "application_reachability_50": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "application_reachability_75": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "application_reachability_90": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "application_reachability_95": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "application_reachability_99": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "machine_reachability_50": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "machine_reachability_75": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "machine_reachability_90": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "machine_reachability_95": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "machine_reachability_99": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "connection_latency_50": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "connection_latency_75": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "connection_latency_90": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "connection_latency_95": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "connection_latency_99": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "request_success": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "request_fail": {
+    "1454007720": 32,
+    "1454007660": 33
+  },
+  "backends": [
+    {
+      "ip": "10.10.11.12",
+      "port": 52342,
+      "machine_reachability_pct": 98,
+      "application_reachability_pct": 95,
+      "framework_id": "afe04867ec7a3845145579a95f72eca7",
+      "task_id": "b4b9b02e6f09a9bd760f388b67351e2b",
+      "p99_latency_ms": 30,
+      "success_last_minute": 481,
+      "fail_last_minute": 3
+    }
+  ],
+  "backend_count": 127
+}

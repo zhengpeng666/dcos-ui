@@ -13,6 +13,10 @@ import MesosLogStore from '../stores/MesosLogStore';
 import MesosStateStore from '../stores/MesosStateStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import MetadataStore from '../stores/MetadataStore';
+import NetworkingBackendConnectionsStore from '../stores/NetworkingBackendConnectionsStore';
+import NetworkingNodeMembershipsStore from '../stores/NetworkingNodeMembershipsStore';
+import NetworkingVIPsStore from '../stores/NetworkingVIPsStore';
+import NetworkingVIPSummariesStore from '../stores/NetworkingVIPSummariesStore';
 import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 
 const ListenersDescription = {
@@ -98,6 +102,56 @@ const ListenersDescription = {
     },
     unmountWhen: function (store, event) {
       return event === 'availableSuccess';
+    },
+    listenAlways: false
+  },
+
+  networkingBackendConnections: {
+    store: NetworkingBackendConnectionsStore,
+    events: {
+      backendConnectionsSuccess: EventTypes.NETWORKING_BACKEND_CONNECTIONS_CHANGE,
+      backendConnectionsError: EventTypes.NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: false
+  },
+
+  networkingNodeMemberships: {
+    store: NetworkingNodeMembershipsStore,
+    events: {
+      nodeMembershipsSuccess: EventTypes.NETWORKING_BACKEND_CONNECTIONS_CHANGE,
+      nodeMembershipsError: EventTypes.NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: false
+  },
+
+  networkingVIPs: {
+    store: NetworkingVIPsStore,
+    events: {
+      vipsSuccess: EventTypes.NETWORKING_VIPS_CHANGE,
+      vipsError: EventTypes.NETWORKING_VIPS_REQUEST_ERROR,
+      vipDetailSuccess: EventTypes.NETWORKING_VIP_DETAIL_CHANGE,
+      vipDetailError: EventTypes.NETWORKING_VIP_DETAIL_REQUEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: false
+  },
+
+  networkingVIPSummaries: {
+    store: NetworkingVIPSummariesStore,
+    events: {
+      vipSummariesSuccess: EventTypes.NETWORKING_VIP_SUMMARIES_CHANGE,
+      vipSummariesError: EventTypes.NETWORKING_VIP_SUMMARIES_ERROR
+    },
+    unmountWhen: function () {
+      return true;
     },
     listenAlways: false
   },
