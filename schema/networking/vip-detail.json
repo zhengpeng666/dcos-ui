@@ -109,6 +109,18 @@
       "type": "object",
       "$ref": "timeseries-integers"
     },
+    "request_success": {
+      "description": "Successful requests on this backend.",
+      "title": "Successful Requests",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "request_fail": {
+      "description": "Failed requests on this backend.",
+      "title": "Failed Requests",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
     "backends": {
       "description": "A list of backends on this VIP.",
       "title": "VIP Backends",
@@ -116,24 +128,6 @@
       "items": {
         "type": "object",
         "properties": {
-          "request_success": {
-            "description": "Successful requests on this backend.",
-            "title": "Successful Requests",
-            "type": "object",
-            "$ref": "timeseries-integers"
-          },
-          "request_fail": {
-            "description": "Failed requests on this backend.",
-            "title": "Failed Requests",
-            "type": "object",
-            "patternProperties": {
-              "description": "Timestamps of the number of failed requests.",
-              "title": "Timestamp",
-              "[0-9]": {
-                "type": "integer"
-              }
-            }
-          },
           "ip": {
             "title": "Virtual IP",
             "type": "string"

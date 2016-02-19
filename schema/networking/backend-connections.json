@@ -109,6 +109,18 @@
       "type": "object",
       "$ref": "timeseries-integers"
     },
+    "request_success": {
+      "description": "Successful requests on this client.",
+      "title": "Successful Requests",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
+    "request_fail": {
+      "description": "Failed requests on this client.",
+      "title": "Failed Requests",
+      "type": "object",
+      "$ref": "timeseries-integers"
+    },
     "clients": {
       "description": "A list of client connnections.",
       "title": "Clients",
@@ -116,41 +128,29 @@
       "items": {
         "type": "object",
         "properties": {
-          "request_success": {
-            "description": "Successful requests on this client.",
-            "title": "Successful Requests",
-            "type": "object",
-            "patternProperties": {
-              "description": "Timestamps of the number of successful requests.",
-              "title": "Timestamp",
-              "[0-9]": {
-                "type": "integer"
-              }
-            }
+          "machine_reachability": {
+            "title": "Machine Reachable",
+            "type": "boolean"
           },
-          "request_fail": {
-            "type": "object",
-            "patternProperties": {
-              "description": "Timestamps of the number of failed requests.",
-              "title": "Timestamp",
-              "[0-9]": {
-                "type": "integer"
-              }
-            }
-          },
-          "machine_reachability_pct": {
-            "description": "Percentage of clients that can reach this machine.",
-            "title": "Machine Reachable Percentage",
-            "type": "integer"
-          },
-          "app_reachability_pct": {
-            "description": "Percentage of clients that can reach this application.",
-            "title": "Application Reachable Percentage",
-            "type": "integer"
+          "app_reachability": {
+            "title": "Application Reachable",
+            "type": "boolean"
           },
           "ip": {
             "title": "Client IP",
             "type": "string"
+          },
+          "p99_latency_ms": {
+            "title": "99th Percentile Latency in Milliseconds",
+            "type": "integer"
+          },
+          "success_last_minute": {
+            "title": "Successful Connections",
+            "type": "integer"
+          },
+          "fail_last_minute": {
+            "title": "Failed Connections",
+            "type": "integer"
           }
         }
       }
