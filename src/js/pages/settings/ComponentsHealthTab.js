@@ -9,6 +9,7 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import {Table} from 'reactjs-components';
 
 import ComponentHealthStore from '../../stores/ComponentHealthStore';
+import Config from '../../config/Config';
 import FilterHeadline from '../../components/FilterHeadline';
 import FilterButtons from '../../components/FilterButtons';
 import FilterInputText from '../../components/FilterInputText';
@@ -50,10 +51,6 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
     super.componentDidMount();
     ComponentHealthStore.fetchComponents();
     ComponentHealthStore.fetchReport();
-  }
-
-  handleHealthReportClick() {
-    console.log(ComponentHealthStore.get('report'));
   }
 
   handleSearchStringChange(searchString) {
@@ -201,9 +198,8 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
                 inverseStyle={true} />
             </li>
             <li className="button-collection list-item-aligned-right">
-              <a
-                className="button button-primary"
-                onClick={this.handleHealthReportClick}>
+              <a href={`${Config.rootUrl}${Config.componentHealthAPIPrefix}\/report`}
+                className="button button-primary">
                 Download Health
               </a>
             </li>
