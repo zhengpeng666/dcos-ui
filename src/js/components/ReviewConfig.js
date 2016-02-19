@@ -52,7 +52,7 @@ class ReviewConfig extends React.Component {
         if (typeof fieldValue === 'object' && !Array.isArray(fieldValue)) {
           elementsToRender.push(this.getFieldSubheader(fieldKey));
           elementsToRender = elementsToRender.push(
-            this.renderFields(fieldValue, uniqueKey)
+            this.renderDescriptionList(fieldValue, uniqueKey)
           );
           return;
         }
@@ -62,7 +62,7 @@ class ReviewConfig extends React.Component {
         }
 
         elementsToRender.push(
-          this.renderFields({[fieldKey]: fieldValue}, uniqueKey)
+          this.renderDescriptionList({[fieldKey]: fieldValue}, uniqueKey)
         );
       });
     });
@@ -70,7 +70,7 @@ class ReviewConfig extends React.Component {
     return elementsToRender;
   }
 
-  renderFields(hash, key) {
+  renderDescriptionList(hash, key) {
     return (
       <DescriptionList hash={hash} key={key} />
     );
