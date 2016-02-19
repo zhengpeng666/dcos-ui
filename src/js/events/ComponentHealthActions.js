@@ -23,6 +23,60 @@ const ComponentHealthActions = {
     });
   },
 
+  fetchComponent: function (componentID) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.componentHealthAPIPrefix}/components/${componentID}`,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_HEALTH_COMPONENT_SUCCESS,
+          data: response
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_HEALTH_COMPONENT_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr)
+        });
+      }
+    });
+  },
+
+  fetchNodes: function (componentID) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.componentHealthAPIPrefix}/components/${componentID}/nodes`,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_HEALTH_COMPONENT_NODES_SUCCESS,
+          data: response.array
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_HEALTH_COMPONENT_NODES_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr)
+        });
+      }
+    });
+  },
+
+  fetchNode: function (componentID, nodeID) {
+    RequestUtil.json({
+      url: `${Config.rootUrl}${Config.componentHealthAPIPrefix}/components/${componentID}/nodes/${nodeID}`,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_HEALTH_COMPONENT_NODE_SUCCESS,
+          data: response
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_HEALTH_COMPONENT_NODE_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr)
+        });
+      }
+    });
+  },
+
   fetchReport: function () {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.componentHealthAPIPrefix}/report`,
