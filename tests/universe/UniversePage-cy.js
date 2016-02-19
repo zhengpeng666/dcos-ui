@@ -3,7 +3,7 @@ describe('Universe Page', function () {
   beforeEach(function () {
     cy.configureCluster({
       mesos: '1-task-healthy',
-      acl: true
+      universePackages: true
     });
   });
 
