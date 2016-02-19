@@ -1,4 +1,3 @@
-
 let pluginList = {};
 
 module.exports = {
