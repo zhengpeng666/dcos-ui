@@ -77,11 +77,11 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
           container-pod
           container-pod-super-short
           flush-top">
-          <div className="media-object media-object-align-middle">
-            <div className="media-object-icon media-object-icon-medium">
+          <div className="media-object media-object-spacing media-object-align-middle">
+            <div className="media-object-item">
               <i className={resourceIconClasses}></i>
             </div>
-            <div className="media-object-content">
+            <div className="media-object-item">
               <h4 className="flush-top flush-bottom text-color-neutral">
                 {resourceValue}
               </h4>
@@ -112,11 +112,11 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
             {task.name}
           </h1>
 
-          <div className="media-object media-object-align-middle media-object-inline">
-            <div className="media-object-item media-object-item-spacing media-object-item-spacing-narrow">
+          <div className="media-object media-object-spacing media-object-spacing-narrow media-object-align-middle media-object-inline">
+            <div className="media-object-item">
               {statusIcon}
             </div>
-            <div className="media-object-item media-object-item-spacing">
+            <div className="media-object-item">
               <span className={statusClassName}>
                 {TaskStates[task.state].displayName}
               </span>
