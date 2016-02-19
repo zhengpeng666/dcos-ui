@@ -18,6 +18,18 @@ const StringUtil = {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
   },
 
+  isUrl: function (str) {
+    return !!str && /^https?:\/\/.+/.test(str);
+  },
+
+  isEmail: function (str) {
+    // https://news.ycombinator.com/item?id=8360786
+    return !!str &&
+      str.length > 3 &&
+      str.indexOf('@') !== -1 &&
+      str.indexOf('.') !== -1;
+  },
+
   pluralize: function (string, arity) {
     if (arity == null) {
       arity = 2;
