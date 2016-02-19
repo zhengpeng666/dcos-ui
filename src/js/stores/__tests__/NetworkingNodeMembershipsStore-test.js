@@ -30,11 +30,15 @@ describe('NetworkingNodeMembershipsStore', function () {
   });
 
   it('should return all of the node memberships it was given', function () {
+    this.useFixtures = Config.useFixtures;
     Config.useFixtures = true;
+
     NetworkingNodeMembershipsStore.fetchNodeMemberships();
     var nodeMemberships = NetworkingNodeMembershipsStore.get('nodeMemberships');
 
     expect(nodeMemberships.length).toEqual(this.nodeMemberships.array.length);
+
+    Config.useFixtures = this.useFixtures;
   });
 
   describe('processNodeMemberships', function () {

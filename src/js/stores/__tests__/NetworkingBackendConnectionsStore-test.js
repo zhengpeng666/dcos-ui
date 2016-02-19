@@ -30,13 +30,17 @@ describe('NetworkingBackendConnectionsStore', function () {
   });
 
   it('should return the data it was given', function () {
+    this.useFixtures = Config.useFixtures;
     Config.useFixtures = true;
+
     NetworkingBackendConnectionsStore.fetchVIPBackendConnections('foo', 'bar', 'baz');
     var backendConnections = NetworkingBackendConnectionsStore.get('backendConnections');
 
     expect(backendConnections).toEqual(
       {'foo:bar:baz': this.backendConnections}
     );
+
+    Config.useFixtures = this.useFixtures;
   });
 
   describe('processBackendConnections', function () {

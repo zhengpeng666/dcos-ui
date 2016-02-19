@@ -30,11 +30,15 @@ describe('NetworkingVIPsStore', function () {
   });
 
   it('should return all of the VIPs it was given', function () {
+    this.useFixtures = Config.useFixtures;
     Config.useFixtures = true;
+
     NetworkingVIPsStore.fetchVIPs();
     var vips = NetworkingVIPsStore.get('vips');
 
     expect(vips.length).toEqual(this.vipsFixture.array.length);
+
+    Config.useFixtures = this.useFixtures;
   });
 
   describe('processVIPs', function () {

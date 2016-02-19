@@ -30,11 +30,15 @@ describe('NetworkingVIPSummariesStore', function () {
   });
 
   it('should return all of the VIP summaries it was given', function () {
+    this.useFixtures = Config.useFixtures;
     Config.useFixtures = true;
+
     NetworkingVIPSummariesStore.fetchVIPSummaries();
     var vipSummaries = NetworkingVIPSummariesStore.get('vipSummaries');
 
     expect(vipSummaries.length).toEqual(this.vipSummaries.array.length);
+
+    Config.useFixtures = this.useFixtures;
   });
 
   describe('processVIPSummaries', function () {
