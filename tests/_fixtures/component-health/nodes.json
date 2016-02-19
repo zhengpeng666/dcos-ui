@@ -1,0 +1,32 @@
+{
+  "array": [
+    {
+      "id": "srv1.hw.ca1.mesosphere.com",
+      "description": "There has been enhanced damage inside the quantum inverted charge! There has been enhanced ripples next to the critical calibrated capacitors.",
+      "type": "master",
+      "health": 3,
+      "output": "{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}"
+    },
+    {
+      "id": "srv2.hw.ca1.mesosphere.com",
+      "description": "Enhanced time-matter field has to be inverted, because the critical delta region appears to be aligned. You need to invert the diagnostics.",
+      "type": "agent",
+      "health": 1,
+      "output": "{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}"
+    },
+    {
+      "id": "srv3.hw.ca1.mesosphere.com",
+      "description": "Fluctuating the auxiliary crystal damages fluctuations next to the auxiliary region. Fluctuating the auxiliary singularity affects fluctuations near the enhanced zone.",
+      "type": "agent",
+      "health": 1,
+      "output": "{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}"
+    },
+    {
+      "id": "srv4.hw.ca1.mesosphere.com",
+      "description": "There appears to be a critical crystal within the power which catches auxiliary ripples in the special capacitors.",
+      "type": "agent",
+      "health": 1,
+      "output": "{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}"
+    }
+  ]
+}
