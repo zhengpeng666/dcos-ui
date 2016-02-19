@@ -3,27 +3,26 @@ jest.dontMock('../../config/Config');
 jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../events/NetworkingActions');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../utils/RequestUtil');
-jest.dontMock('../../utils/Util');
 jest.dontMock('../../../../tests/_fixtures/networking/networking-vip-summaries.json');
 
 var _ = require('underscore');
+
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../../events/AppDispatcher');
 var Config = require('../../config/Config');
 var EventTypes = require('../../constants/EventTypes');
 var NetworkingVIPSummariesStore = require('../NetworkingVIPSummariesStore');
 var RequestUtil = require('../../utils/RequestUtil');
-var vipSummaries = require('../../../../tests/_fixtures/networking/networking-vip-summaries.json');
+var vipSummariesFixture = require('../../../../tests/_fixtures/networking/networking-vip-summaries.json');
 
 describe('NetworkingVIPSummariesStore', function () {
 
   beforeEach(function () {
     this.requestFn = RequestUtil.json;
     RequestUtil.json = function (handlers) {
-      handlers.success(vipSummaries);
+      handlers.success(vipSummariesFixture);
     };
-    this.vipSummaries = _.clone(vipSummaries);
+    this.vipSummaries = _.clone(vipSummariesFixture);
   });
 
   afterEach(function () {

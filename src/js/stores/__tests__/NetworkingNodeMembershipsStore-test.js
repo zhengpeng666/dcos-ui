@@ -3,27 +3,26 @@ jest.dontMock('../../config/Config');
 jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../events/NetworkingActions');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../utils/RequestUtil');
-jest.dontMock('../../utils/Util');
 jest.dontMock('../../../../tests/_fixtures/networking/networking-node-memberships.json');
 
 var _ = require('underscore');
+
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../../events/AppDispatcher');
 var Config = require('../../config/Config');
 var EventTypes = require('../../constants/EventTypes');
 var NetworkingNodeMembershipsStore = require('../NetworkingNodeMembershipsStore');
+var nodeMembershipsFixture = require('../../../../tests/_fixtures/networking/networking-node-memberships.json');
 var RequestUtil = require('../../utils/RequestUtil');
-var nodeMemberships = require('../../../../tests/_fixtures/networking/networking-node-memberships.json');
 
 describe('NetworkingNodeMembershipsStore', function () {
 
   beforeEach(function () {
     this.requestFn = RequestUtil.json;
     RequestUtil.json = function (handlers) {
-      handlers.success(nodeMemberships);
+      handlers.success(nodeMembershipsFixture);
     };
-    this.nodeMemberships = _.clone(nodeMemberships);
+    this.nodeMemberships = _.clone(nodeMembershipsFixture);
   });
 
   afterEach(function () {

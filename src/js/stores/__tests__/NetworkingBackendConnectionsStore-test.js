@@ -3,27 +3,26 @@ jest.dontMock('../../config/Config');
 jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../events/NetworkingActions');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../utils/RequestUtil');
-jest.dontMock('../../utils/Util');
 jest.dontMock('../../../../tests/_fixtures/networking/networking-backend-connections.json');
 
 var _ = require('underscore');
+
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../../events/AppDispatcher');
+var backendConnectionsFixture = require('../../../../tests/_fixtures/networking/networking-backend-connections.json');
 var Config = require('../../config/Config');
 var EventTypes = require('../../constants/EventTypes');
 var NetworkingBackendConnectionsStore = require('../NetworkingBackendConnectionsStore');
 var RequestUtil = require('../../utils/RequestUtil');
-var backendConnections = require('../../../../tests/_fixtures/networking/networking-backend-connections.json');
 
 describe('NetworkingBackendConnectionsStore', function () {
 
   beforeEach(function () {
     this.requestFn = RequestUtil.json;
     RequestUtil.json = function (handlers) {
-      handlers.success(backendConnections);
+      handlers.success(backendConnectionsFixture);
     };
-    this.backendConnections = _.clone(backendConnections);
+    this.backendConnections = _.clone(backendConnectionsFixture);
   });
 
   afterEach(function () {
