@@ -1,7 +1,7 @@
 jest.dontMock('../FilterButtons');
 
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var FilterButtons = require('../FilterButtons');
 
