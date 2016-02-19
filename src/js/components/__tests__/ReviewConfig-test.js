@@ -50,7 +50,7 @@ describe('ReviewConfig', function () {
       );
 
       var result = instance.getDefinitionReview();
-      expect(result.length).toEqual(3);
+      expect(result).toEqual(3);
     });
   });
 });
