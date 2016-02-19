@@ -6,13 +6,14 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
+import StringUtil from '../../utils/StringUtil';
 
 class PackageDetailTab extends mixin(StoreMixin) {
   constructor() {
     super();
 
     this.state = {
-      descriptionErrorCount: 0,
+      hasError: 0,
       isLoading: true
     };
 
@@ -38,95 +39,57 @@ class PackageDetailTab extends mixin(StoreMixin) {
 
   onCosmosPackagesStoreDescriptionError() {
     this.setState({
-      descriptionErrorCount: this.state.descriptionErrorCount + 1
+      hasError: true
     });
   }
 
   onCosmosPackagesStoreDescriptionSuccess() {
-    this.setState({descriptionErrorCount: 0, isLoading: false});
+    this.setState({hasError: false, isLoading: false});
   }
 
   handleInstallModalOpen(cosmosPackage) {
     this.setState({installModalPackage: cosmosPackage});
   }
 
-  getContentForLabelAndValue(label, value) {
-    if (label === 'Media') {
-      return (
-        <div className="media-object media-object-spacing flex-box flex-box-wrap">
-          {this.getMediaItems(value)}
-        </div>
-      );
-    } else if (typeof value === 'object') {
-      return this.getSubItems(value);
-    } else {
-      return <p className="flush">{value}</p>;
-    }
-  }
-
   getErrorScreen() {
     return <RequestErrorMsg />;
   }
 
-  getItems(description) {
-    return Object.keys(description).map((label, index) => {
-      let value = description[label];
+  getItems(definition, renderItem) {
+    let items = [];
+    Object.keys(definition).forEach((label, index) => {
+      let value = definition[label];
+
       if (!value || (Array.isArray(value) && !value.length)) {
         return null;
       }
 
-      let contents = this.getContentForLabelAndValue(label, value);
+      let content = value;
 
-      // Handle objects with null values
-      if (!contents || (Array.isArray(contents) && !contents.length)) {
-        return null;
+      if (typeof value === 'object') {
+        content = this.getItems(value, this.getSubItem);
       }
 
-      return (
-        <div
-          className="container-pod container-pod-short-bottom flush-top"
-          key={index}>
-          <h5 className="inverse flush-top">{label}</h5>
-          {contents}
-        </div>
-      );
-    });
-  }
-
-  getLicenses(licenses) {
-    if (!licenses || (Array.isArray(licenses) && !licenses.length)) {
-      return null;
-    }
-
-    return licenses.reduce(function (current, license) {
-      current[license.name] = (
-        <a href={license.url}>{license.url}</a>
-      );
-
-      return current;
-    }, {});
-  }
-
-  getLink(url, prefix = '') {
-    if (!url) {
-      return null;
-    }
-
-    return (
-      <a href={`${prefix}${url}`}>{url}</a>
-    );
-  }
-
-  getMediaItems(items) {
-    return items.map(function (url, index) {
-      return (
-        <div className="media-object-item media-object-item-fill" key={index}>
+      // Specific render method for media
+      if (label === 'Media') {
+        content = (
           <div
-            className="media-object-item-fill-image image-rounded-corners"
-            style={{backgroundImage: `url(${url})`}} />
-        </div>
-      );
+            className="media-object media-object-spacing flex-box flex-box-wrap"
+            key={index}>
+            {this.getItems(value, this.getMediaItem)}
+          </div>
+        );
+      }
+
+      items.push(renderItem(label, content, index));
+
     });
+
+    if (!items.length) {
+      return null;
+    }
+
+    return items;
   }
 
   getLoadingScreen() {
@@ -141,28 +104,67 @@ class PackageDetailTab extends mixin(StoreMixin) {
     );
   }
 
-  getSubItems(description) {
-    let items = [];
-    Object.keys(description).forEach((label, index) => {
-      let value = description[label];
-      if (value) {
-        items.push(
-          <p key={index} className="short">{`${label}: `}{value}</p>
-        );
-      }
-    });
-
-    if (!items.length) {
+  getLicenses(licenses) {
+    if (!Array.isArray(licenses)) {
       return null;
     }
 
-    return items;
+    return licenses.reduce(function (current, license) {
+      current[license.name] = license.url;
+
+      return current;
+    }, {});
+  }
+
+  getItem(label, value, key) {
+    if (!label || !value) {
+      return null;
+    }
+
+    if (typeof value === 'string') {
+      value = <p className="flush">{value}</p>;
+    }
+
+    return (
+      <div
+        className="container-pod container-pod-short-bottom flush-top"
+        key={key}>
+        <h5 className="inverse flush-top">{label}</h5>
+        {value}
+      </div>
+    );
+  }
+
+  getMediaItem(label, value, key) {
+    return (
+      <div className="media-object-item media-object-item-fill" key={key}>
+        <div
+          className="media-object-item-fill-image image-rounded-corners"
+          style={{backgroundImage: `url(${value})`}} />
+      </div>
+    );
+  }
+
+  getSubItem(label, value, key) {
+    let content = value;
+
+    if (StringUtil.isEmail(value)) {
+      content = <a key={key} href={`mailto:${value}`}>{value}</a>;
+    }
+
+    if (StringUtil.isUrl(value)) {
+      content = <a key={key} href={value}>{value}</a>;
+    }
+
+    return (
+      <p key={key} className="short">{`${label}: `}{content}</p>
+    );
   }
 
   render() {
     let {state} = this;
 
-    if (state.packagesErrorCount >= 3) {
+    if (state.hasError) {
       return this.getErrorScreen();
     }
 
@@ -172,12 +174,12 @@ class PackageDetailTab extends mixin(StoreMixin) {
 
     let cosmosPackage = CosmosPackagesStore.get('packageDetails');
     let packageDetails = cosmosPackage.get('package');
-    let description = {
+    let definition = {
       Description: packageDetails.description,
       'Pre-Install Notes': packageDetails.preInstallNotes,
       Information: {
-        SCM: this.getLink(packageDetails.scm),
-        Maintainer: this.getLink(packageDetails.maintainer, 'mailto:')
+        SCM: packageDetails.scm,
+        Maintainer: packageDetails.maintainer
       },
       Licenses: this.getLicenses(packageDetails.licenses),
       Media: cosmosPackage.getScreenshots()
@@ -206,7 +208,7 @@ class PackageDetailTab extends mixin(StoreMixin) {
           </div>
         </div>
         <div className="container-pod container-pod-short">
-          {this.getItems(description)}
+          {this.getItems(definition, this.getItem)}
         </div>
       </div>
     );
