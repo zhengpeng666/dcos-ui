@@ -175,8 +175,7 @@ class TaskTable extends React.Component {
         className="table
           table-borderless-outer
           table-borderless-inner-columns
-          flush-bottom
-          no-overflow"
+          flush-bottom"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
         data={this.props.tasks.slice()}
