@@ -36,6 +36,10 @@ const TrackingPlugin = {
       this.installCLIModalAppendInstructions.bind(this)
     );
     Plugins.addFilter(
+      'installCLIModalCLIInstallURL',
+      this.installCLIModalCLIInstallURL.bind(this)
+    );
+    Plugins.addFilter(
       'installCLIModalFooter', this.installCLIModalFooter.bind(this)
     );
     Plugins.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
@@ -128,6 +132,14 @@ const TrackingPlugin = {
     );
 
     value.splice(1, 0, intercomButton);
+
+    return value;
+  },
+
+  installCLIModalCLIInstallURL: function (value) {
+    if (this.isEnabled() !== true) {
+      return 'https://downloads.mesosphere.com/dcos-cli/install-optout.sh';
+    }
 
     return value;
   },
