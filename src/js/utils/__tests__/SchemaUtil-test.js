@@ -36,7 +36,7 @@ describe('SchemaUtil', function () {
 
     it('turns a schema to a definition', function () {
       expect(this.result.application.description)
-      .toEqual('This is a description');
+        .toEqual('This is a description');
     });
 
     it('creates a definition for the field', function () {
