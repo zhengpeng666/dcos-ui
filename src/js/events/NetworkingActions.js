@@ -101,4 +101,30 @@ let NetworkingActions = {
 
 };
 
+if (Config.useFixtures) {
+  let backendConnectionsFixture = require('json!../../../tests/_fixtures/networking/networking-backend-connections.json');
+  let nodeMembershipsFixture = require('json!../../../tests/_fixtures/networking/networking-node-memberships.json');
+  let vipDetailFixture = require('json!../../../tests/_fixtures/networking/networking-vip-detail.json');
+  let vipSummariesFixture = require('json!../../../tests/_fixtures/networking/networking-vip-summaries.json');
+  let vipsFixture = require('json!../../../tests/_fixtures/networking/networking-vips.json');
+
+  if (!global.actionTypes) {
+    global.actionTypes = {};
+  }
+
+  global.actionTypes.NetworkingActions = {
+    fetchVIPs: {event: 'success', success: {response: vipsFixture}},
+    fetchVIPSummaries: {event: 'success', success: {response: vipSummariesFixture}},
+    fetchVIPDetail: {event: 'success', success: {response: vipDetailFixture}},
+    fetchVIPBackendConnections: {event: 'success', success: {response: backendConnectionsFixture}},
+    fetchNodeMemberships: {event: 'success', success: {response: nodeMembershipsFixture}}
+  };
+
+  Object.keys(global.actionTypes.NetworkingActions).forEach(function (method) {
+    NetworkingActions[method] = RequestUtil.stubRequest(
+      NetworkingActions, 'NetworkingActions', method
+    );
+  });
+}
+
 module.exports = NetworkingActions;

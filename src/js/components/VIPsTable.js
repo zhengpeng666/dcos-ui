@@ -1,181 +1,155 @@
-var classNames = require('classnames');
-import {Link} from 'react-router';
-var React = require('react');
-
-var HostTableHeaderLabels = require('../constants/HostTableHeaderLabels');
-var ResourceTableUtil = require('../utils/ResourceTableUtil');
-var ProgressBar = require('./charts/ProgressBar');
+import classNames from 'classnames';
+import React from 'react';
 import {Table} from 'reactjs-components';
+
+import ResourceTableUtil from '../utils/ResourceTableUtil';
 import TableUtil from '../utils/TableUtil';
-var TooltipMixin = require('../mixins/TooltipMixin');
 
-var HostTable = React.createClass({
+const METHODS_TO_BIND = ['getColumnClassname'];
+const COLUMNS_TO_HIDE_MINI = [
+  'failurePerecent',
+  'applicationReachabilityPercent',
+  'machineReachabilityPercent'
+];
 
-  displayName: 'HostTable',
+class VIPsTable extends React.Component {
+   constructor() {
+     super();
 
-  mixins: [TooltipMixin],
+     this.state = {};
 
-  statics: {
-    routeConfig: {
-      label: 'Nodes',
-      icon: 'datacenter',
-      matches: /^\/nodes/
-    }
-  },
+     METHODS_TO_BIND.forEach((method) => {
+       this[method] = this[method].bind(this);
+     });
+   }
 
-  propTypes: {
-    hosts: React.PropTypes.array.isRequired
-  },
-
-  getDefaultProps: function () {
-    return {
-      hosts: []
-    };
-  },
-
-  renderHeadline: function (prop, node) {
-    let icon = null;
-    let toolTip = {};
-
-    if (!node.isActive()) {
-      icon = <i className="icon icon-mini icon-mini-white icon-alert disable-pointer-events" />;
-      toolTip = {
-        'data-behavior': 'show-tip',
-        'data-tip-place': 'top',
-        'data-tip-content': 'Connection to node lost'
-      };
-    }
-
-    // Anything nested in elements hosting a tooltip needs to have
-    // 'disable-pointer-events' in order for the tip to render correctly.
-    return (
-      <div>
-        <Link params={{nodeID: node.get('id')}}
-          to="nodes-list-panel"
-          {...toolTip}>
-          {icon}
-        </Link>
-        <Link className="headline emphasize"
-          params={{nodeID: node.get('id')}}
-          to="nodes-list-panel"
-          {...toolTip}>
-          {node.get(prop)}
-        </Link>
-      </div>
-    );
-  },
-
-  renderStats: function (prop, node) {
-    var colorMapping = {
-      cpus: 1,
-      mem: 2,
-      disk: 3
-    };
-
-    var value = node.getUsageStats(prop).percentage;
-    return (
-      <span className="spread-content">
-        <ProgressBar value={value}
-          colorIndex={colorMapping[prop]} /> <span>{value}%</span>
-      </span>
-    );
-  },
-
-  getColumns: function () {
-    let className = ResourceTableUtil.getClassName;
-    let heading = ResourceTableUtil.renderHeading(HostTableHeaderLabels);
-    let propSortFunction = ResourceTableUtil.getPropSortFunction('hostname');
-    let statSortFunction = ResourceTableUtil.getStatSortFunction(
-      'hostname',
-      function (node, resource) {
-        return node.getUsageStats(resource).percentage;
-      }
-    );
+  getColumns() {
+    let className = this.getColumnClassname;
+    let heading = ResourceTableUtil.renderHeading({
+      vip: 'VIRTUAL IP',
+      successLastMinute: 'SUCCESSES',
+      failLastMinute: 'FAILURES',
+      failurePerecent: 'FAILURE %',
+      applicationReachabilityPercent: 'APP REACHABILITY',
+      machineReachabilityPercent: 'MACHINE REACHABILITY',
+      p99Latency: '99TH% LATENCY'
+    });
 
     return [
       {
         className,
         headerClassName: className,
-        prop: 'hostname',
-        render: this.renderHeadline,
+        prop: 'vip',
         sortable: true,
-        sortFunction: propSortFunction,
         heading
       },
       {
         className,
         headerClassName: className,
-        prop: 'TASK_RUNNING',
-        render: ResourceTableUtil.renderTask,
+        prop: 'successLastMinute',
+        render: this.getFailSuccessRenderFn('success'),
         sortable: true,
-        sortFunction: propSortFunction,
         heading
       },
       {
         className,
         headerClassName: className,
-        prop: 'cpus',
-        render: this.renderStats,
+        prop: 'failLastMinute',
+        render: this.getFailSuccessRenderFn('fail'),
         sortable: true,
-        sortFunction: statSortFunction,
         heading
       },
       {
         className,
         headerClassName: className,
-        prop: 'mem',
-        render: this.renderStats,
+        prop: 'failurePerecent',
+        render: this.renderPercentage,
         sortable: true,
-        sortFunction: statSortFunction,
         heading
       },
       {
         className,
         headerClassName: className,
-        prop: 'disk',
-        render: this.renderStats,
+        prop: 'applicationReachabilityPercent',
         sortable: true,
-        sortFunction: statSortFunction,
+        heading
+      },
+      {
+        className,
+        headerClassName: className,
+        prop: 'machineReachabilityPercent',
+        sortable: true,
+        heading
+      },
+      {
+        className,
+        headerClassName: className,
+        prop: 'p99Latency',
+        sortable: true,
         heading
       }
     ];
-  },
+  }
 
-  getColGroup: function () {
+  getColumnClassname(prop, sortBy, row) {
+    return classNames({
+      'hidden-mini': this.hideColumnAtMini(prop),
+      'highlight': prop === sortBy.prop,
+      'clickable': row == null
+    });
+  }
+
+  getColGroup() {
     return (
       <colgroup>
+        <col style={{width: '20%'}} />
         <col />
-        <col style={{width: '110px'}} />
-        <col className="hidden-mini" style={{width: '135px'}} />
-        <col className="hidden-mini" style={{width: '135px'}} />
-        <col className="hidden-mini" style={{width: '135px'}} />
+        <col />
+        <col className="hidden-mini" />
+        <col className="hidden-mini" />
+        <col className="hidden-mini" />
+        <col className="hidden-mini" />
       </colgroup>
     );
-  },
+  }
 
-  getRowAttributes: function (node) {
-    return {
-      className: classNames({
-        'danger': node.isActive() === false
-      })
+  getFailSuccessRenderFn(type) {
+    let classes = classNames({
+      'text-danger': type === 'fail',
+      'text-success': type === 'success'
+    });
+
+    return function (prop, item) {
+      return <span className={classes}>{item[prop]}</span>;
     };
-  },
+  }
 
-  render: function () {
+  hideColumnAtMini(prop) {
+    if (COLUMNS_TO_HIDE_MINI.indexOf(prop) > -1) {
+      return true;
+    }
+
+    return false;
+  }
+
+  renderPercentage(prop, item) {
+    return `${item[prop]}%`;
+  }
+
+  render() {
     return (
       <Table
         className="table inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
         containerSelector=".gm-scroll-view"
-        data={this.props.hosts.slice()}
-        idAttribute="id"
+        data={this.props.vips}
+        idAttribute="vip"
         itemHeight={TableUtil.getRowHeight()}
-        sortBy={{ prop: 'hostname', order: 'desc' }}
-        buildRowOptions={this.getRowAttributes}
+        sortBy={{prop: 'vip', order: 'desc'}}
         transition={false} />
     );
   }
-});
+}
 
-module.exports = HostTable;
+module.exports = VIPsTable;

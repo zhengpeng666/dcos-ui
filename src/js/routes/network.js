@@ -1,4 +1,4 @@
-import {Route, Redirect} from 'react-router';
+import {Route} from 'react-router';
 
 import NetworkPage from '../pages/NetworkPage';
 

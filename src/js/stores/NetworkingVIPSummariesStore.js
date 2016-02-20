@@ -5,6 +5,7 @@ import AppDispatcher from '../events/AppDispatcher';
 import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import NetworkingActions from '../events/NetworkingActions';
+import VIPSummaryList from '../structs/VIPSummaryList';
 
 let NetworkingVIPSummariesStore = Store.createStore({
   storeID: 'networkingVIPSummaries',
@@ -24,6 +25,10 @@ let NetworkingVIPSummariesStore = Store.createStore({
   },
 
   fetchVIPSummaries: NetworkingActions.fetchVIPSummaries,
+
+  getVIPSummaries() {
+    return new VIPSummaryList({items: this.get('vipSummaries')});
+  },
 
   processVIPSummaries: function (vipSummaries) {
     this.set({vipSummaries});
