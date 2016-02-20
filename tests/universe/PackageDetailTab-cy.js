@@ -7,14 +7,14 @@ describe.only('Package Detail Tab', function () {
     });
   });
 
-  it('displays marathon package details', function () {
+  it('displays package information on package page', function () {
     cy
       .visitUrl({url: '/universe/packages/marathon?packageVersion=0.11.1'})
-      .get('h1')
+      .get('.page-content h1')
       .should('contain', 'marathon');
   });
 
-  it('goes to Packages tab when tab is clicked', function () {
+  it('displays marathon package details', function () {
     cy
       .visitUrl({url: '/universe/packages/marathon?packageVersion=0.11.1'})
       .get('.container-pod.container-pod-short-bottom.flush-top > p')
