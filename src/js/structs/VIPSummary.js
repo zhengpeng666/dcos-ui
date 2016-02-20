@@ -1,15 +1,8 @@
-import UsersList from './UsersList';
 import Item from './Item';
 
 module.exports = class VIPSummary extends Item {
-  getVIPString() {
-    let vip = this.get('vip');
-
-    return `${vip.ip}:${vip.port}`;
-  }
-
-  getSuccessLastMinute() {
-    return Number(this.get('success_last_minute'));
+  getApplicationReachabilityPercent() {
+    return Number(this.get('application_reachability_pct'));
   }
 
   getFailLastMinute() {
@@ -17,19 +10,25 @@ module.exports = class VIPSummary extends Item {
   }
 
   getFailPercent() {
-    return (this.getFailLastMinute() / this.getSuccessLastMinute() * 100)
-      .toFixed(0);
-  }
-
-  getApplicationReachabilityPercent() {
-    return this.get('application_reachability_pct');
+    return Number((this.getFailLastMinute() / this.getSuccessLastMinute() * 100)
+      .toFixed(0));
   }
 
   getMachineReachabilityPercent() {
-    return this.get('machine_reachability_pct');
+    return Number(this.get('machine_reachability_pct'));
   }
 
   getP99Latency() {
-    return this.get('p99_latency_ms');
+    return Number(this.get('p99_latency_ms'));
+  }
+
+  getSuccessLastMinute() {
+    return Number(this.get('success_last_minute'));
+  }
+
+  getVIPString() {
+    let vip = this.get('vip');
+
+    return `${vip.ip}:${vip.port}`;
   }
 };
