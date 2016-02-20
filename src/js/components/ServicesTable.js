@@ -1,12 +1,10 @@
 var _ = require('underscore');
-var classNames = require('classnames');
 import {Link} from 'react-router';
 var React = require('react');
 
 import Cluster from '../utils/Cluster';
 var EventTypes = require('../constants/EventTypes');
 var HealthLabels = require('../constants/HealthLabels');
-var HealthTypes = require('../constants/HealthTypes');
 var HealthTypesDescription = require('../constants/HealthTypesDescription');
 var MarathonStore = require('../stores/MarathonStore');
 var ResourceTableUtil = require('../utils/ResourceTableUtil');
@@ -88,7 +86,7 @@ var ServicesTable = React.createClass({
   },
 
   renderHealth: function (prop, service) {
-    let appHealth = MarathonStore.getServiceHealth(service.name);
+    let appHealth = service.getHealth();
 
     if (!this.props.healthProcessed) {
       return (
@@ -100,29 +98,13 @@ var ServicesTable = React.createClass({
       );
     }
 
-    let statusClassSet = classNames({
-      'text-success': appHealth.value === HealthTypes.HEALTHY,
-      'text-danger': appHealth.value === HealthTypes.UNHEALTHY,
-      'text-warning': appHealth.value === HealthTypes.IDLE,
-      'text-mute': appHealth.value === HealthTypes.NA
-    });
-
     let attributes = {};
     attributes['data-behavior'] = 'show-tip';
-
-    if (appHealth.value === HealthTypes.HEALTHY) {
-      attributes['data-tip-content'] = HealthTypesDescription.HEALTHY;
-    } else if (appHealth.value === HealthTypes.UNHEALTHY) {
-      attributes['data-tip-content'] = HealthTypesDescription.UNHEALTHY;
-    } else if (appHealth.value === HealthTypes.IDLE) {
-      attributes['data-tip-content'] = HealthTypesDescription.IDLE;
-    } else if (appHealth.value === HealthTypes.NA) {
-      attributes['data-tip-content'] = HealthTypesDescription.NA;
-    }
+    attributes['data-tip-content'] = HealthTypesDescription[appHealth.key];
 
     return React.createElement(
       'span',
-      _.extend({className: statusClassSet}, attributes),
+      _.extend({className: appHealth.classNames}, attributes),
       HealthLabels[appHealth.key]
     );
 

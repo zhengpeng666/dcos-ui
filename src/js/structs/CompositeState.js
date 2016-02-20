@@ -38,7 +38,8 @@ let mergeObjectsById = function (newData, data) {
   });
 };
 
-module.exports = class CompositeState {
+
+class CompositeState {
   constructor(data = {}) {
     this.data = data;
   }
@@ -49,9 +50,11 @@ module.exports = class CompositeState {
     }
 
     this.data.frameworks.forEach(function (service) {
-      if (data[service.id]) {
+      // Marathon data merged by service name because Marathon doesn't know id.
+      // See MarathonStore.processMarathonApps
+      if (data[service.name]) {
         service._meta = _.extend({}, service._meta, {
-          marathon: data[service.id]
+          marathon: data[service.name]
         });
       }
     });
@@ -70,4 +73,6 @@ module.exports = class CompositeState {
       items: this.data.frameworks
     });
   }
-};
+}
+
+module.exports = new CompositeState();

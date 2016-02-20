@@ -34,9 +34,9 @@ module.exports = class ServicesList extends List {
       }
 
       if (filters.health != null) {
-        services = MesosSummaryUtil.filterServicesByHealth(
-          services, filters.health
-        );
+        services = _.filter(services, function (service) {
+          return service.getHealth().value === filters.health;
+        });
       }
     }
 

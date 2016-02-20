@@ -1,9 +1,6 @@
-jest.dontMock('../../stores/MarathonStore');
 jest.dontMock('../../utils/StringUtil');
-jest.dontMock('../../utils/MesosSummaryUtil');
 jest.dontMock('../../utils/Util');
 
-let MarathonStore = require('../../stores/MarathonStore');
 let Service = require('../Service');
 let ServicesList = require('../ServicesList');
 
@@ -55,29 +52,16 @@ describe('ServicesList', function () {
     });
 
     it('filters by health', function () {
-      var oldFunction = MarathonStore.getServiceHealth;
-      MarathonStore.getServiceHealth = function (name) {
-        switch (name) {
-          case 'marathon':
-          case 'marathon-user':
-            return {value: 1};
-          default:
-            return {value: 0};
-        }
-      };
-
       let items = [
-        {name: 'marathon'},
-        {name: 'chronos'},
-        {name: 'marathon-user'}
+        {name: 'marathon', getHealth: function () {return {value: 1}; }},
+        {name: 'chronos', getHealth: function () {return {value: 0}; }},
+        {name: 'marathon-user', getHealth: function () {return {value: 2}; }}
       ];
+
       let list = new ServicesList({items});
       let filteredList = list.filter({health: 0}).getItems();
       expect(filteredList.length).toEqual(1);
       expect(filteredList[0].get('name')).toEqual('chronos');
-
-      // Reset
-      MarathonStore.getServiceHealth = oldFunction;
     });
 
   });

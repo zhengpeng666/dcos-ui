@@ -3,6 +3,7 @@ var React = require('react');
 import {RouteHandler} from 'react-router';
 
 var AlertPanel = require('../components/AlertPanel');
+import CompositeState from '../structs/CompositeState';
 import Config from '../config/Config';
 import EventTypes from '../constants/EventTypes';
 var FilterHealth = require('../components/FilterHealth');
@@ -13,7 +14,7 @@ var Page = require('../components/Page');
 var MarathonStore = require('../stores/MarathonStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var ResourceBarChart = require('../components/charts/ResourceBarChart');
-var ServiceTable = require('../components/ServiceTable');
+var ServicesTable = require('../components/ServicesTable');
 var SidebarActions = require('../events/SidebarActions');
 import SidePanels from '../components/SidePanels';
 
@@ -30,13 +31,12 @@ function getCountByHealth(frameworks) {
 }
 
 function getMesosServices(state) {
-  let filters = _.pick(state, 'searchString', 'healthFilter');
   let states = MesosSummaryStore.get('states');
   let lastState = states.lastSuccessful();
-  let services = lastState.getServiceList();
+  let services = CompositeState.getServiceList();
   let filteredServices = services.filter({
-    health: filters.healthFilter,
-    name: filters.searchString
+    health: state.healthFilter,
+    name: state.searchString
   }).getItems();
   let serviceIDs = _.pluck(filteredServices, 'id');
 
@@ -52,8 +52,8 @@ function getMesosServices(state) {
 }
 
 var DEFAULT_FILTER_OPTIONS = {
-  searchString: '',
-  healthFilter: null
+  healthFilter: null,
+  searchString: ''
 };
 
 var ServicesPage = React.createClass({
@@ -200,7 +200,7 @@ var ServicesPage = React.createClass({
               inverseStyle={true} />
           </li>
         </ul>
-        <ServiceTable
+        <ServicesTable
           services={data.services}
           healthProcessed={appsProcessed} />
         <SidePanels
