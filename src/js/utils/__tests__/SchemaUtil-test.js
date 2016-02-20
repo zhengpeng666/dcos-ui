@@ -65,4 +65,80 @@ describe('SchemaUtil', function () {
       expect(result.application.definition[0].definition).toNotEqual(undefined);
     });
   });
+
+  describe('#definitionToJSONDocument', function () {
+    beforeEach(function () {
+      var definition = {
+        application: {
+          title: 'Application',
+          description: 'Lorem ipsum dolor sit amet',
+          definition: [
+            {
+              fieldType: 'text',
+              name: 'Name',
+              placeholder: 'Name',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: 'nameValue'
+            },
+            {
+              fieldType: 'text',
+              name: 'CPU',
+              placeholder: 'CPU',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: 'CPU Value'
+            }
+          ]
+        }
+      };
+
+      this.result = SchemaUtil.definitionToJSONDocument(definition);
+    });
+
+    it('creates Application at the top level', function () {
+      expect(typeof this.result.application).toEqual('object');
+    });
+
+    it('creates properties for application', function () {
+      expect(this.result.application.Name).toEqual('nameValue');
+      expect(this.result.application.CPU).toEqual('CPU Value');
+    });
+
+    it('creates a nested json document correctly', function () {
+      var definition = {
+        application: {
+          title: 'Application',
+          description: 'Lorem ipsum dolor sit amet',
+          definition: [
+            {
+              name: 'Nested',
+              definition: [
+                {
+                  fieldType: 'text',
+                  name: 'CPU',
+                  placeholder: 'CPU',
+                  required: false,
+                  showError: false,
+                  showLabel: true,
+                  writeType: 'input',
+                  validation: function () { return true; },
+                  value: 'CPU Value'
+                }
+              ]
+            }
+          ]
+        }
+      };
+
+      var result = SchemaUtil.definitionToJSONDocument(definition);
+      expect(result.application.Nested.CPU).toEqual('CPU Value');
+    });
+  });
 });
