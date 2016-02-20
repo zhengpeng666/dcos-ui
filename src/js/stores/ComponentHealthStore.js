@@ -1,11 +1,14 @@
+import _ from 'underscore';
 import {Store} from 'mesosphere-shared-reactjs';
 
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../events/AppDispatcher';
 import ComponentHealthActions from '../events/ComponentHealthActions';
 import EventTypes from '../constants/EventTypes';
-import GetSetMixin from '../mixins/GetSetMixin';
+import HealthComponent from '../structs/HealthComponent';
 import HealthComponentList from '../structs/HealthComponentList';
+import GetSetMixin from '../mixins/GetSetMixin';
+import NodesList from '../structs/NodesList';
 
 const ComponentHealthStore = Store.createStore({
 
@@ -14,7 +17,8 @@ const ComponentHealthStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    components: new HealthComponentList()
+    components: new HealthComponentList(),
+    componentsByID: {}
   },
 
   addChangeListener: function (eventName, callback) {
@@ -25,7 +29,33 @@ const ComponentHealthStore = Store.createStore({
     this.removeListener(eventName, callback);
   },
 
+  getComponents: function () {
+    return this.get('components');
+  },
+
+  getComponent: function (id) {
+    return new HealthComponent(this.get('componentsByID')[id] || {});
+  },
+
+  getNodes: function (componentID) {
+    // let parentComponent = this.get('componentsByID')[id] || {id: };
+  },
+
+  getNode: function (componentID, nodeID) {
+
+  },
+
+  getReport: function () {
+    return this.get('report');
+  },
+
   fetchComponents: ComponentHealthActions.fetchComponents,
+
+  fetchComponent: ComponentHealthActions.fetchComponent,
+
+  fetchNodes: ComponentHealthActions.fetchNodes,
+
+  fetchNode: ComponentHealthActions.fetchNode,
 
   fetchReport: ComponentHealthActions.fetchReport,
 
@@ -39,17 +69,27 @@ const ComponentHealthStore = Store.createStore({
     this.emit(EventTypes.HEALTH_COMPONENTS_CHANGE);
   },
 
-  processComponentsError: function (error) {
-    this.emit(EventTypes.HEALTH_COMPONENTS_ERROR, error);
+  processComponent: function (componentData) {
+    let componentsByID = this.get('componentsByID');
+    let component = componentsByID[componentData.id] || {};
+
+    component = _.extend(component, componentData);
+    componentsByID[component.id] = component;
+    this.set({componentsByID});
+
+    this.emit(EventTypes.HEALTH_COMPONENT_SUCCESS, component.id);
+  },
+
+  processNodes: function (nodes) {
+    // this.emit(EventTypes.HEALTH_COMPONENT_NODES_SUCCESS);
+  },
+
+  processNode: function (nodeData) {
   },
 
   processReport: function (report) {
     this.set({report});
     this.emit(EventTypes.HEALTH_REPORT_CHANGE);
-  },
-
-  processReportError: function (error) {
-    this.emit(EventTypes.HEALTH_REPORT_ERROR, error);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -64,13 +104,31 @@ const ComponentHealthStore = Store.createStore({
         ComponentHealthStore.processComponents(action.data);
         break;
       case ActionTypes.REQUEST_HEALTH_COMPONENTS_ERROR:
-        ComponentHealthStore.processComponentsError(action.data);
+        this.emit(EventTypes.HEALTH_COMPONENTS_ERROR, action.data);
+        break;
+      case ActionTypes.REQUEST_HEALTH_COMPONENT_SUCCESS:
+        ComponentHealthStore.processComponent(action.data);
+        break;
+      case ActionTypes.REQUEST_HEALTH_COMPONENT_ERROR:
+        this.emit(EventTypes.HEALTH_COMPONENT_ERROR, action.data);
+        break;
+      case ActionTypes.REQUEST_HEALTH_COMPONENT_NODES_SUCCESS:
+        ComponentHealthStore.processNodes(action.data);
+        break;
+      case ActionTypes.REQUEST_HEALTH_COMPONENT_NODES_ERROR:
+        this.emit(EventTypes.HEALTH_COMPONENT_NODES_ERROR, action.data);
+        break;
+      case ActionTypes.REQUEST_HEALTH_COMPONENT_NODE_SUCCESS:
+        ComponentHealthStore.processNode(action.data);
+        break;
+      case ActionTypes.REQUEST_HEALTH_COMPONENT_NODE_ERROR:
+        this.emit(EventTypes.HEALTH_COMPONENT_NODE_ERROR, action.data);
         break;
       case ActionTypes.REQUEST_HEALTH_REPORT_SUCCESS:
         ComponentHealthStore.processReport(action.data);
         break;
       case ActionTypes.REQUEST_HEALTH_REPORT_ERROR:
-        ComponentHealthStore.processReportError(action.data);
+        this.emit(EventTypes.HEALTH_REPORT_ERROR, action.data);
         break;
     }
 

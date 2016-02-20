@@ -168,7 +168,7 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
   }
 
   render() {
-    let data = ComponentHealthStore.get('components').getItems();
+    let data = ComponentHealthStore.getComponents().getItems();
     let state = this.state;
     let visibleData = this.getVisibleData(data);
     let pluralizedItemName = StringUtil.pluralize('Component', data.length);
