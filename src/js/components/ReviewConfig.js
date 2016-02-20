@@ -1,8 +1,5 @@
 import React from 'react';
 
-// TODO: remove this. This is a fixture for development purposes.
-import {jsonDocument as boomski} from './marathonConfigFixture';
-
 import DescriptionList from './DescriptionList';
 
 class ReviewConfig extends React.Component {
@@ -96,7 +93,7 @@ class ReviewConfig extends React.Component {
 }
 
 ReviewConfig.defaultProps = {
-  jsonDocument: boomski,
+  jsonDocument: {},
   serviceImage: './img/services/icon-service-marathon-large@2x.png',
   serviceName: 'Marathon',
   serviceVersion: '0.23.2'
