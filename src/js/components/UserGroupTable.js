@@ -172,7 +172,6 @@ module.exports = class UserGroupTable extends mixin(StoreMixin) {
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
           data={userGroups}
-          idAttribute="gid"
           itemHeight={TableUtil.getRowHeight()}
           sortBy={{prop: 'description', order: 'asc'}}
           useFlex={true}

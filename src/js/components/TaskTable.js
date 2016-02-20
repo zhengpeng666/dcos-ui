@@ -179,7 +179,6 @@ class TaskTable extends React.Component {
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
         data={this.props.tasks.slice()}
-        idAttribute="id"
         itemHeight={TableUtil.getRowHeight()}
         sortBy={{prop: 'name', order: 'desc'}}
         useFlex={true}

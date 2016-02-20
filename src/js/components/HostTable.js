@@ -169,7 +169,6 @@ var HostTable = React.createClass({
         colGroup={this.getColGroup()}
         containerSelector=".gm-scroll-view"
         data={this.props.hosts.slice()}
-        idAttribute="id"
         itemHeight={TableUtil.getRowHeight()}
         sortBy={{ prop: 'hostname', order: 'desc' }}
         buildRowOptions={this.getRowAttributes}

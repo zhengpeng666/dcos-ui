@@ -216,7 +216,6 @@ var ServicesTable = React.createClass({
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
           data={this.props.services.slice()}
-          idAttribute="id"
           itemHeight={TableUtil.getRowHeight()}
           sortBy={{prop: 'name', order: 'desc'}}
           transition={false} />

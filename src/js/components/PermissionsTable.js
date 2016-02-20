@@ -206,7 +206,6 @@ class PermissionsTable extends mixin(StoreMixin) {
             columns={this.getColumns()}
             colGroup={this.getColGroup()}
             data={permissions}
-            idAttribute="rid"
             itemHeight={TableUtil.getRowHeight()}
             sortBy={{prop: 'description', order: 'asc'}}
             useFlex={true}
