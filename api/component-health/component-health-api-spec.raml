@@ -11,7 +11,7 @@ schemas:
   - report: !include ../../schema/component-health/report.json
 
 /components:
-  displayName: Components' Health
+  displayName: Components Health
   get:
     description: Get a list of components and their health status.
     responses:
@@ -22,18 +22,44 @@ schemas:
             schema: components
             example: |
               {
-                "array": [
+                "components": [
                   {
-                    "id": "mesos",
-                    "name": "Mesos",
-                    "version": "0.27.1",
-                    "health": 3
+                    "component_id": "marathon_service",
+                    "component_description": "marathon service",
+                    "component_health": 0,
+                    # Possibly a "family" since a component may have several "services"
+                    # This could make it easier to aggregate health by family instead 
+                    # of individual component names. 
+                    "component_family": "marathon"
                   },
                   {
-                    "id": "service_manager",
-                    "name": "Service Manage",
-                    "version": "0.0.1",
-                    "health": 1
+                    "component_id": "mesos_dns_service",
+                    "component_description": "mesos dns service",
+                    "component_health": 0
+                  },
+                  {
+                    "component_id": "mesos_master_service",
+                    "component_description": "mesos master service",
+                    "component_health": 0
+                  },
+                  # Example of instance were component_family would be useful. Nginx has several
+                  # "services" to determine it's final state. Howewver, the nginx_service itself
+                  # will not be healthy if the reload or timer is not, so those can simply be 
+                  # ignored and instead we can just parse for nginx_service. 
+                  {
+                    "component_id": "nginx_reload_service",
+                    "component_description": "nginx reload service",
+                    "component_health": 0
+                  },
+                  {
+                    "component_id": "nginx_reload_timer",
+                    "component_description": "nginx reload timer",
+                    "component_health": 0
+                  },
+                  {
+                    "component_id": "nginx_service",
+                    "component_description": "nginx service",
+                    "component_health": 0
                   }
                 ]
               }
@@ -45,7 +71,7 @@ schemas:
         type: string
     displayName: Component Health
     get:
-      description: Get a list of the component's node health summaries.
+      description: Get the component health summaries by node_id.
       responses:
         200:
           description: Successful response.
@@ -53,16 +79,62 @@ schemas:
             application/json:
               schema: component
               example: |
+              # Example query for nginx_service in a 3-master cluster would return the component 
+              # health on the 3 masters on which that component runs. 
+              {
+                "nodes" [
+                  {
+                    "node_id": "ip-10-10-0-234",
+                    "node_family": "master",
+                    "component_id": "nginx_service",
+                    "component_description": "nginx service",
+                    "health": 1,
+                    "output": "FAILED"
+                  },
+                  {
+                    "node_id": "ip-10-10-0-235",
+                    "node_family": "master",
+                    "component_id": "nginx_service",
+                    "component_description": "nginx service",
+                    "health": 0,
+                    "output": "SUCCESS"
+                  },
+                  {
+                    "node_id": "ip-10-10-0-236",
+                    "node_family": "master",
+                    "component_id": "nginx_service",
+                    "component_description": "nginx service",
+                    "health": 0,
+                    "output": "SUCCESS"
+                  }
+                ]
+              }
+  /{component-id}/summary:
+    uriParameters:
+      component-id:
+        description: Requested component summary of health.
+        type: string
+    displayName: Component Health Summary
+    get:
+      description: Get the component health summary. Aggregates for most unhealthy state across all node_ids. 
+      responses:
+        200:
+          description: Successful response.
+          body:
+            application/json:
+              schema: component
+              example: |
+                # Example response from query for nginx_service where nginx health > 0 on some node_id
                 {
-                  "id": "service_manager",
-                  "name": "Service Manager",
-                  "version": "0.0.1",
-                  "health": 1
+                  "component_id": "nginx_service",
+                  "component_description": "nginx service",
+                  "health": 1,
+                  "output": "FAILED"
                 }
     /nodes:
-      displayName: Component Nodes' Health
+      displayName: Node Health
       get:
-        description: Get a list of a component's nodes and their healths.
+        description: Get a list of a nodes and their healths. Show failed components if health is > 0.
         responses:
           200:
             description: Successful response.
@@ -70,20 +142,33 @@ schemas:
               application/json:
                 schema: nodes
                 example: |
+                  # Example response from a 2-node cluster where one node has components with health > 0
                   {
-                    "array": [
+                    "nodes": [
                       {
-                        "id": "srv1.hw.ca1.mesosphere.com",
-                        "type": "master",
-                        "health": 1
+                        "node_id": "ip-10-10-0-235",
+                        "node_family": "master",
+                        "health": 0,
+                        "failed_component_ids": {
+                          "mesos_master_service": {
+                            "output": "FAILED",
+                            "health": 1,
+                          },
+                          "nginx service": {
+                            "output": "FAILED",
+                            "health" 1,
+                        }
                       },
                       {
-                        "id": "srv1.hw.ca1.mesosphere.com",
-                        "type": "agent",
-                        "health": 1
+                        "node_id": "ip-10-10-0-236",
+                        "node_family": "agent",
+                        "health": 0,
+                        "failed_component_ids": []
                       }
                     ]
                   }
+      # Must ensure all node_id's contain are hyphened and not "." separated. Only matters if we go 
+      # through a proxy of some sort, but generally not great to "." separate in our URL requested. 
       /{node-id}:
         uriParameters:
           node-id:
@@ -91,7 +176,7 @@ schemas:
             type: string
         displayName: Node Health
         get:
-          description: Get a node's health status.
+          description: Get node health status.
           responses:
             200:
               description: Successful response.
@@ -99,15 +184,15 @@ schemas:
                 application/json:
                   schema: node
                   example: |
+                    # Example response from a healthy node with all components == 0
                     {
-                      "id": "srv1.hw.ca1.mesosphere.com",
-                      "description": "This is a node, it has a health check and a family.",
-                      "type": "agent",
+                      "node_id": "ip-10-10-0-236",
+                      "node_family": "agent",
                       "health": 0,
-                      "health_check_name": "Infalliable Health Check",
-                      "output": "{\n\"path\": \"/health/cluster\"\n}"
+                      "failed_component_ids": []
                     }
 
+# This is possibly just a 301 -> /nodes, lets disucss. 
 /report:
   displayName: Health Report
   get:
