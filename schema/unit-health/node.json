@@ -19,7 +19,7 @@
       "minimum": 0,
       "maximum": 3
     },
-    "component_check_output": {
+    "unit_check_output": {
       "title": "Node health check output",
       "type": "string"
     }

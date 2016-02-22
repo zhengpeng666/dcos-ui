@@ -49,7 +49,7 @@ class SettingsPage extends mixin(TabsMixin) {
       this.tabs_tabs = {
         // todo: content for Overview Tab
         // 'settings-system-overview': 'Overview',
-        'settings-system-components': 'Components'
+        'settings-system-units': 'Units'
       };
     }
 

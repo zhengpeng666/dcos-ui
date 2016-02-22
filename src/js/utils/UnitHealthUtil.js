@@ -1,4 +1,4 @@
-const ComponentHealthUtil = {
+const UnitHealthUtil = {
 
   getHealthSortFunction() {
     return function () {
@@ -26,4 +26,4 @@ const ComponentHealthUtil = {
 
 };
 
-module.exports = ComponentHealthUtil;
+module.exports = UnitHealthUtil;

@@ -3,17 +3,17 @@ import {Dropdown, Table} from 'reactjs-components';
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import ComponentHealthStatus from '../constants/ComponentHealthStatus';
-import ComponentHealthUtil from '../utils/ComponentHealthUtil';
 import FilterHeadline from '../components/FilterHeadline';
 import FilterInputText from '../components/FilterInputText';
-import HealthComponent from '../structs/HealthComponent';
+import HealthUnit from '../structs/HealthUnit';
 import RequestErrorMsg from './RequestErrorMsg';
 import ResourceTableUtil from '../utils/ResourceTableUtil';
 import SidePanelContents from './SidePanelContents';
 import StringUtil from '../utils/StringUtil';
 import TableUtil from '../utils/TableUtil';
 import NodesList from '../structs/NodesList';
+import UnitHealthStatus from '../constants/UnitHealthStatus';
+import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 const METHODS_TO_BIND = [
   'handleItemSelection',
@@ -24,7 +24,7 @@ const METHODS_TO_BIND = [
   'resetFilter'
 ];
 
-module.exports = class UserSidePanelContents extends SidePanelContents {
+module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
@@ -67,7 +67,7 @@ module.exports = class UserSidePanelContents extends SidePanelContents {
         prop: 'health',
         render: this.renderHealth,
         sortable: true,
-        sortFunction: ComponentHealthUtil.getHealthSortFunction()
+        sortFunction: UnitHealthUtil.getHealthSortFunction()
       },
       {
         className: classNameFn,
@@ -118,11 +118,11 @@ module.exports = class UserSidePanelContents extends SidePanelContents {
       selectedHtml: 'All Health Checks'
     };
 
-    let items = Object.keys(ComponentHealthStatus).map(function (health) {
+    let items = Object.keys(UnitHealthStatus).map(function (health) {
       return {
         id: health,
-        html: ComponentHealthStatus[health].title,
-        selectedHtml: ComponentHealthStatus[health].title
+        html: UnitHealthStatus[health].title,
+        selectedHtml: UnitHealthStatus[health].title
       };
     });
 
@@ -199,7 +199,7 @@ module.exports = class UserSidePanelContents extends SidePanelContents {
 
   // demo
   getComponentData() {
-    return new HealthComponent(
+    return new HealthUnit(
       {
         'id': 'apache-zookeeper',
         'name': 'Apache ZooKeeper',

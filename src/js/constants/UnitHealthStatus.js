@@ -1,4 +1,4 @@
-const ComponentHealthStatus = {
+const UnitHealthStatus = {
   NA: {
     title: 'N/A',
     value: 0,
@@ -21,4 +21,4 @@ const ComponentHealthStatus = {
   }
 };
 
-module.exports = ComponentHealthStatus;
+module.exports = UnitHealthStatus;

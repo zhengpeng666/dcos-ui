@@ -1,21 +1,21 @@
 jest.dontMock('../AppDispatcher');
-jest.dontMock('../ComponentHealthActions');
+jest.dontMock('../UnitHealthActions');
 jest.dontMock('../../config/Config');
 jest.dontMock('../../constants/ActionTypes');
 
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../AppDispatcher');
-var ComponentHealthActions = require('../ComponentHealthActions');
+var UnitHealthActions = require('../UnitHealthActions');
 var Config = require('../../config/Config');
 var RequestUtil = require('../../utils/RequestUtil');
 
-describe('ComponentHealthActions', function () {
+describe('UnitHealthActions', function () {
 
-  describe('#fetchComponents', function () {
+  describe('#fetchUnits', function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, 'json');
-      ComponentHealthActions.fetchComponents();
+      UnitHealthActions.fetchUnits();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
@@ -23,7 +23,7 @@ describe('ComponentHealthActions', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.type).toEqual(ActionTypes.REQUEST_HEALTH_COMPONENTS_SUCCESS);
+        expect(action.type).toEqual(ActionTypes.REQUEST_HEALTH_UNITS_SUCCESS);
       });
 
       this.configuration.success({bar: 'bar'});
@@ -33,7 +33,7 @@ describe('ComponentHealthActions', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.type).toEqual(ActionTypes.REQUEST_HEALTH_COMPONENTS_ERROR);
+        expect(action.type).toEqual(ActionTypes.REQUEST_HEALTH_UNITS_ERROR);
       });
 
       this.configuration.error({responseJSON: {description: 'bar'}});
@@ -44,7 +44,7 @@ describe('ComponentHealthActions', function () {
     });
 
     it('fetches data from the correct URL', function () {
-      expect(this.configuration.url).toEqual(Config.componentHealthAPIPrefix + '/components');
+      expect(this.configuration.url).toEqual(Config.unitHealthAPIPrefix + '/units');
     });
 
   });

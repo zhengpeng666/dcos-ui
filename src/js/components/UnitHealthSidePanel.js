@@ -4,13 +4,13 @@ import {SidePanel} from 'reactjs-components';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 import HistoryStore from '../stores/HistoryStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
-import ComponentHealthSidePanelContents from './ComponentHealthSidePanelContents';
+import UnitHealthSidePanelContents from './UnitHealthSidePanelContents';
 
 const METHODS_TO_BIND = [
   'handlePanelClose'
 ];
 
-class ComponentHealthSidePanel extends mixin(StoreMixin) {
+class UnitHealthSidePanel extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -19,7 +19,7 @@ class ComponentHealthSidePanel extends mixin(StoreMixin) {
     }, this);
 
     this.store_listeners = [
-      {name: 'componentHealth', events: ['success', 'error' ]}
+      {name: 'unitHealth', events: ['success', 'error' ]}
     ];
   }
 
@@ -38,7 +38,7 @@ class ComponentHealthSidePanel extends mixin(StoreMixin) {
 
   isOpen() {
     return (
-      this.props.params.componentID != null
+      this.props.params.unitID != null
       && MesosSummaryStore.get('statesProcessed')
     );
   }
@@ -59,20 +59,20 @@ class ComponentHealthSidePanel extends mixin(StoreMixin) {
     );
   }
 
-  getContents(componentID) {
+  getContents(unitID) {
     if (!this.isOpen()) {
       return null;
     }
 
     return (
-      <ComponentHealthSidePanelContents
-        itemID={componentID}
+      <UnitHealthSidePanelContents
+        itemID={unitID}
         parentRouter={this.context.router} />
     );
   }
 
   render() {
-    let componentID = 'component';
+    let unitID = 'unit';
 
     return (
       <div>
@@ -84,19 +84,19 @@ class ComponentHealthSidePanel extends mixin(StoreMixin) {
           bodyClass="side-panel-content flex-container-col"
           onClose={this.handlePanelClose}
           open={this.isOpen()}>
-          {this.getContents(componentID)}
+          {this.getContents(unitID)}
         </SidePanel>
       </div>
     );
   }
 }
 
-ComponentHealthSidePanel.contextTypes = {
+UnitHealthSidePanel.contextTypes = {
   router: React.PropTypes.func
 };
 
-ComponentHealthSidePanel.propTypes = {
+UnitHealthSidePanel.propTypes = {
   params: React.PropTypes.object
 };
 
-module.exports = ComponentHealthSidePanel;
+module.exports = UnitHealthSidePanel;

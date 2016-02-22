@@ -1,5 +1,5 @@
 import Item from './Item';
-import ComponentHealthStatus from '../constants/ComponentHealthStatus';
+import UnitHealthStatus from '../constants/UnitHealthStatus';
 
 module.exports = class Node extends Item {
   getServiceIDs() {
@@ -24,12 +24,12 @@ module.exports = class Node extends Item {
   getHealth() {
     let health = this.get('health');
 
-    return Object.keys(ComponentHealthStatus).reduce(function (prev, healthObj) {
-      if (ComponentHealthStatus[healthObj].value === health) {
-        return ComponentHealthStatus[healthObj];
+    return Object.keys(UnitHealthStatus).reduce(function (prev, healthObj) {
+      if (UnitHealthStatus[healthObj].value === health) {
+        return UnitHealthStatus[healthObj];
       }
       return prev;
-    }, null) || ComponentHealthStatus.NA;
+    }, null) || UnitHealthStatus.NA;
   }
 
 };

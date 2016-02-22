@@ -1,7 +1,0 @@
-{
-  "id": "srv1.hw.ca1.mesosphere.com",
-  "description": "There has been enhanced damage inside the quantum inverted charge! There has been enhanced ripples next to the critical calibrated capacitors.",
-  "type": "master",
-  "health": 3,
-  "output": "{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}"
-}

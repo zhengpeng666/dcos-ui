@@ -1,14 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-03/schema",
-  "id": "http://schema.dcos/system/health/components",
+  "id": "http://schema.dcos/system/health/units",
   "type": "object",
   "properties": {
     "array": {
-      "title": "List of components and their health statuses.",
+      "title": "List of units and their health statuses.",
       "type": "array",
       "items": {
         "allOf": [
-          {"$ref": "http://schema.dcos/system/health/component"}
+          {"$ref": "http://schema.dcos/system/health/unit"}
         ]
       }
     }
