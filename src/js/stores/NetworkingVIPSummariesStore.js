@@ -1,11 +1,31 @@
+import _ from 'underscore';
 import {Store} from 'mesosphere-shared-reactjs';
 
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../events/AppDispatcher';
+import Config from '../config/Config';
 import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import NetworkingActions from '../events/NetworkingActions';
 import VIPSummaryList from '../structs/VIPSummaryList';
+
+var requestInterval = null;
+
+function startPolling() {
+  if (requestInterval == null) {
+    NetworkingActions.fetchVIPSummaries();
+    requestInterval = setInterval(
+      NetworkingActions.fetchVIPSummaries, Config.getRefreshRate()
+    );
+  }
+}
+
+function stopPolling() {
+  if (requestInterval != null) {
+    clearInterval(requestInterval);
+    requestInterval = null;
+  }
+}
 
 let NetworkingVIPSummariesStore = Store.createStore({
   storeID: 'networkingVIPSummaries',
@@ -18,10 +38,15 @@ let NetworkingVIPSummariesStore = Store.createStore({
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
+    startPolling();
   },
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
+
+    if (_.isEmpty(this.listeners(EventTypes.NETWORKING_VIP_SUMMARIES_CHANGE))) {
+      stopPolling();
+    }
   },
 
   fetchVIPSummaries: NetworkingActions.fetchVIPSummaries,

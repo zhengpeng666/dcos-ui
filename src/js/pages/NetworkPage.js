@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import mixin from 'reactjs-mixin';
 import React from 'react';
 import {RouteHandler} from 'react-router';
@@ -46,6 +45,14 @@ class NetworkPage extends mixin(StoreMixin) {
   componentDidMount() {
     super.componentDidMount();
     NetworkingVIPSummariesStore.fetchVIPSummaries();
+  }
+
+  onNetworkingVIPSummariesStoreVipSummariesError() {
+    this.setState({hasErrors: true});
+  }
+
+  onNetworkingVIPSummariesStoreVipSummariesSuccess() {
+    this.setState({receivedVIPSummaries: true});
   }
 
   getEmptyNetworkPageContent() {
@@ -144,14 +151,6 @@ class NetworkPage extends mixin(StoreMixin) {
 
   isLoading() {
     return !this.state.receivedVIPSummaries;
-  }
-
-  onNetworkingVIPSummariesStoreVipSummariesError() {
-    this.setState({hasErrors: true});
-  }
-
-  onNetworkingVIPSummariesStoreVipSummariesSuccess() {
-    this.setState({receivedVIPSummaries: true});
   }
 
   resetFilter() {

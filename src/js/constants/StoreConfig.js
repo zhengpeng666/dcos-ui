@@ -235,7 +235,7 @@ const ListenersDescription = {
     unmountWhen: function () {
       return true;
     },
-    listenAlways: false
+    listenAlways: true
   },
 
   networkingNodeMemberships: {
@@ -247,7 +247,7 @@ const ListenersDescription = {
     unmountWhen: function () {
       return true;
     },
-    listenAlways: false
+    listenAlways: true
   },
 
   networkingVIPs: {
@@ -261,7 +261,7 @@ const ListenersDescription = {
     unmountWhen: function () {
       return true;
     },
-    listenAlways: false
+    listenAlways: true
   },
 
   networkingVIPSummaries: {
@@ -273,7 +273,7 @@ const ListenersDescription = {
     unmountWhen: function () {
       return true;
     },
-    listenAlways: false
+    listenAlways: true
   },
 
   summary: {
