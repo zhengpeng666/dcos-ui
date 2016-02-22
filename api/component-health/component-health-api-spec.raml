@@ -27,21 +27,25 @@ schemas:
                     "component_id": "marathon_service", # Is the component family
                     "component_description": "marathon service",
                     "component_health": 0,
+                    "component_check_output": "OK"
                   },
                   {
                     "component_id": "mesos_dns_service",
                     "component_description": "mesos dns service",
-                    "component_health": 0
+                    "component_health": 1,
+                    "component_check_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
                   },
                   {
                     "component_id": "mesos_master_service",
                     "component_description": "mesos master service",
-                    "component_health": 0
+                    "component_health": 0,
+                    "component_check_output": "OK"
                   },
                   {
                     "component_id": "nginx_service",
                     "component_description": "nginx service",
-                    "component_health": 0
+                    "component_health": 0,
+                    "component_check_output": "OK"
                   }
                 ]
               }
@@ -66,13 +70,14 @@ schemas:
                 {
                   "component_id": "nginx_service",
                   "component_description": "nginx service",
-                  "component_health": 0
+                  "component_health": 0,
+                  "component_check_output": "OK"
                 }
               
     /nodes:
-      displayName: Node Health
+      displayName: Component Nodes Health
       get:
-        description: Get a list of a nodes and their healths. Show failed components if health is > 0.
+        description: Get a list of the components node health summaries.
         responses:
           200:
             description: Successful response.
@@ -116,7 +121,8 @@ schemas:
                     {
                       "node_id": "ip-10-10-0-236",
                       "node_role": "agent",
-                      "node_health": 1
+                      "node_health": 1,
+                      "component_check_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
                     }
 
 # This is possibly just a 301 -> /nodes, lets disucss. 
