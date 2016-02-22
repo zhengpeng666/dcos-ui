@@ -87,11 +87,6 @@ const ComponentHealthStore = Store.createStore({
   processNode: function (nodeData) {
   },
 
-  processReport: function (report) {
-    this.set({report});
-    this.emit(EventTypes.HEALTH_REPORT_CHANGE);
-  },
-
   dispatcherIndex: AppDispatcher.register(function (payload) {
     if (payload.source !== ActionTypes.SERVER_ACTION) {
       return false;
@@ -123,12 +118,6 @@ const ComponentHealthStore = Store.createStore({
         break;
       case ActionTypes.REQUEST_HEALTH_COMPONENT_NODE_ERROR:
         this.emit(EventTypes.HEALTH_COMPONENT_NODE_ERROR, action.data);
-        break;
-      case ActionTypes.REQUEST_HEALTH_REPORT_SUCCESS:
-        ComponentHealthStore.processReport(action.data);
-        break;
-      case ActionTypes.REQUEST_HEALTH_REPORT_ERROR:
-        this.emit(EventTypes.HEALTH_REPORT_ERROR, action.data);
         break;
     }
 

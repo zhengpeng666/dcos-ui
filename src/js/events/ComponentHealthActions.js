@@ -1,4 +1,13 @@
-import ActionTypes from '../constants/ActionTypes';
+import {
+  REQUEST_HEALTH_COMPONENTS_SUCCESS,
+  REQUEST_HEALTH_COMPONENTS_ERROR,
+  REQUEST_HEALTH_COMPONENT_SUCCESS,
+  REQUEST_HEALTH_COMPONENT_ERROR,
+  REQUEST_HEALTH_COMPONENT_NODES_SUCCESS,
+  REQUEST_HEALTH_COMPONENT_NODES_ERROR,
+  REQUEST_HEALTH_COMPONENT_NODE_SUCCESS,
+  REQUEST_HEALTH_COMPONENT_NODE_ERROR
+} from '../constants/ActionTypes';
 import AppDispatcher from './AppDispatcher';
 import Config from '../config/Config';
 import RequestUtil from '../utils/RequestUtil';
@@ -10,13 +19,13 @@ const ComponentHealthActions = {
       url: `${Config.rootUrl}${Config.componentHealthAPIPrefix}/components`,
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_HEALTH_COMPONENTS_SUCCESS,
+          type: REQUEST_HEALTH_COMPONENTS_SUCCESS,
           data: response.array
         });
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_HEALTH_COMPONENTS_ERROR,
+          type: REQUEST_HEALTH_COMPONENTS_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr)
         });
       }
@@ -28,68 +37,58 @@ const ComponentHealthActions = {
       url: `${Config.rootUrl}${Config.componentHealthAPIPrefix}/components/${componentID}`,
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_HEALTH_COMPONENT_SUCCESS,
-          data: response
+          type: REQUEST_HEALTH_COMPONENT_SUCCESS,
+          data: response,
+          componentID
         });
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_HEALTH_COMPONENT_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr)
+          type: REQUEST_HEALTH_COMPONENT_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr),
+          componentID
         });
       }
     });
   },
 
-  fetchNodes: function (componentID) {
+  fetchComponentNodes: function (componentID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.componentHealthAPIPrefix}/components/${componentID}/nodes`,
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_HEALTH_COMPONENT_NODES_SUCCESS,
-          data: response.array
+          type: REQUEST_HEALTH_COMPONENT_NODES_SUCCESS,
+          data: response,
+          componentID
         });
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_HEALTH_COMPONENT_NODES_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr)
+          type: REQUEST_HEALTH_COMPONENT_NODES_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr),
+          componentID
         });
       }
     });
   },
 
-  fetchNode: function (componentID, nodeID) {
+  fetchComponentNode: function (componentID, nodeID) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.componentHealthAPIPrefix}/components/${componentID}/nodes/${nodeID}`,
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_HEALTH_COMPONENT_NODE_SUCCESS,
-          data: response
+          type: REQUEST_HEALTH_COMPONENT_NODE_SUCCESS,
+          data: response,
+          componentID,
+          nodeID
         });
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_HEALTH_COMPONENT_NODE_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr)
-        });
-      }
-    });
-  },
-
-  fetchReport: function () {
-    RequestUtil.json({
-      url: `${Config.rootUrl}${Config.componentHealthAPIPrefix}/report`,
-      success: function (response) {
-        AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_HEALTH_REPORT_SUCCESS,
-          data: response
-        });
-      },
-      error: function (xhr) {
-        AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_HEALTH_REPORT_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr)
+          type: REQUEST_HEALTH_COMPONENT_NODE_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr),
+          componentID,
+          nodeID
         });
       }
     });
@@ -98,14 +97,25 @@ const ComponentHealthActions = {
 
 if (Config.useFixtures) {
   let componentsFixture = require('json!../../../tests/_fixtures/component-health/components.json');
+  let componentFixture = require('json!../../../tests/_fixtures/component-health/component.json');
+  let componentNodesFixture = require('json!../../../tests/_fixtures/component-health/component-nodes.json');
+  let componentNodeFixture = require('json!../../../tests/_fixtures/component-health/component-node.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};
   }
 
   global.actionTypes.ComponentHealthActions = {
-    fetchComponents: {event: 'success', success: {response: componentsFixture}},
-    fetchReport: {event: 'success', success: {response: 'I am health report'}}
+    fetchComponents: {
+      event: 'success', success: {response: componentsFixture}
+    },
+    fetchComponent: {events: 'success', success: {response: componentFixture}},
+    fetchComponentNodes: {
+      events: 'success', success: {response: componentNodesFixture}
+    },
+    fetchComponentNode: {
+      events: 'success', success: {response: componentNodeFixture}
+    }
   };
 
   Object.keys(global.actionTypes.ComponentHealthActions).forEach(function (method) {

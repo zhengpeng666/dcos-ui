@@ -38,7 +38,6 @@ let mergeObjectsById = function (newData, data) {
   });
 };
 
-
 class CompositeState {
   constructor(data = {}) {
     this.data = data;

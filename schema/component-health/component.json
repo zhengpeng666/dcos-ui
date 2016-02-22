@@ -27,7 +27,6 @@
   "required": [
     "component_id",
     "component_description",
-    "component_health",
-    "component_check_output"
+    "component_health"
   ]
 }

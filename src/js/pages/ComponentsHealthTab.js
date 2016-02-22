@@ -52,7 +52,6 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
   componentDidMount() {
     super.componentDidMount();
     ComponentHealthStore.fetchComponents();
-    ComponentHealthStore.fetchReport();
   }
 
   handleSearchStringChange(searchString) {

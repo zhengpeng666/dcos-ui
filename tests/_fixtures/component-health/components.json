@@ -1,34 +1,28 @@
 {
   "array": [
     {
-      "id": "apache-zookeeper",
-      "name": "Apache ZooKeeper",
-      "version": "3.4.6",
-      "health": 1
+      "component_id": "marathon_service",
+      "component_description": "marathon service",
+      "component_health": 0,
+      "component_check_output": "OK"
     },
     {
-      "id": "mesos",
-      "name": "Mesos",
-      "version": "0.27.1",
-      "health": 3
+      "component_id": "mesos_dns_service",
+      "component_description": "Mesos DNS",
+      "component_health": 1,
+      "component_check_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
     },
     {
-      "id": "service-manager",
-      "name": "Service Manager",
-      "version": "0.0.1",
-      "health": 1
+      "component_id": "mesos_master_service",
+      "component_description": "mesos master service",
+      "component_health": 0,
+      "component_check_output": "OK"
     },
     {
-      "id": "mesos-DNS",
-      "name": "Mesos DNS",
-      "version": "0.1.1",
-      "health": 0
-    },
-    {
-      "id": "admin-router",
-      "name": "Admin Router",
-      "version": "0.1",
-      "health": 0
+      "component_id": "nginx_service",
+      "component_description": "nginx service",
+      "component_health": 0,
+      "component_check_output": "OK"
     }
   ]
 }
