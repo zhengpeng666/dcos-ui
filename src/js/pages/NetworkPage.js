@@ -48,16 +48,6 @@ class NetworkPage extends mixin(StoreMixin) {
     NetworkingVIPSummariesStore.fetchVIPSummaries();
   }
 
-  getContents() {
-    if (this.isLoading()) {
-      return this.getLoadingScreen();
-    } else if (this.state.hasErrors) {
-      return this.getErrorScreen();
-    }
-
-    return this.getNetworkPageContent();
-  }
-
   getEmptyNetworkPageContent() {
     return (
       <AlertPanel
@@ -80,7 +70,7 @@ class NetworkPage extends mixin(StoreMixin) {
       return vipSummaries;
     }
 
-    return _.filter(vipSummaries, function (vipSummary) {
+    return vipSummaries.filter(function (vipSummary) {
       if (vipSummary.vip.indexOf(searchString) > -1) {
         return true;
       }
@@ -169,9 +159,19 @@ class NetworkPage extends mixin(StoreMixin) {
   }
 
   render() {
+    let content = null;
+
+    if (this.isLoading()) {
+      content = this.getLoadingScreen();
+    } else if (this.state.hasErrors) {
+      content = this.getErrorScreen();
+    } else {
+      content = this.getNetworkPageContent();
+    }
+
     return (
       <Page title="Network">
-        {this.getContents()}
+        {content}
         <RouteHandler />
       </Page>
     );
