@@ -86,26 +86,17 @@ schemas:
                   {
                     "node_id": "ip-10-10-0-234",
                     "node_family": "master",
-                    "component_id": "nginx_service",
-                    "component_description": "nginx service",
                     "health": 1,
-                    "output": "FAILED"
                   },
                   {
                     "node_id": "ip-10-10-0-235",
                     "node_family": "master",
-                    "component_id": "nginx_service",
-                    "component_description": "nginx service",
                     "health": 0,
-                    "output": "SUCCESS"
                   },
                   {
                     "node_id": "ip-10-10-0-236",
                     "node_family": "master",
-                    "component_id": "nginx_service",
-                    "component_description": "nginx service",
                     "health": 0,
-                    "output": "SUCCESS"
                   }
                 ]
               }
@@ -129,7 +120,6 @@ schemas:
                   "component_id": "nginx_service",
                   "component_description": "nginx service",
                   "health": 1,
-                  "output": "FAILED"
                 }
     /nodes:
       displayName: Node Health
@@ -149,21 +139,11 @@ schemas:
                         "node_id": "ip-10-10-0-235",
                         "node_family": "master",
                         "health": 0,
-                        "failed_component_ids": {
-                          "mesos_master_service": {
-                            "output": "FAILED",
-                            "health": 1,
-                          },
-                          "nginx service": {
-                            "output": "FAILED",
-                            "health" 1,
-                        }
                       },
                       {
                         "node_id": "ip-10-10-0-236",
                         "node_family": "agent",
-                        "health": 0,
-                        "failed_component_ids": []
+                        "health": 1,
                       }
                     ]
                   }
@@ -188,8 +168,7 @@ schemas:
                     {
                       "node_id": "ip-10-10-0-236",
                       "node_family": "agent",
-                      "health": 0,
-                      "failed_component_ids": []
+                      "health": 1,
                     }
 
 # This is possibly just a 301 -> /nodes, lets disucss. 
