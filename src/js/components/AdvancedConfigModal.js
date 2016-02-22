@@ -110,8 +110,6 @@ class AdvancedConfigModal extends React.Component {
   }
 }
 
-global.yoyo = JSON.stringify(SchemaUtil.schemaToMultipleDefinition(boomski));
-
 AdvancedConfigModal.defaultProps = {
   multipleDefinition: SchemaUtil.schemaToMultipleDefinition(boomski),
   onClose: function () {},
