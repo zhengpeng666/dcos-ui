@@ -10,8 +10,8 @@ module.exports = class VIPSummary extends Item {
   }
 
   getFailPercent() {
-    return Number((this.getFailLastMinute() / this.getSuccessLastMinute() * 100)
-      .toFixed(0));
+    return Math.floor(this.getFailLastMinute() /
+      this.getSuccessLastMinute() * 100);
   }
 
   getMachineReachabilityPercent() {
