@@ -22,15 +22,11 @@ schemas:
             schema: components
             example: |
               {
-                "components": [
+                "array": [
                   {
-                    "component_id": "marathon_service",
+                    "component_id": "marathon_service", # Is the component family
                     "component_description": "marathon service",
                     "component_health": 0,
-                    # Possibly a "family" since a component may have several "services"
-                    # This could make it easier to aggregate health by family instead 
-                    # of individual component names. 
-                    "component_family": "marathon"
                   },
                   {
                     "component_id": "mesos_dns_service",
@@ -40,20 +36,6 @@ schemas:
                   {
                     "component_id": "mesos_master_service",
                     "component_description": "mesos master service",
-                    "component_health": 0
-                  },
-                  # Example of instance were component_family would be useful. Nginx has several
-                  # "services" to determine it's final state. Howewver, the nginx_service itself
-                  # will not be healthy if the reload or timer is not, so those can simply be 
-                  # ignored and instead we can just parse for nginx_service. 
-                  {
-                    "component_id": "nginx_reload_service",
-                    "component_description": "nginx reload service",
-                    "component_health": 0
-                  },
-                  {
-                    "component_id": "nginx_reload_timer",
-                    "component_description": "nginx reload timer",
                     "component_health": 0
                   },
                   {
@@ -79,48 +61,14 @@ schemas:
             application/json:
               schema: component
               example: |
-              # Example query for nginx_service in a 3-master cluster would return the component 
-              # health on the 3 masters on which that component runs. 
-              {
-                "nodes" [
-                  {
-                    "node_id": "ip-10-10-0-234",
-                    "node_family": "master",
-                    "health": 1,
-                  },
-                  {
-                    "node_id": "ip-10-10-0-235",
-                    "node_family": "master",
-                    "health": 0,
-                  },
-                  {
-                    "node_id": "ip-10-10-0-236",
-                    "node_family": "master",
-                    "health": 0,
-                  }
-                ]
-              }
-  /{component-id}/summary:
-    uriParameters:
-      component-id:
-        description: Requested component summary of health.
-        type: string
-    displayName: Component Health Summary
-    get:
-      description: Get the component health summary. Aggregates for most unhealthy state across all node_ids. 
-      responses:
-        200:
-          description: Successful response.
-          body:
-            application/json:
-              schema: component
-              example: |
-                # Example response from query for nginx_service where nginx health > 0 on some node_id
+                # Example query for nginx_service in a 3-master cluster would return the component 
+                # health on the 3 masters on which that component runs. 
                 {
                   "component_id": "nginx_service",
                   "component_description": "nginx service",
-                  "health": 1,
+                  "component_health": 0
                 }
+              
     /nodes:
       displayName: Node Health
       get:
@@ -134,16 +82,16 @@ schemas:
                 example: |
                   # Example response from a 2-node cluster where one node has components with health > 0
                   {
-                    "nodes": [
+                    "array": [
                       {
                         "node_id": "ip-10-10-0-235",
-                        "node_family": "master",
-                        "health": 0,
+                        "node_role": "master",
+                        "node_health": 0,
                       },
                       {
                         "node_id": "ip-10-10-0-236",
-                        "node_family": "agent",
-                        "health": 1,
+                        "node_role": "agent",
+                        "node_health": 1
                       }
                     ]
                   }
@@ -167,8 +115,8 @@ schemas:
                     # Example response from a healthy node with all components == 0
                     {
                       "node_id": "ip-10-10-0-236",
-                      "node_family": "agent",
-                      "health": 1,
+                      "node_role": "agent",
+                      "node_health": 1
                     }
 
 # This is possibly just a 301 -> /nodes, lets disucss. 
