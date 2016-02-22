@@ -3,39 +3,30 @@
   "id": "http://schema.dcos/system/health/node",
   "type": "object",
   "properties": {
-    "id": {
+    "node_id": {
       "title": "Node ID",
       "type": "string",
       "pattern": "^[\\w\\.]+$"
     },
-    "description": {
-      "title": "Node description text",
-      "type": "string"
-    },
-    "type": {
-      "title": "Node ID",
+    "node_role": {
+      "title": "Node Type",
       "type": "string",
       "enum": ["master", "agent"]
     },
-    "health": {
+    "node_health": {
       "title": "Node health status",
       "type": "integer",
       "minimum": 0,
       "maximum": 3
     },
-    "health_check_name": {
-      "title": "Node health check name",
-      "type": "string"
-    },
-    "output": {
+    "component_check_output": {
       "title": "Node health check output",
       "type": "string"
     }
   },
   "required": [
-    "id",
-    "type",
-    "health",
-    "output"
+    "node_id",
+    "node_role",
+    "node_health"
   ]
 }

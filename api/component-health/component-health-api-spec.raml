@@ -11,7 +11,7 @@ schemas:
   - report: !include ../../schema/component-health/report.json
 
 /components:
-  displayName: Components' Health
+  displayName: Components Health
   get:
     description: Get a list of components and their health status.
     responses:
@@ -24,16 +24,28 @@ schemas:
               {
                 "array": [
                   {
-                    "id": "mesos",
-                    "name": "Mesos",
-                    "version": "0.27.1",
-                    "health": 3
+                    "component_id": "marathon_service", # Is the component family
+                    "component_description": "marathon service",
+                    "component_health": 0,
+                    "component_check_output": "OK"
                   },
                   {
-                    "id": "service_manager",
-                    "name": "Service Manage",
-                    "version": "0.0.1",
-                    "health": 1
+                    "component_id": "mesos_dns_service",
+                    "component_description": "mesos dns service",
+                    "component_health": 1,
+                    "component_check_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+                  },
+                  {
+                    "component_id": "mesos_master_service",
+                    "component_description": "mesos master service",
+                    "component_health": 0,
+                    "component_check_output": "OK"
+                  },
+                  {
+                    "component_id": "nginx_service",
+                    "component_description": "nginx service",
+                    "component_health": 0,
+                    "component_check_output": "OK"
                   }
                 ]
               }
@@ -45,7 +57,7 @@ schemas:
         type: string
     displayName: Component Health
     get:
-      description: Get a list of the component's node health summaries.
+      description: Get the component health summaries by node_id.
       responses:
         200:
           description: Successful response.
@@ -53,16 +65,19 @@ schemas:
             application/json:
               schema: component
               example: |
+                # Example query for nginx_service in a 3-master cluster would return the component 
+                # health on the 3 masters on which that component runs. 
                 {
-                  "id": "service_manager",
-                  "name": "Service Manager",
-                  "version": "0.0.1",
-                  "health": 1
+                  "component_id": "nginx_service",
+                  "component_description": "nginx service",
+                  "component_health": 0,
+                  "component_check_output": "OK"
                 }
+              
     /nodes:
-      displayName: Component Nodes' Health
+      displayName: Component Nodes Health
       get:
-        description: Get a list of a component's nodes and their healths.
+        description: Get a list of the components node health summaries.
         responses:
           200:
             description: Successful response.
@@ -70,20 +85,23 @@ schemas:
               application/json:
                 schema: nodes
                 example: |
+                  # Example response from a 2-node cluster where one node has components with health > 0
                   {
                     "array": [
                       {
-                        "id": "srv1.hw.ca1.mesosphere.com",
-                        "type": "master",
-                        "health": 1
+                        "node_id": "ip-10-10-0-235",
+                        "node_role": "master",
+                        "node_health": 0,
                       },
                       {
-                        "id": "srv1.hw.ca1.mesosphere.com",
-                        "type": "agent",
-                        "health": 1
+                        "node_id": "ip-10-10-0-236",
+                        "node_role": "agent",
+                        "node_health": 1
                       }
                     ]
                   }
+      # Must ensure all node_id's contain are hyphened and not "." separated. Only matters if we go 
+      # through a proxy of some sort, but generally not great to "." separate in our URL requested. 
       /{node-id}:
         uriParameters:
           node-id:
@@ -91,7 +109,7 @@ schemas:
             type: string
         displayName: Node Health
         get:
-          description: Get a node's health status.
+          description: Get node health status.
           responses:
             200:
               description: Successful response.
@@ -99,15 +117,15 @@ schemas:
                 application/json:
                   schema: node
                   example: |
+                    # Example response from a healthy node with all components == 0
                     {
-                      "id": "srv1.hw.ca1.mesosphere.com",
-                      "description": "This is a node, it has a health check and a family.",
-                      "type": "agent",
-                      "health": 0,
-                      "health_check_name": "Infalliable Health Check",
-                      "output": "{\n\"path\": \"/health/cluster\"\n}"
+                      "node_id": "ip-10-10-0-236",
+                      "node_role": "agent",
+                      "node_health": 1,
+                      "component_check_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
                     }
 
+# This is possibly just a 301 -> /nodes, lets disucss. 
 /report:
   displayName: Health Report
   get:

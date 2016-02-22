@@ -3,29 +3,31 @@
   "id": "http://schema.dcos/health/component",
   "type": "object",
   "properties": {
-    "id": {
+    "component_id": {
       "title": "Component ID",
       "type": "string",
       "pattern": "^[\\w]+$"
     },
-    "name": {
+    "component_description": {
       "title": "Component name",
       "type": "string"
     },
-    "version": {
-      "title": "Component version",
-      "type": "string"
-    },
-    "health": {
+    "component_health": {
       "title": "Node health status",
       "type": "integer",
       "minimum": 0,
       "maximum": 3
+    },
+    "component_check_output": {
+      "title": "Output from health check",
+      "description": "Aggregated output from all nodes, will only show the unhealthiest.",
+      "type": "string"
     }
   },
   "required": [
-    "id",
-    "name",
-    "health"
+    "component_id",
+    "component_description",
+    "component_health",
+    "component_check_output"
   ]
 }
