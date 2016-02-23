@@ -9,12 +9,12 @@ import RequestUtil from '../utils/RequestUtil';
 
 function findWithID(stateObject, listProps, id) {
   let idCondition = {id};
-  let framework;
+  let searchItem;
   let length = listProps.length;
   for (let i = 0; i < length; i++) {
-    framework = _.findWhere(stateObject[listProps[i]], idCondition);
-    if (framework) {
-      return framework;
+    searchItem = _.findWhere(stateObject[listProps[i]], idCondition);
+    if (searchItem) {
+      return searchItem;
     }
   }
 
@@ -52,7 +52,7 @@ var TaskDirectoryActions = {
     let executor = findWithID(
       framework,
       ['executors', 'completed_executors'],
-      task.id
+      task.executor_id || task.id // Fallback to task id, if no executor id
     );
 
     if (!executor) {

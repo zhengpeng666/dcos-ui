@@ -73,6 +73,15 @@ describe('TaskDirectoryActions', function () {
       expect(result).toBeTruthy();
     });
 
+    it('finds path of a completed task with executor id', function () {
+      var result = TaskDirectoryActions.getInnerPath(
+        {completed_frameworks: [{id: 'foo', completed_executors: [{id: 'bar'}]}]},
+        {framework_id: 'foo', executor_id: 'bar'}
+      );
+
+      expect(result).toBeTruthy();
+    });
+
   });
 
 });
