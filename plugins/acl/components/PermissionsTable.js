@@ -6,7 +6,7 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLStore from '../stores/ACLStore';
-import ResourceTableUtil from '../../../src/js//utils/ResourceTableUtil';
+import ResourceTableUtil from '../../../src/js/utils/ResourceTableUtil';
 import TableUtil from '../../../src/js/utils/TableUtil';
 
 const METHODS_TO_BIND = [
