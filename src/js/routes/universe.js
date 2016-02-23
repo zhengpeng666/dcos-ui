@@ -1,8 +1,8 @@
 import {Route, Redirect} from 'react-router';
 
-import UniversePage from '../pages/UniversePage';
 import PackageDetailTab from '../pages/universe/PackageDetailTab';
 import PackagesTab from '../pages/universe/PackagesTab';
+import UniversePage from '../pages/UniversePage';
 
 let universeRoutes = {
   type: Route,
