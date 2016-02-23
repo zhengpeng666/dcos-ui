@@ -157,8 +157,7 @@ describe('UnitHealthActions', function () {
         AppDispatcher.unregister(id);
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_HEALTH_UNIT_NODE_SUCCESS);
-        expect(action.unitID).toEqual('foo');
-        expect(action.nodeID).toEqual('bar');
+        expect(action.data).toEqual({bar: 'baz'});
       });
 
       this.configuration.success({bar: 'baz'});

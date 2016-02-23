@@ -32,14 +32,14 @@ describe('UnitHealthStore', function () {
   it('should return an instance of HealthUnitsList', function () {
     Config.useFixtures = true;
     UnitHealthStore.fetchUnits();
-    var units = UnitHealthStore.get('units');
+    var units = UnitHealthStore.getUnits('units');
     expect(units instanceof HealthUnitsList).toBeTruthy();
   });
 
   it('should return all of the units it was given', function () {
     Config.useFixtures = true;
     UnitHealthStore.fetchUnits();
-    var units = UnitHealthStore.get('units').getItems();
+    var units = UnitHealthStore.getUnits().getItems();
     expect(units.length).toEqual(this.unitsFixture.array.length);
   });
 
@@ -58,7 +58,7 @@ describe('UnitHealthStore', function () {
         ]
       });
 
-      var units = UnitHealthStore.get('units').getItems();
+      var units = UnitHealthStore.getUnits().getItems();
       expect(units[0].id).toEqual('mesos');
       expect(units[0].name).toEqual('Mesos');
     });
