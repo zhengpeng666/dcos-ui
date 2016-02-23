@@ -12,6 +12,9 @@ describe('HistoryStore', function () {
       getCurrentRoutes: function () {
         return routes;
       },
+      getCurrentParams: function () {
+        return {};
+      },
       transitionTo: function () {}
     };
   });
@@ -22,7 +25,7 @@ describe('HistoryStore', function () {
       this.router.transitionTo = jasmine.createSpy();
 
       HistoryStore.goBackToPage(this.router);
-      expect(this.router.transitionTo).toHaveBeenCalledWith('dashboard');
+      expect(this.router.transitionTo).toHaveBeenCalledWith('dashboard', {});
     });
   });
 
