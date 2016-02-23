@@ -38,9 +38,7 @@ class PackageDetailTab extends mixin(StoreMixin) {
   }
 
   onCosmosPackagesStoreDescriptionError() {
-    this.setState({
-      hasError: true
-    });
+    this.setState({hasError: true});
   }
 
   onCosmosPackagesStoreDescriptionSuccess() {
