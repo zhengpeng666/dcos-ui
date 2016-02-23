@@ -59,7 +59,7 @@ var HistoryStore = Store.createStore({
   goBackToPage: function (router) {
     let routes = router.getCurrentRoutes();
     let pageBefore = routes[routes.length - 2];
-    router.transitionTo(pageBefore.name);
+    router.transitionTo(pageBefore.name, router.getCurrentParams());
   }
 });
 

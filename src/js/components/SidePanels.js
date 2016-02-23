@@ -36,14 +36,15 @@ class SidePanels extends React.Component {
       return;
     }
 
+    let router = this.context.router;
     this.setState({sidePanelSize: 'large'});
 
     if (closeInfo && closeInfo.closedByBackdrop) {
-      HistoryStore.goBackToPage(this.context.router);
+      router.transitionTo(this.props.openedPage, router.getCurrentParams());
       return;
     }
 
-    HistoryStore.goBack(this.context.router);
+    HistoryStore.goBack(router);
   }
 
   isOpen() {
