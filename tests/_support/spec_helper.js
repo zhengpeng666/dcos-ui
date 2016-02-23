@@ -1,4 +1,4 @@
-Cypress.addParentCommand('configureCluster', function(configuration) {
+Cypress.addParentCommand('configureCluster', function (configuration) {
   if (Object.keys(configuration).length === 0) {
     return;
   }
@@ -13,6 +13,18 @@ Cypress.addParentCommand('configureCluster', function(configuration) {
       .route(/history\/last/, 'fx:marathon-1-task/summary')
       .route(/state-summary/, 'fx:marathon-1-task/summary')
       .route(/state/, 'fx:marathon-1-task/state');
+  }
+
+  if (configuration.mesos === '1-service-with-executor-task') {
+    cy
+      .route(/apps/, 'fx:1-service-with-executor-task/app')
+      .route(/browse\.json/, 'fx:1-service-with-executor-task/browse')
+      .route(/dcos-version/, 'fx:dcos/dcos-version')
+      .route(/history\/minute/, 'fx:1-service-with-executor-task/history-minute')
+      .route(/history\/last/, 'fx:1-service-with-executor-task/summary')
+      .route(/master\/state/, 'fx:1-service-with-executor-task/state')
+      .route(/state-summary/, 'fx:1-service-with-executor-task/summary')
+      .route(/slave\/.*\/slave\(1\)\/state/, 'fx:1-service-with-executor-task/slave-state');
   }
 
   if (configuration.acl) {
@@ -99,11 +111,11 @@ Cypress.addParentCommand('visitUrl', function (options) {
     callback = function (win) {
       win.document.cookie = 'dcos-acs-info-cookie=' +
         'eyJ1aWQiOiJqb2UiLCJkZXNjcmlwdGlvbiI6IkpvZSBEb2UifQ==';
-    }
+    };
   } else if (options.identify) {
     callback = function (win) {
       win.localStorage.setItem('email', 'ui-bot@mesosphere.com');
-    }
+    };
   }
 
   if (options.identify && options.fakeAnalytics) {
@@ -112,11 +124,11 @@ Cypress.addParentCommand('visitUrl', function (options) {
       identifyCallback(win);
       win.analytics = {
         initialized: true,
-        page: function(){},
-        push: function(){},
-        track: function(){}
+        page: function () {},
+        push: function () {},
+        track: function () {}
       };
-    }
+    };
   }
 
   var url = 'http://localhost:4200/#' + options.url;
