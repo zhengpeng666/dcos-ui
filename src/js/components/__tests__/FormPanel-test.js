@@ -2,7 +2,6 @@ jest.dontMock('../FormPanel');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var TestUtils = require('react-addons-test-utils');
 
 var FormPanel = require('../FormPanel');
 
@@ -20,26 +19,34 @@ describe('FormPanel', function () {
         validation: function () { return true; },
         value: ''
       };
-      var definition = [
-        {
-          name: 'nestedDefinition',
-          definition: [nestedDefinition]
+      var definition = {
+        nestedDefinition: {
+          definition: [
+            {
+              name: 'nestedDefinition',
+              definition: [nestedDefinition]
+            }
+          ]
         },
-        {
-          fieldType: 'text',
-          name: 'Hostname',
-          placeholder: 'Hostname',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
+        anotherOne: {
+          definition: [
+            {
+              fieldType: 'text',
+              name: 'Hostname',
+              placeholder: 'Hostname',
+              required: false,
+              showError: false,
+              showLabel: true,
+              writeType: 'input',
+              validation: function () { return true; },
+              value: ''
+            }
+          ]
         }
-      ];
+      };
       this.container = document.createElement('div');
       this.instance = ReactDOM.render(
-        <FormPanel />,
+        <FormPanel definition={definition} />,
         this.container
       );
 
@@ -51,11 +58,11 @@ describe('FormPanel', function () {
     });
 
     it('flattens turns the 2nd level object to an item', function () {
-      expect(this.flattenedDefinition.length).toEqual(3);
+      expect(this.flattenedDefinition.length).toEqual(5);
     });
 
-    it('turns the nested definition into a React element', function () {
-      expect(React.isValidElement(this.flattenedDefinition[0])).toEqual(true);
+    it('creates a object with a render function', function () {
+      expect(typeof this.flattenedDefinition[0].render).toEqual('function');
     });
   });
 });
