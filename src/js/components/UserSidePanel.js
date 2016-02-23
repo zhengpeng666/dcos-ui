@@ -65,12 +65,14 @@ class UserSidePanel extends mixin(StoreMixin) {
       return;
     }
 
+    let router = this.context.router;
+
     if (closeInfo && closeInfo.closedByBackdrop) {
-      HistoryStore.goBackToPage(this.context.router);
+      router.transitionTo(this.props.openedPage, router.getCurrentParams());
       return;
     }
 
-    HistoryStore.goBack(this.context.router);
+    HistoryStore.goBack(router);
   }
 
   onUserStoreDeleteError(error) {
