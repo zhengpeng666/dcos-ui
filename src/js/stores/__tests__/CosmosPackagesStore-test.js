@@ -19,6 +19,8 @@ var packagesSearchFixture =
   require('./fixtures/MockPackagesSearchResponse.json');
 var RequestUtil = require('../../utils/RequestUtil');
 var UniversePackage = require('../../structs/UniversePackage');
+var UniverseInstalledPackagesList =
+  require('../../structs/UniverseInstalledPackagesList');
 var UniversePackagesList = require('../../structs/UniversePackagesList');
 
 describe('CosmosPackagesStore', function () {
@@ -219,10 +221,11 @@ describe('CosmosPackagesStore', function () {
       RequestUtil.json = this.requestFn;
     });
 
-    it('should return an instance of UniversePackagesList', function () {
+    it('should return an instance of UniverseInstalledPackagesList', function () {
       CosmosPackagesStore.fetchInstalledPackages('foo', 'bar');
       var installedPackages = CosmosPackagesStore.get('installedPackages');
-      expect(installedPackages instanceof UniversePackagesList).toBeTruthy();
+      expect(installedPackages instanceof UniverseInstalledPackagesList)
+        .toBeTruthy();
     });
 
     it('should return all of the installedPackages it was given', function () {
@@ -245,7 +248,7 @@ describe('CosmosPackagesStore', function () {
       it('stores installedPackages when event is dispatched', function () {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
-          data: [{gid: 'foo', bar: 'baz'}],
+          data: [{packageInformation: {gid: 'foo', bar: 'baz'}}],
           packageName: 'foo',
           appId: 'bar'
         });
@@ -264,7 +267,7 @@ describe('CosmosPackagesStore', function () {
         );
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
-          data: [{gid: 'foo', bar: 'baz'}],
+          data: [{packageInformation: {gid: 'foo', bar: 'baz'}}],
           packageName: 'foo',
           appId: 'bar'
         });
