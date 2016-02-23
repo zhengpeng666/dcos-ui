@@ -29,7 +29,8 @@ class UniversePage extends mixin(TabsMixin) {
 
     // Universe Tabs
     this.tabs_tabs = {
-      'universe-packages': 'Packages'
+      'universe-packages': 'Packages',
+      'universe-installed-packages': 'Installed'
     };
 
     this.setState({currentTab});
