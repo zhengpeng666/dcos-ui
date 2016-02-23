@@ -67,7 +67,7 @@ describe('NetworkingVIPSummariesStore', function () {
         data: [{vip: {ip: 'foo', port: 'bar', protocol: 'baz'}}]
       });
 
-      expect(mockedFn.mock.calls.length).toEqual(1);
+      expect(mockedFn.mock.calls.length).toEqual(2);
     });
 
   });

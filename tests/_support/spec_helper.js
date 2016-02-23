@@ -84,6 +84,12 @@ Cypress.addParentCommand('configureCluster', function(configuration) {
       .route(/acls\?type=service/, 'fx:acl/acls-unicode');
   }
 
+  if (configuration.networkVIPSummaries) {
+    cy
+      .route(/networking\/api\/v1\/summary/,
+        'fx:networking/networking-vip-summaries');
+  }
+
   // The app won't load until plugins are loaded
   var pluginsFixture = configuration.plugins || 'no-plugins';
   cy.route(/ui-config/, 'fx:config/' + pluginsFixture + '.json');

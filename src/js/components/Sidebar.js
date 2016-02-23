@@ -15,7 +15,7 @@ var MetadataStore = require('../stores/MetadataStore');
 var SidebarActions = require('../events/SidebarActions');
 var TooltipMixin = require('../mixins/TooltipMixin');
 
-let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'universe'];
+let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'network', 'universe'];
 
 var Sidebar = React.createClass({
 
