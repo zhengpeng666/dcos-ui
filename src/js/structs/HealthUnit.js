@@ -3,7 +3,7 @@ import UnitHealthStatus from '../constants/UnitHealthStatus';
 
 class HealthUnit extends Item {
   getHealth() {
-    let health = this.get('health');
+    let health = this.get('unit_health');
 
     return Object.keys(UnitHealthStatus).reduce(function (prev, healthObj) {
       if (UnitHealthStatus[healthObj].value === health) {

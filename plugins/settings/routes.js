@@ -29,11 +29,25 @@ let settingsRoutes = {
           name: 'settings-system-units',
           path: 'units/?',
           handler: UnitsHealthTab,
-          children: [{
-            type: Route,
-            name: 'settings-system-units-health-panel',
-            path: ':unitID'
-          }]
+          children: [
+            {
+              type: Route,
+              name: 'settings-system-units-unit-nodes-panel',
+              path: ':unitID/?',
+              children: [
+                {
+                  type: Route,
+                  name: 'settings-system-units-unit-nodes-node-panel',
+                  path: 'nodes/:unitNodeID'
+                }
+              ]
+            },
+            {
+              type: Redirect,
+              from: ':unitID/?',
+              to: 'settings-system-units-unit-nodes-panel'
+            }
+          ]
         },
         {
           type: Redirect,

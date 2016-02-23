@@ -8,7 +8,6 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 import {Table} from 'reactjs-components';
 
-import UnitHealthSidePanel from '../../components/UnitHealthSidePanel';
 import UnitHealthStore from '../../stores/UnitHealthStore';
 import UnitHealthUtil from '../../utils/UnitHealthUtil';
 import Config from '../../config/Config';
@@ -16,6 +15,7 @@ import FilterHeadline from '../../components/FilterHeadline';
 import FilterButtons from '../../components/FilterButtons';
 import FilterInputText from '../../components/FilterInputText';
 import ResourceTableUtil from '../../utils/ResourceTableUtil';
+import SidePanels from '../../components/SidePanels';
 import StringUtil from '../../utils/StringUtil';
 import TableUtil from '../../utils/TableUtil';
 
@@ -60,13 +60,11 @@ class UnitsHealthTab extends mixin(StoreMixin) {
 
   renderUnit(prop, unit) {
     return (
-      <div>
-        <Link to="settings-system-units-health-panel"
-          params={{unitID: unit.get('id')}}
-          className="headline">
-          {unit.get(prop)}
-        </Link>
-      </div>
+      <Link to="settings-system-units-unit-nodes-panel"
+        params={{unitID: unit.get('unit_id')}}
+        className="headline">
+        {unit.get(prop)}
+      </Link>
     );
   }
 
@@ -113,11 +111,11 @@ class UnitsHealthTab extends mixin(StoreMixin) {
         cacheCell: true,
         className: classNameFn,
         headerClassName: classNameFn,
-        prop: 'name',
+        prop: 'unit_description',
         render: this.renderUnit,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('id'),
-        heading: ResourceTableUtil.renderHeading({name: 'NAME'})
+        sortFunction: ResourceTableUtil.getPropSortFunction('unit_description'),
+        heading: ResourceTableUtil.renderHeading({unit_description: 'NAME'})
       },
       {
         className: classNameFn,
@@ -219,7 +217,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
             sortBy={{prop: 'health', order: 'desc'}}
             />
         </div>
-        <UnitHealthSidePanel
+        <SidePanels
           params={this.props.params}
           openedPage="settings-system-units" />
       </div>

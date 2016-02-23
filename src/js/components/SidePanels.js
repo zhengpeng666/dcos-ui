@@ -2,6 +2,8 @@ import _ from 'underscore';
 import React from 'react';
 import {SidePanel} from 'reactjs-components';
 
+import UnitHealthSidePanelContents from './UnitHealthSidePanelContents';
+import UnitNodeSidePanelContents from './UnitNodeSidePanelContents';
 import HistoryStore from '../stores/HistoryStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import NodeSidePanelContents from './NodeSidePanelContents';
@@ -53,7 +55,9 @@ class SidePanels extends React.Component {
     return (
       params.nodeID != null ||
       params.serviceName != null ||
-      params.taskID != null
+      params.taskID != null ||
+      params.unitID != null ||
+      (params.unitNodeID != null && params.unitID != null)
     ) && MesosSummaryStore.get('statesProcessed');
   }
 
@@ -89,12 +93,12 @@ class SidePanels extends React.Component {
     );
   }
 
-  getContents(ids) {
+  getContents(itemIDs) {
     if (!this.isOpen()) {
       return null;
     }
 
-    let {nodeID, serviceName, taskID} = ids;
+    let {unitID, unitNodeID, nodeID, serviceName, taskID} = itemIDs;
 
     if (nodeID != null) {
       return (
@@ -121,6 +125,22 @@ class SidePanels extends React.Component {
       );
     }
 
+    if (unitID != null) {
+      if (unitNodeID != null) {
+        return (
+          <UnitNodeSidePanelContents
+            itemID={unitID}
+            parentRouter={this.context.router} />
+        );
+      }
+
+      return (
+        <UnitHealthSidePanelContents
+          itemID={unitID}
+          parentRouter={this.context.router} />
+      );
+    }
+
     return null;
   }
 
@@ -130,10 +150,6 @@ class SidePanels extends React.Component {
 
   render() {
     let params = this.props.params;
-
-    let nodeID = params.nodeID;
-    let serviceName = params.serviceName;
-    let taskID = params.taskID;
 
     return (
       <SidePanel className="side-panel-detail"
@@ -145,7 +161,7 @@ class SidePanels extends React.Component {
         onClose={this.handlePanelClose}
         open={this.isOpen()}
         sidePanelClass={this.getSidePanelClass(this.state.sidePanelSize)}>
-        {this.getContents({nodeID, serviceName, taskID})}
+        {this.getContents(params)}
       </SidePanel>
     );
   }

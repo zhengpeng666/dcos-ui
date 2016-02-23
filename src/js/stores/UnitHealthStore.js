@@ -88,13 +88,13 @@ const UnitHealthStore = Store.createStore({
 
   processUnit: function (unitData) {
     let unitsByID = this.get('unitsByID');
-    let unit = unitsByID[unitData.id] || {};
+    let unit = unitsByID[unitData.unit_it] || {};
 
     unit = _.extend(unit, unitData);
-    unitsByID[unit.id] = unit;
+    unitsByID[unit.unit_it] = unit;
     this.set({unitsByID});
 
-    this.emit(HEALTH_UNIT_SUCCESS, unit.id);
+    this.emit(HEALTH_UNIT_SUCCESS, unit.unit_it);
   },
 
   processNodes: function (nodes) {

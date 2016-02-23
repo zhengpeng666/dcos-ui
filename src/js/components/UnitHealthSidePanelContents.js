@@ -72,8 +72,8 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({check: 'HEALTH CHECK NAME'}),
-        prop: 'check',
+        heading: ResourceTableUtil.renderHeading({health: 'HEALTH CHECK NAME'}),
+        prop: 'health',
         render: this.renderHealthCheckName
       },
       {
@@ -88,7 +88,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     ];
   }
 
-  getComponentInfo(component) {
+  getUnitInfo(unit) {
     let imageTag = (
       <div className="side-panel-icon icon icon-large icon-image-container
         icon-app-container">
@@ -101,10 +101,10 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
         {imageTag}
         <div>
           <h1 className="side-panel-content-header-label flush">
-            {component.get('name')}
+            {unit.get('id')}
           </h1>
           <div>
-            {this.getSubHeader(component)}
+            {this.getSubHeader(unit)}
           </div>
         </div>
       </div>
@@ -139,8 +139,22 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     );
   }
 
-  getSubHeader(component) {
-    let healthStatus = component.getHealth();
+  getNodeLink(node, linkText) {
+    let path = 'settings-system-units-unit-nodes-node-panel';
+    let params = {unitID: this.props.itemID, unitNodeID: node.get('id')};
+
+    return (
+      <a
+        className="emphasize clickable text-overflow"
+        onClick={() => { this.props.parentRouter.transitionTo(path, params); }}
+        title={linkText}>
+        {linkText}
+      </a>
+    );
+  }
+
+  getSubHeader(unit) {
+    let healthStatus = unit.getHealth();
 
     return (
       <ul className="list-inline flush-bottom">
@@ -148,9 +162,6 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
           <span className={healthStatus.classNames}>
             {healthStatus.title}
           </span>
-        </li>
-        <li>
-          Version {component.get('version')}
         </li>
       </ul>
     );
@@ -161,31 +172,31 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
       {
         items: [
           {
-            'id': 'srv1.hw.ca1.mesosphere.com',
+            'id': 'ip-10-10-0-235',
             'description': 'There has been enhanced damage inside the quantum inverted charge! There has been enhanced ripples next to the critical calibrated capacitors.',
             'type': 'master',
-            'health': 3,
+            'health': 0,
             'output': '{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}'
           },
           {
-            'id': 'srv2.hw.ca1.mesosphere.com',
+            'id': 'ip-10-10-0-236',
             'description': 'Enhanced time-matter field has to be inverted, because the critical delta region appears to be aligned. You need to invert the diagnostics.',
             'type': 'agent',
-            'health': 1,
+            'health': 0,
             'output': '{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}'
           },
           {
-            'id': 'srv3.hw.ca1.mesosphere.com',
+            'id': 'ip-10-10-0-237',
             'description': 'Fluctuating the auxiliary crystal damages fluctuations next to the auxiliary region. Fluctuating the auxiliary singularity affects fluctuations near the enhanced zone.',
             'type': 'agent',
             'health': 1,
             'output': '{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}'
           },
           {
-            'id': 'srv4.hw.ca1.mesosphere.com',
+            'id': 'ip-10-10-0-238',
             'description': 'There appears to be a critical crystal within the power which catches auxiliary ripples in the special capacitors.',
             'type': 'agent',
-            'health': 1,
+            'health': 0,
             'output': '{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}'
           }
         ]
@@ -197,12 +208,11 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     return data.getItems();
   }
 
-  // demo
-  getComponentData() {
+  getUnitData() {
     return new HealthUnit(
       {
-        'id': 'apache-zookeeper',
-        'name': 'Apache ZooKeeper',
+        'id': this.props.itemID,
+        'name': this.props.itemID,
         'version': '3.4.6',
         'health': 1
       }
@@ -226,22 +236,19 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     );
   }
 
-  renderHealthCheckName() {
-    return `${this.getComponentData().get('name')} Health Check`;
+  renderHealthCheckName(prop, node) {
+    let linkTitle = `${this.getUnitData().get('name')} Health Check`;
+    return this.getNodeLink(node, linkTitle);
   }
 
   renderNode(prop, node) {
-    return (
-      <div>
-        {node.get(prop)}
-      </div>
-    );
+    return this.getNodeLink(node, node.get(prop));
   }
 
   render() {
     // TODO get from store
     let {searchString, healthFilter} = this.state;
-    let component = this.getComponentData();
+    let unit = this.getUnitData();
     let visibleData = this.getVisibleData([], searchString, healthFilter);
 
     return (
@@ -250,7 +257,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
           container-pod-divider-bottom container-pod-divider-bottom-align-right
           container-pod-divider-inverse container-pod-short-top
           side-panel-content-header side-panel-section">
-          {this.getComponentInfo(component)}
+          {this.getUnitInfo(unit)}
         </div>
         <div className="side-panel-tab-content side-panel-section container
           container-fluid container-pod container-pod-short container-fluid

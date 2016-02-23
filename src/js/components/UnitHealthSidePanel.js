@@ -72,11 +72,12 @@ class UnitHealthSidePanel extends mixin(StoreMixin) {
   }
 
   render() {
-    let unitID = 'unit';
+    let unitID = this.props.params.unitID;
 
     return (
       <div>
-        <SidePanel className="side-panel-detail"
+        <SidePanel
+          className="side-panel-detail"
           header={this.getHeader()}
           headerContainerClass="container
             container-fluid container-fluid-narrow container-pod
