@@ -1,4 +1,4 @@
-describe.only('Universe Page', function () {
+describe('Universe Page', function () {
 
   beforeEach(function () {
     cy.configureCluster({
