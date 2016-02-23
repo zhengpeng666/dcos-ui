@@ -135,9 +135,9 @@ const listenForConfigChange = function () {
 };
 
 module.exports = {
-  Store: Store,
+  Store,
   dispatch: createDispatcher(APPLICATION),
-  listenForConfigChange: listenForConfigChange,
-  Hooks: Hooks
+  listenForConfigChange,
+  Hooks
 };
 

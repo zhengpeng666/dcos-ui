@@ -6,6 +6,7 @@ var _ = require('underscore');
 
 var PluginBridge;
 
+// Hack until we fix circular dependency - DCOS-5040
 if (global.__DEV__) {
   PluginBridge = require('../pluginBridge/PluginBridge');
 }
