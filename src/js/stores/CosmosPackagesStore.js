@@ -4,6 +4,8 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../events/AppDispatcher';
 import CosmosPackagesActions from '../events/CosmosPackagesActions';
 import EventTypes from '../constants/EventTypes';
+import UniverseInstalledPackagesList from
+  '../structs/UniverseInstalledPackagesList';
 import UniversePackage from '../structs/UniversePackage';
 import UniversePackagesList from '../structs/UniversePackagesList';
 
@@ -45,13 +47,15 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   processInstalledPackagesSuccess: function (packages, name, appId) {
-    this.set({installedPackages: new UniversePackagesList({items: packages})});
+    this.set({
+      installedPackages: new UniverseInstalledPackagesList({items: packages})
+    });
 
     this.emit(EventTypes.COSMOS_LIST_CHANGE, packages, name, appId);
   },
 
-  processInstalledPackagesError: function (packages, name, appId) {
-    this.emit(EventTypes.COSMOS_LIST_ERROR, packages, name, appId);
+  processInstalledPackagesError: function (error, name, appId) {
+    this.emit(EventTypes.COSMOS_LIST_ERROR, error, name, appId);
   },
 
   processPackageDescriptionSuccess: function (cosmosPackage, name, version) {
