@@ -8,7 +8,7 @@
       "type": "string",
       "pattern": "^[\\w]+$"
     },
-    "unit_description": {
+    "unit_title": {
       "title": "Unit name",
       "type": "string"
     },
@@ -18,7 +18,7 @@
       "minimum": 0,
       "maximum": 3
     },
-    "unit_check_output": {
+    "unit_output": {
       "title": "Output from health check",
       "description": "Aggregated output from all nodes, will only show the unhealthiest.",
       "type": "string"
@@ -26,7 +26,7 @@
   },
   "required": [
     "unit_id",
-    "unit_description",
+    "unit_title",
     "unit_health"
   ]
 }

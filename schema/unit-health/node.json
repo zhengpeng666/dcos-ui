@@ -3,15 +3,15 @@
   "id": "http://schema.dcos/system/health/node",
   "type": "object",
   "properties": {
-    "node_id": {
-      "title": "Node ID",
+    "hostname": {
+      "title": "Host Name",
       "type": "string",
       "pattern": "^[\\w\\.]+$"
     },
     "node_role": {
       "title": "Node Type",
       "type": "string",
-      "enum": ["master", "agent"]
+      "enum": ["master", "agent", "unknown"]
     },
     "node_health": {
       "title": "Node health status",
@@ -19,7 +19,7 @@
       "minimum": 0,
       "maximum": 3
     },
-    "unit_check_output": {
+    "unit_output": {
       "title": "Node health check output",
       "type": "string"
     }
