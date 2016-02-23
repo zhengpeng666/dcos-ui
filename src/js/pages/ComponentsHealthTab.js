@@ -8,14 +8,14 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 import {Table} from 'reactjs-components';
 
-import ComponentHealthStore from '../../stores/ComponentHealthStore';
-import Config from '../../config/Config';
-import FilterHeadline from '../../../src/js/components/FilterHeadline';
-import FilterButtons from '../../../src/js/components/FilterButtons';
-import FilterInputText from '../../../src/js/components/FilterInputText';
-import ResourceTableUtil from '../../../src/js/utils/ResourceTableUtil';
-import StringUtil from '../../../src/js/utils/StringUtil';
-import TableUtil from '../../../src/js/utils/TableUtil';
+import ComponentHealthStore from '../stores/ComponentHealthStore';
+import Config from '../config/Config';
+import FilterHeadline from '../components/FilterHeadline';
+import FilterButtons from '../components/FilterButtons';
+import FilterInputText from '../components/FilterInputText';
+import ResourceTableUtil from '../utils/ResourceTableUtil';
+import StringUtil from '../utils/StringUtil';
+import TableUtil from '../utils/TableUtil';
 
 const METHODS_TO_BIND = [
   'getHandleHealthFilterChange',

@@ -1,13 +1,13 @@
-jest.dontMock('../BannerPlugin');
-jest.dontMock('../../components/icons/IconInfo');
-jest.dontMock('../../utils/DOMUtils');
+jest.dontMock('../pluginHooks');
+jest.dontMock('../../../src/js/components/icons/IconInfo');
+jest.dontMock('../../../src/js/utils/DOMUtils');
 
 var _ = require('underscore');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
-var BannerPlugin = require('../BannerPlugin');
+var BannerPlugin = require('../pluginHooks');
 var defaultConfiguration = BannerPlugin.configuration;
 
 describe('BannerPlugin', function () {

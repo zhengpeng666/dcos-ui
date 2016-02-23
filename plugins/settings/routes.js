@@ -1,6 +1,6 @@
 import {Route, Redirect} from 'react-router';
 
-import ComponentsHealthTab from '../health/pages/ComponentsHealthTab';
+import ComponentsHealthTab from '../../src/js/pages/ComponentsHealthTab';
 import DirectoriesTab from '../directories/pages/DirectoriesTab';
 import GroupsTab from '../groups/pages/GroupsTab';
 import OverviewTab from '../overview/pages//OverviewTab';

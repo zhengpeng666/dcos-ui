@@ -2,8 +2,8 @@
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import IconInfo from '../components/icons/IconInfo';
-import DOMUtils from '../utils/DOMUtils';
+import IconInfo from '../../src/js/components/icons/IconInfo';
+import DOMUtils from '../../src/js/utils/DOMUtils';
 
 const BannerPlugin = {
   configuration: {
@@ -17,17 +17,17 @@ const BannerPlugin = {
   },
 
   /**
-   * @param  {Object} Plugins The Plugins API
+   * @param  {Object} Hooks The Hooks API
    */
-  initialize: function (Plugins) {
-    Plugins.addAction(
+  initialize: function (Hooks) {
+    Hooks.addAction(
       'applicationRendered',
       this.applicationRendered.bind(this)
     );
-    Plugins.addFilter('applicationContents',
+    Hooks.addFilter('applicationContents',
       this.applicationContents.bind(this)
     );
-    Plugins.addFilter('overlayNewWindowButton',
+    Hooks.addFilter('overlayNewWindowButton',
       this.overlayNewWindowButton.bind(this)
     );
   },
