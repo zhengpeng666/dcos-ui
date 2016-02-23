@@ -6,7 +6,7 @@ let Utils = {
   getUserMetadata: function () {
     return cookie.parse(global.document.cookie)[userCookieKey];
   },
-  emtpyCookieWithExpiry(date) {
+  emptyCookieWithExpiry(date) {
     return cookie.serialize(
       userCookieKey, '', {expires: date}
     );

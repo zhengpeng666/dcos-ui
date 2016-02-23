@@ -106,7 +106,7 @@ var ACLAuthStore = Store.createStore({
 
   processLogoutSuccess: function () {
     // Set the cookie to an empty string.
-    global.document.cookie = Utils.emtpyCookieWithExpiry(new Date(1970));
+    global.document.cookie = Utils.emptyCookieWithExpiry(new Date(1970));
 
     this.resetRole();
     this.emit(ACL_AUTH_USER_LOGOUT_SUCCESS);
