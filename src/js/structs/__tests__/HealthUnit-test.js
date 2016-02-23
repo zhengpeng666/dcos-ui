@@ -9,16 +9,15 @@ describe('HealthUnit', function () {
 
     it('returns a UnitHealthStatus object', function () {
       var healthItem = new HealthUnit({
-        'id': 'service_manager',
-        'name': 'Service Manager',
-        'version': '0.0.1',
-        'health': 1
+        'unit_id': 'service_manager',
+        'unit_title': 'Service Manager',
+        'unit_health': 1
       });
 
       expect(healthItem.getHealth()).toEqual({
-        title: 'Healthy',
+        title: 'Unhealthy',
         value: 1,
-        classNames: 'text-success'
+        classNames: 'text-danger'
       });
     });
 

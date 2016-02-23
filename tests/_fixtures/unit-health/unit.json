@@ -1,6 +1,6 @@
 {
   "unit_id": "mesos_dns_service",
-  "unit_description": "Mesos DNS",
+  "unit_title": "Mesos DNS",
   "unit_health": 1,
-  "unit_check_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+  "unit_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
 }
