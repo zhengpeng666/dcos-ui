@@ -6,7 +6,6 @@ import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
 var GetSetMixin = require('../mixins/GetSetMixin');
 import MetadataActions from '../events/MetadataActions';
-// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 var MetadataStore = Store.createStore({
   storeID: 'metadata',

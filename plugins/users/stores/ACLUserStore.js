@@ -39,7 +39,6 @@ import ACLUsersActions from '../actions/ACLUsersActions';
 import AppDispatcher from '../../../src/js/events/AppDispatcher';
 import GetSetMixin from '../../../src/js/mixins/GetSetMixin';
 import User from '../../../src/js/structs/User';
-// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 /**
  * This store will keep track of users and their details

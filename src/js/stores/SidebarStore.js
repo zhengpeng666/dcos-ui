@@ -4,7 +4,6 @@ var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
 import EventTypes from '../constants/EventTypes';
 var GetSetMixin = require('../mixins/GetSetMixin');
-// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 var SidebarStore = Store.createStore({
   storeID: 'sidebar',

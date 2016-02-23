@@ -47,7 +47,6 @@ import ACLGroupsActions from '../actions/ACLGroupsActions';
 import AppDispatcher from '../../../src/js/events/AppDispatcher';
 import GetSetMixin from '../../../src/js/mixins/GetSetMixin';
 import Group from '../../../src/js/structs/Group';
-// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 /**
  * This store will keep track of groups and their details

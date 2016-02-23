@@ -28,7 +28,6 @@ import ACLDirectoriesActions from '../actions/ACLDirectoriesActions';
 import AppDispatcher from '../../../src/js/events/AppDispatcher';
 import GetSetMixin from '../../../src/js/mixins/GetSetMixin';
 import List from '../../../src/js/structs/List';
-// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 var ACLDirectoriesStore = Store.createStore({
   storeID: 'aclDirectories',

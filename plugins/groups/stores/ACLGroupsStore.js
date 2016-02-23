@@ -16,7 +16,6 @@ import ACLGroupsActions from '../actions/ACLGroupsActions';
 import AppDispatcher from '../../../src/js/events/AppDispatcher';
 import GetSetMixin from '../../../src/js/mixins/GetSetMixin';
 import GroupsList from '../../../src/js/structs/GroupsList';
-// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 const ACLGroupsStore = Store.createStore({
   storeID: 'groups',

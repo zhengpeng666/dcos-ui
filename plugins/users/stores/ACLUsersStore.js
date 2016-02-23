@@ -16,7 +16,6 @@ import ACLUsersActions from '../actions/ACLUsersActions';
 import AppDispatcher from '../../../src/js/events/AppDispatcher';
 import GetSetMixin from '../../../src/js/mixins/GetSetMixin';
 import UsersList from '../../../src/js/structs/UsersList';
-// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 const ACLUsersStore = Store.createStore({
   storeID: 'users',
