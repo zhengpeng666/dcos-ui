@@ -111,6 +111,8 @@ import {
 
   NETWORKING_BACKEND_CONNECTIONS_CHANGE,
   NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR,
+  NETWORKING_NODE_MEMBERSHIP_CHANGE,
+  NETWORKING_NODE_MEMBERSHIP_REQUEST_ERROR,
   NETWORKING_VIPS_CHANGE,
   NETWORKING_VIPS_REQUEST_ERROR,
   NETWORKING_VIP_DETAIL_CHANGE,
@@ -229,8 +231,8 @@ const ListenersDescription = {
   networkingBackendConnections: {
     store: NetworkingBackendConnectionsStore,
     events: {
-      backendConnectionsSuccess: NETWORKING_BACKEND_CONNECTIONS_CHANGE,
-      backendConnectionsError: NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR
+      success: NETWORKING_BACKEND_CONNECTIONS_CHANGE,
+      error: NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -241,8 +243,8 @@ const ListenersDescription = {
   networkingNodeMemberships: {
     store: NetworkingNodeMembershipsStore,
     events: {
-      nodeMembershipsSuccess: NETWORKING_BACKEND_CONNECTIONS_CHANGE,
-      nodeMembershipsError: NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR
+      success: NETWORKING_NODE_MEMBERSHIP_CHANGE,
+      error: NETWORKING_NODE_MEMBERSHIP_REQUEST_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -253,10 +255,10 @@ const ListenersDescription = {
   networkingVIPs: {
     store: NetworkingVIPsStore,
     events: {
-      vipsSuccess: NETWORKING_VIPS_CHANGE,
-      vipsError: NETWORKING_VIPS_REQUEST_ERROR,
-      vipDetailSuccess: NETWORKING_VIP_DETAIL_CHANGE,
-      vipDetailError: NETWORKING_VIP_DETAIL_REQUEST_ERROR
+      success: NETWORKING_VIPS_CHANGE,
+      error: NETWORKING_VIPS_REQUEST_ERROR,
+      detailSuccess: NETWORKING_VIP_DETAIL_CHANGE,
+      detailError: NETWORKING_VIP_DETAIL_REQUEST_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -267,8 +269,8 @@ const ListenersDescription = {
   networkingVIPSummaries: {
     store: NetworkingVIPSummariesStore,
     events: {
-      vipSummariesSuccess: NETWORKING_VIP_SUMMARIES_CHANGE,
-      vipSummariesError: NETWORKING_VIP_SUMMARIES_ERROR
+      success: NETWORKING_VIP_SUMMARIES_CHANGE,
+      error: NETWORKING_VIP_SUMMARIES_ERROR
     },
     unmountWhen: function () {
       return true;

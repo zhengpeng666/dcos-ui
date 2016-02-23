@@ -13,8 +13,8 @@ import VIPsTable from '../components/VIPsTable';
 
 const METHODS_TO_BIND = [
   'handleSearchStringChange',
-  'onNetworkingVIPSummariesStoreVipSummariesError',
-  'onNetworkingVIPSummariesStoreVipSummariesSuccess',
+  'onNetworkingVIPSummariesStoreError',
+  'onNetworkingVIPSummariesStoreSuccess',
   'resetFilter'
 ];
 
@@ -34,10 +34,7 @@ class NetworkPage extends mixin(StoreMixin) {
     this.store_listeners = [
       {
         name: 'networkingVIPSummaries',
-        events: [
-          'vipSummariesSuccess',
-          'vipSummariesError'
-        ]
+        events: ['success', 'error']
       }
     ];
   }
@@ -47,11 +44,11 @@ class NetworkPage extends mixin(StoreMixin) {
     NetworkingVIPSummariesStore.fetchVIPSummaries();
   }
 
-  onNetworkingVIPSummariesStoreVipSummariesError() {
+  onNetworkingVIPSummariesStoreError() {
     this.setState({hasErrors: true});
   }
 
-  onNetworkingVIPSummariesStoreVipSummariesSuccess() {
+  onNetworkingVIPSummariesStoreSuccess() {
     this.setState({receivedVIPSummaries: true});
   }
 
