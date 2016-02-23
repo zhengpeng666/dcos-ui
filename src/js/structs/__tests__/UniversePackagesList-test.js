@@ -18,4 +18,53 @@ describe('UniversePackagesList', function () {
 
   });
 
+  describe('#filterItems', function () {
+
+    it('should filter by packageName', function () {
+      var items = [
+        {packageName: 'foo'},
+        {packageName: 'bar'}
+      ];
+      var list = new UniversePackagesList({items});
+      items = list.filterItems('bar').getItems();
+      expect(items.length).toEqual(1);
+      expect(items[0].get('packageName')).toEqual('bar');
+    });
+
+    it('should filter by description', function () {
+      var items = [
+        {description: 'foo'},
+        {description: 'bar'}
+      ];
+      var list = new UniversePackagesList({items});
+      items = list.filterItems('foo').getItems();
+      expect(items.length).toEqual(1);
+      expect(items[0].get('description')).toEqual('foo');
+    });
+
+    it('should filter by tags', function () {
+      var items = [
+        {tags: ['foo', 'bar']},
+        {tags: ['foo']},
+        {tags: []}
+      ];
+      var list = new UniversePackagesList({items});
+      items = list.filterItems('foo').getItems();
+      expect(items.length).toEqual(2);
+      expect(items[0].get('tags')).toEqual(['foo', 'bar']);
+      expect(items[1].get('tags')).toEqual(['foo']);
+    });
+
+    it('should handle filter by tags with null elements', function () {
+      var items = [
+        {tags: ['foo', 'bar']},
+        {tags: ['foo']},
+        {tags: null}
+      ];
+      var list = new UniversePackagesList({items});
+      expect(list.filterItems.bind(list, 'foo')).not.toThrow();
+    });
+
+  });
+
 });
