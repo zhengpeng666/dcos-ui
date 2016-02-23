@@ -69,7 +69,7 @@ class MultipleForm extends React.Component {
     );
   }
 
-  getSideTabs(multipleDefinition) {
+  getSideContent(multipleDefinition) {
     let tabValues = _.values(multipleDefinition);
     let content = null;
 
@@ -158,7 +158,7 @@ class MultipleForm extends React.Component {
 
     return (
       <div className={classSet}>
-        {this.getSideTabs(multipleDefinition)}
+        {this.getSideContent(multipleDefinition)}
         {this.getFormPanel(selectedTabDefinition)}
       </div>
     );
