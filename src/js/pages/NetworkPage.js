@@ -24,7 +24,8 @@ class NetworkPage extends mixin(StoreMixin) {
 
     this.state = {
       receivedVIPSummaries: false,
-      searchString: ''
+      searchString: '',
+      vipSummariesErrorCount: 0
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -45,11 +46,12 @@ class NetworkPage extends mixin(StoreMixin) {
   }
 
   onNetworkingVIPSummariesStoreError() {
-    this.setState({hasErrors: true});
+    let vipSummariesErrorCount = this.state.vipSummariesErrorCount + 1;
+    this.setState({vipSummariesErrorCount});
   }
 
   onNetworkingVIPSummariesStoreSuccess() {
-    this.setState({receivedVIPSummaries: true});
+    this.setState({receivedVIPSummaries: true, vipSummariesErrorCount: 0});
   }
 
   getEmptyNetworkPageContent() {
@@ -75,11 +77,7 @@ class NetworkPage extends mixin(StoreMixin) {
     }
 
     return vipSummaries.filter(function (vipSummary) {
-      if (vipSummary.vip.indexOf(searchString) > -1) {
-        return true;
-      }
-
-      return false;
+      return vipSummary.vip.indexOf(searchString) > -1;
     });
   }
 
@@ -159,7 +157,7 @@ class NetworkPage extends mixin(StoreMixin) {
 
     if (this.isLoading()) {
       content = this.getLoadingScreen();
-    } else if (this.state.hasErrors) {
+    } else if (this.state.vipSummariesErrorCount >= 3) {
       content = this.getErrorScreen();
     } else {
       content = this.getNetworkPageContent();

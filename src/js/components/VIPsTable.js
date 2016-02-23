@@ -16,8 +16,6 @@ class VIPsTable extends React.Component {
    constructor() {
      super();
 
-     this.state = {};
-
      METHODS_TO_BIND.forEach((method) => {
        this[method] = this[method].bind(this);
      });
@@ -125,11 +123,7 @@ class VIPsTable extends React.Component {
   }
 
   hideColumnAtMini(prop) {
-    if (COLUMNS_TO_HIDE_MINI.indexOf(prop) > -1) {
-      return true;
-    }
-
-    return false;
+    return COLUMNS_TO_HIDE_MINI.indexOf(prop) > -1;
   }
 
   renderPercentage(prop, item) {
@@ -151,5 +145,23 @@ class VIPsTable extends React.Component {
     );
   }
 }
+
+VIPsTable.defaultProps = {
+  vips: []
+};
+
+VIPsTable.propTypes = {
+  vips: React.PropTypes.arrayOf(
+    React.PropTypes.shape({
+      vip: React.PropTypes.string,
+      successLastMinute: React.PropTypes.number,
+      failLastMinute: React.PropTypes.number,
+      failurePerecent: React.PropTypes.number,
+      applicationReachabilityPercent: React.PropTypes.number,
+      machineReachabilityPercent: React.PropTypes.number,
+      p99Latency: React.PropTypes.number
+    })
+  )
+};
 
 module.exports = VIPsTable;

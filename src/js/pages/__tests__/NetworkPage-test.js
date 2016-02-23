@@ -1,6 +1,5 @@
 jest.dontMock('../NetworkPage');
 jest.dontMock('../../components/VIPsTable');
-jest.dontMock('../../utils/ResourceTableUtil');
 jest.dontMock('../../stores/NetworkingVIPSummariesStore');
 jest.dontMock('../../../../tests/_fixtures/networking/networking-vip-summaries.json');
 
