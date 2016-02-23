@@ -155,10 +155,10 @@ class NetworkPage extends mixin(StoreMixin) {
   render() {
     let content = null;
 
-    if (this.isLoading()) {
-      content = this.getLoadingScreen();
-    } else if (this.state.vipSummariesErrorCount >= 3) {
+    if (this.state.vipSummariesErrorCount >= 3) {
       content = this.getErrorScreen();
+    } else if (this.isLoading()) {
+      content = this.getLoadingScreen();
     } else {
       content = this.getNetworkPageContent();
     }

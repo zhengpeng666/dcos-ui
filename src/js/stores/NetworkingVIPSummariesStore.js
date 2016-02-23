@@ -9,7 +9,7 @@ import GetSetMixin from '../mixins/GetSetMixin';
 import NetworkingActions from '../events/NetworkingActions';
 import VIPSummaryList from '../structs/VIPSummaryList';
 
-var requestInterval = null;
+let requestInterval = null;
 
 function startPolling() {
   if (requestInterval == null) {

@@ -140,8 +140,7 @@ class VIPsTable extends React.Component {
         data={this.props.vips}
         idAttribute="vip"
         itemHeight={TableUtil.getRowHeight()}
-        sortBy={{prop: 'vip', order: 'desc'}}
-        transition={false} />
+        sortBy={{prop: 'vip', order: 'desc'}} />
     );
   }
 }
