@@ -1,4 +1,4 @@
-function schemaToFieldDefinition(fieldName, fieldProps) {
+function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
   let value = '';
 
   if (fieldProps.default != null) {
@@ -10,6 +10,7 @@ function schemaToFieldDefinition(fieldName, fieldProps) {
 
   let definition = {
     fieldType: 'text',
+    formParent,
     name: fieldName,
     placeholder: '',
     required: false,
@@ -69,7 +70,8 @@ let SchemaUtil = {
         if (secondLevelObject.properties == null) {
           fieldDefinition = schemaToFieldDefinition(
             secondLevelProp,
-            secondLevelObject
+            secondLevelObject,
+            topLevelProp
           );
         } else {
           fieldDefinition = nestedSchemaToFieldDefinition(

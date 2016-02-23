@@ -8,20 +8,28 @@ import SchemaUtil from '../utils/SchemaUtil';
 
 const METHODS_TO_BIND = [
   'changeReviewState',
-  'handleInstallClick'
+  'handleInstallClick',
+  'onResize'
 ];
+const MOBILE_WIDTH = 480;
 
 class AdvancedConfigModal extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      reviewingConfig: false
+      reviewingConfig: false,
+      isMobileWidth: false
     };
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+  }
+
+  componentWillMount() {
+    this.setState({isMobileWidth: this.isMobileWidth(global.window)});
+    global.window.addEventListener('resize', this.onResize);
   }
 
   componentDidUpdate(prevProps) {
@@ -30,12 +38,33 @@ class AdvancedConfigModal extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    global.window.removeEventListener('resize', this.onResize);
+  }
+
   changeReviewState(reviewing) {
     this.setState({reviewingConfig: reviewing});
   }
 
+  onResize(e) {
+    if (!this.props.open) {
+      return;
+    }
+
+    var isMobileWidth = this.isMobileWidth(e.target);
+    if (isMobileWidth) {
+      this.setState({isMobileWidth: true});
+    } else if (this.state.isMobileWidth) {
+      this.setState({isMobileWidth: false});
+    }
+  }
+
   handleInstallClick() {
     console.log('Installing!');
+  }
+
+  isMobileWidth(element) {
+    return element.innerWidth <= MOBILE_WIDTH;
   }
 
   isReviewing() {
@@ -86,7 +115,11 @@ class AdvancedConfigModal extends React.Component {
       );
     }
 
-    return <MultipleForm multipleDefinition={this.props.multipleDefinition}/>;
+    return (
+      <MultipleForm
+        multipleDefinition={this.props.multipleDefinition}
+        isMobileWidth={this.state.isMobileWidth}/>
+    );
   }
 
   render() {
