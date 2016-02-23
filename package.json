@@ -118,26 +118,28 @@
       "/.module-cache/"
     ],
     "unmockedModulePathPatterns": [
+      "AppReducer",
+      "babel-runtime",
       "browser-info",
       "classnames",
       "d3",
       "events",
       "flux",
+      "Hooks",
       "jasmine-reporters",
       "localStorage",
       "mesosphere-shared-reactjs",
       "md5",
+      "PluginBridge",
       "react",
       "reactjs-components",
       "reactjs-mixin",
       "react-router",
+      "redux",
       "src/js/constants",
       "src/js/utils",
       "structs",
-      "underscore",
-      "babel-runtime",
-      "redux",
-      "AppReducer"
+      "underscore"
     ],
     "testPathIgnorePatterns": [
       "/tmp/",

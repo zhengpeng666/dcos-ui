@@ -1,7 +1,13 @@
-import ExamplePlugin from './example/example';
+import Auth from './auth';
+import Settings from './settings';
+import Banner from './banner';
+import Tracking from './tracking';
 
 const pluginList = {
-  'example': ExamplePlugin
+  'authentication': Auth,
+  'settings': Settings,
+  'banner': Banner,
+  'tracking': Tracking
 };
 
 module.exports = {

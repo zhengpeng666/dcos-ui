@@ -1,4 +1,4 @@
-var Actions = require('../actions/Actions');
+var Actions = require('../../../plugins/tracking/actions/Actions');
 import ActionTypes from '../constants/ActionTypes';
 var AppDispatcher = require('./AppDispatcher');
 var Config = require('../config/Config');

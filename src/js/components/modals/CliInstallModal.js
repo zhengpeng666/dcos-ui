@@ -3,7 +3,7 @@ var classNames = require('classnames');
 import {Modal} from 'reactjs-components';
 var React = require('react');
 
-import Plugins from '../../plugins/Plugins';
+import {Hooks} from '../../pluginBridge/PluginBridge';
 
 var CliInstructionsModal = React.createClass({
 
@@ -41,7 +41,7 @@ var CliInstructionsModal = React.createClass({
     var cliSnippet = '';
 
     if (OS === 'Windows') {
-      let appendText = Plugins.applyFilter(
+      let appendText = Hooks.applyFilter(
         'installCLIModalAppendInstructions', ''
       );
       requirements = (
@@ -64,7 +64,7 @@ var CliInstructionsModal = React.createClass({
           </ul>
         </div>
       );
-      let cliInstallScriptUrl = Plugins.applyFilter(
+      let cliInstallScriptUrl = Hooks.applyFilter(
         'installCLIModalCLIInstallURL',
         'https://downloads.mesosphere.com/dcos-cli/install.sh'
       );

@@ -4,7 +4,8 @@ import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import {APPLICATION} from '../constants/PluginConstants';
 import AppReducer from './AppReducer';
 import Config from '../config/Config';
-import Plugins from '../../../plugins/index';
+import Plugins from '../../../plugins';
+import Hooks from './Hooks';
 
 const initialState = {};
 const middleware = [];
@@ -30,7 +31,7 @@ if (Config.environment === 'development'
 }
 
 // Create Redux Store
-const Store = createStore(
+let Store = createStore(
   combineReducers(reducers),
   initialState,
   compose(
@@ -46,7 +47,6 @@ const Store = createStore(
  */
 const initialize = function (pluginsConfig) {
   let pluginList = Plugins.getAvailablePlugins();
-
   Object.keys(pluginsConfig).forEach(function (pluginID) {
     // Make sure plugin is bundled
     if (!(pluginID in pluginList)) {
@@ -62,6 +62,7 @@ const initialize = function (pluginsConfig) {
   Store.replaceReducer(
     combineReducers(reducers)
   );
+  Hooks.notifyPluginsLoaded();
 };
 
 /**
@@ -90,7 +91,9 @@ const bootstrapPlugin = function (name, plugin, config) {
   // Inject Application key constant and configOptions if specified
   let options = {
     APPLICATION: APPLICATION,
-    config: config || {}
+    config: config || {},
+    appConfig: Config,
+    Hooks: Hooks
   };
 
   let pluginReducer = plugin(
@@ -132,8 +135,9 @@ const listenForConfigChange = function () {
 };
 
 module.exports = {
-  Store: Store,
+  Store,
   dispatch: createDispatcher(APPLICATION),
-  listenForConfigChange: listenForConfigChange
+  listenForConfigChange,
+  Hooks
 };
 

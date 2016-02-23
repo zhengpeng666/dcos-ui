@@ -9,7 +9,7 @@ import ConfigStore from '../stores/ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import HistoryStore from '../stores/HistoryStore';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
-var IntercomStore = require('../stores/IntercomStore');
+var IntercomStore = require('../../../plugins/tracking/stores/IntercomStore');
 var MetadataStore = require('../stores/MetadataStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var Modals = require('../components/Modals');

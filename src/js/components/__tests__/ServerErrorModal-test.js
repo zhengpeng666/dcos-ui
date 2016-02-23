@@ -1,11 +1,11 @@
 jest.dontMock('../ServerErrorModal');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../stores/ACLAuthStore');
-jest.dontMock('../../stores/ACLGroupsStore');
-jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../stores/ACLStore');
-jest.dontMock('../../stores/ACLUsersStore');
-jest.dontMock('../../stores/ACLUserStore');
+jest.dontMock('../../../../plugins/auth/stores/ACLAuthStore');
+jest.dontMock('../../../../plugins/groups/stores/ACLGroupsStore');
+jest.dontMock('../../../../plugins/groups/stores/ACLGroupStore');
+jest.dontMock('../../../../plugins/acl/stores/ACLStore');
+jest.dontMock('../../../../plugins/users/stores/ACLUsersStore');
+jest.dontMock('../../../../plugins/users/stores/ACLUserStore');
 jest.dontMock('../../stores/MarathonStore');
 jest.dontMock('../../stores/MesosStateStore');
 jest.dontMock('../../stores/MesosSummaryStore');

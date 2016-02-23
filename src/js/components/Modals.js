@@ -1,14 +1,14 @@
 var browserInfo = require('browser-info');
 var React = require('react');
 
-var Actions = require('../actions/Actions');
+var Actions = require('../../../plugins/tracking/actions/Actions');
 var CliInstallModal = require('./modals/CliInstallModal');
 var ErrorModal = require('./modals/ErrorModal');
 import EventTypes from '../constants/EventTypes';
+import {Hooks} from '../pluginBridge/PluginBridge';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 import IdentifyModal from './modals/IdentifyModal';
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
-import Plugins from '../plugins/Plugins';
 var SidebarStore = require('../stores/SidebarStore');
 var VersionsModal = require('./modals/VersionsModal');
 
@@ -52,7 +52,7 @@ var Modals = React.createClass({
 
   componentWillMount: function () {
     this.setState({
-      hasIdentity: Plugins.applyFilter('applicationHasIdentity', true)
+      hasIdentity: Hooks.applyFilter('applicationHasIdentity', true)
     });
   },
 
@@ -116,7 +116,7 @@ var Modals = React.createClass({
   },
 
   onLogin: function (email) {
-    Plugins.doAction('receivedUserEmail', email);
+    Hooks.doAction('receivedUserEmail', email);
 
     this.setState({
       hasIdentity: true,
@@ -126,7 +126,7 @@ var Modals = React.createClass({
 
   getIdentifyModal: function (hasIdentity) {
     let statesReady = MesosSummaryStore.get('statesProcessed');
-    let isOpen = Plugins.applyFilter(
+    let isOpen = Hooks.applyFilter(
       'openIdentifyModal',
       (!hasIdentity && statesReady)
     );
@@ -165,7 +165,7 @@ var Modals = React.createClass({
     let subHeaderContent = '';
 
     if (OS !== 'Windows') {
-      let appendText = Plugins.applyFilter(
+      let appendText = Hooks.applyFilter(
         'installCLIModalAppendInstructions', ''
       );
       subHeaderContent = `Install the DCOS command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal. ${appendText}`;
@@ -176,7 +176,7 @@ var Modals = React.createClass({
       title: 'Welcome to the Mesosphere DCOS',
       subHeaderContent,
       showFooter: true,
-      footer: Plugins.applyFilter('installCLIModalFooter', (
+      footer: Hooks.applyFilter('installCLIModalFooter', (
         <div className="tour-start-modal-footer">
           <div className="row text-align-center">
             <button className="button button-primary button-medium" onClick={onClose}>

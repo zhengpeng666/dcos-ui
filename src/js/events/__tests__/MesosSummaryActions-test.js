@@ -7,7 +7,7 @@ jest.dontMock('../MesosSummaryActions');
 jest.dontMock('../../utils/RequestUtil');
 jest.dontMock('../../constants/TimeScales');
 
-var Actions = require('../../actions/Actions');
+var Actions = require('../../../../plugins/tracking/actions/Actions');
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../AppDispatcher');
 var Config = require('../../config/Config');

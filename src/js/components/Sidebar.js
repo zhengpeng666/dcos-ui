@@ -7,11 +7,11 @@ var State = require('react-router').State;
 
 import ClusterHeader from './ClusterHeader';
 var EventTypes = require('../constants/EventTypes');
-var IntercomStore = require('../stores/IntercomStore');
+import {Hooks} from '../pluginBridge/PluginBridge';
+var IntercomStore = require('../../../plugins/tracking/stores/IntercomStore');
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var MetadataStore = require('../stores/MetadataStore');
-import Plugins from '../plugins/Plugins';
 var SidebarActions = require('../events/SidebarActions');
 var TooltipMixin = require('../mixins/TooltipMixin');
 
@@ -74,7 +74,7 @@ var Sidebar = React.createClass({
   getMenuItems: function () {
     let currentPath = this.context.router.getLocation().getCurrentPath();
 
-    const menuItems = Plugins.applyFilter(
+    const menuItems = Hooks.applyFilter(
       'sidebarNavigation',
       defaultMenuItems
     );
@@ -145,7 +145,7 @@ var Sidebar = React.createClass({
       )
     ];
 
-    let buttonSet = Plugins.applyFilter(
+    let buttonSet = Hooks.applyFilter(
       'sidebarFooterButtonSet', defaultButtonSet
     );
     let footer = null;
@@ -154,7 +154,7 @@ var Sidebar = React.createClass({
       footer = <div className="icon-buttons">{buttonSet}</div>;
     }
 
-    return Plugins.applyFilter('sidebarFooter', footer, defaultButtonSet);
+    return Hooks.applyFilter('sidebarFooter', footer, defaultButtonSet);
   },
 
   render: function () {

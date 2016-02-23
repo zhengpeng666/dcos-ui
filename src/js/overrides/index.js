@@ -1,6 +1,6 @@
 var React = require('react');
 
-var ActionsMixin = require('../mixins/ActionsMixin');
+var ActionsMixin = require('../../../plugins/tracking/mixins/ActionsMixin');
 
 function overrides() {
   var originalCreateClass = React.createClass;

@@ -1,10 +1,10 @@
-let pluginList = {};
+let _pluginList = {};
 
 module.exports = {
-  __setMockPlugins: function (plugins) {
-    pluginList = plugins;
-  },
   getAvailablePlugins: function () {
-    return pluginList;
+    return _pluginList;
+  },
+  __setMockPlugins: function (plugins) {
+    _pluginList = plugins;
   }
 };

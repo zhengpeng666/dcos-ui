@@ -1,15 +1,38 @@
 jest.dontMock('../AppReducer');
 jest.dontMock('../PluginBridge');
+jest.dontMock('../Hooks');
 jest.dontMock('../../config/Config');
 jest.dontMock('../../mixins/GetSetMixin');
 jest.dontMock('../../stores/ConfigStore');
+jest.dontMock('../../utils/StructUtil');
 
 var _ = require('underscore');
+var Config = require('../../config/Config');
 var ConfigStore = require('../../stores/ConfigStore');
 var PluginConstants = require('../../constants/PluginConstants');
 var Plugins = require('../../../../plugins/index');
 
+var EventTypes = require('../../constants/EventTypes');
 var PluginBridge = require('../PluginBridge');
+
+let Hooks = PluginBridge.Hooks;
+
+function loadPlugins() {
+  var mockPlugin = jest.genMockFunction();
+
+  Plugins.__setMockPlugins({fakePlugin: mockPlugin});
+  PluginBridge.listenForConfigChange();
+  ConfigStore.set({config: {
+    uiConfiguration: {
+      plugins: {
+        fakePlugin: {
+          enabled: true,
+          foo: 'bar'
+        }
+      }
+    }
+  }});
+}
 
 describe('PluginBridge', function () {
 
@@ -37,7 +60,6 @@ describe('PluginBridge', function () {
             }
           }
         }});
-
         var state = PluginBridge.Store.getState();
         expect(state.fakePlugin1).toEqual(undefined);
       });
@@ -164,7 +186,9 @@ describe('PluginBridge', function () {
         config: {
           enabled: true,
           foo: 'bar'
-        }
+        },
+        Hooks: PluginBridge.Hooks,
+        appConfig: Config
       };
       expect(_.isEqual(options, expectedOptions)).toEqual(true);
     });
@@ -248,6 +272,43 @@ describe('PluginBridge', function () {
       this.testArgs.dispatch({type: 'bar'});
       var state = PluginBridge.Store.getState().anotherFakePlugin;
       expect(_.isEqual(state, {foo: 2, bar: 'qux'})).toEqual(true);
+    });
+  });
+
+  describe('#Events', function () {
+
+    it('fires an action when plugins are loaded', function () {
+      this.fakeAction = jest.genMockFunction();
+      Hooks.addAction('pluginsConfigured', this.fakeAction);
+      loadPlugins();
+
+      expect(this.fakeAction.mock.calls.length).toEqual(1);
+    });
+
+    it('emits an event when the configuration is loaded', function () {
+      this.fakeEventHandler = jest.genMockFunction();
+      Hooks.addChangeListener(
+        EventTypes.PLUGINS_CONFIGURED,
+        this.fakeEventHandler
+      );
+      loadPlugins();
+      expect(this.fakeEventHandler.mock.calls.length).toEqual(1);
+    });
+
+    it('allows listeners to be added and removed', function () {
+      this.fakeEventHandler = jest.genMockFunction();
+      Hooks.addChangeListener(
+        EventTypes.PLUGINS_CONFIGURED,
+        this.fakeEventHandler
+      );
+      loadPlugins();
+      expect(this.fakeEventHandler.mock.calls.length).toEqual(1);
+      Hooks.removeChangeListener(
+        EventTypes.PLUGINS_CONFIGURED,
+        this.fakeEventHandler
+      );
+      loadPlugins();
+      expect(this.fakeEventHandler.mock.calls.length).toEqual(1);
     });
   });
 });

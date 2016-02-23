@@ -1,7 +1,7 @@
 var overrides = require('./overrides');
 overrides.override();
 
-import Actions from './actions/Actions';
+import Actions from '../../plugins/tracking/actions/Actions';
 Actions.initialize();
 
 Actions.log({eventID: 'Stint started.', date: Actions.createdAt});
@@ -23,12 +23,15 @@ require('./utils/StoreMixinConfig');
 import ApplicationLoader from './pages/ApplicationLoader';
 import appRoutes from './routes/index';
 var Config = require('./config/Config');
-import Plugins from './plugins/Plugins';
+import ConfigStore from './stores/ConfigStore';
 import RequestUtil from './utils/RequestUtil';
 
 let domElement = document.getElementById('application');
 
+// Listen for plugin configuration change
 PluginBridge.listenForConfigChange();
+// Load configuration
+ConfigStore.fetchConfig();
 
 // Patch json
 let oldJSON = RequestUtil.json;
@@ -39,7 +42,7 @@ RequestUtil.json = function (options = {}) {
     if (typeof oldHandler === 'function') {
       oldHandler.apply(null, arguments);
     }
-    Plugins.doAction('AJAXRequestError', ...arguments);
+    PluginBridge.Hooks.doAction('AJAXRequestError', ...arguments);
   };
 
   oldJSON(options);
@@ -60,7 +63,7 @@ function createRoutes(routes) {
 
 function onApplicationLoad() {
   // Allow overriding of application contents
-  let contents = Plugins.applyFilter('applicationContents', null);
+  let contents = PluginBridge.Hooks.applyFilter('applicationContents', null);
   if (contents) {
     ReactDOM.render(
       (<Provider store={PluginBridge.Store}>
@@ -70,7 +73,7 @@ function onApplicationLoad() {
   } else {
     setTimeout(function () {
       let builtRoutes = createRoutes(
-        Plugins.applyFilter('applicationRoutes', appRoutes)
+        PluginBridge.Hooks.applyFilter('applicationRoutes', appRoutes)
       );
 
       Router.run(builtRoutes[0], function (Handler, state) {
@@ -84,7 +87,7 @@ function onApplicationLoad() {
     });
   }
 
-  Plugins.doAction('applicationRendered');
+  PluginBridge.Hooks.doAction('applicationRendered');
 }
 
 ReactDOM.render(

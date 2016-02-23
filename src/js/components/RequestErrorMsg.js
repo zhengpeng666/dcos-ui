@@ -1,6 +1,6 @@
 var React = require('react');
 
-var IntercomActions = require('../events/IntercomActions');
+var IntercomActions = require('../../../plugins/tracking/events/IntercomActions');
 
 var RequestErrorMsg = React.createClass({
 
