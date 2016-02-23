@@ -120,11 +120,11 @@ class UnitsHealthTab extends mixin(StoreMixin) {
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        prop: 'health',
+        prop: 'unit_health',
         render: this.renderHealth,
         sortable: true,
         sortFunction: UnitHealthUtil.getHealthSortFunction(),
-        heading: ResourceTableUtil.renderHeading({health: 'HEALTH'})
+        heading: ResourceTableUtil.renderHeading({unit_health: 'HEALTH'})
       }
     ];
   }
@@ -149,7 +149,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
 
     if (searchString !== '') {
       filteredData = _.filter(filteredData, function (datum) {
-        let name = datum.get('name').toLowerCase();
+        let name = datum.get('unit_title').toLowerCase();
         return name.indexOf(searchString) > -1;
       });
     }
@@ -214,7 +214,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
             containerSelector=".gm-scroll-view"
             data={visibleData}
             itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: 'health', order: 'desc'}}
+            sortBy={{prop: 'unit_health', order: 'desc'}}
             />
         </div>
         <SidePanels

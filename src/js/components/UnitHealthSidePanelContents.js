@@ -244,11 +244,11 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
           flex-container-col flex-grow no-overflow">
           <div className="flex-container-col flex-grow no-overflow">
             <FilterHeadline
-              currentLength={4}
+              currentLength={visibleData.length}
               inverseStyle={false}
               name={"Health Checks"}
               onReset={this.resetFilter}
-              totalLength={4} />
+              totalLength={nodes.getItems().length} />
             <ul className="list list-unstyled list-inline flush-bottom">
               <li>
                 <FilterInputText
