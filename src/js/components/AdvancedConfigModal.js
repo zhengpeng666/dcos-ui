@@ -3,6 +3,8 @@ import React from 'react';
 
 import MultipleForm from './MultipleForm';
 import ReviewConfig from './ReviewConfig';
+import {schema as boomski} from './__tests__/fixtures/MarathonConfigFixture';
+import SchemaUtil from '../utils/SchemaUtil';
 
 const METHODS_TO_BIND = [
   'changeReviewState',
@@ -74,7 +76,14 @@ class AdvancedConfigModal extends React.Component {
 
   getModalContents() {
     if (this.isReviewing()) {
-      return <ReviewConfig multipleDefinition={this.props.multipleDefinition}/>;
+      let jsonDocument = SchemaUtil.definitionToJSONDocument(
+        this.props.multipleDefinition
+      );
+
+      return (
+        <ReviewConfig
+          jsonDocument={jsonDocument}/>
+      );
     }
 
     return <MultipleForm multipleDefinition={this.props.multipleDefinition}/>;
@@ -102,285 +111,7 @@ class AdvancedConfigModal extends React.Component {
 }
 
 AdvancedConfigModal.defaultProps = {
-  multipleDefinition: {
-    Application: {
-      title: 'Application',
-      description: 'Lorem ipsum dolor sit amet',
-      definition: [
-        {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        },
-        {
-          fieldType: 'text',
-          name: 'CPU',
-          placeholder: 'CPU',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ]
-    },
-    'JVM Configuration': {
-      title: 'JVM Configuration',
-      definition: [
-        {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ]
-    },
-    'Command Line Flags': {
-      title: 'Command Line Flags',
-      definition: [
-        {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ]
-    },
-    'Environment & Executor': {
-      title: 'Environment & Executor',
-      definition: [
-        {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ]
-    },
-    'Framework & Host': {
-      title: 'Framework & Host',
-      description: 'Lorem ipsum dolor sit amet',
-      definition: [
-        {
-          name: 'Subdivider',
-          definition: [
-            {
-              fieldType: 'text',
-              name: 'Framework Name',
-              placeholder: 'Framework Name',
-              required: false,
-              showError: false,
-              showLabel: true,
-              writeType: 'input',
-              validation: function () { return true; },
-              value: ''
-            }
-          ]
-        },
-
-        {
-          name: 'Subdivider 2',
-          definition: [
-            {
-              fieldType: 'text',
-              name: 'Hostname',
-              placeholder: 'i.e. http_callback',
-              required: false,
-              showError: false,
-              showLabel: true,
-              writeType: 'input',
-              validation: function () { return true; },
-              value: ''
-            },
-            {
-              fieldType: 'text',
-              name: 'HTTP Address',
-              placeholder: 'Placeholder Text',
-              required: false,
-              showError: false,
-              showLabel: true,
-              writeType: 'input',
-              validation: function () { return true; },
-              value: ''
-            },
-            {
-              fieldType: 'text',
-              name: 'HTTP Credentials',
-              placeholder: 'Placeholder Text',
-              required: false,
-              showError: false,
-              showLabel: true,
-              writeType: 'input',
-              validation: function () { return true; },
-              value: ''
-            },
-            {
-              fieldType: 'text',
-              name: 'CPU',
-              placeholder: 'CPU',
-              required: false,
-              showError: false,
-              showLabel: true,
-              writeType: 'input',
-              validation: function () { return true; },
-              value: ''
-            },
-            {
-              fieldType: 'text',
-              name: 'Memory',
-              placeholder: 'Memory',
-              required: false,
-              showError: false,
-              showLabel: true,
-              writeType: 'input',
-              validation: function () { return true; },
-              value: ''
-            },
-            {
-              fieldType: 'text',
-              name: 'CPU',
-              placeholder: 'CPU',
-              required: false,
-              showError: false,
-              showLabel: true,
-              writeType: 'input',
-              validation: function () { return true; },
-              value: ''
-            },
-            {
-              fieldType: 'text',
-              name: 'Memory',
-              placeholder: 'Memory',
-              required: false,
-              showError: false,
-              showLabel: true,
-              writeType: 'input',
-              validation: function () { return true; },
-              value: ''
-            }
-          ]
-        }
-      ]
-    },
-    'Launch Tokens': {
-      title: 'Launch Tokens',
-      definition: [
-        {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ]
-    },
-    'Mesos Master': {
-      title: 'Mesos Master',
-      definition: [
-        {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ]
-    },
-    'Mesos Configuration': {
-      title: 'Mesos Configuration',
-      definition: [
-        {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ]
-    },
-    'Plugins': {
-      title: 'Plugins',
-      definition: [
-        {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ]
-    },
-    'SSL': {
-      title: 'SSL',
-      definition: [
-        {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ]
-    },
-    'Zookeeper': {
-      title: 'Zookeeper',
-      definition: [
-        {
-          fieldType: 'text',
-          name: 'Name',
-          placeholder: 'Name',
-          required: false,
-          showError: false,
-          showLabel: true,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ]
-    }
-  },
+  multipleDefinition: SchemaUtil.schemaToMultipleDefinition(boomski),
   onClose: function () {},
   open: false
 };
