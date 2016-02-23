@@ -68,7 +68,10 @@ var CliInstructionsModal = React.createClass({
         'installCLIModalCLIInstallURL',
         'https://downloads.mesosphere.com/dcos-cli/install.sh'
       );
-      cliSnippet = `mkdir -p dcos && cd dcos && \n  curl -O ${cliInstallScriptUrl} && \n  bash ./install.sh . http://${hostname} && \n  source ./bin/env-setup`;
+      let cliInstallOutputScript = Hooks.applyFilter(
+        'installCLIModalCLIInstallScript', './install.sh'
+      );
+      cliSnippet = `mkdir -p dcos && cd dcos && \n  curl -O ${cliInstallScriptUrl} && \n  bash ${cliInstallOutputScript} . http://${hostname} && \n  source ./bin/env-setup`;
     }
 
     if (cliSnippet) {
