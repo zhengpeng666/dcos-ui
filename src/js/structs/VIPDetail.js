@@ -1,7 +1,8 @@
+import BackendList from './BackendList';
 import Item from './Item';
 
 module.exports = class VIPDetail extends Item {
   getBackends() {
-    return this.get('backends');
+    return new BackendList({items: this.get('backends')});
   }
 };
