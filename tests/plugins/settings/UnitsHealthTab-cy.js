@@ -1,14 +1,15 @@
-describe('Components Tab [0e2]', function () {
-
-  beforeEach(function () {
-    cy.configureCluster({
-      mesos: '1-task-healthy',
-      plugins: 'settings-enabled'
-    })
-    .visitUrl({url: '/settings/system/components', identify: true});
-  });
+describe('Units Tab [0e2]', function () {
 
   context('Filters [0e3]', function () {
+
+    beforeEach(function () {
+      cy.configureCluster({
+        mesos: '1-task-healthy',
+        plugins: 'settings-enabled'
+      })
+        .route(/api\/v1\/system\/health\/units/, 'fx:unit-health/units')
+        .visitUrl({url: '/settings/system/units', identify: true});
+    });
 
     it('renders three filter buttons [0e4]', function () {
       cy.get('.button-group .button').should(function ($buttons) {
@@ -22,28 +23,110 @@ describe('Components Tab [0e2]', function () {
       });
     });
 
-    it('filters by component health [0e7]', function () {
+    it('filters by node health [0e7]', function () {
       cy.get('.button-group .button').last().click();
       cy.get('tr a').should(function ($row) {
         expect($row.length).to.equal(1);
       });
     });
 
-    it('filters by component name [0e6]', function () {
-      cy.get('.form-control input[type=\'text\']').type('zoo');
+    it('filters by node name [0e6]', function () {
+      cy.get('.form-control input[type=\'text\']').type('nginx');
       cy.get('tr a').should(function ($row) {
         expect($row.length).to.equal(1);
       });
     });
 
-    it('filters by component health and name at the same time [0e8]', function () {
+    it('filters by node health and name at the same time [0e8]', function () {
       cy.get('.button-group .button').eq(1).click();
-      cy.get('.form-control input[type=\'text\']').type('apache');
+      cy.get('.form-control input[type=\'text\']').type('mesos');
       cy.get('tr a').should(function ($row) {
         expect($row.length).to.equal(1);
       });
+    });
+
+    it('opens unit detail side panel [0ed]', function () {
+      cy.get('tr a').contains('Mesos DNS').click();
+      cy.hash().should('match', /mesos_dns_service/);
     });
 
   });
-  
+
+  context('Unit Side Panel [0e9]', function () {
+
+    beforeEach(function () {
+      cy.configureCluster({
+        mesos: '1-task-healthy',
+        plugins: 'settings-enabled'
+      })
+      .route(/api\/v1\/system\/health\/units\/mesos_dns_service\/nodes/, 'fx:unit-health/unit-nodes')
+      .route(/api\/v1\/system\/health\/units\/mesos_dns_service/, 'fx:unit-health/unit')
+      .visitUrl(
+        {url: '/settings/system/units/mesos_dns_service/', identify: true}
+      );
+    });
+
+    it('renders unit title [0ea]', function () {
+      cy.get('h1').should(function ($title) {
+        expect($title).to.contain('Mesos DNS');
+      });
+    });
+
+    it('renders unit health [0eb]', function () {
+      cy.get('.side-panel-content-header-details')
+        .find('.text-danger')
+        .should(function ($health) {
+          expect($health).to.contain('Unhealthy');
+        });
+    });
+
+    it('filters by node health [0ec]', function () {
+      cy.get('button').last().click();
+      cy.get('.dropdown').find('li').eq(1).click();
+      cy.get('tr a').should(function ($row) {
+        expect($row.length).to.equal(1);
+      });
+    });
+
+    it('opens unit node detail side panel [0ee]', function () {
+      cy.get('tr a').contains('ip-10-10-0-236').click();
+      cy.hash().should('match', /ip-10-10-0-236/);
+    });
+  });
+
+  context('Unit Node Side Panel [0ef]', function () {
+
+    beforeEach(function () {
+      cy.configureCluster({
+        mesos: '1-task-healthy',
+        plugins: 'settings-enabled'
+      })
+      .route(/api\/v1\/system\/health\/units\/mesos_dns_service\/nodes\/ip-10-10-0-236/, 'fx:unit-health/unit-node')
+      .route(/api\/v1\/system\/health\/units\/mesos_dns_service/, 'fx:unit-health/unit')
+      .visitUrl(
+        {url: '/settings/system/units/mesos_dns_service/nodes/ip-10-10-0-236', identify: true}
+      );
+    });
+
+    it('renders health check title [0ei]', function () {
+      cy.get('h1').should(function ($title) {
+        expect($title).to.contain('Mesos DNS Health Check');
+      });
+    });
+
+    it('renders node health [0ej]', function () {
+      cy.get('.side-panel-content-header-details')
+        .should(function ($health) {
+          expect($health).to.contain('Unhealthy');
+        });
+    });
+
+    it('renders health check output [0ek]', function () {
+      cy.get('.side-panel-tab-content')
+        .find('pre')
+        .should(function ($output) {
+          expect($output).to.contain('Please');
+        });
+    });
+  });
 });
