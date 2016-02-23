@@ -58,7 +58,7 @@ const UnitHealthActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_HEALTH_UNIT_NODES_SUCCESS,
-          data: response,
+          data: response.array,
           unitID
         });
       },
@@ -78,9 +78,7 @@ const UnitHealthActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_HEALTH_UNIT_NODE_SUCCESS,
-          data: response,
-          unitID,
-          nodeID
+          data: response
         });
       },
       error: function (xhr) {
@@ -109,12 +107,12 @@ if (Config.useFixtures) {
     fetchUnits: {
       event: 'success', success: {response: unitsFixture}
     },
-    fetchUnit: {events: 'success', success: {response: unitFixture}},
+    fetchUnit: {event: 'success', success: {response: unitFixture}},
     fetchUnitNodes: {
-      events: 'success', success: {response: unitNodesFixture}
+      event: 'success', success: {response: unitNodesFixture}
     },
     fetchUnitNode: {
-      events: 'success', success: {response: unitNodeFixture}
+      event: 'success', success: {response: unitNodeFixture}
     }
   };
 

@@ -8,8 +8,6 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 import {Table} from 'reactjs-components';
 
-import UnitHealthStore from '../../stores/UnitHealthStore';
-import UnitHealthUtil from '../../utils/UnitHealthUtil';
 import Config from '../../config/Config';
 import FilterHeadline from '../../components/FilterHeadline';
 import FilterButtons from '../../components/FilterButtons';
@@ -18,6 +16,8 @@ import ResourceTableUtil from '../../utils/ResourceTableUtil';
 import SidePanels from '../../components/SidePanels';
 import StringUtil from '../../utils/StringUtil';
 import TableUtil from '../../utils/TableUtil';
+import UnitHealthStore from '../../stores/UnitHealthStore';
+import UnitHealthUtil from '../../utils/UnitHealthUtil';
 
 const METHODS_TO_BIND = [
   'getHandleHealthFilterChange',
@@ -35,7 +35,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
     this.store_listeners = [
       {
         name: 'unitHealth',
-        events: ['success', 'error', 'reportSuccess', 'reportError']
+        events: ['success', 'error']
       }
     ];
 
@@ -111,11 +111,11 @@ class UnitsHealthTab extends mixin(StoreMixin) {
         cacheCell: true,
         className: classNameFn,
         headerClassName: classNameFn,
-        prop: 'unit_description',
+        prop: 'unit_title',
         render: this.renderUnit,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('unit_description'),
-        heading: ResourceTableUtil.renderHeading({unit_description: 'NAME'})
+        sortFunction: ResourceTableUtil.getPropSortFunction('unit_title'),
+        heading: ResourceTableUtil.renderHeading({unit_title: 'NAME'})
       },
       {
         className: classNameFn,

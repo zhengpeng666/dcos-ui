@@ -22,7 +22,7 @@ module.exports = class Node extends Item {
   // http://schema.dcos/system/health/node
 
   getHealth() {
-    let health = this.get('health');
+    let health = this.get('node_health');
 
     return Object.keys(UnitHealthStatus).reduce(function (prev, healthObj) {
       if (UnitHealthStatus[healthObj].value === health) {

@@ -27,6 +27,7 @@ import UnitHealthActions from '../events/UnitHealthActions';
 import HealthUnit from '../structs/HealthUnit';
 import HealthUnitsList from '../structs/HealthUnitsList';
 import GetSetMixin from '../mixins/GetSetMixin';
+import Node from '../structs/Node';
 import NodesList from '../structs/NodesList';
 
 const UnitHealthStore = Store.createStore({
@@ -36,8 +37,9 @@ const UnitHealthStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    units: new HealthUnitsList(),
-    unitsByID: {}
+    units: [],
+    unitsByID: {},
+    nodesByID: {}
   },
 
   addChangeListener: function (eventName, callback) {
@@ -49,7 +51,9 @@ const UnitHealthStore = Store.createStore({
   },
 
   getUnits: function () {
-    return this.get('units');
+    return new HealthUnitsList({
+      items: this.get('units')
+    });
   },
 
   getUnit: function (id) {
@@ -57,11 +61,12 @@ const UnitHealthStore = Store.createStore({
   },
 
   getNodes: function (unitID) {
-    // let parentUnit = this.get('unitsByID')[id] || {id: };
+    let unit = this.get('unitsByID')[unitID] || [];
+    return new NodesList({items: unit.nodes});
   },
 
-  getNode: function (unitID, nodeID) {
-
+  getNode: function (nodeID) {
+    return new Node(this.get('nodesByID')[nodeID] || []);
   },
 
   getReport: function () {
@@ -72,36 +77,46 @@ const UnitHealthStore = Store.createStore({
 
   fetchUnit: UnitHealthActions.fetchUnit,
 
-  fetchNodes: UnitHealthActions.fetchNodes,
+  fetchUnitNodes: UnitHealthActions.fetchUnitNodes,
 
-  fetchNode: UnitHealthActions.fetchNode,
+  fetchUnitNode: UnitHealthActions.fetchUnitNode,
 
   processUnits: function (units) {
-    this.set({
-      units: new HealthUnitsList({
-        items: units
-      })
-    });
+    this.set({units});
 
     this.emit(HEALTH_UNITS_CHANGE);
   },
 
   processUnit: function (unitData) {
     let unitsByID = this.get('unitsByID');
-    let unit = unitsByID[unitData.unit_it] || {};
+    let unit = unitsByID[unitData.unit_id] || {};
 
     unit = _.extend(unit, unitData);
-    unitsByID[unit.unit_it] = unit;
+    unitsByID[unit.unit_id] = unit;
     this.set({unitsByID});
 
-    this.emit(HEALTH_UNIT_SUCCESS, unit.unit_it);
+    this.emit(HEALTH_UNIT_SUCCESS, unit.unit_id);
   },
 
-  processNodes: function (nodes) {
+  processNodes: function (nodes, unitID) {
+    let unitsByID = this.get('unitsByID');
+    let unit = unitsByID[unitID] || {};
+
+    unit.nodes = nodes;
+    unitsByID[unitID] = unit;
+    this.set({unitsByID});
+
     this.emit(HEALTH_UNIT_NODES_SUCCESS);
   },
 
   processNode: function (nodeData) {
+    let nodesByID = this.get('nodesByID');
+    let node = nodesByID[nodeData.hostname] || {};
+
+    node = _.extend(node, nodeData);
+    nodesByID[node.hostname] = node;
+    this.set({nodesByID});
+
     this.emit(HEALTH_UNIT_NODE_SUCCESS);
   },
 
@@ -111,31 +126,32 @@ const UnitHealthStore = Store.createStore({
     }
 
     let action = payload.action;
+    let data = action.data;
 
     switch (action.type) {
       case REQUEST_HEALTH_UNITS_SUCCESS:
-        UnitHealthStore.processUnits(action.data);
+        UnitHealthStore.processUnits(data);
         break;
       case REQUEST_HEALTH_UNITS_ERROR:
-        UnitHealthStore.emit(HEALTH_UNITS_ERROR, action.data);
+        UnitHealthStore.emit(HEALTH_UNITS_ERROR, data);
         break;
       case REQUEST_HEALTH_UNIT_SUCCESS:
-        UnitHealthStore.processUnit(action.data);
+        UnitHealthStore.processUnit(data);
         break;
       case REQUEST_HEALTH_UNIT_ERROR:
-        UnitHealthStore.emit(HEALTH_UNIT_ERROR, action.data);
+        UnitHealthStore.emit(HEALTH_UNIT_ERROR, data);
         break;
       case REQUEST_HEALTH_UNIT_NODES_SUCCESS:
-        UnitHealthStore.processNodes(action.data);
+        UnitHealthStore.processNodes(data, action.unitID);
         break;
       case REQUEST_HEALTH_UNIT_NODES_ERROR:
-        UnitHealthStore.emit(HEALTH_UNIT_NODES_ERROR, action.data);
+        UnitHealthStore.emit(HEALTH_UNIT_NODES_ERROR, data);
         break;
       case REQUEST_HEALTH_UNIT_NODE_SUCCESS:
-        UnitHealthStore.processNode(action.data);
+        UnitHealthStore.processNode(data);
         break;
       case REQUEST_HEALTH_UNIT_NODE_ERROR:
-        UnitHealthStore.emit(HEALTH_UNIT_NODE_ERROR, action.data);
+        UnitHealthStore.emit(HEALTH_UNIT_NODE_ERROR, data);
         break;
     }
 

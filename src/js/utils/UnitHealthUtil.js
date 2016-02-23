@@ -3,14 +3,14 @@ import HealthSorting from '../constants/HealthSorting';
 const UnitHealthUtil = {
 
   getHealthSortFunction() {
-    return function () {
+    return function (tieBreakKey) {
       return function (a, b) {
         let aValue = HealthSorting[a.getHealth().title.toUpperCase()];
         let bValue = HealthSorting[b.getHealth().title.toUpperCase()];
 
         if (aValue === bValue) {
-          let aTieBreak = a.get('id');
-          let bTieBreak = b.get('id');
+          let aTieBreak = a.get(tieBreakKey);
+          let bTieBreak = b.get(tieBreakKey);
 
           if (aTieBreak > bTieBreak) {
             return 1;

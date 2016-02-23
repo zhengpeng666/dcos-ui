@@ -5,14 +5,13 @@ import React from 'react';
 
 import FilterHeadline from '../components/FilterHeadline';
 import FilterInputText from '../components/FilterInputText';
-import HealthUnit from '../structs/HealthUnit';
 import RequestErrorMsg from './RequestErrorMsg';
 import ResourceTableUtil from '../utils/ResourceTableUtil';
 import SidePanelContents from './SidePanelContents';
 import StringUtil from '../utils/StringUtil';
 import TableUtil from '../utils/TableUtil';
-import NodesList from '../structs/NodesList';
 import UnitHealthStatus from '../constants/UnitHealthStatus';
+import UnitHealthStore from '../stores/UnitHealthStore';
 import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 const METHODS_TO_BIND = [
@@ -28,6 +27,13 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
+    this.store_listeners = [
+      {
+        name: 'unitHealth',
+        events: ['unitSuccess', 'unitError', 'nodesSuccess', 'nodesError']
+      }
+    ];
+
     this.state = {
       healthFilter: 'all',
       searchString: ''
@@ -36,6 +42,12 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     }, this);
+  }
+
+  componentDidMount() {
+    super.componentDidMount();
+    UnitHealthStore.fetchUnit(this.props.itemID);
+    UnitHealthStore.fetchUnitNodes(this.props.itemID);
   }
 
   handleItemSelection(selectedHealth) {
@@ -63,32 +75,36 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({health: 'HEALTH'}),
-        prop: 'health',
+        heading: ResourceTableUtil.renderHeading({node_health: 'HEALTH'}),
+        prop: 'node_health',
         render: this.renderHealth,
         sortable: true,
-        sortFunction: UnitHealthUtil.getHealthSortFunction()
+        sortFunction: UnitHealthUtil.getHealthSortFunction('node_id')
       },
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({health: 'HEALTH CHECK NAME'}),
-        prop: 'health',
+        heading: ResourceTableUtil.renderHeading({check: 'HEALTH CHECK NAME'}),
+        prop: 'check',
         render: this.renderHealthCheckName
       },
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({id: 'NODE'}),
-        prop: 'id',
+        heading: ResourceTableUtil.renderHeading({hostname: 'NODE'}),
+        prop: 'hostname',
         render: this.renderNode,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('id')
+        sortFunction: ResourceTableUtil.getPropSortFunction('hostname')
       }
     ];
   }
 
-  getUnitInfo(unit) {
+  getUnit() {
+    return UnitHealthStore.getUnit(this.props.itemID);
+  }
+
+  getUnitHeader(unit) {
     let imageTag = (
       <div className="side-panel-icon icon icon-large icon-image-container
         icon-app-container">
@@ -101,7 +117,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
         {imageTag}
         <div>
           <h1 className="side-panel-content-header-label flush">
-            {unit.get('id')}
+            {unit.get('unit_title')}
           </h1>
           <div>
             {this.getSubHeader(unit)}
@@ -141,7 +157,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
 
   getNodeLink(node, linkText) {
     let path = 'settings-system-units-unit-nodes-node-panel';
-    let params = {unitID: this.props.itemID, unitNodeID: node.get('id')};
+    let params = {unitID: this.props.itemID, unitNodeID: node.get('hostname')};
 
     return (
       <a
@@ -168,55 +184,9 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
   }
 
   getVisibleData(data, searchString, healthFilter) {
-    data = new NodesList(
-      {
-        items: [
-          {
-            'id': 'ip-10-10-0-235',
-            'description': 'There has been enhanced damage inside the quantum inverted charge! There has been enhanced ripples next to the critical calibrated capacitors.',
-            'type': 'master',
-            'health': 0,
-            'output': '{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}'
-          },
-          {
-            'id': 'ip-10-10-0-236',
-            'description': 'Enhanced time-matter field has to be inverted, because the critical delta region appears to be aligned. You need to invert the diagnostics.',
-            'type': 'agent',
-            'health': 0,
-            'output': '{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}'
-          },
-          {
-            'id': 'ip-10-10-0-237',
-            'description': 'Fluctuating the auxiliary crystal damages fluctuations next to the auxiliary region. Fluctuating the auxiliary singularity affects fluctuations near the enhanced zone.',
-            'type': 'agent',
-            'health': 1,
-            'output': '{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}'
-          },
-          {
-            'id': 'ip-10-10-0-238',
-            'description': 'There appears to be a critical crystal within the power which catches auxiliary ripples in the special capacitors.',
-            'type': 'agent',
-            'health': 0,
-            'output': '{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}'
-          }
-        ]
-      }
-    );
-
     data = data.filter({id: searchString, health: healthFilter});
 
     return data.getItems();
-  }
-
-  getUnitData() {
-    return new HealthUnit(
-      {
-        'id': this.props.itemID,
-        'name': this.props.itemID,
-        'version': '3.4.6',
-        'health': 1
-      }
-    );
   }
 
   resetFilter() {
@@ -237,19 +207,29 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
   }
 
   renderHealthCheckName(prop, node) {
-    let linkTitle = `${this.getUnitData().get('name')} Health Check`;
+    let linkTitle = `${this.getUnit().get('unit_title')} Health Check`;
     return this.getNodeLink(node, linkTitle);
   }
 
   renderNode(prop, node) {
-    return this.getNodeLink(node, node.get(prop));
+    return this.getNodeLink(node,
+      (
+        <span>
+          {node.get(prop)}
+          <span className="mute">
+            {` (${StringUtil.capitalize(node.get('node_role'))})`}
+          </span>
+        </span>
+      )
+    );
   }
 
   render() {
-    // TODO get from store
     let {searchString, healthFilter} = this.state;
-    let unit = this.getUnitData();
-    let visibleData = this.getVisibleData([], searchString, healthFilter);
+
+    let unit = this.getUnit();
+    let nodes = UnitHealthStore.getNodes(this.props.itemID);
+    let visibleData = this.getVisibleData(nodes, searchString, healthFilter);
 
     return (
       <div className="flex-container-col">
@@ -257,7 +237,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
           container-pod-divider-bottom container-pod-divider-bottom-align-right
           container-pod-divider-inverse container-pod-short-top
           side-panel-content-header side-panel-section">
-          {this.getUnitInfo(unit)}
+          {this.getUnitHeader(unit)}
         </div>
         <div className="side-panel-tab-content side-panel-section container
           container-fluid container-pod container-pod-short container-fluid
@@ -297,7 +277,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
               data={visibleData}
               idAttribute="id"
               itemHeight={TableUtil.getRowHeight()}
-              sortBy={{prop: 'health', order: 'desc'}}
+              sortBy={{prop: 'node_health', order: 'desc'}}
               />
           </div>
         </div>

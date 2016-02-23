@@ -130,6 +130,7 @@ class SidePanels extends React.Component {
         return (
           <UnitNodeSidePanelContents
             itemID={unitID}
+            params={this.props.params}
             parentRouter={this.context.router} />
         );
       }

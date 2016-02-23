@@ -2,12 +2,31 @@
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import HealthUnit from '../structs/HealthUnit';
-import Node from '../structs/Node';
 import RequestErrorMsg from './RequestErrorMsg';
 import SidePanelContents from './SidePanelContents';
+import UnitHealthStore from '../stores/UnitHealthStore';
 
 module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
+
+  constructor() {
+    super(...arguments);
+
+    this.store_listeners = [
+      {
+        name: 'unitHealth',
+        events: ['unitSuccess', 'unitError', 'nodeSuccess', 'nodeError']
+      }
+    ];
+  }
+
+  componentDidMount() {
+    super.componentDidMount();
+
+    let {unitID, unitNodeID} = this.props.params;
+
+    UnitHealthStore.fetchUnit(unitID);
+    UnitHealthStore.fetchUnitNode(unitNodeID);
+  }
 
   getHeader(unit, node) {
     let imageTag = (
@@ -22,7 +41,7 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
         {imageTag}
         <div>
           <h1 className="side-panel-content-header-label flush">
-            {unit.get('unit_description')}
+            {`${unit.get('unit_title')} Health Check`}
           </h1>
           <div>
             {this.getSubHeader(unit, node)}
@@ -41,60 +60,37 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
   }
 
   getSubHeader(unit, node) {
-    let healthStatus = unit.getHealth();
+    let healthStatus = node.getHealth();
 
     return (
       <ul className="list-inline flush-bottom">
         <li>
           <span className={healthStatus.classNames}>
-            {`${healthStatus.title} Health Check`}
+            {healthStatus.title}
           </span>
         </li>
         <li>
-          {node.get('node_id')}
+          {node.get('hostname')}
         </li>
       </ul>
     );
   }
 
-  getNodeData() {
-    return new Node(
-      {
-        'node_id': 'ip-10-10-0-235',
-        'node_role': 'master',
-        'node_health': 3,
-        'unit_check_output': '{\r\n  \"path\": \"\/health\/cluster\",\r\n  \"protocol\": \"HTTP\",\r\n  \"portIndex\": 0\r\n}'
-      }
-    );
-  }
-
-  // demo
-  getUnitData() {
-    return new HealthUnit(
-      {
-        'unit_id': this.props.itemID,
-        'unit_description': this.props.itemID,
-        'health': 1
-      }
-    );
-  }
-
-  getNodeInfo(unit, node) {
+  getNodeInfo(node) {
     return (
-      <div>
-        <span className="h4">Summary</span>
-        <p>{unit.get('unit_description')}</p>
+      <div className="flex-container-col flex-grow">
         <span className="h4">Output</span>
-        <pre>
-          {node.get('unit_check_output')}
+        <pre className="flex-grow flush-bottom">
+          {node.get('unit_output')}
         </pre>
       </div>
     );
   }
 
   render() {
-    let node = this.getNodeData();
-    let unit = this.getUnitData();
+    let {unitID, unitNodeID} = this.props.params;
+    let node = UnitHealthStore.getNode(unitNodeID);
+    let unit = UnitHealthStore.getUnit(unitID);
 
     return (
       <div className="flex-container-col">
@@ -106,10 +102,8 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
         </div>
         <div className="side-panel-tab-content side-panel-section container
           container-fluid container-pod container-pod-short container-fluid
-          flex-container-col flex-grow no-overflow">
-          <div className="flex-container-col flex-grow no-overflow">
-            {this.getNodeInfo(unit, node)}
-          </div>
+          flex-container-col flex-grow">
+          {this.getNodeInfo(node)}
         </div>
       </div>
     );
