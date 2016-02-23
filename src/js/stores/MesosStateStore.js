@@ -9,6 +9,7 @@ import EventTypes from '../constants/EventTypes';
 var GetSetMixin = require('../mixins/GetSetMixin');
 var MesosStateActions = require('../events/MesosStateActions');
 var MesosStateUtil = require('../utils/MesosStateUtil');
+// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 var requestInterval = null;
 

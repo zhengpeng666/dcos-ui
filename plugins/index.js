@@ -1,7 +1,9 @@
-import ExamplePlugin from './example/example';
+import Auth from './auth';
+import Settings from './settings';
 
 const pluginList = {
-  'example': ExamplePlugin
+  'authentication': Auth,
+  'settings': Settings
 };
 
 module.exports = {

@@ -1,8 +1,8 @@
 import React from 'react';
 
 import AnimatedLogo from '../components/AnimatedLogo';
-import EventTypes from '../constants/EventTypes';
-import Plugins from '../plugins/Plugins';
+import {PLUGINS_CONFIGURED} from '../constants/EventTypes';
+import {Hooks} from '../pluginBridge/PluginBridge';
 
 const METHODS_TO_BIND = ['onPluginsLoaded'];
 
@@ -18,17 +18,11 @@ export default class ApplicationLoader extends React.Component {
   }
 
   componentDidMount() {
-    Plugins.addChangeListener(
-      EventTypes.PLUGINS_CONFIGURED, this.onPluginsLoaded
-    );
-
-    Plugins.initialize();
+    Hooks.addChangeListener(PLUGINS_CONFIGURED, this.onPluginsLoaded);
   }
 
   componentWillUnmount() {
-    Plugins.removeChangeListener(
-      EventTypes.PLUGINS_CONFIGURED, this.onPluginsLoaded
-    );
+    Hooks.removeChangeListener(PLUGINS_CONFIGURED, this.onPluginsLoaded);
   }
 
   onPluginsLoaded() {

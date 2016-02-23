@@ -10,6 +10,7 @@ var GetSetMixin = require('../mixins/GetSetMixin');
 var HealthStatus = require('../constants/HealthStatus');
 var MarathonActions = require('../events/MarathonActions');
 var ServiceImages = require('../constants/ServiceImages');
+// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 var requestInterval = null;
 

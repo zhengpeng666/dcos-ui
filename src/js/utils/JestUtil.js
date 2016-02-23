@@ -8,13 +8,14 @@ const JestUtil = {
 
   unMockStores: function (storeIDs) {
     let stores = {
-      ACLAuthStore: '../stores/ACLAuthStore',
-      ACLDirectoriesStore: '../stores/ACLDirectoriesStore',
-      ACLGroupsStore: '../stores/ACLGroupsStore',
-      ACLGroupStore: '../stores/ACLGroupStore',
-      ACLStore: '../stores/ACLStore',
-      ACLUsersStore: '../stores/ACLUsersStore',
-      ACLUserStore: '../stores/ACLUserStore',
+      ACLAuthStore: '../../../plugins/auth/stores/ACLAuthStore',
+      ACLDirectoriesStore: '../../../plugins/directories/stores/ACLDirectoriesStore',
+      ACLGroupsStore: '../../../plugins/groups/stores/ACLGroupsStore',
+      ACLGroupStore: '../../../plugins/groups/stores/ACLGroupStore',
+      ACLStore: '../../../plugins/acl/stores/ACLStore',
+      ACLUsersStore: '../../../plugins/users/stores/ACLUsersStore',
+      ACLUserStore: '../../../plugins/users/stores/ACLUserStore',
+
       CosmosPackagesStore: '../stores/CosmosPackagesStore',
       MarathonStore: '../stores/MarathonStore',
       MesosLogStore: '../stores/MesosLogStore',

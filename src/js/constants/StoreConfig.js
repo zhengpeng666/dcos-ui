@@ -1,13 +1,124 @@
-import ACLAuthStore from '../stores/ACLAuthStore';
-import ACLDirectoriesStore from '../stores/ACLDirectoriesStore';
-import ACLGroupsStore from '../stores/ACLGroupsStore';
-import ACLGroupStore from '../stores/ACLGroupStore';
-import ACLStore from '../stores/ACLStore';
-import ACLUsersStore from '../stores/ACLUsersStore';
-import ACLUserStore from '../stores/ACLUserStore';
+// Auth
+import ACLAuthStore from '../../../plugins/auth/stores/ACLAuthStore';
+import {
+  ACL_AUTH_USER_LOGIN_CHANGED,
+  ACL_AUTH_USER_LOGIN_ERROR,
+  ACL_AUTH_USER_LOGOUT_SUCCESS,
+  ACL_AUTH_USER_LOGOUT_ERROR,
+  ACL_AUTH_USER_ROLE_CHANGED
+} from '../../../plugins/auth/constants/EventTypes';
+
+// Directories
+import ACLDirectoriesStore from '../../../plugins/directories/stores/ACLDirectoriesStore';
+import {
+  ACL_DIRECTORIES_CHANGED,
+  ACL_DIRECTORIES_ERROR,
+  ACL_DIRECTORY_ADD_SUCCESS,
+  ACL_DIRECTORY_ADD_ERROR,
+  ACL_DIRECTORY_DELETE_SUCCESS,
+  ACL_DIRECTORY_DELETE_ERROR,
+  ACL_DIRECTORY_TEST_SUCCESS,
+  ACL_DIRECTORY_TEST_ERROR
+} from '../../../plugins/directories/constants/EventTypes';
+
+// Groups
+import ACLGroupsStore from '../../../plugins/groups/stores/ACLGroupsStore';
+import ACLGroupStore from '../../../plugins/groups/stores/ACLGroupStore';
+import {
+  ACL_GROUPS_CHANGE,
+  ACL_GROUPS_REQUEST_ERROR,
+  ACL_GROUP_DETAILS_GROUP_CHANGE,
+  ACL_GROUP_DETAILS_GROUP_ERROR,
+  ACL_GROUP_USERS_CHANGED,
+  ACL_GROUP_ADD_USER_ERROR,
+  ACL_GROUP_CREATE_SUCCESS,
+  ACL_GROUP_CREATE_ERROR,
+  ACL_GROUP_UPDATE_ERROR,
+  ACL_GROUP_UPDATE_SUCCESS,
+  ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
+  ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
+  ACL_GROUP_DETAILS_USERS_CHANGE,
+  ACL_GROUP_DETAILS_USERS_ERROR,
+  ACL_GROUP_DETAILS_FETCHED_SUCCESS,
+  ACL_GROUP_DETAILS_FETCHED_ERROR,
+  ACL_GROUP_REMOVE_USER_SUCCESS,
+  ACL_GROUP_REMOVE_USER_ERROR,
+  ACL_GROUP_DELETE_SUCCESS,
+  ACL_GROUP_DELETE_ERROR
+} from '../../../plugins/groups/constants/EventTypes';
+
+// ACL
+import ACLStore from '../../../plugins/acl/stores/ACLStore';
+import {
+  ACL_CREATE_SUCCESS,
+  ACL_CREATE_ERROR,
+  ACL_RESOURCE_ACLS_CHANGE,
+  ACL_RESOURCE_ACLS_ERROR,
+  ACL_USER_GRANT_ACTION_CHANGE,
+  ACL_USER_GRANT_ACTION_ERROR,
+  ACL_USER_REVOKE_ACTION_CHANGE,
+  ACL_USER_REVOKE_ACTION_ERROR,
+  ACL_GROUP_GRANT_ACTION_CHANGE,
+  ACL_GROUP_GRANT_ACTION_ERROR,
+  ACL_GROUP_REVOKE_ACTION_CHANGE,
+  ACL_GROUP_REVOKE_ACTION_ERROR
+} from '../../../plugins/acl/constants/EventTypes';
+
+// Users
+import ACLUsersStore from '../../../plugins/users/stores/ACLUsersStore';
+import ACLUserStore from '../../../plugins/users/stores/ACLUserStore';
+import {
+  ACL_USERS_CHANGE,
+  ACL_USERS_REQUEST_ERROR,
+  ACL_USER_DETAILS_USER_CHANGE,
+  ACL_USER_DETAILS_USER_ERROR,
+  ACL_USER_DETAILS_PERMISSIONS_CHANGE,
+  ACL_USER_DETAILS_PERMISSIONS_ERROR,
+  ACL_USER_DETAILS_GROUPS_CHANGE,
+  ACL_USER_DETAILS_GROUPS_ERROR,
+  ACL_USER_DETAILS_FETCHED_SUCCESS,
+  ACL_USER_DETAILS_FETCHED_ERROR,
+  ACL_USER_CREATE_SUCCESS,
+  ACL_USER_CREATE_ERROR,
+  ACL_USER_UPDATE_SUCCESS,
+  ACL_USER_UPDATE_ERROR,
+  ACL_USER_DELETE_SUCCESS,
+  ACL_USER_DELETE_ERROR
+} from '../../../plugins/users/constants/EventTypes';
+
 import ComponentHealthStore from '../stores/ComponentHealthStore';
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
-import EventTypes from './EventTypes';
+import {
+  HEALTH_COMPONENTS_CHANGE,
+  HEALTH_COMPONENTS_ERROR,
+  HEALTH_REPORT_CHANGE,
+  HEALTH_REPORT_ERROR,
+
+  COSMOS_DESCRIBE_CHANGE,
+  COSMOS_DESCRIBE_ERROR,
+  COSMOS_LIST_CHANGE,
+  COSMOS_LIST_ERROR,
+  COSMOS_SEARCH_CHANGE,
+  COSMOS_SEARCH_ERROR,
+
+  MESOS_SUMMARY_CHANGE,
+  MESOS_SUMMARY_REQUEST_ERROR,
+  MESOS_STATE_CHANGE,
+  MESOS_STATE_REQUEST_ERROR,
+
+  MARATHON_APPS_CHANGE,
+  MARATHON_APPS_ERROR,
+
+  METADATA_CHANGE,
+
+  DCOS_METADATA_CHANGE,
+
+  MESOS_LOG_CHANGE,
+  MESOS_LOG_REQUEST_ERROR,
+
+  TASK_DIRECTORY_CHANGE,
+  TASK_DIRECTORY_ERROR
+} from './EventTypes';
 import MarathonStore from '../stores/MarathonStore';
 import MesosLogStore from '../stores/MesosLogStore';
 import MesosStateStore from '../stores/MesosStateStore';
@@ -24,18 +135,18 @@ const ListenersDescription = {
   acl: {
     store: ACLStore,
     events: {
-      createSuccess: EventTypes.ACL_CREATE_SUCCESS,
-      createError: EventTypes.ACL_CREATE_ERROR,
-      fetchResourceSuccess: EventTypes.ACL_RESOURCE_ACLS_CHANGE,
-      fetchResourceError: EventTypes.ACL_RESOURCE_ACLS_ERROR,
-      userGrantSuccess: EventTypes.ACL_USER_GRANT_ACTION_CHANGE,
-      userGrantError: EventTypes.ACL_USER_GRANT_ACTION_ERROR,
-      userRevokeSuccess: EventTypes.ACL_USER_REVOKE_ACTION_CHANGE,
-      userRevokeError: EventTypes.ACL_USER_REVOKE_ACTION_ERROR,
-      groupGrantSuccess: EventTypes.ACL_GROUP_GRANT_ACTION_CHANGE,
-      groupGrantError: EventTypes.ACL_GROUP_GRANT_ACTION_ERROR,
-      groupRevokeSuccess: EventTypes.ACL_GROUP_REVOKE_ACTION_CHANGE,
-      groupRevokeError: EventTypes.ACL_GROUP_REVOKE_ACTION_ERROR
+      createSuccess: ACL_CREATE_SUCCESS,
+      createError: ACL_CREATE_ERROR,
+      fetchResourceSuccess: ACL_RESOURCE_ACLS_CHANGE,
+      fetchResourceError: ACL_RESOURCE_ACLS_ERROR,
+      userGrantSuccess: ACL_USER_GRANT_ACTION_CHANGE,
+      userGrantError: ACL_USER_GRANT_ACTION_ERROR,
+      userRevokeSuccess: ACL_USER_REVOKE_ACTION_CHANGE,
+      userRevokeError: ACL_USER_REVOKE_ACTION_ERROR,
+      groupGrantSuccess: ACL_GROUP_GRANT_ACTION_CHANGE,
+      groupGrantError: ACL_GROUP_GRANT_ACTION_ERROR,
+      groupRevokeSuccess: ACL_GROUP_REVOKE_ACTION_CHANGE,
+      groupRevokeError: ACL_GROUP_REVOKE_ACTION_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -46,14 +157,14 @@ const ListenersDescription = {
   aclDirectories: {
     store: ACLDirectoriesStore,
     events: {
-      fetchSuccess: EventTypes.ACL_DIRECTORIES_CHANGED,
-      fetchError: EventTypes.ACL_DIRECTORIES_ERROR,
-      addSuccess: EventTypes.ACL_DIRECTORY_ADD_SUCCESS,
-      addError: EventTypes.ACL_DIRECTORY_ADD_ERROR,
-      deleteSuccess: EventTypes.ACL_DIRECTORY_DELETE_SUCCESS,
-      deleteError: EventTypes.ACL_DIRECTORY_DELETE_ERROR,
-      testSuccess: EventTypes.ACL_DIRECTORY_TEST_SUCCESS,
-      testError: EventTypes.ACL_DIRECTORY_TEST_ERROR
+      fetchSuccess: ACL_DIRECTORIES_CHANGED,
+      fetchError: ACL_DIRECTORIES_ERROR,
+      addSuccess: ACL_DIRECTORY_ADD_SUCCESS,
+      addError: ACL_DIRECTORY_ADD_ERROR,
+      deleteSuccess: ACL_DIRECTORY_DELETE_SUCCESS,
+      deleteError: ACL_DIRECTORY_DELETE_ERROR,
+      testSuccess: ACL_DIRECTORY_TEST_SUCCESS,
+      testError: ACL_DIRECTORY_TEST_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -64,11 +175,11 @@ const ListenersDescription = {
   auth: {
     store: ACLAuthStore,
     events: {
-      success: EventTypes.ACL_AUTH_USER_LOGIN_CHANGED,
-      error: EventTypes.ACL_AUTH_USER_LOGIN_ERROR,
-      logoutSuccess: EventTypes.ACL_AUTH_USER_LOGOUT_SUCCESS,
-      logoutError: EventTypes.ACL_AUTH_USER_LOGOUT_ERROR,
-      roleChange: EventTypes.ACL_AUTH_USER_ROLE_CHANGED
+      success: ACL_AUTH_USER_LOGIN_CHANGED,
+      error: ACL_AUTH_USER_LOGIN_ERROR,
+      logoutSuccess: ACL_AUTH_USER_LOGOUT_SUCCESS,
+      logoutError: ACL_AUTH_USER_LOGOUT_ERROR,
+      roleChange: ACL_AUTH_USER_ROLE_CHANGED
     },
     unmountWhen: function () {
       return true;
@@ -79,10 +190,10 @@ const ListenersDescription = {
   componentHealth: {
     store: ComponentHealthStore,
     events: {
-      success: EventTypes.HEALTH_COMPONENTS_CHANGE,
-      error: EventTypes.HEALTH_COMPONENTS_ERROR,
-      reportSuccess: EventTypes.HEALTH_REPORT_CHANGE,
-      reportError: EventTypes.HEALTH_REPORT_ERROR
+      success: HEALTH_COMPONENTS_CHANGE,
+      error: HEALTH_COMPONENTS_ERROR,
+      reportSuccess: HEALTH_REPORT_CHANGE,
+      reportError: HEALTH_REPORT_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -93,12 +204,12 @@ const ListenersDescription = {
   cosmosPackages: {
     store: CosmosPackagesStore,
     events: {
-      descriptionSuccess: EventTypes.COSMOS_DESCRIBE_CHANGE,
-      descriptionError: EventTypes.COSMOS_DESCRIBE_ERROR,
-      installedSuccess: EventTypes.COSMOS_LIST_CHANGE,
-      installedError: EventTypes.COSMOS_LIST_ERROR,
-      availableSuccess: EventTypes.COSMOS_SEARCH_CHANGE,
-      availableError: EventTypes.COSMOS_SEARCH_ERROR
+      descriptionSuccess: COSMOS_DESCRIBE_CHANGE,
+      descriptionError: COSMOS_DESCRIBE_ERROR,
+      installedSuccess: COSMOS_LIST_CHANGE,
+      installedError: COSMOS_LIST_ERROR,
+      availableSuccess: COSMOS_SEARCH_CHANGE,
+      availableError: COSMOS_SEARCH_ERROR
     },
     unmountWhen: function (store, event) {
       return event === 'availableSuccess';
@@ -162,8 +273,8 @@ const ListenersDescription = {
 
     // What event to listen to
     events: {
-      success: EventTypes.MESOS_SUMMARY_CHANGE,
-      error: EventTypes.MESOS_SUMMARY_REQUEST_ERROR
+      success: MESOS_SUMMARY_CHANGE,
+      error: MESOS_SUMMARY_REQUEST_ERROR
     },
 
     // When to remove listener
@@ -180,8 +291,8 @@ const ListenersDescription = {
   state: {
     store: MesosStateStore,
     events: {
-      success: EventTypes.MESOS_STATE_CHANGE,
-      error: EventTypes.MESOS_STATE_REQUEST_ERROR
+      success: MESOS_STATE_CHANGE,
+      error: MESOS_STATE_REQUEST_ERROR
     },
     unmountWhen: function (store, event) {
       if (event === 'success') {
@@ -194,8 +305,8 @@ const ListenersDescription = {
   marathon: {
     store: MarathonStore,
     events: {
-      success: EventTypes.MARATHON_APPS_CHANGE,
-      error: EventTypes.MARATHON_APPS_ERROR
+      success: MARATHON_APPS_CHANGE,
+      error: MARATHON_APPS_ERROR
     },
     unmountWhen: function (store, event) {
       if (event === 'success') {
@@ -208,8 +319,8 @@ const ListenersDescription = {
   metadata: {
     store: MetadataStore,
     events: {
-      success: EventTypes.METADATA_CHANGE,
-      dcosSuccess: EventTypes.DCOS_METADATA_CHANGE
+      success: METADATA_CHANGE,
+      dcosSuccess: DCOS_METADATA_CHANGE
     },
     unmountWhen: function () {
       return true;
@@ -220,8 +331,8 @@ const ListenersDescription = {
   mesosLog: {
     store: MesosLogStore,
     events: {
-      success: EventTypes.MESOS_LOG_CHANGE,
-      error: EventTypes.MESOS_LOG_REQUEST_ERROR
+      success: MESOS_LOG_CHANGE,
+      error: MESOS_LOG_REQUEST_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -233,8 +344,8 @@ const ListenersDescription = {
   taskDirectory: {
     store: TaskDirectoryStore,
     events: {
-      success: EventTypes.TASK_DIRECTORY_CHANGE,
-      error: EventTypes.TASK_DIRECTORY_ERROR
+      success: TASK_DIRECTORY_CHANGE,
+      error: TASK_DIRECTORY_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -245,8 +356,8 @@ const ListenersDescription = {
   groups: {
     store: ACLGroupsStore,
     events: {
-      success: EventTypes.ACL_GROUPS_CHANGE,
-      error: EventTypes.ACL_GROUPS_REQUEST_ERROR
+      success: ACL_GROUPS_CHANGE,
+      error: ACL_GROUPS_REQUEST_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -257,24 +368,24 @@ const ListenersDescription = {
   group: {
     store: ACLGroupStore,
     events: {
-      success: EventTypes.ACL_GROUP_DETAILS_GROUP_CHANGE,
-      error: EventTypes.ACL_GROUP_DETAILS_GROUP_ERROR,
-      addUserSuccess: EventTypes.ACL_GROUP_USERS_CHANGED,
-      addUserError: EventTypes.ACL_GROUP_ADD_USER_ERROR,
-      createSuccess: EventTypes.ACL_GROUP_CREATE_SUCCESS,
-      createError: EventTypes.ACL_GROUP_CREATE_ERROR,
-      updateError: EventTypes.ACL_GROUP_UPDATE_ERROR,
-      updateSuccess: EventTypes.ACL_GROUP_UPDATE_SUCCESS,
-      permissionsSuccess: EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
-      permissionsError: EventTypes.ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
-      usersSuccess: EventTypes.ACL_GROUP_DETAILS_USERS_CHANGE,
-      usersError: EventTypes.ACL_GROUP_DETAILS_USERS_ERROR,
-      fetchedDetailsSuccess: EventTypes.ACL_GROUP_DETAILS_FETCHED_SUCCESS,
-      fetchedDetailsError: EventTypes.ACL_GROUP_DETAILS_FETCHED_ERROR,
-      deleteUserSuccess: EventTypes.ACL_GROUP_REMOVE_USER_SUCCESS,
-      deleteUserError: EventTypes.ACL_GROUP_REMOVE_USER_ERROR,
-      deleteSuccess: EventTypes.ACL_GROUP_DELETE_SUCCESS,
-      deleteError: EventTypes.ACL_GROUP_DELETE_ERROR
+      success: ACL_GROUP_DETAILS_GROUP_CHANGE,
+      error: ACL_GROUP_DETAILS_GROUP_ERROR,
+      addUserSuccess: ACL_GROUP_USERS_CHANGED,
+      addUserError: ACL_GROUP_ADD_USER_ERROR,
+      createSuccess: ACL_GROUP_CREATE_SUCCESS,
+      createError: ACL_GROUP_CREATE_ERROR,
+      updateError: ACL_GROUP_UPDATE_ERROR,
+      updateSuccess: ACL_GROUP_UPDATE_SUCCESS,
+      permissionsSuccess: ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
+      permissionsError: ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
+      usersSuccess: ACL_GROUP_DETAILS_USERS_CHANGE,
+      usersError: ACL_GROUP_DETAILS_USERS_ERROR,
+      fetchedDetailsSuccess: ACL_GROUP_DETAILS_FETCHED_SUCCESS,
+      fetchedDetailsError: ACL_GROUP_DETAILS_FETCHED_ERROR,
+      deleteUserSuccess: ACL_GROUP_REMOVE_USER_SUCCESS,
+      deleteUserError: ACL_GROUP_REMOVE_USER_ERROR,
+      deleteSuccess: ACL_GROUP_DELETE_SUCCESS,
+      deleteError: ACL_GROUP_DELETE_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -285,8 +396,8 @@ const ListenersDescription = {
   users: {
     store: ACLUsersStore,
     events: {
-      success: EventTypes.ACL_USERS_CHANGE,
-      error: EventTypes.ACL_USERS_REQUEST_ERROR
+      success: ACL_USERS_CHANGE,
+      error: ACL_USERS_REQUEST_ERROR
     },
     unmountWhen: function () {
       return true;
@@ -297,20 +408,20 @@ const ListenersDescription = {
   user: {
     store: ACLUserStore,
     events: {
-      success: EventTypes.ACL_USER_DETAILS_USER_CHANGE,
-      error: EventTypes.ACL_USER_DETAILS_USER_ERROR,
-      permissionsSuccess: EventTypes.ACL_USER_DETAILS_PERMISSIONS_CHANGE,
-      permissionsError: EventTypes.ACL_USER_DETAILS_PERMISSIONS_ERROR,
-      groupsSuccess: EventTypes.ACL_USER_DETAILS_GROUPS_CHANGE,
-      groupsError: EventTypes.ACL_USER_DETAILS_GROUPS_ERROR,
-      fetchedDetailsSuccess: EventTypes.ACL_USER_DETAILS_FETCHED_SUCCESS,
-      fetchedDetailsError: EventTypes.ACL_USER_DETAILS_FETCHED_ERROR,
-      createSuccess: EventTypes.ACL_USER_CREATE_SUCCESS,
-      createError: EventTypes.ACL_USER_CREATE_ERROR,
-      updateSuccess: EventTypes.ACL_USER_UPDATE_SUCCESS,
-      updateError: EventTypes.ACL_USER_UPDATE_ERROR,
-      deleteSuccess: EventTypes.ACL_USER_DELETE_SUCCESS,
-      deleteError: EventTypes.ACL_USER_DELETE_ERROR
+      success: ACL_USER_DETAILS_USER_CHANGE,
+      error: ACL_USER_DETAILS_USER_ERROR,
+      permissionsSuccess: ACL_USER_DETAILS_PERMISSIONS_CHANGE,
+      permissionsError: ACL_USER_DETAILS_PERMISSIONS_ERROR,
+      groupsSuccess: ACL_USER_DETAILS_GROUPS_CHANGE,
+      groupsError: ACL_USER_DETAILS_GROUPS_ERROR,
+      fetchedDetailsSuccess: ACL_USER_DETAILS_FETCHED_SUCCESS,
+      fetchedDetailsError: ACL_USER_DETAILS_FETCHED_ERROR,
+      createSuccess: ACL_USER_CREATE_SUCCESS,
+      createError: ACL_USER_CREATE_ERROR,
+      updateSuccess: ACL_USER_UPDATE_SUCCESS,
+      updateError: ACL_USER_UPDATE_ERROR,
+      deleteSuccess: ACL_USER_DELETE_SUCCESS,
+      deleteError: ACL_USER_DELETE_ERROR
     },
     unmountWhen: function () {
       return true;

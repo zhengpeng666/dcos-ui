@@ -6,6 +6,7 @@ import CosmosPackagesActions from '../events/CosmosPackagesActions';
 import EventTypes from '../constants/EventTypes';
 import UniversePackage from '../structs/UniversePackage';
 import UniversePackagesList from '../structs/UniversePackagesList';
+// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 const CosmosPackagesStore = Store.createStore({
   storeID: 'cosmosPackages',

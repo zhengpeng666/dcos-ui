@@ -8,6 +8,7 @@ import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import TaskDirectory from '../structs/TaskDirectory';
 import TaskDirectoryActions from '../events/TaskDirectoryActions';
+// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 var requestInterval = null;
 var activeXHR = null;

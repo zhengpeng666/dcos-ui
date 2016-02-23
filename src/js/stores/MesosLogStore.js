@@ -8,6 +8,7 @@ import GetSetMixin from '../mixins/GetSetMixin';
 import Item from '../structs/Item';
 import LogBuffer from '../structs/LogBuffer';
 import MesosLogActions from '../events/MesosLogActions';
+// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 const MAX_FILE_SIZE = 50000;
 

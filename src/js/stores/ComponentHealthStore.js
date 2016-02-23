@@ -6,6 +6,7 @@ import ComponentHealthActions from '../events/ComponentHealthActions';
 import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import HealthComponentList from '../structs/HealthComponentList';
+// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 const ComponentHealthStore = Store.createStore({
 

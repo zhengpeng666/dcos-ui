@@ -12,6 +12,7 @@ var MesosSummaryActions = require('../events/MesosSummaryActions');
 import SummaryList from '../structs/SummaryList';
 import StateSummary from '../structs/StateSummary';
 var TimeScales = require('../constants/TimeScales');
+// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 var requestInterval = null;
 

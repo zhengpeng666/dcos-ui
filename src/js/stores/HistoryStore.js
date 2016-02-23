@@ -2,6 +2,7 @@ import {HashLocation} from 'react-router';
 import {Store} from 'mesosphere-shared-reactjs';
 
 import GetSetMixin from '../mixins/GetSetMixin';
+// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 var HistoryStore = Store.createStore({
   storeID: 'history',

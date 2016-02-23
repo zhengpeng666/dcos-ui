@@ -7,10 +7,10 @@ import Cluster from '../utils/Cluster';
 import EventTypes from '../constants/EventTypes';
 import HealthLabels from '../constants/HealthLabels';
 import HistoryStore from '../stores/HistoryStore';
+import {Hooks} from '../pluginBridge/PluginBridge';
 import InternalStorageMixin from '../mixins/InternalStorageMixin';
 import MarathonStore from '../stores/MarathonStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
-import Plugins from '../plugins/Plugins';
 import StringUtil from '../utils/StringUtil';
 
 const PropTypes = React.PropTypes;
@@ -129,7 +129,7 @@ class ServiceOverlay extends mixin(InternalStorageMixin) {
       </a>
     );
 
-    return Plugins.applyFilter('overlayNewWindowButton', link);
+    return Hooks.applyFilter('overlayNewWindowButton', link);
   }
 
   getServiceNav(service) {

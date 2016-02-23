@@ -5,6 +5,7 @@ import AppDispatcher from '../events/AppDispatcher';
 import ConfigActions from '../events/ConfigActions';
 import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
+// import PluginBridge from '../../../src/js/pluginBridge/PluginBridge';
 
 var ConfigStore = Store.createStore({
   storeID: 'config',

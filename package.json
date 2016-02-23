@@ -137,7 +137,9 @@
       "underscore",
       "babel-runtime",
       "redux",
-      "AppReducer"
+      "AppReducer",
+      "Hooks",
+      "PluginBridge"
     ],
     "testPathIgnorePatterns": [
       "/tmp/",

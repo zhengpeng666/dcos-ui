@@ -4,11 +4,13 @@
 
 var _ = require('underscore');
 
-import {
-  APP_STORE_CHANGE
-} from '../constants/EventTypes';
+var PluginBridge;
 
-import {dispatch} from '../pluginBridge/PluginBridge';
+if (global.__DEV__) {
+  PluginBridge = require('../pluginBridge/PluginBridge');
+}
+
+import {APP_STORE_CHANGE} from '../constants/EventTypes';
 
 var GetSetMixin = {
 
@@ -32,8 +34,11 @@ var GetSetMixin = {
 
     _.extend(this.getSet_data, data);
 
+    if (!global.__DEV__) {
+      PluginBridge = require('../pluginBridge/PluginBridge');
+    }
     // Dispatch new Store data to pluginBridge
-    dispatch({
+    PluginBridge.dispatch({
       type: APP_STORE_CHANGE,
       storeID: this.storeID,
       data: this.getSet_data
