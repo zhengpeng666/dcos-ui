@@ -21,15 +21,15 @@ describe.only('Package Detail Tab', function () {
       .as('information');
 
     cy
-      .get("@information").eq(0)
+      .get('@information').eq(0)
       .should('contain', 'A cluster-wide init and control system for services in cgroups or Docker containers.')
-      .get("@information").eq(1)
+      .get('@information').eq(1)
       .should('contain', 'We recommend a minimum of one node with at least 2 CPU\'s and 1GB of RAM available for the Marathon Service.')
-      .get("@information").eq(2)
+      .get('@information').eq(2)
       .should('contain', 'SCM: https://github.com/mesosphere/marathon.git')
-      .get("@information").eq(3)
+      .get('@information').eq(3)
       .should('contain', 'Maintainer: support@mesosphere.io')
-      .get("@information").eq(4)
+      .get('@information').eq(4)
       .should('contain', 'Apache License Version 2.0: https://github.com/mesosphere/marathon/blob/master/LICENSE');
   });
 });
