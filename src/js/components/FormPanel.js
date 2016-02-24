@@ -26,13 +26,11 @@ class FormPanel extends React.Component {
     Object.keys(definition).forEach((title) => {
       let typeDefinition = definition[title];
 
-      flattenedDefinition.push(
-        {
-          render: this.getHeader.bind(
-            this, typeDefinition.title, typeDefinition.description
-          )
-        }
-      );
+      flattenedDefinition.push({render: this.getHeader.bind(
+        this,
+        typeDefinition.title,
+        typeDefinition.description
+      )});
 
       typeDefinition.definition.forEach((field) => {
         let nestedDefinition = field.definition;
@@ -56,9 +54,7 @@ class FormPanel extends React.Component {
   getFormRowClass(definition) {
     let isSelectedForm = definition.formParent === this.props.currentTab;
 
-    return classNames('row', {
-      hidden: !isSelectedForm
-    });
+    return classNames('row', {hidden: !isSelectedForm});
   }
 
   getHeader(title, description) {

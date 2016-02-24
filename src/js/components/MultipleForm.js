@@ -70,26 +70,28 @@ class MultipleForm extends React.Component {
   }
 
   getSideContent(multipleDefinition) {
-    let tabValues = _.values(multipleDefinition);
     let content = null;
+    let currentTab = this.state.currentTab;
+    let {handleTabClick} = this;
+    let isMobileWidth = this.props.isMobileWidth;
+    let tabValues = _.values(multipleDefinition);
 
-    if (this.props.isMobileWidth) {
+    if (isMobileWidth) {
       content = (
         <FilterByFormTab
-          currentTab={this.state.currentTab}
-          handleFilterChange={this.handleTabClick}
+          currentTab={currentTab}
+          handleFilterChange={handleTabClick}
           tabs={tabValues} />
       );
     } else {
       content = (
         <SideTabs
-          onTabClick={this.handleTabClick}
-          selectedTab={this.state.currentTab}
+          onTabClick={handleTabClick}
+          selectedTab={currentTab}
           tabs={tabValues} />
       );
     }
 
-    let isMobileWidth = this.props.isMobileWidth;
     let classSet = classNames({
       'column-4': !isMobileWidth,
       'column-12 mobile-column': isMobileWidth
