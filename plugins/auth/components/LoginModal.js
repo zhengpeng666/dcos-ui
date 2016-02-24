@@ -173,7 +173,7 @@ class LoginModal extends mixin(StoreMixin) {
             container-pod-short flush-bottom">
             <h3 className="sidebar-header-label flush-top text-align-center
               text-overflow flush-bottom">
-              Sign In to Mesosphere DCOS
+              Sign in to Mesosphere DCOS
             </h3>
           </div>
         </div>
