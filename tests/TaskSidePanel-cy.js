@@ -1,4 +1,4 @@
-describe.only('Task Side Panel', function () {
+describe('Task Side Panel', function () {
 
   beforeEach(function () {
     cy
@@ -25,7 +25,7 @@ describe.only('Task Side Panel', function () {
       });
   });
 
-  it('displays directory of task', function () {
+  it('displays elements in directory table', function () {
     cy
       .get('.side-panel table.table > tbody > tr')
       .should(function ($tableRows) {
