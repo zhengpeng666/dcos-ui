@@ -82,7 +82,7 @@ class InstalledPackagesTab extends mixin(StoreMixin) {
       return this.getLoadingScreen();
     }
 
-    let packages = CosmosPackagesStore.get('installedPackages')
+    let packages = CosmosPackagesStore.getInstalledPackages()
       .filterItems(searchString);
 
     return (
