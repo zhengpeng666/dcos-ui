@@ -20,6 +20,15 @@ module.exports = class AccessDeniedPage extends React.Component {
     ACLAuthActions.logout();
   }
 
+  getFooter() {
+    return (
+      <button className="button button-primary"
+        onClick={this.handleUserLogout}>
+        Log out
+      </button>
+    );
+  }
+
   render() {
     return (
       <div className="flex-container-col">
@@ -27,13 +36,10 @@ module.exports = class AccessDeniedPage extends React.Component {
           <div className="container container-fluid container-pod
             flex-container-col">
             <AlertPanel
-              title="Access Denied"
+              footer={this.getFooter()}
               iconClassName="icon icon-sprite icon-sprite-jumbo
                 icon-sprite-jumbo-white icon-lost-planet flush-top"
-              footer={<button className="button button-primary"
-                onClick={this.handleUserLogout}>
-                Log out
-              </button>}>
+              title="Access Denied">
               <p>
                 You do not have access to this service. <br />
                 Please contact your DCOS administrator.
