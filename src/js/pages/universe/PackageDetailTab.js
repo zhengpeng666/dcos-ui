@@ -74,10 +74,10 @@ class PackageDetailTab extends mixin(StoreMixin) {
       // Render media items
       if (type === 'media') {
         content = (
-          <div
-            className="media-object media-object-spacing flex-box flex-box-wrap"
-            key={index}>
-            {this.getItems(value, this.getMediaItem)}
+          <div className="media-object-spacing-wrapper">
+            <div className="media-object flex-box flex-box-wrap" key={index}>
+              {this.getItems(value, this.getMediaItem)}
+            </div>
           </div>
         );
       }
@@ -203,22 +203,24 @@ class PackageDetailTab extends mixin(StoreMixin) {
     return (
       <div>
         <div className="container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-inverse flush-top">
-          <div className="media-object media-object-spacing media-object-align-middle">
-            <div className="media-object-item">
-              <div className="icon icon-huge icon-image-container icon-app-container">
-                <img src={cosmosPackage.getIcons()['icon-large']} />
+          <div className="media-object-spacing-wrapper">
+            <div className="media-object media-object-align-middle">
+              <div className="media-object-item">
+                <div className="icon icon-huge icon-image-container icon-app-container">
+                  <img src={cosmosPackage.getIcons()['icon-large']} />
+                </div>
               </div>
-            </div>
-            <div className="media-object-item">
-              <h1 className="inverse flush">
-                {packageDetails.name}
-              </h1>
-              <p>{packageDetails.version}</p>
-              <button
-                className="button button-success"
-                onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
-                Install Package
-              </button>
+              <div className="media-object-item">
+                <h1 className="inverse flush">
+                  {packageDetails.name}
+                </h1>
+                <p>{packageDetails.version}</p>
+                <button
+                  className="button button-success"
+                  onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
+                  Install Package
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -92,18 +92,20 @@ class SidePanelContents extends
         container-pod
         container-pod-super-short
         flush-top">
-        <div className="media-object media-object-spacing media-object-align-middle">
-          <div className="media-object-item">
-            <i className={resourceIconClasses}></i>
-          </div>
-          <div className="media-object-item">
-            <h4 className="flush-top flush-bottom text-color-neutral">
-              {resourceValue}
-            </h4>
-            <span className={`side-panel-resource-label
-                text-color-${colorIndex}`}>
-              {resourceLabel.toUpperCase()}
-            </span>
+        <div className="media-object-spacing-wrapper">
+          <div className="media-object media-object-align-middle">
+            <div className="media-object-item">
+              <i className={resourceIconClasses}></i>
+            </div>
+            <div className="media-object-item">
+              <h4 className="flush-top flush-bottom text-color-neutral">
+                {resourceValue}
+              </h4>
+              <span className={`side-panel-resource-label
+                  text-color-${colorIndex}`}>
+                {resourceLabel.toUpperCase()}
+              </span>
+            </div>
           </div>
         </div>
 
