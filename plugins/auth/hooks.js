@@ -9,15 +9,14 @@ import Authenticated from './components/Authenticated';
 import LoginPage from './components/LoginPage';
 import UserDropup from './components/UserDropup';
 
-const pluginHooks = {
+let PluginHooks = {
   configuration: {
     enabled: false
   },
-
   /**
    * @param  {Object} Hooks The Hooks API
    */
-  initialize: function (Hooks) {
+  initialize(Hooks) {
     Hooks.addAction('AJAXRequestError', this.AJAXRequestError.bind(this));
     Hooks.addFilter('sidebarFooter', this.sidebarFooter.bind(this));
     Hooks.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
@@ -25,7 +24,7 @@ const pluginHooks = {
     Hooks.addAction('userLogoutSuccess', this.userLogoutSuccess.bind(this));
   },
 
-  configure: function (configuration) {
+  configure(configuration) {
     // Only merge keys that have a non-null value
     Object.keys(configuration).forEach((key) => {
       if (configuration[key] != null) {
@@ -34,11 +33,11 @@ const pluginHooks = {
     });
   },
 
-  isEnabled: function () {
+  isEnabled() {
     return this.configuration.enabled;
   },
 
-  AJAXRequestError: function (xhr) {
+  AJAXRequestError(xhr) {
     if (xhr.status !== 401 && xhr.status !== 403) {
       return;
     }
@@ -59,7 +58,7 @@ const pluginHooks = {
     }
   },
 
-  openIdentifyModal: function (value) {
+  openIdentifyModal(value) {
     if (this.isEnabled() !== true) {
       return value;
     }
@@ -67,7 +66,7 @@ const pluginHooks = {
     return false;
   },
 
-  sidebarFooter: function (value, defaultButtonSet) {
+  sidebarFooter(value, defaultButtonSet) {
     if (this.isEnabled() !== true) {
       return value;
     }
@@ -82,7 +81,7 @@ const pluginHooks = {
     );
   },
 
-  applicationRoutes: function (routes) {
+  applicationRoutes(routes) {
     if (this.isEnabled() === true) {
 
       // Override handler of index to be 'authenticated'
@@ -111,9 +110,9 @@ const pluginHooks = {
     return routes;
   },
 
-  userLogoutSuccess: function () {
+  userLogoutSuccess() {
     window.location.href = '#/login';
   }
 };
 
-module.exports = pluginHooks;
+module.exports = PluginHooks;

@@ -4,9 +4,9 @@ import mixin from 'reactjs-mixin';
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import Page from '../../../src/js/components/Page';
-import TabsUtil from '../../../src/js/utils/TabsUtil';
-import TabsMixin from '../../../src/js/mixins/TabsMixin';
+import Page from '../components/Page';
+import TabsUtil from '../utils/TabsUtil';
+import TabsMixin from '../mixins/TabsMixin';
 
 const SETTINGS_TABS = {
   'settings-organization': 'Organization',

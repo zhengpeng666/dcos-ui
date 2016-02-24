@@ -1,3 +1,4 @@
+import PluginHooks from './hooks';
 // Declare some constants for my plugin's event types.
 const EXAMPLE_PLUGIN_EVENT = 'EXAMPLE_PLUGIN_EVENT';
 
@@ -28,6 +29,10 @@ module.exports = function (Store, dispatch, name, options) {
 
   // options.config = config from plugin configuration file
   // options.APPLICATION = Applications root key in Store.
+  const {Hooks} = options;
+
+  // Set plugin's hooks
+  PluginHooks.initialize(Hooks);
 
   if (options.config.enabled) {
     setInterval(function () {
@@ -56,4 +61,3 @@ module.exports = function (Store, dispatch, name, options) {
 
   return RootReducer;
 };
-

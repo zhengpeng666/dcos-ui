@@ -73,7 +73,7 @@ function onApplicationLoad() {
   } else {
     setTimeout(function () {
       let builtRoutes = createRoutes(
-        PluginBridge.Hooks.applyFilter('applicationRoutes', appRoutes)
+        appRoutes.getRoutes()
       );
 
       Router.run(builtRoutes[0], function (Handler, state) {
