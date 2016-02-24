@@ -35,7 +35,10 @@ class FormPanel extends React.Component {
       typeDefinition.definition.forEach((field) => {
         let nestedDefinition = field.definition;
         if (nestedDefinition) {
-          flattenedDefinition.push(this.getSubHeader(field.name));
+          flattenedDefinition.push({render: this.getSubHeader.bind(
+            this,
+            field.name
+          )});
           flattenedDefinition = flattenedDefinition.concat(nestedDefinition);
         } else {
           flattenedDefinition.push(field);
