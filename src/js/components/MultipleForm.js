@@ -30,8 +30,16 @@ class MultipleForm extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.setState({useGemini: true});
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isMobileWidth !== this.props.isMobileWidth) {
+      this.setState({useGemini: false});
+    }
+  }
+
+  componentDidUpdate() {
+    if (!this.state.useGemini) {
+      this.setState({useGemini: true});
+    }
   }
 
   handleTabClick(tab) {
