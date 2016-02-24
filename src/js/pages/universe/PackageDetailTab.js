@@ -175,7 +175,7 @@ class PackageDetailTab extends mixin(StoreMixin) {
       return this.getLoadingScreen();
     }
 
-    let cosmosPackage = CosmosPackagesStore.get('packageDetails');
+    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
     let packageDetails = cosmosPackage.get('package');
     let definition = [
       {label: 'Description', value: packageDetails.description},

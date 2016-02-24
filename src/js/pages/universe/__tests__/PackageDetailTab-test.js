@@ -1,7 +1,5 @@
 jest.dontMock('../PackageDetailTab');
 jest.dontMock('../../../components/Panel');
-jest.dontMock('../../../events/AppDispatcher');
-jest.dontMock('../../../events/CosmosPackagesActions');
 jest.dontMock('../../../stores/CosmosPackagesStore');
 jest.dontMock('../../../../../tests/_fixtures/cosmos/package-describe.json');
 
