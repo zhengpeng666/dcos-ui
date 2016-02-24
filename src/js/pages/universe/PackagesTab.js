@@ -123,7 +123,7 @@ class PackagesTab extends mixin(StoreMixin) {
     }).map((cosmosPackage, index) => {
       return (
         <div
-          className="grid-item column-small-6 column-medium-4 column-large-3"
+          className="grid-item column-mini-6 column-medium-4 column-large-3"
           key={index}>
           <Panel
             className="panel clickable"
