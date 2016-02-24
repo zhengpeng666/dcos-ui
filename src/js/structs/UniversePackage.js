@@ -1,14 +1,15 @@
 import Item from './Item';
-import ServiceImages from '../constants/ServiceImages';
+import ServiceUtil from '../utils/ServiceUtil';
 
 class UniversePackage extends Item {
   getIcons() {
+    let images;
     let resources = this.get('resources');
     if (resources && resources.images) {
-      return resources.images;
+      images = resources.images;
     }
 
-    return ServiceImages.NA_IMAGES;
+    return ServiceUtil.getServiceImages(images);
   }
 }
 

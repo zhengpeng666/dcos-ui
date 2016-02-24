@@ -10,6 +10,7 @@ var GetSetMixin = require('../mixins/GetSetMixin');
 var HealthStatus = require('../constants/HealthStatus');
 var MarathonActions = require('../events/MarathonActions');
 var ServiceImages = require('../constants/ServiceImages');
+import ServiceUtil from '../utils/ServiceUtil';
 
 var requestInterval = null;
 
@@ -119,16 +120,6 @@ var MarathonStore = Store.createStore({
     return null;
   },
 
-  getImageSizeFromMetadata: function (metadata, size) {
-    if (metadata.images == null ||
-      metadata.images[`icon-${size}`] == null ||
-      metadata.images[`icon-${size}`].length === 0) {
-      return null;
-    }
-
-    return metadata.images[`icon-${size}`];
-  },
-
   getFrameworkImages: function (app) {
     if (app.labels == null ||
       app.labels.DCOS_PACKAGE_METADATA == null ||
@@ -138,13 +129,7 @@ var MarathonStore = Store.createStore({
 
     var metadata = this.parseMetadata(app.labels.DCOS_PACKAGE_METADATA);
 
-    if (this.getImageSizeFromMetadata(metadata, 'small') == null ||
-        this.getImageSizeFromMetadata(metadata, 'medium') == null ||
-        this.getImageSizeFromMetadata(metadata, 'large') == null) {
-      return ServiceImages.NA_IMAGES;
-    }
-
-    return metadata.images;
+    return ServiceUtil.getServiceImages(metadata.images);
   },
 
   getVersion: function (app) {
