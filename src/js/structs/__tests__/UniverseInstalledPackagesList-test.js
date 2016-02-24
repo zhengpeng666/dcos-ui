@@ -1,6 +1,3 @@
-jest.dontMock('../UniversePackage');
-jest.dontMock('../UniverseInstalledPackagesList');
-
 var UniversePackage = require('../UniversePackage');
 var UniverseInstalledPackagesList = require('../UniverseInstalledPackagesList');
 

@@ -115,7 +115,7 @@ class PackagesTab extends mixin(StoreMixin) {
 
   getPackages() {
     let {searchString, sortProp} = this.state;
-    let packages = CosmosPackagesStore.get('availablePackages')
+    let packages = CosmosPackagesStore.getAvailablePackages()
       .filterItems(searchString);
 
     return _.sortBy(packages.getItems(), function (cosmosPackage) {

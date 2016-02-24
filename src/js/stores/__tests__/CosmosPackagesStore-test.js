@@ -50,14 +50,14 @@ describe('CosmosPackagesStore', function () {
 
     it('should return an instance of UniversePackagesList', function () {
       CosmosPackagesStore.fetchAvailablePackages('foo');
-      var availablePackages = CosmosPackagesStore.get('availablePackages');
+      var availablePackages = CosmosPackagesStore.getAvailablePackages();
       expect(availablePackages instanceof UniversePackagesList).toBeTruthy();
     });
 
     it('should return all of the availablePackages it was given', function () {
       CosmosPackagesStore.fetchAvailablePackages('foo');
       var availablePackages =
-        CosmosPackagesStore.get('availablePackages').getItems();
+        CosmosPackagesStore.getAvailablePackages().getItems();
       expect(availablePackages.length)
         .toEqual(this.packagesSearchFixture.packages.length);
     });
@@ -79,7 +79,7 @@ describe('CosmosPackagesStore', function () {
         });
 
         var availablePackages =
-          CosmosPackagesStore.get('availablePackages').getItems();
+          CosmosPackagesStore.getAvailablePackages().getItems();
         expect(availablePackages[0].get('gid')).toEqual('foo');
         expect(availablePackages[0].get('bar')).toEqual('baz');
       });
@@ -135,13 +135,13 @@ describe('CosmosPackagesStore', function () {
 
     it('should return an instance of UniversePackage', function () {
       CosmosPackagesStore.fetchPackageDescription('foo', 'bar');
-      var packageDetails = CosmosPackagesStore.get('packageDetails');
+      var packageDetails = CosmosPackagesStore.getPackageDetails();
       expect(packageDetails instanceof UniversePackage).toBeTruthy();
     });
 
     it('should return the packageDetails it was given', function () {
       CosmosPackagesStore.fetchPackageDescription('foo', 'bar');
-      var pkg = CosmosPackagesStore.get('packageDetails');
+      var pkg = CosmosPackagesStore.getPackageDetails();
       expect(pkg.get('name'))
         .toEqual(this.packageDescribeFixture.package.name);
       expect(pkg.get('version'))
@@ -165,7 +165,7 @@ describe('CosmosPackagesStore', function () {
           packageVersion: 'bar'
         });
 
-        var pkg = CosmosPackagesStore.get('packageDetails');
+        var pkg = CosmosPackagesStore.getPackageDetails();
         expect(pkg.get('gid')).toEqual('foo');
         expect(pkg.get('bar')).toEqual('baz');
       });
@@ -223,7 +223,7 @@ describe('CosmosPackagesStore', function () {
 
     it('should return an instance of UniverseInstalledPackagesList', function () {
       CosmosPackagesStore.fetchInstalledPackages('foo', 'bar');
-      var installedPackages = CosmosPackagesStore.get('installedPackages');
+      var installedPackages = CosmosPackagesStore.getInstalledPackages();
       expect(installedPackages instanceof UniverseInstalledPackagesList)
         .toBeTruthy();
     });
@@ -231,7 +231,7 @@ describe('CosmosPackagesStore', function () {
     it('should return all of the installedPackages it was given', function () {
       CosmosPackagesStore.fetchInstalledPackages('foo', 'bar');
       var installedPackages =
-        CosmosPackagesStore.get('installedPackages').getItems();
+        CosmosPackagesStore.getInstalledPackages().getItems();
       expect(installedPackages.length)
         .toEqual(this.packagesListFixture.packages.length);
     });
@@ -254,7 +254,7 @@ describe('CosmosPackagesStore', function () {
         });
 
         var installedPackages =
-          CosmosPackagesStore.get('installedPackages').getItems();
+          CosmosPackagesStore.getInstalledPackages().getItems();
         expect(installedPackages[0].get('gid')).toEqual('foo');
         expect(installedPackages[0].get('bar')).toEqual('baz');
       });
