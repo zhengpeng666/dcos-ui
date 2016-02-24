@@ -15,8 +15,10 @@ class FilterByFormTab extends React.Component {
 
   getItemHtml(item) {
     return (
-      <span>
-        <span>{item.title}</span>
+      <span className="badge-container">
+        <h4 className="flush dropdown-header">
+          <span>{item.title}</span>
+        </h4>
       </span>
     );
   }

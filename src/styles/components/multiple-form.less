@@ -35,6 +35,27 @@
 
       .mobile-column {
         flex-shrink: 0;
+
+        &:first-child {
+          border-bottom: 1px solid color-lighten(@neutral, 80);
+        }
+
+        .form-header {
+          margin-top: @base-spacing-unit;
+          margin-bottom: 0;
+        }
+
+        .media-object-item {
+          padding: @base-spacing-unit * 2/3;
+          padding-right: 0;
+        }
+
+        .button.button-wide {
+          padding-bottom: @base-spacing-unit * 3/2;
+          .dropdown-header {
+            color: @purple;
+          }
+        }
       }
     }
 
