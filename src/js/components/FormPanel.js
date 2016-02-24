@@ -67,7 +67,7 @@ class FormPanel extends React.Component {
 
     return (
       <div key={title} className={headerClassSet}>
-        <h3 className="flush">{title}</h3>
+        <h3 className="form-header">{title}</h3>
         <p>{description}</p>
       </div>
     );

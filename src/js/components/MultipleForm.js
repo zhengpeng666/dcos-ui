@@ -129,7 +129,7 @@ class MultipleForm extends React.Component {
     let isMobileWidth = this.props.isMobileWidth;
     let classSet = classNames({
       'column-8 multiple-form-right-column': !isMobileWidth,
-      'column-12': isMobileWidth
+      'column-12 mobile-column': isMobileWidth
     });
 
     if (this.state.useGemini) {
