@@ -110,6 +110,58 @@ describe('Util', function () {
     });
   });
 
+  describe('#findNestedPropertyInObject', function () {
+
+    beforeEach(function () {
+      this.searchObject = {
+        hello: {is: {it: {me: {you: {are: {looking: {for: '?'} } } } } } }
+      };
+      this.searchString = 'hello.is.it.me.you.are.looking.for';
+    });
+
+    it('', function () {
+      expect(
+        Util.findNestedPropertyInObject(this.searchObject, this.searchString)
+      ).toEqual('?');
+    });
+
+    it('', function () {
+      expect(Util.findNestedPropertyInObject(this.searchObject, 'hello.'))
+        .toEqual(undefined);
+    });
+
+    it('', function () {
+      expect(Util.findNestedPropertyInObject(null, this.searchString))
+        .toEqual(null);
+    });
+
+    it('', function () {
+      expect(Util.findNestedPropertyInObject(undefined, this.searchString))
+        .toEqual(null);
+    });
+
+    it('', function () {
+      expect(Util.findNestedPropertyInObject(this.searchObject, '.'))
+        .toEqual(undefined);
+    });
+
+    it('', function () {
+      expect(Util.findNestedPropertyInObject(this.searchObject, ''))
+        .toEqual(null);
+    });
+
+    it('', function () {
+      expect(Util.findNestedPropertyInObject(this.searchObject, null))
+        .toEqual(null);
+    });
+
+    it('', function () {
+      expect(Util.findNestedPropertyInObject(this.searchObject, undefined))
+        .toEqual(null);
+    });
+
+  });
+
   describe('#throttleScroll', function () {
     beforeEach(function () {
       this.func = jest.genMockFunction();

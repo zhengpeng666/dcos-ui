@@ -2,8 +2,6 @@ jest.dontMock('../PackagesTab');
 jest.dontMock('../../../components/Panel');
 jest.dontMock('../../../components/AdvancedConfigModal');
 jest.dontMock('../../../components/MultipleForm');
-jest.dontMock('../../../events/AppDispatcher');
-jest.dontMock('../../../events/CosmosPackagesActions');
 jest.dontMock('../../../stores/CosmosPackagesStore');
 jest.dontMock('../../../../../tests/_fixtures/cosmos/packages-search.json');
 
@@ -68,6 +66,11 @@ describe('PackagesTab', function () {
     beforeEach(function () {
       this.instance.handleInstallModalOpen =
         jasmine.createSpy('handleInstallModalOpen');
+      this.instance.context = {
+        router: {
+          transitionTo: jasmine.createSpy()
+        }
+      };
       jest.runAllTimers();
     });
 

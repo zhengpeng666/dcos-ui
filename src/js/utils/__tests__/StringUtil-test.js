@@ -39,6 +39,84 @@ describe('StringUtil', function () {
 
   });
 
+  describe('#isUrl', function () {
+
+    it('should accept a string starting with http://', function () {
+      var str = 'http://asd/';
+      expect(StringUtil.isUrl(str)).toEqual(true);
+    });
+
+    it('should accept a string starting with https://', function () {
+      var str = 'https://.asf';
+      expect(StringUtil.isUrl(str)).toEqual(true);
+    });
+
+    it('shouldn\'t accept a string with something before http://', function () {
+      var str = 'ahttp://';
+      expect(StringUtil.isUrl(str)).toEqual(false);
+    });
+
+    it('shouldn\'t accept null', function () {
+      var str = null;
+      expect(StringUtil.isUrl(str)).toEqual(false);
+    });
+
+    it('shouldn\'t accept a string missing a /', function () {
+      var str = 'http:/asfasfd';
+      expect(StringUtil.isUrl(str)).toEqual(false);
+    });
+
+    it('shouldn\'t accept a string missing :', function () {
+      var str = 'http//';
+      expect(StringUtil.isUrl(str)).toEqual(false);
+    });
+
+    it('shouldn\'t accept a string that only contains protocol', function () {
+      var str = 'http://';
+      expect(StringUtil.isUrl(str)).toEqual(false);
+    });
+
+    it('shouldn\'t accept a string that only contains protocol', function () {
+      var str = 'https://';
+      expect(StringUtil.isUrl(str)).toEqual(false);
+    });
+
+  });
+
+  describe('#isEmail', function () {
+
+    it('should accept a string with @ and . longer than 3 chars', function () {
+      var str = '@.as';
+      expect(StringUtil.isEmail(str)).toEqual(true);
+    });
+
+    it('should accept a string with @ and . longer than 3 chars', function () {
+      var str = 'a@.a';
+      expect(StringUtil.isEmail(str)).toEqual(true);
+    });
+
+    it('shouldn\'t accept a string without a .', function () {
+      var str = 'a@aa';
+      expect(StringUtil.isEmail(str)).toEqual(false);
+    });
+
+    it('shouldn\'t accept null', function () {
+      var str = null;
+      expect(StringUtil.isEmail(str)).toEqual(false);
+    });
+
+    it('shouldn\'t accept a string without a @', function () {
+      var str = 'aw.a';
+      expect(StringUtil.isEmail(str)).toEqual(false);
+    });
+
+    it('shouldn\'t accept a string shorter than 4', function () {
+      var str = '@.a';
+      expect(StringUtil.isEmail(str)).toEqual(false);
+    });
+
+  });
+
   describe('#pluralize', function () {
 
     it('pluralizes if there\'s more than one item', function () {

@@ -184,7 +184,7 @@ describe('CosmosPackagesActions', function () {
         );
       });
 
-      this.configuration.success({package: {bar: 'baz'}});
+      this.configuration.success({bar: 'baz'});
     });
 
     it('dispatches with the correct data when successful', function () {
@@ -194,7 +194,7 @@ describe('CosmosPackagesActions', function () {
         expect(action.data).toEqual({bar: 'baz'});
       });
 
-      this.configuration.success({package: {bar: 'baz'}});
+      this.configuration.success({bar: 'baz'});
     });
 
     it('dispatches the correct action when unsucessful', function () {

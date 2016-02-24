@@ -25,7 +25,7 @@ class PackagesTab extends mixin(StoreMixin) {
     this.state = {
       advancedModalOpen: false,
       hasError: false,
-      installModalPackage: false,
+      installModalPackage: null,
       isLoading: true,
       sortProp: 'packageName'
     };
@@ -55,7 +55,14 @@ class PackagesTab extends mixin(StoreMixin) {
 
   handleDetailOpen(cosmosPackage, event) {
     event.stopPropagation();
-    // Handle open detail view
+    let {packageName, currentVersion} = cosmosPackage;
+    let params = ['universe-packages-detail', {packageName}];
+
+    if (currentVersion) {
+      params.push({packageVersion: currentVersion});
+    }
+
+    this.context.router.transitionTo.apply(null, params);
   }
 
   handleAdvancedModalClose() {
@@ -96,7 +103,7 @@ class PackagesTab extends mixin(StoreMixin) {
   getIcon(cosmosPackage) {
     return (
       <div className="icon icon-jumbo icon-image-container icon-app-container">
-        <img src={cosmosPackage.getIcons()['icon-large']} />
+        <img src={cosmosPackage.getIcons()['icon-medium']} />
       </div>
     );
   }
@@ -180,5 +187,9 @@ class PackagesTab extends mixin(StoreMixin) {
     );
   }
 }
+
+PackagesTab.contextTypes = {
+  router: React.PropTypes.func
+};
 
 module.exports = PackagesTab;

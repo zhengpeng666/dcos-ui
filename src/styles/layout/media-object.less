@@ -28,48 +28,6 @@ components/media-objects.less
     display: flex;
     width: 100%;
 
-    &.media-object-spacing {
-
-      margin-bottom: -@base-spacing-unit * 1/2;
-      margin-right: -@base-spacing-unit * 1/2;
-
-      .media-object-item {
-
-        padding-bottom: @base-spacing-unit * 1/2;
-        padding-right: @base-spacing-unit * 1/2;
-
-      }
-
-      &.media-object-spacing-narrow {
-
-          margin-bottom: -@base-spacing-unit * 1/4;
-          margin-right: -@base-spacing-unit * 1/4;
-
-        .media-object-item {
-
-          padding-bottom: @base-spacing-unit * 1/4;
-          padding-right: @base-spacing-unit * 1/4;
-
-        }
-
-      }
-
-      &.media-object-spacing-wide {
-
-          margin-bottom: -@base-spacing-unit * 3/4;
-          margin-right: -@base-spacing-unit * 3/4;
-
-        .media-object-item {
-
-          padding-bottom: @base-spacing-unit * 3/4;
-          padding-right: @base-spacing-unit * 3/4;
-
-        }
-
-      }
-
-    }
-
     &.media-object-inline {
       display: inline-flex;
       padding-right: @base-spacing-unit;
@@ -92,12 +50,13 @@ components/media-objects.less
 
         .media-object-item-fill-image {
 
+          background-position: center;
           background-size: cover;
 
           &:before {
             content: '';
             display: block;
-            padding-bottom: 100% * 675/1200;
+            padding-bottom: 100% * 9/16;
           }
 
         }
@@ -128,10 +87,48 @@ components/media-objects.less
 
 }
 
+.media-object-spacing-wrapper {
 
+  display: block;
+  margin-bottom: -@base-spacing-unit * 1/2;
+  margin-right: -@base-spacing-unit * 1/2;
 
+  .media-object-item {
 
+    padding-bottom: @base-spacing-unit * 1/2;
+    padding-right: @base-spacing-unit * 1/2;
 
+  }
+
+  &.media-object-spacing-narrow {
+
+      margin-bottom: -@base-spacing-unit * 1/4;
+      margin-right: -@base-spacing-unit * 1/4;
+
+    .media-object-item {
+
+      padding-bottom: @base-spacing-unit * 1/4;
+      padding-right: @base-spacing-unit * 1/4;
+
+    }
+
+  }
+
+  &.media-object-spacing-wide {
+
+      margin-bottom: -@base-spacing-unit * 3/4;
+      margin-right: -@base-spacing-unit * 3/4;
+
+    .media-object-item {
+
+      padding-bottom: @base-spacing-unit * 3/4;
+      padding-right: @base-spacing-unit * 3/4;
+
+    }
+
+  }
+
+}
 
 & when (@media-object-enabled) and (@screen-mini-enabled) {
 
@@ -145,46 +142,42 @@ components/media-objects.less
 
   @media (min-width: @screen-mini) {
 
-    .media-object {
+    .media-object-spacing-wrapper {
 
-      &.media-object-spacing {
+      margin-bottom: -@base-spacing-unit-screen-mini * 1/2;
+      margin-right: -@base-spacing-unit-screen-mini * 1/2;
 
-        margin-bottom: -@base-spacing-unit-screen-mini * 1/2;
-        margin-right: -@base-spacing-unit-screen-mini * 1/2;
+      .media-object-item {
+
+        padding-bottom: @base-spacing-unit-screen-mini * 1/2;
+        padding-right: @base-spacing-unit-screen-mini * 1/2;
+
+      }
+
+
+      &.media-object-spacing-narrow {
+
+          margin-bottom: -@base-spacing-unit-screen-mini * 1/4;
+          margin-right: -@base-spacing-unit-screen-mini * 1/4;
 
         .media-object-item {
 
-          padding-bottom: @base-spacing-unit-screen-mini * 1/2;
-          padding-right: @base-spacing-unit-screen-mini * 1/2;
+          padding-bottom: @base-spacing-unit-screen-mini * 1/4;
+          padding-right: @base-spacing-unit-screen-mini * 1/4;
 
         }
 
+      }
 
-        &.media-object-spacing-narrow {
+      &.media-object-spacing-wide {
 
-            margin-bottom: -@base-spacing-unit-screen-mini * 1/4;
-            margin-right: -@base-spacing-unit-screen-mini * 1/4;
+          margin-bottom: -@base-spacing-unit-screen-mini * 3/4;
+          margin-right: -@base-spacing-unit-screen-mini * 3/4;
 
-          .media-object-item {
+        .media-object-item {
 
-            padding-bottom: @base-spacing-unit-screen-mini * 1/4;
-            padding-right: @base-spacing-unit-screen-mini * 1/4;
-
-          }
-
-        }
-
-        &.media-object-spacing-wide {
-
-            margin-bottom: -@base-spacing-unit-screen-mini * 3/4;
-            margin-right: -@base-spacing-unit-screen-mini * 3/4;
-
-          .media-object-item {
-
-            padding-bottom: @base-spacing-unit-screen-mini * 3/4;
-            padding-right: @base-spacing-unit-screen-mini * 3/4;
-
-          }
+          padding-bottom: @base-spacing-unit-screen-mini * 3/4;
+          padding-right: @base-spacing-unit-screen-mini * 3/4;
 
         }
 
@@ -213,46 +206,42 @@ components/media-objects.less
 
   @media (min-width: @screen-small) {
 
-    .media-object {
+  .media-object-spacing-wrapper {
 
-      &.media-object-spacing {
+      margin-bottom: -@base-spacing-unit-screen-small * 1/2;
+      margin-right: -@base-spacing-unit-screen-small * 1/2;
 
-        margin-bottom: -@base-spacing-unit-screen-small * 1/2;
-        margin-right: -@base-spacing-unit-screen-small * 1/2;
+      .media-object-item {
+
+        padding-bottom: @base-spacing-unit-screen-small * 1/2;
+        padding-right: @base-spacing-unit-screen-small * 1/2;
+
+      }
+
+
+      &.media-object-spacing-narrow {
+
+          margin-bottom: -@base-spacing-unit-screen-small * 1/4;
+          margin-right: -@base-spacing-unit-screen-small * 1/4;
 
         .media-object-item {
 
-          padding-bottom: @base-spacing-unit-screen-small * 1/2;
-          padding-right: @base-spacing-unit-screen-small * 1/2;
+          padding-bottom: @base-spacing-unit-screen-small * 1/4;
+          padding-right: @base-spacing-unit-screen-small * 1/4;
 
         }
 
+      }
 
-        &.media-object-spacing-narrow {
+      &.media-object-spacing-wide {
 
-            margin-bottom: -@base-spacing-unit-screen-small * 1/4;
-            margin-right: -@base-spacing-unit-screen-small * 1/4;
+          margin-bottom: -@base-spacing-unit-screen-small * 3/4;
+          margin-right: -@base-spacing-unit-screen-small * 3/4;
 
-          .media-object-item {
+        .media-object-item {
 
-            padding-bottom: @base-spacing-unit-screen-small * 1/4;
-            padding-right: @base-spacing-unit-screen-small * 1/4;
-
-          }
-
-        }
-
-        &.media-object-spacing-wide {
-
-            margin-bottom: -@base-spacing-unit-screen-small * 3/4;
-            margin-right: -@base-spacing-unit-screen-small * 3/4;
-
-          .media-object-item {
-
-            padding-bottom: @base-spacing-unit-screen-small * 3/4;
-            padding-right: @base-spacing-unit-screen-small * 3/4;
-
-          }
+          padding-bottom: @base-spacing-unit-screen-small * 3/4;
+          padding-right: @base-spacing-unit-screen-small * 3/4;
 
         }
 
@@ -281,46 +270,43 @@ components/media-objects.less
 
   @media (min-width: @screen-medium) {
 
-    .media-object {
+    .media-object-spacing-wrapper {
 
-      &.media-object-spacing {
 
-        margin-bottom: -@base-spacing-unit-screen-medium * 1/2;
-        margin-right: -@base-spacing-unit-screen-medium * 1/2;
+      margin-bottom: -@base-spacing-unit-screen-medium * 1/2;
+      margin-right: -@base-spacing-unit-screen-medium * 1/2;
+
+      .media-object-item {
+
+        padding-bottom: @base-spacing-unit-screen-medium * 1/2;
+        padding-right: @base-spacing-unit-screen-medium * 1/2;
+
+      }
+
+
+      &.media-object-spacing-narrow {
+
+          margin-bottom: -@base-spacing-unit-screen-medium * 1/4;
+          margin-right: -@base-spacing-unit-screen-medium * 1/4;
 
         .media-object-item {
 
-          padding-bottom: @base-spacing-unit-screen-medium * 1/2;
-          padding-right: @base-spacing-unit-screen-medium * 1/2;
+          padding-bottom: @base-spacing-unit-screen-medium * 1/4;
+          padding-right: @base-spacing-unit-screen-medium * 1/4;
 
         }
 
+      }
 
-        &.media-object-spacing-narrow {
+      &.media-object-spacing-wide {
 
-            margin-bottom: -@base-spacing-unit-screen-medium * 1/4;
-            margin-right: -@base-spacing-unit-screen-medium * 1/4;
+          margin-bottom: -@base-spacing-unit-screen-medium * 3/4;
+          margin-right: -@base-spacing-unit-screen-medium * 3/4;
 
-          .media-object-item {
+        .media-object-item {
 
-            padding-bottom: @base-spacing-unit-screen-medium * 1/4;
-            padding-right: @base-spacing-unit-screen-medium * 1/4;
-
-          }
-
-        }
-
-        &.media-object-spacing-wide {
-
-            margin-bottom: -@base-spacing-unit-screen-medium * 3/4;
-            margin-right: -@base-spacing-unit-screen-medium * 3/4;
-
-          .media-object-item {
-
-            padding-bottom: @base-spacing-unit-screen-medium * 3/4;
-            padding-right: @base-spacing-unit-screen-medium * 3/4;
-
-          }
+          padding-bottom: @base-spacing-unit-screen-medium * 3/4;
+          padding-right: @base-spacing-unit-screen-medium * 3/4;
 
         }
 
@@ -349,46 +335,42 @@ components/media-objects.less
 
   @media (min-width: @screen-large) {
 
-    .media-object {
+  .media-object-spacing-wrapper {
 
-      &.media-object-spacing {
+      margin-bottom: -@base-spacing-unit-screen-large * 1/2;
+      margin-right: -@base-spacing-unit-screen-large * 1/2;
 
-        margin-bottom: -@base-spacing-unit-screen-large * 1/2;
-        margin-right: -@base-spacing-unit-screen-large * 1/2;
+      .media-object-item {
+
+        padding-bottom: @base-spacing-unit-screen-large * 1/2;
+        padding-right: @base-spacing-unit-screen-large * 1/2;
+
+      }
+
+
+      &.media-object-spacing-narrow {
+
+          margin-bottom: -@base-spacing-unit-screen-large * 1/4;
+          margin-right: -@base-spacing-unit-screen-large * 1/4;
 
         .media-object-item {
 
-          padding-bottom: @base-spacing-unit-screen-large * 1/2;
-          padding-right: @base-spacing-unit-screen-large * 1/2;
+          padding-bottom: @base-spacing-unit-screen-large * 1/4;
+          padding-right: @base-spacing-unit-screen-large * 1/4;
 
         }
 
+      }
 
-        &.media-object-spacing-narrow {
+      &.media-object-spacing-wide {
 
-            margin-bottom: -@base-spacing-unit-screen-large * 1/4;
-            margin-right: -@base-spacing-unit-screen-large * 1/4;
+          margin-bottom: -@base-spacing-unit-screen-large * 3/4;
+          margin-right: -@base-spacing-unit-screen-large * 3/4;
 
-          .media-object-item {
+        .media-object-item {
 
-            padding-bottom: @base-spacing-unit-screen-large * 1/4;
-            padding-right: @base-spacing-unit-screen-large * 1/4;
-
-          }
-
-        }
-
-        &.media-object-spacing-wide {
-
-            margin-bottom: -@base-spacing-unit-screen-large * 3/4;
-            margin-right: -@base-spacing-unit-screen-large * 3/4;
-
-          .media-object-item {
-
-            padding-bottom: @base-spacing-unit-screen-large * 3/4;
-            padding-right: @base-spacing-unit-screen-large * 3/4;
-
-          }
+          padding-bottom: @base-spacing-unit-screen-large * 3/4;
+          padding-right: @base-spacing-unit-screen-large * 3/4;
 
         }
 

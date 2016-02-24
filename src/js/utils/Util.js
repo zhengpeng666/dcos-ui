@@ -48,6 +48,27 @@ const Util = {
   },
 
   /**
+   * Finds the property in a given object using a string of propeties
+   * using dot-notation, e.g. 'hello.is.it.me.you.are.looking.for'
+   * @param  {Object} obj          Object to search in
+   * @param  {String} propertyPath Property path to search for
+   * @return {*}                   The value of the found property or null
+   */
+  findNestedPropertyInObject: function (obj, propertyPath) {
+    if (!propertyPath || !obj) {
+      return null;
+    }
+
+    return propertyPath.split('.').reduce(function (current, nextProp) {
+      if (!current) {
+        return current;
+      }
+
+      return current[nextProp];
+    }, obj);
+  },
+
+  /**
    * @param {Function} func A callback function to be called
    * @param {Number} wait How long to wait
    * @returns {Function} A function, that, after triggered the first time, will

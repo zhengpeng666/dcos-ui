@@ -1,15 +1,19 @@
 import Item from './Item';
 import ServiceUtil from '../utils/ServiceUtil';
+import Util from '../utils/Util';
 
 class UniversePackage extends Item {
   getIcons() {
-    let images;
-    let resources = this.get('resources');
-    if (resources && resources.images) {
-      images = resources.images;
-    }
+    return ServiceUtil.getServiceImages(
+      Util.findNestedPropertyInObject(this.get('resource'), 'images')
+    );
+  }
 
-    return ServiceUtil.getServiceImages(images);
+  getScreenshots() {
+    return Util.findNestedPropertyInObject(
+      this.get('resource'),
+      'images.screenshots'
+    );
   }
 }
 

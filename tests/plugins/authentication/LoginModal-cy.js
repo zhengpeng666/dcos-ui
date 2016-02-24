@@ -138,7 +138,7 @@ describe('LoginModal [01i]', function () {
         method: 'GET',
         status: 403,
         url: /apps/,
-        response:''
+        response: ''
       })
       .visitUrl({url: '/#/dashboard/', logIn: true});
     });

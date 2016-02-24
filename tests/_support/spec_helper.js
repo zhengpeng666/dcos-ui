@@ -102,6 +102,28 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
         'fx:networking/networking-vip-summaries');
   }
 
+  if (configuration.universePackages) {
+    cy
+      .route({
+        method: 'POST',
+        url: /packages\/describe/,
+        status: 200,
+        response: 'fx:cosmos/package-describe'
+      })
+      .route({
+        method: 'POST',
+        url: /packages\/list/,
+        status: 200,
+        response: 'fx:cosmos/packages-list'
+      })
+      .route({
+        method: 'POST',
+        url: /packages\/search/,
+        status: 200,
+        response: 'fx:cosmos/packages-search'
+      });
+  }
+
   // The app won't load until plugins are loaded
   var pluginsFixture = configuration.plugins || 'no-plugins';
   cy.route(/ui-config/, 'fx:config/' + pluginsFixture + '.json');

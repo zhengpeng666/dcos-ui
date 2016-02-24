@@ -59,7 +59,7 @@ const CosmosPackagesActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
-          data: response.package,
+          data: response,
           packageName,
           packageVersion
         });

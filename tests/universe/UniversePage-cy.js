@@ -3,7 +3,7 @@ describe('Universe Page', function () {
   beforeEach(function () {
     cy.configureCluster({
       mesos: '1-task-healthy',
-      acl: true
+      universePackages: true
     });
   });
 
@@ -23,5 +23,14 @@ describe('Universe Page', function () {
       .contains('Packages')
       .click();
     cy.hash().should('match', /universe\/packages/);
+  });
+
+  it('goes to the Packages Details tab when panel is clicked', function () {
+    cy
+      .visitUrl({url: '/universe'})
+      .get('.h2.inverse')
+      .contains('arangodb')
+      .click();
+    cy.hash().should('match', /universe\/packages\/arangodb/);
   });
 });

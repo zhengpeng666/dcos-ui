@@ -1,7 +1,8 @@
 import {Route, Redirect} from 'react-router';
 
-import UniversePage from '../pages/UniversePage';
+import PackageDetailTab from '../pages/universe/PackageDetailTab';
 import PackagesTab from '../pages/universe/PackagesTab';
+import UniversePage from '../pages/UniversePage';
 
 let universeRoutes = {
   type: Route,
@@ -12,8 +13,14 @@ let universeRoutes = {
     {
       type: Route,
       name: 'universe-packages',
-      path: 'packages',
+      path: 'packages/?',
       handler: PackagesTab
+    },
+    {
+      type: Route,
+      name: 'universe-packages-detail',
+      path: 'packages/:packageName?:packageVersion?',
+      handler: PackageDetailTab
     },
     {
       type: Redirect,
