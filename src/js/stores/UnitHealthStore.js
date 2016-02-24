@@ -69,10 +69,6 @@ const UnitHealthStore = Store.createStore({
     return new Node(this.get('nodesByID')[nodeID] || []);
   },
 
-  getReport: function () {
-    return this.get('report');
-  },
-
   fetchUnits: UnitHealthActions.fetchUnits,
 
   fetchUnit: UnitHealthActions.fetchUnit,
@@ -139,19 +135,19 @@ const UnitHealthStore = Store.createStore({
         UnitHealthStore.processUnit(data);
         break;
       case REQUEST_HEALTH_UNIT_ERROR:
-        UnitHealthStore.emit(HEALTH_UNIT_ERROR, data);
+        UnitHealthStore.emit(HEALTH_UNIT_ERROR, data, action.unitID);
         break;
       case REQUEST_HEALTH_UNIT_NODES_SUCCESS:
         UnitHealthStore.processNodes(data, action.unitID);
         break;
       case REQUEST_HEALTH_UNIT_NODES_ERROR:
-        UnitHealthStore.emit(HEALTH_UNIT_NODES_ERROR, data);
+        UnitHealthStore.emit(HEALTH_UNIT_NODES_ERROR, data, action.unitID);
         break;
       case REQUEST_HEALTH_UNIT_NODE_SUCCESS:
         UnitHealthStore.processNode(data);
         break;
       case REQUEST_HEALTH_UNIT_NODE_ERROR:
-        UnitHealthStore.emit(HEALTH_UNIT_NODE_ERROR, data);
+        UnitHealthStore.emit(HEALTH_UNIT_NODE_ERROR, data, action.unitID, action.nodeID);
         break;
     }
 
