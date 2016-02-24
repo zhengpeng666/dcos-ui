@@ -9,7 +9,7 @@ import {
 } from '../../../plugins/auth/constants/EventTypes';
 
 // Directories
-import ACLDirectoriesStore from '../../../plugins/directories/stores/ACLDirectoriesStore';
+import ACLDirectoriesStore from '../../../plugins/organization/submodules/directories/stores/ACLDirectoriesStore';
 import {
   ACL_DIRECTORIES_CHANGED,
   ACL_DIRECTORIES_ERROR,
@@ -19,11 +19,11 @@ import {
   ACL_DIRECTORY_DELETE_ERROR,
   ACL_DIRECTORY_TEST_SUCCESS,
   ACL_DIRECTORY_TEST_ERROR
-} from '../../../plugins/directories/constants/EventTypes';
+} from '../../../plugins/organization/submodules/directories/constants/EventTypes';
 
 // Groups
-import ACLGroupsStore from '../../../plugins/groups/stores/ACLGroupsStore';
-import ACLGroupStore from '../../../plugins/groups/stores/ACLGroupStore';
+import ACLGroupsStore from '../../../plugins/organization/submodules/groups/stores/ACLGroupsStore';
+import ACLGroupStore from '../../../plugins/organization/submodules/groups/stores/ACLGroupStore';
 import {
   ACL_GROUPS_CHANGE,
   ACL_GROUPS_REQUEST_ERROR,
@@ -45,10 +45,10 @@ import {
   ACL_GROUP_REMOVE_USER_ERROR,
   ACL_GROUP_DELETE_SUCCESS,
   ACL_GROUP_DELETE_ERROR
-} from '../../../plugins/groups/constants/EventTypes';
+} from '../../../plugins/organization/submodules/groups/constants/EventTypes';
 
 // ACL
-import ACLStore from '../../../plugins/acl/stores/ACLStore';
+import ACLStore from '../../../plugins/auth/submodules/acl/stores/ACLStore';
 import {
   ACL_CREATE_SUCCESS,
   ACL_CREATE_ERROR,
@@ -62,11 +62,11 @@ import {
   ACL_GROUP_GRANT_ACTION_ERROR,
   ACL_GROUP_REVOKE_ACTION_CHANGE,
   ACL_GROUP_REVOKE_ACTION_ERROR
-} from '../../../plugins/acl/constants/EventTypes';
+} from '../../../plugins/auth/submodules/acl/constants/EventTypes';
 
 // Users
-import ACLUsersStore from '../../../plugins/users/stores/ACLUsersStore';
-import ACLUserStore from '../../../plugins/users/stores/ACLUserStore';
+import ACLUsersStore from '../../../plugins/organization/submodules/users/stores/ACLUsersStore';
+import ACLUserStore from '../../../plugins/organization/submodules/users/stores/ACLUserStore';
 import {
   ACL_USERS_CHANGE,
   ACL_USERS_REQUEST_ERROR,
@@ -84,7 +84,7 @@ import {
   ACL_USER_UPDATE_ERROR,
   ACL_USER_DELETE_SUCCESS,
   ACL_USER_DELETE_ERROR
-} from '../../../plugins/users/constants/EventTypes';
+} from '../../../plugins/organization/submodules/users/constants/EventTypes';
 
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import {
