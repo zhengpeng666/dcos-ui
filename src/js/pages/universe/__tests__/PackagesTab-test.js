@@ -94,11 +94,13 @@ describe('PackagesTab', function () {
   describe('#getPackages', function () {
 
     beforeEach(function () {
-      this.CosmosPackagesStoreGet = CosmosPackagesStore.get;
+      this.CosmosPackagesStoreGetAvailablePackages =
+        CosmosPackagesStore.getAvailablePackages;
     });
 
     afterEach(function () {
-      CosmosPackagesStore.get = this.CosmosPackagesStoreGet;
+      CosmosPackagesStore.getAvailablePackages =
+        this.CosmosPackagesStoreGetAvailablePackages;
     });
 
     it('should return packages', function () {
@@ -106,7 +108,7 @@ describe('PackagesTab', function () {
     });
 
     it('shouldn\'t return packages', function () {
-      CosmosPackagesStore.get = function () {
+      CosmosPackagesStore.getAvailablePackages = function () {
         return new UniversePackagesList();
       };
 
