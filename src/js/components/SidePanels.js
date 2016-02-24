@@ -2,14 +2,14 @@ import _ from 'underscore';
 import React from 'react';
 import {SidePanel} from 'reactjs-components';
 
-import UnitHealthSidePanelContents from './UnitHealthSidePanelContents';
-import UnitNodeSidePanelContents from './UnitNodeSidePanelContents';
 import HistoryStore from '../stores/HistoryStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import NodeSidePanelContents from './NodeSidePanelContents';
 import ServiceSidePanelContents from './ServiceSidePanelContents';
 import StringUtil from '../utils/StringUtil';
 import TaskSidePanelContents from './TaskSidePanelContents';
+import UnitHealthSidePanelContents from './UnitHealthSidePanelContents';
+import UnitNodeSidePanelContents from './UnitNodeSidePanelContents';
 
 const METHODS_TO_BIND = [
   'handlePanelClose',

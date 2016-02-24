@@ -1,7 +1,7 @@
 import Item from './Item';
-import UnitHealthStatus from '../constants/UnitHealthStatus';
+import UnitHealthUtil from '../utils/UnitHealthUtil';
 
-module.exports = class Node extends Item {
+class Node extends Item {
   getServiceIDs() {
     return this.get('framework_ids');
   }
@@ -22,14 +22,9 @@ module.exports = class Node extends Item {
   // http://schema.dcos/system/health/node
 
   getHealth() {
-    let health = this.get('node_health');
-
-    return Object.keys(UnitHealthStatus).reduce(function (prev, healthObj) {
-      if (UnitHealthStatus[healthObj].value === health) {
-        return UnitHealthStatus[healthObj];
-      }
-      return prev;
-    }, null) || UnitHealthStatus.NA;
+    return UnitHealthUtil.getHealth(this.get('node_health'));
   }
 
-};
+}
+
+module.exports = Node;

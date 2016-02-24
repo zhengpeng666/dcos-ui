@@ -1,17 +1,12 @@
 import Item from './Item';
-import UnitHealthStatus from '../constants/UnitHealthStatus';
+import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 class HealthUnit extends Item {
-  getHealth() {
-    let health = this.get('unit_health');
 
-    return Object.keys(UnitHealthStatus).reduce(function (prev, healthObj) {
-      if (UnitHealthStatus[healthObj].value === health) {
-        return UnitHealthStatus[healthObj];
-      }
-      return prev;
-    }, null) || UnitHealthStatus.NA;
+  getHealth() {
+    return UnitHealthUtil.getHealth(this.get('unit_health'));
   }
+
 }
 
 module.exports = HealthUnit;

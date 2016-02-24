@@ -1,7 +1,7 @@
 jest.dontMock('../../constants/UnitHealthStatus');
 
-var UnitHealthStatus = require('../../constants/UnitHealthStatus');
 var HealthUnit = require('../HealthUnit');
+var UnitHealthStatus = require('../../constants/UnitHealthStatus');
 
 describe('HealthUnit', function () {
 

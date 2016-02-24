@@ -1,7 +1,9 @@
 import HealthSorting from '../constants/HealthSorting';
+import UnitHealthStatus from '../constants/UnitHealthStatus';
 
 const UnitHealthUtil = {
 
+  // Accepts Items of type Node or HealthUnit and sorts by health
   getHealthSortFunction() {
     return function (tieBreakKey) {
       return function (a, b) {
@@ -24,6 +26,15 @@ const UnitHealthUtil = {
         return aValue - bValue;
       };
     };
+  },
+
+  getHealth(health) {
+    return Object.keys(UnitHealthStatus).reduce(function (prev, healthObj) {
+      if (UnitHealthStatus[healthObj].value === health) {
+        return UnitHealthStatus[healthObj];
+      }
+      return prev;
+    }, null) || UnitHealthStatus.NA;
   }
 
 };
