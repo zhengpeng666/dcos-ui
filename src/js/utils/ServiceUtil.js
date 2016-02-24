@@ -20,8 +20,8 @@ const ServiceUtil = {
    */
   getServiceImages(images) {
     if (this.getImageSizeFromImagesObject(images, 'small') == null ||
-        this.getImageSizeFromImagesObject(images, 'medium') == null ||
-        this.getImageSizeFromImagesObject(images, 'large') == null) {
+      this.getImageSizeFromImagesObject(images, 'medium') == null ||
+      this.getImageSizeFromImagesObject(images, 'large') == null) {
       return ServiceImages.NA_IMAGES;
     }
 
