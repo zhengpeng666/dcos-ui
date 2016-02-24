@@ -31,8 +31,11 @@
     height: 462px;
 
     &.mobile-width {
-      height: auto;
       flex-direction: column;
+
+      .mobile-column {
+        flex-shrink: 0;
+      }
     }
 
     .column-4.gm-scrollbar-container {
