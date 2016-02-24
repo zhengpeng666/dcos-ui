@@ -68,6 +68,7 @@ let RouteFactory = {
   },
 
   getFilteredRoutes(filteredRoutes) {
+    // Push redirect onto Routes Array
     return filteredRoutes.routes.concat([filteredRoutes.redirect]);
   },
 

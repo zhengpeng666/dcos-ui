@@ -1,3 +1,4 @@
+import _ from 'underscore';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
@@ -10,7 +11,7 @@ let PluginHooks = {
     enabled: false
   },
 
-  routes: {
+  defaults: {
     route: {
       type: Route,
       name: 'settings-organization-directories',
@@ -20,11 +21,17 @@ let PluginHooks = {
         type: Route,
         name: 'settings-organization-directories-panel'
       }]
+    },
+    tabs: {
+      'settings-organization-directories': {
+        content: 'External Directory',
+        priority: 5
+      }
     }
   },
 
   getOrganizationRoutes(route) {
-    route.routes.push(this.routes.route);
+    route.routes.push(this.defaults.route);
     return route;
   },
 
@@ -32,7 +39,15 @@ let PluginHooks = {
    * @param  {Object} Hooks The Hooks API
    */
   initialize(Hooks) {
-    Hooks.addFilter('getOrganizationRoutes', this.getOrganizationRoutes.bind(this));
+    Hooks.addFilter('getOrganizationRoutes',
+      this.getOrganizationRoutes.bind(this));
+
+    Hooks.addFilter('getTabsFor_settings-organization',
+      this.getTabs.bind(this));
+  },
+
+  getTabs(tabs) {
+    return _.extend(tabs, this.defaults.tabs);
   }
 };
 

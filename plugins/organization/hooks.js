@@ -1,20 +1,34 @@
+import _ from 'underscore';
 import {Route, Redirect} from 'react-router';
 
 const PluginHooks = {
 
   defaults: {
+
     redirect: {
       type: Redirect,
       from: '/settings/?',
       to: 'settings-organization'
     },
-    organizationRoutes: []
+    organizationRoutes: [],
+
+    settingsTabs: {
+      'settings-organization': {
+        content: 'Organization',
+        priority: 20
+      }
+    }
   },
   /**
    * @param  {Object} Hooks The Hooks API
    */
   initialize(Hooks) {
     Hooks.addFilter('getSettingsRoutes', this.getRoutes.bind(this, Hooks));
+    Hooks.addFilter('getSettingsTabs', this.getTabs.bind(this));
+  },
+
+  getTabs(tabs) {
+    return _.extend(tabs, this.defaults.settingsTabs);
   },
 
   getOrganizationRoutes(Hooks) {
@@ -33,6 +47,7 @@ const PluginHooks = {
   },
 
   getFilteredRoutes(filteredRoutes) {
+    // Push redirect onto Routes Array
     return filteredRoutes.routes.concat([filteredRoutes.redirect]);
   },
 
