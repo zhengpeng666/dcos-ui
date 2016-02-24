@@ -83,7 +83,7 @@ class PackagesTab extends mixin(StoreMixin) {
     return <RequestErrorMsg />;
   }
 
-  getFooter(cosmosPackage) {
+  getButton(cosmosPackage) {
     return (
       <button
         className="button button-success"
@@ -93,7 +93,7 @@ class PackagesTab extends mixin(StoreMixin) {
     );
   }
 
-  getHeading(cosmosPackage) {
+  getIcon(cosmosPackage) {
     return (
       <div className="icon icon-jumbo icon-image-container icon-app-container">
         <img src={cosmosPackage.getIcons()['icon-large']} />
@@ -123,20 +123,19 @@ class PackagesTab extends mixin(StoreMixin) {
     }).map((cosmosPackage, index) => {
       return (
         <div
-          className="grid-item column-small-6 column-medium-4 column-large-3"
+          className="grid-item column-mini-6 column-medium-4 column-large-3"
           key={index}>
           <Panel
             className="panel clickable"
-            contentClass="panel-content horizontal-center short"
-            footer={this.getFooter(cosmosPackage)}
-            footerClass="panel-footer horizontal-center panel-footer-no-top-border short"
-            heading={this.getHeading(cosmosPackage)}
-            headingClass="panel-heading horizontal-center"
+            contentClass="panel-content horizontal-center"
+            footer={this.getButton(cosmosPackage)}
+            footerClass="panel-footer horizontal-center panel-footer-no-top-border short-top"
             onClick={this.handleDetailOpen.bind(this, cosmosPackage)}>
-            <div className="h2 inverse flush-top short-bottom">
+            {this.getIcon(cosmosPackage)}
+            <div className="h2 inverse short-top short-bottom">
               {cosmosPackage.get('packageName')}
             </div>
-            <p className="inverse flush-bottom">
+            <p className="inverse flush">
               {cosmosPackage.get('currentVersion')}
             </p>
           </Panel>
