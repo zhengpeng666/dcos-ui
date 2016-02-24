@@ -131,7 +131,7 @@ class MultipleForm extends React.Component {
       'column-12': isMobileWidth
     });
 
-    if (this.state.useGemini && !isMobileWidth) {
+    if (this.state.useGemini) {
       return (
         <GeminiScrollbar autoshow={true} className={classSet}>
           {panel}
