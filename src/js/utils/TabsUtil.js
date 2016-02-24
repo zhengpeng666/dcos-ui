@@ -34,20 +34,20 @@ const TabsUtil = {
 
   /**
    * Sorts tabs based on their priority
-   * @param  {Object} tabs tabs with a key for each tab to render
+   * @param  {Object} tabs - tabs with a key for each tab to render
    * @return {Object}      tabs Object with sorted insertion order
    */
   sortTabs: function (tabs) {
     let comparator = (a, b) => b[1] - a[1];
 
     return Object.keys(tabs)
-    .map(key => [key, tabs[key].priority || 0])
-    .sort(comparator)
-    .map(val => val[0])
-    .reduce((acc, curr) => {
-      acc[curr] = tabs[curr].content;
-      return acc;
-    }, {});
+      .map(key => [key, tabs[key].priority || 0])
+      .sort(comparator)
+      .map(val => val[0])
+      .reduce((acc, curr) => {
+        acc[curr] = tabs[curr].content;
+        return acc;
+      }, {});
   }
 
 };
