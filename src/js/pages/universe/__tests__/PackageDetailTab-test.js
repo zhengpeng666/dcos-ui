@@ -59,20 +59,30 @@ describe('PackageDetailTab', function () {
 
     describe('#getItem', function () {
 
-      it('should return null if only null values is provided', function () {
+      it('returns empty array with null values provided', function () {
         expect(
-          this.instance.getItems({foo: null, bar: null}),
-          this.instance.getItem).toEqual(null);
+          this.instance.getItems([
+            {label: 'foo', value: null},
+            {label: 'bar', value: null}
+          ]),
+          this.instance.getItem).toEqual([]);
       });
 
-      it('should return only entries with defined values', function () {
-        expect(this.instance.getItems({foo: 'baz', bar: null}, this.instance.getItem).length)
+      it('returns only entries with defined values', function () {
+        expect(this.instance.getItems([
+            {label: 'foo', value: 'baz'},
+            {label: 'bar', value: null}
+          ], this.instance.getItem).length)
           .toEqual(1);
       });
 
       it('should render entries with keys and values', function () {
         var subItem = ReactDOM.render(
-          this.instance.getItems({foo: 'baz', bar: null}, this.instance.getItem)[0],
+          this.instance.getItems([
+            {label: 'foo', value: 'baz'},
+            {label: 'bar', value: null}
+          ],
+          this.instance.getItem)[0],
           this.container
         );
 
@@ -83,64 +93,40 @@ describe('PackageDetailTab', function () {
 
     describe('#getSubItem', function () {
 
-      it('should return null if only null values is provided', function () {
-        expect(this.instance.getItems({foo: null, bar: null}), this.instance.getSubItem).toEqual(null);
+      it('returns empty array with only null values provided', function () {
+        expect(
+          this.instance.getItems([
+              {label: 'foo', value: null},
+              {label: 'bar', value: null}
+          ]),
+          this.instance.getSubItem
+        ).toEqual([]);
       });
 
-      it('should return only entries with defined values', function () {
-        expect(this.instance.getItems({foo: 'baz', bar: null}, this.instance.getSubItem).length)
-          .toEqual(1);
+      it('returns only entries with defined values', function () {
+        expect(this.instance.getItems([
+              {label: 'foo', value: 'baz'},
+              {label: 'bar', value: null}
+            ],
+            this.instance.getSubItem
+          ).length
+        ).toEqual(1);
       });
 
       it('should render entries with keys and values', function () {
         var subItem = ReactDOM.render(
-          this.instance.getItems({foo: 'baz', bar: null}, this.instance.getSubItem)[0],
+          this.instance.getItems([
+              {label: 'foo', value: 'baz'},
+              {label: 'bar', value: null}
+            ],
+            this.instance.getSubItem
+          )[0],
           this.container
         );
 
         expect(subItem.textContent).toEqual('foo: baz');
       });
 
-    });
-
-  });
-
-  describe('#getLicenses', function () {
-
-    it('should return null for an object', function () {
-      expect(this.instance.getLicenses({})).toEqual(null);
-    });
-
-    it('should return null for null', function () {
-      expect(this.instance.getLicenses(null)).toEqual(null);
-    });
-
-    it('should return null for undefined', function () {
-      expect(this.instance.getLicenses(undefined)).toEqual(null);
-    });
-
-    it('should return empty object for empty array', function () {
-      expect(this.instance.getLicenses([])).toEqual({});
-    });
-
-    it('should return all entries of array', function () {
-      var licenses = this.instance.getLicenses([
-        {name: 'foo', url: 'bar'},
-        {name: 'baz', url: 'qux'},
-        {name: 'quux', url: 'corge'}
-      ]);
-
-      expect(Object.keys(licenses).length).toEqual(3);
-    });
-
-    it('should return all entries even with undefined values', function () {
-      var licenses = this.instance.getLicenses([
-        {name: 'foo', url: 'bar'},
-        {name: 'baz', url: null},
-        {name: 'quux', url: 'corge'}
-      ]);
-
-      expect(Object.keys(licenses).length).toEqual(3);
     });
 
   });
@@ -167,6 +153,70 @@ describe('PackageDetailTab', function () {
       expect(link.textContent).toEqual('email: foo@bar.com');
       expect(link.querySelector('a').href).toEqual('mailto:foo@bar.com');
       expect(link.querySelector('a').tagName).toEqual('A');
+    });
+
+  });
+
+  describe('#mapLicenses', function () {
+
+    it('returns empty array for null', function () {
+      expect(this.instance.mapLicenses(null)).toEqual([]);
+    });
+
+    it('returns array for undefined', function () {
+      expect(this.instance.mapLicenses(undefined)).toEqual([]);
+    });
+
+    it('returns array for empty array', function () {
+      expect(this.instance.mapLicenses([])).toEqual([]);
+    });
+
+    it('returns all entries of array', function () {
+      var licenses = this.instance.mapLicenses([
+        {name: 'foo', url: 'bar'},
+        {name: 'baz', url: 'qux'},
+        {name: 'quux', url: 'corge'}
+      ]);
+
+      expect(licenses.length).toEqual(3);
+    });
+
+    it('returns all entries even with undefined values', function () {
+      var licenses = this.instance.mapLicenses([
+        {name: 'foo', url: 'bar'},
+        {name: 'baz', url: null},
+        {name: 'quux', url: 'corge'}
+      ]);
+
+      expect(licenses.length).toEqual(3);
+    });
+
+  });
+
+  describe('#mapScreenshots', function () {
+
+    it('returns empty array for null', function () {
+      expect(this.instance.mapScreenshots(null)).toEqual([]);
+    });
+
+    it('returns array for undefined', function () {
+      expect(this.instance.mapScreenshots(undefined)).toEqual([]);
+    });
+
+    it('returns array for empty array', function () {
+      expect(this.instance.mapScreenshots([])).toEqual([]);
+    });
+
+    it('returns all entries of array', function () {
+      var screenshots = this.instance.mapScreenshots(['foo', 'baz', 'quux']);
+
+      expect(screenshots.length).toEqual(3);
+    });
+
+    it('returns all entries even with undefined values', function () {
+      var screenshots = this.instance.mapScreenshots(['foo', null, 'bar']);
+
+      expect(screenshots.length).toEqual(3);
     });
 
   });

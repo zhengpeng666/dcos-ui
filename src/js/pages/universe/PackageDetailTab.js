@@ -55,21 +55,24 @@ class PackageDetailTab extends mixin(StoreMixin) {
 
   getItems(definition, renderItem) {
     let items = [];
-    Object.keys(definition).forEach((label, index) => {
-      let value = definition[label];
+    definition.forEach((item, index) => {
+      let {label, type, value} = item;
 
+      // When there is no content to render, discard it all together
       if (!value || (Array.isArray(value) && !value.length)) {
         return null;
       }
 
+      // If not specific type assume value is renderable
       let content = value;
 
-      if (typeof value === 'object') {
+      // Render sub items
+      if (type === 'subItems') {
         content = this.getItems(value, this.getSubItem);
       }
 
-      // Specific render method for media
-      if (label === 'Media') {
+      // Render media items
+      if (type === 'media') {
         content = (
           <div
             className="media-object media-object-spacing flex-box flex-box-wrap"
@@ -80,38 +83,9 @@ class PackageDetailTab extends mixin(StoreMixin) {
       }
 
       items.push(renderItem(label, content, index));
-
     });
 
-    if (!items.length) {
-      return null;
-    }
-
     return items;
-  }
-
-  getLoadingScreen() {
-    return (
-      <div className="container-pod text-align-center vertical-center inverse">
-        <div className="row">
-          <div className="ball-scale">
-            <div />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  getLicenses(licenses) {
-    if (!Array.isArray(licenses)) {
-      return null;
-    }
-
-    return licenses.reduce(function (current, license) {
-      current[license.name] = license.url;
-
-      return current;
-    }, {});
   }
 
   getItem(label, value, key) {
@@ -129,6 +103,18 @@ class PackageDetailTab extends mixin(StoreMixin) {
         key={key}>
         <h5 className="inverse flush-top">{label}</h5>
         {value}
+      </div>
+    );
+  }
+
+  getLoadingScreen() {
+    return (
+      <div className="container-pod text-align-center vertical-center inverse">
+        <div className="row">
+          <div className="ball-scale">
+            <div />
+          </div>
+        </div>
       </div>
     );
   }
@@ -159,6 +145,25 @@ class PackageDetailTab extends mixin(StoreMixin) {
     );
   }
 
+  mapLicenses(licenses) {
+    licenses = licenses || [];
+    return licenses.map(function (license) {
+      let item = {
+        label: license.name,
+        value: license.url
+      };
+
+      return item;
+    });
+  }
+
+  mapScreenshots(screenshots) {
+    screenshots = screenshots || [];
+    return screenshots.map(function (screenshot) {
+      return {value: screenshot};
+    });
+  }
+
   render() {
     let {state} = this;
 
@@ -172,16 +177,28 @@ class PackageDetailTab extends mixin(StoreMixin) {
 
     let cosmosPackage = CosmosPackagesStore.get('packageDetails');
     let packageDetails = cosmosPackage.get('package');
-    let definition = {
-      Description: packageDetails.description,
-      'Pre-Install Notes': packageDetails.preInstallNotes,
-      Information: {
-        SCM: packageDetails.scm,
-        Maintainer: packageDetails.maintainer
+    let definition = [
+      {label: 'Description', value: packageDetails.description},
+      {label: 'Pre-Install Notes', value: packageDetails.preInstallNotes},
+      {
+        label: 'Information',
+        type: 'subItems',
+        value: [
+          {label: 'SCM', value: packageDetails.scm},
+          {label: 'Maintainer', value: packageDetails.maintainer}
+        ]
       },
-      Licenses: this.getLicenses(packageDetails.licenses),
-      Media: cosmosPackage.getScreenshots()
-    };
+      {
+        label: 'Licenses',
+        type: 'subItems',
+        value: this.mapLicenses(packageDetails.licenses)
+      },
+      {
+        label: 'Media',
+        type: 'media',
+        value: this.mapScreenshots(cosmosPackage.getScreenshots())
+      }
+    ];
 
     return (
       <div>
