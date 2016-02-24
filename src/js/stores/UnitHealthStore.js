@@ -23,12 +23,31 @@ import {
   HEALTH_UNITS_CHANGE
 } from '../constants/EventTypes';
 import AppDispatcher from '../events/AppDispatcher';
+import Config from '../config/Config';
 import UnitHealthActions from '../events/UnitHealthActions';
 import HealthUnit from '../structs/HealthUnit';
 import HealthUnitsList from '../structs/HealthUnitsList';
 import GetSetMixin from '../mixins/GetSetMixin';
 import Node from '../structs/Node';
 import NodesList from '../structs/NodesList';
+
+var requestInterval = null;
+
+function startPolling() {
+  if (requestInterval == null) {
+    UnitHealthActions.fetchUnits();
+    requestInterval = setInterval(
+      UnitHealthActions.fetchState, Config.getRefreshRate()
+    );
+  }
+}
+
+function stopPolling() {
+  if (requestInterval != null) {
+    clearInterval(requestInterval);
+    requestInterval = null;
+  }
+}
 
 const UnitHealthStore = Store.createStore({
 
@@ -44,10 +63,15 @@ const UnitHealthStore = Store.createStore({
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
+    startPolling();
   },
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
+
+    if (_.isEmpty(this.listeners(HEALTH_UNITS_CHANGE))) {
+      stopPolling();
+    }
   },
 
   getUnits: function () {
