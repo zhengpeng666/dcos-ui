@@ -2,7 +2,7 @@ import List from './List';
 import StringUtil from '../utils/StringUtil';
 import UniversePackage from './UniversePackage';
 
-class UniversePackagesList extends List {
+class UniverseInstalledPackagesList extends List {
   constructor() {
     super(...arguments);
 
@@ -11,7 +11,7 @@ class UniversePackagesList extends List {
       if (item instanceof UniversePackage) {
         return item;
       } else {
-        return new UniversePackage(item);
+        return new UniversePackage(item.packageInformation);
       }
     });
   }
@@ -21,16 +21,17 @@ class UniversePackagesList extends List {
 
     if (filterText) {
       packages = StringUtil.filterByString(packages, function (cosmosPackage) {
-        let description = cosmosPackage.get('description') || '';
-        let packageName = cosmosPackage.get('packageName') || '';
-        let tags = cosmosPackage.get('tags') || [];
+        let {description, name, tags} = cosmosPackage.get('packageDefinition');
+        description = description || '';
+        name = name || '';
+        tags = tags || [];
 
-        return `${packageName} ${description} ${tags.join(' ')}`;
+        return `${name} ${description} ${tags.join(' ')}`;
       }, filterText);
     }
 
-    return new UniversePackagesList({items: packages});
+    return new UniverseInstalledPackagesList({items: packages});
   }
 }
 
-module.exports = UniversePackagesList;
+module.exports = UniverseInstalledPackagesList;

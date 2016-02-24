@@ -4,6 +4,8 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../events/AppDispatcher';
 import CosmosPackagesActions from '../events/CosmosPackagesActions';
 import EventTypes from '../constants/EventTypes';
+import UniverseInstalledPackagesList from
+  '../structs/UniverseInstalledPackagesList';
 import UniversePackage from '../structs/UniversePackage';
 import UniversePackagesList from '../structs/UniversePackagesList';
 
@@ -13,9 +15,9 @@ const CosmosPackagesStore = Store.createStore({
   mixins: [GetSetMixin],
 
   getSet_data: {
-    availablePackages: new UniversePackagesList(),
-    packageDetails: new UniversePackage(),
-    installedPackages: new UniversePackagesList()
+    availablePackages: [],
+    packageDetails: {},
+    installedPackages: []
   },
 
   addChangeListener: function (eventName, callback) {
@@ -34,8 +36,22 @@ const CosmosPackagesStore = Store.createStore({
   fetchPackageDescription: CosmosPackagesActions.fetchPackageDescription,
 
   /* Reducers */
+  getAvailablePackages() {
+    return new UniversePackagesList({items: this.get('availablePackages')});
+  },
+
+  getInstalledPackages() {
+    return new UniverseInstalledPackagesList(
+      {items: this.get('installedPackages')}
+    );
+  },
+
+  getPackageDetails() {
+    return new UniversePackage(this.get('packageDetails'));
+  },
+
   processAvailablePackagesSuccess: function (packages, query) {
-    this.set({availablePackages: new UniversePackagesList({items: packages})});
+    this.set({availablePackages: packages});
 
     this.emit(EventTypes.COSMOS_SEARCH_CHANGE, query);
   },
@@ -45,17 +61,17 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   processInstalledPackagesSuccess: function (packages, name, appId) {
-    this.set({installedPackages: new UniversePackagesList({items: packages})});
+    this.set({installedPackages: packages});
 
     this.emit(EventTypes.COSMOS_LIST_CHANGE, packages, name, appId);
   },
 
-  processInstalledPackagesError: function (packages, name, appId) {
-    this.emit(EventTypes.COSMOS_LIST_ERROR, packages, name, appId);
+  processInstalledPackagesError: function (error, name, appId) {
+    this.emit(EventTypes.COSMOS_LIST_ERROR, error, name, appId);
   },
 
   processPackageDescriptionSuccess: function (cosmosPackage, name, version) {
-    this.set({packageDetails: new UniversePackage(cosmosPackage)});
+    this.set({packageDetails: cosmosPackage});
 
     this.emit(EventTypes.COSMOS_DESCRIBE_CHANGE, cosmosPackage, name, version);
   },
