@@ -114,7 +114,7 @@ let ResourceBarChart = React.createClass({
 
     return (
       <div className="chart panel">
-        <div className="panel-heading panel-heading-large">
+        <div className="panel-header panel-header-large">
           <div className="panel-options-left button-group">
             {this.getModeButtons()}
           </div>

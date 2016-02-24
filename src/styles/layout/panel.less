@@ -2,10 +2,8 @@
   background-color: @panel-background-color;
   margin-bottom: @grid-gutter-width;
 
-  .panel-heading {
+  .panel-header {
     display: flex;
-    padding: @base-spacing-unit / 2;
-    line-height: @heading-h3-text-line-height;
 
     .panel-title {
       text-align: center;
@@ -30,7 +28,7 @@
       }
     }
 
-    &.panel-heading-bottom-border {
+    &.panel-header-bottom-border {
       border-bottom: 1px solid @border-color;
 
       &.inverse {
@@ -39,14 +37,10 @@
     }
 
 
-    &.panel-heading-large {
+    &.panel-header-large {
       padding: @base-spacing-unit @base-spacing-unit 0;
       border: 0;
     }
-  }
-
-  .panel-content {
-    padding: @base-spacing-unit;
   }
 
   .panel-footer {
@@ -56,6 +50,30 @@
 
     &.inverse {
       border-top: 1px solid @border-color-inverse;
+    }
+  }
+
+  .panel-content,
+  .panel-footer,
+  .panel-header {
+
+    &.flush {
+
+      padding-bottom: 0;
+      padding-top: 0;
+
+    }
+
+    &.flush-top {
+
+      padding-top: 0;
+
+    }
+
+    &.flush-bottom {
+
+      padding-bottom: 0;
+
     }
   }
 
@@ -77,9 +95,7 @@
     .panel {
       margin-bottom: @grid-gutter-width;
 
-      .panel-heading {
-        padding: (@base-spacing-unit-screen-mini * 0.5) (@base-spacing-unit-screen-mini * 1);
-
+      .panel-header {
         .panel-options-right {
           /* Hacky - please remove after panel-options-right is filled with content */
           &.fixed-width {
@@ -89,9 +105,6 @@
         }
       }
 
-      .panel-content {
-        padding: @base-spacing-unit-screen-mini * 1;
-      }
       &.dashboard-panel {
         .panel-content {
           height: (@base-spacing-unit-screen-mini * 17) - @heading-h4-text-font-size-scale-screen-mini;
@@ -106,21 +119,16 @@
     .panel {
       margin-bottom: @grid-gutter-width-screen-small;
 
-      .panel-heading {
-        padding: (@base-spacing-unit-screen-small * 0.25) (@base-spacing-unit-screen-small * 0.5);
-
-       .panel-options-right {
+      .panel-header {
+        .panel-options-right {
           /* Hacky - please remove after panel-options-right is filled with content */
           &.fixed-width {
             display: block;
-            width: @base-spacing-unit * 8.1;
+            width: @base-spacing-unit-screen-small * 3.5;
           }
         }
       }
 
-      .panel-content {
-        padding: @base-spacing-unit-screen-small * 0.5;
-      }
       &.dashboard-panel {
         .panel-content {
           height: (@base-spacing-unit-screen-small * 10) - @heading-h4-text-font-size-scale-screen-small;
@@ -135,22 +143,16 @@
     .panel {
       margin-bottom: @grid-gutter-width-screen-medium;
 
-      .panel-heading {
-        padding: (@base-spacing-unit-screen-medium * 0.25) (@base-spacing-unit-screen-medium * 0.5);
-
+      .panel-header {
         .panel-options-right {
           /* Hacky - please remove after panel-options-right is filled with content */
           &.fixed-width {
             display: block;
-            width: @base-spacing-unit * 8.8;
+            width: @base-spacing-unit-screen-medium * 3.5;
           }
         }
-
       }
 
-      .panel-content {
-        padding: @base-spacing-unit-screen-medium * 0.5;
-      }
       &.dashboard-panel {
         .panel-content {
           height: (@base-spacing-unit-screen-medium * 7.5) - @heading-h4-text-font-size-scale-screen-medium;
@@ -165,13 +167,16 @@
     .panel {
       margin-bottom: @grid-gutter-width-screen-large;
 
-      .panel-heading {
-        padding: (@base-spacing-unit-screen-large * 0.25) (@base-spacing-unit-screen-large * 0.5);
+      .panel-header {
+        .panel-options-right {
+          /* Hacky - please remove after panel-options-right is filled with content */
+          &.fixed-width {
+            display: block;
+            width: @base-spacing-unit-screen-large * 3.5;
+          }
+        }
       }
 
-      .panel-content {
-        padding: @base-spacing-unit-screen-large * 0.5;
-      }
       &.dashboard-panel {
         .panel-content {
           height: (@base-spacing-unit-screen-large * 5.5) - @heading-h4-text-font-size-scale-screen-large;
@@ -186,13 +191,16 @@
     .panel {
       margin-bottom: @grid-gutter-width-screen-x-large;
 
-      .panel-heading {
-        padding: (@base-spacing-unit-screen-x-large * 0.25) (@base-spacing-unit-screen-x-large * 0.5);
+      .panel-header {
+        .panel-options-right {
+          /* Hacky - please remove after panel-options-right is filled with content */
+          &.fixed-width {
+            display: block;
+            width: @base-spacing-unit-screen-x-large * 3.5;
+          }
+        }
       }
 
-      .panel-content {
-        padding: @base-spacing-unit-screen-x-large * 0.5;
-      }
       &.dashboard-panel {
         .panel-content {
           height: (@base-spacing-unit-screen-x-large * 5) - @heading-h4-text-font-size-scale-screen-large;

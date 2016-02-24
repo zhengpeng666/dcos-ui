@@ -29,20 +29,15 @@ module.exports = class AccessDeniedPage extends React.Component {
             <AlertPanel
               title="Access Denied"
               iconClassName="icon icon-sprite icon-sprite-jumbo
-                icon-sprite-jumbo-white icon-lost-planet flush-top">
-              <div>
-                <p>
-                  You do not have access to this service. <br />
-                  Please contact your DCOS administrator.
-                </p>
-
-                <div className="container container-pod container-pod-short-top container-fluid flush-bottom">
-                  <button className="button button-primary"
-                    onClick={this.handleUserLogout}>
-                    Log out
-                  </button>
-                </div>
-              </div>
+                icon-sprite-jumbo-white icon-lost-planet flush-top"
+              footer={<button className="button button-primary"
+                onClick={this.handleUserLogout}>
+                Log out
+              </button>}>
+              <p>
+                You do not have access to this service. <br />
+                Please contact your DCOS administrator.
+              </p>
             </AlertPanel>
           </div>
         </div>

@@ -19,7 +19,7 @@ var Panel = React.createClass({
       className: 'panel',
       contentClass: 'panel-content',
       footerClass: 'panel-footer',
-      headingClass: 'panel-heading'
+      headingClass: 'panel-header'
     };
   },
 

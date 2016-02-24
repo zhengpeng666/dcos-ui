@@ -191,7 +191,7 @@ var DashboardPage = React.createClass({
             <Panel
               className="panel dashboard-panel"
               heading={this.getHeading('CPU Allocation')}
-              headingClass="panel-heading panel-heading-bottom-border inverse">
+              headingClass="panel-header panel-header-bottom-border inverse short">
               <ResourceTimeSeriesChart
                 colorIndex={0}
                 usedResourcesStates={data.usedResourcesStates}
@@ -205,7 +205,7 @@ var DashboardPage = React.createClass({
             <Panel
               className="panel dashboard-panel"
               heading={this.getHeading('Memory Allocation')}
-              headingClass="panel-heading panel-heading-bottom-border inverse">
+              headingClass="panel-header panel-header-bottom-border inverse short">
               <ResourceTimeSeriesChart
                 colorIndex={6}
                 usedResourcesStates={data.usedResourcesStates}
@@ -219,7 +219,7 @@ var DashboardPage = React.createClass({
             <Panel
               className="panel dashboard-panel"
               heading={this.getHeading('Task Failure Rate')}
-              headingClass="panel-heading panel-heading-bottom-border inverse">
+              headingClass="panel-header panel-header-bottom-border inverse short">
               <TaskFailureTimeSeriesChart
                 data={data.taskFailureRate}
                 refreshRate={data.refreshRate} />
@@ -229,7 +229,7 @@ var DashboardPage = React.createClass({
             <Panel
               className="panel dashboard-panel"
               heading={this.getHeading('Services Health')}
-              headingClass="panel-heading panel-heading-bottom-border inverse">
+              headingClass="panel-header panel-header-bottom-border inverse short">
               <ServiceList
                 healthProcessed={appsProcessed}
                 services={this.getServicesList(data.services.getItems())} />
@@ -240,7 +240,7 @@ var DashboardPage = React.createClass({
             <Panel
               className="panel dashboard-panel"
               heading={this.getHeading('Tasks')}
-              headingClass="panel-heading panel-heading-bottom-border inverse">
+              headingClass="panel-header panel-header-bottom-border inverse short">
               <TasksChart tasks={data.services.sumTaskStates()} />
             </Panel>
           </div>
@@ -248,7 +248,7 @@ var DashboardPage = React.createClass({
             <Panel
               className="panel dashboard-panel"
               heading={this.getHeading('Nodes')}
-              headingClass="panel-heading panel-heading-bottom-border inverse">
+              headingClass="panel-header panel-header-bottom-border inverse short">
               <HostTimeSeriesChart
                 data={data.hostsCount}
                 currentValue={data.activeSlaves.length}

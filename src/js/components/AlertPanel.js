@@ -69,8 +69,10 @@ var AlertPanel = React.createClass({
           <Panel ref="panel"
             style={{height: data.height}}
             className="panel vertical-center horizontal-center text-align-center flush"
+            footer={this.props.footer}
+            footerClass="panel-footer flush"
             heading={this.getIcon()}
-            headingClass="panel-heading flush-top">
+            headingClass="panel-header flush">
             {this.getTitle()}
             {this.props.children}
           </Panel>

@@ -99,17 +99,17 @@ describe('Panel', function () {
     it('should use default className to heading node', function () {
       var heading = TestUtils.findRenderedDOMComponentWithClass(
         ReactDOM.render(<Panel heading="heading" />, this.container),
-        'panel-heading'
+        'panel-header'
       );
       var node = ReactDOM.findDOMNode(heading);
-      expect(node.className).toBe('panel-heading');
+      expect(node.className).toBe('panel-header');
     });
 
     it('should not render heading when none is given', function () {
       var panel = ReactDOM.render(<Panel />, this.container);
       expect(TestUtils.scryRenderedDOMComponentsWithClass(
         panel,
-        'panel-heading'
+        'panel-header'
       ).length).toBe(0);
     });
 
