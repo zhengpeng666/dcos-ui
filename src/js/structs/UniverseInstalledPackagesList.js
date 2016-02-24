@@ -26,7 +26,7 @@ class UniverseInstalledPackagesList extends List {
         name = name || '';
         tags = tags || [];
 
-        return name + ' ' + description + ' ' + tags.join(' ');
+        return `${name} ${description} ${tags.join(' ')}`;
       }, filterText);
     }
 

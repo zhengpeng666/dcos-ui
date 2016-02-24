@@ -25,7 +25,7 @@ class UniversePackagesList extends List {
         let packageName = cosmosPackage.get('packageName') || '';
         let tags = cosmosPackage.get('tags') || [];
 
-        return packageName + ' ' + description + ' ' + tags.join(' ');
+        return `${packageName} ${description} ${tags.join(' ')}`;
       }, filterText);
     }
 
