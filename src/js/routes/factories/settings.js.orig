@@ -1,0 +1,127 @@
+import {Route, Redirect} from 'react-router';
+
+<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
+import UnitsHealthTab from '../../pages/settings/UnitsHealthTab';
+=======
+import ComponentsHealthTab from '../../pages/ComponentsHealthTab';
+>>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
+import {Hooks} from '../../pluginBridge/PluginBridge';
+import SettingsPage from '../../pages/SettingsPage';
+
+let RouteFactory = {
+
+<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
+  getSystemRoutes() {
+    // Return filtered Routes
+    return this.getFilteredRoutes(
+      Hooks.applyFilter('SystemRoutes', {
+        routes: [{
+          type: Route,
+          name: 'settings-system-units',
+          path: 'units/?',
+          handler: UnitsHealthTab,
+          children: [
+            {
+              type: Route,
+              name: 'settings-system-units-unit-nodes-panel',
+              path: ':unitID/?',
+              children: [
+                {
+                  type: Route,
+                  name: 'settings-system-units-unit-nodes-node-panel',
+                  path: 'nodes/:unitNodeID'
+                }
+              ]
+            },
+            {
+              type: Redirect,
+              from: ':unitID/?',
+              to: 'settings-system-units-unit-nodes-panel'
+            }
+          ]
+        }],
+        redirect: {
+          type: Redirect,
+          from: '/settings/system/?',
+          to: 'settings-system-units'
+=======
+  defaults: {
+    system: [
+      {
+        type: Route,
+        name: 'settings-system-components',
+        path: 'components/?',
+        handler: ComponentsHealthTab
+      }
+    ]
+  },
+
+  getSystemRoutes() {
+    // Return filtered Routes
+    return this.getFilteredRoutes(
+      // Pass in Object so Plugins can mutate routes and the default redirect
+      Hooks.applyFilter('getSystemRoutes', {
+        routes: [].slice.call(this.defaults.system),
+        redirect: {
+          type: Redirect,
+          from: '/settings/system/?',
+          to: 'settings-system-components'
+>>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
+        }
+      })
+    );
+  },
+<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
+
+=======
+>>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
+  getSettingsRoutes() {
+    let systemRoute = {
+      type: Route,
+      name: 'settings-system',
+      path: 'system/?'
+    };
+    // Get children from settings Route
+    systemRoute.children = RouteFactory.getSystemRoutes();
+
+    // Return filtered Routes
+    return this.getFilteredRoutes(
+      // Pass in Object so Plugins can mutate routes and the default redirect
+<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
+      Hooks.applyFilter('SettingsRoutes', {
+=======
+      Hooks.applyFilter('getSettingsRoutes', {
+>>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
+        routes: [systemRoute],
+        redirect: {
+          type: Redirect,
+          from: '/settings/?',
+          to: 'settings-system'
+        }
+      })
+    );
+  },
+
+  getFilteredRoutes(filteredRoutes) {
+<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
+    // Push redirect onto Routes Array
+=======
+>>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
+    return filteredRoutes.routes.concat([filteredRoutes.redirect]);
+  },
+
+  getRoutes() {
+
+    let childRoutes = this.getSettingsRoutes();
+
+    return {
+      type: Route,
+      name: 'settings',
+      path: 'settings/?',
+      handler: SettingsPage,
+      children: childRoutes
+    };
+  }
+};
+
+module.exports = RouteFactory;

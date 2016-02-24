@@ -1,0 +1,38 @@
+import ACL from './acl';
+import Auth from './auth';
+import Banner from './banner';
+<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
+=======
+import Directories from './directories';
+import Groups from './groups';
+>>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
+import Organization from './organization';
+import Overview from './overview';
+import Tracking from './tracking';
+import Users from './users';
+
+const pluginList = {
+<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
+  Auth,
+  Banner,
+  Organization,
+  Overview,
+  Tracking
+=======
+  ACL,
+  Auth,
+  Banner,
+  Directories,
+  Groups,
+  Organization,
+  Overview,
+  Tracking,
+  Users
+>>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
+};
+
+module.exports = {
+  getAvailablePlugins: function () {
+    return pluginList;
+  }
+};
