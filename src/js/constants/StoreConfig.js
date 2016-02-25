@@ -86,7 +86,6 @@ import {
   ACL_USER_DELETE_ERROR
 } from '../../../plugins/users/constants/EventTypes';
 
-import ComponentHealthStore from '../stores/ComponentHealthStore';
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import {
   COSMOS_DESCRIBE_CHANGE,
@@ -203,8 +202,8 @@ const ListenersDescription = {
     listenAlways: true
   },
 
-  componentHealth: {
-    store: ComponentHealthStore,
+  unitHealth: {
+    store: UnitHealthStore,
     events: {
       success: HEALTH_UNITS_CHANGE,
       error: HEALTH_UNITS_ERROR,

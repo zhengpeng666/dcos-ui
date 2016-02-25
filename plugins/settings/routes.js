@@ -4,7 +4,7 @@ import DirectoriesTab from '../directories/pages/DirectoriesTab';
 import GroupsTab from '../groups/pages/GroupsTab';
 import OverviewTab from '../overview/pages//OverviewTab';
 import SettingsPage from './pages/SettingsPage';
-import UnitsHealthTab from '../../pages/settings/UnitsHealthTab';
+import UnitsHealthTab from '../../src/js/pages/settings/UnitsHealthTab';
 import UsersTab from '../users/pages/UsersTab';
 
 let settingsRoutes = {
