@@ -124,6 +124,14 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
       });
   }
 
+  if (configuration.componentHealth) {
+    cy
+      .route(/api\/v1\/system\/health\/units/, 'fx:unit-health/units')
+      .route(/api\/v1\/system\/health\/units\/mesos_dns_service/, 'fx:unit-health/unit')
+      .route(/api\/v1\/system\/health\/units\/mesos_dns_service\/nodes/, 'fx:unit-health/unit-nodes')
+      .route(/api\/v1\/system\/health\/units\/mesos_dns_service\/nodes\/ip-10-10-0-236/, 'fx:unit-health/unit-node');
+  }
+
   // The app won't load until plugins are loaded
   var pluginsFixture = configuration.plugins || 'no-plugins';
   cy.route(/ui-config/, 'fx:config/' + pluginsFixture + '.json');

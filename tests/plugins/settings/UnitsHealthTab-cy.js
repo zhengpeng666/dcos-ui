@@ -1,15 +1,15 @@
 describe('Units Tab [0e2]', function () {
 
+  beforeEach(function () {
+    cy.configureCluster({
+      mesos: '1-task-healthy',
+      plugins: 'settings-enabled',
+      componentHealth: true
+    })
+      .visitUrl({url: '/settings/system/units', identify: true});
+  });
   context('Filters [0e3]', function () {
 
-    beforeEach(function () {
-      cy.configureCluster({
-        mesos: '1-task-healthy',
-        plugins: 'settings-enabled'
-      })
-        .route(/api\/v1\/system\/health\/units/, 'fx:unit-health/units')
-        .visitUrl({url: '/settings/system/units', identify: true});
-    });
 
     it('renders three filter buttons [0e4]', function () {
       cy.get('.button-group .button').should(function ($buttons) {
@@ -55,15 +55,10 @@ describe('Units Tab [0e2]', function () {
   context('Unit Side Panel [0e9]', function () {
 
     beforeEach(function () {
-      cy.configureCluster({
-        mesos: '1-task-healthy',
-        plugins: 'settings-enabled'
-      })
-      .route(/api\/v1\/system\/health\/units\/mesos_dns_service\/nodes/, 'fx:unit-health/unit-nodes')
-      .route(/api\/v1\/system\/health\/units\/mesos_dns_service/, 'fx:unit-health/unit')
-      .visitUrl(
-        {url: '/settings/system/units/mesos_dns_service/', identify: true}
-      );
+      cy
+        .visitUrl(
+          {url: '/settings/system/units/mesos_dns_service/', identify: true}
+        );
     });
 
     it('renders unit title [0ea]', function () {
@@ -83,7 +78,7 @@ describe('Units Tab [0e2]', function () {
     it('filters by node health [0ec]', function () {
       cy.get('button').last().click();
       cy.get('.dropdown').find('li').eq(1).click();
-      cy.get('tr a').should(function ($row) {
+      cy.get('tr a').contains('Health Check').should(function ($row) {
         expect($row.length).to.equal(1);
       });
     });
@@ -97,15 +92,10 @@ describe('Units Tab [0e2]', function () {
   context('Unit Node Side Panel [0ef]', function () {
 
     beforeEach(function () {
-      cy.configureCluster({
-        mesos: '1-task-healthy',
-        plugins: 'settings-enabled'
-      })
-      .route(/api\/v1\/system\/health\/units\/mesos_dns_service\/nodes\/ip-10-10-0-236/, 'fx:unit-health/unit-node')
-      .route(/api\/v1\/system\/health\/units\/mesos_dns_service/, 'fx:unit-health/unit')
-      .visitUrl(
-        {url: '/settings/system/units/mesos_dns_service/nodes/ip-10-10-0-236', identify: true}
-      );
+      cy
+        .visitUrl(
+          {url: '/settings/system/units/mesos_dns_service/nodes/ip-10-10-0-236', identify: true}
+        );
     });
 
     it('renders health check title [0ei]', function () {
