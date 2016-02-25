@@ -30,6 +30,10 @@ class MultipleForm extends React.Component {
     });
   }
 
+  componentDidMount() {
+    this.setState({useGemini: false});
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isMobileWidth !== this.props.isMobileWidth) {
       this.setState({useGemini: false});
