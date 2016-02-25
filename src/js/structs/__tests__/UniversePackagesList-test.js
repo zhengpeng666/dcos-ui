@@ -20,15 +20,15 @@ describe('UniversePackagesList', function () {
 
   describe('#filterItems', function () {
 
-    it('should filter by packageName', function () {
+    it('should filter by name', function () {
       var items = [
-        {packageName: 'foo'},
-        {packageName: 'bar'}
+        {name: 'foo'},
+        {name: 'bar'}
       ];
       var list = new UniversePackagesList({items});
       items = list.filterItems('bar').getItems();
       expect(items.length).toEqual(1);
-      expect(items[0].get('packageName')).toEqual('bar');
+      expect(items[0].get('name')).toEqual('bar');
     });
 
     it('should filter by description', function () {
