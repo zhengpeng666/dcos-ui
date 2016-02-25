@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import classNames from 'classnames';
 import {Link} from 'react-router';
 import mixin from 'reactjs-mixin';
@@ -135,26 +134,8 @@ class UnitsHealthTab extends mixin(StoreMixin) {
     };
   }
 
-  getVisibleData(data) {
-    let {healthFilter, searchString} = this.state;
-    let filteredData = data;
-    healthFilter = healthFilter.toLowerCase();
-    searchString = searchString.toLowerCase();
-
-    if (healthFilter !== 'all') {
-      filteredData = _.filter(filteredData, function (datum) {
-        return datum.getHealth().title.toLowerCase() === healthFilter;
-      });
-    }
-
-    if (searchString !== '') {
-      filteredData = _.filter(filteredData, function (datum) {
-        let name = datum.get('unit_title').toLowerCase();
-        return name.indexOf(searchString) > -1;
-      });
-    }
-
-    return filteredData;
+  getVisibleData(data, searchString, healthFilter) {
+    return data.filter({title: searchString, health: healthFilter}).getItems();
   }
 
   resetFilter() {
@@ -165,11 +146,12 @@ class UnitsHealthTab extends mixin(StoreMixin) {
   }
 
   render() {
-    let data = UnitHealthStore.getUnits().getItems();
-    let state = this.state;
-    let visibleData = this.getVisibleData(data);
-    let pluralizedItemName = StringUtil.pluralize('Unit', data.length);
-    let dataHealth = data.map(function (unit) {
+    let data = UnitHealthStore.getUnits();
+    let dataItems = data.getItems();
+    let {healthFilter, searchString} = this.state;
+    let visibleData = this.getVisibleData(data, searchString, healthFilter);
+    let pluralizedItemName = StringUtil.pluralize('Unit', dataItems.length);
+    let dataHealth = dataItems.map(function (unit) {
       return unit.getHealth();
     });
 
@@ -180,7 +162,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
             onReset={this.resetFilter}
             name={pluralizedItemName}
             currentLength={visibleData.length}
-            totalLength={data.length} />
+            totalLength={dataItems.length} />
           <ul className="list list-unstyled list-inline flush-bottom">
             <li>
               <FilterButtons
@@ -189,11 +171,11 @@ class UnitsHealthTab extends mixin(StoreMixin) {
                 filterByKey={'title'}
                 getfilterChangeHandler={this.getHandleHealthFilterChange}
                 itemList={dataHealth}
-                selectedFilter={state.healthFilter} />
+                selectedFilter={healthFilter} />
             </li>
             <li>
               <FilterInputText
-                searchString={state.searchString}
+                searchString={searchString}
                 handleFilterChange={this.handleSearchStringChange}
                 inverseStyle={true} />
             </li>

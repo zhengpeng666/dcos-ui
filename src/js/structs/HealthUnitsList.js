@@ -1,5 +1,7 @@
 import List from './List';
 import HealthUnit from './HealthUnit';
+import StringUtil from '../utils/StringUtil';
+import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 class HealthUnitsList extends List {
   constructor() {
@@ -13,6 +15,23 @@ class HealthUnitsList extends List {
         return new HealthUnit(item);
       }
     });
+  }
+
+  filter(filters) {
+    let components = this.getItems();
+
+    if (filters) {
+
+      if (filters.title) {
+        components = StringUtil.filterByString(components, 'unit_title', filters.title);
+      }
+
+      if (filters.health) {
+        components = UnitHealthUtil.filterByHealth(components, filters.health);
+      }
+    }
+
+    return new HealthUnitsList({items: components});
   }
 }
 

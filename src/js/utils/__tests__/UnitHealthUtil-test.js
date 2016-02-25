@@ -4,6 +4,7 @@ var _ = require('underscore');
 var HealthUnit = require('../../structs/HealthUnit');
 var UnitHealthStatus = require('../../constants/UnitHealthStatus');
 var UnitHealthUtil = require('../../utils/UnitHealthUtil');
+let NodesList = require('../../structs/NodesList');
 
 describe('UnitHealthUnit', function () {
 
@@ -53,6 +54,22 @@ describe('UnitHealthUnit', function () {
       expect(UnitHealthUtil.getHealth(health)).toEqual(UnitHealthStatus.NA);
     });
 
+  });
+
+  describe('#filterByHealth', function () {
+
+    it('filters by unit health title', function () {
+      let items = [
+        {id: 'food', node_health: 0},
+        {id: 'bard', node_health: 0},
+        {id: 'bluh', node_health: 2}
+      ];
+      let list = new NodesList({items});
+      let filteredList = list.filter({health: 'healthy'}).getItems();
+      expect(filteredList.length).toEqual(2);
+      expect(filteredList[0].get('id')).toEqual('food');
+      expect(filteredList[1].get('id')).toEqual('bard');
+    });
   });
 
 });

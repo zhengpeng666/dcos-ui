@@ -184,9 +184,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
   }
 
   getVisibleData(data, searchString, healthFilter) {
-    data = data.filter({id: searchString, health: healthFilter});
-
-    return data.getItems();
+    return data.filter({name: searchString, health: healthFilter}).getItems();
   }
 
   resetFilter() {
@@ -225,7 +223,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
   }
 
   render() {
-    let {searchString, healthFilter} = this.state;
+    let {healthFilter, searchString} = this.state;
 
     let unit = this.getUnit();
     let nodes = UnitHealthStore.getNodes(this.props.itemID);

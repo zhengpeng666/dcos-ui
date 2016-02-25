@@ -66,6 +66,19 @@ describe('NodesList', function () {
       expect(filteredList[1].get('hostname')).toEqual('baz');
     });
 
+    it('filters by unit health title', function () {
+      let items = [
+        {id: 'foo', node_health: 0},
+        {id: 'bar', node_health: 0},
+        {id: 'bluh', node_health: 2}
+      ];
+      let list = new NodesList({items});
+      let filteredList = list.filter({health: 'healthy'}).getItems();
+      expect(filteredList.length).toEqual(2);
+      expect(filteredList[0].get('id')).toEqual('foo');
+      expect(filteredList[1].get('id')).toEqual('bar');
+    });
+
   });
 
   describe('#sumUsedResources', function () {
