@@ -1,4 +1,4 @@
-describe.only('Installed Packages Tab', function () {
+describe('Installed Packages Tab', function () {
 
   beforeEach(function () {
     cy.configureCluster({
