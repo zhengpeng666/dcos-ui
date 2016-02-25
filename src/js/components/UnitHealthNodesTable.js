@@ -4,7 +4,6 @@ import {Table} from 'reactjs-components';
 import ResourceTableUtil from '../utils/ResourceTableUtil';
 import StringUtil from '../utils/StringUtil';
 import TableUtil from '../utils/TableUtil';
-import UnitHealthStore from '../stores/UnitHealthStore';
 import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 const METHODS_TO_BIND = [
@@ -13,7 +12,7 @@ const METHODS_TO_BIND = [
   'renderNode'
 ];
 
-module.exports = class UnitHealthNodesTable extends React.Component {
+class UnitHealthNodesTable extends React.Component {
 
   constructor() {
     super();
@@ -122,8 +121,10 @@ module.exports = class UnitHealthNodesTable extends React.Component {
         />
     );
   }
+}
+
+UnitHealthNodesTable.propTypes = {
+  nodes: React.PropTypes.array.isRequired
 };
 
-// UnitHealthNodesTable.propTypes = {
-//   nodes: React.PropTypes.array.isRequired
-// };
+module.exports = UnitHealthNodesTable;

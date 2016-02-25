@@ -36,12 +36,9 @@ const UnitHealthUtil = {
    * @return {Object}       - UnitHealthStatus object.
    */
   getHealth(health) {
-    return Object.keys(UnitHealthStatus).reduce(function (prev, healthObj) {
-      if (UnitHealthStatus[healthObj].value === health) {
-        return UnitHealthStatus[healthObj];
-      }
-      return prev;
-    }, null) || UnitHealthStatus.NA;
+    return _.find(UnitHealthStatus, function (healthObject) {
+      return (healthObject.value === health);
+    }) || UnitHealthStatus.NA;
   },
 
   /**
