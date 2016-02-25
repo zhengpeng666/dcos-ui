@@ -25,7 +25,7 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
     let {unitID, unitNodeID} = this.props.params;
 
     UnitHealthStore.fetchUnit(unitID);
-    UnitHealthStore.fetchUnitNode(unitNodeID);
+    UnitHealthStore.fetchUnitNode(unitID, unitNodeID);
   }
 
   getHeader(unit, node) {

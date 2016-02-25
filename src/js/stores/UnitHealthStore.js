@@ -108,13 +108,13 @@ const UnitHealthStore = Store.createStore({
     this.emit(HEALTH_UNITS_CHANGE);
   },
 
-  processUnit: function (unitData) {
+  processUnit: function (unitData, unitID) {
     let unitsByID = this.get('unitsByID');
-    unitsByID[unitData.unit_id] = unitData;
+    unitsByID[unitID] = unitData;
 
     this.set({unitsByID});
 
-    this.emit(HEALTH_UNIT_SUCCESS, unitData.unit_id);
+    this.emit(HEALTH_UNIT_SUCCESS, unitID);
   },
 
   processNodes: function (nodes, unitID) {
@@ -123,16 +123,16 @@ const UnitHealthStore = Store.createStore({
 
     this.set({nodesByUnitID});
 
-    this.emit(HEALTH_UNIT_NODES_SUCCESS);
+    this.emit(HEALTH_UNIT_NODES_SUCCESS, unitID);
   },
 
-  processNode: function (nodeData) {
+  processNode: function (nodeData, unitID, nodeID) {
     let nodesByID = this.get('nodesByID');
-    nodesByID[nodeData.hostname] = nodeData;
+    nodesByID[nodeID] = nodeData;
 
     this.set({nodesByID});
 
-    this.emit(HEALTH_UNIT_NODE_SUCCESS);
+    this.emit(HEALTH_UNIT_NODE_SUCCESS, unitID, nodeID);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -151,7 +151,7 @@ const UnitHealthStore = Store.createStore({
         UnitHealthStore.emit(HEALTH_UNITS_ERROR, data);
         break;
       case REQUEST_HEALTH_UNIT_SUCCESS:
-        UnitHealthStore.processUnit(data);
+        UnitHealthStore.processUnit(data, action.unitID);
         break;
       case REQUEST_HEALTH_UNIT_ERROR:
         UnitHealthStore.emit(HEALTH_UNIT_ERROR, data, action.unitID);
@@ -163,7 +163,7 @@ const UnitHealthStore = Store.createStore({
         UnitHealthStore.emit(HEALTH_UNIT_NODES_ERROR, data, action.unitID);
         break;
       case REQUEST_HEALTH_UNIT_NODE_SUCCESS:
-        UnitHealthStore.processNode(data);
+        UnitHealthStore.processNode(data, action.unitID, action.nodeID);
         break;
       case REQUEST_HEALTH_UNIT_NODE_ERROR:
         UnitHealthStore.emit(HEALTH_UNIT_NODE_ERROR, data, action.unitID, action.nodeID);

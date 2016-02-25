@@ -78,7 +78,9 @@ const UnitHealthActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_HEALTH_UNIT_NODE_SUCCESS,
-          data: response
+          data: response,
+          unitID,
+          nodeID
         });
       },
       error: function (xhr) {
