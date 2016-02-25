@@ -171,6 +171,7 @@ module.exports = class UserGroupTable extends mixin(StoreMixin) {
             flush-bottom"
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
+          containerSelector=".gm-scroll-view"
           data={userGroups}
           itemHeight={TableUtil.getRowHeight()}
           sortBy={{prop: 'description', order: 'asc'}}

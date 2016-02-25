@@ -6,9 +6,15 @@ var JestUtil = require('../../../../src/js/utils/JestUtil');
 JestUtil.unMockStores(['ACLStore']);
 require('../../../../src/js/utils/StoreMixinConfig');
 
+var ReactComponents = require('reactjs-components');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
+
+// Need to mock Table
+ReactComponents.Table = React.createClass({
+  displayName: 'foo', render: function () { return null; }
+});
 
 import {
   REQUEST_ACL_USER_REVOKE_ACTION_ERROR,

@@ -109,27 +109,31 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
 
     return (
       <div>
-        <div className="side-panel-content-header container-fluid container-pod flush-top container-pod-short-bottom">
+        <div className="side-panel-content-header container-fluid container-pod flush-top flush-bottom">
           <h1 className="side-panel-content-header-label flush">
             {task.name}
           </h1>
 
-          <div className="media-object-spacing-wrapper media-object-spacing-wrapper-narrow">
-            <div className="media-object media-object-align-middle media-object-inline">
-              <div className="media-object-item">
-                {statusIcon}
-              </div>
-              <div className="media-object-item">
+          <ul className="list-unstyled list-inline flush-bottom">
+            <li>
+              <div className="media-object media-object-align-middle">
+                <div className="media-object-item">
+                  {statusIcon}
+                </div>
+                <div className="media-object-item">
                 <span className={statusClassName}>
                   {TaskStates[task.state].displayName}
                 </span>
+                </div>
               </div>
-            </div>
-          </div>
+            </li>
 
-          <span className="side-panel-subheader side-panel-subheader-emphasize">
-            {node.hostname}
-          </span>
+            <li>
+              <span className="side-panel-subheader side-panel-subheader-emphasize">
+                {node.hostname}
+              </span>
+            </li>
+          </ul>
         </div>
         <div className="container container-pod container-pod-short container-fluid flush">
           {this.getResources(task)}
