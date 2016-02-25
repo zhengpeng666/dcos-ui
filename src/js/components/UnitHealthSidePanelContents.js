@@ -108,6 +108,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     let imageTag = (
       <div className="side-panel-icon icon icon-large icon-image-container
         icon-app-container">
+        <img src="./img/services/icon-service-default-medium@2x.png" />
       </div>
     );
 

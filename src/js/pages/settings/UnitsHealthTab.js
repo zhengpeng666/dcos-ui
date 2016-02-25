@@ -62,6 +62,9 @@ class UnitsHealthTab extends mixin(StoreMixin) {
       <Link to="settings-system-units-unit-nodes-panel"
         params={{unitID: unit.get('unit_id')}}
         className="headline">
+        <span className="icon icon-small icon-image-container icon-app-container">
+          <img src="./img/services/icon-service-default-small@2x.png" />
+        </span>
         {unit.get(prop)}
       </Link>
     );
