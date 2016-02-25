@@ -1,4 +1,4 @@
-import {Dropdown, Table} from 'reactjs-components';
+import {Dropdown} from 'reactjs-components';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
@@ -6,20 +6,14 @@ import React from 'react';
 import FilterHeadline from '../components/FilterHeadline';
 import FilterInputText from '../components/FilterInputText';
 import RequestErrorMsg from './RequestErrorMsg';
-import ResourceTableUtil from '../utils/ResourceTableUtil';
 import SidePanelContents from './SidePanelContents';
-import StringUtil from '../utils/StringUtil';
-import TableUtil from '../utils/TableUtil';
+import UnitHealthNodesTable from '../components/UnitHealthNodesTable';
 import UnitHealthStatus from '../constants/UnitHealthStatus';
 import UnitHealthStore from '../stores/UnitHealthStore';
-import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 const METHODS_TO_BIND = [
   'handleItemSelection',
   'handleSearchStringChange',
-  'renderHealth',
-  'renderHealthCheckName',
-  'renderNode',
   'resetFilter'
 ];
 
@@ -56,52 +50,6 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
 
   handleSearchStringChange(searchString) {
     this.setState({searchString});
-  }
-
-  getColGroup() {
-    return (
-      <colgroup>
-        <col style={{width: '20%'}} />
-        <col style={{width: '40%'}} />
-        <col style={{width: '40%'}} />
-      </colgroup>
-    );
-  }
-
-  getColumns() {
-    let classNameFn = ResourceTableUtil.getClassName;
-
-    return [
-      {
-        className: classNameFn,
-        headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({node_health: 'HEALTH'}),
-        prop: 'node_health',
-        render: this.renderHealth,
-        sortable: true,
-        sortFunction: UnitHealthUtil.getHealthSortFunction('node_id')
-      },
-      {
-        className: classNameFn,
-        headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({check: 'HEALTH CHECK NAME'}),
-        prop: 'check',
-        render: this.renderHealthCheckName
-      },
-      {
-        className: classNameFn,
-        headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({hostname: 'NODE'}),
-        prop: 'hostname',
-        render: this.renderNode,
-        sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('hostname')
-      }
-    ];
-  }
-
-  getUnit() {
-    return UnitHealthStore.getUnit(this.props.itemID);
   }
 
   getUnitHeader(unit) {
@@ -156,20 +104,6 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     );
   }
 
-  getNodeLink(node, linkText) {
-    let path = 'settings-system-units-unit-nodes-node-panel';
-    let params = {unitID: this.props.itemID, unitNodeID: node.get('hostname')};
-
-    return (
-      <a
-        className="emphasize clickable text-overflow"
-        onClick={() => { this.props.parentRouter.transitionTo(path, params); }}
-        title={linkText}>
-        {linkText}
-      </a>
-    );
-  }
-
   getSubHeader(unit) {
     let healthStatus = unit.getHealth();
 
@@ -184,6 +118,10 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     );
   }
 
+  getUnit() {
+    return UnitHealthStore.getUnit(this.props.itemID);
+  }
+
   getVisibleData(data, searchString, healthFilter) {
     return data.filter({name: searchString, health: healthFilter}).getItems();
   }
@@ -193,34 +131,6 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
       searchString: '',
       healthFilter: 'all'
     });
-  }
-
-  renderHealth(prop, node) {
-    let health = node.getHealth();
-
-    return (
-      <span className={health.classNames}>
-        {StringUtil.capitalize(health.title)}
-      </span>
-    );
-  }
-
-  renderHealthCheckName(prop, node) {
-    let linkTitle = `${this.getUnit().get('unit_title')} Health Check`;
-    return this.getNodeLink(node, linkTitle);
-  }
-
-  renderNode(prop, node) {
-    return this.getNodeLink(node,
-      (
-        <span>
-          {node.get(prop)}
-          <span className="mute">
-            {` (${StringUtil.capitalize(node.get('node_role'))})`}
-          </span>
-        </span>
-      )
-    );
   }
 
   render() {
@@ -267,17 +177,11 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
                   wrapperClassName="dropdown" />
               </li>
             </ul>
-            <Table
-              className="table table-borderless-outer
-                table-borderless-inner-columns flush-bottom"
-              columns={this.getColumns()}
-              colGroup={this.getColGroup()}
-              containerSelector=".gm-scroll-view"
-              data={visibleData}
-              idAttribute="id"
-              itemHeight={TableUtil.getRowHeight()}
-              sortBy={{prop: 'node_health', order: 'desc'}}
-              />
+            <UnitHealthNodesTable
+              nodes={visibleData}
+              unit={unit}
+              itemID={this.props.itemID}
+              parentRouter={this.props.parentRouter} />
           </div>
         </div>
       </div>
