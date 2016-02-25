@@ -88,12 +88,17 @@ import {
 
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import {
-  COSMOS_DESCRIBE_CHANGE,
-  COSMOS_DESCRIBE_ERROR,
-  COSMOS_LIST_CHANGE,
-  COSMOS_LIST_ERROR,
+
   COSMOS_SEARCH_CHANGE,
   COSMOS_SEARCH_ERROR,
+  COSMOS_LIST_CHANGE,
+  COSMOS_LIST_ERROR,
+  COSMOS_DESCRIBE_CHANGE,
+  COSMOS_DESCRIBE_ERROR,
+  COSMOS_INSTALL_SUCCESS,
+  COSMOS_INSTALL_ERROR,
+  COSMOS_UNINSTALL_SUCCESS,
+  COSMOS_UNINSTALL_ERROR,
 
   HEALTH_UNITS_CHANGE,
   HEALTH_UNITS_ERROR,
@@ -223,12 +228,17 @@ const ListenersDescription = {
   cosmosPackages: {
     store: CosmosPackagesStore,
     events: {
+      availableError: COSMOS_SEARCH_ERROR,
+      availableSuccess: COSMOS_SEARCH_CHANGE,
       descriptionSuccess: COSMOS_DESCRIBE_CHANGE,
       descriptionError: COSMOS_DESCRIBE_ERROR,
       installedSuccess: COSMOS_LIST_CHANGE,
       installedError: COSMOS_LIST_ERROR,
-      availableSuccess: COSMOS_SEARCH_CHANGE,
-      availableError: COSMOS_SEARCH_ERROR
+
+      installError: COSMOS_INSTALL_ERROR,
+      installSuccess: COSMOS_INSTALL_SUCCESS,
+      uninstallError: COSMOS_UNINSTALL_ERROR,
+      uninstallSuccess: COSMOS_UNINSTALL_SUCCESS
     },
     unmountWhen: function (store, event) {
       return event === 'availableSuccess';

@@ -4,7 +4,7 @@
       "currentVersion": "0.2.1",
       "description": "A distributed free and open-source database with a flexible data model for documents, graphs, and key-values. Build high performance applications using a convenient SQL-like query language or JavaScript extensions.",
       "framework": true,
-      "packageName": "arangodb",
+      "name": "arangodb",
       "resource": {
         "images": {
           "icon-small": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-small.png",
@@ -26,7 +26,7 @@
       "currentVersion": "0.2.0-1",
       "description": "Apache Cassandra running on Apache Mesos",
       "framework": true,
-      "packageName": "cassandra",
+      "name": "cassandra",
       "tags": [
         "data",
         "database",
@@ -40,7 +40,7 @@
       "currentVersion": "2.4.0",
       "description": "A fault tolerant job scheduler for Mesos which handles dependencies and ISO8601 based schedules.",
       "framework": true,
-      "packageName": "chronos",
+      "name": "chronos",
       "tags": [
         "cron",
         "analytics",
@@ -54,7 +54,7 @@
       "currentVersion": "0.1.7",
       "description": "Hadoop Distributed File System (HDFS), Highly Available",
       "framework": true,
-      "packageName": "hdfs",
+      "name": "hdfs",
       "tags": [
         "filesystem",
         "hadoop",
