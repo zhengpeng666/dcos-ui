@@ -1,6 +1,3 @@
-jest.dontMock('../HealthUnit');
-jest.dontMock('../HealthUnitsList');
-
 var HealthUnit = require('../HealthUnit');
 var HealthUnitsList = require('../HealthUnitsList');
 

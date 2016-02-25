@@ -8,12 +8,12 @@ jest.dontMock('../../../../tests/_fixtures/unit-health/units.json');
 var _ = require('underscore');
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../../events/AppDispatcher');
-var UnitHealthStore = require('../UnitHealthStore');
-var unitsFixture = require('../../../../tests/_fixtures/unit-health/units.json');
 var Config = require('../../config/Config');
 var EventTypes = require('../../constants/EventTypes');
 var HealthUnitsList = require('../../structs/HealthUnitsList');
 var RequestUtil = require('../../utils/RequestUtil');
+var UnitHealthStore = require('../UnitHealthStore');
+var unitsFixture = require('../../../../tests/_fixtures/unit-health/units.json');
 
 describe('UnitHealthStore', function () {
 
