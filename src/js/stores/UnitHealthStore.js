@@ -58,6 +58,7 @@ const UnitHealthStore = Store.createStore({
   getSet_data: {
     units: [],
     unitsByID: {},
+    nodesByUnitID: {},
     nodesByID: {}
   },
 
@@ -85,8 +86,8 @@ const UnitHealthStore = Store.createStore({
   },
 
   getNodes: function (unitID) {
-    let unit = this.get('unitsByID')[unitID] || [];
-    return new NodesList({items: unit.nodes});
+    let nodes = this.get('nodesByUnitID')[unitID] || [];
+    return new NodesList({items: nodes});
   },
 
   getNode: function (nodeID) {
@@ -109,32 +110,26 @@ const UnitHealthStore = Store.createStore({
 
   processUnit: function (unitData) {
     let unitsByID = this.get('unitsByID');
-    let unit = unitsByID[unitData.unit_id] || {};
+    unitsByID[unitData.unit_id] = unitData;
 
-    unit = _.extend(unit, unitData);
-    unitsByID[unit.unit_id] = unit;
     this.set({unitsByID});
 
-    this.emit(HEALTH_UNIT_SUCCESS, unit.unit_id);
+    this.emit(HEALTH_UNIT_SUCCESS, unitData.unit_id);
   },
 
   processNodes: function (nodes, unitID) {
-    let unitsByID = this.get('unitsByID');
-    let unit = unitsByID[unitID] || {};
+    let nodesByUnitID = this.get('nodesByUnitID');
+    nodesByUnitID[unitID] = nodes;
 
-    unit.nodes = nodes;
-    unitsByID[unitID] = unit;
-    this.set({unitsByID});
+    this.set({nodesByUnitID});
 
     this.emit(HEALTH_UNIT_NODES_SUCCESS);
   },
 
   processNode: function (nodeData) {
     let nodesByID = this.get('nodesByID');
-    let node = nodesByID[nodeData.hostname] || {};
+    nodesByID[nodeData.hostname] = nodeData;
 
-    node = _.extend(node, nodeData);
-    nodesByID[node.hostname] = node;
     this.set({nodesByID});
 
     this.emit(HEALTH_UNIT_NODE_SUCCESS);

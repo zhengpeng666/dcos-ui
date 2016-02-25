@@ -34,7 +34,7 @@ class SidePanels extends React.Component {
   }
 
   handlePanelClose(closeInfo) {
-    if (!this.isOpen()) {
+    if (!this.isOpen(this.props.params)) {
       return;
     }
 
@@ -49,15 +49,15 @@ class SidePanels extends React.Component {
     HistoryStore.goBack(router);
   }
 
-  isOpen() {
-    let params = this.props.params;
+  isOpen(itemIDs) {
+    let {unitID, unitNodeID, nodeID, serviceName, taskID} = itemIDs;
 
     return (
-      params.nodeID != null ||
-      params.serviceName != null ||
-      params.taskID != null ||
-      params.unitID != null ||
-      (params.unitNodeID != null && params.unitID != null)
+      nodeID != null ||
+      serviceName != null ||
+      taskID != null ||
+      unitID != null ||
+      (unitNodeID != null && unitID != null)
     ) && MesosSummaryStore.get('statesProcessed');
   }
 
@@ -94,7 +94,7 @@ class SidePanels extends React.Component {
   }
 
   getContents(itemIDs) {
-    if (!this.isOpen()) {
+    if (!this.isOpen(itemIDs)) {
       return null;
     }
 
@@ -125,16 +125,16 @@ class SidePanels extends React.Component {
       );
     }
 
-    if (unitID != null) {
-      if (unitNodeID != null) {
-        return (
-          <UnitNodeSidePanelContents
-            itemID={unitID}
-            params={this.props.params}
-            parentRouter={this.context.router} />
-        );
-      }
+    if (unitID != null && unitNodeID != null) {
+      return (
+        <UnitNodeSidePanelContents
+          itemID={unitID}
+          params={this.props.params}
+          parentRouter={this.context.router} />
+      );
+    }
 
+    if (unitID != null) {
       return (
         <UnitHealthSidePanelContents
           itemID={unitID}
@@ -160,7 +160,7 @@ class SidePanels extends React.Component {
           container-pod-short"
         bodyClass="side-panel-content flex-container-col"
         onClose={this.handlePanelClose}
-        open={this.isOpen()}
+        open={this.isOpen(params)}
         sidePanelClass={this.getSidePanelClass(this.state.sidePanelSize)}>
         {this.getContents(params)}
       </SidePanel>

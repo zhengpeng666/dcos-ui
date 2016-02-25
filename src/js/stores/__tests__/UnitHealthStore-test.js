@@ -34,6 +34,7 @@ describe('UnitHealthStore', function () {
     UnitHealthStore.fetchUnits();
     var units = UnitHealthStore.getUnits('units');
     expect(units instanceof HealthUnitsList).toBeTruthy();
+    Config.useFixtures = false;
   });
 
   it('should return all of the units it was given', function () {
@@ -41,6 +42,7 @@ describe('UnitHealthStore', function () {
     UnitHealthStore.fetchUnits();
     var units = UnitHealthStore.getUnits().getItems();
     expect(units.length).toEqual(this.unitsFixture.array.length);
+    Config.useFixtures = false;
   });
 
   describe('dispatcher', function () {
