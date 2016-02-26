@@ -43,7 +43,10 @@ class UnitHealthNodesTable extends React.Component {
         prop: 'node_health',
         render: this.renderHealth,
         sortable: true,
-        sortFunction: UnitHealthUtil.getHealthSortFunction('node_id')
+        sortFunction: ResourceTableUtil.getStatSortFunction(
+          'hostname',
+          UnitHealthUtil.getHealthSorting
+        )
       },
       {
         className: classNameFn,
