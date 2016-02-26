@@ -8,6 +8,8 @@ import NodeSidePanelContents from './NodeSidePanelContents';
 import ServiceSidePanelContents from './ServiceSidePanelContents';
 import StringUtil from '../utils/StringUtil';
 import TaskSidePanelContents from './TaskSidePanelContents';
+import UnitHealthSidePanelContents from './UnitHealthSidePanelContents';
+import UnitNodeSidePanelContents from './UnitNodeSidePanelContents';
 
 const METHODS_TO_BIND = [
   'handlePanelClose',
@@ -32,7 +34,7 @@ class SidePanels extends React.Component {
   }
 
   handlePanelClose(closeInfo) {
-    if (!this.isOpen()) {
+    if (!this.isOpen(this.props.params)) {
       return;
     }
 
@@ -47,13 +49,15 @@ class SidePanels extends React.Component {
     HistoryStore.goBack(router);
   }
 
-  isOpen() {
-    let params = this.props.params;
+  isOpen(itemIDs) {
+    let {unitID, unitNodeID, nodeID, serviceName, taskID} = itemIDs;
 
     return (
-      params.nodeID != null ||
-      params.serviceName != null ||
-      params.taskID != null
+      nodeID != null ||
+      serviceName != null ||
+      taskID != null ||
+      unitID != null ||
+      (unitNodeID != null && unitID != null)
     ) && MesosSummaryStore.get('statesProcessed');
   }
 
@@ -89,12 +93,12 @@ class SidePanels extends React.Component {
     );
   }
 
-  getContents(ids) {
-    if (!this.isOpen()) {
+  getContents(itemIDs) {
+    if (!this.isOpen(itemIDs)) {
       return null;
     }
 
-    let {nodeID, serviceName, taskID} = ids;
+    let {unitID, unitNodeID, nodeID, serviceName, taskID} = itemIDs;
 
     if (nodeID != null) {
       return (
@@ -121,6 +125,23 @@ class SidePanels extends React.Component {
       );
     }
 
+    if (unitID != null && unitNodeID != null) {
+      return (
+        <UnitNodeSidePanelContents
+          itemID={unitID}
+          params={this.props.params}
+          parentRouter={this.context.router} />
+      );
+    }
+
+    if (unitID != null) {
+      return (
+        <UnitHealthSidePanelContents
+          itemID={unitID}
+          parentRouter={this.context.router} />
+      );
+    }
+
     return null;
   }
 
@@ -131,10 +152,6 @@ class SidePanels extends React.Component {
   render() {
     let params = this.props.params;
 
-    let nodeID = params.nodeID;
-    let serviceName = params.serviceName;
-    let taskID = params.taskID;
-
     return (
       <SidePanel className="side-panel-detail"
         header={this.getHeader()}
@@ -143,9 +160,9 @@ class SidePanels extends React.Component {
           container-pod-short"
         bodyClass="side-panel-content flex-container-col"
         onClose={this.handlePanelClose}
-        open={this.isOpen()}
+        open={this.isOpen(params)}
         sidePanelClass={this.getSidePanelClass(this.state.sidePanelSize)}>
-        {this.getContents({nodeID, serviceName, taskID})}
+        {this.getContents(params)}
       </SidePanel>
     );
   }

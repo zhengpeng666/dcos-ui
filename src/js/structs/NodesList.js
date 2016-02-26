@@ -4,6 +4,7 @@ import List from './List';
 import MesosSummaryUtil from '../utils/MesosSummaryUtil';
 import Node from './Node';
 import StringUtil from '../utils/StringUtil';
+import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 module.exports = class NodesList extends List {
   constructor() {
@@ -23,18 +24,27 @@ module.exports = class NodesList extends List {
     let hosts = this.getItems();
 
     if (filters) {
+
+      // Marathon API
       if (filters.ids) {
         hosts = _.filter(hosts, function (host) {
           return this.ids.indexOf(host.id) !== -1;
         }, {ids: filters.ids});
       }
 
+      // Marathon API
+      if (filters.service != null) {
+        hosts = MesosSummaryUtil.filterHostsByService(hosts, filters.service);
+      }
+
+      // Marathon & Component Health APIs
       if (filters.name) {
         hosts = StringUtil.filterByString(hosts, 'hostname', filters.name);
       }
 
-      if (filters.service != null) {
-        hosts = MesosSummaryUtil.filterHostsByService(hosts, filters.service);
+      // Component Health API
+      if (filters.health) {
+        hosts = UnitHealthUtil.filterByHealth(hosts, filters.health);
       }
     }
 

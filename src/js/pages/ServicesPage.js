@@ -181,6 +181,7 @@ var ServicesPage = React.createClass({
           selectedResource={state.selectedResource}
           onResourceSelectionChange={this.onResourceSelectionChange} />
         <FilterHeadline
+          inverseStyle={true}
           onReset={this.resetFilter}
           name="Services"
           currentLength={data.services.length}

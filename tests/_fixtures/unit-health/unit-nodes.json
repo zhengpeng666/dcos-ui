@@ -1,0 +1,14 @@
+{
+  "array": [
+    {
+      "hostname": "ip-10-10-0-235",
+      "node_role": "master",
+      "node_health": 0
+    },
+    {
+      "hostname": "ip-10-10-0-236",
+      "node_role": "agent",
+      "node_health": 1
+    }
+  ]
+}

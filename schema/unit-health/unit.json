@@ -1,33 +1,32 @@
 {
   "$schema": "http://json-schema.org/draft-03/schema",
-  "id": "http://schema.dcos/health/component",
+  "id": "http://schema.dcos/health/unit",
   "type": "object",
   "properties": {
-    "component_id": {
-      "title": "Component ID",
+    "unit_id": {
+      "title": "Unit ID",
       "type": "string",
       "pattern": "^[\\w]+$"
     },
-    "component_description": {
-      "title": "Component name",
+    "unit_title": {
+      "title": "Unit name",
       "type": "string"
     },
-    "component_health": {
+    "unit_health": {
       "title": "Node health status",
       "type": "integer",
       "minimum": 0,
       "maximum": 3
     },
-    "component_check_output": {
+    "unit_output": {
       "title": "Output from health check",
       "description": "Aggregated output from all nodes, will only show the unhealthiest.",
       "type": "string"
     }
   },
   "required": [
-    "component_id",
-    "component_description",
-    "component_health",
-    "component_check_output"
+    "unit_id",
+    "unit_title",
+    "unit_health"
   ]
 }

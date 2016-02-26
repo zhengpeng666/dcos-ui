@@ -68,13 +68,13 @@ describe('SidePanels', function () {
     });
 
     it('should return false if all IDs are null', function () {
-      expect(this.instance.isOpen()).toEqual(false);
+      expect(this.instance.isOpen({})).toEqual(false);
     });
 
     it('should return true if one value is set', function () {
       var prevServiceName = this.params.serviceName;
       this.params.serviceName = 'serviceName';
-      expect(this.instance.isOpen()).toEqual(true);
+      expect(this.instance.isOpen(this.params)).toEqual(true);
       this.params.serviceName = prevServiceName;
     });
   });

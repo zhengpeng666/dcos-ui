@@ -86,20 +86,23 @@ import {
   ACL_USER_DELETE_ERROR
 } from '../../../plugins/users/constants/EventTypes';
 
-import ComponentHealthStore from '../stores/ComponentHealthStore';
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import {
-  HEALTH_COMPONENTS_CHANGE,
-  HEALTH_COMPONENTS_ERROR,
-  HEALTH_REPORT_CHANGE,
-  HEALTH_REPORT_ERROR,
-
   COSMOS_DESCRIBE_CHANGE,
   COSMOS_DESCRIBE_ERROR,
   COSMOS_LIST_CHANGE,
   COSMOS_LIST_ERROR,
   COSMOS_SEARCH_CHANGE,
   COSMOS_SEARCH_ERROR,
+
+  HEALTH_UNITS_CHANGE,
+  HEALTH_UNITS_ERROR,
+  HEALTH_UNIT_SUCCESS,
+  HEALTH_UNIT_ERROR,
+  HEALTH_UNIT_NODES_SUCCESS,
+  HEALTH_UNIT_NODES_ERROR,
+  HEALTH_UNIT_NODE_SUCCESS,
+  HEALTH_UNIT_NODE_ERROR,
 
   MESOS_SUMMARY_CHANGE,
   MESOS_SUMMARY_REQUEST_ERROR,
@@ -140,6 +143,7 @@ import NetworkingNodeMembershipsStore from '../stores/NetworkingNodeMembershipsS
 import NetworkingVIPsStore from '../stores/NetworkingVIPsStore';
 import NetworkingVIPSummariesStore from '../stores/NetworkingVIPSummariesStore';
 import TaskDirectoryStore from '../stores/TaskDirectoryStore';
+import UnitHealthStore from '../stores/UnitHealthStore';
 
 const ListenersDescription = {
 
@@ -198,13 +202,17 @@ const ListenersDescription = {
     listenAlways: true
   },
 
-  componentHealth: {
-    store: ComponentHealthStore,
+  unitHealth: {
+    store: UnitHealthStore,
     events: {
-      success: HEALTH_COMPONENTS_CHANGE,
-      error: HEALTH_COMPONENTS_ERROR,
-      reportSuccess: HEALTH_REPORT_CHANGE,
-      reportError: HEALTH_REPORT_ERROR
+      success: HEALTH_UNITS_CHANGE,
+      error: HEALTH_UNITS_ERROR,
+      unitSuccess: HEALTH_UNIT_SUCCESS,
+      unitErorr: HEALTH_UNIT_ERROR,
+      nodesSuccess: HEALTH_UNIT_NODES_SUCCESS,
+      nodesError: HEALTH_UNIT_NODES_ERROR,
+      nodeSuccess: HEALTH_UNIT_NODE_SUCCESS,
+      nodeError: HEALTH_UNIT_NODE_ERROR
     },
     unmountWhen: function () {
       return true;

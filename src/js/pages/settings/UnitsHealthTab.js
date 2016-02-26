@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import classNames from 'classnames';
 import {Link} from 'react-router';
 import mixin from 'reactjs-mixin';
@@ -8,32 +7,34 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 import {Table} from 'reactjs-components';
 
-import ComponentHealthStore from '../stores/ComponentHealthStore';
-import Config from '../config/Config';
-import FilterHeadline from '../components/FilterHeadline';
-import FilterButtons from '../components/FilterButtons';
-import FilterInputText from '../components/FilterInputText';
-import ResourceTableUtil from '../utils/ResourceTableUtil';
-import StringUtil from '../utils/StringUtil';
-import TableUtil from '../utils/TableUtil';
+import Config from '../../config/Config';
+import FilterHeadline from '../../components/FilterHeadline';
+import FilterButtons from '../../components/FilterButtons';
+import FilterInputText from '../../components/FilterInputText';
+import ResourceTableUtil from '../../utils/ResourceTableUtil';
+import SidePanels from '../../components/SidePanels';
+import StringUtil from '../../utils/StringUtil';
+import TableUtil from '../../utils/TableUtil';
+import UnitHealthStore from '../../stores/UnitHealthStore';
+import UnitHealthUtil from '../../utils/UnitHealthUtil';
 
 const METHODS_TO_BIND = [
-  'getHandleHealthFilterChange',
+  'handleHealthFilterChange',
   'handleSearchStringChange',
-  'renderComponent',
+  'renderUnit',
   'renderHealth',
   'resetFilter'
 ];
 
-class ComponentsHealthTab extends mixin(StoreMixin) {
+class UnitsHealthTab extends mixin(StoreMixin) {
 
   constructor() {
     super(...arguments);
 
     this.store_listeners = [
       {
-        name: 'componentHealth',
-        events: ['success', 'error', 'reportSuccess', 'reportError']
+        name: 'unitHealth',
+        events: ['success', 'error']
       }
     ];
 
@@ -49,27 +50,28 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount();
-    ComponentHealthStore.fetchComponents();
-    ComponentHealthStore.fetchReport();
+    UnitHealthStore.fetchUnits();
   }
 
   handleSearchStringChange(searchString) {
     this.setState({searchString});
   }
 
-  renderComponent(prop, component) {
+  renderUnit(prop, unit) {
     return (
-      <div>
-        <Link to="settings-system-components"
-          className="headline">
-          {component[prop]}
-        </Link>
-      </div>
+      <Link to="settings-system-units-unit-nodes-panel"
+        params={{unitID: unit.get('unit_id')}}
+        className="headline">
+        <span className="icon icon-small icon-image-container icon-app-container">
+          <img src="./img/services/icon-service-default-small@2x.png" />
+        </span>
+        {unit.get(prop)}
+      </Link>
     );
   }
 
-  renderHealth(prop, component) {
-    let health = component.getHealth();
+  renderHealth(prop, unit) {
+    let health = unit.getHealth();
 
     return (
       <span className={health.classNames}>
@@ -89,7 +91,7 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
       <span className="button-align-content">
         <span className={dotClassSet}></span>
         <span className="label">{StringUtil.capitalize(filterName)}</span>
-        <span className="badge">{count}</span>
+        <span className="badge">{count || 0}</span>
       </span>
     );
   }
@@ -111,50 +113,33 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
         cacheCell: true,
         className: classNameFn,
         headerClassName: classNameFn,
-        prop: 'name',
-        render: this.renderComponent,
+        prop: 'unit_title',
+        render: this.renderUnit,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('id'),
-        heading: ResourceTableUtil.renderHeading({name: 'NAME'})
+        sortFunction: ResourceTableUtil.getPropSortFunction('unit_title'),
+        heading: ResourceTableUtil.renderHeading({unit_title: 'NAME'})
       },
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        prop: 'health',
+        prop: 'unit_health',
         render: this.renderHealth,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('health'),
-        heading: ResourceTableUtil.renderHeading({health: 'HEALTH'})
+        sortFunction: ResourceTableUtil.getStatSortFunction(
+          'unit_title',
+          UnitHealthUtil.getHealthSorting
+        ),
+        heading: ResourceTableUtil.renderHeading({unit_health: 'HEALTH'})
       }
     ];
   }
 
-  getHandleHealthFilterChange(healthFilter) {
-    return () => {
-      this.setState({healthFilter});
-    };
+  handleHealthFilterChange(healthFilter) {
+    this.setState({healthFilter});
   }
 
-  getVisibleData(data) {
-    let {healthFilter, searchString} = this.state;
-    let filteredData = data;
-    healthFilter = healthFilter.toLowerCase();
-    searchString = searchString.toLowerCase();
-
-    if (healthFilter !== 'all') {
-      filteredData = _.filter(filteredData, function (datum) {
-        return datum.getHealth().title.toLowerCase() === healthFilter;
-      });
-    }
-
-    if (searchString !== '') {
-      filteredData = _.filter(filteredData, function (datum) {
-        let name = datum.get('name').toLowerCase();
-        return name.indexOf(searchString) > -1;
-      });
-    }
-
-    return filteredData;
+  getVisibleData(data, searchString, healthFilter) {
+    return data.filter({title: searchString, health: healthFilter}).getItems();
   }
 
   resetFilter() {
@@ -165,40 +150,42 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
   }
 
   render() {
-    let data = ComponentHealthStore.get('components').getItems();
-    let state = this.state;
-    let visibleData = this.getVisibleData(data);
-    let pluralizedItemName = StringUtil.pluralize('Component', data.length);
-    let dataHealth = data.map(function (component) {
-      return component.getHealth();
+    let data = UnitHealthStore.getUnits();
+    let dataItems = data.getItems();
+    let {healthFilter, searchString} = this.state;
+    let visibleData = this.getVisibleData(data, searchString, healthFilter);
+    let pluralizedItemName = StringUtil.pluralize('Unit', dataItems.length);
+    let dataHealth = dataItems.map(function (unit) {
+      return unit.getHealth();
     });
 
     return (
       <div className="flex-container-col">
-        <div className="components-health-table-header">
+        <div className="units-health-table-header">
           <FilterHeadline
+            inverseStyle={true}
             onReset={this.resetFilter}
             name={pluralizedItemName}
             currentLength={visibleData.length}
-            totalLength={data.length} />
+            totalLength={dataItems.length} />
           <ul className="list list-unstyled list-inline flush-bottom">
             <li>
               <FilterButtons
                 renderButtonContent={this.getButtonContent}
                 filters={['all', 'healthy', 'unhealthy']}
                 filterByKey={'title'}
-                getfilterChangeHandler={this.getHandleHealthFilterChange}
+                onFilterChange={this.handleHealthFilterChange}
                 itemList={dataHealth}
-                selectedFilter={state.healthFilter} />
+                selectedFilter={healthFilter} />
             </li>
             <li>
               <FilterInputText
-                searchString={state.searchString}
+                searchString={searchString}
                 handleFilterChange={this.handleSearchStringChange}
                 inverseStyle={true} />
             </li>
             <li className="button-collection list-item-aligned-right">
-              <a href={`${Config.rootUrl}${Config.componentHealthAPIPrefix}\/report`}
+              <a href={`${Config.rootUrl}${Config.unitHealthAPIPrefix}\/report`}
                 className="button button-primary">
                 Download Health
               </a>
@@ -214,12 +201,15 @@ class ComponentsHealthTab extends mixin(StoreMixin) {
             containerSelector=".gm-scroll-view"
             data={visibleData}
             itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: 'health', order: 'desc'}}
+            sortBy={{prop: 'unit_health', order: 'desc'}}
             />
         </div>
+        <SidePanels
+          params={this.props.params}
+          openedPage="settings-system-units" />
       </div>
     );
   }
 }
 
-module.exports = ComponentsHealthTab;
+module.exports = UnitsHealthTab;

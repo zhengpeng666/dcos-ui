@@ -1,6 +1,7 @@
 import Item from './Item';
+import UnitHealthUtil from '../utils/UnitHealthUtil';
 
-module.exports = class Node extends Item {
+class Node extends Item {
   getServiceIDs() {
     return this.get('framework_ids');
   }
@@ -16,4 +17,14 @@ module.exports = class Node extends Item {
 
     return {percentage, total, value};
   }
-};
+
+  // Below is Component Health specific API
+  // http://schema.dcos/system/health/node
+
+  getHealth() {
+    return UnitHealthUtil.getHealth(this.get('node_health'));
+  }
+
+}
+
+module.exports = Node;

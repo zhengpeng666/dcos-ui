@@ -214,6 +214,7 @@ var NodesPage = React.createClass({
           selectedResource={this.state.selectedResource}
           onResourceSelectionChange={this.onResourceSelectionChange} />
         <FilterHeadline
+          inverseStyle={true}
           onReset={this.resetFilter}
           name="Nodes"
           currentLength={nodesList.length}

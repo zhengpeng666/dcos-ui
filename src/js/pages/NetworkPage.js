@@ -107,6 +107,7 @@ class NetworkPage extends mixin(StoreMixin) {
     return (
       <div>
         <FilterHeadline
+          inverseStyle={true}
           onReset={this.resetFilter}
           name="Virual IPs"
           currentLength={filteredVIPSummaries.length}

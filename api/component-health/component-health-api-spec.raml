@@ -1,83 +1,83 @@
  #%RAML 0.8
-title: Component Health Checks API Spec
+title: Unit Health Checks API Spec
 version: v1
 baseUri: /api/{version}/system/health
 mediaType: application/json
 schemas:
-  - components: !include ../../schema/component-health/components.json
-  - component: !include ../../schema/component-health/component.json
-  - nodes: !include ../../schema/component-health/nodes.json
-  - node: !include ../../schema/component-health/node.json
-  - report: !include ../../schema/component-health/report.json
+  - units: !include ../../schema/unit-health/units.json
+  - unit: !include ../../schema/unit-health/unit.json
+  - nodes: !include ../../schema/unit-health/nodes.json
+  - node: !include ../../schema/unit-health/node.json
+  - report: !include ../../schema/unit-health/report.json
 
-/components:
-  displayName: Components Health
+/units:
+  displayName: Units Health
   get:
-    description: Get a list of components and their health status.
+    description: Get a list of units and their health status.
     responses:
       200:
         description: Successful response.
         body:
           application/json:
-            schema: components
+            schema: units
             example: |
               {
                 "array": [
                   {
-                    "component_id": "marathon_service", # Is the component family
-                    "component_description": "marathon service",
-                    "component_health": 0,
-                    "component_check_output": "OK"
+                    "unit_id": "marathon_service", # Is the unit family
+                    "unit_title": "marathon service",
+                    "unit_health": 0,
+                    "unit_output": "OK"
                   },
                   {
-                    "component_id": "mesos_dns_service",
-                    "component_description": "mesos dns service",
-                    "component_health": 1,
-                    "component_check_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+                    "unit_id": "mesos_dns_service",
+                    "unit_title": "mesos dns service",
+                    "unit_health": 1,
+                    "unit_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
                   },
                   {
-                    "component_id": "mesos_master_service",
-                    "component_description": "mesos master service",
-                    "component_health": 0,
-                    "component_check_output": "OK"
+                    "unit_id": "mesos_master_service",
+                    "unit_title": "mesos master service",
+                    "unit_health": 0,
+                    "unit_output": "OK"
                   },
                   {
-                    "component_id": "nginx_service",
-                    "component_description": "nginx service",
-                    "component_health": 0,
-                    "component_check_output": "OK"
+                    "unit_id": "nginx_service",
+                    "unit_title": "nginx service",
+                    "unit_health": 0,
+                    "unit_output": "OK"
                   }
                 ]
               }
 
-  /{component-id}:
+  /{unit-id}:
     uriParameters:
-      component-id:
-        description: Requested component.
+      unit-id:
+        description: Requested unit.
         type: string
-    displayName: Component Health
+    displayName: Unit Health
     get:
-      description: Get the component health summaries by node_id.
+      description: Get the unit health summaries by node_id.
       responses:
         200:
           description: Successful response.
           body:
             application/json:
-              schema: component
+              schema: unit
               example: |
-                # Example query for nginx_service in a 3-master cluster would return the component 
-                # health on the 3 masters on which that component runs. 
+                # Example query for nginx_service in a 3-master cluster would return the unit
+                # health on the 3 masters on which that unit runs.
                 {
-                  "component_id": "nginx_service",
-                  "component_description": "nginx service",
-                  "component_health": 0,
-                  "component_check_output": "OK"
+                  "unit_id": "nginx_service",
+                  "unit_title": "nginx service",
+                  "unit_health": 0,
+                  "unit_output": "OK"
                 }
-              
+
     /nodes:
-      displayName: Component Nodes Health
+      displayName: Unit Nodes Health
       get:
-        description: Get a list of the components node health summaries.
+        description: Get a list of the units node health summaries.
         responses:
           200:
             description: Successful response.
@@ -85,23 +85,23 @@ schemas:
               application/json:
                 schema: nodes
                 example: |
-                  # Example response from a 2-node cluster where one node has components with health > 0
+                  # Example response from a 2-node cluster where one node has units with health > 0
                   {
                     "array": [
                       {
-                        "node_id": "ip-10-10-0-235",
+                        "hostname": "ip-10-10-0-235",
                         "node_role": "master",
                         "node_health": 0,
                       },
                       {
-                        "node_id": "ip-10-10-0-236",
+                        "hostname": "ip-10-10-0-236",
                         "node_role": "agent",
                         "node_health": 1
                       }
                     ]
                   }
-      # Must ensure all node_id's contain are hyphened and not "." separated. Only matters if we go 
-      # through a proxy of some sort, but generally not great to "." separate in our URL requested. 
+      # Must ensure all hostname's contain are hyphened and not "." separated. Only matters if we go
+      # through a proxy of some sort, but generally not great to "." separate in our URL requested.
       /{node-id}:
         uriParameters:
           node-id:
@@ -117,19 +117,19 @@ schemas:
                 application/json:
                   schema: node
                   example: |
-                    # Example response from a healthy node with all components == 0
+                    # Example response from a healthy node with all units == 0
                     {
-                      "node_id": "ip-10-10-0-236",
+                      "hostname": "ip-10-10-0-236",
                       "node_role": "agent",
                       "node_health": 1,
-                      "component_check_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+                      "unit_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
                     }
 
-# This is possibly just a 301 -> /nodes, lets disucss. 
+# This is possibly just a 301 -> /nodes, lets disucss.
 /report:
   displayName: Health Report
   get:
-    description: Get a full report of components' health.
+    description: Get a full report of units' health.
     responses:
       200:
         description: Successful response.

@@ -9,7 +9,14 @@ var FilterHeadline = React.createClass({
     onReset: React.PropTypes.func.isRequired,
     name: React.PropTypes.string.isRequired,
     currentLength: React.PropTypes.number.isRequired,
-    totalLength: React.PropTypes.number.isRequired
+    totalLength: React.PropTypes.number.isRequired,
+    inverseStyle: React.PropTypes.bool
+  },
+
+  getDefaultProps: function () {
+    return {
+      inverseStyle: false
+    };
   },
 
   handleReset: function (e) {
@@ -21,24 +28,33 @@ var FilterHeadline = React.createClass({
     var name = this.props.name;
     var filteredLength = this.props.currentLength;
     var totalLength = this.props.totalLength;
+    let inverseStyle = this.props.inverseStyle;
 
     var filteredClassSet = classNames({
-      'h4 inverse': true,
+      'h4': true,
+      'inverse': inverseStyle,
       'hidden': filteredLength === totalLength
     });
 
     var unfilteredClassSet = classNames({
-      'h4 inverse': true,
+      'h4': true,
+      'inverse': inverseStyle,
       'hidden': filteredLength !== totalLength
     });
 
     var anchorClassSet = classNames({
-      'h4 inverse clickable': true,
+      'h4 clickable': true,
+      'inverse': inverseStyle,
       'hidden': filteredLength === totalLength
     });
 
+    let listClassSet = classNames({
+      'list-unstyled list-inline': true,
+      'inverse': inverseStyle
+    });
+
     return (
-      <ul className="list-unstyled list-inline inverse">
+      <ul className={listClassSet}>
         <li className={filteredClassSet}>
           Showing {filteredLength} of {totalLength} {name}
         </li>

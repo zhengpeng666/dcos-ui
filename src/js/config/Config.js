@@ -4,7 +4,7 @@ var Config = {
   acsAPIPrefix: '/acs/api/v1',
   networkingAPIPrefix: '/networking/api/v1',
   cosmosAPIPrefix: '/packages',
-  componentHealthAPIPrefix: '/api/v1/system/health',
+  unitHealthAPIPrefix: '/api/v1/system/health',
   delayAfterErrorCount: 5,
   environment: '@@ENV',
   historyLength: 31,

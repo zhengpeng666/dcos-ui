@@ -1,0 +1,6 @@
+{
+  "hostname": "ip-10-10-0-236",
+  "node_role": "agent",
+  "node_health": 1,
+  "unit_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+}

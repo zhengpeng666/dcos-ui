@@ -22,6 +22,10 @@ class FilterButtons extends React.Component {
     return counts;
   }
 
+  handleFilterChange(filter) {
+    this.props.onFilterChange(filter);
+  }
+
   getFilterButtons() {
     let {filterByKey, filters, itemList, selectedFilter} = this.props;
     let filterCount = this.getCountByKey(itemList, filterByKey);
@@ -36,7 +40,7 @@ class FilterButtons extends React.Component {
         <button
           key={filter}
           className={classSet}
-          onClick={this.props.getfilterChangeHandler(filter)}>
+          onClick={this.handleFilterChange.bind(this, filter)}>
           {this.props.renderButtonContent(filter, filterCount[filter])}
         </button>
       );
@@ -53,7 +57,8 @@ class FilterButtons extends React.Component {
 }
 
 FilterButtons.defaultProps = {
-  renderButtonContent: function (title) {return title; }
+  renderButtonContent: function (title) {return title; },
+  onFilterChange: function () {}
 };
 
 FilterButtons.propTypes = {
@@ -63,7 +68,7 @@ FilterButtons.propTypes = {
   // The key in itemList that is being filtered
   filterByKey: React.PropTypes.string.isRequired,
   // A function that returns the onClick for a filter button given the filter.
-  getfilterChangeHandler: React.PropTypes.func,
+  onFilterChange: React.PropTypes.func,
   itemList: React.PropTypes.array.isRequired,
   // The filter in props.filters that is currently selected.
   selectedFilter: React.PropTypes.string

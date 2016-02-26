@@ -541,6 +541,7 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
       <div className="flex-container-col">
         <div className={`${itemName}s-table-header`}>
           <FilterHeadline
+            inverseStyle={true}
             onReset={this.resetFilter}
             name={`${StringUtil.pluralize(capitalizedItemName)}`}
             currentLength={visibleItems.length}

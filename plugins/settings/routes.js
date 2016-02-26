@@ -1,10 +1,10 @@
 import {Route, Redirect} from 'react-router';
 
-import ComponentsHealthTab from '../../src/js/pages/ComponentsHealthTab';
 import DirectoriesTab from '../directories/pages/DirectoriesTab';
 import GroupsTab from '../groups/pages/GroupsTab';
 import OverviewTab from '../overview/pages//OverviewTab';
 import SettingsPage from './pages/SettingsPage';
+import UnitsHealthTab from '../../src/js/pages/settings/UnitsHealthTab';
 import UsersTab from '../users/pages/UsersTab';
 
 let settingsRoutes = {
@@ -26,14 +26,33 @@ let settingsRoutes = {
         },
         {
           type: Route,
-          name: 'settings-system-components',
-          path: 'components/?',
-          handler: ComponentsHealthTab
+          name: 'settings-system-units',
+          path: 'units/?',
+          handler: UnitsHealthTab,
+          children: [
+            {
+              type: Route,
+              name: 'settings-system-units-unit-nodes-panel',
+              path: ':unitID/?',
+              children: [
+                {
+                  type: Route,
+                  name: 'settings-system-units-unit-nodes-node-panel',
+                  path: 'nodes/:unitNodeID'
+                }
+              ]
+            },
+            {
+              type: Redirect,
+              from: ':unitID/?',
+              to: 'settings-system-units-unit-nodes-panel'
+            }
+          ]
         },
         {
           type: Redirect,
           from: '/settings/system/?',
-          to: 'settings-system-components'
+          to: 'settings-system-units'
         }
       ]
     },

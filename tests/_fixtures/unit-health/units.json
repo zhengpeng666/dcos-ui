@@ -1,0 +1,28 @@
+{
+  "array": [
+    {
+      "unit_id": "marathon_service",
+      "unit_title": "marathon service",
+      "unit_health": 0,
+      "unit_output": "OK"
+    },
+    {
+      "unit_id": "mesos_dns_service",
+      "unit_title": "Mesos DNS",
+      "unit_health": 1,
+      "unit_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+    },
+    {
+      "unit_id": "mesos_master_service",
+      "unit_title": "mesos master service",
+      "unit_health": 0,
+      "unit_output": "OK"
+    },
+    {
+      "unit_id": "nginx_service",
+      "unit_title": "nginx service",
+      "unit_health": 0,
+      "unit_output": "OK"
+    }
+  ]
+}
