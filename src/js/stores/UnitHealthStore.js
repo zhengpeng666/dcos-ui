@@ -37,7 +37,7 @@ function startPolling() {
   if (requestInterval == null) {
     UnitHealthActions.fetchUnits();
     requestInterval = setInterval(
-      UnitHealthActions.fetchState, Config.getRefreshRate()
+      UnitHealthActions.fetchUnits, Config.getRefreshRate()
     );
   }
 }
