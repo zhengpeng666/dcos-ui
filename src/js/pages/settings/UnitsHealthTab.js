@@ -19,7 +19,7 @@ import UnitHealthStore from '../../stores/UnitHealthStore';
 import UnitHealthUtil from '../../utils/UnitHealthUtil';
 
 const METHODS_TO_BIND = [
-  'getHandleHealthFilterChange',
+  'handleHealthFilterChange',
   'handleSearchStringChange',
   'renderUnit',
   'renderHealth',
@@ -91,7 +91,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
       <span className="button-align-content">
         <span className={dotClassSet}></span>
         <span className="label">{StringUtil.capitalize(filterName)}</span>
-        <span className="badge">{count}</span>
+        <span className="badge">{count || 0}</span>
       </span>
     );
   }
@@ -131,10 +131,8 @@ class UnitsHealthTab extends mixin(StoreMixin) {
     ];
   }
 
-  getHandleHealthFilterChange(healthFilter) {
-    return () => {
-      this.setState({healthFilter});
-    };
+  handleHealthFilterChange(healthFilter) {
+    this.setState({healthFilter});
   }
 
   getVisibleData(data, searchString, healthFilter) {
@@ -173,7 +171,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
                 renderButtonContent={this.getButtonContent}
                 filters={['all', 'healthy', 'unhealthy']}
                 filterByKey={'title'}
-                getfilterChangeHandler={this.getHandleHealthFilterChange}
+                onFilterChange={this.handleHealthFilterChange}
                 itemList={dataHealth}
                 selectedFilter={healthFilter} />
             </li>
