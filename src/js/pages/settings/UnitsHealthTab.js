@@ -162,6 +162,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
       <div className="flex-container-col">
         <div className="units-health-table-header">
           <FilterHeadline
+            inverseStyle={true}
             onReset={this.resetFilter}
             name={pluralizedItemName}
             currentLength={visibleData.length}

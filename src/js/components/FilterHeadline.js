@@ -15,7 +15,7 @@ var FilterHeadline = React.createClass({
 
   getDefaultProps: function () {
     return {
-      inverseStyle: true
+      inverseStyle: false
     };
   },
 
