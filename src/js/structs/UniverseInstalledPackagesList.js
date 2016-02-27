@@ -11,7 +11,10 @@ class UniverseInstalledPackagesList extends List {
       if (item instanceof UniversePackage) {
         return item;
       } else {
-        return new UniversePackage(item.packageInformation);
+        let installedPackage = item.packageInformation;
+        installedPackage.appId = item.appId;
+
+        return new UniversePackage(installedPackage);
       }
     });
   }

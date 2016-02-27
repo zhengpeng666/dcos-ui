@@ -3,6 +3,8 @@ jest.dontMock('../../config/Config');
 jest.dontMock('../../events/AppDispatcher');
 jest.dontMock('../../events/CosmosPackagesActions');
 jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('./fixtures/MockPackageDescribeResponse.json');
+jest.dontMock('./fixtures/MockPackagesListResponse.json');
 jest.dontMock('./fixtures/MockPackagesSearchResponse.json');
 
 var _ = require('underscore');
@@ -254,8 +256,17 @@ describe('CosmosPackagesStore', function () {
       CosmosPackagesStore.fetchInstalledPackages('foo', 'bar');
       var installedPackages =
         CosmosPackagesStore.getInstalledPackages().getItems();
-      expect(installedPackages.length)
-        .toEqual(this.packagesListFixture.packages.length);
+      expect(installedPackages.length).toEqual(2);
+    });
+
+    it('stores the installedPackages it was given', function () {
+      CosmosPackagesStore.fetchInstalledPackages('foo', 'bar');
+      var installedPackage =
+        CosmosPackagesStore.getInstalledPackages().getItems()[0];
+      expect(installedPackage.get('packageDefinition').name)
+        .toEqual('marathon');
+      expect(installedPackage.get('appId'))
+        .toEqual('/marathon-user');
     });
 
     it('should pass though query parameters', function () {
@@ -270,7 +281,7 @@ describe('CosmosPackagesStore', function () {
       it('stores installedPackages when event is dispatched', function () {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
-          data: [{packageInformation: {gid: 'foo', bar: 'baz'}}],
+          data: [{appId: 'bar', packageInformation: {gid: 'foo', bar: 'baz'}}],
           packageName: 'foo',
           appId: 'bar'
         });
@@ -279,6 +290,7 @@ describe('CosmosPackagesStore', function () {
           CosmosPackagesStore.getInstalledPackages().getItems();
         expect(installedPackages[0].get('gid')).toEqual('foo');
         expect(installedPackages[0].get('bar')).toEqual('baz');
+        expect(installedPackages[0].get('appId')).toEqual('bar');
       });
 
       it('dispatches the correct event upon success', function () {
@@ -289,9 +301,9 @@ describe('CosmosPackagesStore', function () {
         );
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
-          data: [{packageInformation: {gid: 'foo', bar: 'baz'}}],
+          data: [{appId: 'bar', packageInformation: {gid: 'foo', bar: 'baz'}}],
           packageName: 'foo',
-          appId: 'bar'
+          appId: 'baz'
         });
 
         expect(mockedFn.mock.calls.length).toEqual(1);
@@ -319,18 +331,6 @@ describe('CosmosPackagesStore', function () {
   });
 
   describe('#installPackage', function () {
-
-    beforeEach(function () {
-      this.requestFn = RequestUtil.json;
-      RequestUtil.json = function (handlers) {
-        handlers.success(_.clone(packagesListFixture));
-      };
-      this.packagesListFixture = _.clone(packagesListFixture);
-    });
-
-    afterEach(function () {
-      RequestUtil.json = this.requestFn;
-    });
 
     describe('dispatcher', function () {
 
@@ -373,18 +373,6 @@ describe('CosmosPackagesStore', function () {
 
   describe('#uninstallPackage', function () {
 
-    beforeEach(function () {
-      this.requestFn = RequestUtil.json;
-      RequestUtil.json = function (handlers) {
-        handlers.success(_.clone(packagesListFixture));
-      };
-      this.packagesListFixture = _.clone(packagesListFixture);
-    });
-
-    afterEach(function () {
-      RequestUtil.json = this.requestFn;
-    });
-
     describe('dispatcher', function () {
 
       it('dispatches the correct event upon success', function () {
@@ -397,7 +385,8 @@ describe('CosmosPackagesStore', function () {
           type: REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS,
           data: [{foo: 'bar'}],
           packageName: 'foo',
-          packageVersion: 'bar'
+          packageVersion: 'bar',
+          appId: 'baz'
         });
 
         expect(mockedFn.mock.calls.length).toEqual(1);
@@ -413,11 +402,12 @@ describe('CosmosPackagesStore', function () {
           type: REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR,
           data: 'error',
           packageName: 'foo',
-          packageVersion: 'bar'
+          packageVersion: 'bar',
+          appId: 'baz'
         });
 
         expect(mockedFn.calls.length).toEqual(1);
-        expect(mockedFn.calls[0].args).toEqual(['error', 'foo', 'bar']);
+        expect(mockedFn.calls[0].args).toEqual(['error', 'foo', 'bar', 'baz']);
       });
 
     });

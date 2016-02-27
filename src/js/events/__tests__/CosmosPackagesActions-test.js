@@ -323,8 +323,7 @@ describe('CosmosPackagesActions', function () {
     it('sends query in request body, even if it is undefined', function () {
       CosmosPackagesActions.installPackage();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
-      expect(JSON.parse(this.configuration.data))
-        .toEqual({options: {}});
+      expect(JSON.parse(this.configuration.data)).toEqual({options: {}});
     });
 
     it('sends a POST request', function () {
@@ -405,8 +404,7 @@ describe('CosmosPackagesActions', function () {
     it('sends query in request body, even if it is undefined', function () {
       CosmosPackagesActions.uninstallPackage();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
-      expect(JSON.parse(this.configuration.data))
-        .toEqual({all: false});
+      expect(JSON.parse(this.configuration.data)).toEqual({all: false});
     });
 
     it('sends a POST request', function () {

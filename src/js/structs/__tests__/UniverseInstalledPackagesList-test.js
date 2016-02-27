@@ -6,10 +6,24 @@ describe('UniverseInstalledPackagesList', function () {
   describe('#constructor', function () {
 
     it('creates instances of UniversePackage', function () {
-      var items = [{packageInformation: {foo: 'bar'}}];
+      var items = [{appId: 'baz', packageInformation: {foo: 'bar'}}];
       var list = new UniverseInstalledPackagesList({items});
       items = list.getItems();
       expect(items[0] instanceof UniversePackage).toBeTruthy();
+    });
+
+    it('should store appId in UniversePackage', function () {
+      var items = [{appId: 'baz', packageInformation: {foo: 'bar'}}];
+      var list = new UniverseInstalledPackagesList({items});
+      items = list.getItems();
+      expect(items[0].get('appId')).toEqual('baz');
+    });
+
+    it('should store packageInformation in UniversePackage', function () {
+      var items = [{appId: 'baz', packageInformation: {foo: 'bar'}}];
+      var list = new UniverseInstalledPackagesList({items});
+      items = list.getItems();
+      expect(items[0].get('foo')).toEqual('bar');
     });
 
   });
@@ -18,8 +32,8 @@ describe('UniverseInstalledPackagesList', function () {
 
     it('should filter by name', function () {
       var items = [
-        {packageInformation: {packageDefinition: {name: 'foo'}}},
-        {packageInformation: {packageDefinition: {name: 'bar'}}}
+        {packageInformation: {appId: 'baz', packageDefinition: {name: 'foo'}}},
+        {packageInformation: {appId: 'baz', packageDefinition: {name: 'bar'}}}
       ];
       var list = new UniverseInstalledPackagesList({items});
       items = list.filterItems('bar').getItems();
@@ -29,8 +43,18 @@ describe('UniverseInstalledPackagesList', function () {
 
     it('should filter by description', function () {
       var items = [
-        {packageInformation: {packageDefinition: {description: 'foo'}}},
-        {packageInformation: {packageDefinition: {description: 'bar'}}}
+        {
+          packageInformation: {
+            appId: 'baz',
+            packageDefinition: {description: 'foo'}
+          }
+        },
+        {
+          packageInformation: {
+            appId: 'baz',
+            packageDefinition: {description: 'bar'}
+          }
+        }
       ];
       var list = new UniverseInstalledPackagesList({items});
       items = list.filterItems('foo').getItems();
@@ -40,9 +64,19 @@ describe('UniverseInstalledPackagesList', function () {
 
     it('should filter by tags', function () {
       var items = [
-        {packageInformation: {packageDefinition: {tags: ['foo', 'bar']}}},
-        {packageInformation: {packageDefinition: {tags: ['foo']}}},
-        {packageInformation: {packageDefinition: {tags: []}}}
+        {
+          packageInformation: {
+            appId: 'baz',
+            packageDefinition: {tags: ['foo', 'bar']}
+          }
+        },
+        {
+          packageInformation: {
+            appId: 'baz',
+            packageDefinition: {tags: ['foo']}
+          }
+        },
+        {packageInformation: {appId: 'baz', packageDefinition: {tags: []}}}
       ];
       var list = new UniverseInstalledPackagesList({items});
       items = list.filterItems('foo').getItems();
@@ -53,9 +87,19 @@ describe('UniverseInstalledPackagesList', function () {
 
     it('should handle filter by tags with null elements', function () {
       var items = [
-        {packageInformation: {packageDefinition: {tags: ['foo', 'bar']}}},
-        {packageInformation: {packageDefinition: {tags: ['foo']}}},
-        {packageInformation: {packageDefinition: {tags: null}}}
+        {
+          packageInformation: {
+            appId: 'baz',
+            packageDefinition: {tags: ['foo', 'bar']}
+          }
+        },
+        {
+          packageInformation: {
+            appId: 'baz',
+            packageDefinition: {tags: ['foo']}
+          }
+        },
+        {packageInformation: {appId: 'baz', packageDefinition: {tags: null}}}
       ];
       var list = new UniverseInstalledPackagesList({items});
       expect(list.filterItems.bind(list, 'foo')).not.toThrow();

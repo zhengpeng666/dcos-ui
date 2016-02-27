@@ -74,7 +74,12 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   getPackageDetails() {
-    return new UniversePackage(this.get('packageDetails'));
+    let packageDetails = this.get('packageDetails');
+    if (packageDetails) {
+      return new UniversePackage(packageDetails);
+    }
+
+    return null;
   },
 
   processAvailablePackagesSuccess: function (packages, query) {
@@ -90,7 +95,7 @@ const CosmosPackagesStore = Store.createStore({
   processInstalledPackagesSuccess: function (packages, name, appId) {
     this.set({installedPackages: packages});
 
-    this.emit(COSMOS_LIST_CHANGE, packages, name, appId);
+    this.emit(COSMOS_LIST_CHANGE, name, appId);
   },
 
   processInstalledPackagesError: function (error, name, appId) {
@@ -100,12 +105,13 @@ const CosmosPackagesStore = Store.createStore({
   processPackageDescriptionSuccess: function (cosmosPackage, name, version) {
     this.set({packageDetails: cosmosPackage});
 
-    this.emit(COSMOS_DESCRIBE_CHANGE, cosmosPackage, name, version);
+    this.emit(COSMOS_DESCRIBE_CHANGE, name, version);
   },
 
-  processPackageDescriptionError:
-    function (cosmosPackage, name, version) {
-    this.emit(COSMOS_DESCRIBE_ERROR, cosmosPackage, name, version);
+  processPackageDescriptionError: function (error, name, version) {
+    this.set({packageDetails: null});
+
+    this.emit(COSMOS_DESCRIBE_ERROR, error, name, version);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -155,7 +161,6 @@ const CosmosPackagesStore = Store.createStore({
       case REQUEST_COSMOS_PACKAGE_INSTALL_SUCCESS:
         CosmosPackagesStore.emit(
           COSMOS_INSTALL_SUCCESS,
-          data,
           action.packageName,
           action.packageVersion
         );
@@ -171,9 +176,9 @@ const CosmosPackagesStore = Store.createStore({
       case REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS:
         CosmosPackagesStore.emit(
           COSMOS_UNINSTALL_SUCCESS,
-          data,
           action.packageName,
-          action.packageVersion
+          action.packageVersion,
+          action.appId
         );
         break;
       case REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR:
@@ -181,7 +186,8 @@ const CosmosPackagesStore = Store.createStore({
           COSMOS_UNINSTALL_ERROR,
           data,
           action.packageName,
-          action.packageVersion
+          action.packageVersion,
+          action.appId
         );
         break;
     }
