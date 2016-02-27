@@ -4,6 +4,7 @@ var Config = {
   acsAPIPrefix: '/acs/api/v1',
   networkingAPIPrefix: '/networking/api/v1',
   cosmosAPIPrefix: '/package',
+  cosmosContentType: 'application/vnd.dcos.package.{action}-{actionType}+json;charset=utf-8;version=v1',
   componentHealthAPIPrefix: '/api/v1/system/health',
   delayAfterErrorCount: 5,
   environment: '@@ENV',
