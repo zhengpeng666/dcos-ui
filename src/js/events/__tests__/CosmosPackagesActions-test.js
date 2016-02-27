@@ -253,7 +253,7 @@ describe('CosmosPackagesActions', function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, 'json');
-      CosmosPackagesActions.installPackage('foo', 'bar', {baz: 'qux'});
+      CosmosPackagesActions.installPackage('foo', 'bar', 'quux', {baz: 'qux'});
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
@@ -313,6 +313,7 @@ describe('CosmosPackagesActions', function () {
     it('sends query in request body', function () {
       expect(JSON.parse(this.configuration.data))
         .toEqual({
+          appId: 'quux',
           packageName: 'foo',
           packageVersion: 'bar',
           options: {baz: 'qux'}
@@ -323,11 +324,7 @@ describe('CosmosPackagesActions', function () {
       CosmosPackagesActions.installPackage();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
       expect(JSON.parse(this.configuration.data))
-        .toEqual({
-          packageName: undefined,
-          packageVersion: undefined,
-          options: undefined
-        });
+        .toEqual({options: {}});
     });
 
     it('sends a POST request', function () {
@@ -340,7 +337,7 @@ describe('CosmosPackagesActions', function () {
 
     beforeEach(function () {
       spyOn(RequestUtil, 'json');
-      CosmosPackagesActions.uninstallPackage('foo', 'bar', true);
+      CosmosPackagesActions.uninstallPackage('foo', 'bar', 'baz', true);
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
@@ -398,6 +395,7 @@ describe('CosmosPackagesActions', function () {
     it('sends query in request body', function () {
       expect(JSON.parse(this.configuration.data))
         .toEqual({
+          appId: 'baz',
           packageName: 'foo',
           packageVersion: 'bar',
           all: true
@@ -408,11 +406,7 @@ describe('CosmosPackagesActions', function () {
       CosmosPackagesActions.uninstallPackage();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
       expect(JSON.parse(this.configuration.data))
-        .toEqual({
-          packageName: undefined,
-          packageVersion: undefined,
-          all: false
-        });
+        .toEqual({all: false});
     });
 
     it('sends a POST request', function () {

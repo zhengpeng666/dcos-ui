@@ -98,7 +98,7 @@ const CosmosPackagesActions = {
     });
   },
 
-  installPackage: function (packageName, packageVersion, options) {
+  installPackage: function (packageName, packageVersion, appId, options = {}) {
     RequestUtil.json({
       contentType: 'application/vnd.dcos.package.install-request+json;charset=utf-8;version=v1',
       headers: {
@@ -106,13 +106,14 @@ const CosmosPackagesActions = {
       },
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/install`,
-      data: JSON.stringify({packageName, packageVersion, options}),
+      data: JSON.stringify({packageName, packageVersion, appId, options}),
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGE_INSTALL_SUCCESS,
           data: response,
           packageName,
-          packageVersion
+          packageVersion,
+          appId
         });
       },
       error: function (xhr) {
@@ -120,13 +121,14 @@ const CosmosPackagesActions = {
           type: REQUEST_COSMOS_PACKAGE_INSTALL_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           packageName,
-          packageVersion
+          packageVersion,
+          appId
         });
       }
     });
   },
 
-  uninstallPackage: function (packageName, packageVersion, all = false) {
+  uninstallPackage: function (packageName, packageVersion, appId, all = false) {
     RequestUtil.json({
       contentType: 'application/vnd.dcos.package.uninstall-request+json;charset=utf-8;version=v1',
       headers: {
@@ -134,13 +136,14 @@ const CosmosPackagesActions = {
       },
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/uninstall`,
-      data: JSON.stringify({packageName, packageVersion, all}),
+      data: JSON.stringify({packageName, packageVersion, appId, all}),
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS,
           data: response,
           packageName,
-          packageVersion
+          packageVersion,
+          appId
         });
       },
       error: function (xhr) {
@@ -148,7 +151,8 @@ const CosmosPackagesActions = {
           type: REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           packageName,
-          packageVersion
+          packageVersion,
+          appId
         });
       }
     });
@@ -157,9 +161,12 @@ const CosmosPackagesActions = {
 };
 
 if (Config.useFixtures) {
-  let packageDescribeFixture = require('json!../../../tests/_fixtures/cosmos/package-describe.json');
-  let packagesListFixture = require('json!../../../tests/_fixtures/cosmos/packages-list.json');
-  let packagesSearchFixture = require('json!../../../tests/_fixtures/cosmos/packages-search.json');
+  let packageDescribeFixture =
+    require('json!../../../tests/_fixtures/cosmos/package-describe.json');
+  let packagesListFixture =
+    require('json!../../../tests/_fixtures/cosmos/packages-list.json');
+  let packagesSearchFixture =
+    require('json!../../../tests/_fixtures/cosmos/packages-search.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};
