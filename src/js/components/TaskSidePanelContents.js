@@ -77,7 +77,7 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
           container-pod
           container-pod-super-short
           flush-top">
-          <div className="media-object-spacing-wrapper">
+          <div className="media-object-spacing-wrapper media-object-spacing-narrow">
             <div className="media-object media-object-align-middle">
               <div className="media-object-item">
                 <i className={resourceIconClasses}></i>
@@ -109,27 +109,29 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
 
     return (
       <div>
-        <div className="side-panel-content-header container-fluid container-pod flush-top container-pod-short-bottom">
+        <div className="side-panel-content-header container-fluid container-pod flush-top flush-bottom">
           <h1 className="side-panel-content-header-label flush">
             {task.name}
           </h1>
-
-          <div className="media-object-spacing-wrapper media-object-spacing-wrapper-narrow">
-            <div className="media-object media-object-align-middle media-object-inline">
+          <div className="media-object-spacing-wrapper media-object-spacing-narrow">
+            <div className="media-object media-object-align-middle">
               <div className="media-object-item">
                 {statusIcon}
               </div>
+
               <div className="media-object-item">
                 <span className={statusClassName}>
                   {TaskStates[task.state].displayName}
                 </span>
               </div>
+
+              <div className="media-object-item">
+                <span className="side-panel-subheader side-panel-subheader-emphasize">
+                  {node.hostname}
+                </span>
+              </div>
             </div>
           </div>
-
-          <span className="side-panel-subheader side-panel-subheader-emphasize">
-            {node.hostname}
-          </span>
         </div>
         <div className="container container-pod container-pod-short container-fluid flush">
           {this.getResources(task)}

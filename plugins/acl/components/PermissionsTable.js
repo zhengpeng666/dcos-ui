@@ -205,6 +205,7 @@ class PermissionsTable extends mixin(StoreMixin) {
               flush-bottom flush-bottom"
             columns={this.getColumns()}
             colGroup={this.getColGroup()}
+            containerSelector=".gm-scroll-view"
             data={permissions}
             itemHeight={TableUtil.getRowHeight()}
             sortBy={{prop: 'description', order: 'asc'}}
