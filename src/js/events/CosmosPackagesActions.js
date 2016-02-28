@@ -150,6 +150,74 @@ const CosmosPackagesActions = {
         });
       }
     });
+  },
+
+  fetchRepositories: function () {
+    let contentType = Config.cosmosContentType.replace('{action}', 'list-source');
+    RequestUtil.json({
+      contentType: contentType.replace('{actionType}', 'request'),
+      headers: {Accept: contentType.replace('{actionType}', 'response')},
+      method: 'POST',
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/list-source`,
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS,
+          data: response
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORIES_LIST_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr)
+        });
+      }
+    });
+  },
+
+  addRepository: function (data) {
+    let contentType = Config.cosmosContentType.replace('{action}', 'add-source');
+    RequestUtil.json({
+      contentType: contentType.replace('{actionType}', 'request'),
+      headers: {Accept: contentType.replace('{actionType}', 'response')},
+      method: 'POST',
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/add-source`,
+      data: JSON.stringify(data),
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS,
+          data: response
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_ADD_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr)
+        });
+      }
+    });
+  },
+
+  deleteRepository: function (name, url) {
+    let contentType = Config.cosmosContentType.replace('{action}', 'delete-source');
+    RequestUtil.json({
+      contentType: contentType.replace('{actionType}', 'request'),
+      headers: {Accept: contentType.replace('{actionType}', 'response')},
+      method: 'POST',
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/delete-source`,
+      data: JSON.stringify({name, url}),
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS,
+          data: response
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_DELETE_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr)
+        });
+      }
+    });
   }
 
 };
@@ -161,6 +229,8 @@ if (Config.useFixtures) {
     require('json!../../../tests/_fixtures/cosmos/packages-list.json');
   let packagesSearchFixture =
     require('json!../../../tests/_fixtures/cosmos/packages-search.json');
+  let packagesRepositoriesFixture =
+    require('json!../../../tests/_fixtures/cosmos/packages-repositories.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};
@@ -174,7 +244,11 @@ if (Config.useFixtures) {
     fetchAvailablePackages:
       {event: 'success', success: {response: packagesSearchFixture}},
     installPackage: {event: 'success'},
-    uninstallPackage: {event: 'success'}
+    uninstallPackage: {event: 'success'},
+    fetchRepositories:
+      {event: 'success', success: {response: packagesRepositoriesFixture}},
+    addRepository: {event: 'success'},
+    deleteRepository: {event: 'success'}
   };
 
   Object.keys(global.actionTypes.CosmosPackagesActions).forEach(function (method) {

@@ -27,6 +27,7 @@ import {
   REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS,
   SERVER_ACTION
 } from '../constants/ActionTypes';
+import List from '../structs/List';
 import UniverseInstalledPackagesList from
   '../structs/UniverseInstalledPackagesList';
 import UniversePackage from '../structs/UniversePackage';
@@ -40,7 +41,8 @@ const CosmosPackagesStore = Store.createStore({
   getSet_data: {
     availablePackages: [],
     packageDetails: null,
-    installedPackages: []
+    installedPackages: [],
+    repositories: []
   },
 
   addChangeListener: function (eventName, callback) {
@@ -82,6 +84,10 @@ const CosmosPackagesStore = Store.createStore({
     return null;
   },
 
+  getRepositories() {
+    return new List(this.get('repositories'));
+  },
+
   processAvailablePackagesSuccess: function (packages, query) {
     this.set({availablePackages: packages});
 
@@ -112,6 +118,12 @@ const CosmosPackagesStore = Store.createStore({
     this.set({packageDetails: null});
 
     this.emit(COSMOS_DESCRIBE_ERROR, error, name, version);
+  },
+
+  processRepositoriesSuccess: function (repositories) {
+    this.set({packageDetails: null});
+
+    this.emit(COSMOS_REPOSITORIES_SUCCESS);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -189,6 +201,24 @@ const CosmosPackagesStore = Store.createStore({
           action.packageVersion,
           action.appId
         );
+        break;
+      case REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS:
+        CosmosPackagesStore.processRepositoriesSuccess(data);
+        break;
+      case REQUEST_COSMOS_REPOSITORIES_LIST_ERROR:
+        CosmosPackagesStore.emit(COSMOS_REPOSITORIES_ERROR);
+        break;
+      case REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS:
+        CosmosPackagesStore.emit(COSMOS_REPOSITORY_ADD_SUCCESS);
+        break;
+      case REQUEST_COSMOS_REPOSITORY_ADD_ERROR:
+        CosmosPackagesStore.emit(COSMOS_REPOSITORY_ADD_ERROR);
+        break;
+      case REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS:
+        CosmosPackagesStore.emit(COSMOS_REPOSITORY_DELETE_SUCCESS);
+        break;
+      case REQUEST_COSMOS_REPOSITORY_DELETE_ERROR:
+        CosmosPackagesStore.emit(COSMOS_REPOSITORY_DELETE_ERROR);
         break;
     }
 
