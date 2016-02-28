@@ -22,7 +22,7 @@ class UniversePackagesList extends List {
     if (filterText) {
       packages = StringUtil.filterByString(packages, function (cosmosPackage) {
         let description = cosmosPackage.get('description') || '';
-        let packageName = cosmosPackage.get('packageName') || '';
+        let packageName = cosmosPackage.get('name') || '';
         let tags = cosmosPackage.get('tags') || [];
 
         return `${packageName} ${description} ${tags.join(' ')}`;

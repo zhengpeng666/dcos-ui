@@ -27,7 +27,7 @@ class PackagesTab extends mixin(StoreMixin) {
       hasError: false,
       installModalPackage: null,
       isLoading: true,
-      sortProp: 'packageName'
+      sortProp: 'name'
     };
 
     this.store_listeners = [
@@ -54,14 +54,11 @@ class PackagesTab extends mixin(StoreMixin) {
 
   handleDetailOpen(cosmosPackage, event) {
     event.stopPropagation();
-    let {packageName, currentVersion} = cosmosPackage;
-    let params = ['universe-packages-detail', {packageName}];
-
-    if (currentVersion) {
-      params.push({packageVersion: currentVersion});
-    }
-
-    this.context.router.transitionTo.apply(null, params);
+    this.context.router.transitionTo(
+      'universe-packages-detail',
+      {packageName: cosmosPackage.get('name')},
+      {version: cosmosPackage.get('currentVersion')}
+    );
   }
 
   handleAdvancedModalClose() {
@@ -139,7 +136,7 @@ class PackagesTab extends mixin(StoreMixin) {
             onClick={this.handleDetailOpen.bind(this, cosmosPackage)}>
             {this.getIcon(cosmosPackage)}
             <div className="h2 inverse short-top short-bottom">
-              {cosmosPackage.get('packageName')}
+              {cosmosPackage.get('name')}
             </div>
             <p className="inverse flush">
               {cosmosPackage.get('currentVersion')}
@@ -152,6 +149,12 @@ class PackagesTab extends mixin(StoreMixin) {
 
   render() {
     let {state} = this;
+    let packageName, packageVersion;
+
+    if (state.installModalPackage) {
+      packageName = state.installModalPackage.get('name');
+      packageVersion = state.installModalPackage.get('currentVersion');
+    }
 
     if (state.hasError) {
       return this.getErrorScreen();

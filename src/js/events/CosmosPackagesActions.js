@@ -1,25 +1,42 @@
-import ActionTypes from '../constants/ActionTypes';
+import {
+  REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
+  REQUEST_COSMOS_PACKAGES_SEARCH_ERROR,
+  REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS,
+  REQUEST_COSMOS_PACKAGES_LIST_ERROR,
+  REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR,
+  REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
+  REQUEST_COSMOS_PACKAGE_INSTALL_ERROR,
+  REQUEST_COSMOS_PACKAGE_INSTALL_SUCCESS,
+  REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR,
+  REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS
+} from '../constants/ActionTypes';
 import AppDispatcher from './AppDispatcher';
 import Config from '../config/Config';
 import RequestUtil from '../utils/RequestUtil';
+
+function getContentType(action, actionType) {
+  return `application/vnd.dcos.package.${action}-${actionType}+json;charset=utf-8;version=v1`;
+}
 
 const CosmosPackagesActions = {
 
   fetchAvailablePackages: function (query) {
     RequestUtil.json({
+      contentType: getContentType('search', 'request'),
+      headers: {Accept: getContentType('search', 'response')},
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/search`,
-      data: {query},
+      data: JSON.stringify({query}),
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS,
+          type: REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS,
           data: response.packages,
           query
         });
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_COSMOS_PACKAGES_SEARCH_ERROR,
+          type: REQUEST_COSMOS_PACKAGES_SEARCH_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           query
         });
@@ -29,12 +46,14 @@ const CosmosPackagesActions = {
 
   fetchInstalledPackages: function (packageName, appId) {
     RequestUtil.json({
+      contentType: getContentType('list', 'request'),
+      headers: {Accept: getContentType('list', 'response')},
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/list`,
-      data: {packageName, appId},
+      data: JSON.stringify({packageName, appId}),
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
+          type: REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
           data: response.packages,
           packageName,
           appId
@@ -42,7 +61,7 @@ const CosmosPackagesActions = {
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_COSMOS_PACKAGES_LIST_ERROR,
+          type: REQUEST_COSMOS_PACKAGES_LIST_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           packageName,
           appId
@@ -53,12 +72,14 @@ const CosmosPackagesActions = {
 
   fetchPackageDescription: function (packageName, packageVersion) {
     RequestUtil.json({
+      contentType: getContentType('describe', 'request'),
+      headers: {Accept: getContentType('describe', 'response')},
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/describe`,
-      data: {packageName, packageVersion},
+      data: JSON.stringify({packageName, packageVersion}),
       success: function (response) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
+          type: REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
           data: response,
           packageName,
           packageVersion
@@ -66,10 +87,66 @@ const CosmosPackagesActions = {
       },
       error: function (xhr) {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR,
+          type: REQUEST_COSMOS_PACKAGE_DESCRIBE_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           packageName,
           packageVersion
+        });
+      }
+    });
+  },
+
+  installPackage: function (packageName, packageVersion, appId, options = {}) {
+    RequestUtil.json({
+      contentType: getContentType('install', 'request'),
+      headers: {Accept: getContentType('install', 'response')},
+      method: 'POST',
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/install`,
+      data: JSON.stringify({packageName, packageVersion, appId, options}),
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_PACKAGE_INSTALL_SUCCESS,
+          data: response,
+          packageName,
+          packageVersion,
+          appId
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_PACKAGE_INSTALL_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr),
+          packageName,
+          packageVersion,
+          appId
+        });
+      }
+    });
+  },
+
+  uninstallPackage: function (packageName, packageVersion, appId, all = false) {
+    RequestUtil.json({
+      contentType: getContentType('uninstall', 'request'),
+      headers: {Accept: getContentType('uninstall', 'response')},
+      method: 'POST',
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/uninstall`,
+      data: JSON.stringify({packageName, packageVersion, appId, all}),
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS,
+          data: response,
+          packageName,
+          packageVersion,
+          appId
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr),
+          packageName,
+          packageVersion,
+          appId
         });
       }
     });
@@ -78,9 +155,12 @@ const CosmosPackagesActions = {
 };
 
 if (Config.useFixtures) {
-  let packageDescribeFixture = require('json!../../../tests/_fixtures/cosmos/package-describe.json');
-  let packagesListFixture = require('json!../../../tests/_fixtures/cosmos/packages-list.json');
-  let packagesSearchFixture = require('json!../../../tests/_fixtures/cosmos/packages-search.json');
+  let packageDescribeFixture =
+    require('json!../../../tests/_fixtures/cosmos/package-describe.json');
+  let packagesListFixture =
+    require('json!../../../tests/_fixtures/cosmos/packages-list.json');
+  let packagesSearchFixture =
+    require('json!../../../tests/_fixtures/cosmos/packages-search.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};
@@ -92,7 +172,9 @@ if (Config.useFixtures) {
     fetchInstalledPackages:
       {event: 'success', success: {response: packagesListFixture}},
     fetchAvailablePackages:
-      {event: 'success', success: {response: packagesSearchFixture}}
+      {event: 'success', success: {response: packagesSearchFixture}},
+    installPackage: {event: 'success'},
+    uninstallPackage: {event: 'success'}
   };
 
   Object.keys(global.actionTypes.CosmosPackagesActions).forEach(function (method) {

@@ -47,7 +47,7 @@ describe('PackagesTab', function () {
         .querySelector('.panel.clickable');
       TestUtils.Simulate.click(panel);
 
-      expect(this.instance.handleDetailOpen.mostRecentCall.args[0].packageName)
+      expect(this.instance.handleDetailOpen.mostRecentCall.args[0].get('name'))
         .toEqual('arangodb');
     });
 
@@ -78,9 +78,8 @@ describe('PackagesTab', function () {
       var panelButton = ReactDOM.findDOMNode(this.instance)
         .querySelector('.panel .button');
       TestUtils.Simulate.click(panelButton);
-
       expect(
-        this.instance.handleInstallModalOpen.mostRecentCall.args[0].packageName
+        this.instance.handleInstallModalOpen.mostRecentCall.args[0].get('name')
       ).toEqual('arangodb');
     });
 
