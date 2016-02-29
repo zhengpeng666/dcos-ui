@@ -5,8 +5,6 @@ jest.dontMock('../../stores/ConfigStore');
 jest.dontMock('../../utils/StructUtil');
 
 var _ = require('underscore');
-var Config = require('../../config/Config');
-var PluginConstants = require('../../constants/PluginConstants');
 
 var EventTypes = require('../../constants/EventTypes');
 var PluginSDK = require('PluginSDK');
@@ -136,14 +134,13 @@ describe('PluginSDK', function () {
 
     it('should contain Store in PluginSDK', function () {
       var store = this.mockPlugin.mock.calls[0][0].Store;
-      expect(typeof store.dispatch).toEqual('function');
       expect(typeof store.subscribe).toEqual('function');
       expect(typeof store.getState).toEqual('function');
     });
 
     it('should contain personal dispatch in PluginSDK', function () {
       var SDK = this.mockPlugin.mock.calls[0][0];
-      var store = SDK.Store;
+      var store = PluginSDK.Store;
       var dispatch = SDK.dispatch;
       var pluginID = SDK.pluginID;
       var storeDispatch = store.dispatch;
