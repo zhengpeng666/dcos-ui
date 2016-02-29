@@ -1,16 +1,20 @@
 var browserInfo = require('browser-info');
 var React = require('react');
 
-var Actions = require('../../../plugins/tracking/actions/Actions');
 var CliInstallModal = require('./modals/CliInstallModal');
 var ErrorModal = require('./modals/ErrorModal');
 import EventTypes from '../constants/EventTypes';
-import {Hooks} from 'PluginSDK';
+import PluginSDK from 'PluginSDK';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 import IdentifyModal from './modals/IdentifyModal';
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var SidebarStore = require('../stores/SidebarStore');
 var VersionsModal = require('./modals/VersionsModal');
+let {Hooks} = PluginSDK;
+
+let Actions = PluginSDK.getActions('Tracking', {
+  logFakePageView: () => {}
+});
 
 var Modals = React.createClass({
 

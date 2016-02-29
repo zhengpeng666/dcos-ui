@@ -7,11 +7,15 @@ import ReactZeroClipboard from 'react-zeroclipboard';
 import ZeroClipboard from 'zeroclipboard';
 global.ZeroClipboard = ZeroClipboard;
 
-import Actions from '../../../plugins/tracking/actions/Actions';
 import ClusterName from './ClusterName';
 import DCOSLogo from './DCOSLogo';
 import MetadataStore from '../stores/MetadataStore';
+import PluginSDK from 'PluginSDK';
 import TooltipMixin from '../mixins/TooltipMixin';
+
+let Actions = PluginSDK.getActions('Tracking', {
+  log: () => {}
+});
 
 var ClusterHeader = React.createClass({
   displayName: 'ClusterHeader',

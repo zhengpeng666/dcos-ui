@@ -1,16 +1,53 @@
 import {Route, Redirect} from 'react-router';
 
-<<<<<<< e239b6b5ae56625dfd921fdda15e39cce5ad44c0
 import UnitsHealthTab from '../../pages/settings/UnitsHealthTab';
+<<<<<<< 25dd0274b6cca69e7129630080755225c0ecb4d5
 import {Hooks} from '../../pluginBridge/PluginBridge';
 =======
-import ComponentsHealthTab from '../../pages/ComponentsHealthTab';
 import {Hooks} from 'PluginSDK';
->>>>>>> Mostly complete plugin system.
+>>>>>>> fixing loaders
 import SettingsPage from '../../pages/SettingsPage';
 
 let RouteFactory = {
 
+<<<<<<< 25dd0274b6cca69e7129630080755225c0ecb4d5
+=======
+  defaults: {
+    system: [
+      {
+        type: Route,
+        name: 'settings-system-units',
+        path: 'units/?',
+        handler: UnitsHealthTab,
+        children: [
+          {
+            type: Route,
+            name: 'settings-system-units-unit-nodes-panel',
+            path: ':unitID/?',
+            children: [
+              {
+                type: Route,
+                name: 'settings-system-units-unit-nodes-node-panel',
+                path: 'nodes/:unitNodeID'
+              }
+            ]
+          },
+          {
+            type: Redirect,
+            from: ':unitID/?',
+            to: 'settings-system-units-unit-nodes-panel'
+          }
+        ]
+      },
+      {
+        type: Redirect,
+        from: '/settings/system/?',
+        to: 'settings-system-units'
+      }
+    ]
+  },
+
+>>>>>>> fixing loaders
   getSystemRoutes() {
     // Return filtered Routes
     return this.getFilteredRoutes(
