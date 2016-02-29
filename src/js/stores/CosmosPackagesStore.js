@@ -212,13 +212,17 @@ const CosmosPackagesStore = Store.createStore({
         CosmosPackagesStore.emit(COSMOS_REPOSITORY_ADD_SUCCESS);
         break;
       case REQUEST_COSMOS_REPOSITORY_ADD_ERROR:
-        CosmosPackagesStore.emit(COSMOS_REPOSITORY_ADD_ERROR);
+        CosmosPackagesStore.emit(
+          COSMOS_REPOSITORY_ADD_ERROR, action.name, action.url
+        );
         break;
       case REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS:
         CosmosPackagesStore.emit(COSMOS_REPOSITORY_DELETE_SUCCESS);
         break;
       case REQUEST_COSMOS_REPOSITORY_DELETE_ERROR:
-        CosmosPackagesStore.emit(COSMOS_REPOSITORY_DELETE_ERROR);
+        CosmosPackagesStore.emit(
+          COSMOS_REPOSITORY_DELETE_ERROR, action.name, action.url
+        );
         break;
     }
 
