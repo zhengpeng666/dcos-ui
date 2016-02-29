@@ -21,6 +21,8 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
+    this.internalStorage_set({renderTable: false});
+
     this.store_listeners = [
       {
         name: 'unitHealth',
@@ -40,8 +42,11 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
 
   componentDidMount() {
     super.componentDidMount();
+
     UnitHealthStore.fetchUnit(this.props.itemID);
     UnitHealthStore.fetchUnitNodes(this.props.itemID);
+
+    this.internalStorage_update({renderTable: true});
   }
 
   handleItemSelection(selectedHealth) {
@@ -104,6 +109,20 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     );
   }
 
+  getNodesTable(renderTable, unit, visibleData) {
+    if (!renderTable) {
+      return null;
+    }
+
+    return (
+      <UnitHealthNodesTable
+        nodes={visibleData}
+        unit={unit}
+        itemID={this.props.itemID}
+        parentRouter={this.props.parentRouter} />
+    );
+  }
+
   getSubHeader(unit) {
     let healthStatus = unit.getHealth();
 
@@ -139,6 +158,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     let unit = this.getUnit();
     let nodes = UnitHealthStore.getNodes(this.props.itemID);
     let visibleData = this.getVisibleData(nodes, searchString, healthFilter);
+    let renderTable = this.internalStorage_get().renderTable;
 
     return (
       <div className="flex-container-col">
@@ -177,11 +197,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
                   wrapperClassName="dropdown" />
               </li>
             </ul>
-            <UnitHealthNodesTable
-              nodes={visibleData}
-              unit={unit}
-              itemID={this.props.itemID}
-              parentRouter={this.props.parentRouter} />
+            {this.getNodesTable(renderTable, unit, visibleData)}
           </div>
         </div>
       </div>
