@@ -4,7 +4,13 @@ var json = require('mesosphere-shared-reactjs').RequestUtil.json;
 const DEFAULT_ERROR_MESSAGE = 'An error has occurred.';
 
 var RequestUtil = {
-  json,
+  json: function (options = {}, ...args) {
+    if (options.url && !/\?/.test(options.url)) {
+      options.url += '?_timestamp=' + Date.now();
+    }
+
+    json(options, ...args);
+  },
 
   debounceOnError: function (interval, promiseFn, options) {
     var rejectionCount = 0;

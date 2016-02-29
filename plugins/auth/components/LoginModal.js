@@ -151,7 +151,7 @@ class LoginModal extends mixin(StoreMixin) {
   render() {
     let modalProps = {
       innerBodyClass: 'modal-body container container-pod ' +
-        'container-pod-short flex-container-col',
+        'container-pod-short',
       modalClass: 'modal modal-narrow'
     };
 
