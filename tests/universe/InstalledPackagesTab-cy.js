@@ -38,6 +38,8 @@ describe('Installed Packages Tab', function () {
       expect($itemNames.length).to.equal(1);
       expect($itemNames.first()).to.contain('marathon');
     });
+
+    cy.get('@filterTextbox').type('{selectall}{backspace}');
   });
 
   it('displays \'No data\' when it has filtered out all packages', function () {
@@ -50,5 +52,7 @@ describe('Installed Packages Tab', function () {
     cy.get('@tableRowCell').should(function ($tableCell) {
       expect($tableCell[0].textContent).to.equal('No data');
     });
+
+    cy.get('@filterTextbox').type('{selectall}{backspace}');
   });
 });
