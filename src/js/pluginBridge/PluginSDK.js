@@ -97,7 +97,6 @@ const createDispatcher = function (pluginID) {
  * @return {module}            - Required module
  */
 const getModule = function (moduleName) {
-
   let foundDirs = Object.keys(PluginModules).filter(directory => {
     return moduleName in PluginModules[directory];
   });
@@ -268,7 +267,7 @@ const listenForConfigChange = function () {
   });
 };
 
-// Register actions exposed in DCOSActions
+// Register actions exposed in PluginModules.events
 const registerApplicationActions = function (SDK) {
   if (PluginModules.events) {
     Object.keys(PluginModules.events).forEach(name => {

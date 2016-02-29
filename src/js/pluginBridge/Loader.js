@@ -1,5 +1,5 @@
 // Provide webpack contexts for smarter build. Without these,
-// webpack will try to be smart an auto create the contexts,
+// webpack will try to be smart and auto create the contexts,
 // doubling the built output
 const requirePlugin = require.context('../../../plugins', true, /index/);
 const requireConfig = require.context('../config', false);

@@ -6,7 +6,7 @@ import SidebarActions from '../events/SidebarActions';
 // Modules to paths
 module.exports = {
   events: {
-    SidebarActions: 'SidebarActions.js'
+    SidebarActions: 'SidebarActions'
   },
   structs: {
     List: 'List',
