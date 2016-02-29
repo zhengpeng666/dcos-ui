@@ -161,10 +161,10 @@ const CosmosPackagesActions = {
 
   fetchRepositories: function (type) {
     RequestUtil.json({
-      contentType: getContentType('list-source', 'request'),
-      headers: {Accept: getContentType('list-source', 'response')},
+      contentType: getContentType('repository.list', 'request'),
+      headers: {Accept: getContentType('repository.list', 'response')},
       method: 'POST',
-      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/list-source`,
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/repository/list`,
       data: JSON.stringify({type}),
       success: function (response) {
         AppDispatcher.handleServerAction({
@@ -181,22 +181,19 @@ const CosmosPackagesActions = {
     });
   },
 
-  addRepository: function (name, url, auth) {
+  addRepository: function (name, uri) {
     RequestUtil.json({
-      contentType: getContentType('add-source', 'request'),
-      headers: {Accept: getContentType('add-source', 'response')},
+      contentType: getContentType('repository.add', 'request'),
+      headers: {Accept: getContentType('repository.add', 'response')},
       method: 'POST',
-      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/add-source`,
-      data: JSON.stringify({
-        type: {},
-        properties: {name, url, auth}
-      }),
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/repository/add`,
+      data: JSON.stringify({name, uri}),
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS,
           data: response,
           name,
-          url
+          uri
         });
       },
       error: function (xhr) {
@@ -204,28 +201,25 @@ const CosmosPackagesActions = {
           type: REQUEST_COSMOS_REPOSITORY_ADD_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           name,
-          url
+          uri
         });
       }
     });
   },
 
-  deleteRepository: function (name, url) {
+  deleteRepository: function (name, uri) {
     RequestUtil.json({
-      contentType: getContentType('delete-source', 'request'),
-      headers: {Accept: getContentType('delete-source', 'response')},
+      contentType: getContentType('repository.delete', 'request'),
+      headers: {Accept: getContentType('repository.delete', 'response')},
       method: 'POST',
-      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/delete-source`,
-      data: JSON.stringify({
-        type: {},
-        properties: {name, url}
-      }),
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/repository/delete`,
+      data: JSON.stringify({name, uri}),
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS,
           data: response,
           name,
-          url
+          uri
         });
       },
       error: function (xhr) {
@@ -233,7 +227,7 @@ const CosmosPackagesActions = {
           type: REQUEST_COSMOS_REPOSITORY_DELETE_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           name,
-          url
+          uri
         });
       }
     });
