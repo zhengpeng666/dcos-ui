@@ -13,6 +13,7 @@ const requireModals = require.context('../components/modals', false);
 
 let pluginsList;
 
+// Try loading the list of plugins.
 try {
   pluginsList = require('../../../plugins/index');
 } catch(err) {
@@ -20,15 +21,27 @@ try {
   pluginsList = {};
 }
 
+// Return all available plugins
 function getAvailablePlugins() {
   return pluginsList;
 }
 
+/**
+ * Removes a part of a filepath
+ * @param  {Array} dirs    - Array of directories representing the path to a file
+ * @param  {Int} atIndex - Index of directory to remove
+ * @return {String}         - New path to file
+ */
 function removeDir(dirs, atIndex) {
   dirs.splice(atIndex, 1);
   return dirs.join('/');
 }
 
+/**
+ * Finds component within subdirectories of components/
+ * @param  {String} path - Path to module
+ * @return {module}      - result of require
+ */
 function pluckComponent(path) {
   let dirs = path.split('/');
   switch (dirs[1]) {
@@ -41,6 +54,12 @@ function pluckComponent(path) {
   }
 }
 
+/**
+ * Dynamic require of module with base directory and name
+ * @param  {String} dir  - base directory of module
+ * @param  {String} name - name of module
+ * @return {module}      - result of require
+ */
 function requireModule(dir, name) {
   let path = './' + name;
   switch (dir) {

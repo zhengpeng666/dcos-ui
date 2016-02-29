@@ -1,4 +1,6 @@
-
+/**
+ * Struct representing the PluginSDK
+ */
 class PluginSDK {
 
   constructor(item) {

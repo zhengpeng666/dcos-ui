@@ -91,6 +91,11 @@ const createDispatcher = function (pluginID) {
   };
 };
 
+/**
+ * Finds module by name, builds its path and requires it
+ * @param  {String} moduleName - Name of module
+ * @return {module}            - Required module
+ */
 const getModule = function (moduleName) {
 
   let foundDirs = Object.keys(PluginModules).filter(directory => {
@@ -103,8 +108,11 @@ const getModule = function (moduleName) {
   return Loader.requireModule(dir, PluginModules[dir][moduleName]);
 };
 
+/**
+ * Builds getter API for plugins to request application modules
+ * @return {Object} - API with Get method.
+ */
 const getApplicationModuleAPI = function () {
-  // Return get
   return {
     get(modules) {
       if (Array.isArray(modules)) {
@@ -120,8 +128,14 @@ const getApplicationModuleAPI = function () {
   };
 };
 
+/**
+ * Builds Actions API for registerActions and getActions.
+ * Get Actions automatically instantiates actions module with
+ * the requesting Plugin's SDK so dispatch is bound to the requesting Plugin.
+ * @param  {PluginSDK} SDK - PluginSDK
+ * @return {Object}     - API for registering/requesting actions
+ */
 const getActionsAPI = function (SDK) {
-  // Return an API
   return {
     registerActions(name, actionsModule) {
       if (!name) {
@@ -154,21 +168,23 @@ const getActionsAPI = function (SDK) {
   };
 };
 
-// Register actions exposed in DCOSActions
-const registerApplicationActions = function (SDK) {
-  if (PluginModules.events) {
-    Object.keys(PluginModules.events).forEach(name => {
-      SDK.registerActions(name, getModule(name));
-    });
-  }
-};
-
+/**
+ * Extends the PluginSDK
+ * @param  {PluginSDK} SDK - SDK to extend
+ * @param  {Object} obj  - Key value pairs to be added to SDK
+ */
 const extendSDK = function (SDK, obj) {
   Object.keys(obj).forEach(methodName => {
     SDK[methodName] = obj[methodName].bind(SDK);
   });
 };
 
+/**
+ * Builds SDK for pluginID
+ * @param  {String} pluginID - ID for plugin
+ * @param  {Object} config   - Config
+ * @return {PluginSDK}       - SDK for plugins
+ */
 const getSDK = function (pluginID, config) {
 
   if (pluginID in PLUGIN_ENV_CACHE) {
@@ -251,6 +267,16 @@ const listenForConfigChange = function () {
     }
   });
 };
+
+// Register actions exposed in DCOSActions
+const registerApplicationActions = function (SDK) {
+  if (PluginModules.events) {
+    Object.keys(PluginModules.events).forEach(name => {
+      SDK.registerActions(name, getModule(name));
+    });
+  }
+};
+
 // Lets get an SDK for the Application
 let ApplicationSDK = getSDK(APPLICATION, Config);
 // Register our Actions

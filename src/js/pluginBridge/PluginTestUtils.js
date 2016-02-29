@@ -45,6 +45,12 @@ function loadPluginsByName(plugins) {
 
 }
 
+/**
+ * Finds and returns the SDK for a specific plugin
+ * @param  {String} pluginID - ID of plugin
+ * @param  {Object} config   - configuration
+ * @return {PluginSDK}          - SDK for plugin with pluginID
+ */
 function getSDK(pluginID, config) {
   // Get SDK for pluginID. If Plugin hasn't been initialized,
   // this will create the SDK, cache it, and pass into the plugin if
@@ -52,17 +58,30 @@ function getSDK(pluginID, config) {
   return PluginSDK.__getSDK(pluginID, config);
 }
 
+/**
+ * Set a mock for a module which would normally be returned by
+ * PluginSDK.get().
+ * @param {String} name - name of module
+ * @param {any} mock - value representing the mock
+ * @returns {mock} - the mock that was passed in
+ */
 function setMock(name, mock) {
   Loader.__setMockModule(name, mock);
   return mock;
 }
 
+/**
+ * Unmocks the plugin entry point for pluginID
+ * @param  {Strin} pluginID - ID of plugin
+ * @return {Bool}          - true if mocked plugin
+ */
 function unMockPlugin(pluginID) {
   let availablePlugins = Loader.__getAvailablePlugins();
   if (pluginID in availablePlugins) {
     jest.dontMock('../../../plugins/' + availablePlugins[pluginID]);
     return true;
   }
+  return false;
 }
 
 /**
