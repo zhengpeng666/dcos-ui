@@ -24,6 +24,8 @@ module.exports = (PluginSDK) => {
 
     mixins: [PluginGetSetMixin],
 
+    onSet() {},
+
     init: function () {
       this.set({isOpen: false});
 

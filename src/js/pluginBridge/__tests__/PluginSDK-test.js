@@ -6,30 +6,26 @@ jest.dontMock('../../utils/StructUtil');
 
 var _ = require('underscore');
 var Config = require('../../config/Config');
-var ConfigStore = require('../../stores/ConfigStore');
 var PluginConstants = require('../../constants/PluginConstants');
-var Plugins = require('../../../../plugins/index');
 
 var EventTypes = require('../../constants/EventTypes');
 var PluginSDK = require('PluginSDK');
+var PluginTestUtils = require('PluginTestUtils');
 
 let Hooks = PluginSDK.Hooks;
 
 function loadPlugins() {
   var mockPlugin = jest.genMockFunction();
 
-  Plugins.__setMockPlugins({fakePlugin: mockPlugin});
-  PluginSDK.listenForConfigChange();
-  ConfigStore.set({config: {
-    uiConfiguration: {
-      plugins: {
-        fakePlugin: {
-          enabled: true,
-          foo: 'bar'
-        }
+  PluginTestUtils.loadPlugins({
+    fakePlugin: {
+      module: mockPlugin,
+      config: {
+        enabled: true,
+        foo: 'bar'
       }
     }
-  }});
+  });
 }
 
 describe('PluginSDK', function () {
@@ -46,18 +42,15 @@ describe('PluginSDK', function () {
             // Don't return anything
           }
         );
-
-        Plugins.__setMockPlugins({fakePlugin1: this.mockPlugin});
-        PluginSDK.listenForConfigChange();
-        ConfigStore.set({config: {
-          uiConfiguration: {
-            plugins: {
-              fakePlugin1: {
-                enabled: true
-              }
+        PluginTestUtils.loadPlugins({
+          fakePlugin1: {
+            module: this.mockPlugin,
+            config: {
+              enabled: true,
+              foo: 'bar'
             }
           }
-        }});
+        });
         var state = PluginSDK.Store.getState();
         expect(state.fakePlugin1).toEqual(undefined);
       });
@@ -74,17 +67,15 @@ describe('PluginSDK', function () {
             };
           }
         );
-        Plugins.__setMockPlugins({fakePlugin2: this.mockPlugin});
-        PluginSDK.listenForConfigChange();
-        ConfigStore.set({config: {
-          uiConfiguration: {
-            plugins: {
-              fakePlugin2: {
-                enabled: true
-              }
+        PluginTestUtils.loadPlugins({
+          fakePlugin2: {
+            module: this.mockPlugin,
+            config: {
+              enabled: true,
+              foo: 'bar'
             }
           }
-        }});
+        });
         var state = PluginSDK.Store.getState();
         expect(_.isEqual(state.fakePlugin2, {foo: 'bar'})).toEqual(true);
       });
@@ -98,18 +89,16 @@ describe('PluginSDK', function () {
             return {};
           }
         );
-        Plugins.__setMockPlugins({badFakePlugin: mockPlugin});
-        PluginSDK.listenForConfigChange();
         expect(function () {
-          ConfigStore.set({config: {
-            uiConfiguration: {
-              plugins: {
-                badFakePlugin: {
-                  enabled: true
-                }
+          PluginTestUtils.loadPlugins({
+            badFakePlugin: {
+              module: mockPlugin,
+              config: {
+                enabled: true,
+                foo: 'bar'
               }
             }
-          }});
+          });
         }).toThrow(new Error('Reducer for badFakePlugin must be a function'));
       });
     });
@@ -120,18 +109,15 @@ describe('PluginSDK', function () {
     beforeEach(function () {
       this.mockPlugin = jest.genMockFunction();
 
-      Plugins.__setMockPlugins({fakePlugin3: this.mockPlugin});
-      PluginSDK.listenForConfigChange();
-      ConfigStore.set({config: {
-        uiConfiguration: {
-          plugins: {
-            fakePlugin3: {
+      PluginTestUtils.loadPlugins({
+          fakePlugin3: {
+            module: this.mockPlugin,
+            config: {
               enabled: true,
               foo: 'bar'
             }
           }
-        }
-      }});
+        });
     });
 
     it('should call plugin', function () {
@@ -140,20 +126,26 @@ describe('PluginSDK', function () {
 
     it('should call plugin with correct # of args', function () {
       var args = this.mockPlugin.mock.calls[0];
-      expect(args.length).toBe(4);
+      expect(args.length).toBe(1);
     });
 
-    it('should call plugin with Store as first arg', function () {
-      var store = this.mockPlugin.mock.calls[0][0];
+    it('should call plugin with PluginSDK', function () {
+      var SDK = this.mockPlugin.mock.calls[0][0];
+      expect(SDK.toString()).toEqual(PluginSDK.toString());
+    });
+
+    it('should contain Store in PluginSDK', function () {
+      var store = this.mockPlugin.mock.calls[0][0].Store;
       expect(typeof store.dispatch).toEqual('function');
       expect(typeof store.subscribe).toEqual('function');
       expect(typeof store.getState).toEqual('function');
     });
 
-    it('should call plugin with personal dispatch as second arg', function () {
-      var store = this.mockPlugin.mock.calls[0][0];
-      var dispatch = this.mockPlugin.mock.calls[0][1];
-      var name = this.mockPlugin.mock.calls[0][2];
+    it('should contain personal dispatch in PluginSDK', function () {
+      var SDK = this.mockPlugin.mock.calls[0][0];
+      var store = SDK.Store;
+      var dispatch = SDK.dispatch;
+      var pluginID = SDK.pluginID;
       var storeDispatch = store.dispatch;
       store.dispatch = jest.genMockFunction();
       dispatch({
@@ -163,7 +155,7 @@ describe('PluginSDK', function () {
       var dispatchedObject = {
         type: 'foo',
         data: 'bar',
-        __origin: name
+        __origin: pluginID
       };
       expect(store.dispatch.mock.calls.length).toEqual(1);
       expect(_.isEqual(store.dispatch.mock.calls[0][0],
@@ -172,23 +164,14 @@ describe('PluginSDK', function () {
       store.dispatch = storeDispatch;
     });
 
-    it('should call plugin with name as third arg', function () {
-      var name = this.mockPlugin.mock.calls[0][2];
-      expect(name).toEqual('fakePlugin3');
+    it('should contain pluginID in PluginSDK', function () {
+      var pluginID = this.mockPlugin.mock.calls[0][0].pluginID;
+      expect(pluginID).toEqual('fakePlugin3');
     });
 
-    it('should call plugin with options as fourth arg', function () {
-      var options = this.mockPlugin.mock.calls[0][3];
-      var expectedOptions = {
-        APPLICATION: PluginConstants.APPLICATION,
-        config: {
-          enabled: true,
-          foo: 'bar'
-        },
-        Hooks: PluginSDK.Hooks,
-        appConfig: Config
-      };
-      expect(_.isEqual(options, expectedOptions)).toEqual(true);
+    it('should contain Hooks in PluginSDK', function () {
+      var pluginHooks = this.mockPlugin.mock.calls[0][0].Hooks;
+      expect(pluginHooks).toEqual(PluginSDK.Hooks);
     });
   });
 
@@ -214,27 +197,23 @@ describe('PluginSDK', function () {
 
       // Mock a fake plugin
       this.mockPlugin = jest.genMockFunction().mockImplementation(
-        function (Store, dispatch) {
-          testArgs.dispatch = dispatch;
+        function (SDK) {
+          testArgs.dispatch = SDK.dispatch;
           return mockReducer;
         }
       );
       this.testArgs = testArgs;
       this.mockReducer = mockReducer;
 
-      Plugins.__setMockPlugins({anotherFakePlugin: this.mockPlugin});
-      PluginSDK.listenForConfigChange();
-      ConfigStore.set({config: {
-        uiConfiguration: {
-          plugins: {
-            anotherFakePlugin: {
-              enabled: true,
-              foo: 'bar'
-            }
+      PluginTestUtils.loadPlugins({
+        anotherFakePlugin: {
+          module: this.mockPlugin,
+          config: {
+            enabled: true,
+            foo: 'bar'
           }
         }
-      }});
-
+      });
     });
 
     it('should call reducer to get initial state', function () {

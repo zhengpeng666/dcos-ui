@@ -14,7 +14,11 @@ var IntercomStore = require('../../../plugins/tracking/stores/IntercomStore')(Pl
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var MetadataStore = require('../stores/MetadataStore');
-var SidebarActions = PluginSDK.getActions('SidebarActions');
+var SidebarActions = PluginSDK.getActions('SidebarActions', {
+  close() {},
+  showVersions() {},
+  startTour() {}
+});
 var TooltipMixin = require('../mixins/TooltipMixin');
 
 let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'network', 'universe', 'settings'];

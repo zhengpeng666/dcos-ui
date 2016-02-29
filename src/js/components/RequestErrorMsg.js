@@ -7,7 +7,9 @@ var RequestErrorMsg = React.createClass({
   displayName: 'RequestErrorMsg',
 
   render: function () {
-    var IntercomActions = PluginSDK.getActions('Intercom');
+    var IntercomActions = PluginSDK.getActions('Intercom', {
+      open: () => {}
+    });
     return (
       <div className="row">
         <div className="column-small-8 column-small-offset-2 column-medium-6 column-medium-offset-3">

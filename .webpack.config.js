@@ -92,7 +92,6 @@ module.exports = {
     root: path.resolve(__dirname),
     extensions: ['', '.js'],
     alias: {
-      PluginList: 'plugins/index',
       PluginSDK: 'src/js/pluginBridge/PluginSDK',
       PluginTestUtils: 'src/js/pluginBridge/PluginTestUtils',
       StoreMixinConfig: 'src/js/utils/StoreMixinConfig'

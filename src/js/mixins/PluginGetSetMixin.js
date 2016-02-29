@@ -26,6 +26,9 @@ var GetSetMixin = {
 
     _.extend(this.getSet_data, data);
 
+    if (!this.onSet) {
+      throw new Error(`No method onSet for ${this.storeID}`);
+    }
     this.onSet();
   }
 

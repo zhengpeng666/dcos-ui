@@ -28,13 +28,7 @@ PluginTestUtils.dontMock([
 
 let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
 
-PluginTestUtils.setMock('FormModal', jest.genMockFn().mockImplementation(
-  function () {
-    return React.createClass({
-      displayName: 'mock',
-      render: function () { return null; }
-    });
-  }));
+require('../../storeConfig').register(PluginSDK);
 
 let LoginModal = require('../LoginModal')(PluginSDK);
 var ACLAuthStore = require('../../stores/ACLAuthStore')(PluginSDK);

@@ -17,7 +17,7 @@ var Modals = require('../components/Modals');
 var RequestErrorMsg = require('../components/RequestErrorMsg');
 import ServerErrorModal from '../components/ServerErrorModal';
 var Sidebar = require('../components/Sidebar');
-var SidebarActions = PluginSDK.getActions('SidebarActions');
+var SidebarActions = PluginSDK.getActions('SidebarActions', {close() {}});
 var SidebarStore = require('../stores/SidebarStore');
 
 function getSidebarState() {
