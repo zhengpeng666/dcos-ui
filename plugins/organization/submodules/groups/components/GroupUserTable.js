@@ -5,9 +5,7 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLGroupStore from '../stores/ACLGroupStore';
-import ResourceTableUtil from '../../../../../src/js/utils/ResourceTableUtil';
-import TableUtil from '../../../../../src/js/utils/TableUtil';
+import _ACLGroupStore from '../stores/ACLGroupStore';
 
 const METHODS_TO_BIND = [
   'handleOpenConfirm',
@@ -16,193 +14,203 @@ const METHODS_TO_BIND = [
   'renderButton'
 ];
 
-module.exports = class GroupUserTable extends mixin(StoreMixin) {
-  constructor() {
-    super();
+module.exports = (PluginSDK) => {
 
-    this.state = {
-      userID: null,
-      openConfirm: false,
-      pendingRequest: false,
-      requestUsersError: false,
-      requestUsersSuccess: false,
-      groupUpdateError: null
-    };
+  let {ResourceTableUtil, TableUtil} = PluginSDK.get([
+    'ResourceTableUtil', 'TableUtil']);
 
-    this.store_listeners = [
-      {
-        name: 'group',
-        events: ['deleteUserSuccess', 'deleteUserError', 'usersSuccess']
-      }
-    ];
+  let ACLGroupStore = _ACLGroupStore(PluginSDK);
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
+  class GroupUserTable extends mixin(StoreMixin) {
+    constructor() {
+      super();
 
-  handleOpenConfirm(user) {
-    this.setState({
-      userID: user.uid,
-      openConfirm: true,
-      groupUpdateError: null
-    });
-  }
+      this.state = {
+        userID: null,
+        openConfirm: false,
+        pendingRequest: false,
+        requestUsersError: false,
+        requestUsersSuccess: false,
+        groupUpdateError: null
+      };
 
-  handleButtonConfirm() {
-    this.setState({pendingRequest: true});
-    ACLGroupStore.deleteUser(this.props.groupID, this.state.userID);
-  }
+      this.store_listeners = [
+        {
+          name: 'group',
+          events: ['deleteUserSuccess', 'deleteUserError', 'usersSuccess']
+        }
+      ];
 
-  handleButtonCancel() {
-    this.setState({openConfirm: false, userID: null});
-  }
+      METHODS_TO_BIND.forEach((method) => {
+        this[method] = this[method].bind(this);
+      });
+    }
 
-  onGroupStoreDeleteUserError(error) {
-    this.setState({groupUpdateError: error, pendingRequest: false});
-  }
+    handleOpenConfirm(user) {
+      this.setState({
+        userID: user.uid,
+        openConfirm: true,
+        groupUpdateError: null
+      });
+    }
 
-  onGroupStoreDeleteUserSuccess() {
-    this.setState({openConfirm: false, pendingRequest: false, userID: null});
-  }
+    handleButtonConfirm() {
+      this.setState({pendingRequest: true});
+      ACLGroupStore.deleteUser(this.props.groupID, this.state.userID);
+    }
 
-  onUsersStoreError() {
-    this.setState({
-      requestUsersError: true
-    });
-  }
+    handleButtonCancel() {
+      this.setState({openConfirm: false, userID: null});
+    }
 
-  onUsersStoreSuccess() {
-    this.setState({
-      requestUsersSuccess: true,
-      requestUsersError: false
-    });
-  }
+    onGroupStoreDeleteUserError(error) {
+      this.setState({groupUpdateError: error, pendingRequest: false});
+    }
 
-  getColGroup() {
-    return (
-      <colgroup>
-        <col style={{width: '50%'}} />
-        <col />
-      </colgroup>
-    );
-  }
+    onGroupStoreDeleteUserSuccess() {
+      this.setState({openConfirm: false, pendingRequest: false, userID: null});
+    }
 
-  getColumns() {
-    let className = ResourceTableUtil.getClassName;
-    let descriptionHeading = ResourceTableUtil.renderHeading({
-      description: 'Name'
-    });
-    let propSortFunction = ResourceTableUtil.getPropSortFunction('description');
+    onUsersStoreError() {
+      this.setState({
+        requestUsersError: true
+      });
+    }
 
-    return [
-      {
-        className,
-        headerClassName: className,
-        prop: 'description',
-        render: this.renderUserLabel,
-        sortable: true,
-        sortFunction: propSortFunction,
-        heading: descriptionHeading
-      },
-      {
-        className,
-        headerClassName: className,
-        prop: 'remove',
-        render: this.renderButton,
-        sortable: false,
-        sortFunction: propSortFunction,
-        heading: ''
-      }
-    ];
-  }
+    onUsersStoreSuccess() {
+      this.setState({
+        requestUsersSuccess: true,
+        requestUsersError: false
+      });
+    }
 
-  getConfirmModalContent(groupDetails) {
-    let state = this.state;
-    let userLabel = 'this user';
-    groupDetails.users.forEach(function (user) {
-      if (user.user.uid === state.userID) {
-        userLabel = user.user.description;
-      }
-    });
-
-    let groupLabel = groupDetails.description;
-    let error = null;
-
-    if (state.groupUpdateError != null) {
-      error = (
-        <p className="text-error-state">{state.groupUpdateError}</p>
+    getColGroup() {
+      return (
+        <colgroup>
+          <col style={{width: '50%'}} />
+          <col />
+        </colgroup>
       );
     }
 
-    return (
-      <div className="container-pod container-pod-short text-align-center">
-        <h3 className="flush-top">Are you sure?</h3>
-        <p>{`${userLabel} will be removed from the ${groupLabel} group.`}</p>
-        {error}
-      </div>
-    );
-  }
+    getColumns() {
+      let className = ResourceTableUtil.getClassName;
+      let descriptionHeading = ResourceTableUtil.renderHeading({
+        description: 'Name'
+      });
+      let propSortFunction = ResourceTableUtil.getPropSortFunction('description');
 
-  getLoadingScreen() {
-    return (
-      <div className="container container-fluid container-pod text-align-center
-        vertical-center inverse">
-        <div className="row">
-          <div className="ball-scale">
-            <div />
+      return [
+        {
+          className,
+          headerClassName: className,
+          prop: 'description',
+          render: this.renderUserLabel,
+          sortable: true,
+          sortFunction: propSortFunction,
+          heading: descriptionHeading
+        },
+        {
+          className,
+          headerClassName: className,
+          prop: 'remove',
+          render: this.renderButton,
+          sortable: false,
+          sortFunction: propSortFunction,
+          heading: ''
+        }
+      ];
+    }
+
+    getConfirmModalContent(groupDetails) {
+      let state = this.state;
+      let userLabel = 'this user';
+      groupDetails.users.forEach(function (user) {
+        if (user.user.uid === state.userID) {
+          userLabel = user.user.description;
+        }
+      });
+
+      let groupLabel = groupDetails.description;
+      let error = null;
+
+      if (state.groupUpdateError != null) {
+        error = (
+          <p className="text-error-state">{state.groupUpdateError}</p>
+        );
+      }
+
+      return (
+        <div className="container-pod container-pod-short text-align-center">
+          <h3 className="flush-top">Are you sure?</h3>
+          <p>{`${userLabel} will be removed from the ${groupLabel} group.`}</p>
+          {error}
+        </div>
+      );
+    }
+
+    getLoadingScreen() {
+      return (
+        <div className="container container-fluid container-pod text-align-center
+          vertical-center inverse">
+          <div className="row">
+            <div className="ball-scale">
+              <div />
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  renderUserLabel(prop, user) {
-    return user[prop];
-  }
+    renderUserLabel(prop, user) {
+      return user[prop];
+    }
 
-  renderButton(prop, user) {
-    return (
-      <div className="text-align-right">
-        <button className="button button-danger button-stroke button-small"
-          onClick={this.handleOpenConfirm.bind(this, user)}>
-          Remove
-        </button>
-      </div>
-    );
-  }
+    renderButton(prop, user) {
+      return (
+        <div className="text-align-right">
+          <button className="button button-danger button-stroke button-small"
+            onClick={this.handleOpenConfirm.bind(this, user)}>
+            Remove
+          </button>
+        </div>
+      );
+    }
 
-  render() {
-    let groupDetails = ACLGroupStore.getGroup(this.props.groupID);
-    let groupUsers = groupDetails.users.map(function (user) {
-      return user.user;
-    });
+    render() {
+      let groupDetails = ACLGroupStore.getGroup(this.props.groupID);
+      let groupUsers = groupDetails.users.map(function (user) {
+        return user.user;
+      });
 
-    return (
-      <div>
-        <Confirm
-          disabled={this.state.pendingRequest}
-          footerContainerClass="container container-pod container-pod-short
-            container-pod-fluid flush-top flush-bottom"
-          open={this.state.openConfirm}
-          onClose={this.handleButtonCancel}
-          leftButtonCallback={this.handleButtonCancel}
-          rightButtonCallback={this.handleButtonConfirm}>
-          {this.getConfirmModalContent(groupDetails)}
-        </Confirm>
-        <Table
-          className="table table-borderless-outer table-borderless-inner-columns
-            flush-bottom"
-          columns={this.getColumns()}
-          colGroup={this.getColGroup()}
-          containerSelector=".gm-scroll-view"
-          data={groupUsers}
-          itemHeight={TableUtil.getRowHeight()}
-          sortBy={{prop: 'description', order: 'asc'}}
-          useFlex={true}
-          transition={false}
-          useScrollTable={false} />
-      </div>
-    );
+      return (
+        <div>
+          <Confirm
+            disabled={this.state.pendingRequest}
+            footerContainerClass="container container-pod container-pod-short
+              container-pod-fluid flush-top flush-bottom"
+            open={this.state.openConfirm}
+            onClose={this.handleButtonCancel}
+            leftButtonCallback={this.handleButtonCancel}
+            rightButtonCallback={this.handleButtonConfirm}>
+            {this.getConfirmModalContent(groupDetails)}
+          </Confirm>
+          <Table
+            className="table table-borderless-outer table-borderless-inner-columns
+              flush-bottom"
+            columns={this.getColumns()}
+            colGroup={this.getColGroup()}
+            containerSelector=".gm-scroll-view"
+            data={groupUsers}
+            itemHeight={TableUtil.getRowHeight()}
+            sortBy={{prop: 'description', order: 'asc'}}
+            useFlex={true}
+            transition={false}
+            useScrollTable={false} />
+        </div>
+      );
+    }
   }
+  return GroupUserTable;
 };
+

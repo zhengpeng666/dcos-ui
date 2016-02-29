@@ -1,5 +1,4 @@
 jest.dontMock('../AppReducer');
-jest.dontMock('../PluginBridge');
 jest.dontMock('../../config/Config');
 jest.dontMock('../../mixins/GetSetMixin');
 jest.dontMock('../../stores/ConfigStore');
@@ -8,13 +7,13 @@ var _ = require('underscore');
 
 var ConfigStore = require('../../stores/ConfigStore');
 var EventTypes = require('../../constants/EventTypes');
-var PluginBridge = require('../PluginBridge');
+var PluginSDK = require('PluginSDK');
 var PluginConstants = require('../../constants/PluginConstants');
-var Plugins = require('../../../../plugins/index');
+var PluginTestUtils = require('PluginTestUtils');
 
 // Get State specific to Application
 function getApplicationState() {
-  return PluginBridge.Store.getState()[PluginConstants.APPLICATION];
+  return PluginSDK.Store.getState()[PluginConstants.APPLICATION];
 }
 
 describe('AppReducer', function () {
@@ -25,17 +24,17 @@ describe('AppReducer', function () {
   };
 
   it('should alter state correctly when no plugins loaded', function () {
-    PluginBridge.dispatch({
+    PluginSDK.dispatch({
       type: EventTypes.APP_STORE_CHANGE,
       storeID: 'foo',
       data: 'bar'
     });
-    PluginBridge.dispatch({
+    PluginSDK.dispatch({
       type: EventTypes.APP_STORE_CHANGE,
       storeID: 'qux',
       data: {foo: 'bar'}
     });
-    PluginBridge.listenForConfigChange();
+    PluginSDK.listenForConfigChange();
 
     var state = getApplicationState();
 
@@ -43,12 +42,12 @@ describe('AppReducer', function () {
   });
 
   it('should alter state correctly after plugins loaded', function () {
-    PluginBridge.dispatch({
+    PluginSDK.dispatch({
       type: EventTypes.APP_STORE_CHANGE,
       storeID: 'foo',
       data: 'bar'
     });
-    PluginBridge.dispatch({
+    PluginSDK.dispatch({
       type: EventTypes.APP_STORE_CHANGE,
       storeID: 'qux',
       data: {foo: 'bar'}
@@ -62,17 +61,15 @@ describe('AppReducer', function () {
       }
     );
 
-    Plugins.__setMockPlugins({fakePlugin: mockPlugin});
-    PluginBridge.listenForConfigChange();
-    ConfigStore.set({config: {
-      uiConfiguration: {
-        plugins: {
-          fakePlugin: {
-            enabled: true
-          }
+    PluginTestUtils.loadPlugins({
+      fakePlugin: {
+        module: mockPlugin,
+        config: {
+          enabled: true
         }
       }
-    }});
+    });
+
     var state = getApplicationState();
     // lets remove the config stuff just for ease
     delete state.config;
@@ -80,12 +77,12 @@ describe('AppReducer', function () {
   });
 
   it('should alter state correctly for storeID', function () {
-    PluginBridge.dispatch({
+    PluginSDK.dispatch({
       type: EventTypes.APP_STORE_CHANGE,
       storeID: 'foo',
       data: 'bar'
     });
-    PluginBridge.dispatch({
+    PluginSDK.dispatch({
       type: EventTypes.APP_STORE_CHANGE,
       storeID: 'qux',
       data: {foo: 'bar'}
@@ -101,21 +98,19 @@ describe('AppReducer', function () {
     var pluginDispatch;
     // Mock a fake plugin
     var mockPlugin = jest.genMockFunction().mockImplementation(
-      function (Store, dispatch) {
-        pluginDispatch = dispatch;
+      function (SDK) {
+        pluginDispatch = SDK.dispatch;
       }
     );
-    Plugins.__setMockPlugins({fakePluginAgain: mockPlugin});
-    PluginBridge.listenForConfigChange();
-    ConfigStore.set({config: {
-      uiConfiguration: {
-        plugins: {
-          fakePluginAgain: {
-            enabled: true
-          }
+
+    PluginTestUtils.loadPlugins({
+      fakePluginAgain: {
+        module: mockPlugin,
+        config: {
+          enabled: true
         }
       }
-    }});
+    });
 
     pluginDispatch({
       type: EventTypes.APP_STORE_CHANGE,
@@ -134,7 +129,7 @@ describe('AppReducer', function () {
       foo: 'bar',
       nested: nestedObj
     };
-    PluginBridge.dispatch({
+    PluginSDK.dispatch({
       type: EventTypes.APP_STORE_CHANGE,
       storeID: 'foo',
       data: data

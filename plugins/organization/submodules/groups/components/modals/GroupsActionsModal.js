@@ -3,112 +3,119 @@ import _ from 'underscore';
 import React from 'react';
 /* eslint-enable no-unused-vars */
 
-import ActionsModal from '../../../../../../src/js/components/modals/ActionsModal';
-import ACLGroupStore from '../../stores/ACLGroupStore';
-import ACLUsersStore from '../../../users/stores/ACLUsersStore';
-import Util from '../../../../../../src/js/utils/Util';
+import _ACLGroupStore from '../../stores/ACLGroupStore';
+import _ACLUsersStore from '../../../users/stores/ACLUsersStore';
 
-class GroupsActionsModal extends ActionsModal {
-  constructor() {
-    super(...arguments);
+module.exports = (PluginSDK) => {
 
-    this.store_listeners = [
-      {
-        name: 'groups',
-        events: ['success', 'error']
-      },
-      {
-        name: 'group',
-        events: [
-          'addUserError',
-          'addUserSuccess',
-          'deleteError',
-          'deleteSuccess'
-        ]
-      }
-    ];
+  let {ActionsModal, Util} = PluginSDK.get(['ActionsModal', 'Util']);
 
-  }
+  let ACLGroupStore = _ACLGroupStore(PluginSDK);
+  let ACLUsersStore = _ACLUsersStore(PluginSDK);
 
-  componentWillMount() {
-    super.componentWillMount();
+  class GroupsActionsModal extends ActionsModal {
+    constructor() {
+      super(...arguments);
 
-    ACLUsersStore.fetchUsers();
-  }
+      this.store_listeners = [
+        {
+          name: 'groups',
+          events: ['success', 'error']
+        },
+        {
+          name: 'group',
+          events: [
+            'addUserError',
+            'addUserSuccess',
+            'deleteError',
+            'deleteSuccess'
+          ]
+        }
+      ];
 
-  onGroupStoreAddUserError(errorMessage) {
-    this.onActionError(errorMessage);
-  }
-
-  onGroupStoreAddUserSuccess() {
-    this.onActionSuccess();
-  }
-
-  onGroupStoreDeleteError(errorMessage) {
-    this.onActionError(errorMessage);
-  }
-
-  onGroupStoreDeleteSuccess() {
-    this.onActionSuccess();
-  }
-
-  handleButtonConfirm() {
-    let {action, itemID, selectedItems} = this.props;
-    let selectedItem = this.state.selectedItem;
-
-    if (selectedItem === null && action !== 'delete') {
-      this.setState({validationError: 'Select from dropdown.'});
-    } else {
-      let itemsByID = _.pluck(selectedItems, itemID);
-
-      if (action === 'add') {
-        itemsByID.forEach(function (groupID) {
-          ACLGroupStore.addUser(groupID, selectedItem.id);
-        });
-      } else if (action === 'remove') {
-        itemsByID.forEach(function (groupID) {
-          ACLGroupStore.deleteUser(groupID, selectedItem.id);
-        });
-      } else if (action === 'delete') {
-        itemsByID.forEach(function (groupID) {
-          ACLGroupStore.deleteGroup(groupID);
-        });
-      }
-
-      this.setState({pendingRequest: true});
     }
+
+    componentWillMount() {
+      super.componentWillMount();
+
+      ACLUsersStore.fetchUsers();
+    }
+
+    onGroupStoreAddUserError(errorMessage) {
+      this.onActionError(errorMessage);
+    }
+
+    onGroupStoreAddUserSuccess() {
+      this.onActionSuccess();
+    }
+
+    onGroupStoreDeleteError(errorMessage) {
+      this.onActionError(errorMessage);
+    }
+
+    onGroupStoreDeleteSuccess() {
+      this.onActionSuccess();
+    }
+
+    handleButtonConfirm() {
+      let {action, itemID, selectedItems} = this.props;
+      let selectedItem = this.state.selectedItem;
+
+      if (selectedItem === null && action !== 'delete') {
+        this.setState({validationError: 'Select from dropdown.'});
+      } else {
+        let itemsByID = _.pluck(selectedItems, itemID);
+
+        if (action === 'add') {
+          itemsByID.forEach(function (groupID) {
+            ACLGroupStore.addUser(groupID, selectedItem.id);
+          });
+        } else if (action === 'remove') {
+          itemsByID.forEach(function (groupID) {
+            ACLGroupStore.deleteUser(groupID, selectedItem.id);
+          });
+        } else if (action === 'delete') {
+          itemsByID.forEach(function (groupID) {
+            ACLGroupStore.deleteGroup(groupID);
+          });
+        }
+
+        this.setState({pendingRequest: true});
+      }
+    }
+
+    getDropdownItems() {
+      let items = ACLUsersStore.get('users').getItems().sort(
+        Util.getLocaleCompareSortFn('description')
+      );
+
+      let dropdownItems = items.map(function (itemInfo) {
+        return {
+          html: itemInfo.description,
+          id: itemInfo.uid,
+          selectedHtml: itemInfo.description
+        };
+      });
+
+      dropdownItems.unshift({
+        html: 'Choose a user',
+        id: 'DEFAULT',
+        selectable: false
+      });
+
+      return dropdownItems;
+    }
+
   }
 
-  getDropdownItems() {
-    let items = ACLUsersStore.get('users').getItems().sort(
-      Util.getLocaleCompareSortFn('description')
-    );
+  GroupsActionsModal.propTypes = {
+    action: React.PropTypes.string.isRequired,
+    actionText: React.PropTypes.object.isRequired,
+    itemID: React.PropTypes.string.isRequired,
+    onClose: React.PropTypes.func.isRequired,
+    selectedItems: React.PropTypes.array.isRequired
+  };
 
-    let dropdownItems = items.map(function (itemInfo) {
-      return {
-        html: itemInfo.description,
-        id: itemInfo.uid,
-        selectedHtml: itemInfo.description
-      };
-    });
-
-    dropdownItems.unshift({
-      html: 'Choose a user',
-      id: 'DEFAULT',
-      selectable: false
-    });
-
-    return dropdownItems;
-  }
-
-}
-
-GroupsActionsModal.propTypes = {
-  action: React.PropTypes.string.isRequired,
-  actionText: React.PropTypes.object.isRequired,
-  itemID: React.PropTypes.string.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  selectedItems: React.PropTypes.array.isRequired
+  return GroupsActionsModal;
 };
 
-module.exports = GroupsActionsModal;

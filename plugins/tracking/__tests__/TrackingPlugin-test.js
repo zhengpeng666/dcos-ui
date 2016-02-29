@@ -1,16 +1,16 @@
-jest.dontMock('../../../src/js/pluginBridge/PluginBridge');
-jest.dontMock('../../../src/js/pluginBridge/Hooks');
-jest.dontMock('../../../src/js/pluginBridge/TestUtils');
 jest.dontMock('../index');
 jest.dontMock('../hooks');
-jest.dontMock('../../../src/js/config/Config');
-jest.dontMock('../../../src/js/mixins/GetSetMixin');
+jest.dontMock('../stores/IntercomStore');
+
+import PluginTestUtils from 'PluginTestUtils';
+
+let PluginSDK = PluginTestUtils.getSDK('Tracking', {enabled: true});
 
 var _ = require('underscore');
 
-var PluginTestUtils = require('../../../src/js/pluginBridge/TestUtils');
-var TrackingHooks = require('../hooks');
-var DOMUtils = require('../../../src/js/utils/DOMUtils');
+var TrackingHooks = require('../hooks')(PluginSDK);
+var DOMUtils = PluginSDK.get('DOMUtils');
+var {Hooks} = PluginSDK;
 
 describe('TrackingHooks', function () {
 
@@ -48,48 +48,48 @@ describe('TrackingHooks', function () {
     describe('#pluginsConfigured', function () {
 
       it('appends scripts to the document head if plugin enabled', function () {
-        TrackingHooks.initialize(PluginTestUtils.Hooks);
+        TrackingHooks.initialize();
         TrackingHooks.configure({enabled: true});
-        PluginTestUtils.Hooks.doAction('pluginsConfigured');
+        Hooks.doAction('pluginsConfigured');
         expect(DOMUtils.appendScript.callCount).toEqual(2);
       });
 
       it('does not append scripts if plugin disabled', function () {
-        TrackingHooks.initialize(PluginTestUtils.Hooks);
+        TrackingHooks.initialize();
         TrackingHooks.configure({enabled: false});
-        PluginTestUtils.Hooks.doAction('pluginsConfigured');
+        Hooks.doAction('pluginsConfigured');
         expect(DOMUtils.appendScript.callCount).toEqual(0);
       });
     });
 
     describe('#openIdentifyModal', function () {
       it('returns the value given to it if plugin enabled', function () {
-        TrackingHooks.initialize(PluginTestUtils.Hooks);
+        TrackingHooks.initialize();
         TrackingHooks.configure({enabled: true});
-        var result = PluginTestUtils.Hooks.applyFilter('openIdentifyModal', 'hello');
+        var result = Hooks.applyFilter('openIdentifyModal', 'hello');
         expect(result).toEqual('hello');
       });
 
       it('returns false if plugin disabled', function () {
-        TrackingHooks.initialize(PluginTestUtils.Hooks);
+        TrackingHooks.initialize();
         TrackingHooks.configure({enabled: false});
-        var result = PluginTestUtils.Hooks.applyFilter('openIdentifyModal', 'hello');
+        var result = Hooks.applyFilter('openIdentifyModal', 'hello');
         expect(result).toEqual(false);
       });
     });
 
     describe('#sidebarFooterButtonSet', function () {
       it('returns the value given to it if plugin enabled', function () {
-        TrackingHooks.initialize(PluginTestUtils.Hooks);
+        TrackingHooks.initialize();
         TrackingHooks.configure({enabled: true});
-        var result = PluginTestUtils.Hooks.applyFilter('sidebarFooterButtonSet', ['foo']);
+        var result = Hooks.applyFilter('sidebarFooterButtonSet', ['foo']);
         expect(result).not.toEqual(['foo']);
       });
 
       it('returns an empty array if plugin disabled', function () {
-        TrackingHooks.initialize(PluginTestUtils.Hooks);
+        TrackingHooks.initialize();
         TrackingHooks.configure({enabled: false});
-        var result = PluginTestUtils.Hooks.applyFilter('sidebarFooterButtonSet', []);
+        var result = Hooks.applyFilter('sidebarFooterButtonSet', []);
         expect(result).toEqual([]);
       });
     });

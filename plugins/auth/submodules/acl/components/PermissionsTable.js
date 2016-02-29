@@ -5,9 +5,7 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLStore from '../stores/ACLStore';
-import ResourceTableUtil from '../../../../../src/js/utils/ResourceTableUtil';
-import TableUtil from '../../../../../src/js/utils/TableUtil';
+import _ACLStore from '../stores/ACLStore';
 
 const METHODS_TO_BIND = [
   'handleOpenConfirm',
@@ -16,212 +14,221 @@ const METHODS_TO_BIND = [
   'renderButton'
 ];
 
-class PermissionsTable extends mixin(StoreMixin) {
-  constructor() {
-    super();
+module.exports = (PluginSDK) => {
 
-    this.state = {
-      permissionID: null,
-      openConfirm: false,
-      pendingRequest: false,
-      permissionUpdateError: null
-    };
+  let {ResourceTableUtil, TableUtil} = PluginSDK.get([
+    'ResourceTableUtil', 'TableUtil']);
 
-    this.store_listeners = [
-      {
-        name: 'acl',
-        events: [
-          'userRevokeSuccess',
-          'userRevokeError',
-          'groupRevokeSuccess',
-          'groupRevokeError'
-        ]
-      }
-    ];
+  let ACLStore = _ACLStore(PluginSDK);
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
+  class PermissionsTable extends mixin(StoreMixin) {
+    constructor() {
+      super();
 
-  handleOpenConfirm(permission) {
-    this.setState({
-      permissionID: permission.rid,
-      openConfirm: true,
-      permissionUpdateError: null
-    });
-  }
+      this.state = {
+        permissionID: null,
+        openConfirm: false,
+        pendingRequest: false,
+        permissionUpdateError: null
+      };
 
-  handleButtonConfirm() {
-    this.setState({pendingRequest: true});
-    let storeAction;
+      this.store_listeners = [
+        {
+          name: 'acl',
+          events: [
+            'userRevokeSuccess',
+            'userRevokeError',
+            'groupRevokeSuccess',
+            'groupRevokeError'
+          ]
+        }
+      ];
 
-    if (this.props.itemType === 'user') {
-      storeAction = ACLStore.revokeUserActionToResource.bind(ACLStore);
+      METHODS_TO_BIND.forEach((method) => {
+        this[method] = this[method].bind(this);
+      });
     }
 
-    if (this.props.itemType === 'group') {
-      storeAction = ACLStore.revokeGroupActionToResource.bind(ACLStore);
+    handleOpenConfirm(permission) {
+      this.setState({
+        permissionID: permission.rid,
+        openConfirm: true,
+        permissionUpdateError: null
+      });
     }
 
-    storeAction(this.props.itemID, 'access', this.state.permissionID);
-  }
+    handleButtonConfirm() {
+      this.setState({pendingRequest: true});
+      let storeAction;
 
-  handleButtonCancel() {
-    this.setState({
-      openConfirm: false,
-      permissionID: null
-    });
-  }
-
-  onAclStoreGroupRevokeError(error) {
-    this.setState({
-      permissionUpdateError: error,
-      pendingRequest: false
-    });
-  }
-
-  onAclStoreGroupRevokeSuccess() {
-    this.setState({
-      openConfirm: false,
-      permissionID: null,
-      pendingRequest: false
-    });
-  }
-
-  onAclStoreUserRevokeError(error) {
-    this.setState({
-      permissionUpdateError: error,
-      pendingRequest: false
-    });
-  }
-
-  onAclStoreUserRevokeSuccess() {
-    this.setState({
-      openConfirm: false,
-      permissionID: null,
-      pendingRequest: false
-    });
-  }
-
-  getColGroup() {
-    return (
-      <colgroup>
-        <col style={{width: '50%'}} />
-        <col />
-      </colgroup>
-    );
-  }
-
-  getColumns() {
-    let className = ResourceTableUtil.getClassName;
-    let descriptionHeading = ResourceTableUtil.renderHeading({
-      description: 'Name'
-    });
-    let propSortFunction = ResourceTableUtil.getPropSortFunction('description');
-
-    return [
-      {
-        className,
-        headerClassName: className,
-        prop: 'description',
-        render: this.renderPermissionLabel,
-        sortable: true,
-        sortFunction: propSortFunction,
-        heading: descriptionHeading
-      },
-      {
-        className,
-        headerClassName: className,
-        prop: 'remove',
-        render: this.renderButton,
-        sortable: false,
-        sortFunction: propSortFunction,
-        heading: ''
+      if (this.props.itemType === 'user') {
+        storeAction = ACLStore.revokeUserActionToResource.bind(ACLStore);
       }
-    ];
-  }
 
-  getConfirmModalContent(permissions) {
-    let state = this.state;
-    let serviceLabel = 'this service';
-    permissions.forEach(function (permission) {
-      if (permission.rid === state.permissionID) {
-        serviceLabel = permission.description;
+      if (this.props.itemType === 'group') {
+        storeAction = ACLStore.revokeGroupActionToResource.bind(ACLStore);
       }
-    });
 
-    let error = null;
+      storeAction(this.props.itemID, 'access', this.state.permissionID);
+    }
 
-    if (state.permissionUpdateError != null) {
-      error = (
-        <p className="text-error-state">{state.permissionUpdateError}</p>
+    handleButtonCancel() {
+      this.setState({
+        openConfirm: false,
+        permissionID: null
+      });
+    }
+
+    onAclStoreGroupRevokeError(error) {
+      this.setState({
+        permissionUpdateError: error,
+        pendingRequest: false
+      });
+    }
+
+    onAclStoreGroupRevokeSuccess() {
+      this.setState({
+        openConfirm: false,
+        permissionID: null,
+        pendingRequest: false
+      });
+    }
+
+    onAclStoreUserRevokeError(error) {
+      this.setState({
+        permissionUpdateError: error,
+        pendingRequest: false
+      });
+    }
+
+    onAclStoreUserRevokeSuccess() {
+      this.setState({
+        openConfirm: false,
+        permissionID: null,
+        pendingRequest: false
+      });
+    }
+
+    getColGroup() {
+      return (
+        <colgroup>
+          <col style={{width: '50%'}} />
+          <col />
+        </colgroup>
       );
     }
 
-    return (
-      <div className="container-pod container-pod-short text-align-center">
-        <h3 className="flush-top">Are you sure?</h3>
-        <p>{`Permission to ${serviceLabel} will be removed.`}</p>
-        {error}
-      </div>
-    );
-  }
+    getColumns() {
+      let className = ResourceTableUtil.getClassName;
+      let descriptionHeading = ResourceTableUtil.renderHeading({
+        description: 'Name'
+      });
+      let propSortFunction = ResourceTableUtil.getPropSortFunction('description');
 
-  renderPermissionLabel(prop, user) {
-    return user[prop];
-  }
+      return [
+        {
+          className,
+          headerClassName: className,
+          prop: 'description',
+          render: this.renderPermissionLabel,
+          sortable: true,
+          sortFunction: propSortFunction,
+          heading: descriptionHeading
+        },
+        {
+          className,
+          headerClassName: className,
+          prop: 'remove',
+          render: this.renderButton,
+          sortable: false,
+          sortFunction: propSortFunction,
+          heading: ''
+        }
+      ];
+    }
 
-  renderButton(prop, permission) {
-    return (
-      <div key={permission.rid} className="text-align-right">
-        <button className="button button-danger button-stroke button-small"
-          onClick={this.handleOpenConfirm.bind(this, permission)}>
-          Remove
-        </button>
-      </div>
-    );
-  }
+    getConfirmModalContent(permissions) {
+      let state = this.state;
+      let serviceLabel = 'this service';
+      permissions.forEach(function (permission) {
+        if (permission.rid === state.permissionID) {
+          serviceLabel = permission.description;
+        }
+      });
 
-  render() {
-    let permissions = this.props.permissions;
+      let error = null;
 
-    return (
-      <div>
-        <Confirm
-          disabled={this.state.pendingRequest}
-          footerContainerClass="container container-pod container-pod-short
-            container-pod-fluid flush-top flush-bottom"
-          open={this.state.openConfirm}
-          onClose={this.handleButtonCancel}
-          leftButtonCallback={this.handleButtonCancel}
-          rightButtonCallback={this.handleButtonConfirm}>
-          {this.getConfirmModalContent(permissions)}
-        </Confirm>
-        <div className="container container-fluid container-pod
-          container-pod-short flush-horizontal">
-          <Table
-            className="table table-borderless-outer table-borderless-inner-columns
-              flush-bottom flush-bottom"
-            columns={this.getColumns()}
-            colGroup={this.getColGroup()}
-            containerSelector=".gm-scroll-view"
-            data={permissions}
-            itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: 'description', order: 'asc'}}
-            useFlex={true}
-            transition={false}
-            useScrollTable={false} />
+      if (state.permissionUpdateError != null) {
+        error = (
+          <p className="text-error-state">{state.permissionUpdateError}</p>
+        );
+      }
+
+      return (
+        <div className="container-pod container-pod-short text-align-center">
+          <h3 className="flush-top">Are you sure?</h3>
+          <p>{`Permission to ${serviceLabel} will be removed.`}</p>
+          {error}
         </div>
-      </div>
-    );
-  }
-}
+      );
+    }
 
-PermissionsTable.propTypes = {
-  permissions: React.PropTypes.array,
-  itemID: React.PropTypes.string,
-  itemType: React.PropTypes.string
+    renderPermissionLabel(prop, user) {
+      return user[prop];
+    }
+
+    renderButton(prop, permission) {
+      return (
+        <div key={permission.rid} className="text-align-right">
+          <button className="button button-danger button-stroke button-small"
+            onClick={this.handleOpenConfirm.bind(this, permission)}>
+            Remove
+          </button>
+        </div>
+      );
+    }
+
+    render() {
+      let permissions = this.props.permissions;
+
+      return (
+        <div>
+          <Confirm
+            disabled={this.state.pendingRequest}
+            footerContainerClass="container container-pod container-pod-short
+              container-pod-fluid flush-top flush-bottom"
+            open={this.state.openConfirm}
+            onClose={this.handleButtonCancel}
+            leftButtonCallback={this.handleButtonCancel}
+            rightButtonCallback={this.handleButtonConfirm}>
+            {this.getConfirmModalContent(permissions)}
+          </Confirm>
+          <div className="container container-fluid container-pod
+            container-pod-short flush-horizontal">
+            <Table
+              className="table table-borderless-outer table-borderless-inner-columns
+                flush-bottom flush-bottom"
+              columns={this.getColumns()}
+              colGroup={this.getColGroup()}
+              containerSelector=".gm-scroll-view"
+              data={permissions}
+              itemHeight={TableUtil.getRowHeight()}
+              sortBy={{prop: 'description', order: 'asc'}}
+              useFlex={true}
+              transition={false}
+              useScrollTable={false} />
+          </div>
+        </div>
+      );
+    }
+  }
+
+  PermissionsTable.propTypes = {
+    permissions: React.PropTypes.array,
+    itemID: React.PropTypes.string,
+    itemType: React.PropTypes.string
+  };
+
+  return PermissionsTable;
 };
 
-module.exports = PermissionsTable;

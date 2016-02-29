@@ -1,4 +1,4 @@
-jest.dontMock('./fixtures/MockTasks');
+jest.dontMock('./fixtures/MockTasks.json');
 jest.dontMock('../../utils/ResourceTableUtil');
 jest.dontMock('../../stores/MesosStateStore');
 jest.dontMock('../TaskTable');
@@ -9,7 +9,7 @@ var ReactDOM = require('react-dom');
 
 var MesosStateStore = require('../../stores/MesosStateStore');
 var TaskTable = require('../TaskTable');
-const Tasks = require('./fixtures/MockTasks').tasks;
+const Tasks = require('./fixtures/MockTasks.json').tasks;
 
 describe('TaskTable', function () {
   beforeEach(function () {

@@ -1,10 +1,13 @@
-import PluginHooks from './hooks';
+import _PluginHooks from './hooks';
+import IntercomActions from './actions/IntercomActions';
+import TrackingActions from './actions/Actions';
 
-module.exports = function (Store, dispatch, name, options) {
-  const {Hooks, config} = options;
-
+module.exports = function (PluginSDK) {
   // Set plugin's hooks
-  PluginHooks.initialize(Hooks);
-  PluginHooks.configure(config);
+  _PluginHooks(PluginSDK).initialize();
+
+  // Register Actions
+  PluginSDK.registerActions('Intercom', IntercomActions);
+  PluginSDK.registerActions('Tracking', TrackingActions);
 };
 

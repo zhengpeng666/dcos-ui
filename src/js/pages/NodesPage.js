@@ -15,8 +15,9 @@ var FilterHeadline = require('../components/FilterHeadline');
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var Page = require('../components/Page');
+import PluginSDK from 'PluginSDK';
 var ResourceBarChart = require('../components/charts/ResourceBarChart');
-var SidebarActions = require('../events/SidebarActions');
+var SidebarActions = PluginSDK.getActions('SidebarActions');
 import SidePanels from '../components/SidePanels';
 
 var NODES_DISPLAY_LIMIT = 300;

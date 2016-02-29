@@ -33,254 +33,277 @@ import {
   ACL_USER_DELETE_ERROR,
 } from '../constants/EventTypes';
 
-import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
-
-import ACLUsersActions from '../actions/ACLUsersActions';
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import GetSetMixin from '../../../../../src/js/mixins/GetSetMixin';
+import _ACLUsersActions from '../actions/ACLUsersActions';
 import User from '../../../../../src/js/structs/User';
 
-/**
- * This store will keep track of users and their details
- */
-var ACLUserStore = Store.createStore({
-  storeID: 'user',
+import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
+import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
 
-  mixins: [GetSetMixin],
+let cachedStore;
 
-  getSet_data: {
-    users: {},
-    // A hash of userIds that we're fetching
-    // The value is a list of requests that have been received
-    usersFetching: {}
-  },
+module.exports = (PluginSDK) => {
+  // Return cached version if exists
+  if (cachedStore) {
+    return cachedStore;
+  }
+  let PluginGetSetMixin = PluginSDK.get('PluginGetSetMixin');
+  let {APP_STORE_CHANGE} = PluginSDK.constants;
 
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
-  },
-
-  getUserRaw: function (userID) {
-    return this.get('users')[userID];
-  },
-
-  getUser: function (userID) {
-    return new User(this.getUserRaw(userID) || {});
-  },
-
-  setUser: function (userID, user) {
-    let users = this.get('users');
-    users[userID] = user;
-    this.set({users});
-  },
-
-  fetchUser: ACLUsersActions.fetchUser,
-
-  addUser: ACLUsersActions.addUser,
-
-  updateUser: ACLUsersActions.updateUser,
-
-  deleteUser: ACLUsersActions.deleteUser,
+  let ACLUsersActions = _ACLUsersActions(PluginSDK);
 
   /**
-   * Will fetch a user and their details.
-   * Will make a request to various different endpoints to get all details
-   *
-   * @param  {Number} userID
+   * This store will keep track of users and their details
    */
-  fetchUserWithDetails: function (userID) {
-    let usersFetching = this.get('usersFetching');
+  var ACLUserStore = Store.createStore({
+    storeID: 'user',
 
-    usersFetching[userID] = {user: false, groups: false, permissions: false};
-    this.set({usersFetching});
+    mixins: [PluginGetSetMixin],
 
-    ACLUsersActions.fetchUser(userID);
-    ACLUsersActions.fetchUserGroups(userID);
-    ACLUsersActions.fetchUserPermissions(userID);
-  },
+    getSet_data: {
+      users: {},
+      // A hash of userIds that we're fetching
+      // The value is a list of requests that have been received
+      usersFetching: {}
+    },
 
-  /**
-   * Validates if the details for a user have been successfuly fetched
-   *
-   * @param  {Number} userID
-   * @param  {String} type The type of detail that has been successfuly
-   *   received
-   */
-  validateUserWithDetailsFetch: function (userID, type) {
-    let usersFetching = this.get('usersFetching');
-    if (usersFetching[userID] == null) {
-      return;
-    }
+    onSet() {
+      PluginSDK.dispatch({
+        type: APP_STORE_CHANGE,
+        storeID: this.storeID,
+        data: this.getSet_data
+      });
+    },
 
-    usersFetching[userID][type] = true;
+    addChangeListener: function (eventName, callback) {
+      this.on(eventName, callback);
+    },
 
-    let fetchedAll = true;
-    Object.keys(usersFetching[userID]).forEach(function (key) {
-      if (usersFetching[userID][key] === false) {
-        fetchedAll = false;
+    removeChangeListener: function (eventName, callback) {
+      this.removeListener(eventName, callback);
+    },
+
+    getUserRaw: function (userID) {
+      return this.get('users')[userID];
+    },
+
+    getUser: function (userID) {
+      return new User(this.getUserRaw(userID) || {});
+    },
+
+    setUser: function (userID, user) {
+      let users = this.get('users');
+      users[userID] = user;
+      this.set({users});
+    },
+
+    fetchUser: ACLUsersActions.fetchUser,
+
+    addUser: ACLUsersActions.addUser,
+
+    updateUser: ACLUsersActions.updateUser,
+
+    deleteUser: ACLUsersActions.deleteUser,
+
+    /**
+     * Will fetch a user and their details.
+     * Will make a request to various different endpoints to get all details
+     *
+     * @param  {Number} userID
+     */
+    fetchUserWithDetails: function (userID) {
+      let usersFetching = this.get('usersFetching');
+
+      usersFetching[userID] = {user: false, groups: false, permissions: false};
+      this.set({usersFetching});
+
+      ACLUsersActions.fetchUser(userID);
+      ACLUsersActions.fetchUserGroups(userID);
+      ACLUsersActions.fetchUserPermissions(userID);
+    },
+
+    /**
+     * Validates if the details for a user have been successfuly fetched
+     *
+     * @param  {Number} userID
+     * @param  {String} type The type of detail that has been successfuly
+     *   received
+     */
+    validateUserWithDetailsFetch: function (userID, type) {
+      let usersFetching = this.get('usersFetching');
+      if (usersFetching[userID] == null) {
+        return;
       }
-    });
 
-    if (fetchedAll === true) {
+      usersFetching[userID][type] = true;
+
+      let fetchedAll = true;
+      Object.keys(usersFetching[userID]).forEach(function (key) {
+        if (usersFetching[userID][key] === false) {
+          fetchedAll = false;
+        }
+      });
+
+      if (fetchedAll === true) {
+        delete usersFetching[userID];
+        this.set({usersFetching});
+        this.emit(ACL_USER_DETAILS_FETCHED_SUCCESS, userID);
+      }
+    },
+
+    /**
+     * Emits error if we're in the process of fetching details for a user
+     * but one of the requests fails.
+     *
+     * @param  {Number} userID
+     */
+    invalidateUserWithDetailsFetch: function (userID) {
+      let usersFetching = this.get('usersFetching');
+      if (usersFetching[userID] == null) {
+        return;
+      }
+
       delete usersFetching[userID];
       this.set({usersFetching});
-      this.emit(ACL_USER_DETAILS_FETCHED_SUCCESS, userID);
-    }
-  },
+      this.emit(ACL_USER_DETAILS_FETCHED_ERROR, userID);
+    },
 
-  /**
-   * Emits error if we're in the process of fetching details for a user
-   * but one of the requests fails.
-   *
-   * @param  {Number} userID
-   */
-  invalidateUserWithDetailsFetch: function (userID) {
-    let usersFetching = this.get('usersFetching');
-    if (usersFetching[userID] == null) {
-      return;
-    }
+    /**
+     * Process a user response
+     *
+     * @param  {Object} userData see /acl/users/user schema
+     */
+    processUser: function (userData) {
+      let user = this.getUserRaw(userData.uid) || {};
 
-    delete usersFetching[userID];
-    this.set({usersFetching});
-    this.emit(ACL_USER_DETAILS_FETCHED_ERROR, userID);
-  },
+      user = _.extend(user, userData);
 
-  /**
-   * Process a user response
-   *
-   * @param  {Object} userData see /acl/users/user schema
-   */
-  processUser: function (userData) {
-    let user = this.getUserRaw(userData.uid) || {};
+      this.setUser(user.uid, user);
+      this.emit(ACL_USER_DETAILS_USER_CHANGE, user.uid);
 
-    user = _.extend(user, userData);
+      this.validateUserWithDetailsFetch(user.uid, 'user');
+    },
 
-    this.setUser(user.uid, user);
-    this.emit(ACL_USER_DETAILS_USER_CHANGE, user.uid);
+    processUserError: function (userID) {
+      this.emit(ACL_USER_DETAILS_USER_ERROR, userID);
+      this.invalidateUserWithDetailsFetch(userID);
+    },
 
-    this.validateUserWithDetailsFetch(user.uid, 'user');
-  },
+    /**
+     * Process a user groups response
+     *
+     * @param  {Object} groups see /acl/users/user/groups schema
+     * @param  {Object} userID
+     */
+    processUserGroups: function (groups, userID) {
+      let user = this.getUserRaw(userID) || {};
 
-  processUserError: function (userID) {
-    this.emit(ACL_USER_DETAILS_USER_ERROR, userID);
-    this.invalidateUserWithDetailsFetch(userID);
-  },
+      user.groups = groups;
 
-  /**
-   * Process a user groups response
-   *
-   * @param  {Object} groups see /acl/users/user/groups schema
-   * @param  {Object} userID
-   */
-  processUserGroups: function (groups, userID) {
-    let user = this.getUserRaw(userID) || {};
+      // Use userID throughout as the user may not have been previously set
+      this.setUser(userID, user);
+      this.emit(ACL_USER_DETAILS_GROUPS_CHANGE, userID);
 
-    user.groups = groups;
+      this.validateUserWithDetailsFetch(userID, 'groups');
+    },
 
-    // Use userID throughout as the user may not have been previously set
-    this.setUser(userID, user);
-    this.emit(ACL_USER_DETAILS_GROUPS_CHANGE, userID);
+    processUserGroupsError: function (userID) {
+      this.emit(ACL_USER_DETAILS_GROUPS_ERROR, userID);
+      this.invalidateUserWithDetailsFetch(userID);
+    },
 
-    this.validateUserWithDetailsFetch(userID, 'groups');
-  },
+    /**
+     * Process a user permissions response
+     *
+     * @param  {Object} permissions see /acl/users/user/permissions schema
+     * @param  {Object} userID
+     */
+    processUserPermissions: function (permissions, userID) {
+      let user = this.getUserRaw(userID) || {};
 
-  processUserGroupsError: function (userID) {
-    this.emit(ACL_USER_DETAILS_GROUPS_ERROR, userID);
-    this.invalidateUserWithDetailsFetch(userID);
-  },
+      user.permissions = permissions;
 
-  /**
-   * Process a user permissions response
-   *
-   * @param  {Object} permissions see /acl/users/user/permissions schema
-   * @param  {Object} userID
-   */
-  processUserPermissions: function (permissions, userID) {
-    let user = this.getUserRaw(userID) || {};
+      // Use userID throughout as the user may not have been previously set
+      this.setUser(userID, user);
+      this.emit(ACL_USER_DETAILS_PERMISSIONS_CHANGE, userID);
 
-    user.permissions = permissions;
+      this.validateUserWithDetailsFetch(userID, 'permissions');
+    },
 
-    // Use userID throughout as the user may not have been previously set
-    this.setUser(userID, user);
-    this.emit(ACL_USER_DETAILS_PERMISSIONS_CHANGE, userID);
+    processUserPermissionsError: function (userID) {
+      this.emit(ACL_USER_DETAILS_PERMISSIONS_ERROR, userID);
+      this.invalidateUserWithDetailsFetch(userID);
+    },
 
-    this.validateUserWithDetailsFetch(userID, 'permissions');
-  },
+    dispatcherIndex: AppDispatcher.register(function (payload) {
+      if (payload.source !== SERVER_ACTION) {
+        return false;
+      }
 
-  processUserPermissionsError: function (userID) {
-    this.emit(ACL_USER_DETAILS_PERMISSIONS_ERROR, userID);
-    this.invalidateUserWithDetailsFetch(userID);
-  },
+      var action = payload.action;
+      switch (action.type) {
+        // Get user details
+        case REQUEST_ACL_USER_SUCCESS:
+          ACLUserStore.processUser(action.data);
+          break;
+        case REQUEST_ACL_USER_ERROR:
+          ACLUserStore.processUserError(action.userID);
+          break;
+        // Get groups for user
+        case REQUEST_ACL_USER_GROUPS_SUCCESS:
+          ACLUserStore.processUserGroups(action.data, action.userID);
+          break;
+        case REQUEST_ACL_USER_GROUPS_ERROR:
+          ACLUserStore.processUserGroupsError(action.userID);
+          break;
+        // Get ACLs for user
+        case REQUEST_ACL_USER_PERMISSIONS_SUCCESS:
+          ACLUserStore.processUserPermissions(action.data, action.userID);
+          break;
+        case REQUEST_ACL_USER_PERMISSIONS_ERROR:
+          ACLUserStore.processUserPermissionsError(action.userID);
+          break;
+        // Create user
+        case REQUEST_ACL_USER_CREATE_SUCCESS:
+          ACLUserStore.emit(ACL_USER_CREATE_SUCCESS, action.userID);
+          break;
+        case REQUEST_ACL_USER_CREATE_ERROR:
+          ACLUserStore.emit(
+            ACL_USER_CREATE_ERROR, action.data, action.userID
+          );
+          break;
+        // Update user
+        case REQUEST_ACL_USER_UPDATE_SUCCESS:
+          ACLUserStore
+            .emit(ACL_USER_UPDATE_SUCCESS, action.userID);
+          break;
+        case REQUEST_ACL_USER_UPDATE_ERROR:
+          ACLUserStore.emit(
+            ACL_USER_UPDATE_ERROR,
+            action.data,
+            action.userID
+          );
+          break;
+        // Delete user
+        case REQUEST_ACL_USER_DELETE_SUCCESS:
+          ACLUserStore
+            .emit(ACL_USER_DELETE_SUCCESS, action.userID);
+          break;
+        case REQUEST_ACL_USER_DELETE_ERROR:
+          ACLUserStore.emit(
+            ACL_USER_DELETE_ERROR,
+            action.data,
+            action.userID
+          );
+          break;
+      }
 
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    if (payload.source !== SERVER_ACTION) {
-      return false;
-    }
+      return true;
+    })
 
-    var action = payload.action;
-    switch (action.type) {
-      // Get user details
-      case REQUEST_ACL_USER_SUCCESS:
-        ACLUserStore.processUser(action.data);
-        break;
-      case REQUEST_ACL_USER_ERROR:
-        ACLUserStore.processUserError(action.userID);
-        break;
-      // Get groups for user
-      case REQUEST_ACL_USER_GROUPS_SUCCESS:
-        ACLUserStore.processUserGroups(action.data, action.userID);
-        break;
-      case REQUEST_ACL_USER_GROUPS_ERROR:
-        ACLUserStore.processUserGroupsError(action.userID);
-        break;
-      // Get ACLs for user
-      case REQUEST_ACL_USER_PERMISSIONS_SUCCESS:
-        ACLUserStore.processUserPermissions(action.data, action.userID);
-        break;
-      case REQUEST_ACL_USER_PERMISSIONS_ERROR:
-        ACLUserStore.processUserPermissionsError(action.userID);
-        break;
-      // Create user
-      case REQUEST_ACL_USER_CREATE_SUCCESS:
-        ACLUserStore.emit(ACL_USER_CREATE_SUCCESS, action.userID);
-        break;
-      case REQUEST_ACL_USER_CREATE_ERROR:
-        ACLUserStore.emit(
-          ACL_USER_CREATE_ERROR, action.data, action.userID
-        );
-        break;
-      // Update user
-      case REQUEST_ACL_USER_UPDATE_SUCCESS:
-        ACLUserStore
-          .emit(ACL_USER_UPDATE_SUCCESS, action.userID);
-        break;
-      case REQUEST_ACL_USER_UPDATE_ERROR:
-        ACLUserStore.emit(
-          ACL_USER_UPDATE_ERROR,
-          action.data,
-          action.userID
-        );
-        break;
-      // Delete user
-      case REQUEST_ACL_USER_DELETE_SUCCESS:
-        ACLUserStore
-          .emit(ACL_USER_DELETE_SUCCESS, action.userID);
-        break;
-      case REQUEST_ACL_USER_DELETE_ERROR:
-        ACLUserStore.emit(
-          ACL_USER_DELETE_ERROR,
-          action.data,
-          action.userID
-        );
-        break;
-    }
+  });
 
-    return true;
-  })
+  cachedStore = ACLUserStore;
 
-});
+  return ACLUserStore;
+};
 
-module.exports = ACLUserStore;

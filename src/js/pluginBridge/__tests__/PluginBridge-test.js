@@ -1,6 +1,4 @@
 jest.dontMock('../AppReducer');
-jest.dontMock('../PluginBridge');
-jest.dontMock('../Hooks');
 jest.dontMock('../../config/Config');
 jest.dontMock('../../mixins/GetSetMixin');
 jest.dontMock('../../stores/ConfigStore');
@@ -13,15 +11,15 @@ var PluginConstants = require('../../constants/PluginConstants');
 var Plugins = require('../../../../plugins/index');
 
 var EventTypes = require('../../constants/EventTypes');
-var PluginBridge = require('../PluginBridge');
+var PluginSDK = require('PluginSDK');
 
-let Hooks = PluginBridge.Hooks;
+let Hooks = PluginSDK.Hooks;
 
 function loadPlugins() {
   var mockPlugin = jest.genMockFunction();
 
   Plugins.__setMockPlugins({fakePlugin: mockPlugin});
-  PluginBridge.listenForConfigChange();
+  PluginSDK.listenForConfigChange();
   ConfigStore.set({config: {
     uiConfiguration: {
       plugins: {
@@ -34,7 +32,7 @@ function loadPlugins() {
   }});
 }
 
-describe('PluginBridge', function () {
+describe('PluginSDK', function () {
 
   describe('#initialize', function () {
 
@@ -50,7 +48,7 @@ describe('PluginBridge', function () {
         );
 
         Plugins.__setMockPlugins({fakePlugin1: this.mockPlugin});
-        PluginBridge.listenForConfigChange();
+        PluginSDK.listenForConfigChange();
         ConfigStore.set({config: {
           uiConfiguration: {
             plugins: {
@@ -60,7 +58,7 @@ describe('PluginBridge', function () {
             }
           }
         }});
-        var state = PluginBridge.Store.getState();
+        var state = PluginSDK.Store.getState();
         expect(state.fakePlugin1).toEqual(undefined);
       });
 
@@ -77,7 +75,7 @@ describe('PluginBridge', function () {
           }
         );
         Plugins.__setMockPlugins({fakePlugin2: this.mockPlugin});
-        PluginBridge.listenForConfigChange();
+        PluginSDK.listenForConfigChange();
         ConfigStore.set({config: {
           uiConfiguration: {
             plugins: {
@@ -87,7 +85,7 @@ describe('PluginBridge', function () {
             }
           }
         }});
-        var state = PluginBridge.Store.getState();
+        var state = PluginSDK.Store.getState();
         expect(_.isEqual(state.fakePlugin2, {foo: 'bar'})).toEqual(true);
       });
 
@@ -101,7 +99,7 @@ describe('PluginBridge', function () {
           }
         );
         Plugins.__setMockPlugins({badFakePlugin: mockPlugin});
-        PluginBridge.listenForConfigChange();
+        PluginSDK.listenForConfigChange();
         expect(function () {
           ConfigStore.set({config: {
             uiConfiguration: {
@@ -123,7 +121,7 @@ describe('PluginBridge', function () {
       this.mockPlugin = jest.genMockFunction();
 
       Plugins.__setMockPlugins({fakePlugin3: this.mockPlugin});
-      PluginBridge.listenForConfigChange();
+      PluginSDK.listenForConfigChange();
       ConfigStore.set({config: {
         uiConfiguration: {
           plugins: {
@@ -187,7 +185,7 @@ describe('PluginBridge', function () {
           enabled: true,
           foo: 'bar'
         },
-        Hooks: PluginBridge.Hooks,
+        Hooks: PluginSDK.Hooks,
         appConfig: Config
       };
       expect(_.isEqual(options, expectedOptions)).toEqual(true);
@@ -225,7 +223,7 @@ describe('PluginBridge', function () {
       this.mockReducer = mockReducer;
 
       Plugins.__setMockPlugins({anotherFakePlugin: this.mockPlugin});
-      PluginBridge.listenForConfigChange();
+      PluginSDK.listenForConfigChange();
       ConfigStore.set({config: {
         uiConfiguration: {
           plugins: {
@@ -258,19 +256,19 @@ describe('PluginBridge', function () {
 
     it('should update Store with new state #1', function () {
       this.testArgs.dispatch({type: 'reset'});
-      var state = PluginBridge.Store.getState().anotherFakePlugin;
+      var state = PluginSDK.Store.getState().anotherFakePlugin;
       expect(_.isEqual(state, {foo: 1})).toEqual(true);
     });
 
     it('should update Store with new state #2', function () {
       this.testArgs.dispatch({type: 'foo'});
-      var state = PluginBridge.Store.getState().anotherFakePlugin;
+      var state = PluginSDK.Store.getState().anotherFakePlugin;
       expect(_.isEqual(state, {foo: 2})).toEqual(true);
     });
 
     it('should update Store with new state #3', function () {
       this.testArgs.dispatch({type: 'bar'});
-      var state = PluginBridge.Store.getState().anotherFakePlugin;
+      var state = PluginSDK.Store.getState().anotherFakePlugin;
       expect(_.isEqual(state, {foo: 2, bar: 'qux'})).toEqual(true);
     });
   });

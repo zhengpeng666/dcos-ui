@@ -1,23 +1,34 @@
-<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
+<<<<<<< e239b6b5ae56625dfd921fdda15e39cce5ad44c0
 import GroupsHooks from './submodules/groups/hooks';
 import DirectoriesHooks from './submodules/directories/hooks';
 import PluginHooks from './hooks';
 import UsersHooks from './submodules/users/hooks';
-=======
-import PluginHooks from './hooks';
->>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
 
 module.exports = function (Store, dispatch, name, options) {
   const {Hooks} = options;
+=======
+import _DirectoriesHooks from './submodules/directories/hooks';
+import _GroupsHooks from './submodules/groups/hooks';
+import _PluginHooks from './hooks';
+import _UsersHooks from './submodules/users/hooks';
+import StoreConfig from './storeConfig';
+>>>>>>> Mostly complete plugin system.
 
+module.exports = function (PluginSDK) {
   // Set plugin's hooks
-  PluginHooks.initialize(Hooks);
-<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
+  _PluginHooks(PluginSDK).initialize();
   // Set submodule hooks
+<<<<<<< e239b6b5ae56625dfd921fdda15e39cce5ad44c0
   DirectoriesHooks.initialize(Hooks);
   GroupsHooks.initialize(Hooks);
   UsersHooks.initialize(Hooks);
 =======
->>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
+  _GroupsHooks(PluginSDK).initialize();
+  _UsersHooks(PluginSDK).initialize();
+  _DirectoriesHooks(PluginSDK).initialize();
+
+   // Register our Stores
+  StoreConfig.register(PluginSDK);
+>>>>>>> Mostly complete plugin system.
 };
 

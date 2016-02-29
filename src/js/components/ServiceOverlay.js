@@ -7,7 +7,7 @@ import Cluster from '../utils/Cluster';
 import EventTypes from '../constants/EventTypes';
 import HealthLabels from '../constants/HealthLabels';
 import HistoryStore from '../stores/HistoryStore';
-import {Hooks} from '../pluginBridge/PluginBridge';
+import {Hooks} from 'PluginSDK';
 import InternalStorageMixin from '../mixins/InternalStorageMixin';
 import MarathonStore from '../stores/MarathonStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';

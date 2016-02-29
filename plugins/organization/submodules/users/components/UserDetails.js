@@ -5,7 +5,7 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLUserStore from '../stores/ACLUserStore';
+import _ACLUserStore from '../stores/ACLUserStore';
 
 const METHODS_TO_BIND = [
   'handlePasswordSubmit',
@@ -13,83 +13,90 @@ const METHODS_TO_BIND = [
   'onUserStoreUpdateSuccess'
 ];
 
-module.exports = class UserDetails extends mixin(StoreMixin) {
-  constructor() {
-    super();
+module.exports = (PluginSDK) => {
 
-    this.state = {userStoreError: false};
+  let ACLUserStore = _ACLUserStore(PluginSDK);
 
-    this.store_listeners = [
-      {
-        name: 'user',
-        events: ['updateSuccess', 'updateError']
-      }
-    ];
+  class UserDetails extends mixin(StoreMixin) {
+    constructor() {
+      super();
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
+      this.state = {userStoreError: false};
 
-  handlePasswordSubmit(formData) {
-    ACLUserStore.updateUser(this.props.userID, {
-      password: formData.password
-    });
-  }
+      this.store_listeners = [
+        {
+          name: 'user',
+          events: ['updateSuccess', 'updateError']
+        }
+      ];
 
-  onUserStoreUpdateError(error) {
-    this.setState({
-      userStoreError: error
-    });
-  }
+      METHODS_TO_BIND.forEach((method) => {
+        this[method] = this[method].bind(this);
+      });
+    }
 
-  onUserStoreUpdateSuccess() {
-    this.setState({
-      userStoreError: false
-    });
-  }
+    handlePasswordSubmit(formData) {
+      ACLUserStore.updateUser(this.props.userID, {
+        password: formData.password
+      });
+    }
 
-  render() {
-    let userDetails = ACLUserStore.getUser(this.props.userID);
-    let passwordDefinition = [
-      {
-        defaultPasswordValue: '••••••••',
-        fieldType: 'password',
-        name: 'password',
-        placeholder: 'Password',
-        required: true,
-        sharedClass: 'form-element-inline',
-        showError: this.state.userStoreError,
-        showLabel: false,
-        writeType: 'edit',
-        validation: function () { return true; },
-        value: ''
-      }
-    ];
+    onUserStoreUpdateError(error) {
+      this.setState({
+        userStoreError: error
+      });
+    }
 
-    return (
-      <div className="side-panel-content-user-details container container-fluid
-        container-pod container-pod-short">
-        <div className="flex-container-col">
-          <dl className="row flex-box">
-            <dt className="column-3 emphasize">
-              Username
-            </dt>
-            <dt className="column-9">
-              {userDetails.uid}
-            </dt>
-          </dl>
-          <dl className="row flex-box">
-            <dt className="column-3 emphasize">
-              Password
-            </dt>
-            <dt className="column-9">
-              <Form definition={passwordDefinition}
-                onSubmit={this.handlePasswordSubmit} />
-            </dt>
-          </dl>
+    onUserStoreUpdateSuccess() {
+      this.setState({
+        userStoreError: false
+      });
+    }
+
+    render() {
+      let userDetails = ACLUserStore.getUser(this.props.userID);
+      let passwordDefinition = [
+        {
+          defaultPasswordValue: '••••••••',
+          fieldType: 'password',
+          name: 'password',
+          placeholder: 'Password',
+          required: true,
+          sharedClass: 'form-element-inline',
+          showError: this.state.userStoreError,
+          showLabel: false,
+          writeType: 'edit',
+          validation: function () { return true; },
+          value: ''
+        }
+      ];
+
+      return (
+        <div className="side-panel-content-user-details container container-fluid
+          container-pod container-pod-short">
+          <div className="flex-container-col">
+            <dl className="row flex-box">
+              <dt className="column-3 emphasize">
+                Username
+              </dt>
+              <dt className="column-9">
+                {userDetails.uid}
+              </dt>
+            </dl>
+            <dl className="row flex-box">
+              <dt className="column-3 emphasize">
+                Password
+              </dt>
+              <dt className="column-9">
+                <Form definition={passwordDefinition}
+                  onSubmit={this.handlePasswordSubmit} />
+              </dt>
+            </dl>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
+  return UserDetails;
 };
+

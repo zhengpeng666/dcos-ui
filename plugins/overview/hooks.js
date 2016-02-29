@@ -3,27 +3,34 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {Route} from 'react-router';
 
-import OverviewTab from './pages/OverviewTab';
+import _OverviewTab from './pages/OverviewTab';
 
-let PluginHooks = {
+module.exports = (PluginSDK) => {
 
-  appendRoutes(route) {
-    route.routes.push({
-      type: Route,
-      name: 'settings-system-overview',
-      path: 'overview/?',
-      handler: OverviewTab
-    });
-    return route;
-  },
+  let {Hooks} = PluginSDK;
 
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize(Hooks) {
-    Hooks.addFilter('SystemRoutes', this.appendRoutes.bind(this));
-  }
+  let OverviewTab = _OverviewTab(PluginSDK);
+
+  let OverviewPluginHooks = {
+    routes: {
+      route: {
+        type: Route,
+        name: 'settings-system-overview',
+        path: 'overview/?',
+        handler: OverviewTab
+      }
+    },
+
+    getOrganizationRoutes(route) {
+      route.routes.push(this.routes.route);
+      return route;
+    },
+
+    initialize() {
+      Hooks.addFilter('getSystemRoutes', this.getOrganizationRoutes.bind(this));
+    }
+  };
+
+  return OverviewPluginHooks;
+
 };
-
-module.exports = PluginHooks;
-

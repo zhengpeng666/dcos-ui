@@ -1,12 +1,9 @@
 jest.dontMock('../ACLStore');
 jest.dontMock('../../actions/ACLActions');
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
 jest.dontMock('../../../../../../tests/_fixtures/acl/acls-unicode.json');
 
 var _ = require('underscore');
 
-var ACLList = require('../../../../../../src/js/structs/ACLList');
-var ACLStore = require('../ACLStore');
 import {
   REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
   REQUEST_ACL_RESOURCE_ACLS_ERROR,
@@ -21,8 +18,6 @@ import {
   REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR
 } from '../../constants/ActionTypes';
 
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-
 import {
   ACL_RESOURCE_ACLS_CHANGE,
   ACL_RESOURCE_ACLS_ERROR,
@@ -36,8 +31,16 @@ import {
   ACL_GROUP_REVOKE_ACTION_ERROR
 } from '../../constants/EventTypes';
 
-var RequestUtil = require('../../../../../../src/js/utils/RequestUtil');
+import PluginTestUtils from 'PluginTestUtils';
 
+let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+
+var ACLList = require('../../../../../../src/js/structs/ACLList');
+
+var ACLStore = require('../ACLStore')(PluginSDK);
+var RequestUtil = PluginSDK.get('RequestUtil');
+
+var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 var aclsFixture = require('../../../../../../tests/_fixtures/acl/acls-unicode.json');
 
 describe('ACLStore', function () {

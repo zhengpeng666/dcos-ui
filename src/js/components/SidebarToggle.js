@@ -1,8 +1,9 @@
 var React = require('react');
 
+import PluginSDK from 'PluginSDK';
 import EventTypes from '../constants/EventTypes';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
-var SidebarActions = require('../events/SidebarActions');
+var SidebarActions = PluginSDK.getActions('SidebarActions');
 var SidebarStore = require('../stores/SidebarStore');
 
 function getSidebarState() {
@@ -50,6 +51,7 @@ var SidebarToggle = React.createClass({
     } else {
       SidebarActions.open();
     }
+
   },
 
   render: function () {

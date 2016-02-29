@@ -14,7 +14,7 @@ import {Provider} from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Router from 'react-router';
-import PluginBridge from './pluginBridge/PluginBridge';
+import PluginSDK from 'PluginSDK';
 
 require('./utils/MomentJSConfig');
 require('./utils/ReactSVG');
@@ -29,7 +29,7 @@ import RequestUtil from './utils/RequestUtil';
 let domElement = document.getElementById('application');
 
 // Listen for plugin configuration change
-PluginBridge.listenForConfigChange();
+PluginSDK.listenForConfigChange();
 // Load configuration
 ConfigStore.fetchConfig();
 
@@ -42,7 +42,7 @@ RequestUtil.json = function (options = {}) {
     if (typeof oldHandler === 'function') {
       oldHandler.apply(null, arguments);
     }
-    PluginBridge.Hooks.doAction('AJAXRequestError', ...arguments);
+    PluginSDK.Hooks.doAction('AJAXRequestError', ...arguments);
   };
 
   oldJSON(options);
@@ -63,10 +63,10 @@ function createRoutes(routes) {
 
 function onApplicationLoad() {
   // Allow overriding of application contents
-  let contents = PluginBridge.Hooks.applyFilter('applicationContents', null);
+  let contents = PluginSDK.Hooks.applyFilter('applicationContents', null);
   if (contents) {
     ReactDOM.render(
-      (<Provider store={PluginBridge.Store}>
+      (<Provider store={PluginSDK.Store}>
         contents
       </Provider>),
       domElement);
@@ -79,7 +79,7 @@ function onApplicationLoad() {
       Router.run(builtRoutes[0], function (Handler, state) {
         Config.setOverrides(state.query);
         ReactDOM.render(
-          (<Provider store={PluginBridge.Store}>
+          (<Provider store={PluginSDK.Store}>
             <Handler state={state} />
           </Provider>),
           domElement);
@@ -87,11 +87,11 @@ function onApplicationLoad() {
     });
   }
 
-  PluginBridge.Hooks.doAction('applicationRendered');
+  PluginSDK.Hooks.doAction('applicationRendered');
 }
 
 ReactDOM.render(
-  (<Provider store={PluginBridge.Store}>
+  (<Provider store={PluginSDK.Store}>
     <ApplicationLoader onApplicationLoad={onApplicationLoad} />
   </Provider>),
   domElement

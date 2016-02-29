@@ -1,13 +1,11 @@
 jest.dontMock('../PermissionsTable');
 jest.dontMock('../../stores/ACLStore');
-
-var JestUtil = require('../../../../../../src/js/utils/JestUtil');
-
-JestUtil.unMockStores(['ACLStore']);
-require('../../../../../../src/js/utils/StoreMixinConfig');
+jest.dontMock('../../../../storeConfig');
 
 var ReactComponents = require('reactjs-components');
-var React = require('react');
+/*eslint-disable no-unused-vars*/
+import React from 'react';
+/*eslint-enable no-unused-vars*/
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
@@ -21,10 +19,18 @@ import {
   REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS
 } from '../../constants/ActionTypes';
 
-var ACLStore = require('../../stores/ACLStore');
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-var PermissionsTable = require('../PermissionsTable');
 var User = require('../../../../../../src/js/structs/User');
+
+import PluginTestUtils from 'PluginTestUtils';
+
+let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+
+var ACLStore = require('../../stores/ACLStore')(PluginSDK);
+var PermissionsTable = require('../PermissionsTable')(PluginSDK);
+
+require('../../../../storeConfig').register(PluginSDK);
+
+var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 const userDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/user-with-details.json');

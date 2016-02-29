@@ -1,7 +1,11 @@
-var _ = require('underscore');
-
 jest.dontMock('../Actions');
-var Actions = require('../Actions');
+
+import PluginTestUtils from 'PluginTestUtils';
+
+let PluginSDK = PluginTestUtils.getSDK('Tracking', {enabled: true});
+
+var _ = require('underscore');
+var Actions = require('../Actions')(PluginSDK);
 
 global.analytics = {
   initialized: true,

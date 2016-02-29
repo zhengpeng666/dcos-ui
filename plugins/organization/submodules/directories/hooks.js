@@ -4,47 +4,57 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {Route} from 'react-router';
 
-import DirectoriesTab from './pages/DirectoriesTab';
+import _DirectoriesTab from './pages/DirectoriesTab';
 
-let PluginHooks = {
-  configuration: {
-    enabled: false
-  },
+module.exports = (PluginSDK) => {
 
-  getOrganizationRoutes(route) {
-    route.routes.push({
-      type: Route,
-      name: 'settings-organization-directories',
-      path: 'directories/?',
-      handler: DirectoriesTab,
-      children: [{
+  let DirectoriesTab = _DirectoriesTab(PluginSDK);
+  let {Hooks} = PluginSDK;
+
+  let DirectoriesPluginHooks = {
+    configuration: {
+      enabled: false
+    },
+
+    defaults: {
+      route: {
         type: Route,
-        name: 'settings-organization-directories-panel'
-      }]
-    });
-    return route;
-  },
-
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize(Hooks) {
-    Hooks.addFilter('OrganizationRoutes',
-      this.getOrganizationRoutes.bind(this));
-
-    Hooks.addFilter('settings-organization-tabs',
-      this.getTabs.bind(this));
-  },
-
-  getTabs(tabs) {
-    return _.extend(tabs, {
-      'settings-organization-directories': {
-        content: 'External Directory',
-        priority: 5
+        name: 'settings-organization-directories',
+        path: 'directories/?',
+        handler: DirectoriesTab,
+        children: [{
+          type: Route,
+          name: 'settings-organization-directories-panel'
+        }]
+      },
+      tabs: {
+        'settings-organization-directories': {
+          content: 'External Directory',
+          priority: 5
+        }
       }
-    });
-  }
+    },
+
+    getOrganizationRoutes(route) {
+      route.routes.push(this.defaults.route);
+      return route;
+    },
+
+    /**
+     * @param  {Object} Hooks The Hooks API
+     */
+    initialize() {
+      Hooks.addFilter('getOrganizationRoutes',
+        this.getOrganizationRoutes.bind(this));
+
+      Hooks.addFilter('getTabsFor_settings-organization',
+        this.getTabs.bind(this));
+    },
+
+    getTabs(tabs) {
+      return _.extend(tabs, this.defaults.tabs);
+    }
+  };
+
+  return DirectoriesPluginHooks;
 };
-
-module.exports = PluginHooks;
-

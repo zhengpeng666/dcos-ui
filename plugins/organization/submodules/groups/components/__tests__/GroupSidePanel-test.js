@@ -1,26 +1,35 @@
-jest.dontMock('../../../../../../src/js/mixins/InternalStorageMixin');
-jest.dontMock('../../../../../../src/js/mixins/TabsMixin');
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
-jest.dontMock('../../../../../../src/js/components/SidePanelContents');
 jest.dontMock('../GroupSidePanel');
 jest.dontMock('../GroupSidePanelContents');
 jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../../../../../src/js/stores/MesosSummaryStore');
-jest.dontMock('../../../../../../src/js/stores/MarathonStore');
+jest.dontMock('../../../../storeConfig');
 
-var JestUtil = require('../../../../../../src/js/utils/JestUtil');
-
-JestUtil.unMockStores(['ACLGroupStore', 'MesosSummaryStore', 'MarathonStore']);
-require('../../../../../../src/js/utils/StoreMixinConfig');
-
-var React = require('react');
+/*eslint-disable no-unused-vars*/
+import React from 'react';
+/*eslint-enable no-unused-vars*/
 var ReactDOM = require('react-dom');
 
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.dontMock([
+  'RequestUtil',
+  'MesosSummaryStore',
+  'MarathonStore',
+  'InternalStorageMixin',
+  'TabsMixin',
+  'PluginGetSetMixin',
+  'SidePanelContents'
+]);
+
+let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+
+require('../../../../storeConfig').register(PluginSDK);
+
 var MesosSummaryActions = require('../../../../../../src/js/events/MesosSummaryActions');
-var ACLGroupStore = require('../../stores/ACLGroupStore');
 var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
-var GroupSidePanel = require('../GroupSidePanel');
-var GroupSidePanelContents = require('../GroupSidePanelContents');
+
+var ACLGroupStore = require('../../stores/ACLGroupStore')(PluginSDK);
+var GroupSidePanel = require('../GroupSidePanel')(PluginSDK);
+var GroupSidePanelContents = require('../GroupSidePanelContents')(PluginSDK);
 
 describe('GroupSidePanel', function () {
   beforeEach(function () {
@@ -104,7 +113,7 @@ describe('GroupSidePanel', function () {
         this.params.groupID = 'set';
         var contents = this.instance.getContents(this.params.groupID);
 
-        expect(contents.type === GroupSidePanelContents).toEqual(true);
+        expect(contents.type.toString() === GroupSidePanelContents.toString()).toEqual(true);
         this.params.serviceName = null;
       }
     );

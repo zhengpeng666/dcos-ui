@@ -7,15 +7,19 @@ var State = require('react-router').State;
 
 import ClusterHeader from './ClusterHeader';
 var EventTypes = require('../constants/EventTypes');
-import {Hooks} from '../pluginBridge/PluginBridge';
-var IntercomStore = require('../../../plugins/tracking/stores/IntercomStore');
+import PluginSDK from 'PluginSDK';
+// Need to remove
+var IntercomStore = require('../../../plugins/tracking/stores/IntercomStore')(PluginSDK);
+
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var MetadataStore = require('../stores/MetadataStore');
-var SidebarActions = require('../events/SidebarActions');
+var SidebarActions = PluginSDK.getActions('SidebarActions');
 var TooltipMixin = require('../mixins/TooltipMixin');
 
 let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'network', 'universe', 'settings'];
+
+let {Hooks} = PluginSDK;
 
 var Sidebar = React.createClass({
 

@@ -3,7 +3,8 @@ var React = require('react');
 
 var AlertPanel = require('../components/AlertPanel');
 var Page = require('../components/Page');
-var SidebarActions = require('../events/SidebarActions');
+import PluginSDK from 'PluginSDK';
+var SidebarActions = PluginSDK.getActions('SidebarActions');
 
 var NotFoundPage = React.createClass({
 

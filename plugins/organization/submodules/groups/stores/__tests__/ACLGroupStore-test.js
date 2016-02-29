@@ -1,14 +1,18 @@
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
-jest.dontMock('../../../../../../src/js/structs/User');
 jest.dontMock('../../actions/ACLGroupsActions');
 jest.dontMock('../ACLGroupStore');
+jest.dontMock('../../../../../../src/js/structs/User');
 
-var ACLGroupsActions = require('../../actions/ACLGroupsActions');
-var ACLGroupStore = require('../ACLGroupStore');
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-var ActionTypes = require('../../constants/ActionTypes');
-var EventTypes = require('../../constants/EventTypes');
-var Group = require('../../../../../../src/js/structs/Group');
+import PluginTestUtils from 'PluginTestUtils';
+
+let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+
+let ACLGroupsActions = require('../../actions/ACLGroupsActions')(PluginSDK);
+let ACLGroupStore = require('../ACLGroupStore')(PluginSDK);
+let ActionTypes = require('../../constants/ActionTypes');
+let EventTypes = require('../../constants/EventTypes');
+let Group = require('../../../../../../src/js/structs/Group');
+
+let AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 describe('ACLGroupStore', function () {
 

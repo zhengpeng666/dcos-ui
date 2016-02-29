@@ -1,27 +1,12 @@
-<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
 import _ from 'underscore';
 import {Route, Redirect} from 'react-router';
 
+<<<<<<< e239b6b5ae56625dfd921fdda15e39cce5ad44c0
 const PluginHooks = {
-=======
-import {Route, Redirect} from 'react-router';
-
-const PluginHooks = {
-
-  defaults: {
-    redirect: {
-      type: Redirect,
-      from: '/settings/?',
-      to: 'settings-organization'
-    },
-    organizationRoutes: []
-  },
->>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
   /**
    * @param  {Object} Hooks The Hooks API
    */
   initialize(Hooks) {
-<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
     Hooks.addFilter('SettingsRoutes', this.appendRoutes.bind(this, Hooks));
     Hooks.addFilter('SettingsTabs', this.getTabs.bind(this));
   },
@@ -33,34 +18,45 @@ const PluginHooks = {
         priority: 20
       }
     });
-=======
-    Hooks.addFilter('getSettingsRoutes', this.getRoutes.bind(this, Hooks));
->>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
   },
 
   getOrganizationRoutes(Hooks) {
     // Return filtered Routes
     return this.getFilteredRoutes(
       // Pass in Object so Plugins can mutate routes and the default redirect
-<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
       Hooks.applyFilter('OrganizationRoutes', {
         routes: [],
-=======
-      Hooks.applyFilter('getOrganizationRoutes', {
-        routes: [].slice.call(this.defaults.organizationRoutes),
->>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
         redirect: {
           type: Redirect,
           from: '/settings/?',
           to: 'settings-system'
-        }
-      })
-    );
-  },
+=======
+module.exports = (PluginSDK) => {
 
+  let {Hooks} = PluginSDK;
+
+  const OrganizationPluginHooks = {
+
+    defaults: {
+
+      redirect: {
+        type: Redirect,
+        from: '/settings/?',
+        to: 'settings-organization'
+      },
+      organizationRoutes: [],
+
+      settingsTabs: {
+        'settings-organization': {
+          content: 'Organization',
+          priority: 20
+>>>>>>> Mostly complete plugin system.
+        }
+      }
+    },
+
+<<<<<<< e239b6b5ae56625dfd921fdda15e39cce5ad44c0
   getFilteredRoutes(filteredRoutes) {
-<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
-    // Push redirect onto Routes Array
     return filteredRoutes.routes.concat([filteredRoutes.redirect]);
   },
 
@@ -72,15 +68,6 @@ const PluginHooks = {
       from: '/settings/?',
       to: 'settings-organization'
     };
-=======
-    return filteredRoutes.routes.concat([filteredRoutes.redirect]);
-  },
-
-  getRoutes(Hooks, route) {
-    let childRoutes = this.getOrganizationRoutes(Hooks);
-
-    route.redirect = this.defaults.redirect;
->>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
     route.routes.push(
       {
         type: Route,
@@ -92,5 +79,52 @@ const PluginHooks = {
     return route;
   }
 };
+=======
+    initialize() {
+      Hooks.addFilter('getSettingsRoutes', this.getRoutes.bind(this));
+      Hooks.addFilter('getSettingsTabs', this.getTabs.bind(this));
+    },
 
-module.exports = PluginHooks;
+    getTabs(tabs) {
+      return _.extend(tabs, this.defaults.settingsTabs);
+    },
+
+    getOrganizationRoutes() {
+      // Return filtered Routes
+      return this.getFilteredRoutes(
+        // Pass in Object so Plugins can mutate routes and the default redirect
+        Hooks.applyFilter('getOrganizationRoutes', {
+          routes: [].slice.call(this.defaults.organizationRoutes),
+          redirect: {
+            type: Redirect,
+            from: '/settings/?',
+            to: 'settings-system'
+          }
+        })
+      );
+    },
+
+    getFilteredRoutes(filteredRoutes) {
+      // Push redirect onto Routes Array
+      return filteredRoutes.routes.concat([filteredRoutes.redirect]);
+    },
+
+    getRoutes(route) {
+      let childRoutes = this.getOrganizationRoutes();
+>>>>>>> Mostly complete plugin system.
+
+      route.redirect = this.defaults.redirect;
+      route.routes.push(
+        {
+          type: Route,
+          name: 'settings-organization',
+          path: 'organization/?',
+          children: childRoutes
+        }
+      );
+      return route;
+    }
+  };
+
+  return OrganizationPluginHooks;
+};

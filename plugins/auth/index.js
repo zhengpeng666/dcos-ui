@@ -1,14 +1,10 @@
-import PluginHooks from './hooks';
-import ACLHooks from './submodules/acl/hooks';
+import _PluginHooks from './hooks';
+import StoreConfig from './storeConfig';
 
-module.exports = function (Store, dispatch, name, options) {
-  const {Hooks, config} = options;
-
+module.exports = function (PluginSDK) {
   // Set plugin's hooks
-  PluginHooks.initialize(Hooks);
-  PluginHooks.configure(config);
-
-  // Set hooks on submodules
-  ACLHooks.initialize(Hooks);
+  _PluginHooks(PluginSDK).initialize();
+  // Register our Stores
+  StoreConfig.register(PluginSDK);
 };
 

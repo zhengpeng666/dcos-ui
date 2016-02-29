@@ -4,12 +4,12 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
-jest.dontMock('./fixtures/MockTimeSeriesData');
+jest.dontMock('./fixtures/MockTimeSeriesData.json');
 jest.dontMock('../../../mixins/ChartMixin');
 jest.dontMock('../TimeSeriesChart');
 jest.dontMock('../TimeSeriesArea');
 
-var MockTimeSeriesData = require('./fixtures/MockTimeSeriesData');
+var MockTimeSeriesData = require('./fixtures/MockTimeSeriesData.json');
 var TimeSeriesArea = require('../TimeSeriesArea');
 
 function checkPath(instance, props) {

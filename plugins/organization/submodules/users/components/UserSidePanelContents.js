@@ -3,14 +3,12 @@ import {Form} from 'reactjs-components';
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import ACLUserStore from '../stores/ACLUserStore';
+import _ACLUserStore from '../stores/ACLUserStore';
+import _PermissionsView from '../../../../auth/submodules/acl/components/PermissionsView';
+import _UserDetails from './UserDetails';
+import _UserGroupMembershipTab from '../../groups/components/UserGroupMembershipTab';
+
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
-import PermissionsView from '../../../../auth/submodules/acl/components/PermissionsView';
-import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
-import SidePanelContents from '../../../../../src/js/components/SidePanelContents';
-import StringUtil from '../../../../../src/js/utils/StringUtil';
-import UserDetails from './UserDetails';
-import UserGroupMembershipTab from './UserGroupMembershipTab';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onAclStoreUserGrantSuccess',
@@ -21,204 +19,217 @@ const EXTERNAL_CHANGE_EVENTS = [
 
 const METHODS_TO_BIND = ['handleNameChange'];
 
-module.exports = class UserSidePanelContents extends SidePanelContents {
-  constructor() {
-    super();
+module.exports = (PluginSDK) => {
 
-    this.tabs_tabs = {
-      permissions: 'Permissions',
-      membership: 'Group Membership',
-      details: 'Details'
-    };
+  let {RequestErrorMsg, SidePanelContents, StringUtil} = PluginSDK.get([
+    'RequestErrorMsg', 'SidePanelContents', 'StringUtil']);
 
-    this.state = {
-      currentTab: Object.keys(this.tabs_tabs).shift(),
-      fetchedDetailsError: false
-    };
+  let ACLUserStore = _ACLUserStore(PluginSDK);
+  let PermissionsView = _PermissionsView(PluginSDK);
+  let UserDetails = _UserDetails(PluginSDK);
+  let UserGroupMembershipTab = _UserGroupMembershipTab(PluginSDK);
 
-    this.store_listeners = [
-      {
-        name: 'acl',
-        events: [
-          'userGrantSuccess',
-          'userRevokeSuccess'
-        ]
-      },
-      {
-        name: 'group',
-        events: ['addUserSuccess', 'deleteUserSuccess']
-      },
-      {
-        name: 'user',
-        events: ['fetchedDetailsSuccess', 'fetchedDetailsError']
-      },
-      {
-        name: 'summary',
-        events: ['success'],
-        listenAlways: false
-      }
-    ];
+  class UserSidePanelContents extends SidePanelContents {
+    constructor() {
+      super();
 
-    EXTERNAL_CHANGE_EVENTS.forEach((event) => {
-      this[event] = this.onACLChange;
-    });
+      this.tabs_tabs = {
+        permissions: 'Permissions',
+        membership: 'Group Membership',
+        details: 'Details'
+      };
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
+      this.state = {
+        currentTab: Object.keys(this.tabs_tabs).shift(),
+        fetchedDetailsError: false
+      };
 
-  componentDidMount() {
-    super.componentDidMount();
+      this.store_listeners = [
+        {
+          name: 'acl',
+          events: [
+            'userGrantSuccess',
+            'userRevokeSuccess'
+          ]
+        },
+        {
+          name: 'group',
+          events: ['addUserSuccess', 'deleteUserSuccess']
+        },
+        {
+          name: 'user',
+          events: ['fetchedDetailsSuccess', 'fetchedDetailsError']
+        },
+        {
+          name: 'summary',
+          events: ['success'],
+          listenAlways: false
+        }
+      ];
 
-    ACLUserStore.fetchUserWithDetails(this.props.itemID);
-  }
+      EXTERNAL_CHANGE_EVENTS.forEach((event) => {
+        this[event] = this.onACLChange;
+      });
 
-  handleNameChange(model) {
-    ACLUserStore.updateUser(this.props.itemID, {description: model.text});
-  }
-
-  onACLChange() {
-    ACLUserStore.fetchUserWithDetails(this.props.itemID);
-  }
-
-  onUserStoreFetchedDetailsSuccess() {
-    if (this.state.fetchedDetailsError === true) {
-      this.setState({fetchedDetailsError: false});
+      METHODS_TO_BIND.forEach((method) => {
+        this[method] = this[method].bind(this);
+      });
     }
-  }
 
-  onUserStoreFetchedDetailsError(userID) {
-    if (userID === this.props.itemID) {
-      this.setState({fetchedDetailsError: true});
+    componentDidMount() {
+      super.componentDidMount();
+
+      ACLUserStore.fetchUserWithDetails(this.props.itemID);
     }
-  }
 
-  getErrorNotice() {
-    return (
-      <div className="container container-pod">
-        <RequestErrorMsg />
-      </div>
-    );
-  }
+    handleNameChange(model) {
+      ACLUserStore.updateUser(this.props.itemID, {description: model.text});
+    }
 
-  getUserInfo(user) {
-    let editNameFormDefinition = [
-      {
-        fieldType: 'text',
-        name: 'text',
-        placeholder: 'User\'s Full Name',
-        required: true,
-        sharedClass: 'form-element-inline h1 flush',
-        showError: false,
-        showLabel: false,
-        writeType: 'edit',
-        validation: function () { return true; },
-        value: user.description
+    onACLChange() {
+      ACLUserStore.fetchUserWithDetails(this.props.itemID);
+    }
+
+    onUserStoreFetchedDetailsSuccess() {
+      if (this.state.fetchedDetailsError === true) {
+        this.setState({fetchedDetailsError: false});
       }
-    ];
+    }
 
-    let imageTag = (
-      <div className="side-panel-icon icon icon-large icon-image-container icon-user-container">
-        <img src="./img/layout/icon-user-default-64x64@2x.png" />
-      </div>
-    );
+    onUserStoreFetchedDetailsError(userID) {
+      if (userID === this.props.itemID) {
+        this.setState({fetchedDetailsError: true});
+      }
+    }
 
-    return (
-      <div className="side-panel-content-header-details flex-box
-        flex-box-align-vertical-center">
-        {imageTag}
-        <div className="side-panel-content-header-label">
-          <Form definition={editNameFormDefinition}
-            formRowClass="row"
-            formGroupClass="form-group flush-bottom"
-            onSubmit={this.handleNameChange} />
-          <div>
-            {this.getSubHeader(user)}
+    getErrorNotice() {
+      return (
+        <div className="container container-pod">
+          <RequestErrorMsg />
+        </div>
+      );
+    }
+
+    getUserInfo(user) {
+      let editNameFormDefinition = [
+        {
+          fieldType: 'text',
+          name: 'text',
+          placeholder: 'User\'s Full Name',
+          required: true,
+          sharedClass: 'form-element-inline h1 flush',
+          showError: false,
+          showLabel: false,
+          writeType: 'edit',
+          validation: function () { return true; },
+          value: user.description
+        }
+      ];
+
+      let imageTag = (
+        <div className="side-panel-icon icon icon-large icon-image-container icon-user-container">
+          <img src="./img/layout/icon-user-default-64x64@2x.png" />
+        </div>
+      );
+
+      return (
+        <div className="side-panel-content-header-details flex-box
+          flex-box-align-vertical-center">
+          {imageTag}
+          <div className="side-panel-content-header-label">
+            <Form definition={editNameFormDefinition}
+              formRowClass="row"
+              formGroupClass="form-group flush-bottom"
+              onSubmit={this.handleNameChange} />
+            <div>
+              {this.getSubHeader(user)}
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  getSubHeader(user) {
-    let groupCount = user.getGroupCount();
-    let serviceCount = user.getPermissionCount();
-    let groupLabel = StringUtil.pluralize('group', groupCount);
-    let serviceLabel = StringUtil.pluralize('Service', serviceCount);
-    let remote = '';
-
-    if (user.isRemote()) {
-      remote = '. Managed by External LDAP';
+      );
     }
 
-    return (
-      <div>
-        {
-          `${serviceCount} ${serviceLabel}, Member of ${groupCount}
-${groupLabel}${remote}`
-        }
-      </div>
-    );
-  }
+    getSubHeader(user) {
+      let groupCount = user.getGroupCount();
+      let serviceCount = user.getPermissionCount();
+      let groupLabel = StringUtil.pluralize('group', groupCount);
+      let serviceLabel = StringUtil.pluralize('Service', serviceCount);
+      let remote = '';
 
-  renderDetailsTabView() {
-    return (
-      <UserDetails userID={this.props.itemID} />
-    );
-  }
+      if (user.isRemote()) {
+        remote = '. Managed by External LDAP';
+      }
 
-  renderPermissionsTabView(user) {
-    return (
-      <div className="
-        side-panel-tab-content
-        side-panel-section
-        container
-        container-fluid
-        container-pod
-        container-pod-short
-        container-fluid
-        flex-container-col
-        flex-grow">
-        <PermissionsView
-          permissions={user.getUniquePermissions()}
-          itemID={this.props.itemID}
-          itemType="user" />
-      </div>
-    );
-  }
-
-  renderGroupMembershipTabView() {
-    return (
-      <UserGroupMembershipTab userID={this.props.itemID} />
-    );
-  }
-
-  render() {
-    let user = ACLUserStore.getUser(this.props.itemID);
-
-    if (this.state.fetchedDetailsError) {
-      return this.getErrorNotice();
-    }
-
-    if (user.get('uid') == null ||
-      !MesosSummaryStore.get('statesProcessed')) {
-      return this.getLoadingScreen();
-    }
-
-    return (
-      <div className="flex-container-col">
-        <div className="container container-fluid container-pod
-          container-pod-divider-bottom container-pod-divider-bottom-align-right
-          container-pod-divider-inverse container-pod-short-top
-          side-panel-content-header side-panel-section flush-bottom">
-          {this.getUserInfo(user)}
-          <ul className="tabs tall list-inline flush-bottom">
-            {this.tabs_getUnroutedTabs()}
-          </ul>
+      return (
+        <div>
+          {
+            `${serviceCount} ${serviceLabel}, Member of ${groupCount}
+  ${groupLabel}${remote}`
+          }
         </div>
-        {this.tabs_getTabView(user)}
-      </div>
-    );
+      );
+    }
+
+    renderDetailsTabView() {
+      return (
+        <UserDetails userID={this.props.itemID} />
+      );
+    }
+
+    renderPermissionsTabView(user) {
+      return (
+        <div className="
+          side-panel-tab-content
+          side-panel-section
+          container
+          container-fluid
+          container-pod
+          container-pod-short
+          container-fluid
+          flex-container-col
+          flex-grow">
+          <PermissionsView
+            permissions={user.getUniquePermissions()}
+            itemID={this.props.itemID}
+            itemType="user" />
+        </div>
+      );
+    }
+
+    renderGroupMembershipTabView() {
+      return (
+        <UserGroupMembershipTab userID={this.props.itemID} />
+      );
+    }
+
+    render() {
+      let user = ACLUserStore.getUser(this.props.itemID);
+
+      if (this.state.fetchedDetailsError) {
+        return this.getErrorNotice();
+      }
+
+      if (user.get('uid') == null ||
+        !MesosSummaryStore.get('statesProcessed')) {
+        return this.getLoadingScreen();
+      }
+
+      return (
+        <div className="flex-container-col">
+          <div className="container container-fluid container-pod
+            container-pod-divider-bottom container-pod-divider-bottom-align-right
+            container-pod-divider-inverse container-pod-short-top
+            side-panel-content-header side-panel-section flush-bottom">
+            {this.getUserInfo(user)}
+            <ul className="tabs tall list-inline flush-bottom">
+              {this.tabs_getUnroutedTabs()}
+            </ul>
+          </div>
+          {this.tabs_getTabView(user)}
+        </div>
+      );
+    }
   }
+  return UserSidePanelContents;
 };
+

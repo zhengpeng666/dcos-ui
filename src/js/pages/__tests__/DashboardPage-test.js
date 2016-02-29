@@ -1,6 +1,6 @@
 jest.dontMock('../DashboardPage');
 jest.dontMock('../../stores/MarathonStore');
-jest.dontMock('./fixtures/MockMarathonResponse');
+jest.dontMock('./fixtures/MockMarathonResponse.json');
 jest.dontMock('../../mixins/GetSetMixin');
 jest.dontMock('../../mixins/InternalStorageMixin');
 jest.dontMock('../../utils/Util');
@@ -16,7 +16,7 @@ var ReactDOM = require('react-dom');
 var DashboardPage = require('../DashboardPage');
 var MarathonStore = require('../../stores/MarathonStore');
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
-var MockMarathonResponse = require('./fixtures/MockMarathonResponse');
+var MockMarathonResponse = require('./fixtures/MockMarathonResponse.json');
 var ServicesList = require('../../structs/ServicesList');
 var SummaryList = require('../../structs/SummaryList');
 

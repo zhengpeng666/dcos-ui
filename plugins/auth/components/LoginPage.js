@@ -1,9 +1,15 @@
 import React from 'react';
 
-import LoginModal from './LoginModal';
+import _LoginModal from './LoginModal';
 
-module.exports = class LoginPage extends React.Component {
-  render() {
-    return <LoginModal />;
+module.exports = (PluginSDK) => {
+
+  let LoginModal = _LoginModal(PluginSDK);
+
+  class LoginPage extends React.Component {
+    render() {
+      return <LoginModal />;
+    }
   }
+  return LoginPage;
 };

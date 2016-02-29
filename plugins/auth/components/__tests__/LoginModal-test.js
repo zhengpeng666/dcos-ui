@@ -1,32 +1,45 @@
 jest.dontMock('../LoginModal');
-jest.dontMock('../../../../src/js/components/ClusterHeader');
-jest.dontMock('../../../../src/js/components/DCOSLogo');
-jest.dontMock('../../../../src/js/components/ClusterName');
-jest.dontMock('../../../auth/stores/ACLAuthStore');
-jest.dontMock('../../../organization/submodules/groups/stores/ACLGroupsStore');
-jest.dontMock('../../../organization/submodules/groups/stores/ACLGroupStore');
-jest.dontMock('../../../auth/submodules/acl/stores/ACLStore');
-jest.dontMock('../../../organization/submodules/users/stores/ACLUsersStore');
-jest.dontMock('../../../organization/submodules/users/stores/ACLUserStore');
-jest.dontMock('../../../../src/js/stores/MarathonStore');
-jest.dontMock('../../../../src/js/stores/MetadataStore');
-jest.dontMock('../../../../src/js/stores/MesosStateStore');
-jest.dontMock('../../../../src/js/stores/MesosSummaryStore');
-jest.dontMock('../../../../src/js/mixins/GetSetMixin');
-
-require('../../../../src/js/utils/StoreMixinConfig');
+jest.dontMock('../../actions/ACLAuthActions');
+jest.dontMock('../../stores/ACLAuthStore');
+jest.dontMock('../../submodules/acl/stores/ACLStore');
+jest.dontMock('../../storeConfig');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-jest.setMock('../../../../src/js/components/FormModal', React.createClass({
-  displayName: 'mock',
-  render: function () { return null; }
-}));
-
-var ACLAuthStore = require('../../stores/ACLAuthStore');
 var MetadataStore = require('../../../../src/js/stores/MetadataStore');
-var LoginModal = require('../LoginModal');
+
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.dontMock([
+  'MarathonStore',
+  'MetadataStore',
+  'MesosStateStore',
+  'MesosSummaryStore',
+  'PluginGetSetMixin',
+  'ACLUsersStore',
+  'ACLUserStore',
+  'ACLGroupsStore',
+  'ACLGroupStore',
+  'ClusterHeader',
+  'DCOSLogo',
+  'ClusterName'
+]);
+
+let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+
+PluginTestUtils.setMock('FormModal', jest.genMockFn().mockImplementation(
+  function () {
+    return React.createClass({
+      displayName: 'mock',
+      render: function () { return null; }
+    });
+  }));
+
+let LoginModal = require('../LoginModal')(PluginSDK);
+var ACLAuthStore = require('../../stores/ACLAuthStore')(PluginSDK);
+
+require('../../storeConfig').register(PluginSDK);
 
 MetadataStore.set({dcosMetadata: {}});
 

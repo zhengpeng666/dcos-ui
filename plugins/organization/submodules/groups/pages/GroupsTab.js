@@ -4,12 +4,12 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLGroupsStore from '../stores/ACLGroupsStore';
-import GroupFormModal from '../components/GroupFormModal';
-import GroupSidePanel from '../components/GroupSidePanel';
+import _ACLGroupsStore from '../stores/ACLGroupsStore';
+import _GroupFormModal from '../components/GroupFormModal';
+import _GroupSidePanel from '../components/GroupSidePanel';
+import _OrganizationTab from '../../../pages/OrganizationTab';
+
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
-import OrganizationTab from '../../../pages/OrganizationTab';
-import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onGroupStoreCreateSuccess',
@@ -24,118 +24,129 @@ const METHODS_TO_BIND = [
   'onGroupsStoreError'
 ];
 
-class GroupsTab extends mixin(StoreMixin) {
-  constructor() {
-    super(...arguments);
+module.exports = (PluginSDK) => {
 
-    this.store_listeners = [
-      {name: 'marathon', events: ['success']},
-      {name: 'groups', events: ['success', 'error']},
-      {name: 'group', events: ['createSuccess', 'deleteSuccess', 'updateSuccess']}
-    ];
+  let RequestErrorMsg = PluginSDK.get('RequestErrorMsg');
 
-    this.state = {
-      groupsStoreError: false,
-      groupsStoreSuccess: false,
-      openNewGroupModal: false
-    };
+  let ACLGroupsStore = _ACLGroupsStore(PluginSDK);
+  let GroupFormModal = _GroupFormModal(PluginSDK);
+  let GroupSidePanel = _GroupSidePanel(PluginSDK);
+  let OrganizationTab = _OrganizationTab(PluginSDK);
 
-    EXTERNAL_CHANGE_EVENTS.forEach((event) => {
-      this[event] = this.onGroupsChange;
-    });
+  class GroupsTab extends mixin(StoreMixin) {
+    constructor() {
+      super(...arguments);
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
+      this.store_listeners = [
+        {name: 'marathon', events: ['success']},
+        {name: 'groups', events: ['success', 'error']},
+        {name: 'group', events: ['createSuccess', 'deleteSuccess', 'updateSuccess']}
+      ];
 
-  componentDidMount() {
-    super.componentDidMount();
-    ACLGroupsStore.fetchGroups();
-  }
+      this.state = {
+        groupsStoreError: false,
+        groupsStoreSuccess: false,
+        openNewGroupModal: false
+      };
 
-  onGroupsChange() {
-    ACLGroupsStore.fetchGroups();
-  }
+      EXTERNAL_CHANGE_EVENTS.forEach((event) => {
+        this[event] = this.onGroupsChange;
+      });
 
-  onGroupsStoreSuccess() {
-    this.setState({
-      groupsStoreError: false,
-      groupsStoreSuccess: true
-    });
-  }
+      METHODS_TO_BIND.forEach((method) => {
+        this[method] = this[method].bind(this);
+      });
+    }
 
-  onGroupsStoreError() {
-    this.setState({
-      groupsStoreError: true,
-      groupsStoreSuccess: false
-    });
-  }
+    componentDidMount() {
+      super.componentDidMount();
+      ACLGroupsStore.fetchGroups();
+    }
 
-  handleNewGroupClick() {
-    this.setState({openNewGroupModal: true});
-  }
+    onGroupsChange() {
+      ACLGroupsStore.fetchGroups();
+    }
 
-  handleNewGroupClose() {
-    this.setState({openNewGroupModal: false});
-  }
+    onGroupsStoreSuccess() {
+      this.setState({
+        groupsStoreError: false,
+        groupsStoreSuccess: true
+      });
+    }
 
-  getLoadingScreen() {
-    return (
-      <div className="container container-fluid container-pod text-align-center
-        vertical-center inverse">
-        <div className="row">
-          <div className="ball-scale">
-            <div />
+    onGroupsStoreError() {
+      this.setState({
+        groupsStoreError: true,
+        groupsStoreSuccess: false
+      });
+    }
+
+    handleNewGroupClick() {
+      this.setState({openNewGroupModal: true});
+    }
+
+    handleNewGroupClose() {
+      this.setState({openNewGroupModal: false});
+    }
+
+    getLoadingScreen() {
+      return (
+        <div className="container container-fluid container-pod text-align-center
+          vertical-center inverse">
+          <div className="row">
+            <div className="ball-scale">
+              <div />
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  getContents() {
-    // We want to always render the portals (side panel and modal),
-    // so only this part is showing loading and error screend
-    if (this.state.groupsStoreError) {
-      return (
-        <RequestErrorMsg />
       );
     }
 
-    if (!MesosSummaryStore.get('statesProcessed') ||
-      !this.state.groupsStoreSuccess) {
-      return this.getLoadingScreen();
+    getContents() {
+      // We want to always render the portals (side panel and modal),
+      // so only this part is showing loading and error screend
+      if (this.state.groupsStoreError) {
+        return (
+          <RequestErrorMsg />
+        );
+      }
+
+      if (!MesosSummaryStore.get('statesProcessed') ||
+        !this.state.groupsStoreSuccess) {
+        return this.getLoadingScreen();
+      }
+
+      let items = ACLGroupsStore.get('groups').getItems();
+
+      return (
+        <OrganizationTab
+          items={items}
+          itemID="gid"
+          itemName="group"
+          handleNewItemClick={this.handleNewGroupClick} />
+      );
     }
 
-    let items = ACLGroupsStore.get('groups').getItems();
+    render() {
 
-    return (
-      <OrganizationTab
-        items={items}
-        itemID="gid"
-        itemName="group"
-        handleNewItemClick={this.handleNewGroupClick} />
-    );
+      return (
+        <div>
+          {this.getContents()}
+          <GroupSidePanel
+            params={this.props.params}
+            openedPage="settings-organization-groups" />
+          <GroupFormModal
+            open={this.state.openNewGroupModal}
+            onClose={this.handleNewGroupClose}/>
+        </div>
+      );
+    }
   }
 
-  render() {
+  GroupsTab.propTypes = {
+    params: React.PropTypes.object
+  };
 
-    return (
-      <div>
-        {this.getContents()}
-        <GroupSidePanel
-          params={this.props.params}
-          openedPage="settings-organization-groups" />
-        <GroupFormModal
-          open={this.state.openNewGroupModal}
-          onClose={this.handleNewGroupClose}/>
-      </div>
-    );
-  }
-}
-
-GroupsTab.propTypes = {
-  params: React.PropTypes.object
+  return GroupsTab;
 };
 
-module.exports = GroupsTab;

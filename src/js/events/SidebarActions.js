@@ -1,59 +1,61 @@
 import ActionTypes from '../constants/ActionTypes';
 var AppDispatcher = require('./AppDispatcher');
-var Config = require('../config/Config');
-var RequestUtil = require('../utils/RequestUtil');
 
-var SidebarActions = {
+module.exports = (PluginSDK) => {
 
-  open: function () {
-    AppDispatcher.handleSidebarAction({
-      type: ActionTypes.REQUEST_SIDEBAR_OPEN,
-      data: true
-    });
-  },
+  let {RequestUtil, Config} = PluginSDK.get(['RequestUtil', 'Config']);
 
-  close: function () {
-    AppDispatcher.handleSidebarAction({
-      type: ActionTypes.REQUEST_SIDEBAR_CLOSE,
-      data: false
-    });
-  },
+  var SidebarActions = {
 
-  openCliInstructions: function () {
-    AppDispatcher.handleSidebarAction({
-      type: ActionTypes.REQUEST_CLI_INSTRUCTIONS,
-      data: false
-    });
-  },
+    open: function () {
+      AppDispatcher.handleSidebarAction({
+        type: ActionTypes.REQUEST_SIDEBAR_OPEN,
+        data: true
+      });
+    },
 
-  startTour: function () {
-    AppDispatcher.handleSidebarAction({
-      type: ActionTypes.REQUEST_TOUR_START,
-      data: false
-    });
-  },
+    close: function () {
+      AppDispatcher.handleSidebarAction({
+        type: ActionTypes.REQUEST_SIDEBAR_CLOSE,
+        data: false
+      });
+    },
 
-  showVersions: function () {
-    var host = Config.rootUrl.replace(/:[0-9]{0,4}$/, '');
-    var url = host + '/pkgpanda/active.buildinfo.full.json';
+    openCliInstructions: function () {
+      AppDispatcher.handleSidebarAction({
+        type: ActionTypes.REQUEST_CLI_INSTRUCTIONS,
+        data: false
+      });
+    },
 
-    RequestUtil.json({
-      url: url,
-      success: function (response) {
-        AppDispatcher.handleSidebarAction({
-          type: ActionTypes.REQUEST_VERSIONS_SUCCESS,
-          data: response
-        });
-      },
-      error: function (e) {
-        AppDispatcher.handleSidebarAction({
-          type: ActionTypes.REQUEST_VERSIONS_ERROR,
-          data: e.message
-        });
-      }
-    });
-  }
+    startTour: function () {
+      AppDispatcher.handleSidebarAction({
+        type: ActionTypes.REQUEST_TOUR_START,
+        data: false
+      });
+    },
 
+    showVersions: function () {
+      var host = Config.rootUrl.replace(/:[0-9]{0,4}$/, '');
+      var url = host + '/pkgpanda/active.buildinfo.full.json';
+
+      RequestUtil.json({
+        url: url,
+        success: function (response) {
+          AppDispatcher.handleSidebarAction({
+            type: ActionTypes.REQUEST_VERSIONS_SUCCESS,
+            data: response
+          });
+        },
+        error: function (e) {
+          AppDispatcher.handleSidebarAction({
+            type: ActionTypes.REQUEST_VERSIONS_ERROR,
+            data: e.message
+          });
+        }
+      });
+    }
+
+  };
+  return SidebarActions;
 };
-
-module.exports = SidebarActions;

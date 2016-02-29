@@ -1,11 +1,19 @@
 jest.dontMock('../ACLDirectoriesStore');
 jest.dontMock('../../actions/ACLDirectoriesActions');
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
 
-var ACLDirectoriesStore = require('../ACLDirectoriesStore');
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.dontMock([
+  'List'
+]);
+
+let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+
+var ACLDirectoriesStore = require('../ACLDirectoriesStore')(PluginSDK);
 var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 var EventTypes = require('../../constants/EventTypes');
+
+var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 describe('ACLDirectoriesStore dispatcher', function () {
 

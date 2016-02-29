@@ -1,16 +1,14 @@
-var fixturePath = '../../../../tests/_fixtures/acl/group-with-details.json';
-
 jest.dontMock('../Group');
 jest.dontMock('../Item');
 jest.dontMock('../List');
 jest.dontMock('../User');
 jest.dontMock('../UsersList');
 jest.dontMock('../../utils/Util');
-jest.dontMock(fixturePath);
+jest.dontMock('../../../../tests/_fixtures/acl/group-with-details.json');
 
 var _ = require('underscore');
 var Group = require('../Group');
-var groupFixture = require(fixturePath);
+var groupFixture = require('../../../../tests/_fixtures/acl/group-with-details.json');
 var UsersList = require('../UsersList');
 
 groupFixture.permissions = groupFixture.permissions.array;

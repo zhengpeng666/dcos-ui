@@ -13,10 +13,11 @@ var IntercomStore = require('../../../plugins/tracking/stores/IntercomStore');
 var MetadataStore = require('../stores/MetadataStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var Modals = require('../components/Modals');
+import PluginSDK from 'PluginSDK';
 var RequestErrorMsg = require('../components/RequestErrorMsg');
 import ServerErrorModal from '../components/ServerErrorModal';
 var Sidebar = require('../components/Sidebar');
-var SidebarActions = require('../events/SidebarActions');
+var SidebarActions = PluginSDK.getActions('SidebarActions');
 var SidebarStore = require('../stores/SidebarStore');
 
 function getSidebarState() {

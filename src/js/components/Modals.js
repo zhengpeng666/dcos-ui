@@ -5,7 +5,7 @@ var Actions = require('../../../plugins/tracking/actions/Actions');
 var CliInstallModal = require('./modals/CliInstallModal');
 var ErrorModal = require('./modals/ErrorModal');
 import EventTypes from '../constants/EventTypes';
-import {Hooks} from '../pluginBridge/PluginBridge';
+import {Hooks} from 'PluginSDK';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 import IdentifyModal from './modals/IdentifyModal';
 var MesosSummaryStore = require('../stores/MesosSummaryStore');

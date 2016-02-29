@@ -11,11 +11,12 @@ var MarathonStore = require('../stores/MarathonStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var Page = require('../components/Page');
 var Panel = require('../components/Panel');
+import PluginSDK from 'PluginSDK';
 var ResourceTimeSeriesChart = require('../components/charts/ResourceTimeSeriesChart');
 var TaskFailureTimeSeriesChart = require('../components/charts/TaskFailureTimeSeriesChart');
 var ServiceList = require('../components/ServiceList');
 var TasksChart = require('../components/charts/TasksChart');
-var SidebarActions = require('../events/SidebarActions');
+var SidebarActions = PluginSDK.getActions('SidebarActions');
 import SidePanels from '../components/SidePanels';
 
 function getMesosState() {

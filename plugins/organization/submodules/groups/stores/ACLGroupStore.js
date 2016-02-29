@@ -41,305 +41,327 @@ import {
   ACL_GROUP_REMOVE_USER_ERROR
 } from '../constants/EventTypes';
 
-import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
-
-import ACLGroupsActions from '../actions/ACLGroupsActions';
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import GetSetMixin from '../../../../../src/js/mixins/GetSetMixin';
+import _ACLGroupsActions from '../actions/ACLGroupsActions';
 import Group from '../../../../../src/js/structs/Group';
 
-/**
- * This store will keep track of groups and their details
- */
-let ACLGroupStore = Store.createStore({
-  storeID: 'group',
+import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
+import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
 
-  mixins: [GetSetMixin],
+let cachedStore;
 
-  getSet_data: {
-    groups: {},
-    // A hash of groupIDs that we're fetching
-    // The value is a list of requests that have been received
-    groupsFetching: {}
-  },
+module.exports = (PluginSDK) => {
+  // Return cached version if exists
+  if (cachedStore) {
+    return cachedStore;
+  }
+  let PluginGetSetMixin = PluginSDK.get('PluginGetSetMixin');
+  let {APP_STORE_CHANGE} = PluginSDK.constants;
 
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
-  },
-
-  getGroupRaw: function (groupID) {
-    return this.get('groups')[groupID];
-  },
-
-  getGroup: function (groupID) {
-    return new Group(this.getGroupRaw(groupID));
-  },
-
-  setGroup: function (groupID, group) {
-    let groups = this.get('groups');
-    groups[groupID] = group;
-    this.set(groups);
-  },
-
-  fetchGroup: ACLGroupsActions.fetchGroup,
-
-  addGroup: ACLGroupsActions.addGroup,
-
-  updateGroup: ACLGroupsActions.updateGroup,
-
-  deleteGroup: ACLGroupsActions.deleteGroup,
-
-  addUser: ACLGroupsActions.addUser,
-
-  deleteUser: ACLGroupsActions.deleteUser,
-
+  let ACLGroupsActions = _ACLGroupsActions(PluginSDK);
   /**
-   * Will fetch a group and their details.
-   * Will make a request to various different endpoints to get all details
-   *
-   * @param  {Number} groupID
-   */
-  fetchGroupWithDetails: function (groupID) {
-    let groupsFetching = this.get('groupsFetching');
+  * This store will keep track of groups and their details
+  */
+  let ACLGroupStore = Store.createStore({
+    storeID: 'group',
 
-    groupsFetching[groupID] = {group: false, users: false, permissions: false};
-    this.set(groupsFetching);
+    mixins: [PluginGetSetMixin],
 
-    ACLGroupsActions.fetchGroup(groupID);
-    ACLGroupsActions.fetchGroupPermissions(groupID);
-    ACLGroupsActions.fetchGroupUsers(groupID);
-  },
+    getSet_data: {
+      groups: {},
+      // A hash of groupIDs that we're fetching
+      // The value is a list of requests that have been received
+      groupsFetching: {}
+    },
 
-  /**
-   * Validates if the details for a group have been successfuly fetched
-   *
-   * @param  {Number} groupID
-   * @param  {String} type The type of detail that has been successfuly
-   *   received
-   */
-  validateGroupWithDetailsFetch: function (groupID, type) {
-    let groupsFetching = this.get('groupsFetching');
-    if (groupsFetching[groupID] == null) {
-      return;
-    }
+    onSet() {
+      PluginSDK.dispatch({
+        type: APP_STORE_CHANGE,
+        storeID: this.storeID,
+        data: this.getSet_data
+      });
+    },
 
-    groupsFetching[groupID][type] = true;
+    addChangeListener: function (eventName, callback) {
+      this.on(eventName, callback);
+    },
 
-    let fetchedAll = true;
-    Object.keys(groupsFetching[groupID]).forEach(function (key) {
-      if (groupsFetching[groupID][key] === false) {
-        fetchedAll = false;
+    removeChangeListener: function (eventName, callback) {
+      this.removeListener(eventName, callback);
+    },
+
+    getGroupRaw: function (groupID) {
+      return this.get('groups')[groupID];
+    },
+
+    getGroup: function (groupID) {
+      return new Group(this.getGroupRaw(groupID));
+    },
+
+    setGroup: function (groupID, group) {
+      let groups = this.get('groups');
+      groups[groupID] = group;
+      this.set(groups);
+    },
+
+    fetchGroup: ACLGroupsActions.fetchGroup,
+
+    addGroup: ACLGroupsActions.addGroup,
+
+    updateGroup: ACLGroupsActions.updateGroup,
+
+    deleteGroup: ACLGroupsActions.deleteGroup,
+
+    addUser: ACLGroupsActions.addUser,
+
+    deleteUser: ACLGroupsActions.deleteUser,
+
+    /**
+     * Will fetch a group and their details.
+     * Will make a request to various different endpoints to get all details
+     *
+     * @param  {Number} groupID
+     */
+    fetchGroupWithDetails: function (groupID) {
+      let groupsFetching = this.get('groupsFetching');
+
+      groupsFetching[groupID] = {group: false, users: false, permissions: false};
+      this.set(groupsFetching);
+
+      ACLGroupsActions.fetchGroup(groupID);
+      ACLGroupsActions.fetchGroupPermissions(groupID);
+      ACLGroupsActions.fetchGroupUsers(groupID);
+    },
+
+    /**
+     * Validates if the details for a group have been successfuly fetched
+     *
+     * @param  {Number} groupID
+     * @param  {String} type The type of detail that has been successfuly
+     *   received
+     */
+    validateGroupWithDetailsFetch: function (groupID, type) {
+      let groupsFetching = this.get('groupsFetching');
+      if (groupsFetching[groupID] == null) {
+        return;
       }
-    });
 
-    if (fetchedAll) {
+      groupsFetching[groupID][type] = true;
+
+      let fetchedAll = true;
+      Object.keys(groupsFetching[groupID]).forEach(function (key) {
+        if (groupsFetching[groupID][key] === false) {
+          fetchedAll = false;
+        }
+      });
+
+      if (fetchedAll) {
+        delete groupsFetching[groupID];
+        this.set(groupsFetching);
+        this.emit(ACL_GROUP_DETAILS_FETCHED_SUCCESS, groupID);
+      }
+    },
+
+    /**
+     * Emits error if we're in the process of fetching details for a group
+     * but one of the requests fails.
+     *
+     * @param  {Number} groupID
+     */
+    invalidateGroupWithDetailsFetch: function (groupID) {
+      let groupsFetching = this.get('groupsFetching');
+      if (groupsFetching[groupID] == null) {
+        return;
+      }
+
       delete groupsFetching[groupID];
       this.set(groupsFetching);
-      this.emit(ACL_GROUP_DETAILS_FETCHED_SUCCESS, groupID);
-    }
-  },
+      this.emit(ACL_GROUP_DETAILS_FETCHED_ERROR, groupID);
+    },
 
-  /**
-   * Emits error if we're in the process of fetching details for a group
-   * but one of the requests fails.
-   *
-   * @param  {Number} groupID
-   */
-  invalidateGroupWithDetailsFetch: function (groupID) {
-    let groupsFetching = this.get('groupsFetching');
-    if (groupsFetching[groupID] == null) {
-      return;
-    }
+    /**
+     * Process a group response
+     *
+     * @param  {Object} groupData see /acl/groups/group schema
+     */
+    processGroup: function (groupData) {
+      let group = this.getGroupRaw(groupData.gid) || {};
 
-    delete groupsFetching[groupID];
-    this.set(groupsFetching);
-    this.emit(ACL_GROUP_DETAILS_FETCHED_ERROR, groupID);
-  },
+      group = _.extend(group, groupData);
 
-  /**
-   * Process a group response
-   *
-   * @param  {Object} groupData see /acl/groups/group schema
-   */
-  processGroup: function (groupData) {
-    let group = this.getGroupRaw(groupData.gid) || {};
+      this.setGroup(group.gid, group);
+      this.emit(ACL_GROUP_DETAILS_GROUP_CHANGE, group.gid);
 
-    group = _.extend(group, groupData);
+      this.validateGroupWithDetailsFetch(group.gid, 'group');
+    },
 
-    this.setGroup(group.gid, group);
-    this.emit(ACL_GROUP_DETAILS_GROUP_CHANGE, group.gid);
+    processGroupError: function (data, groupID) {
+      this.emit(
+        ACL_GROUP_DETAILS_GROUP_ERROR,
+        data,
+        groupID);
+      this.invalidateGroupWithDetailsFetch(groupID);
+    },
 
-    this.validateGroupWithDetailsFetch(group.gid, 'group');
-  },
+    /**
+     * Process a group permissions response
+     *
+     * @param  {Object} permissions see /acl/groups/group/permissions schema
+     * @param  {Object} groupID
+     */
+    processGroupPermissions: function (permissions, groupID) {
+      let group = this.getGroupRaw(groupID) || {};
 
-  processGroupError: function (data, groupID) {
-    this.emit(
-      ACL_GROUP_DETAILS_GROUP_ERROR,
-      data,
-      groupID);
-    this.invalidateGroupWithDetailsFetch(groupID);
-  },
+      group.permissions = permissions;
 
-  /**
-   * Process a group permissions response
-   *
-   * @param  {Object} permissions see /acl/groups/group/permissions schema
-   * @param  {Object} groupID
-   */
-  processGroupPermissions: function (permissions, groupID) {
-    let group = this.getGroupRaw(groupID) || {};
+      // Use groupID throughout as the group may not have been previously set
+      this.setGroup(groupID, group);
+      this.emit(ACL_GROUP_DETAILS_PERMISSIONS_CHANGE, groupID);
 
-    group.permissions = permissions;
+      this.validateGroupWithDetailsFetch(groupID, 'permissions');
+    },
 
-    // Use groupID throughout as the group may not have been previously set
-    this.setGroup(groupID, group);
-    this.emit(ACL_GROUP_DETAILS_PERMISSIONS_CHANGE, groupID);
+    processGroupPermissionsError: function (data, groupID) {
+      this.emit(
+        ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
+        data,
+        groupID);
+      this.invalidateGroupWithDetailsFetch(groupID);
+    },
 
-    this.validateGroupWithDetailsFetch(groupID, 'permissions');
-  },
+    /**
+     * Process a grup users response
+     *
+     * @param  {Object} users see /acl/groups/group/users schema
+     * @param  {Object} groupID
+     */
+    processGroupUsers: function (users, groupID) {
+      let group = this.getGroupRaw(groupID) || {};
 
-  processGroupPermissionsError: function (data, groupID) {
-    this.emit(
-      ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
-      data,
-      groupID);
-    this.invalidateGroupWithDetailsFetch(groupID);
-  },
+      group.users = users;
 
-  /**
-   * Process a grup users response
-   *
-   * @param  {Object} users see /acl/groups/group/users schema
-   * @param  {Object} groupID
-   */
-  processGroupUsers: function (users, groupID) {
-    let group = this.getGroupRaw(groupID) || {};
+      // Use groupID throughout as the group may not have been previously set
+      this.setGroup(groupID, group);
+      this.emit(ACL_GROUP_DETAILS_USERS_CHANGE, groupID);
 
-    group.users = users;
+      this.validateGroupWithDetailsFetch(groupID, 'users');
+    },
 
-    // Use groupID throughout as the group may not have been previously set
-    this.setGroup(groupID, group);
-    this.emit(ACL_GROUP_DETAILS_USERS_CHANGE, groupID);
+    processGroupUsersError: function (data, groupID) {
+      this.emit(
+        ACL_GROUP_DETAILS_USERS_ERROR,
+        data,
+        groupID);
+      this.invalidateGroupWithDetailsFetch(groupID);
+    },
 
-    this.validateGroupWithDetailsFetch(groupID, 'users');
-  },
+    dispatcherIndex: AppDispatcher.register(function (payload) {
+      let source = payload.source;
+      if (source !== SERVER_ACTION) {
+        return false;
+      }
 
-  processGroupUsersError: function (data, groupID) {
-    this.emit(
-      ACL_GROUP_DETAILS_USERS_ERROR,
-      data,
-      groupID);
-    this.invalidateGroupWithDetailsFetch(groupID);
-  },
+      let action = payload.action;
 
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    let source = payload.source;
-    if (source !== SERVER_ACTION) {
-      return false;
-    }
+      switch (action.type) {
+        // Get group details
+        case REQUEST_ACL_GROUP_SUCCESS:
+          ACLGroupStore.processGroup(action.data);
+          break;
+        case REQUEST_ACL_GROUP_ERROR:
+          ACLGroupStore.processGroupError(action.data, action.groupID);
+          break;
+        // Get ACL permissions of group
+        case REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS:
+          ACLGroupStore.processGroupPermissions(action.data, action.groupID);
+          break;
+        case REQUEST_ACL_GROUP_PERMISSIONS_ERROR:
+          ACLGroupStore.processGroupPermissionsError(
+            action.data,
+            action.groupID);
+          break;
+        // Get users members of group
+        case REQUEST_ACL_GROUP_USERS_SUCCESS:
+          ACLGroupStore.processGroupUsers(action.data, action.groupID);
+          break;
+        case REQUEST_ACL_GROUP_USERS_ERROR:
+          ACLGroupStore.processGroupUsersError(action.data, action.groupID);
+          break;
+        // Create group
+        case REQUEST_ACL_GROUP_CREATE_SUCCESS:
+          ACLGroupStore
+            .emit(ACL_GROUP_CREATE_SUCCESS, action.groupID);
+          break;
+        case REQUEST_ACL_GROUP_CREATE_ERROR:
+          ACLGroupStore.emit(
+            ACL_GROUP_CREATE_ERROR,
+            action.data,
+            action.groupID
+          );
+          break;
+        // Update group
+        case REQUEST_ACL_GROUP_UPDATE_SUCCESS:
+          ACLGroupStore
+            .emit(ACL_GROUP_UPDATE_SUCCESS, action.groupID);
+          break;
+        case REQUEST_ACL_GROUP_UPDATE_ERROR:
+          ACLGroupStore.emit(
+            ACL_GROUP_UPDATE_ERROR,
+            action.data,
+            action.groupID
+          );
+          break;
+        // Delete group
+        case REQUEST_ACL_GROUP_DELETE_SUCCESS:
+          ACLGroupStore
+            .emit(ACL_GROUP_DELETE_SUCCESS, action.groupID);
+          break;
+        case REQUEST_ACL_GROUP_DELETE_ERROR:
+          ACLGroupStore.emit(
+            ACL_GROUP_DELETE_ERROR,
+            action.data,
+            action.groupID
+          );
+          break;
+        // Add user to group
+        case REQUEST_ACL_GROUP_ADD_USER_SUCCESS:
+          ACLGroupStore.emit(
+            ACL_GROUP_USERS_CHANGED,
+            action.groupID,
+            action.userID
+          );
+          break;
+        case REQUEST_ACL_GROUP_ADD_USER_ERROR:
+          ACLGroupStore.emit(
+            ACL_GROUP_ADD_USER_ERROR,
+            action.data,
+            action.groupID,
+            action.userID
+          );
+          break;
+        // Remove user from group
+        case REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS:
+          ACLGroupStore.emit(
+            ACL_GROUP_REMOVE_USER_SUCCESS,
+            action.groupID,
+            action.userID
+          );
+          break;
+        case REQUEST_ACL_GROUP_REMOVE_USER_ERROR:
+          ACLGroupStore.emit(
+            ACL_GROUP_REMOVE_USER_ERROR,
+            action.data,
+            action.groupID,
+            action.userID
+          );
+          break;
+      }
 
-    let action = payload.action;
+      return true;
+    })
+  });
 
-    switch (action.type) {
-      // Get group details
-      case REQUEST_ACL_GROUP_SUCCESS:
-        ACLGroupStore.processGroup(action.data);
-        break;
-      case REQUEST_ACL_GROUP_ERROR:
-        ACLGroupStore.processGroupError(action.data, action.groupID);
-        break;
-      // Get ACL permissions of group
-      case REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS:
-        ACLGroupStore.processGroupPermissions(action.data, action.groupID);
-        break;
-      case REQUEST_ACL_GROUP_PERMISSIONS_ERROR:
-        ACLGroupStore.processGroupPermissionsError(
-          action.data,
-          action.groupID);
-        break;
-      // Get users members of group
-      case REQUEST_ACL_GROUP_USERS_SUCCESS:
-        ACLGroupStore.processGroupUsers(action.data, action.groupID);
-        break;
-      case REQUEST_ACL_GROUP_USERS_ERROR:
-        ACLGroupStore.processGroupUsersError(action.data, action.groupID);
-        break;
-      // Create group
-      case REQUEST_ACL_GROUP_CREATE_SUCCESS:
-        ACLGroupStore
-          .emit(ACL_GROUP_CREATE_SUCCESS, action.groupID);
-        break;
-      case REQUEST_ACL_GROUP_CREATE_ERROR:
-        ACLGroupStore.emit(
-          ACL_GROUP_CREATE_ERROR,
-          action.data,
-          action.groupID
-        );
-        break;
-      // Update group
-      case REQUEST_ACL_GROUP_UPDATE_SUCCESS:
-        ACLGroupStore
-          .emit(ACL_GROUP_UPDATE_SUCCESS, action.groupID);
-        break;
-      case REQUEST_ACL_GROUP_UPDATE_ERROR:
-        ACLGroupStore.emit(
-          ACL_GROUP_UPDATE_ERROR,
-          action.data,
-          action.groupID
-        );
-        break;
-      // Delete group
-      case REQUEST_ACL_GROUP_DELETE_SUCCESS:
-        ACLGroupStore
-          .emit(ACL_GROUP_DELETE_SUCCESS, action.groupID);
-        break;
-      case REQUEST_ACL_GROUP_DELETE_ERROR:
-        ACLGroupStore.emit(
-          ACL_GROUP_DELETE_ERROR,
-          action.data,
-          action.groupID
-        );
-        break;
-      // Add user to group
-      case REQUEST_ACL_GROUP_ADD_USER_SUCCESS:
-        ACLGroupStore.emit(
-          ACL_GROUP_USERS_CHANGED,
-          action.groupID,
-          action.userID
-        );
-        break;
-      case REQUEST_ACL_GROUP_ADD_USER_ERROR:
-        ACLGroupStore.emit(
-          ACL_GROUP_ADD_USER_ERROR,
-          action.data,
-          action.groupID,
-          action.userID
-        );
-        break;
-      // Remove user from group
-      case REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS:
-        ACLGroupStore.emit(
-          ACL_GROUP_REMOVE_USER_SUCCESS,
-          action.groupID,
-          action.userID
-        );
-        break;
-      case REQUEST_ACL_GROUP_REMOVE_USER_ERROR:
-        ACLGroupStore.emit(
-          ACL_GROUP_REMOVE_USER_ERROR,
-          action.data,
-          action.groupID,
-          action.userID
-        );
-        break;
-    }
+  cachedStore = ACLGroupStore;
 
-    return true;
-  })
-});
+  return ACLGroupStore;
+};
 
-module.exports = ACLGroupStore;

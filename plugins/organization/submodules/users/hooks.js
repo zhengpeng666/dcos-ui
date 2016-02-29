@@ -4,51 +4,60 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {Route, Redirect} from 'react-router';
 
-import UsersTab from './pages/UsersTab';
+import _UsersTab from './pages/UsersTab';
 
-let PluginHooks = {
-  configuration: {
-    enabled: false
-  },
+module.exports = (PluginSDK) => {
 
-  getOrganizationRoutes(route) {
-    route.redirect = {
-      type: Redirect,
-      from: '/settings/organization/?',
-      to: 'settings-organization-users'
-    };
-    route.routes.push({
-      type: Route,
-      name: 'settings-organization-users',
-      path: 'users/?',
-      handler: UsersTab,
-      children: [{
+  let UsersTab = _UsersTab(PluginSDK);
+  let {Hooks} = PluginSDK;
+
+  let UsersPluginHooks = {
+    configuration: {
+      enabled: false
+    },
+
+    defaults: {
+      redirect: {
+        type: Redirect,
+        from: '/settings/organization/?',
+        to: 'settings-organization-users'
+      },
+      route: {
         type: Route,
-        name: 'settings-organization-users-user-panel',
-        path: ':userID'
-      }]
-    });
-    return route;
-  },
-
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize(Hooks) {
-    Hooks.addFilter('OrganizationRoutes', this.getOrganizationRoutes.bind(this));
-
-    Hooks.addFilter('settings-organization-tabs',
-      this.getTabs.bind(this));
-  },
-
-  getTabs(tabs) {
-    return _.extend(tabs, {
-      'settings-organization-users': {
-        content: 'Users',
-        priority: 50
+        name: 'settings-organization-users',
+        path: 'users/?',
+        handler: UsersTab,
+        children: [{
+          type: Route,
+          name: 'settings-organization-users-user-panel',
+          path: ':userID'
+        }]
+      },
+      tabs: {
+        'settings-organization-users': {
+          content: 'Users',
+          priority: 50
+        }
       }
-    });
-  }
-};
+    },
 
-module.exports = PluginHooks;
+    getOrganizationRoutes(route) {
+      route.redirect = this.defaults.redirect;
+      route.routes.push(this.defaults.route);
+      return route;
+    },
+
+    initialize() {
+      Hooks.addFilter('getOrganizationRoutes', this.getOrganizationRoutes.bind(this));
+
+      Hooks.addFilter('getTabsFor_settings-organization',
+        this.getTabs.bind(this));
+    },
+
+    getTabs(tabs) {
+      return _.extend(tabs, this.defaults.tabs);
+    }
+  };
+
+  return UsersPluginHooks;
+};

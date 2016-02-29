@@ -7,7 +7,14 @@ jest.dontMock('../MesosSummaryActions');
 jest.dontMock('../../utils/RequestUtil');
 jest.dontMock('../../constants/TimeScales');
 
-var Actions = require('../../../../plugins/tracking/actions/Actions');
+import PluginSDK from 'PluginSDK';
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.loadPluginsByName({
+  Tracking: {enabled: true}
+});
+
+var Actions = PluginSDK.getActions('Tracking');
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../AppDispatcher');
 var Config = require('../../config/Config');

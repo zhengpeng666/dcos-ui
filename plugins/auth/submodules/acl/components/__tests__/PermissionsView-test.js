@@ -1,17 +1,22 @@
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
 jest.dontMock('../PermissionsView');
+jest.dontMock('../../stores/ACLStore');
+jest.dontMock('../../actions/ACLActions');
+jest.dontMock('../../../../storeConfig');
 
-var JestUtil = require('../../../../../../src/js/utils/JestUtil');
+import PluginTestUtils from 'PluginTestUtils';
 
-JestUtil.unMockStores(['ACLStore']);
-require('../../../../../../src/js/utils/StoreMixinConfig');
-
-var React = require('react');
+/*eslint-disable no-unused-vars*/
+import React from 'react';
+/*eslint-enable no-unused-vars*/
 var ReactDOM = require('react-dom');
 
+let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+
 var ACLList = require('../../../../../../src/js/structs/ACLList');
-var ACLStore = require('../../stores/ACLStore');
-var PermissionsView = require('../PermissionsView');
+var ACLStore = require('../../stores/ACLStore')(PluginSDK);
+var PermissionsView = require('../PermissionsView')(PluginSDK);
+
+require('../../../../storeConfig').register(PluginSDK);
 
 describe('PermissionsView', function () {
 

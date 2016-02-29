@@ -1,6 +1,5 @@
 jest.dontMock('../ACLActions');
 
-let ACLActions = require('../ACLActions');
 import {
   REQUEST_ACL_CREATE_SUCCESS,
   REQUEST_ACL_CREATE_ERROR,
@@ -16,9 +15,15 @@ import {
   REQUEST_ACL_USER_REVOKE_ACTION_ERROR
 } from '../../constants/ActionTypes';
 
+import PluginTestUtils from 'PluginTestUtils';
+
+let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+
+let ACLActions = require('../ACLActions')(PluginSDK);
+
+let {RequestUtil, Config} = PluginSDK.get(['Config', 'RequestUtil']);
+
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-let Config = require('../../../../../../src/js/config/Config');
-let RequestUtil = require('../../../../../../src/js/utils/RequestUtil');
 
 describe('ACLActions', function () {
 

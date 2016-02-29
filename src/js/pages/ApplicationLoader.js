@@ -2,7 +2,7 @@ import React from 'react';
 
 import AnimatedLogo from '../components/AnimatedLogo';
 import {PLUGINS_CONFIGURED} from '../constants/EventTypes';
-import {Hooks} from '../pluginBridge/PluginBridge';
+import {Hooks} from 'PluginSDK';
 
 const METHODS_TO_BIND = ['onPluginsLoaded'];
 

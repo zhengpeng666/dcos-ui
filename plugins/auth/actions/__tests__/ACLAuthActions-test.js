@@ -1,10 +1,16 @@
 jest.dontMock('../ACLAuthActions');
 
-var ACLAuthActions = require('../ACLAuthActions');
-var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../../../src/js/events/AppDispatcher');
-var Config = require('../../../../src/js/config/Config');
-var RequestUtil = require('../../../../src/js/utils/RequestUtil');
+import PluginTestUtils from 'PluginTestUtils';
+
+import ActionTypes from '../../constants/ActionTypes';
+
+import AppDispatcher from '../../../../src/js/events/AppDispatcher';
+
+let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+
+var ACLAuthActions = require('../ACLAuthActions')(PluginSDK);
+
+let {RequestUtil, Config} = PluginSDK.get(['RequestUtil', 'Config']);
 
 describe('ACLAuthActions', function () {
 

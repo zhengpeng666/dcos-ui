@@ -3,7 +3,7 @@ var classNames = require('classnames');
 import {Modal} from 'reactjs-components';
 var React = require('react');
 
-import {Hooks} from '../../pluginBridge/PluginBridge';
+import {Hooks} from 'PluginSDK';
 
 var CliInstructionsModal = React.createClass({
 

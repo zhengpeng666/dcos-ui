@@ -1,10 +1,8 @@
-import PluginHooks from './hooks';
+import _PluginHooks from './hooks';
 
-module.exports = function (Store, dispatch, name, options) {
-  const {Hooks, config} = options;
+module.exports = function (PluginSDK) {
 
   // Set plugin's hooks
-  PluginHooks.initialize(Hooks);
-  PluginHooks.configure(config);
+  _PluginHooks(PluginSDK).initialize();
 };
 

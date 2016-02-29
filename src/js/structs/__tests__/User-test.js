@@ -1,14 +1,12 @@
-var fixturePath = "../../../../tests/_fixtures/acl/user-with-details.json";
-
-jest.mock("../UsersList")
-jest.dontMock("underscore");
-jest.dontMock("../../utils/Util");
-jest.dontMock(fixturePath);
+jest.mock('../UsersList');
+jest.dontMock('underscore');
+jest.dontMock('../../utils/Util');
+jest.dontMock('../../../../tests/_fixtures/acl/user-with-details.json');
 
 var _ = require('underscore');
 var GroupsList = require('../GroupsList');
 var User = require('../User');
-var userFixture = require(fixturePath);
+var userFixture = require('../../../../tests/_fixtures/acl/user-with-details.json');
 userFixture.groups = userFixture.groups.array;
 
 describe('User', function () {

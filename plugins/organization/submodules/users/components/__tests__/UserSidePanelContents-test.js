@@ -1,22 +1,43 @@
-jest.dontMock('../../../../../../src/js/components/SidePanelContents');
 jest.dontMock('../UserSidePanelContents');
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
-jest.dontMock('../../../../../../src/js/mixins/InternalStorageMixin');
-jest.dontMock('../../../../../../src/js/mixins/TabsMixin');
-jest.dontMock('../../../../../../src/js/components/RequestErrorMsg');
-jest.dontMock('../../../../../../src/js/stores/MesosSummaryStore');
 jest.dontMock('../../stores/ACLUserStore');
+jest.dontMock('../../../../storeConfig');
 
-require('../../../../../../src/js/utils/StoreMixinConfig');
+import PluginTestUtils from 'PluginTestUtils';
 
-var React = require('react');
+PluginTestUtils.dontMock([
+  'InternalStorageMixin',
+  'TabsMixin',
+  'SidePanelContents',
+  'RequestErrorMsg',
+  'MesosSummaryStore',
+  'ACLStore',
+  'ACLGroupStore'
+]);
+
+PluginTestUtils.loadPluginsByName({
+  Auth: {
+    enabled: true
+  },
+  Tracking: {
+    enabled: true
+  }
+});
+
+let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+
+require('../../../../storeConfig').register(PluginSDK);
+/*eslint-disable no-unused-vars*/
+import React from 'react';
+/*eslint-enable no-unused-vars*/
 var ReactDOM = require('react-dom');
 
-var ACLUserStore = require('../../stores/ACLUserStore');
-var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
-var EventTypes = require('../../constants/EventTypes');
-var UserSidePanelContents = require('../UserSidePanelContents');
+import {ACL_USER_DETAILS_FETCHED_ERROR} from '../../constants/EventTypes';
+
+var ACLUserStore = require('../../stores/ACLUserStore')(PluginSDK);
+var UserSidePanelContents = require('../UserSidePanelContents')(PluginSDK);
+
 var User = require('../../../../../../src/js/structs/User');
+var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
 
 var userDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/user-with-details.json');
@@ -52,7 +73,7 @@ describe('UserSidePanelContents', function () {
 
   describe('#render', function () {
 
-    it('should return error message if fetch error was received', function () {
+    it.only('should return error message if fetch error was received', function () {
       var userID = 'unicode';
 
       var instance = ReactDOM.render(
@@ -61,7 +82,7 @@ describe('UserSidePanelContents', function () {
         this.container
       );
 
-      ACLUserStore.emit(EventTypes.ACL_USER_DETAILS_FETCHED_ERROR, userID);
+      ACLUserStore.emit(ACL_USER_DETAILS_FETCHED_ERROR, userID);
 
       var node = ReactDOM.findDOMNode(instance);
       var text = node.querySelector('h3');

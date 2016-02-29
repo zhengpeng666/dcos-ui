@@ -1,9 +1,11 @@
-var Actions = require('../../../plugins/tracking/actions/Actions');
 import ActionTypes from '../constants/ActionTypes';
 var AppDispatcher = require('./AppDispatcher');
 var Config = require('../config/Config');
+import PluginSDK from 'PluginSDK';
 var RequestUtil = require('../utils/RequestUtil');
 var _historyServiceOnline = true;
+
+var Actions = PluginSDK.getActions('Tracking', false);
 
 function getStateUrl(timeScale) {
   timeScale = timeScale || 'last';
@@ -16,11 +18,13 @@ function getStateUrl(timeScale) {
 
 function registerServerError(message, type) {
   _historyServiceOnline = false;
-  Actions.log({
-    eventID: 'Server error',
-    type: type,
-    error: message
-  });
+  if (Actions) {
+    Actions.log({
+      eventID: 'Server error',
+      type: type,
+      error: message
+    });
+  }
 }
 
 var MesosSummaryActions = {

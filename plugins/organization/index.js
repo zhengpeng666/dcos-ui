@@ -1,16 +1,18 @@
-import GroupsHooks from './submodules/groups/hooks';
-import DirectoriesHooks from './submodules/directories/hooks';
-import PluginHooks from './hooks';
-import UsersHooks from './submodules/users/hooks';
+import _DirectoriesHooks from './submodules/directories/hooks';
+import _GroupsHooks from './submodules/groups/hooks';
+import _PluginHooks from './hooks';
+import _UsersHooks from './submodules/users/hooks';
+import StoreConfig from './storeConfig';
 
-module.exports = function (Store, dispatch, name, options) {
-  const {Hooks} = options;
-
+module.exports = function (PluginSDK) {
   // Set plugin's hooks
-  PluginHooks.initialize(Hooks);
+  _PluginHooks(PluginSDK).initialize();
   // Set submodule hooks
-  DirectoriesHooks.initialize(Hooks);
-  GroupsHooks.initialize(Hooks);
-  UsersHooks.initialize(Hooks);
+  _GroupsHooks(PluginSDK).initialize();
+  _UsersHooks(PluginSDK).initialize();
+  _DirectoriesHooks(PluginSDK).initialize();
+
+   // Register our Stores
+  StoreConfig.register(PluginSDK);
 };
 

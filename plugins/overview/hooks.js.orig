@@ -3,30 +3,18 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {Route} from 'react-router';
 
+<<<<<<< e239b6b5ae56625dfd921fdda15e39cce5ad44c0
 import OverviewTab from './pages/OverviewTab';
 
 let PluginHooks = {
-<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
 
   appendRoutes(route) {
     route.routes.push({
-=======
-  routes: {
-    route: {
->>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
       type: Route,
       name: 'settings-system-overview',
       path: 'overview/?',
       handler: OverviewTab
-<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
     });
-=======
-    }
-  },
-
-  getOrganizationRoutes(route) {
-    route.routes.push(this.routes.route);
->>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
     return route;
   },
 
@@ -34,13 +22,39 @@ let PluginHooks = {
    * @param  {Object} Hooks The Hooks API
    */
   initialize(Hooks) {
-<<<<<<< 77a5b25722214bf320734c4cd3096ab3e305bec7
     Hooks.addFilter('SystemRoutes', this.appendRoutes.bind(this));
-=======
-    Hooks.addFilter('getSystemRoutes', this.getOrganizationRoutes.bind(this));
->>>>>>> extensible routing in place for settings tab. Missing some pieces but pushing for team to view
   }
 };
+=======
+import _OverviewTab from './pages/OverviewTab';
 
-module.exports = PluginHooks;
+module.exports = (PluginSDK) => {
 
+  let {Hooks} = PluginSDK;
+
+  let OverviewTab = _OverviewTab(PluginSDK);
+
+  let OverviewPluginHooks = {
+    routes: {
+      route: {
+        type: Route,
+        name: 'settings-system-overview',
+        path: 'overview/?',
+        handler: OverviewTab
+      }
+    },
+
+    getOrganizationRoutes(route) {
+      route.routes.push(this.routes.route);
+      return route;
+    },
+
+    initialize() {
+      Hooks.addFilter('getSystemRoutes', this.getOrganizationRoutes.bind(this));
+    }
+  };
+>>>>>>> Mostly complete plugin system.
+
+  return OverviewPluginHooks;
+
+};
