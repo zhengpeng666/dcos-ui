@@ -12,7 +12,14 @@ import {
   COSMOS_INSTALL_SUCCESS,
   COSMOS_INSTALL_ERROR,
   COSMOS_UNINSTALL_SUCCESS,
-  COSMOS_UNINSTALL_ERROR
+  COSMOS_UNINSTALL_ERROR,
+
+  COSMOS_REPOSITORIES_SUCCESS,
+  COSMOS_REPOSITORIES_ERROR,
+  COSMOS_REPOSITORY_ADD_SUCCESS,
+  COSMOS_REPOSITORY_ADD_ERROR,
+  COSMOS_REPOSITORY_DELETE_SUCCESS,
+  COSMOS_REPOSITORY_DELETE_ERROR
 } from '../constants/EventTypes';
 import {
   REQUEST_COSMOS_PACKAGES_LIST_ERROR,
@@ -25,6 +32,14 @@ import {
   REQUEST_COSMOS_PACKAGE_INSTALL_SUCCESS,
   REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR,
   REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS,
+
+  REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS,
+  REQUEST_COSMOS_REPOSITORIES_LIST_ERROR,
+  REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS,
+  REQUEST_COSMOS_REPOSITORY_ADD_ERROR,
+  REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS,
+  REQUEST_COSMOS_REPOSITORY_DELETE_ERROR,
+
   SERVER_ACTION
 } from '../constants/ActionTypes';
 import List from '../structs/List';
@@ -63,6 +78,12 @@ const CosmosPackagesStore = Store.createStore({
   installPackage: CosmosPackagesActions.installPackage,
 
   uninstallPackage: CosmosPackagesActions.uninstallPackage,
+
+  fetchRepositories: CosmosPackagesActions.fetchRepositories,
+
+  addRepository: CosmosPackagesActions.addRepository,
+
+  deleteRepository: CosmosPackagesActions.deleteRepository,
 
   /* Reducers */
   getAvailablePackages() {
@@ -121,7 +142,7 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   processRepositoriesSuccess: function (repositories) {
-    this.set({packageDetails: null});
+    this.set({repositories});
 
     this.emit(COSMOS_REPOSITORIES_SUCCESS);
   },
@@ -209,7 +230,9 @@ const CosmosPackagesStore = Store.createStore({
         CosmosPackagesStore.emit(COSMOS_REPOSITORIES_ERROR);
         break;
       case REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS:
-        CosmosPackagesStore.emit(COSMOS_REPOSITORY_ADD_SUCCESS);
+        CosmosPackagesStore.emit(
+          COSMOS_REPOSITORY_ADD_SUCCESS, action.name, action.url
+        );
         break;
       case REQUEST_COSMOS_REPOSITORY_ADD_ERROR:
         CosmosPackagesStore.emit(
@@ -217,7 +240,9 @@ const CosmosPackagesStore = Store.createStore({
         );
         break;
       case REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS:
-        CosmosPackagesStore.emit(COSMOS_REPOSITORY_DELETE_SUCCESS);
+        CosmosPackagesStore.emit(
+          COSMOS_REPOSITORY_DELETE_SUCCESS, action.name, action.url
+        );
         break;
       case REQUEST_COSMOS_REPOSITORY_DELETE_ERROR:
         CosmosPackagesStore.emit(
