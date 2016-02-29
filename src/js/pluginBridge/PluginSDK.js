@@ -175,12 +175,22 @@ const getSDK = function (pluginID, config) {
     return PLUGIN_ENV_CACHE[pluginID];
   }
 
+  let StoreAPI = Store;
+
+  if (pluginID !== APPLICATION) {
+    // Limit access for Plugins
+    StoreAPI = {
+      subscribe: Store.subscribe.bind(Store),
+      getState: Store.getState.bind(Store)
+    };
+  }
+
   let SDK = new PluginSDKStruct({
     config: config || {},
     dispatch: createDispatcher(pluginID),
+    Store: StoreAPI,
     Hooks,
     pluginID,
-    Store,
     constants
   });
 
