@@ -1,9 +1,9 @@
 import {Confirm} from 'reactjs-components';
 import React from 'react';
 
-import MultipleForm from './MultipleForm';
 import ReviewConfig from './ReviewConfig';
 import {schema as boomski} from './__tests__/fixtures/MarathonConfigFixture';
+import SchemaForm from './SchemaForm';
 import SchemaUtil from '../utils/SchemaUtil';
 
 const METHODS_TO_BIND = [
@@ -106,7 +106,7 @@ class AdvancedConfigModal extends React.Component {
   getModalContents() {
     if (this.isReviewing()) {
       let jsonDocument = SchemaUtil.definitionToJSONDocument(
-        this.props.multipleDefinition
+        SchemaUtil.schemaToMultipleDefinition(this.props.schema)
       );
 
       return (
@@ -116,8 +116,8 @@ class AdvancedConfigModal extends React.Component {
     }
 
     return (
-      <MultipleForm
-        multipleDefinition={this.props.multipleDefinition}
+      <SchemaForm
+        schema={this.props.schema}
         isMobileWidth={this.state.isMobileWidth}/>
     );
   }
@@ -144,13 +144,13 @@ class AdvancedConfigModal extends React.Component {
 }
 
 AdvancedConfigModal.defaultProps = {
-  multipleDefinition: SchemaUtil.schemaToMultipleDefinition(boomski),
+  schema: boomski,
   onClose: function () {},
   open: false
 };
 
 AdvancedConfigModal.propTypes = {
-  multipleDefinition: React.PropTypes.object,
+  schema: React.PropTypes.object,
   onClose: React.PropTypes.func,
   open: React.PropTypes.bool,
   serviceImage: React.PropTypes.string,

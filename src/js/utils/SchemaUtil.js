@@ -1,3 +1,17 @@
+/* eslint-disable no-unused-vars */
+import React from 'react';
+/* eslint-enable no-unused-vars */
+
+function getSubHeader(name) {
+  return (
+    <div key={name} className="row">
+      <div className="h5 column-12">
+        {name}
+      </div>
+    </div>
+  );
+}
+
 function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
   let value = '';
 
@@ -18,8 +32,13 @@ function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
     showLabel: true,
     writeType: 'input',
     validation: function () { return true; },
-    value: value
+    value: value,
+    valueType: fieldProps.type
   };
+
+  if (typeof value === 'boolean') {
+    definition.checked = value;
+  }
 
   if (Array.isArray(fieldProps.default) && fieldProps.default.length === 0) {
     definition.value = '';
@@ -33,17 +52,23 @@ function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
   return definition;
 }
 
-function nestedSchemaToFieldDefinition(fieldName, fieldProps) {
+function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp) {
   let nestedDefinition = {
     name: fieldName,
+    formParent: topLevelProp,
+    render: getSubHeader.bind(this, fieldName),
+    fieldType: 'object',
     definition: []
   };
 
   let properties = fieldProps.properties;
   Object.keys(properties).forEach(function (nestedFieldName) {
     nestedDefinition.definition.push(
-      nestedFieldName,
-      properties[nestedFieldName]
+      schemaToFieldDefinition(
+        nestedFieldName,
+        properties[nestedFieldName],
+        nestedFieldName
+      )
     );
   });
 
@@ -76,7 +101,8 @@ let SchemaUtil = {
         } else {
           fieldDefinition = nestedSchemaToFieldDefinition(
             secondLevelProp,
-            secondLevelObject
+            secondLevelObject,
+            topLevelProp
           );
         }
         definitionForm.definition.push(fieldDefinition);

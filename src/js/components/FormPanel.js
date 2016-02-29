@@ -3,61 +3,31 @@ import {Form} from 'reactjs-components';
 import React from 'react';
 
 const METHODS_TO_BIND = [
-  'getFormRowClass', 'getTriggerSubmit', 'handleError'
+  'getTriggerSubmit'
 ];
 
 class FormPanel extends React.Component {
   constructor() {
     super();
-    this.triggerSubmit = function () {};
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  handleError() {
-    console.log('error');
-  }
-
-  flattenDefinition(definition) {
+  getDefinition(definition) {
     let flattenedDefinition = [];
+    flattenedDefinition.push({render: this.getHeader.bind(
+      this,
+      definition.title,
+      definition.description
+    )});
 
-    Object.keys(definition).forEach((title) => {
-      let typeDefinition = definition[title];
-
-      flattenedDefinition.push({render: this.getHeader.bind(
-        this,
-        typeDefinition.title,
-        typeDefinition.description
-      )});
-
-      typeDefinition.definition.forEach((field) => {
-        let nestedDefinition = field.definition;
-        if (nestedDefinition) {
-          flattenedDefinition.push({render: this.getSubHeader.bind(
-            this,
-            field.name
-          )});
-          flattenedDefinition = flattenedDefinition.concat(nestedDefinition);
-        } else {
-          flattenedDefinition.push(field);
-        }
-      });
-    });
-
-    return flattenedDefinition;
+    return flattenedDefinition.concat(definition.definition);
   }
 
   getTriggerSubmit(trigger) {
-    this.triggerSubmit = trigger;
-    this.forceUpdate();
-  }
-
-  getFormRowClass(definition) {
-    let isSelectedForm = definition.formParent === this.props.currentTab;
-
-    return classNames('row', {hidden: !isSelectedForm});
+    this.props.getTriggerSubmit(trigger);
   }
 
   getHeader(title, description) {
@@ -73,28 +43,17 @@ class FormPanel extends React.Component {
     );
   }
 
-  getSubHeader(name) {
-    return (
-      <div className="row">
-        <div className="h5 column-12">
-          {name}
-        </div>
-      </div>
-    );
-  }
-
   render() {
-    let definition = this.flattenDefinition(this.props.definition);
+    let definition = this.getDefinition(this.props.definition);
 
     return (
       <div className="row form-panel">
         <Form
-          className="form"
+          className={this.props.className}
           definition={definition}
-          formRowClass={this.getFormRowClass}
           triggerSubmit={this.getTriggerSubmit}
-          onSubmit={this.props.onSubmit}
-          onError={this.handleError} />
+          onChange={this.props.onFormChange}
+          onSubmit={this.props.onSubmit} />
       </div>
     );
   }
