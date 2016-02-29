@@ -187,7 +187,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
             <li className="button-collection list-item-aligned-right">
               <a href={`${Config.rootUrl}${Config.unitHealthAPIPrefix}\/report`}
                 className="button button-primary">
-                Download Health
+                Download Snapshot
               </a>
             </li>
           </ul>

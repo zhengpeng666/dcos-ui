@@ -8,7 +8,6 @@ import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 const METHODS_TO_BIND = [
   'renderHealth',
-  'renderHealthCheckName',
   'renderNode'
 ];
 
@@ -25,9 +24,8 @@ class UnitHealthNodesTable extends React.Component {
   getColGroup() {
     return (
       <colgroup>
-        <col style={{width: '20%'}} />
-        <col style={{width: '40%'}} />
-        <col style={{width: '40%'}} />
+        <col style={{width: '25%'}} />
+        <col />
       </colgroup>
     );
   }
@@ -47,13 +45,6 @@ class UnitHealthNodesTable extends React.Component {
           'hostname',
           UnitHealthUtil.getHealthSorting
         )
-      },
-      {
-        className: classNameFn,
-        headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({check: 'HEALTH CHECK NAME'}),
-        prop: 'check',
-        render: this.renderHealthCheckName
       },
       {
         className: classNameFn,
@@ -89,11 +80,6 @@ class UnitHealthNodesTable extends React.Component {
         {StringUtil.capitalize(health.title)}
       </span>
     );
-  }
-
-  renderHealthCheckName(prop, node) {
-    let linkTitle = `${this.props.unit.get('unit_title')} Health Check`;
-    return this.getNodeLink(node, linkTitle);
   }
 
   renderNode(prop, node) {
