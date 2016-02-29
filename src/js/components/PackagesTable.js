@@ -1,10 +1,10 @@
 import classNames from 'classnames';
+import {Confirm, Table} from 'reactjs-components';
 import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
 import React from 'react';
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from 'mesosphere-shared-reactjs';
-import {Confirm, Table} from 'reactjs-components';
 
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import PackagesTableHeaderLabels from '../constants/PackagesTableHeaderLabels';
@@ -12,11 +12,11 @@ import ResourceTableUtil from '../utils/ResourceTableUtil';
 import UniversePackagesList from '../structs/UniversePackagesList';
 
 const METHODS_TO_BIND = [
-  'handleOpenConfirm',
-  'handleUninstallPackage',
-  'handleUninstallCancel',
   'getHeadline',
-  'getUninstallButton'
+  'getUninstallButton',
+  'handleOpenConfirm',
+  'handleUninstallCancel',
+  'handleUninstallPackage'
 ];
 
 class PackagesTable extends mixin(StoreMixin) {
@@ -24,8 +24,8 @@ class PackagesTable extends mixin(StoreMixin) {
     super();
 
     this.state = {
-      packageUninstallError: null,
       packageToUninstall: null,
+      packageUninstallError: null,
       pendingRequest: false
     };
 
@@ -51,9 +51,9 @@ class PackagesTable extends mixin(StoreMixin) {
 
   onCosmosPackagesStoreUninstallSuccess() {
     this.setState({
+      packageToUninstall: null,
       packageUninstallError: null,
-      pendingRequest: false,
-      packageToUninstall: null
+      pendingRequest: false
     });
     CosmosPackagesStore.fetchInstalledPackages();
   }
