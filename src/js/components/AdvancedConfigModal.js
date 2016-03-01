@@ -18,8 +18,8 @@ class AdvancedConfigModal extends React.Component {
     super();
 
     this.state = {
-      reviewingConfig: false,
-      isMobileWidth: false
+      isMobileWidth: false,
+      reviewingConfig: false
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -51,7 +51,7 @@ class AdvancedConfigModal extends React.Component {
       return;
     }
 
-    var isMobileWidth = this.isMobileWidth(e.target);
+    let isMobileWidth = this.isMobileWidth(e.target);
     if (isMobileWidth) {
       this.setState({isMobileWidth: true});
     } else if (this.state.isMobileWidth) {
