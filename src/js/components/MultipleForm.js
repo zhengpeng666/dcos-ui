@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
 
-import FilterByFormTab from './FilterByFormTab';
 import FormPanel from './FormPanel';
 import SideTabs from './SideTabs';
 
@@ -60,12 +59,11 @@ class MultipleForm extends React.Component {
 
   getServiceHeader() {
     return (
-      <div className="media-object-spacing-wrapper">
+      <div className="media-object-spacing-wrapper media-object-spacing-narrow flush">
         <div className="media-object media-object-align-middle">
           <div className="media-object-item">
             <img
-              className="icon icon-sprite icon-sprite-medium
-                icon-sprite-medium-color"
+              className="icon icon-sprite icon-sprite-medium icon-sprite-medium-color icon-app-container"
               src={this.props.serviceImage} />
           </div>
           <div className="media-object-item">
@@ -82,27 +80,18 @@ class MultipleForm extends React.Component {
   }
 
   getSideContent(multipleDefinition) {
-    let content = null;
     let currentTab = this.state.currentTab;
     let {handleTabClick} = this;
     let isMobileWidth = this.props.isMobileWidth;
     let tabValues = _.values(multipleDefinition);
 
-    if (isMobileWidth) {
-      content = (
-        <FilterByFormTab
-          currentTab={currentTab}
-          handleFilterChange={handleTabClick}
-          tabs={tabValues} />
-      );
-    } else {
-      content = (
-        <SideTabs
-          onTabClick={handleTabClick}
-          selectedTab={currentTab}
-          tabs={tabValues} />
-      );
-    }
+    let content = (
+      <SideTabs
+        isMobileWidth={isMobileWidth}
+        onTabClick={handleTabClick}
+        selectedTab={currentTab}
+        tabs={tabValues} />
+    );
 
     let classSet = classNames({
       'column-4': !isMobileWidth,

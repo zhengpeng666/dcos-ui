@@ -15,11 +15,9 @@ class FilterByFormTab extends React.Component {
 
   getItemHtml(item) {
     return (
-      <span className="badge-container">
-        <h4 className="flush dropdown-header">
-          <span>{item.title}</span>
-        </h4>
-      </span>
+      <h4 className="flush dropdown-header">
+        {item.title}
+      </h4>
     );
   }
 
@@ -41,7 +39,7 @@ class FilterByFormTab extends React.Component {
   render() {
     return (
       <Dropdown
-        buttonClassName="button dropdown-toggle text-align-left"
+        buttonClassName="button button-link button-primary dropdown-toggle text-align-left"
         dropdownMenuClassName="
           dropdown-menu
           dropdown-menu-space-bottom
