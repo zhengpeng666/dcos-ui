@@ -2,111 +2,11 @@ import _ from 'underscore';
 import classNames from 'classnames';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
-import tv4 from 'tv4';
 
 import FormPanel from './FormPanel';
 import SideTabs from './SideTabs';
+import SchemaFormUtil from '../utils/SchemaFormUtil';
 import SchemaUtil from '../utils/SchemaUtil';
-
-const DEFAULT_FORM_VALUES = {
-  array: [],
-  boolean: false,
-  integer: null,
-  number: null,
-  string: ''
-};
-
-function getDefinitionFromPath(definition, paths) {
-  if (definition[paths[0]]) {
-    definition = definition[paths[0]];
-    paths = paths.slice(1);
-  }
-
-  paths.forEach(function (path) {
-    if (definition.definition == null) {
-      return;
-    }
-
-    let nextDefinition = _.find(definition.definition, function (definitionField) {
-      return definitionField.name === path || definitionField.title === path;
-    });
-
-    if (nextDefinition) {
-      definition = nextDefinition;
-    }
-  });
-
-  return definition;
-}
-
-function processFormModel(model, multipleDefinition, prevPath = []) {
-  let copy = {};
-
-  Object.keys(model).forEach(function (key) {
-    let value = model[key];
-    let path = prevPath.concat([key]);
-
-    if (typeof value === 'object' && value !== null) {
-      if (value.hasOwnProperty('checked')) {
-        value = value.checked;
-      } else {
-        copy[key] = processFormModel(value, multipleDefinition, path);
-      }
-      return;
-    }
-
-    let definition = getDefinitionFromPath(multipleDefinition, path);
-    if (definition == null) {
-      return;
-    }
-
-    let valueType = definition.valueType;
-
-    if (valueType === 'integer' || valueType === 'number') {
-      value = Number(value);
-      if (isNaN(value)) {
-        value = null;
-      }
-    }
-
-    if (value === null) {
-      value = DEFAULT_FORM_VALUES[valueType];
-    }
-
-    if (valueType === 'array' && typeof value === 'string') {
-      value = value.split(',').map((val) => { return val.trim(); });
-    }
-
-    copy[key] = value;
-  });
-
-  return copy;
-}
-
-function filteredPaths(combinedPath) {
-  return combinedPath.split('/').filter(function (path) {
-    return path.length > 0;
-  });
-}
-
-function parseTV4Error(tv4Error) {
-  let errorObj = {
-    message: tv4Error.message,
-    path: filteredPaths(tv4Error.dataPath)
-  };
-
-  let schemaPath = tv4Error.schemaPath.split('/');
-
-  if (tv4Error.code === 302) {
-    errorObj.path.push(tv4Error.params.key);
-  }
-
-  if (schemaPath[schemaPath.length - 2] === 'items') {
-    errorObj.path.pop();
-  }
-
-  return errorObj;
-}
 
 const METHODS_TO_BIND = [
   'getTriggerSubmit', 'validateForm', 'handleFormChange', 'handleTabClick'
@@ -131,7 +31,7 @@ class SchemaForm extends React.Component {
 
   componentWillMount() {
     this.multipleDefinition = SchemaUtil.schemaToMultipleDefinition(
-      this.props.schema
+      this.props.schema, this.getSubHeader
     );
 
     this.submitMap = {};
@@ -183,26 +83,28 @@ class SchemaForm extends React.Component {
     let prevDefinition = this.multipleDefinition;
     // Reset the definition in order to reset all errors.
     this.multipleDefinition = SchemaUtil.schemaToMultipleDefinition(
-      schema
+      schema, this.getSubHeader
     );
 
-    let model = processFormModel(this.model, this.multipleDefinition);
-    let result = tv4.validateMultiple(model, schema);
+    let model = SchemaFormUtil.processFormModel(
+      this.model, this.multipleDefinition
+    );
+    let result = SchemaFormUtil.tv4Validate(model, schema);
 
     let errors = result.errors.map(function (error) {
-      return parseTV4Error(error);
+      return SchemaFormUtil.parseTV4Error(error);
     });
 
     errors.forEach((error) => {
       let path = error.path;
       let prevObj = prevDefinition[path[0]];
-      prevObj = getDefinitionFromPath(prevObj, path.slice(1));
+      prevObj = SchemaFormUtil.getDefinitionFromPath(prevObj, path.slice(1));
       if (path[path.length - 1] !== fieldName && !prevObj.showError) {
         return;
       }
 
       let obj = this.multipleDefinition[path[0]];
-      obj = getDefinitionFromPath(obj, path.slice(1));
+      obj = SchemaFormUtil.getDefinitionFromPath(obj, path.slice(1));
 
       if (obj == null) {
         return;
@@ -217,6 +119,16 @@ class SchemaForm extends React.Component {
 
   getTriggerSubmit(formKey, triggerSubmit) {
     this.submitMap[formKey] = triggerSubmit;
+  }
+
+  getSubHeader(name) {
+    return (
+      <div key={name} className="row">
+        <div className="h5 column-12">
+          {name}
+        </div>
+      </div>
+    );
   }
 
   getServiceHeader() {

@@ -1,17 +1,3 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
-/* eslint-enable no-unused-vars */
-
-function getSubHeader(name) {
-  return (
-    <div key={name} className="row">
-      <div className="h5 column-12">
-        {name}
-      </div>
-    </div>
-  );
-}
-
 function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
   let value = '';
 
@@ -52,11 +38,11 @@ function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
   return definition;
 }
 
-function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp) {
+function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subheaderRender) {
   let nestedDefinition = {
     name: fieldName,
     formParent: topLevelProp,
-    render: getSubHeader.bind(this, fieldName),
+    render: subheaderRender.bind(null, fieldName),
     fieldType: 'object',
     definition: []
   };
@@ -76,7 +62,7 @@ function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp) {
 }
 
 let SchemaUtil = {
-  schemaToMultipleDefinition: function (schema) {
+  schemaToMultipleDefinition: function (schema, subheaderRender) {
     let multipleDefinition = {};
     let schemaProperties = schema.properties;
 
@@ -102,7 +88,8 @@ let SchemaUtil = {
           fieldDefinition = nestedSchemaToFieldDefinition(
             secondLevelProp,
             secondLevelObject,
-            topLevelProp
+            topLevelProp,
+            subheaderRender
           );
         }
         definitionForm.definition.push(fieldDefinition);
