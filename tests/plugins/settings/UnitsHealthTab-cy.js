@@ -1,46 +1,55 @@
 describe('Units Tab [0e2]', function () {
 
-  beforeEach(function () {
-    cy.configureCluster({
-      mesos: '1-task-healthy',
-      plugins: 'settings-enabled',
-      componentHealth: true
-    })
-      .visitUrl({url: '/settings/system/units', identify: true});
-  });
   context('Filters [0e3]', function () {
 
+    beforeEach(function () {
 
-    it('renders three filter buttons [0e4]', function () {
-      cy.get('.button-group .button').should(function ($buttons) {
+      cy.configureCluster({
+          mesos: '1-task-healthy',
+          plugins: 'settings-enabled',
+          componentHealth: true
+        })
+        .visitUrl({url: '/settings/system/units', identify: true});
+
+      cy.get('.units-health-table-header').within(function () {
+        cy.get('.form-control input[type=\'text\']').as('filterTextbox');
+        cy.get('.button-group .button').as('filterButtons');
+      });
+    });
+
+    it('renders filter buttons [0e4]', function () {
+      cy.get('@filterButtons').should(function ($buttons) {
         expect($buttons.length).to.equal(3);
+        expect($buttons).to.contain('Healthy');
       });
     });
 
     it('renders string filter input box [0e5]', function () {
-      cy.get('.filter-input-text').should(function ($input) {
-        expect($input).to.exist;
+      cy.get('@filterTextbox').should(function ($input) {
+        expect($input.length).to.equal(1);
       });
     });
 
     it('filters by node health [0e7]', function () {
-      cy.get('.button-group .button').last().click();
+      cy.get('@filterButtons').last().click();
       cy.get('tr a').should(function ($row) {
+        expect($row).to.contain('Mesos DNS');
         expect($row.length).to.equal(1);
       });
     });
 
     it('filters by node name [0e6]', function () {
-      cy.get('.form-control input[type=\'text\']').type('nginx');
+      cy.get('@filterTextbox').type('nginx');
       cy.get('tr a').should(function ($row) {
         expect($row.length).to.equal(1);
       });
     });
 
     it('filters by node health and name at the same time [0e8]', function () {
-      cy.get('.button-group .button').eq(1).click();
-      cy.get('.form-control input[type=\'text\']').type('mesos');
+      cy.get('@filterButtons').eq(1).click();
+      cy.get('@filterTextbox').type('mesos');
       cy.get('tr a').should(function ($row) {
+        expect($row).to.contain('mesos master service');
         expect($row.length).to.equal(1);
       });
     });
@@ -55,15 +64,19 @@ describe('Units Tab [0e2]', function () {
   context('Unit Side Panel [0e9]', function () {
 
     beforeEach(function () {
-      cy
+      cy.configureCluster({
+          mesos: '1-task-healthy',
+          plugins: 'settings-enabled',
+          componentHealth: true
+        })
         .visitUrl(
           {url: '/settings/system/units/mesos_dns_service/', identify: true}
         );
     });
 
     it('renders unit title [0ea]', function () {
-      cy.get('h1').should(function ($title) {
-        expect($title).to.contain('Mesos DNS');
+      cy.get('h1').contains('Mesos DNS').should(function ($title) {
+        expect($title).to.exist;
       });
     });
 
@@ -76,9 +89,9 @@ describe('Units Tab [0e2]', function () {
     });
 
     it('filters by node health [0ec]', function () {
-      cy.get('button').last().click();
-      cy.get('.dropdown').find('li').eq(1).click();
-      cy.get('tr a').contains('Health Check').should(function ($row) {
+      cy.get('button').contains('Health Checks').click();
+      cy.get('.dropdown').find('li').contains('Healthy').click();
+      cy.get('tr').contains('Healthy').should(function ($row) {
         expect($row.length).to.equal(1);
       });
     });
@@ -92,15 +105,19 @@ describe('Units Tab [0e2]', function () {
   context('Unit Node Side Panel [0ef]', function () {
 
     beforeEach(function () {
-      cy
+      cy.configureCluster({
+          mesos: '1-task-healthy',
+          plugins: 'settings-enabled',
+          componentHealth: true
+        })
         .visitUrl(
           {url: '/settings/system/units/mesos_dns_service/nodes/ip-10-10-0-236', identify: true}
         );
     });
 
     it('renders health check title [0ei]', function () {
-      cy.get('h1').should(function ($title) {
-        expect($title).to.contain('Mesos DNS Health Check');
+      cy.get('h1').contains('Mesos DNS Health Check').should(function ($title) {
+        expect($title).to.exist;
       });
     });
 
