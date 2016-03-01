@@ -4,30 +4,17 @@ import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
 import tv4 from 'tv4';
 
-global.tv4 = tv4;
-
-import FilterByFormTab from './FilterByFormTab';
 import FormPanel from './FormPanel';
 import SideTabs from './SideTabs';
 import SchemaUtil from '../utils/SchemaUtil';
 
-function resetDefinitionErrors(definitions) {
-  definitions.forEach(function (definition) {
-    if (definition.fieldType === 'object') {
-      resetDefinitionErrors(definition.definition);
-    } else {
-      definition.showError = '';
-      definition.validationErrorText = '';
-    }
-  });
-}
-
-function resetErrors(multipleDefinition) {
-  Object.keys(multipleDefinition).forEach(function (key) {
-    let field = multipleDefinition[key];
-    resetDefinitionErrors(field.definition);
-  });
-}
+const DEFAULT_FORM_VALUES = {
+  array: [],
+  boolean: false,
+  integer: null,
+  number: null,
+  string: ''
+};
 
 function getDefinitionFromPath(definition, paths) {
   if (definition[paths[0]]) {
@@ -37,13 +24,16 @@ function getDefinitionFromPath(definition, paths) {
 
   paths.forEach(function (path) {
     if (definition.definition == null) {
-      definition = null;
       return;
     }
 
-    definition = _.find(definition.definition, function (definitionField) {
+    let nextDefinition = _.find(definition.definition, function (definitionField) {
       return definitionField.name === path || definitionField.title === path;
     });
+
+    if (nextDefinition) {
+      definition = nextDefinition;
+    }
   });
 
   return definition;
@@ -73,19 +63,18 @@ function processFormModel(model, multipleDefinition, prevPath = []) {
     let valueType = definition.valueType;
 
     if (valueType === 'integer' || valueType === 'number') {
-      value = Number(value) || value;
+      value = Number(value);
+      if (isNaN(value)) {
+        value = null;
+      }
     }
 
-    if (valueType === 'array' && value !== null) {
+    if (value === null) {
+      value = DEFAULT_FORM_VALUES[valueType];
+    }
+
+    if (valueType === 'array' && typeof value === 'string') {
       value = value.split(',').map((val) => { return val.trim(); });
-    }
-
-    if (valueType === 'boolean' && value == null) {
-      value = false;
-    }
-
-    if (value === '') {
-      value = null;
     }
 
     copy[key] = value;
@@ -106,8 +95,14 @@ function parseTV4Error(tv4Error) {
     path: filteredPaths(tv4Error.dataPath)
   };
 
+  let schemaPath = tv4Error.schemaPath.split('/');
+
   if (tv4Error.code === 302) {
     errorObj.path.push(tv4Error.params.key);
+  }
+
+  if (schemaPath[schemaPath.length - 2] === 'items') {
+    errorObj.path.pop();
   }
 
   return errorObj;
@@ -168,28 +163,24 @@ class SchemaForm extends React.Component {
   }
 
   handleFormChange(formData, eventObj) {
-    if (eventObj.eventType !== 'change') {
+    if (eventObj.eventType !== 'blur') {
       return;
     }
 
-    let fieldValue = eventObj.fieldValue;
-    if (typeof eventObj.fieldValue === 'object'
-      && fieldValue.hasOwnProperty('checked')) {
-      // this.updateDefinition(eventObj);
-      // this.forceUpdate();
-    }
+    this.validateForm(eventObj.fieldName);
   }
 
   handleFormSubmit(formKey, formModel) {
     this.model[formKey] = formModel;
   }
 
-  validateForm() {
+  validateForm(fieldName) {
     let schema = this.props.schema;
     Object.keys(this.multipleDefinition).forEach((formKey) => {
       this.submitMap[formKey]();
     });
 
+    let prevDefinition = this.multipleDefinition;
     // Reset the definition in order to reset all errors.
     this.multipleDefinition = SchemaUtil.schemaToMultipleDefinition(
       schema
@@ -201,23 +192,17 @@ class SchemaForm extends React.Component {
     let errors = result.errors.map(function (error) {
       return parseTV4Error(error);
     });
-    console.log(errors.length);
+
     errors.forEach((error) => {
       let path = error.path;
+      let prevObj = prevDefinition[path[0]];
+      prevObj = getDefinitionFromPath(prevObj, path.slice(1));
+      if (path[path.length - 1] !== fieldName && !prevObj.showError) {
+        return;
+      }
+
       let obj = this.multipleDefinition[path[0]];
       obj = getDefinitionFromPath(obj, path.slice(1));
-
-      // if (obj && path[1]) {
-      //   obj = _.find(obj.definition, function (definitionField) {
-      //     return definitionField.name === path[1];
-      //   });
-      // }
-
-      // if (obj && path[2]) {
-      //   obj = _.find(obj.definition, function (definitionField) {
-      //     return definitionField.name === path[2];
-      //   });
-      // }
 
       if (obj == null) {
         return;
@@ -230,30 +215,13 @@ class SchemaForm extends React.Component {
     this.forceUpdate();
   }
 
-  updateDefinition(eventObj) {
-    let {fieldName, fieldValue} = eventObj;
-    let definition = this.multipleDefinition[this.state.currentTab].definition;
-
-    definition.forEach(function (field) {
-      if (field.name === fieldName) {
-        field.checked = fieldValue.checked;
-        field.value = fieldValue.checked;
-        console.log(field.value);
-      }
-    });
-  }
-
-  validateWithSchema() {
-    // Nothing to do for now.
-  }
-
   getTriggerSubmit(formKey, triggerSubmit) {
     this.submitMap[formKey] = triggerSubmit;
   }
 
   getServiceHeader() {
     return (
-      <div className="media-object-spacing-wrapper">
+      <div className="media-object-spacing-wrapper media-object-spacing-narrow flush">
         <div className="media-object media-object-align-middle">
           <div className="media-object-item">
             <img
@@ -275,27 +243,18 @@ class SchemaForm extends React.Component {
   }
 
   getSideContent(multipleDefinition) {
-    let content = null;
     let currentTab = this.state.currentTab;
     let {handleTabClick} = this;
     let isMobileWidth = this.props.isMobileWidth;
     let tabValues = _.values(multipleDefinition);
 
-    if (isMobileWidth) {
-      content = (
-        <FilterByFormTab
-          currentTab={currentTab}
-          handleFilterChange={handleTabClick}
-          tabs={tabValues} />
-      );
-    } else {
-      content = (
-        <SideTabs
-          onTabClick={handleTabClick}
-          selectedTab={currentTab}
-          tabs={tabValues} />
-      );
-    }
+    let content = (
+      <SideTabs
+        isMobileWidth={isMobileWidth}
+        onTabClick={handleTabClick}
+        selectedTab={currentTab}
+        tabs={tabValues} />
+    );
 
     let classSet = classNames({
       'column-4': !isMobileWidth,

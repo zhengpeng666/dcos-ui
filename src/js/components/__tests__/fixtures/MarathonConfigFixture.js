@@ -72,7 +72,13 @@ module.exports.schema = {
         },
         "artifact-store" : {
           "description" : "URL to the artifact store. Supported store types hdfs, file. Example: hdfs://localhost:54310/path/to/store, file:///var/log/store",
-          "type" : "string"
+          "type" : "object",
+          "properties": {
+            "nestedThing": {
+              "type": "string",
+              "description": "something nested"
+            }
+          }
         },
         "assets-path" : {
           "description" : "Set a local file system path to load assets from, instead of loading them from the packaged jar.",
@@ -565,14 +571,19 @@ module.exports.multipleDefinition = {
         "value":""
       },
       {
-        "fieldType":"text",
-        "name":"artifact-store",
-        "placeholder":"",
-        "required":false,
-        "showError":false,
-        "showLabel":true,
-        "writeType":"input",
-        "value":""
+        "title": "nested subtitle",
+        "definition": [
+          {
+            "fieldType":"text",
+            "name":"access-control-allow-origin",
+            "placeholder":"",
+            "required":false,
+            "showError":false,
+            "showLabel":true,
+            "writeType":"input",
+            "value":""
+          }
+        ]
       },
       {
         "fieldType":"text",
@@ -1234,3 +1245,355 @@ module.exports.multipleDefinition = {
     ]
   }
 };
+
+module.exports.schema2 = {
+  "type":"object",
+  "properties":{
+    "mesos":{
+      "description":"Mesos specific configuration properties",
+      "type":"object",
+      "properties":{
+        "master":{
+          "default":"zk://master.mesos:2181/mesos",
+          "description":"The URL of the Mesos master. The format is a comma-delimited list of hosts like zk://host1:port,host2:port/mesos. If using ZooKeeper, pay particular attention to the leading zk:// and trailing /mesos! If not using ZooKeeper, standard host:port patterns, like localhost:5050 or 10.0.0.5:5050,10.0.0.6:5050, are also acceptable.",
+          "type":"string"
+        }
+      },
+      "required":[
+        "master"
+      ]
+    },
+    "cassandra":{
+      "description":"Cassandra Framework Configuration Properties",
+      "type":"object",
+      "additionalProperties":false,
+      "properties":{
+        "framework":{
+          "description":"Framework Scheduler specific Configuration Properties",
+          "type":"object",
+          "additionalProperties":false,
+          "properties":{
+            "failover-timeout-seconds":{
+              "description":"The failover_timeout for Mesos in seconds. If the framework instance has not re-registered with Mesos this long after a failover, Mesos will shut down all running tasks started by the framework.",
+              "type":"integer",
+              "minimum":0,
+              "default":604800
+            },
+            "cpus":{
+              "default":0.5,
+              "description":"CPU shares to allocate to each Cassandra framework instance.",
+              "type":"number"
+            },
+            "mem":{
+              "default":512.0,
+              "description":"Memory (MB) to allocate to each Cassandra framework instance.",
+              "minimum":512.0,
+              "type":"number"
+            },
+            "instances":{
+              "default":1,
+              "description":"Number of Cassandra framework instances to run.",
+              "minimum":0,
+              "type":"integer"
+            },
+            "role":{
+              "description":"Mesos role for this framework.",
+              "type":"string",
+              "default":"*"
+            },
+            "authentication":{
+              "description":"Framework Scheduler Authentication Configuration Properties",
+              "type":"object",
+              "additionalProperties":false,
+              "properties":{
+                "enabled":{
+                  "description":"Whether framework authentication should be used",
+                  "type":"boolean",
+                  "default":false
+                },
+                "principal":{
+                  "description":"The Mesos principal used for authentication.",
+                  "type":"string"
+                },
+                "secret":{
+                  "description":"The path to the Mesos secret file containing the authentication secret.",
+                  "type":"string"
+                }
+              },
+              "required":[
+                "enabled"
+              ]
+            }
+          },
+          "required":[
+            "instances",
+            "cpus",
+            "mem",
+            "failover-timeout-seconds",
+            "role",
+            "authentication"
+          ]
+        },
+        "cluster-name":{
+          "description":"The name of the framework to register with mesos. Will also be used as the cluster name in Cassandra",
+          "type":"string",
+          "default":"dcos"
+        },
+        "zk":{
+          "description":"ZooKeeper URL for storing state. Format: zk://host1:port1,host2:port2,.../path (can have nested directories)",
+          "type":"string"
+        },
+        "zk-timeout-ms":{
+          "description":"Timeout for ZooKeeper in milliseconds.",
+          "type":"integer",
+          "minimum":0,
+          "default":10000
+        },
+        "node-count":{
+          "description":"The number of nodes in the ring for the framework to run.",
+          "type":"integer",
+          "minimum":1,
+          "default":3
+        },
+        "seed-count":{
+          "description":"The number of seed nodes in the ring for the framework to run.",
+          "type":"integer",
+          "minimum":1,
+          "default":2
+        },
+        "health-check-interval-seconds":{
+          "description":"The interval in seconds that the framework should check the health of each Cassandra Server instance.",
+          "type":"integer",
+          "minimum":15,
+          "default":60
+        },
+        "bootstrap-grace-time-seconds":{
+          "description":"The minimum number of seconds to wait between starting each node. Setting this too low could result in the ring not bootstrapping correctly.",
+          "type":"integer",
+          "minimum":15,
+          "default":120
+        },
+        "data-directory":{
+          "description":"The location on disk where Cassandra will be configured to write it's data.",
+          "type":"string",
+          "default":"."
+        },
+        "resources":{
+          "description":"Cassandra Server Resources Configuration Properties",
+          "type":"object",
+          "additionalProperties":false,
+          "properties":{
+            "cpus":{
+              "description":"CPU shares to allocate to each Cassandra Server Instance.",
+              "type":"number",
+              "minimum":0.0,
+              "default":0.1
+            },
+            "mem":{
+              "description":"Memory (MB) to allocate to each Cassandra Server instance.",
+              "type":"integer",
+              "minimum":0,
+              "default":768
+            },
+            "disk":{
+              "description":"Disk (MB) to allocate to each Cassandra Server instance.",
+              "type":"integer",
+              "minimum":0,
+              "default":16
+            },
+            "heap-mb":{
+              "description":"The amount of memory in MB that are allocated to each Cassandra Server Instance. This value should be smaller than 'cassandra.resources.mem'. The remaining difference will be used for memory mapped files and other off-heap memory requirements.",
+              "type":"integer",
+              "minimum":0
+            }
+          },
+          "required":[
+            "cpus",
+            "mem",
+            "disk"
+          ]
+        },
+        "dc":{
+          "description":"Cassandra multi Datacenter Configuration Properties",
+          "type":"object",
+          "additionalProperties":false,
+          "properties":{
+            "default-dc":{
+              "description":"Default value to be set for dc name in the GossipingPropertyFileSnitch",
+              "type":"string",
+              "default":"DC1"
+            },
+            "default-rack":{
+              "description":"Default value to be set for rack name in the GossipingPropertyFileSnitch",
+              "type":"string",
+              "default":"RAC1"
+            },
+            "external-dcs":{
+              "description":"Name and URL for another instance of Cassandra DCOS Service",
+              "type":"array",
+              "additionalProperties":false,
+              "items":{
+                "type":"object",
+                "additionalProperties":false,
+                "properties":{
+                  "name":{
+                    "type":"string"
+                  },
+                  "url":{
+                    "type":"string"
+                  }
+                },
+                "required":[
+                  "name",
+                  "url"
+                ]
+              }
+            }
+          },
+          "required":[
+            "default-dc",
+            "default-rack"
+          ]
+        }
+      },
+      "required":[
+        "framework",
+        "cluster-name",
+        "zk-timeout-ms",
+        "node-count",
+        "seed-count",
+        "health-check-interval-seconds",
+        "bootstrap-grace-time-seconds",
+        "data-directory",
+        "resources"
+      ]
+    }
+  },
+  "required":[
+    "mesos",
+    "cassandra"
+  ]
+}
+
+module.exports.schema3 = {
+  "type":"object",
+  "properties":{
+    "mesos":{
+      "description":"Mesos specific configuration properties",
+      "type":"object",
+      "properties":{
+        "master":{
+          "default":"zk://master.mesos:2181/mesos",
+          "description":"The URL of the Mesos master. The format is a comma-delimited list of hosts like zk://host1:port,host2:port/mesos. If using ZooKeeper, pay particular attention to the leading zk:// and trailing /mesos! If not using ZooKeeper, standard host:port patterns, like localhost:5050 or 10.0.0.5:5050,10.0.0.6:5050, are also acceptable.",
+          "type":"string"
+        }
+      },
+      "required":[
+        "master"
+      ]
+    },
+    "kafka":{
+      "description":"Kafka framework configuration properties",
+      "type":"object",
+      "additionalProperties":false,
+      "properties":{
+        "app":{
+          "description":"Marathon app configuration properties",
+          "type":"object",
+          "additionalProperties":false,
+          "properties":{
+            "cpus":{
+              "description":"cpu requirements",
+              "type":"number",
+              "default":0.5
+            },
+            "mem":{
+              "description":"mem requirements (this should be approximately 120% of the heap size).",
+              "type":"integer",
+              "default":307
+            },
+            "heap-mb":{
+              "description":"Heap size for scheduler JVM, in MiB",
+              "type":"integer",
+              "default":256
+            },
+            "instances":{
+              "description":"app instances",
+              "type":"integer",
+              "default":1
+            }
+          },
+          "required":[
+            "cpus",
+            "mem",
+            "instances",
+            "heap-mb"
+          ]
+        },
+        "zk":{
+          "type":"string",
+          "description":"ZK URL for Kafka",
+          "default":"master.mesos:2181"
+        },
+        "api":{
+          "type":"string",
+          "description":"Scheduler API URL to bind to",
+          "default":"http://$HOST:$PORT0"
+        },
+        "storage":{
+          "type":"string",
+          "description":"State storage path. See --storage option",
+          "default":"zk:/kafka-mesos"
+        },
+        "jre":{
+          "type":"string",
+          "description":"See --jre option",
+          "default":"jre-7u79-openjdk.tgz"
+        },
+        "framework-name":{
+          "type":"string",
+          "description":"Mesos Framework Name",
+          "default":"kafka"
+        },
+        "framework-role":{
+          "type":"string",
+          "description":"Mesos Framework Role",
+          "default":"*"
+        },
+        "user":{
+          "type":"string",
+          "description":"Mesos user to run tasks",
+          "default":""
+        },
+        "principal":{
+          "type":"string",
+          "description":"Mesos principal (username)",
+          "default":""
+        },
+        "secret":{
+          "type":"string",
+          "description":"Mesos secret (password)",
+          "default":""
+        },
+        "other-options":{
+          "type":"string",
+          "description":"Other Scheduler options if required",
+          "default":""
+        }
+      },
+      "required":[
+        "app",
+        "zk",
+        "api",
+        "storage",
+        "jre",
+        "framework-name",
+        "framework-role",
+        "user",
+        "principal",
+        "secret",
+        "other-options"
+      ]
+    }
+  }
+}
