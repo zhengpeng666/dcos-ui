@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Node 0.10.x is **required** as versions 0.11 and 0.12 introduced compatibility issues with Jest as reported [here](https://github.com/facebook/jest/issues/243). We suggest using [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n) to keep multiple Node versions on your system.
+Node 4.x is **required**. We suggest using [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n) to keep multiple Node versions on your system.
 
 ## Local Setup
 
@@ -15,6 +15,18 @@ To install, run, and contribute to DCOS-UI on your local machine you will need t
 ### DCOS UI Proxy
 
 This is a simple Vagrant machine which acts as a proxy between your local DCOS UI Application Server and an active DCOS Cluster. Since the assets for the DCOS UI Application needs to make requests to endpoints located on the local DCOS Image (or a remote DCOS Cluster) which resides on a different domain, this will normally cause CORS problems due to browser security policies. This vagrant machine solves this problem by proxying both requests through the same domain.
+Pick one of the options below:
+
+##### Remote DCOS Cluster
+
+The instructions in the following section ([DCOS Image](#dcos-image)) have you setup a local DCOS Cluster in a virtual machine on your computer.  If you would like to instead have your local DCOS UI Application work of a remote DCOS Cluster, you will need to modify the DCOS UI Proxy you setup and ran in the steps above.  Follow these simple steps:
+
+1. Navigate to the directory in which you installed and are running your DCOS UI Proxy
+2. `vagrant ssh`
+3. `sudo vi /etc/nginx/sites-enabled/dcos-ui`
+4. Change the `proxy_pass` address in the now open text file to the address of the remote DCOS Cluster.  Be sure to comment-out or remove any other `proxy_pass` definitions.
+5. Save the configuration file (e.g. `:wq`)
+6. `sudo service nginx restart`
 
 ##### Installation Instructions:
 
@@ -27,17 +39,6 @@ This is a simple Vagrant machine which acts as a proxy between your local DCOS U
 6. Navigate http://dcos.local
 
 **NOTE:** `http://dcos.local` will only resolve if both your DCOS UI Server and DCOS Image/Cluster are operational and running.
-
-##### Remote DCOS Cluster
-
-The instructions in the following section ([DCOS Image](#dcos-image)) have you setup a local DCOS Cluster in a virtual machine on your computer.  If you would like to instead have your local DCOS UI Application work of a remote DCOS Cluster, you will need to modify the DCOS UI Proxy you setup and ran in the steps above.  Follow these simple steps:
-
-1. Navigate to the directory in which you installed and are running your DCOS UI Proxy
-2. `vagrant ssh`
-3. `sudo vi /etc/nginx/sites-enabled/dcos-ui`
-4. Change the `proxy_pass` address in the now open text file to the address of the remote DCOS Cluster.  Be sure to comment-out or remove any other `proxy_pass` definitions.
-5. Save the configuration file (e.g. `:wq`)
-6. `sudo service nginx restart`
 
 ### DCOS Image
 
