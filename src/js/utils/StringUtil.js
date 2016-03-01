@@ -1,3 +1,5 @@
+import marked from 'marked';
+
 const StringUtil = {
   filterByString: function (objects, getter, searchString) {
     var regex = StringUtil.escapeForRegExp(searchString);
@@ -54,6 +56,20 @@ const StringUtil = {
     }
 
     return string.charAt(0).toUpperCase() + string.slice(1, string.length);
+  },
+
+  parseMarkdown(text) {
+    let __html = marked(
+      // Remove any tabs, that will create code blocks
+      text.replace('\t', ' '),
+      {gfm: true, tables: false, sanitize: true}
+    );
+
+    if (!__html) {
+      return null;
+    }
+
+    return {__html};
   }
 };
 

@@ -5,15 +5,13 @@ import React from 'react';
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import AdvancedConfigModal from '../../components/AdvancedConfigModal';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
 import FilterInputText from '../../components/FilterInputText';
+import InstallPackageModal from '../../components/modals/InstallPackageModal';
 import Panel from '../../components/Panel';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
 
 const METHODS_TO_BIND = [
-  'handleAdvancedModalClose',
-  'handleAdvancedModalOpen',
   'handleInstallModalClose',
   'handleSearchStringChange'
 ];
@@ -23,7 +21,6 @@ class PackagesTab extends mixin(StoreMixin) {
     super();
 
     this.state = {
-      advancedModalOpen: false,
       hasError: false,
       installModalPackage: null,
       isLoading: true,
@@ -59,14 +56,6 @@ class PackagesTab extends mixin(StoreMixin) {
       {packageName: cosmosPackage.get('name')},
       {version: cosmosPackage.get('currentVersion')}
     );
-  }
-
-  handleAdvancedModalClose() {
-    this.setState({advancedModalOpen: false});
-  }
-
-  handleAdvancedModalOpen() {
-    this.setState({advancedModalOpen: true});
   }
 
   handleInstallModalClose() {
@@ -135,7 +124,7 @@ class PackagesTab extends mixin(StoreMixin) {
             footerClass="panel-footer horizontal-center panel-footer-no-top-border flush-top"
             onClick={this.handleDetailOpen.bind(this, cosmosPackage)}>
             {this.getIcon(cosmosPackage)}
-            <div className="h2 inverse short-top short-bottom">
+            <div className="h2 inverse short">
               {cosmosPackage.get('name')}
             </div>
             <p className="inverse flush">
@@ -173,18 +162,15 @@ class PackagesTab extends mixin(StoreMixin) {
             searchString={state.searchString}
             handleFilterChange={this.handleSearchStringChange}
             inverseStyle={true} />
-          <button
-            className="button button-success"
-            onClick={this.handleAdvancedModalOpen}>
-            Open Advanced Configuration
-          </button>
         </div>
         <div className="grid row">
           {this.getPackages()}
         </div>
-        <AdvancedConfigModal
-          open={state.advancedModalOpen}
-          onClose={this.handleAdvancedModalClose}/>
+        <InstallPackageModal
+          open={!!state.installModalPackage}
+          packageName={packageName}
+          packageVersion={packageVersion}
+          onClose={this.handleInstallModalClose}/>
       </div>
     );
   }

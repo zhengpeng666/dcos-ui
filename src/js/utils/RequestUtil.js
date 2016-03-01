@@ -54,7 +54,7 @@ var RequestUtil = {
 
   getErrorFromXHR: function (xhr) {
     let response = this.parseResponseBody(xhr);
-    return response.description || DEFAULT_ERROR_MESSAGE;
+    return response.description || response.message || DEFAULT_ERROR_MESSAGE;
   },
 
   /**

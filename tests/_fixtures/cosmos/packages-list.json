@@ -26,7 +26,7 @@
             }
           ]
         },
-        "resource": {
+        "resourceDefinition": {
           "assets": {
             "uris": null,
             "container": {
@@ -72,7 +72,7 @@
             }
           ]
         },
-        "resource": {
+        "resourceDefinition": {
           "assets": {
             "uris": null,
             "container": {
