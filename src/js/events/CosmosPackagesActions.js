@@ -8,7 +8,14 @@ import {
   REQUEST_COSMOS_PACKAGE_INSTALL_ERROR,
   REQUEST_COSMOS_PACKAGE_INSTALL_SUCCESS,
   REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR,
-  REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS
+  REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS,
+
+  REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS,
+  REQUEST_COSMOS_REPOSITORIES_LIST_ERROR,
+  REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS,
+  REQUEST_COSMOS_REPOSITORY_ADD_ERROR,
+  REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS,
+  REQUEST_COSMOS_REPOSITORY_DELETE_ERROR
 } from '../constants/ActionTypes';
 import AppDispatcher from './AppDispatcher';
 import Config from '../config/Config';
@@ -150,6 +157,80 @@ const CosmosPackagesActions = {
         });
       }
     });
+  },
+
+  fetchRepositories: function (type) {
+    RequestUtil.json({
+      contentType: getContentType('repository.list', 'request'),
+      headers: {Accept: getContentType('repository.list', 'response')},
+      method: 'POST',
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/repository/list`,
+      data: JSON.stringify({type}),
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS,
+          data: response
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORIES_LIST_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr)
+        });
+      }
+    });
+  },
+
+  addRepository: function (name, uri) {
+    RequestUtil.json({
+      contentType: getContentType('repository.add', 'request'),
+      headers: {Accept: getContentType('repository.add', 'response')},
+      method: 'POST',
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/repository/add`,
+      data: JSON.stringify({name, uri}),
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS,
+          data: response,
+          name,
+          uri
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_ADD_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr),
+          name,
+          uri
+        });
+      }
+    });
+  },
+
+  deleteRepository: function (name, uri) {
+    RequestUtil.json({
+      contentType: getContentType('repository.delete', 'request'),
+      headers: {Accept: getContentType('repository.delete', 'response')},
+      method: 'POST',
+      url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/repository/delete`,
+      data: JSON.stringify({name, uri}),
+      success: function (response) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS,
+          data: response,
+          name,
+          uri
+        });
+      },
+      error: function (xhr) {
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_DELETE_ERROR,
+          data: RequestUtil.getErrorFromXHR(xhr),
+          name,
+          uri
+        });
+      }
+    });
   }
 
 };
@@ -161,6 +242,8 @@ if (Config.useFixtures) {
     require('json!../../../tests/_fixtures/cosmos/packages-list.json');
   let packagesSearchFixture =
     require('json!../../../tests/_fixtures/cosmos/packages-search.json');
+  let packagesRepositoriesFixture =
+    require('json!../../../tests/_fixtures/cosmos/packages-repositories.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};
@@ -174,7 +257,11 @@ if (Config.useFixtures) {
     fetchAvailablePackages:
       {event: 'success', success: {response: packagesSearchFixture}},
     installPackage: {event: 'success'},
-    uninstallPackage: {event: 'success'}
+    uninstallPackage: {event: 'success'},
+    fetchRepositories:
+      {event: 'success', success: {response: packagesRepositoriesFixture}},
+    addRepository: {event: 'success'},
+    deleteRepository: {event: 'success'}
   };
 
   Object.keys(global.actionTypes.CosmosPackagesActions).forEach(function (method) {

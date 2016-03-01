@@ -12,7 +12,14 @@ import {
   COSMOS_INSTALL_SUCCESS,
   COSMOS_INSTALL_ERROR,
   COSMOS_UNINSTALL_SUCCESS,
-  COSMOS_UNINSTALL_ERROR
+  COSMOS_UNINSTALL_ERROR,
+
+  COSMOS_REPOSITORIES_SUCCESS,
+  COSMOS_REPOSITORIES_ERROR,
+  COSMOS_REPOSITORY_ADD_SUCCESS,
+  COSMOS_REPOSITORY_ADD_ERROR,
+  COSMOS_REPOSITORY_DELETE_SUCCESS,
+  COSMOS_REPOSITORY_DELETE_ERROR
 } from '../constants/EventTypes';
 import {
   REQUEST_COSMOS_PACKAGES_LIST_ERROR,
@@ -25,8 +32,17 @@ import {
   REQUEST_COSMOS_PACKAGE_INSTALL_SUCCESS,
   REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR,
   REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS,
+
+  REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS,
+  REQUEST_COSMOS_REPOSITORIES_LIST_ERROR,
+  REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS,
+  REQUEST_COSMOS_REPOSITORY_ADD_ERROR,
+  REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS,
+  REQUEST_COSMOS_REPOSITORY_DELETE_ERROR,
+
   SERVER_ACTION
 } from '../constants/ActionTypes';
+import List from '../structs/List';
 import UniverseInstalledPackagesList from
   '../structs/UniverseInstalledPackagesList';
 import UniversePackage from '../structs/UniversePackage';
@@ -40,7 +56,8 @@ const CosmosPackagesStore = Store.createStore({
   getSet_data: {
     availablePackages: [],
     packageDetails: null,
-    installedPackages: []
+    installedPackages: [],
+    repositories: []
   },
 
   addChangeListener: function (eventName, callback) {
@@ -62,6 +79,12 @@ const CosmosPackagesStore = Store.createStore({
 
   uninstallPackage: CosmosPackagesActions.uninstallPackage,
 
+  fetchRepositories: CosmosPackagesActions.fetchRepositories,
+
+  addRepository: CosmosPackagesActions.addRepository,
+
+  deleteRepository: CosmosPackagesActions.deleteRepository,
+
   /* Reducers */
   getAvailablePackages() {
     return new UniversePackagesList({items: this.get('availablePackages')});
@@ -80,6 +103,10 @@ const CosmosPackagesStore = Store.createStore({
     }
 
     return null;
+  },
+
+  getRepositories() {
+    return new List({items: this.get('repositories')});
   },
 
   processAvailablePackagesSuccess: function (packages, query) {
@@ -112,6 +139,12 @@ const CosmosPackagesStore = Store.createStore({
     this.set({packageDetails: null});
 
     this.emit(COSMOS_DESCRIBE_ERROR, error, name, version);
+  },
+
+  processRepositoriesSuccess: function (repositories) {
+    this.set({repositories});
+
+    this.emit(COSMOS_REPOSITORIES_SUCCESS);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -188,6 +221,32 @@ const CosmosPackagesStore = Store.createStore({
           action.packageName,
           action.packageVersion,
           action.appId
+        );
+        break;
+      case REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS:
+        CosmosPackagesStore.processRepositoriesSuccess(data);
+        break;
+      case REQUEST_COSMOS_REPOSITORIES_LIST_ERROR:
+        CosmosPackagesStore.emit(COSMOS_REPOSITORIES_ERROR, data);
+        break;
+      case REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS:
+        CosmosPackagesStore.emit(
+          COSMOS_REPOSITORY_ADD_SUCCESS, data, action.name, action.uri
+        );
+        break;
+      case REQUEST_COSMOS_REPOSITORY_ADD_ERROR:
+        CosmosPackagesStore.emit(
+          COSMOS_REPOSITORY_ADD_ERROR, data, action.name, action.uri
+        );
+        break;
+      case REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS:
+        CosmosPackagesStore.emit(
+          COSMOS_REPOSITORY_DELETE_SUCCESS, data, action.name, action.uri
+        );
+        break;
+      case REQUEST_COSMOS_REPOSITORY_DELETE_ERROR:
+        CosmosPackagesStore.emit(
+          COSMOS_REPOSITORY_DELETE_ERROR, data, action.name, action.uri
         );
         break;
     }
