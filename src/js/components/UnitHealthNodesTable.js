@@ -8,7 +8,8 @@ import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 const METHODS_TO_BIND = [
   'renderHealth',
-  'renderNode'
+  'renderNode',
+  'renderNodeRole'
 ];
 
 class UnitHealthNodesTable extends React.Component {
@@ -26,18 +27,24 @@ class UnitHealthNodesTable extends React.Component {
       <colgroup>
         <col style={{width: '25%'}} />
         <col />
+        <col style={{width: '25%'}} />
       </colgroup>
     );
   }
 
   getColumns() {
     let classNameFn = ResourceTableUtil.getClassName;
+    let headings = ResourceTableUtil.renderHeading({
+      node_health: 'HEALTH',
+      hostname: 'NODE',
+      node_role: 'ROLE'
+    });
 
     return [
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({node_health: 'HEALTH'}),
+        heading: headings,
         prop: 'node_health',
         render: this.renderHealth,
         sortable: true,
@@ -49,9 +56,18 @@ class UnitHealthNodesTable extends React.Component {
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({hostname: 'NODE'}),
+        heading: headings,
         prop: 'hostname',
         render: this.renderNode,
+        sortable: true,
+        sortFunction: ResourceTableUtil.getPropSortFunction()
+      },
+      {
+        className: classNameFn,
+        headerClassName: classNameFn,
+        heading: headings,
+        prop: 'node_role',
+        render: this.renderNodeRole,
         sortable: true,
         sortFunction: ResourceTableUtil.getPropSortFunction('hostname')
       }
@@ -83,15 +99,12 @@ class UnitHealthNodesTable extends React.Component {
   }
 
   renderNode(prop, node) {
-    return this.getNodeLink(node,
-      (
-        <span>
-          {node.get(prop)}
-          <span className="mute">
-            {` (${StringUtil.capitalize(node.get('node_role'))})`}
-          </span>
-        </span>
-      )
+    return this.getNodeLink(node, node.get(prop));
+  }
+
+  renderNodeRole(prop, node) {
+    return (
+      StringUtil.capitalize(node.get(prop))
     );
   }
 

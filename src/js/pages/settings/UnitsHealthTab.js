@@ -170,29 +170,35 @@ class UnitsHealthTab extends mixin(StoreMixin) {
             name={pluralizedItemName}
             currentLength={visibleData.length}
             totalLength={dataItems.length} />
-          <ul className="list list-unstyled list-inline flush-bottom">
-            <li>
-              <FilterButtons
-                renderButtonContent={this.getButtonContent}
-                filters={['all', 'healthy', 'unhealthy']}
-                filterByKey={'title'}
-                onFilterChange={this.handleHealthFilterChange}
-                itemList={dataHealth}
-                selectedFilter={healthFilter} />
-            </li>
-            <li>
-              <FilterInputText
-                searchString={searchString}
-                handleFilterChange={this.handleSearchStringChange}
-                inverseStyle={true} />
-            </li>
-            <li className="button-collection list-item-aligned-right">
-              <a href={`${Config.rootUrl}${Config.unitHealthAPIPrefix}\/report`}
-                className="button button-primary">
-                Download Snapshot
-              </a>
-            </li>
-          </ul>
+          <div className="media-object-spacing-wrapper media-object-spacing-narrow">
+            <div className="media-object media-object-wrap-reverse">
+              <div className="media-object media-object-item media-object-inline media-object-wrap">
+                <div className="media-object-item media-object-align-top">
+                  <FilterButtons
+                    renderButtonContent={this.getButtonContent}
+                    filters={['all', 'healthy', 'unhealthy']}
+                    filterByKey={'title'}
+                    onFilterChange={this.handleHealthFilterChange}
+                    itemList={dataHealth}
+                    selectedFilter={healthFilter} />
+                </div>
+                <div className="media-object-item media-object-align-top">
+                  <FilterInputText
+                    searchString={searchString}
+                    handleFilterChange={this.handleSearchStringChange}
+                    inverseStyle={true} />
+                </div>
+              </div>
+              <div className="media-object media-object-item media-object-inline media-object-item-align-right">
+                <div className="media-object-item">
+                  <a href={`${Config.rootUrl}${Config.unitHealthAPIPrefix}\/report`}
+                    className="button button-primary">
+                    Download Snapshot
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="page-content-fill flex-grow flex-container-col">
           <Table

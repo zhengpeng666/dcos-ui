@@ -97,8 +97,7 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
       <div className="flex-container-col">
         <div className="container container-fluid container-pod
           container-pod-divider-bottom container-pod-divider-bottom-align-right
-          container-pod-divider-inverse container-pod-short-top
-          side-panel-content-header side-panel-section">
+          container-pod-short side-panel-content-header side-panel-section">
           {this.getHeader(unit, node)}
         </div>
         <div className="side-panel-tab-content side-panel-section container
