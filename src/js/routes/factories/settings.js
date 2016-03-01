@@ -9,8 +9,7 @@ let RouteFactory = {
   getSystemRoutes() {
     // Return filtered Routes
     return this.getFilteredRoutes(
-      // Pass in Object so Plugins can mutate routes and the default redirect
-      Hooks.applyFilter('getSystemRoutes', {
+      Hooks.applyFilter('SystemRoutes', {
         routes: {
           type: Route,
           name: 'settings-system-units',
@@ -56,7 +55,7 @@ let RouteFactory = {
     // Return filtered Routes
     return this.getFilteredRoutes(
       // Pass in Object so Plugins can mutate routes and the default redirect
-      Hooks.applyFilter('getSettingsRoutes', {
+      Hooks.applyFilter('SettingsRoutes', {
         routes: [systemRoute],
         redirect: {
           type: Redirect,

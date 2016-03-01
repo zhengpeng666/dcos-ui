@@ -32,10 +32,12 @@ class SettingsPage extends mixin(TabsMixin) {
 
     // Get top level tabs
     SETTINGS_TABS = TabsUtil.sortTabs(
-      Hooks.applyFilter('getSettingsTabs', DEFAULT_SETTINGS_TABS)
+      Hooks.applyFilter('SettingsTabs', DEFAULT_SETTINGS_TABS)
     );
     // Add filter to register default Component Tab
-    Hooks.addFilter('getTabsFor_settings-system', (tabs) => _.extend(tabs, DEFAULT_TABS_TABS));
+    Hooks.addFilter('settings-system-tabs', function (tabs) {
+      return _.extend(tabs, DEFAULT_TABS_TABS);
+    });
 
     this.tabs_tabs = {};
     this.state = {};
@@ -56,7 +58,7 @@ class SettingsPage extends mixin(TabsMixin) {
     let topLevelTab = currentTab.split('-').slice(0, 2).join('-');
 
     this.tabs_tabs = TabsUtil.sortTabs(
-      Hooks.applyFilter(`getTabsFor_${topLevelTab}`, {})
+      Hooks.applyFilter(`${topLevelTab}-tabs`, {})
     );
 
     this.setState({currentTab});

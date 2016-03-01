@@ -2,33 +2,21 @@ import _ from 'underscore';
 import {Route, Redirect} from 'react-router';
 
 const PluginHooks = {
-
-  defaults: {
-
-    redirect: {
-      type: Redirect,
-      from: '/settings/?',
-      to: 'settings-organization'
-    },
-    organizationRoutes: [],
-
-    settingsTabs: {
-      'settings-organization': {
-        content: 'Organization',
-        priority: 20
-      }
-    }
-  },
   /**
    * @param  {Object} Hooks The Hooks API
    */
   initialize(Hooks) {
-    Hooks.addFilter('getSettingsRoutes', this.getRoutes.bind(this, Hooks));
-    Hooks.addFilter('getSettingsTabs', this.getTabs.bind(this));
+    Hooks.addFilter('SettingsRoutes', this.getRoutes.bind(this, Hooks));
+    Hooks.addFilter('SettingsTabs', this.getTabs.bind(this));
   },
 
   getTabs(tabs) {
-    return _.extend(tabs, this.defaults.settingsTabs);
+    return _.extend(tabs, {
+      'settings-organization': {
+        content: 'Organization',
+        priority: 20
+      }
+    });
   },
 
   getOrganizationRoutes(Hooks) {
@@ -36,7 +24,7 @@ const PluginHooks = {
     return this.getFilteredRoutes(
       // Pass in Object so Plugins can mutate routes and the default redirect
       Hooks.applyFilter('getOrganizationRoutes', {
-        routes: [].slice.call(this.defaults.organizationRoutes),
+        routes: [],
         redirect: {
           type: Redirect,
           from: '/settings/?',
@@ -54,7 +42,11 @@ const PluginHooks = {
   getRoutes(Hooks, route) {
     let childRoutes = this.getOrganizationRoutes(Hooks);
 
-    route.redirect = this.defaults.redirect;
+    route.redirect = {
+      type: Redirect,
+      from: '/settings/?',
+      to: 'settings-organization'
+    };
     route.routes.push(
       {
         type: Route,

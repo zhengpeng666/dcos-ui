@@ -11,8 +11,8 @@ let PluginHooks = {
     enabled: false
   },
 
-  defaults: {
-    route: {
+  getOrganizationRoutes(route) {
+    route.routes.push({
       type: Route,
       name: 'settings-organization-groups',
       path: 'groups/?',
@@ -22,17 +22,7 @@ let PluginHooks = {
         name: 'settings-organization-groups-group-panel',
         path: ':groupID'
       }]
-    },
-    tabs: {
-      'settings-organization-groups': {
-        content: 'Groups',
-        priority: 20
-      }
-    }
-  },
-
-  getOrganizationRoutes(route) {
-    route.routes.push(this.defaults.route);
+    });
     return route;
   },
 
@@ -42,12 +32,17 @@ let PluginHooks = {
   initialize(Hooks) {
     Hooks.addFilter('getOrganizationRoutes', this.getOrganizationRoutes.bind(this));
 
-    Hooks.addFilter('getTabsFor_settings-organization',
+    Hooks.addFilter('settings-organization-tabs',
       this.getTabs.bind(this));
   },
 
   getTabs(tabs) {
-    return _.extend(tabs, this.defaults.tabs);
+    return _.extend(tabs, {
+      'settings-organization-groups': {
+        content: 'Groups',
+        priority: 20
+      }
+    });
   }
 };
 

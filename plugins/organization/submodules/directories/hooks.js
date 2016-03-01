@@ -11,8 +11,8 @@ let PluginHooks = {
     enabled: false
   },
 
-  defaults: {
-    route: {
+  getOrganizationRoutes(route) {
+    route.routes.push({
       type: Route,
       name: 'settings-organization-directories',
       path: 'directories/?',
@@ -21,17 +21,7 @@ let PluginHooks = {
         type: Route,
         name: 'settings-organization-directories-panel'
       }]
-    },
-    tabs: {
-      'settings-organization-directories': {
-        content: 'External Directory',
-        priority: 5
-      }
-    }
-  },
-
-  getOrganizationRoutes(route) {
-    route.routes.push(this.defaults.route);
+    });
     return route;
   },
 
@@ -42,12 +32,17 @@ let PluginHooks = {
     Hooks.addFilter('getOrganizationRoutes',
       this.getOrganizationRoutes.bind(this));
 
-    Hooks.addFilter('getTabsFor_settings-organization',
+    Hooks.addFilter('settings-organization-tabs',
       this.getTabs.bind(this));
   },
 
   getTabs(tabs) {
-    return _.extend(tabs, this.defaults.tabs);
+    return _.extend(tabs, {
+      'settings-organization-directories': {
+        content: 'External Directory',
+        priority: 5
+      }
+    });
   }
 };
 

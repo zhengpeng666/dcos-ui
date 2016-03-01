@@ -24,7 +24,7 @@ let PluginHooks = {
    * @param  {Object} Hooks The Hooks API
    */
   initialize(Hooks) {
-    Hooks.addFilter('getSystemRoutes', this.getOrganizationRoutes.bind(this));
+    Hooks.addFilter('SystemRoutes', this.getOrganizationRoutes.bind(this));
   }
 };
 
