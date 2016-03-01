@@ -57,14 +57,6 @@ describe('Client', function () {
 
   });
 
-  describe('#getIP', function () {
-
-    it('returns the value it was given', function () {
-      expect(this.client.getIP()).toEqual(this.clientFixture.ip);
-    });
-
-  });
-
   describe('#getMachineReachability', function () {
 
     it('returns a value of type boolean', function () {

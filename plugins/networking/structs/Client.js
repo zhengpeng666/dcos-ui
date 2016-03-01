@@ -14,10 +14,6 @@ module.exports = class Client extends Item {
       * 100);
   }
 
-  getIP() {
-    return this.get('ip');
-  }
-
   getMachineReachability() {
     return this.get('machine_reachability');
   }
