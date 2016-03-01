@@ -1,5 +1,4 @@
 var config = require('./.build.config');
-var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
 
@@ -13,19 +12,16 @@ if (process.env.NODE_ENV === 'development' ||
   webpackWatch = true;
 }
 
-function getDirectories(srcpath) {
-  return fs.readdirSync(srcpath).filter(function (file) {
-    return fs.statSync(path.join(srcpath, file)).isDirectory();
-  });
+var pluginsList = {};
+try {
+  pluginsList = require('./plugins/index');
+} catch (err) {
+  console.warn('Could not find an index file in plugins directory listing available plugins');
 }
 
-var pluginEntryPoints = getDirectories(path.resolve(__dirname, 'plugins'))
-  .filter(function (dir) {
-    return dir !== '__mocks__';
-  })
-  .map(function (dir) {
-    return path.resolve(__dirname, 'plugins', dir + '/index');
-  });
+var pluginEntryPoints = Object.keys(pluginsList).map(function (pluginID) {
+  return path.resolve(__dirname, 'plugins', pluginsList[pluginID]);
+});
 
 var vendors = [
   'classnames',
