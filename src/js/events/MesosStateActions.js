@@ -10,7 +10,7 @@ var MesosStateActions = {
     function (resolve, reject) {
       return function () {
         RequestUtil.json({
-          url: `${Config.historyServer}/mesos/master/state.json`,
+          url: `${Config.historyServer}/mesos/master/state`,
           success: function (response) {
             AppDispatcher.handleServerAction({
               type: ActionTypes.REQUEST_MESOS_STATE_SUCCESS,

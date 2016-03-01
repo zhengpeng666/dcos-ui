@@ -80,7 +80,7 @@ var NodesGridView = React.createClass({
     var data = this.internalStorage_get();
     var resourcesByFramework = data.resourcesByFramework;
     // Maps the usage of each service per node
-    // This can change at anytime. This info is only available in state.json
+    // This can change at anytime. This info is only available at /state
     var slaves = MesosStateStore.getHostResourcesByFramework(
       data.hiddenServices
     );
