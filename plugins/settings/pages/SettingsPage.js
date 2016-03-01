@@ -106,7 +106,7 @@ SettingsPage.contextTypes = {
 
 SettingsPage.routeConfig = {
   label: 'Settings',
-  icon: 'resources-settings',
+  icon: 'settings',
   matches: /^\/settings/
 };
 
