@@ -49,7 +49,7 @@ Icon (Medium)
 ----------------------------------------------------------------------------- */
 
 @icon-sprite-medium-count-horizontal:                                           3;
-@icon-sprite-medium-count-vertical:                                             16;
+@icon-sprite-medium-count-vertical:                                             17;
 @icon-sprite-medium-border-radius:                                              5px;
 
 @icon-sprite-medium-variant-black-offset-horizontal:                            0 * @icon-medium-width;
@@ -1023,6 +1023,24 @@ Icon (huge)
         &.icon-sprite-medium-color {
 
           background-position: floor(-@icon-sprite-medium-variant-color-offset-horizontal) -(floor(@icon-medium-height) * 15);
+
+        }
+
+      }
+
+      &.icon-resources-network {
+
+        background-position: floor(-@icon-sprite-medium-variant-black-offset-horizontal) -(floor(@icon-medium-height) * 16);
+
+        &.icon-sprite-medium-white {
+
+          background-position: floor(-@icon-sprite-medium-variant-white-offset-horizontal) -(floor(@icon-medium-height) * 16);
+
+        }
+
+        &.icon-sprite-medium-color {
+
+          background-position: floor(-@icon-sprite-medium-variant-color-offset-horizontal) -(floor(@icon-medium-height) * 16);
 
         }
 
