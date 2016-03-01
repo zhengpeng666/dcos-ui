@@ -9,8 +9,8 @@ module.exports = function (Store, dispatch, name, options) {
   // Set plugin's hooks
   PluginHooks.initialize(Hooks);
   // Set submodule hooks
+  DirectoriesHooks.initialize(Hooks);
   GroupsHooks.initialize(Hooks);
   UsersHooks.initialize(Hooks);
-  DirectoriesHooks.initialize(Hooks);
 };
 
