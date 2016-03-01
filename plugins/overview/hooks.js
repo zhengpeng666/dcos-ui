@@ -6,17 +6,14 @@ import {Route} from 'react-router';
 import OverviewTab from './pages/OverviewTab';
 
 let PluginHooks = {
-  routes: {
-    route: {
+
+  getRoutes(route) {
+    route.routes.push({
       type: Route,
       name: 'settings-system-overview',
       path: 'overview/?',
       handler: OverviewTab
-    }
-  },
-
-  getOrganizationRoutes(route) {
-    route.routes.push(this.routes.route);
+    });
     return route;
   },
 
@@ -24,7 +21,7 @@ let PluginHooks = {
    * @param  {Object} Hooks The Hooks API
    */
   initialize(Hooks) {
-    Hooks.addFilter('SystemRoutes', this.getOrganizationRoutes.bind(this));
+    Hooks.addFilter('SystemRoutes', this.getRoutes.bind(this));
   }
 };
 

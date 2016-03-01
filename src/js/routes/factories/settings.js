@@ -1,6 +1,6 @@
 import {Route, Redirect} from 'react-router';
 
-import UnitsHealthTab from '../../pages/UnitsHealthTab';
+import UnitsHealthTab from '../../pages/settings/UnitsHealthTab';
 import {Hooks} from '../../pluginBridge/PluginBridge';
 import SettingsPage from '../../pages/SettingsPage';
 
@@ -10,7 +10,7 @@ let RouteFactory = {
     // Return filtered Routes
     return this.getFilteredRoutes(
       Hooks.applyFilter('SystemRoutes', {
-        routes: {
+        routes: [{
           type: Route,
           name: 'settings-system-units',
           path: 'units/?',
@@ -34,7 +34,7 @@ let RouteFactory = {
               to: 'settings-system-units-unit-nodes-panel'
             }
           ]
-        },
+        }],
         redirect: {
           type: Redirect,
           from: '/settings/system/?',

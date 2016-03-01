@@ -35,7 +35,7 @@ let PluginHooks = {
    * @param  {Object} Hooks The Hooks API
    */
   initialize(Hooks) {
-    Hooks.addFilter('getOrganizationRoutes', this.getOrganizationRoutes.bind(this));
+    Hooks.addFilter('OrganizationRoutes', this.getOrganizationRoutes.bind(this));
 
     Hooks.addFilter('settings-organization-tabs',
       this.getTabs.bind(this));

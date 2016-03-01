@@ -23,7 +23,7 @@ const PluginHooks = {
     // Return filtered Routes
     return this.getFilteredRoutes(
       // Pass in Object so Plugins can mutate routes and the default redirect
-      Hooks.applyFilter('getOrganizationRoutes', {
+      Hooks.applyFilter('OrganizationRoutes', {
         routes: [],
         redirect: {
           type: Redirect,

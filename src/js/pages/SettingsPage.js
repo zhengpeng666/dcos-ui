@@ -18,8 +18,8 @@ let DEFAULT_SETTINGS_TABS = {
 };
 
 let DEFAULT_TABS_TABS = {
-  'settings-system-components': {
-    content: 'Components',
+  'settings-system-units': {
+    content: 'Units',
     priority: 10
   }
 };
