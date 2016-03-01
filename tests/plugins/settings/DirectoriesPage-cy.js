@@ -53,8 +53,8 @@ describe('Directories Page [02l]', function () {
 
     it('does not allow selecting StartTLS when SSL/TLS is selected [0jv]', function () {
       cy.get('@addDirectoryBtn').click();
-      cy.get('.modal .modal-content').contains('Use SSL/TLS socket').click();
-      cy.get('.modal .modal-content').contains('Enforce StartTLS')
+      cy.get('.modal .modal-content').contains('Use SSL/TLS').click();
+      cy.get('.modal .modal-content').contains('Use StartTLS')
         .closest('label').children('input').should(function ($checkbox) {
           expect($checkbox[0].disabled).to.be.true;
         });
@@ -62,9 +62,9 @@ describe('Directories Page [02l]', function () {
 
     it('enables checkbox after unselecting SSL/TLS [0jj]', function () {
       cy.get('@addDirectoryBtn').click();
-      cy.get('.modal .modal-content').contains('Use SSL/TLS socket').click();
-      cy.get('.modal .modal-content').contains('Use SSL/TLS socket').click();
-      cy.get('.modal .modal-content').contains('Enforce StartTLS')
+      cy.get('.modal .modal-content').contains('Use SSL/TLS').click();
+      cy.get('.modal .modal-content').contains('Use SSL/TLS').click();
+      cy.get('.modal .modal-content').contains('Use StartTLS')
         .closest('label').children('input').should(function ($checkbox) {
           expect($checkbox[0].disabled).to.not.be.true;
         });
@@ -72,8 +72,8 @@ describe('Directories Page [02l]', function () {
 
     it('does not allow selecting SSL/TLS when StartTLS is selected [0jw]', function () {
       cy.get('@addDirectoryBtn').click();
-      cy.get('.modal .modal-content').contains('Enforce StartTLS').click();
-      cy.get('.modal .modal-content').contains('Use SSL/TLS socket')
+      cy.get('.modal .modal-content').contains('Use StartTLS').click();
+      cy.get('.modal .modal-content').contains('Use SSL/TLS')
         .closest('label').children('input').should(function ($checkbox) {
           expect($checkbox[0].disabled).to.be.true;
         });
@@ -81,9 +81,9 @@ describe('Directories Page [02l]', function () {
 
     it('enables checkbox after unselecting SSL/TLS [0jt]', function () {
       cy.get('@addDirectoryBtn').click();
-      cy.get('.modal .modal-content').contains('Enforce StartTLS').click();
-      cy.get('.modal .modal-content').contains('Enforce StartTLS').click();
-      cy.get('.modal .modal-content').contains('Use SSL/TLS socket')
+      cy.get('.modal .modal-content').contains('Use StartTLS').click();
+      cy.get('.modal .modal-content').contains('Use StartTLS').click();
+      cy.get('.modal .modal-content').contains('Use SSL/TLS')
         .closest('label').children('input').should(function ($checkbox) {
           expect($checkbox[0].disabled).to.not.be.true;
         });
@@ -117,9 +117,9 @@ describe('Directories Page [02l]', function () {
       cy.get('@list').eq(1).contains('636');
       cy.get('@list').eq(2).contains('Distinguished Name template');
       cy.get('@list').eq(2).contains('uid=%(username)s,cn=users,cn=accounts,dc=demo1,dc=freeipa,dc=org');
-      cy.get('@list').eq(3).contains('Use SSL/TLS socket');
+      cy.get('@list').eq(3).contains('Use SSL/TLS');
       cy.get('@list').eq(3).contains('Yes');
-      cy.get('@list').eq(4).contains('Enforce StartTLS');
+      cy.get('@list').eq(4).contains('Use StartTLS');
       cy.get('@list').eq(4).contains('No');
     });
 
