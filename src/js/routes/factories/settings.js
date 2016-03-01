@@ -43,6 +43,7 @@ let RouteFactory = {
       })
     );
   },
+
   getSettingsRoutes() {
     let systemRoute = {
       type: Route,

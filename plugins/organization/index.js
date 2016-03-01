@@ -1,7 +1,7 @@
-import PluginHooks from './hooks';
 import GroupsHooks from './submodules/groups/hooks';
-import UsersHooks from './submodules/users/hooks';
 import DirectoriesHooks from './submodules/directories/hooks';
+import PluginHooks from './hooks';
+import UsersHooks from './submodules/users/hooks';
 
 module.exports = function (Store, dispatch, name, options) {
   const {Hooks} = options;
