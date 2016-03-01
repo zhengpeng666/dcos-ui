@@ -18,6 +18,12 @@ import {
   COSMOS_INSTALL_SUCCESS,
   COSMOS_LIST_CHANGE,
   COSMOS_LIST_ERROR,
+  COSMOS_REPOSITORIES_SUCCESS,
+  COSMOS_REPOSITORIES_ERROR,
+  COSMOS_REPOSITORY_ADD_SUCCESS,
+  COSMOS_REPOSITORY_ADD_ERROR,
+  COSMOS_REPOSITORY_DELETE_SUCCESS,
+  COSMOS_REPOSITORY_DELETE_ERROR,
   COSMOS_SEARCH_CHANGE,
   COSMOS_SEARCH_ERROR,
   COSMOS_UNINSTALL_ERROR,
@@ -40,7 +46,13 @@ import {
   REQUEST_COSMOS_PACKAGE_INSTALL_ERROR,
   REQUEST_COSMOS_PACKAGE_INSTALL_SUCCESS,
   REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR,
-  REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS
+  REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS,
+  REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS,
+  REQUEST_COSMOS_REPOSITORIES_LIST_ERROR,
+  REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS,
+  REQUEST_COSMOS_REPOSITORY_ADD_ERROR,
+  REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS,
+  REQUEST_COSMOS_REPOSITORY_DELETE_ERROR
 } from '../../constants/ActionTypes';
 var UniversePackage = require('../../structs/UniversePackage');
 var UniverseInstalledPackagesList =
@@ -408,6 +420,144 @@ describe('CosmosPackagesStore', function () {
 
         expect(mockedFn.calls.length).toEqual(1);
         expect(mockedFn.calls[0].args).toEqual(['error', 'foo', 'bar', 'baz']);
+      });
+
+    });
+
+  });
+
+  describe('#processRepositoriesSuccess', function () {
+
+    beforeEach(function () {
+      CosmosPackagesStore.processRepositoriesSuccess([
+        {foo: 'bar'}, {baz: 'qux'}
+      ]);
+    });
+
+    it('stores repositories', function () {
+      var repos = CosmosPackagesStore.getRepositories();
+      expect(repos.getItems().length).toEqual(2);
+    });
+
+  });
+
+  describe('dispatcher', function () {
+
+    describe('repositories fetch', function () {
+
+      it('dispatches the correct event on success', function () {
+        var mockedFn = jest.genMockFunction();
+        CosmosPackagesStore.addChangeListener(
+          COSMOS_REPOSITORIES_SUCCESS,
+          mockedFn
+        );
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS,
+          data: [{foo: 'bar'}]
+        });
+
+        expect(mockedFn.mock.calls.length).toEqual(1);
+      });
+
+      it('dispatches the correct event on error', function () {
+        var mockedFn = jest.genMockFunction();
+        CosmosPackagesStore.addChangeListener(
+          COSMOS_REPOSITORIES_ERROR,
+          mockedFn
+        );
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORIES_LIST_ERROR,
+          data: {foo: 'bar'},
+          name: 'baz',
+          uri: 'qux'
+        });
+
+        expect(mockedFn.mock.calls.length).toEqual(1);
+        expect(mockedFn.mock.calls[0]).toEqual([{foo: 'bar'}]);
+      });
+
+    });
+
+    describe('repository add', function () {
+
+      it('dispatches the correct event on success', function () {
+        var mockedFn = jest.genMockFunction();
+        CosmosPackagesStore.addChangeListener(
+          COSMOS_REPOSITORY_ADD_SUCCESS,
+          mockedFn
+        );
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS,
+          data: {foo: 'bar'},
+          name: 'baz',
+          uri: 'qux'
+        });
+
+        expect(mockedFn.mock.calls.length).toEqual(1);
+        expect(mockedFn.mock.calls[0]).toEqual(
+          [{foo: 'bar'}, 'baz', 'qux']
+        );
+      });
+
+      it('dispatches the correct event on error', function () {
+        var mockedFn = jest.genMockFunction();
+        CosmosPackagesStore.addChangeListener(
+          COSMOS_REPOSITORY_ADD_ERROR,
+          mockedFn
+        );
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_ADD_ERROR,
+          data: {foo: 'bar'},
+          name: 'baz',
+          uri: 'qux'
+        });
+
+        expect(mockedFn.mock.calls.length).toEqual(1);
+        expect(mockedFn.mock.calls[0]).toEqual(
+          [{foo: 'bar'}, 'baz', 'qux']
+        );
+      });
+
+    });
+
+    describe('repository delete', function () {
+
+      it('dispatches the correct event on success', function () {
+        var mockedFn = jest.genMockFunction();
+        CosmosPackagesStore.addChangeListener(
+          COSMOS_REPOSITORY_DELETE_SUCCESS,
+          mockedFn
+        );
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS,
+          data: {foo: 'bar'},
+          name: 'baz',
+          uri: 'qux'
+        });
+
+        expect(mockedFn.mock.calls.length).toEqual(1);
+        expect(mockedFn.mock.calls[0]).toEqual(
+          [{foo: 'bar'}, 'baz', 'qux']
+        );
+      });
+
+      it('dispatches the correct event on error', function () {
+        var mockedFn = jest.genMockFunction();
+        CosmosPackagesStore.addChangeListener(
+          COSMOS_REPOSITORY_DELETE_ERROR,
+          mockedFn
+        );
+        AppDispatcher.handleServerAction({
+          type: REQUEST_COSMOS_REPOSITORY_DELETE_ERROR,
+          data: {foo: 'bar'},
+          name: 'baz',
+          uri: 'qux'
+        });
+
+        expect(mockedFn.mock.calls.length).toEqual(1);
+        expect(mockedFn.mock.calls[0]).toEqual(
+          [{foo: 'bar'}, 'baz', 'qux']
+        );
       });
 
     });

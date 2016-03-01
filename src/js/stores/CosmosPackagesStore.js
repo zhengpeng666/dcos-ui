@@ -106,7 +106,7 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   getRepositories() {
-    return new List(this.get('repositories'));
+    return new List({items: this.get('repositories')});
   },
 
   processAvailablePackagesSuccess: function (packages, query) {
@@ -227,26 +227,26 @@ const CosmosPackagesStore = Store.createStore({
         CosmosPackagesStore.processRepositoriesSuccess(data);
         break;
       case REQUEST_COSMOS_REPOSITORIES_LIST_ERROR:
-        CosmosPackagesStore.emit(COSMOS_REPOSITORIES_ERROR);
+        CosmosPackagesStore.emit(COSMOS_REPOSITORIES_ERROR, data);
         break;
       case REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS:
         CosmosPackagesStore.emit(
-          COSMOS_REPOSITORY_ADD_SUCCESS, action.name, action.url
+          COSMOS_REPOSITORY_ADD_SUCCESS, data, action.name, action.uri
         );
         break;
       case REQUEST_COSMOS_REPOSITORY_ADD_ERROR:
         CosmosPackagesStore.emit(
-          COSMOS_REPOSITORY_ADD_ERROR, action.name, action.url
+          COSMOS_REPOSITORY_ADD_ERROR, data, action.name, action.uri
         );
         break;
       case REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS:
         CosmosPackagesStore.emit(
-          COSMOS_REPOSITORY_DELETE_SUCCESS, action.name, action.url
+          COSMOS_REPOSITORY_DELETE_SUCCESS, data, action.name, action.uri
         );
         break;
       case REQUEST_COSMOS_REPOSITORY_DELETE_ERROR:
         CosmosPackagesStore.emit(
-          COSMOS_REPOSITORY_DELETE_ERROR, action.name, action.url
+          COSMOS_REPOSITORY_DELETE_ERROR, data, action.name, action.uri
         );
         break;
     }

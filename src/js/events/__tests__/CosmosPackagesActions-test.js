@@ -13,7 +13,13 @@ import {
   REQUEST_COSMOS_PACKAGE_INSTALL_ERROR,
   REQUEST_COSMOS_PACKAGE_INSTALL_SUCCESS,
   REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR,
-  REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS
+  REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS,
+  REQUEST_COSMOS_REPOSITORIES_LIST_ERROR,
+  REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS,
+  REQUEST_COSMOS_REPOSITORY_ADD_ERROR,
+  REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS,
+  REQUEST_COSMOS_REPOSITORY_DELETE_ERROR,
+  REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS,
 } from '../../constants/ActionTypes';
 var AppDispatcher = require('../AppDispatcher');
 var CosmosPackagesActions = require('../CosmosPackagesActions');
@@ -405,6 +411,215 @@ describe('CosmosPackagesActions', function () {
       CosmosPackagesActions.uninstallPackage();
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
       expect(JSON.parse(this.configuration.data)).toEqual({all: false});
+    });
+
+    it('sends a POST request', function () {
+      expect(this.configuration.method).toEqual('POST');
+    });
+
+  });
+
+  describe('#fetchRepositories', function () {
+
+    beforeEach(function () {
+      spyOn(RequestUtil, 'json');
+      CosmosPackagesActions.fetchRepositories({foo: 'bar'});
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+    });
+
+    it('dispatches the correct action when successful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS);
+      });
+
+      this.configuration.success({bar: 'baz'});
+    });
+
+    it('dispatches with the correct data when successful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.data).toEqual({bar: 'baz'});
+      });
+
+      this.configuration.success({bar: 'baz'});
+    });
+
+    it('dispatches the correct action when unsuccessful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(REQUEST_COSMOS_REPOSITORIES_LIST_ERROR);
+      });
+
+      this.configuration.error({responseJSON: {description: 'bar'}});
+    });
+
+    it('dispatches with the correct data when unsuccessful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.data).toEqual('bar');
+      });
+
+      this.configuration.error({responseJSON: {description: 'bar'}});
+    });
+
+    it('calls #json from the RequestUtil', function () {
+      expect(RequestUtil.json).toHaveBeenCalled();
+    });
+
+    it('fetches data from the correct URL', function () {
+      expect(this.configuration.url)
+        .toEqual(Config.cosmosAPIPrefix + '/repository/list');
+    });
+
+    it('sends a POST request', function () {
+      expect(this.configuration.method).toEqual('POST');
+    });
+
+  });
+
+  describe('#addRepository', function () {
+
+    beforeEach(function () {
+      spyOn(RequestUtil, 'json');
+      CosmosPackagesActions.addRepository('foo', 'bar');
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+    });
+
+    it('dispatches the correct action when successful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS);
+      });
+
+      this.configuration.success({bar: 'baz'});
+    });
+
+    it('dispatches with the correct data when successful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.data).toEqual({bar: 'baz'});
+        expect(action.name).toEqual('foo');
+        expect(action.uri).toEqual('bar');
+      });
+
+      this.configuration.success({bar: 'baz'});
+    });
+
+    it('dispatches the correct action when unsuccessful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(REQUEST_COSMOS_REPOSITORY_ADD_ERROR);
+      });
+
+      this.configuration.error({responseJSON: {description: 'bar'}});
+    });
+
+    it('dispatches with the correct data when unsuccessful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.data).toEqual('bar');
+      });
+
+      this.configuration.error({responseJSON: {description: 'bar'}});
+    });
+
+    it('calls #json from the RequestUtil', function () {
+      expect(RequestUtil.json).toHaveBeenCalled();
+    });
+
+    it('fetches data from the correct URL', function () {
+      expect(this.configuration.url)
+        .toEqual(Config.cosmosAPIPrefix + '/repository/add');
+    });
+
+    it('sends query in request body', function () {
+      expect(JSON.parse(this.configuration.data))
+        .toEqual({
+          name: 'foo',
+          uri: 'bar'
+        });
+    });
+
+    it('sends a POST request', function () {
+      expect(this.configuration.method).toEqual('POST');
+    });
+
+  });
+
+  describe('#deleteRepository', function () {
+
+    beforeEach(function () {
+      spyOn(RequestUtil, 'json');
+      CosmosPackagesActions.deleteRepository('foo', 'bar');
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+    });
+
+    it('dispatches the correct action when successful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS);
+      });
+
+      this.configuration.success({bar: 'baz'});
+    });
+
+    it('dispatches with the correct data when successful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.data).toEqual({bar: 'baz'});
+        expect(action.name).toEqual('foo');
+        expect(action.uri).toEqual('bar');
+      });
+
+      this.configuration.success({bar: 'baz'});
+    });
+
+    it('dispatches the correct action when unsuccessful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.type).toEqual(REQUEST_COSMOS_REPOSITORY_DELETE_ERROR);
+      });
+
+      this.configuration.error({responseJSON: {description: 'bar'}});
+    });
+
+    it('dispatches with the correct data when unsuccessful', function () {
+      var id = AppDispatcher.register(function (payload) {
+        var action = payload.action;
+        AppDispatcher.unregister(id);
+        expect(action.data).toEqual('bar');
+      });
+
+      this.configuration.error({responseJSON: {description: 'bar'}});
+    });
+
+    it('calls #json from the RequestUtil', function () {
+      expect(RequestUtil.json).toHaveBeenCalled();
+    });
+
+    it('fetches data from the correct URL', function () {
+      expect(this.configuration.url)
+        .toEqual(Config.cosmosAPIPrefix + '/repository/delete');
+    });
+
+    it('sends query in request body', function () {
+      expect(JSON.parse(this.configuration.data))
+        .toEqual({
+          name: 'foo',
+          uri: 'bar'
+        });
     });
 
     it('sends a POST request', function () {
