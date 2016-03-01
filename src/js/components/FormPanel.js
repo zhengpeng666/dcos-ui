@@ -1,8 +1,9 @@
+import classNames from 'classnames';
 import {Form} from 'reactjs-components';
 import React from 'react';
 
 const METHODS_TO_BIND = [
-  'getTriggerSubmit', 'handleError'
+  'getFormRowClass', 'getTriggerSubmit', 'handleError'
 ];
 
 class FormPanel extends React.Component {
@@ -22,14 +23,27 @@ class FormPanel extends React.Component {
   flattenDefinition(definition) {
     let flattenedDefinition = [];
 
-    definition.forEach((field) => {
-      let nestedDefinition = field.definition;
-      if (nestedDefinition) {
-        flattenedDefinition.push(this.getSubHeader(field.name));
-        flattenedDefinition = flattenedDefinition.concat(nestedDefinition);
-      } else {
-        flattenedDefinition.push(field);
-      }
+    Object.keys(definition).forEach((title) => {
+      let typeDefinition = definition[title];
+
+      flattenedDefinition.push({render: this.getHeader.bind(
+        this,
+        typeDefinition.title,
+        typeDefinition.description
+      )});
+
+      typeDefinition.definition.forEach((field) => {
+        let nestedDefinition = field.definition;
+        if (nestedDefinition) {
+          flattenedDefinition.push({render: this.getSubHeader.bind(
+            this,
+            field.name
+          )});
+          flattenedDefinition = flattenedDefinition.concat(nestedDefinition);
+        } else {
+          flattenedDefinition.push(field);
+        }
+      });
     });
 
     return flattenedDefinition;
@@ -38,6 +52,25 @@ class FormPanel extends React.Component {
   getTriggerSubmit(trigger) {
     this.triggerSubmit = trigger;
     this.forceUpdate();
+  }
+
+  getFormRowClass(definition) {
+    let isSelectedForm = definition.formParent === this.props.currentTab;
+
+    return classNames('row', {hidden: !isSelectedForm});
+  }
+
+  getHeader(title, description) {
+    let headerClassSet = classNames('column-12', {
+      'hidden': title !== this.props.currentTab
+    });
+
+    return (
+      <div key={title} className={headerClassSet}>
+        <h3 className="flush">{title}</h3>
+        <p>{description}</p>
+      </div>
+    );
   }
 
   getSubHeader(name) {
@@ -55,13 +88,10 @@ class FormPanel extends React.Component {
 
     return (
       <div className="row form-panel">
-        <div className="column-12">
-          <h3 className="flush">{this.props.title}</h3>
-          <p>{this.props.description}</p>
-        </div>
         <Form
           className="form"
           definition={definition}
+          formRowClass={this.getFormRowClass}
           triggerSubmit={this.getTriggerSubmit}
           onSubmit={this.props.onSubmit}
           onError={this.handleError} />

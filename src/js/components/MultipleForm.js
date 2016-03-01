@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import classNames from 'classnames';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
 
@@ -29,7 +30,19 @@ class MultipleForm extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({useGemini: true});
+    this.setState({useGemini: false});
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isMobileWidth !== this.props.isMobileWidth) {
+      this.setState({useGemini: false});
+    }
+  }
+
+  componentDidUpdate() {
+    if (!this.state.useGemini) {
+      this.setState({useGemini: true});
+    }
   }
 
   handleTabClick(tab) {
@@ -46,12 +59,11 @@ class MultipleForm extends React.Component {
 
   getServiceHeader() {
     return (
-      <div className="media-object-spacing-wrapper">
+      <div className="media-object-spacing-wrapper media-object-spacing-narrow flush">
         <div className="media-object media-object-align-middle">
           <div className="media-object-item">
             <img
-              className="icon icon-sprite icon-sprite-medium
-                icon-sprite-medium-color"
+              className="icon icon-sprite icon-sprite-medium icon-sprite-medium-color icon-app-container"
               src={this.props.serviceImage} />
           </div>
           <div className="media-object-item">
@@ -67,51 +79,69 @@ class MultipleForm extends React.Component {
     );
   }
 
-  getSideTabs(multipleDefinition) {
-    var tabs = (
+  getSideContent(multipleDefinition) {
+    let currentTab = this.state.currentTab;
+    let {handleTabClick} = this;
+    let isMobileWidth = this.props.isMobileWidth;
+    let tabValues = _.values(multipleDefinition);
+
+    let content = (
       <SideTabs
-        onTabClick={this.handleTabClick}
-        selectedTab={this.state.currentTab}
-        tabs={_.values(multipleDefinition)} />
+        isMobileWidth={isMobileWidth}
+        onTabClick={handleTabClick}
+        selectedTab={currentTab}
+        tabs={tabValues} />
     );
 
-    if (this.state.useGemini) {
+    let classSet = classNames({
+      'column-4': !isMobileWidth,
+      'column-12 mobile-column': isMobileWidth
+    });
+
+    if (this.state.useGemini && !isMobileWidth) {
       return (
-        <GeminiScrollbar autoshow={true} className="column-4">
+        <GeminiScrollbar autoshow={true} className={classSet}>
           <div className="multiple-form-left-column">
             {this.getServiceHeader()}
-            {tabs}
+            {content}
           </div>
         </GeminiScrollbar>
       );
     }
 
     return (
-      <div className="column-4">
+      <div className={classSet}>
         {this.getServiceHeader()}
-        {tabs}
+        {content}
       </div>
     );
   }
 
   getFormPanel(selectedTabDefinition) {
-    var panel = (
+    let panel = (
       <FormPanel
-        definition={selectedTabDefinition.definition}
+        definition={this.props.multipleDefinition}
         description={selectedTabDefinition.description}
-        title={selectedTabDefinition.title} />
+        title={selectedTabDefinition.title}
+        currentTab={this.state.currentTab} />
     );
+
+    let isMobileWidth = this.props.isMobileWidth;
+    let classSet = classNames({
+      'column-8 multiple-form-right-column': !isMobileWidth,
+      'column-12': isMobileWidth
+    });
 
     if (this.state.useGemini) {
       return (
-        <GeminiScrollbar autoshow={true} className="column-8 multiple-form-right-column">
+        <GeminiScrollbar autoshow={true} className={classSet}>
           {panel}
         </GeminiScrollbar>
       );
     }
 
     return (
-      <div className="column-8">
+      <div className={classSet}>
         {panel}
       </div>
     );
@@ -124,9 +154,14 @@ class MultipleForm extends React.Component {
       selectedTabDefinition = {};
     }
 
+    let isMobileWidth = this.props.isMobileWidth;
+    let classSet = classNames('row row-flex multiple-form', {
+       'mobile-width': isMobileWidth
+    });
+
     return (
-      <div className="row row-flex multiple-form">
-        {this.getSideTabs(multipleDefinition)}
+      <div className={classSet}>
+        {this.getSideContent(multipleDefinition)}
         {this.getFormPanel(selectedTabDefinition)}
       </div>
     );
@@ -141,6 +176,7 @@ MultipleForm.defaultProps = {
 };
 
 MultipleForm.propTypes = {
+  isMobileWidth: React.PropTypes.bool,
   multipleDefinition: React.PropTypes.object,
   serviceImage: React.PropTypes.string,
   serviceName: React.PropTypes.string,
