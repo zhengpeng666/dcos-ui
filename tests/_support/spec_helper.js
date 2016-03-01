@@ -106,19 +106,19 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
     cy
       .route({
         method: 'POST',
-        url: /packages\/describe/,
+        url: /package\/describe/,
         status: 200,
         response: 'fx:cosmos/package-describe'
       })
       .route({
         method: 'POST',
-        url: /packages\/list/,
+        url: /package\/list/,
         status: 200,
         response: 'fx:cosmos/packages-list'
       })
       .route({
         method: 'POST',
-        url: /packages\/search/,
+        url: /package\/search/,
         status: 200,
         response: 'fx:cosmos/packages-search'
       });

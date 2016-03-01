@@ -38,6 +38,9 @@ describe('Installed Packages Tab', function () {
       expect($itemNames.length).to.equal(1);
       expect($itemNames.first()).to.contain('marathon');
     });
+
+    // Clean up
+    cy.get('@filterTextbox').type('{selectall}{backspace}');
   });
 
   it('displays \'No data\' when it has filtered out all packages', function () {
@@ -50,5 +53,18 @@ describe('Installed Packages Tab', function () {
     cy.get('@tableRowCell').should(function ($tableCell) {
       expect($tableCell[0].textContent).to.equal('No data');
     });
+
+    // Clean up
+    cy.get('@filterTextbox').type('{selectall}{backspace}');
+  });
+
+  it('displays uninstall modal when uninstall is clicked', function () {
+    cy.get('.button.button-link.button-danger').eq(0).invoke('show').click();
+    cy
+      .get('.modal .modal-footer .button.button-danger')
+      .should('contain', 'Uninstall');
+
+    // Clean up
+    cy.get('.modal .modal-footer .button').contains('Cancel').click();
   });
 });
