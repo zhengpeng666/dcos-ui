@@ -101,7 +101,7 @@ class PackagesTable extends mixin(StoreMixin) {
         prop: 'name',
         render: this.getHeadline,
         sortable: true,
-        sortFunction: sortFunction
+        sortFunction
       },
       {
         className: getClassName,
@@ -110,7 +110,7 @@ class PackagesTable extends mixin(StoreMixin) {
         prop: 'version',
         render: this.getProp,
         sortable: true,
-        sortFunction: sortFunction
+        sortFunction
       },
       {
         className: getClassName,
