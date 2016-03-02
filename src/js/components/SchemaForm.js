@@ -76,7 +76,10 @@ class SchemaForm extends React.Component {
   }
 
   handleFormChange(formData, eventObj) {
-    if (eventObj.eventType !== 'blur') {
+    let isCheckboxChange = eventObj.eventType === 'change'
+      && typeof eventObj.fieldValue === 'boolean';
+
+    if (eventObj.eventType !== 'blur' && !isCheckboxChange) {
       return;
     }
 
