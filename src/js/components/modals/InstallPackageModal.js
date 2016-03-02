@@ -50,6 +50,17 @@ class InstallPackageModal extends mixin(StoreMixin) {
     });
   }
 
+  componentDidMount() {
+    super.componentDidMount(...arguments);
+    let {props} = this;
+    if (props.open) {
+      CosmosPackagesStore.fetchPackageDescription(
+        props.packageName,
+        props.packageVersion
+      );
+    }
+  }
+
   componentDidUpdate(prevProps) {
     super.componentDidUpdate(...arguments);
     let {props} = this;
@@ -83,11 +94,11 @@ class InstallPackageModal extends mixin(StoreMixin) {
     let appId = Util.findNestedPropertyInObject(
       cosmosPackage.get('config'),
       `properties.${name}.properties.framework-name.default`
-    ) || `${name}`;
+    ) || `${name}-default`;
 
     // Store appId from package
     this.setState({
-      appId: `${appId}-default`,
+      appId: appId,
       hasError: false,
       isLoading: false
     });
@@ -122,9 +133,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   handleChangeAppId(definition) {
-    console.log(definition);
-    let {installError} = this.state;
-    this.setState({appId: definition.appId, installError});
+    this.setState({installError: null, appId: definition.appId});
   }
 
   handleChangeReviewState(isReviewing) {
@@ -307,7 +316,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
 
       return (
         <ReviewConfig
-          jsonDocument={jsonDocument}/>
+          jsonDocument={jsonDocument} />
       );
     }
 
@@ -364,10 +373,6 @@ class InstallPackageModal extends mixin(StoreMixin) {
     );
 
     let parsedNotes = StringUtil.parseMarkdown(notes);
-
-    if (!parsedNotes) {
-      return null;
-    }
 
     return (
       <div className="horizontal-center">
