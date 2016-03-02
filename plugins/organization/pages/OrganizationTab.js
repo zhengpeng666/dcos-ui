@@ -7,8 +7,8 @@ import mixin from 'reactjs-mixin';
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import GroupsActionsModal from '../../groups/components/modals/GroupsActionsModal';
-import UsersActionsModal from '../../users/components/modals/UsersActionsModal';
+import GroupsActionsModal from '../submodules/groups/components/modals/GroupsActionsModal';
+import UsersActionsModal from '../submodules/users/components/modals/UsersActionsModal';
 import FilterHeadline from '../../../src/js/components/FilterHeadline';
 import FilterInputText from '../../../src/js/components/FilterInputText';
 import InternalStorageMixin from '../../../src/js/mixins/InternalStorageMixin';

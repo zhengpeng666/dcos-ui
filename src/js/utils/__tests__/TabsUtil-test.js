@@ -74,4 +74,30 @@ describe('TabsUtil', function () {
       ]);
     });
   });
+
+  describe('#sortTabs', function () {
+    beforeEach(function () {
+      this.tabs = {
+        foo: {
+          content: 'foo',
+          priority: 20
+        },
+        bar: {
+          content: 'bar',
+          priority: 30
+        },
+        qux: {
+          content: 'qux',
+          priority: 10
+        }
+      };
+    });
+
+    it('should arrange tabs in correct order', function () {
+      var sortedTabs = TabsUtil.sortTabs(this.tabs);
+      var tabContent = Object.keys(sortedTabs);
+      expect(tabContent).toEqual(['bar', 'foo', 'qux']);
+    });
+
+  });
 });

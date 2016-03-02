@@ -2,14 +2,14 @@ jest.dontMock('../../../src/js/pluginBridge/PluginBridge');
 jest.dontMock('../../../src/js/pluginBridge/Hooks');
 jest.dontMock('../../../src/js/pluginBridge/TestUtils');
 jest.dontMock('../index');
-jest.dontMock('../pluginHooks');
+jest.dontMock('../hooks');
 jest.dontMock('../../../src/js/config/Config');
 jest.dontMock('../../../src/js/mixins/GetSetMixin');
 
 var _ = require('underscore');
 
 var PluginTestUtils = require('../../../src/js/pluginBridge/TestUtils');
-var TrackingHooks = require('../pluginHooks');
+var TrackingHooks = require('../hooks');
 var DOMUtils = require('../../../src/js/utils/DOMUtils');
 
 describe('TrackingHooks', function () {

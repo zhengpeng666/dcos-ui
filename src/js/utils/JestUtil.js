@@ -9,12 +9,12 @@ const JestUtil = {
   unMockStores: function (storeIDs) {
     let stores = {
       ACLAuthStore: '../../../plugins/auth/stores/ACLAuthStore',
-      ACLDirectoriesStore: '../../../plugins/directories/stores/ACLDirectoriesStore',
-      ACLGroupsStore: '../../../plugins/groups/stores/ACLGroupsStore',
-      ACLGroupStore: '../../../plugins/groups/stores/ACLGroupStore',
-      ACLStore: '../../../plugins/acl/stores/ACLStore',
-      ACLUsersStore: '../../../plugins/users/stores/ACLUsersStore',
-      ACLUserStore: '../../../plugins/users/stores/ACLUserStore',
+      ACLDirectoriesStore: '../../../plugins/organization/submodules/directories/stores/ACLDirectoriesStore',
+      ACLGroupsStore: '../../../plugins/organization/submodules/groups/stores/ACLGroupsStore',
+      ACLGroupStore: '../../../plugins/organization/submodules/groups/stores/ACLGroupStore',
+      ACLStore: '../../../plugins/auth/submodules/acl/stores/ACLStore',
+      ACLUsersStore: '../../../plugins/organization/submodules/users/stores/ACLUsersStore',
+      ACLUserStore: '../../../plugins/organization/submodules/users/stores/ACLUserStore',
 
       CosmosPackagesStore: '../stores/CosmosPackagesStore',
       MarathonStore: '../stores/MarathonStore',
