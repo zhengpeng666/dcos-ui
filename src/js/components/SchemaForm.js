@@ -9,7 +9,8 @@ import SchemaFormUtil from '../utils/SchemaFormUtil';
 import SchemaUtil from '../utils/SchemaUtil';
 
 const METHODS_TO_BIND = [
-  'getTriggerSubmit', 'validateForm', 'handleFormChange', 'handleTabClick'
+  'getTriggerSubmit', 'validateForm', 'handleFormChange', 'handleTabClick',
+  'handleExternalSubmit'
 ];
 
 class SchemaForm extends React.Component {
@@ -26,20 +27,32 @@ class SchemaForm extends React.Component {
     });
 
     this.triggerSubmit = function () {};
+    this.errors = 0;
     global.bigSubmit = this.validateForm;
   }
 
   componentWillMount() {
-    this.multipleDefinition = SchemaUtil.schemaToMultipleDefinition(
-      this.props.schema, this.getSubHeader
-    );
+    if (this.props.definition) {
+      this.multipleDefinition = this.props.definition;
+    } else {
+      this.multipleDefinition = SchemaUtil.schemaToMultipleDefinition(
+        this.props.schema, this.getSubHeader
+      );
+    }
+
+    if (this.props.model) {
+      this.model = this.props.model;
+      SchemaFormUtil.mergeModelIntoDefinition(this.model, this.multipleDefinition);
+    } else {
+      this.model = {};
+    }
 
     this.submitMap = {};
-    this.model = {};
-
     this.setState({
       currentTab: Object.keys(this.multipleDefinition)[0]
     });
+
+    this.props.getTriggerSubmit(this.handleExternalSubmit);
   }
 
   componentDidMount() {
@@ -74,6 +87,15 @@ class SchemaForm extends React.Component {
     this.model[formKey] = formModel;
   }
 
+  handleExternalSubmit() {
+    this.validateForm();
+    return {
+      errors: this.errors,
+      model: this.model,
+      definition: this.multipleDefinition
+    };
+  }
+
   validateForm(fieldName) {
     let schema = this.props.schema;
     Object.keys(this.multipleDefinition).forEach((formKey) => {
@@ -85,6 +107,7 @@ class SchemaForm extends React.Component {
     this.multipleDefinition = SchemaUtil.schemaToMultipleDefinition(
       schema, this.getSubHeader
     );
+    SchemaFormUtil.mergeModelIntoDefinition(this.model, this.multipleDefinition);
 
     let model = SchemaFormUtil.processFormModel(
       this.model, this.multipleDefinition
@@ -94,7 +117,7 @@ class SchemaForm extends React.Component {
     let errors = result.errors.map(function (error) {
       return SchemaFormUtil.parseTV4Error(error);
     });
-
+    this.errors = errors.length;
     errors.forEach((error) => {
       let path = error.path;
       let prevObj = prevDefinition[path[0]];
@@ -253,6 +276,7 @@ class SchemaForm extends React.Component {
 }
 
 SchemaForm.defaultProps = {
+  getTriggerSubmit: function () {},
   schema: {},
   serviceImage: './img/services/icon-service-marathon-large@2x.png',
   serviceName: 'Marathon',
@@ -261,6 +285,7 @@ SchemaForm.defaultProps = {
 
 SchemaForm.propTypes = {
   isMobileWidth: React.PropTypes.bool,
+  getTriggerSubmit: React.PropTypes.func,
   schema: React.PropTypes.object,
   serviceImage: React.PropTypes.string,
   serviceName: React.PropTypes.string,

@@ -15,6 +15,35 @@ function filteredPaths(combinedPath) {
   });
 }
 
+function setDefinitionValue(thingToSet, definition) {
+  let {path, value} = thingToSet;
+  let definitionToSet = SchemaFormUtil.getDefinitionFromPath(definition, path);
+
+  definitionToSet.value = value;
+  definitionToSet.startValue = value;
+}
+
+function getThingsToSet(model, path) {
+  path = path || [];
+  let thingsToSet = [];
+
+  Object.keys(model).forEach(function (key) {
+    let pathCopy = path.concat([key]);
+    let value = model[key];
+
+    if (typeof value === 'object' && value !== null) {
+      thingsToSet = thingsToSet.concat(getThingsToSet(value, pathCopy));
+    } else if (value != null) {
+      thingsToSet.push({
+        path: pathCopy,
+        value
+      });
+    }
+  });
+
+  return thingsToSet;
+}
+
 let SchemaFormUtil = {
   getDefinitionFromPath(definition, paths) {
     if (definition[paths[0]]) {
@@ -78,7 +107,9 @@ let SchemaFormUtil = {
       }
 
       if (valueType === 'array' && typeof value === 'string') {
-        value = value.split(',').map((val) => { return val.trim(); });
+        value = value.split(',')
+          .map(function (val) { return val.trim(); })
+          .filter(function (val) { return val !== ''; });
       }
 
       copy[key] = value;
@@ -108,6 +139,14 @@ let SchemaFormUtil = {
 
   tv4Validate(model, schema) {
     return tv4.validateMultiple(model, schema);
+  },
+
+  mergeModelIntoDefinition(model, definition) {
+    let thingsToSet = getThingsToSet(model);
+
+    thingsToSet.forEach(function (thingToSet) {
+      setDefinitionValue(thingToSet, definition);
+    });
   }
 };
 

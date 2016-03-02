@@ -25,7 +25,8 @@ class ReviewConfig extends React.Component {
         let fieldValue = fieldObj[fieldKey];
         let uniqueKey = `${i}${fieldKey}`;
 
-        if (typeof fieldValue === 'object' && !Array.isArray(fieldValue)) {
+        if (typeof fieldValue === 'object' && !Array.isArray(fieldValue)
+          && fieldValue !== null) {
           elementsToRender.push(
             this.getFieldSubheader(fieldKey),
             this.renderDescriptionList(fieldValue, uniqueKey)

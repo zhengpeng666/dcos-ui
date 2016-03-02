@@ -4,11 +4,12 @@ import React from 'react';
 import ReviewConfig from './ReviewConfig';
 import {schema as boomski} from './__tests__/fixtures/MarathonConfigFixture';
 import SchemaForm from './SchemaForm';
-import SchemaUtil from '../utils/SchemaUtil';
 
 const METHODS_TO_BIND = [
   'changeReviewState',
+  'getTriggerSubmit',
   'handleInstallClick',
+  'handleReviewClick',
   'onResize'
 ];
 const MOBILE_WIDTH = 480;
@@ -63,12 +64,27 @@ class AdvancedConfigModal extends React.Component {
     console.log('Installing!');
   }
 
+  handleReviewClick() {
+    let submitInfo = this.triggerSubmit();
+
+    if (submitInfo.errors === 0) {
+      this.model = submitInfo.model;
+      this.definition = submitInfo.definition;
+      this.changeReviewState(true);
+    }
+
+  }
+
   isMobileWidth(element) {
     return element.innerWidth <= MOBILE_WIDTH;
   }
 
   isReviewing() {
     return this.state.reviewingConfig;
+  }
+
+  getTriggerSubmit(triggerSubmit) {
+    this.triggerSubmit = triggerSubmit;
   }
 
   getLeftButtonText() {
@@ -100,25 +116,24 @@ class AdvancedConfigModal extends React.Component {
       return this.handleInstallClick;
     }
 
-    return this.changeReviewState.bind(this, true);
+    return this.handleReviewClick;
   }
 
   getModalContents() {
     if (this.isReviewing()) {
-      let jsonDocument = SchemaUtil.definitionToJSONDocument(
-        SchemaUtil.schemaToMultipleDefinition(this.props.schema)
-      );
-
       return (
         <ReviewConfig
-          jsonDocument={jsonDocument}/>
+          jsonDocument={this.model}/>
       );
     }
 
     return (
       <SchemaForm
         schema={this.props.schema}
-        isMobileWidth={this.state.isMobileWidth}/>
+        definition={this.definition}
+        model={this.model}
+        isMobileWidth={this.state.isMobileWidth}
+        getTriggerSubmit={this.getTriggerSubmit} />
     );
   }
 
