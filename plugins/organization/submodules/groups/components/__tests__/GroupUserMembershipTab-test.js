@@ -21,9 +21,9 @@ var TestUtils = require('react-addons-test-utils');
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var ACLGroupsStore = require('../../stores/ACLGroupsStore');
 var ACLUsersStore = require('../../../users/stores/ACLUsersStore');
+var Group = require('../../../../../../src/js/structs/Group');
 var GroupUserMembershipTab = require('../GroupUserMembershipTab');
-
-var Group = require('../../structs/Group');
+var UsersList = require('../../../../../../src/js/structs/UsersList');
 
 const groupDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/group-with-details.json');
@@ -64,24 +64,22 @@ describe('GroupUserMembershipTab', function () {
       ACLGroupStore.addUser = jest.genMockFunction();
       ACLUsersStore.get = function (key) {
         if (key === 'users') {
-          return {
-            getItems: function () {
-              return [
-                {
-                  description: 'foo',
-                  uid: 'bar'
-                },
-                {
-                  description: 'bar',
-                  uid: 'baz'
-                },
-                {
-                  description: 'baz',
-                  uid: 'qux'
-                }
-              ];
-            }
-          };
+          return new UsersList({
+            items: [
+              {
+                description: 'foo',
+                uid: 'bar'
+              },
+              {
+                description: 'bar',
+                uid: 'baz'
+              },
+              {
+                description: 'baz',
+                uid: 'qux'
+              }
+            ]
+          });
         }
       };
 
