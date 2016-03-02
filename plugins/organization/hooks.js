@@ -6,7 +6,7 @@ const PluginHooks = {
    * @param  {Object} Hooks The Hooks API
    */
   initialize(Hooks) {
-    Hooks.addFilter('SettingsRoutes', this.getRoutes.bind(this, Hooks));
+    Hooks.addFilter('SettingsRoutes', this.appendRoutes.bind(this, Hooks));
     Hooks.addFilter('SettingsTabs', this.getTabs.bind(this));
   },
 
@@ -39,7 +39,7 @@ const PluginHooks = {
     return filteredRoutes.routes.concat([filteredRoutes.redirect]);
   },
 
-  getRoutes(Hooks, route) {
+  appendRoutes(Hooks, route) {
     let childRoutes = this.getOrganizationRoutes(Hooks);
 
     route.redirect = {

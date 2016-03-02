@@ -1,7 +1,7 @@
 jest.dontMock('../UserGroupTable');
-jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../stores/ACLGroupsStore');
-jest.dontMock('../../../users/stores/ACLUserStore');
+jest.dontMock('../../../groups/stores/ACLGroupStore');
+jest.dontMock('../../../groups/stores/ACLGroupsStore');
+jest.dontMock('../../stores/ACLUserStore');
 
 var JestUtil = require('../../../../../../src/js/utils/JestUtil');
 
@@ -12,9 +12,9 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
-var ActionTypes = require('../../constants/ActionTypes');
-var ACLGroupStore = require('../../stores/ACLGroupStore');
-var ACLUserStore = require('../../../users/stores/ACLUserStore');
+var ActionTypes = require('../../../groups/constants/ActionTypes');
+var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
+var ACLUserStore = require('../../stores/ACLUserStore');
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 var UserGroupTable = require('../UserGroupTable');
 var User = require('../../../../../../src/js/structs/User');

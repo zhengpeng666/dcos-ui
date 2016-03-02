@@ -7,7 +7,7 @@ import OverviewTab from './pages/OverviewTab';
 
 let PluginHooks = {
 
-  getRoutes(route) {
+  appendRoutes(route) {
     route.routes.push({
       type: Route,
       name: 'settings-system-overview',
@@ -21,7 +21,7 @@ let PluginHooks = {
    * @param  {Object} Hooks The Hooks API
    */
   initialize(Hooks) {
-    Hooks.addFilter('SystemRoutes', this.getRoutes.bind(this));
+    Hooks.addFilter('SystemRoutes', this.appendRoutes.bind(this));
   }
 };
 

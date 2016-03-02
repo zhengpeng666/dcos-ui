@@ -10,7 +10,7 @@ import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
 import SidePanelContents from '../../../../../src/js/components/SidePanelContents';
 import StringUtil from '../../../../../src/js/utils/StringUtil';
 import UserDetails from './UserDetails';
-import UserGroupMembershipTab from '../../groups/components/UserGroupMembershipTab';
+import UserGroupMembershipTab from './UserGroupMembershipTab';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onAclStoreUserGrantSuccess',

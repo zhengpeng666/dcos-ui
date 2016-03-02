@@ -5,8 +5,8 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLGroupStore from '../stores/ACLGroupStore';
-import ACLUserStore from '../../users/stores/ACLUserStore';
+import ACLGroupStore from '../../groups/stores/ACLGroupStore';
+import ACLUserStore from '../stores/ACLUserStore';
 import ResourceTableUtil from '../../../../../src/js/utils/ResourceTableUtil';
 import TableUtil from '../../../../../src/js/utils/TableUtil';
 

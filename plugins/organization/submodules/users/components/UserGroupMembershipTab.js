@@ -5,8 +5,8 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import ACLGroupStore from '../stores/ACLGroupStore';
-import ACLGroupsStore from '../stores/ACLGroupsStore';
+import ACLGroupStore from '../../groups/stores/ACLGroupStore';
+import ACLGroupsStore from '../../groups/stores/ACLGroupsStore';
 import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
 import UserGroupTable from './UserGroupTable';
 import Util from '../../../../../src/js/utils/Util';
