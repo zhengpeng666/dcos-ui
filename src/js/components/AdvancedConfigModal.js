@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import {Confirm} from 'reactjs-components';
 import React from 'react';
 
@@ -120,21 +121,29 @@ class AdvancedConfigModal extends React.Component {
   }
 
   getModalContents() {
-    if (this.isReviewing()) {
-      return (
-        <ReviewConfig
-          jsonDocument={this.model}/>
-      );
-    }
+    let isReviewing = this.isReviewing();
+    let reviewClassSet = classNames({
+      hidden: !isReviewing
+    });
 
-    return (
+    let schemaFormClassSet = classNames({
+      hidden: isReviewing
+    });
+
+    return [
       <SchemaForm
-        schema={this.props.schema}
+        className={schemaFormClassSet}
         definition={this.definition}
-        model={this.model}
+        getTriggerSubmit={this.getTriggerSubmit}
         isMobileWidth={this.state.isMobileWidth}
-        getTriggerSubmit={this.getTriggerSubmit} />
-    );
+        key="schemaForm"
+        model={this.model}
+        schema={this.props.schema} />,
+      <ReviewConfig
+        className={reviewClassSet}
+        jsonDocument={this.model}
+        key="reviewConfig" />
+    ];
   }
 
   render() {

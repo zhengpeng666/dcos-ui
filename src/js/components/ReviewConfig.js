@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 
 import DescriptionList from './DescriptionList';
@@ -54,6 +55,8 @@ class ReviewConfig extends React.Component {
   }
 
   render() {
+    let classSet = classNames(this.props.className, 'modal-body review-config');
+
     return (
       <div className={this.props.className}>
         {this.getDefinitionReview()}

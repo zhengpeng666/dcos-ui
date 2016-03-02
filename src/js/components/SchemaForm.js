@@ -262,9 +262,13 @@ class SchemaForm extends React.Component {
     let multipleDefinition = this.multipleDefinition;
     let isMobileWidth = this.props.isMobileWidth;
 
-    let classSet = classNames('row row-flex multiple-form', {
+    let classSet = classNames(
+      'row row-flex multiple-form',
+      this.props.className,
+      {
        'mobile-width': isMobileWidth
-    });
+      }
+    );
 
     return (
       <div className={classSet}>
@@ -276,6 +280,7 @@ class SchemaForm extends React.Component {
 }
 
 SchemaForm.defaultProps = {
+  className: '',
   getTriggerSubmit: function () {},
   schema: {},
   serviceImage: './img/services/icon-service-marathon-large@2x.png',
