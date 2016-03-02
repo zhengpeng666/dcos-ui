@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import mixin from 'reactjs-mixin';
 import {Form, Modal} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
@@ -61,10 +61,10 @@ class InstallPackageModal extends mixin(StoreMixin) {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    super.componentDidUpdate(...arguments);
+  componentWillReceiveProps(nextProps) {
+    super.componentWillReceiveProps(...arguments);
     let {props} = this;
-    if (prevProps.open && !props.open) {
+    if (props.open && !nextProps.open) {
       this.setState({
         advancedModalOpen: false,
         appId: null,
@@ -76,10 +76,10 @@ class InstallPackageModal extends mixin(StoreMixin) {
       });
     }
 
-    if (!prevProps.open && props.open) {
+    if (!props.open && nextProps.open) {
       CosmosPackagesStore.fetchPackageDescription(
-        props.packageName,
-        props.packageVersion
+        nextProps.packageName,
+        nextProps.packageVersion
       );
     }
   }
