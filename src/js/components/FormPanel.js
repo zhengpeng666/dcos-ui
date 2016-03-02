@@ -51,7 +51,7 @@ class FormPanel extends React.Component {
         <Form
           className={this.props.className}
           definition={definition}
-          formGroupClass=""
+          formGroupClass="form-group flush"
           triggerSubmit={this.getTriggerSubmit}
           onChange={this.props.onFormChange}
           onSubmit={this.props.onSubmit} />

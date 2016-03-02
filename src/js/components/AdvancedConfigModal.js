@@ -10,6 +10,7 @@ const METHODS_TO_BIND = [
   'changeReviewState',
   'getTriggerSubmit',
   'handleInstallClick',
+  'handleSchemaFormChange',
   'handleReviewClick',
   'onResize'
 ];
@@ -58,6 +59,13 @@ class AdvancedConfigModal extends React.Component {
       this.setState({isMobileWidth: true});
     } else if (this.state.isMobileWidth) {
       this.setState({isMobileWidth: false});
+    }
+  }
+
+  handleSchemaFormChange(hasNoErrors) {
+    let hasFormErrors = !hasNoErrors;
+    if (hasFormErrors !== this.state.hasFormErrors) {
+      this.setState({hasFormErrors});
     }
   }
 
@@ -138,6 +146,7 @@ class AdvancedConfigModal extends React.Component {
         isMobileWidth={this.state.isMobileWidth}
         key="schemaForm"
         model={this.model}
+        onChange={this.handleSchemaFormChange}
         schema={this.props.schema} />,
       <ReviewConfig
         className={reviewClassSet}
@@ -147,6 +156,13 @@ class AdvancedConfigModal extends React.Component {
   }
 
   render() {
+    let rightButtonClassName = classNames(
+      'button button-success button-large',
+      {
+        disabled: this.state.hasFormErrors
+      }
+    );
+
     return (
       <Confirm
         innerBodyClass=""
@@ -158,7 +174,7 @@ class AdvancedConfigModal extends React.Component {
         onClose={this.props.onClose}
         open={this.props.open}
         rightButtonCallback={this.getRightButtonCallback()}
-        rightButtonClassName="button button-success button-large"
+        rightButtonClassName={rightButtonClassName}
         rightButtonText={this.getRightButtonText()}
         titleClass="modal-header-title text-align-center flush">
         {this.getModalContents()}

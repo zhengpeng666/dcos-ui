@@ -83,7 +83,8 @@ class SchemaForm extends React.Component {
       return;
     }
 
-    this.validateForm(eventObj.fieldName);
+    let validated = this.validateForm(eventObj.fieldName);
+    this.props.onChange(validated);
   }
 
   handleFormSubmit(formKey, formModel) {
@@ -110,7 +111,6 @@ class SchemaForm extends React.Component {
     this.multipleDefinition = SchemaUtil.schemaToMultipleDefinition(
       schema, this.getSubHeader
     );
-    SchemaFormUtil.mergeModelIntoDefinition(this.model, this.multipleDefinition);
 
     let model = SchemaFormUtil.processFormModel(
       this.model, this.multipleDefinition
@@ -141,6 +141,8 @@ class SchemaForm extends React.Component {
     });
 
     this.forceUpdate();
+
+    return errors.length === 0;
   }
 
   getTriggerSubmit(formKey, triggerSubmit) {
