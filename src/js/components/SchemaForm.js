@@ -102,6 +102,8 @@ class SchemaForm extends React.Component {
 
   validateForm(fieldName) {
     let schema = this.props.schema;
+    let isValidated = true;
+
     Object.keys(this.multipleDefinition).forEach((formKey) => {
       this.submitMap[formKey]();
     });
@@ -128,7 +130,7 @@ class SchemaForm extends React.Component {
       if (path[path.length - 1] !== fieldName && !prevObj.showError) {
         return;
       }
-
+      isValidated = false;
       let obj = this.multipleDefinition[path[0]];
       obj = SchemaFormUtil.getDefinitionFromPath(obj, path.slice(1));
 
@@ -142,7 +144,7 @@ class SchemaForm extends React.Component {
 
     this.forceUpdate();
 
-    return errors.length === 0;
+    return isValidated;
   }
 
   getTriggerSubmit(formKey, triggerSubmit) {

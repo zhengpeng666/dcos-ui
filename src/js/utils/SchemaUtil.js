@@ -49,13 +49,26 @@ function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subh
 
   let properties = fieldProps.properties;
   Object.keys(properties).forEach(function (nestedFieldName) {
-    nestedDefinition.definition.push(
-      schemaToFieldDefinition(
-        nestedFieldName,
-        properties[nestedFieldName],
-        nestedFieldName
-      )
-    );
+    let nestedPropertyValue = properties[nestedFieldName];
+
+    if (nestedPropertyValue.properties) {
+      nestedDefinition.definition.push(
+        nestedSchemaToFieldDefinition(
+          nestedFieldName,
+          nestedPropertyValue,
+          nestedFieldName,
+          subheaderRender
+        )
+      );
+    } else {
+      nestedDefinition.definition.push(
+        schemaToFieldDefinition(
+          nestedFieldName,
+          nestedPropertyValue,
+          nestedFieldName
+        )
+      );
+    }
   });
 
   return nestedDefinition;
