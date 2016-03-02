@@ -7,6 +7,7 @@ import mixin from 'reactjs-mixin';
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
+import AuthUtil from '../../../src/js/utils/AuthUtil';
 import GroupsActionsModal from '../submodules/groups/components/modals/GroupsActionsModal';
 import UsersActionsModal from '../submodules/users/components/modals/UsersActionsModal';
 
@@ -20,8 +21,8 @@ const METHODS_TO_BIND = [
   'handleHeadingCheckboxChange',
   'handleSearchStringChange',
   'renderCheckbox',
+  'renderFullName',
   'renderHeadingCheckbox',
-  'renderHeadline',
   'renderUsername',
   'resetFilter',
   // Must bind these due to TooltipMixin legacy code
@@ -125,12 +126,55 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
     this.bulkCheck(false);
   }
 
-  renderHeadline(prop, subject) {
-    let itemName = this.props.itemName;
+  renderFullName(prop, subject) {
     let badge = null;
+    let isRemote = AuthUtil.isSubjectRemote(subject);
+    let itemName = this.props.itemName;
+    let label = subject.get('description');
     let nameColClassnames = 'column-small-12 column-large-12 column-x-large-12 text-overflow';
 
-    if (typeof subject.isRemote === 'function' && subject.isRemote()) {
+    if (isRemote) {
+      label = subject.get(this.props.itemID);
+    }
+
+    let link = (
+      <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
+        params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}
+        className="">
+        {label}
+      </Link>
+    );
+
+    let content = link;
+
+    if (isRemote) {
+      content = (
+        <div className="row">
+          <div className="column-small-9 column-large-9 column-x-large-10 text-overflow">
+            {link}
+          </div>
+          <div className="column-small-3 column-large-3 column-x-large-2 text-align-right">
+            <span
+              className="badge"
+              data-behavior="show-tip"
+              data-tip-place="top"
+              data-tip-content="This user is managed by an external LDAP directory.">
+              LDAP
+            </span>
+          </div>
+        </div>
+      );
+    }
+
+    return content;
+  }
+
+  renderUsername(prop, subject) {
+    let badge = null;
+    let itemName = this.props.itemName;
+    let nameColClassnames = 'column-small-12 column-large-12 column-x-large-12 text-overflow';
+
+    if (AuthUtil.isSubjectRemote(subject)) {
       nameColClassnames = 'column-small-9 column-large-9 column-x-large-10 text-overflow';
       badge = (
         <div className="column-small-3 column-large-3 column-x-large-2 text-align-right">
@@ -149,25 +193,11 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
       <div className="row">
         <div className={nameColClassnames}>
           <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
-          params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}
-          className="">
-          {subject.get('description')}
+            params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}>
+            {subject.get('uid')}
           </Link>
         </div>
         {badge}
-      </div>
-    );
-  }
-
-  renderUsername(prop, subject) {
-    let itemName = this.props.itemName;
-
-    return (
-      <div>
-        <Link to={`settings-organization-${itemName}s-${itemName}-panel`}
-          params={{[`${itemName}ID`]: subject.get(this.props.itemID)}}>
-          {subject.get('uid')}
-        </Link>
       </div>
     );
   }
@@ -274,16 +304,6 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
         render: this.renderCheckbox,
         sortable: false,
         heading: this.renderHeadingCheckbox
-      },
-      {
-        cacheCell: true,
-        className,
-        headerClassName: className,
-        prop: 'description',
-        render: this.renderHeadline,
-        sortable: true,
-        sortFunction: propSortFunction,
-        heading: nameHeading
       }
     ];
 
@@ -304,6 +324,17 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
         heading: usernameHeading
       });
     }
+
+    columns.push({
+      cacheCell: true,
+      className,
+      headerClassName: className,
+      prop: 'description',
+      render: this.renderFullName,
+      sortable: true,
+      sortFunction: propSortFunction,
+      heading: nameHeading
+    });
 
     return columns;
   }
@@ -375,20 +406,27 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
         break;
       case 'local':
         items = _.filter(items, function (item) {
-          return !item.isRemote();
+          return !AuthUtil.isSubjectRemote(item);
         });
         break;
       case 'external':
         items = _.filter(items, function (item) {
-          return item.isRemote();
+          return AuthUtil.isSubjectRemote(item);
         });
         break;
     }
 
     if (searchString !== '') {
-      return _.filter(items, function (item) {
+      return _.filter(items, (item) => {
         let description = item.get('description').toLowerCase();
-        return description.indexOf(searchString) > -1;
+        let id = item.get(this.props.itemID).toLowerCase();
+
+        if (AuthUtil.isSubjectRemote(item)) {
+          description = '';
+        }
+
+        return description.indexOf(searchString) > -1
+          || id.indexOf(searchString) > -1;
       });
     }
 
@@ -515,7 +553,7 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
     items.forEach(function (item) {
       let id = item.get(itemID);
 
-      if (typeof item.isRemote === 'function' && item.isRemote()) {
+      if (AuthUtil.isSubjectRemote(item)) {
         remoteIDSet[id] = true;
       } else {
         checkableCount += 1;
@@ -544,6 +582,7 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
     let filterInputText = this.getStringFilter();
     let actionDropdown = this.getActionDropdown(itemName);
     let actionsModal = this.getActionsModal(action, items, itemID, itemName);
+    let sortProp = itemID;
 
     return (
       <div className="flex-container-col">
@@ -578,7 +617,7 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
             containerSelector=".gm-scroll-view"
             data={visibleItems}
             itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: 'description', order: 'asc'}} />
+            sortBy={{prop: sortProp, order: 'asc'}} />
         </div>
       </div>
     );
