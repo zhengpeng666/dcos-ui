@@ -78,7 +78,11 @@ base/forms.less
     }
 
     .form {
-      margin-bottom: @base-spacing-unit * 3/2;
+      margin-bottom: @base-spacing-unit;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     .column-4.gm-scrollbar-container {

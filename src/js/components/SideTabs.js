@@ -20,6 +20,28 @@ class SideTabs extends React.Component {
     }
   }
 
+  getTabHeader() {
+    let {props} = this;
+    let {isMobileWidth, selectedTab} = props;
+
+    if (!isMobileWidth) {
+      return null;
+    }
+
+    let caret = (
+      <span className="caret caret--desc caret--visible" />
+    );
+
+    return (
+      <li className="h3 sidebar-menu-item selected clickable">
+        <a onClick={this.handleTabClick.bind(this, selectedTab)}>
+          {selectedTab}
+          {caret}
+        </a>
+      </li>
+    );
+  }
+
   getTabs() {
     let {props, state} = this;
     let {isMobileWidth, selectedTab} = props;
@@ -28,8 +50,8 @@ class SideTabs extends React.Component {
       let title = tab.title;
       let classes = classNames('sidebar-menu-item', 'clickable', {
         h3: isMobileWidth,
-        hidden: !state.dropdownOpen && isMobileWidth && selectedTab !== title,
-        selected: title === selectedTab
+        hidden: !state.dropdownOpen && isMobileWidth,
+        selected: title === selectedTab && !isMobileWidth
       });
 
       return (
@@ -48,6 +70,7 @@ class SideTabs extends React.Component {
   render() {
     return (
       <ul className={this.props.className}>
+        {this.getTabHeader()}
         {this.getTabs()}
       </ul>
     );
