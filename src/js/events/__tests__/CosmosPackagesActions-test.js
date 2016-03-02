@@ -304,7 +304,7 @@ describe('CosmosPackagesActions', function () {
         expect(action.packageVersion).toEqual('bar');
       });
 
-      this.configuration.error({responseJSON: {description: 'bar'}});
+      this.configuration.error({responseJSON: 'bar'});
     });
 
     it('calls #json from the RequestUtil', function () {
@@ -375,7 +375,7 @@ describe('CosmosPackagesActions', function () {
         expect(action.type).toEqual(REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR);
       });
 
-      this.configuration.error({responseJSON: {description: 'bar'}});
+      this.configuration.error({responseJSON: 'bar'});
     });
 
     it('dispatches with the correct data when unsuccessful', function () {
@@ -385,7 +385,7 @@ describe('CosmosPackagesActions', function () {
         expect(action.data).toEqual('bar');
       });
 
-      this.configuration.error({responseJSON: {description: 'bar'}});
+      this.configuration.error({responseJSON: 'bar'});
     });
 
     it('calls #json from the RequestUtil', function () {
