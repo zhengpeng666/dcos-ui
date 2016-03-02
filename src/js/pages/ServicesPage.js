@@ -16,7 +16,7 @@ var MesosSummaryStore = require('../stores/MesosSummaryStore');
 import PluginSDK from 'PluginSDK';
 var ResourceBarChart = require('../components/charts/ResourceBarChart');
 var ServicesTable = require('../components/ServicesTable');
-var SidebarActions = PluginSDK.getActions('SidebarActions', {close() {}});
+var SidebarActions = PluginSDK.getActions('SidebarActions');
 import SidePanels from '../components/SidePanels';
 
 function getCountByHealth(frameworks) {

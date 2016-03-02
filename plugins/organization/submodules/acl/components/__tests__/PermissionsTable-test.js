@@ -28,7 +28,7 @@ let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
 var ACLStore = require('../../stores/ACLStore')(PluginSDK);
 var PermissionsTable = require('../PermissionsTable')(PluginSDK);
 
-require('../../../../storeConfig').register(PluginSDK);
+require('../../../../storeConfig')(PluginSDK);
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 

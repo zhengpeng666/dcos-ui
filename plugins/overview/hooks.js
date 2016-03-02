@@ -11,26 +11,19 @@ module.exports = (PluginSDK) => {
 
   let OverviewTab = _OverviewTab(PluginSDK);
 
-  let OverviewPluginHooks = {
-    routes: {
-      route: {
+  return {
+    appendRoutes(route) {
+      route.routes.push({
         type: Route,
         name: 'settings-system-overview',
         path: 'overview/?',
         handler: OverviewTab
-      }
-    },
-
-    getOrganizationRoutes(route) {
-      route.routes.push(this.routes.route);
+      });
       return route;
     },
 
     initialize() {
-      Hooks.addFilter('getSystemRoutes', this.getOrganizationRoutes.bind(this));
+      Hooks.addFilter('SystemRoutes', this.appendRoutes.bind(this));
     }
   };
-
-  return OverviewPluginHooks;
-
 };

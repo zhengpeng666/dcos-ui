@@ -16,9 +16,7 @@ var ResourceTimeSeriesChart = require('../components/charts/ResourceTimeSeriesCh
 var TaskFailureTimeSeriesChart = require('../components/charts/TaskFailureTimeSeriesChart');
 var ServiceList = require('../components/ServiceList');
 var TasksChart = require('../components/charts/TasksChart');
-var SidebarActions = PluginSDK.getActions('SidebarActions', {
-  close() {}
-});
+var SidebarActions = PluginSDK.getActions('SidebarActions');
 import SidePanels from '../components/SidePanels';
 
 function getMesosState() {

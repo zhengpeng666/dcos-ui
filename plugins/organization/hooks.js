@@ -5,40 +5,28 @@ module.exports = (PluginSDK) => {
 
   let {Hooks} = PluginSDK;
 
-  const OrganizationPluginHooks = {
+  return {
 
-    defaults: {
+    initialize() {
+      Hooks.addFilter('SettingsRoutes', this.appendRoutes.bind(this));
+      Hooks.addFilter('SettingsTabs', this.getTabs.bind(this));
+    },
 
-      redirect: {
-        type: Redirect,
-        from: '/settings/?',
-        to: 'settings-organization'
-      },
-      organizationRoutes: [],
-
-      settingsTabs: {
+    getTabs(tabs) {
+      return _.extend(tabs, {
         'settings-organization': {
           content: 'Organization',
           priority: 20
         }
-      }
+      });
     },
 
-    initialize() {
-      Hooks.addFilter('getSettingsRoutes', this.getRoutes.bind(this));
-      Hooks.addFilter('getSettingsTabs', this.getTabs.bind(this));
-    },
-
-    getTabs(tabs) {
-      return _.extend(tabs, this.defaults.settingsTabs);
-    },
-
-    getOrganizationRoutes() {
+    appendOrganizationRoutes() {
       // Return filtered Routes
       return this.getFilteredRoutes(
         // Pass in Object so Plugins can mutate routes and the default redirect
-        Hooks.applyFilter('getOrganizationRoutes', {
-          routes: [].slice.call(this.defaults.organizationRoutes),
+        Hooks.applyFilter('OrganizationRoutes', {
+          routes: [],
           redirect: {
             type: Redirect,
             from: '/settings/?',
@@ -53,21 +41,21 @@ module.exports = (PluginSDK) => {
       return filteredRoutes.routes.concat([filteredRoutes.redirect]);
     },
 
-    getRoutes(route) {
-      let childRoutes = this.getOrganizationRoutes();
+    appendRoutes(route) {
+      let childRoutes = this.appendOrganizationRoutes();
 
-      route.redirect = this.defaults.redirect;
-      route.routes.push(
-        {
-          type: Route,
-          name: 'settings-organization',
-          path: 'organization/?',
-          children: childRoutes
-        }
-      );
+      route.redirect = {
+        type: Redirect,
+        from: '/settings/?',
+        to: 'settings-organization'
+      };
+      route.routes.push({
+        type: Route,
+        name: 'settings-organization',
+        path: 'organization/?',
+        children: childRoutes
+      });
       return route;
     }
   };
-
-  return OrganizationPluginHooks;
 };

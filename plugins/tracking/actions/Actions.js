@@ -2,6 +2,13 @@ var _ = require('underscore');
 var md5 = require('md5');
 var RouterLocation = require('react-router').HashLocation;
 
+import {
+  REQUEST_INTERCOM_OPEN,
+  REQUEST_INTERCOM_CLOSE
+} from '../constants/ActionTypes';
+
+var AppDispatcher = require('../../../src/js/events/AppDispatcher');
+
 let cached;
 
 module.exports = (PluginSDK) => {
@@ -196,6 +203,20 @@ module.exports = (PluginSDK) => {
 
     getComponent: function (componentID) {
       return this.components[componentID];
+    },
+
+    openIntercom: function () {
+      AppDispatcher.handleIntercomAction({
+        type: REQUEST_INTERCOM_OPEN,
+        data: true
+      });
+    },
+
+    closeIntercom: function () {
+      AppDispatcher.handleIntercomAction({
+        type: REQUEST_INTERCOM_CLOSE,
+        data: false
+      });
     }
 
   };

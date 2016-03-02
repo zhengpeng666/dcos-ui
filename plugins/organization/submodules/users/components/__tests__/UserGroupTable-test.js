@@ -1,7 +1,7 @@
 jest.dontMock('../UserGroupTable');
-jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../stores/ACLGroupsStore');
-jest.dontMock('../../../users/stores/ACLUserStore');
+jest.dontMock('../../../groups/stores/ACLGroupStore');
+jest.dontMock('../../../groups/stores/ACLGroupsStore');
+jest.dontMock('../../stores/ACLUserStore');
 jest.dontMock('../../../../storeConfig');
 
 import PluginTestUtils from 'PluginTestUtils';
@@ -14,14 +14,18 @@ import React from 'react';
 
 let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
 
-require('../../../../storeConfig').register(PluginSDK);
+require('../../../../storeConfig')(PluginSDK);
 
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
-var ActionTypes = require('../../constants/ActionTypes');
-var ACLGroupStore = require('../../stores/ACLGroupStore')(PluginSDK);
-var ACLUserStore = require('../../../users/stores/ACLUserStore')(PluginSDK);
+import {
+  REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
+  REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS
+} from '../../../groups/constants/ActionTypes';
+
+var ACLGroupStore = require('../../../groups/stores/ACLGroupStore')(PluginSDK);
+var ACLUserStore = require('../../stores/ACLUserStore')(PluginSDK);
 var UserGroupTable = require('../UserGroupTable')(PluginSDK);
 
 var User = require('../../../../../../src/js/structs/User');
@@ -64,7 +68,7 @@ describe('UserGroupTable', function () {
     it('updates state when an error event is emitted', function () {
       ACLGroupStore.deleteUser = function () {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
+          type: REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
           data: 'foo bar',
           groupID: 'baz',
           userID: 'unicode'
@@ -82,7 +86,7 @@ describe('UserGroupTable', function () {
     it('gets called when a success event is emitted', function () {
       ACLGroupStore.deleteUser = function () {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
+          type: REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
           data: 'foo bar',
           groupID: 'baz',
           userID: 'unicode'

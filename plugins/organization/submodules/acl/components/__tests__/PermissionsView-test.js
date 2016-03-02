@@ -16,7 +16,7 @@ var ACLList = require('../../../../../../src/js/structs/ACLList');
 var ACLStore = require('../../stores/ACLStore')(PluginSDK);
 var PermissionsView = require('../PermissionsView')(PluginSDK);
 
-require('../../../../storeConfig').register(PluginSDK);
+require('../../../../storeConfig')(PluginSDK);
 
 describe('PermissionsView', function () {
 

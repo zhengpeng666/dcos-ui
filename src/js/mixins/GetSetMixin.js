@@ -38,7 +38,7 @@ var GetSetMixin = {
     if (!global.__DEV__) {
       PluginSDK = require('PluginSDK');
     }
-    // Dispatch new Store data to pluginBridge
+    // Dispatch new Store data
     PluginSDK.dispatch({
       type: APP_STORE_CHANGE,
       storeID: this.storeID,

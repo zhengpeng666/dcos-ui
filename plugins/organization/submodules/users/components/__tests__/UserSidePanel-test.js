@@ -12,7 +12,7 @@ PluginTestUtils.dontMock([
 
 let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
 
-require('../../../../storeConfig').register(PluginSDK);
+require('../../../../storeConfig')(PluginSDK);
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/

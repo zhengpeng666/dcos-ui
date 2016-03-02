@@ -1,7 +1,6 @@
 jest.dontMock('../LoginModal');
 jest.dontMock('../../actions/ACLAuthActions');
 jest.dontMock('../../stores/ACLAuthStore');
-jest.dontMock('../../submodules/acl/stores/ACLStore');
 jest.dontMock('../../storeConfig');
 
 var React = require('react');
@@ -17,10 +16,6 @@ PluginTestUtils.dontMock([
   'MesosStateStore',
   'MesosSummaryStore',
   'PluginGetSetMixin',
-  'ACLUsersStore',
-  'ACLUserStore',
-  'ACLGroupsStore',
-  'ACLGroupStore',
   'ClusterHeader',
   'DCOSLogo',
   'ClusterName'
@@ -28,12 +23,12 @@ PluginTestUtils.dontMock([
 
 let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
 
-require('../../storeConfig').register(PluginSDK);
+require('../../storeConfig')(PluginSDK);
 
 let LoginModal = require('../LoginModal')(PluginSDK);
 var ACLAuthStore = require('../../stores/ACLAuthStore')(PluginSDK);
 
-require('../../storeConfig').register(PluginSDK);
+require('../../storeConfig')(PluginSDK);
 
 MetadataStore.set({dcosMetadata: {}});
 

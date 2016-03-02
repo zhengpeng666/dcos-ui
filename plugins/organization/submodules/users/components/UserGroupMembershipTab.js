@@ -5,8 +5,8 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import _ACLGroupStore from '../stores/ACLGroupStore';
-import _ACLGroupsStore from '../stores/ACLGroupsStore';
+import _ACLGroupStore from '../../groups/stores/ACLGroupStore';
+import _ACLGroupsStore from '../../groups/stores/ACLGroupsStore';
 import _UserGroupTable from './UserGroupTable';
 
 const DEFAULT_ID = 'default-placeholder-group-id';

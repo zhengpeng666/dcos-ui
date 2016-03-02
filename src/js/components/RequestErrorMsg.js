@@ -7,8 +7,8 @@ var RequestErrorMsg = React.createClass({
   displayName: 'RequestErrorMsg',
 
   render: function () {
-    var IntercomActions = PluginSDK.getActions('Intercom', {
-      open: () => {}
+    var Tracking = PluginSDK.getActions('Tracking', {
+      openIntercom: () => {}
     });
     return (
       <div className="row">
@@ -18,7 +18,7 @@ var RequestErrorMsg = React.createClass({
           </h3>
           <p className="inverse text-align-center flush-bottom">
             {'We have been notified of the issue, but would love to know more. Talk with us using '}
-            <a className="clickable" onClick={IntercomActions.open}>Intercom</a>
+            <a className="clickable" onClick={Tracking.openIntercom}>Intercom</a>
             {'. You can also join us on our '}
             <a href="https://mesosphere.slack.com/messages/dcos-eap-public"
                 target="_blank">

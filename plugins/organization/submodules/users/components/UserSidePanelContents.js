@@ -4,9 +4,9 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 
 import _ACLUserStore from '../stores/ACLUserStore';
-import _PermissionsView from '../../../../auth/submodules/acl/components/PermissionsView';
+import _PermissionsView from '../../acl/components/PermissionsView';
 import _UserDetails from './UserDetails';
-import _UserGroupMembershipTab from '../../groups/components/UserGroupMembershipTab';
+import _UserGroupMembershipTab from './UserGroupMembershipTab';
 
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
 

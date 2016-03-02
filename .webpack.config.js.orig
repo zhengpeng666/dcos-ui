@@ -88,8 +88,14 @@ module.exports = {
     root: path.resolve(__dirname),
     extensions: ['', '.js'],
     alias: {
+<<<<<<< fa9ef5e53cc6ec170405556724b97968970b2832
       PluginSDK: 'src/js/plugin-bridge/PluginSDK',
-      PluginTestUtils: 'src/js/plugin-bridge/PluginTestUtils'
+      PluginTestUtils: 'src/js/plugin-bridge/PluginTestUtils',
+      StoreMixinConfig: 'src/js/utils/StoreMixinConfig'
+=======
+      PluginSDK: 'src/js/pluginBridge/PluginSDK',
+      PluginTestUtils: 'src/js/pluginBridge/PluginTestUtils'
+>>>>>>> cleaned up registerActions, addConfig
     }
   },
   watch: webpackWatch

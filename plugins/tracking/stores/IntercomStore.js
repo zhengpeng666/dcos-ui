@@ -23,7 +23,7 @@ module.exports = (PluginSDK) => {
     storeID: 'intercom',
 
     mixins: [PluginGetSetMixin],
-
+    // Keep onSet because PluginGetSetMixin wants it
     onSet() {},
 
     init: function () {

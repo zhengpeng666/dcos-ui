@@ -53,7 +53,7 @@ let Store = createStore(
 /**
  * Bootstraps plugins and adds new reducers to Store.
  *
- * @param {Object} pluginsConfig Plugin configuration from Store
+ * @param {Object} pluginsConfig - Plugin configuration
  */
 const initialize = function (pluginsConfig) {
 
@@ -136,18 +136,19 @@ const getApplicationModuleAPI = function () {
  */
 const getActionsAPI = function (SDK) {
   return {
-    registerActions(name, actionsModule) {
-      if (!name) {
-        throw new Error(`Name not valid.`);
+    registerActions(actions, name) {
+      if (SDK.pluginID in REGISTERED_ACTIONS) {
+        throw new Error(`${SDK.pluginID} already has registered actions.`);
       }
-      if (name in REGISTERED_ACTIONS) {
-        console.warn(`${name} already exists in Actions registry. ${name} failed to register.`);
-        return;
+      if (typeof actions !== 'function') {
+        throw new Error(`Actions for ${SDK.pluginID} must be a function.`);
       }
-      if (!actionsModule || typeof actionsModule !== 'function') {
-        throw new Error(`Failed to supply Actions for ${name}`);
+      // Allow Application to name it's actions. Plugins have actions
+      // registered under their pluginID
+      if (SDK.pluginID !== APPLICATION) {
+        name = SDK.pluginID;
       }
-      REGISTERED_ACTIONS[name] = actionsModule;
+      REGISTERED_ACTIONS[name] = actions;
     },
 
     getActions(name, defaultValue) {
@@ -254,27 +255,25 @@ const addPluginReducer = function (reducer, pluginID) {
   reducers[pluginID] = reducer;
 };
 
-// Subscribe to Store config change and call initialize with
-// new plugin configuration
-const listenForConfigChange = function () {
-  let unSubscribe = Store.subscribe(function () {
-    let configStore = Store.getState()[APPLICATION].config;
-    if (configStore && configStore.config && configStore.config.uiConfiguration) {
-      // unsubscribe once we have the config
-      unSubscribe();
-      initialize(configStore.config.uiConfiguration.plugins);
-    }
-  });
-};
-
 // Register actions exposed in PluginModules.events
 const registerApplicationActions = function (SDK) {
   if (PluginModules.events) {
     Object.keys(PluginModules.events).forEach(name => {
-      SDK.registerActions(name, getModule(name));
+      SDK.registerActions(getModule(name), name);
     });
   }
 };
+
+// Subscribe to Store config change and call initialize with
+// new plugin configuration
+let unSubscribe = Store.subscribe(function () {
+  let configStore = Store.getState()[APPLICATION].config;
+  if (configStore && configStore.config && configStore.config.uiConfiguration) {
+    // unsubscribe once we have the config
+    unSubscribe();
+    initialize(configStore.config.uiConfiguration.plugins);
+  }
+});
 
 // Lets get an SDK for the Application
 let ApplicationSDK = getSDK(APPLICATION, Config);
@@ -282,10 +281,10 @@ let ApplicationSDK = getSDK(APPLICATION, Config);
 registerApplicationActions(ApplicationSDK);
 
 // Add helper for PluginTestUtils. This allows us to get SDKS for other plugins
-ApplicationSDK.__getSDK = getSDK;
+if (global.__DEV__) {
+  ApplicationSDK.__getSDK = getSDK;
+}
 // Add manual load method
 ApplicationSDK.initialize = initialize;
-// Work around for circular dependency. Hopefully we can deprecate this at some point.
-ApplicationSDK.listenForConfigChange = listenForConfigChange;
 
 module.exports = ApplicationSDK;

@@ -1,8 +1,8 @@
 jest.dontMock('../UserGroupMembershipTab');
 jest.dontMock('../UserGroupTable');
-jest.dontMock('../../stores/ACLGroupsStore');
-jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../../users/stores/ACLUserStore');
+jest.dontMock('../../../groups/stores/ACLGroupsStore');
+jest.dontMock('../../../groups/stores/ACLGroupStore');
+jest.dontMock('../../stores/ACLUserStore');
 jest.dontMock('../../../../storeConfig');
 
 import PluginTestUtils from 'PluginTestUtils';
@@ -15,14 +15,14 @@ import React from 'react';
 
 let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
 
-require('../../../../storeConfig').register(PluginSDK);
+require('../../../../storeConfig')(PluginSDK);
 
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
-var ACLGroupStore = require('../../stores/ACLGroupStore')(PluginSDK);
-var ACLGroupsStore = require('../../stores/ACLGroupsStore')(PluginSDK);
-var ACLUserStore = require('../../../users/stores/ACLUserStore')(PluginSDK);
+var ACLGroupStore = require('../../../groups/stores/ACLGroupStore')(PluginSDK);
+var ACLGroupsStore = require('../../../groups/stores/ACLGroupsStore')(PluginSDK);
+var ACLUserStore = require('../../stores/ACLUserStore')(PluginSDK);
 var UserGroupMembershipTab = require('../UserGroupMembershipTab')(PluginSDK);
 
 import {

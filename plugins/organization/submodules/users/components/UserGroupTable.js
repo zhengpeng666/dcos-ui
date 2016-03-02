@@ -5,8 +5,8 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import _ACLGroupStore from '../stores/ACLGroupStore';
-import _ACLUserStore from '../../users/stores/ACLUserStore';
+import _ACLGroupStore from '../../groups/stores/ACLGroupStore';
+import _ACLUserStore from '../stores/ACLUserStore';
 
 const METHODS_TO_BIND = [
   'handleOpenConfirm',

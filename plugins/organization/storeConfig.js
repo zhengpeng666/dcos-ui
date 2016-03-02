@@ -1,4 +1,18 @@
-import StoreMixinConfig from 'StoreMixinConfig';
+import _ACLStore from './submodules/acl/stores/ACLStore';
+import {
+  ACL_CREATE_SUCCESS,
+  ACL_CREATE_ERROR,
+  ACL_RESOURCE_ACLS_CHANGE,
+  ACL_RESOURCE_ACLS_ERROR,
+  ACL_USER_GRANT_ACTION_CHANGE,
+  ACL_USER_GRANT_ACTION_ERROR,
+  ACL_USER_REVOKE_ACTION_CHANGE,
+  ACL_USER_REVOKE_ACTION_ERROR,
+  ACL_GROUP_GRANT_ACTION_CHANGE,
+  ACL_GROUP_GRANT_ACTION_ERROR,
+  ACL_GROUP_REVOKE_ACTION_CHANGE,
+  ACL_GROUP_REVOKE_ACTION_ERROR
+} from './submodules/acl/constants/EventTypes';
 
 // Directories
 import _ACLDirectoriesStore from './submodules/directories/stores/ACLDirectoriesStore';
@@ -61,110 +75,132 @@ import {
   ACL_USER_DELETE_ERROR
 } from './submodules/users/constants/EventTypes';
 
-module.exports = {
+module.exports = (PluginSDK) => {
 
-  register(PluginSDK) {
+  let ACLStore = _ACLStore(PluginSDK);
+  let ACLDirectoriesStore = _ACLDirectoriesStore(PluginSDK);
+  let ACLGroupsStore = _ACLGroupsStore(PluginSDK);
+  let ACLGroupStore = _ACLGroupStore(PluginSDK);
+  let ACLUsersStore = _ACLUsersStore(PluginSDK);
+  let ACLUserStore = _ACLUserStore(PluginSDK);
 
-    let ACLDirectoriesStore = _ACLDirectoriesStore(PluginSDK);
-    let ACLGroupsStore = _ACLGroupsStore(PluginSDK);
-    let ACLGroupStore = _ACLGroupStore(PluginSDK);
-    let ACLUsersStore = _ACLUsersStore(PluginSDK);
-    let ACLUserStore = _ACLUserStore(PluginSDK);
+  let StoreMixinConfig = PluginSDK.get('StoreMixinConfig');
 
-    // Register our Stores
-    StoreMixinConfig.addConfig('aclDirectories', {
-      store: ACLDirectoriesStore,
-      events: {
-        fetchSuccess: ACL_DIRECTORIES_CHANGED,
-        fetchError: ACL_DIRECTORIES_ERROR,
-        addSuccess: ACL_DIRECTORY_ADD_SUCCESS,
-        addError: ACL_DIRECTORY_ADD_ERROR,
-        deleteSuccess: ACL_DIRECTORY_DELETE_SUCCESS,
-        deleteError: ACL_DIRECTORY_DELETE_ERROR,
-        testSuccess: ACL_DIRECTORY_TEST_SUCCESS,
-        testError: ACL_DIRECTORY_TEST_ERROR
-      },
-      unmountWhen: function () {
-        return true;
-      },
-      listenAlways: true
-    });
+  StoreMixinConfig.add('acl', {
+    store: ACLStore,
+    events: {
+      createSuccess: ACL_CREATE_SUCCESS,
+      createError: ACL_CREATE_ERROR,
+      fetchResourceSuccess: ACL_RESOURCE_ACLS_CHANGE,
+      fetchResourceError: ACL_RESOURCE_ACLS_ERROR,
+      userGrantSuccess: ACL_USER_GRANT_ACTION_CHANGE,
+      userGrantError: ACL_USER_GRANT_ACTION_ERROR,
+      userRevokeSuccess: ACL_USER_REVOKE_ACTION_CHANGE,
+      userRevokeError: ACL_USER_REVOKE_ACTION_ERROR,
+      groupGrantSuccess: ACL_GROUP_GRANT_ACTION_CHANGE,
+      groupGrantError: ACL_GROUP_GRANT_ACTION_ERROR,
+      groupRevokeSuccess: ACL_GROUP_REVOKE_ACTION_CHANGE,
+      groupRevokeError: ACL_GROUP_REVOKE_ACTION_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  });
 
-    StoreMixinConfig.addConfig('groups', {
-      store: ACLGroupsStore,
-      events: {
-        success: ACL_GROUPS_CHANGE,
-        error: ACL_GROUPS_REQUEST_ERROR
-      },
-      unmountWhen: function () {
-        return true;
-      },
-      listenAlways: true
-    });
+  StoreMixinConfig.add('aclDirectories', {
+    store: ACLDirectoriesStore,
+    events: {
+      fetchSuccess: ACL_DIRECTORIES_CHANGED,
+      fetchError: ACL_DIRECTORIES_ERROR,
+      addSuccess: ACL_DIRECTORY_ADD_SUCCESS,
+      addError: ACL_DIRECTORY_ADD_ERROR,
+      deleteSuccess: ACL_DIRECTORY_DELETE_SUCCESS,
+      deleteError: ACL_DIRECTORY_DELETE_ERROR,
+      testSuccess: ACL_DIRECTORY_TEST_SUCCESS,
+      testError: ACL_DIRECTORY_TEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  });
 
-    StoreMixinConfig.addConfig('group', {
-      store: ACLGroupStore,
-      events: {
-        success: ACL_GROUP_DETAILS_GROUP_CHANGE,
-        error: ACL_GROUP_DETAILS_GROUP_ERROR,
-        addUserSuccess: ACL_GROUP_USERS_CHANGED,
-        addUserError: ACL_GROUP_ADD_USER_ERROR,
-        createSuccess: ACL_GROUP_CREATE_SUCCESS,
-        createError: ACL_GROUP_CREATE_ERROR,
-        updateError: ACL_GROUP_UPDATE_ERROR,
-        updateSuccess: ACL_GROUP_UPDATE_SUCCESS,
-        permissionsSuccess: ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
-        permissionsError: ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
-        usersSuccess: ACL_GROUP_DETAILS_USERS_CHANGE,
-        usersError: ACL_GROUP_DETAILS_USERS_ERROR,
-        fetchedDetailsSuccess: ACL_GROUP_DETAILS_FETCHED_SUCCESS,
-        fetchedDetailsError: ACL_GROUP_DETAILS_FETCHED_ERROR,
-        deleteUserSuccess: ACL_GROUP_REMOVE_USER_SUCCESS,
-        deleteUserError: ACL_GROUP_REMOVE_USER_ERROR,
-        deleteSuccess: ACL_GROUP_DELETE_SUCCESS,
-        deleteError: ACL_GROUP_DELETE_ERROR
-      },
-      unmountWhen: function () {
-        return true;
-      },
-      listenAlways: true
-    });
+  StoreMixinConfig.add('groups', {
+    store: ACLGroupsStore,
+    events: {
+      success: ACL_GROUPS_CHANGE,
+      error: ACL_GROUPS_REQUEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  });
 
-    StoreMixinConfig.addConfig('users', {
-      store: ACLUsersStore,
-      events: {
-        success: ACL_USERS_CHANGE,
-        error: ACL_USERS_REQUEST_ERROR
-      },
-      unmountWhen: function () {
-        return true;
-      },
-      listenAlways: true
-    });
+  StoreMixinConfig.add('group', {
+    store: ACLGroupStore,
+    events: {
+      success: ACL_GROUP_DETAILS_GROUP_CHANGE,
+      error: ACL_GROUP_DETAILS_GROUP_ERROR,
+      addUserSuccess: ACL_GROUP_USERS_CHANGED,
+      addUserError: ACL_GROUP_ADD_USER_ERROR,
+      createSuccess: ACL_GROUP_CREATE_SUCCESS,
+      createError: ACL_GROUP_CREATE_ERROR,
+      updateError: ACL_GROUP_UPDATE_ERROR,
+      updateSuccess: ACL_GROUP_UPDATE_SUCCESS,
+      permissionsSuccess: ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
+      permissionsError: ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
+      usersSuccess: ACL_GROUP_DETAILS_USERS_CHANGE,
+      usersError: ACL_GROUP_DETAILS_USERS_ERROR,
+      fetchedDetailsSuccess: ACL_GROUP_DETAILS_FETCHED_SUCCESS,
+      fetchedDetailsError: ACL_GROUP_DETAILS_FETCHED_ERROR,
+      deleteUserSuccess: ACL_GROUP_REMOVE_USER_SUCCESS,
+      deleteUserError: ACL_GROUP_REMOVE_USER_ERROR,
+      deleteSuccess: ACL_GROUP_DELETE_SUCCESS,
+      deleteError: ACL_GROUP_DELETE_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  });
 
-    StoreMixinConfig.addConfig('user', {
-      store: ACLUserStore,
-      events: {
-        success: ACL_USER_DETAILS_USER_CHANGE,
-        error: ACL_USER_DETAILS_USER_ERROR,
-        permissionsSuccess: ACL_USER_DETAILS_PERMISSIONS_CHANGE,
-        permissionsError: ACL_USER_DETAILS_PERMISSIONS_ERROR,
-        groupsSuccess: ACL_USER_DETAILS_GROUPS_CHANGE,
-        groupsError: ACL_USER_DETAILS_GROUPS_ERROR,
-        fetchedDetailsSuccess: ACL_USER_DETAILS_FETCHED_SUCCESS,
-        fetchedDetailsError: ACL_USER_DETAILS_FETCHED_ERROR,
-        createSuccess: ACL_USER_CREATE_SUCCESS,
-        createError: ACL_USER_CREATE_ERROR,
-        updateSuccess: ACL_USER_UPDATE_SUCCESS,
-        updateError: ACL_USER_UPDATE_ERROR,
-        deleteSuccess: ACL_USER_DELETE_SUCCESS,
-        deleteError: ACL_USER_DELETE_ERROR
-      },
-      unmountWhen: function () {
-        return true;
-      },
-      listenAlways: true
-    });
-  }
+  StoreMixinConfig.add('users', {
+    store: ACLUsersStore,
+    events: {
+      success: ACL_USERS_CHANGE,
+      error: ACL_USERS_REQUEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  });
+
+  StoreMixinConfig.add('user', {
+    store: ACLUserStore,
+    events: {
+      success: ACL_USER_DETAILS_USER_CHANGE,
+      error: ACL_USER_DETAILS_USER_ERROR,
+      permissionsSuccess: ACL_USER_DETAILS_PERMISSIONS_CHANGE,
+      permissionsError: ACL_USER_DETAILS_PERMISSIONS_ERROR,
+      groupsSuccess: ACL_USER_DETAILS_GROUPS_CHANGE,
+      groupsError: ACL_USER_DETAILS_GROUPS_ERROR,
+      fetchedDetailsSuccess: ACL_USER_DETAILS_FETCHED_SUCCESS,
+      fetchedDetailsError: ACL_USER_DETAILS_FETCHED_ERROR,
+      createSuccess: ACL_USER_CREATE_SUCCESS,
+      createError: ACL_USER_CREATE_ERROR,
+      updateSuccess: ACL_USER_UPDATE_SUCCESS,
+      updateError: ACL_USER_UPDATE_ERROR,
+      deleteSuccess: ACL_USER_DELETE_SUCCESS,
+      deleteError: ACL_USER_DELETE_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  });
+
 };
 

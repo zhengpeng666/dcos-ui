@@ -11,13 +11,13 @@ module.exports = (PluginSDK) => {
   let GroupsTab = _GroupsTab(PluginSDK);
   let {Hooks} = PluginSDK;
 
-  let GroupsPluginHooks = {
+  return {
     configuration: {
       enabled: false
     },
 
-    defaults: {
-      route: {
+    appendRoutes(route) {
+      route.routes.push({
         type: Route,
         name: 'settings-organization-groups',
         path: 'groups/?',
@@ -27,31 +27,22 @@ module.exports = (PluginSDK) => {
           name: 'settings-organization-groups-group-panel',
           path: ':groupID'
         }]
-      },
-      tabs: {
-        'settings-organization-groups': {
-          content: 'Groups',
-          priority: 20
-        }
-      }
-    },
-
-    getOrganizationRoutes(route) {
-      route.routes.push(this.defaults.route);
+      });
       return route;
     },
 
     initialize() {
-      Hooks.addFilter('getOrganizationRoutes', this.getOrganizationRoutes.bind(this));
-
-      Hooks.addFilter('getTabsFor_settings-organization',
-        this.getTabs.bind(this));
+      Hooks.addFilter('OrganizationRoutes', this.appendRoutes.bind(this));
+      Hooks.addFilter('settings-organization-tabs', this.getTabs.bind(this));
     },
 
     getTabs(tabs) {
-      return _.extend(tabs, this.defaults.tabs);
+      return _.extend(tabs, {
+        'settings-organization-groups': {
+          content: 'Groups',
+          priority: 20
+        }
+      });
     }
   };
-
-  return GroupsPluginHooks;
 };

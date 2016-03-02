@@ -8,17 +8,11 @@ var State = require('react-router').State;
 import ClusterHeader from './ClusterHeader';
 var EventTypes = require('../constants/EventTypes');
 import PluginSDK from 'PluginSDK';
-// Need to remove
-var IntercomStore = require('../../../plugins/tracking/stores/IntercomStore')(PluginSDK);
 
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var MetadataStore = require('../stores/MetadataStore');
-var SidebarActions = PluginSDK.getActions('SidebarActions', {
-  close() {},
-  showVersions() {},
-  startTour() {}
-});
+var SidebarActions = PluginSDK.getActions('SidebarActions');
 var TooltipMixin = require('../mixins/TooltipMixin');
 
 let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'network', 'universe', 'settings'];
@@ -35,6 +29,15 @@ var Sidebar = React.createClass({
     router: React.PropTypes.func
   },
 
+  componentWillMount() {
+    this.store_listeners = [{
+      name: 'intercom',
+      events: [
+        'change'
+      ]
+    }];
+  },
+
   componentDidMount: function () {
     this.internalStorage_update({
       mesosInfo: MesosSummaryStore.get('states').lastSuccessful()
@@ -44,10 +47,6 @@ var Sidebar = React.createClass({
       EventTypes.DCOS_METADATA_CHANGE,
       this.onDCOSMetadataChange
     );
-    IntercomStore.addChangeListener(
-      EventTypes.INTERCOM_CHANGE,
-      this.onIntercomChange
-    );
   },
 
   componentWillUnmount: function () {
@@ -55,17 +54,9 @@ var Sidebar = React.createClass({
       EventTypes.DCOS_METADATA_CHANGE,
       this.onDCOSMetadataChange
     );
-    IntercomStore.removeChangeListener(
-      EventTypes.INTERCOM_CHANGE,
-      this.onIntercomChange
-    );
   },
 
   onDCOSMetadataChange: function () {
-    this.forceUpdate();
-  },
-
-  onIntercomChange: function () {
     this.forceUpdate();
   },
 

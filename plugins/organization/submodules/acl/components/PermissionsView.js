@@ -6,7 +6,6 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import _ACLStore from '../stores/ACLStore';
-import Item from '../../../../../src/js/structs/Item';
 import _PermissionsTable from './PermissionsTable';
 
 // TO REMOVE
@@ -23,8 +22,8 @@ const NO_SERVICES_INSTALLED_ID = 'NO_SERVICES_INSTALLED';
 
 module.exports = (PluginSDK) => {
 
-  let {RequestErrorMsg, StringUtil, Util} = PluginSDK.get([
-    'RequestErrorMsg', 'StringUtil', 'Util']);
+  let {RequestErrorMsg, StringUtil, Util, Item} = PluginSDK.get([
+    'RequestErrorMsg', 'StringUtil', 'Util', 'Item']);
 
   let ACLStore = _ACLStore(PluginSDK);
   let PermissionsTable = _PermissionsTable(PluginSDK);

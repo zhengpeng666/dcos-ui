@@ -13,7 +13,7 @@ import React from 'react';
 
 let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
 
-require('../../../../storeConfig').register(PluginSDK);
+require('../../../../storeConfig')(PluginSDK);
 
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');

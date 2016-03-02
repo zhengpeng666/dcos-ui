@@ -22,7 +22,7 @@ PluginTestUtils.dontMock([
 
 let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
 
-require('../../../../storeConfig').register(PluginSDK);
+require('../../../../storeConfig')(PluginSDK);
 
 var MesosSummaryActions = require('../../../../../../src/js/events/MesosSummaryActions');
 var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');

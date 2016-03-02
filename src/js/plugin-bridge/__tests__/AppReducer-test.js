@@ -5,7 +5,6 @@ jest.dontMock('../../stores/ConfigStore');
 
 var _ = require('underscore');
 
-var ConfigStore = require('../../stores/ConfigStore');
 var EventTypes = require('../../constants/EventTypes');
 var PluginSDK = require('PluginSDK');
 var PluginConstants = require('../../constants/PluginConstants');
@@ -34,7 +33,7 @@ describe('AppReducer', function () {
       storeID: 'qux',
       data: {foo: 'bar'}
     });
-    PluginSDK.listenForConfigChange();
+    PluginSDK.initialize({});
 
     var state = getApplicationState();
 

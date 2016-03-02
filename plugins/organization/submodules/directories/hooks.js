@@ -11,13 +11,13 @@ module.exports = (PluginSDK) => {
   let DirectoriesTab = _DirectoriesTab(PluginSDK);
   let {Hooks} = PluginSDK;
 
-  let DirectoriesPluginHooks = {
+  return {
     configuration: {
       enabled: false
     },
 
-    defaults: {
-      route: {
+    appendRoutes(route) {
+      route.routes.push({
         type: Route,
         name: 'settings-organization-directories',
         path: 'directories/?',
@@ -26,35 +26,22 @@ module.exports = (PluginSDK) => {
           type: Route,
           name: 'settings-organization-directories-panel'
         }]
-      },
-      tabs: {
+      });
+      return route;
+    },
+
+    initialize() {
+      Hooks.addFilter('OrganizationRoutes', this.appendRoutes.bind(this));
+      Hooks.addFilter('settings-organization-tabs', this.getTabs.bind(this));
+    },
+
+    getTabs(tabs) {
+      return _.extend(tabs, {
         'settings-organization-directories': {
           content: 'External Directory',
           priority: 5
         }
-      }
-    },
-
-    getOrganizationRoutes(route) {
-      route.routes.push(this.defaults.route);
-      return route;
-    },
-
-    /**
-     * @param  {Object} Hooks The Hooks API
-     */
-    initialize() {
-      Hooks.addFilter('getOrganizationRoutes',
-        this.getOrganizationRoutes.bind(this));
-
-      Hooks.addFilter('getTabsFor_settings-organization',
-        this.getTabs.bind(this));
-    },
-
-    getTabs(tabs) {
-      return _.extend(tabs, this.defaults.tabs);
+      });
     }
   };
-
-  return DirectoriesPluginHooks;
 };

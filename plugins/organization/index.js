@@ -2,7 +2,7 @@ import _DirectoriesHooks from './submodules/directories/hooks';
 import _GroupsHooks from './submodules/groups/hooks';
 import _PluginHooks from './hooks';
 import _UsersHooks from './submodules/users/hooks';
-import StoreConfig from './storeConfig';
+import _StoreConfig from './storeConfig';
 
 module.exports = function (PluginSDK) {
   // Set plugin's hooks
@@ -13,6 +13,6 @@ module.exports = function (PluginSDK) {
   _DirectoriesHooks(PluginSDK).initialize();
 
    // Register our Stores
-  StoreConfig.register(PluginSDK);
+  _StoreConfig(PluginSDK);
 };
 

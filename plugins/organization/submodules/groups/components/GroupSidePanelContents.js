@@ -5,7 +5,7 @@ import React from 'react';
 
 import _ACLGroupStore from '../stores/ACLGroupStore';
 import _GroupUserMembershipTab from './GroupUserMembershipTab';
-import _PermissionsView from '../../../../auth/submodules/acl/components/PermissionsView';
+import _PermissionsView from '../../acl/components/PermissionsView';
 
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
 

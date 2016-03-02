@@ -29,8 +29,6 @@ import RequestUtil from './utils/RequestUtil';
 
 let domElement = document.getElementById('application');
 
-// Listen for plugin configuration change
-PluginSDK.listenForConfigChange();
 // Load configuration
 ConfigStore.fetchConfig();
 

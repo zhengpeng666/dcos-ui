@@ -29,7 +29,7 @@ PluginTestUtils.loadPluginsByName({
 
 let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
 
-require('../../../../storeConfig').register(PluginSDK);
+require('../../../../storeConfig')(PluginSDK);
 
 let ACLGroupStore = require('../../stores/ACLGroupStore')(PluginSDK);
 let EventTypes = require('../../constants/EventTypes');

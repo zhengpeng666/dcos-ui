@@ -19,7 +19,8 @@ module.exports = {
     ResourceTableUtil: 'ResourceTableUtil',
     TableUtil: 'TableUtil',
     LocalStorageUtil: 'LocalStorageUtil',
-    Util: 'Util'
+    Util: 'Util',
+    StoreMixinConfig: 'StoreMixinConfig'
   },
   mixins: {
     PluginGetSetMixin: 'PluginGetSetMixin',

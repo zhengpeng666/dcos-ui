@@ -4,12 +4,6 @@ jest.dontMock('../../mixins/GetSetMixin');
 import PluginTestUtils from 'PluginTestUtils';
 
 PluginTestUtils.dontMock([
-  'ACLAuthStore',
-  'ACLGroupsStore',
-  'ACLGroupStore',
-  'ACLStore',
-  'ACLUsersStore',
-  'ACLUserStore',
   'MarathonStore',
   'MesosStateStore',
   'MesosSummaryStore',
