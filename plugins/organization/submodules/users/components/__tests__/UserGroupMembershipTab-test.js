@@ -111,7 +111,7 @@ describe('UserGroupMembershipTab', function () {
 
     it('should call #addUser with the proper arguments when selecting a group',
       function () {
-      expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual('baz');
+      expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual('qux');
       expect(ACLGroupStore.addUser.mock.calls[0][1]).toEqual('unicode');
     });
 
@@ -160,6 +160,7 @@ describe('UserGroupMembershipTab', function () {
         id: 'default-placeholder-group-id',
         name: 'Add Group',
         html: 'Add Group',
+        selectable: false,
         selectedHtml: 'Add Group'
       });
     });
