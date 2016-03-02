@@ -73,14 +73,12 @@ class GroupUserMembershipTable extends mixin(StoreMixin) {
       Util.getLocaleCompareSortFn('description')
     );
     let groupDetails = ACLGroupStore.getGroup(this.props.groupID);
-    let groupUsers = groupDetails.users.map(function (user) {
-      return user.user;
-    });
+    let groupUsers = groupDetails.getUsers().getItems();
     let filteredUsers = users.filter(function (user) {
       // Filter out any user which is already part of the group.
-      let uid = user.uid;
+      let uid = user.get('uid');
       return !groupUsers.some(function (currentUser) {
-        return currentUser.uid === uid;
+        return currentUser.get('uid') === uid;
       });
     });
 

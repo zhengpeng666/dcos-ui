@@ -87,14 +87,12 @@ class UserGroupMembershipTab extends mixin(StoreMixin) {
       Util.getLocaleCompareSortFn('description')
     );
     let userDetails = ACLUserStore.getUser(this.props.userID);
-    let userGroups = userDetails.groups.map(function (group) {
-      return group.group;
-    });
+    let userGroups = userDetails.getGroups().getItems();
     let filteredGroups = groups.filter(function (group) {
       // Filter out any group which is in permissions
-      let gid = group.gid;
+      let gid = group.get('gid');
       return !userGroups.some(function (currentGroup) {
-        return currentGroup.gid === gid;
+        return currentGroup.get('gid') === gid;
       });
     });
 
