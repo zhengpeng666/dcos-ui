@@ -1,4 +1,4 @@
- #%RAML 0.8
+#%RAML 0.8
 title: Unit Health Checks API Spec
 version: v1
 baseUri: /api/{version}/system/health
@@ -8,7 +8,6 @@ schemas:
   - unit: !include ../../schema/unit-health/unit.json
   - nodes: !include ../../schema/unit-health/nodes.json
   - node: !include ../../schema/unit-health/node.json
-  - report: !include ../../schema/unit-health/report.json
 
 /units:
   displayName: Units Health
@@ -24,7 +23,7 @@ schemas:
               {
                 "array": [
                   {
-                    "unit_id": "marathon_service", # Is the unit family
+                    "unit_id": "marathon_service",
                     "unit_title": "marathon service",
                     "unit_health": 0,
                     "unit_output": "OK"
@@ -49,7 +48,6 @@ schemas:
                   }
                 ]
               }
-
   /{unit-id}:
     uriParameters:
       unit-id:
@@ -73,7 +71,6 @@ schemas:
                   "unit_health": 0,
                   "unit_output": "OK"
                 }
-
     /nodes:
       displayName: Unit Nodes Health
       get:
@@ -89,12 +86,12 @@ schemas:
                   {
                     "array": [
                       {
-                        "hostname": "ip-10-10-0-235",
+                        "host_ip": "10.10.0.235",
                         "node_role": "master",
                         "node_health": 0,
                       },
                       {
-                        "hostname": "ip-10-10-0-236",
+                        "host_ip": "10.10.0.235",
                         "node_role": "agent",
                         "node_health": 1
                       }
@@ -119,12 +116,108 @@ schemas:
                   example: |
                     # Example response from a healthy node with all units == 0
                     {
-                      "hostname": "ip-10-10-0-236",
+                      "host_ip": "10.10.0.236",
                       "node_role": "agent",
                       "node_health": 1,
                       "unit_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
                     }
 
+/nodes:
+  displayName: Nodes
+  get:
+    description: Get a list of nodes with their accumulated healths.
+    responses:
+      200:
+        description: Successful response.
+        body:
+          application/json:
+            schema: nodes
+            example: |
+              {
+                "array": [
+                  {
+                    "host_ip: "10.10.0.235",
+                    "node_role": "master",
+                    "node_health": 1
+                  },
+                  {
+                    "host_ip: "10.10.0.236",
+                    "node_role": "agent",
+                    "node_health": 1
+                  }
+                ]
+              }
+  /{node-id}:
+    uriParameters:
+      node-id:
+        description: Node ID
+        type: string
+    displayName: Node
+    get:
+      description: Requested node.
+      responses:
+        200:
+          description: Successful response.
+          body:
+            application/json:
+              schema: node
+              example: |
+                {
+                  "host_ip: "10.10.0.236",
+                  "node_role": "agent",
+                  "node_health": 1
+                }
+    /units:
+      displayName: Units Health
+      get:
+        description: Units residing on requested node.
+        responses:
+          200:
+            description: Successful response.
+            body:
+              application/json:
+                schema: units
+                example: |
+                  {
+                    "array": [
+                      {
+                        "unit_id": "marathon_service",
+                        "unit_title": "marathon service",
+                        "unit_health": 0,
+                        "unit_output": "OK",
+                        "unit_help": "NA"
+                      },
+                      {
+                        "unit_id": "mesos_dns_service",
+                        "unit_title": "mesos dns service",
+                        "unit_health": 1,
+                        "unit_output": "Here are some journald logs, log log log.",
+                        "unit_help": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+                      }
+                    ]
+                  }
+      /{unit-id}:
+        uriParameters:
+          unit-id:
+            description: Requested unit.
+            type: string
+        displayName: Unit Health
+        get:
+          description: Get the unit health summaries by node_id.
+          responses:
+            200:
+              description: Successful response.
+              body:
+                application/json:
+                  schema: unit
+                  example: |
+                    {
+                      "unit_id": "mesos_dns_service",
+                      "unit_title": "mesos dns service",
+                      "unit_health": 1,
+                      "unit_output": "Here are some journald logs, log log log.",
+                      "unit_help": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+                    }
 # This is possibly just a 301 -> /nodes, lets disucss.
 /report:
   displayName: Health Report

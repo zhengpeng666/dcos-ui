@@ -3,8 +3,8 @@
   "id": "http://schema.dcos/system/health/node",
   "type": "object",
   "properties": {
-    "hostname": {
-      "title": "Host Name",
+    "host_ip": {
+      "title": "Host IP from ip-detect script",
       "type": "string",
       "pattern": "^[\\w\\.]+$"
     },
@@ -25,7 +25,7 @@
     }
   },
   "required": [
-    "node_id",
+    "host_ip",
     "node_role",
     "node_health"
   ]
