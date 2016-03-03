@@ -20,16 +20,17 @@ PluginTestUtils.dontMock([
   'SidePanelContents'
 ]);
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-require('../../../../storeConfig')(PluginSDK);
+require('../../../../storeConfig').register();
 
 var MesosSummaryActions = require('../../../../../../src/js/events/MesosSummaryActions');
 var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
 
-var ACLGroupStore = require('../../stores/ACLGroupStore')(PluginSDK);
-var GroupSidePanel = require('../GroupSidePanel')(PluginSDK);
-var GroupSidePanelContents = require('../GroupSidePanelContents')(PluginSDK);
+var ACLGroupStore = require('../../stores/ACLGroupStore');
+var GroupSidePanel = require('../GroupSidePanel');
+var GroupSidePanelContents = require('../GroupSidePanelContents');
 
 describe('GroupSidePanel', function () {
   beforeEach(function () {

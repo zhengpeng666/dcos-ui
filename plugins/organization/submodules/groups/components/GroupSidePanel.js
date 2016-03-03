@@ -3,8 +3,8 @@ import React from 'react';
 import {Confirm, SidePanel} from 'reactjs-components';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import _ACLGroupStore from '../stores/ACLGroupStore';
-import _GroupSidePanelContents from './GroupSidePanelContents';
+import ACLGroupStore from '../stores/ACLGroupStore';
+import GroupSidePanelContents from './GroupSidePanelContents';
 
 import HistoryStore from '../../../../../src/js/stores/HistoryStore';
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
@@ -16,205 +16,198 @@ const METHODS_TO_BIND = [
   'handleDeleteGroup'
 ];
 
-module.exports = (PluginSDK) => {
+class GroupSidePanel extends mixin(StoreMixin) {
+  constructor() {
+    super();
 
-  let ACLGroupStore = _ACLGroupStore(PluginSDK);
-  let GroupSidePanelContents = _GroupSidePanelContents(PluginSDK);
+    METHODS_TO_BIND.forEach(function (method) {
+      this[method] = this[method].bind(this);
+    }, this);
 
-  class GroupSidePanel extends mixin(StoreMixin) {
-    constructor() {
-      super();
+    this.state = {
+      deleteUpdateError: null,
+      openDeleteConfirmation: false,
+      pendingRequest: false
+    };
 
-      METHODS_TO_BIND.forEach(function (method) {
-        this[method] = this[method].bind(this);
-      }, this);
-
-      this.state = {
-        deleteUpdateError: null,
-        openDeleteConfirmation: false,
-        pendingRequest: false
-      };
-
-      this.store_listeners = [
-        {
-          name: 'group',
-          events: [
-            'deleteSuccess',
-            'deleteError'
-          ]
-        }
-      ];
-    }
-
-    handleDeleteCancel() {
-      this.setState({
-        openDeleteConfirmation: false
-      });
-    }
-
-    handleDeleteModalOpen() {
-      this.setState({
-        deleteUpdateError: null,
-        openDeleteConfirmation: true
-      });
-    }
-
-    handleDeleteGroup() {
-      this.setState({
-        pendingRequest: true
-      });
-      ACLGroupStore.deleteGroup(this.props.params.groupID);
-    }
-
-    handlePanelClose(closeInfo) {
-      if (!this.isOpen()) {
-        return;
+    this.store_listeners = [
+      {
+        name: 'group',
+        events: [
+          'deleteSuccess',
+          'deleteError'
+        ]
       }
+    ];
+  }
 
-      let router = this.context.router;
+  handleDeleteCancel() {
+    this.setState({
+      openDeleteConfirmation: false
+    });
+  }
 
-      if (closeInfo && closeInfo.closedByBackdrop) {
-        router.transitionTo(this.props.openedPage, router.getCurrentParams());
-        return;
-      }
+  handleDeleteModalOpen() {
+    this.setState({
+      deleteUpdateError: null,
+      openDeleteConfirmation: true
+    });
+  }
 
-      HistoryStore.goBack(router);
+  handleDeleteGroup() {
+    this.setState({
+      pendingRequest: true
+    });
+    ACLGroupStore.deleteGroup(this.props.params.groupID);
+  }
+
+  handlePanelClose(closeInfo) {
+    if (!this.isOpen()) {
+      return;
     }
 
-    onGroupStoreDeleteError(error) {
-      this.setState({
-        deleteUpdateError: error,
-        pendingRequest: false
-      });
+    let router = this.context.router;
+
+    if (closeInfo && closeInfo.closedByBackdrop) {
+      router.transitionTo(this.props.openedPage, router.getCurrentParams());
+      return;
     }
 
-    onGroupStoreDeleteSuccess() {
-      this.setState({
-        openDeleteConfirmation: false,
-        pendingRequest: false
-      });
+    HistoryStore.goBack(router);
+  }
 
-      this.context.router.transitionTo('settings-organization-groups');
-    }
+  onGroupStoreDeleteError(error) {
+    this.setState({
+      deleteUpdateError: error,
+      pendingRequest: false
+    });
+  }
 
-    isOpen() {
-      return (
-        this.props.params.groupID != null
-        && MesosSummaryStore.get('statesProcessed')
+  onGroupStoreDeleteSuccess() {
+    this.setState({
+      openDeleteConfirmation: false,
+      pendingRequest: false
+    });
+
+    this.context.router.transitionTo('settings-organization-groups');
+  }
+
+  isOpen() {
+    return (
+      this.props.params.groupID != null
+      && MesosSummaryStore.get('statesProcessed')
+    );
+  }
+
+  getDeleteModalContent() {
+    let error = null;
+
+    if (this.state.deleteUpdateError != null) {
+      error = (
+        <p className="text-error-state">{this.state.deleteUpdateError}</p>
       );
     }
 
-    getDeleteModalContent() {
-      let error = null;
+    let group = ACLGroupStore.getGroup(this.props.params.groupID);
+    return (
+      <div className="container-pod container-pod-short text-align-center">
+        <h3 className="flush-top">Are you sure?</h3>
+        <p>{`${group.description} will be deleted.`}</p>
+        {error}
+      </div>
+    );
+  }
 
-      if (this.state.deleteUpdateError != null) {
-        error = (
-          <p className="text-error-state">{this.state.deleteUpdateError}</p>
-        );
-      }
+  getHeader(groupID) {
+    return (
+      <div className="side-panel-header-container">
+        <div className="side-panel-header-actions
+          side-panel-header-actions-primary">
 
-      let group = ACLGroupStore.getGroup(this.props.params.groupID);
-      return (
-        <div className="container-pod container-pod-short text-align-center">
-          <h3 className="flush-top">Are you sure?</h3>
-          <p>{`${group.description} will be deleted.`}</p>
-          {error}
-        </div>
-      );
-    }
-
-    getHeader(groupID) {
-      return (
-        <div className="side-panel-header-container">
-          <div className="side-panel-header-actions
-            side-panel-header-actions-primary">
-
-            <span className="side-panel-header-action"
-              onClick={this.handlePanelClose}>
-              <i className={`icon icon-sprite
-                icon-sprite-small
-                icon-close
-                icon-sprite-small-white`}></i>
-              Close
-            </span>
-
-          </div>
-
-          <div className="side-panel-header-actions
-            side-panel-header-actions-secondary">
-            {this.getHeaderDelete(groupID)}
-          </div>
-
-        </div>
-      );
-    }
-
-    getHeaderDelete(groupID) {
-      if (groupID != null) {
-        return (
           <span className="side-panel-header-action"
-            onClick={this.handleDeleteModalOpen}>
-            Delete
+            onClick={this.handlePanelClose}>
+            <i className={`icon icon-sprite
+              icon-sprite-small
+              icon-close
+              icon-sprite-small-white`}></i>
+            Close
           </span>
-        );
-      }
 
+        </div>
+
+        <div className="side-panel-header-actions
+          side-panel-header-actions-secondary">
+          {this.getHeaderDelete(groupID)}
+        </div>
+
+      </div>
+    );
+  }
+
+  getHeaderDelete(groupID) {
+    if (groupID != null) {
+      return (
+        <span className="side-panel-header-action"
+          onClick={this.handleDeleteModalOpen}>
+          Delete
+        </span>
+      );
+    }
+
+    return null;
+  }
+
+  getContents(groupID) {
+    if (!this.isOpen()) {
       return null;
     }
 
-    getContents(groupID) {
-      if (!this.isOpen()) {
-        return null;
-      }
-
-      return (
-        <GroupSidePanelContents
-          itemID={groupID}
-          parentRouter={this.context.router} />
-      );
-    }
-
-    render() {
-      let groupID = this.props.params.groupID;
-
-      return (
-        <div>
-          <SidePanel className="side-panel-detail"
-            header={this.getHeader(groupID)}
-            headerContainerClass="container
-              container-fluid container-fluid-narrow container-pod
-              container-pod-short"
-            bodyClass="side-panel-content flex-container-col"
-            onClose={this.handlePanelClose}
-            open={this.isOpen()}>
-            {this.getContents(groupID)}
-          </SidePanel>
-          <Confirm
-            closeByBackdropClick={true}
-            disabled={this.state.pendingRequest}
-            footerContainerClass="container container-pod container-pod-short
-              container-pod-fluid flush-top flush-bottom"
-            open={this.state.openDeleteConfirmation}
-            onClose={this.handleDeleteCancel}
-            leftButtonCallback={this.handleDeleteCancel}
-            rightButtonCallback={this.handleDeleteGroup}
-            rightButtonClassName="button button-danger"
-            rightButtonText="Delete">
-            {this.getDeleteModalContent()}
-          </Confirm>
-        </div>
-      );
-    }
+    return (
+      <GroupSidePanelContents
+        itemID={groupID}
+        parentRouter={this.context.router} />
+    );
   }
 
-  GroupSidePanel.contextTypes = {
-    router: React.PropTypes.func
-  };
+  render() {
+    let groupID = this.props.params.groupID;
 
-  GroupSidePanel.propTypes = {
-    params: React.PropTypes.object
-  };
+    return (
+      <div>
+        <SidePanel className="side-panel-detail"
+          header={this.getHeader(groupID)}
+          headerContainerClass="container
+            container-fluid container-fluid-narrow container-pod
+            container-pod-short"
+          bodyClass="side-panel-content flex-container-col"
+          onClose={this.handlePanelClose}
+          open={this.isOpen()}>
+          {this.getContents(groupID)}
+        </SidePanel>
+        <Confirm
+          closeByBackdropClick={true}
+          disabled={this.state.pendingRequest}
+          footerContainerClass="container container-pod container-pod-short
+            container-pod-fluid flush-top flush-bottom"
+          open={this.state.openDeleteConfirmation}
+          onClose={this.handleDeleteCancel}
+          leftButtonCallback={this.handleDeleteCancel}
+          rightButtonCallback={this.handleDeleteGroup}
+          rightButtonClassName="button button-danger"
+          rightButtonText="Delete">
+          {this.getDeleteModalContent()}
+        </Confirm>
+      </div>
+    );
+  }
+}
 
-  return GroupSidePanel;
+GroupSidePanel.contextTypes = {
+  router: React.PropTypes.func
 };
 
+GroupSidePanel.propTypes = {
+  params: React.PropTypes.object
+};
+
+module.exports = GroupSidePanel;

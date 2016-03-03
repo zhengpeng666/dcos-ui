@@ -12,9 +12,10 @@ PluginTestUtils.dontMock('RequestUtil');
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-require('../../../../storeConfig')(PluginSDK);
+require('../../../../storeConfig').register();
 
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
@@ -24,9 +25,9 @@ import {
   REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS
 } from '../../../groups/constants/ActionTypes';
 
-var ACLGroupStore = require('../../../groups/stores/ACLGroupStore')(PluginSDK);
-var ACLUserStore = require('../../stores/ACLUserStore')(PluginSDK);
-var UserGroupTable = require('../UserGroupTable')(PluginSDK);
+var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
+var ACLUserStore = require('../../stores/ACLUserStore');
+var UserGroupTable = require('../UserGroupTable');
 
 var User = require('../../../../../../src/js/structs/User');
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');

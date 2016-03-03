@@ -3,13 +3,12 @@ jest.dontMock('../../actions/ACLDirectoriesActions');
 
 import PluginTestUtils from 'PluginTestUtils';
 
-PluginTestUtils.dontMock([
-  'List'
-]);
+PluginTestUtils.dontMock(['List']);
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-var ACLDirectoriesStore = require('../ACLDirectoriesStore')(PluginSDK);
+var ACLDirectoriesStore = require('../ACLDirectoriesStore');
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
 

@@ -6,19 +6,17 @@ jest.dontMock('../../../../../../tests/_fixtures/acl/users-unicode.json');
 
 import PluginTestUtils from 'PluginTestUtils';
 
-PluginTestUtils.dontMock([
-  'List',
-  'Item'
-]);
+PluginTestUtils.dontMock(['List', 'Item']);
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
 var _ = require('underscore');
-var ACLUsersStore = require('../ACLUsersStore')(PluginSDK);
+var ACLUsersStore = require('../ACLUsersStore');
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
 var UsersList = require('../../../../../../src/js/structs/UsersList');
-var {RequestUtil, Config} = PluginSDK.get(['RequestUtil', 'Config']);
+var {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
 var usersFixture = require('../../../../../../tests/_fixtures/acl/users-unicode.json');
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');

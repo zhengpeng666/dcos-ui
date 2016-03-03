@@ -4,10 +4,11 @@ jest.dontMock('../../../../../../src/js/structs/User');
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-let ACLGroupsActions = require('../../actions/ACLGroupsActions')(PluginSDK);
-let ACLGroupStore = require('../ACLGroupStore')(PluginSDK);
+let ACLGroupsActions = require('../../actions/ACLGroupsActions');
+let ACLGroupStore = require('../ACLGroupStore');
 let ActionTypes = require('../../constants/ActionTypes');
 let EventTypes = require('../../constants/EventTypes');
 let Group = require('../../../../../../src/js/structs/Group');

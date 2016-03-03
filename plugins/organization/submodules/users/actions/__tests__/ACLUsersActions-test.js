@@ -8,12 +8,13 @@ PluginTestUtils.dontMock([
   'RequestUtil'
 ]);
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
 var ActionTypes = require('../../constants/ActionTypes');
-var ACLUsersActions = require('../ACLUsersActions')(PluginSDK);
+var ACLUsersActions = require('../ACLUsersActions');
 
-var RequestUtil = PluginSDK.get('RequestUtil');
+var RequestUtil = SDK.get('RequestUtil');
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 

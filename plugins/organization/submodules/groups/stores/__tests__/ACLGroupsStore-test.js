@@ -12,17 +12,17 @@ PluginTestUtils.dontMock([
   'PluginGetSetMixin',
   'RequestUtil'
 ]);
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
-
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 var _ = require('underscore');
-var ACLGroupsStore = require('../ACLGroupsStore')(PluginSDK);
+var ACLGroupsStore = require('../ACLGroupsStore');
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
 var GroupsList = require('../../../../../../src/js/structs/GroupsList');
-var {RequestUtil, Config} = PluginSDK.get(['RequestUtil', 'Config']);
+var {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
 var groupsFixture = require('../../../../../../tests/_fixtures/acl/groups-unicode.json');
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');

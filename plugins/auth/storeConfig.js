@@ -10,8 +10,8 @@ import {
 let SDK = require('./SDK').getSDK();
 
 module.exports = {
-
   register() {
+
     let StoreMixinConfig = SDK.get('StoreMixinConfig');
 
     StoreMixinConfig.add('auth', {

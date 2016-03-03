@@ -33,12 +33,12 @@ import {
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
-
+let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 var ACLList = require('../../../../../../src/js/structs/ACLList');
 
-var ACLStore = require('../ACLStore')(PluginSDK);
-var RequestUtil = PluginSDK.get('RequestUtil');
+var ACLStore = require('../ACLStore');
+var RequestUtil = SDK.get('RequestUtil');
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 var aclsFixture = require('../../../../../../tests/_fixtures/acl/acls-unicode.json');

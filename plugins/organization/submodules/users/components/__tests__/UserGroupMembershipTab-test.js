@@ -13,17 +13,18 @@ PluginTestUtils.dontMock('RequestUtil');
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-require('../../../../storeConfig')(PluginSDK);
+require('../../../../storeConfig').register();
 
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
-var ACLGroupStore = require('../../../groups/stores/ACLGroupStore')(PluginSDK);
-var ACLGroupsStore = require('../../../groups/stores/ACLGroupsStore')(PluginSDK);
-var ACLUserStore = require('../../stores/ACLUserStore')(PluginSDK);
-var UserGroupMembershipTab = require('../UserGroupMembershipTab')(PluginSDK);
+var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
+var ACLGroupsStore = require('../../../groups/stores/ACLGroupsStore');
+var ACLUserStore = require('../../stores/ACLUserStore');
+var UserGroupMembershipTab = require('../UserGroupMembershipTab');
 
 import {
   REQUEST_ACL_GROUPS_ERROR,

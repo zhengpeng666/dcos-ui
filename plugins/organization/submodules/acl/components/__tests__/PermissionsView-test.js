@@ -10,13 +10,14 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 var ReactDOM = require('react-dom');
 
-let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
 var ACLList = require('../../../../../../src/js/structs/ACLList');
-var ACLStore = require('../../stores/ACLStore')(PluginSDK);
-var PermissionsView = require('../PermissionsView')(PluginSDK);
+var ACLStore = require('../../stores/ACLStore');
+var PermissionsView = require('../PermissionsView');
 
-require('../../../../storeConfig')(PluginSDK);
+require('../../../../storeConfig').register();
 
 describe('PermissionsView', function () {
 

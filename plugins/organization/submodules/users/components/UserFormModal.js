@@ -4,114 +4,109 @@ import React from 'react';
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import _ACLUserStore from '../stores/ACLUserStore';
+import ACLUserStore from '../stores/ACLUserStore';
 
 const METHODS_TO_BIND = [
   'handleNewUserSubmit',
   'onUserStoreCreateSuccess'
 ];
 
-module.exports = (PluginSDK) => {
+let SDK = require('../../../SDK').getSDK();
 
-  let FormModal = PluginSDK.get('FormModal');
+class UserFormModal extends mixin(StoreMixin) {
+  constructor() {
+    super();
 
-  let ACLUserStore = _ACLUserStore(PluginSDK);
+    this.state = {
+      disableNewUser: false,
+      errorMsg: false
+    };
 
-  class UserFormModal extends mixin(StoreMixin) {
-    constructor() {
-      super();
+    this.store_listeners = [
+      {
+        name: 'user',
+        events: ['createSuccess', 'createError']
+      }
+    ];
 
-      this.state = {
-        disableNewUser: false,
-        errorMsg: false
-      };
-
-      this.store_listeners = [
-        {
-          name: 'user',
-          events: ['createSuccess', 'createError']
-        }
-      ];
-
-      METHODS_TO_BIND.forEach((method) => {
-        this[method] = this[method].bind(this);
-      });
-    }
-
-    onUserStoreCreateSuccess() {
-      this.setState({
-        disableNewUser: false,
-        errorMsg: false
-      });
-      this.props.onClose();
-    }
-
-    onUserStoreCreateError(errorMsg) {
-      this.setState({
-        disableNewUser: false,
-        errorMsg
-      });
-    }
-
-    handleNewUserSubmit(model) {
-      this.setState({disableNewUser: true});
-      ACLUserStore.addUser(model);
-    }
-
-    getNewUserFormDefinition() {
-      return [
-        {
-          fieldType: 'text',
-          name: 'description',
-          placeholder: 'Full Name',
-          required: true,
-          showError: false,
-          showLabel: false,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        },
-        {
-          fieldType: 'text',
-          name: 'uid',
-          placeholder: 'Username',
-          required: true,
-          showError: false,
-          showLabel: false,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        },
-        {
-          fieldType: 'password',
-          name: 'password',
-          placeholder: 'Password',
-          required: true,
-          showError: this.state.errorMsg,
-          showLabel: false,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ];
-    }
-
-    render() {
-      return (
-        <FormModal
-          definition={this.getNewUserFormDefinition()}
-          disabled={this.state.disableNewUser}
-          onClose={this.props.onClose}
-          onSubmit={this.handleNewUserSubmit}
-          open={this.props.open}
-          titleText="Create New User">
-          <h2 className="modal-header-title text-align-center flush-top">
-            Create New User
-          </h2>
-        </FormModal>
-      );
-    }
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
   }
-  return UserFormModal;
-};
 
+  onUserStoreCreateSuccess() {
+    this.setState({
+      disableNewUser: false,
+      errorMsg: false
+    });
+    this.props.onClose();
+  }
+
+  onUserStoreCreateError(errorMsg) {
+    this.setState({
+      disableNewUser: false,
+      errorMsg
+    });
+  }
+
+  handleNewUserSubmit(model) {
+    this.setState({disableNewUser: true});
+    ACLUserStore.addUser(model);
+  }
+
+  getNewUserFormDefinition() {
+    return [
+      {
+        fieldType: 'text',
+        name: 'description',
+        placeholder: 'Full Name',
+        required: true,
+        showError: false,
+        showLabel: false,
+        writeType: 'input',
+        validation: function () { return true; },
+        value: ''
+      },
+      {
+        fieldType: 'text',
+        name: 'uid',
+        placeholder: 'Username',
+        required: true,
+        showError: false,
+        showLabel: false,
+        writeType: 'input',
+        validation: function () { return true; },
+        value: ''
+      },
+      {
+        fieldType: 'password',
+        name: 'password',
+        placeholder: 'Password',
+        required: true,
+        showError: this.state.errorMsg,
+        showLabel: false,
+        writeType: 'input',
+        validation: function () { return true; },
+        value: ''
+      }
+    ];
+  }
+
+  render() {
+    let FormModal = SDK.get('FormModal');
+    return (
+      <FormModal
+        definition={this.getNewUserFormDefinition()}
+        disabled={this.state.disableNewUser}
+        onClose={this.props.onClose}
+        onSubmit={this.handleNewUserSubmit}
+        open={this.props.open}
+        titleText="Create New User">
+        <h2 className="modal-header-title text-align-center flush-top">
+          Create New User
+        </h2>
+      </FormModal>
+    );
+  }
+}
+module.exports = UserFormModal;

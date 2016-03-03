@@ -8,16 +8,16 @@ import PluginTestUtils from 'PluginTestUtils';
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
-
-require('../../../../storeConfig')(PluginSDK);
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
+require('../../../../storeConfig').register();
 
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var ActionTypes = require('../../constants/ActionTypes');
-var ACLGroupStore = require('../../stores/ACLGroupStore')(PluginSDK);
-var GroupUserTable = require('../GroupUserTable')(PluginSDK);
+var ACLGroupStore = require('../../stores/ACLGroupStore');
+var GroupUserTable = require('../GroupUserTable');
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 var Group = require('../../../../../../src/js/structs/Group');

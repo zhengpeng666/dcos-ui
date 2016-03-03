@@ -27,13 +27,14 @@ PluginTestUtils.loadPluginsByName({
   }
 });
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-require('../../../../storeConfig')(PluginSDK);
+require('../../../../storeConfig').register();
 
-let ACLGroupStore = require('../../stores/ACLGroupStore')(PluginSDK);
+let ACLGroupStore = require('../../stores/ACLGroupStore');
 let EventTypes = require('../../constants/EventTypes');
-let GroupSidePanelContents = require('../GroupSidePanelContents')(PluginSDK);
+let GroupSidePanelContents = require('../GroupSidePanelContents');
 
 let Group = require('../../../../../../src/js/structs/Group');
 

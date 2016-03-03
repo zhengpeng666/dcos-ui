@@ -17,11 +17,12 @@ import {
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-let ACLActions = require('../ACLActions')(PluginSDK);
+let ACLActions = require('../ACLActions');
 
-let {RequestUtil, Config} = PluginSDK.get(['Config', 'RequestUtil']);
+let {RequestUtil, Config} = SDK.get(['Config', 'RequestUtil']);
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 

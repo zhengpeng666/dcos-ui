@@ -12,10 +12,11 @@ PluginTestUtils.dontMock([
   'Util'
 ]);
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-var ACLUsersActions = require('../../actions/ACLUsersActions')(PluginSDK);
-var ACLUserStore = require('../ACLUserStore')(PluginSDK);
+var ACLUsersActions = require('../../actions/ACLUsersActions');
+var ACLUserStore = require('../ACLUserStore');
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
 var User = require('../../../../../../src/js/structs/User');

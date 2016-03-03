@@ -23,12 +23,13 @@ var User = require('../../../../../../src/js/structs/User');
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-var ACLStore = require('../../stores/ACLStore')(PluginSDK);
-var PermissionsTable = require('../PermissionsTable')(PluginSDK);
+var ACLStore = require('../../stores/ACLStore');
+var PermissionsTable = require('../PermissionsTable');
 
-require('../../../../storeConfig')(PluginSDK);
+require('../../../../storeConfig').register();
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 

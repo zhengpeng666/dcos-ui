@@ -21,9 +21,10 @@ PluginTestUtils.loadPluginsByName({
   }
 });
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-require('../../../../storeConfig')(PluginSDK);
+require('../../../../storeConfig').register();
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
@@ -31,8 +32,8 @@ var ReactDOM = require('react-dom');
 
 import {ACL_USER_DETAILS_FETCHED_ERROR} from '../../constants/EventTypes';
 
-var ACLUserStore = require('../../stores/ACLUserStore')(PluginSDK);
-var UserSidePanelContents = require('../UserSidePanelContents')(PluginSDK);
+var ACLUserStore = require('../../stores/ACLUserStore');
+var UserSidePanelContents = require('../UserSidePanelContents');
 
 var User = require('../../../../../../src/js/structs/User');
 var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');

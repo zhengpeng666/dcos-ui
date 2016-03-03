@@ -22,104 +22,93 @@ import {
   ACL_DIRECTORY_TEST_ERROR
 } from '../constants/EventTypes';
 
-import _ACLDirectoriesActions from '../actions/ACLDirectoriesActions';
+import ACLDirectoriesActions from '../actions/ACLDirectoriesActions';
 
 import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
 
-let cachedStore;
+let SDK = require('../../../SDK').getSDK();
 
-module.exports = (PluginSDK) => {
-  // Return cached version if exists
-  if (cachedStore) {
-    return cachedStore;
-  }
+let {PluginGetSetMixin, List} = SDK.get(['PluginGetSetMixin', 'List']);
 
-  let {PluginGetSetMixin, List} = PluginSDK.get(['PluginGetSetMixin', 'List']);
+let {APP_STORE_CHANGE} = SDK.constants;
 
-  let {APP_STORE_CHANGE} = PluginSDK.constants;
+let ACLDirectoriesStore = Store.createStore({
+  storeID: 'aclDirectories',
 
-  let ACLDirectoriesActions = _ACLDirectoriesActions(PluginSDK);
+  mixins: [PluginGetSetMixin],
 
-  let ACLDirectoriesStore = Store.createStore({
-    storeID: 'aclDirectories',
+  onSet() {
+    SDK.dispatch({
+      type: APP_STORE_CHANGE,
+      storeID: this.storeID,
+      data: this.getSet_data
+    });
+  },
 
-    mixins: [PluginGetSetMixin],
+  addChangeListener: function (eventName, callback) {
+    this.on(eventName, callback);
+  },
 
-    onSet() {
-      PluginSDK.dispatch({
-        type: APP_STORE_CHANGE,
-        storeID: this.storeID,
-        data: this.getSet_data
-      });
-    },
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
+  },
 
-    addChangeListener: function (eventName, callback) {
-      this.on(eventName, callback);
-    },
+  addDirectory: ACLDirectoriesActions.addDirectory,
 
-    removeChangeListener: function (eventName, callback) {
-      this.removeListener(eventName, callback);
-    },
+  deleteDirectory: ACLDirectoriesActions.deleteDirectory,
 
-    addDirectory: ACLDirectoriesActions.addDirectory,
+  testDirectoryConnection: ACLDirectoriesActions.testDirectoryConnection,
 
-    deleteDirectory: ACLDirectoriesActions.deleteDirectory,
+  fetchDirectories: ACLDirectoriesActions.fetchDirectories,
 
-    testDirectoryConnection: ACLDirectoriesActions.testDirectoryConnection,
+  processDirectoriesSuccess(directories) {
+    this.set({
+      directories: new List({items: directories})
+    });
+    this.emit(ACL_DIRECTORIES_CHANGED);
+  },
 
-    fetchDirectories: ACLDirectoriesActions.fetchDirectories,
+  dispatcherIndex: AppDispatcher.register(function (payload) {
+    let source = payload.source;
+    if (source !== SERVER_ACTION) {
+      return false;
+    }
 
-    processDirectoriesSuccess(directories) {
-      this.set({
-        directories: new List({items: directories})
-      });
-      this.emit(ACL_DIRECTORIES_CHANGED);
-    },
+    let {data, type} = payload.action;
 
-    dispatcherIndex: AppDispatcher.register(function (payload) {
-      let source = payload.source;
-      if (source !== SERVER_ACTION) {
-        return false;
-      }
+    switch (type) {
+      // Get a list of external directories
+      case REQUEST_ACL_DIRECTORIES_SUCCESS:
+        ACLDirectoriesStore.processDirectoriesSuccess(data);
+        break;
+      case REQUEST_ACL_DIRECTORIES_ERROR:
+        ACLDirectoriesStore.emit(ACL_DIRECTORIES_ERROR, data);
+        break;
+      case REQUEST_ACL_DIRECTORY_ADD_SUCCESS:
+        ACLDirectoriesStore.emit(ACL_DIRECTORY_ADD_SUCCESS);
+        break;
+      case REQUEST_ACL_DIRECTORY_ADD_ERROR:
+        ACLDirectoriesStore.emit(ACL_DIRECTORY_ADD_ERROR, data);
+        break;
+      case REQUEST_ACL_DIRECTORY_DELETE_SUCCESS:
+        ACLDirectoriesStore.set({directories: null});
+        ACLDirectoriesStore.emit(ACL_DIRECTORY_DELETE_SUCCESS);
+        break;
+      case REQUEST_ACL_DIRECTORY_DELETE_ERROR:
+        ACLDirectoriesStore.emit(ACL_DIRECTORY_DELETE_ERROR, data);
+        break;
+      case REQUEST_ACL_DIRECTORY_TEST_SUCCESS:
+        ACLDirectoriesStore.emit(ACL_DIRECTORY_TEST_SUCCESS, data);
+        break;
+      case REQUEST_ACL_DIRECTORY_TEST_ERROR:
+        ACLDirectoriesStore.emit(ACL_DIRECTORY_TEST_ERROR, data);
+        break;
+    }
 
-      let {data, type} = payload.action;
+    return true;
+  })
+});
 
-      switch (type) {
-        // Get a list of external directories
-        case REQUEST_ACL_DIRECTORIES_SUCCESS:
-          ACLDirectoriesStore.processDirectoriesSuccess(data);
-          break;
-        case REQUEST_ACL_DIRECTORIES_ERROR:
-          ACLDirectoriesStore.emit(ACL_DIRECTORIES_ERROR, data);
-          break;
-        case REQUEST_ACL_DIRECTORY_ADD_SUCCESS:
-          ACLDirectoriesStore.emit(ACL_DIRECTORY_ADD_SUCCESS);
-          break;
-        case REQUEST_ACL_DIRECTORY_ADD_ERROR:
-          ACLDirectoriesStore.emit(ACL_DIRECTORY_ADD_ERROR, data);
-          break;
-        case REQUEST_ACL_DIRECTORY_DELETE_SUCCESS:
-          ACLDirectoriesStore.set({directories: null});
-          ACLDirectoriesStore.emit(ACL_DIRECTORY_DELETE_SUCCESS);
-          break;
-        case REQUEST_ACL_DIRECTORY_DELETE_ERROR:
-          ACLDirectoriesStore.emit(ACL_DIRECTORY_DELETE_ERROR, data);
-          break;
-        case REQUEST_ACL_DIRECTORY_TEST_SUCCESS:
-          ACLDirectoriesStore.emit(ACL_DIRECTORY_TEST_SUCCESS, data);
-          break;
-        case REQUEST_ACL_DIRECTORY_TEST_ERROR:
-          ACLDirectoriesStore.emit(ACL_DIRECTORY_TEST_ERROR, data);
-          break;
-      }
-
-      return true;
-    })
-  });
-
-  cachedStore = ACLDirectoriesStore;
-
-  return ACLDirectoriesStore;
-};
+module.exports = ACLDirectoriesStore;
 

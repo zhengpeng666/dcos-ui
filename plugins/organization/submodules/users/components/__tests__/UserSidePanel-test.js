@@ -10,17 +10,18 @@ PluginTestUtils.dontMock([
   'SidePanelContents'
 ]);
 
-let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
-require('../../../../storeConfig')(PluginSDK);
+require('../../../../storeConfig').register();
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 var ReactDOM = require('react-dom');
 
-var ACLUserStore = require('../../stores/ACLUserStore')(PluginSDK);
-var UserSidePanel = require('../UserSidePanel')(PluginSDK);
-var UserSidePanelContents = require('../UserSidePanelContents')(PluginSDK);
+var ACLUserStore = require('../../stores/ACLUserStore');
+var UserSidePanel = require('../UserSidePanel');
+var UserSidePanelContents = require('../UserSidePanelContents');
 
 var MesosSummaryActions = require('../../../../../../src/js/events/MesosSummaryActions');
 var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
