@@ -10,7 +10,7 @@ import ConfigStore from '../stores/ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import HistoryStore from '../stores/HistoryStore';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
-import PluginSDK from 'PluginSDK';
+import PluginSDK, {Hooks} from 'PluginSDK';
 var MetadataStore = require('../stores/MetadataStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var Modals = require('../components/Modals');
@@ -19,14 +19,6 @@ import ServerErrorModal from '../components/ServerErrorModal';
 var Sidebar = require('../components/Sidebar');
 var SidebarActions = require('../events/SidebarActions');
 var SidebarStore = require('../stores/SidebarStore');
-
-function isIntercomOpen() {
-  return PluginSDK.getActions('tracking', {
-    isIntercomOpen() {
-      return false;
-    }
-  }).isIntercomOpen();
-}
 
 function getSidebarState() {
   return {
@@ -42,7 +34,7 @@ var Index = React.createClass({
 
   getInitialState: function () {
     return {
-      showIntercom: isIntercomOpen(),
+      showIntercom: Hooks.applyFilter('isIntercomOpen', false),
       mesosSummaryErrorCount: 0,
       showErrorModal: false,
       modalErrorMsg: '',
@@ -145,7 +137,7 @@ var Index = React.createClass({
   onIntercomStoreChange: function () {
     var intercom = global.Intercom;
     if (intercom != null) {
-      this.setState({showIntercom: isIntercomOpen()});
+      this.setState({showIntercom: PluginSDK.applyFilter('isIntercomOpen', false)});
     } else {
       this.setState({
         showErrorModal: true,

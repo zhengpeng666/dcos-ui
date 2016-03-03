@@ -4,17 +4,12 @@ var React = require('react');
 var CliInstallModal = require('./modals/CliInstallModal');
 var ErrorModal = require('./modals/ErrorModal');
 import EventTypes from '../constants/EventTypes';
-import PluginSDK from 'PluginSDK';
+import {Hooks} from 'PluginSDK';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 import IdentifyModal from './modals/IdentifyModal';
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var SidebarStore = require('../stores/SidebarStore');
 var VersionsModal = require('./modals/VersionsModal');
-let {Hooks} = PluginSDK;
-
-let Actions = PluginSDK.getActions('tracking', {
-  logFakePageView: function () {}
-});
 
 var Modals = React.createClass({
 
@@ -136,7 +131,7 @@ var Modals = React.createClass({
     );
 
     if (isOpen) {
-      Actions.logFakePageView({
+      Hooks.doAction('logFakePageView', {
         title: 'Signup Modal',
         path: '/v/beta-signup-modal-form',
         referrer: 'https://mesosphere.com/'
@@ -202,7 +197,7 @@ var Modals = React.createClass({
     };
 
     if (this.state.showingCliModal) {
-      Actions.logFakePageView({
+      Hooks.doAction('logFakePageView', {
         title: 'CLI instructions',
         path: '/v/cli-instructions',
         referrer: 'https://mesosphere.com/'
@@ -210,7 +205,7 @@ var Modals = React.createClass({
 
       options = this.getCliModalOptions();
     } else if (this.state.showingTourModal) {
-      Actions.logFakePageView({
+      Hooks.doAction('logFakePageView', {
         title: 'Tour prompt',
         path: '/v/tour-prompt',
         referrer: 'https://mesosphere.com/'

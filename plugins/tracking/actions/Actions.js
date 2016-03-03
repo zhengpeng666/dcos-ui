@@ -2,15 +2,6 @@ var _ = require('underscore');
 var md5 = require('md5');
 var RouterLocation = require('react-router').HashLocation;
 
-import {
-  REQUEST_INTERCOM_OPEN,
-  REQUEST_INTERCOM_CLOSE
-} from '../constants/ActionTypes';
-
-import IntercomStore from '../stores/IntercomStore';
-
-var AppDispatcher = require('../../../src/js/events/AppDispatcher');
-
 let SDK = require('../SDK').getSDK();
 let Config = SDK.get('Config');
 
@@ -28,7 +19,26 @@ var Actions = {
 
   logQueue: [],
 
+  actions: [
+    'log',
+    'logFakePageView'
+  ],
+
+  filters: [
+
+  ],
+
   initialize: function () {
+    this.filters.forEach(filter => {
+      SDK.Hooks.addFilter(filter, this[filter].bind(this));
+    });
+    this.actions.forEach(action => {
+      SDK.Hooks.addAction(action, this[action].bind(this));
+    });
+    this.start();
+  },
+
+  start: function () {
     this.createdAt = Date.now();
     this.lastLogDate = this.createdAt;
     this.stintID = md5(`session_${this.createdAt}`);
@@ -199,24 +209,6 @@ var Actions = {
 
   getComponent: function (componentID) {
     return this.components[componentID];
-  },
-
-  openIntercom: function () {
-    AppDispatcher.handleIntercomAction({
-      type: REQUEST_INTERCOM_OPEN,
-      data: true
-    });
-  },
-
-  closeIntercom: function () {
-    AppDispatcher.handleIntercomAction({
-      type: REQUEST_INTERCOM_CLOSE,
-      data: false
-    });
-  },
-
-  isIntercomOpen() {
-    return IntercomStore.get('isOpen');
   }
 
 };

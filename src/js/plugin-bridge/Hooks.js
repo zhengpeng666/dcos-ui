@@ -19,7 +19,7 @@ function addListener(store, hook, listener, priority = 10) {
   store[hook][priority].push(listener);
 }
 
-var Hooks = _.extend({}, Events.EventEmitter.prototype, {
+module.exports = _.extend({}, Events.EventEmitter.prototype, {
   // Event store for actions
   actions: {},
 
@@ -124,5 +124,3 @@ var Hooks = _.extend({}, Events.EventEmitter.prototype, {
     });
   }
 });
-
-module.exports = Hooks;

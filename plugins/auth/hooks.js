@@ -16,12 +16,24 @@ module.exports = {
     enabled: false
   },
 
+  actions: [
+    'AJAXRequestError',
+    'userLogoutSuccess'
+  ],
+
+  filters: [
+    'sidebarFooter',
+    'openIdentifyModal',
+    'applicationRoutes'
+  ],
+
   initialize() {
-    SDK.Hooks.addAction('AJAXRequestError', this.AJAXRequestError.bind(this));
-    SDK.Hooks.addFilter('sidebarFooter', this.sidebarFooter.bind(this));
-    SDK.Hooks.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
-    SDK.Hooks.addFilter('applicationRoutes', this.applicationRoutes.bind(this));
-    SDK.Hooks.addAction('userLogoutSuccess', this.userLogoutSuccess.bind(this));
+    this.filters.forEach(filter => {
+      SDK.Hooks.addFilter(filter, this[filter].bind(this));
+    });
+    this.actions.forEach(action => {
+      SDK.Hooks.addAction(action, this[action].bind(this));
+    });
     this.configure(SDK.config);
   },
 

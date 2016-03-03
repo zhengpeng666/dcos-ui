@@ -1,6 +1,4 @@
-// import PluginHooks from './hooks';
 import SDK from './SDK';
-// import StoreConfig from './storeConfig';
 
 module.exports = function (PluginSDK) {
   SDK.setSDK(PluginSDK);

@@ -4,6 +4,7 @@ import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import {APPLICATION} from '../constants/PluginConstants';
 import {APP_STORE_CHANGE} from '../constants/EventTypes';
 import AppReducer from './AppReducer';
+import AppHooks from './AppHooks';
 import Config from '../config/Config';
 import Hooks from './Hooks';
 import PluginSDKStruct from './PluginSDKStruct';
@@ -252,15 +253,6 @@ const addPluginReducer = function (reducer, pluginID) {
   reducers[pluginID] = reducer;
 };
 
-// Register actions exposed in PluginModules.events
-const registerApplicationActions = function (SDK) {
-  if (PluginModules.events) {
-    Object.keys(PluginModules.events).forEach(name => {
-      SDK.registerActions(getModule(name), name);
-    });
-  }
-};
-
 // Subscribe to Store config change and call initialize with
 // new plugin configuration
 let unSubscribe = Store.subscribe(function () {
@@ -275,7 +267,7 @@ let unSubscribe = Store.subscribe(function () {
 // Lets get an SDK for the Application
 let ApplicationSDK = getSDK(APPLICATION, Config);
 // Register our Actions
-registerApplicationActions(ApplicationSDK);
+AppHooks.initialize(ApplicationSDK);
 
 // Add helper for PluginTestUtils. This allows us to get SDKS for other plugins
 if (global.__DEV__) {

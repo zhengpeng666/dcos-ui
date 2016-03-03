@@ -1,13 +1,5 @@
-/*eslint-disable no-unused-vars*/
-
-// Include modules that aren't statically imported elsewhere
-import SidebarActions from '../events/SidebarActions';
-
 // Modules to paths
 module.exports = {
-  events: {
-    SidebarActions: 'SidebarActions'
-  },
   structs: {
     List: 'List',
     Item: 'Item'

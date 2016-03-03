@@ -1,9 +1,19 @@
+var overrides = require('./overrides');
+overrides.override();
+import PluginSDK, {Hooks} from 'PluginSDK';
+
+Hooks.addAction('pluginsConfigured', function () {
+  Hooks.doAction('log', {eventID: 'Stint started.'});
+});
+global.addEventListener('beforeunload', function () {
+  Hooks.doAction('log', {eventID: 'Stint ended.'});
+});
+
 import _ from 'underscore';
 import {Provider} from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Router from 'react-router';
-import PluginSDK from 'PluginSDK';
 
 require('./utils/MomentJSConfig');
 require('./utils/ReactSVG');
@@ -29,7 +39,7 @@ RequestUtil.json = function (options = {}) {
     if (typeof oldHandler === 'function') {
       oldHandler.apply(null, arguments);
     }
-    PluginSDK.Hooks.doAction('AJAXRequestError', ...arguments);
+    Hooks.doAction('AJAXRequestError', ...arguments);
   };
 
   oldJSON(options);
