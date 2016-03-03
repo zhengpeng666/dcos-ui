@@ -25,8 +25,8 @@ const fieldDefinitions = {
   host: 'Host',
   port: 'Port',
   dntemplate: 'Distinguished Name template',
-  'use-ldaps': 'Use SSL/TLS socket',
-  'enforce-starttls': 'Enforce StartTLS'
+  'use-ldaps': 'Use SSL/TLS for all connections',
+  'enforce-starttls': 'Use StartTLS for all connections'
 };
 
 const METHODS_TO_BIND = [
@@ -251,9 +251,16 @@ class DirectoriesTab extends mixin(StoreMixin) {
           onChange={this.hangleFormChange}
           onSubmit={this.handleModalSubmit}
           open={this.state.modalOpen}>
-          <h2 className="modal-header-title text-align-center flush-top">
-            Add External Directory
-          </h2>
+          <div className="container container-pod container-pod-super-short-bottom flush-top">
+            <h2 className="modal-header-title text-align-center flush-top flush-bottom">
+              Add External Directory
+            </h2>
+          </div>
+          <div className="container container-fluid container-pod container-pod-short flush-horizontal flush-top">
+            <p className="text-align-center lead flush-bottom">
+              This is an alpha feature and is meant for testing only.
+            </p>
+          </div>
         </FormModal>
       </div>
     );
