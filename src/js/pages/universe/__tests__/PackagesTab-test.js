@@ -1,8 +1,8 @@
-jest.dontMock('../../../components/modals/InstallPackageModal');
 jest.dontMock('../PackagesTab');
-jest.dontMock('../../../components/Panel');
 jest.dontMock('../../../components/AdvancedConfigModal');
+jest.dontMock('../../../components/Panel');
 jest.dontMock('../../../components/MultipleForm');
+jest.dontMock('../../../components/modals/InstallPackageModal');
 jest.dontMock('../../../mixins/InternalStorageMixin');
 jest.dontMock('../../../stores/CosmosPackagesStore');
 jest.dontMock('../../../../../tests/_fixtures/cosmos/packages-search.json');
