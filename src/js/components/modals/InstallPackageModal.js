@@ -198,7 +198,7 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
       showLabel: false,
       validation: /^\/?(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$/g,
       validationErrorText: (
-        'Names can include lowercase letters, digits, hyphens, "." "," and ".."'
+        'Names can include lowercase letters, digits, hyphens, "." and ","'
       ),
       writeType: 'edit'
     }];
