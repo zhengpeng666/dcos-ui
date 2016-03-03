@@ -4,7 +4,7 @@ jest.dontMock('../stores/IntercomStore');
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let SDK = PluginTestUtils.getSDK('Tracking', {enabled: true});
+let SDK = PluginTestUtils.getSDK('tracking', {enabled: true});
 require('../SDK').setSDK(SDK);
 
 var _ = require('underscore');

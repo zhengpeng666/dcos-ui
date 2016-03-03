@@ -5,7 +5,7 @@ import ActionTypes from '../../constants/ActionTypes';
 import AppDispatcher from '../../../../src/js/events/AppDispatcher';
 import PluginSDK from '../../SDK';
 
-let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('auth', {enabled: true});
 PluginSDK.setSDK(SDK);
 let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 let ACLAuthActions = require('../ACLAuthActions');

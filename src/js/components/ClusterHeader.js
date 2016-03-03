@@ -13,8 +13,8 @@ import MetadataStore from '../stores/MetadataStore';
 import PluginSDK from 'PluginSDK';
 import TooltipMixin from '../mixins/TooltipMixin';
 
-let Actions = PluginSDK.getActions('Tracking', {
-  log: () => {}
+let Actions = PluginSDK.getActions('tracking', {
+  log: function () {}
 });
 
 var ClusterHeader = React.createClass({

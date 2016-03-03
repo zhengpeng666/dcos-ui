@@ -21,7 +21,7 @@ var SidebarActions = require('../events/SidebarActions');
 var SidebarStore = require('../stores/SidebarStore');
 
 function isIntercomOpen() {
-  return PluginSDK.getActions('Tracking', {
+  return PluginSDK.getActions('tracking', {
     isIntercomOpen() {
       return false;
     }

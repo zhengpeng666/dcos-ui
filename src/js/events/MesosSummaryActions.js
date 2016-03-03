@@ -5,7 +5,7 @@ import PluginSDK from 'PluginSDK';
 var RequestUtil = require('../utils/RequestUtil');
 var _historyServiceOnline = true;
 
-var Actions = PluginSDK.getActions('Tracking', false);
+var Actions = PluginSDK.getActions('tracking', false);
 
 function getStateUrl(timeScale) {
   timeScale = timeScale || 'last';

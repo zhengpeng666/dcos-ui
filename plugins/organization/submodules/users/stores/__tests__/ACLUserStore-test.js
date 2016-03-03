@@ -12,7 +12,7 @@ PluginTestUtils.dontMock([
   'Util'
 ]);
 
-let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 
 var ACLUsersActions = require('../../actions/ACLUsersActions');

@@ -7,8 +7,8 @@ var RequestErrorMsg = React.createClass({
   displayName: 'RequestErrorMsg',
 
   render: function () {
-    var Tracking = PluginSDK.getActions('Tracking', {
-      openIntercom: () => {}
+    var Tracking = PluginSDK.getActions('tracking', {
+      openIntercom: function () {}
     });
     return (
       <div className="row">

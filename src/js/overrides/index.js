@@ -10,7 +10,7 @@ function overrides() {
     if (specification.mixins == null) {
       specification.mixins = [];
     }
-    var ActionsMixin = PluginSDK.getActions('Tracking', {});
+    var ActionsMixin = PluginSDK.getActions('tracking', {});
     // We don't want to log actions from the router
     if (specification.displayName !== 'Router') {
       specification.mixins.push(ActionsMixin);

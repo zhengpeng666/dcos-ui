@@ -11,10 +11,10 @@ import PluginSDK from 'PluginSDK';
 import PluginTestUtils from 'PluginTestUtils';
 
 PluginTestUtils.loadPluginsByName({
-  Tracking: {enabled: true}
+  tracking: {enabled: true}
 });
 
-var Actions = PluginSDK.getActions('Tracking');
+var Actions = PluginSDK.getActions('tracking');
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../AppDispatcher');
 var Config = require('../../config/Config');

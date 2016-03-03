@@ -12,7 +12,7 @@ var cookie = require('cookie');
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
 
-let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('auth', {enabled: true});
 require('../../SDK').setSDK(SDK);
 
 var ACLAuthStore = require('../ACLAuthStore');

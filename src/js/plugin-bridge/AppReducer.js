@@ -6,8 +6,8 @@ const initialState = {};
 // List of plugins with permissions to alter this state
 const PERMISSIONS_LIST = [
   APPLICATION,
-  'Auth',
-  'Organization'
+  'auth',
+  'organization'
 ];
 
 // Compute new state based on action

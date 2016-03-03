@@ -11,7 +11,7 @@ import PluginTestUtils from 'PluginTestUtils';
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 require('../../../../storeConfig').register();
 

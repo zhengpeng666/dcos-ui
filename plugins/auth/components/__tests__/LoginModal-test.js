@@ -21,7 +21,7 @@ PluginTestUtils.dontMock([
   'ClusterName'
 ]);
 
-let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('auth', {enabled: true});
 
 require('../../SDK').setSDK(SDK);
 

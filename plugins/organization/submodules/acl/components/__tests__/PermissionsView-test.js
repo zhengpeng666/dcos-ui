@@ -10,7 +10,7 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 var ReactDOM = require('react-dom');
 
-let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('auth', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 
 var ACLList = require('../../../../../../src/js/structs/ACLList');

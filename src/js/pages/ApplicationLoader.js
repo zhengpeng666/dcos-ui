@@ -8,7 +8,7 @@ import PluginSDK, {Hooks} from 'PluginSDK';
 const METHODS_TO_BIND = ['onPluginsLoaded'];
 
 function startTrackingIfAvailable() {
-  let Actions = PluginSDK.getActions('Tracking', false);
+  let Actions = PluginSDK.getActions('tracking', false);
   if (Actions) {
     Actions.initialize();
 

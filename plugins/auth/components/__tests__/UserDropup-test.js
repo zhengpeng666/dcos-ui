@@ -9,7 +9,7 @@ PluginTestUtils.unMockStores(['ACLAuthStore']);
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('auth', {enabled: true});
 
 require('../../SDK').setSDK(SDK);
 

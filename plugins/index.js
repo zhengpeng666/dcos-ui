@@ -1,7 +1,7 @@
 module.exports = {
-  Auth: 'auth/index',
-  Banner: 'banner/index',
-  Organization: 'organization/index',
-  Overview: 'overview/index',
-  Tracking: 'tracking/index'
+  auth: 'auth/index',
+  banner: 'banner/index',
+  organization: 'organization/index',
+  overview: 'overview/index',
+  tracking: 'tracking/index'
 };

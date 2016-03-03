@@ -13,15 +13,15 @@ PluginTestUtils.dontMock([
 ]);
 
 PluginTestUtils.loadPluginsByName({
-  Auth: {
+  auth: {
     enabled: true
   },
-  Tracking: {
+  tracking: {
     enabled: true
   }
 });
 
-let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 
 require('../../../../storeConfig').register();

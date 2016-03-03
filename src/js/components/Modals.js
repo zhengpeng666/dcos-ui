@@ -12,8 +12,8 @@ var SidebarStore = require('../stores/SidebarStore');
 var VersionsModal = require('./modals/VersionsModal');
 let {Hooks} = PluginSDK;
 
-let Actions = PluginSDK.getActions('Tracking', {
-  logFakePageView: () => {}
+let Actions = PluginSDK.getActions('tracking', {
+  logFakePageView: function () {}
 });
 
 var Modals = React.createClass({

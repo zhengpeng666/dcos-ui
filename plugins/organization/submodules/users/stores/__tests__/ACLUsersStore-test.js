@@ -8,7 +8,7 @@ import PluginTestUtils from 'PluginTestUtils';
 
 PluginTestUtils.dontMock(['List', 'Item']);
 
-let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 
 var _ = require('underscore');

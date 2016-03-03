@@ -12,7 +12,7 @@ PluginTestUtils.dontMock([
   'PluginGetSetMixin',
   'RequestUtil'
 ]);
-let SDK = PluginTestUtils.getSDK('Organization', {enabled: true});
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 /*eslint-disable no-unused-vars*/
 import React from 'react';

@@ -7,13 +7,13 @@ PluginTestUtils.dontMock([
   'MarathonStore',
   'MesosStateStore',
   'MesosSummaryStore',
-  'Auth',
-  'Organization'
+  'auth',
+  'organization'
 ]);
 
 PluginTestUtils.loadPluginsByName({
-  Auth: {enabled: true},
-  Organization: {enabled: true}
+  auth: {enabled: true},
+  organization: {enabled: true}
 });
 
 var React = require('react');
