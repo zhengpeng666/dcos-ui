@@ -8,4 +8,3 @@ node_modules/
 src/js/config/Config.dev.js
 serve
 tmp/
-*.orig
