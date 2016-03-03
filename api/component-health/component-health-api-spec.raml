@@ -21,30 +21,26 @@ schemas:
             schema: units
             example: |
               {
-                "array": [
+                "units": [
                   {
-                    "unit_id": "marathon_service",
-                    "unit_title": "marathon service",
-                    "unit_health": 0,
-                    "unit_output": "OK"
+                    "id": "marathon_service",
+                    "description": "A Long Running Jobs Scheduler",
+                    "health": 0,
                   },
                   {
-                    "unit_id": "mesos_dns_service",
-                    "unit_title": "mesos dns service",
-                    "unit_health": 1,
-                    "unit_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+                    "id": "mesos_dns_service",
+                    "description": "Mesos DNS",
+                    "health": 1,
                   },
                   {
-                    "unit_id": "mesos_master_service",
-                    "unit_title": "mesos master service",
-                    "unit_health": 0,
-                    "unit_output": "OK"
+                    "id": "mesos_master_service",
+                    "description": "The Mesos master service",
+                    "health": 0,
                   },
                   {
-                    "unit_id": "nginx_service",
-                    "unit_title": "nginx service",
-                    "unit_health": 0,
-                    "unit_output": "OK"
+                    "id": "nginx_service",
+                    "description": "A High performance web proxy",
+                    "health": 0,
                   }
                 ]
               }
@@ -66,10 +62,9 @@ schemas:
                 # Example query for nginx_service in a 3-master cluster would return the unit
                 # health on the 3 masters on which that unit runs.
                 {
-                  "unit_id": "nginx_service",
-                  "unit_title": "nginx service",
-                  "unit_health": 0,
-                  "unit_output": "OK"
+                  "id": "nginx_service",
+                  "description": "nginx service",
+                  "health": 0,
                 }
     /nodes:
       displayName: Unit Nodes Health
@@ -84,7 +79,7 @@ schemas:
                 example: |
                   # Example response from a 2-node cluster where one node has units with health > 0
                   {
-                    "array": [
+                    "nodes": [
                       {
                         "host_ip": "10.10.0.235",
                         "node_role": "master",
@@ -119,7 +114,8 @@ schemas:
                       "host_ip": "10.10.0.236",
                       "node_role": "agent",
                       "node_health": 1,
-                      "unit_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+                      "output" "... journald..."
+                      "help": "Please try `dcos node ssh ..."
                     }
 
 /nodes:
@@ -134,7 +130,7 @@ schemas:
             schema: nodes
             example: |
               {
-                "array": [
+                "nodes": [
                   {
                     "host_ip: "10.10.0.235",
                     "node_role": "master",
@@ -179,20 +175,20 @@ schemas:
                 schema: units
                 example: |
                   {
-                    "array": [
+                    "units": [
                       {
-                        "unit_id": "marathon_service",
-                        "unit_title": "marathon service",
-                        "unit_health": 0,
-                        "unit_output": "OK",
-                        "unit_help": "NA"
+                        "id": "marathon_service",
+                        "description": "marathon service",
+                        "health": 0,
+                        "output": "OK",
+                        "help": "NA"
                       },
                       {
-                        "unit_id": "mesos_dns_service",
-                        "unit_title": "mesos dns service",
-                        "unit_health": 1,
-                        "unit_output": "Here are some journald logs, log log log.",
-                        "unit_help": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+                        "id": "mesos_dns_service",
+                        "description": "mesos dns service",
+                        "health": 1,
+                        "output": "Here are some journald logs, log log log.",
+                        "help": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
                       }
                     ]
                   }
@@ -212,11 +208,11 @@ schemas:
                   schema: unit
                   example: |
                     {
-                      "unit_id": "mesos_dns_service",
-                      "unit_title": "mesos dns service",
-                      "unit_health": 1,
-                      "unit_output": "Here are some journald logs, log log log.",
-                      "unit_help": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+                      "id": "mesos_dns_service",
+                      "description": "mesos dns service",
+                      "health": 1,
+                      "output": "Here are some journald logs, log log log.",
+                      "help": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
                     }
 # This is possibly just a 301 -> /nodes, lets disucss.
 /report:
