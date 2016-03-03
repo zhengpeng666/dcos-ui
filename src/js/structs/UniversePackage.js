@@ -5,6 +5,10 @@ import Util from '../utils/Util';
 class UniversePackage extends Item {
   getIcons() {
     return ServiceUtil.getServiceImages(
+      this.get('images') ||
+      Util.findNestedPropertyInObject(
+        this.get('resourceDefinition'), 'images'
+      ) ||
       Util.findNestedPropertyInObject(this.get('resource'), 'images')
     );
   }

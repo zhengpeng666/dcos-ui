@@ -101,14 +101,19 @@ class PackagesTable extends mixin(StoreMixin) {
         prop: 'name',
         render: this.getHeadline,
         sortable: true,
-        sortFunction
+        sortFunction: ResourceTableUtil
+          .getStatSortFunction('name', function (cosmosPackage) {
+            return cosmosPackage.get('appId');
+          })
       },
       {
         className: getClassName,
         headerClassName: getClassName,
         heading,
         prop: 'version',
-        render: this.getProp,
+        render: function (prop, cosmosPackage) {
+          return cosmosPackage.get('packageDefinition')[prop];
+        },
         sortable: true,
         sortFunction
       },
@@ -135,20 +140,21 @@ class PackagesTable extends mixin(StoreMixin) {
 
   getHeadline(prop, cosmosPackage) {
     let packageImages = cosmosPackage.getIcons();
+    let name = cosmosPackage.get('appId');
+    // Remove initial slash if present
+    if (name.charAt(0) === '/') {
+      name = name.slice(1);
+    }
     return (
       <div className="package-table-heading flex-box flex-box-align-vertical-center table-cell-flex-box">
         <span className="icon icon-small icon-image-container icon-app-container">
           <img src={packageImages['icon-small']} />
         </span>
         <span className="text-overflow">
-          {this.getProp(prop, cosmosPackage)}
+          {name}
         </span>
       </div>
     );
-  }
-
-  getProp(prop, cosmosPackage) {
-    return cosmosPackage.get('packageDefinition')[prop];
   }
 
   getUninstallButton(prop, packageToUninstall) {
