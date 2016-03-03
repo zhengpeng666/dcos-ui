@@ -7,6 +7,7 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import AdvancedConfigModal from '../AdvancedConfigModal';
 import CosmosMessages from '../../constants/CosmosMessages';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
+import InternalStorageMixin from '../../mixins/InternalStorageMixin';
 import ReviewConfig from '../ReviewConfig';
 import SchemaUtil from '../../utils/SchemaUtil';
 import StringUtil from '../../utils/StringUtil';
@@ -20,11 +21,11 @@ const METHODS_TO_BIND = [
   'handleInstallPackage'
 ];
 
-class InstallPackageModal extends mixin(StoreMixin) {
+class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
   constructor() {
     super();
 
-    this.state = {
+    this.internalStorage_set({
       advancedModalOpen: false,
       appId: null,
       installError: null,
@@ -33,7 +34,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
       nameError: null,
       packageInstalled: false,
       pendingRequest: false
-    };
+    });
 
     this.store_listeners = [{
       name: 'cosmosPackages',
@@ -65,7 +66,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
     super.componentWillReceiveProps(...arguments);
     let {props} = this;
     if (props.open && !nextProps.open) {
-      this.setState({
+      this.internalStorage_update({
         advancedModalOpen: false,
         appId: null,
         installError: null,
@@ -85,7 +86,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   onCosmosPackagesStoreDescriptionError(nameError) {
-    this.setState({appId: null, nameError});
+    this.internalStorage_update({appId: null, nameError});
   }
 
   onCosmosPackagesStoreDescriptionSuccess() {
@@ -97,7 +98,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
     ) || `${name}-default`;
 
     // Store appId from package
-    this.setState({
+    this.internalStorage_update({
       appId: appId,
       hasError: false,
       isLoading: false
@@ -105,7 +106,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   onCosmosPackagesStoreInstallError(installError) {
-    this.setState({
+    this.internalStorage_update({
       installError,
       packageInstalled: false,
       pendingRequest: false
@@ -113,7 +114,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   onCosmosPackagesStoreInstallSuccess() {
-    this.setState({
+    this.internalStorage_update({
       installError: null,
       packageInstalled: true,
       pendingRequest: false
@@ -121,11 +122,11 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   handleAdvancedModalClose() {
-    this.setState({advancedModalOpen: false});
+    this.internalStorage_update({advancedModalOpen: false});
   }
 
   handleAdvancedModalOpen() {
-    this.setState({
+    this.internalStorage_update({
       advancedModalOpen: true,
       installError: null,
       pendingRequest: false
@@ -133,15 +134,15 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   handleChangeAppId(definition) {
-    this.setState({installError: null, appId: definition.appId});
+    this.internalStorage_update({installError: null, appId: definition.appId});
   }
 
   handleChangeReviewState(isReviewing) {
-    this.setState({installError: null, isReviewing});
+    this.internalStorage_update({installError: null, isReviewing});
   }
 
   handleInstallPackage(cosmosPackage) {
-    let {appId} = this.state;
+    let {appId} = this.internalStorage_get();
     CosmosPackagesStore.installPackage(
       cosmosPackage.get('package').name,
       cosmosPackage.get('package').version,
@@ -149,11 +150,16 @@ class InstallPackageModal extends mixin(StoreMixin) {
       {[cosmosPackage.get('package').name]: {'framework-name': appId}}
     );
 
-    this.setState({pendingRequest: true});
+    this.internalStorage_update({pendingRequest: true});
   }
 
   getAdvancedLink() {
-    let {installError, isReviewing, packageInstalled, pendingRequest} = this.state;
+    let {
+      installError,
+      isReviewing,
+      packageInstalled,
+      pendingRequest
+    } = this.internalStorage_get();
     if (isReviewing || packageInstalled || pendingRequest) {
       return null;
     }
@@ -184,7 +190,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
     return [{
       fieldType: 'text',
       name: 'appId',
-      value: this.state.appId,
+      value: this.internalStorage_get().appId,
       required: true,
       sharedClass: 'form-element-inline h2 short',
       inputClass: 'form-control text-align-center',
@@ -199,7 +205,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   getBackButton() {
-    if (!this.state.isReviewing) {
+    if (!this.internalStorage_get().isReviewing) {
       return null;
     }
 
@@ -231,7 +237,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
       isReviewing,
       packageInstalled,
       pendingRequest
-    } = this.state;
+    } = this.internalStorage_get();
 
     if (installError || isReviewing) {
       return null;
@@ -267,7 +273,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   getInstallError() {
-    let {installError} = this.state;
+    let {installError} = this.internalStorage_get();
     if (!installError) {
       return null;
     }
@@ -301,15 +307,15 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   getModalContents() {
-    let {state} = this;
+    let {isLoading, isReviewing} = this.internalStorage_get();
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
 
-    if (state.isLoading || !cosmosPackage) {
+    if (isLoading || !cosmosPackage) {
       return this.getLoadingScreen();
     }
 
     let config = cosmosPackage.get('config');
-    if (state.isReviewing) {
+    if (isReviewing) {
       let jsonDocument = SchemaUtil.definitionToJSONDocument(
         SchemaUtil.schemaToMultipleDefinition(config)
       );
@@ -330,8 +336,12 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   getPackageInfo() {
-    let {nameError, installError, isReviewing, packageInstalled} =
-      this.state;
+    let {
+      nameError,
+      installError,
+      isReviewing,
+      packageInstalled
+    } = this.internalStorage_get();
     if (installError || isReviewing || packageInstalled) {
       return null;
     }
@@ -362,7 +372,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   getPostInstallNotes() {
-    let {isReviewing, packageInstalled} = this.state;
+    let {isReviewing, packageInstalled} = this.internalStorage_get();
     if (isReviewing || !packageInstalled) {
       return null;
     }
@@ -386,7 +396,12 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   getReviewConfigButton() {
-    let {installError, isReviewing, packageInstalled, pendingRequest} = this.state;
+    let {
+      installError,
+      isReviewing,
+      packageInstalled,
+      pendingRequest
+    } = this.internalStorage_get();
     if (installError || isReviewing || packageInstalled || pendingRequest) {
       return null;
     }
@@ -438,20 +453,21 @@ class InstallPackageModal extends mixin(StoreMixin) {
   }
 
   render() {
-    let {props, state} = this;
+    let {props} = this;
+    let {advancedModalOpen, isReviewing} = this.internalStorage_get();
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
     let modalClasses = classNames('modal', {
-      'modal-large': state.isReviewing,
-      'modal-narrow': !state.isReviewing
+      'modal-large': isReviewing,
+      'modal-narrow': !isReviewing
     });
 
     let modalWrapperClasses = classNames({
-      'multiple-form-modal': state.isReviewing
+      'multiple-form-modal': isReviewing
     });
 
     let modalBodyClasses = classNames({
       'modal-content-inner container container-pod container-pod-short': true,
-      'flush-top flush-bottom': state.isReviewing
+      'flush-top flush-bottom': isReviewing
     });
 
     if (!cosmosPackage) {
@@ -472,14 +488,14 @@ class InstallPackageModal extends mixin(StoreMixin) {
           onClose={props.onClose}
           showCloseButton={false}
           showFooter={true}
-          showHeader={state.isReviewing}
+          showHeader={isReviewing}
           headerClass="modal-header modal-header-bottom-border modal-header-white"
           innerBodyClass={modalBodyClasses}
           subHeader={this.getReviewHeader()}>
           {this.getModalContents()}
         </Modal>
         <AdvancedConfigModal
-          open={state.advancedModalOpen}
+          open={advancedModalOpen}
           onClose={this.handleAdvancedModalClose}
           multipleDefinition={multipleDefinition} />
       </div>
