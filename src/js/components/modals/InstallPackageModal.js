@@ -159,7 +159,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
     }
 
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
-    let buttonClasses = classNames('button', {
+    let buttonClasses = classNames('button flush-bottom', {
       'button-link button-primary clickable': !installError,
       'button-wide': installError
     });
@@ -169,7 +169,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
     }
 
     return (
-      <div className="button-collection horizontal-center">
+      <div className="button-collection horizontal-center flush-bottom">
         <button
           disabled={!cosmosPackage || pendingRequest}
           className={buttonClasses}
@@ -180,7 +180,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
     );
   }
 
-  getAppIdFormData() {
+  getAppIdFormDefinition() {
     return [{
       fieldType: 'text',
       name: 'appId',
@@ -192,7 +192,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
       showLabel: false,
       validation: /^\/?(([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)*([a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])$/g,
       validationErrorText: (
-        'Name contains invalid characters (allowed: lowercase letters, digits, hyphens, ".", "..")'
+        'Names can include lowercase letters, digits, hyphens, "." "," and ".."'
       ),
       writeType: 'edit'
     }];
@@ -252,7 +252,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
     }
 
     let buttonClasses = classNames({
-      'button button-success': true,
+      'button button-success flush-bottom': true,
       'button-wide': !installError
     });
 
@@ -353,7 +353,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
         <div className="icon icon-jumbo icon-image-container icon-app-container">
           <img src={cosmosPackage.getIcons()['icon-large']} />
         </div>
-        <Form definition={this.getAppIdFormData()}
+        <Form definition={this.getAppIdFormDefinition()}
             onSubmit={this.handleChangeAppId} />
         <p className="flush-bottom">{`${name} ${version}`}</p>
         {error}
@@ -395,7 +395,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
       <div className="button-collection horizontal-center">
         <button
           disabled={!CosmosPackagesStore.getPackageDetails()}
-          className="button button-mini button-stroke button-rounded"
+          className="button button-small button-stroke button-rounded"
           onClick={this.handleChangeReviewState.bind(this, true)}>
           View Configuration Details
         </button>
@@ -429,7 +429,7 @@ class InstallPackageModal extends mixin(StoreMixin) {
           </div>
         </div>
         <div className="column-8 text-align-right">
-          <button className="button button-stroke button-rounded">
+          <button className="button button-small button-stroke button-rounded">
             Download config.json
           </button>
         </div>
