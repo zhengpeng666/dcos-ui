@@ -1,8 +1,4 @@
-let SDK = {
-  get() {
-    console.log('not loaded yet');
-  }
-};
+let SDK;
 
 module.exports = {
   getSDK: function () {
