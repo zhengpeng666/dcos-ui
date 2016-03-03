@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import classNames from 'classnames';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
@@ -232,13 +233,15 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
     }
 
     let node = MesosStateStore.getNodeFromID(task.slave_id);
+    let panelClasses = classNames({
+      'side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom flex-no-shrink': true,
+      'container-pod-short': this.state.currentTab === 'debug'
+    });
 
     return (
       <div className="flex-container-col">
         {this.getExpandButton()}
-        <div className="side-panel-content-header container container-pod
-          container-fluid container-pod-divider-bottom
-          container-pod-divider-bottom-align-right flush-bottom flex-no-shrink">
+        <div className={panelClasses}>
           {this.getBasicInfo(task, node)}
           <ul className="tabs list-inline container container-fluid container-pod
             flush flush-bottom flush-top">
