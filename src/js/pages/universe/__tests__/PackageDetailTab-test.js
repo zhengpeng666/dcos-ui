@@ -1,5 +1,7 @@
 jest.dontMock('../PackageDetailTab');
 jest.dontMock('../../../components/Panel');
+jest.dontMock('../../../mixins/InternalStorageMixin');
+jest.dontMock('../../../components/modals/InstallPackageModal');
 jest.dontMock('../../../stores/CosmosPackagesStore');
 jest.dontMock('../../../../../tests/_fixtures/cosmos/package-describe.json');
 
