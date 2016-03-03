@@ -1,6 +1,7 @@
 jest.dontMock('../InstallPackageModal');
 jest.dontMock('../../ReviewConfig');
 jest.dontMock('../../../stores/CosmosPackagesStore');
+jest.dontMock('../../../mixins/InternalStorageMixin');
 
 var _ = require('underscore');
 var React = require('react');
