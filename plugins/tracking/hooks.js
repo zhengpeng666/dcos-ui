@@ -5,51 +5,50 @@ import React from 'react';
 /* eslint-enable no-unused-vars */
 
 import Actions from './actions/Actions';
-import Config from '../../src/js/config/Config';
-import DOMUtils from '../../src/js/utils/DOMUtils';
-import IntercomActions from './events/IntercomActions';
 import IntercomStore from './stores/IntercomStore';
-import LocalStorageUtil from '../../src/js/utils/LocalStorageUtil';
-import SidebarActions from '../../src/js/events/SidebarActions';
+
+let SDK = require('./SDK').getSDK();
+let {Config, DOMUtils, LocalStorageUtil} = SDK.get([
+    'Config',
+    'DOMUtils',
+    'LocalStorageUtil'
+    ]);
+let SidebarActions = SDK.getActions('SidebarActions');
 
 let segmentScript = `!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error('Segment snippet included twice.');else{analytics.invoked=!0;analytics.methods=['trackSubmit','trackClick','trackLink','trackForm','pageview','identify','group','track','ready','alias','page','once','off','on'];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement('script');e.type="text/javascript";e.async=!0;e.src=('https:'===document.location.protocol?'https://':'http://')+'cdn.segment.com/analytics.js/v1/'+t+'/analytics.min.js';var n=document.getElementsByTagName('script')[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.0.1";analytics.load("${Config.analyticsKey}");}}();`;
-
 let chameleonScript = `(function(d,w,o){w.chmln=w.docent=o;var s=d.createElement('script');s.async=true;s.src='https://cdn.trychameleon.com/east/'+chmln.token+'/'+chmln.host+'.min.js.gz';d.head.appendChild(s);var n='setup alias track set'.split(' ');for(var i=0;i<n.length;i++){(function(){var t=o[n[i]+'_a']=[];o[n[i]]=function(){t.push(arguments);};})()}})(document,window,{token:'AygXvQUlEVrijBUcM-gzCNB7tISfDWWmHYplrY',host:'mesosphere.com'});`;
 
 let interval = null;
 let tourHasBeenSetup = false;
 
-const PluginHooks = {
+module.exports = {
   configuration: {
     enabled: false
   },
 
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize: function (Hooks) {
-    Hooks.addFilter(
+  initialize: function () {
+    SDK.Hooks.addFilter(
       'sidebarFooterButtonSet', this.sidebarFooterButtonSet.bind(this)
     );
-    Hooks.addFilter(
+    SDK.Hooks.addFilter(
       'installCLIModalAppendInstructions',
       this.installCLIModalAppendInstructions.bind(this)
     );
-    Hooks.addFilter(
+    SDK.Hooks.addFilter(
       'installCLIModalCLIInstallURL',
       this.installCLIModalCLIInstallURL.bind(this)
     );
-    Hooks.addFilter(
+    SDK.Hooks.addFilter(
       'installCLIModalCLIInstallScript',
       this.installCLIModalCLIInstallScript.bind(this)
     );
-    Hooks.addFilter(
+    SDK.Hooks.addFilter(
       'installCLIModalFooter', this.installCLIModalFooter.bind(this)
     );
-    Hooks.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
-    Hooks.addAction('pluginsConfigured', this.pluginsConfigured.bind(this));
-    Hooks.addAction('receivedUserEmail', this.receivedUserEmail.bind(this));
-    Hooks.addFilter(
+    SDK.Hooks.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
+    SDK.Hooks.addAction('pluginsConfigured', this.pluginsConfigured.bind(this));
+    SDK.Hooks.addAction('receivedUserEmail', this.receivedUserEmail.bind(this));
+    SDK.Hooks.addFilter(
       'applicationHasIdentity', this.applicationHasIdentity.bind(this)
     );
   },
@@ -64,9 +63,9 @@ const PluginHooks = {
 
   handleToggleIntercom: function () {
     if (IntercomStore.get('isOpen')) {
-      IntercomActions.close();
+      Actions.closeIntercom();
     } else {
-      IntercomActions.open();
+      Actions.openIntercom();
       SidebarActions.close();
     }
   },
@@ -210,5 +209,3 @@ const PluginHooks = {
     );
   }
 };
-
-module.exports = PluginHooks;
