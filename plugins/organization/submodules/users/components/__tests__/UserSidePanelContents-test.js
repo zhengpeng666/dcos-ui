@@ -72,7 +72,7 @@ describe('UserSidePanelContents', function () {
 
   describe('#render', function () {
 
-    it.only('should return error message if fetch error was received', function () {
+    it('should return error message if fetch error was received', function () {
       var userID = 'unicode';
 
       var instance = ReactDOM.render(

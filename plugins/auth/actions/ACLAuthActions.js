@@ -1,5 +1,4 @@
 import cookie from 'cookie';
-import Config from 'Config';
 
 import {
   REQUEST_ACL_LOGIN_SUCCESS,
@@ -15,7 +14,7 @@ import ACLAuthConstants from '../constants/ACLAuthConstants';
 import AppDispatcher from '../../../src/js/events/AppDispatcher';
 
 let SDK = require('../SDK').getSDK();
-let RequestUtil = SDK.get('RequestUtil');
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
 const ACLAuthActions = {
   fetchRole: function (uid) {

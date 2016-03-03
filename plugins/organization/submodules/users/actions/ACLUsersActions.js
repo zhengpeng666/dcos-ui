@@ -1,5 +1,4 @@
 import _ from 'underscore';
-import Config from 'Config';
 
 import {
   REQUEST_ACL_USERS_SUCCESS,
@@ -22,7 +21,7 @@ import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 
 let SDK = require('../../../SDK').getSDK();
 
-let RequestUtil = SDK.get('RequestUtil');
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
 const ACLUsersActions = {
   fetch: function () {

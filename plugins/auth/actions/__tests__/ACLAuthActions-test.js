@@ -1,6 +1,5 @@
 jest.dontMock('../ACLAuthActions');
 
-import Config from 'Config';
 import PluginTestUtils from 'PluginTestUtils';
 
 import ActionTypes from '../../constants/ActionTypes';
@@ -13,7 +12,7 @@ let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
 
 PluginSDK.setSDK(SDK);
 
-let RequestUtil = SDK.get('RequestUtil');
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
 var ACLAuthActions = require('../ACLAuthActions');
 
@@ -27,7 +26,7 @@ describe('ACLAuthActions', function () {
       this.configuration = RequestUtil.json.mostRecentCall.args[0];
     });
 
-    it.only('calls #json from the RequestUtil', function () {
+    it('calls #json from the RequestUtil', function () {
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
