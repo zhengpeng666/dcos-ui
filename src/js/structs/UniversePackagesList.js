@@ -1,10 +1,23 @@
 import List from './List';
-import StringUtil from '../utils/StringUtil';
 import UniversePackage from './UniversePackage';
 
 class UniversePackagesList extends List {
-  constructor() {
-    super(...arguments);
+  constructor(options = {}) {
+    // Specify filter properties if not specified
+    if (!options.filterProperties) {
+      options.filterProperties = {
+        description: null, // use default getter
+        name: null, // use default getter
+        tags: function (item) {
+          let tags = item.get('tags') || [];
+
+          return tags.join(' ');
+        }
+      };
+    }
+
+    // Pass in overloaded options and the rest of the arguments
+    super(options, ...Array.prototype.slice(arguments, 1));
 
     // Replace list items instances of UniversePackage.
     this.list = this.list.map(function (item) {
@@ -14,22 +27,6 @@ class UniversePackagesList extends List {
         return new UniversePackage(item);
       }
     });
-  }
-
-  filterItems(filterText) {
-    let packages = this.getItems();
-
-    if (filterText) {
-      packages = StringUtil.filterByString(packages, function (cosmosPackage) {
-        let description = cosmosPackage.get('description') || '';
-        let packageName = cosmosPackage.get('name') || '';
-        let tags = cosmosPackage.get('tags') || [];
-
-        return `${packageName} ${description} ${tags.join(' ')}`;
-      }, filterText);
-    }
-
-    return new UniversePackagesList({items: packages});
   }
 }
 
