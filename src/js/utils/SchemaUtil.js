@@ -1,4 +1,4 @@
-function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
+function schemaToFieldDefinition(fieldName, fieldProps, formParent, isRequired) {
   let value = '';
 
   if (fieldProps.default != null) {
@@ -13,17 +13,22 @@ function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
     formParent,
     name: fieldName,
     placeholder: '',
+    isRequired,
     required: false,
     showError: false,
     showLabel: true,
     writeType: 'input',
     validation: function () { return true; },
-    value: value,
+    value,
     valueType: fieldProps.type
   };
 
   if (typeof value === 'boolean') {
     definition.checked = value;
+  }
+
+  if (isRequired) {
+    definition.showLabel = `${fieldName} *`;
   }
 
   if (Array.isArray(fieldProps.default) && fieldProps.default.length === 0) {
@@ -48,6 +53,8 @@ function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subh
   };
 
   let properties = fieldProps.properties;
+  let requiredProps = fieldProps.required;
+
   Object.keys(properties).forEach(function (nestedFieldName) {
     let nestedPropertyValue = properties[nestedFieldName];
 
@@ -65,7 +72,8 @@ function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subh
         schemaToFieldDefinition(
           nestedFieldName,
           nestedPropertyValue,
-          nestedFieldName
+          nestedFieldName,
+          requiredProps && requiredProps.indexOf(nestedFieldName) > -1
         )
       );
     }
@@ -82,6 +90,7 @@ let SchemaUtil = {
     Object.keys(schemaProperties).forEach(function (topLevelProp) {
       let topLevelPropertyObject = schemaProperties[topLevelProp];
       let secondLevelProperties = topLevelPropertyObject.properties;
+      let requiredProps = topLevelPropertyObject.required;
       let definitionForm = multipleDefinition[topLevelProp] = {};
 
       definitionForm.title = topLevelProp;
@@ -95,7 +104,8 @@ let SchemaUtil = {
           fieldDefinition = schemaToFieldDefinition(
             secondLevelProp,
             secondLevelObject,
-            topLevelProp
+            topLevelProp,
+            requiredProps && requiredProps.indexOf(secondLevelProp) > -1
           );
         } else {
           fieldDefinition = nestedSchemaToFieldDefinition(

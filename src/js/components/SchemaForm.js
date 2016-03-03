@@ -28,7 +28,6 @@ class SchemaForm extends React.Component {
 
     this.triggerSubmit = function () {};
     this.errors = 0;
-    global.bigSubmit = this.validateForm;
   }
 
   componentWillMount() {
@@ -122,7 +121,7 @@ class SchemaForm extends React.Component {
     let errors = result.errors.map(function (error) {
       return SchemaFormUtil.parseTV4Error(error);
     });
-    this.errors = errors.length;
+
     errors.forEach((error) => {
       let path = error.path;
       let prevObj = prevDefinition[path[0]];
@@ -144,6 +143,7 @@ class SchemaForm extends React.Component {
 
     this.forceUpdate();
 
+    this.errors = isValidated;
     return isValidated;
   }
 
@@ -289,10 +289,7 @@ class SchemaForm extends React.Component {
 SchemaForm.defaultProps = {
   className: '',
   getTriggerSubmit: function () {},
-  schema: {},
-  serviceImage: './img/services/icon-service-marathon-large@2x.png',
-  serviceName: 'Marathon',
-  serviceVersion: '0.23.2'
+  schema: {}
 };
 
 SchemaForm.propTypes = {

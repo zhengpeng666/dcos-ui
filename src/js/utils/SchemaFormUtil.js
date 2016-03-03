@@ -94,16 +94,25 @@ let SchemaFormUtil = {
       }
 
       let valueType = definition.valueType;
+      let {isRequired} = definition;
 
       if (valueType === 'integer' || valueType === 'number') {
-        value = Number(value);
-        if (isNaN(value)) {
+        if (value !== null && value !== '') {
+          value = Number(value);
+          if (isNaN(value)) {
+            value = null;
+          }
+        } else {
           value = null;
         }
       }
 
-      if (value === null) {
-        value = DEFAULT_FORM_VALUES[valueType];
+      if (typeof value === 'string' && isRequired && value === '') {
+        value = null;
+      } else {
+        if (value === null) {
+          value = DEFAULT_FORM_VALUES[valueType];
+        }
       }
 
       if (valueType === 'array' && typeof value === 'string') {
