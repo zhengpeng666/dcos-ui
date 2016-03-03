@@ -9,10 +9,12 @@ PluginTestUtils.unMockStores(['ACLAuthStore']);
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
 
-var ACLAuthStore = require('../../stores/ACLAuthStore')(PluginSDK);
-var UserDropup = require('../UserDropup')(PluginSDK);
+require('../../SDK').setSDK(SDK);
+
+var ACLAuthStore = require('../../stores/ACLAuthStore');
+var UserDropup = require('../UserDropup');
 
 describe('UserDropup', function () {
 

@@ -1,60 +1,55 @@
 import React from 'react';
 
-import _ACLAuthActions from '../actions/ACLAuthActions';
+import ACLAuthActions from '../actions/ACLAuthActions';
 
 const METHODS_TO_BIND = [
   'handleUserLogout'
 ];
 
-module.exports = (PluginSDK) => {
+let SDK = require('../SDK').getSDK();
 
-  let AlertPanel = PluginSDK.get('AlertPanel');
+module.exports = class AccessDeniedPage extends React.Component {
+  constructor() {
+    super(...arguments);
 
-  let ACLAuthActions = _ACLAuthActions(PluginSDK);
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
 
-  let AccessDeniedPage = class AccessDeniedPage extends React.Component {
-    constructor() {
-      super(...arguments);
+  handleUserLogout() {
+    ACLAuthActions.logout();
+  }
 
-      METHODS_TO_BIND.forEach((method) => {
-        this[method] = this[method].bind(this);
-      });
-    }
+  getFooter() {
+    return (
+      <button className="button button-primary"
+        onClick={this.handleUserLogout}>
+        Log out
+      </button>
+    );
+  }
 
-    handleUserLogout() {
-      ACLAuthActions.logout();
-    }
-
-    getFooter() {
-      return (
-        <button className="button button-primary"
-          onClick={this.handleUserLogout}>
-          Log out
-        </button>
-      );
-    }
-
-    render() {
-      return (
-        <div className="flex-container-col">
-          <div className="page-content container-scrollable inverse">
-            <div className="container container-fluid container-pod
-              flex-container-col">
-              <AlertPanel
-                footer={this.getFooter()}
-                iconClassName="icon icon-sprite icon-sprite-jumbo
-                  icon-sprite-jumbo-white icon-lost-planet flush-top"
-                title="Access Denied">
-                <p>
-                  You do not have access to this service. <br />
-                  Please contact your DCOS administrator.
-                </p>
-              </AlertPanel>
-            </div>
+  render() {
+    let AlertPanel = SDK.get('AlertPanel');
+    return (
+      <div className="flex-container-col">
+        <div className="page-content container-scrollable inverse">
+          <div className="container container-fluid container-pod
+            flex-container-col">
+            <AlertPanel
+              footer={this.getFooter()}
+              iconClassName="icon icon-sprite icon-sprite-jumbo
+                icon-sprite-jumbo-white icon-lost-planet flush-top"
+              title="Access Denied">
+              <p>
+                You do not have access to this service. <br />
+                Please contact your DCOS administrator.
+              </p>
+            </AlertPanel>
           </div>
         </div>
-      );
-    }
-  };
-  return AccessDeniedPage;
+      </div>
+    );
+  }
 };

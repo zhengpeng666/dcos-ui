@@ -10,10 +10,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
-let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
 
-let Authenticated = require('../Authenticated')(PluginSDK);
-let ACLAuthStore = require('../../stores/ACLAuthStore')(PluginSDK);
+require('../../SDK').setSDK(SDK);
+
+let Authenticated = require('../Authenticated');
+let ACLAuthStore = require('../../stores/ACLAuthStore');
 
 class FakeComponent extends React.Component {
   render() {

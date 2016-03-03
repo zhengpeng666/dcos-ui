@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import Config from 'Config';
 
 import {
   REQUEST_ACL_USERS_SUCCESS,
@@ -26,7 +27,7 @@ module.exports = (PluginSDK) => {
     return cached;
   }
 
-  let {RequestUtil, Config} = PluginSDK.get(['RequestUtil', 'Config']);
+  let RequestUtil = PluginSDK.get('RequestUtil');
 
   const ACLUsersActions = {
     fetch: function () {

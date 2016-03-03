@@ -17,158 +17,143 @@ import {
   ACL_AUTH_USER_LOGOUT_ERROR
 } from '../constants/EventTypes';
 
-let _ACLAuthActions = require('../actions/ACLAuthActions');
+import ACLAuthActions from '../actions/ACLAuthActions';
 import ACLUserRoles from '../constants/ACLUserRoles';
-
 import Utils from '../utils';
 
 import AppDispatcher from '../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../src/js/constants/ActionTypes';
 
-let cachedStore;
+let SDK = require('../SDK').getSDK();
 
-module.exports = (PluginSDK) => {
-  // Return cached version if exists
-  if (cachedStore) {
-    return cachedStore;
-  }
+let ACLAuthStore = Store.createStore({
+  storeID: 'auth',
 
-  let ACLAuthActions = _ACLAuthActions(PluginSDK);
+  mixins: [SDK.get('PluginGetSetMixin')],
 
-  let {Hooks} = PluginSDK;
-  let PluginGetSetMixin = PluginSDK.get('PluginGetSetMixin');
-  let {APP_STORE_CHANGE} = PluginSDK.constants;
+  onSet() {
+    let {APP_STORE_CHANGE} = SDK.constants;
+    SDK.dispatch({
+      type: APP_STORE_CHANGE,
+      storeID: this.storeID,
+      data: this.getSet_data
+    });
+  },
 
-  var ACLAuthStore = Store.createStore({
-    storeID: 'auth',
+  addChangeListener: function (eventName, callback) {
+    this.on(eventName, callback);
+  },
 
-    mixins: [PluginGetSetMixin],
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
+  },
 
-    onSet() {
-      PluginSDK.dispatch({
-        type: APP_STORE_CHANGE,
-        storeID: this.storeID,
-        data: this.getSet_data
-      });
-    },
+  login: ACLAuthActions.login,
 
-    addChangeListener: function (eventName, callback) {
-      this.on(eventName, callback);
-    },
+  logout: ACLAuthActions.logout,
 
-    removeChangeListener: function (eventName, callback) {
-      this.removeListener(eventName, callback);
-    },
+  fetchRole: ACLAuthActions.fetchRole,
 
-    login: ACLAuthActions.login,
+  isLoggedIn: function () {
+    return !!Utils.getUserMetadata();
+  },
 
-    logout: ACLAuthActions.logout,
+  getUser: function () {
+    let userCode = Utils.getUserMetadata();
 
-    fetchRole: ACLAuthActions.fetchRole,
+    if (!userCode) {
+      return null;
+    }
 
-    isLoggedIn: function () {
-      return !!Utils.getUserMetadata();
-    },
+    try {
+      return JSON.parse(atob(userCode));
+    } catch(err) {
+      return null;
+    }
+  },
 
-    getUser: function () {
-      let userCode = Utils.getUserMetadata();
+  hasRole() {
+    return !!this.get('role');
+  },
 
-      if (!userCode) {
-        return null;
-      }
+  isAdmin() {
+    return this.get('role') === ACLUserRoles.admin;
+  },
 
-      try {
-        return JSON.parse(atob(userCode));
-      } catch(err) {
-        return null;
-      }
-    },
+  makeAdminRole() {
+    let role = this.get('role');
+    if (role !== ACLUserRoles.admin) {
+      this.set({role: ACLUserRoles.admin});
+      this.emit(ACL_AUTH_USER_ROLE_CHANGED);
+    }
+  },
 
-    hasRole() {
-      return !!this.get('role');
-    },
+  makeDefaultRole() {
+    let role = this.get('role');
+    if (role !== ACLUserRoles.default) {
+      this.set({role: ACLUserRoles.default});
+      this.emit(ACL_AUTH_USER_ROLE_CHANGED);
+    }
+  },
 
-    isAdmin() {
-      return this.get('role') === ACLUserRoles.admin;
-    },
+  resetRole() {
+    this.set({role: undefined});
+  },
 
-    makeAdminRole() {
-      let role = this.get('role');
-      if (role !== ACLUserRoles.admin) {
-        this.set({role: ACLUserRoles.admin});
-        this.emit(ACL_AUTH_USER_ROLE_CHANGED);
-      }
-    },
+  processLoginSuccess() {
+    // Reset role before fetching new one
+    this.resetRole();
 
-    makeDefaultRole() {
-      let role = this.get('role');
-      if (role !== ACLUserRoles.default) {
-        this.set({role: ACLUserRoles.default});
-        this.emit(ACL_AUTH_USER_ROLE_CHANGED);
-      }
-    },
+    let user = this.getUser();
+    if (!user) {
+      this.makeDefaultRole();
+    }
+    this.emit(ACL_AUTH_USER_LOGIN_CHANGED);
+  },
 
-    resetRole() {
-      this.set({role: undefined});
-    },
+  processLogoutSuccess: function () {
+    // Set the cookie to an empty string.
+    global.document.cookie = Utils.emptyCookieWithExpiry(new Date(1970));
 
-    processLoginSuccess() {
-      // Reset role before fetching new one
-      this.resetRole();
+    this.resetRole();
+    this.emit(ACL_AUTH_USER_LOGOUT_SUCCESS);
 
-      let user = this.getUser();
-      if (!user) {
-        this.makeDefaultRole();
-      }
-      this.emit(ACL_AUTH_USER_LOGIN_CHANGED);
-    },
+    SDK.Hooks.doAction('userLogoutSuccess');
+  },
 
-    processLogoutSuccess: function () {
-      // Set the cookie to an empty string.
-      global.document.cookie = Utils.emptyCookieWithExpiry(new Date(1970));
+  dispatcherIndex: AppDispatcher.register(function (payload) {
+    let source = payload.source;
+    if (source !== SERVER_ACTION) {
+      return false;
+    }
 
-      this.resetRole();
-      this.emit(ACL_AUTH_USER_LOGOUT_SUCCESS);
+    let action = payload.action;
 
-      Hooks.doAction('userLogoutSuccess');
-    },
+    switch (action.type) {
+      case REQUEST_ACL_LOGIN_SUCCESS:
+        ACLAuthStore.processLoginSuccess();
+        break;
+      case REQUEST_ACL_LOGIN_ERROR:
+        ACLAuthStore.emit(ACL_AUTH_USER_LOGIN_ERROR, action.data);
+        break;
+      case REQUEST_ACL_LOGOUT_SUCCESS:
+        ACLAuthStore.processLogoutSuccess();
+        break;
+      case REQUEST_ACL_LOGOUT_ERROR:
+        ACLAuthStore.emit(ACL_AUTH_USER_LOGOUT_ERROR, action.data);
+        break;
+      // Get role of current user
+      case REQUEST_ACL_ROLE_SUCCESS:
+        ACLAuthStore.makeAdminRole();
+        break;
+      // Get role of current user
+      case REQUEST_ACL_ROLE_ERROR:
+        ACLAuthStore.makeDefaultRole();
+        break;
+    }
 
-    dispatcherIndex: AppDispatcher.register(function (payload) {
-      let source = payload.source;
-      if (source !== SERVER_ACTION) {
-        return false;
-      }
+    return true;
+  })
+});
 
-      let action = payload.action;
-
-      switch (action.type) {
-        case REQUEST_ACL_LOGIN_SUCCESS:
-          ACLAuthStore.processLoginSuccess();
-          break;
-        case REQUEST_ACL_LOGIN_ERROR:
-          ACLAuthStore.emit(ACL_AUTH_USER_LOGIN_ERROR, action.data);
-          break;
-        case REQUEST_ACL_LOGOUT_SUCCESS:
-          ACLAuthStore.processLogoutSuccess();
-          break;
-        case REQUEST_ACL_LOGOUT_ERROR:
-          ACLAuthStore.emit(ACL_AUTH_USER_LOGOUT_ERROR, action.data);
-          break;
-        // Get role of current user
-        case REQUEST_ACL_ROLE_SUCCESS:
-          ACLAuthStore.makeAdminRole();
-          break;
-        // Get role of current user
-        case REQUEST_ACL_ROLE_ERROR:
-          ACLAuthStore.makeDefaultRole();
-          break;
-      }
-
-      return true;
-    })
-  });
-
-  cachedStore = ACLAuthStore;
-
-  return ACLAuthStore;
-};
+module.exports = ACLAuthStore;

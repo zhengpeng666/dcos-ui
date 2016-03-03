@@ -88,6 +88,7 @@ module.exports = {
     root: path.resolve(__dirname),
     extensions: ['', '.js'],
     alias: {
+      Config: 'src/js/config/Config',
       PluginSDK: 'src/js/plugin-bridge/PluginSDK',
       PluginTestUtils: 'src/js/plugin-bridge/PluginTestUtils'
     }

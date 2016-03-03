@@ -1,4 +1,4 @@
-import _ACLAuthStore from './stores/ACLAuthStore';
+import ACLAuthStore from './stores/ACLAuthStore';
 import {
   ACL_AUTH_USER_LOGIN_CHANGED,
   ACL_AUTH_USER_LOGIN_ERROR,
@@ -7,24 +7,26 @@ import {
   ACL_AUTH_USER_ROLE_CHANGED
 } from './constants/EventTypes';
 
-module.exports = (PluginSDK) => {
+let SDK = require('./SDK').getSDK();
 
-  let ACLAuthStore = _ACLAuthStore(PluginSDK);
+module.exports = {
 
-  let StoreMixinConfig = PluginSDK.get('StoreMixinConfig');
+  register() {
+    let StoreMixinConfig = SDK.get('StoreMixinConfig');
 
-  StoreMixinConfig.add('auth', {
-    store: ACLAuthStore,
-    events: {
-      success: ACL_AUTH_USER_LOGIN_CHANGED,
-      error: ACL_AUTH_USER_LOGIN_ERROR,
-      logoutSuccess: ACL_AUTH_USER_LOGOUT_SUCCESS,
-      logoutError: ACL_AUTH_USER_LOGOUT_ERROR,
-      roleChange: ACL_AUTH_USER_ROLE_CHANGED
-    },
-    unmountWhen: function () {
-      return true;
-    },
-    listenAlways: true
-  });
+    StoreMixinConfig.add('auth', {
+      store: ACLAuthStore,
+      events: {
+        success: ACL_AUTH_USER_LOGIN_CHANGED,
+        error: ACL_AUTH_USER_LOGIN_ERROR,
+        logoutSuccess: ACL_AUTH_USER_LOGOUT_SUCCESS,
+        logoutError: ACL_AUTH_USER_LOGOUT_ERROR,
+        roleChange: ACL_AUTH_USER_ROLE_CHANGED
+      },
+      unmountWhen: function () {
+        return true;
+      },
+      listenAlways: true
+    });
+  }
 };

@@ -6,18 +6,18 @@ jest.dontMock('../../constants/ACLUserRoles');
 import PluginTestUtils from 'PluginTestUtils';
 
 PluginTestUtils.dontMock('PluginGetSetMixin');
-PluginTestUtils.unMockStores(['ACLAuthStore']);
 
 var cookie = require('cookie');
 
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
 
-let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+require('../../SDK').setSDK(SDK);
 
-var ACLAuthStore = require('../ACLAuthStore')(PluginSDK);
+var ACLAuthStore = require('../ACLAuthStore');
 
-let RequestUtil = PluginSDK.get('RequestUtil');
+let RequestUtil = SDK.get('RequestUtil');
 
 var AppDispatcher = require('../../../../src/js/events/AppDispatcher');
 

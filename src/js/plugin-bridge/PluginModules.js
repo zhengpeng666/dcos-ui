@@ -43,6 +43,6 @@ module.exports = {
     ClusterName: 'ClusterName'
   },
   config: {
-    'Config': 'Config'
+    Config: 'Config'
   }
 };

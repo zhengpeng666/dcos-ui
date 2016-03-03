@@ -21,14 +21,14 @@ PluginTestUtils.dontMock([
   'ClusterName'
 ]);
 
-let PluginSDK = PluginTestUtils.getSDK('Auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Auth', {enabled: true});
 
-require('../../storeConfig')(PluginSDK);
+require('../../SDK').setSDK(SDK);
 
-let LoginModal = require('../LoginModal')(PluginSDK);
-var ACLAuthStore = require('../../stores/ACLAuthStore')(PluginSDK);
+require('../../storeConfig').register();
 
-require('../../storeConfig')(PluginSDK);
+let LoginModal = require('../LoginModal');
+var ACLAuthStore = require('../../stores/ACLAuthStore');
 
 MetadataStore.set({dcosMetadata: {}});
 

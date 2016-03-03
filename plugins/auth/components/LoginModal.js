@@ -3,192 +3,190 @@ import mixin from 'reactjs-mixin';
 import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import _ACLAuthStore from '../stores/ACLAuthStore';
+import ACLAuthStore from '../stores/ACLAuthStore';
 
-module.exports = (PluginSDK) => {
+let SDK = require('../SDK').getSDK();
 
-  let {MesosphereLogo, FormModal, DCOSLogo} = PluginSDK.get([
-    'MesosphereLogo', 'FormModal', 'DCOSLogo']);
+function findRedirect(queryString) {
+  let redirectTo = false;
 
-  let ACLAuthStore = _ACLAuthStore(PluginSDK);
+  Object.keys(queryString).forEach(function (key) {
+    if (/redirect/.test(key)) {
+      redirectTo = queryString[key];
+    }
+  });
 
-  function findRedirect(queryString) {
+  return redirectTo;
+}
+
+const METHODS_TO_BIND = [
+  'handleLoginSubmit'
+];
+
+class LoginModal extends mixin(StoreMixin) {
+  constructor() {
+    super();
+
+    this.state = {
+      disableLogin: false,
+      errorMsg: false
+    };
+
+    this.store_listeners = [
+      {
+        name: 'auth',
+        events: ['roleChange', 'success', 'error']
+      }
+    ];
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  onAuthStoreRoleChange() {
+    let router = this.context.router;
+    let loginRedirectRoute = ACLAuthStore.get('loginRedirectRoute');
+
+    if (!ACLAuthStore.isAdmin()) {
+      router.transitionTo('/access-denied');
+    } else if (loginRedirectRoute) {
+      // Go to redirect route if it is present
+      router.transitionTo(loginRedirectRoute);
+    } else {
+      // Go to home
+      router.transitionTo('/');
+    }
+
+    this.setState({disableLogin: false});
+  }
+
+  onAuthStoreSuccess() {
     let redirectTo = false;
 
-    Object.keys(queryString).forEach(function (key) {
-      if (/redirect/.test(key)) {
-        redirectTo = queryString[key];
-      }
+    // This will match url instances like this:
+    // /?redirect=SOME_ADDRESS#/login
+    if (global.location.search) {
+      redirectTo = findRedirect(qs.parse(global.location.search));
+    }
+
+    // This will match url instances like this:
+    // /#/login?redirect=SOME_ADDRESS
+    if (!redirectTo && global.location.hash) {
+      redirectTo = findRedirect(qs.parse(global.location.hash));
+    }
+
+    if (redirectTo) {
+      window.location.href = redirectTo;
+    } else {
+      let user = ACLAuthStore.getUser();
+      ACLAuthStore.fetchRole(user.uid);
+    }
+  }
+
+  onAuthStoreError(errorMsg) {
+    this.setState({
+      disableLogin: false,
+      errorMsg
     });
-
-    return redirectTo;
   }
 
-  const METHODS_TO_BIND = [
-    'handleLoginSubmit'
-  ];
+  handleLoginSubmit(model) {
+    this.setState({disableLogin: true});
+    ACLAuthStore.login(model);
+  }
 
-  class LoginModal extends mixin(StoreMixin) {
-    constructor() {
-      super();
-
-      this.state = {
-        disableLogin: false,
-        errorMsg: false
-      };
-
-      this.store_listeners = [
-        {
-          name: 'auth',
-          events: ['roleChange', 'success', 'error']
-        }
-      ];
-
-      METHODS_TO_BIND.forEach((method) => {
-        this[method] = this[method].bind(this);
-      });
-    }
-
-    onAuthStoreRoleChange() {
-      let router = this.context.router;
-      let loginRedirectRoute = ACLAuthStore.get('loginRedirectRoute');
-
-      if (!ACLAuthStore.isAdmin()) {
-        router.transitionTo('/access-denied');
-      } else if (loginRedirectRoute) {
-        // Go to redirect route if it is present
-        router.transitionTo(loginRedirectRoute);
-      } else {
-        // Go to home
-        router.transitionTo('/');
+  getLoginFormDefinition() {
+    return [
+      {
+        fieldType: 'text',
+        formGroupClass: 'form-group short-bottom',
+        name: 'uid',
+        placeholder: 'Username',
+        required: true,
+        showError: false,
+        showLabel: false,
+        writeType: 'input',
+        validation: function () { return true; },
+        value: ''
+      },
+      {
+        fieldType: 'password',
+        name: 'password',
+        placeholder: 'Password',
+        required: true,
+        showError: this.state.errorMsg,
+        showLabel: false,
+        writeType: 'input',
+        validation: function () { return true; },
+        value: ''
       }
+    ];
+  }
 
-      this.setState({disableLogin: false});
+  getLoginButtonDefinition() {
+    let buttonText = 'Sign In';
+    if (this.state.disableLogin) {
+      buttonText = 'Signing in...';
     }
 
-    onAuthStoreSuccess() {
-      let redirectTo = false;
-
-      // This will match url instances like this:
-      // /?redirect=SOME_ADDRESS#/login
-      if (global.location.search) {
-        redirectTo = findRedirect(qs.parse(global.location.search));
+    return [
+      {
+        text: buttonText,
+        className: 'button button-primary button-wide',
+        isSubmit: true
       }
+    ];
+  }
 
-      // This will match url instances like this:
-      // /#/login?redirect=SOME_ADDRESS
-      if (!redirectTo && global.location.hash) {
-        redirectTo = findRedirect(qs.parse(global.location.hash));
-      }
+  getMesosphereLogo() {
+    let MesosphereLogo = SDK.get('MesosphereLogo');
 
-      if (redirectTo) {
-        window.location.href = redirectTo;
-      } else {
-        let user = ACLAuthStore.getUser();
-        ACLAuthStore.fetchRole(user.uid);
-      }
-    }
+    return (
+      <div className="mesosphere-footer-logo">
+        <MesosphereLogo height="20" width="148" />
+      </div>
+    );
+  }
 
-    onAuthStoreError(errorMsg) {
-      this.setState({
-        disableLogin: false,
-        errorMsg
-      });
-    }
+  render() {
+    let {FormModal, DCOSLogo} = SDK.get(['FormModal', 'DCOSLogo']);
 
-    handleLoginSubmit(model) {
-      this.setState({disableLogin: true});
-      ACLAuthStore.login(model);
-    }
+    let modalProps = {
+      innerBodyClass: 'modal-body container container-pod ' +
+        'container-pod-short flex-container-col',
+      modalClass: 'modal modal-narrow'
+    };
 
-    getLoginFormDefinition() {
-      return [
-        {
-          fieldType: 'text',
-          formGroupClass: 'form-group short-bottom',
-          name: 'uid',
-          placeholder: 'Username',
-          required: true,
-          showError: false,
-          showLabel: false,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        },
-        {
-          fieldType: 'password',
-          name: 'password',
-          placeholder: 'Password',
-          required: true,
-          showError: this.state.errorMsg,
-          showLabel: false,
-          writeType: 'input',
-          validation: function () { return true; },
-          value: ''
-        }
-      ];
-    }
-
-    getLoginButtonDefinition() {
-      let buttonText = 'Sign In';
-      if (this.state.disableLogin) {
-        buttonText = 'Signing in...';
-      }
-
-      return [
-        {
-          text: buttonText,
-          className: 'button button-primary button-wide',
-          isSubmit: true
-        }
-      ];
-    }
-
-    getMesosphereLogo() {
-      return (
-        <div className="mesosphere-footer-logo">
-          <MesosphereLogo height="20" width="148" />
-        </div>
-      );
-    }
-
-    render() {
-      let modalProps = {
-        innerBodyClass: 'modal-body container container-pod ' +
-          'container-pod-short flex-container-col',
-        modalClass: 'modal modal-narrow'
-      };
-
-      return (
-        <FormModal
-          buttonDefinition={this.getLoginButtonDefinition()}
-          definition={this.getLoginFormDefinition()}
-          disabled={this.state.disableLogin}
-          extraFooterContent={this.getMesosphereLogo()}
-          onSubmit={this.handleLoginSubmit}
-          open={true}
-          modalProps={modalProps}>
-          <div className="container container-fluid container-fluid-narrow
-            container-pod container-pod-short flush-top">
-            <div className="sidebar-header-image flush-bottom">
-              <DCOSLogo />
-            </div>
-            <div className="container container-pod
-              container-pod-short flush-bottom">
-              <h3 className="sidebar-header-label flush-top text-align-center
-                text-overflow flush-bottom">
-                Sign in to Mesosphere DCOS
-              </h3>
-            </div>
+    return (
+      <FormModal
+        buttonDefinition={this.getLoginButtonDefinition()}
+        definition={this.getLoginFormDefinition()}
+        disabled={this.state.disableLogin}
+        extraFooterContent={this.getMesosphereLogo()}
+        onSubmit={this.handleLoginSubmit}
+        open={true}
+        modalProps={modalProps}>
+        <div className="container container-fluid container-fluid-narrow
+          container-pod container-pod-short flush-top">
+          <div className="sidebar-header-image flush-bottom">
+            <DCOSLogo />
           </div>
-        </FormModal>
-      );
-    }
+          <div className="container container-pod
+            container-pod-short flush-bottom">
+            <h3 className="sidebar-header-label flush-top text-align-center
+              text-overflow flush-bottom">
+              Sign in to Mesosphere DCOS
+            </h3>
+          </div>
+        </div>
+      </FormModal>
+    );
   }
+}
 
-  LoginModal.contextTypes = {
-    router: React.PropTypes.func
-  };
-
-  return LoginModal;
+LoginModal.contextTypes = {
+  router: React.PropTypes.func
 };
+
+module.exports = LoginModal;

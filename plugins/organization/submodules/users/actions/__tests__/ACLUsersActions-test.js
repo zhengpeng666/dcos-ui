@@ -1,6 +1,7 @@
 jest.dontMock('../../constants/ActionTypes');
 jest.dontMock('../ACLUsersActions');
 
+import Config from 'Config';
 import PluginTestUtils from 'PluginTestUtils';
 
 PluginTestUtils.dontMock([
@@ -12,7 +13,7 @@ let PluginSDK = PluginTestUtils.getSDK('Organization', {enabled: true});
 var ActionTypes = require('../../constants/ActionTypes');
 var ACLUsersActions = require('../ACLUsersActions')(PluginSDK);
 
-var {RequestUtil, Config} = PluginSDK.get(['RequestUtil', 'Config']);
+var RequestUtil = PluginSDK.get('RequestUtil');
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
