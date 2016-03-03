@@ -87,6 +87,7 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
 
   onCosmosPackagesStoreDescriptionError(nameError) {
     this.internalStorage_update({appId: null, nameError});
+    this.forceUpdate();
   }
 
   onCosmosPackagesStoreDescriptionSuccess() {
@@ -103,6 +104,7 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
       hasError: false,
       isLoading: false
     });
+    this.forceUpdate();
   }
 
   onCosmosPackagesStoreInstallError(installError) {
@@ -111,6 +113,7 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
       packageInstalled: false,
       pendingRequest: false
     });
+    this.forceUpdate();
   }
 
   onCosmosPackagesStoreInstallSuccess() {
@@ -119,10 +122,12 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
       packageInstalled: true,
       pendingRequest: false
     });
+    this.forceUpdate();
   }
 
   handleAdvancedModalClose() {
     this.internalStorage_update({advancedModalOpen: false});
+    this.forceUpdate();
   }
 
   handleAdvancedModalOpen() {
@@ -131,14 +136,17 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
       installError: null,
       pendingRequest: false
     });
+    this.forceUpdate();
   }
 
   handleChangeAppId(definition) {
     this.internalStorage_update({installError: null, appId: definition.appId});
+    this.forceUpdate();
   }
 
   handleChangeReviewState(isReviewing) {
     this.internalStorage_update({installError: null, isReviewing});
+    this.forceUpdate();
   }
 
   handleInstallPackage(cosmosPackage) {
@@ -151,6 +159,7 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
     );
 
     this.internalStorage_update({pendingRequest: true});
+    this.forceUpdate();
   }
 
   getAdvancedLink() {
