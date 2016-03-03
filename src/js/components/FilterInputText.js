@@ -1,5 +1,6 @@
 var classNames = require('classnames');
 var React = require('react');
+import ReactDOM from 'react-dom';
 
 var FilterInputText = React.createClass({
 
@@ -26,13 +27,18 @@ var FilterInputText = React.createClass({
     };
   },
 
+  componentDidUpdate: function () {
+    if (this.state.focus) {
+      ReactDOM.findDOMNode(this.refs.filterInput).focus();
+    }
+  },
+
   handleChange: function (e) {
     e.preventDefault();
     this.props.handleFilterChange(this.refs.filterInput.value);
   },
 
-  handleClearInput: function (e) {
-    e.preventDefault();
+  handleClearInput: function () {
     this.props.handleFilterChange('');
   },
 
@@ -48,61 +54,70 @@ var FilterInputText = React.createClass({
     });
   },
 
+  renderClearIcon: function (focus, props) {
+
+    if (props.searchString.length > 0) {
+
+      var clearIconClasses = classNames({
+        'icon icon-sprite icon-sprite-mini icon-close': true,
+        'icon-sprite-mini-white': props.inverseStyle
+      });
+
+      return (
+        <span className="form-control-group-add-on form-control-group-add-on-append" onClick={this.handleClearInput}>
+          <a>
+            <i className={clearIconClasses}></i>
+          </a>
+        </span>
+      );
+    }
+
+    return null;
+  },
+
   render: function () {
     var props = this.props;
-    var clearIconContainerClasses = classNames({
-      'form-control-group-add-on form-control-group-add-on-append': true,
-      'hidden': props.searchString.length === 0
-    });
-
-    var clearIconClasses = classNames({
-      'icon icon-sprite icon-sprite-mini icon-close': true,
-      'icon-sprite-mini-white': this.props.inverseStyle
-    });
+    var focus = this.state.focus;
 
     var iconSearchClasses = classNames({
       'icon icon-sprite icon-sprite-mini icon-search': true,
-      'icon-sprite-mini-white': this.props.inverseStyle,
-      'icon-sprite-mini-color': !this.props.inverseStyle && this.state.focus,
-      'active': this.state.focus
+      'icon-sprite-mini-white': props.inverseStyle,
+      'icon-sprite-mini-color': !props.inverseStyle && focus,
+      'active': focus
     });
 
     var inputClasses = classNames({
       'form-control filter-input-text': true,
-      'form-control-inverse': this.props.inverseStyle
+      'form-control-inverse': props.inverseStyle
     });
 
     let inputContainerClasses = classNames({
       'form-control form-control-group filter-input-text-group': true,
-      'form-control-inverse': this.props.inverseStyle,
-      'focus': this.state.focus
+      'form-control-inverse': props.inverseStyle,
+      'focus': focus
     });
 
     let formGroupClasses = classNames(
       'form-group',
-      this.props.className
+      props.className
     );
 
     return (
       <div className={formGroupClasses}>
-        <div className={inputContainerClasses}>
+        <div className={inputContainerClasses}
+          onClick={this.handleFocus}
+          onBlur={this.handleBlur}>
           <span className="form-control-group-add-on form-control-group-add-on-prepend">
             <i className={iconSearchClasses}></i>
           </span>
           <input
             type="text"
             className={inputClasses}
-            placeholder={this.props.placeholder}
-            value={this.props.searchString}
-            onBlur={this.handleBlur}
+            placeholder={props.placeholder}
+            value={props.searchString}
             onChange={this.handleChange}
-            onFocus={this.handleFocus}
             ref="filterInput" />
-          <span className={clearIconContainerClasses}>
-            <a href="#" onClick={this.handleClearInput}>
-              <i className={clearIconClasses}></i>
-            </a>
-          </span>
+          {this.renderClearIcon(focus, props)}
         </div>
       </div>
     );
