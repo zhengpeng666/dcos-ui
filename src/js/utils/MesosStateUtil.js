@@ -3,7 +3,7 @@ var _ = require('underscore');
 const MesosStateUtil = {
 
   /**
-   * @param  {Object} state A document of mesos state.json
+   * @param  {Object} state A document of mesos state
    * @param  {Array} filter Allows us to filter by framework id
    *   All other frameworks will be put into an 'other' category
    * @returns {Object} A map of frameworks running on host

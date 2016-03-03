@@ -23,7 +23,7 @@ function findWithID(stateObject, listProps, id) {
 
 var TaskDirectoryActions = {
   getDownloadURL: function (nodeID, path) {
-    return `${Config.rootUrl}/slave/${nodeID}/files/download.json?` +
+    return `${Config.rootUrl}/slave/${nodeID}/files/download?` +
       `path=${path}`;
   },
 
@@ -31,7 +31,7 @@ var TaskDirectoryActions = {
     let pid = MesosStateStore.getNodeFromID(task.slave_id).pid;
     let nodePID = pid.substring(0, pid.indexOf('@'));
 
-    return `${Config.rootUrl}/slave/${task.slave_id}/${nodePID}/state.json`;
+    return `${Config.rootUrl}/slave/${task.slave_id}/${nodePID}/state`;
   },
 
   getInnerPath: function (nodeState, task, innerPath) {
@@ -101,7 +101,7 @@ var TaskDirectoryActions = {
     }
 
     RequestUtil.json({
-      url: `${Config.rootUrl}/slave/${task.slave_id}/files/browse.json`,
+      url: `${Config.rootUrl}/slave/${task.slave_id}/files/browse`,
       data: {
         path: innerPath
       },

@@ -7,7 +7,7 @@ const MesosLogActions = {
 
   requestOffset: function (slaveID, path) {
     RequestUtil.json({
-      url: `${Config.rootUrl}/slave/${slaveID}/files/read.json?path=${path}&offset=-1`,
+      url: `${Config.rootUrl}/slave/${slaveID}/files/read?path=${path}&offset=-1`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_MESOS_LOG_OFFSET_SUCCESS,
@@ -29,7 +29,7 @@ const MesosLogActions = {
 
   fetchLog: function (slaveID, path, offset, length) {
     RequestUtil.json({
-      url: `${Config.rootUrl}/slave/${slaveID}/files/read.json?path=${path}&offset=${offset}&length=${length}`,
+      url: `${Config.rootUrl}/slave/${slaveID}/files/read?path=${path}&offset=${offset}&length=${length}`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_MESOS_LOG_SUCCESS,
@@ -51,7 +51,7 @@ const MesosLogActions = {
 
   fetchPreviousLog: function (slaveID, path, offset, length) {
     RequestUtil.json({
-      url: `${Config.rootUrl}/slave/${slaveID}/files/read.json?path=${path}&offset=${offset}&length=${length}`,
+      url: `${Config.rootUrl}/slave/${slaveID}/files/read?path=${path}&offset=${offset}&length=${length}`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_PREVIOUS_MESOS_LOG_SUCCESS,
