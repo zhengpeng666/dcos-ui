@@ -26,7 +26,9 @@ const reducers = {
 };
 
 // Default pass through function when devTools are not enabled
-let devToolIfEnabled = f => f;
+let devToolIfEnabled = function (f) {
+  return f;
+};
 
 // Inject middleware to observe actions and state
 if (Config.environment === 'development'
@@ -98,7 +100,7 @@ const createDispatcher = function (pluginID) {
  * @return {module}            - Required module
  */
 const getModule = function (moduleName) {
-  let foundDirs = Object.keys(PluginModules).filter(directory => {
+  let foundDirs = Object.keys(PluginModules).filter(function (directory) {
     return moduleName in PluginModules[directory];
   });
   if (!foundDirs.length) {
@@ -118,7 +120,7 @@ const getApplicationModuleAPI = function () {
       if (Array.isArray(modules)) {
         // Return Object of Modules so we can use Object destructuring at the
         // other end.
-        return modules.reduce((acc, module) => {
+        return modules.reduce(function (acc, module) {
           acc[module] = getModule(module);
           return acc;
         }, {});
@@ -172,7 +174,7 @@ const getActionsAPI = function (SDK) {
  * @param  {Object} obj  - Key value pairs to be added to SDK
  */
 const extendSDK = function (SDK, obj) {
-  Object.keys(obj).forEach(methodName => {
+  Object.keys(obj).forEach(function (methodName) {
     SDK[methodName] = obj[methodName].bind(SDK);
   });
 };

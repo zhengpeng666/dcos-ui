@@ -24,14 +24,7 @@ var Actions = {
     'logFakePageView'
   ],
 
-  filters: [
-
-  ],
-
   initialize: function () {
-    this.filters.forEach(filter => {
-      SDK.Hooks.addFilter(filter, this[filter].bind(this));
-    });
     this.actions.forEach(action => {
       SDK.Hooks.addAction(action, this[action].bind(this));
     });

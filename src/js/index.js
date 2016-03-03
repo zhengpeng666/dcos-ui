@@ -1,4 +1,4 @@
-var overrides = require('./overrides');
+import overrides from './overrides';
 overrides.override();
 import PluginSDK, {Hooks} from 'PluginSDK';
 

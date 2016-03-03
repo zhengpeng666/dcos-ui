@@ -4,7 +4,7 @@ module.exports = function (PluginSDK) {
   SDK.setSDK(PluginSDK);
 
   let PluginHooks = require('./hooks');
-  let StoreConfig = require('./StoreConfig');
+  let StoreConfig = require('./storeConfig');
 
   // Set plugin's hooks
   PluginHooks.initialize();
