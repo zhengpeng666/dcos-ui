@@ -115,9 +115,13 @@ var MesosStateStore = Store.createStore({
     }
 
     let result = _.find(framework.tasks, function (task) {
-      return _.find(task.labels, function (label) {
+      let frameworkName = _.find(task.labels, function (label) {
         return label.key === 'DCOS_PACKAGE_FRAMEWORK_NAME';
-      }).value === serviceName;
+      });
+
+      if (frameworkName && name.value === serviceName) {
+        return true;
+      }
     });
 
     return result;
