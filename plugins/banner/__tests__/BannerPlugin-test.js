@@ -15,9 +15,10 @@ PluginTestUtils.dontMock([
   'DOMUtils'
 ]);
 
-let PluginSDK = PluginTestUtils.getSDK('Banner', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Banner', {enabled: true});
+require('../SDK').setSDK(SDK);
 
-var BannerPlugin = require('../hooks')(PluginSDK);
+var BannerPlugin = require('../hooks');
 var defaultConfiguration = BannerPlugin.configuration;
 
 describe('BannerPlugin', function () {
@@ -34,9 +35,9 @@ describe('BannerPlugin', function () {
   describe('#initialize', function () {
 
     beforeEach(function () {
-      this.Hooks = PluginSDK.Hooks;
+      this.Hooks = SDK.Hooks;
 
-      PluginSDK.Hooks = {
+      SDK.Hooks = {
         addAction: jest.genMockFunction(),
         addFilter: jest.genMockFunction()
       };
@@ -45,17 +46,17 @@ describe('BannerPlugin', function () {
     });
 
     afterEach(function () {
-      PluginSDK.Hooks = this.Hooks;
+      SDK.Hooks = this.Hooks;
     });
 
     it('should add one action and two filters', function () {
-      expect(PluginSDK.Hooks.addAction.mock.calls[0]).toEqual(
+      expect(SDK.Hooks.addAction.mock.calls[0]).toEqual(
         ['applicationRendered', BannerPlugin.applicationRendered]
       );
-      expect(PluginSDK.Hooks.addFilter.mock.calls[0]).toEqual(
+      expect(SDK.Hooks.addFilter.mock.calls[0]).toEqual(
         ['applicationContents', BannerPlugin.applicationContents]
       );
-      expect(PluginSDK.Hooks.addFilter.mock.calls[1]).toEqual(
+      expect(SDK.Hooks.addFilter.mock.calls[1]).toEqual(
         ['overlayNewWindowButton', BannerPlugin.overlayNewWindowButton]
       );
     });

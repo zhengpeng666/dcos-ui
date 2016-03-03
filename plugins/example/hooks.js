@@ -2,14 +2,9 @@
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-let PluginHooks = {
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize(Hooks) {
+module.exports = {
+
+  initialize() {
     // Hooks.addFilter etc.
   }
 };
-
-module.exports = PluginHooks;
-
