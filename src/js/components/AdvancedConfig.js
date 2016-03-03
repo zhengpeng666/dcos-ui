@@ -60,14 +60,16 @@ class AdvancedConfig extends React.Component {
 
   render() {
     return (
-      <SchemaForm
-        getTriggerSubmit={this.getTriggerSubmit}
-        isMobileWidth={this.state.isMobileWidth}
-        onChange={this.handleSchemaFormChange}
-        schema={this.props.schema}
-        serviceName={this.props.serviceName}
-        serviceImage={this.props.serviceImage}
-        serviceVersion={this.props.serviceVersion} />
+      <div className={this.props.className}>
+        <SchemaForm
+          getTriggerSubmit={this.getTriggerSubmit}
+          isMobileWidth={this.state.isMobileWidth}
+          onChange={this.handleSchemaFormChange}
+          schema={this.props.schema}
+          serviceName={this.props.serviceName}
+          serviceImage={this.props.serviceImage}
+          serviceVersion={this.props.serviceVersion} />
+      </div>
     );
   }
 }

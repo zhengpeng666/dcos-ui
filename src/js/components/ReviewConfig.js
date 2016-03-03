@@ -58,7 +58,7 @@ class ReviewConfig extends React.Component {
     let classSet = classNames(this.props.className, 'modal-body review-config');
 
     return (
-      <div className={this.props.className}>
+      <div className={classSet}>
         {this.getDefinitionReview()}
       </div>
     );
