@@ -1,6 +1,5 @@
 var React = require('react');
 
-import PluginSDK from 'PluginSDK';
 import EventTypes from '../constants/EventTypes';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var SidebarActions = require('../events/SidebarActions');
