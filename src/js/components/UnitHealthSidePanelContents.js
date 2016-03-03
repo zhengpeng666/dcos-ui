@@ -85,7 +85,9 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     let defaultItem = {
       id: 'all',
       html: 'All Health Checks',
-      selectedHtml: 'All Health Checks'
+      selectedHtml: 'All Health Checks',
+      className: 'hidden',
+      selectable: false
     };
 
     let items = Object.keys(UnitHealthStatus).map(function (health) {
