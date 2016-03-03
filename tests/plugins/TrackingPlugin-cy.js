@@ -20,6 +20,8 @@ describe('Tracking Plugin Enabled [02w]', function() {
 
       cy.get('.install-cli-modal-content pre')
         .should('not.contain', 'https://downloads.mesosphere.com/dcos-cli/install-optout.sh');
+      cy.get('.install-cli-modal-content pre')
+        .should('not.contain', './install-optout.sh');
     });
 
   });
@@ -68,6 +70,8 @@ describe('Tracking Plugin Disabled [03d]', function() {
 
       cy.get('.install-cli-modal-content pre')
         .should('contain', 'https://downloads.mesosphere.com/dcos-cli/install-optout.sh');
+      cy.get('.install-cli-modal-content pre')
+        .should('contain', './install-optout.sh');
     });
 
   });
