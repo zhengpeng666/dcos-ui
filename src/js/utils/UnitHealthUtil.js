@@ -2,6 +2,7 @@ import _ from 'underscore';
 
 import HealthSorting from '../constants/HealthSorting';
 import UnitHealthStatus from '../constants/UnitHealthStatus';
+import Util from '../utils/Util';
 
 const UnitHealthUtil = {
 
@@ -16,9 +17,11 @@ const UnitHealthUtil = {
    * @return {Object}       - UnitHealthStatus object.
    */
   getHealth(health) {
-    return _.find(UnitHealthStatus, function (healthObject) {
-      return (healthObject.value === health);
-    }) || UnitHealthStatus.NA;
+    let healthKey = Util.find(Object.keys(UnitHealthStatus), function (key) {
+      return (UnitHealthStatus[key].value === health);
+    });
+
+    return UnitHealthStatus[healthKey] || UnitHealthStatus.NA;
   },
 
   /**

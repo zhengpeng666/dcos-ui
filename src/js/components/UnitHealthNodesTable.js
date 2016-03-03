@@ -8,8 +8,8 @@ import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 const METHODS_TO_BIND = [
   'renderHealth',
-  'renderHealthCheckName',
-  'renderNode'
+  'renderNode',
+  'renderNodeRole'
 ];
 
 class UnitHealthNodesTable extends React.Component {
@@ -25,21 +25,26 @@ class UnitHealthNodesTable extends React.Component {
   getColGroup() {
     return (
       <colgroup>
-        <col style={{width: '20%'}} />
-        <col style={{width: '40%'}} />
-        <col style={{width: '40%'}} />
+        <col style={{width: '25%'}} />
+        <col />
+        <col style={{width: '25%'}} />
       </colgroup>
     );
   }
 
   getColumns() {
     let classNameFn = ResourceTableUtil.getClassName;
+    let headings = ResourceTableUtil.renderHeading({
+      node_health: 'HEALTH',
+      hostname: 'NODE',
+      node_role: 'ROLE'
+    });
 
     return [
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({node_health: 'HEALTH'}),
+        heading: headings,
         prop: 'node_health',
         render: this.renderHealth,
         sortable: true,
@@ -51,16 +56,18 @@ class UnitHealthNodesTable extends React.Component {
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({check: 'HEALTH CHECK NAME'}),
-        prop: 'check',
-        render: this.renderHealthCheckName
+        heading: headings,
+        prop: 'hostname',
+        render: this.renderNode,
+        sortable: true,
+        sortFunction: ResourceTableUtil.getPropSortFunction()
       },
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({hostname: 'NODE'}),
-        prop: 'hostname',
-        render: this.renderNode,
+        heading: headings,
+        prop: 'node_role',
+        render: this.renderNodeRole,
         sortable: true,
         sortFunction: ResourceTableUtil.getPropSortFunction('hostname')
       }
@@ -91,21 +98,13 @@ class UnitHealthNodesTable extends React.Component {
     );
   }
 
-  renderHealthCheckName(prop, node) {
-    let linkTitle = `${this.props.unit.get('unit_title')} Health Check`;
-    return this.getNodeLink(node, linkTitle);
+  renderNode(prop, node) {
+    return this.getNodeLink(node, node.get(prop));
   }
 
-  renderNode(prop, node) {
-    return this.getNodeLink(node,
-      (
-        <span>
-          {node.get(prop)}
-          <span className="mute">
-            {` (${StringUtil.capitalize(node.get('node_role'))})`}
-          </span>
-        </span>
-      )
+  renderNodeRole(prop, node) {
+    return (
+      StringUtil.capitalize(node.get(prop))
     );
   }
 

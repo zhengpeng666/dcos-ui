@@ -21,6 +21,8 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
+    this.internalStorage_set({renderTable: false});
+
     this.store_listeners = [
       {
         name: 'unitHealth',
@@ -40,8 +42,11 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
 
   componentDidMount() {
     super.componentDidMount();
+
     UnitHealthStore.fetchUnit(this.props.itemID);
     UnitHealthStore.fetchUnitNodes(this.props.itemID);
+
+    this.internalStorage_update({renderTable: true});
   }
 
   handleItemSelection(selectedHealth) {
@@ -80,7 +85,9 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     let defaultItem = {
       id: 'all',
       html: 'All Health Checks',
-      selectedHtml: 'All Health Checks'
+      selectedHtml: 'All Health Checks',
+      className: 'hidden',
+      selectable: false
     };
 
     let items = Object.keys(UnitHealthStatus).map(function (health) {
@@ -101,6 +108,20 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
       <div className="container container-pod">
         <RequestErrorMsg />
       </div>
+    );
+  }
+
+  getNodesTable(renderTable, unit, visibleData) {
+    if (!renderTable) {
+      return null;
+    }
+
+    return (
+      <UnitHealthNodesTable
+        nodes={visibleData}
+        unit={unit}
+        itemID={this.props.itemID}
+        parentRouter={this.props.parentRouter} />
     );
   }
 
@@ -139,13 +160,13 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     let unit = this.getUnit();
     let nodes = UnitHealthStore.getNodes(this.props.itemID);
     let visibleData = this.getVisibleData(nodes, searchString, healthFilter);
+    let renderTable = this.internalStorage_get().renderTable;
 
     return (
       <div className="flex-container-col">
         <div className="container container-fluid container-pod
           container-pod-divider-bottom container-pod-divider-bottom-align-right
-          container-pod-divider-inverse container-pod-short-top
-          side-panel-content-header side-panel-section">
+          container-pod-short side-panel-content-header side-panel-section">
           {this.getUnitHeader(unit)}
         </div>
         <div className="side-panel-tab-content side-panel-section container
@@ -177,11 +198,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
                   wrapperClassName="dropdown" />
               </li>
             </ul>
-            <UnitHealthNodesTable
-              nodes={visibleData}
-              unit={unit}
-              itemID={this.props.itemID}
-              parentRouter={this.props.parentRouter} />
+            {this.getNodesTable(renderTable, unit, visibleData)}
           </div>
         </div>
       </div>
