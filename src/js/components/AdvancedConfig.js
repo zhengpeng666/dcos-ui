@@ -1,6 +1,5 @@
 import React from 'react';
 
-import {schema3 as boomski} from './__tests__/fixtures/MarathonConfigFixture';
 import SchemaForm from './SchemaForm';
 
 const METHODS_TO_BIND = [
@@ -77,7 +76,7 @@ class AdvancedConfig extends React.Component {
 AdvancedConfig.defaultProps = {
   getTriggerSubmit: function () {},
   onChange: function () {},
-  schema: boomski,
+  schema: {},
   serviceImage: './img/services/icon-service-marathon-large@2x.png',
   serviceName: 'Marathon',
   serviceVersion: '0.23.2'

@@ -18,7 +18,8 @@ class SchemaForm extends React.Component {
     super();
 
     this.state = {
-      currentTab: ''
+      currentTab: '',
+      useGemini: false
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -51,6 +52,22 @@ class SchemaForm extends React.Component {
     });
 
     this.props.getTriggerSubmit(this.handleExternalSubmit);
+  }
+
+  componentDidMount() {
+    this.setState({useGemini: false});
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isMobileWidth !== this.props.isMobileWidth) {
+      this.setState({useGemini: false});
+    }
+  }
+
+  componentDidUpdate() {
+    if (!this.state.useGemini) {
+      this.setState({useGemini: true});
+    }
   }
 
   handleTabClick(tab) {
@@ -186,13 +203,22 @@ class SchemaForm extends React.Component {
       'column-12 mobile-column': isMobileWidth
     });
 
+    if (this.state.useGemini && !isMobileWidth) {
+      return (
+        <GeminiScrollbar autoshow={true} className={classSet}>
+          <div className="multiple-form-left-column">
+            {this.getServiceHeader()}
+            {content}
+          </div>
+        </GeminiScrollbar>
+      );
+    }
+
     return (
-      <GeminiScrollbar autoshow={true} className={classSet}>
-        <div className="multiple-form-left-column">
-          {this.getServiceHeader()}
-          {content}
-        </div>
-      </GeminiScrollbar>
+      <div className={classSet}>
+        {this.getServiceHeader()}
+        {content}
+      </div>
     );
   }
 
@@ -224,10 +250,18 @@ class SchemaForm extends React.Component {
       'column-12': isMobileWidth
     });
 
+    if (this.state.useGemini) {
+      return (
+        <GeminiScrollbar autoshow={true} className={classSet}>
+          {panels}
+        </GeminiScrollbar>
+      );
+    }
+
     return (
-      <GeminiScrollbar autoshow={true} className={classSet}>
+      <div className={classSet}>
         {panels}
-      </GeminiScrollbar>
+      </div>
     );
   }
 
