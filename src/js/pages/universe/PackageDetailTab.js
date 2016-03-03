@@ -5,8 +5,13 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
+import InstallPackageModal from '../../components/modals/InstallPackageModal';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
 import StringUtil from '../../utils/StringUtil';
+
+const METHODS_TO_BIND = [
+  'handleInstallModalClose'
+];
 
 class PackageDetailTab extends mixin(StoreMixin) {
   constructor() {
@@ -14,6 +19,7 @@ class PackageDetailTab extends mixin(StoreMixin) {
 
     this.state = {
       hasError: 0,
+      openInstallModal: false,
       isLoading: true
     };
 
@@ -27,6 +33,10 @@ class PackageDetailTab extends mixin(StoreMixin) {
       },
       listenAlways: false
     }];
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
   }
 
   componentDidMount() {
@@ -45,8 +55,12 @@ class PackageDetailTab extends mixin(StoreMixin) {
     this.setState({hasError: false, isLoading: false});
   }
 
-  handleInstallModalOpen(cosmosPackage) {
-    this.setState({installModalPackage: cosmosPackage});
+  handleInstallModalClose() {
+    this.setState({openInstallModal: false});
+  }
+
+  handleInstallModalOpen() {
+    this.setState({openInstallModal: true});
   }
 
   getErrorScreen() {
@@ -165,21 +179,27 @@ class PackageDetailTab extends mixin(StoreMixin) {
   }
 
   render() {
-    let {state} = this;
+    let {props, state} = this;
 
-    if (state.hasError) {
+    if (state.hasError || !props.params.packageName) {
       return this.getErrorScreen();
     }
 
-    if (state.isLoading) {
+    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
+    if (state.isLoading || !cosmosPackage) {
       return this.getLoadingScreen();
     }
 
-    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
     let packageDetails = cosmosPackage.get('package');
     let definition = [
-      {label: 'Description', value: packageDetails.description},
-      {label: 'Pre-Install Notes', value: packageDetails.preInstallNotes},
+      {
+        label: 'Description',
+        value: <div dangerouslySetInnerHTML={StringUtil.parseMarkdown(packageDetails.description)} />
+      },
+      {
+        label: 'Pre-Install Notes',
+        value: <div dangerouslySetInnerHTML={StringUtil.parseMarkdown(packageDetails.preInstallNotes)} />
+      },
       {
         label: 'Information',
         type: 'subItems',
@@ -227,6 +247,11 @@ class PackageDetailTab extends mixin(StoreMixin) {
         <div className="container-pod container-pod-short">
           {this.getItems(definition, this.getItem)}
         </div>
+        <InstallPackageModal
+          open={state.openInstallModal}
+          packageName={packageDetails.name}
+          packageVersion={packageDetails.version}
+          onClose={this.handleInstallModalClose}/>
       </div>
     );
   }

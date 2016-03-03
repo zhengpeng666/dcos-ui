@@ -137,7 +137,6 @@ class DirectoryActionButtons extends mixin(StoreMixin) {
         </FormModal>
 
         <Modal
-          headerClass="modal-header modal-header-white"
           maxHeightPercentage={0.9}
           modalClass="modal"
           onClose={this.handleSuccessModalClose}

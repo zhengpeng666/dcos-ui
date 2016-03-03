@@ -21,6 +21,8 @@ import AppDispatcher from './AppDispatcher';
 import Config from '../config/Config';
 import RequestUtil from '../utils/RequestUtil';
 
+const REQUEST_TIMEOUT = 10000;
+
 function getContentType(action, actionType) {
   return `application/vnd.dcos.package.${action}-${actionType}+json;charset=utf-8;version=v1`;
 }
@@ -34,6 +36,7 @@ const CosmosPackagesActions = {
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/search`,
       data: JSON.stringify({query}),
+      timeout: REQUEST_TIMEOUT,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGES_SEARCH_SUCCESS,
@@ -58,6 +61,7 @@ const CosmosPackagesActions = {
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/list`,
       data: JSON.stringify({packageName, appId}),
+      timeout: REQUEST_TIMEOUT,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGES_LIST_SUCCESS,
@@ -84,6 +88,7 @@ const CosmosPackagesActions = {
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/describe`,
       data: JSON.stringify({packageName, packageVersion}),
+      timeout: REQUEST_TIMEOUT,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGE_DESCRIBE_SUCCESS,
@@ -110,6 +115,7 @@ const CosmosPackagesActions = {
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/install`,
       data: JSON.stringify({packageName, packageVersion, appId, options}),
+      timeout: REQUEST_TIMEOUT,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGE_INSTALL_SUCCESS,
@@ -122,7 +128,7 @@ const CosmosPackagesActions = {
       error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGE_INSTALL_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr),
+          data: RequestUtil.parseResponseBody(xhr),
           packageName,
           packageVersion,
           appId
@@ -138,6 +144,7 @@ const CosmosPackagesActions = {
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/uninstall`,
       data: JSON.stringify({packageName, packageVersion, appId, all}),
+      timeout: REQUEST_TIMEOUT,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGE_UNINSTALL_SUCCESS,
@@ -150,7 +157,7 @@ const CosmosPackagesActions = {
       error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGE_UNINSTALL_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr),
+          data: RequestUtil.parseResponseBody(xhr),
           packageName,
           packageVersion,
           appId

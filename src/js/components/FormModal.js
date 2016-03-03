@@ -93,7 +93,6 @@ class FormModal extends React.Component {
     return (
       <Modal
         closeByBackdropClick={!this.props.disabled}
-        headerClass="modal-header modal-header-white"
         maxHeightPercentage={0.9}
         modalClass="modal"
         onClose={this.props.onClose}

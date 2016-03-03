@@ -34,6 +34,18 @@
 
   .modal-header {
     border-radius: @modal-border-radius @modal-border-radius 0px 0px;
+
+    &.modal-header-white {
+      background-color: @modal-content-background-color;
+    }
+
+    &.modal-header-bottom-border {
+      border-bottom: 1px solid @border-color;
+
+      &.inverse {
+        border-bottom: 1px solid @border-color-inverse;
+      }
+    }
   }
 
   .modal-content {

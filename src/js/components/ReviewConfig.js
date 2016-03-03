@@ -3,27 +3,6 @@ import React from 'react';
 import DescriptionList from './DescriptionList';
 
 class ReviewConfig extends React.Component {
-  getServiceHeader() {
-    let {props} = this;
-    return (
-      <div className="media-object media-object-align-middle">
-        <div className="media-object-icon media-object-icon-medium">
-          <img
-            className="icon icon-sprite icon-sprite-medium
-              icon-sprite-medium-color"
-            src={props.serviceImage} />
-        </div>
-        <div className="media-object-content">
-          <h4 className="flush-top flush-bottom text-color-neutral">
-            {props.serviceName}
-          </h4>
-          <span className="side-panel-resource-label">
-            {props.serviceVersion}
-          </span>
-        </div>
-      </div>
-    );
-  }
 
   getFieldTitle(title) {
     return <h3 key={`${title}-header`}>{title}</h3>;
@@ -75,17 +54,7 @@ class ReviewConfig extends React.Component {
 
   render() {
     return (
-      <div className="modal-body review-config">
-        <div className="row">
-          <div className="column-4">
-            {this.getServiceHeader()}
-          </div>
-          <div className="column-8 text-align-right">
-            <button className="button button-stroke button-rounded">
-              Download config.json
-            </button>
-          </div>
-        </div>
+      <div className={this.props.className}>
         {this.getDefinitionReview()}
       </div>
     );
@@ -93,6 +62,7 @@ class ReviewConfig extends React.Component {
 }
 
 ReviewConfig.defaultProps = {
+  className: 'multiple-form',
   jsonDocument: {},
   serviceImage: './img/services/icon-service-marathon-large@2x.png',
   serviceName: 'Marathon',
@@ -100,6 +70,7 @@ ReviewConfig.defaultProps = {
 };
 
 ReviewConfig.propTypes = {
+  className: React.PropTypes.string,
   jsonDocument: React.PropTypes.object,
   serviceImage: React.PropTypes.string,
   serviceName: React.PropTypes.string,
