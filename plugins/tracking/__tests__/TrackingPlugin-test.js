@@ -4,13 +4,13 @@ jest.dontMock('../stores/IntercomStore');
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let PluginSDK = PluginTestUtils.getSDK('Tracking', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Tracking', {enabled: true});
+require('../SDK').setSDK(SDK);
 
 var _ = require('underscore');
 
-var TrackingHooks = require('../hooks')(PluginSDK);
-var DOMUtils = PluginSDK.get('DOMUtils');
-var {Hooks} = PluginSDK;
+var TrackingHooks = require('../hooks');
+var DOMUtils = SDK.get('DOMUtils');
 
 describe('TrackingHooks', function () {
 
@@ -50,14 +50,14 @@ describe('TrackingHooks', function () {
       it('appends scripts to the document head if plugin enabled', function () {
         TrackingHooks.initialize();
         TrackingHooks.configure({enabled: true});
-        Hooks.doAction('pluginsConfigured');
+        SDK.Hooks.doAction('pluginsConfigured');
         expect(DOMUtils.appendScript.callCount).toEqual(2);
       });
 
       it('does not append scripts if plugin disabled', function () {
         TrackingHooks.initialize();
         TrackingHooks.configure({enabled: false});
-        Hooks.doAction('pluginsConfigured');
+        SDK.Hooks.doAction('pluginsConfigured');
         expect(DOMUtils.appendScript.callCount).toEqual(0);
       });
     });
@@ -66,14 +66,14 @@ describe('TrackingHooks', function () {
       it('returns the value given to it if plugin enabled', function () {
         TrackingHooks.initialize();
         TrackingHooks.configure({enabled: true});
-        var result = Hooks.applyFilter('openIdentifyModal', 'hello');
+        var result = SDK.Hooks.applyFilter('openIdentifyModal', 'hello');
         expect(result).toEqual('hello');
       });
 
       it('returns false if plugin disabled', function () {
         TrackingHooks.initialize();
         TrackingHooks.configure({enabled: false});
-        var result = Hooks.applyFilter('openIdentifyModal', 'hello');
+        var result = SDK.Hooks.applyFilter('openIdentifyModal', 'hello');
         expect(result).toEqual(false);
       });
     });
@@ -82,14 +82,14 @@ describe('TrackingHooks', function () {
       it('returns the value given to it if plugin enabled', function () {
         TrackingHooks.initialize();
         TrackingHooks.configure({enabled: true});
-        var result = Hooks.applyFilter('sidebarFooterButtonSet', ['foo']);
+        var result = SDK.Hooks.applyFilter('sidebarFooterButtonSet', ['foo']);
         expect(result).not.toEqual(['foo']);
       });
 
       it('returns an empty array if plugin disabled', function () {
         TrackingHooks.initialize();
         TrackingHooks.configure({enabled: false});
-        var result = Hooks.applyFilter('sidebarFooterButtonSet', []);
+        var result = SDK.Hooks.applyFilter('sidebarFooterButtonSet', []);
         expect(result).toEqual([]);
       });
     });

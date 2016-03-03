@@ -1,22 +1,24 @@
-import _IntercomStore from './stores/IntercomStore';
+import IntercomStore from './stores/IntercomStore';
 import {
   INTERCOM_CHANGE
 } from './constants/EventTypes';
 
-module.exports = (PluginSDK) => {
+let SDK = require('./SDK').getSDK();
 
-  let IntercomStore = _IntercomStore(PluginSDK);
+module.exports = {
+  register() {
 
-  let StoreMixinConfig = PluginSDK.get('StoreMixinConfig');
+    let StoreMixinConfig = SDK.get('StoreMixinConfig');
 
-  StoreMixinConfig.add('intercom', {
-    store: IntercomStore,
-    events: {
-      change: INTERCOM_CHANGE
-    },
-    unmountWhen: function () {
-      return true;
-    },
-    listenAlways: true
-  });
+    StoreMixinConfig.add('intercom', {
+      store: IntercomStore,
+      events: {
+        change: INTERCOM_CHANGE
+      },
+      unmountWhen: function () {
+        return true;
+      },
+      listenAlways: true
+    });
+  }
 };

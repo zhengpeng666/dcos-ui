@@ -1,8 +1,10 @@
-import _PluginHooks from './hooks';
+import SDK from './SDK';
 
 module.exports = function (PluginSDK) {
+  SDK.setSDK(PluginSDK);
 
+  let PluginHooks = require('./hooks');
   // Set plugin's hooks
-  _PluginHooks(PluginSDK).initialize();
+  PluginHooks.initialize();
 };
 

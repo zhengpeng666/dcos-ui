@@ -5,6 +5,7 @@ import React from 'react';
 /* eslint-enable no-unused-vars */
 
 import Actions from './actions/Actions';
+<<<<<<< 8a9faade5d33fbb73631600d5a68b7bec37586f1
 import Config from '../../src/js/config/Config';
 import DOMUtils from '../../src/js/utils/DOMUtils';
 import IntercomActions from './events/IntercomActions';
@@ -15,11 +16,84 @@ import SidebarActions from '../../src/js/events/SidebarActions';
 let segmentScript = `!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error('Segment snippet included twice.');else{analytics.invoked=!0;analytics.methods=['trackSubmit','trackClick','trackLink','trackForm','pageview','identify','group','track','ready','alias','page','once','off','on'];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement('script');e.type="text/javascript";e.async=!0;e.src=('https:'===document.location.protocol?'https://':'http://')+'cdn.segment.com/analytics.js/v1/'+t+'/analytics.min.js';var n=document.getElementsByTagName('script')[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.0.1";analytics.load("${Config.analyticsKey}");}}();`;
 
 let chameleonScript = `(function(d,w,o){w.chmln=w.docent=o;var s=d.createElement('script');s.async=true;s.src='https://cdn.trychameleon.com/east/'+chmln.token+'/'+chmln.host+'.min.js.gz';d.head.appendChild(s);var n='setup alias track set'.split(' ');for(var i=0;i<n.length;i++){(function(){var t=o[n[i]+'_a']=[];o[n[i]]=function(){t.push(arguments);};})()}})(document,window,{token:'AygXvQUlEVrijBUcM-gzCNB7tISfDWWmHYplrY',host:'mesosphere.com'});`;
+=======
+import IntercomStore from './stores/IntercomStore';
+>>>>>>> updated tracking plugin with new format and updated SidebarActions
 
 let interval = null;
 let tourHasBeenSetup = false;
+let SDK = require('./SDK').getSDK();
 
-<<<<<<< 3103e168cacde3eb4c179f7abb9521d632d82594
+let SidebarActions = SDK.getActions('SidebarActions');
+
+let {Config, DOMUtils, LocalStorageUtil} = SDK.get([
+  'Config',
+  'DOMUtils',
+  'LocalStorageUtil'
+  ]);
+
+let segmentScript = `!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error('Segment snippet included twice.');else{analytics.invoked=!0;analytics.methods=['trackSubmit','trackClick','trackLink','trackForm','pageview','identify','group','track','ready','alias','page','once','off','on'];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement('script');e.type="text/javascript";e.async=!0;e.src=('https:'===document.location.protocol?'https://':'http://')+'cdn.segment.com/analytics.js/v1/'+t+'/analytics.min.js';var n=document.getElementsByTagName('script')[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.0.1";analytics.load("${Config.analyticsKey}");}}();`;
+let chameleonScript = `(function(d,w,o){w.chmln=w.docent=o;var s=d.createElement('script');s.async=true;s.src='https://cdn.trychameleon.com/east/'+chmln.token+'/'+chmln.host+'.min.js.gz';d.head.appendChild(s);var n='setup alias track set'.split(' ');for(var i=0;i<n.length;i++){(function(){var t=o[n[i]+'_a']=[];o[n[i]]=function(){t.push(arguments);};})()}})(document,window,{token:'AygXvQUlEVrijBUcM-gzCNB7tISfDWWmHYplrY',host:'mesosphere.com'});`;
+
+module.exports = {
+  configuration: {
+    enabled: false
+  },
+
+  initialize: function () {
+    SDK.Hooks.addFilter(
+      'sidebarFooterButtonSet', this.sidebarFooterButtonSet.bind(this)
+    );
+    SDK.Hooks.addFilter(
+      'installCLIModalAppendInstructions',
+      this.installCLIModalAppendInstructions.bind(this)
+    );
+    SDK.Hooks.addFilter(
+      'installCLIModalFooter', this.installCLIModalFooter.bind(this)
+    );
+    SDK.Hooks.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
+    SDK.Hooks.addAction('pluginsConfigured', this.pluginsConfigured.bind(this));
+    SDK.Hooks.addAction('receivedUserEmail', this.receivedUserEmail.bind(this));
+    SDK.Hooks.addFilter(
+      'applicationHasIdentity', this.applicationHasIdentity.bind(this)
+    );
+
+    this.configure(SDK.config);
+  },
+
+  configure: function (configuration) {
+    this.configuration = _.extend(this.configuration, configuration);
+  },
+
+  isEnabled() {
+    return this.configuration.enabled;
+  },
+
+  handleToggleIntercom: function () {
+    if (IntercomStore.get('isOpen')) {
+      Actions.closeIntercom();
+    } else {
+      Actions.openIntercom();
+      SidebarActions.close();
+    }
+  },
+
+  pluginsConfigured: function () {
+    if (this.isEnabled()) {
+      DOMUtils.appendScript(document.head, segmentScript);
+      DOMUtils.appendScript(document.head, chameleonScript);
+
+      // Continue to check if analytics script (Segment) is initialized and only
+      // identify user by email after it is ready.
+      interval = setInterval(function () {
+        if (Actions.canLog()) {
+          var email = LocalStorageUtil.get('email');
+          if (email != null) {
+            Actions.identify(email, function () {
+              IntercomStore.init();
+            });
+
+<<<<<<< 8a9faade5d33fbb73631600d5a68b7bec37586f1
 const PluginHooks = {
   configuration: {
     enabled: false
@@ -87,94 +161,16 @@ const PluginHooks = {
               IntercomStore.init();
             });
 
+=======
+>>>>>>> updated tracking plugin with new format and updated SidebarActions
             clearInterval(interval);
             interval = null;
-=======
-module.exports = (PluginSDK) => {
-
-  let SidebarActions = PluginSDK.getActions('SidebarActions');
-
-  let {Config, DOMUtils, LocalStorageUtil} = PluginSDK.get([
-    'Config',
-    'DOMUtils',
-    'LocalStorageUtil'
-    ]);
-
-  let {Hooks} = PluginSDK;
-
-  let segmentScript = `!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error('Segment snippet included twice.');else{analytics.invoked=!0;analytics.methods=['trackSubmit','trackClick','trackLink','trackForm','pageview','identify','group','track','ready','alias','page','once','off','on'];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement('script');e.type="text/javascript";e.async=!0;e.src=('https:'===document.location.protocol?'https://':'http://')+'cdn.segment.com/analytics.js/v1/'+t+'/analytics.min.js';var n=document.getElementsByTagName('script')[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.0.1";analytics.load("${Config.analyticsKey}");}}();`;
-  let chameleonScript = `(function(d,w,o){w.chmln=w.docent=o;var s=d.createElement('script');s.async=true;s.src='https://cdn.trychameleon.com/east/'+chmln.token+'/'+chmln.host+'.min.js.gz';d.head.appendChild(s);var n='setup alias track set'.split(' ');for(var i=0;i<n.length;i++){(function(){var t=o[n[i]+'_a']=[];o[n[i]]=function(){t.push(arguments);};})()}})(document,window,{token:'AygXvQUlEVrijBUcM-gzCNB7tISfDWWmHYplrY',host:'mesosphere.com'});`;
-
-  let Actions = _Actions(PluginSDK);
-  let IntercomStore = _IntercomStore(PluginSDK);
-
-  const TrackingPluginHooks = {
-    configuration: {
-      enabled: false
-    },
-
-    initialize: function () {
-      Hooks.addFilter(
-        'sidebarFooterButtonSet', this.sidebarFooterButtonSet.bind(this)
-      );
-      Hooks.addFilter(
-        'installCLIModalAppendInstructions',
-        this.installCLIModalAppendInstructions.bind(this)
-      );
-      Hooks.addFilter(
-        'installCLIModalFooter', this.installCLIModalFooter.bind(this)
-      );
-      Hooks.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
-      Hooks.addAction('pluginsConfigured', this.pluginsConfigured.bind(this));
-      Hooks.addAction('receivedUserEmail', this.receivedUserEmail.bind(this));
-      Hooks.addFilter(
-        'applicationHasIdentity', this.applicationHasIdentity.bind(this)
-      );
-
-      this.configure(PluginSDK.config);
-    },
-
-    configure: function (configuration) {
-      this.configuration = _.extend(this.configuration, configuration);
-    },
-
-    isEnabled() {
-      return this.configuration.enabled;
-    },
-
-    handleToggleIntercom: function () {
-      if (IntercomStore.get('isOpen')) {
-        Actions.closeIntercom();
-      } else {
-        Actions.openIntercom();
-        SidebarActions.close();
-      }
-    },
-
-    pluginsConfigured: function () {
-      if (this.isEnabled()) {
-        DOMUtils.appendScript(document.head, segmentScript);
-        DOMUtils.appendScript(document.head, chameleonScript);
-
-        // Continue to check if analytics script (Segment) is initialized and only
-        // identify user by email after it is ready.
-        interval = setInterval(function () {
-          if (Actions.canLog()) {
-            var email = LocalStorageUtil.get('email');
-            if (email != null) {
-              Actions.identify(email, function () {
-                IntercomStore.init();
-              });
-
-              clearInterval(interval);
-              interval = null;
-            }
->>>>>>> added comments, renamed plugin-bridge, altered hooks files to get rid of defaults, moved all user related components to users submodule of organization
           }
         }
       }, 500);
     }
   },
+<<<<<<< 8a9faade5d33fbb73631600d5a68b7bec37586f1
 
   receivedUserEmail: function (email) {
     LocalStorageUtil.set('email', email);
@@ -238,6 +234,55 @@ module.exports = (PluginSDK) => {
     return value;
   },
 
+=======
+
+  receivedUserEmail: function (email) {
+    LocalStorageUtil.set('email', email);
+  },
+
+  openIdentifyModal: function (value) {
+    // If plugin is disabled then always return false
+    if (this.isEnabled() !== true) {
+      return false;
+    }
+
+    // Else just pass the value along
+    return value;
+  },
+
+  applicationHasIdentity: function () {
+    return !!LocalStorageUtil.get('email');
+  },
+
+  sidebarFooterButtonSet: function (value) {
+    if (this.isEnabled() !== true) {
+      return value;
+    }
+
+    var chatIconClassSet = classNames({
+      'clickable': true,
+      'icon': true,
+      'icon-sprite': true,
+      'icon-chat': true,
+      'icon-sprite-medium': true,
+      'icon-sprite-medium-color': IntercomStore.get('isOpen')
+    });
+
+    let intercomButton = (
+      <a key="button-intercom" className="button button-link"
+        data-behavior="show-tip"
+        data-tip-content="Talk with us"
+        onClick={this.handleToggleIntercom}>
+        <i className={chatIconClassSet}></i>
+      </a>
+    );
+
+    value.splice(1, 0, intercomButton);
+
+    return value;
+  },
+
+>>>>>>> updated tracking plugin with new format and updated SidebarActions
   installCLIModalAppendInstructions: function (value) {
     if (this.isEnabled() !== true) {
       return value;

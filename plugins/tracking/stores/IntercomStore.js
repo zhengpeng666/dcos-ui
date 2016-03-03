@@ -10,72 +10,64 @@ import {INTERCOM_CHANGE} from '../constants/EventTypes';
 
 var AppDispatcher = require('../../../src/js/events/AppDispatcher');
 
-let cachedStore;
+let SDK = require('../SDK').getSDK();
 
-module.exports = (PluginSDK) => {
-  // Return cached version if exists
-  if (cachedStore) {
-    return cachedStore;
-  }
-  let PluginGetSetMixin = PluginSDK.get('PluginGetSetMixin');
+let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
 
-  var IntercomStore = Store.createStore({
-    storeID: 'intercom',
+var IntercomStore = Store.createStore({
+  storeID: 'intercom',
 
-    mixins: [PluginGetSetMixin],
-    // Keep onSet because PluginGetSetMixin wants it
-    onSet() {},
+  mixins: [PluginGetSetMixin],
+  // Keep onSet because PluginGetSetMixin wants it
+  onSet() {},
 
-    init: function () {
-      this.set({isOpen: false});
+  init: function () {
+    this.set({isOpen: false});
 
-      var intercom = global.Intercom;
-      if (intercom != null) {
-        // make sure to hide Intercom on load
-        intercom('hide');
+    var intercom = global.Intercom;
+    if (intercom != null) {
+      // make sure to hide Intercom on load
+      intercom('hide');
 
-        // register events
-        intercom('onHide', this.handleChange.bind(this, false));
-        intercom('onShow', this.handleChange.bind(this, true));
-      }
-    },
+      // register events
+      intercom('onHide', this.handleChange.bind(this, false));
+      intercom('onShow', this.handleChange.bind(this, true));
+    }
+  },
 
-    handleChange: function (isOpen) {
-      // only handle change if there is one
-      if (this.get('isOpen') !== isOpen) {
-        this.set({isOpen});
-        this.emit(INTERCOM_CHANGE);
-      }
-    },
+  handleChange: function (isOpen) {
+    // only handle change if there is one
+    if (this.get('isOpen') !== isOpen) {
+      this.set({isOpen});
+      this.emit(INTERCOM_CHANGE);
+    }
+  },
 
-    addChangeListener: function (eventName, callback) {
-      this.on(eventName, callback);
-    },
+  addChangeListener: function (eventName, callback) {
+    this.on(eventName, callback);
+  },
 
-    removeChangeListener: function (eventName, callback) {
-      this.removeListener(eventName, callback);
-    },
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
+  },
 
-    dispatcherIndex: AppDispatcher.register(function (payload) {
-      var source = payload.source;
-      if (source !== INTERCOM_ACTION) {
-        return false;
-      }
+  dispatcherIndex: AppDispatcher.register(function (payload) {
+    var source = payload.source;
+    if (source !== INTERCOM_ACTION) {
+      return false;
+    }
 
-      var action = payload.action;
+    var action = payload.action;
 
-      switch (action.type) {
-        case REQUEST_INTERCOM_CLOSE:
-        case REQUEST_INTERCOM_OPEN:
-          IntercomStore.handleChange(action.data);
-          break;
-      }
+    switch (action.type) {
+      case REQUEST_INTERCOM_CLOSE:
+      case REQUEST_INTERCOM_OPEN:
+        IntercomStore.handleChange(action.data);
+        break;
+    }
 
-      return true;
-    })
-  });
+    return true;
+  })
+});
 
-  cachedStore = IntercomStore;
-
-  return IntercomStore;
-};
+module.exports = IntercomStore;

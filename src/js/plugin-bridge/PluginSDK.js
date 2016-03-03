@@ -140,9 +140,6 @@ const getActionsAPI = function (SDK) {
       if (SDK.pluginID in REGISTERED_ACTIONS) {
         throw new Error(`${SDK.pluginID} already has registered actions.`);
       }
-      if (typeof actions !== 'function') {
-        throw new Error(`Actions for ${SDK.pluginID} must be a function.`);
-      }
       // Allow Application to name it's actions. Plugins have actions
       // registered under their pluginID
       if (SDK.pluginID !== APPLICATION) {
@@ -163,7 +160,7 @@ const getActionsAPI = function (SDK) {
         }
         throw Error(`No registered actions for ${name}. Make sure plugin is loaded or actions are registered`);
       }
-      return REGISTERED_ACTIONS[name](SDK);
+      return REGISTERED_ACTIONS[name];
     }
   };
 };

@@ -1,6 +1,5 @@
 var React = require('react');
-
-var ActionsMixin = require('../../../plugins/tracking/mixins/ActionsMixin');
+var PluginSDK = require('PluginSDK');
 
 function overrides() {
   var originalCreateClass = React.createClass;
@@ -11,7 +10,7 @@ function overrides() {
     if (specification.mixins == null) {
       specification.mixins = [];
     }
-
+    var ActionsMixin = PluginSDK.getActions('Tracking', {});
     // We don't want to log actions from the router
     if (specification.displayName !== 'Router') {
       specification.mixins.push(ActionsMixin);

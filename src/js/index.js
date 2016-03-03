@@ -1,6 +1,3 @@
-var overrides = require('./overrides');
-overrides.override();
-
 import _ from 'underscore';
 import {Provider} from 'react-redux';
 import React from 'react';
@@ -8,15 +5,6 @@ import ReactDOM from 'react-dom';
 import Router from 'react-router';
 import PluginSDK from 'PluginSDK';
 
-let Actions = PluginSDK.getActions('Tracking', false);
-if (Actions) {
-  Actions.initialize();
-
-  Actions.log({eventID: 'Stint started.', date: Actions.createdAt});
-  global.addEventListener('beforeunload', function () {
-    Actions.log({eventID: 'Stint ended.'});
-  });
-}
 require('./utils/MomentJSConfig');
 require('./utils/ReactSVG');
 require('./utils/StoreMixinConfig');

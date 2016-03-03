@@ -13,10 +13,9 @@ var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var Page = require('../components/Page');
 var MarathonStore = require('../stores/MarathonStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
-import PluginSDK from 'PluginSDK';
 var ResourceBarChart = require('../components/charts/ResourceBarChart');
 var ServicesTable = require('../components/ServicesTable');
-var SidebarActions = PluginSDK.getActions('SidebarActions');
+var SidebarActions = require('../events/SidebarActions');
 import SidePanels from '../components/SidePanels';
 
 function getCountByHealth(frameworks) {

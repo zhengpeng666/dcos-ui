@@ -2,10 +2,11 @@ jest.dontMock('../Actions');
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let PluginSDK = PluginTestUtils.getSDK('Tracking', {enabled: true});
+let SDK = PluginTestUtils.getSDK('Tracking', {enabled: true});
+require('../../SDK').setSDK(SDK);
 
 var _ = require('underscore');
-var Actions = require('../Actions')(PluginSDK);
+var Actions = require('../Actions');
 
 global.analytics = {
   initialized: true,

@@ -12,7 +12,7 @@ import PluginSDK from 'PluginSDK';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var MetadataStore = require('../stores/MetadataStore');
-var SidebarActions = PluginSDK.getActions('SidebarActions');
+var SidebarActions = require('../events/SidebarActions');
 var TooltipMixin = require('../mixins/TooltipMixin');
 
 let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'network', 'universe', 'settings'];

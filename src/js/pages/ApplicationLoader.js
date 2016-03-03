@@ -1,10 +1,23 @@
+var overrides = require('../overrides');
 import React from 'react';
 
 import AnimatedLogo from '../components/AnimatedLogo';
 import {PLUGINS_CONFIGURED} from '../constants/EventTypes';
-import {Hooks} from 'PluginSDK';
+import PluginSDK, {Hooks} from 'PluginSDK';
 
 const METHODS_TO_BIND = ['onPluginsLoaded'];
+
+function startTrackingIfAvailable() {
+  let Actions = PluginSDK.getActions('Tracking', false);
+  if (Actions) {
+    Actions.initialize();
+
+    Actions.log({eventID: 'Stint started.', date: Actions.createdAt});
+    global.addEventListener('beforeunload', function () {
+      Actions.log({eventID: 'Stint ended.'});
+    });
+  }
+}
 
 export default class ApplicationLoader extends React.Component {
   constructor() {
@@ -26,6 +39,8 @@ export default class ApplicationLoader extends React.Component {
   }
 
   onPluginsLoaded() {
+    overrides.override();
+    startTrackingIfAvailable();
     this.props.onApplicationLoad();
   }
 
