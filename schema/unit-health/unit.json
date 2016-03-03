@@ -9,18 +9,23 @@
       "pattern": "^[\\w]+$"
     },
     "unit_title": {
-      "title": "Unit name",
+      "title": "Unit Name",
       "type": "string"
     },
     "unit_health": {
-      "title": "Node health status",
+      "title": "Node Health Status",
       "type": "integer",
       "minimum": 0,
       "maximum": 3
     },
     "unit_output": {
-      "title": "Output from health check",
-      "description": "Aggregated output from all nodes, will only show the unhealthiest.",
+      "title": "Unit Output",
+      "description": "Log output.",
+      "type": "string"
+    },
+    "unit_help": {
+      "title": "Help Information",
+      "description": "Steps a user can take if more information than the unit output is needed.",
       "type": "string"
     }
   },
