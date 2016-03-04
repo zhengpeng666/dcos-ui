@@ -53,7 +53,7 @@ class SchemaForm extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({useGemini: false});
+    this.setState({useGemini: true});
   }
 
   componentWillReceiveProps(nextProps) {
