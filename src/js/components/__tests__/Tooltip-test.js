@@ -8,7 +8,7 @@ var ReactDOM = require('react-dom');
 var Tooltip = require('../Tooltip');
 
 describe('Tooltip', function () {
-  describe('#getTabs', function () {
+  describe('#render', function () {
     beforeEach(function () {
       this.container = document.createElement('div');
       this.instance = ReactDOM.render(
