@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
 import React from 'react';
@@ -69,7 +70,6 @@ class AddRepositoryFormModal extends mixin(StoreMixin) {
         name: 'uri',
         placeholder: 'URL',
         required: true,
-        showError: this.state.errorMsg,
         validationErrorText: 'Must be a valid url with http:// or https://',
         showLabel: false,
         writeType: 'input',
@@ -94,8 +94,23 @@ class AddRepositoryFormModal extends mixin(StoreMixin) {
     ];
   }
 
+  getErrorMessage() {
+    let {errorMsg} = this.state;
+    if (!errorMsg) {
+      return null;
+    }
+    return (
+      <h4 className="text-align-center text-danger flush-top">{errorMsg}</h4>
+    );
+  }
+
   render() {
     let {props, state} = this;
+
+    let headerClasses = classNames(
+      'modal-header-title text-align-center flush-top',
+      {'short-bottom': this.state.errorMsg}
+    );
 
     return (
       <FormModal
@@ -106,9 +121,10 @@ class AddRepositoryFormModal extends mixin(StoreMixin) {
         onSubmit={this.handleAddRepository}
         open={props.open}
         titleText="Add Repository">
-        <h2 className="modal-header-title text-align-center flush-top">
+        <h2 className={headerClasses}>
           Add Repository
         </h2>
+        {this.getErrorMessage()}
       </FormModal>
     );
   }
