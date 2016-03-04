@@ -434,17 +434,17 @@ describe('CosmosPackagesActions', function () {
         expect(action.type).toEqual(REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS);
       });
 
-      this.configuration.success({bar: 'baz'});
+      this.configuration.success({repositories: [{bar: 'baz'}]});
     });
 
     it('dispatches with the correct data when successful', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual({bar: 'baz'});
+        expect(action.data).toEqual([{bar: 'baz'}]);
       });
 
-      this.configuration.success({bar: 'baz'});
+      this.configuration.success({repositories: [{bar: 'baz'}]});
     });
 
     it('dispatches the correct action when unsuccessful', function () {
