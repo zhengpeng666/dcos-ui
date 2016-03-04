@@ -40,8 +40,8 @@ class AdvancedConfig extends React.Component {
     }
   }
 
-  handleSchemaFormChange(hasNoErrors) {
-    let hasFormErrors = !hasNoErrors;
+  handleSchemaFormChange(isValidated) {
+    let hasFormErrors = !isValidated;
     this.props.onChange(hasFormErrors);
   }
 

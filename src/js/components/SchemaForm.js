@@ -27,7 +27,7 @@ class SchemaForm extends React.Component {
     });
 
     this.triggerSubmit = function () {};
-    this.errors = 0;
+    this.isValidated = true;
   }
 
   componentWillMount() {
@@ -93,7 +93,7 @@ class SchemaForm extends React.Component {
   handleExternalSubmit() {
     this.validateForm();
     return {
-      errors: this.errors,
+      isValidated: this.isValidated,
       model: this.model,
       definition: this.multipleDefinition
     };
@@ -143,7 +143,7 @@ class SchemaForm extends React.Component {
 
     this.forceUpdate();
 
-    this.errors = isValidated;
+    this.isValidated = isValidated;
     return isValidated;
   }
 
