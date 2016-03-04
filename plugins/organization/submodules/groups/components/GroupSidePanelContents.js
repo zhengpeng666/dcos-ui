@@ -5,10 +5,9 @@ import React from 'react';
 
 import ACLGroupStore from '../stores/ACLGroupStore';
 import GroupUserMembershipTab from './GroupUserMembershipTab';
+import MesosSummary from '../../../structs';
 import PermissionsView from '../../acl/components/PermissionsView';
 import GroupAdvancedACLsTab from './GroupAdvancedACLsTab';
-
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onAclStoreGroupGrantSuccess',
@@ -199,9 +198,8 @@ class GroupSidePanelContents extends SidePanelContents {
     if (this.state.fetchedDetailsError) {
       return this.getErrorNotice();
     }
-
     if (group.get('gid') == null ||
-        !MesosSummaryStore.get('statesProcessed')) {
+        !MesosSummary.getState('statesProcessed')) {
       return this.getLoadingScreen();
     }
 

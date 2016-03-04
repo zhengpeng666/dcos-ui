@@ -8,7 +8,7 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import ACLUserStore from '../stores/ACLUserStore';
 import UserSidePanelContents from './UserSidePanelContents';
 
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
+import MesosSummary from '../../../structs';
 
 let SDK = require('../../../SDK').getSDK();
 
@@ -98,7 +98,7 @@ class UserSidePanel extends mixin(StoreMixin) {
   isOpen() {
     return (
       this.props.params.userID != null
-      && MesosSummaryStore.get('statesProcessed')
+      && MesosSummary.getState('statesProcessed')
     );
   }
 

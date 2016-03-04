@@ -9,7 +9,7 @@ import GroupFormModal from '../components/GroupFormModal';
 import GroupSidePanel from '../components/GroupSidePanel';
 import OrganizationTab from '../../../pages/OrganizationTab';
 
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
+import MesosSummary from '../../../structs';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onGroupStoreCreateSuccess',
@@ -105,7 +105,7 @@ class GroupsTab extends mixin(StoreMixin) {
       );
     }
 
-    if (!MesosSummaryStore.get('statesProcessed') ||
+    if (!MesosSummary.getState('statesProcessed') ||
       !this.state.groupsStoreSuccess) {
       return this.getLoadingScreen();
     }

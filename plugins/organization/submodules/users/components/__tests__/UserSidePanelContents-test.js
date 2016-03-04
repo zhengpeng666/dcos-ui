@@ -36,7 +36,7 @@ var ACLUserStore = require('../../stores/ACLUserStore');
 var UserSidePanelContents = require('../UserSidePanelContents');
 
 var User = require('../../structs/User');
-var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
+var MesosSummary = require('../../../../structs');
 
 var userDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/user-with-details.json');
@@ -46,12 +46,12 @@ describe('UserSidePanelContents', function () {
 
   beforeEach(function () {
     require('../../../../SDK').setSDK(SDK);
-    this.summaryGet = MesosSummaryStore.get;
+    this.summaryGet = MesosSummary.getState;
     this.userStoreGetUser = ACLUserStore.getUser;
 
     this.container = document.createElement('div');
 
-    MesosSummaryStore.get = function (status) {
+    MesosSummary.getState = function (status) {
       if (status === 'statesProcessed') {
         return true;
       }
@@ -65,7 +65,7 @@ describe('UserSidePanelContents', function () {
   });
 
   afterEach(function () {
-    MesosSummaryStore.get = this.summaryGet;
+    MesosSummary.getState = this.summaryGet;
     ACLUserStore.getUser = this.userStoreGetUser;
 
     ReactDOM.unmountComponentAtNode(this.container);
@@ -92,7 +92,7 @@ describe('UserSidePanelContents', function () {
     });
 
     it('should show loading screen if still waiting on Store', function () {
-      MesosSummaryStore.get = function (status) {
+      MesosSummary.getState = function (status) {
         if (status === 'statesProcessed') {
           return false;
         }

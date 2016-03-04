@@ -7,9 +7,7 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLStore from '../stores/ACLStore';
 import PermissionsTable from './PermissionsTable';
-
-// TO REMOVE
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
+import MesosSummary from '../../../structs';
 
 const METHODS_TO_BIND = [
   'handleResourceSelection',
@@ -120,7 +118,7 @@ class PermissionsView extends mixin(StoreMixin) {
 
   getDropdownItems() {
     let permissions = this.props.permissions;
-    let services = MesosSummaryStore.getActiveServices().sort(
+    let services = MesosSummary.getActiveServices().sort(
       Util.getLocaleCompareSortFn('name')
     );
     let filteredResources = services.filter(function (resource) {

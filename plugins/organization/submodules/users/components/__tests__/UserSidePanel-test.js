@@ -23,22 +23,15 @@ var ACLUserStore = require('../../stores/ACLUserStore');
 var UserSidePanel = require('../UserSidePanel');
 var UserSidePanelContents = require('../UserSidePanelContents');
 
-var MesosSummaryActions = require('../../../../../../src/js/events/MesosSummaryActions');
-var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
+var MesosSummary = require('../../../../structs');
 
 describe('UserSidePanel', function () {
   beforeEach(function () {
-
-    this.fetchSummary = MesosSummaryActions.fetchSummary;
     this.userStore = ACLUserStore.getUser;
 
     this.container = document.createElement('div');
 
-    MesosSummaryActions.fetchSummary = function () {
-      return null;
-    };
-
-    MesosSummaryStore.get = function () {
+    MesosSummary.getState = function () {
       return true;
     };
 
@@ -49,14 +42,10 @@ describe('UserSidePanel', function () {
         'description': 'user description'
       };
     };
-
-    MesosSummaryStore.init();
   });
 
   afterEach(function () {
-    MesosSummaryActions.fetchSummary = this.fetchSummary;
     ACLUserStore.getUser = this.userStore;
-
     ReactDOM.unmountComponentAtNode(this.container);
   });
 

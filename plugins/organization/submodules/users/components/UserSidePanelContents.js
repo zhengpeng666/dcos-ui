@@ -9,7 +9,7 @@ import UserDetails from './UserDetails';
 import UserGroupMembershipTab from './UserGroupMembershipTab';
 import UserAdvancedACLsTab from './UserAdvancedACLsTab';
 
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
+import MesosSummary from '../../../structs';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onAclStoreUserGrantSuccess',
@@ -213,7 +213,7 @@ ${groupLabel}${remote}`
     }
 
     if (user.get('uid') == null ||
-      !MesosSummaryStore.get('statesProcessed')) {
+      !MesosSummary.getState('statesProcessed')) {
       return this.getLoadingScreen();
     }
 

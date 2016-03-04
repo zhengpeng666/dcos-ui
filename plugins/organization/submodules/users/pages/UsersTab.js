@@ -9,7 +9,7 @@ import OrganizationTab from '../../../pages/OrganizationTab';
 import UserFormModal from '../components/UserFormModal';
 import UserSidePanel from '../components/UserSidePanel';
 
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
+import MesosSummary from '../../../structs';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onUserStoreCreateSuccess',
@@ -110,7 +110,7 @@ class UsersTab extends mixin(StoreMixin) {
       );
     }
 
-    if (!MesosSummaryStore.get('statesProcessed') ||
+    if (!MesosSummary.getState('statesProcessed') ||
       !this.state.usersStoreSuccess) {
       return this.getLoadingScreen();
     }

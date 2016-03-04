@@ -6,7 +6,7 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import ACLGroupStore from '../stores/ACLGroupStore';
 import GroupSidePanelContents from './GroupSidePanelContents';
 
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
+import MesosSummary from '../../../structs';
 
 let SDK = require('../../../SDK').getSDK();
 
@@ -96,7 +96,7 @@ class GroupSidePanel extends mixin(StoreMixin) {
   isOpen() {
     return (
       this.props.params.groupID != null
-      && MesosSummaryStore.get('statesProcessed')
+      && MesosSummary.getState('statesProcessed')
     );
   }
 

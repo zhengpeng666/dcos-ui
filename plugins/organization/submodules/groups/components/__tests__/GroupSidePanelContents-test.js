@@ -38,7 +38,7 @@ let GroupSidePanelContents = require('../GroupSidePanelContents');
 
 let Group = require('../../structs/Group');
 
-let MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
+let MesosSummary = require('../../../../structs');
 
 let groupDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/group-with-details.json');
@@ -48,10 +48,10 @@ groupDetailsFixture.users = groupDetailsFixture.users.array;
 describe('GroupSidePanelContents', function () {
 
   beforeEach(function () {
-    this.summaryGet = MesosSummaryStore.get;
+    this.summaryGet = MesosSummary.getState;
     this.groupStoreGetGroup = ACLGroupStore.getGroup;
 
-    MesosSummaryStore.get = function (status) {
+    MesosSummary.getState = function (status) {
       if (status === 'statesProcessed') {
         return true;
       }
@@ -65,11 +65,8 @@ describe('GroupSidePanelContents', function () {
   });
 
   afterEach(function () {
-    MesosSummaryStore.get = this.summaryGet;
+    MesosSummary.getState = this.summaryGet;
     ACLGroupStore.getGroup = this.groupStoreGetGroup;
-
-    ACLGroupStore.removeAllListeners();
-    MesosSummaryStore.removeAllListeners();
   });
 
   describe('#render', function () {
@@ -98,7 +95,7 @@ describe('GroupSidePanelContents', function () {
     });
 
     it('should show loading screen if still waiting on Store', function () {
-      MesosSummaryStore.get = function (status) {
+      MesosSummary.getState = function (status) {
         if (status === 'statesProcessed') {
           return false;
         }
