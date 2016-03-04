@@ -70,6 +70,40 @@ const StringUtil = {
     }
 
     return {__html};
+  },
+
+  /**
+   * @param {Array} id       - An array that, when concatenated, represents an ID.
+   * @param {Array} splitBy  - Tokens to split id by.
+   * @param {Object} replace - Keys are words to replace, with value of the word
+   *                           to replace with.
+   * @param {Boolean} removeConsecutive
+   *                         - Whether or not to remove consecutive duplicate
+   *                           word tokens.
+   * @return {String}        - Human-readable title.
+   */
+  idToTitle: function (id, splitBy=[], replace={}, removeConsecutive) {
+
+    if (splitBy.length === 0) {
+      return id.reduce((title, word, i, words) => {
+        if (removeConsecutive && (i > 0) && (word === words[i - 1])) {
+          return title;
+        }
+        word = replace[word] || this.capitalize(word.toLowerCase().trim());
+        return `${title} ${word}`;
+      }, '');
+    }
+
+    let splitID = id.reduce(function (accumulated, element) {
+      let splitWords = element.split(splitBy.shift());
+
+      splitWords.map(function (token) {
+        accumulated.push(token);
+      });
+      return accumulated;
+    }, []);
+
+    return this.idToTitle(splitID, splitBy, replace, removeConsecutive);
   }
 };
 

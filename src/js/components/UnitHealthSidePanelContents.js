@@ -71,7 +71,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
         {imageTag}
         <div>
           <h1 className="side-panel-content-header-label flush">
-            {unit.get('unit_title')}
+            {unit.getTitle()}
           </h1>
           <div>
             {this.getSubHeader(unit)}

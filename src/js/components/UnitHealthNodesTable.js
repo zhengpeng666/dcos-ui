@@ -35,9 +35,9 @@ class UnitHealthNodesTable extends React.Component {
   getColumns() {
     let classNameFn = ResourceTableUtil.getClassName;
     let headings = ResourceTableUtil.renderHeading({
-      node_health: 'HEALTH',
-      hostname: 'NODE',
-      node_role: 'ROLE'
+      health: 'HEALTH',
+      host_ip: 'NODE',
+      role: 'ROLE'
     });
 
     return [
@@ -45,11 +45,11 @@ class UnitHealthNodesTable extends React.Component {
         className: classNameFn,
         headerClassName: classNameFn,
         heading: headings,
-        prop: 'node_health',
+        prop: 'health',
         render: this.renderHealth,
         sortable: true,
         sortFunction: ResourceTableUtil.getStatSortFunction(
-          'hostname',
+          'host_ip',
           UnitHealthUtil.getHealthSorting
         )
       },
@@ -57,7 +57,7 @@ class UnitHealthNodesTable extends React.Component {
         className: classNameFn,
         headerClassName: classNameFn,
         heading: headings,
-        prop: 'hostname',
+        prop: 'host_ip',
         render: this.renderNode,
         sortable: true,
         sortFunction: ResourceTableUtil.getPropSortFunction()
@@ -66,17 +66,17 @@ class UnitHealthNodesTable extends React.Component {
         className: classNameFn,
         headerClassName: classNameFn,
         heading: headings,
-        prop: 'node_role',
+        prop: 'role',
         render: this.renderNodeRole,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('hostname')
+        sortFunction: ResourceTableUtil.getPropSortFunction('host_ip')
       }
     ];
   }
 
   getNodeLink(node, linkText) {
     let path = 'settings-system-units-unit-nodes-node-panel';
-    let params = {unitID: this.props.itemID, unitNodeID: node.get('hostname')};
+    let params = {unitID: this.props.itemID, unitNodeID: node.get('host_ip')};
 
     return (
       <a
@@ -119,7 +119,7 @@ class UnitHealthNodesTable extends React.Component {
         data={this.props.nodes}
         idAttribute="id"
         itemHeight={TableUtil.getRowHeight()}
-        sortBy={{prop: 'node_health', order: 'desc'}}
+        sortBy={{prop: 'health', order: 'desc'}}
         />
     );
   }
