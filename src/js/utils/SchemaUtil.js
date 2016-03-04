@@ -1,4 +1,4 @@
-function schemaToFieldDefinition(fieldName, fieldProps, formParent, isRequired) {
+function getValueFromSchemaProperty(fieldProps) {
   let value = '';
 
   if (fieldProps.default != null) {
@@ -8,6 +8,27 @@ function schemaToFieldDefinition(fieldName, fieldProps, formParent, isRequired) 
     }
   }
 
+  if (Array.isArray(fieldProps.default) && fieldProps.default.length === 0) {
+    value = '';
+  }
+
+  return value;
+}
+
+function getLabelFromSchemaProperty(fieldProps, fieldName, isRequired) {
+  let label = fieldName;
+
+  if (isRequired) {
+    label = `${label} *`;
+  }
+
+  return label;
+}
+
+function schemaToFieldDefinition(fieldName, fieldProps, formParent, isRequired) {
+  let value = getValueFromSchemaProperty(fieldProps);
+  let label = getLabelFromSchemaProperty(fieldProps, fieldName, isRequired);
+
   let definition = {
     fieldType: 'text',
     formParent,
@@ -16,7 +37,7 @@ function schemaToFieldDefinition(fieldName, fieldProps, formParent, isRequired) 
     isRequired,
     required: false,
     showError: false,
-    showLabel: true,
+    showLabel: label,
     writeType: 'input',
     validation: function () { return true; },
     value,
@@ -25,14 +46,6 @@ function schemaToFieldDefinition(fieldName, fieldProps, formParent, isRequired) 
 
   if (typeof value === 'boolean') {
     definition.checked = value;
-  }
-
-  if (isRequired) {
-    definition.showLabel = `${fieldName} *`;
-  }
-
-  if (Array.isArray(fieldProps.default) && fieldProps.default.length === 0) {
-    definition.value = '';
   }
 
   if (fieldProps.type === 'boolean') {

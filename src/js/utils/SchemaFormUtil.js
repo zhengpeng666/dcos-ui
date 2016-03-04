@@ -44,6 +44,35 @@ function getThingsToSet(model, path) {
   return thingsToSet;
 }
 
+function processValue(value, valueType, isRequired) {
+  if (valueType === 'integer' || valueType === 'number') {
+    if (value !== null && value !== '') {
+      value = Number(value);
+      if (isNaN(value)) {
+        value = null;
+      }
+    } else {
+      value = null;
+    }
+  }
+
+  if (typeof value === 'string' && isRequired && value === '') {
+    value = null;
+  } else {
+    if (value === null) {
+      value = DEFAULT_FORM_VALUES[valueType];
+    }
+  }
+
+  if (valueType === 'array' && typeof value === 'string') {
+    value = value.split(',')
+      .map(function (val) { return val.trim(); })
+      .filter(function (val) { return val !== ''; });
+  }
+
+  return value;
+}
+
 let SchemaFormUtil = {
   getDefinitionFromPath(definition, paths) {
     if (definition[paths[0]]) {
@@ -75,14 +104,11 @@ let SchemaFormUtil = {
       let value = model[key];
       let path = prevPath.concat([key]);
 
+      // Nested model.
       if (typeof value === 'object' && value !== null) {
-        if (value.hasOwnProperty('checked')) {
-          value = value.checked;
-        } else {
-          copy[key] = SchemaFormUtil.processFormModel(
-            value, multipleDefinition, path
-          );
-        }
+        copy[key] = SchemaFormUtil.processFormModel(
+          value, multipleDefinition, path
+        );
         return;
       }
 
@@ -96,32 +122,8 @@ let SchemaFormUtil = {
       let valueType = definition.valueType;
       let {isRequired} = definition;
 
-      if (valueType === 'integer' || valueType === 'number') {
-        if (value !== null && value !== '') {
-          value = Number(value);
-          if (isNaN(value)) {
-            value = null;
-          }
-        } else {
-          value = null;
-        }
-      }
-
-      if (typeof value === 'string' && isRequired && value === '') {
-        value = null;
-      } else {
-        if (value === null) {
-          value = DEFAULT_FORM_VALUES[valueType];
-        }
-      }
-
-      if (valueType === 'array' && typeof value === 'string') {
-        value = value.split(',')
-          .map(function (val) { return val.trim(); })
-          .filter(function (val) { return val !== ''; });
-      }
-
-      copy[key] = value;
+      let processedValue = processValue(value, valueType, isRequired);
+      copy[key] = processedValue;
     });
 
     return copy;
