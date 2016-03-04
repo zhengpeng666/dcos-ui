@@ -1,32 +1,14 @@
 import overrides from './overrides';
 overrides.override();
-import PluginSDK, {Hooks} from 'PluginSDK';
+import PluginSDK from 'PluginSDK';
 
-Hooks.addAction('pluginsConfigured', function () {
-  Hooks.doAction('log', {eventID: 'Stint started.'});
+PluginSDK.Hooks.addAction('pluginsConfigured', function () {
+  PluginSDK.Hooks.doAction('log', {eventID: 'Stint started.'});
 });
 global.addEventListener('beforeunload', function () {
-  Hooks.doAction('log', {eventID: 'Stint ended.'});
+  PluginSDK.Hooks.doAction('log', {eventID: 'Stint ended.'});
 });
 
-// Register our own Intercom store for cases where tracking is disabled.
-// TEMP FIX
-import StoreMixinConfig from './utils/StoreMixinConfig';
-import {Store} from 'mesosphere-shared-reactjs';
-let IntercomStore = Store.createStore({
-  storeID: 'intercom',
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
-  }
-});
-StoreMixinConfig.add('intercom', {
-  store: IntercomStore,
-  events: ['change']
-});
-// END FIX
 import _ from 'underscore';
 import {Provider} from 'react-redux';
 import React from 'react';
@@ -39,7 +21,7 @@ require('./utils/StoreMixinConfig');
 
 import ApplicationLoader from './pages/ApplicationLoader';
 import appRoutes from './routes/index';
-var Config = require('./config/Config');
+import Config from './config/Config';
 import ConfigStore from './stores/ConfigStore';
 import RequestUtil from './utils/RequestUtil';
 
@@ -57,7 +39,7 @@ RequestUtil.json = function (options = {}) {
     if (typeof oldHandler === 'function') {
       oldHandler.apply(null, arguments);
     }
-    Hooks.doAction('AJAXRequestError', ...arguments);
+    PluginSDK.Hooks.doAction('AJAXRequestError', ...arguments);
   };
 
   oldJSON(options);
