@@ -9,43 +9,6 @@ global.addEventListener('beforeunload', function () {
   PluginSDK.Hooks.doAction('log', {eventID: 'Stint ended.'});
 });
 
-// Register our own Intercom and Auth store for cases where tracking is disabled.
-// TEMP FIX
-import StoreMixinConfig from './utils/StoreMixinConfig';
-import {Store} from 'mesosphere-shared-reactjs';
-let IntercomStore = Store.createStore({
-  storeID: 'intercom',
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
-  }
-});
-let AuthStore = Store.createStore({
-  storeID: 'auth',
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
-  }
-});
-StoreMixinConfig.add('intercom', {
-  store: IntercomStore,
-  events: ['change']
-});
-StoreMixinConfig.add('auth', {
-  store: AuthStore,
-  events: {
-    success: 'ACL_AUTH_USER_LOGIN_CHANGED',
-    error: 'ACL_AUTH_USER_LOGIN_ERROR',
-    logoutSuccess: 'ACL_AUTH_USER_LOGOUT_SUCCESS',
-    logoutError: 'ACL_AUTH_USER_LOGOUT_ERROR',
-    roleChange: 'ACL_AUTH_USER_ROLE_CHANGED'
-  }
-});
-// END FIX
 import _ from 'underscore';
 import {Provider} from 'react-redux';
 import React from 'react';
@@ -58,7 +21,7 @@ require('./utils/StoreMixinConfig');
 
 import ApplicationLoader from './pages/ApplicationLoader';
 import appRoutes from './routes/index';
-var Config = require('./config/Config');
+import Config from './config/Config';
 import ConfigStore from './stores/ConfigStore';
 import RequestUtil from './utils/RequestUtil';
 
