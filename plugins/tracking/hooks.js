@@ -3,55 +3,58 @@ import classNames from 'classnames';
 /* eslint-disable no-unused-vars */
 import React from 'react';
 /* eslint-enable no-unused-vars */
+import {
+  REQUEST_INTERCOM_OPEN,
+  REQUEST_INTERCOM_CLOSE
+} from './constants/ActionTypes';
 
 import Actions from './actions/Actions';
-import Config from '../../src/js/config/Config';
-import DOMUtils from '../../src/js/utils/DOMUtils';
-import IntercomActions from './events/IntercomActions';
+var AppDispatcher = require('../../src/js/events/AppDispatcher');
 import IntercomStore from './stores/IntercomStore';
-import LocalStorageUtil from '../../src/js/utils/LocalStorageUtil';
-import SidebarActions from '../../src/js/events/SidebarActions';
+
+let SDK = require('./SDK').getSDK();
+let {Config, DOMUtils, LocalStorageUtil} = SDK.get([
+  'Config',
+  'DOMUtils',
+  'LocalStorageUtil'
+]);
 
 let segmentScript = `!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error('Segment snippet included twice.');else{analytics.invoked=!0;analytics.methods=['trackSubmit','trackClick','trackLink','trackForm','pageview','identify','group','track','ready','alias','page','once','off','on'];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement('script');e.type="text/javascript";e.async=!0;e.src=('https:'===document.location.protocol?'https://':'http://')+'cdn.segment.com/analytics.js/v1/'+t+'/analytics.min.js';var n=document.getElementsByTagName('script')[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.0.1";analytics.load("${Config.analyticsKey}");}}();`;
-
 let chameleonScript = `(function(d,w,o){w.chmln=w.docent=o;var s=d.createElement('script');s.async=true;s.src='https://cdn.trychameleon.com/east/'+chmln.token+'/'+chmln.host+'.min.js.gz';d.head.appendChild(s);var n='setup alias track set'.split(' ');for(var i=0;i<n.length;i++){(function(){var t=o[n[i]+'_a']=[];o[n[i]]=function(){t.push(arguments);};})()}})(document,window,{token:'AygXvQUlEVrijBUcM-gzCNB7tISfDWWmHYplrY',host:'mesosphere.com'});`;
 
 let interval = null;
 let tourHasBeenSetup = false;
 
-const PluginHooks = {
+module.exports = {
   configuration: {
     enabled: false
   },
 
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize: function (Hooks) {
-    Hooks.addFilter(
-      'sidebarFooterButtonSet', this.sidebarFooterButtonSet.bind(this)
-    );
-    Hooks.addFilter(
-      'installCLIModalAppendInstructions',
-      this.installCLIModalAppendInstructions.bind(this)
-    );
-    Hooks.addFilter(
-      'installCLIModalCLIInstallURL',
-      this.installCLIModalCLIInstallURL.bind(this)
-    );
-    Hooks.addFilter(
-      'installCLIModalCLIInstallScript',
-      this.installCLIModalCLIInstallScript.bind(this)
-    );
-    Hooks.addFilter(
-      'installCLIModalFooter', this.installCLIModalFooter.bind(this)
-    );
-    Hooks.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
-    Hooks.addAction('pluginsConfigured', this.pluginsConfigured.bind(this));
-    Hooks.addAction('receivedUserEmail', this.receivedUserEmail.bind(this));
-    Hooks.addFilter(
-      'applicationHasIdentity', this.applicationHasIdentity.bind(this)
-    );
+  filters: [
+    'sidebarFooterButtonSet',
+    'installCLIModalAppendInstructions',
+    'installCLIModalCLIInstallURL',
+    'installCLIModalCLIInstallScript',
+    'installCLIModalFooter',
+    'openIdentifyModal',
+    'applicationHasIdentity',
+    'isIntercomOpen'
+  ],
+
+  actions: [
+    'pluginsConfigured',
+    'receivedUserEmail',
+    'openIntercom',
+    'closeIntercom'
+  ],
+
+  initialize: function () {
+    this.filters.forEach(filter => {
+      SDK.Hooks.addFilter(filter, this[filter].bind(this));
+    });
+    this.actions.forEach(action => {
+      SDK.Hooks.addAction(action, this[action].bind(this));
+    });
   },
 
   configure: function (configuration) {
@@ -62,12 +65,30 @@ const PluginHooks = {
     return this.configuration.enabled;
   },
 
+  isIntercomOpen: function () {
+    return IntercomStore.get('isOpen');
+  },
+
+  openIntercom: function () {
+    AppDispatcher.handleIntercomAction({
+      type: REQUEST_INTERCOM_OPEN,
+      data: true
+    });
+  },
+
+  closeIntercom: function () {
+    AppDispatcher.handleIntercomAction({
+      type: REQUEST_INTERCOM_CLOSE,
+      data: false
+    });
+  },
+
   handleToggleIntercom: function () {
     if (IntercomStore.get('isOpen')) {
-      IntercomActions.close();
+      Actions.closeIntercom();
     } else {
-      IntercomActions.open();
-      SidebarActions.close();
+      Actions.openIntercom();
+      SDK.Hooks.doAction('closeSidebar');
     }
   },
 
@@ -210,5 +231,3 @@ const PluginHooks = {
     );
   }
 };
-
-module.exports = PluginHooks;

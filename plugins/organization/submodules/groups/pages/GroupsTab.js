@@ -7,9 +7,9 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import ACLGroupsStore from '../stores/ACLGroupsStore';
 import GroupFormModal from '../components/GroupFormModal';
 import GroupSidePanel from '../components/GroupSidePanel';
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
 import OrganizationTab from '../../../pages/OrganizationTab';
-import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
+
+import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onGroupStoreCreateSuccess',
@@ -23,6 +23,8 @@ const METHODS_TO_BIND = [
   'onGroupsStoreSuccess',
   'onGroupsStoreError'
 ];
+
+let SDK = require('../../../SDK').getSDK();
 
 class GroupsTab extends mixin(StoreMixin) {
   constructor() {
@@ -94,6 +96,7 @@ class GroupsTab extends mixin(StoreMixin) {
   }
 
   getContents() {
+    let RequestErrorMsg = SDK.get('RequestErrorMsg');
     // We want to always render the portals (side panel and modal),
     // so only this part is showing loading and error screend
     if (this.state.groupsStoreError) {

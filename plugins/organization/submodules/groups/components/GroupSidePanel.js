@@ -4,9 +4,10 @@ import {Confirm, SidePanel} from 'reactjs-components';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLGroupStore from '../stores/ACLGroupStore';
+import GroupSidePanelContents from './GroupSidePanelContents';
+
 import HistoryStore from '../../../../../src/js/stores/HistoryStore';
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
-import GroupSidePanelContents from './GroupSidePanelContents';
 
 const METHODS_TO_BIND = [
   'handleDeleteModalOpen',

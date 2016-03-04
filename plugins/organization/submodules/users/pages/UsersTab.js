@@ -5,11 +5,11 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLUsersStore from '../stores/ACLUsersStore';
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
 import OrganizationTab from '../../../pages/OrganizationTab';
-import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
 import UserFormModal from '../components/UserFormModal';
 import UserSidePanel from '../components/UserSidePanel';
+
+import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onUserStoreCreateSuccess',
@@ -23,6 +23,10 @@ const METHODS_TO_BIND = [
   'onUsersStoreSuccess',
   'onUsersStoreError'
 ];
+
+let SDK = require('../../../SDK').getSDK();
+
+let RequestErrorMsg = SDK.get('RequestErrorMsg');
 
 class UsersTab extends mixin(StoreMixin) {
   constructor() {

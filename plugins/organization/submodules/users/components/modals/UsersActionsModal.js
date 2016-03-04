@@ -6,8 +6,10 @@ import React from 'react';
 import ACLUserStore from '../../stores/ACLUserStore';
 import ACLGroupStore from '../../../groups/stores/ACLGroupStore';
 import ACLGroupsStore from '../../../groups/stores/ACLGroupsStore';
-import ActionsModal from '../../../../../../src/js/components/modals/ActionsModal';
-import Util from '../../../../../../src/js/utils/Util';
+
+let SDK = require('../../../../SDK').getSDK();
+
+let {ActionsModal, Util} = SDK.get(['ActionsModal', 'Util']);
 
 class UsersActionsModal extends ActionsModal {
   constructor() {

@@ -5,11 +5,9 @@ import React from 'react';
 
 import ACLGroupStore from '../stores/ACLGroupStore';
 import GroupUserMembershipTab from './GroupUserMembershipTab';
+import PermissionsView from '../../acl/components/PermissionsView';
+
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
-import PermissionsView from '../../../../auth/submodules/acl/components/PermissionsView';
-import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
-import SidePanelContents from '../../../../../src/js/components/SidePanelContents';
-import StringUtil from '../../../../../src/js/utils/StringUtil';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onAclStoreGroupGrantSuccess',
@@ -20,7 +18,12 @@ const EXTERNAL_CHANGE_EVENTS = [
 
 const METHODS_TO_BIND = ['handleNameChange'];
 
-module.exports = class GroupSidePanelContents extends SidePanelContents {
+let SDK = require('../../../SDK').getSDK();
+
+let {RequestErrorMsg, SidePanelContents, StringUtil} = SDK.get([
+  'RequestErrorMsg', 'SidePanelContents', 'StringUtil']);
+
+class GroupSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
@@ -209,4 +212,6 @@ module.exports = class GroupSidePanelContents extends SidePanelContents {
       </div>
     );
   }
-};
+}
+
+module.exports = GroupSidePanelContents;

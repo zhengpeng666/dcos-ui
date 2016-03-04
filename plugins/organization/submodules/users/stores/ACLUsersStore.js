@@ -10,20 +10,32 @@ import {
   ACL_USERS_REQUEST_ERROR
 } from '../constants/EventTypes';
 
+import ACLUsersActions from '../actions/ACLUsersActions';
+import UsersList from '../../../../../src/js/structs/UsersList';
+
+import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
 
-import ACLUsersActions from '../actions/ACLUsersActions';
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import GetSetMixin from '../../../../../src/js/mixins/GetSetMixin';
-import UsersList from '../../../../../src/js/structs/UsersList';
+let SDK = require('../../../SDK').getSDK();
+
+let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
+let {APP_STORE_CHANGE} = SDK.constants;
 
 const ACLUsersStore = Store.createStore({
   storeID: 'users',
 
-  mixins: [GetSetMixin],
+  mixins: [PluginGetSetMixin],
 
   getSet_data: {
     users: new UsersList()
+  },
+
+  onSet() {
+    SDK.dispatch({
+      type: APP_STORE_CHANGE,
+      storeID: this.storeID,
+      data: this.getSet_data
+    });
   },
 
   addChangeListener: function (eventName, callback) {

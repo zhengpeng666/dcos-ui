@@ -10,9 +10,11 @@ import {
 } from '../constants/ActionTypes';
 
 import ACLAuthConstants from '../constants/ACLAuthConstants';
+
 import AppDispatcher from '../../../src/js/events/AppDispatcher';
-import Config from '../../../src/js/config/Config';
-import RequestUtil from '../../../src/js/utils/RequestUtil';
+
+let SDK = require('../SDK').getSDK();
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
 const ACLAuthActions = {
   fetchRole: function (uid) {

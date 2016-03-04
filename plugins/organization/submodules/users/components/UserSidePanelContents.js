@@ -4,13 +4,11 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 
 import ACLUserStore from '../stores/ACLUserStore';
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
-import PermissionsView from '../../../../auth/submodules/acl/components/PermissionsView';
-import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
-import SidePanelContents from '../../../../../src/js/components/SidePanelContents';
-import StringUtil from '../../../../../src/js/utils/StringUtil';
+import PermissionsView from '../../acl/components/PermissionsView';
 import UserDetails from './UserDetails';
 import UserGroupMembershipTab from './UserGroupMembershipTab';
+
+import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
 
 const EXTERNAL_CHANGE_EVENTS = [
   'onAclStoreUserGrantSuccess',
@@ -21,7 +19,12 @@ const EXTERNAL_CHANGE_EVENTS = [
 
 const METHODS_TO_BIND = ['handleNameChange'];
 
-module.exports = class UserSidePanelContents extends SidePanelContents {
+let SDK = require('../../../SDK').getSDK();
+
+let {RequestErrorMsg, SidePanelContents, StringUtil} = SDK.get([
+  'RequestErrorMsg', 'SidePanelContents', 'StringUtil']);
+
+class UserSidePanelContents extends SidePanelContents {
   constructor() {
     super();
 
@@ -221,4 +224,6 @@ ${groupLabel}${remote}`
       </div>
     );
   }
-};
+}
+
+module.exports = UserSidePanelContents;

@@ -1,7 +1,12 @@
-var _ = require('underscore');
-
 jest.dontMock('../../actions/Actions');
 jest.dontMock('../ActionsMixin');
+
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('tracking', {enabled: true});
+require('../../SDK').setSDK(SDK);
+
+var _ = require('underscore');
 
 var Actions = require('../../actions/Actions');
 var ActionsMixin = require('../ActionsMixin');

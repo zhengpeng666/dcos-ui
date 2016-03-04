@@ -7,9 +7,7 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLGroupStore from '../../groups/stores/ACLGroupStore';
 import ACLGroupsStore from '../../groups/stores/ACLGroupsStore';
-import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
 import UserGroupTable from './UserGroupTable';
-import Util from '../../../../../src/js/utils/Util';
 
 const DEFAULT_ID = 'default-placeholder-group-id';
 
@@ -17,7 +15,11 @@ const METHODS_TO_BIND = [
   'onGroupSelection'
 ];
 
-module.exports = class UserGroupMembershipTab extends mixin(StoreMixin) {
+let SDK = require('../../../SDK').getSDK();
+
+let {RequestErrorMsg, Util} = SDK.get(['RequestErrorMsg', 'Util']);
+
+class UserGroupMembershipTab extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -144,4 +146,6 @@ module.exports = class UserGroupMembershipTab extends mixin(StoreMixin) {
       </div>
     );
   }
-};
+}
+
+module.exports = UserGroupMembershipTab;

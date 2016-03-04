@@ -50,6 +50,7 @@ var SidebarToggle = React.createClass({
     } else {
       SidebarActions.open();
     }
+
   },
 
   render: function () {

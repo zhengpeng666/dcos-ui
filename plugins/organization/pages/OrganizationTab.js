@@ -9,14 +9,8 @@ import React from 'react';
 
 import GroupsActionsModal from '../submodules/groups/components/modals/GroupsActionsModal';
 import UsersActionsModal from '../submodules/users/components/modals/UsersActionsModal';
-import FilterHeadline from '../../../src/js/components/FilterHeadline';
-import FilterInputText from '../../../src/js/components/FilterInputText';
-import InternalStorageMixin from '../../../src/js/mixins/InternalStorageMixin';
+
 import BulkOptions from '../constants/BulkOptions';
-import ResourceTableUtil from '../../../src/js/utils/ResourceTableUtil';
-import StringUtil from '../../../src/js/utils/StringUtil';
-import TableUtil from '../../../src/js/utils/TableUtil';
-import TooltipMixin from '../../../src/js/mixins/TooltipMixin';
 
 const METHODS_TO_BIND = [
   'getTableRowOptions',
@@ -36,6 +30,20 @@ const METHODS_TO_BIND = [
 ];
 
 const FILTERS = ['all', 'local', 'external'];
+
+let SDK = require('../SDK').getSDK();
+
+let {FilterHeadline, FilterInputText,
+  InternalStorageMixin, TooltipMixin,
+  ResourceTableUtil, StringUtil, TableUtil} = SDK.get([
+    'FilterHeadline',
+    'FilterInputText',
+    'InternalStorageMixin',
+    'TooltipMixin',
+    'ResourceTableUtil',
+    'StringUtil',
+    'TableUtil'
+    ]);
 
 class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
   constructor() {

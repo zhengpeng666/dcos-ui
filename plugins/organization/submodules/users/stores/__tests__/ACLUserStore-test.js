@@ -1,17 +1,27 @@
-jest.dontMock('../../../../../../src/js/events/AppDispatcher');
-jest.dontMock('../../constants/ActionTypes');
-jest.dontMock('../../constants/EventTypes');
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
 jest.dontMock('../../../../../../src/js/structs/User');
 jest.dontMock('../../actions/ACLUsersActions');
 jest.dontMock('../ACLUserStore');
 
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.dontMock([
+  'RequestUtil',
+  'PluginGetSetMixin',
+  'List',
+  'Item',
+  'Util'
+]);
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
+
 var ACLUsersActions = require('../../actions/ACLUsersActions');
 var ACLUserStore = require('../ACLUserStore');
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
 var User = require('../../../../../../src/js/structs/User');
+
+var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 describe('ACLUserStore', function () {
 

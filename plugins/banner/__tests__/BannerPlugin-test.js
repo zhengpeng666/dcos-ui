@@ -1,11 +1,22 @@
 jest.dontMock('../hooks');
-jest.dontMock('../../../src/js/components/icons/IconInfo');
-jest.dontMock('../../../src/js/utils/DOMUtils');
 
 var _ = require('underscore');
-var React = require('react');
+/*eslint-disable no-unused-vars*/
+import React from 'react';
+/*eslint-enable no-unused-vars*/
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
+
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.dontMock([
+  'PluginGetSetMixin',
+  'IconInfo',
+  'DOMUtils'
+]);
+
+let SDK = PluginTestUtils.getSDK('banner', {enabled: true});
+require('../SDK').setSDK(SDK);
 
 var BannerPlugin = require('../hooks');
 var defaultConfiguration = BannerPlugin.configuration;
@@ -24,22 +35,28 @@ describe('BannerPlugin', function () {
   describe('#initialize', function () {
 
     beforeEach(function () {
-      this.Plugins = {
+      this.Hooks = SDK.Hooks;
+
+      SDK.Hooks = {
         addAction: jest.genMockFunction(),
         addFilter: jest.genMockFunction()
       };
 
-      BannerPlugin.initialize(this.Plugins);
+      BannerPlugin.initialize();
+    });
+
+    afterEach(function () {
+      SDK.Hooks = this.Hooks;
     });
 
     it('should add one action and two filters', function () {
-      expect(this.Plugins.addAction.mock.calls[0]).toEqual(
+      expect(SDK.Hooks.addAction.mock.calls[0]).toEqual(
         ['applicationRendered', BannerPlugin.applicationRendered]
       );
-      expect(this.Plugins.addFilter.mock.calls[0]).toEqual(
+      expect(SDK.Hooks.addFilter.mock.calls[0]).toEqual(
         ['applicationContents', BannerPlugin.applicationContents]
       );
-      expect(this.Plugins.addFilter.mock.calls[1]).toEqual(
+      expect(SDK.Hooks.addFilter.mock.calls[1]).toEqual(
         ['overlayNewWindowButton', BannerPlugin.overlayNewWindowButton]
       );
     });

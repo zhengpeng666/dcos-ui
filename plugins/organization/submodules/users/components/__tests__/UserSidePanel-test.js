@@ -1,23 +1,30 @@
-jest.dontMock('../../../../../../src/js/mixins/InternalStorageMixin');
-jest.dontMock('../../../../../../src/js/mixins/TabsMixin');
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
-jest.dontMock('../../../../../../src/js/components/SidePanelContents');
 jest.dontMock('../UserSidePanel');
 jest.dontMock('../UserSidePanelContents');
+jest.dontMock('../../../../storeConfig');
 
-var JestUtil = require('../../../../../../src/js/utils/JestUtil');
+import PluginTestUtils from 'PluginTestUtils';
 
-JestUtil.unMockStores(['ACLUserStore', 'MesosSummaryStore', 'MarathonStore']);
-require('../../../../../../src/js/utils/StoreMixinConfig');
+PluginTestUtils.dontMock([
+  'InternalStorageMixin',
+  'TabsMixin',
+  'SidePanelContents'
+]);
 
-var React = require('react');
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
+
+require('../../../../storeConfig').register();
+/*eslint-disable no-unused-vars*/
+import React from 'react';
+/*eslint-enable no-unused-vars*/
 var ReactDOM = require('react-dom');
 
-var MesosSummaryActions = require('../../../../../../src/js/events/MesosSummaryActions');
 var ACLUserStore = require('../../stores/ACLUserStore');
-var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
 var UserSidePanel = require('../UserSidePanel');
 var UserSidePanelContents = require('../UserSidePanelContents');
+
+var MesosSummaryActions = require('../../../../../../src/js/events/MesosSummaryActions');
+var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
 
 describe('UserSidePanel', function () {
   beforeEach(function () {
@@ -96,7 +103,7 @@ describe('UserSidePanel', function () {
         this.params.userID = 'set';
         var contents = this.instance.getContents(this.params.userID);
 
-        expect(contents.type === UserSidePanelContents).toEqual(true);
+        expect(contents.type.toString() === UserSidePanelContents.toString()).toEqual(true);
         this.params.serviceName = null;
       }
     );

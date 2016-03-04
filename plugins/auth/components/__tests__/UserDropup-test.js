@@ -1,13 +1,17 @@
 jest.dontMock('../UserDropup');
 jest.dontMock('../../stores/ACLAuthStore');
-jest.dontMock('../../../../src/js/mixins/GetSetMixin');
+jest.dontMock('../../actions/ACLAuthActions');
 
-var JestUtil = require('../../../../src/js/utils/JestUtil');
+import PluginTestUtils from 'PluginTestUtils';
 
-JestUtil.unMockStores(['ACLAuthStore']);
+PluginTestUtils.unMockStores(['ACLAuthStore']);
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+
+let SDK = PluginTestUtils.getSDK('auth', {enabled: true});
+
+require('../../SDK').setSDK(SDK);
 
 var ACLAuthStore = require('../../stores/ACLAuthStore');
 var UserDropup = require('../UserDropup');

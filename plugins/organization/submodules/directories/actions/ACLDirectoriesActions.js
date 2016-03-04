@@ -1,9 +1,12 @@
 import ActionTypes from '../constants/ActionTypes';
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import Config from '../../../../../src/js/config/Config';
-import RequestUtil from '../../../../../src/js/utils/RequestUtil';
 
-const ACLDirectoriesActions = {
+import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
+
+let SDK = require('../../../SDK').getSDK();
+
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
+
+module.exports = {
 
   fetchDirectories: function () {
     RequestUtil.json({
@@ -83,7 +86,4 @@ const ACLDirectoriesActions = {
       }
     });
   }
-
 };
-
-module.exports = ACLDirectoriesActions;

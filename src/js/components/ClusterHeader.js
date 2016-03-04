@@ -7,10 +7,10 @@ import ReactZeroClipboard from 'react-zeroclipboard';
 import ZeroClipboard from 'zeroclipboard';
 global.ZeroClipboard = ZeroClipboard;
 
-import Actions from '../../../plugins/tracking/actions/Actions';
 import ClusterName from './ClusterName';
 import DCOSLogo from './DCOSLogo';
 import MetadataStore from '../stores/MetadataStore';
+import {Hooks} from 'PluginSDK';
 import TooltipMixin from '../mixins/TooltipMixin';
 
 var ClusterHeader = React.createClass({
@@ -28,7 +28,7 @@ var ClusterHeader = React.createClass({
     this.tip_updateTipContent(
       ReactDOM.findDOMNode(this.refs.copyButton), 'Copied!'
     );
-    Actions.log({eventID: 'Copied hostname from sidebar'});
+    Hooks.doAction('log', {eventID: 'Copied hostname from sidebar'});
   },
 
   handleMouseOverCopyIcon() {

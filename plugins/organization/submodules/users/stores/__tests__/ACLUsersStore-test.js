@@ -1,25 +1,25 @@
 jest.dontMock('../ACLUsersStore');
-jest.dontMock('../../../../../../src/js/config/Config');
-jest.dontMock('../../../../../../src/js/events/AppDispatcher');
 jest.dontMock('../../actions/ACLUsersActions');
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
 jest.dontMock('../../../../../../src/js/structs/User');
 jest.dontMock('../../../../../../src/js/structs/UsersList');
-jest.dontMock('../../../../../../src/js/structs/Item');
-jest.dontMock('../../../../../../src/js/structs/List');
-jest.dontMock('../../../../../../src/js/utils/RequestUtil');
-jest.dontMock('../../../../../../src/js/utils/Util');
 jest.dontMock('../../../../../../tests/_fixtures/acl/users-unicode.json');
+
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.dontMock(['List', 'Item']);
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
 var _ = require('underscore');
 var ACLUsersStore = require('../ACLUsersStore');
 var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-var Config = require('../../../../../../src/js/config/Config');
 var EventTypes = require('../../constants/EventTypes');
-var usersFixture = require('../../../../../../tests/_fixtures/acl/users-unicode.json');
 var UsersList = require('../../../../../../src/js/structs/UsersList');
-var RequestUtil = require('../../../../../../src/js/utils/RequestUtil');
+var {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
+
+var usersFixture = require('../../../../../../tests/_fixtures/acl/users-unicode.json');
+var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 describe('ACLUsersStore', function () {
 

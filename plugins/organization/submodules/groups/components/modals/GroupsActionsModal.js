@@ -3,10 +3,12 @@ import _ from 'underscore';
 import React from 'react';
 /* eslint-enable no-unused-vars */
 
-import ActionsModal from '../../../../../../src/js/components/modals/ActionsModal';
 import ACLGroupStore from '../../stores/ACLGroupStore';
 import ACLUsersStore from '../../../users/stores/ACLUsersStore';
-import Util from '../../../../../../src/js/utils/Util';
+
+let SDK = require('../../../../SDK').getSDK();
+
+let {ActionsModal, Util} = SDK.get(['ActionsModal', 'Util']);
 
 class GroupsActionsModal extends ActionsModal {
   constructor() {

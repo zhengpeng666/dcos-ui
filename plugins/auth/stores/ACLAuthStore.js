@@ -19,19 +19,26 @@ import {
 
 import ACLAuthActions from '../actions/ACLAuthActions';
 import ACLUserRoles from '../constants/ACLUserRoles';
-
 import Utils from '../utils';
 
-// TO REMOVE
-import {SERVER_ACTION} from '../../../src/js/constants/ActionTypes';
 import AppDispatcher from '../../../src/js/events/AppDispatcher';
-import GetSetMixin from '../../../src/js/mixins/GetSetMixin';
-import {Hooks} from '../../../src/js/pluginBridge/PluginBridge';
+import {SERVER_ACTION} from '../../../src/js/constants/ActionTypes';
 
-var ACLAuthStore = Store.createStore({
+let SDK = require('../SDK').getSDK();
+
+let ACLAuthStore = Store.createStore({
   storeID: 'auth',
 
-  mixins: [GetSetMixin],
+  mixins: [SDK.get('PluginGetSetMixin')],
+
+  onSet() {
+    let {APP_STORE_CHANGE} = SDK.constants;
+    SDK.dispatch({
+      type: APP_STORE_CHANGE,
+      storeID: this.storeID,
+      data: this.getSet_data
+    });
+  },
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
@@ -111,7 +118,7 @@ var ACLAuthStore = Store.createStore({
     this.resetRole();
     this.emit(ACL_AUTH_USER_LOGOUT_SUCCESS);
 
-    Hooks.doAction('userLogoutSuccess');
+    SDK.Hooks.doAction('userLogoutSuccess');
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {

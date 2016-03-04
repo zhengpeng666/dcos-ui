@@ -54,7 +54,6 @@
     "babel-plugin-transform-runtime": "6.4.3",
     "babel-preset-es2015": "6.3.13",
     "babel-preset-react": "6.3.13",
-    "babel-preset-stage-0": "6.5.0",
     "babel-runtime": "6.3.19",
     "browser-sync": "2.11.0",
     "envify": "3.4.0",
@@ -72,14 +71,13 @@
     "gulp-sourcemaps": "1.5.2",
     "gulp-uglify": "1.2.0",
     "gulp-util": "3.0.6",
-    "install": "0.4.2",
     "jasmine-reporters": "1.0.1",
     "jest-cli": "0.8.2",
+    "jest-webpack-alias": "^2.2.0",
     "json-loader": "0.5.4",
     "localStorage": "1.0.3",
     "marked": "0.3.5",
     "node-libs-browser": "0.5.3",
-    "npm": "3.7.1",
     "source-map-loader": "0.1.3",
     "transform-loader": "0.2.3",
     "webpack": "1.10.1"
@@ -96,12 +94,15 @@
     "livereload": "NODE_ENV='development' ./node_modules/.bin/gulp livereload",
     "test": "jest"
   },
+  "jest-webpack-alias": {
+    "configFile": ".webpack.config.js"
+  },
   "jest": {
     "testDirectoryName": "__tests__",
     "globals": {
       "__DEV__": true
     },
-    "scriptPreprocessor": "./node_modules/babel-jest",
+    "scriptPreprocessor": "jest/preprocessor.js",
     "setupTestFrameworkScriptFile": "jest/setupTestFramework.js",
     "setupEnvScriptFile": "jest/setupEnv.js",
     "testFileExtensions": [
@@ -119,27 +120,32 @@
       "/.module-cache/"
     ],
     "unmockedModulePathPatterns": [
-      "AppReducer",
       "babel-runtime",
       "browser-info",
       "classnames",
       "d3",
       "events",
       "flux",
-      "Hooks",
       "jasmine-reporters",
       "localStorage",
       "mesosphere-shared-reactjs",
       "md5",
-      "PluginBridge",
+      "mixins/index",
+      "src/js/config/",
+      "src/js/constants",
+      "src/js/mixins/PluginGetSetMixin",
+      "src/js/plugin-bridge/AppReducer",
+      "src/js/plugin-bridge/Hooks",
+      "src/js/plugin-bridge/PluginSDK",
+      "src/js/plugin-bridge/PluginTestUtils",
+      "src/js/structs",
+      "src/js/utils",
+      "plugins",
       "react",
       "reactjs-components",
       "reactjs-mixin",
       "react-router",
       "redux",
-      "src/js/constants",
-      "src/js/utils",
-      "structs",
       "underscore"
     ],
     "testPathIgnorePatterns": [

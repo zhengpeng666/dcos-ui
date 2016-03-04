@@ -102,11 +102,11 @@ let NetworkingActions = {
 };
 
 if (Config.useFixtures) {
-  let backendConnectionsFixture = require('json!../../../tests/_fixtures/networking/networking-backend-connections.json');
-  let nodeMembershipsFixture = require('json!../../../tests/_fixtures/networking/networking-node-memberships.json');
-  let vipDetailFixture = require('json!../../../tests/_fixtures/networking/networking-vip-detail.json');
-  let vipSummariesFixture = require('json!../../../tests/_fixtures/networking/networking-vip-summaries.json');
-  let vipsFixture = require('json!../../../tests/_fixtures/networking/networking-vips.json');
+  let backendConnectionsFixture = require('../../../tests/_fixtures/networking/networking-backend-connections.json');
+  let nodeMembershipsFixture = require('../../../tests/_fixtures/networking/networking-node-memberships.json');
+  let vipDetailFixture = require('../../../tests/_fixtures/networking/networking-vip-detail.json');
+  let vipSummariesFixture = require('../../../tests/_fixtures/networking/networking-vip-summaries.json');
+  let vipsFixture = require('../../../tests/_fixtures/networking/networking-vips.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};

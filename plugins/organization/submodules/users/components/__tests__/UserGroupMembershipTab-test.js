@@ -3,26 +3,35 @@ jest.dontMock('../UserGroupTable');
 jest.dontMock('../../../groups/stores/ACLGroupsStore');
 jest.dontMock('../../../groups/stores/ACLGroupStore');
 jest.dontMock('../../stores/ACLUserStore');
+jest.dontMock('../../../../storeConfig');
 
-var JestUtil = require('../../../../../../src/js/utils/JestUtil');
+import PluginTestUtils from 'PluginTestUtils';
 
-JestUtil.unMockStores(['ACLGroupStore', 'ACLGroupsStore', 'ACLUserStore']);
-require('../../../../../../src/js/utils/StoreMixinConfig');
+PluginTestUtils.dontMock('RequestUtil');
 
-var React = require('react');
+/*eslint-disable no-unused-vars*/
+import React from 'react';
+/*eslint-enable no-unused-vars*/
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
+
+require('../../../../storeConfig').register();
+
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
 var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
 var ACLGroupsStore = require('../../../groups/stores/ACLGroupsStore');
 var ACLUserStore = require('../../stores/ACLUserStore');
+var UserGroupMembershipTab = require('../UserGroupMembershipTab');
+
 import {
   REQUEST_ACL_GROUPS_ERROR,
   REQUEST_ACL_GROUPS_SUCCESS
 } from '../../../groups/constants/ActionTypes';
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-var UserGroupMembershipTab = require('../UserGroupMembershipTab');
 var User = require('../../../../../../src/js/structs/User');
 
 let userDetailsFixture =

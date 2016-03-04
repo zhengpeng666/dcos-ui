@@ -2,10 +2,10 @@ var _ = require('underscore');
 var md5 = require('md5');
 var RouterLocation = require('react-router').HashLocation;
 
-var Config = require('../../../src/js/config/Config');
+let SDK = require('../SDK').getSDK();
+let Config = SDK.get('Config');
 
 var Actions = {
-
   /**
    * A hash of active components
    */
@@ -19,7 +19,19 @@ var Actions = {
 
   logQueue: [],
 
+  actions: [
+    'log',
+    'logFakePageView'
+  ],
+
   initialize: function () {
+    this.actions.forEach(action => {
+      SDK.Hooks.addAction(action, this[action].bind(this));
+    });
+    this.start();
+  },
+
+  start: function () {
     this.createdAt = Date.now();
     this.lastLogDate = this.createdAt;
     this.stintID = md5(`session_${this.createdAt}`);

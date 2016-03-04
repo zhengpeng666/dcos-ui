@@ -1,6 +1,10 @@
 var React = require('react');
 
-var IntercomActions = require('../../../plugins/tracking/events/IntercomActions');
+import PluginSDK from 'PluginSDK';
+
+function openIntercom() {
+  PluginSDK.Hooks.doAction('openIntercom');
+}
 
 var RequestErrorMsg = React.createClass({
 
@@ -15,7 +19,7 @@ var RequestErrorMsg = React.createClass({
           </h3>
           <p className="inverse text-align-center flush-bottom">
             {'We have been notified of the issue, but would love to know more. Talk with us using '}
-            <a className="clickable" onClick={IntercomActions.open}>Intercom</a>
+            <a className="clickable" onClick={openIntercom}>Intercom</a>
             {'. You can also join us on our '}
             <a href="https://mesosphere.slack.com/messages/dcos-eap-public"
                 target="_blank">

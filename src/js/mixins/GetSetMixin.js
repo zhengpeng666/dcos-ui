@@ -4,11 +4,11 @@
 
 var _ = require('underscore');
 
-var PluginBridge;
+var PluginSDK;
 
 // Hack until we fix circular dependency - DCOS-5040
 if (global.__DEV__) {
-  PluginBridge = require('../pluginBridge/PluginBridge');
+  PluginSDK = require('PluginSDK');
 }
 
 import {APP_STORE_CHANGE} from '../constants/EventTypes';
@@ -36,10 +36,10 @@ var GetSetMixin = {
     _.extend(this.getSet_data, data);
 
     if (!global.__DEV__) {
-      PluginBridge = require('../pluginBridge/PluginBridge');
+      PluginSDK = require('PluginSDK');
     }
-    // Dispatch new Store data to pluginBridge
-    PluginBridge.dispatch({
+    // Dispatch new Store data
+    PluginSDK.dispatch({
       type: APP_STORE_CHANGE,
       storeID: this.storeID,
       data: this.getSet_data

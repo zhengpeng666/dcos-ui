@@ -1,20 +1,26 @@
 jest.dontMock('../ACLAuthStore');
 jest.dontMock('../../utils');
 jest.dontMock('../../actions/ACLAuthActions');
-jest.dontMock('../../../../src/js/config/Config');
-jest.dontMock('../../../../src/js/mixins/GetSetMixin');
+jest.dontMock('../../constants/ACLUserRoles');
 
-var JestUtil = require('../../../../src/js/utils/JestUtil');
+import PluginTestUtils from 'PluginTestUtils';
 
-JestUtil.unMockStores(['ACLAuthStore']);
+PluginTestUtils.dontMock('PluginGetSetMixin');
 
 var cookie = require('cookie');
 
-var ACLAuthStore = require('../ACLAuthStore');
 var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../../../src/js/events/AppDispatcher');
 var EventTypes = require('../../constants/EventTypes');
-var RequestUtil = require('../../../../src/js/utils/RequestUtil');
+
+let SDK = PluginTestUtils.getSDK('auth', {enabled: true});
+require('../../SDK').setSDK(SDK);
+
+var ACLAuthStore = require('../ACLAuthStore');
+
+let RequestUtil = SDK.get('RequestUtil');
+
+var AppDispatcher = require('../../../../src/js/events/AppDispatcher');
+
 const USER_COOKIE_KEY = 'dcos-acs-info-cookie';
 
 global.atob = global.atob || function () {

@@ -5,8 +5,9 @@ import {Route} from 'react-router';
 
 import OverviewTab from './pages/OverviewTab';
 
-let PluginHooks = {
+let SDK = require('./SDK').getSDK();
 
+module.exports = {
   appendRoutes(route) {
     route.routes.push({
       type: Route,
@@ -17,13 +18,7 @@ let PluginHooks = {
     return route;
   },
 
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize(Hooks) {
-    Hooks.addFilter('SystemRoutes', this.appendRoutes.bind(this));
+  initialize() {
+    SDK.Hooks.addFilter('SystemRoutes', this.appendRoutes.bind(this));
   }
 };
-
-module.exports = PluginHooks;
-

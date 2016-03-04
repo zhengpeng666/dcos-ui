@@ -1,12 +1,18 @@
 jest.dontMock('../ACLGroupsActions');
-jest.dontMock('../../../../../../src/js/events/AppDispatcher');
-jest.dontMock('../../../../../../src/js/config/Config');
 
-var ACLGroupsActions = require('../ACLGroupsActions');
-var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-var Config = require('../../../../../../src/js/config/Config');
-var RequestUtil = require('../../../../../../src/js/utils/RequestUtil');
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.dontMock('RequestUtil');
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
+
+let ACLGroupsActions = require('../ACLGroupsActions');
+let ActionTypes = require('../../constants/ActionTypes');
+
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
+
+let AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 describe('ACLGroupsActions', function () {
 

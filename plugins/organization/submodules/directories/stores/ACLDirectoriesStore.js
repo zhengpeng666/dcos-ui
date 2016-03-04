@@ -22,17 +22,29 @@ import {
   ACL_DIRECTORY_TEST_ERROR
 } from '../constants/EventTypes';
 
+import ACLDirectoriesActions from '../actions/ACLDirectoriesActions';
+
+import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
 
-import ACLDirectoriesActions from '../actions/ACLDirectoriesActions';
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import GetSetMixin from '../../../../../src/js/mixins/GetSetMixin';
-import List from '../../../../../src/js/structs/List';
+let SDK = require('../../../SDK').getSDK();
 
-var ACLDirectoriesStore = Store.createStore({
+let {PluginGetSetMixin, List} = SDK.get(['PluginGetSetMixin', 'List']);
+
+let {APP_STORE_CHANGE} = SDK.constants;
+
+let ACLDirectoriesStore = Store.createStore({
   storeID: 'aclDirectories',
 
-  mixins: [GetSetMixin],
+  mixins: [PluginGetSetMixin],
+
+  onSet() {
+    SDK.dispatch({
+      type: APP_STORE_CHANGE,
+      storeID: this.storeID,
+      data: this.getSet_data
+    });
+  },
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
@@ -99,3 +111,4 @@ var ACLDirectoriesStore = Store.createStore({
 });
 
 module.exports = ACLDirectoriesStore;
+

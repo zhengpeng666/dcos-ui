@@ -33,12 +33,16 @@ import {
   ACL_USER_DELETE_ERROR,
 } from '../constants/EventTypes';
 
+import ACLUsersActions from '../actions/ACLUsersActions';
+import User from '../../../../../src/js/structs/User';
+
+import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
 
-import ACLUsersActions from '../actions/ACLUsersActions';
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import GetSetMixin from '../../../../../src/js/mixins/GetSetMixin';
-import User from '../../../../../src/js/structs/User';
+let SDK = require('../../../SDK').getSDK();
+
+let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
+let {APP_STORE_CHANGE} = SDK.constants;
 
 /**
  * This store will keep track of users and their details
@@ -46,13 +50,21 @@ import User from '../../../../../src/js/structs/User';
 var ACLUserStore = Store.createStore({
   storeID: 'user',
 
-  mixins: [GetSetMixin],
+  mixins: [PluginGetSetMixin],
 
   getSet_data: {
     users: {},
     // A hash of userIds that we're fetching
     // The value is a list of requests that have been received
     usersFetching: {}
+  },
+
+  onSet() {
+    SDK.dispatch({
+      type: APP_STORE_CHANGE,
+      storeID: this.storeID,
+      data: this.getSet_data
+    });
   },
 
   addChangeListener: function (eventName, callback) {

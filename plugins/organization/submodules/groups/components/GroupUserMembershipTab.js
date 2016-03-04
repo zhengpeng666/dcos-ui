@@ -8,14 +8,16 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import ACLGroupStore from '../stores/ACLGroupStore';
 import ACLUsersStore from '../../users/stores/ACLUsersStore';
 import GroupUserTable from './GroupUserTable';
-import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
-import Util from '../../../../../src/js/utils/Util';
 
 const METHODS_TO_BIND = [
   'onUserSelection'
 ];
 
-module.exports = class GroupUserMembershipTable extends mixin(StoreMixin) {
+let SDK = require('../../../SDK').getSDK();
+
+let {RequestErrorMsg, Util} = SDK.get(['RequestErrorMsg', 'Util']);
+
+class GroupUserMembershipTable extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -149,4 +151,6 @@ module.exports = class GroupUserMembershipTable extends mixin(StoreMixin) {
       </div>
     );
   }
-};
+}
+
+module.exports = GroupUserMembershipTable;

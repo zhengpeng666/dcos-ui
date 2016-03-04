@@ -5,7 +5,6 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLGroupStore from '../stores/ACLGroupStore';
-import FormModal from '../../../../../src/js/components/FormModal';
 
 const METHODS_TO_BIND = [
   'handleNewGroupSubmit',
@@ -13,7 +12,9 @@ const METHODS_TO_BIND = [
   'onGroupStoreCreateError'
 ];
 
-module.exports = class GroupFormModal extends mixin(StoreMixin) {
+let SDK = require('../../../SDK').getSDK();
+
+class GroupFormModal extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -71,6 +72,7 @@ module.exports = class GroupFormModal extends mixin(StoreMixin) {
   }
 
   render() {
+    let FormModal = SDK.get('FormModal');
     return (
       <FormModal
         disabled={this.state.disableNewGroup}
@@ -84,4 +86,6 @@ module.exports = class GroupFormModal extends mixin(StoreMixin) {
       </FormModal>
     );
   }
-};
+}
+
+module.exports = GroupFormModal;

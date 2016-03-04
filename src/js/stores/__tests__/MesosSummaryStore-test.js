@@ -2,7 +2,7 @@ var _ = require('underscore');
 
 jest.dontMock('../../mixins/GetSetMixin');
 jest.dontMock('../MesosSummaryStore');
-jest.dontMock('./fixtures/MockStates');
+jest.dontMock('./fixtures/MockStates.json');
 jest.dontMock('./fixtures/MockAppMetadata');
 jest.dontMock('./fixtures/MockParsedAppMetadata');
 jest.dontMock('../../utils/MesosSummaryUtil');
@@ -12,7 +12,7 @@ jest.dontMock('../../utils/StringUtil');
 jest.dontMock('../../utils/Util');
 
 var MesosSummaryStore = require('../MesosSummaryStore');
-var MockStates = require('./fixtures/MockStates');
+var MockStates = require('./fixtures/MockStates.json');
 var Service = require('../../structs/Service');
 
 MesosSummaryStore.init();

@@ -2,10 +2,11 @@
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import IconInfo from '../../src/js/components/icons/IconInfo';
-import DOMUtils from '../../src/js/utils/DOMUtils';
+let SDK = require('./SDK').getSDK();
 
-const BannerPlugin = {
+let {IconInfo, DOMUtils} = SDK.get(['IconInfo', 'DOMUtils']);
+
+module.exports = {
   configuration: {
     backgroundColor: '#1E232F',
     foregroundColor: '#FFFFFF',
@@ -16,20 +17,18 @@ const BannerPlugin = {
     dismissible: null
   },
 
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize: function (Hooks) {
-    Hooks.addAction(
+  initialize: function () {
+    SDK.Hooks.addAction(
       'applicationRendered',
       this.applicationRendered.bind(this)
     );
-    Hooks.addFilter('applicationContents',
+    SDK.Hooks.addFilter('applicationContents',
       this.applicationContents.bind(this)
     );
-    Hooks.addFilter('overlayNewWindowButton',
+    SDK.Hooks.addFilter('overlayNewWindowButton',
       this.overlayNewWindowButton.bind(this)
     );
+    this.configure(SDK.config);
   },
 
   configure: function (configuration) {
@@ -207,4 +206,3 @@ const BannerPlugin = {
   }
 };
 
-module.exports = BannerPlugin;

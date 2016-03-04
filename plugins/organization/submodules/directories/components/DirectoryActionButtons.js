@@ -6,7 +6,6 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLDirectoriesStore from '../stores/ACLDirectoriesStore';
-import FormModal from '../../../../../src/js/components/FormModal';
 
 const buttonDefinition = [
   {
@@ -27,7 +26,9 @@ const METHODS_TO_BIND = [
   'handleSuccessModalClose'
 ];
 
-class DirectoryActionButtons extends mixin(StoreMixin) {
+let SDK = require('../../../SDK').getSDK();
+
+module.exports = class DirectoryActionButtons extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
@@ -109,6 +110,7 @@ class DirectoryActionButtons extends mixin(StoreMixin) {
   }
 
   render() {
+    let FormModal = SDK.get('FormModal');
     return (
       <div>
         <div className="button-collection">
@@ -137,6 +139,7 @@ class DirectoryActionButtons extends mixin(StoreMixin) {
         </FormModal>
 
         <Modal
+          headerClass="modal-header modal-header-white"
           maxHeightPercentage={0.9}
           modalClass="modal"
           onClose={this.handleSuccessModalClose}
@@ -149,6 +152,4 @@ class DirectoryActionButtons extends mixin(StoreMixin) {
       </div>
     );
   }
-}
-
-module.exports = DirectoryActionButtons;
+};

@@ -13,7 +13,7 @@ const METHODS_TO_BIND = [
   'onUserStoreUpdateSuccess'
 ];
 
-module.exports = class UserDetails extends mixin(StoreMixin) {
+class UserDetails extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -92,4 +92,5 @@ module.exports = class UserDetails extends mixin(StoreMixin) {
       </div>
     );
   }
-};
+}
+module.exports = UserDetails;

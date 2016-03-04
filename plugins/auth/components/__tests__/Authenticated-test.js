@@ -1,13 +1,21 @@
 jest.dontMock('../Authenticated');
-jest.dontMock('../../../../src/js/mixins/GetSetMixin');
 jest.dontMock('../../stores/ACLAuthStore');
+jest.dontMock('../../actions/ACLAuthActions');
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var TestUtils = require('react-addons-test-utils');
+import PluginTestUtils from 'PluginTestUtils';
 
-var Authenticated = require('../Authenticated');
-var ACLAuthStore = require('../../stores/ACLAuthStore');
+PluginTestUtils.dontMock('PluginGetSetMixin');
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TestUtils from 'react-addons-test-utils';
+
+let SDK = PluginTestUtils.getSDK('auth', {enabled: true});
+
+require('../../SDK').setSDK(SDK);
+
+let Authenticated = require('../Authenticated');
+let ACLAuthStore = require('../../stores/ACLAuthStore');
 
 class FakeComponent extends React.Component {
   render() {

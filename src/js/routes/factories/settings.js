@@ -1,7 +1,7 @@
 import {Route, Redirect} from 'react-router';
 
 import UnitsHealthTab from '../../pages/settings/UnitsHealthTab';
-import {Hooks} from '../../pluginBridge/PluginBridge';
+import {Hooks} from 'PluginSDK';
 import SettingsPage from '../../pages/SettingsPage';
 
 let RouteFactory = {

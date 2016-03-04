@@ -1,11 +1,16 @@
 jest.dontMock('../ACLDirectoriesActions');
-jest.dontMock('../../../../../../src/js/utils/RequestUtil');
 
-var ACLDirectoriesActions = require('../ACLDirectoriesActions');
-var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-var Config = require('../../../../../../src/js/config/Config');
-var RequestUtil = require('../../../../../../src/js/utils/RequestUtil');
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
+
+let ACLDirectoriesActions = require('../ACLDirectoriesActions');
+let ActionTypes = require('../../constants/ActionTypes');
+
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
+
+let AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 describe('ACLDirectoriesActions', function () {
 

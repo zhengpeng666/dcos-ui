@@ -4,9 +4,8 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLAuthStore from '../stores/ACLAuthStore';
-import MesosphereLogo from '../../../src/js/components/icons/MesosphereLogo';
-import DCOSLogo from '../../../src/js/components/DCOSLogo';
-import FormModal from '../../../src/js/components/FormModal';
+
+let SDK = require('../SDK').getSDK();
 
 function findRedirect(queryString) {
   let redirectTo = false;
@@ -141,6 +140,8 @@ class LoginModal extends mixin(StoreMixin) {
   }
 
   getMesosphereLogo() {
+    let MesosphereLogo = SDK.get('MesosphereLogo');
+
     return (
       <div className="mesosphere-footer-logo">
         <MesosphereLogo height="20" width="148" />
@@ -149,6 +150,8 @@ class LoginModal extends mixin(StoreMixin) {
   }
 
   render() {
+    let {FormModal, DCOSLogo} = SDK.get(['FormModal', 'DCOSLogo']);
+
     let modalProps = {
       innerBodyClass: 'modal-body container container-pod ' +
         'container-pod-short',

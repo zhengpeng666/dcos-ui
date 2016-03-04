@@ -1,26 +1,46 @@
-jest.dontMock('../../../../../../src/js/components/SidePanelContents');
 jest.dontMock('../GroupSidePanelContents');
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
-jest.dontMock('../../../../../../src/js/mixins/InternalStorageMixin');
-jest.dontMock('../../../../../../src/js/mixins/TabsMixin');
-jest.dontMock('../../../../../../src/js/components/RequestErrorMsg');
 jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../../../../../src/js/stores/MesosSummaryStore');
-
-require('../../../../../../src/js/utils/StoreMixinConfig');
+jest.dontMock('../../../../storeConfig');
 
 /* eslint-disable no-unused-vars */
 var React = require('react');
 /* eslint-enable no-unused-vars */
 var ReactDOM = require('react-dom');
 
-var ACLGroupStore = require('../../stores/ACLGroupStore');
-var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
-var EventTypes = require('../../constants/EventTypes');
-var GroupSidePanelContents = require('../GroupSidePanelContents');
-var Group = require('../../../../../../src/js/structs/Group');
+import PluginTestUtils from 'PluginTestUtils';
 
-var groupDetailsFixture =
+PluginTestUtils.dontMock([
+  'MesosSummaryStore',
+  'InternalStorageMixin',
+  'TabsMixin',
+  'PluginGetSetMixin',
+  'SidePanelContents',
+  'RequestErrorMsg'
+]);
+
+PluginTestUtils.loadPluginsByName({
+  auth: {
+    enabled: true
+  },
+  tracking: {
+    enabled: true
+  }
+});
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
+
+require('../../../../storeConfig').register();
+
+let ACLGroupStore = require('../../stores/ACLGroupStore');
+let EventTypes = require('../../constants/EventTypes');
+let GroupSidePanelContents = require('../GroupSidePanelContents');
+
+let Group = require('../../../../../../src/js/structs/Group');
+
+let MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
+
+let groupDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/group-with-details.json');
 groupDetailsFixture.permissions = groupDetailsFixture.permissions.array;
 groupDetailsFixture.users = groupDetailsFixture.users.array;

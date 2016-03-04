@@ -1,22 +1,31 @@
 jest.dontMock('../ACLGroupsStore');
-jest.dontMock('../../../../../../src/js/config/Config');
 jest.dontMock('../../actions/ACLGroupsActions');
-jest.dontMock('../../../../../../src/js/mixins/GetSetMixin');
 jest.dontMock('../../../../../../src/js/structs/Group');
 jest.dontMock('../../../../../../src/js/structs/GroupsList');
-jest.dontMock('../../../../../../src/js/structs/Item');
-jest.dontMock('../../../../../../src/js/structs/List');
 jest.dontMock('../../../../../../tests/_fixtures/acl/groups-unicode.json');
 
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.dontMock([
+  'Item',
+  'List',
+  'PluginGetSetMixin',
+  'RequestUtil'
+]);
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
+/*eslint-disable no-unused-vars*/
+import React from 'react';
+/*eslint-enable no-unused-vars*/
 var _ = require('underscore');
 var ACLGroupsStore = require('../ACLGroupsStore');
 var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-var Config = require('../../../../../../src/js/config/Config');
 var EventTypes = require('../../constants/EventTypes');
-var groupsFixture = require('../../../../../../tests/_fixtures/acl/groups-unicode.json');
 var GroupsList = require('../../../../../../src/js/structs/GroupsList');
-var RequestUtil = require('../../../../../../src/js/utils/RequestUtil');
+var {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
+
+var groupsFixture = require('../../../../../../tests/_fixtures/acl/groups-unicode.json');
+var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 describe('ACLGroupsStore', function () {
 

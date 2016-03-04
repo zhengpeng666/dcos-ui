@@ -7,7 +7,13 @@ jest.dontMock('../MesosSummaryActions');
 jest.dontMock('../../utils/RequestUtil');
 jest.dontMock('../../constants/TimeScales');
 
-var Actions = require('../../../../plugins/tracking/actions/Actions');
+import {Hooks} from 'PluginSDK';
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.loadPluginsByName({
+  tracking: {enabled: true}
+});
+
 var ActionTypes = require('../../constants/ActionTypes');
 var AppDispatcher = require('../AppDispatcher');
 var Config = require('../../config/Config');
@@ -91,21 +97,23 @@ describe('Mesos State Actions', function () {
       });
 
       it('registers history server errors with analytics', function () {
-        spyOn(Actions, 'log');
+        let mockFn = jest.genMockFunction();
+        Hooks.addAction('log', mockFn);
         MesosSummaryActions.fetchSummary(TimeScales.MINUTE);
-        expect(Actions.log).toHaveBeenCalled();
-        expect(Actions.log.mostRecentCall.args[0].eventID).toEqual('Server error');
-        expect(Actions.log.mostRecentCall.args[0].type).toEqual(ActionTypes.REQUEST_MESOS_HISTORY_ERROR);
-        expect(Actions.log.mostRecentCall.args[0].error).toEqual('Guru Meditation');
+        expect(mockFn.mock.calls.length).toEqual(1);
+        expect(mockFn.mock.calls[0][0].eventID).toEqual('Server error');
+        expect(mockFn.mock.calls[0][0].type).toEqual(ActionTypes.REQUEST_MESOS_HISTORY_ERROR);
+        expect(mockFn.mock.calls[0][0].error).toEqual('Guru Meditation');
       });
 
       it('registers mesos server errors with analytics', function () {
-        spyOn(Actions, 'log');
+        let mockFn = jest.genMockFunction();
+        Hooks.addAction('log', mockFn);
         MesosSummaryActions.fetchSummary();
-        expect(Actions.log).toHaveBeenCalled();
-        expect(Actions.log.mostRecentCall.args[0].eventID).toEqual('Server error');
-        expect(Actions.log.mostRecentCall.args[0].type).toEqual(ActionTypes.REQUEST_MESOS_SUMMARY_ERROR);
-        expect(Actions.log.mostRecentCall.args[0].error).toEqual('Guru Meditation');
+        expect(mockFn.mock.calls.length).toEqual(1);
+        expect(mockFn.mock.calls[0][0].eventID).toEqual('Server error');
+        expect(mockFn.mock.calls[0][0].type).toEqual(ActionTypes.REQUEST_MESOS_SUMMARY_ERROR);
+        expect(mockFn.mock.calls[0][0].error).toEqual('Guru Meditation');
       });
 
     });

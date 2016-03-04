@@ -1,9 +1,12 @@
 import _ from 'underscore';
 
 import ActionTypes from '../constants/ActionTypes';
+
 import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import Config from '../../../../../src/js/config/Config';
-import RequestUtil from '../../../../../src/js/utils/RequestUtil';
+
+let SDK = require('../../../SDK').getSDK();
+
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
 const ACLGroupsActions = {
   fetch: function () {
@@ -198,9 +201,9 @@ const ACLGroupsActions = {
 };
 
 if (Config.useFixtures) {
-  let groupFixture = require('json!../../../../../tests/_fixtures/acl/group-unicode.json');
-  let groupDetailsFixture = require('json!../../../../../tests/_fixtures/acl/group-with-details.json');
-  let groupsFixture = require('json!../../../../../tests/_fixtures/acl/groups-unicode.json');
+  let groupFixture = require('../../../../../tests/_fixtures/acl/group-unicode.json');
+  let groupDetailsFixture = require('../../../../../tests/_fixtures/acl/group-with-details.json');
+  let groupsFixture = require('../../../../../tests/_fixtures/acl/groups-unicode.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};

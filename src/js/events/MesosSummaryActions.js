@@ -1,7 +1,7 @@
-var Actions = require('../../../plugins/tracking/actions/Actions');
 import ActionTypes from '../constants/ActionTypes';
 var AppDispatcher = require('./AppDispatcher');
 var Config = require('../config/Config');
+import {Hooks} from 'PluginSDK';
 var RequestUtil = require('../utils/RequestUtil');
 var _historyServiceOnline = true;
 
@@ -16,7 +16,7 @@ function getStateUrl(timeScale) {
 
 function registerServerError(message, type) {
   _historyServiceOnline = false;
-  Actions.log({
+  Hooks.doAction('log', {
     eventID: 'Server error',
     type: type,
     error: message

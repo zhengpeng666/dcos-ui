@@ -2,6 +2,7 @@ var _ = require('underscore');
 var classNames = require('classnames');
 var React = require('react');
 var RouteHandler = require('react-router').RouteHandler;
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 var AnimatedLogo = require('../components/AnimatedLogo');
 var Config = require('../config/Config');
@@ -9,7 +10,7 @@ import ConfigStore from '../stores/ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import HistoryStore from '../stores/HistoryStore';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
-var IntercomStore = require('../../../plugins/tracking/stores/IntercomStore');
+import PluginSDK, {Hooks} from 'PluginSDK';
 var MetadataStore = require('../stores/MetadataStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var Modals = require('../components/Modals');
@@ -29,17 +30,22 @@ var Index = React.createClass({
 
   displayName: 'Index',
 
-  mixins: [InternalStorageMixin],
+  mixins: [InternalStorageMixin, StoreMixin],
 
   getInitialState: function () {
     return {
-      showIntercom: IntercomStore.get('isOpen'),
+      showIntercom: Hooks.applyFilter('isIntercomOpen', false),
       mesosSummaryErrorCount: 0,
       showErrorModal: false,
       modalErrorMsg: '',
       configErrorCount: 0
     };
   },
+
+  store_listeners: [{
+    name: 'intercom',
+    events: ['change']
+  }],
 
   componentWillMount: function () {
     HistoryStore.init();
@@ -57,10 +63,6 @@ var Index = React.createClass({
       EventTypes.SIDEBAR_CHANGE, this.onSideBarChange
     );
     window.addEventListener('resize', SidebarActions.close);
-
-    IntercomStore.addChangeListener(
-      EventTypes.INTERCOM_CHANGE, this.handleIntercomChange
-    );
 
     ConfigStore.addChangeListener(
       EventTypes.CONFIG_ERROR, this.onConfigError
@@ -102,10 +104,6 @@ var Index = React.createClass({
     );
     window.removeEventListener('resize', SidebarActions.close);
 
-    IntercomStore.removeChangeListener(
-      EventTypes.INTERCOM_CHANGE, this.handleIntercomChange
-    );
-
     ConfigStore.removeChangeListener(
       EventTypes.CONFIG_ERROR, this.onConfigError
     );
@@ -136,10 +134,10 @@ var Index = React.createClass({
     }
   },
 
-  handleIntercomChange: function () {
+  onIntercomStoreChange: function () {
     var intercom = global.Intercom;
     if (intercom != null) {
-      this.setState({showIntercom: IntercomStore.get('isOpen')});
+      this.setState({showIntercom: PluginSDK.applyFilter('isIntercomOpen', false)});
     } else {
       this.setState({
         showErrorModal: true,

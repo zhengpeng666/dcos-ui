@@ -1,10 +1,16 @@
-import PluginHooks from './hooks';
+import SDK from './SDK';
 
-module.exports = function (Store, dispatch, name, options) {
-  const {Hooks, config} = options;
+module.exports = function (PluginSDK) {
+  SDK.setSDK(PluginSDK);
 
+  let PluginHooks = require('./hooks');
+  let TrackingActions = require('./actions/Actions');
+  let storeConfig = require('./storeConfig');
   // Set plugin's hooks
-  PluginHooks.initialize(Hooks);
-  PluginHooks.configure(config);
-};
+  PluginHooks.initialize();
 
+  storeConfig.register();
+
+  // Register Actions
+  PluginSDK.registerActions(TrackingActions);
+};

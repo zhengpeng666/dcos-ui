@@ -18,8 +18,10 @@ import {
 } from '../constants/ActionTypes';
 
 import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import Config from '../../../../../src/js/config/Config';
-import RequestUtil from '../../../../../src/js/utils/RequestUtil';
+
+let SDK = require('../../../SDK').getSDK();
+
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
 const ACLUsersActions = {
   fetch: function () {
@@ -170,10 +172,10 @@ const ACLUsersActions = {
 };
 
 if (Config.useFixtures) {
-  let userFixture = require('json!../../../../../tests/_fixtures/acl/user-unicode.json');
-  let usersFixture = require('json!../../../../../tests/_fixtures/acl/users-unicode.json');
+  let userFixture = require('../../../../../tests/_fixtures/acl/user-unicode.json');
+  let usersFixture = require('../../../../../tests/_fixtures/acl/users-unicode.json');
   let userDetailsFixture =
-    require('json!../../../../../tests/_fixtures/acl/user-with-details.json');
+    require('../../../../../tests/_fixtures/acl/user-with-details.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};

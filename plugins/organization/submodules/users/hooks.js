@@ -6,12 +6,14 @@ import {Route, Redirect} from 'react-router';
 
 import UsersTab from './pages/UsersTab';
 
-let PluginHooks = {
+let SDK = require('../../SDK').getSDK();
+
+module.exports = {
   configuration: {
     enabled: false
   },
 
-  getOrganizationRoutes(route) {
+  appendRoutes(route) {
     route.redirect = {
       type: Redirect,
       from: '/settings/organization/?',
@@ -31,14 +33,9 @@ let PluginHooks = {
     return route;
   },
 
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize(Hooks) {
-    Hooks.addFilter('OrganizationRoutes', this.getOrganizationRoutes.bind(this));
-
-    Hooks.addFilter('settings-organization-tabs',
-      this.getTabs.bind(this));
+  initialize() {
+    SDK.Hooks.addFilter('OrganizationRoutes', this.appendRoutes.bind(this));
+    SDK.Hooks.addFilter('settings-organization-tabs', this.getTabs.bind(this));
   },
 
   getTabs(tabs) {
@@ -50,5 +47,3 @@ let PluginHooks = {
     });
   }
 };
-
-module.exports = PluginHooks;

@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var Actions = require('../actions/Actions');
 
-var ActionsMixin = {
+module.exports = {
 
   componentDidMount: function () {
     // Actions disabled for component
@@ -110,5 +110,3 @@ var ActionsMixin = {
     Actions.logBatchAction(messages, state, this.actions_componentID);
   }
 };
-
-module.exports = ActionsMixin;

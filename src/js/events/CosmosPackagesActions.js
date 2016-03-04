@@ -243,14 +243,15 @@ const CosmosPackagesActions = {
 };
 
 if (Config.useFixtures) {
+
   let packageDescribeFixture =
-    require('json!../../../tests/_fixtures/cosmos/package-describe.json');
+    require('../../../tests/_fixtures/cosmos/package-describe.json');
   let packagesListFixture =
-    require('json!../../../tests/_fixtures/cosmos/packages-list.json');
+    require('../../../tests/_fixtures/cosmos/packages-list.json');
   let packagesSearchFixture =
-    require('json!../../../tests/_fixtures/cosmos/packages-search.json');
+    require('../../../tests/_fixtures/cosmos/packages-search.json');
   let packagesRepositoriesFixture =
-    require('json!../../../tests/_fixtures/cosmos/packages-repositories.json');
+    require('../../../tests/_fixtures/cosmos/packages-repositories.json');
 
   if (!global.actionTypes) {
     global.actionTypes = {};

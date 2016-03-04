@@ -9,19 +9,32 @@ import Authenticated from './components/Authenticated';
 import LoginPage from './components/LoginPage';
 import UserDropup from './components/UserDropup';
 
-let PluginHooks = {
+let SDK = require('./SDK').getSDK();
+
+module.exports = {
   configuration: {
     enabled: false
   },
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize(Hooks) {
-    Hooks.addAction('AJAXRequestError', this.AJAXRequestError.bind(this));
-    Hooks.addFilter('sidebarFooter', this.sidebarFooter.bind(this));
-    Hooks.addFilter('openIdentifyModal', this.openIdentifyModal.bind(this));
-    Hooks.addFilter('applicationRoutes', this.applicationRoutes.bind(this));
-    Hooks.addAction('userLogoutSuccess', this.userLogoutSuccess.bind(this));
+
+  actions: [
+    'AJAXRequestError',
+    'userLogoutSuccess'
+  ],
+
+  filters: [
+    'sidebarFooter',
+    'openIdentifyModal',
+    'applicationRoutes'
+  ],
+
+  initialize() {
+    this.filters.forEach(filter => {
+      SDK.Hooks.addFilter(filter, this[filter].bind(this));
+    });
+    this.actions.forEach(action => {
+      SDK.Hooks.addAction(action, this[action].bind(this));
+    });
+    this.configure(SDK.config);
   },
 
   configure(configuration) {
@@ -114,5 +127,3 @@ let PluginHooks = {
     window.location.href = '#/login';
   }
 };
-
-module.exports = PluginHooks;

@@ -2,22 +2,35 @@ jest.dontMock('../UserGroupTable');
 jest.dontMock('../../../groups/stores/ACLGroupStore');
 jest.dontMock('../../../groups/stores/ACLGroupsStore');
 jest.dontMock('../../stores/ACLUserStore');
+jest.dontMock('../../../../storeConfig');
 
-var JestUtil = require('../../../../../../src/js/utils/JestUtil');
+import PluginTestUtils from 'PluginTestUtils';
 
-JestUtil.unMockStores(['ACLGroupStore', 'ACLGroupsStore', 'ACLUserStore']);
-require('../../../../../../src/js/utils/StoreMixinConfig');
+PluginTestUtils.dontMock('RequestUtil');
 
-var React = require('react');
+/*eslint-disable no-unused-vars*/
+import React from 'react';
+/*eslint-enable no-unused-vars*/
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
+
+require('../../../../storeConfig').register();
+
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
-var ActionTypes = require('../../../groups/constants/ActionTypes');
+import {
+  REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
+  REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS
+} from '../../../groups/constants/ActionTypes';
+
 var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
 var ACLUserStore = require('../../stores/ACLUserStore');
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 var UserGroupTable = require('../UserGroupTable');
+
 var User = require('../../../../../../src/js/structs/User');
+var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 let userDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/user-with-details.json');
@@ -56,7 +69,7 @@ describe('UserGroupTable', function () {
     it('updates state when an error event is emitted', function () {
       ACLGroupStore.deleteUser = function () {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
+          type: REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
           data: 'foo bar',
           groupID: 'baz',
           userID: 'unicode'
@@ -74,7 +87,7 @@ describe('UserGroupTable', function () {
     it('gets called when a success event is emitted', function () {
       ACLGroupStore.deleteUser = function () {
         AppDispatcher.handleServerAction({
-          type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
+          type: REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
           data: 'foo bar',
           groupID: 'baz',
           userID: 'unicode'

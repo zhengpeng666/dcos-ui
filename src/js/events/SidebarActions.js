@@ -1,9 +1,10 @@
 import ActionTypes from '../constants/ActionTypes';
-var AppDispatcher = require('./AppDispatcher');
-var Config = require('../config/Config');
-var RequestUtil = require('../utils/RequestUtil');
+import Config from '../config/Config';
+import RequestUtil from '../utils/RequestUtil';
 
-var SidebarActions = {
+var AppDispatcher = require('./AppDispatcher');
+
+module.exports = {
 
   open: function () {
     AppDispatcher.handleSidebarAction({
@@ -53,7 +54,4 @@ var SidebarActions = {
       }
     });
   }
-
 };
-
-module.exports = SidebarActions;

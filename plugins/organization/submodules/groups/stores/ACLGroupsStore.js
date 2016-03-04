@@ -10,20 +10,33 @@ import {
   ACL_GROUPS_REQUEST_ERROR
 } from '../constants/EventTypes';
 
+import ACLGroupsActions from '../actions/ACLGroupsActions';
+
+import GroupsList from '../../../../../src/js/structs/GroupsList';
+
+import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
 
-import ACLGroupsActions from '../actions/ACLGroupsActions';
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import GetSetMixin from '../../../../../src/js/mixins/GetSetMixin';
-import GroupsList from '../../../../../src/js/structs/GroupsList';
+let SDK = require('../../../SDK').getSDK();
+
+let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
+let {APP_STORE_CHANGE} = SDK.constants;
 
 const ACLGroupsStore = Store.createStore({
   storeID: 'groups',
 
-  mixins: [GetSetMixin],
+  mixins: [PluginGetSetMixin],
 
   getSet_data: {
     groups: new GroupsList()
+  },
+
+  onSet() {
+    SDK.dispatch({
+      type: APP_STORE_CHANGE,
+      storeID: this.storeID,
+      data: this.getSet_data
+    });
   },
 
   addChangeListener: function (eventName, callback) {

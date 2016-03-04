@@ -1,9 +1,11 @@
 var srcFolder = "./src";
 var distFolder = "./dist";
- 
+var pluginsFolder = "./plugins";
+
 var dirs = {
   src: srcFolder,
   dist: distFolder,
+  plugins: pluginsFolder,
   srcJS: srcFolder + "/js",
   distJS: distFolder,
   srcCSS: srcFolder + "/styles",
@@ -11,7 +13,7 @@ var dirs = {
   srcImg: srcFolder + "/img",
   distImg: distFolder + "/img"
 };
- 
+
 var files = {
   srcJS: dirs.srcJS + "/index.js",
   distJS: dirs.distJS + "/index.js",
@@ -20,7 +22,7 @@ var files = {
   srcHTML: dirs.src + "/index.html",
   distHTML: dirs.dist + "/index.html"
 };
- 
+
 module.exports = {
   dirs: dirs,
   files: files

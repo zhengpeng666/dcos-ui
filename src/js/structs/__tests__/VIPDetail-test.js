@@ -1,10 +1,8 @@
-var fixturePath = '../../../../tests/_fixtures/networking/networking-vip-detail.json';
-
-jest.dontMock(fixturePath);
+jest.dontMock('../../../../tests/_fixtures/networking/networking-vip-detail.json');
 
 var BackendList = require('../BackendList');
 var VIPDetail = require('../VIPDetail');
-var vipDetailFixture = require(fixturePath);
+var vipDetailFixture = require('../../../../tests/_fixtures/networking/networking-vip-detail.json');
 
 describe('VIPDetail', function () {
 

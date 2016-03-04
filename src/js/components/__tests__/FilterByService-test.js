@@ -7,7 +7,7 @@ jest.dontMock('./fixtures/MockFrameworks');
 jest.dontMock('../../utils/Util');
 
 var FilterByService = require('../FilterByService');
-var MockFrameworks = require('./fixtures/MockFrameworks');
+var MockFrameworks = require('./fixtures/MockFrameworks.json');
 var ServicesList = require('../../structs/ServicesList');
 var Service = require('../../structs/Service');
 

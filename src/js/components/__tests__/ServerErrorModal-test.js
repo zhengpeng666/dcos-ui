@@ -1,16 +1,20 @@
 jest.dontMock('../ServerErrorModal');
 jest.dontMock('../../mixins/GetSetMixin');
-jest.dontMock('../../../../plugins/auth/stores/ACLAuthStore');
-jest.dontMock('../../../../plugins/organization/submodules/groups/stores/ACLGroupsStore');
-jest.dontMock('../../../../plugins/organization/submodules/groups/stores/ACLGroupStore');
-jest.dontMock('../../../../plugins/auth/submodules/acl/stores/ACLStore');
-jest.dontMock('../../../../plugins/organization/submodules/users/stores/ACLUsersStore');
-jest.dontMock('../../../../plugins/organization/submodules/users/stores/ACLUserStore');
-jest.dontMock('../../stores/MarathonStore');
-jest.dontMock('../../stores/MesosStateStore');
-jest.dontMock('../../stores/MesosSummaryStore');
 
-require('../../utils/StoreMixinConfig');
+import PluginTestUtils from 'PluginTestUtils';
+
+PluginTestUtils.dontMock([
+  'MarathonStore',
+  'MesosStateStore',
+  'MesosSummaryStore',
+  'auth',
+  'organization'
+]);
+
+PluginTestUtils.loadPluginsByName({
+  auth: {enabled: true},
+  organization: {enabled: true}
+});
 
 var React = require('react');
 var ReactDOM = require('react-dom');

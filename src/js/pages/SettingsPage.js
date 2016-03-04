@@ -4,7 +4,7 @@ import mixin from 'reactjs-mixin';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
-import {Hooks} from '../pluginBridge/PluginBridge';
+import {Hooks} from 'PluginSDK';
 import Page from '../components/Page';
 import TabsUtil from '../utils/TabsUtil';
 import TabsMixin from '../mixins/TabsMixin';

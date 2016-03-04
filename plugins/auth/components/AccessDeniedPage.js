@@ -1,11 +1,12 @@
 import React from 'react';
 
 import ACLAuthActions from '../actions/ACLAuthActions';
-import AlertPanel from '../../../src/js/components/AlertPanel';
 
 const METHODS_TO_BIND = [
   'handleUserLogout'
 ];
+
+let SDK = require('../SDK').getSDK();
 
 module.exports = class AccessDeniedPage extends React.Component {
   constructor() {
@@ -30,6 +31,7 @@ module.exports = class AccessDeniedPage extends React.Component {
   }
 
   render() {
+    let AlertPanel = SDK.get('AlertPanel');
     return (
       <div className="flex-container-col">
         <div className="page-content container-scrollable inverse">

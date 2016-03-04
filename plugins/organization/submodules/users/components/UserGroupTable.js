@@ -7,8 +7,6 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLGroupStore from '../../groups/stores/ACLGroupStore';
 import ACLUserStore from '../stores/ACLUserStore';
-import ResourceTableUtil from '../../../../../src/js/utils/ResourceTableUtil';
-import TableUtil from '../../../../../src/js/utils/TableUtil';
 
 const METHODS_TO_BIND = [
   'handleOpenConfirm',
@@ -17,7 +15,12 @@ const METHODS_TO_BIND = [
   'renderButton'
 ];
 
-module.exports = class UserGroupTable extends mixin(StoreMixin) {
+let SDK = require('../../../SDK').getSDK();
+
+let {ResourceTableUtil, TableUtil} = SDK.get([
+  'ResourceTableUtil', 'TableUtil']);
+
+class UserGroupTable extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -181,4 +184,6 @@ module.exports = class UserGroupTable extends mixin(StoreMixin) {
       </div>
     );
   }
-};
+}
+
+module.exports = UserGroupTable;

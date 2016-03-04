@@ -6,7 +6,6 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLDirectoriesStore from '../stores/ACLDirectoriesStore';
 import DirectoryActionButtons from '../components/DirectoryActionButtons';
-import FormModal from '../../../../../src/js/components/FormModal';
 
 const buttonDefinition = [
   {
@@ -35,7 +34,9 @@ const METHODS_TO_BIND = [
   'handleModalSubmit'
 ];
 
-class DirectoriesTab extends mixin(StoreMixin) {
+let SDK = require('../../../SDK').getSDK();
+
+module.exports = class DirectoriesTab extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
@@ -235,6 +236,7 @@ class DirectoriesTab extends mixin(StoreMixin) {
   }
 
   renderAddDirectory() {
+    let FormModal = SDK.get('FormModal');
     return (
       <div>
         <button
@@ -274,6 +276,4 @@ class DirectoriesTab extends mixin(StoreMixin) {
       return this.renderAddDirectory();
     }
   }
-}
-
-module.exports = DirectoriesTab;
+};

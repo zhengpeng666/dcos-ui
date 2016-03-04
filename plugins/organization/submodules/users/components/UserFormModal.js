@@ -5,14 +5,15 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLUserStore from '../stores/ACLUserStore';
-import FormModal from '../../../../../src/js/components/FormModal';
 
 const METHODS_TO_BIND = [
   'handleNewUserSubmit',
   'onUserStoreCreateSuccess'
 ];
 
-module.exports = class UserFormModal extends mixin(StoreMixin) {
+let SDK = require('../../../SDK').getSDK();
+
+class UserFormModal extends mixin(StoreMixin) {
   constructor() {
     super();
 
@@ -92,6 +93,7 @@ module.exports = class UserFormModal extends mixin(StoreMixin) {
   }
 
   render() {
+    let FormModal = SDK.get('FormModal');
     return (
       <FormModal
         definition={this.getNewUserFormDefinition()}
@@ -106,4 +108,5 @@ module.exports = class UserFormModal extends mixin(StoreMixin) {
       </FormModal>
     );
   }
-};
+}
+module.exports = UserFormModal;

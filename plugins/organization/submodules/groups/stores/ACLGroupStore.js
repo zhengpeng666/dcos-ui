@@ -41,26 +41,38 @@ import {
   ACL_GROUP_REMOVE_USER_ERROR
 } from '../constants/EventTypes';
 
-import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
-
 import ACLGroupsActions from '../actions/ACLGroupsActions';
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import GetSetMixin from '../../../../../src/js/mixins/GetSetMixin';
 import Group from '../../../../../src/js/structs/Group';
 
+import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
+import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
+
+let SDK = require('../../../SDK').getSDK();
+
+let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
+let {APP_STORE_CHANGE} = SDK.constants;
+
 /**
- * This store will keep track of groups and their details
- */
+* This store will keep track of groups and their details
+*/
 let ACLGroupStore = Store.createStore({
   storeID: 'group',
 
-  mixins: [GetSetMixin],
+  mixins: [PluginGetSetMixin],
 
   getSet_data: {
     groups: {},
     // A hash of groupIDs that we're fetching
     // The value is a list of requests that have been received
     groupsFetching: {}
+  },
+
+  onSet() {
+    SDK.dispatch({
+      type: APP_STORE_CHANGE,
+      storeID: this.storeID,
+      data: this.getSet_data
+    });
   },
 
   addChangeListener: function (eventName, callback) {

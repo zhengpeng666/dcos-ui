@@ -1,12 +1,15 @@
 import mixin from 'reactjs-mixin';
+/*eslint-disable no-unused-vars*/
 import React from 'react';
+/*eslint-enable no-unused-vars*/
 import {Confirm, SidePanel} from 'reactjs-components';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import ACLUserStore from '../stores/ACLUserStore';
+import UserSidePanelContents from './UserSidePanelContents';
+
 import HistoryStore from '../../../../../src/js/stores/HistoryStore';
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
-import UserSidePanelContents from './UserSidePanelContents';
 
 const METHODS_TO_BIND = [
   'handleDeleteModalOpen',

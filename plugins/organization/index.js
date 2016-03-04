@@ -1,16 +1,23 @@
-import GroupsHooks from './submodules/groups/hooks';
-import DirectoriesHooks from './submodules/directories/hooks';
-import PluginHooks from './hooks';
-import UsersHooks from './submodules/users/hooks';
+import SDK from './SDK';
 
-module.exports = function (Store, dispatch, name, options) {
-  const {Hooks} = options;
+module.exports = function (PluginSDK) {
+
+  SDK.setSDK(PluginSDK);
+
+  let DirectoriesHooks = require('./submodules/directories/hooks');
+  let GroupsHooks = require('./submodules/groups/hooks');
+  let PluginHooks = require('./hooks');
+  let UsersHooks = require('./submodules/users/hooks');
+  let StoreConfig = require('./storeConfig');
 
   // Set plugin's hooks
-  PluginHooks.initialize(Hooks);
+  PluginHooks.initialize();
   // Set submodule hooks
-  DirectoriesHooks.initialize(Hooks);
-  GroupsHooks.initialize(Hooks);
-  UsersHooks.initialize(Hooks);
+  GroupsHooks.initialize();
+  UsersHooks.initialize();
+  DirectoriesHooks.initialize();
+
+   // Register our Stores
+  StoreConfig.register();
 };
 

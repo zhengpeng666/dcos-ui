@@ -1,7 +1,5 @@
 import {Store} from 'mesosphere-shared-reactjs';
 
-var AppDispatcher = require('../../../src/js/events/AppDispatcher');
-
 import {
   INTERCOM_ACTION,
   REQUEST_INTERCOM_CLOSE,
@@ -9,12 +7,19 @@ import {
 } from '../constants/ActionTypes';
 
 import {INTERCOM_CHANGE} from '../constants/EventTypes';
-var GetSetMixin = require('../../../src/js/mixins/GetSetMixin');
+
+var AppDispatcher = require('../../../src/js/events/AppDispatcher');
+
+let SDK = require('../SDK').getSDK();
+
+let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
 
 var IntercomStore = Store.createStore({
   storeID: 'intercom',
 
-  mixins: [GetSetMixin],
+  mixins: [PluginGetSetMixin],
+  // Keep onSet because PluginGetSetMixin wants it
+  onSet() {},
 
   init: function () {
     this.set({isOpen: false});
@@ -63,7 +68,6 @@ var IntercomStore = Store.createStore({
 
     return true;
   })
-
 });
 
 module.exports = IntercomStore;
