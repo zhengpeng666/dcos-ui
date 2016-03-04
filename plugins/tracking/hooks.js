@@ -91,6 +91,7 @@ module.exports = {
       // identify user by email after it is ready.
       interval = setInterval(function () {
         if (Actions.canLog()) {
+          debugger;
           var email = LocalStorageUtil.get('email');
           if (email != null) {
             Actions.identify(email, function () {

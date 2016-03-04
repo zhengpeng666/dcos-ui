@@ -8,8 +8,9 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import ACLUserStore from '../stores/ACLUserStore';
 import UserSidePanelContents from './UserSidePanelContents';
 
-import HistoryStore from '../../../../../src/js/stores/HistoryStore';
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
+
+let SDK = require('../../../SDK').getSDK();
 
 const METHODS_TO_BIND = [
   'handleDeleteModalOpen',
@@ -75,7 +76,7 @@ class UserSidePanel extends mixin(StoreMixin) {
       return;
     }
 
-    HistoryStore.goBack(router);
+    SDK.Hooks.doAction('goBack', router);
   }
 
   onUserStoreDeleteError(error) {
