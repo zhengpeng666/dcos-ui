@@ -9,6 +9,24 @@ global.addEventListener('beforeunload', function () {
   Hooks.doAction('log', {eventID: 'Stint ended.'});
 });
 
+// Register our own Intercom store for cases where tracking is disabled.
+// TEMP FIX
+import StoreMixinConfig from './utils/StoreMixinConfig';
+import {Store} from 'mesosphere-shared-reactjs';
+let IntercomStore = Store.createStore({
+  storeID: 'intercom',
+  addChangeListener: function (eventName, callback) {
+    this.on(eventName, callback);
+  },
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
+  }
+});
+StoreMixinConfig.add('intercom', {
+  store: IntercomStore,
+  events: ['change']
+});
+// END FIX
 import _ from 'underscore';
 import {Provider} from 'react-redux';
 import React from 'react';
