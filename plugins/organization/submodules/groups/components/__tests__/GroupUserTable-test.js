@@ -20,7 +20,7 @@ var ACLGroupStore = require('../../stores/ACLGroupStore');
 var GroupUserTable = require('../GroupUserTable');
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-var Group = require('../../../../../../src/js/structs/Group');
+var Group = require('../../structs/Group');
 
 const groupDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/group-with-details.json');

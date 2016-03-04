@@ -36,7 +36,7 @@ let ACLGroupStore = require('../../stores/ACLGroupStore');
 let EventTypes = require('../../constants/EventTypes');
 let GroupSidePanelContents = require('../GroupSidePanelContents');
 
-let Group = require('../../../../../../src/js/structs/Group');
+let Group = require('../../structs/Group');
 
 let MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
 

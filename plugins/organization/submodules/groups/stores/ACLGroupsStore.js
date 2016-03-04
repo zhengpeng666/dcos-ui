@@ -12,7 +12,7 @@ import {
 
 import ACLGroupsActions from '../actions/ACLGroupsActions';
 
-import GroupsList from '../../../../../src/js/structs/GroupsList';
+import GroupsList from '../../structs/GroupsList';
 
 import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';

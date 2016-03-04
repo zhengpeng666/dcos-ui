@@ -11,7 +11,7 @@ let ACLGroupsActions = require('../../actions/ACLGroupsActions');
 let ACLGroupStore = require('../ACLGroupStore');
 let ActionTypes = require('../../constants/ActionTypes');
 let EventTypes = require('../../constants/EventTypes');
-let Group = require('../../../../../../src/js/structs/Group');
+let Group = require('../../structs/Group');
 
 let AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 

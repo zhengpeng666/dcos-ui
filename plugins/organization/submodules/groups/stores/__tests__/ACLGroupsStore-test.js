@@ -1,7 +1,7 @@
 jest.dontMock('../ACLGroupsStore');
 jest.dontMock('../../actions/ACLGroupsActions');
-jest.dontMock('../../../../../../src/js/structs/Group');
-jest.dontMock('../../../../../../src/js/structs/GroupsList');
+jest.dontMock('../../structs/Group');
+jest.dontMock('../../GroupsList');
 jest.dontMock('../../../../../../tests/_fixtures/acl/groups-unicode.json');
 
 import PluginTestUtils from 'PluginTestUtils';
@@ -21,7 +21,7 @@ var _ = require('underscore');
 var ACLGroupsStore = require('../ACLGroupsStore');
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
-var GroupsList = require('../../../../../../src/js/structs/GroupsList');
+var GroupsList = require('../../structs/GroupsList');
 var {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
 var groupsFixture = require('../../../../../../tests/_fixtures/acl/groups-unicode.json');
