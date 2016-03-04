@@ -83,8 +83,7 @@ describe('LoginModal', function () {
 
   describe('#onAuthStoreError', function () {
     beforeEach(function () {
-      this.errorMsg = 'Something went wrong';
-      this.instance.onAuthStoreError(this.errorMsg);
+      this.instance.onAuthStoreError();
     });
 
     it('should enable the modal', function () {
@@ -92,7 +91,8 @@ describe('LoginModal', function () {
     });
 
     it('should set the errorMsg to state', function () {
-      expect(this.instance.state.errorMsg).toEqual(this.errorMsg);
+      expect(this.instance.state.errorMsg)
+        .toEqual('Username and password do not match.');
     });
   });
 
