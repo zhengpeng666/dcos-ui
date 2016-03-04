@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import qs from 'query-string';
 import mixin from 'reactjs-mixin';
 import React from 'react';
@@ -84,23 +85,31 @@ class LoginModal extends mixin(StoreMixin) {
     }
   }
 
-  onAuthStoreError(errorMsg) {
+  onAuthStoreError() {
     this.setState({
       disableLogin: false,
-      errorMsg
+      errorMsg: 'Username and password do not match.'
     });
   }
 
   handleLoginSubmit(model) {
-    this.setState({disableLogin: true});
+    this.setState({
+      disableLogin: true,
+      errorMsg: false
+    });
     ACLAuthStore.login(model);
   }
 
   getLoginFormDefinition() {
+    let formGroupClass = classNames({
+      'form-group short-bottom': true,
+      'form-group-error': this.state.errorMsg
+    });
+
     return [
       {
         fieldType: 'text',
-        formGroupClass: 'form-group short-bottom',
+        formGroupClass,
         name: 'uid',
         placeholder: 'Username',
         required: true,
@@ -112,6 +121,7 @@ class LoginModal extends mixin(StoreMixin) {
       },
       {
         fieldType: 'password',
+        formGroupClass,
         name: 'password',
         placeholder: 'Password',
         required: true,
