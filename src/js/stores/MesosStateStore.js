@@ -119,9 +119,7 @@ var MesosStateStore = Store.createStore({
         return label.key === 'DCOS_PACKAGE_FRAMEWORK_NAME';
       });
 
-      if (frameworkName && name.value === serviceName) {
-        return true;
-      }
+      return frameworkName && frameworkName.value === serviceName;
     });
 
     return result;
