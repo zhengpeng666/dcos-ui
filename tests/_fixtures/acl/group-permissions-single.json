@@ -1,0 +1,15 @@
+{
+  "array": [
+    {
+      "rid": "service.marathon",
+      "description": "Marathon",
+      "aclurl": "/acls/service.marathon",
+      "actions": [
+        {
+          "name": "access",
+          "url": "/acls/service.marathon/groups/olis/access"
+        }
+      ]
+    }
+  ]
+}

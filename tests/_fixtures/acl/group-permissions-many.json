@@ -1,0 +1,38 @@
+{
+  "array": [
+    {
+      "rid": "service.marathon",
+      "description": "Marathon",
+      "aclurl": "/acls/service.marathon",
+      "actions": [
+        {
+          "name": "Read",
+          "url": "/acls/service.marathon/groups/olis/access"
+        },
+        {
+          "name": "Write",
+          "url": "/acls/service.marathon/groups/olis/access"
+        },
+        {
+          "name": "Update",
+          "url": "/acls/service.marathon/groups/olis/access"
+        },
+        {
+          "name": "Delete",
+          "url": "/acls/service.marathon/groups/olis/access"
+        }
+      ]
+    },
+    {
+      "rid": "foo.bar",
+      "description": "Foo",
+      "aclurl": "/acls/foo.bar",
+      "actions": [
+        {
+          "name": "access",
+          "url": "/acls/service.marathon/groups/olis/access"
+        }
+      ]
+    }
+  ]
+}

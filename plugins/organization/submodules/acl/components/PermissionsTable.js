@@ -178,7 +178,8 @@ class PermissionsTable extends mixin(StoreMixin) {
   renderButton(prop, permission) {
     return (
       <div key={permission.rid} className="text-align-right">
-        <button className="button button-danger button-stroke button-small"
+        <button className="button button-small button-danger
+          button-link button-small"
           onClick={this.handleOpenConfirm.bind(this, permission)}>
           Remove
         </button>
@@ -211,10 +212,7 @@ class PermissionsTable extends mixin(StoreMixin) {
             containerSelector=".gm-scroll-view"
             data={permissions}
             itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: 'description', order: 'asc'}}
-            useFlex={true}
-            transition={false}
-            useScrollTable={false} />
+            sortBy={{prop: 'description', order: 'asc'}} />
         </div>
       </div>
     );

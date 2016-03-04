@@ -201,10 +201,7 @@ class GroupUserTable extends mixin(StoreMixin) {
           containerSelector=".gm-scroll-view"
           data={groupUsers}
           itemHeight={TableUtil.getRowHeight()}
-          sortBy={{prop: 'description', order: 'asc'}}
-          useFlex={true}
-          transition={false}
-          useScrollTable={false} />
+          sortBy={{prop: 'description', order: 'asc'}} />
       </div>
     );
   }
