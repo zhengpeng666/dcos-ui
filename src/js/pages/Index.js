@@ -102,8 +102,6 @@ var Index = React.createClass({
       EventTypes.METADATA_CHANGE, this.onMetadataStoreSuccess
     );
 
-    this.removeMesosStateListeners();
-
     MesosSummaryStore.unmount();
   },
 
