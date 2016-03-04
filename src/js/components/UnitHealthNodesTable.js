@@ -60,7 +60,7 @@ class UnitHealthNodesTable extends React.Component {
         prop: 'host_ip',
         render: this.renderNode,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction()
+        sortFunction: ResourceTableUtil.getPropSortFunction('role')
       },
       {
         className: classNameFn,
