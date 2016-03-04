@@ -102,7 +102,7 @@ let SchemaFormUtil = {
   },
 
   processFormModel(model, multipleDefinition, prevPath = []) {
-    let copy = {};
+    let newModel = {};
 
     Object.keys(model).forEach(function (key) {
       let value = model[key];
@@ -110,7 +110,7 @@ let SchemaFormUtil = {
 
       // Nested model.
       if (typeof value === 'object' && value !== null) {
-        copy[key] = SchemaFormUtil.processFormModel(
+        newModel[key] = SchemaFormUtil.processFormModel(
           value, multipleDefinition, path
         );
         return;
@@ -123,14 +123,19 @@ let SchemaFormUtil = {
         return;
       }
 
-      let valueType = definition.valueType;
-      let {isRequired} = definition;
-
-      let processedValue = processValue(value, valueType, isRequired);
-      copy[key] = processedValue;
+      let {isRequired, valueType} = definition;
+      newModel[key] = processValue(value, valueType, isRequired);
     });
 
-    return copy;
+    return newModel;
+  },
+
+  mergeModelIntoDefinition(model, definition) {
+    let thingsToSet = getThingsToSet(model);
+
+    thingsToSet.forEach(function (thingToSet) {
+      setDefinitionValue(thingToSet, definition);
+    });
   },
 
   parseTV4Error(tv4Error) {
@@ -152,21 +157,8 @@ let SchemaFormUtil = {
     return errorObj;
   },
 
-  tv4Validate(model, schema) {
-    return tv4.validateMultiple(model, schema);
-  },
-
-  mergeModelIntoDefinition(model, definition) {
-    let thingsToSet = getThingsToSet(model);
-
-    thingsToSet.forEach(function (thingToSet) {
-      setDefinitionValue(thingToSet, definition);
-    });
-  },
-
   validateModelWithSchema(model, schema) {
-    let result = SchemaFormUtil.tv4Validate(model, schema);
-
+    let result = tv4.validateMultiple(model, schema);
     if (result.valid) {
       return [];
     }

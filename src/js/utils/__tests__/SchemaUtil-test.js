@@ -1,5 +1,4 @@
 jest.dontMock('../SchemaUtil');
-jest.dontMock('../../components/__tests__/fixtures/MarathonConfigFixture');
 
 var SchemaUtil = require('../SchemaUtil');
 
