@@ -43,6 +43,54 @@ describe('LoginModal [01i]', function () {
         });
     });
 
+    it('shows error when credentials are invalid [0ng]', function () {
+      cy.route({
+        method: 'POST',
+        status: 401,
+        url: /api\/v1\/auth\/login/,
+        delay: 100,
+        response: {description: 'foo'}
+      });
+
+      cy.get('.modal-footer .button').click();
+      cy.get('.modal-body .container')
+        .contains('Username and password do not match.');
+    });
+
+    it('removes error while form is submitting [0ni]', function () {
+      cy.route({
+        method: 'POST',
+        status: 401,
+        url: /api\/v1\/auth\/login/,
+        delay: 200,
+        response: {description: 'foo'}
+      });
+
+      cy.get('.modal-footer .button').click();
+      cy.get('.modal-body .container')
+        .contains('Username and password do not match.');
+      cy.get('.modal-footer .button').click();
+      cy.get('.modal-body .container')
+        .should('not.contain', 'Username and password do not match.');
+    });
+
+    it('shows error on subsequent invalid logins [0nh]', function () {
+      cy.route({
+        method: 'POST',
+        status: 401,
+        url: /api\/v1\/auth\/login/,
+        delay: 200,
+        response: {description: 'foo'}
+      });
+
+      cy.get('.modal-footer .button').click();
+      cy.get('.modal-body .container')
+        .contains('Username and password do not match.');
+      cy.get('.modal-footer .button').click();
+      cy.get('.modal-body .container')
+        .contains('Username and password do not match.');
+    });
+
     it('routes to dashboard after login with admin [01m]', function () {
       cy
         .get('.modal-footer .button')
