@@ -6,8 +6,9 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import ACLGroupStore from '../stores/ACLGroupStore';
 import GroupSidePanelContents from './GroupSidePanelContents';
 
-import HistoryStore from '../../../../../src/js/stores/HistoryStore';
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
+
+let SDK = require('../../../SDK').getSDK();
 
 const METHODS_TO_BIND = [
   'handleDeleteModalOpen',
@@ -73,7 +74,7 @@ class GroupSidePanel extends mixin(StoreMixin) {
       return;
     }
 
-    HistoryStore.goBack(router);
+    SDK.Hooks.doAction('goBack', router);
   }
 
   onGroupStoreDeleteError(error) {
