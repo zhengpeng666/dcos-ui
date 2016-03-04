@@ -49,7 +49,7 @@ var Index = React.createClass({
     },
     {
       name: 'summary',
-      events: ['success'],
+      events: ['success', 'error'],
       unmountWhen: function (store, event) {
         return event === 'success';
       },
@@ -127,7 +127,9 @@ var Index = React.createClass({
   onIntercomStoreChange: function () {
     var intercom = global.Intercom;
     if (intercom != null) {
-      this.setState({showIntercom: PluginSDK.Hooks.applyFilter('isIntercomOpen', false)});
+      this.setState({
+        showIntercom: PluginSDK.Hooks.applyFilter('isIntercomOpen', false)
+      });
     } else {
       this.setState({
         showErrorModal: true,
@@ -140,7 +142,7 @@ var Index = React.createClass({
     }
   },
 
-  onMesosSummaryChange: function () {
+  onSummaryStoreSuccess: function () {
     let prevStatesProcessed = this.internalStorage_get().statesProcessed;
 
     // Reset count as we've just received a successful response
@@ -154,7 +156,7 @@ var Index = React.createClass({
     }
   },
 
-  onMesosSummaryError: function () {
+  onSummaryStoreError: function () {
     this.setState({
       mesosSummaryErrorCount: this.state.mesosSummaryErrorCount + 1
     });
