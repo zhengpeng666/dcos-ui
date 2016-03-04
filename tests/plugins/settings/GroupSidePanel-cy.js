@@ -4,7 +4,7 @@ describe('Group Details Sidepanel [02k]', function () {
     cy.configureCluster({
       mesos: '1-task-healthy',
       acl: true,
-      plugins: 'settings-enabled'
+      plugins: 'organization-enabled'
     })
     .visitUrl({url: '/settings/organization/groups/olis', identify: true});
   });

@@ -6,7 +6,7 @@ describe('User Details Sidepanel [02k]', function () {
       cy.configureCluster({
         mesos: '1-task-healthy',
         acl: true,
-        plugins: 'settings-enabled'
+        plugins: 'organization-enabled'
       })
       .visitUrl({url: '/settings/organization/users/quis', identify: true});
     });
@@ -237,7 +237,7 @@ describe('User Details Sidepanel [02k]', function () {
         mesos: '1-task-healthy',
         acl: true,
         aclCreate: true,
-        plugins: 'settings-enabled'
+        plugins: 'organization-enabled'
       })
       .visitUrl({url: '/settings/organization/users/quis', identify: true});
     });

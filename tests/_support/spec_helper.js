@@ -137,7 +137,7 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
   cy.route(/ui-config/, 'fx:config/' + pluginsFixture + '.json');
 
   // Metadata
-  cy.route(/metadata$/, 'fx:dcos/metadata');
+  cy.route(/metadata(\?_timestamp=[0-9]+)?$/, 'fx:dcos/metadata');
 });
 
 Cypress.addParentCommand('visitUrl', function (options) {
