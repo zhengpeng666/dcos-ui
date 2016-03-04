@@ -55,6 +55,7 @@ module.exports = {
     this.actions.forEach(action => {
       SDK.Hooks.addAction(action, this[action].bind(this));
     });
+    this.configure(SDK.config);
   },
 
   configure: function (configuration) {
@@ -85,9 +86,9 @@ module.exports = {
 
   handleToggleIntercom: function () {
     if (IntercomStore.get('isOpen')) {
-      Actions.closeIntercom();
+      this.closeIntercom();
     } else {
-      Actions.openIntercom();
+      this.openIntercom();
       SDK.Hooks.doAction('closeSidebar');
     }
   },
@@ -151,7 +152,7 @@ module.exports = {
       <a key="button-intercom" className="button button-link"
         data-behavior="show-tip"
         data-tip-content="Talk with us"
-        onClick={this.handleToggleIntercom}>
+        onClick={this.handleToggleIntercom.bind(this)}>
         <i className={chatIconClassSet}></i>
       </a>
     );

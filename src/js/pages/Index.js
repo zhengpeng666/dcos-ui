@@ -10,7 +10,7 @@ import ConfigStore from '../stores/ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import HistoryStore from '../stores/HistoryStore';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
-import PluginSDK, {Hooks} from 'PluginSDK';
+import PluginSDK from 'PluginSDK';
 var MetadataStore = require('../stores/MetadataStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var Modals = require('../components/Modals');
@@ -34,7 +34,7 @@ var Index = React.createClass({
 
   getInitialState: function () {
     return {
-      showIntercom: Hooks.applyFilter('isIntercomOpen', false),
+      showIntercom: PluginSDK.Hooks.applyFilter('isIntercomOpen', false),
       mesosSummaryErrorCount: 0,
       showErrorModal: false,
       modalErrorMsg: '',
@@ -42,10 +42,20 @@ var Index = React.createClass({
     };
   },
 
-  store_listeners: [{
-    name: 'intercom',
-    events: ['change']
-  }],
+  store_listeners: [
+    {
+      name: 'intercom',
+      events: ['change']
+    },
+    {
+      name: 'summary',
+      events: ['success'],
+      unmountWhen: function (store, event) {
+        return event === 'success';
+      },
+      listenAlways: false
+    }
+  ],
 
   componentWillMount: function () {
     HistoryStore.init();
@@ -71,31 +81,11 @@ var Index = React.createClass({
     MetadataStore.addChangeListener(
       EventTypes.METADATA_CHANGE, this.onMetadataStoreSuccess
     );
-
-    this.addMesosStateListeners();
   },
 
   shouldComponentUpdate: function (nextProps, nextState) {
     return !(_.isEqual(this.props, nextProps) &&
         _.isEqual(this.state, nextState));
-  },
-
-  addMesosStateListeners: function () {
-    MesosSummaryStore.addChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
-    );
-    MesosSummaryStore.addChangeListener(
-      EventTypes.MESOS_SUMMARY_REQUEST_ERROR, this.onMesosSummaryError
-    );
-  },
-
-  removeMesosStateListeners: function () {
-    MesosSummaryStore.removeChangeListener(
-      EventTypes.MESOS_SUMMARY_CHANGE, this.onMesosSummaryChange
-    );
-    MesosSummaryStore.removeChangeListener(
-      EventTypes.MESOS_SUMMARY_REQUEST_ERROR, this.onMesosSummaryError
-    );
   },
 
   componentWillUnmount: function () {
@@ -137,7 +127,7 @@ var Index = React.createClass({
   onIntercomStoreChange: function () {
     var intercom = global.Intercom;
     if (intercom != null) {
-      this.setState({showIntercom: PluginSDK.applyFilter('isIntercomOpen', false)});
+      this.setState({showIntercom: PluginSDK.Hooks.applyFilter('isIntercomOpen', false)});
     } else {
       this.setState({
         showErrorModal: true,

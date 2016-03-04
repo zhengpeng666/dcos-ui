@@ -1,15 +1,15 @@
 import overrides from './overrides';
 overrides.override();
-import PluginSDK, {Hooks} from 'PluginSDK';
+import PluginSDK from 'PluginSDK';
 
-Hooks.addAction('pluginsConfigured', function () {
-  Hooks.doAction('log', {eventID: 'Stint started.'});
+PluginSDK.Hooks.addAction('pluginsConfigured', function () {
+  PluginSDK.Hooks.doAction('log', {eventID: 'Stint started.'});
 });
 global.addEventListener('beforeunload', function () {
-  Hooks.doAction('log', {eventID: 'Stint ended.'});
+  PluginSDK.Hooks.doAction('log', {eventID: 'Stint ended.'});
 });
 
-// Register our own Intercom store for cases where tracking is disabled.
+// Register our own Intercom and Auth store for cases where tracking is disabled.
 // TEMP FIX
 import StoreMixinConfig from './utils/StoreMixinConfig';
 import {Store} from 'mesosphere-shared-reactjs';
@@ -22,9 +22,28 @@ let IntercomStore = Store.createStore({
     this.removeListener(eventName, callback);
   }
 });
+let AuthStore = Store.createStore({
+  storeID: 'auth',
+  addChangeListener: function (eventName, callback) {
+    this.on(eventName, callback);
+  },
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
+  }
+});
 StoreMixinConfig.add('intercom', {
   store: IntercomStore,
   events: ['change']
+});
+StoreMixinConfig.add('auth', {
+  store: AuthStore,
+  events: {
+    success: 'ACL_AUTH_USER_LOGIN_CHANGED',
+    error: 'ACL_AUTH_USER_LOGIN_ERROR',
+    logoutSuccess: 'ACL_AUTH_USER_LOGOUT_SUCCESS',
+    logoutError: 'ACL_AUTH_USER_LOGOUT_ERROR',
+    roleChange: 'ACL_AUTH_USER_ROLE_CHANGED'
+  }
 });
 // END FIX
 import _ from 'underscore';
@@ -57,7 +76,7 @@ RequestUtil.json = function (options = {}) {
     if (typeof oldHandler === 'function') {
       oldHandler.apply(null, arguments);
     }
-    Hooks.doAction('AJAXRequestError', ...arguments);
+    PluginSDK.Hooks.doAction('AJAXRequestError', ...arguments);
   };
 
   oldJSON(options);
