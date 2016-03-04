@@ -4,7 +4,7 @@ describe('Directories Page [02l]', function () {
     cy.configureCluster({
       mesos: '1-task-healthy',
       acl: true,
-      plugins: 'settings-enabled'
+      plugins: 'organization-enabled'
     })
     .visitUrl({url: '/', logIn: true});
 
@@ -21,7 +21,7 @@ describe('Directories Page [02l]', function () {
       cy.configureCluster({
         mesos: '1-task-healthy',
         acl: true,
-        plugins: 'settings-enabled'
+        plugins: 'organization-enabled'
       })
       .visitUrl({url: '/settings/organization/directories', logIn: true});
 
@@ -98,7 +98,7 @@ describe('Directories Page [02l]', function () {
       cy.configureCluster({
         mesos: '1-task-healthy',
         acl: true,
-        plugins: 'settings-enabled',
+        plugins: 'organization-enabled',
         singleLDAP: true
       })
       .visitUrl({url: '/settings/organization/directories', logIn: true});
@@ -145,7 +145,7 @@ describe('Directories Page [02l]', function () {
       cy.configureCluster({
         mesos: '1-task-healthy',
         acl: true,
-        plugins: 'settings-enabled',
+        plugins: 'organization-enabled',
         singleLDAP: true
       })
       .visitUrl({url: '/settings/organization/directories', logIn: true});

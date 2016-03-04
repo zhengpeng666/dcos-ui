@@ -4,7 +4,7 @@ describe('ServerErrorModal [01n]', function () {
     cy.configureCluster({
       mesos: '1-task-healthy',
       acl: true,
-      plugins: 'settings-enabled'
+      plugins: 'organization-enabled'
     })
     .visitUrl({url: '/', identify: true});
   });

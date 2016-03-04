@@ -6,7 +6,7 @@ describe('Settings Page [05k]', function () {
       cy.configureCluster({
         mesos: '1-task-healthy',
         acl: true,
-        plugins: 'settings-enabled'
+        plugins: 'organization-enabled'
       })
       .visitUrl({url: '/settings/organization/groups/', identify: true});
     });
@@ -84,7 +84,7 @@ describe('Settings Page [05k]', function () {
       cy.configureCluster({
         mesos: '1-task-healthy',
         acl: true,
-        plugins: 'settings-enabled'
+        plugins: 'organization-enabled'
       })
       .visitUrl({url: '/settings/organization/users/', identify: true});
     });

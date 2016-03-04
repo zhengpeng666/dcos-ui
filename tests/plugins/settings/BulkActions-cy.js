@@ -6,7 +6,7 @@ describe('Settings Page [04x]', function () {
       cy.configureCluster({
         mesos: '1-task-healthy',
         acl: true,
-        plugins: 'settings-enabled'
+        plugins: 'organization-enabled'
       })
       .route(/api\/v1\/groups/, 'fx:acl/groups-unicode-truncated')
       .visitUrl({url: '/settings/organization/groups/', identify: true});
@@ -87,7 +87,7 @@ describe('Settings Page [04x]', function () {
       cy.configureCluster({
         mesos: '1-task-healthy',
         acl: true,
-        plugins: 'settings-enabled'
+        plugins: 'organization-enabled'
       })
       .route(/api\/v1\/users/, 'fx:acl/users-unicode-truncated')
       .visitUrl({url: '/settings/organization/users/', identify: true});

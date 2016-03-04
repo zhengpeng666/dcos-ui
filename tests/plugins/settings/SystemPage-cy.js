@@ -5,7 +5,7 @@ describe('System Page [0dw]', function () {
     beforeEach(function () {
       cy.configureCluster({
         mesos: '1-task-healthy',
-        plugins: 'settings-enabled'
+        plugins: 'organization-enabled'
       })
       .visitUrl({url: '/settings/system', identify: true});
     });

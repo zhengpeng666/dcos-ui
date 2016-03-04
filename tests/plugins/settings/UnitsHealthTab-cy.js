@@ -6,7 +6,7 @@ describe('Units Tab [0e2]', function () {
 
       cy.configureCluster({
           mesos: '1-task-healthy',
-          plugins: 'settings-enabled',
+          plugins: 'organization-enabled',
           componentHealth: true
         })
         .visitUrl({url: '/settings/system/units', identify: true});
@@ -66,7 +66,7 @@ describe('Units Tab [0e2]', function () {
     beforeEach(function () {
       cy.configureCluster({
           mesos: '1-task-healthy',
-          plugins: 'settings-enabled',
+          plugins: 'organization-enabled',
           componentHealth: true
         })
         .visitUrl(
@@ -107,7 +107,7 @@ describe('Units Tab [0e2]', function () {
     beforeEach(function () {
       cy.configureCluster({
           mesos: '1-task-healthy',
-          plugins: 'settings-enabled',
+          plugins: 'organization-enabled',
           componentHealth: true
         })
         .visitUrl(
