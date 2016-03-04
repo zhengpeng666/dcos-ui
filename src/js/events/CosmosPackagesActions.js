@@ -176,7 +176,7 @@ const CosmosPackagesActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS,
-          data: response
+          data: response.repositories
         });
       },
       error: function (xhr) {

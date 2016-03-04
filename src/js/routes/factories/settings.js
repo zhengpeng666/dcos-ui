@@ -1,8 +1,9 @@
 import {Route, Redirect} from 'react-router';
 
-import UnitsHealthTab from '../../pages/settings/UnitsHealthTab';
 import {Hooks} from 'PluginSDK';
+import RepositoriesTab from '../../pages/settings/RepositoriesTab';
 import SettingsPage from '../../pages/SettingsPage';
+import UnitsHealthTab from '../../pages/settings/UnitsHealthTab';
 
 let RouteFactory = {
 
@@ -10,31 +11,39 @@ let RouteFactory = {
     // Return filtered Routes
     return this.getFilteredRoutes(
       Hooks.applyFilter('SystemRoutes', {
-        routes: [{
-          type: Route,
-          name: 'settings-system-units',
-          path: 'units/?',
-          handler: UnitsHealthTab,
-          children: [
-            {
-              type: Route,
-              name: 'settings-system-units-unit-nodes-panel',
-              path: ':unitID/?',
-              children: [
-                {
-                  type: Route,
-                  name: 'settings-system-units-unit-nodes-node-panel',
-                  path: 'nodes/:unitNodeID'
-                }
-              ]
-            },
-            {
-              type: Redirect,
-              from: ':unitID/?',
-              to: 'settings-system-units-unit-nodes-panel'
-            }
-          ]
-        }],
+        routes: [
+          {
+            type: Route,
+            name: 'settings-system-units',
+            path: 'units/?',
+            handler: UnitsHealthTab,
+            children: [
+              {
+                type: Route,
+                name: 'settings-system-units-unit-nodes-panel',
+                path: ':unitID/?',
+                children: [
+                  {
+                    type: Route,
+                    name: 'settings-system-units-unit-nodes-node-panel',
+                    path: 'nodes/:unitNodeID'
+                  }
+                ]
+              },
+              {
+                type: Redirect,
+                from: ':unitID/?',
+                to: 'settings-system-units-unit-nodes-panel'
+              }
+            ]
+          },
+          {
+            type: Route,
+            name: 'settings-system-repositories',
+            path: 'repositories/?',
+            handler: RepositoriesTab
+          }
+        ],
         redirect: {
           type: Redirect,
           from: '/settings/system/?',

@@ -4,20 +4,24 @@ import React from 'react';
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+import AddRepositoryFormModal from '../../components/modals/AddRepositoryFormModal';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
 import FilterInputText from '../../components/FilterInputText';
-import PackagesTable from '../../components/PackagesTable';
+import RepositoriesTable from '../../components/RepositoriesTable';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
 
 const METHODS_TO_BIND = [
-  'handleSearchStringChange'
+  'handleSearchStringChange',
+  'handleCloseAddRepository',
+  'handleOpenAddRepository'
 ];
 
-class InstalledPackagesTab extends mixin(StoreMixin) {
+class RepositoriesTab extends mixin(StoreMixin) {
   constructor() {
     super();
 
     this.state = {
+      addRepositoryModalOpen: false,
       hasError: false,
       isLoading: true
     };
@@ -25,7 +29,7 @@ class InstalledPackagesTab extends mixin(StoreMixin) {
     this.store_listeners = [
       {
         name: 'cosmosPackages',
-        events: ['installedError', 'installedSuccess'],
+        events: ['repositoriesSuccess', 'repositoriesError'],
         unmountWhen: function () {
           return true;
         },
@@ -40,14 +44,22 @@ class InstalledPackagesTab extends mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount(...arguments);
-    CosmosPackagesStore.fetchInstalledPackages();
+    CosmosPackagesStore.fetchRepositories();
   }
 
-  onCosmosPackagesStoreInstalledError() {
+  handleCloseAddRepository() {
+    this.setState({addRepositoryModalOpen: false});
+  }
+
+  handleOpenAddRepository() {
+    this.setState({addRepositoryModalOpen: true});
+  }
+
+  onCosmosPackagesStoreRepositoriesError() {
     this.setState({hasError: true});
   }
 
-  onCosmosPackagesStoreInstalledSuccess() {
+  onCosmosPackagesStoreRepositoriesSuccess() {
     this.setState({hasError: false, isLoading: false});
   }
 
@@ -72,7 +84,12 @@ class InstalledPackagesTab extends mixin(StoreMixin) {
   }
 
   render() {
-    let {hasError, isLoading, searchString} = this.state;
+    let {
+      addRepositoryModalOpen,
+      hasError,
+      isLoading,
+      searchString
+    } = this.state;
 
     if (hasError) {
       return this.getErrorScreen();
@@ -82,7 +99,7 @@ class InstalledPackagesTab extends mixin(StoreMixin) {
       return this.getLoadingScreen();
     }
 
-    let packages = CosmosPackagesStore.getInstalledPackages()
+    let repositories = CosmosPackagesStore.getRepositories()
       .filterItems(searchString);
 
     return (
@@ -94,11 +111,19 @@ class InstalledPackagesTab extends mixin(StoreMixin) {
             searchString={searchString}
             handleFilterChange={this.handleSearchStringChange}
             inverseStyle={true} />
+          <button
+            className="button button-success"
+            onClick={this.handleOpenAddRepository}>
+            Add Repository
+          </button>
         </div>
-        <PackagesTable packages={packages} filter={searchString} />
+        <RepositoriesTable repositories={repositories} filter={searchString} />
+        <AddRepositoryFormModal
+          open={addRepositoryModalOpen}
+          onClose={this.handleCloseAddRepository} />
       </div>
     );
   }
 }
 
-module.exports = InstalledPackagesTab;
+module.exports = RepositoriesTab;
