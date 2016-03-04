@@ -164,9 +164,9 @@ gulp.task('webpack', function (callback) {
   });
 });
 
-gulp.task('default', ['webpack', 'eslint', 'replace-js-strings', 'less', 'swf', 'html']);
+gulp.task('default', ['webpack', 'eslint', 'replace-js-strings', 'less', 'images', 'swf', 'html']);
 
-gulp.task('dist', ['default', 'images', 'minify-css', 'minify-js']);
+gulp.task('dist', ['default', 'minify-css', 'minify-js']);
 
 gulp.task('serve', ['default', 'connect:server', 'watch']);
 
