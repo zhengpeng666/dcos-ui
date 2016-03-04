@@ -11,7 +11,7 @@ import {
 } from '../constants/EventTypes';
 
 import ACLUsersActions from '../actions/ACLUsersActions';
-import UsersList from '../../../../../src/js/structs/UsersList';
+import UsersList from '../structs/UsersList';
 
 import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';

@@ -1,6 +1,6 @@
 jest.dontMock('../../actions/ACLGroupsActions');
 jest.dontMock('../ACLGroupStore');
-jest.dontMock('../../../../../../src/js/structs/User');
+jest.dontMock('../../../users/structs/User');
 
 import PluginTestUtils from 'PluginTestUtils';
 

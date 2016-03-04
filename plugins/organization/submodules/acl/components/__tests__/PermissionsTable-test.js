@@ -19,7 +19,7 @@ import {
   REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS
 } from '../../constants/ActionTypes';
 
-var User = require('../../../../../../src/js/structs/User');
+var User = require('../../../users/structs/User');
 
 import PluginTestUtils from 'PluginTestUtils';
 

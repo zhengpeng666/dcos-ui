@@ -32,7 +32,7 @@ import {
 } from '../../../groups/constants/ActionTypes';
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-var User = require('../../../../../../src/js/structs/User');
+var User = require('../../structs/User');
 
 let userDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/user-with-details.json');

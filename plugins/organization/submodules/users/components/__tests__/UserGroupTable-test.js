@@ -29,7 +29,7 @@ var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
 var ACLUserStore = require('../../stores/ACLUserStore');
 var UserGroupTable = require('../UserGroupTable');
 
-var User = require('../../../../../../src/js/structs/User');
+var User = require('../../structs/User');
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 let userDetailsFixture =
