@@ -15,19 +15,23 @@ function getValueFromSchemaProperty(fieldProps) {
   return value;
 }
 
-function getLabelFromSchemaProperty(fieldProps, fieldName, isRequired) {
+function getLabelFromSchemaProperty(fieldName, fieldProps, isRequired, renderLabel) {
   let label = fieldName;
 
   if (isRequired) {
     label = `${label} *`;
   }
 
+  if (renderLabel && fieldProps.description) {
+    return renderLabel(fieldProps.description, label);
+  }
+
   return label;
 }
 
-function schemaToFieldDefinition(fieldName, fieldProps, formParent, isRequired) {
+function schemaToFieldDefinition(fieldName, fieldProps, formParent, isRequired, renderLabel) {
   let value = getValueFromSchemaProperty(fieldProps);
-  let label = getLabelFromSchemaProperty(fieldProps, fieldName, isRequired);
+  let label = getLabelFromSchemaProperty(fieldName, fieldProps, isRequired, renderLabel);
 
   let definition = {
     fieldType: 'text',
@@ -56,7 +60,7 @@ function schemaToFieldDefinition(fieldName, fieldProps, formParent, isRequired) 
   return definition;
 }
 
-function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subheaderRender) {
+function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, renderSubheader, renderLabel) {
   let nestedDefinition = {
     name: fieldName,
     formParent: topLevelProp,
@@ -65,8 +69,8 @@ function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subh
     definition: []
   };
 
-  if (typeof subheaderRender === 'function') {
-    nestedDefinition.render = subheaderRender.bind(null, fieldName);
+  if (typeof renderSubheader === 'function') {
+    nestedDefinition.render = renderSubheader.bind(null, fieldName);
   }
 
   let properties = fieldProps.properties;
@@ -81,7 +85,8 @@ function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subh
           nestedFieldName,
           nestedPropertyValue,
           nestedFieldName,
-          subheaderRender
+          renderSubheader,
+          renderLabel
         )
       );
     } else {
@@ -90,7 +95,8 @@ function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subh
           nestedFieldName,
           nestedPropertyValue,
           nestedFieldName,
-          requiredProps && requiredProps.indexOf(nestedFieldName) > -1
+          requiredProps && requiredProps.indexOf(nestedFieldName) > -1,
+          renderLabel
         )
       );
     }
@@ -100,7 +106,7 @@ function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subh
 }
 
 let SchemaUtil = {
-  schemaToMultipleDefinition: function (schema, subheaderRender) {
+  schemaToMultipleDefinition: function (schema, renderSubheader, renderLabel) {
     let multipleDefinition = {};
     let schemaProperties = schema.properties;
 
@@ -122,14 +128,16 @@ let SchemaUtil = {
             secondLevelProp,
             secondLevelObject,
             topLevelProp,
-            requiredProps && requiredProps.indexOf(secondLevelProp) > -1
+            requiredProps && requiredProps.indexOf(secondLevelProp) > -1,
+            renderLabel
           );
         } else {
           fieldDefinition = nestedSchemaToFieldDefinition(
             secondLevelProp,
             secondLevelObject,
             topLevelProp,
-            subheaderRender
+            renderSubheader,
+            renderLabel
           );
         }
         definitionForm.definition.push(fieldDefinition);
