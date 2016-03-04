@@ -1,9 +1,9 @@
 import _ from 'underscore';
 import classNames from 'classnames';
+import {Form} from 'reactjs-components';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
 
-import FormPanel from './FormPanel';
 import SideTabs from './SideTabs';
 import SchemaFormUtil from '../utils/SchemaFormUtil';
 import SchemaUtil from '../utils/SchemaUtil';
@@ -180,6 +180,15 @@ class SchemaForm extends React.Component {
     );
   }
 
+  getHeader(title, description) {
+    return (
+      <div key={title} className="column-12">
+        <h3 className="form-header flush-bottom">{title}</h3>
+        <p>{description}</p>
+      </div>
+    );
+  }
+
   getSideContent(multipleDefinition) {
     let currentTab = this.state.currentTab;
     let {handleTabClick} = this;
@@ -228,15 +237,23 @@ class SchemaForm extends React.Component {
         'hidden': currentTab !== formKey
       });
 
+      let formPanelDefinition = multipleDefinition[formKey];
+      let definition = [{render: this.getHeader.bind(
+        this,
+        formPanelDefinition.title,
+        formPanelDefinition.description
+      )}].concat(formPanelDefinition.definition);
+
       return (
-        <FormPanel
-          className={panelClassSet}
-          currentTab={this.state.currentTab}
-          definition={multipleDefinition[formKey]}
-          getTriggerSubmit={this.getTriggerSubmit.bind(this, formKey)}
-          key={i}
-          onSubmit={this.handleFormSubmit.bind(this, formKey)}
-          onFormChange={this.handleFormChange} />
+        <div key={i} className="row form-panel">
+          <Form
+            className={panelClassSet}
+            definition={definition}
+            formGroupClass="form-group flush"
+            triggerSubmit={this.getTriggerSubmit.bind(this, formKey)}
+            onChange={this.handleFormChange}
+            onSubmit={this.handleFormSubmit.bind(this, formKey)} />
+        </div>
       );
     });
 
