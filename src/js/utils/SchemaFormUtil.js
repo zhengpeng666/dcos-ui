@@ -85,9 +85,13 @@ let SchemaFormUtil = {
         return;
       }
 
-      let nextDefinition = _.find(definition.definition, function (definitionField) {
-        return definitionField.name === path || definitionField.title === path;
-      });
+      let nextDefinition = _.find(
+        definition.definition,
+        function (definitionField) {
+          return definitionField.name === path
+            || definitionField.title === path;
+        }
+      );
 
       if (nextDefinition) {
         definition = nextDefinition;
@@ -157,6 +161,18 @@ let SchemaFormUtil = {
 
     thingsToSet.forEach(function (thingToSet) {
       setDefinitionValue(thingToSet, definition);
+    });
+  },
+
+  validateModelWithSchema(model, schema) {
+    let result = SchemaFormUtil.tv4Validate(model, schema);
+
+    if (result.valid) {
+      return [];
+    }
+
+    return result.errors.map(function (error) {
+      return SchemaFormUtil.parseTV4Error(error);
     });
   }
 };

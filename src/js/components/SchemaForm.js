@@ -34,9 +34,7 @@ class SchemaForm extends React.Component {
     if (this.props.definition) {
       this.multipleDefinition = this.props.definition;
     } else {
-      this.multipleDefinition = SchemaUtil.schemaToMultipleDefinition(
-        this.props.schema, this.getSubHeader
-      );
+      this.multipleDefinition = this.getNewDefinition();
     }
 
     if (this.props.model) {
@@ -99,50 +97,48 @@ class SchemaForm extends React.Component {
     };
   }
 
-  validateForm(fieldName) {
-    let schema = this.props.schema;
-    let isValidated = true;
+  getNewDefinition() {
+    return SchemaUtil.schemaToMultipleDefinition(
+      this.props.schema, this.getSubHeader
+    );
+  }
 
+  buildModel() {
     Object.keys(this.multipleDefinition).forEach((formKey) => {
       this.submitMap[formKey]();
     });
+  }
 
+  validateForm(fieldName) {
+    let schema = this.props.schema;
+    let isValidated = true;
     let prevDefinition = this.multipleDefinition;
+
+    this.buildModel();
     // Reset the definition in order to reset all errors.
-    this.multipleDefinition = SchemaUtil.schemaToMultipleDefinition(
-      schema, this.getSubHeader
-    );
+    this.multipleDefinition = this.getNewDefinition();
 
     let model = SchemaFormUtil.processFormModel(
       this.model, this.multipleDefinition
     );
-    let result = SchemaFormUtil.tv4Validate(model, schema);
 
-    let errors = result.errors.map(function (error) {
-      return SchemaFormUtil.parseTV4Error(error);
-    });
-
+    let errors = SchemaFormUtil.validateModelWithSchema(model, schema);
     errors.forEach((error) => {
       let path = error.path;
-      let prevObj = prevDefinition[path[0]];
-      prevObj = SchemaFormUtil.getDefinitionFromPath(prevObj, path.slice(1));
-      if (path[path.length - 1] !== fieldName && !prevObj.showError) {
+      let prevObj = SchemaFormUtil.getDefinitionFromPath(prevDefinition, path);
+      let obj = SchemaFormUtil.getDefinitionFromPath(
+        this.multipleDefinition, path
+      );
+      if ((_.last(path) !== fieldName && !prevObj.showError) || obj == null) {
         return;
       }
+
       isValidated = false;
-      let obj = this.multipleDefinition[path[0]];
-      obj = SchemaFormUtil.getDefinitionFromPath(obj, path.slice(1));
-
-      if (obj == null) {
-        return;
-      }
-
       obj.showError = error.message;
       obj.validationErrorText = error.message;
     });
 
     this.forceUpdate();
-
     this.isValidated = isValidated;
     return isValidated;
   }
