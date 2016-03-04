@@ -1,5 +1,5 @@
 jest.dontMock('../PackagesTab');
-jest.dontMock('../../../components/AdvancedConfigModal');
+jest.dontMock('../../../components/AdvancedConfig');
 jest.dontMock('../../../components/Panel');
 jest.dontMock('../../../components/MultipleForm');
 jest.dontMock('../../../components/modals/InstallPackageModal');
