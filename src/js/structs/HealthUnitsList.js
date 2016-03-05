@@ -23,7 +23,9 @@ class HealthUnitsList extends List {
     if (filters) {
 
       if (filters.title) {
-        components = StringUtil.filterByString(components, 'unit_title', filters.title);
+        components = StringUtil.filterByString(components, function (component) {
+          return component.getTitle();
+        }, filters.title);
       }
 
       if (filters.health) {

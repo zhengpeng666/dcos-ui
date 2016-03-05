@@ -20,7 +20,7 @@ const UnitHealthActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_HEALTH_UNITS_SUCCESS,
-          data: response.array
+          data: response.units
         });
       },
       error: function (xhr) {
@@ -58,7 +58,7 @@ const UnitHealthActions = {
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_HEALTH_UNIT_NODES_SUCCESS,
-          data: response.array,
+          data: response.nodes,
           unitID
         });
       },

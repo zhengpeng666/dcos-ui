@@ -41,7 +41,7 @@ describe('UnitHealthStore', function () {
     Config.useFixtures = true;
     UnitHealthStore.fetchUnits();
     var units = UnitHealthStore.getUnits().getItems();
-    expect(units.length).toEqual(this.unitsFixture.array.length);
+    expect(units.length).toEqual(this.unitsFixture.units.length);
     Config.useFixtures = false;
   });
 

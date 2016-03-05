@@ -61,12 +61,12 @@ class UnitsHealthTab extends mixin(StoreMixin) {
     return (
       <div className="text-overflow">
         <Link to="settings-system-units-unit-nodes-panel"
-          params={{unitID: unit.get('unit_id')}}
+          params={{unitID: unit.get('id')}}
           className="headline">
           <span className="icon icon-small icon-image-container icon-app-container">
             <img src="./img/services/icon-service-default-small@2x.png" />
           </span>
-          {unit.get(prop)}
+          {unit.getTitle()}
         </Link>
       </div>
     );
@@ -115,23 +115,23 @@ class UnitsHealthTab extends mixin(StoreMixin) {
         cacheCell: true,
         className: classNameFn,
         headerClassName: classNameFn,
-        prop: 'unit_title',
+        prop: 'id',
         render: this.renderUnit,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('unit_title'),
-        heading: ResourceTableUtil.renderHeading({unit_title: 'NAME'})
+        sortFunction: ResourceTableUtil.getPropSortFunction('id'),
+        heading: ResourceTableUtil.renderHeading({id: 'NAME'})
       },
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        prop: 'unit_health',
+        prop: 'health',
         render: this.renderHealth,
         sortable: true,
         sortFunction: ResourceTableUtil.getStatSortFunction(
-          'unit_title',
+          'description',
           UnitHealthUtil.getHealthSorting
         ),
-        heading: ResourceTableUtil.renderHeading({unit_health: 'HEALTH'})
+        heading: ResourceTableUtil.renderHeading({health: 'HEALTH'})
       }
     ];
   }
@@ -209,7 +209,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
             containerSelector=".gm-scroll-view"
             data={visibleData}
             itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: 'unit_health', order: 'desc'}}
+            sortBy={{prop: 'health', order: 'desc'}}
             />
         </div>
         <SidePanels

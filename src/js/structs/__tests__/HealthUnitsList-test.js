@@ -30,22 +30,22 @@ describe('HealthUnitsList', function () {
 
     it('filters by title', function () {
       let items = [
-        {unit_title: 'foo'},
-        {unit_title: 'bar'},
-        {unit_title: 'baz'}
+        {id: 'foo'},
+        {id: 'bar'},
+        {id: 'baz'}
       ];
       let list = new HealthUnitsList({items});
       let filteredList = list.filter({title: 'ba'}).getItems();
       expect(filteredList.length).toEqual(2);
-      expect(filteredList[0].get('unit_title')).toEqual('bar');
-      expect(filteredList[1].get('unit_title')).toEqual('baz');
+      expect(filteredList[0].get('id')).toEqual('bar');
+      expect(filteredList[1].get('id')).toEqual('baz');
     });
 
     it('filters by unit health title', function () {
       let items = [
-        {id: 'foo', unit_health: 0},
-        {id: 'bar', unit_health: 0},
-        {id: 'bluh', unit_health: 2}
+        {id: 'foo', health: 0},
+        {id: 'bar', health: 0},
+        {id: 'bluh', health: 2}
       ];
       let list = new HealthUnitsList({items});
       let filteredList = list.filter({health: 'healthy'}).getItems();

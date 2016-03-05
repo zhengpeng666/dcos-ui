@@ -42,7 +42,7 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
         {imageTag}
         <div>
           <h1 className="side-panel-content-header-label flush">
-            {`${unit.get('unit_title')} Health Check`}
+            {`${unit.getTitle()} Health Check`}
           </h1>
           <div>
             {this.getSubHeader(unit, node)}
@@ -71,7 +71,7 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
           </span>
         </li>
         <li>
-          {node.get('hostname')}
+          {node.get('host_ip')}
         </li>
       </ul>
     );
@@ -80,9 +80,11 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
   getNodeInfo(node) {
     return (
       <div className="flex-container-col flex-grow">
+        <span className="h4">Summary</span>
+        <p>This is a component summary, a placeholder.</p>
         <span className="h4">Output</span>
         <pre className="flex-grow flush-bottom">
-          {node.get('unit_output')}
+          {node.get('output')}
         </pre>
       </div>
     );

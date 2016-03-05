@@ -1,28 +1,104 @@
 {
-  "array": [
+  "units": [
     {
-      "unit_id": "marathon_service",
-      "unit_title": "marathon service",
-      "unit_health": 0,
-      "unit_output": "OK"
+      "id": "dcos-marathon.service",
+      "health": 0,
+      "description": "Marathon"
     },
     {
-      "unit_id": "mesos_dns_service",
-      "unit_title": "Mesos DNS",
-      "unit_health": 1,
-      "unit_output": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
+      "id": "dcos-mesos-dns.service",
+      "health": 1,
+      "description": "Mesos DNS"
     },
     {
-      "unit_id": "mesos_master_service",
-      "unit_title": "mesos master service",
-      "unit_health": 0,
-      "unit_output": "OK"
+      "id": "dcos-mesos-master.service",
+      "health": 0,
+      "description": "Mesos Master"
     },
     {
-      "unit_id": "nginx_service",
-      "unit_title": "nginx service",
-      "unit_health": 0,
-      "unit_output": "OK"
+      "id": "dcos-signal.service",
+      "health": 0,
+      "description": "DCOS Tracking"
+    },
+    {
+      "id": "dcos-gen-resolvconf.timer",
+      "health": 0,
+      "description": "Periodically update systemd-resolved for mesos-dns"
+    },
+    {
+      "id": "dcos-exhibitor.service",
+      "health": 0,
+      "description": "Exhibitor Zookeeper Supervisor"
+    },
+    {
+      "id": "dcos-history-service.service",
+      "health": 0,
+      "description": "DCOS History Service"
+    },
+    {
+      "id": "dcos-logrotate.service",
+      "health": 0,
+      "description": "Rotate various logs on the system"
+    },
+    {
+      "id": "dcos-link-env.service",
+      "health": 0,
+      "description": "dcos-link-env.service"
+    },
+    {
+      "id": "dcos-download.service",
+      "health": 0,
+      "description": "Download the DCOS"
+    },
+    {
+      "id": "dcos-logrotate.timer",
+      "health": 0,
+      "description": "Rotate logs every 2 minutes"
+    },
+    {
+      "id": "dcos-signal.timer",
+      "health": 0,
+      "description": "Tracking every interval"
+    },
+    {
+      "id": "dcos-gunicorn-bouncer.service",
+      "health": 0,
+      "description": "Bouncer (DCOS Access Control Service API provider)"
+    },
+    {
+      "id": "dcos-nginx-reload.service",
+      "health": 0,
+      "description": "Reload nginx"
+    },
+    {
+      "id": "dcos-nginx-reload.timer",
+      "health": 0,
+      "description": "Periodically reload nginx config to pickup new dns"
+    },
+    {
+      "id": "dcos-setup.service",
+      "health": 0,
+      "description": "Prep the Pkgpanda working directories for this host."
+    },
+    {
+      "id": "dcos-mesos-slave.service",
+      "health": 0,
+      "description": "Mesos Slave"
+    },
+    {
+      "id": "dcos-keepalived.service",
+      "health": 0,
+      "description": "LVS and VRRP High Availability Monitor"
+    },
+    {
+      "id": "dcos-nginx.service",
+      "health": 0,
+      "description": "A high performance web server and a reverse proxy server"
+    },
+    {
+      "id": "dcos-gen-resolvconf.service",
+      "health": 0,
+      "description": "Update systemd-resolved for mesos-dns"
     }
   ]
 }

@@ -22,7 +22,7 @@ class Node extends Item {
   // http://schema.dcos/system/health/node
 
   getHealth() {
-    return UnitHealthUtil.getHealth(this.get('node_health'));
+    return UnitHealthUtil.getHealth(this.get('health'));
   }
 
 }

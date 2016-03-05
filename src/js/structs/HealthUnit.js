@@ -1,10 +1,25 @@
 import Item from './Item';
+import StringUtil from '../utils/StringUtil';
 import UnitHealthUtil from '../utils/UnitHealthUtil';
+
+const ID_PREFIX = 'dcos-';
+const REPLACE_IN_ID = {'dns': 'DNS'};
 
 class HealthUnit extends Item {
 
   getHealth() {
-    return UnitHealthUtil.getHealth(this.get('unit_health'));
+    return UnitHealthUtil.getHealth(this.get('health'));
+  }
+
+  getTitle() {
+    let id = this.get('id') || '';
+    let prefixIndex = id.indexOf(ID_PREFIX);
+
+    if (prefixIndex >= 0) {
+      id = id.slice(prefixIndex + ID_PREFIX.length);
+    }
+
+    return StringUtil.idToTitle([id], ['.', '-'], REPLACE_IN_ID, true);
   }
 
 }

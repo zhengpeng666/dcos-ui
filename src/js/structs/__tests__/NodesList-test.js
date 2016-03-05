@@ -68,9 +68,9 @@ describe('NodesList', function () {
 
     it('filters by unit health title', function () {
       let items = [
-        {id: 'foo', node_health: 0},
-        {id: 'bar', node_health: 0},
-        {id: 'bluh', node_health: 2}
+        {id: 'foo', health: 0},
+        {id: 'bar', health: 0},
+        {id: 'bluh', health: 2}
       ];
       let list = new NodesList({items});
       let filteredList = list.filter({health: 'healthy'}).getItems();

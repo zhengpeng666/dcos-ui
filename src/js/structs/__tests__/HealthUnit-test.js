@@ -9,9 +9,9 @@ describe('HealthUnit', function () {
 
     it('returns a UnitHealthStatus object', function () {
       var healthItem = new HealthUnit({
-        'unit_id': 'service_manager',
-        'unit_title': 'Service Manager',
-        'unit_health': 1
+        'id': 'service_manager',
+        'description': 'Service Manager',
+        'health': 1
       });
 
       expect(healthItem.getHealth()).toEqual({

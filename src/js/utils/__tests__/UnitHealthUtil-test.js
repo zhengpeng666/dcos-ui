@@ -9,7 +9,7 @@ describe('UnitHealthUnit', function () {
 
   describe('#getHealthSorting', function () {
     beforeEach(function () {
-      let unit = new HealthUnit({unit_health: 0, unit_id: 'aaa'});
+      let unit = new HealthUnit({health: 0, id: 'aaa'});
       this.healthWeight = UnitHealthUtil.getHealthSorting(unit);
     });
 
@@ -42,9 +42,9 @@ describe('UnitHealthUnit', function () {
 
     it('filters by unit health title', function () {
       let items = [
-        {id: 'food', node_health: 0},
-        {id: 'bard', node_health: 0},
-        {id: 'bluh', node_health: 2}
+        {id: 'food', health: 0},
+        {id: 'bard', health: 0},
+        {id: 'bluh', health: 2}
       ];
       let list = new NodesList({items});
       let filteredList = list.filter({health: 'healthy'}).getItems();
