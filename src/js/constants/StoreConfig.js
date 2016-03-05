@@ -18,6 +18,15 @@ import {
   COSMOS_REPOSITORY_DELETE_SUCCESS,
   COSMOS_REPOSITORY_DELETE_ERROR,
 
+  HEALTH_NODE_ERROR,
+  HEALTH_NODE_SUCCESS,
+  HEALTH_NODE_UNITS_ERROR,
+  HEALTH_NODE_UNITS_SUCCESS,
+  HEALTH_NODE_UNIT_ERROR,
+  HEALTH_NODE_UNIT_SUCCESS,
+  HEALTH_NODES_CHANGE,
+  HEALTH_NODES_ERROR,
+
   HEALTH_UNITS_CHANGE,
   HEALTH_UNITS_ERROR,
   HEALTH_UNIT_SUCCESS,
@@ -65,6 +74,7 @@ import NetworkingBackendConnectionsStore from '../stores/NetworkingBackendConnec
 import NetworkingNodeMembershipsStore from '../stores/NetworkingNodeMembershipsStore';
 import NetworkingVIPsStore from '../stores/NetworkingVIPsStore';
 import NetworkingVIPSummariesStore from '../stores/NetworkingVIPSummariesStore';
+import NodeHealthStore from '../stores/NodeHealthStore';
 import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 import UnitHealthStore from '../stores/UnitHealthStore';
 
@@ -81,6 +91,24 @@ const ListenersDescription = {
       nodesError: HEALTH_UNIT_NODES_ERROR,
       nodeSuccess: HEALTH_UNIT_NODE_SUCCESS,
       nodeError: HEALTH_UNIT_NODE_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
+  nodeHealth: {
+    store: NodeHealthStore,
+    events: {
+      success: HEALTH_NODES_CHANGE,
+      error: HEALTH_NODES_ERROR,
+      nodeSuccess: HEALTH_NODE_SUCCESS,
+      nodeErorr: HEALTH_NODE_ERROR,
+      unitsSuccess: HEALTH_NODE_UNITS_SUCCESS,
+      unitsError: HEALTH_NODE_UNITS_ERROR,
+      unitSuccess: HEALTH_NODE_UNIT_SUCCESS,
+      unitError: HEALTH_NODE_UNIT_ERROR
     },
     unmountWhen: function () {
       return true;
