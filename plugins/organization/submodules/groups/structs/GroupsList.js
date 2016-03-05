@@ -1,4 +1,6 @@
-import List from './List';
+let SDK = require('../../../SDK').getSDK();
+
+let List = SDK.get('List');
 
 module.exports = class GroupsList extends List {
   constructor() {

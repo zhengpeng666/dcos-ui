@@ -41,6 +41,7 @@ userDetailsFixture.groups = userDetailsFixture.groups.array;
 describe('UserGroupMembershipTab', function () {
 
   beforeEach(function () {
+    require('../../../../SDK').setSDK(SDK);
     this.groupStoreAddUser = ACLGroupStore.addUser;
     this.groupsStoreGet = ACLGroupsStore.get;
     this.userStoreGetUser = ACLUserStore.getUser;

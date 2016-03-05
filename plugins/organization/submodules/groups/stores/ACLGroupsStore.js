@@ -10,14 +10,14 @@ import {
   ACL_GROUPS_REQUEST_ERROR
 } from '../constants/EventTypes';
 
+let SDK = require('../../../SDK').getSDK();
+
 import ACLGroupsActions from '../actions/ACLGroupsActions';
 
-import GroupsList from '../../structs/GroupsList';
+import GroupsList from '../structs/GroupsList';
 
 import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
-
-let SDK = require('../../../SDK').getSDK();
 
 let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
 let {APP_STORE_CHANGE} = SDK.constants;

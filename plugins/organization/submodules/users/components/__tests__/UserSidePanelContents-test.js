@@ -45,6 +45,7 @@ userDetailsFixture.groups = userDetailsFixture.groups.array;
 describe('UserSidePanelContents', function () {
 
   beforeEach(function () {
+    require('../../../../SDK').setSDK(SDK);
     this.summaryGet = MesosSummaryStore.get;
     this.userStoreGetUser = ACLUserStore.getUser;
 

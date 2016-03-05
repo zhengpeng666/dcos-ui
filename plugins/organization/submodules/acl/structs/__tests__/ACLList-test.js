@@ -1,9 +1,13 @@
-jest.dontMock('../Item');
 jest.dontMock('../ACLList');
-jest.dontMock('../../utils/Util');
 
-let Item = require('../Item');
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
+
 let ACLList = require('../ACLList');
+
+let Item = SDK.get('Item');
 
 describe('ACLList', function () {
 

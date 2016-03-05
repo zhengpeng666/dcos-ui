@@ -1,7 +1,7 @@
 jest.dontMock('../ACLGroupsStore');
 jest.dontMock('../../actions/ACLGroupsActions');
 jest.dontMock('../../structs/Group');
-jest.dontMock('../../GroupsList');
+jest.dontMock('../../structs/GroupsList');
 jest.dontMock('../../../../../../tests/_fixtures/acl/groups-unicode.json');
 
 import PluginTestUtils from 'PluginTestUtils';
@@ -30,6 +30,7 @@ var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 describe('ACLGroupsStore', function () {
 
   beforeEach(function () {
+    require('../../../../SDK').setSDK(SDK);
     this.requestFn = RequestUtil.json;
     RequestUtil.json = function (handlers) {
       handlers.success(groupsFixture);

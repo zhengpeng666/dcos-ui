@@ -1,7 +1,10 @@
 jest.dontMock('../Group');
 jest.dontMock('../GroupsList');
-jest.dontMock('../../utils/Util');
 
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 // var Group = require('../Group');
 // var GroupsList = require('../GroupsList');
 

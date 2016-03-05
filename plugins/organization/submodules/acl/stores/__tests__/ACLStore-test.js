@@ -35,7 +35,7 @@ import PluginTestUtils from 'PluginTestUtils';
 
 let SDK = PluginTestUtils.getSDK('auth', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
-var ACLList = require('../../../../../../src/js/structs/ACLList');
+var ACLList = require('../../structs/ACLList');
 
 var ACLStore = require('../ACLStore');
 var RequestUtil = SDK.get('RequestUtil');

@@ -1,5 +1,7 @@
-import List from './List';
 import User from './User';
+let SDK = require('../../../SDK').getSDK();
+
+let List = SDK.get('List');
 
 module.exports = class UsersList extends List {
   constructor() {
