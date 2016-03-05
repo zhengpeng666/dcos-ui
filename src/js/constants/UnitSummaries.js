@@ -8,7 +8,7 @@ const UnitSummaries = {
     documentation_url: "https://docs.mesosphere.com/administration/dcosarchitecture/components/"
   },
   dcos-mesos-master.service: {
-    summary: "The mesos-master process orchestrates agent tasks.",
+    summary: "The Mesos master process orchestrates agent tasks.",
     documentation_url: "https://docs.mesosphere.com/getting-started/installing/installing-enterprise-edition/troubleshooting/#scrollNav-2"
   },
   dcos-signal.service: {
@@ -16,15 +16,15 @@ const UnitSummaries = {
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-gen-resolvconf.timer: {
-    summary: "Periodically updates the systemd-resolved for Mesos DNS.",
+    summary: "Sets the dcos-gen-resolvconf.service to be run once a minute.",
     documentation_url: "https://docs.mesosphere.com/getting-started/installing/installing-enterprise-edition/troubleshooting/#scrollNav-2"
   },
   dcos-exhibitor.service: {
-    summary: "The Exhibitor supervisor for Zookeeper.",
+    summary: "Manages DCOS in-cluster Zookeeper, used by Mesos as well as DCOS Marathon.",
     documentation_url: "https://docs.mesosphere.com/getting-started/overview/"
   },
   dcos-history-service.service: {
-    summary: "Enables the DCOS web interface to display cluster usage statistics.",
+    summary: "Caches recent cluster history in-memory so that the DCOS web interface can show recent data",
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-logrotate.service: {
@@ -36,11 +36,11 @@ const UnitSummaries = {
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-download.service: {
-    summary: "Downloads and extracts the DCOS bootstrap tarball into /opt/mesosphere on your bootstrap node.",
+    summary: "Downloads and extracts the DCOS bootstrap tarball into /opt/mesosphere on your nodes.",
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-logrotate.timer: {
-    summary:"Sets the logrotate interval at 2 minutes.",
+    summary:"Rotates the Mesos master and agent log files to prevent filling the disk.",
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-signal.timer: {
