@@ -47,7 +47,6 @@ const ACLStore = Store.createStore({
   mixins: [PluginGetSetMixin],
 
   getSet_data: {
-    services: new ACLList(),
     outstandingGrants: {}
   },
 
@@ -69,7 +68,7 @@ const ACLStore = Store.createStore({
 
   createACLForResource: ACLActions.createACLForResource,
 
-  fetchACLsForResource: ACLActions.fetchACLsForResource,
+  fetchACLs: ACLActions.fetchACLs,
 
   grantUserActionToResource: function (...args) {
     this.safeGrantRequest(ACLActions.grantUserActionToResource, ...args);
@@ -83,8 +82,12 @@ const ACLStore = Store.createStore({
 
   revokeGroupActionToResource: ACLActions.revokeGroupActionToResource,
 
-  hasACL: function (resourceID) {
-    return this.get('services').getItem(resourceID) !== undefined;
+  getACLs: function (resourceType = 'allACLs') {
+    return new ACLList({items: this.get(resourceType) || []});
+  },
+
+  hasACL: function (resourceType, resourceID) {
+    return this.getACLs(resourceType).getItem(resourceID) !== undefined;
   },
 
   addOutstandingGrantRequest: function (resourceID, cb) {
@@ -93,18 +96,19 @@ const ACLStore = Store.createStore({
       outstandingGrants[resourceID] = [];
     }
     outstandingGrants[resourceID].push(cb);
-    this.set({outstandingGrants: outstandingGrants});
+    this.set({outstandingGrants});
   },
 
   removeAllOutstandingGrantRequests: function (resourceID) {
     let outstandingGrants = this.get('outstandingGrants');
     delete outstandingGrants[resourceID];
-    this.set({'outstandingGrants': outstandingGrants});
+    this.set({outstandingGrants});
   },
 
-  safeGrantRequest: function (aclActionFn, subjectID, action, resourceID) {
+  safeGrantRequest: function (aclActionFn, subjectID, action, resourceID,
+    resourceType = 'allACLs') {
     // First check if ACL exists before requesting grant
-    if (ACLStore.hasACL(resourceID)) {
+    if (ACLStore.hasACL(resourceType, resourceID)) {
       aclActionFn(subjectID, action, resourceID);
       return;
     }
@@ -112,15 +116,18 @@ const ACLStore = Store.createStore({
     ACLStore.addOutstandingGrantRequest(resourceID, function () {
       aclActionFn(subjectID, action, resourceID);
     });
-    let ACL = {
-      description: resourceID.split('.')[1] + ' service'
-    };
-    ACLStore.createACLForResource(resourceID, ACL);
+
+    let ACLObject = {description: resourceID};
+    if (/^service/.test(resourceID)) {
+      ACLObject.description = resourceID.split('.')[1] + ' service';
+    }
+
+    ACLStore.createACLForResource(resourceID, ACLObject);
   },
 
-  processOutstandingGrants: function () {
+  processOutstandingGrants: function (resourceType) {
     let outstandingGrants = this.get('outstandingGrants');
-    this.get('services').getItems().forEach(function (acl) {
+    this.getACLs(resourceType).getItems().forEach(function (acl) {
       let resourceID = acl.get('rid');
       if (resourceID in outstandingGrants) {
         // Run grant requests now that we have an ACL
@@ -132,10 +139,10 @@ const ACLStore = Store.createStore({
     });
   },
 
-  processResourcesACLs: function (items = []) {
-    this.set({services: new ACLList({items})});
+  processResourcesACLs: function (items = [], resourceType = 'allACLs') {
+    this.set({[resourceType]: items});
     this.emit(ACL_RESOURCE_ACLS_CHANGE);
-    ACLStore.processOutstandingGrants();
+    ACLStore.processOutstandingGrants(resourceType);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
@@ -149,7 +156,7 @@ const ACLStore = Store.createStore({
     switch (action.type) {
       // Create ACL for resource
       case REQUEST_ACL_CREATE_SUCCESS:
-        ACLStore.fetchACLsForResource('service');
+        ACLStore.fetchACLs();
         ACLStore.emit(
             ACL_CREATE_SUCCESS,
             action.resourceID

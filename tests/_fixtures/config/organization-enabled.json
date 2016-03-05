@@ -1,8 +1,8 @@
 {
   "uiConfiguration": {
     "plugins": {
-      "settings": {
-        "enabled": false
+      "organization": {
+        "enabled": true
       }
     }
   }

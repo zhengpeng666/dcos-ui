@@ -1,0 +1,20 @@
+{
+  "direct": [
+    
+  ],
+  "groups": [
+    {
+      "rid": "service.marathon",
+      "description": "Marathon",
+      "aclurl": "/acls/service.marathon",
+      "gid": "ölis",
+      "membershipurl": "/groups/quis/users/quis",
+      "actions": [
+        {
+          "name": "access",
+          "url": "/acls/service.marathon/groups/quis/access"
+        }
+      ]
+    }
+  ]
+}

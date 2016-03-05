@@ -42,9 +42,14 @@ const ACLActions = {
     });
   },
 
-  fetchACLsForResource: function (resourceType) {
+  fetchACLs: function (resourceType) {
+    let query = '';
+    if (resourceType) {
+      query = `?type=${resourceType}`;
+    }
+
     RequestUtil.json({
-      url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls?type=${resourceType}`,
+      url: `${Config.rootUrl}${Config.acsAPIPrefix}/acls${query}`,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
@@ -153,7 +158,7 @@ if (Config.useFixtures) {
   }
 
   global.actionTypes.ACLActions = {
-    fetchACLsForResource: {event: 'success', success: {
+    fetchACLs: {event: 'success', success: {
       response: aclsFixture
     }},
     grantUserActionToResource: {event: 'success'},

@@ -578,10 +578,7 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
             containerSelector=".gm-scroll-view"
             data={visibleItems}
             itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: 'description', order: 'asc'}}
-            useFlex={true}
-            transition={false}
-            useScrollTable={false} />
+            sortBy={{prop: 'description', order: 'asc'}} />
         </div>
       </div>
     );

@@ -68,7 +68,7 @@ const initialize = function (pluginsConfig) {
       return;
     }
     // Bootstrap if plugin enabled
-    if (pluginsConfig[pluginID].enabled) {
+    if (pluginsConfig[pluginID] && pluginsConfig[pluginID].enabled) {
       bootstrapPlugin(pluginID, pluginList[pluginID], pluginsConfig[pluginID]);
     }
   });

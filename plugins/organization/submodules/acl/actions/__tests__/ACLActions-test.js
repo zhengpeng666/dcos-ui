@@ -42,10 +42,10 @@ describe('ACLActions', function () {
     RequestUtil.json = this.requestUtilJSON;
   });
 
-  describe('#fetchACLsForResource', function () {
+  describe('#fetchACLs', function () {
 
     it('dispatches the correct action when successful', function () {
-      ACLActions.fetchACLsForResource('foo');
+      ACLActions.fetchACLs('foo');
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -60,7 +60,7 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      ACLActions.fetchACLsForResource('bar');
+      ACLActions.fetchACLs('bar');
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
@@ -76,15 +76,22 @@ describe('ACLActions', function () {
 
     it('calls #json from the RequestUtil', function () {
       spyOn(RequestUtil, 'json');
-      ACLActions.fetchACLsForResource('foo');
+      ACLActions.fetchACLs('foo');
       expect(RequestUtil.json).toHaveBeenCalled();
     });
 
     it('fetches data from the correct URL', function () {
       spyOn(RequestUtil, 'json');
-      ACLActions.fetchACLsForResource('bar');
+      ACLActions.fetchACLs('bar');
       expect(RequestUtil.json.mostRecentCall.args[0].url)
         .toEqual(Config.acsAPIPrefix + '/acls?type=bar');
+    });
+
+    it('fetches data from the correct URL', function () {
+      spyOn(RequestUtil, 'json');
+      ACLActions.fetchACLs();
+      expect(RequestUtil.json.mostRecentCall.args[0].url)
+        .toEqual(Config.acsAPIPrefix + '/acls');
     });
   });
 

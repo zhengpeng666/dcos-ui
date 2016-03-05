@@ -230,6 +230,148 @@ describe('User Details Sidepanel [02k]', function () {
 
   });
 
+  context('Advanced ACLs Tab [0k4]', function () {
+
+    context('no permissions set [0l1]', function () {
+
+      beforeEach(function () {
+        cy.configureCluster({
+          mesos: '1-task-healthy',
+          acl: true,
+          userNoPermissions: true,
+          plugins: 'organization-enabled'
+        })
+        .visitUrl({url: '/settings/organization/users/quis', identify: true});
+
+        cy.get('.side-panel .tabs .tab-item-label')
+          .contains('Advanced ACLs')
+          .click();
+        cy.get('.side-panel table tbody tr').as('rows');
+      });
+
+      it('should have an empty table [08g]', function () {
+        cy.get('@rows').should('have.length', 1);
+        cy.get('@rows').eq(0).find('td').contains('No data');
+      });
+
+    });
+
+    context('permissions set [0l7]', function () {
+
+      beforeEach(function () {
+        cy.configureCluster({
+          mesos: '1-task-healthy',
+          acl: true,
+          plugins: 'organization-enabled'
+        })
+        .visitUrl({url: '/settings/organization/users/quis', identify: true});
+
+        cy.get('.side-panel .tabs .tab-item-label')
+          .contains('Advanced ACLs')
+          .click();
+        cy.get('.side-panel table tbody tr').as('rows');
+      });
+
+      it('display resource names [0l8]', function () {
+        cy.get('@rows').should('have.length', 4);
+        cy.get('@rows').eq(1).find('td').contains('service.marathon');
+      });
+
+    });
+
+    context('many permissions set [0ld]', function () {
+
+      beforeEach(function () {
+        cy.configureCluster({
+          mesos: '1-task-healthy',
+          acl: true,
+          userManyPermissions: true,
+          plugins: 'organization-enabled'
+        })
+        .visitUrl({url: '/settings/organization/users/quis', identify: true});
+
+        cy.get('.side-panel .tabs .tab-item-label')
+          .contains('Advanced ACLs')
+          .click();
+        cy.get('.side-panel table tbody tr').as('rows');
+      });
+
+      it('display all permissions for resource [0le]', function () {
+        cy.get('@rows').should('have.length', 4);
+        cy.get('@rows').eq(1).find('td').eq(1)
+          .contains('Read, Write, Update, Delete');
+      });
+
+    });
+
+    context('delete permission [0lv]', function () {
+
+      beforeEach(function () {
+        cy.configureCluster({
+          mesos: '1-task-healthy',
+          acl: true,
+          userManyPermissions: true,
+          plugins: 'organization-enabled'
+        })
+        .visitUrl({url: '/settings/organization/users/quis', identify: true});
+
+        cy.get('.side-panel .tabs .tab-item-label')
+          .contains('Advanced ACLs')
+          .click();
+        cy.get('.side-panel table tbody tr').as('rows');
+      });
+
+      it('delete all permissions [0lw]', function () {
+        cy.configureCluster({
+          acl: true,
+          userPermissionDeleteAllow: true,
+          userSinglePermission: true
+        });
+
+        cy.get('@rows').should('have.length', 4);
+        cy.get('@rows').eq(1).contains('Remove').click();
+        cy.get('@rows').should('have.length', 3);
+      });
+
+    });
+
+    context('add permission [0lv]', function () {
+
+      beforeEach(function () {
+        cy.configureCluster({
+          mesos: '1-task-healthy',
+          acl: true,
+          aclCreate: true,
+          plugins: 'organization-enabled'
+        })
+        .visitUrl({url: '/settings/organization/users/quis', identify: true});
+
+        cy.get('.side-panel .tabs .tab-item-label')
+          .contains('Advanced ACLs')
+          .click();
+        cy.get('.side-panel table tbody tr').as('rows');
+      });
+
+      it('adds permission [0lw]', function () {
+        cy.configureCluster({
+          acl: true,
+          userSinglePermission: true
+        });
+
+        cy.get('.side-panel form')
+          .find('input[name=resource]').type('service.marathon');
+        cy.get('.side-panel form')
+          .find('input[name=action]').type('access');
+        cy.get('.side-panel button').contains('Add Rule').click();
+        cy.get('@rows').should('have.length', 3);
+        cy.get('@rows').eq(1).contains('service.marathon');
+        cy.get('@rows').eq(1).contains('access');
+      });
+
+    });
+
+  });
+
   context('ACL [08d]', function () {
 
     beforeEach(function () {
@@ -246,7 +388,7 @@ describe('User Details Sidepanel [02k]', function () {
       cy
         .get('.side-panel table tr')
         .should(function ($tr) {
-          expect($tr).to.have.length(0);
+          expect($tr).to.have.length(2);
         });
     });
 

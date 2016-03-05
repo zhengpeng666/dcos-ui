@@ -59,7 +59,7 @@ class PermissionsView extends mixin(StoreMixin) {
 
   componentDidMount() {
     super.componentDidMount();
-    ACLStore.fetchACLsForResource('service');
+    ACLStore.fetchACLs('service');
   }
 
   onAclStoreFetchResourceSuccess() {
@@ -91,7 +91,8 @@ class PermissionsView extends mixin(StoreMixin) {
     ACLStore[`grant${itemType}ActionToResource`](
       this.props.itemID,
       'access',
-      resource.id
+      resource.id,
+      'service'
     );
   }
 

@@ -1,0 +1,42 @@
+{
+  "direct": [
+    {
+      "rid": "service.marathon",
+      "description": "Marathon",
+      "aclurl": "/acls/service.marathon",
+      "actions": [
+        {
+          "name": "Read",
+          "url": "/acls/service.marathon/users/quis/access"
+        },
+        {
+          "name": "Write",
+          "url": "/acls/service.marathon/users/quis/access"
+        },
+        {
+          "name": "Update",
+          "url": "/acls/service.marathon/users/quis/access"
+        },
+        {
+          "name": "Delete",
+          "url": "/acls/service.marathon/users/quis/access"
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "rid": "service.marathon",
+      "description": "Marathon",
+      "aclurl": "/acls/service.marathon",
+      "gid": "ölis",
+      "membershipurl": "/groups/quis/users/quis",
+      "actions": [
+        {
+          "name": "access",
+          "url": "/acls/service.marathon/groups/quis/access"
+        }
+      ]
+    }
+  ]
+}

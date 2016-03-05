@@ -7,6 +7,7 @@ import ACLUserStore from '../stores/ACLUserStore';
 import PermissionsView from '../../acl/components/PermissionsView';
 import UserDetails from './UserDetails';
 import UserGroupMembershipTab from './UserGroupMembershipTab';
+import UserAdvancedACLsTab from './UserAdvancedACLsTab';
 
 import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
 
@@ -31,6 +32,7 @@ class UserSidePanelContents extends SidePanelContents {
     this.tabs_tabs = {
       permissions: 'Permissions',
       membership: 'Group Membership',
+      advancedACLs: 'Advanced ACLs',
       details: 'Details'
     };
 
@@ -194,6 +196,12 @@ ${groupLabel}${remote}`
   renderGroupMembershipTabView() {
     return (
       <UserGroupMembershipTab userID={this.props.itemID} />
+    );
+  }
+
+  renderAdvancedACLsTabView() {
+    return (
+      <UserAdvancedACLsTab itemID={this.props.itemID} />
     );
   }
 

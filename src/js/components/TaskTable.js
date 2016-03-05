@@ -181,9 +181,7 @@ class TaskTable extends React.Component {
         containerSelector=".gm-scroll-view"
         data={this.props.tasks.slice()}
         itemHeight={TableUtil.getRowHeight()}
-        sortBy={{prop: 'name', order: 'desc'}}
-        useFlex={true}
-        transition={false} />
+        sortBy={{prop: 'name', order: 'desc'}} />
     );
   }
 }

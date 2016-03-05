@@ -57,7 +57,7 @@ describe('PermissionsView', function () {
       this.instance.handleResourceSelection({id: 'foo'});
 
       expect(ACLStore.grantUserActionToResource)
-        .toHaveBeenCalledWith('quis', 'access', 'foo');
+        .toHaveBeenCalledWith('quis', 'access', 'foo', 'service');
     });
 
     it('shouldn\'t call #grantUserActionToResource when is default', function () {

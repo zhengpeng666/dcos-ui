@@ -29,7 +29,7 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
 
   if (configuration.acl) {
     cy
-      .route(/acls\?type=service/, 'fx:acl/acls-unicode')
+      .route(/acls(\?type=.*?)?/, 'fx:acl/acls-unicode')
       .route({
         method: 'GET',
         url: /api\/v1\/ldap\/config/,
@@ -59,6 +59,50 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
     if (configuration.singleLDAP) {
       cy.route(/api\/v1\/ldap\/config/, 'fx:acl/acls-config-1-server');
     }
+
+    // User endpoints
+    if (configuration.userNoPermissions) {
+      cy.route(/users\/quis\/permissions/, 'fx:acl/user-permissions-empty');
+    }
+
+    if (configuration.userManyPermissions) {
+      cy.route(/users\/quis\/permissions/, 'fx:acl/user-permissions-many');
+    }
+
+    if (configuration.userSinglePermission) {
+      cy.route(/users\/quis\/permissions/, 'fx:acl/user-permissions-single');
+    }
+
+    if (configuration.userPermissionDeleteAllow) {
+      cy.route({
+        method: 'DELETE',
+        url: /api\/v1\/acls\/.*?\/users\/quis/,
+        status: 200,
+        response: {}
+      })
+    }
+
+    // Group endpoints
+    if (configuration.groupNoPermissions) {
+      cy.route(/groups\/olis\/permissions/, 'fx:acl/group-permissions-empty');
+    }
+
+    if (configuration.groupManyPermissions) {
+      cy.route(/groups\/olis\/permissions/, 'fx:acl/group-permissions-many');
+    }
+
+    if (configuration.groupSinglePermission) {
+      cy.route(/groups\/olis\/permissions/, 'fx:acl/group-permissions-single');
+    }
+
+    if (configuration.groupPermissionDeleteAllow) {
+      cy.route({
+        method: 'DELETE',
+        url: /api\/v1\/acls\/.*?\/groups\/olis/,
+        status: 200,
+        response: {}
+      })
+    }
   }
 
   if (configuration.aclLDAPTestSuccessful) {
@@ -81,8 +125,9 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
 
   if (configuration.aclCreate) {
     cy
-      .route(/acls\?type=service/, 'fx:acl/acls_empty')
+      .route(/acls(\?type=.*?)?/, 'fx:acl/acls_empty')
       .route(/users\/quis\/permissions/, 'fx:acl/user-permissions-empty')
+      .route(/groups\/olis\/permissions/, 'fx:acl/group-permissions-empty')
       .route({
         url: /acls\/service\.marathon/,
         method: 'PUT',

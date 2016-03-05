@@ -45,7 +45,7 @@ var aclsFixture = require('../../../../../../tests/_fixtures/acl/acls-unicode.js
 
 describe('ACLStore', function () {
 
-  describe('#fetchACLsForResource', function () {
+  describe('#fetchACLs', function () {
 
     beforeEach(function () {
       this.requestFn = RequestUtil.json;
@@ -60,14 +60,14 @@ describe('ACLStore', function () {
     });
 
     it('should return an instance of ACLList', function () {
-      ACLStore.fetchACLsForResource('service');
-      var services = ACLStore.get('services');
+      ACLStore.fetchACLs('service');
+      var services = ACLStore.getACLs('service');
       expect(services instanceof ACLList).toBeTruthy();
     });
 
     it('should return all of the services it was given', function () {
-      ACLStore.fetchACLsForResource('service');
-      var services = ACLStore.get('services').getItems();
+      ACLStore.fetchACLs('service');
+      var services = ACLStore.getACLs('service').getItems();
       expect(services.length).toEqual(this.aclsFixture.array.length);
     });
 
@@ -84,7 +84,7 @@ describe('ACLStore', function () {
           resourceType: 'service'
         });
 
-        var services = ACLStore.get('services').getItems();
+        var services = ACLStore.getACLs('service').getItems();
         expect(services[0].get('rid')).toEqual('foo');
         expect(services[0].get('bar')).toEqual('baz');
       });
