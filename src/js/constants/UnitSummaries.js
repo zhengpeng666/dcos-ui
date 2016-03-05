@@ -44,19 +44,19 @@ const UnitSummaries = {
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-signal.timer: {
-    summary: "Sets the dcos-signal.service interval at once per hour.",
+    summary: "Sets the dcos-signal.service interval at once an hour.",
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-gunicorn-bouncer.service: {
-    summary: "DCOS access control service.",
+    summary: "Processes login requests from users, as well as checking if an authorization token is valid.",
     documentation_url: "https://docs.mesosphere.com/installing-enterprise-edition-1-6/security-and-authentication/"
   },
   dcos-adminrouter-reload.service: {
-    summary: "Restart the Admin router Nginx server so that it picks up new DNS resolutions, for example master.mesos, leader.mesos.",
+    summary: "Restart the Admin Router Nginx server so that it picks up new DNS resolutions, for example master.mesos, leader.mesos.",
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-nginx-reload.timer:
-    summary: "Sets the dcos-adminrouter-reload.service interval at once per hour.",
+    summary: "Sets the dcos-adminrouter-reload.service interval at once an hour.",
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-setup.service: {
@@ -64,20 +64,25 @@ const UnitSummaries = {
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-mesos-slave.service: {
-    summary:"The mesos-slave process."
+    summary:"Runs a Mesos agent on the node."
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-keepalived.service: {
     summary:"Runs keepalived to make a VRRP load balancer that can be used to access the masters."
     documentation_url: "https://docs.mesosphere.com/"
   },
-  dcos-nginx.service: {
-    summary:"A high performance web server and a reverse proxy server."
+  dcos-adminrouter.service: {
+    summary:"Runs the DCOS web interface, as well as a reverse proxy so that administrative interfaces of DCOS Services can be accessed from outside the cluster."
     documentation_url: "https://docs.mesosphere.com/"
   },
   dcos-gen-resolvconf.service: {
-    summary:"This is a service that helps the agent nodes locate the master nodes."
+    summary:"Periodically writes /etc/resolv.conf so that only currently active Mesos masters with working Mesos DNS are in it."
     documentation_url: "https://docs.mesosphere.com/getting-started/installing/installing-enterprise-edition/troubleshooting/#scrollNav-6"
+  },
+dcos-mesos-slave-public: {
+    summary:"Runs a publicly accessible Mesos agent on the node."
+    documentation_url: "https://docs.mesosphere.com/administration/dcosarchitecture/security/#scrollNav-3"
+
 };
 
 module.exports = UnitSummaries;
