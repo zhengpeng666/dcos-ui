@@ -193,21 +193,22 @@ class SchemaForm extends React.Component {
   }
 
   getServiceHeader() {
+    let {packageIcon, packageName, packageVersion} = this.props;
+
     return (
       <div className="media-object-spacing-wrapper media-object-spacing-narrow flush">
         <div className="media-object media-object-align-middle">
           <div className="media-object-item">
             <img
-              className="icon icon-sprite icon-sprite-medium
-                icon-sprite-medium-color"
-              src={this.props.serviceImage} />
+              className="icon icon-sprite icon-sprite-medium icon-sprite-medium-color icon-image-container icon-app-container"
+              src={packageIcon} />
           </div>
           <div className="media-object-item">
             <h4 className="flush-top flush-bottom text-color-neutral">
-              {this.props.serviceName}
+              {packageName}
             </h4>
             <span className="side-panel-resource-label">
-              {this.props.serviceVersion}
+              {packageVersion}
             </span>
           </div>
         </div>
@@ -320,9 +321,7 @@ class SchemaForm extends React.Component {
     let classSet = classNames(
       'row row-flex multiple-form',
       this.props.className,
-      {
-       'mobile-width': isMobileWidth
-      }
+      {'mobile-width': isMobileWidth}
     );
 
     return (
@@ -344,9 +343,9 @@ SchemaForm.propTypes = {
   isMobileWidth: React.PropTypes.bool,
   getTriggerSubmit: React.PropTypes.func,
   schema: React.PropTypes.object,
-  serviceImage: React.PropTypes.string,
-  serviceName: React.PropTypes.string,
-  serviceVersion: React.PropTypes.string
+  packageIcon: React.PropTypes.string,
+  packageName: React.PropTypes.string,
+  packageVersion: React.PropTypes.string
 };
 
 module.exports = SchemaForm;

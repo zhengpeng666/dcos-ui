@@ -52,17 +52,27 @@ class AdvancedConfig extends React.Component {
   }
 
   render() {
+    let {
+      className,
+      model,
+      onChange,
+      packageIcon,
+      packageName,
+      packageVersion,
+      schema
+    } = this.props;
+
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         <SchemaForm
           getTriggerSubmit={this.getTriggerSubmit}
           isMobileWidth={this.state.isMobileWidth}
-          model={this.props.model}
-          onChange={this.props.onChange}
-          schema={this.props.schema}
-          serviceName={this.props.serviceName}
-          serviceImage={this.props.serviceImage}
-          serviceVersion={this.props.serviceVersion} />
+          model={model}
+          onChange={onChange}
+          schema={schema}
+          packageIcon={packageIcon}
+          packageName={packageName}
+          packageVersion={packageVersion} />
       </div>
     );
   }
@@ -71,10 +81,7 @@ class AdvancedConfig extends React.Component {
 AdvancedConfig.defaultProps = {
   getTriggerSubmit: function () {},
   onChange: function () {},
-  schema: {},
-  serviceImage: './img/services/icon-service-marathon-large@2x.png',
-  serviceName: 'Marathon',
-  serviceVersion: '0.23.2'
+  schema: {}
 };
 
 AdvancedConfig.propTypes = {
@@ -82,9 +89,9 @@ AdvancedConfig.propTypes = {
   model: React.PropTypes.object,
   onChange: React.PropTypes.func,
   schema: React.PropTypes.object,
-  serviceImage: React.PropTypes.string,
-  serviceName: React.PropTypes.string,
-  serviceVersion: React.PropTypes.string
+  packageIcon: React.PropTypes.string,
+  packageName: React.PropTypes.string,
+  packageVersion: React.PropTypes.string
 };
 
 module.exports = AdvancedConfig;
