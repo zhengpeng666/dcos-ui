@@ -1,6 +1,5 @@
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import {
-
   COSMOS_SEARCH_CHANGE,
   COSMOS_SEARCH_ERROR,
   COSMOS_LIST_CHANGE,
@@ -26,6 +25,8 @@ import {
   HEALTH_UNIT_NODES_ERROR,
   HEALTH_UNIT_NODE_SUCCESS,
   HEALTH_UNIT_NODE_ERROR,
+
+  HISTORY_CHANGE,
 
   MESOS_SUMMARY_CHANGE,
   MESOS_SUMMARY_REQUEST_ERROR,
@@ -56,6 +57,7 @@ import {
   TASK_DIRECTORY_CHANGE,
   TASK_DIRECTORY_ERROR
 } from './EventTypes';
+import HistoryStore from '../stores/HistoryStore';
 import MarathonStore from '../stores/MarathonStore';
 import MesosLogStore from '../stores/MesosLogStore';
 import MesosStateStore from '../stores/MesosStateStore';
@@ -112,6 +114,17 @@ const ListenersDescription = {
     },
     unmountWhen: function (store, event) {
       return event === 'availableSuccess';
+    },
+    listenAlways: false
+  },
+
+  history: {
+    store: HistoryStore,
+    events: {
+      change: HISTORY_CHANGE
+    },
+    unmountWhen: function () {
+      true
     },
     listenAlways: false
   },

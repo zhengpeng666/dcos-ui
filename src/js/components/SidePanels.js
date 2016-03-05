@@ -6,7 +6,9 @@ import HistoryStore from '../stores/HistoryStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import NodeSidePanelContents from './NodeSidePanelContents';
 import ServiceSidePanelContents from './ServiceSidePanelContents';
+import mixin from 'reactjs-mixin';
 import StringUtil from '../utils/StringUtil';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 import TaskSidePanelContents from './TaskSidePanelContents';
 import UnitHealthSidePanelContents from './UnitHealthSidePanelContents';
 import UnitNodeSidePanelContents from './UnitNodeSidePanelContents';
@@ -16,9 +18,16 @@ const METHODS_TO_BIND = [
   'handlePanelSizeChange'
 ];
 
-class SidePanels extends React.Component {
+class SidePanels extends mixin(StoreMixin) {
   constructor() {
     super();
+
+    this.store_listeners = [
+      {
+        name: 'history',
+        events: ['change']
+      }
+    ];
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
