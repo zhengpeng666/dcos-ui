@@ -12,7 +12,7 @@ const METHODS_TO_BIND = [
 
 let SDK = require('../../../SDK').getSDK();
 
-let {RequestErrorMsg} = SDK.get(['RequestErrorMsg']);
+let RequestErrorMsg = SDK.get('RequestErrorMsg');
 
 import ACLStore from  '../..//acl/stores/ACLStore';
 import ACLGroupsActions from  '../actions/ACLGroupsActions';

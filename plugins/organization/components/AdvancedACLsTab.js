@@ -16,7 +16,7 @@ let {InternalStorageMixin, RequestErrorMsg, ResourceTableUtil,
   ]);
 
 const METHODS_TO_BIND = [
-  'getTriggerSubmit',
+  'setTriggerSubmit',
   'handleFormButtonClick',
   'handleFormSubmit',
   'renderActions',
@@ -93,8 +93,11 @@ class AdvancedACLsTab extends
 
     data.revokeActionsRemaining = data.revokeActionsRemaining - 1;
 
+    this.internalStorage_set({
+      revokeActionsRemaining: data.revokeActionsRemaining
+    });
+
     if (data.revokeActionsRemaining <= 0) {
-      this.internalStorage_set({revokeActionsRemaining: 0});
       this.forceUpdate();
     }
   }
@@ -111,7 +114,7 @@ class AdvancedACLsTab extends
     });
   }
 
-  getTriggerSubmit(trigger) {
+  setTriggerSubmit(trigger) {
     this.triggerSubmit = trigger;
   }
 
@@ -149,7 +152,7 @@ class AdvancedACLsTab extends
             }
           ]
         ]}
-        triggerSubmit={this.getTriggerSubmit}
+        triggerSubmit={this.setTriggerSubmit}
         onSubmit={this.handleFormSubmit} />
     );
   }
