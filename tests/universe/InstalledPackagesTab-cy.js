@@ -1,28 +1,28 @@
 describe('Installed Packages Tab', function () {
 
   beforeEach(function () {
-    cy.configureCluster({
-      mesos: '1-task-healthy',
-      universePackages: true
-    });
+    cy
+      .configureCluster({
+        mesos: '1-task-healthy',
+        universePackages: true
+      })
+      .visitUrl({url: '/universe/installed-packages'});
   });
 
   it('activates the correct tab', function () {
     cy
-      .visitUrl({url: '/universe/installed-packages'})
       .get('.page-header-navigation .tab-item.active .tab-item-label')
       .should('contain', 'Installed');
   });
 
   it('displays a table of installed packages', function () {
     cy
-      .visitUrl({url: '/universe/installed-packages'})
       .get('table.table > tbody > tr .package-table-heading')
       .as('itemNames');
 
     cy
       .get('@itemNames').eq(0)
-      .should('contain', 'marathon')
+      .should('contain', 'marathon-user')
       .get('@itemNames').eq(1)
       .should('contain', 'arangodb');
   });

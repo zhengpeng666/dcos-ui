@@ -24,12 +24,13 @@ class UniverseInstalledPackagesList extends List {
 
     if (filterText) {
       packages = StringUtil.filterByString(packages, function (cosmosPackage) {
-        let {description, name, tags} = cosmosPackage.get('packageDefinition');
+        let appId = cosmosPackage.get('appId');
+        let {description, name, tags, version} = cosmosPackage.get('packageDefinition');
         description = description || '';
         name = name || '';
         tags = tags || [];
 
-        return `${name} ${description} ${tags.join(' ')}`;
+        return `${appId} ${name} ${description} ${tags.join(' ')} ${version}`;
       }, filterText);
     }
 
