@@ -456,15 +456,16 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
   getReviewButton() {
     let {currentState, installError, pendingRequest} =
       this.internalStorage_get();
-    if (installError) {
-      return null;
-    }
     let {
       advancedInstall,
       defaultInstall,
+      packageInstalled,
       reviewAdvancedConfig,
       reviewDefaultConfig
     } = INSTALL_STATES;
+    if (installError || currentState === packageInstalled) {
+      return null;
+    }
 
     let buttonText = 'View Configuration Details';
     let newState = reviewDefaultConfig;
