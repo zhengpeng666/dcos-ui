@@ -92,7 +92,7 @@ class SchemaForm extends React.Component {
     this.validateForm();
     return {
       isValidated: this.isValidated,
-      model: SchemaFormUtil.processFormModel(this.model),
+      model: SchemaFormUtil.processFormModel(this.model, this.multipleDefinition),
       definition: this.multipleDefinition
     };
   }
