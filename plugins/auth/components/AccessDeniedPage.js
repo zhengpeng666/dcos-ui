@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ACLAuthActions from '../actions/ACLAuthActions';
+import ACLAuthStore from '../stores/ACLAuthStore';
 
 const METHODS_TO_BIND = [
   'handleUserLogout'
@@ -18,7 +18,7 @@ module.exports = class AccessDeniedPage extends React.Component {
   }
 
   handleUserLogout() {
-    ACLAuthActions.logout();
+    ACLAuthStore.logout();
   }
 
   getFooter() {

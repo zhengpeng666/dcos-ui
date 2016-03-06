@@ -13,7 +13,10 @@ let SDK = PluginTestUtils.getSDK('authentication', {enabled: true});
 require('../../SDK').setSDK(SDK);
 
 var ACLAuthStore = require('../../stores/ACLAuthStore');
+var AuthReducer = require('../../Reducer');
 var UserDropup = require('../UserDropup');
+
+PluginTestUtils.addReducer('auth', AuthReducer);
 
 describe('UserDropup', function () {
 
