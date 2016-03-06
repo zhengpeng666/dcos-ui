@@ -80,8 +80,8 @@ class SchemaForm extends React.Component {
       return;
     }
 
-    let validated = this.validateForm(eventObj.fieldName);
-    this.props.onChange(validated);
+    this.validateForm(eventObj.fieldName);
+    this.props.onChange(this.getDataTriple());
   }
 
   handleFormSubmit(formKey, formModel) {
@@ -90,6 +90,10 @@ class SchemaForm extends React.Component {
 
   handleExternalSubmit() {
     this.validateForm();
+    return this.getDataTriple();
+  }
+
+  getDataTriple() {
     return {
       isValidated: this.isValidated,
       model: SchemaFormUtil.processFormModel(this.model, this.multipleDefinition),
