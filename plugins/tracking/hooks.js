@@ -3,13 +3,8 @@ import classNames from 'classnames';
 /* eslint-disable no-unused-vars */
 import React from 'react';
 /* eslint-enable no-unused-vars */
-import {
-  REQUEST_INTERCOM_OPEN,
-  REQUEST_INTERCOM_CLOSE
-} from './constants/ActionTypes';
 
 import Actions from './actions/Actions';
-var AppDispatcher = require('../../src/js/events/AppDispatcher');
 import IntercomStore from './stores/IntercomStore';
 
 let SDK = require('./SDK').getSDK();
@@ -71,17 +66,11 @@ module.exports = {
   },
 
   openIntercom: function () {
-    AppDispatcher.handleIntercomAction({
-      type: REQUEST_INTERCOM_OPEN,
-      data: true
-    });
+    IntercomStore.handleChange(true);
   },
 
   closeIntercom: function () {
-    AppDispatcher.handleIntercomAction({
-      type: REQUEST_INTERCOM_CLOSE,
-      data: false
-    });
+    IntercomStore.handleChange(false);
   },
 
   handleToggleIntercom: function () {

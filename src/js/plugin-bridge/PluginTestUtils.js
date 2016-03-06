@@ -51,10 +51,15 @@ function loadPluginsByName(plugins) {
  * @param  {Object} config   - configuration
  * @return {PluginSDK}          - SDK for plugin with pluginID
  */
-function getSDK(pluginID, config) {
-  // Get SDK for pluginID. If Plugin hasn't been initialized,
-  // this will create the SDK, cache it, and pass into the plugin if
-  // it is eventually initialized.
+function getSDK(pluginID, config, loadPlugin = false) {
+  // Load plugin first so it can register it's reducer
+  // if it has one.
+  if (loadPlugin) {
+    loadPluginsByName({
+      [pluginID]: config
+    });
+  }
+  // Get SDK for pluginID.
   return PluginSDK.__getSDK(pluginID, config);
 }
 
@@ -68,6 +73,16 @@ function getSDK(pluginID, config) {
 function setMock(name, mock) {
   Loader.__setMockModule(name, mock);
   return mock;
+}
+
+/**
+ * Add reducer to Store. Could be an actual plugin reducer or a mock for test
+ * cases that require specific state.
+ * @param {String} root    - Root key for which reducer will manage state
+ * @param {Function} reducer - Reducer function
+ */
+function addReducer(root, reducer) {
+  PluginSDK.__addReducer(root, reducer);
 }
 
 /**
@@ -117,12 +132,12 @@ function dontMock(moduleNames) {
 }
 
 let TestUtils = {
-  loadPlugins,
-  loadPluginsByName,
+  addReducer,
   getSDK,
   dontMock,
-  setMock,
-  unMockStores: JestUtil.unMockStores
+  loadPlugins,
+  loadPluginsByName,
+  setMock
 };
 
 module.exports = TestUtils;

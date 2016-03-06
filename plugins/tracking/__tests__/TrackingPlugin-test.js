@@ -10,6 +10,7 @@ require('../SDK').setSDK(SDK);
 var _ = require('underscore');
 
 var TrackingHooks = require('../hooks');
+var TrackingReducer = require('../Reducer');
 var DOMUtils = SDK.get('DOMUtils');
 
 describe('TrackingHooks', function () {
@@ -65,7 +66,6 @@ describe('TrackingHooks', function () {
     describe('#openIdentifyModal', function () {
       it('returns the value given to it if plugin enabled', function () {
         TrackingHooks.initialize();
-        TrackingHooks.configure({enabled: true});
         var result = SDK.Hooks.applyFilter('openIdentifyModal', 'hello');
         expect(result).toEqual('hello');
       });
@@ -81,7 +81,7 @@ describe('TrackingHooks', function () {
     describe('#sidebarFooterButtonSet', function () {
       it('returns the value given to it if plugin enabled', function () {
         TrackingHooks.initialize();
-        TrackingHooks.configure({enabled: true});
+        PluginTestUtils.addReducer(SDK.pluginID, TrackingReducer);
         var result = SDK.Hooks.applyFilter('sidebarFooterButtonSet', ['foo']);
         expect(result).not.toEqual(['foo']);
       });
