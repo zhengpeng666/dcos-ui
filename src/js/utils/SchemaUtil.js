@@ -60,10 +60,14 @@ function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subh
   let nestedDefinition = {
     name: fieldName,
     formParent: topLevelProp,
-    render: subheaderRender.bind(null, fieldName),
+    render: null,
     fieldType: 'object',
     definition: []
   };
+
+  if (typeof subheaderRender === 'function') {
+    nestedDefinition.render = subheaderRender.bind(null, fieldName);
+  }
 
   let properties = fieldProps.properties;
   let requiredProps = fieldProps.required;
