@@ -5,7 +5,7 @@ module.exports = function (PluginSDK) {
 
   let PluginHooks = require('./hooks');
   let TrackingActions = require('./actions/Actions');
-  let TrackingReducer = require('./reducer');
+  let TrackingReducer = require('./Reducer');
   // Set plugin's hooks
   PluginHooks.initialize();
 
