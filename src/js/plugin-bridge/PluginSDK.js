@@ -187,7 +187,7 @@ const createPluginStore = function (definition) {
     }
   });
 
-  if (definition.exposeEvents) {
+  if (definition.mixinEvents) {
     if (!definition.storeID) {
       throw new Error(`Must define a valid storeID to expose events`);
     }
@@ -201,7 +201,7 @@ const createPluginStore = function (definition) {
     // because its presence will degrade test performance.
     getApplicationModuleAPI().get('StoreMixinConfig')
       .add(definition.storeID,
-        _.extend({store: definition}, definition.exposeEvents)
+        _.extend({store: definition}, definition.mixinEvents)
       );
   }
 

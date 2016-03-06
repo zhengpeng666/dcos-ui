@@ -5,7 +5,7 @@ let SDK = require('../SDK').getSDK();
 var IntercomStore = SDK.createStore({
   storeID: 'intercom',
 
-  exposeEvents: {
+  mixinEvents: {
     events: {
       change: INTERCOM_CHANGE
     },
