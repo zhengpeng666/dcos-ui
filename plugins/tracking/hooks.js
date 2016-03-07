@@ -66,11 +66,11 @@ module.exports = {
   },
 
   openIntercom: function () {
-    IntercomStore.handleChange(true);
+    IntercomStore.openIntercom();
   },
 
   closeIntercom: function () {
-    IntercomStore.handleChange(false);
+    IntercomStore.closeIntercom();
   },
 
   handleToggleIntercom: function () {

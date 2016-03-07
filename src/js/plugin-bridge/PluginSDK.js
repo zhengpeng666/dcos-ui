@@ -201,7 +201,7 @@ const createPluginStore = function (definition) {
     // because its presence will degrade test performance.
     getApplicationModuleAPI().get('StoreMixinConfig')
       .add(definition.storeID,
-        _.extend({store: definition}, definition.mixinEvents)
+        _.extend({}, definition.mixinEvents, {store: definition})
       );
   }
 
@@ -320,7 +320,8 @@ const replaceStoreReducers = function () {
 };
 
 /**
- * Add reducer to Store without (only available in test mode)
+ * Add reducer to Store (only available in test mode so we can test plugins
+ * that rely on State)
  * @param {String} pluginID - Plugin ID
  * @param  {Function} reducer - A reducer
  */
