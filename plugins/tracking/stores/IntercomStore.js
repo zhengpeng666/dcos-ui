@@ -28,13 +28,13 @@ var IntercomStore = SDK.createStore({
     }
   },
 
-  get(prop) {
-    return SDK.Store.getOwnState()[prop];
+  isOpen() {
+    return SDK.Store.getOwnState().isOpen;
   },
 
   handleChange: function (isOpen) {
     // only handle change if there is one
-    if (this.get('isOpen') !== isOpen) {
+    if (this.isOpen() !== isOpen) {
       SDK.dispatch({
         type: INTERCOM_CHANGE,
         isOpen

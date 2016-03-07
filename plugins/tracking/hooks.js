@@ -62,7 +62,7 @@ module.exports = {
   },
 
   isIntercomOpen: function () {
-    return IntercomStore.get('isOpen');
+    return IntercomStore.isOpen();
   },
 
   openIntercom: function () {
@@ -74,7 +74,7 @@ module.exports = {
   },
 
   handleToggleIntercom: function () {
-    if (IntercomStore.get('isOpen')) {
+    if (IntercomStore.isOpen()) {
       this.closeIntercom();
     } else {
       this.openIntercom();
@@ -134,7 +134,7 @@ module.exports = {
       'icon-sprite': true,
       'icon-chat': true,
       'icon-sprite-medium': true,
-      'icon-sprite-medium-color': IntercomStore.get('isOpen')
+      'icon-sprite-medium-color': IntercomStore.isOpen()
     });
 
     let intercomButton = (
