@@ -3,7 +3,6 @@ jest.dontMock('../GroupUserTable');
 jest.dontMock('../../stores/ACLGroupStore');
 jest.dontMock('../../stores/ACLGroupsStore');
 jest.dontMock('../../../users/stores/ACLUsersStore');
-jest.dontMock('../../../../storeConfig');
 
 import PluginTestUtils from 'PluginTestUtils';
 
@@ -13,7 +12,6 @@ import React from 'react';
 
 let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
-require('../../../../storeConfig').register();
 
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
@@ -21,9 +19,13 @@ var TestUtils = require('react-addons-test-utils');
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var ACLGroupsStore = require('../../stores/ACLGroupsStore');
 var ACLUsersStore = require('../../../users/stores/ACLUsersStore');
+var OrganizationReducer = require('../../../../Reducer');
 var Group = require('../../structs/Group');
 var GroupUserMembershipTab = require('../GroupUserMembershipTab');
 var UsersList = require('../../../users/structs/UsersList');
+
+PluginTestUtils.addReducer('organization', OrganizationReducer);
+
 
 const groupDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/group-with-details.json');
@@ -58,28 +60,27 @@ describe('GroupUserMembershipTab', function () {
   describe('add users dropdown', function () {
 
     beforeEach(function () {
-      this.usersStoreGet = ACLUsersStore.get;
+      this.usersStoreGet = ACLUsersStore.getUsers;
       this.groupStoreAddUser = ACLGroupStore.addUser;
 
       ACLGroupStore.addUser = jest.genMockFunction();
-      ACLUsersStore.get = function (key) {
-        if (key === 'users') {
-          return new UsersList({
-            items: [
-              {
-                description: 'foo',
-                uid: 'bar'
-              },
-              {
-                description: 'bar',
-                uid: 'baz'
-              },
-              {
-                description: 'baz',
-                uid: 'qux'
-              }
-            ]
-          });
+
+      ACLUsersStore.getUsers = function () {
+        return new UsersList({
+          items: [
+            {
+              description: 'foo',
+              uid: 'bar'
+            },
+            {
+              description: 'bar',
+              uid: 'baz'
+            },
+            {
+              description: 'baz',
+              uid: 'qux'
+            }
+          ];
         }
       };
 

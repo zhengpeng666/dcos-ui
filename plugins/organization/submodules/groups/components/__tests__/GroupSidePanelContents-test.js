@@ -1,6 +1,5 @@
 jest.dontMock('../GroupSidePanelContents');
 jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../../../storeConfig');
 
 /* eslint-disable no-unused-vars */
 var React = require('react');
@@ -28,8 +27,6 @@ PluginTestUtils.loadPluginsByName({
 
 let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
-
-require('../../../../storeConfig').register();
 
 let ACLGroupStore = require('../../stores/ACLGroupStore');
 let EventTypes = require('../../constants/EventTypes');

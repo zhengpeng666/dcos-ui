@@ -1,6 +1,5 @@
 jest.dontMock('../UserSidePanel');
 jest.dontMock('../UserSidePanelContents');
-jest.dontMock('../../../../storeConfig');
 
 import PluginTestUtils from 'PluginTestUtils';
 
@@ -12,8 +11,6 @@ PluginTestUtils.dontMock([
 
 let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
-
-require('../../../../storeConfig').register();
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/

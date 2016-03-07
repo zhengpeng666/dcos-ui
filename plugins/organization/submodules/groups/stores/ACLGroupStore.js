@@ -85,7 +85,7 @@ let ACLGroupStore = SDK.createStore({
   },
 
   getGroupRaw: function (groupID) {
-    return this.get('groups')[groupID];
+    return this.get('byId')[groupID];
   },
 
   getGroup: function (groupID) {
@@ -93,7 +93,7 @@ let ACLGroupStore = SDK.createStore({
   },
 
   setGroup: function (groupID, group) {
-    let groups = this.get('groups');
+    let groups = this.get('byId');
     groups[groupID] = group;
     SDK.dispatch({
       type: ACL_GROUP_SET_GROUPS,

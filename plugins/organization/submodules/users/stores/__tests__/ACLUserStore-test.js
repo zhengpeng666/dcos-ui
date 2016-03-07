@@ -20,22 +20,34 @@ var ACLUserStore = require('../ACLUserStore');
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
 var User = require('../../structs/User');
+var OrganizationReducer = require('../../../../Reducer');
 
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
+PluginTestUtils.addReducer('organization', OrganizationReducer);
 
 describe('ACLUserStore', function () {
 
   beforeEach(function () {
-    ACLUserStore.set({
-      users: {},
-      usersFetching: {}
+    let users = {};
+    let usersFetching = {};
+
+    SDK.dispatch({
+      type: EventTypes.ACL_USER_SET_USER,
+      users
+    });
+    SDK.dispatch({
+      type: EventTypes.ACL_USER_DETAILS_FETCH_START,
+      usersFetching
     });
   });
 
   describe('#getUserRaw', function () {
 
     it('returns the user that was set', function () {
-      ACLUserStore.set({users: {foo: {bar: 'baz'}}});
+      let users = {foo: {bar: 'baz'}};
+      SDK.dispatch({
+        type: EventTypes.ACL_USER_SET_USER,
+        users
+      });
       expect(ACLUserStore.getUserRaw('foo')).toEqual({bar: 'baz'});
     });
 
@@ -44,12 +56,20 @@ describe('ACLUserStore', function () {
   describe('#getUser', function () {
 
     it('returns the user that was set', function () {
-      ACLUserStore.set({users: {foo: {bar: 'baz'}}});
+      let users = {foo: {bar: 'baz'}};
+      SDK.dispatch({
+        type: EventTypes.ACL_USER_SET_USER,
+        users
+      });
       expect(ACLUserStore.getUser('foo') instanceof User).toBeTruthy();
     });
 
     it('returns the correct user data', function () {
-      ACLUserStore.set({users: {foo: {bar: 'baz'}}});
+      let users = {foo: {bar: 'baz'}};
+      SDK.dispatch({
+        type: EventTypes.ACL_USER_SET_USER,
+        users
+      });
       expect(ACLUserStore.getUser('foo').get()).toEqual({bar: 'baz'});
     });
 
@@ -59,7 +79,7 @@ describe('ACLUserStore', function () {
 
     it('sets user', function () {
       ACLUserStore.setUser('foo', {bar: 'baz'});
-      expect(ACLUserStore.get('users')).toEqual({foo: {bar: 'baz'}});
+      expect(ACLUserStore.get('byId')).toEqual({foo: {bar: 'baz'}});
     });
 
   });
@@ -97,7 +117,7 @@ describe('ACLUserStore', function () {
     describe('user', function () {
 
       it('stores user when event is dispatched', function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_SUCCESS,
           data: {uid: 'foo', bar: 'baz'}
         });
@@ -113,7 +133,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_SUCCESS,
           data: {uid: 'foo'}
         });
@@ -126,7 +146,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_ERROR,
           userID: 'foo'
         });
@@ -137,7 +157,7 @@ describe('ACLUserStore', function () {
     describe('groups', function () {
 
       it('stores groups when event is dispatched', function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS,
           data: {bar: 'baz'},
           userID: 'foo'
@@ -155,7 +175,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS,
           userID: 'foo'
         });
@@ -169,7 +189,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_GROUPS_ERROR,
           userID: 'foo'
         });
@@ -180,7 +200,7 @@ describe('ACLUserStore', function () {
     describe('permissions', function () {
 
       it('stores permissions when event is dispatched', function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS,
           data: {bar: 'baz'},
           userID: 'foo'
@@ -198,7 +218,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS,
           userID: 'foo'
         });
@@ -212,7 +232,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR,
           userID: 'foo'
         });
@@ -230,7 +250,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS
         });
       });
@@ -243,7 +263,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS,
           userID: 'foo'
         });
@@ -257,7 +277,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_CREATE_ERROR
         });
       });
@@ -270,7 +290,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_CREATE_ERROR,
           userID: 'foo'
         });
@@ -288,7 +308,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS
         });
       });
@@ -301,7 +321,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS,
           userID: 'foo'
         });
@@ -315,7 +335,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR
         });
       });
@@ -328,7 +348,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR,
           data: 'bar',
           userID: 'foo'
@@ -343,7 +363,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR,
           data: 'bar',
           userID: 'foo'
@@ -362,7 +382,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS
         });
       });
@@ -375,7 +395,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS,
           userID: 'foo'
         });
@@ -389,7 +409,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_ERROR
         });
       });
@@ -403,7 +423,7 @@ describe('ACLUserStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_USER_DELETE_ERROR,
           userID: 'foo',
           data: 'error'

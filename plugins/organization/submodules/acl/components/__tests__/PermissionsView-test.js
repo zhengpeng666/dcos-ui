@@ -1,7 +1,6 @@
 jest.dontMock('../PermissionsView');
 jest.dontMock('../../stores/ACLStore');
 jest.dontMock('../../actions/ACLActions');
-jest.dontMock('../../../../storeConfig');
 
 import PluginTestUtils from 'PluginTestUtils';
 
@@ -16,8 +15,6 @@ require('../../../../SDK').setSDK(SDK);
 var ACLList = require('../../structs/ACLList');
 var ACLStore = require('../../stores/ACLStore');
 var PermissionsView = require('../PermissionsView');
-
-require('../../../../storeConfig').register();
 
 describe('PermissionsView', function () {
 

@@ -114,7 +114,7 @@ class UsersTab extends mixin(StoreMixin) {
       return this.getLoadingScreen();
     }
 
-    let items = ACLUsersStore.get('users').getItems();
+    let items = ACLUsersStore.getUsers().getItems();
 
     return (
       <OrganizationTab

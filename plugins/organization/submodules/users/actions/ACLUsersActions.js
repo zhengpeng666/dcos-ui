@@ -17,8 +17,6 @@ import {
   REQUEST_ACL_USER_DELETE_ERROR
 } from '../constants/ActionTypes';
 
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-
 let SDK = require('../../../SDK').getSDK();
 
 let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
@@ -28,13 +26,13 @@ const ACLUsersActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users`,
       success: function (response) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USERS_SUCCESS,
           data: response.array
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USERS_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr)
         });
@@ -46,13 +44,13 @@ const ACLUsersActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
       success: function (response) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_SUCCESS,
           data: response
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           userID
@@ -65,14 +63,14 @@ const ACLUsersActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}/groups`,
       success: function (response) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_GROUPS_SUCCESS,
           data: response.array,
           userID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_GROUPS_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           userID
@@ -85,14 +83,14 @@ const ACLUsersActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}/permissions`,
       success: function (response) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_PERMISSIONS_SUCCESS,
           data: response,
           userID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_PERMISSIONS_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           userID
@@ -114,13 +112,13 @@ const ACLUsersActions = {
       method: 'PUT',
       data,
       success: function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_CREATE_SUCCESS,
           userID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_CREATE_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           userID
@@ -135,13 +133,13 @@ const ACLUsersActions = {
       method: 'PATCH',
       data: patchData,
       success: function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_UPDATE_SUCCESS,
           userID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_UPDATE_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           userID
@@ -155,13 +153,13 @@ const ACLUsersActions = {
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
       method: 'DELETE',
       success: function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_DELETE_SUCCESS,
           userID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_DELETE_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           userID

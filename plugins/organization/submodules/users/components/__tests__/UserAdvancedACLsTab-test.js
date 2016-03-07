@@ -1,6 +1,5 @@
 jest.dontMock('../UserAdvancedACLsTab');
 jest.dontMock('../../stores/ACLUserStore');
-jest.dontMock('../../../../storeConfig');
 jest.dontMock('../../../../../../tests/_fixtures/acl/user-with-details.json');
 
 /*eslint-disable no-unused-vars*/
@@ -19,7 +18,6 @@ import {
 PluginTestUtils.dontMock('RequestUtil');
 let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
-require('../../../../storeConfig').register();
 
 var ACLUserStore = require('../../stores/ACLUserStore');
 var User = require('../../structs/User');

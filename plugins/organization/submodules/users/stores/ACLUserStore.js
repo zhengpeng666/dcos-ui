@@ -1,5 +1,4 @@
 import _ from 'underscore';
-import {Store} from 'mesosphere-shared-reactjs';
 
 import {
   REQUEST_ACL_USER_SUCCESS,
@@ -17,6 +16,7 @@ import {
 } from '../constants/ActionTypes';
 
 import {
+  ACL_USER_DETAILS_FETCH_START,
   ACL_USER_DETAILS_FETCHED_SUCCESS,
   ACL_USER_DETAILS_FETCHED_ERROR,
   ACL_USER_DETAILS_USER_CHANGE,
@@ -27,6 +27,7 @@ import {
   ACL_USER_DETAILS_PERMISSIONS_ERROR,
   ACL_USER_CREATE_SUCCESS,
   ACL_USER_CREATE_ERROR,
+  ACL_USER_SET_USER,
   ACL_USER_UPDATE_SUCCESS,
   ACL_USER_UPDATE_ERROR,
   ACL_USER_DELETE_SUCCESS,
@@ -36,47 +37,43 @@ import {
 import ACLUsersActions from '../actions/ACLUsersActions';
 import User from '../structs/User';
 
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
-
 let SDK = require('../../../SDK').getSDK();
-
-let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
-let {APP_STORE_CHANGE} = SDK.constants;
 
 /**
  * This store will keep track of users and their details
  */
-var ACLUserStore = Store.createStore({
+var ACLUserStore = SDK.createStore({
   storeID: 'user',
 
-  mixins: [PluginGetSetMixin],
-
-  getSet_data: {
-    users: {},
-    // A hash of userIds that we're fetching
-    // The value is a list of requests that have been received
-    usersFetching: {}
+  mixinEvents: {
+    events: {
+      success: ACL_USER_DETAILS_USER_CHANGE,
+      error: ACL_USER_DETAILS_USER_ERROR,
+      permissionsSuccess: ACL_USER_DETAILS_PERMISSIONS_CHANGE,
+      permissionsError: ACL_USER_DETAILS_PERMISSIONS_ERROR,
+      groupsSuccess: ACL_USER_DETAILS_GROUPS_CHANGE,
+      groupsError: ACL_USER_DETAILS_GROUPS_ERROR,
+      fetchedDetailsSuccess: ACL_USER_DETAILS_FETCHED_SUCCESS,
+      fetchedDetailsError: ACL_USER_DETAILS_FETCHED_ERROR,
+      createSuccess: ACL_USER_CREATE_SUCCESS,
+      createError: ACL_USER_CREATE_ERROR,
+      updateSuccess: ACL_USER_UPDATE_SUCCESS,
+      updateError: ACL_USER_UPDATE_ERROR,
+      deleteSuccess: ACL_USER_DELETE_SUCCESS,
+      deleteError: ACL_USER_DELETE_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
   },
 
-  onSet() {
-    SDK.dispatch({
-      type: APP_STORE_CHANGE,
-      storeID: this.storeID,
-      data: this.getSet_data
-    });
-  },
-
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
+  get(prop) {
+    return SDK.Store.getOwnState().users[prop];
   },
 
   getUserRaw: function (userID) {
-    return this.get('users')[userID];
+    return this.get('byId')[userID];
   },
 
   getUser: function (userID) {
@@ -84,9 +81,12 @@ var ACLUserStore = Store.createStore({
   },
 
   setUser: function (userID, user) {
-    let users = this.get('users');
+    let users = this.get('byId');
     users[userID] = user;
-    this.set({users});
+    SDK.dispatch({
+      type: ACL_USER_SET_USER,
+      users
+    });
   },
 
   fetchUser: ACLUsersActions.fetchUser,
@@ -107,7 +107,10 @@ var ACLUserStore = Store.createStore({
     let usersFetching = this.get('usersFetching');
 
     usersFetching[userID] = {user: false, groups: false, permissions: false};
-    this.set({usersFetching});
+    SDK.dispatch({
+      type: ACL_USER_DETAILS_FETCH_START,
+      usersFetching
+    });
 
     ACLUsersActions.fetchUser(userID);
     ACLUsersActions.fetchUserGroups(userID);
@@ -138,7 +141,10 @@ var ACLUserStore = Store.createStore({
 
     if (fetchedAll === true) {
       delete usersFetching[userID];
-      this.set({usersFetching});
+      SDK.dispatch({
+        type: ACL_USER_DETAILS_FETCHED_SUCCESS,
+        usersFetching
+      });
       this.emit(ACL_USER_DETAILS_FETCHED_SUCCESS, userID);
     }
   },
@@ -156,7 +162,10 @@ var ACLUserStore = Store.createStore({
     }
 
     delete usersFetching[userID];
-    this.set({usersFetching});
+    SDK.dispatch({
+      type: ACL_USER_DETAILS_FETCHED_ERROR,
+      usersFetching
+    });
     this.emit(ACL_USER_DETAILS_FETCHED_ERROR, userID);
   },
 
@@ -225,74 +234,64 @@ var ACLUserStore = Store.createStore({
   processUserPermissionsError: function (userID) {
     this.emit(ACL_USER_DETAILS_PERMISSIONS_ERROR, userID);
     this.invalidateUserWithDetailsFetch(userID);
-  },
+  }
+});
 
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    if (payload.source !== SERVER_ACTION) {
-      return false;
-    }
-
-    var action = payload.action;
-    switch (action.type) {
-      // Get user details
-      case REQUEST_ACL_USER_SUCCESS:
-        ACLUserStore.processUser(action.data);
-        break;
-      case REQUEST_ACL_USER_ERROR:
-        ACLUserStore.processUserError(action.userID);
-        break;
-      // Get groups for user
-      case REQUEST_ACL_USER_GROUPS_SUCCESS:
-        ACLUserStore.processUserGroups(action.data, action.userID);
-        break;
-      case REQUEST_ACL_USER_GROUPS_ERROR:
-        ACLUserStore.processUserGroupsError(action.userID);
-        break;
-      // Get ACLs for user
-      case REQUEST_ACL_USER_PERMISSIONS_SUCCESS:
-        ACLUserStore.processUserPermissions(action.data, action.userID);
-        break;
-      case REQUEST_ACL_USER_PERMISSIONS_ERROR:
-        ACLUserStore.processUserPermissionsError(action.userID);
-        break;
-      // Create user
-      case REQUEST_ACL_USER_CREATE_SUCCESS:
-        ACLUserStore.emit(ACL_USER_CREATE_SUCCESS, action.userID);
-        break;
-      case REQUEST_ACL_USER_CREATE_ERROR:
-        ACLUserStore.emit(
-          ACL_USER_CREATE_ERROR, action.data, action.userID
-        );
-        break;
-      // Update user
-      case REQUEST_ACL_USER_UPDATE_SUCCESS:
-        ACLUserStore
-          .emit(ACL_USER_UPDATE_SUCCESS, action.userID);
-        break;
-      case REQUEST_ACL_USER_UPDATE_ERROR:
-        ACLUserStore.emit(
-          ACL_USER_UPDATE_ERROR,
-          action.data,
-          action.userID
-        );
-        break;
-      // Delete user
-      case REQUEST_ACL_USER_DELETE_SUCCESS:
-        ACLUserStore
-          .emit(ACL_USER_DELETE_SUCCESS, action.userID);
-        break;
-      case REQUEST_ACL_USER_DELETE_ERROR:
-        ACLUserStore.emit(
-          ACL_USER_DELETE_ERROR,
-          action.data,
-          action.userID
-        );
-        break;
-    }
-
-    return true;
-  })
-
+SDK.onDispatch(function (action) {
+  switch (action.type) {
+    // Get user details
+    case REQUEST_ACL_USER_SUCCESS:
+      ACLUserStore.processUser(action.data);
+      break;
+    case REQUEST_ACL_USER_ERROR:
+      ACLUserStore.processUserError(action.userID);
+      break;
+    // Get groups for user
+    case REQUEST_ACL_USER_GROUPS_SUCCESS:
+      ACLUserStore.processUserGroups(action.data, action.userID);
+      break;
+    case REQUEST_ACL_USER_GROUPS_ERROR:
+      ACLUserStore.processUserGroupsError(action.userID);
+      break;
+    // Get ACLs for user
+    case REQUEST_ACL_USER_PERMISSIONS_SUCCESS:
+      ACLUserStore.processUserPermissions(action.data, action.userID);
+      break;
+    case REQUEST_ACL_USER_PERMISSIONS_ERROR:
+      ACLUserStore.processUserPermissionsError(action.userID);
+      break;
+    // Create user
+    case REQUEST_ACL_USER_CREATE_SUCCESS:
+      ACLUserStore.emit(ACL_USER_CREATE_SUCCESS, action.userID);
+      break;
+    case REQUEST_ACL_USER_CREATE_ERROR:
+      ACLUserStore.emit(
+        ACL_USER_CREATE_ERROR, action.data, action.userID
+      );
+      break;
+    // Update user
+    case REQUEST_ACL_USER_UPDATE_SUCCESS:
+      ACLUserStore.emit(ACL_USER_UPDATE_SUCCESS, action.userID);
+      break;
+    case REQUEST_ACL_USER_UPDATE_ERROR:
+      ACLUserStore.emit(
+        ACL_USER_UPDATE_ERROR,
+        action.data,
+        action.userID
+      );
+      break;
+    // Delete user
+    case REQUEST_ACL_USER_DELETE_SUCCESS:
+      ACLUserStore.emit(ACL_USER_DELETE_SUCCESS, action.userID);
+      break;
+    case REQUEST_ACL_USER_DELETE_ERROR:
+      ACLUserStore.emit(
+        ACL_USER_DELETE_ERROR,
+        action.data,
+        action.userID
+      );
+      break;
+  }
 });
 
 module.exports = ACLUserStore;

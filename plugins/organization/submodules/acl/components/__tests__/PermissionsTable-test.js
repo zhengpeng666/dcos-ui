@@ -1,6 +1,5 @@
 jest.dontMock('../PermissionsTable');
 jest.dontMock('../../stores/ACLStore');
-jest.dontMock('../../../../storeConfig');
 
 import PluginTestUtils from 'PluginTestUtils';
 
@@ -27,8 +26,6 @@ import {
 var User = require('../../../users/structs/User');
 var ACLStore = require('../../stores/ACLStore');
 var PermissionsTable = require('../PermissionsTable');
-
-require('../../../../storeConfig').register();
 
 const userDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/user-with-details.json');

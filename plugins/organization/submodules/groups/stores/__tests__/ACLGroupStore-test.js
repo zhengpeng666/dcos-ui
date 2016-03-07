@@ -71,7 +71,7 @@ describe('ACLGroupStore', function () {
 
     it('sets group', function () {
       ACLGroupStore.setGroup('foo', {bar: 'baz'});
-      expect(ACLGroupStore.get('groups')).toEqual({foo: {bar: 'baz'}});
+      expect(ACLGroupStore.get('byId')).toEqual({foo: {bar: 'baz'}});
     });
 
   });
