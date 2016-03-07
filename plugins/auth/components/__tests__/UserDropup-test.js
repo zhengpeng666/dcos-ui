@@ -3,10 +3,9 @@ jest.dontMock('../../stores/ACLAuthStore');
 jest.dontMock('../../actions/ACLAuthActions');
 
 import PluginTestUtils from 'PluginTestUtils';
-
-PluginTestUtils.unMockStores(['ACLAuthStore']);
-
-var React = require('react');
+/* eslint-disable no-unused-vars */
+import React from 'react';
+/* eslint-enable no-unused-vars */
 var ReactDOM = require('react-dom');
 
 let SDK = PluginTestUtils.getSDK('auth', {enabled: true});

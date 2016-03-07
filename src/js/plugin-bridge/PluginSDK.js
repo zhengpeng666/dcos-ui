@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
+import {Store as fluxStore} from 'mesosphere-shared-reactjs';
 
 import {APPLICATION} from '../constants/PluginConstants';
 import {APP_STORE_CHANGE} from '../constants/EventTypes';
@@ -15,6 +16,7 @@ const initialState = {};
 const middleware = [];
 const PLUGIN_ENV_CACHE = [];
 const REGISTERED_ACTIONS = {};
+const EXISTING_FLUX_STORES = {};
 
 const constants = {
   APPLICATION,
@@ -72,10 +74,9 @@ const initialize = function (pluginsConfig) {
       bootstrapPlugin(pluginID, pluginList[pluginID], pluginsConfig[pluginID]);
     }
   });
-  // Replace all store reducers now that we have all plugin reducers
-  Store.replaceReducer(
-    combineReducers(reducers)
-  );
+
+  replaceStoreReducers();
+
   Hooks.notifyPluginsLoaded();
 };
 
@@ -169,6 +170,56 @@ const getActionsAPI = function (SDK) {
 };
 
 /**
+ * Create a flux store that exposes events to components. This store
+ * does not support set methods. It provides an abstration for handling
+ * state changes in the OmniStore.
+ * @param  {Object} definition - Store definition
+ * @return {Object}            - Created store
+ */
+const createPluginStore = function (definition) {
+  // Extend with event handling to reduce boilerplate.
+  definition = _.extend({}, definition, {
+    addChangeListener: function (eventName, callback) {
+      this.on(eventName, callback);
+    },
+    removeChangeListener: function (eventName, callback) {
+      this.removeListener(eventName, callback);
+    }
+  });
+
+  if (definition.mixinEvents) {
+    if (!definition.storeID) {
+      throw new Error(`Must define a valid storeID to expose events`);
+    }
+    if (definition.storeID in EXISTING_FLUX_STORES) {
+      throw new Error(`Store with ID ${definition.storeID} already exists.`);
+    }
+    EXISTING_FLUX_STORES[definition.storeID] = true;
+    // Create Store (same as used in core application)
+    definition = fluxStore.createStore(definition);
+    // Register events with StoreMixinConfig. Only import this as needed
+    // because its presence will degrade test performance.
+    getApplicationModuleAPI().get('StoreMixinConfig')
+      .add(definition.storeID,
+        _.extend({}, definition.mixinEvents, {store: definition})
+      );
+  }
+
+  return definition;
+};
+
+/**
+ * Return a slice of the State
+ * @param  {String} root - root of the slice to return
+ * @return {Function}      Returns state at root
+ */
+const getStateRootedAt = function (root) {
+  return function () {
+    return Store.getState()[root];
+  };
+};
+
+/**
  * Extends the PluginSDK
  * @param  {PluginSDK} SDK - SDK to extend
  * @param  {Object} obj  - Key value pairs to be added to SDK
@@ -197,12 +248,15 @@ const getSDK = function (pluginID, config) {
     // Limit access for Plugins
     StoreAPI = {
       subscribe: Store.subscribe.bind(Store),
-      getState: Store.getState.bind(Store)
+      getState: Store.getState.bind(Store),
+      getOwnState: getStateRootedAt(pluginID),
+      getAppState: getStateRootedAt(APPLICATION)
     };
   }
 
   let SDK = new PluginSDKStruct({
     config: config || {},
+    createStore: createPluginStore,
     dispatch: createDispatcher(pluginID),
     Store: StoreAPI,
     Hooks,
@@ -255,6 +309,27 @@ const addPluginReducer = function (reducer, pluginID) {
   reducers[pluginID] = reducer;
 };
 
+/**
+ * Replace reducers in Store
+ */
+const replaceStoreReducers = function () {
+  // Replace all store reducers now that we have all plugin reducers
+  Store.replaceReducer(
+    combineReducers(reducers)
+  );
+};
+
+/**
+ * Add reducer to Store (only available in test mode so we can test plugins
+ * that rely on State)
+ * @param {String} pluginID - Plugin ID
+ * @param  {Function} reducer - A reducer
+ */
+const __addReducer = function (pluginID, reducer) {
+  addPluginReducer(reducer, pluginID);
+  replaceStoreReducers();
+};
+
 // Subscribe to Store config change and call initialize with
 // new plugin configuration
 let unSubscribe = Store.subscribe(function () {
@@ -274,6 +349,7 @@ AppHooks.initialize(ApplicationSDK);
 // Add helper for PluginTestUtils. This allows us to get SDKS for other plugins
 if (global.__DEV__) {
   ApplicationSDK.__getSDK = getSDK;
+  ApplicationSDK.__addReducer = __addReducer;
 }
 // Add manual load method
 ApplicationSDK.initialize = initialize;

@@ -3,13 +3,8 @@ import classNames from 'classnames';
 /* eslint-disable no-unused-vars */
 import React from 'react';
 /* eslint-enable no-unused-vars */
-import {
-  REQUEST_INTERCOM_OPEN,
-  REQUEST_INTERCOM_CLOSE
-} from './constants/ActionTypes';
 
 import Actions from './actions/Actions';
-var AppDispatcher = require('../../src/js/events/AppDispatcher');
 import IntercomStore from './stores/IntercomStore';
 
 let SDK = require('./SDK').getSDK();
@@ -67,25 +62,19 @@ module.exports = {
   },
 
   isIntercomOpen: function () {
-    return IntercomStore.get('isOpen');
+    return IntercomStore.isOpen();
   },
 
   openIntercom: function () {
-    AppDispatcher.handleIntercomAction({
-      type: REQUEST_INTERCOM_OPEN,
-      data: true
-    });
+    IntercomStore.openIntercom();
   },
 
   closeIntercom: function () {
-    AppDispatcher.handleIntercomAction({
-      type: REQUEST_INTERCOM_CLOSE,
-      data: false
-    });
+    IntercomStore.closeIntercom();
   },
 
   handleToggleIntercom: function () {
-    if (IntercomStore.get('isOpen')) {
+    if (IntercomStore.isOpen()) {
       this.closeIntercom();
     } else {
       this.openIntercom();
@@ -145,7 +134,7 @@ module.exports = {
       'icon-sprite': true,
       'icon-chat': true,
       'icon-sprite-medium': true,
-      'icon-sprite-medium-color': IntercomStore.get('isOpen')
+      'icon-sprite-medium-color': IntercomStore.isOpen()
     });
 
     let intercomButton = (

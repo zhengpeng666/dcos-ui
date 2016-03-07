@@ -1,73 +1,55 @@
-import {Store} from 'mesosphere-shared-reactjs';
-
-import {
-  INTERCOM_ACTION,
-  REQUEST_INTERCOM_CLOSE,
-  REQUEST_INTERCOM_OPEN
-} from '../constants/ActionTypes';
-
 import {INTERCOM_CHANGE} from '../constants/EventTypes';
-
-var AppDispatcher = require('../../../src/js/events/AppDispatcher');
 
 let SDK = require('../SDK').getSDK();
 
-let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
-
-var IntercomStore = Store.createStore({
+var IntercomStore = SDK.createStore({
   storeID: 'intercom',
 
-  mixins: [PluginGetSetMixin],
-  // Keep onSet because PluginGetSetMixin wants it
-  onSet() {},
+  mixinEvents: {
+    events: {
+      change: INTERCOM_CHANGE
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
 
   init: function () {
-    this.set({isOpen: false});
 
     var intercom = global.Intercom;
     if (intercom != null) {
       // make sure to hide Intercom on load
       intercom('hide');
 
-      // register events
+      // register for intercom events
       intercom('onHide', this.handleChange.bind(this, false));
       intercom('onShow', this.handleChange.bind(this, true));
     }
   },
 
+  isOpen() {
+    return SDK.Store.getOwnState().isOpen;
+  },
+
+  openIntercom() {
+    this.handleChange(true);
+  },
+
+  closeIntercom() {
+    this.handleChange(false);
+  },
+
   handleChange: function (isOpen) {
     // only handle change if there is one
-    if (this.get('isOpen') !== isOpen) {
-      this.set({isOpen});
+    if (this.isOpen() !== isOpen) {
+      SDK.dispatch({
+        type: INTERCOM_CHANGE,
+        isOpen
+      });
       this.emit(INTERCOM_CHANGE);
     }
-  },
-
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
-  },
-
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    var source = payload.source;
-    if (source !== INTERCOM_ACTION) {
-      return false;
-    }
-
-    var action = payload.action;
-
-    switch (action.type) {
-      case REQUEST_INTERCOM_CLOSE:
-      case REQUEST_INTERCOM_OPEN:
-        IntercomStore.handleChange(action.data);
-        break;
-    }
-
-    return true;
-  })
+  }
 });
 
 module.exports = IntercomStore;
