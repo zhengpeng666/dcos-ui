@@ -23,7 +23,7 @@ var ACLUserStore = require('../../stores/ACLUserStore');
 var UserSidePanel = require('../UserSidePanel');
 var UserSidePanelContents = require('../UserSidePanelContents');
 
-var MesosSummary = require('../../../../structs');
+let {APPLICATION} = SDK.constants;
 
 describe('UserSidePanel', function () {
   beforeEach(function () {
@@ -31,8 +31,14 @@ describe('UserSidePanel', function () {
 
     this.container = document.createElement('div');
 
-    MesosSummary.getState = function () {
-      return true;
+    SDK.Store.getState = function () {
+      return {
+        [APPLICATION]: {
+          summary: {
+            statesProcessed: true
+          }
+        }
+      };
     };
 
     ACLUserStore.getUser = function () {

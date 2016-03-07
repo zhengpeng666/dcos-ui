@@ -25,18 +25,24 @@ require('../../../../SDK').setSDK(SDK);
 
 require('../../../../storeConfig').register();
 
-var MesosSummary = require('../../../../structs');
-
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var GroupSidePanel = require('../GroupSidePanel');
 var GroupSidePanelContents = require('../GroupSidePanelContents');
+
+let {APPLICATION} = SDK.constants;
 
 describe('GroupSidePanel', function () {
   beforeEach(function () {
     this.groupStore = ACLGroupStore.getGroup;
 
-    MesosSummary.getState = function () {
-      return true;
+    SDK.Store.getState = function () {
+      return {
+        [APPLICATION]: {
+          summary: {
+            statesProcessed: true
+          }
+        }
+      };
     };
 
     ACLGroupStore.getGroup = function () {

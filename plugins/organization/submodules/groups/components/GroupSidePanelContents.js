@@ -5,7 +5,6 @@ import React from 'react';
 
 import ACLGroupStore from '../stores/ACLGroupStore';
 import GroupUserMembershipTab from './GroupUserMembershipTab';
-import MesosSummary from '../../../structs';
 import PermissionsView from '../../acl/components/PermissionsView';
 import GroupAdvancedACLsTab from './GroupAdvancedACLsTab';
 
@@ -22,6 +21,7 @@ let SDK = require('../../../SDK').getSDK();
 
 let {RequestErrorMsg, SidePanelContents, StringUtil} = SDK.get([
   'RequestErrorMsg', 'SidePanelContents', 'StringUtil']);
+let {APPLICATION} = SDK.constants;
 
 class GroupSidePanelContents extends SidePanelContents {
   constructor() {
@@ -199,7 +199,7 @@ class GroupSidePanelContents extends SidePanelContents {
       return this.getErrorNotice();
     }
     if (group.get('gid') == null ||
-        !MesosSummary.getState('statesProcessed')) {
+        !SDK.Store.getState()[APPLICATION].summary.statesProcessed) {
       return this.getLoadingScreen();
     }
 

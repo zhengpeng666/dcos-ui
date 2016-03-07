@@ -6,9 +6,8 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import ACLGroupStore from '../stores/ACLGroupStore';
 import GroupSidePanelContents from './GroupSidePanelContents';
 
-import MesosSummary from '../../../structs';
-
 let SDK = require('../../../SDK').getSDK();
+let {APPLICATION} = SDK.constants;
 
 const METHODS_TO_BIND = [
   'handleDeleteModalOpen',
@@ -96,7 +95,7 @@ class GroupSidePanel extends mixin(StoreMixin) {
   isOpen() {
     return (
       this.props.params.groupID != null
-      && MesosSummary.getState('statesProcessed')
+      && SDK.Store.getState()[APPLICATION].summary.statesProcessed
     );
   }
 

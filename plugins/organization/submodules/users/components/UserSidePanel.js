@@ -8,9 +8,8 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import ACLUserStore from '../stores/ACLUserStore';
 import UserSidePanelContents from './UserSidePanelContents';
 
-import MesosSummary from '../../../structs';
-
 let SDK = require('../../../SDK').getSDK();
+let {APPLICATION} = SDK.constants;
 
 const METHODS_TO_BIND = [
   'handleDeleteModalOpen',
@@ -98,7 +97,7 @@ class UserSidePanel extends mixin(StoreMixin) {
   isOpen() {
     return (
       this.props.params.userID != null
-      && MesosSummary.getState('statesProcessed')
+      && SDK.Store.getState()[APPLICATION].summary.statesProcessed
     );
   }
 

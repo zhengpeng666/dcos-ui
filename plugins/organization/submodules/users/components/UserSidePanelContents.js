@@ -9,8 +9,6 @@ import UserDetails from './UserDetails';
 import UserGroupMembershipTab from './UserGroupMembershipTab';
 import UserAdvancedACLsTab from './UserAdvancedACLsTab';
 
-import MesosSummary from '../../../structs';
-
 const EXTERNAL_CHANGE_EVENTS = [
   'onAclStoreUserGrantSuccess',
   'onAclStoreUserRevokeSuccess',
@@ -24,6 +22,7 @@ let SDK = require('../../../SDK').getSDK();
 
 let {RequestErrorMsg, SidePanelContents, StringUtil} = SDK.get([
   'RequestErrorMsg', 'SidePanelContents', 'StringUtil']);
+let {APPLICATION} = SDK.constants;
 
 class UserSidePanelContents extends SidePanelContents {
   constructor() {
@@ -213,7 +212,7 @@ ${groupLabel}${remote}`
     }
 
     if (user.get('uid') == null ||
-      !MesosSummary.getState('statesProcessed')) {
+      !SDK.Store.getState()[APPLICATION].summary.statesProcessed) {
       return this.getLoadingScreen();
     }
 
