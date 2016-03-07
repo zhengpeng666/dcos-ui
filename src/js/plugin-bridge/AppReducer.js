@@ -6,7 +6,7 @@ const initialState = {};
 // List of plugins with permissions to alter this state
 const PERMISSIONS_LIST = [
   APPLICATION,
-  'auth',
+  'authentication',
   'organization'
 ];
 
