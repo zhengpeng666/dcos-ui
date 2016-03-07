@@ -86,8 +86,11 @@ base/forms.less
 
       .icon.icon-error {
         transform: rotate(180deg);
-        opacity: 0.4;
-        margin-left: @base-spacing-unit * 0.5;
+        opacity: 0.5;
+
+        &:hover {
+          opacity: 1;
+        }
       }
 
       .checkbox .form-group label {

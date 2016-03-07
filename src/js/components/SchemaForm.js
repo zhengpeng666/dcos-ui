@@ -165,11 +165,16 @@ class SchemaForm extends React.Component {
   getLabel(description, label) {
     return (
       <label>
-        <Tooltip
-          content={description}
-          iconClass="icon icon-sprite icon-sprite-mini icon-error">
-          {label}
-        </Tooltip>
+        <span className="media-object-spacing-wrapper media-object-spacing-narrow">
+          <Tooltip
+            content={description}
+            contentClass="media-object"
+            iconClass="icon icon-sprite icon-sprite-mini icon-error media-object-item">
+            <span className="media-object-item">
+              {label}
+            </span>
+          </Tooltip>
+        </span>
       </label>
     );
   }

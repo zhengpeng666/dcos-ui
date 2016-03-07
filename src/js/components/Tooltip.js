@@ -11,6 +11,7 @@ let Tooltip = React.createClass({
   propTypes: {
     behavior: React.PropTypes.string,
     content: React.PropTypes.string,
+    contentClass: React.PropTypes.string,
     iconClass: React.PropTypes.string,
     tipPlace: React.PropTypes.string
   },
@@ -19,6 +20,7 @@ let Tooltip = React.createClass({
     return {
       behavior: 'show-tip',
       content: '',
+      contentClass: '',
       iconClass: '',
       tipPlace: 'top'
     };
@@ -33,7 +35,7 @@ let Tooltip = React.createClass({
     };
 
     return (
-      <span>
+      <span className={props.contentClass}>
         {this.props.children}
         <i className={props.iconClass}
           {...tooltipAttributes} />
