@@ -149,6 +149,7 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
 
   if (configuration.universePackages) {
     cy
+      // Packages
       .route({
         method: 'POST',
         url: /package\/describe/,
@@ -166,6 +167,25 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
         url: /package\/search/,
         status: 200,
         response: 'fx:cosmos/packages-search'
+      })
+      // Repositories
+      .route({
+        method: 'POST',
+        url: /repository\/list/,
+        status: 200,
+        response: 'fx:cosmos/repositories-list'
+      })
+      .route({
+        method: 'POST',
+        url: /repository\/add/,
+        status: 200,
+        response: 'fx:cosmos/repositories-list'
+      })
+      .route({
+        method: 'POST',
+        url: /repository\/delete/,
+        status: 200,
+        response: 'fx:cosmos/repositories-list'
       });
   }
 

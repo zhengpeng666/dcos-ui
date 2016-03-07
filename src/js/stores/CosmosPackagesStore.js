@@ -42,7 +42,7 @@ import {
 
   SERVER_ACTION
 } from '../constants/ActionTypes';
-import List from '../structs/List';
+import RepositoryList from '../structs/RepositoryList';
 import UniverseInstalledPackagesList from
   '../structs/UniverseInstalledPackagesList';
 import UniversePackage from '../structs/UniversePackage';
@@ -106,7 +106,7 @@ const CosmosPackagesStore = Store.createStore({
   },
 
   getRepositories() {
-    return new List({items: this.get('repositories')});
+    return new RepositoryList({items: this.get('repositories')});
   },
 
   processAvailablePackagesSuccess: function (packages, query) {

@@ -140,6 +140,7 @@ FormModal.propTypes = {
   modalProps: React.PropTypes.object,
   onChange: React.PropTypes.func,
   onClose: React.PropTypes.func.isRequired,
+  onSubmit: React.PropTypes.func,
   open: React.PropTypes.bool
 };
 

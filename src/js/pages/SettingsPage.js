@@ -20,6 +20,10 @@ let DEFAULT_SETTINGS_TABS = {
 let DEFAULT_TABS_TABS = {
   'settings-system-units': {
     content: 'Units',
+    priority: 20
+  },
+  'settings-system-repositories': {
+    content: 'Repositories',
     priority: 10
   }
 };
