@@ -21,7 +21,7 @@ const CosmosMessages = {
     }
   },
   InvalidRepositoryUri: {
-    header: 'Issue with the package registered repositories',
+    header: 'Issue with registered repositories',
     getMessage: function (repository = 'a repository') {
       return (
         <span>
@@ -32,8 +32,8 @@ const CosmosMessages = {
     }
   },
   IndexNotFound: {
-    header: 'Issue with the package registered repositories',
-    getMessage: function (repository = 'A repository') {
+    header: 'Issue with registered repositories',
+    getMessage: function (repository = 'a repository') {
       return (
         <span>
           {`The index file is missing in ${repository} (repository). You might need to change the URL of ${repository}.`}
@@ -43,11 +43,11 @@ const CosmosMessages = {
     }
   },
   PackageFileMissing: {
-    header: 'Issue with the package registered repositories',
-    getMessage: function (repository = 'A repository') {
+    header: 'Issue with registered repositories',
+    getMessage: function (repository = 'a repository') {
       return (
         <span>
-          {`The index file is missing in ${repository} (repository). You might need to change the URL of ${repository}.`}
+          {`The package file is missing in ${repository} (repository). You might need to change the URL of ${repository}.`}
           {repositoryLink}
         </span>
       );
