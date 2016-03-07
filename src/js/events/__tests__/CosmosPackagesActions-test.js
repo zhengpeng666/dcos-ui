@@ -70,7 +70,7 @@ describe('CosmosPackagesActions', function () {
       var id = AppDispatcher.register(function (payload) {
         var action = payload.action;
         AppDispatcher.unregister(id);
-        expect(action.data).toEqual('bar');
+        expect(action.data).toEqual({description: 'bar'});
       });
 
       this.configuration.error({responseJSON: {description: 'bar'}});
