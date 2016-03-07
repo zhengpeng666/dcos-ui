@@ -67,6 +67,17 @@ class SchemaForm extends React.Component {
     if (!this.state.useGemini) {
       this.setState({useGemini: true});
     }
+
+    setTimeout(() => {
+      let {geminiTabs, geminiForms} = this.refs;
+
+      if (!geminiTabs || !geminiForms) {
+        return;
+      }
+
+      geminiTabs.scrollbar.update();
+      geminiForms.scrollbar.update();
+    });
   }
 
   handleTabClick(tab) {
@@ -233,7 +244,7 @@ class SchemaForm extends React.Component {
 
     if (this.state.useGemini && !isMobileWidth) {
       return (
-        <GeminiScrollbar autoshow={true} className={classSet}>
+        <GeminiScrollbar ref="geminiTabs" autoshow={true} className={classSet}>
           <div className="multiple-form-left-column">
             {this.getServiceHeader()}
             {content}
@@ -288,7 +299,7 @@ class SchemaForm extends React.Component {
 
     if (this.state.useGemini) {
       return (
-        <GeminiScrollbar autoshow={true} className={classSet}>
+        <GeminiScrollbar ref="geminiForms" autoshow={true} className={classSet}>
           {panels}
         </GeminiScrollbar>
       );
