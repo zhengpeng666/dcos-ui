@@ -1,19 +1,3 @@
-import ACLStore from './submodules/acl/stores/ACLStore';
-import {
-  ACL_CREATE_SUCCESS,
-  ACL_CREATE_ERROR,
-  ACL_RESOURCE_ACLS_CHANGE,
-  ACL_RESOURCE_ACLS_ERROR,
-  ACL_USER_GRANT_ACTION_CHANGE,
-  ACL_USER_GRANT_ACTION_ERROR,
-  ACL_USER_REVOKE_ACTION_CHANGE,
-  ACL_USER_REVOKE_ACTION_ERROR,
-  ACL_GROUP_GRANT_ACTION_CHANGE,
-  ACL_GROUP_GRANT_ACTION_ERROR,
-  ACL_GROUP_REVOKE_ACTION_CHANGE,
-  ACL_GROUP_REVOKE_ACTION_ERROR
-} from './submodules/acl/constants/EventTypes';
-
 // Directories
 import ACLDirectoriesStore from './submodules/directories/stores/ACLDirectoriesStore';
 import {
@@ -80,28 +64,6 @@ let SDK = require('./SDK').getSDK();
 module.exports = {
   register() {
     let StoreMixinConfig = SDK.get('StoreMixinConfig');
-
-    StoreMixinConfig.add('acl', {
-      store: ACLStore,
-      events: {
-        createSuccess: ACL_CREATE_SUCCESS,
-        createError: ACL_CREATE_ERROR,
-        fetchResourceSuccess: ACL_RESOURCE_ACLS_CHANGE,
-        fetchResourceError: ACL_RESOURCE_ACLS_ERROR,
-        userGrantSuccess: ACL_USER_GRANT_ACTION_CHANGE,
-        userGrantError: ACL_USER_GRANT_ACTION_ERROR,
-        userRevokeSuccess: ACL_USER_REVOKE_ACTION_CHANGE,
-        userRevokeError: ACL_USER_REVOKE_ACTION_ERROR,
-        groupGrantSuccess: ACL_GROUP_GRANT_ACTION_CHANGE,
-        groupGrantError: ACL_GROUP_GRANT_ACTION_ERROR,
-        groupRevokeSuccess: ACL_GROUP_REVOKE_ACTION_CHANGE,
-        groupRevokeError: ACL_GROUP_REVOKE_ACTION_ERROR
-      },
-      unmountWhen: function () {
-        return true;
-      },
-      listenAlways: true
-    });
 
     StoreMixinConfig.add('aclDirectories', {
       store: ACLDirectoriesStore,

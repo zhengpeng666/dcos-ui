@@ -33,14 +33,16 @@ import {
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let SDK = PluginTestUtils.getSDK('authentication', {enabled: true});
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
-var ACLList = require('../../structs/ACLList');
 
+var ACLList = require('../../structs/ACLList');
 var ACLStore = require('../ACLStore');
+var AuthReducer = require('../../Reducer');
 var RequestUtil = SDK.get('RequestUtil');
 
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
+PluginTestUtils.addReducer('organization', AuthReducer);
+
 var aclsFixture = require('../../../../../../tests/_fixtures/acl/acls-unicode.json');
 
 describe('ACLStore', function () {
@@ -78,7 +80,7 @@ describe('ACLStore', function () {
     describe('ACLs', function () {
 
       it('stores services when event is dispatched', function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
           data: [{rid: 'foo', bar: 'baz'}],
           resourceType: 'service'
@@ -95,7 +97,7 @@ describe('ACLStore', function () {
           ACL_RESOURCE_ACLS_CHANGE,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
           data: [{rid: 'foo', bar: 'baz'}],
           resourceType: 'service'
@@ -110,7 +112,7 @@ describe('ACLStore', function () {
           ACL_RESOURCE_ACLS_ERROR,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_RESOURCE_ACLS_ERROR,
           data: 'foo',
           resourceType: 'service'
@@ -132,7 +134,7 @@ describe('ACLStore', function () {
       const ID = 'service.' + mockData.resourceID;
 
       beforeEach(function () {
-        ACLStore.set({'outstandingGrants': {}});
+        ACLStore.outstandingGrants = {};
       });
 
       it('first creates ACL for resource if nonexistent', function () {
@@ -153,7 +155,7 @@ describe('ACLStore', function () {
           mockData.action,
           ID);
 
-        expect(typeof ACLStore.get('outstandingGrants')[ID][0] == 'function')
+        expect(typeof ACLStore.outstandingGrants[ID][0] == 'function')
           .toBeTruthy();
       });
 
@@ -165,7 +167,7 @@ describe('ACLStore', function () {
           ACLStore.addOutstandingGrantRequest('service.foo', mockedFn);
           ACLStore.addOutstandingGrantRequest('service.foo', mockedFn2);
 
-          AppDispatcher.handleServerAction({
+          SDK.dispatch({
             type: REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
             data: [
               {rid: 'service.foo', bar: 'baz'},
@@ -187,7 +189,7 @@ describe('ACLStore', function () {
           ACLStore.addOutstandingGrantRequest('service.foo', mockedFn);
           ACLStore.addOutstandingGrantRequest('service.baz', mockedFn2);
 
-          AppDispatcher.handleServerAction({
+          SDK.dispatch({
             type: REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
             data: [
               {rid: 'service.foo', bar: 'baz'}
@@ -208,13 +210,12 @@ describe('ACLStore', function () {
           ACLStore.addOutstandingGrantRequest('service.foo', mockedFn);
           ACLStore.addOutstandingGrantRequest('service.baz', mockedFn2);
 
-          AppDispatcher.handleServerAction({
+          SDK.dispatch({
             type: REQUEST_ACL_CREATE_ERROR,
             resourceID: 'service.foo'
           });
-          let outstandingGrants = ACLStore.get('outstandingGrants');
-          expect('service.foo' in outstandingGrants).toBeFalsy();
-          expect(outstandingGrants['service.baz'].length).toEqual(1);
+          expect('service.foo' in ACLStore.outstandingGrants).toBeFalsy();
+          expect(ACLStore.outstandingGrants['service.baz'].length).toEqual(1);
         });
 
     });
@@ -227,7 +228,7 @@ describe('ACLStore', function () {
           ACL_USER_GRANT_ACTION_CHANGE,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
           triple: {userID: 'foo', action: 'access', resourceID: 'marathon'}
         });
@@ -242,7 +243,7 @@ describe('ACLStore', function () {
           ACL_USER_GRANT_ACTION_ERROR,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_GRANT_ACTION_ERROR,
           data: 'bar',
           triple: {userID: 'foo', action: 'access', resourceID: 'marathon'}
@@ -264,7 +265,7 @@ describe('ACLStore', function () {
           ACL_USER_REVOKE_ACTION_CHANGE,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
           triple: {userID: 'foo', action: 'access', resourceID: 'marathon'}
         });
@@ -279,7 +280,7 @@ describe('ACLStore', function () {
           ACL_USER_REVOKE_ACTION_ERROR,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_USER_REVOKE_ACTION_ERROR,
           data: 'bar',
           triple: {userID: 'foo', action: 'access', resourceID: 'marathon'}
@@ -301,7 +302,7 @@ describe('ACLStore', function () {
           ACL_GROUP_GRANT_ACTION_CHANGE,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
           triple: {groupID: 'foo', action: 'access', resourceID: 'marathon'}
         });
@@ -316,7 +317,7 @@ describe('ACLStore', function () {
           ACL_GROUP_GRANT_ACTION_ERROR,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_GROUP_GRANT_ACTION_ERROR,
           data: 'bar',
           triple: {groupID: 'foo', action: 'access', resourceID: 'marathon'}
@@ -338,7 +339,7 @@ describe('ACLStore', function () {
           ACL_GROUP_REVOKE_ACTION_CHANGE,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
           triple: {groupID: 'foo', action: 'access', resourceID: 'marathon'}
         });
@@ -353,7 +354,7 @@ describe('ACLStore', function () {
           ACL_GROUP_REVOKE_ACTION_ERROR,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR,
           data: 'bar',
           triple: {groupID: 'foo', action: 'access', resourceID: 'marathon'}

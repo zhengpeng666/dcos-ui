@@ -7,6 +7,7 @@ module.exports = function (PluginSDK) {
   let DirectoriesHooks = require('./submodules/directories/hooks');
   let GroupsHooks = require('./submodules/groups/hooks');
   let PluginHooks = require('./hooks');
+  let OrganizationReducer = require('./Reducer');
   let UsersHooks = require('./submodules/users/hooks');
   let StoreConfig = require('./storeConfig');
 
@@ -19,5 +20,7 @@ module.exports = function (PluginSDK) {
 
    // Register our Stores
   StoreConfig.register();
+
+  return OrganizationReducer;
 };
 
