@@ -13,7 +13,6 @@ PluginTestUtils.dontMock([
   'MesosSummaryStore',
   'InternalStorageMixin',
   'TabsMixin',
-  'PluginGetSetMixin',
   'SidePanelContents',
   'RequestErrorMsg'
 ]);
@@ -35,6 +34,9 @@ require('../../../../storeConfig').register();
 let ACLGroupStore = require('../../stores/ACLGroupStore');
 let EventTypes = require('../../constants/EventTypes');
 let GroupSidePanelContents = require('../GroupSidePanelContents');
+var OrganizationReducer = require('../../../../Reducer');
+
+PluginTestUtils.addReducer('organization', OrganizationReducer);
 
 let Group = require('../../structs/Group');
 
