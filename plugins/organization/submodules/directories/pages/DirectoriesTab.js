@@ -269,8 +269,8 @@ module.exports = class DirectoriesTab extends mixin(StoreMixin) {
   }
 
   render() {
-    let directories = ACLDirectoriesStore.get('directories');
-    if (directories) {
+    let directories = ACLDirectoriesStore.getDirectories();
+    if (directories.length > 0) {
       return this.renderDirectory(directories.getItems()[0]);
     } else {
       return this.renderAddDirectory();

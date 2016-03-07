@@ -110,7 +110,7 @@ class GroupsTab extends mixin(StoreMixin) {
       return this.getLoadingScreen();
     }
 
-    let items = ACLGroupsStore.get('groups').getItems();
+    let items = ACLGroupsStore.getGroups().getItems();
 
     return (
       <OrganizationTab

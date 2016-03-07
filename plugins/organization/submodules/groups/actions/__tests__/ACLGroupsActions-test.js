@@ -12,8 +12,6 @@ let ActionTypes = require('../../constants/ActionTypes');
 
 let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
-let AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-
 describe('ACLGroupsActions', function () {
 
   describe('#fetch', function () {
@@ -26,9 +24,8 @@ describe('ACLGroupsActions', function () {
 
     it('dispatches the correct action when successful', function () {
       ACLGroupsActions.fetch();
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUPS_SUCCESS);
       });
 
@@ -37,9 +34,8 @@ describe('ACLGroupsActions', function () {
 
     it('dispatches the correct action when unsuccessful', function () {
       ACLGroupsActions.fetch();
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUPS_ERROR);
       });
 
@@ -68,9 +64,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUP_SUCCESS);
       });
 
@@ -78,9 +73,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the correct data when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual({array: {bar: 'baz'}});
       });
 
@@ -88,9 +82,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_GROUP_ERROR);
       });
 
@@ -98,9 +91,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the correct data when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -108,9 +100,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the groupID when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -128,9 +119,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS);
       });
@@ -139,9 +129,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the correct data when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual({bar: 'baz'});
       });
 
@@ -149,9 +138,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the groupID successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -159,9 +147,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR);
       });
@@ -170,9 +157,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the correct data when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -180,9 +166,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the groupID when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -200,9 +185,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS);
       });
@@ -211,9 +195,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the correct data when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual({bar: 'baz'});
       });
 
@@ -221,9 +204,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the groupID successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -231,9 +213,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR);
       });
@@ -242,9 +223,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the correct data when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -252,9 +232,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches with the groupID when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -284,9 +263,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS);
       });
@@ -295,9 +273,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct groupID when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -305,9 +282,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR);
       });
@@ -316,9 +292,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct message when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -326,9 +301,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct groupID when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -358,9 +332,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS);
       });
@@ -369,9 +342,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the groupID when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -379,9 +351,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR);
       });
@@ -390,9 +361,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct message when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -400,9 +370,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the groupID when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -432,9 +401,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS);
       });
@@ -443,9 +411,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the groupID when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -453,9 +420,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR);
       });
@@ -464,9 +430,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct message when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -474,9 +439,8 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the groupID when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.groupID).toEqual('foo');
       });
 
@@ -494,10 +458,10 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
           userID: 'bar',
           groupID: 'foo'
@@ -508,10 +472,10 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
           data: 'bar',
           userID: 'bar',
@@ -533,10 +497,10 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
           userID: 'bar',
           groupID: 'foo'
@@ -547,10 +511,10 @@ describe('ACLGroupsActions', function () {
     });
 
     it('dispatches the correct action when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
           data: 'bar',
           userID: 'bar',

@@ -1,5 +1,3 @@
-import {Store} from 'mesosphere-shared-reactjs';
-
 import {
   REQUEST_ACL_GROUPS_SUCCESS,
   REQUEST_ACL_GROUPS_ERROR
@@ -16,71 +14,52 @@ import ACLGroupsActions from '../actions/ACLGroupsActions';
 
 import GroupsList from '../structs/GroupsList';
 
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
+let SDK = require('../../../SDK').getSDK();
 
-let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
-let {APP_STORE_CHANGE} = SDK.constants;
-
-const ACLGroupsStore = Store.createStore({
+const ACLGroupsStore = SDK.createStore({
   storeID: 'groups',
 
-  mixins: [PluginGetSetMixin],
-
-  getSet_data: {
-    groups: new GroupsList()
-  },
-
-  onSet() {
-    SDK.dispatch({
-      type: APP_STORE_CHANGE,
-      storeID: this.storeID,
-      data: this.getSet_data
-    });
-  },
-
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
+  mixinEvents: {
+    events: {
+      success: ACL_GROUPS_CHANGE,
+      error: ACL_GROUPS_REQUEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
   },
 
   fetchGroups: ACLGroupsActions.fetch,
 
+  getGroups() {
+    return new GroupsList({items: SDK.Store.getOwnState().groups.list});
+  },
+
   processGroups: function (groups) {
-    this.set({
-      groups: new GroupsList({
-        items: groups
-      })
+    SDK.dispatch({
+      type: ACL_GROUPS_CHANGE,
+      groups
     });
     this.emit(ACL_GROUPS_CHANGE);
   },
 
   processGroupsError: function (error) {
     this.emit(ACL_GROUPS_REQUEST_ERROR, error);
-  },
+  }
+});
 
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    let source = payload.source;
-    if (source !== SERVER_ACTION) {
-      return false;
-    }
+SDK.onDispatch(function (action) {
+  switch (action.type) {
+    case REQUEST_ACL_GROUPS_SUCCESS:
+      ACLGroupsStore.processGroups(action.data);
+      break;
+    case REQUEST_ACL_GROUPS_ERROR:
+      ACLGroupsStore.processGroupsError(action.data);
+      break;
+  }
 
-    let action = payload.action;
-
-    switch (action.type) {
-      case REQUEST_ACL_GROUPS_SUCCESS:
-        ACLGroupsStore.processGroups(action.data);
-        break;
-      case REQUEST_ACL_GROUPS_ERROR:
-        ACLGroupsStore.processGroupsError(action.data);
-        break;
-    }
-
-    return true;
-  })
+  return true;
 });
 
 module.exports = ACLGroupsStore;

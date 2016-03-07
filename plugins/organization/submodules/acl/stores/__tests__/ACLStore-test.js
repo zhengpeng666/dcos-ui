@@ -38,10 +38,10 @@ require('../../../../SDK').setSDK(SDK);
 
 var ACLList = require('../../structs/ACLList');
 var ACLStore = require('../ACLStore');
-var AuthReducer = require('../../Reducer');
+var OrganizationReducer = require('../../../../Reducer');
 var RequestUtil = SDK.get('RequestUtil');
 
-PluginTestUtils.addReducer('organization', AuthReducer);
+PluginTestUtils.addReducer('organization', OrganizationReducer);
 
 var aclsFixture = require('../../../../../../tests/_fixtures/acl/acls-unicode.json');
 

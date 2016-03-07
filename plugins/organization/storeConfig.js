@@ -1,22 +1,6 @@
-// Directories
-import ACLDirectoriesStore from './submodules/directories/stores/ACLDirectoriesStore';
-import {
-  ACL_DIRECTORIES_CHANGED,
-  ACL_DIRECTORIES_ERROR,
-  ACL_DIRECTORY_ADD_SUCCESS,
-  ACL_DIRECTORY_ADD_ERROR,
-  ACL_DIRECTORY_DELETE_SUCCESS,
-  ACL_DIRECTORY_DELETE_ERROR,
-  ACL_DIRECTORY_TEST_SUCCESS,
-  ACL_DIRECTORY_TEST_ERROR
-} from './submodules/directories/constants/EventTypes';
-
 // Groups
-import ACLGroupsStore from './submodules/groups/stores/ACLGroupsStore';
 import ACLGroupStore from './submodules/groups/stores/ACLGroupStore';
 import {
-  ACL_GROUPS_CHANGE,
-  ACL_GROUPS_REQUEST_ERROR,
   ACL_GROUP_DETAILS_GROUP_CHANGE,
   ACL_GROUP_DETAILS_GROUP_ERROR,
   ACL_GROUP_USERS_CHANGED,
@@ -64,36 +48,6 @@ let SDK = require('./SDK').getSDK();
 module.exports = {
   register() {
     let StoreMixinConfig = SDK.get('StoreMixinConfig');
-
-    StoreMixinConfig.add('aclDirectories', {
-      store: ACLDirectoriesStore,
-      events: {
-        fetchSuccess: ACL_DIRECTORIES_CHANGED,
-        fetchError: ACL_DIRECTORIES_ERROR,
-        addSuccess: ACL_DIRECTORY_ADD_SUCCESS,
-        addError: ACL_DIRECTORY_ADD_ERROR,
-        deleteSuccess: ACL_DIRECTORY_DELETE_SUCCESS,
-        deleteError: ACL_DIRECTORY_DELETE_ERROR,
-        testSuccess: ACL_DIRECTORY_TEST_SUCCESS,
-        testError: ACL_DIRECTORY_TEST_ERROR
-      },
-      unmountWhen: function () {
-        return true;
-      },
-      listenAlways: true
-    });
-
-    StoreMixinConfig.add('groups', {
-      store: ACLGroupsStore,
-      events: {
-        success: ACL_GROUPS_CHANGE,
-        error: ACL_GROUPS_REQUEST_ERROR
-      },
-      unmountWhen: function () {
-        return true;
-      },
-      listenAlways: true
-    });
 
     StoreMixinConfig.add('group', {
       store: ACLGroupStore,

@@ -80,7 +80,7 @@ class UserGroupMembershipTab extends mixin(StoreMixin) {
   }
 
   getDropdownItems() {
-    let groups = ACLGroupsStore.get('groups').getItems().sort(
+    let groups = ACLGroupsStore.getGroups().getItems().sort(
       Util.getLocaleCompareSortFn('description')
     );
 

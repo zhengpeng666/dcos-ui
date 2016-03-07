@@ -60,7 +60,7 @@ const ACLStore = SDK.createStore({
   outstandingGrants: {},
 
   get(prop) {
-    return SDK.Store.getOwnState()[prop];
+    return SDK.Store.getOwnState().acl[prop];
   },
 
   createACLForResource: ACLActions.createACLForResource,
