@@ -1,5 +1,7 @@
-import UsersList from './UsersList';
-import Item from './Item';
+import UsersList from '../../users/structs/UsersList';
+let SDK = require('../../../SDK').getSDK();
+
+let Item = SDK.get('Item');
 
 module.exports = class Group extends Item {
   getPermissions() {

@@ -22,7 +22,7 @@ require('../../../../SDK').setSDK(SDK);
 require('../../../../storeConfig').register();
 
 var ACLUserStore = require('../../stores/ACLUserStore');
-var User = require('../../../../../../src/js/structs/User');
+var User = require('../../structs/User');
 var UserAdvancedACLsTab = require('../UserAdvancedACLsTab');
 
 let userDetailsFixture =

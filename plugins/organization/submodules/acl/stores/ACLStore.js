@@ -31,7 +31,7 @@ import {
 } from '../constants/EventTypes';
 
 import ACLActions from '../actions/ACLActions';
-import ACLList from '../../../../../src/js/structs/ACLList';
+import ACLList from '../structs/ACLList';
 
 import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';

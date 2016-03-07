@@ -42,7 +42,7 @@ import {
 } from '../constants/EventTypes';
 
 import ACLGroupsActions from '../actions/ACLGroupsActions';
-import Group from '../../../../../src/js/structs/Group';
+import Group from '../structs/Group';
 
 import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';

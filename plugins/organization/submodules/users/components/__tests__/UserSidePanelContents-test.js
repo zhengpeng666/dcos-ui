@@ -35,7 +35,7 @@ import {ACL_USER_DETAILS_FETCHED_ERROR} from '../../constants/EventTypes';
 var ACLUserStore = require('../../stores/ACLUserStore');
 var UserSidePanelContents = require('../UserSidePanelContents');
 
-var User = require('../../../../../../src/js/structs/User');
+var User = require('../../structs/User');
 var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
 
 var userDetailsFixture =
@@ -45,6 +45,7 @@ userDetailsFixture.groups = userDetailsFixture.groups.array;
 describe('UserSidePanelContents', function () {
 
   beforeEach(function () {
+    require('../../../../SDK').setSDK(SDK);
     this.summaryGet = MesosSummaryStore.get;
     this.userStoreGetUser = ACLUserStore.getUser;
 

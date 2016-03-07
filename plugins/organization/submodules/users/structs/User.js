@@ -1,5 +1,6 @@
-import GroupsList from './GroupsList';
-import Item from './Item';
+let SDK = require('../../../SDK').getSDK();
+
+let Item = SDK.get('Item');
 
 module.exports = class User extends Item {
 
@@ -8,6 +9,7 @@ module.exports = class User extends Item {
     let items = groups.map(function (groupMembership) {
       return groupMembership.group;
     });
+    let GroupsList = require('../../groups/structs/GroupsList');
     return new GroupsList({items});
   }
 

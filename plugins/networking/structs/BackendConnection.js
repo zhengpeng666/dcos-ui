@@ -1,5 +1,7 @@
 import ClientList from './ClientList';
-import Item from '../../../src/js/structs/Item';
+
+let SDK = require('../SDK').getSDK();
+let Item = SDK.get('Item');
 
 module.exports = class BackendConnection extends Item {
   getClients() {

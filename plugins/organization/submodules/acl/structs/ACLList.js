@@ -1,6 +1,7 @@
 import _ from 'underscore';
-import List from './List';
-import Item from './Item';
+let SDK = require('../../../SDK').getSDK();
+
+let {Item, List} = SDK.get(['Item', 'List']);
 
 module.exports = class ACLList extends List {
   constructor() {

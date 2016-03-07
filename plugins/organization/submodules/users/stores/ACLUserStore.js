@@ -34,7 +34,7 @@ import {
 } from '../constants/EventTypes';
 
 import ACLUsersActions from '../actions/ACLUsersActions';
-import User from '../../../../../src/js/structs/User';
+import User from '../structs/User';
 
 import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
 import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';

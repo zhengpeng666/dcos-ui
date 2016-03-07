@@ -22,7 +22,7 @@ require('../../../../SDK').setSDK(SDK);
 require('../../../../storeConfig').register();
 
 var ACLGroupStore = require('../../stores/ACLGroupStore');
-var Group = require('../../../../../../src/js/structs/Group');
+var Group = require('../../structs/Group');
 var GroupAdvancedACLsTab = require('../GroupAdvancedACLsTab');
 
 let groupDetailsFixture =

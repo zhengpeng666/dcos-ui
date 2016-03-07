@@ -1,15 +1,17 @@
 jest.dontMock('../Group');
-jest.dontMock('../Item');
-jest.dontMock('../List');
-jest.dontMock('../User');
-jest.dontMock('../UsersList');
-jest.dontMock('../../utils/Util');
-jest.dontMock('../../../../tests/_fixtures/acl/group-with-details.json');
+jest.dontMock('../../../users/structs/User');
+jest.dontMock('../../../users/structs/UsersList');
+jest.dontMock('../../../../../../tests/_fixtures/acl/group-with-details.json');
+
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../../../SDK').setSDK(SDK);
 
 var _ = require('underscore');
 var Group = require('../Group');
-var groupFixture = require('../../../../tests/_fixtures/acl/group-with-details.json');
-var UsersList = require('../UsersList');
+var groupFixture = require('../../../../../../tests/_fixtures/acl/group-with-details.json');
+var UsersList = require('../../../users/structs/UsersList');
 
 groupFixture.permissions = groupFixture.permissions.array;
 groupFixture.users = groupFixture.users.array;

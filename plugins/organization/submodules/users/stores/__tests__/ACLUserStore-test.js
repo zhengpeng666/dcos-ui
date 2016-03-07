@@ -1,4 +1,4 @@
-jest.dontMock('../../../../../../src/js/structs/User');
+jest.dontMock('../../structs/User');
 jest.dontMock('../../actions/ACLUsersActions');
 jest.dontMock('../ACLUserStore');
 
@@ -19,7 +19,7 @@ var ACLUsersActions = require('../../actions/ACLUsersActions');
 var ACLUserStore = require('../ACLUserStore');
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
-var User = require('../../../../../../src/js/structs/User');
+var User = require('../../structs/User');
 
 var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 

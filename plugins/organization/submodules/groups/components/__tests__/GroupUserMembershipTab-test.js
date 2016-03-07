@@ -23,7 +23,7 @@ var ACLGroupsStore = require('../../stores/ACLGroupsStore');
 var ACLUsersStore = require('../../../users/stores/ACLUsersStore');
 var GroupUserMembershipTab = require('../GroupUserMembershipTab');
 
-var Group = require('../../../../../../src/js/structs/Group');
+var Group = require('../../structs/Group');
 
 const groupDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/group-with-details.json');
