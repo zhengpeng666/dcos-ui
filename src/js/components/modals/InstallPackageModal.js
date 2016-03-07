@@ -4,7 +4,7 @@ import mixin from 'reactjs-mixin';
 import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import AdvancedConfigModal from '../AdvancedConfigModal';
+import AdvancedConfig from '../AdvancedConfig';
 import CosmosMessages from '../../constants/CosmosMessages';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
 import InternalStorageMixin from '../../mixins/InternalStorageMixin';
@@ -340,18 +340,20 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
         {this.getInstallError()}
         {this.getPackageInfo()}
         {this.getPostInstallNotes()}
+        {this.getAdvancedConfig()}
       </div>
     );
   }
 
   getPackageInfo() {
     let {
+      advancedModalOpen,
       nameError,
       installError,
       isReviewing,
       packageInstalled
     } = this.internalStorage_get();
-    if (installError || isReviewing || packageInstalled) {
+    if (installError || isReviewing || packageInstalled || advancedModalOpen) {
       return null;
     }
 
@@ -461,17 +463,35 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
     );
   }
 
+  getAdvancedConfig() {
+    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
+    if (!cosmosPackage) {
+      return null;
+    }
+
+    let {advancedModalOpen} = this.internalStorage_get();
+    let classSet = classNames({
+      hidden: !advancedModalOpen
+    });
+
+    return (
+      <AdvancedConfig
+        className={classSet}
+        schema={cosmosPackage.get('config')} />
+    );
+  }
+
   render() {
     let {props} = this;
     let {advancedModalOpen, isReviewing} = this.internalStorage_get();
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
     let modalClasses = classNames('modal', {
-      'modal-large': isReviewing,
-      'modal-narrow': !isReviewing
+      'modal-large': isReviewing || advancedModalOpen,
+      'modal-narrow': !isReviewing && !advancedModalOpen
     });
 
     let modalWrapperClasses = classNames({
-      'multiple-form-modal': isReviewing
+      'multiple-form-modal': isReviewing || advancedModalOpen
     });
 
     let modalBodyClasses = classNames({
@@ -483,10 +503,6 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
       return null;
     }
 
-    let multipleDefinition = SchemaUtil.schemaToMultipleDefinition(
-      cosmosPackage.get('config')
-    );
-
     return (
       <div>
         <Modal
@@ -497,16 +513,12 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
           onClose={props.onClose}
           showCloseButton={false}
           showFooter={true}
-          showHeader={isReviewing}
+          showHeader={isReviewing && !advancedModalOpen}
           headerClass="modal-header modal-header-bottom-border modal-header-white"
           innerBodyClass={modalBodyClasses}
           subHeader={this.getReviewHeader()}>
           {this.getModalContents()}
         </Modal>
-        <AdvancedConfigModal
-          open={advancedModalOpen}
-          onClose={this.handleAdvancedModalClose}
-          multipleDefinition={multipleDefinition} />
       </div>
     );
   }

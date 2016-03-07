@@ -19,10 +19,22 @@ class DescriptionList extends React.Component {
     let {hash} = this.props;
 
     return Object.keys(hash).map(function (key, index) {
+      let value = hash[key];
+
+      if (typeof value === 'object' && value !== null) {
+        return (
+          <DescriptionList hash={value} key={index} headline={key} />
+        );
+      }
+
+      if (typeof value !== 'string' && value != null) {
+        value = value.toString();
+      }
+
       return (
         <dl key={index} className="flex-box row">
           <dt className="column-3 emphasize">{key}</dt>
-          <dd className="column-9">{hash[key]}</dd>
+          <dd className="column-9">{value}</dd>
         </dl>
       );
     });

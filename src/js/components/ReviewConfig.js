@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 
 import DescriptionList from './DescriptionList';
@@ -25,9 +26,10 @@ class ReviewConfig extends React.Component {
         let fieldValue = fieldObj[fieldKey];
         let uniqueKey = `${i}${fieldKey}`;
 
-        if (typeof fieldValue === 'object' && !Array.isArray(fieldValue)) {
-          elementsToRender.push(this.getFieldSubheader(fieldKey));
-          elementsToRender = elementsToRender.push(
+        if (typeof fieldValue === 'object' && !Array.isArray(fieldValue)
+          && fieldValue !== null) {
+          elementsToRender.push(
+            this.getFieldSubheader(fieldKey),
             this.renderDescriptionList(fieldValue, uniqueKey)
           );
           return;
@@ -53,8 +55,10 @@ class ReviewConfig extends React.Component {
   }
 
   render() {
+    let classSet = classNames(this.props.className, 'modal-body review-config');
+
     return (
-      <div className={this.props.className}>
+      <div className={classSet}>
         {this.getDefinitionReview()}
       </div>
     );

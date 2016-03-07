@@ -1,4 +1,4 @@
-function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
+function getValueFromSchemaProperty(fieldProps) {
   let value = '';
 
   if (fieldProps.default != null) {
@@ -8,21 +8,44 @@ function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
     }
   }
 
+  if (Array.isArray(fieldProps.default) && fieldProps.default.length === 0) {
+    value = '';
+  }
+
+  return value;
+}
+
+function getLabelFromSchemaProperty(fieldProps, fieldName, isRequired) {
+  let label = fieldName;
+
+  if (isRequired) {
+    label = `${label} *`;
+  }
+
+  return label;
+}
+
+function schemaToFieldDefinition(fieldName, fieldProps, formParent, isRequired) {
+  let value = getValueFromSchemaProperty(fieldProps);
+  let label = getLabelFromSchemaProperty(fieldProps, fieldName, isRequired);
+
   let definition = {
     fieldType: 'text',
     formParent,
     name: fieldName,
     placeholder: '',
+    isRequired,
     required: false,
     showError: false,
-    showLabel: true,
+    showLabel: label,
     writeType: 'input',
     validation: function () { return true; },
-    value: value
+    value,
+    valueType: fieldProps.type
   };
 
-  if (Array.isArray(fieldProps.default) && fieldProps.default.length === 0) {
-    definition.value = '';
+  if (typeof value === 'boolean') {
+    definition.checked = value;
   }
 
   if (fieldProps.type === 'boolean') {
@@ -33,31 +56,58 @@ function schemaToFieldDefinition(fieldName, fieldProps, formParent) {
   return definition;
 }
 
-function nestedSchemaToFieldDefinition(fieldName, fieldProps) {
+function nestedSchemaToFieldDefinition(fieldName, fieldProps, topLevelProp, subheaderRender) {
   let nestedDefinition = {
     name: fieldName,
+    formParent: topLevelProp,
+    render: null,
+    fieldType: 'object',
     definition: []
   };
 
+  if (typeof subheaderRender === 'function') {
+    nestedDefinition.render = subheaderRender.bind(null, fieldName);
+  }
+
   let properties = fieldProps.properties;
+  let requiredProps = fieldProps.required;
+
   Object.keys(properties).forEach(function (nestedFieldName) {
-    nestedDefinition.definition.push(
-      nestedFieldName,
-      properties[nestedFieldName]
-    );
+    let nestedPropertyValue = properties[nestedFieldName];
+
+    if (nestedPropertyValue.properties) {
+      nestedDefinition.definition.push(
+        nestedSchemaToFieldDefinition(
+          nestedFieldName,
+          nestedPropertyValue,
+          nestedFieldName,
+          subheaderRender
+        )
+      );
+    } else {
+      nestedDefinition.definition.push(
+        schemaToFieldDefinition(
+          nestedFieldName,
+          nestedPropertyValue,
+          nestedFieldName,
+          requiredProps && requiredProps.indexOf(nestedFieldName) > -1
+        )
+      );
+    }
   });
 
   return nestedDefinition;
 }
 
 let SchemaUtil = {
-  schemaToMultipleDefinition: function (schema) {
+  schemaToMultipleDefinition: function (schema, subheaderRender) {
     let multipleDefinition = {};
     let schemaProperties = schema.properties;
 
     Object.keys(schemaProperties).forEach(function (topLevelProp) {
       let topLevelPropertyObject = schemaProperties[topLevelProp];
       let secondLevelProperties = topLevelPropertyObject.properties;
+      let requiredProps = topLevelPropertyObject.required;
       let definitionForm = multipleDefinition[topLevelProp] = {};
 
       definitionForm.title = topLevelProp;
@@ -71,12 +121,15 @@ let SchemaUtil = {
           fieldDefinition = schemaToFieldDefinition(
             secondLevelProp,
             secondLevelObject,
-            topLevelProp
+            topLevelProp,
+            requiredProps && requiredProps.indexOf(secondLevelProp) > -1
           );
         } else {
           fieldDefinition = nestedSchemaToFieldDefinition(
             secondLevelProp,
-            secondLevelObject
+            secondLevelObject,
+            topLevelProp,
+            subheaderRender
           );
         }
         definitionForm.definition.push(fieldDefinition);
