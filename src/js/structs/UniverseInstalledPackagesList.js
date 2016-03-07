@@ -1,10 +1,28 @@
 import List from './List';
-import StringUtil from '../utils/StringUtil';
 import UniversePackage from './UniversePackage';
 
+function propertyGetter(item, prop) {
+  return item.get('packageDefinition')[prop];
+}
+
 class UniverseInstalledPackagesList extends List {
-  constructor() {
-    super(...arguments);
+  constructor(options = {}) {
+    // Specify filter properties if not specified
+    if (!options.filterProperties) {
+      options.filterProperties = {
+        appId: null, // default getter
+        description: propertyGetter,
+        name: propertyGetter,
+        tags: function (item, prop) {
+          let tags = propertyGetter(item, prop) || [];
+
+          return tags.join(' ');
+        }
+      };
+    }
+
+    // Pass in overloaded options and the rest of the arguments
+    super(options, ...Array.prototype.slice(arguments, 1));
 
     // Replace list items instances of UniversePackage.
     this.list = this.list.map(function (item) {
@@ -17,24 +35,6 @@ class UniverseInstalledPackagesList extends List {
         return new UniversePackage(installedPackage);
       }
     });
-  }
-
-  filterItems(filterText) {
-    let packages = this.getItems();
-
-    if (filterText) {
-      packages = StringUtil.filterByString(packages, function (cosmosPackage) {
-        let appId = cosmosPackage.get('appId');
-        let {description, name, tags, version} = cosmosPackage.get('packageDefinition');
-        description = description || '';
-        name = name || '';
-        tags = tags || [];
-
-        return `${appId} ${name} ${description} ${tags.join(' ')} ${version}`;
-      }, filterText);
-    }
-
-    return new UniverseInstalledPackagesList({items: packages});
   }
 }
 
