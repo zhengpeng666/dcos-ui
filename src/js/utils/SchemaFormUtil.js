@@ -6,7 +6,7 @@ const DEFAULT_FORM_VALUES = {
   boolean: false,
   integer: null,
   number: null,
-  string: ''
+  string: null
 };
 
 function filteredPaths(combinedPath) {
@@ -119,8 +119,11 @@ let SchemaFormUtil = {
         return;
       }
 
-      let {valueType} = definition;
-      newModel[key] = processValue(value, valueType);
+      let {isRequired, valueType} = definition;
+      let processedValue = processValue(value, valueType);
+      if (processedValue != null || isRequired) {
+        newModel[key] = processedValue;
+      }
     });
 
     return newModel;
