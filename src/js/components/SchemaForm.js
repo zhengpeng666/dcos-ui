@@ -7,6 +7,7 @@ import React from 'react';
 import SideTabs from './SideTabs';
 import SchemaFormUtil from '../utils/SchemaFormUtil';
 import SchemaUtil from '../utils/SchemaUtil';
+import Tooltip from './Tooltip';
 
 const METHODS_TO_BIND = [
   'getTriggerSubmit', 'validateForm', 'handleFormChange', 'handleTabClick',
@@ -103,7 +104,7 @@ class SchemaForm extends React.Component {
 
   getNewDefinition() {
     return SchemaUtil.schemaToMultipleDefinition(
-      this.props.schema, this.getSubHeader
+      this.props.schema, this.getSubHeader, this.getLabel
     );
   }
 
@@ -158,6 +159,23 @@ class SchemaForm extends React.Component {
           {name}
         </div>
       </div>
+    );
+  }
+
+  getLabel(description, label) {
+    return (
+      <label>
+        <span className="media-object-spacing-wrapper media-object-spacing-narrow">
+          <Tooltip
+            content={description}
+            contentClass="media-object"
+            iconClass="icon icon-sprite icon-sprite-mini icon-error media-object-item">
+            <span className="media-object-item">
+              {label}
+            </span>
+          </Tooltip>
+        </span>
+      </label>
     );
   }
 

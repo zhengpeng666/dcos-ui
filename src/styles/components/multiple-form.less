@@ -83,6 +83,19 @@ base/forms.less
       &:last-child {
         margin-bottom: 0;
       }
+
+      .icon.icon-error {
+        transform: rotate(180deg);
+        opacity: 0.5;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .checkbox .form-group label {
+        padding-left: 0;
+      }
     }
 
     .column-4 {
