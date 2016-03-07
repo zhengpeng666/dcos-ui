@@ -18,7 +18,6 @@ var TestUtils = require('react-addons-test-utils');
 var ActionTypes = require('../../constants/ActionTypes');
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var GroupUserTable = require('../GroupUserTable');
-
 var Group = require('../../structs/Group');
 
 const groupDetailsFixture =

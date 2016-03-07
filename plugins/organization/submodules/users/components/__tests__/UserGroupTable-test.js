@@ -28,7 +28,6 @@ import {
 var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
 var ACLUserStore = require('../../stores/ACLUserStore');
 var UserGroupTable = require('../UserGroupTable');
-
 var User = require('../../structs/User');
 
 let userDetailsFixture =
