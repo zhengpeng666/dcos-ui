@@ -44,7 +44,7 @@ function getThingsToSet(model, path) {
   return thingsToSet;
 }
 
-function processValue(value, valueType, isRequired) {
+function processValue(value, valueType) {
   if (valueType === 'integer' || valueType === 'number') {
     if (value !== null && value !== '') {
       value = Number(value);
@@ -56,12 +56,8 @@ function processValue(value, valueType, isRequired) {
     }
   }
 
-  if (typeof value === 'string' && isRequired && value === '') {
-    value = null;
-  } else {
-    if (value === null) {
-      value = DEFAULT_FORM_VALUES[valueType];
-    }
+  if (value == null || value === '') {
+    value = DEFAULT_FORM_VALUES[valueType];
   }
 
   if (valueType === 'array' && typeof value === 'string') {
@@ -123,8 +119,8 @@ let SchemaFormUtil = {
         return;
       }
 
-      let {isRequired, valueType} = definition;
-      newModel[key] = processValue(value, valueType, isRequired);
+      let {valueType} = definition;
+      newModel[key] = processValue(value, valueType);
     });
 
     return newModel;

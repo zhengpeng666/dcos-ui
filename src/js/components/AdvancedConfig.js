@@ -5,8 +5,8 @@ import SchemaForm from './SchemaForm';
 const METHODS_TO_BIND = [
   'getTriggerSubmit',
   'handleSchemaFormChange',
-  'triggerSubmit',
-  'onResize'
+  'onResize',
+  'triggerSubmit'
 ];
 const MOBILE_WIDTH = 1500;
 
@@ -63,6 +63,7 @@ class AdvancedConfig extends React.Component {
         <SchemaForm
           getTriggerSubmit={this.getTriggerSubmit}
           isMobileWidth={this.state.isMobileWidth}
+          model={this.props.model}
           onChange={this.handleSchemaFormChange}
           schema={this.props.schema}
           serviceName={this.props.serviceName}
@@ -84,6 +85,7 @@ AdvancedConfig.defaultProps = {
 
 AdvancedConfig.propTypes = {
   getTriggerSubmit: React.PropTypes.func,
+  model: React.PropTypes.object,
   onChange: React.PropTypes.func,
   schema: React.PropTypes.object,
   serviceImage: React.PropTypes.string,
