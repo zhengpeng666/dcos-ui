@@ -46,7 +46,7 @@ class FormModal extends React.Component {
   focusOnField() {
     // Gotta account for animation
     setTimeout(() => {
-      let el = document.querySelector('.form-modal');
+      let el = this.refs['form-wrapper'];
       if (el) {
         let input = el.querySelector('form input');
         if (input) {
@@ -100,7 +100,8 @@ class FormModal extends React.Component {
 
   getContent() {
     return (
-      <div className="container container-pod flush-top flush-bottom">
+      <div ref="form-wrapper"
+        className="container container-pod flush-top flush-bottom">
         {this.props.children}
         <Form
           definition={this.props.definition}
