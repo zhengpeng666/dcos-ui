@@ -21,9 +21,9 @@ var TestUtils = require('react-addons-test-utils');
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var ACLGroupsStore = require('../../stores/ACLGroupsStore');
 var ACLUsersStore = require('../../../users/stores/ACLUsersStore');
-var Group = require('../../../../../../src/js/structs/Group');
+var Group = require('../../structs/Group');
 var GroupUserMembershipTab = require('../GroupUserMembershipTab');
-var UsersList = require('../../../../../../src/js/structs/UsersList');
+var UsersList = require('../../../users/structs/UsersList');
 
 const groupDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/group-with-details.json');

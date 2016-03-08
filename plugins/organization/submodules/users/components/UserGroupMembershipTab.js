@@ -8,7 +8,6 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import ACLGroupStore from '../../groups/stores/ACLGroupStore';
 import ACLGroupsStore from '../../groups/stores/ACLGroupsStore';
 import ACLUserStore from '../../users/stores/ACLUserStore';
-import RequestErrorMsg from '../../../../../src/js/components/RequestErrorMsg';
 import UserGroupTable from './UserGroupTable';
 
 const DEFAULT_ID = 'default-placeholder-group-id';
