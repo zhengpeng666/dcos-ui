@@ -1,5 +1,5 @@
 module.exports = {
-  auth: 'auth/index',
+  authentication: 'auth/index',
   banner: 'banner/index',
   organization: 'organization/index',
   overview: 'overview/index',

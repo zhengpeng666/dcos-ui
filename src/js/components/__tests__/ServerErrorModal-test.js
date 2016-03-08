@@ -6,13 +6,11 @@ import PluginTestUtils from 'PluginTestUtils';
 PluginTestUtils.dontMock([
   'MarathonStore',
   'MesosStateStore',
-  'MesosSummaryStore',
-  'auth',
-  'organization'
+  'MesosSummaryStore'
 ]);
 
 PluginTestUtils.loadPluginsByName({
-  auth: {enabled: true},
+  authentication: {enabled: true},
   organization: {enabled: true}
 });
 

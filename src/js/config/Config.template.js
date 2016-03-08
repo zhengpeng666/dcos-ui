@@ -6,7 +6,7 @@ var ConfigDev = {
   uiConfigurationFixture: {
     uiConfiguration: {
       plugins: {
-        auth: {
+        authentication: {
           enabled: true
         },
         banner: {

@@ -33,7 +33,7 @@ import {
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let SDK = PluginTestUtils.getSDK('auth', {enabled: true});
+let SDK = PluginTestUtils.getSDK('authentication', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 var ACLList = require('../../structs/ACLList');
 

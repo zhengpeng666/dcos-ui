@@ -13,7 +13,7 @@ PluginTestUtils.dontMock([
 ]);
 
 PluginTestUtils.loadPluginsByName({
-  auth: {
+  authentication: {
     enabled: true
   },
   tracking: {

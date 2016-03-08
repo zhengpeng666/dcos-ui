@@ -13,7 +13,7 @@ module.exports = {
   register() {
     let StoreMixinConfig = SDK.get('StoreMixinConfig');
 
-    StoreMixinConfig.add('auth', {
+    StoreMixinConfig.add('authentication', {
       store: ACLAuthStore,
       events: {
         success: ACL_AUTH_USER_LOGIN_CHANGED,
