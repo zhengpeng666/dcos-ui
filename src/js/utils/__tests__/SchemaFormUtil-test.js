@@ -74,15 +74,15 @@ describe('SchemaFormUtil', function () {
       expect(model).toEqual(result);
     });
 
-    it('should replace null with a default value', function () {
+    it('should replace undefined with null', function () {
       this.definition.valueType = 'array';
       var model = {
-        key: null,
+        key: undefined,
         key2: 'value2'
       };
 
       var result = SchemaFormUtil.processFormModel(model);
-      expect(result.key).toEqual([]);
+      expect(result.key).toEqual(null);
     });
 
     it('should omit null values for non-required fields', function () {
@@ -95,7 +95,7 @@ describe('SchemaFormUtil', function () {
       expect(result.key).toEqual(undefined);
     });
 
-    it('shouldn\' omit null values for required fields', function () {
+    it('shouldn\'t omit null values for required fields', function () {
       this.definition.isRequired = true;
       var model = {
         key: null,

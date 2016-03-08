@@ -1,14 +1,6 @@
 import _ from 'underscore';
 import tv4 from 'tv4';
 
-const DEFAULT_FORM_VALUES = {
-  array: [],
-  boolean: false,
-  integer: null,
-  number: null,
-  string: null
-};
-
 function filteredPaths(combinedPath) {
   return combinedPath.split('/').filter(function (path) {
     return path.length > 0;
@@ -47,21 +39,21 @@ function getThingsToSet(model, path) {
 function processValue(value, valueType) {
   if (valueType === 'integer' || valueType === 'number') {
     if (value !== null && value !== '') {
-      value = Number(value);
-      if (isNaN(value)) {
-        value = null;
+      let parsedNumber = Number(value);
+      if (isNaN(parsedNumber)) {
+        return value;
       }
-    } else {
-      value = null;
+
+      return parsedNumber;
     }
   }
 
   if (value == null || value === '') {
-    value = DEFAULT_FORM_VALUES[valueType];
+    return null;
   }
 
   if (valueType === 'array' && typeof value === 'string') {
-    value = value.split(',')
+    return value.split(',')
       .map(function (val) { return val.trim(); })
       .filter(function (val) { return val !== ''; });
   }

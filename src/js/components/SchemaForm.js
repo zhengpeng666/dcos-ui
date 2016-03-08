@@ -74,15 +74,23 @@ class SchemaForm extends React.Component {
   }
 
   handleFormChange(formData, eventObj) {
-    let isCheckboxChange = eventObj.eventType === 'change'
-      && typeof eventObj.fieldValue === 'boolean';
+    let isBlur = eventObj.eventType === 'blur';
+    let isChange = eventObj.eventType === 'change';
 
-    if (eventObj.eventType !== 'blur' && !isCheckboxChange) {
+    if (!isBlur && !isChange) {
       return;
     }
 
-    this.validateForm(eventObj.fieldName);
-    this.props.onChange(this.getDataTriple());
+    if (isBlur) {
+      this.validateForm();
+      this.props.onChange(this.getDataTriple());
+      return;
+    }
+
+    setTimeout(() => {
+      this.validateForm();
+      this.props.onChange(this.getDataTriple());
+    });
   }
 
   handleFormSubmit(formKey, formModel) {
@@ -114,29 +122,22 @@ class SchemaForm extends React.Component {
     });
   }
 
-  validateForm(fieldName) {
+  validateForm() {
     let schema = this.props.schema;
     let isValidated = true;
-    let prevDefinition = this.multipleDefinition;
 
     this.buildModel();
     // Reset the definition in order to reset all errors.
     this.multipleDefinition = this.getNewDefinition();
-
     let model = SchemaFormUtil.processFormModel(
       this.model, this.multipleDefinition
     );
 
-    let errors = SchemaFormUtil.validateModelWithSchema(model, schema);
-    errors.forEach((error) => {
+    SchemaFormUtil.validateModelWithSchema(model, schema).forEach((error) => {
       let path = error.path;
-      let prevObj = SchemaFormUtil.getDefinitionFromPath(prevDefinition, path);
       let obj = SchemaFormUtil.getDefinitionFromPath(
         this.multipleDefinition, path
       );
-      if ((_.last(path) !== fieldName && !prevObj.showError) || obj == null) {
-        return;
-      }
 
       isValidated = false;
       obj.showError = error.message;
