@@ -74,12 +74,21 @@ class SchemaForm extends React.Component {
   }
 
   handleFormChange(formData, eventObj) {
-    if (eventObj.eventType !== 'change' && eventObj.eventType !== 'blur') {
+    let isBlur = eventObj.eventType === 'blur';
+    let isChange = eventObj.eventType === 'change';
+
+    if (!isBlur && !isChange) {
+      return;
+    }
+
+    if (isBlur) {
+      this.validateForm(eventObj.fieldName, isChange);
+      this.props.onChange(this.getDataTriple());
       return;
     }
 
     setTimeout(() => {
-      this.validateForm(eventObj.fieldName, eventObj.eventType === 'change');
+      this.validateForm(eventObj.fieldName, isChange);
       this.props.onChange(this.getDataTriple());
     });
   }
