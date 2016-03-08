@@ -16,6 +16,16 @@ class FormModal extends React.Component {
     });
   }
 
+  componentDidMount() {
+    this.focusOnField();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.open === false && this.props.open === true) {
+      this.focusOnField();
+    }
+  }
+
   handleTriggerSubmit() {
     this.triggerSubmit();
   }
@@ -31,6 +41,19 @@ class FormModal extends React.Component {
 
   handleError() {
     this.forceUpdate();
+  }
+
+  focusOnField() {
+    // Gotta account for animation
+    setTimeout(() => {
+      let el = this.refs['form-wrapper'];
+      if (el) {
+        let input = el.querySelector('form input');
+        if (input) {
+          input.focus();
+        }
+      }
+    }, 100);
   }
 
   getButtons() {
@@ -77,7 +100,8 @@ class FormModal extends React.Component {
 
   getContent() {
     return (
-      <div className="container container-pod flush-top flush-bottom">
+      <div ref="form-wrapper"
+        className="container container-pod flush-top flush-bottom">
         {this.props.children}
         <Form
           definition={this.props.definition}
@@ -94,7 +118,7 @@ class FormModal extends React.Component {
       <Modal
         closeByBackdropClick={!this.props.disabled}
         maxHeightPercentage={0.9}
-        modalClass="modal"
+        modalClass="modal form-modal"
         onClose={this.props.onClose}
         open={this.props.open}
         showCloseButton={false}
