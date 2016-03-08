@@ -139,7 +139,7 @@ describe('InstallPackageModal', function () {
         this.instance.getModalContents(),
         this.container
       ));
-      var result = node.querySelector('h2.flush');
+      var result = node.querySelector('h2.flush-top.short-bottom');
       expect(result.textContent).toEqual('Success!');
     });
 

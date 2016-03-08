@@ -141,11 +141,30 @@ class InstallPackageModal extends
   }
 
   handleChangeTab(currentTab) {
-    this.internalStorage_update({installError: null});
+    let newState = {installError: null};
+    if (currentTab === 'advancedInstall') {
+      // Change back to previous state and clean up stored config
+      newState.advancedConfiguration = null;
+    }
+
+    if (currentTab === 'reviewAdvancedConfig') {
+      let {isValidated, model} = this.triggerAdvancedSubmit();
+
+      // Change state if form fields are validated and store configuration
+      // for submission
+      if (isValidated) {
+        newState.advancedConfiguration = model;
+      }
+    }
+
+    this.internalStorage_update(newState);
     this.tabs_handleTabClick(currentTab);
   }
 
-  handleInstallPackage(name, version, appId, configuration) {
+  handleInstallPackage(isDefaultInstall) {
+    let {name, version} = CosmosPackagesStore
+      .getPackageDetails().get('package');
+    let {appId, configuration} = this.getAppIdAndConfiguration(isDefaultInstall);
     CosmosPackagesStore.installPackage(name, version, appId, configuration);
     this.internalStorage_update({pendingRequest: true});
     this.forceUpdate();
@@ -171,6 +190,46 @@ class InstallPackageModal extends
       ),
       writeType: 'edit'
     }];
+  }
+
+  getAppIdAndConfiguration(isDefaultInstall) {
+    let {advancedConfiguration, appId} = this.internalStorage_get();
+    let {currentTab} = this.state;
+    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
+    let {name} = cosmosPackage.get('package');
+
+    let isAdvancedInstall = currentTab === 'advancedInstall' ||
+      currentTab === 'reviewAdvancedConfig';
+
+    let configuration = SchemaUtil.definitionToJSONDocument(
+      SchemaUtil.schemaToMultipleDefinition(cosmosPackage.get('config'))
+    );
+
+    // Rely on default configurations
+    if (isDefaultInstall) {
+      configuration = {[name]: {}};
+    }
+
+    if (isAdvancedInstall && advancedConfiguration) {
+      configuration = advancedConfiguration;
+    }
+
+    let advancedName =
+      Util.findNestedPropertyInObject(configuration, `${name}.framework-name`);
+
+    // Copy appId to framework name when using default install and
+    // name option is available
+    if (advancedName && !isAdvancedInstall && appId) {
+      configuration[name]['framework-name'] = appId;
+    }
+
+    // Copy framework name to appId when using advanced install and
+    // name option is available
+    if (advancedName && isAdvancedInstall) {
+      appId = advancedName;
+    }
+
+    return {appId, configuration};
   }
 
   getLoadingScreen() {
@@ -217,25 +276,12 @@ class InstallPackageModal extends
 
   renderDefaultInstallTabView() {
     let {
-      appId,
       descriptionError,
       pendingRequest,
       installError
     } = this.internalStorage_get();
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
     let {name, version} = cosmosPackage.get('package');
-
-    let configuration = SchemaUtil.definitionToJSONDocument(
-      SchemaUtil.schemaToMultipleDefinition(cosmosPackage.get('config'))
-    );
-
-    let advancedName =
-      Util.findNestedPropertyInObject(configuration, `${name}.framework-name`);
-    // Copy appId to framework name when using default install and
-    // name option is available
-    if (advancedName && appId) {
-      configuration[name]['framework-name'] = appId;
-    }
 
     let error;
     if (descriptionError) {
@@ -281,7 +327,7 @@ class InstallPackageModal extends
               <button
                 disabled={!cosmosPackage || pendingRequest || descriptionError}
                 className="button button-success flush-bottom button-wide"
-                onClick={this.handleInstallPackage.bind(this, name, version, appId, configuration)}>
+                onClick={this.handleInstallPackage.bind(this, true)}>
                 {buttonText}
               </button>
               <button
@@ -298,22 +344,10 @@ class InstallPackageModal extends
   }
 
   renderReviewDefaultConfigTabView() {
-    let {appId} = this.internalStorage_get();
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
 
     let {name, version} = cosmosPackage.get('package');
-
-    let configuration = SchemaUtil.definitionToJSONDocument(
-      SchemaUtil.schemaToMultipleDefinition(cosmosPackage.get('config'))
-    );
-
-    let advancedName =
-      Util.findNestedPropertyInObject(configuration, `${name}.framework-name`);
-    // Copy appId to framework name when using default install and
-    // name option is available
-    if (advancedName && appId) {
-      configuration[name]['framework-name'] = appId;
-    }
+    let {appId, configuration} = this.getAppIdAndConfiguration();
 
     return (
       <div>
@@ -356,16 +390,7 @@ class InstallPackageModal extends
             <button
               disabled={!cosmosPackage || pendingRequest || hasFormErrors}
               className="button button-large button-success flush-bottom"
-              onClick={() => {
-                let {isValidated, model} = this.triggerAdvancedSubmit();
-
-                // Change state if form fields are validated and store configuration
-                // for submission
-                if (isValidated) {
-                  this.internalStorage_update({advancedConfiguration: model});
-                  this.handleChangeTab('reviewAdvancedConfig');
-                }
-              }}>
+              onClick={this.handleChangeTab.bind(this, 'reviewAdvancedConfig')}>
               Review and Install
             </button>
           </div>
@@ -376,25 +401,10 @@ class InstallPackageModal extends
   }
 
   renderReviewAdvancedConfigTabView() {
-    let {
-      advancedConfiguration,
-      appId,
-      pendingRequest
-    } = this.internalStorage_get();
+    let {pendingRequest} = this.internalStorage_get();
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
     let {name, version} = cosmosPackage.get('package');
-
-    let advancedName = Util.findNestedPropertyInObject(
-      advancedConfiguration,
-      `${name}.framework-name`
-    );
-
-    // Copy framework name to appId when using advanced install and
-    // name option is available
-    if (advancedName) {
-      appId = advancedName;
-    }
-
+    let {appId, configuration} = this.getAppIdAndConfiguration();
     let buttonText = 'Install';
 
     if (pendingRequest) {
@@ -408,23 +418,19 @@ class InstallPackageModal extends
           packageType={name}
           packageName={appId}
           packageVersion={version}
-          configuration={advancedConfiguration} />
+          configuration={configuration} />
         <div className="modal-footer">
           <div className="container">
             <div className="button-collection flush-bottom">
               <button
                 className="button button-large flush"
-                onClick={() => {
-                  // Change back to previous state and clean up stored config
-                  this.handleChangeTab('advancedInstall');
-                  this.internalStorage_update({advancedConfiguration: null});
-                }}>
+                onClick={this.handleChangeTab.bind(this, 'advancedInstall')}>
                 Back
               </button>
               <button
                 disabled={!cosmosPackage || pendingRequest}
                 className="button button-success flush-bottom button-large"
-                onClick={this.handleInstallPackage.bind(this, name, version, appId, advancedConfiguration)}>
+                onClick={this.handleInstallPackage}>
                 {buttonText}
               </button>
             </div>
@@ -449,7 +455,7 @@ class InstallPackageModal extends
       <div>
         <div className="modal-content">
           <div className="horizontal-center modal-content-inner container container-pod container-pod-short text-align-center">
-            <h2 className="flush">Success!</h2>
+            <h2 className="flush-top short-bottom">Success!</h2>
             <div
               style={{width: '100%', overflow: 'auto', wordWrap: 'break-word'}}
               dangerouslySetInnerHTML={parsedNotes} />
