@@ -1,11 +1,15 @@
 const listeners = {};
 let ID = 0;
 
-const pub = store => next => action => {
-  Object.keys(listeners).forEach(function (id) {
-    listeners[id].call(null, action);
-  });
-  return next(action);
+const pub = function () {
+  return function (next) {
+    return function (action) {
+      Object.keys(listeners).forEach(function (id) {
+        listeners[id].call(null, action);
+      });
+      return next(action);
+    };
+  };
 };
 
 const unsubscribe = function (id) {
