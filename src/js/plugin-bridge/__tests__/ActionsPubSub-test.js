@@ -1,5 +1,6 @@
 jest.dontMock('../middleware/ActionsPubSub');
 
+import {APPLICATION} from '../../constants/PluginConstants';
 import * as SDK from 'PluginSDK';
 
 describe('#ActionsPubSub', function () {
@@ -14,6 +15,7 @@ describe('#ActionsPubSub', function () {
     SDK.dispatch({type: 'foo'});
     expect(this.mockFn.mock.calls.length).toEqual(1);
     expect(this.mockFn1.mock.calls.length).toEqual(1);
+    expect(this.mockFn.mock.calls[0][0]).toEqual({type: 'foo', __origin: APPLICATION});
   });
 
   it('should stop receiving actions after unsubscribing', function () {
