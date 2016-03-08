@@ -18,7 +18,8 @@ const METHODS_TO_BIND = [
   'getAdvancedSubmit',
   'handleChangeAppId',
   'handleChangeTab',
-  'handleInstallPackage'
+  'handleInstallPackage',
+  'handleAdvancedFormChange'
 ];
 
 class InstallPackageModal extends
@@ -81,6 +82,8 @@ class InstallPackageModal extends
         isLoading: true,
         pendingRequest: false
       });
+      // Reset our trigger submit for advanced install
+      this.triggerAdvancedSubmit = undefined;
       this.setState({currentTab: 'defaultInstall'});
     }
 
@@ -89,11 +92,14 @@ class InstallPackageModal extends
         nextProps.packageName,
         nextProps.packageVersion
       );
-      this.setState({transitionName: 'modal'});
     }
+  }
 
-    if (props.open === nextProps.open) {
-      this.setState({transitionName: 'flip'});
+  componentDidUpdate() {
+    if (this.triggerAdvancedSubmit) {
+      // Trigger submit upfront to validate fields and potentially disable buttons
+      let {isValidated} = this.triggerAdvancedSubmit();
+      this.internalStorage_update({hasFormErrors: !isValidated});
     }
   }
 
@@ -133,6 +139,11 @@ class InstallPackageModal extends
       pendingRequest: false
     });
     this.setState({currentTab: 'packageInstalled'});
+  }
+
+  handleAdvancedFormChange(formObject) {
+    this.internalStorage_update({hasFormErrors: !formObject.isValidated});
+    this.forceUpdate();
   }
 
   handleChangeAppId(definition) {
@@ -498,10 +509,7 @@ class InstallPackageModal extends
           packageName={name}
           packageVersion={version}
           schema={cosmosPackage.get('config')}
-          onChange={(formObject) => {
-            this.internalStorage_update({hasFormErrors: !formObject.isValidated});
-            this.forceUpdate();
-          }}
+          onChange={this.handleAdvancedFormChange}
           getTriggerSubmit={this.getAdvancedSubmit} />
         {this.tabs_getTabView()}
       </div>
@@ -528,8 +536,9 @@ class InstallPackageModal extends
     return (
       <Modal
         bodyClass=""
-        maxHeightPercentage={1}
+        closeByBackdropClick={!isAdvanced}
         innerBodyClass="flush-top flush-bottom"
+        maxHeightPercentage={1}
         modalClass={modalClasses}
         modalWrapperClass={modalWrapperClasses}
         onClose={props.onClose}
