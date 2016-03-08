@@ -48,6 +48,10 @@ function processValue(value, valueType) {
     }
   }
 
+  if (valueType === 'boolean' && value == null) {
+    return false;
+  }
+
   if (value == null || value === '') {
     return null;
   }

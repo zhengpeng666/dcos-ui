@@ -16,7 +16,7 @@ function getValueFromSchemaProperty(fieldProps) {
 }
 
 function getLabelFromSchemaProperty(fieldName, fieldProps, isRequired, renderLabel) {
-  let label = fieldName;
+  let label = fieldProps.title || fieldName;
 
   if (isRequired) {
     label = `${label} *`;
