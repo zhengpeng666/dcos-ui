@@ -71,12 +71,13 @@ class SchemaForm extends React.Component {
     setTimeout(() => {
       let {geminiTabs, geminiForms} = this.refs;
 
-      if (!geminiTabs || !geminiForms) {
-        return;
+      if (geminiTabs) {
+        geminiTabs.scrollbar.update();
       }
 
-      geminiTabs.scrollbar.update();
-      geminiForms.scrollbar.update();
+      if (geminiForms) {
+        geminiForms.scrollbar.update();
+      }
     });
   }
 
