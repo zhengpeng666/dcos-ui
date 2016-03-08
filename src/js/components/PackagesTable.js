@@ -174,17 +174,9 @@ class PackagesTable extends mixin(StoreMixin) {
 
     let error = CosmosMessages[packageUninstallError.type] ||
       CosmosMessages.default;
-    if (error) {
-      return (
-        <p className="text-error-state">
-         {error.getMessage(packageUninstallError.name)}
-        </p>
-      );
-    }
-
     return (
       <p className="text-error-state">
-        {RequestUtil.getErrorFromXHR(packageUninstallError)}
+       {error.getMessage(packageUninstallError.name)}
       </p>
     );
   }
