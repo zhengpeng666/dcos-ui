@@ -11,7 +11,7 @@ require('../../SDK').setSDK(SDK);
 var ACLAuthStore = require('../ACLAuthStore');
 var AuthReducer = require('../../Reducer');
 
-PluginTestUtils.addReducer('auth', AuthReducer);
+PluginTestUtils.addReducer('authentication', AuthReducer);
 
 let RequestUtil = SDK.get('RequestUtil');
 

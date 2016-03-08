@@ -16,7 +16,7 @@ var ACLAuthStore = require('../../stores/ACLAuthStore');
 var AuthReducer = require('../../Reducer');
 var UserDropup = require('../UserDropup');
 
-PluginTestUtils.addReducer('auth', AuthReducer);
+PluginTestUtils.addReducer('authentication', AuthReducer);
 
 describe('UserDropup', function () {
 
