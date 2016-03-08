@@ -8,8 +8,6 @@ import {
   ACL_GROUPS_REQUEST_ERROR
 } from '../constants/EventTypes';
 
-let SDK = require('../../../SDK').getSDK();
-
 import ACLGroupsActions from '../actions/ACLGroupsActions';
 
 import GroupsList from '../structs/GroupsList';
