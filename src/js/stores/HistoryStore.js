@@ -1,3 +1,4 @@
+import {HISTORY_CHANGE} from '../constants/EventTypes';
 import {HashLocation} from 'react-router';
 import {Store} from 'mesosphere-shared-reactjs';
 
@@ -20,6 +21,14 @@ var HistoryStore = Store.createStore({
     });
   },
 
+  addChangeListener: function (eventName, callback) {
+    this.on(eventName, callback);
+  },
+
+  removeChangeListener: function (eventName, callback) {
+    this.removeListener(eventName, callback);
+  },
+
   onHashChange: function (change) {
     let history = this.get('history');
 
@@ -30,6 +39,7 @@ var HistoryStore = Store.createStore({
     }
 
     this.set({history});
+    this.emit(HISTORY_CHANGE);
   },
 
   /**

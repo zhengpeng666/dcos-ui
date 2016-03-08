@@ -1,6 +1,8 @@
 import _ from 'underscore';
+import mixin from 'reactjs-mixin';
 import React from 'react';
 import {SidePanel} from 'reactjs-components';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import HistoryStore from '../stores/HistoryStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
@@ -16,9 +18,16 @@ const METHODS_TO_BIND = [
   'handlePanelSizeChange'
 ];
 
-class SidePanels extends React.Component {
+class SidePanels extends mixin(StoreMixin) {
   constructor() {
     super();
+
+    this.store_listeners = [
+      {
+        name: 'history',
+        events: ['change']
+      }
+    ];
 
     METHODS_TO_BIND.forEach(function (method) {
       this[method] = this[method].bind(this);
