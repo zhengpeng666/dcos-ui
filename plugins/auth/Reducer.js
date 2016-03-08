@@ -15,9 +15,7 @@ module.exports = function (state = initialState, action) {
   if (action.__origin !== SDK.pluginID) {
     return state;
   }
-
   switch (action.type) {
-
     case ACL_AUTH_USER_ROLE_CHANGED:
       return _.extend({}, state, {role: action.role});
 
