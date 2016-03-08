@@ -2,6 +2,7 @@ jest.dontMock('../InstallPackageModal');
 jest.dontMock('../../ReviewConfig');
 jest.dontMock('../../../stores/CosmosPackagesStore');
 jest.dontMock('../../../mixins/InternalStorageMixin');
+jest.dontMock('../../../mixins/TabsMixin');
 
 var _ = require('underscore');
 var React = require('react');
@@ -14,7 +15,6 @@ var JestUtil = require('../../../utils/JestUtil');
 var packageDescribeFixture =
   require('../../../../../tests/_fixtures/cosmos/package-describe.json');
 var RequestUtil = require('../../../utils/RequestUtil');
-var ReviewConfig = require('../../ReviewConfig');
 var UniversePackage = require('../../../structs/UniversePackage');
 
 JestUtil.unMockStores(['CosmosPackagesStore']);
@@ -139,7 +139,7 @@ describe('InstallPackageModal', function () {
         this.instance.getModalContents(),
         this.container
       ));
-      var result = node.querySelector('h2.flush');
+      var result = node.querySelector('h2.flush-top.short-bottom');
       expect(result.textContent).toEqual('Success!');
     });
 
@@ -171,7 +171,7 @@ describe('InstallPackageModal', function () {
         new UniversePackage({package: {name: 'marathon', version: '0.11.1'}})
       );
       // Change appId
-      this.instance.handleChangeReviewState(false);
+      this.instance.handleChangeTab('reviewDefaultConfig');
 
       var node = ReactDOM.findDOMNode(ReactDOM.render(
         this.instance.getModalContents(),
@@ -183,22 +183,14 @@ describe('InstallPackageModal', function () {
 
     it('should show review config when review button is clicked', function () {
       // Change to review state
-      this.instance.handleChangeReviewState(true);
-      expect(TestUtils.isElementOfType(
+      this.instance.handleChangeTab('reviewDefaultConfig');
+
+      var node = ReactDOM.findDOMNode(ReactDOM.render(
         this.instance.getModalContents(),
-        ReviewConfig
-      )).toEqual(true);
-    });
-
-  });
-
-  describe('#getReviewHeader', function () {
-
-    it('should show review header when review button is clicked', function () {
-      this.instance.getReviewHeader = jasmine.createSpy('getReviewHeader');
-      // Change to review state
-      this.instance.handleChangeReviewState(true);
-      expect(this.instance.getReviewHeader).toHaveBeenCalled();
+        this.container
+      ));
+      var result = node.querySelector('.review-config');
+      expect(TestUtils.isDOMComponent(result)).toEqual(true);
     });
 
   });

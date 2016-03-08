@@ -1,9 +1,55 @@
-import classNames from 'classnames';
+import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
 
 import DescriptionList from './DescriptionList';
+import IconDownload from './icons/IconDownload';
 
 class ReviewConfig extends React.Component {
+
+  getHeader() {
+    let {
+      configuration,
+      packageIcon,
+      packageName,
+      packageType,
+      packageVersion
+    } = this.props;
+    let parsedConfig = encodeURIComponent(JSON.stringify(configuration));
+
+    return (
+      <div className="modal-header modal-header-bottom-border modal-header-white flex-no-shrink">
+        <div className="row">
+          <div className="column-4">
+            <div className="media-object-spacing-wrapper media-object-spacing-narrow">
+              <div className="media-object media-object-align-middle">
+                <div className="media-object-item">
+                  <img
+                    className="icon icon-sprite icon-sprite-medium icon-sprite-medium-color icon-image-container icon-app-container"
+                    src={packageIcon} />
+                </div>
+                <div className="media-object-item">
+                  <h4 className="flush-top flush-bottom text-color-neutral">
+                    {packageName}
+                  </h4>
+                  <span className="side-panel-resource-label">
+                    {`${packageType} ${packageVersion}`}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="column-8 text-align-right">
+            <a
+              className="button button-stroke button-rounded"
+              download="config.json"
+              href={`data:text/json;charset=utf-8,${parsedConfig}`}>
+              <IconDownload /> Download config.json
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   getFieldTitle(title) {
     return <h3 key={`${title}-header`}>{title}</h3>;
@@ -15,11 +61,11 @@ class ReviewConfig extends React.Component {
 
   getDefinitionReview() {
     var elementsToRender = [];
-    let jsonDocument = this.props.jsonDocument;
-    let fields = Object.keys(jsonDocument);
+    let {configuration} = this.props;
+    let fields = Object.keys(configuration);
 
     fields.forEach((field, i) => {
-      var fieldObj = jsonDocument[field];
+      var fieldObj = configuration[field];
       elementsToRender.push(this.getFieldTitle(field));
 
       Object.keys(fieldObj).forEach((fieldKey) => {
@@ -55,30 +101,29 @@ class ReviewConfig extends React.Component {
   }
 
   render() {
-    let classSet = classNames(this.props.className, 'modal-body review-config');
-
     return (
-      <div className={classSet}>
-        {this.getDefinitionReview()}
+      <div className={this.props.className}>
+        {this.getHeader()}
+        <GeminiScrollbar className="modal-content" autoshow={true}>
+          <div className="modal-content-inner container container-pod container-pod-short flush-top flush-bottom flex-grow">
+            {this.getDefinitionReview()}
+          </div>
+        </GeminiScrollbar>
       </div>
     );
   }
 }
 
 ReviewConfig.defaultProps = {
-  className: 'multiple-form',
-  jsonDocument: {},
-  serviceImage: './img/services/icon-service-marathon-large@2x.png',
-  serviceName: 'Marathon',
-  serviceVersion: '0.23.2'
+  className: 'review-config flex-container-col'
 };
 
 ReviewConfig.propTypes = {
   className: React.PropTypes.string,
-  jsonDocument: React.PropTypes.object,
-  serviceImage: React.PropTypes.string,
-  serviceName: React.PropTypes.string,
-  serviceVersion: React.PropTypes.string
+  configuration: React.PropTypes.object.isRequired,
+  packageIcon: React.PropTypes.string,
+  packageType: React.PropTypes.string,
+  packageVersion: React.PropTypes.string
 };
 
 module.exports = ReviewConfig;

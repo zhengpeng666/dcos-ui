@@ -4,18 +4,16 @@ class IconDownload extends React.Component {
   render() {
     return (
       <svg
-        className="icon-download"
+        className="icon icon-download"
         height="16px"
         viewBox="0 0 16 16"
         width="16px"
         {...this.props}>
-        <title>icon-download</title>
-        <polygon points="14 8 14 12 2 12 2 8 0 8 0 14 16 14 16 8 14 8"/>
-        <polygon points="12.24 5.76 10.83 4.34 9 6.17 9 0 7 0 7 6.17 5.17 4.34 3.76 5.76 8 10 12.24 5.76"/>
+        <polygon points="15.22 11.79 13.07 13.94 13.07 7.15 12.07 7.15 12.07 13.94 9.93 11.79 9.22 12.5 12.57 15.85 15.93 12.5 15.22 11.79"/>
+        <path d="M3.07,4.15h7v1h-7v-1Zm0,3h7v1h-7v-1Zm0,3h5v1h-5v-1Zm10,5-13,0v-15h13v5h-1v-4h-11v13h7v1m5,0" fill-rule="evenodd"/>
       </svg>
     );
   }
 }
 
 module.exports = IconDownload;
-

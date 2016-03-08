@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import {Confirm, Table} from 'reactjs-components';
-import {Link} from 'react-router';
 import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
 import React from 'react';
@@ -11,7 +10,6 @@ import CosmosMessages from '../constants/CosmosMessages';
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import PackagesTableHeaderLabels from '../constants/PackagesTableHeaderLabels';
 import ResourceTableUtil from '../utils/ResourceTableUtil';
-import RequestUtil from '../utils/RequestUtil';
 import UniversePackagesList from '../structs/UniversePackagesList';
 
 const METHODS_TO_BIND = [

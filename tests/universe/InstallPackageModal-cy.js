@@ -1,4 +1,4 @@
-describe('Installed Package Modal', function () {
+describe('Install Package Modal', function () {
 
   beforeEach(function () {
     cy
@@ -28,13 +28,13 @@ describe('Installed Package Modal', function () {
       .should('contain', 'marathon');
   });
 
-  it('displays config header for package', function () {
+  it('displays config values for package', function () {
     cy
       .get('.modal-footer .button')
       .contains('View Configuration Details')
       .click();
     cy
-      .get('.modal-content dt.emphasize')
+      .get('.modal-content-inner dt.emphasize')
       .contains('cpus')
       .next()
       .should('contain', '2');

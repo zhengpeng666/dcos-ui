@@ -11,36 +11,45 @@ import InternalStorageMixin from '../../mixins/InternalStorageMixin';
 import ReviewConfig from '../ReviewConfig';
 import SchemaUtil from '../../utils/SchemaUtil';
 import StringUtil from '../../utils/StringUtil';
+import TabsMixin from '../../mixins/TabsMixin';
 import Util from '../../utils/Util';
 
 const METHODS_TO_BIND = [
-  'handleAdvancedModalClose',
-  'handleAdvancedModalOpen',
+  'getAdvancedSubmit',
   'handleChangeAppId',
-  'handleChangeReviewState',
-  'handleInstallPackage'
+  'handleChangeTab',
+  'handleInstallPackage',
+  'handleAdvancedFormChange'
 ];
 
-class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
+class InstallPackageModal extends
+  mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
   constructor() {
-    super();
+    super(...arguments);
+
+    this.tabs_tabs = {
+      defaultInstall: 'DefaultInstall',
+      reviewDefaultConfig: 'ReviewDefaultConfig',
+      advancedInstall: 'AdvancedInstall',
+      reviewAdvancedConfig: 'ReviewAdvancedConfig',
+      packageInstalled: 'PackageInstalled'
+    };
 
     this.internalStorage_set({
-      advancedModalOpen: false,
       appId: null,
+      descriptionError: null,
+      hasFormErrors: false,
       installError: null,
       isLoading: true,
-      isReviewing: false,
-      nameError: null,
-      packageInstalled: false,
       pendingRequest: false
     });
+    this.state = {currentTab: 'defaultInstall'};
 
     this.store_listeners = [{
       name: 'cosmosPackages',
       events: [
-        'descriptionSuccess',
         'descriptionError',
+        'descriptionSuccess',
         'installError',
         'installSuccess'
       ]
@@ -66,15 +75,16 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
     super.componentWillReceiveProps(...arguments);
     let {props} = this;
     if (props.open && !nextProps.open) {
-      this.internalStorage_update({
-        advancedModalOpen: false,
+      this.internalStorage_set({
         appId: null,
+        descriptionError: null,
         installError: null,
         isLoading: true,
-        isReviewing: false,
-        nameError: null,
-        packageInstalled: false
+        pendingRequest: false
       });
+      // Reset our trigger submit for advanced install
+      this.triggerAdvancedSubmit = undefined;
+      this.setState({currentTab: 'defaultInstall'});
     }
 
     if (!props.open && nextProps.open) {
@@ -85,8 +95,16 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
     }
   }
 
-  onCosmosPackagesStoreDescriptionError(nameError) {
-    this.internalStorage_update({appId: null, nameError});
+  componentDidUpdate() {
+    if (this.triggerAdvancedSubmit) {
+      // Trigger submit upfront to validate fields and potentially disable buttons
+      let {isValidated} = this.triggerAdvancedSubmit();
+      this.internalStorage_update({hasFormErrors: !isValidated});
+    }
+  }
+
+  onCosmosPackagesStoreDescriptionError(descriptionError) {
+    this.internalStorage_update({appId: null, descriptionError});
     this.forceUpdate();
   }
 
@@ -110,32 +128,21 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
   onCosmosPackagesStoreInstallError(installError) {
     this.internalStorage_update({
       installError,
-      packageInstalled: false,
       pendingRequest: false
     });
-    this.forceUpdate();
+    this.setState({currentTab: 'defaultInstall'});
   }
 
   onCosmosPackagesStoreInstallSuccess() {
     this.internalStorage_update({
       installError: null,
-      packageInstalled: true,
       pendingRequest: false
     });
-    this.forceUpdate();
+    this.setState({currentTab: 'packageInstalled'});
   }
 
-  handleAdvancedModalClose() {
-    this.internalStorage_update({advancedModalOpen: false});
-    this.forceUpdate();
-  }
-
-  handleAdvancedModalOpen() {
-    this.internalStorage_update({
-      advancedModalOpen: true,
-      installError: null,
-      pendingRequest: false
-    });
+  handleAdvancedFormChange(formObject) {
+    this.internalStorage_update({hasFormErrors: !formObject.isValidated});
     this.forceUpdate();
   }
 
@@ -144,55 +151,38 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
     this.forceUpdate();
   }
 
-  handleChangeReviewState(isReviewing) {
-    this.internalStorage_update({installError: null, isReviewing});
-    this.forceUpdate();
+  handleChangeTab(currentTab) {
+    let newState = {installError: null};
+    if (currentTab === 'advancedInstall') {
+      // Change back to previous state and clean up stored config
+      newState.advancedConfiguration = null;
+    }
+
+    if (currentTab === 'reviewAdvancedConfig') {
+      let {isValidated, model} = this.triggerAdvancedSubmit();
+
+      // Change state if form fields are validated and store configuration
+      // for submission
+      if (isValidated) {
+        newState.advancedConfiguration = model;
+      }
+    }
+
+    this.internalStorage_update(newState);
+    this.tabs_handleTabClick(currentTab);
   }
 
-  handleInstallPackage(cosmosPackage) {
-    let {appId} = this.internalStorage_get();
-    CosmosPackagesStore.installPackage(
-      cosmosPackage.get('package').name,
-      cosmosPackage.get('package').version,
-      appId,
-      {[cosmosPackage.get('package').name]: {'framework-name': appId}}
-    );
-
+  handleInstallPackage(isDefaultInstall) {
+    let {name, version} = CosmosPackagesStore
+      .getPackageDetails().get('package');
+    let {appId, configuration} = this.getAppIdAndConfiguration(isDefaultInstall);
+    CosmosPackagesStore.installPackage(name, version, appId, configuration);
     this.internalStorage_update({pendingRequest: true});
     this.forceUpdate();
   }
 
-  getAdvancedLink() {
-    let {
-      installError,
-      isReviewing,
-      packageInstalled,
-      pendingRequest
-    } = this.internalStorage_get();
-    if (isReviewing || packageInstalled || pendingRequest) {
-      return null;
-    }
-
-    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
-    let buttonClasses = classNames('button flush-bottom', {
-      'button-link button-primary clickable': !installError,
-      'button-wide': installError
-    });
-    let buttonText = 'Advanced Installation';
-    if (installError) {
-      buttonText = 'Edit Configuration';
-    }
-
-    return (
-      <div className="button-collection horizontal-center flush-bottom">
-        <button
-          disabled={!cosmosPackage || pendingRequest}
-          className={buttonClasses}
-          onClick={this.handleAdvancedModalOpen}>
-          {buttonText}
-        </button>
-      </div>
-    );
+  getAdvancedSubmit(triggerSubmit) {
+    this.triggerAdvancedSubmit = triggerSubmit;
   }
 
   getAppIdFormDefinition() {
@@ -213,94 +203,44 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
     }];
   }
 
-  getBackButton() {
-    if (!this.internalStorage_get().isReviewing) {
-      return null;
-    }
-
-    return (
-      <button
-        className="button button-large flush"
-        onClick={this.handleChangeReviewState.bind(this, false)}>
-        Back
-      </button>
-    );
-  }
-
-  getFooter() {
-    return (
-      <div className="text-align-center flush-bottom">
-        {this.getReviewConfigButton()}
-        <div className="button-collection flush">
-          {this.getBackButton()}
-          {this.getInstallButton()}
-        </div>
-        {this.getAdvancedLink()}
-      </div>
-    );
-  }
-
-  getInstallButton() {
-    let {
-      installError,
-      isReviewing,
-      packageInstalled,
-      pendingRequest
-    } = this.internalStorage_get();
-
-    if (installError || isReviewing) {
-      return null;
-    }
-
+  getAppIdAndConfiguration(isDefaultInstall) {
+    let {advancedConfiguration, appId} = this.internalStorage_get();
+    let {currentTab} = this.state;
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
-    let buttonAction = this.handleInstallPackage.bind(this, cosmosPackage);
-    let buttonText = 'Install';
-    if (pendingRequest) {
-      buttonText = 'Installing...';
-    }
+    let {name} = cosmosPackage.get('package');
 
-    if (packageInstalled) {
-      buttonAction = this.props.onClose;
-      buttonText = (
-        <i className="icon icon-sprite icon-sprite-mini icon-sprite-mini-white icon-check-mark" />
-      );
-    }
+    let isAdvancedInstall = currentTab === 'advancedInstall' ||
+      currentTab === 'reviewAdvancedConfig';
 
-    let buttonClasses = classNames({
-      'button button-success flush-bottom': true,
-      'button-wide': !installError
-    });
-
-    return (
-      <button
-        disabled={!cosmosPackage || pendingRequest}
-        className={buttonClasses}
-        onClick={buttonAction}>
-        {buttonText}
-      </button>
+    let configuration = SchemaUtil.definitionToJSONDocument(
+      SchemaUtil.schemaToMultipleDefinition(cosmosPackage.get('config'))
     );
-  }
 
-  getInstallError() {
-    let {installError} = this.internalStorage_get();
-    if (!installError) {
-      return null;
+    // Rely on default configurations
+    if (isDefaultInstall) {
+      configuration = {[name]: {}};
     }
 
-    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
-    let name = cosmosPackage.get('package').name || 'this package';
-    let installErrorMessage = CosmosMessages[installError.type] ||
-      CosmosMessages.default;
-    if (installError) {
-      return (
-        <div className="horizontal-center">
-          <h4 className="text-danger">{installErrorMessage.header}</h4>
-          <p className="text-align-center">
-            {installErrorMessage.getMessage(name)}
-          </p>
-        </div>
-      );
+    if (isAdvancedInstall && advancedConfiguration) {
+      configuration = advancedConfiguration;
     }
+
+    let advancedName =
+      Util.findNestedPropertyInObject(configuration, `${name}.framework-name`);
+
+    // Copy appId to framework name when using default install and
+    // name option is available
+    if (advancedName && !isAdvancedInstall && appId) {
+      configuration[name]['framework-name'] = appId;
+    }
+
+    // Copy framework name to appId when using advanced install and
+    // name option is available
+    if (advancedName && isAdvancedInstall) {
+      appId = advancedName;
+    }
+
+    return {appId, configuration};
   }
 
   getLoadingScreen() {
@@ -315,211 +255,304 @@ class InstallPackageModal extends mixin(InternalStorageMixin, StoreMixin) {
     );
   }
 
-  getModalContents() {
-    let {isLoading, isReviewing} = this.internalStorage_get();
+  getInstallErrorScreen() {
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
-
-    if (isLoading || !cosmosPackage) {
-      return this.getLoadingScreen();
-    }
-
-    let config = cosmosPackage.get('config');
-    if (isReviewing) {
-      let jsonDocument = SchemaUtil.definitionToJSONDocument(
-        SchemaUtil.schemaToMultipleDefinition(config)
-      );
-
-      return (
-        <ReviewConfig
-          jsonDocument={jsonDocument} />
-      );
-    }
+    let {pendingRequest, installError} = this.internalStorage_get();
+    let installErrorMessage = CosmosMessages[installError.type] ||
+        CosmosMessages.default;
 
     return (
-      <div>
-        {this.getInstallError()}
-        {this.getPackageInfo()}
-        {this.getPostInstallNotes()}
-        {this.getAdvancedConfig()}
+      <div className="modal-content">
+        <div className="modal-content-inner container container-pod container-pod-short horizontal-center">
+          <h4 className="text-danger">{installErrorMessage.header}</h4>
+          <p className="text-align-center">
+            {installErrorMessage.getMessage(name || 'this package')}
+          </p>
+        </div>
+        <div className="modal-footer">
+          <div className="container">
+            <div className="button-collection horizontal-center flush-bottom">
+              <button
+                disabled={!cosmosPackage || pendingRequest}
+                className="button flush-bottom button-wide"
+                onClick={this.handleChangeTab.bind(this, 'advancedInstall')}>
+                Edit Configuration
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
-  getPackageInfo() {
+  renderDefaultInstallTabView() {
     let {
-      advancedModalOpen,
-      nameError,
-      installError,
-      isReviewing,
-      packageInstalled
+      descriptionError,
+      pendingRequest,
+      installError
     } = this.internalStorage_get();
-    if (installError || isReviewing || packageInstalled || advancedModalOpen) {
-      return null;
-    }
-
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
     let {name, version} = cosmosPackage.get('package');
 
     let error;
-    if (nameError) {
+    if (descriptionError) {
       error = (
         <p className="text-danger text-small text-align-center">
-          {nameError}
+          {descriptionError}
         </p>
       );
     }
 
+    if (installError) {
+      return this.getInstallErrorScreen();
+    }
+
+    let buttonText = 'Install';
+
+    if (pendingRequest) {
+      buttonText = 'Installing...';
+    }
+
     return (
-      <div className="horizontal-center">
-        <div className="icon icon-jumbo icon-image-container icon-app-container">
-          <img src={cosmosPackage.getIcons()['icon-large']} />
+      <div>
+        <div className="modal-content">
+          <div className="modal-content-inner container container-pod container-pod-short horizontal-center">
+            <div className="icon icon-jumbo icon-image-container icon-app-container">
+              <img src={cosmosPackage.getIcons()['icon-large']} />
+            </div>
+            <Form definition={this.getAppIdFormDefinition()}
+                onSubmit={this.handleChangeAppId} />
+            <p className="flush-bottom">{`${name} ${version}`}</p>
+            {error}
+          </div>
         </div>
-        <Form definition={this.getAppIdFormDefinition()}
-            onSubmit={this.handleChangeAppId} />
-        <p className="flush-bottom">{`${name} ${version}`}</p>
-        {error}
+        <div className="modal-footer">
+          <div className="container">
+            <div className="button-collection horizontal-center flush-bottom">
+              <button
+                disabled={!cosmosPackage || pendingRequest}
+                className="button button-small button-stroke button-rounded"
+                onClick={this.handleChangeTab.bind(this, 'reviewDefaultConfig')}>
+                View Configuration Details
+              </button>
+              <button
+                disabled={!cosmosPackage || pendingRequest || descriptionError}
+                className="button button-success flush-bottom button-wide"
+                onClick={this.handleInstallPackage.bind(this, true)}>
+                {buttonText}
+              </button>
+              <button
+                disabled={!cosmosPackage || pendingRequest}
+                className="button flush-bottom button-link button-primary clickable"
+                onClick={this.handleChangeTab.bind(this, 'advancedInstall')}>
+                Advanced Installation
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
-  getPostInstallNotes() {
-    let {isReviewing, packageInstalled} = this.internalStorage_get();
-    if (isReviewing || !packageInstalled) {
-      return null;
+  renderReviewDefaultConfigTabView() {
+    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
+
+    let {name, version} = cosmosPackage.get('package');
+    let {appId, configuration} = this.getAppIdAndConfiguration();
+
+    return (
+      <div>
+        <ReviewConfig
+          packageIcon={cosmosPackage.getIcons()['icon-small']}
+          packageType={name}
+          packageName={appId}
+          packageVersion={version}
+          configuration={configuration} />
+        <div className="modal-footer">
+          <div className="container">
+            <div className="button-collection flush-bottom">
+              <button
+                className="button button-large flush"
+                onClick={this.handleChangeTab.bind(this, 'defaultInstall')}>
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderAdvancedInstallTabView() {
+    let {pendingRequest, hasFormErrors} = this.internalStorage_get();
+    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
+
+    // Only return footer, we always render AdvancedConfig, but just change
+    // the hidden class in render
+    return (
+      <div className="modal-footer">
+        <div className="container">
+          <div className="button-collection flush-bottom">
+            <button
+              className="button button-large flush"
+              onClick={this.handleChangeTab.bind(this, 'defaultInstall')}>
+              Back
+            </button>
+            <button
+              disabled={!cosmosPackage || pendingRequest || hasFormErrors}
+              className="button button-large button-success flush-bottom"
+              onClick={this.handleChangeTab.bind(this, 'reviewAdvancedConfig')}>
+              Review and Install
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+
+  }
+
+  renderReviewAdvancedConfigTabView() {
+    let {pendingRequest} = this.internalStorage_get();
+    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
+    let {name, version} = cosmosPackage.get('package');
+    let {appId, configuration} = this.getAppIdAndConfiguration();
+    let buttonText = 'Install';
+
+    if (pendingRequest) {
+      buttonText = 'Installing...';
     }
 
+    return (
+      <div>
+        <ReviewConfig
+          packageIcon={cosmosPackage.getIcons()['icon-small']}
+          packageType={name}
+          packageName={appId}
+          packageVersion={version}
+          configuration={configuration} />
+        <div className="modal-footer">
+          <div className="container">
+            <div className="button-collection flush-bottom">
+              <button
+                className="button button-large flush"
+                onClick={this.handleChangeTab.bind(this, 'advancedInstall')}>
+                Back
+              </button>
+              <button
+                disabled={!cosmosPackage || pendingRequest}
+                className="button button-success flush-bottom button-large"
+                onClick={this.handleInstallPackage}>
+                {buttonText}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderPackageInstalledTabView() {
+    let {pendingRequest} = this.internalStorage_get();
+    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
+
     let notes = Util.findNestedPropertyInObject(
-      CosmosPackagesStore.getPackageDetails().get('package'),
+      cosmosPackage.get('package'),
       'postInstallNotes'
     );
 
     let parsedNotes = StringUtil.parseMarkdown(notes);
 
     return (
-      <div className="horizontal-center">
-        <h2 className="flush">Success!</h2>
-        <div
-          className="container-pod container-pod-short-top flush-bottom text-align-center"
-          style={{width: '100%', overflow: 'auto', wordWrap: 'break-word'}}
-          dangerouslySetInnerHTML={parsedNotes} />
-      </div>
-    );
-  }
-
-  getReviewConfigButton() {
-    let {
-      installError,
-      isReviewing,
-      packageInstalled,
-      pendingRequest
-    } = this.internalStorage_get();
-    if (installError || isReviewing || packageInstalled || pendingRequest) {
-      return null;
-    }
-
-    return (
-      <div className="button-collection horizontal-center">
-        <button
-          disabled={!CosmosPackagesStore.getPackageDetails()}
-          className="button button-small button-stroke button-rounded"
-          onClick={this.handleChangeReviewState.bind(this, true)}>
-          View Configuration Details
-        </button>
-      </div>
-    );
-  }
-
-  getReviewHeader() {
-    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
-    let {name, version} = cosmosPackage.get('package');
-
-    return (
       <div>
-        <div className="column-4">
-          <div className="media-object-spacing-wrapper media-object-spacing-narrow">
-            <div className="media-object media-object-align-middle">
-              <div className="media-object-item">
-                <img
-                  className="icon icon-sprite icon-sprite-medium icon-sprite-medium-color icon-image-container icon-app-container"
-                  src={cosmosPackage.getIcons()['icon-small']} />
-              </div>
-              <div className="media-object-item">
-                <h4 className="flush-top flush-bottom text-color-neutral">
-                  {name}
-                </h4>
-                <span className="side-panel-resource-label">
-                  {version}
-                </span>
-              </div>
+        <div className="modal-content">
+          <div className="horizontal-center modal-content-inner container container-pod container-pod-short text-align-center">
+            <h2 className="flush-top short-bottom">Success!</h2>
+            <div
+              style={{width: '100%', overflow: 'auto', wordWrap: 'break-word'}}
+              dangerouslySetInnerHTML={parsedNotes} />
+          </div>
+        </div>
+        <div className="modal-footer">
+          <div className="container">
+            <div className="button-collection horizontal-center flush-bottom">
+              <button
+                disabled={!cosmosPackage || pendingRequest}
+                className="button button-success flush-bottom button-wide"
+                onClick={this.props.onClose}>
+                <i className="icon icon-sprite icon-sprite-mini icon-sprite-mini-white icon-check-mark" />
+              </button>
             </div>
           </div>
         </div>
-        <div className="column-8 text-align-right">
-          <button className="button button-small button-stroke button-rounded">
-            Download config.json
-          </button>
-        </div>
       </div>
     );
   }
 
-  getAdvancedConfig() {
+  getModalContents() {
+    let {currentTab} = this.state;
+    let {isLoading} = this.internalStorage_get();
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
-    if (!cosmosPackage) {
-      return null;
+    if (isLoading || !cosmosPackage) {
+      return this.getLoadingScreen();
     }
 
-    let {advancedModalOpen} = this.internalStorage_get();
-    let classSet = classNames({
-      hidden: !advancedModalOpen
+    let {name, version} = cosmosPackage.get('package');
+    let advancedConfigClasses = classNames({
+      hidden: currentTab !== 'advancedInstall'
     });
 
     return (
-      <AdvancedConfig
-        className={classSet}
-        schema={cosmosPackage.get('config')} />
+      <div>
+        <AdvancedConfig
+          className={advancedConfigClasses}
+          packageIcon={cosmosPackage.getIcons()['icon-small']}
+          packageName={name}
+          packageVersion={version}
+          schema={cosmosPackage.get('config')}
+          onChange={this.handleAdvancedFormChange}
+          getTriggerSubmit={this.getAdvancedSubmit} />
+        {this.tabs_getTabView()}
+      </div>
     );
   }
 
   render() {
-    let {props} = this;
-    let {advancedModalOpen, isReviewing} = this.internalStorage_get();
-    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
+    let {props, state} = this;
+    let {currentTab} = state;
+
+    let isAdvanced = currentTab === 'advancedInstall' ||
+      currentTab === 'reviewAdvancedConfig';
+    let isReviewing = isAdvanced || currentTab === 'reviewDefaultConfig';
+
+    let backdropClasses = classNames({
+      'modal-backdrop': true,
+      'default-cursor': isAdvanced
+    });
+
     let modalClasses = classNames('modal', {
-      'modal-large': isReviewing || advancedModalOpen,
-      'modal-narrow': !isReviewing && !advancedModalOpen
+      'modal-large': isReviewing,
+      'modal-narrow': !isReviewing
     });
 
     let modalWrapperClasses = classNames({
-      'multiple-form-modal': isReviewing || advancedModalOpen
+      'multiple-form-modal': isAdvanced
     });
-
-    let modalBodyClasses = classNames({
-      'modal-content-inner container container-pod container-pod-short': true,
-      'flush-top flush-bottom': isReviewing
-    });
-
-    if (!cosmosPackage) {
-      return null;
-    }
 
     return (
-      <div>
-        <Modal
-          footer={this.getFooter()}
-          modalClass={modalClasses}
-          modalWrapperClass={modalWrapperClasses}
-          open={props.open}
-          onClose={props.onClose}
-          showCloseButton={false}
-          showFooter={true}
-          showHeader={isReviewing && !advancedModalOpen}
-          headerClass="modal-header modal-header-bottom-border modal-header-white"
-          innerBodyClass={modalBodyClasses}
-          subHeader={this.getReviewHeader()}>
-          {this.getModalContents()}
-        </Modal>
-      </div>
+      <Modal
+        backdropClass={backdropClasses}
+        bodyClass=""
+        closeByBackdropClick={!isAdvanced}
+        innerBodyClass="flush-top flush-bottom"
+        maxHeightPercentage={1}
+        modalClass={modalClasses}
+        modalWrapperClass={modalWrapperClasses}
+        onClose={props.onClose}
+        open={props.open}
+        showCloseButton={false}
+        showFooter={false}>
+        {this.getModalContents()}
+      </Modal>
     );
   }
 }
@@ -533,10 +566,7 @@ InstallPackageModal.propTypes = {
   packageName: React.PropTypes.string,
   packageVersion: React.PropTypes.string,
   open: React.PropTypes.bool,
-  onClose: React.PropTypes.func,
-  serviceImage: React.PropTypes.string,
-  serviceName: React.PropTypes.string,
-  serviceVersion: React.PropTypes.string
+  onClose: React.PropTypes.func
 };
 
 module.exports = InstallPackageModal;
