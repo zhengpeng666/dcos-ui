@@ -1,5 +1,5 @@
-import React from 'react';
 import GeminiScrollbar from 'react-gemini-scrollbar';
+import React from 'react';
 
 import DescriptionList from './DescriptionList';
 import IconDownload from './icons/IconDownload';
