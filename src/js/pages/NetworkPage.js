@@ -6,6 +6,7 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import AlertPanel from '../components/AlertPanel';
 import FilterHeadline from '../components/FilterHeadline';
 import FilterInputText from '../components/FilterInputText';
+import {Hooks} from 'PluginSDK';
 import NetworkingVIPSummariesStore from '../stores/NetworkingVIPSummariesStore';
 import Page from '../components/Page';
 import RequestErrorMsg from '../components/RequestErrorMsg';
@@ -130,6 +131,7 @@ class NetworkPage extends mixin(StoreMixin) {
 
     return vipSummaries.map(function (vipSummary) {
       return {
+        fullVIP: vipSummary.getVIP(),
         vip: vipSummary.getVIPString(),
         successLastMinute: vipSummary.getSuccessLastMinute(),
         failLastMinute: vipSummary.getFailLastMinute(),
@@ -161,7 +163,8 @@ class NetworkPage extends mixin(StoreMixin) {
     } else if (this.isLoading()) {
       content = this.getLoadingScreen();
     } else {
-      content = this.getNetworkPageContent();
+      content = Hooks.applyFilter('getNetworkingPageContent',
+        this.getNetworkPageContent(), this.props.params, 'network');
     }
 
     return (

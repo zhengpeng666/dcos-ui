@@ -26,9 +26,13 @@ module.exports = class VIPSummary extends Item {
     return Number(this.get('success_last_minute'));
   }
 
-  getVIPString() {
-    let vip = this.get('vip');
+  getVIP() {
+    return this.get('vip');
+  }
 
-    return `${vip.ip}:${vip.port}`;
+  getVIPString() {
+    let {ip, port} = this.getVIP();
+
+    return `${ip}:${port}`;
   }
 };

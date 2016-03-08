@@ -1,3 +1,8 @@
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../SDK').setSDK(SDK);
+
 var Client = require('../Client');
 var ClientList = require('../ClientList');
 

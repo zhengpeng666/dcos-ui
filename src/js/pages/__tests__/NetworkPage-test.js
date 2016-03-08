@@ -53,9 +53,9 @@ describe('NetworkPage', function () {
       let vipSummaries = this.instance.getVIPSummaries();
 
       expect(Object.keys(vipSummaries[0])).toEqual([
-        'vip', 'successLastMinute', 'failLastMinute', 'failurePerecent',
-        'applicationReachabilityPercent', 'machineReachabilityPercent',
-        'p99Latency'
+        'fullVIP', 'vip', 'successLastMinute', 'failLastMinute',
+        'failurePerecent', 'applicationReachabilityPercent',
+        'machineReachabilityPercent', 'p99Latency'
       ]);
     });
   });

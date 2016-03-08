@@ -36,14 +36,6 @@ import {
   MARATHON_APPS_CHANGE,
   MARATHON_APPS_ERROR,
 
-  NETWORKING_BACKEND_CONNECTIONS_CHANGE,
-  NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR,
-  NETWORKING_NODE_MEMBERSHIP_CHANGE,
-  NETWORKING_NODE_MEMBERSHIP_REQUEST_ERROR,
-  NETWORKING_VIPS_CHANGE,
-  NETWORKING_VIPS_REQUEST_ERROR,
-  NETWORKING_VIP_DETAIL_CHANGE,
-  NETWORKING_VIP_DETAIL_REQUEST_ERROR,
   NETWORKING_VIP_SUMMARIES_CHANGE,
   NETWORKING_VIP_SUMMARIES_ERROR,
 
@@ -63,9 +55,6 @@ import MesosLogStore from '../stores/MesosLogStore';
 import MesosStateStore from '../stores/MesosStateStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import MetadataStore from '../stores/MetadataStore';
-import NetworkingBackendConnectionsStore from '../stores/NetworkingBackendConnectionsStore';
-import NetworkingNodeMembershipsStore from '../stores/NetworkingNodeMembershipsStore';
-import NetworkingVIPsStore from '../stores/NetworkingVIPsStore';
 import NetworkingVIPSummariesStore from '../stores/NetworkingVIPSummariesStore';
 import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 import UnitHealthStore from '../stores/UnitHealthStore';
@@ -124,47 +113,9 @@ const ListenersDescription = {
       change: HISTORY_CHANGE
     },
     unmountWhen: function () {
-      true
+      return true;
     },
     listenAlways: false
-  },
-
-  networkingBackendConnections: {
-    store: NetworkingBackendConnectionsStore,
-    events: {
-      success: NETWORKING_BACKEND_CONNECTIONS_CHANGE,
-      error: NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR
-    },
-    unmountWhen: function () {
-      return true;
-    },
-    listenAlways: true
-  },
-
-  networkingNodeMemberships: {
-    store: NetworkingNodeMembershipsStore,
-    events: {
-      success: NETWORKING_NODE_MEMBERSHIP_CHANGE,
-      error: NETWORKING_NODE_MEMBERSHIP_REQUEST_ERROR
-    },
-    unmountWhen: function () {
-      return true;
-    },
-    listenAlways: true
-  },
-
-  networkingVIPs: {
-    store: NetworkingVIPsStore,
-    events: {
-      success: NETWORKING_VIPS_CHANGE,
-      error: NETWORKING_VIPS_REQUEST_ERROR,
-      detailSuccess: NETWORKING_VIP_DETAIL_CHANGE,
-      detailError: NETWORKING_VIP_DETAIL_REQUEST_ERROR
-    },
-    unmountWhen: function () {
-      return true;
-    },
-    listenAlways: true
   },
 
   networkingVIPSummaries: {

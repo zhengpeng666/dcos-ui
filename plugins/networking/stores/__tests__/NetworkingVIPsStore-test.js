@@ -1,18 +1,18 @@
 jest.dontMock('../NetworkingVIPsStore');
-jest.dontMock('../../config/Config');
-jest.dontMock('../../events/AppDispatcher');
-jest.dontMock('../../events/NetworkingActions');
-jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../../../../src/js/config/Config');
+jest.dontMock('../../../../src/js/events/AppDispatcher');
+jest.dontMock('../../actions/NetworkingActions');
+jest.dontMock('../../../../src/js/mixins/GetSetMixin');
 jest.dontMock('../../../../tests/_fixtures/networking/networking-vips.json');
 
 var _ = require('underscore');
 
 var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../events/AppDispatcher');
-var Config = require('../../config/Config');
+var AppDispatcher = require('../../../../src/js/events/AppDispatcher');
+var Config = require('../../../../src/js/config/Config');
 var EventTypes = require('../../constants/EventTypes');
 var NetworkingVIPsStore = require('../NetworkingVIPsStore');
-var RequestUtil = require('../../utils/RequestUtil');
+var RequestUtil = require('../../../../src/js/utils/RequestUtil');
 var vipsFixture = require('../../../../tests/_fixtures/networking/networking-vips.json');
 
 describe('NetworkingVIPsStore', function () {

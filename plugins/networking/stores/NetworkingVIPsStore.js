@@ -1,10 +1,12 @@
 import {Store} from 'mesosphere-shared-reactjs';
 
 import ActionTypes from '../constants/ActionTypes';
-import AppDispatcher from '../events/AppDispatcher';
+import AppDispatcher from '../../../src/js/events/AppDispatcher';
 import EventTypes from '../constants/EventTypes';
-import GetSetMixin from '../mixins/GetSetMixin';
-import NetworkingActions from '../events/NetworkingActions';
+import GetSetMixin from '../../../src/js/mixins/GetSetMixin';
+import NetworkingActions from '../actions/NetworkingActions';
+import VIPDetail from '../structs/VIPDetail';
+import {SERVER_ACTION} from '../../../src/js/constants/ActionTypes';
 
 let NetworkingVIPsStore = Store.createStore({
   storeID: 'networkingVIPs',
@@ -28,6 +30,16 @@ let NetworkingVIPsStore = Store.createStore({
 
   fetchVIPDetail: NetworkingActions.fetchVIPDetail,
 
+  getVIPDetail: function (vipString) {
+    let vipDetail = this.get('vipDetail')[vipString];
+
+    if (vipDetail) {
+      return new VIPDetail(vipDetail);
+    }
+
+    return null;
+  },
+
   processVIPs: function (vips) {
     this.set({vips});
     this.emit(EventTypes.NETWORKING_VIPS_CHANGE);
@@ -49,7 +61,7 @@ let NetworkingVIPsStore = Store.createStore({
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
-    if (payload.source !== ActionTypes.SERVER_ACTION) {
+    if (payload.source !== SERVER_ACTION) {
       return false;
     }
 

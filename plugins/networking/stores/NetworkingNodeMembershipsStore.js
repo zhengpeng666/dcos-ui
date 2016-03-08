@@ -1,10 +1,11 @@
 import {Store} from 'mesosphere-shared-reactjs';
 
 import ActionTypes from '../constants/ActionTypes';
-import AppDispatcher from '../events/AppDispatcher';
+import AppDispatcher from '../../../src/js/events/AppDispatcher';
 import EventTypes from '../constants/EventTypes';
-import GetSetMixin from '../mixins/GetSetMixin';
-import NetworkingActions from '../events/NetworkingActions';
+import GetSetMixin from '../../../src/js/mixins/GetSetMixin';
+import NetworkingActions from '../actions/NetworkingActions';
+import {SERVER_ACTION} from '../../../src/js/constants/ActionTypes';
 
 let NetworkingNodeMembershipsStore = Store.createStore({
   storeID: 'networkingNodeMemberships',
@@ -35,7 +36,7 @@ let NetworkingNodeMembershipsStore = Store.createStore({
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {
-    if (payload.source !== ActionTypes.SERVER_ACTION) {
+    if (payload.source !== SERVER_ACTION) {
       return false;
     }
 

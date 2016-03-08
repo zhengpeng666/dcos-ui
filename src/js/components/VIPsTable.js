@@ -2,28 +2,50 @@ import classNames from 'classnames';
 import React from 'react';
 import {Table} from 'reactjs-components';
 
-import ResourceTableUtil from '../utils/ResourceTableUtil';
+import {Hooks} from 'PluginSDK';
 import TableUtil from '../utils/TableUtil';
 
-const METHODS_TO_BIND = ['getColumnClassname'];
+const METHODS_TO_BIND = [
+  'getColumnClassname'
+];
+
+const COLUMNS_TO_HIDE_MEDIUM = [
+  'successLastMinute',
+  'failLastMinute'
+];
+
 const COLUMNS_TO_HIDE_MINI = [
-  'failurePerecent',
+  'successLastMinute',
+  'failLastMinute',
   'applicationReachabilityPercent',
   'machineReachabilityPercent'
 ];
 
-class VIPsTable extends React.Component {
-   constructor() {
-     super();
+const RIGHT_ALIGNED_TABLE_CELLS = [
+  'successLastMinute',
+  'failLastMinute',
+  'failurePerecent',
+  'applicationReachabilityPercent',
+  'machineReachabilityPercent',
+  'p99Latency'
+];
 
-     METHODS_TO_BIND.forEach((method) => {
-       this[method] = this[method].bind(this);
-     });
-   }
+class VIPsTable extends React.Component {
+  constructor() {
+    super();
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  alignTableCellRight(prop) {
+    return RIGHT_ALIGNED_TABLE_CELLS.indexOf(prop) > -1;
+  }
 
   getColumns() {
     let className = this.getColumnClassname;
-    let heading = ResourceTableUtil.renderHeading({
+    let heading = this.renderHeading({
       vip: 'VIRTUAL IP',
       successLastMinute: 'SUCCESSES',
       failLastMinute: 'FAILURES',
@@ -38,6 +60,7 @@ class VIPsTable extends React.Component {
         className,
         headerClassName: className,
         prop: 'vip',
+        render: this.renderVIP,
         sortable: true,
         heading
       },
@@ -90,8 +113,13 @@ class VIPsTable extends React.Component {
   }
 
   getColumnClassname(prop, sortBy, row) {
+    let {alignTableCellRight, hideColumnAtScreenSize} = this;
+
     return classNames({
-      'hidden-mini': this.hideColumnAtMini(prop),
+      'text-align-right': alignTableCellRight(prop),
+      'hidden-medium': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MEDIUM),
+      'hidden-small': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MINI),
+      'hidden-mini': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MINI),
       'highlight': prop === sortBy.prop,
       'clickable': row == null
     });
@@ -101,12 +129,12 @@ class VIPsTable extends React.Component {
     return (
       <colgroup>
         <col style={{width: '20%'}} />
+        <col className="hidden-mini" />
+        <col className="hidden-mini" />
         <col />
+        <col className="hidden-mini hidden-small hidden-medium" />
+        <col className="hidden-mini hidden-small hidden-medium" />
         <col />
-        <col className="hidden-mini" />
-        <col className="hidden-mini" />
-        <col className="hidden-mini" />
-        <col className="hidden-mini" />
       </colgroup>
     );
   }
@@ -122,12 +150,51 @@ class VIPsTable extends React.Component {
     };
   }
 
-  hideColumnAtMini(prop) {
-    return COLUMNS_TO_HIDE_MINI.indexOf(prop) > -1;
+  hideColumnAtScreenSize(prop, columns) {
+    return columns.indexOf(prop) > -1;
+  }
+
+  renderHeading(config) {
+    return (prop, order, sortBy) => {
+      let title = config[prop];
+      let caret = {
+        before: null,
+        after: null
+      };
+      let caretClassSet = classNames(
+        `caret caret--${order}`,
+        {'caret--visible': prop === sortBy.prop}
+      );
+
+      if (this.alignTableCellRight(prop)) {
+        caret.before = <span className={caretClassSet} />;
+      } else {
+        caret.after = <span className={caretClassSet} />;
+      }
+
+      return (
+        <span>
+          {caret.before}
+          <span className="table-header-title">{title}</span>
+          {caret.after}
+        </span>
+      );
+    };
   }
 
   renderPercentage(prop, item) {
     return `${item[prop]}%`;
+  }
+
+  renderVIP(prop, item) {
+    let fullVIP = item.fullVIP;
+    let displayedVIP = Hooks.applyFilter('networkingVIPTableLabel', item[prop], fullVIP);
+
+    return (
+      <span>
+        {displayedVIP}
+      </span>
+    );
   }
 
   render() {

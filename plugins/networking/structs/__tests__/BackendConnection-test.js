@@ -1,3 +1,8 @@
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
+require('../../SDK').setSDK(SDK);
+
 var fixturePath = '../../../../tests/_fixtures/networking/networking-backend-connections.json';
 
 jest.dontMock(fixturePath);

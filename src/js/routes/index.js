@@ -3,10 +3,10 @@ import {Route, Redirect, NotFoundRoute} from 'react-router';
 import dashboard from './dashboard';
 import {Hooks} from 'PluginSDK';
 import Index from '../pages/Index';
-import network from './network';
 import nodes from './nodes';
 import NotFoundPage from '../pages/NotFoundPage';
 import Settings from './factories/settings';
+import Networking from './factories/networking';
 import services from './services';
 import universe from './universe';
 
@@ -15,7 +15,7 @@ let applicationRoutes = [
   dashboard,
   services,
   nodes,
-  network,
+
   universe,
   {
     type: Redirect,
@@ -29,7 +29,7 @@ let applicationRoutes = [
 ];
 
 // Modules that produce routes
-let routeFactories = [Settings];
+let routeFactories = [Settings, Networking];
 
 function getApplicationRoutes() {
   let routes = applicationRoutes.slice();

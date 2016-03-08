@@ -1,19 +1,19 @@
 jest.dontMock('../NetworkingBackendConnectionsStore');
-jest.dontMock('../../config/Config');
-jest.dontMock('../../events/AppDispatcher');
-jest.dontMock('../../events/NetworkingActions');
-jest.dontMock('../../mixins/GetSetMixin');
+jest.dontMock('../../../../src/js/config/Config');
+jest.dontMock('../../../../src/js/events/AppDispatcher');
+jest.dontMock('../../actions/NetworkingActions');
+jest.dontMock('../../../../src/js/mixins/GetSetMixin');
 jest.dontMock('../../../../tests/_fixtures/networking/networking-backend-connections.json');
 
 var _ = require('underscore');
 
 var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../events/AppDispatcher');
+var AppDispatcher = require('../../../../src/js/events/AppDispatcher');
 var backendConnectionsFixture = require('../../../../tests/_fixtures/networking/networking-backend-connections.json');
-var Config = require('../../config/Config');
+var Config = require('../../../../src/js/config/Config');
 var EventTypes = require('../../constants/EventTypes');
 var NetworkingBackendConnectionsStore = require('../NetworkingBackendConnectionsStore');
-var RequestUtil = require('../../utils/RequestUtil');
+var RequestUtil = require('../../../../src/js/utils/RequestUtil');
 
 describe('NetworkingBackendConnectionsStore', function () {
 
