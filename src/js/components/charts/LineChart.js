@@ -24,7 +24,7 @@ class LineChart extends React.Component {
   /**
    * Will take in an array of labels and array of of lines
    * with their datapoints and will get the data ready for dygraphs
-   * For example: ['a', 'b'], [[1, 2], [3, 4]] will return:
+   * For example: (['a', 'b'], [[1, 2], [3, 4]]) will return:
    * [['a', 1, 3], ['b', 2, 4]]
    *
    * @param  {Array} labels
@@ -32,10 +32,10 @@ class LineChart extends React.Component {
    * @return {Array} An array
    */
   transpose(labels, data) {
-    return labels.map(function (label, i) {
+    return labels.map(function (label, labelIndex) {
       var xPoints = [label];
-      for (var j = 0; j < data.length; j++) {
-        xPoints.push(data[j][i]);
+      for (var dataIndex = 0; dataIndex < data.length; dataIndex++) {
+        xPoints.push(data[dataIndex][labelIndex]);
       }
 
       return xPoints;
