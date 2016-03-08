@@ -27,7 +27,7 @@ describe('ReviewConfig', function () {
       };
 
       var instance = ReactDOM.render(
-        <ReviewConfig jsonDocument={normalDocument} />,
+        <ReviewConfig configuration={normalDocument} />,
         this.container
       );
 
@@ -45,7 +45,7 @@ describe('ReviewConfig', function () {
       };
 
       var instance = ReactDOM.render(
-        <ReviewConfig jsonDocument={nestedDocument} />,
+        <ReviewConfig configuration={nestedDocument} />,
         this.container
       );
 

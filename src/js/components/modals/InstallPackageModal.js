@@ -247,7 +247,7 @@ class InstallPackageModal extends
     }
 
     if (installError) {
-      this.getInstallErrorScreen();
+      return this.getInstallErrorScreen();
     }
 
     let buttonText = 'Install';
