@@ -1,11 +1,8 @@
 import _ from 'underscore';
+import Clipboard from 'clipboard';
+import browserInfo from 'browser-info';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactZeroClipboard from 'react-zeroclipboard';
-// ReactZeroClipboard injects ZeroClipboard from a third-party server unless
-// global.ZeroClipboard is already defined:
-import ZeroClipboard from 'zeroclipboard';
-global.ZeroClipboard = ZeroClipboard;
 
 import ClusterName from './ClusterName';
 import DCOSLogo from './DCOSLogo';
@@ -24,6 +21,21 @@ var ClusterHeader = React.createClass({
     };
   },
 
+  componentDidMount() {
+    if (this.refs.copyButton) {
+      this.clipboard = new Clipboard(this.refs.copyButton, {
+        text: () => {
+          return this.getPublicIP();
+        }
+      });
+      this.clipboard.on('success', this.handleCopy);
+    }
+  },
+
+  componentWillUnmount() {
+    this.clipboard.destroy();
+  },
+
   handleCopy() {
     this.tip_updateTipContent(
       ReactDOM.findDOMNode(this.refs.copyButton), 'Copied!'
@@ -40,27 +52,16 @@ var ClusterHeader = React.createClass({
     this.tip_hideTip(ReactDOM.findDOMNode(this.refs.copyButton));
   },
 
-  getFlashButton(content) {
+  getFlashButton() {
     let clipboard = null;
-    var hasFlash = false;
-
-    try {
-      hasFlash = Boolean(new ActiveXObject('ShockwaveFlash.ShockwaveFlash'));
-    } catch(exception) {
-      hasFlash = navigator.mimeTypes['application/x-shockwave-flash'] != null;
-    }
 
     if (this.props.useClipboard) {
       clipboard = (
-        <ReactZeroClipboard
-          text={content}
-          onAfterCopy={this.handleCopy}>
-          <i className="icon icon-sprite icon-sprite-mini icon-clipboard icon-sprite-mini-color clickable" />
-        </ReactZeroClipboard>
+        <i className="icon icon-sprite icon-sprite-mini icon-clipboard icon-sprite-mini-color clickable" />
       );
     }
 
-    if (hasFlash) {
+    if (!/safari/i.test(browserInfo().name)) {
       return (
         <div data-behavior="show-tip"
           data-tip-place="bottom"
@@ -76,21 +77,29 @@ var ClusterHeader = React.createClass({
     return null;
   },
 
-  getHostName(metadata) {
+  getPublicIP() {
+    let metadata = MetadataStore.get('metadata');
+
     if (!_.isObject(metadata) ||
       metadata.PUBLIC_IPV4 == null ||
       metadata.PUBLIC_IPV4.length === 0) {
       return null;
     }
 
+    return metadata.PUBLIC_IPV4;
+  },
+
+  getHostName() {
+    let ip = this.getPublicIP();
+
     return (
       <div className="sidebar-header-sublabel"
-        title={metadata.PUBLIC_IPV4}>
+        title={ip}>
         <span className="hostname text-overflow">
-          {metadata.PUBLIC_IPV4}
+          {ip}
         </span>
         <span className="sidebar-header-sublabel-action">
-          {this.getFlashButton(metadata.PUBLIC_IPV4)}
+          {this.getFlashButton()}
         </span>
       </div>
     );
@@ -103,7 +112,7 @@ var ClusterHeader = React.createClass({
           <DCOSLogo />
         </div>
         <ClusterName />
-        {this.getHostName(MetadataStore.get('metadata'))}
+        {this.getHostName()}
       </div>
     );
   }

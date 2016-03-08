@@ -40,12 +40,10 @@ var vendors = [
   'react-gemini-scrollbar',
   'react-redux',
   'react-router',
-  'react-zeroclipboard',
   'reactjs-components',
   'reactjs-mixin',
   'redux',
-  'underscore',
-  'zeroclipboard'
+  'underscore'
 ];
 
 /**

@@ -122,11 +122,6 @@ function replaceJsStringsFn() {
 }
 gulp.task('replace-js-strings', ['webpack'], replaceJsStringsFn);
 
-gulp.task('swf', function () {
-  return gulp.src(config.dirs.src + '/**/*.swf')
-    .pipe(gulp.dest(config.dirs.dist));
-});
-
 gulp.task('watch', function () {
   gulp.watch(config.files.srcHTML, ['html']);
   gulp.watch(config.dirs.srcCSS + '/**/*.less', ['less']);
@@ -164,7 +159,7 @@ gulp.task('webpack', function (callback) {
   });
 });
 
-gulp.task('default', ['webpack', 'eslint', 'replace-js-strings', 'less', 'images', 'swf', 'html']);
+gulp.task('default', ['webpack', 'eslint', 'replace-js-strings', 'less', 'images', 'html']);
 
 gulp.task('dist', ['default', 'minify-css', 'minify-js']);
 
