@@ -39,7 +39,7 @@
     "react-redux": "4.4.0",
     "react-router": "0.13.5",
     "react-zeroclipboard": "3.0.0",
-    "reactjs-components": "0.14.0-beta.7",
+    "reactjs-components": "^0.14.0-beta.8",
     "reactjs-mixin": "0.0.2",
     "redux": "3.3.1",
     "tv4": "1.2.7",
