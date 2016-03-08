@@ -1,14 +1,14 @@
 import _ from 'underscore';
+import mixin from 'reactjs-mixin';
 import React from 'react';
 import {SidePanel} from 'reactjs-components';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import HistoryStore from '../stores/HistoryStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import NodeSidePanelContents from './NodeSidePanelContents';
 import ServiceSidePanelContents from './ServiceSidePanelContents';
-import mixin from 'reactjs-mixin';
 import StringUtil from '../utils/StringUtil';
-import {StoreMixin} from 'mesosphere-shared-reactjs';
 import TaskSidePanelContents from './TaskSidePanelContents';
 import UnitHealthSidePanelContents from './UnitHealthSidePanelContents';
 import UnitNodeSidePanelContents from './UnitNodeSidePanelContents';
