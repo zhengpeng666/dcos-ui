@@ -2,6 +2,7 @@
 // webpack will try to be smart and auto create the contexts,
 // doubling the built output
 const requirePlugin = require.context('../../../plugins', true, /index/);
+const requireExternalPlugin = require.context('../../../.plugins', true, /index/);
 const requireConfig = require.context('../config', false);
 const requireEvents = require.context('../events', false);
 const requireStructs = require.context('../structs', false);
@@ -13,18 +14,29 @@ const requireIcons = require.context('../components/icons', false);
 const requireModals = require.context('../components/modals', false);
 
 let pluginsList;
+let externalPluginsList;
 
 // Try loading the list of plugins.
 try {
-  pluginsList = require('../../../plugins/index');
+  pluginsList = requirePlugin('./index');
 } catch(err) {
   // No plugins
   pluginsList = {};
 }
 
+// Try loading the list of plugins.
+try {
+  externalPluginsList = requireExternalPlugin('./index');
+} catch (err) {
+  externalPluginsList = {};
+}
+
 // Return all available plugins
 function getAvailablePlugins() {
-  return pluginsList;
+  return {
+    pluginsList,
+    externalPluginsList
+  };
 }
 
 /**
@@ -78,7 +90,9 @@ function requireModule(dir, name) {
       return requireMixins(path);
     case 'components':
       return pluckComponent(path);
-    case 'plugins':
+    case 'externalPlugin':
+      return requireExternalPlugin(path);
+    case 'internalPlugin':
       return requirePlugin(path);
     default:
       throw Error('No loader for directory');

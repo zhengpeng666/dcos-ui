@@ -1,9 +1,11 @@
 let _plugins = {};
+let _externalPlugins = {};
 
 const Plugins = {};
 const Mocks = {};
 
 let pluginsList;
+let externalPluginsList;
 
 try {
   pluginsList = require('../../../../plugins/index');
@@ -11,12 +13,29 @@ try {
   pluginsList = {};
 }
 
+try {
+  externalPluginsList = require('../../../../.plugins/index');
+} catch(err) {
+  externalPluginsList = {};
+}
+
 function __getAvailablePlugins() {
-  return _plugins;
+  return {
+    pluginsList: _plugins,
+    externalPluginsList: _externalPlugins
+  };
 }
 
 function __setMockPlugins(plugins) {
-  _plugins = plugins;
+  _plugins = {};
+  _externalPlugins = {};
+  Object.keys(plugins).forEach(function (pluginID) {
+    if (pluginID in externalPluginsList) {
+      _externalPlugins[pluginID] = plugins[pluginID];
+    } else {
+      _plugins[pluginID] = plugins[pluginID];
+    }
+  });
 }
 
 function __setMockModule(name, mock) {
@@ -28,8 +47,11 @@ function __requireModule(dir, name) {
   if (name in Mocks) {
     return Mocks[name];
   }
-  if (dir === 'plugins') {
+  if (dir === 'internalPlugin') {
     return require('../../../../plugins/' + name);
+  }
+  if (dir === 'externalPlugin') {
+    return require('../../../../.plugins/' + name);
   }
   return require(`../../${dir}/${name}`);
 }
@@ -39,7 +61,13 @@ Plugins.__setMockPlugins = __setMockPlugins;
 
 // Rewire so PluginSDK loads the mocked version. But still provide access
 // to original method for PluginTestUtils to load actual plugins
-Plugins.__getAvailablePlugins = () => pluginsList;
+Plugins.__getAvailablePlugins = function () {
+  return {
+    pluginsList,
+    externalPluginsList
+  };
+};
+
 Plugins.getAvailablePlugins = __getAvailablePlugins;
 Plugins.requireModule = __requireModule;
 Plugins.__setMockModule = __setMockModule;

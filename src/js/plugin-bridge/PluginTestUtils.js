@@ -27,17 +27,23 @@ function loadPlugins(plugins) {
 function loadPluginsByName(plugins) {
   let pluginsToLoad = {};
 
-  let availablePlugins = Loader.__getAvailablePlugins();
+  let {pluginsList, externalPluginsList} = Loader.__getAvailablePlugins();
+
   Object.keys(plugins).forEach(function (pluginID) {
 
-    if (!(pluginID in availablePlugins)) {
+    if (!(pluginID in pluginsList) && !(pluginID in externalPluginsList)) {
       throw new Error(`${pluginID} does not exist. Failed to load.`);
     }
-    // Automatically unMock the plugin seeing we obviously need it's functionality
-    unMockPlugin(pluginID);
-
+    let path;
+    // Default to always selecting internal plugin if same pluginID
+    // exists in external plugins. This makes mocking easier.
+    if (pluginID in pluginsList) {
+      path = pluginsList[pluginID];
+    } else {
+      path = externalPluginsList[pluginID];
+    }
     pluginsToLoad[pluginID] = {
-      module: availablePlugins[pluginID],
+      module: path,
       config: plugins[pluginID]
     };
   });

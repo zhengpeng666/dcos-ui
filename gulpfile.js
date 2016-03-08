@@ -2,7 +2,9 @@
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync');
 var colorLighten = require('less-color-lighten');
+var changed = require('gulp-changed');
 var connect = require('gulp-connect');
+var del = require('del');
 var eslint = require('gulp-eslint');
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
@@ -15,6 +17,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var webpack = require('webpack');
 
+var appConfig = require('./src/js/config/Config');
 var config = require('./.build.config');
 var packageInfo = require('./package');
 var webpackConfig = require('./.webpack.config');
@@ -22,11 +25,32 @@ var webpackConfig = require('./.webpack.config');
 var development = process.env.NODE_ENV === 'development';
 var devBuild = development || (process.env.NODE_ENV === 'testing');
 
+if (devBuild) {
+  appConfig = require('./src/js/config/Config.dev');
+}
+var pluginsGlob = appConfig.externalPluginsDirectory + '/**/*.*';
+
 function browserSyncReload() {
   if (development) {
     browserSync.reload();
   }
 }
+// Clean out plugins in destination folder
+gulp.task('clean:external-plugins', function () {
+  return del([config.dirs.pluginsTmp + '/**/*']);
+});
+// Copy over all
+gulp.task('copy:external-plugins', ['clean:external-plugins'], function () {
+  return gulp.src([pluginsGlob])
+    .pipe(gulp.dest(config.dirs.pluginsTmp));
+});
+
+// Copy over changed files
+gulp.task('copy:changed-external-plugins', function () {
+  return gulp.src([pluginsGlob])
+    .pipe(changed(config.dirs.pluginsTmp))
+    .pipe(gulp.dest(config.dirs.pluginsTmp));
+});
 
 gulp.task('browsersync', function () {
   browserSync.init({
@@ -126,6 +150,7 @@ gulp.task('watch', function () {
   gulp.watch(config.files.srcHTML, ['html']);
   gulp.watch(config.dirs.srcCSS + '/**/*.less', ['less']);
   gulp.watch(config.dirs.srcImg + '/**/*.*', ['images']);
+  gulp.watch(pluginsGlob, ['copy:changed-external-plugins']);
   // Why aren't we watching any JS files? Because we use webpack's
   // internal watch, which is faster due to insane caching.
 });
@@ -138,7 +163,7 @@ gulp.task('global-js', function () {
 });
 
 // Use webpack to compile jsx into js.
-gulp.task('webpack', function (callback) {
+gulp.task('webpack', ['copy:external-plugins'], function (callback) {
   var isFirstRun = true;
 
   webpack(webpackConfig, function (err, stats) {

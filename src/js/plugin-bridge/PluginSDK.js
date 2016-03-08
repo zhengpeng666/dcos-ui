@@ -63,16 +63,32 @@ let Store = createStore(
  */
 const initialize = function (pluginsConfig) {
 
-  let pluginList = Loader.getAvailablePlugins();
+  let {pluginsList, externalPluginsList} = Loader.getAvailablePlugins();
+
   Object.keys(pluginsConfig).forEach(function (pluginID) {
     // Make sure plugin is bundled
-    if (!(pluginID in pluginList)) {
+    if (!(pluginID in pluginsList) && !(pluginID in externalPluginsList)) {
       console.warn(`Plugin ${pluginID} not available in bundle`);
       return;
     }
+    let pluginType;
+    let path;
+    // Default to always selecting internal plugin if same pluginID
+    // exists in external plugins. This makes mocking easier.
+    if (pluginID in pluginsList) {
+      pluginType = 'internalPlugin';
+      path = pluginsList[pluginID];
+    } else {
+      pluginType = 'externalPlugin';
+      path = externalPluginsList[pluginID];
+    }
     // Bootstrap if plugin enabled
     if (pluginsConfig[pluginID] && pluginsConfig[pluginID].enabled) {
-      bootstrapPlugin(pluginID, pluginList[pluginID], pluginsConfig[pluginID]);
+      bootstrapPlugin(
+        pluginID,
+        path,
+        pluginsConfig[pluginID],
+        pluginType);
     }
   });
 
@@ -281,13 +297,14 @@ const getSDK = function (pluginID, config) {
  * @param  {String} pluginID   Plugin's pluginID from config
  * @param  {Module} plugin Plugin module or path to entry point within plugins directory
  * @param  {Object} config Plugin configuration
+ * @param  {String} pluginType - One of 'internal' or 'external'.
  */
-const bootstrapPlugin = function (pluginID, plugin, config) {
+const bootstrapPlugin = function (pluginID, plugin, config, pluginType) {
   // Inject Application key constant and configOptions if specified
   let SDK = getSDK(pluginID, config);
 
   if (typeof plugin === 'string') {
-    plugin = Loader.requireModule('plugins', plugin);
+    plugin = Loader.requireModule(pluginType, plugin);
   }
 
   let pluginReducer = plugin(SDK);
