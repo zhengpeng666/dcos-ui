@@ -130,6 +130,11 @@ gulp.task('watch', function () {
   // internal watch, which is faster due to insane caching.
 });
 
+gulp.task('global-js', function () {
+  return gulp.src(config.dirs.src + '/js/vendor/dygraph-combined.js')
+    .pipe(gulp.dest(config.dirs.dist));
+});
+
 // Use webpack to compile jsx into js.
 gulp.task('webpack', function (callback) {
   var isFirstRun = true;
@@ -159,7 +164,7 @@ gulp.task('webpack', function (callback) {
   });
 });
 
-gulp.task('default', ['webpack', 'eslint', 'replace-js-strings', 'less', 'images', 'html']);
+gulp.task('default', ['webpack', 'global-js', 'eslint', 'replace-js-strings', 'less', 'images', 'html']);
 
 gulp.task('dist', ['default', 'minify-css', 'minify-js']);
 
