@@ -524,6 +524,11 @@ class InstallPackageModal extends
       currentTab === 'reviewAdvancedConfig';
     let isReviewing = isAdvanced || currentTab === 'reviewDefaultConfig';
 
+    let backdropClasses = classNames({
+      'modal-backdrop': true,
+      'default-cursor': isAdvanced
+    });
+
     let modalClasses = classNames('modal', {
       'modal-large': isReviewing,
       'modal-narrow': !isReviewing
@@ -535,6 +540,7 @@ class InstallPackageModal extends
 
     return (
       <Modal
+        backdropClass={backdropClasses}
         bodyClass=""
         closeByBackdropClick={!isAdvanced}
         innerBodyClass="flush-top flush-bottom"
