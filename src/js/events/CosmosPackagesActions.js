@@ -47,7 +47,7 @@ const CosmosPackagesActions = {
       error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_PACKAGES_SEARCH_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr),
+          data: RequestUtil.parseResponseBody(xhr),
           query
         });
       }
@@ -173,6 +173,7 @@ const CosmosPackagesActions = {
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/repository/list`,
       data: JSON.stringify({type}),
+      timeout: REQUEST_TIMEOUT,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_REPOSITORIES_LIST_SUCCESS,
@@ -195,6 +196,7 @@ const CosmosPackagesActions = {
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/repository/add`,
       data: JSON.stringify({name, uri}),
+      timeout: REQUEST_TIMEOUT,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_REPOSITORY_ADD_SUCCESS,
@@ -221,6 +223,7 @@ const CosmosPackagesActions = {
       method: 'POST',
       url: `${Config.rootUrl}${Config.cosmosAPIPrefix}/repository/delete`,
       data: JSON.stringify({name, uri}),
+      timeout: REQUEST_TIMEOUT,
       success: function (response) {
         AppDispatcher.handleServerAction({
           type: REQUEST_COSMOS_REPOSITORY_DELETE_SUCCESS,

@@ -1,10 +1,12 @@
 import _ from 'underscore';
+import {Link} from 'react-router';
 import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
 import React from 'react';
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+import CosmosMessages from '../../constants/CosmosMessages';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
 import FilterInputText from '../../components/FilterInputText';
 import InstallPackageModal from '../../components/modals/InstallPackageModal';
@@ -21,7 +23,7 @@ class PackagesTab extends mixin(StoreMixin) {
     super();
 
     this.state = {
-      hasError: false,
+      errorMessage: false,
       installModalPackage: null,
       isLoading: true,
       sortProp: 'name'
@@ -41,12 +43,12 @@ class PackagesTab extends mixin(StoreMixin) {
     CosmosPackagesStore.fetchAvailablePackages();
   }
 
-  onCosmosPackagesStoreAvailableError() {
-    this.setState({hasError: true});
+  onCosmosPackagesStoreAvailableError(errorMessage) {
+    this.setState({errorMessage});
   }
 
   onCosmosPackagesStoreAvailableSuccess() {
-    this.setState({hasError: false, isLoading: false});
+    this.setState({errorMessage: false, isLoading: false});
   }
 
   handleDetailOpen(cosmosPackage, event) {
@@ -72,7 +74,18 @@ class PackagesTab extends mixin(StoreMixin) {
   }
 
   getErrorScreen() {
-    return <RequestErrorMsg />;
+    let header, message;
+    let error = CosmosMessages[this.state.errorMessage.type];
+    if (error) {
+      header = error.header;
+      message = (
+        <p className="inverse text-align-center flush-bottom">
+          {error.getMessage(this.state.errorMessage.name)}
+        </p>
+      );
+    }
+
+    return <RequestErrorMsg message={message} header={header} />;
   }
 
   getButton(cosmosPackage) {
@@ -145,7 +158,7 @@ class PackagesTab extends mixin(StoreMixin) {
       packageVersion = state.installModalPackage.get('currentVersion');
     }
 
-    if (state.hasError) {
+    if (state.errorMessage) {
       return this.getErrorScreen();
     }
 

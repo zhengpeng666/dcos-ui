@@ -1,14 +1,17 @@
 import classNames from 'classnames';
 import {Confirm, Table} from 'reactjs-components';
+import {Link} from 'react-router';
 import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
 import React from 'react';
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+import CosmosMessages from '../constants/CosmosMessages';
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import PackagesTableHeaderLabels from '../constants/PackagesTableHeaderLabels';
 import ResourceTableUtil from '../utils/ResourceTableUtil';
+import RequestUtil from '../utils/RequestUtil';
 import UniversePackagesList from '../structs/UniversePackagesList';
 
 const METHODS_TO_BIND = [
@@ -169,19 +172,26 @@ class PackagesTable extends mixin(StoreMixin) {
     );
   }
 
+  getErrorMessage() {
+    let {packageUninstallError} = this.state;
+    if (!packageUninstallError) {
+      return null;
+    }
+
+    let error = CosmosMessages[packageUninstallError.type] ||
+      CosmosMessages.default;
+    return (
+      <p className="text-error-state">
+       {error.getMessage(packageUninstallError.name)}
+      </p>
+    );
+  }
+
   getUninstallModalContent() {
-    let {packageUninstallError, packageToUninstall} = this.state;
+    let {packageToUninstall} = this.state;
     let packageLabel = 'This package';
     if (packageToUninstall) {
       packageLabel = packageToUninstall.get('packageDefinition').name;
-    }
-
-    let error = null;
-
-    if (packageUninstallError != null) {
-      error = (
-        <p className="text-error-state">{packageUninstallError}</p>
-      );
     }
 
     return (
@@ -190,7 +200,7 @@ class PackagesTable extends mixin(StoreMixin) {
         <p>
           {`${packageLabel} will be uninstalled from DCOS. All tasks belonging to this package will be killed.`}
         </p>
-        {error}
+        {this.getErrorMessage()}
       </div>
     );
   }
