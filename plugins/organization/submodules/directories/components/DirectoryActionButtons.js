@@ -97,7 +97,7 @@ module.exports = class DirectoryActionButtons extends mixin(StoreMixin) {
         value: ''
       },
       {
-        fieldType: 'text',
+        fieldType: 'password',
         name: 'password',
         placeholder: 'LDAP Password',
         required: true,
