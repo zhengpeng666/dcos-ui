@@ -104,7 +104,7 @@ class ReviewConfig extends React.Component {
     return (
       <div className={this.props.className}>
         {this.getHeader()}
-        <GeminiScrollbar autoshow={true}>
+        <GeminiScrollbar className="modal-content" autoshow={true}>
           <div className="modal-content-inner container container-pod container-pod-short flush-top flush-bottom flex-grow">
             {this.getDefinitionReview()}
           </div>
