@@ -239,7 +239,7 @@ class SchemaForm extends React.Component {
     );
 
     let classSet = classNames({
-      'column-4': !isMobileWidth,
+      'column-4 multiple-form-left-column-container': !isMobileWidth,
       'column-12 mobile-column': isMobileWidth
     });
 
