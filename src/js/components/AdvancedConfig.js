@@ -7,7 +7,7 @@ const METHODS_TO_BIND = [
   'onResize',
   'triggerSubmit'
 ];
-const MOBILE_WIDTH = 1500;
+const MOBILE_WIDTH = 480;
 
 class AdvancedConfig extends React.Component {
   constructor() {
