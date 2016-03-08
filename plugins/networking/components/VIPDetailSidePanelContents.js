@@ -11,7 +11,7 @@ import RequestErrorMsg from '../../../src/js/components/RequestErrorMsg';
 import SidePanelContents from '../../../src/js/components/SidePanelContents';
 import StringUtil from '../../../src/js/utils/StringUtil';
 
-class NetworkSidePanelContents extends SidePanelContents {
+class VIPDetailSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
@@ -163,4 +163,4 @@ class NetworkSidePanelContents extends SidePanelContents {
   }
 }
 
-module.exports = NetworkSidePanelContents;
+module.exports = VIPDetailSidePanelContents;

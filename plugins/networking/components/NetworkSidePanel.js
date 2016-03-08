@@ -4,7 +4,7 @@ import React from 'react';
 
 import HistoryStore from '../../../src/js/stores/HistoryStore';
 import MesosSummaryStore from '../../../src/js/stores/MesosSummaryStore';
-import NetworkSidePanelContents from './NetworkSidePanelContents';
+import VIPDetailSidePanelContents from './VIPDetailSidePanelContents';
 
 const METHODS_TO_BIND = [
   'handlePanelClose'
@@ -62,7 +62,7 @@ class NetworkSidePanel extends React.Component {
     }
 
     return (
-      <NetworkSidePanelContents port={port} vip={vip} protocol={protocol}
+      <VIPDetailSidePanelContents port={port} vip={vip} protocol={protocol}
         parentRouter={this.context.router} />
     );
   }
