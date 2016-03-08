@@ -82,13 +82,13 @@ class SchemaForm extends React.Component {
     }
 
     if (isBlur) {
-      this.validateForm(eventObj.fieldName, isChange);
+      this.validateForm();
       this.props.onChange(this.getDataTriple());
       return;
     }
 
     setTimeout(() => {
-      this.validateForm(eventObj.fieldName, isChange);
+      this.validateForm();
       this.props.onChange(this.getDataTriple());
     });
   }
@@ -122,37 +122,22 @@ class SchemaForm extends React.Component {
     });
   }
 
-  validateForm(fieldName, isKeyDown) {
+  validateForm() {
     let schema = this.props.schema;
     let isValidated = true;
-    let prevDefinition = this.multipleDefinition;
 
     this.buildModel();
     // Reset the definition in order to reset all errors.
     this.multipleDefinition = this.getNewDefinition();
-
     let model = SchemaFormUtil.processFormModel(
       this.model, this.multipleDefinition
     );
 
-    let errors = SchemaFormUtil.validateModelWithSchema(model, schema);
-    errors.forEach((error) => {
+    SchemaFormUtil.validateModelWithSchema(model, schema).forEach((error) => {
       let path = error.path;
-      let prevObj = SchemaFormUtil.getDefinitionFromPath(prevDefinition, path);
       let obj = SchemaFormUtil.getDefinitionFromPath(
         this.multipleDefinition, path
       );
-      let previouslyDidNotHaveErrors = !prevObj.showError;
-
-      // Cases of when to ignore errors.
-      // 1: if the error did not come from the field currently being edited.
-      // 2: if error happened onChange, and there previously were no errors,
-      //    ignore the error. An example of how this is useful is if there is an
-      //    email field; if you begin typing, it shouldn't instantly error.
-      if ((_.last(path) !== fieldName && previouslyDidNotHaveErrors)
-        || obj == null || (isKeyDown && previouslyDidNotHaveErrors)) {
-        return;
-      }
 
       isValidated = false;
       obj.showError = error.message;
