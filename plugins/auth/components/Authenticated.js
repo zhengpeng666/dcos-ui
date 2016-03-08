@@ -1,7 +1,6 @@
 import React from 'react';
 
 import ACLAuthStore from '../stores/ACLAuthStore';
-import {ACL_AUTH_LOGIN_REDIRECT} from '../constants/EventTypes';
 
 let SDK = require('../SDK').getSDK();
 /*
@@ -14,15 +13,7 @@ module.exports = (ComposedComponent) => {
 
     static willTransitionTo(transition) {
       if (!ACLAuthStore.isLoggedIn()) {
-
-        // Store the route we came from
-        SDK.dispatch({
-          type: ACL_AUTH_LOGIN_REDIRECT,
-          loginRedirectRoute: transition.path
-        });
-
-        // Go to login page
-        transition.redirect('/login');
+        SDK.Hooks.doAction('redirectToLogin', transition);
       }
     }
 

@@ -3,6 +3,7 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {Route} from 'react-router';
 
+import {ACL_AUTH_LOGIN_REDIRECT} from './constants/EventTypes';
 import AccessDeniedPage from './components/AccessDeniedPage';
 import ACLAuthConstants from './constants/ACLAuthConstants';
 import Authenticated from './components/Authenticated';
@@ -18,7 +19,8 @@ module.exports = {
 
   actions: [
     'AJAXRequestError',
-    'userLogoutSuccess'
+    'userLogoutSuccess',
+    'redirectToLogin'
   ],
 
   filters: [
@@ -48,6 +50,16 @@ module.exports = {
 
   isEnabled() {
     return this.configuration.enabled;
+  },
+
+  redirectToLogin(transition) {
+    // Store the route we came from
+    SDK.dispatch({
+      type: ACL_AUTH_LOGIN_REDIRECT,
+      loginRedirectRoute: transition.path
+    });
+    // Go to login page
+    transition.redirect('/login');
   },
 
   AJAXRequestError(xhr) {
