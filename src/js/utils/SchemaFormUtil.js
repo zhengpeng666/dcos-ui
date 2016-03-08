@@ -47,21 +47,21 @@ function getThingsToSet(model, path) {
 function processValue(value, valueType) {
   if (valueType === 'integer' || valueType === 'number') {
     if (value !== null && value !== '') {
-      value = Number(value);
-      if (isNaN(value)) {
-        value = null;
+      let parsedNumber = Number(value);
+      if (isNaN(parsedNumber)) {
+        return value;
       }
-    } else {
-      value = null;
+
+      return parsedNumber;
     }
   }
 
   if (value == null || value === '') {
-    value = DEFAULT_FORM_VALUES[valueType];
+    return DEFAULT_FORM_VALUES[valueType];
   }
 
   if (valueType === 'array' && typeof value === 'string') {
-    value = value.split(',')
+    return value.split(',')
       .map(function (val) { return val.trim(); })
       .filter(function (val) { return val !== ''; });
   }

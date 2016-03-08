@@ -74,15 +74,14 @@ class SchemaForm extends React.Component {
   }
 
   handleFormChange(formData, eventObj) {
-    let isCheckboxChange = eventObj.eventType === 'change'
-      && typeof eventObj.fieldValue === 'boolean';
-
-    if (eventObj.eventType !== 'blur' && !isCheckboxChange) {
+    if (eventObj.eventType !== 'change' && eventObj.eventType !== 'blur') {
       return;
     }
 
-    this.validateForm(eventObj.fieldName);
-    this.props.onChange(this.getDataTriple());
+    setTimeout(() => {
+      this.validateForm(eventObj.fieldName, eventObj.eventType === 'change');
+      this.props.onChange(this.getDataTriple());
+    });
   }
 
   handleFormSubmit(formKey, formModel) {
@@ -114,7 +113,7 @@ class SchemaForm extends React.Component {
     });
   }
 
-  validateForm(fieldName) {
+  validateForm(fieldName, isKeyDown) {
     let schema = this.props.schema;
     let isValidated = true;
     let prevDefinition = this.multipleDefinition;
@@ -134,7 +133,15 @@ class SchemaForm extends React.Component {
       let obj = SchemaFormUtil.getDefinitionFromPath(
         this.multipleDefinition, path
       );
-      if ((_.last(path) !== fieldName && !prevObj.showError) || obj == null) {
+      let previouslyDidNotHaveErrors = !prevObj.showError;
+
+      // Cases of when to ignore errors.
+      // 1: if the error did not come from the field currently being edited.
+      // 2: if error happened onChange, and there previously were no errors,
+      //    ignore the error. An example of how this is useful is if there is an
+      //    email field; if you begin typing, it shouldn't instantly error.
+      if ((_.last(path) !== fieldName && previouslyDidNotHaveErrors)
+        || obj == null || (isKeyDown && previouslyDidNotHaveErrors)) {
         return;
       }
 

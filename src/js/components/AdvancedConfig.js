@@ -4,7 +4,6 @@ import SchemaForm from './SchemaForm';
 
 const METHODS_TO_BIND = [
   'getTriggerSubmit',
-  'handleSchemaFormChange',
   'onResize',
   'triggerSubmit'
 ];
@@ -40,11 +39,6 @@ class AdvancedConfig extends React.Component {
     }
   }
 
-  handleSchemaFormChange(isValidated) {
-    let hasFormErrors = !isValidated;
-    this.props.onChange(hasFormErrors);
-  }
-
   triggerSubmit() {
     return this.triggerSchemaSubmit();
   }
@@ -64,7 +58,7 @@ class AdvancedConfig extends React.Component {
           getTriggerSubmit={this.getTriggerSubmit}
           isMobileWidth={this.state.isMobileWidth}
           model={this.props.model}
-          onChange={this.handleSchemaFormChange}
+          onChange={this.props.onChange}
           schema={this.props.schema}
           serviceName={this.props.serviceName}
           serviceImage={this.props.serviceImage}
