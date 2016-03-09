@@ -133,8 +133,8 @@ class VIPDetailSidePanelContents extends SidePanelContents {
       `${this.props.protocol}:${this.props.vip}:${this.props.port}`
     );
 
-    let details = vipDetails.details.map(function (detail) {
-      return <DescriptionList headline={detail.name} hash={detail.labels} />;
+    let details = vipDetails.details.map(function (detail, index) {
+      return <DescriptionList key={index} headline={detail.name} hash={detail.labels} />;
     });
 
     return (

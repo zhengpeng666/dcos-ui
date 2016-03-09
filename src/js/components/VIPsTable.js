@@ -188,7 +188,7 @@ class VIPsTable extends React.Component {
 
   renderVIP(prop, item) {
     let fullVIP = item.fullVIP;
-    let displayedVIP = Hooks.applyFilter('networkingVIPTableLabel', item[prop], fullVIP);
+    let displayedVIP = Hooks.applyFilter('NetworkingVIPTableLabel', item[prop], fullVIP);
 
     return (
       <span>
