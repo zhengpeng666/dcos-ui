@@ -12,6 +12,7 @@ var gutil = require('gulp-util');
 var imagemin = require('gulp-imagemin');
 var less = require('gulp-less');
 var minifyCSS = require('gulp-cssnano');
+var mkdirp = require('mkdirp');
 var replace = require('gulp-replace');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
@@ -35,6 +36,11 @@ function browserSyncReload() {
     browserSync.reload();
   }
 }
+// Make temp plugins directory if doesn't exist
+mkdirp(config.dirs.pluginsTmp, function () {
+  console.log('Created ' + config.dirs.pluginsTmp);
+});
+
 // Clean out plugins in destination folder
 gulp.task('clean:external-plugins', function () {
   return del([config.dirs.pluginsTmp + '/**/*']);
