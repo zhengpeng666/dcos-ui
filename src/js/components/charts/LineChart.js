@@ -6,15 +6,15 @@ class LineChart extends React.Component {
   componentDidMount() {
     let el = ReactDOM.findDOMNode(this);
     let options = _.extend({},
-      LineChart.defaultProps.options,
-      this.props.data
+      LineChart.defaultProps.chartOptions,
+      this.props.chartOptions
     );
 
     this.graph = new Dygraph(el, this.getGraphData(), options);
   }
 
   componentWillUpdate() {
-    this.graph.updateOptions({'file': this.getGraphData()});
+    this.graph.updateOptions({file: this.getGraphData()});
   }
 
   getGraphData() {
@@ -33,8 +33,8 @@ class LineChart extends React.Component {
    */
   transpose(labels, data) {
     return labels.map(function (label, labelIndex) {
-      var xPoints = [label];
-      for (var dataIndex = 0; dataIndex < data.length; dataIndex++) {
+      let xPoints = [label];
+      for (let dataIndex = 0; dataIndex < data.length; dataIndex++) {
         xPoints.push(data[dataIndex][labelIndex]);
       }
 
