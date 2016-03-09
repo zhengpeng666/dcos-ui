@@ -1,3 +1,8 @@
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('networking', {enabled: true});
+require('../../SDK').setSDK(SDK);
+
 var Backend = require('../Backend');
 var BackendList = require('../BackendList');
 
