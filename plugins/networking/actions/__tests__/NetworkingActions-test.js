@@ -1,12 +1,13 @@
-jest.dontMock('../../../../src/js/events/AppDispatcher');
-jest.dontMock('../NetworkingActions');
-jest.dontMock('../../../../src/js/config/Config');
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('networking', {enabled: true});
+
+require('../../SDK').setSDK(SDK);
 
 let ActionTypes = require('../../constants/ActionTypes');
-let AppDispatcher = require('../../../../src/js/events/AppDispatcher');
-let Config = require('../../../../src/js/config/Config');
 let NetworkingActions = require('../NetworkingActions');
-let RequestUtil = require('../../../../src/js/utils/RequestUtil');
+
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
 describe('NetworkingActions', function () {
 
@@ -32,10 +33,10 @@ describe('NetworkingActions', function () {
 
     it('dispatches the correct action when successful', function () {
       NetworkingActions.fetchVIPs();
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'networking',
           type: ActionTypes.REQUEST_NETWORKING_VIPS_SUCCESS,
           data: {bar: 'baz'}
         });
@@ -46,10 +47,10 @@ describe('NetworkingActions', function () {
 
     it('dispatches the correct action when unsuccessful', function () {
       NetworkingActions.fetchVIPs();
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'networking',
           type: ActionTypes.REQUEST_NETWORKING_VIPS_ERROR,
           data: {bar: 'baz'}
         });
@@ -70,10 +71,10 @@ describe('NetworkingActions', function () {
 
     it('dispatches the correct action when successful', function () {
       NetworkingActions.fetchVIPDetail('foo', 'bar', 'baz');
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'networking',
           type: ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_SUCCESS,
           data: {bar: 'baz'},
           vip: 'foo:bar:baz'
@@ -85,10 +86,10 @@ describe('NetworkingActions', function () {
 
     it('dispatches the correct action when unsuccessful', function () {
       NetworkingActions.fetchVIPDetail('foo', 'bar', 'baz');
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'networking',
           type: ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_ERROR,
           data: {bar: 'baz'},
           vip: 'foo:bar:baz'
@@ -117,10 +118,10 @@ describe('NetworkingActions', function () {
 
     it('dispatches the correct action when successful', function () {
       NetworkingActions.fetchVIPBackendConnections('foo', 'bar', 'baz');
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'networking',
           type: ActionTypes.REQUEST_NETWORKING_BACKEND_CONNECTIONS_SUCCESS,
           data: {bar: 'baz'},
           vip: 'foo:bar:baz'
@@ -132,10 +133,10 @@ describe('NetworkingActions', function () {
 
     it('dispatches the correct action when unsuccessful', function () {
       NetworkingActions.fetchVIPBackendConnections('foo', 'bar', 'baz');
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'networking',
           type: ActionTypes.REQUEST_NETWORKING_BACKEND_CONNECTIONS_ERROR,
           data: {bar: 'baz'},
           vip: 'foo:bar:baz'
@@ -164,10 +165,10 @@ describe('NetworkingActions', function () {
 
     it('dispatches the correct action when successful', function () {
       NetworkingActions.fetchNodeMemberships();
-      let id = AppDispatcher.register(function (payload) {
-        let action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'networking',
           type: ActionTypes.REQUEST_NETWORKING_NODE_MEMBERSHIPS_SUCCESS,
           data: {bar: 'baz'}
         });
@@ -178,10 +179,10 @@ describe('NetworkingActions', function () {
 
     it('dispatches the correct action when unsuccessful', function () {
       NetworkingActions.fetchNodeMemberships();
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
+          __origin: 'networking',
           type: ActionTypes.REQUEST_NETWORKING_NODE_MEMBERSHIPS_ERROR,
           data: {bar: 'baz'}
         });

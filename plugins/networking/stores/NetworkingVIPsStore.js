@@ -1,34 +1,45 @@
-import {Store} from 'mesosphere-shared-reactjs';
+import {
+  NETWORKING_VIPS_CHANGE,
+  NETWORKING_VIPS_REQUEST_ERROR,
+  NETWORKING_VIP_DETAIL_CHANGE,
+  NETWORKING_VIP_DETAIL_REQUEST_ERROR,
+} from '../constants/EventTypes';
 
-import ActionTypes from '../constants/ActionTypes';
-import AppDispatcher from '../../../src/js/events/AppDispatcher';
-import EventTypes from '../constants/EventTypes';
-import GetSetMixin from '../../../src/js/mixins/GetSetMixin';
+import {
+  REQUEST_NETWORKING_VIPS_SUCCESS,
+  REQUEST_NETWORKING_VIPS_ERROR,
+  REQUEST_NETWORKING_VIP_DETAIL_SUCCESS,
+  REQUEST_NETWORKING_VIP_DETAIL_ERROR
+} from '../constants/ActionTypes';
+
 import NetworkingActions from '../actions/NetworkingActions';
 import VIPDetail from '../structs/VIPDetail';
-import {SERVER_ACTION} from '../../../src/js/constants/ActionTypes';
 
-let NetworkingVIPsStore = Store.createStore({
+let SDK = require('../SDK').getSDK();
+
+let NetworkingVIPsStore = SDK.createStore({
   storeID: 'networkingVIPs',
 
-  mixins: [GetSetMixin],
-
-  getSet_data: {
-    vips: [],
-    vipDetail: {}
-  },
-
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
+  mixinEvents: {
+    events: {
+      success: NETWORKING_VIPS_CHANGE,
+      error: NETWORKING_VIPS_REQUEST_ERROR,
+      detailSuccess: NETWORKING_VIP_DETAIL_CHANGE,
+      detailError: NETWORKING_VIP_DETAIL_REQUEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
   },
 
   fetchVIPs: NetworkingActions.fetchVIPs,
 
   fetchVIPDetail: NetworkingActions.fetchVIPDetail,
+
+  get(prop) {
+    return SDK.Store.getOwnState()[prop];
+  },
 
   getVIPDetail: function (vipString) {
     let vipDetail = this.get('vipDetail')[vipString];
@@ -41,49 +52,47 @@ let NetworkingVIPsStore = Store.createStore({
   },
 
   processVIPs: function (vips) {
-    this.set({vips});
-    this.emit(EventTypes.NETWORKING_VIPS_CHANGE);
+    SDK.dispatch({
+      type: NETWORKING_VIPS_CHANGE,
+      vips
+    });
+    this.emit(NETWORKING_VIPS_CHANGE);
   },
 
   processVIPsError: function (error) {
-    this.emit(EventTypes.NETWORKING_VIPS_REQUEST_ERROR, error);
+    this.emit(NETWORKING_VIPS_REQUEST_ERROR, error);
   },
 
   processVIPDetail: function (vip, vipDetail) {
     let currentVIPDetail = this.get('vipDetail');
     currentVIPDetail[vip] = vipDetail;
-    this.set({vipDetail: currentVIPDetail});
-    this.emit(EventTypes.NETWORKING_VIP_DETAIL_CHANGE, vip);
+    SDK.dispatch({
+      type: NETWORKING_VIP_DETAIL_CHANGE,
+      vipDetail: currentVIPDetail
+    });
+    this.emit(NETWORKING_VIP_DETAIL_CHANGE, vip);
   },
 
   processVIPDetailError: function (vip, error) {
-    this.emit(EventTypes.NETWORKING_VIP_DETAIL_REQUEST_ERROR, vip, error);
-  },
+    this.emit(NETWORKING_VIP_DETAIL_REQUEST_ERROR, vip, error);
+  }
+});
 
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    if (payload.source !== SERVER_ACTION) {
-      return false;
-    }
-
-    let action = payload.action;
-    switch (action.type) {
-      case ActionTypes.REQUEST_NETWORKING_VIPS_SUCCESS:
-        NetworkingVIPsStore.processVIPs(action.data);
-        break;
-      case ActionTypes.REQUEST_NETWORKING_VIPS_ERROR:
-        NetworkingVIPsStore.processVIPsError(action.data);
-        break;
-      case ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_SUCCESS:
-        NetworkingVIPsStore.processVIPDetail(action.vip, action.data);
-        break;
-      case ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_ERROR:
-        NetworkingVIPsStore.processVIPDetailError(action.vip, action.data);
-        break;
-    }
-
-    return true;
-  })
-
+SDK.onDispatch(function (action) {
+  switch (action.type) {
+    case REQUEST_NETWORKING_VIPS_SUCCESS:
+      NetworkingVIPsStore.processVIPs(action.data);
+      break;
+    case REQUEST_NETWORKING_VIPS_ERROR:
+      NetworkingVIPsStore.processVIPsError(action.data);
+      break;
+    case REQUEST_NETWORKING_VIP_DETAIL_SUCCESS:
+      NetworkingVIPsStore.processVIPDetail(action.vip, action.data);
+      break;
+    case REQUEST_NETWORKING_VIP_DETAIL_ERROR:
+      NetworkingVIPsStore.processVIPDetailError(action.vip, action.data);
+      break;
+  }
 });
 
 module.exports = NetworkingVIPsStore;

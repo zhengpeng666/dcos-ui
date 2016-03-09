@@ -7,28 +7,20 @@ import NetworkSidePanel from './components/NetworkSidePanel';
 let SDK = require('./SDK').getSDK();
 
 module.exports = {
-  /**
-   * @param  {Object} Hooks The Hooks API
-   */
-  initialize(Hooks) {
-    SDK.Hooks.addFilter('getNetworkingPageContent', this.addPageContent.bind(this));
-    SDK.Hooks.addFilter('getNetworkingChildRoutes', this.addSubRoutes.bind(this));
-    SDK.Hooks.addFilter('networkingVIPTableLabel', this.addVIPDetailLink.bind(this));
+
+  filters: [
+    'NetworkingPageContent',
+    'NetworkingChildRoutes',
+    'NetworkingVIPTableLabel'
+  ],
+
+  initialize() {
+    this.filters.forEach(filter => {
+      SDK.Hooks.addFilter(filter, this[filter].bind(this));
+    });
   },
 
-  routes: {
-    route: {
-      children: [
-        {
-          type: Route,
-          name: 'network-panel',
-          path: 'vip-detail/:vip/:protocol/:port'
-        }
-      ]
-    }
-  },
-
-  addPageContent(content, props, openedPage) {
+  NetworkingPageContent(content, props, openedPage) {
     return (
       <div>
         {content}
@@ -38,12 +30,16 @@ module.exports = {
     );
   },
 
-  addSubRoutes(route) {
-    route.children = this.routes.route.children;
+  NetworkingChildRoutes(route) {
+    route.children = [{
+      type: Route,
+      name: 'network-panel',
+      path: 'vip-detail/:vip/:protocol/:port'
+    }];
     return route;
   },
 
-  addVIPDetailLink(label, fullVIP) {
+  NetworkingVIPTableLabel(label, fullVIP) {
     return (
       <Link to="network-panel" params={{
           protocol: fullVIP.protocol,

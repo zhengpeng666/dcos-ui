@@ -1,18 +1,17 @@
-jest.dontMock('../BackendsTable');
-jest.dontMock('../../stores/NetworkingVIPsStore');
 jest.dontMock('../../../../tests/_fixtures/networking/networking-vip-detail.json');
 
-var JestUtil = require('../../../../src/js/utils/JestUtil');
+import PluginTestUtils from 'PluginTestUtils';
 
-JestUtil.unMockStores(['NetworkingVIPsStore']);
-require('../../../../src/js/utils/StoreMixinConfig');
+let SDK = PluginTestUtils.getSDK('networking', {enabled: true});
 
-var React = require('react');
+require('../../SDK').setSDK(SDK);
+
+/* eslint-disable no-unused-vars */
+import React from 'react';
+/* eslint-enable no-unused-vars */
 var ReactDOM = require('react-dom');
 
 var BackendsTable = require('../BackendsTable');
-var NetworkingVIPsStore =
-require('../../stores/NetworkingVIPsStore');
 var VIPDetail = require('../../structs/VIPDetail');
 
 const vipDetailFixture =
@@ -77,11 +76,11 @@ describe('BackendsTable', function () {
     it('should return an array of objects with the correct properties',
       function () {
 
-      expect(Object.keys(this.processedBackends[0])).toEqual([
-        'ip', 'port', 'successLastMinute', 'failLastMinute', 'p99Latency',
-        'taskID', 'frameworkID'
-      ]);
-    });
+        expect(Object.keys(this.processedBackends[0])).toEqual([
+          'ip', 'port', 'successLastMinute', 'failLastMinute', 'p99Latency',
+          'taskID', 'frameworkID'
+        ]);
+      });
   });
 
   describe('#renderPercentage', function () {

@@ -1,10 +1,11 @@
-import {Confirm, SidePanel} from 'reactjs-components';
-import mixin from 'reactjs-mixin';
+import {SidePanel} from 'reactjs-components';
 import React from 'react';
 
 import HistoryStore from '../../../src/js/stores/HistoryStore';
 import MesosSummaryStore from '../../../src/js/stores/MesosSummaryStore';
 import VIPDetailSidePanelContents from './VIPDetailSidePanelContents';
+
+let SDK = require('../SDK').getSDK();
 
 const METHODS_TO_BIND = [
   'handlePanelClose'

@@ -1,19 +1,22 @@
-jest.dontMock('../NetworkingVIPsStore');
-jest.dontMock('../../../../src/js/config/Config');
-jest.dontMock('../../../../src/js/events/AppDispatcher');
-jest.dontMock('../../actions/NetworkingActions');
-jest.dontMock('../../../../src/js/mixins/GetSetMixin');
 jest.dontMock('../../../../tests/_fixtures/networking/networking-vips.json');
 
 var _ = require('underscore');
 
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('networking', {enabled: true});
+
+require('../../SDK').setSDK(SDK);
+
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
+
 var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../../../src/js/events/AppDispatcher');
-var Config = require('../../../../src/js/config/Config');
 var EventTypes = require('../../constants/EventTypes');
 var NetworkingVIPsStore = require('../NetworkingVIPsStore');
-var RequestUtil = require('../../../../src/js/utils/RequestUtil');
 var vipsFixture = require('../../../../tests/_fixtures/networking/networking-vips.json');
+var NetworkingReducer = require('../../Reducer');
+
+PluginTestUtils.addReducer('networking', NetworkingReducer);
 
 describe('NetworkingVIPsStore', function () {
 
@@ -44,7 +47,7 @@ describe('NetworkingVIPsStore', function () {
   describe('processVIPs', function () {
 
     it('stores VIPs when event is dispatched', function () {
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_NETWORKING_VIPS_SUCCESS,
         data: [{ip: 'foo', port: 'bar', protocol: 'baz'}]
       });
@@ -58,7 +61,7 @@ describe('NetworkingVIPsStore', function () {
     it('dispatches the correct event upon VIP request success', function () {
       var mockedFn = jest.genMockFunction();
       NetworkingVIPsStore.addChangeListener(EventTypes.NETWORKING_VIPS_CHANGE, mockedFn);
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_NETWORKING_VIPS_SUCCESS,
         data: [{ip: 'foo', port: 'bar', protocol: 'baz'}]
       });
@@ -76,7 +79,7 @@ describe('NetworkingVIPsStore', function () {
         EventTypes.NETWORKING_VIPS_REQUEST_ERROR,
         mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_NETWORKING_VIPS_ERROR,
         data: 'foo'
       });
@@ -90,7 +93,7 @@ describe('NetworkingVIPsStore', function () {
   describe('processVIPDetail', function () {
 
     it('stores VIP detail in a hash with the VIP as the key', function () {
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_SUCCESS,
         data: {qux: 'quux'},
         vip: 'foo:bar:baz'
@@ -101,7 +104,7 @@ describe('NetworkingVIPsStore', function () {
     });
 
     it('stores VIP detail when event is dispatched', function () {
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_SUCCESS,
         data: {qux: 'quux', grault: 'garply', waldo: 'fred'},
         vip: 'foo:bar:baz'
@@ -122,7 +125,7 @@ describe('NetworkingVIPsStore', function () {
         EventTypes.NETWORKING_VIP_DETAIL_CHANGE,
         mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_SUCCESS,
         data: {qux: 'quux', grault: 'garply', waldo: 'fred'},
         vip: 'foo:bar:baz'
@@ -142,7 +145,7 @@ describe('NetworkingVIPsStore', function () {
         EventTypes.NETWORKING_VIP_DETAIL_REQUEST_ERROR,
         mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_ERROR,
         data: 'foo',
         vip: 'foo:bar:baz'

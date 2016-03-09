@@ -12,7 +12,7 @@ let RouteFactory = {
       handler: NetworkPage
     };
 
-    return Hooks.applyFilter('getNetworkingChildRoutes', networkingRoute);
+    return Hooks.applyFilter('NetworkingChildRoutes', networkingRoute);
   },
 
   getRoutes() {

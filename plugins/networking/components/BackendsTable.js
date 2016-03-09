@@ -3,10 +3,12 @@ import React from 'react';
 import {Table} from 'reactjs-components';
 
 import CompositeState from '../../../src/js/structs/CompositeState';
-import FilterInputText from '../../../src/js/components/FilterInputText';
-import MesosStateStore from '../../../src/js/stores/MesosStateStore';
-import StringUtil from '../../../src/js/utils/StringUtil';
-import TableUtil from '../../../src/js/utils/TableUtil';
+
+let SDK = require('../SDK').getSDK();
+
+let {StringUtil, FilterInputText} = SDK.get([
+  'StringUtil', 'FilterInputText'
+]);
 
 const COLUMNS_TO_HIDE_MINI = [
   'failurePerecent',

@@ -3,13 +3,13 @@ const React = require('react');
 /*eslint-enable no-unused-vars*/
 
 import BackendsTable from './BackendsTable';
-import DescriptionList from '../../../src/js/components/DescriptionList';
-import MesosStateStore from '../../../src/js/stores/MesosStateStore';
-import MesosSummaryStore from '../../../src/js/stores/MesosSummaryStore';
 import NetworkingVIPsStore from '../stores/NetworkingVIPsStore';
-import RequestErrorMsg from '../../../src/js/components/RequestErrorMsg';
-import SidePanelContents from '../../../src/js/components/SidePanelContents';
-import StringUtil from '../../../src/js/utils/StringUtil';
+
+let SDK = require('../SDK').getSDK();
+
+let {SidePanelContents, RequestErrorMsg, DescriptionList} = SDK.get([
+  'SidePanelContents', 'RequestErrorMsg', 'DescriptionList'
+]);
 
 class VIPDetailSidePanelContents extends SidePanelContents {
   constructor() {

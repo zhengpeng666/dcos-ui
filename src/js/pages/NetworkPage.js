@@ -163,7 +163,7 @@ class NetworkPage extends mixin(StoreMixin) {
     } else if (this.isLoading()) {
       content = this.getLoadingScreen();
     } else {
-      content = Hooks.applyFilter('getNetworkingPageContent',
+      content = Hooks.applyFilter('NetworkingPageContent',
         this.getNetworkPageContent(), this.props.params, 'network');
     }
 

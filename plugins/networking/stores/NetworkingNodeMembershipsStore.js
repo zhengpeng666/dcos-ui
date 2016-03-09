@@ -1,58 +1,59 @@
-import {Store} from 'mesosphere-shared-reactjs';
+import {
+  NETWORKING_NODE_MEMBERSHIP_CHANGE,
+  NETWORKING_NODE_MEMBERSHIP_REQUEST_ERROR
+} from '../constants/EventTypes';
 
-import ActionTypes from '../constants/ActionTypes';
-import AppDispatcher from '../../../src/js/events/AppDispatcher';
-import EventTypes from '../constants/EventTypes';
-import GetSetMixin from '../../../src/js/mixins/GetSetMixin';
+import {
+  REQUEST_NETWORKING_NODE_MEMBERSHIPS_SUCCESS,
+  REQUEST_NETWORKING_NODE_MEMBERSHIPS_ERROR
+} from '../constants/ActionTypes';
+
 import NetworkingActions from '../actions/NetworkingActions';
-import {SERVER_ACTION} from '../../../src/js/constants/ActionTypes';
 
-let NetworkingNodeMembershipsStore = Store.createStore({
+let SDK = require('../SDK').getSDK();
+
+let NetworkingNodeMembershipsStore = SDK.createStore({
   storeID: 'networkingNodeMemberships',
 
-  mixins: [GetSetMixin],
-
-  getSet_data: {
-    nodeMemberships: []
+  mixinEvents: {
+    events: {
+      success: NETWORKING_NODE_MEMBERSHIP_CHANGE,
+      error: NETWORKING_NODE_MEMBERSHIP_REQUEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
   },
 
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
+  get(prop) {
+    return SDK.Store.getOwnState()[prop];
   },
 
   fetchNodeMemberships: NetworkingActions.fetchNodeMemberships,
 
   processNodeMemberships: function (nodeMemberships) {
-    this.set({nodeMemberships});
-    this.emit(EventTypes.NETWORKING_NODE_MEMBERSHIP_CHANGE);
+    SDK.dispatch({
+      type: NETWORKING_NODE_MEMBERSHIP_CHANGE,
+      nodeMemberships
+    });
+    this.emit(NETWORKING_NODE_MEMBERSHIP_CHANGE);
   },
 
   processNodeMembershipsError: function (error) {
-    this.emit(EventTypes.NETWORKING_NODE_MEMBERSHIP_REQUEST_ERROR, error);
-  },
+    this.emit(NETWORKING_NODE_MEMBERSHIP_REQUEST_ERROR, error);
+  }
+});
 
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    if (payload.source !== SERVER_ACTION) {
-      return false;
-    }
-
-    let action = payload.action;
-    switch (action.type) {
-      case ActionTypes.REQUEST_NETWORKING_NODE_MEMBERSHIPS_SUCCESS:
-        NetworkingNodeMembershipsStore.processNodeMemberships(action.data);
-        break;
-      case ActionTypes.REQUEST_NETWORKING_NODE_MEMBERSHIPS_ERROR:
-        NetworkingNodeMembershipsStore.processNodeMembershipsError(action.data);
-        break;
-    }
-
-    return true;
-  })
-
+SDK.onDispatch(function (action) {
+  switch (action.type) {
+    case REQUEST_NETWORKING_NODE_MEMBERSHIPS_SUCCESS:
+      NetworkingNodeMembershipsStore.processNodeMemberships(action.data);
+      break;
+    case REQUEST_NETWORKING_NODE_MEMBERSHIPS_ERROR:
+      NetworkingNodeMembershipsStore.processNodeMembershipsError(action.data);
+      break;
+  }
 });
 
 module.exports = NetworkingNodeMembershipsStore;
