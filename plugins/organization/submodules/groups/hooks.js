@@ -9,10 +9,6 @@ import GroupsTab from './pages/GroupsTab';
 let SDK = require('../../SDK').getSDK();
 
 module.exports = {
-  configuration: {
-    enabled: false
-  },
-
   appendRoutes(route) {
     route.routes.push({
       type: Route,
