@@ -11,8 +11,8 @@ import {
 let SDK = require('../../SDK').getSDK();
 
 const initialState = {
-  list: [],
-  byId: {},
+  users: [],
+  userDetail: {},
   usersFetching: {}
 };
 
@@ -23,10 +23,10 @@ module.exports = function (state = initialState, action) {
 
   switch (action.type) {
     case ACL_USERS_CHANGE:
-      return _.extend({}, state, {list: action.users});
+      return _.extend({}, state, {users: action.users});
 
     case ACL_USER_SET_USER:
-      return _.extend({}, state, {byId: action.users});
+      return _.extend({}, state, {userDetail: action.users});
 
     case ACL_USER_DETAILS_FETCH_START:
     case ACL_USER_DETAILS_FETCHED_SUCCESS:

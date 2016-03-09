@@ -73,7 +73,7 @@ var ACLUserStore = SDK.createStore({
   },
 
   getUserRaw: function (userID) {
-    return this.get('byId')[userID];
+    return this.get('userDetail')[userID];
   },
 
   getUser: function (userID) {
@@ -81,7 +81,7 @@ var ACLUserStore = SDK.createStore({
   },
 
   setUser: function (userID, user) {
-    let users = this.get('byId');
+    let users = this.get('userDetail');
     users[userID] = user;
     SDK.dispatch({
       type: ACL_USER_SET_USER,

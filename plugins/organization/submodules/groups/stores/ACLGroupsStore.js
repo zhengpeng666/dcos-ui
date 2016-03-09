@@ -31,7 +31,7 @@ const ACLGroupsStore = SDK.createStore({
   fetchGroups: ACLGroupsActions.fetch,
 
   getGroups() {
-    return new GroupsList({items: SDK.Store.getOwnState().groups.list});
+    return new GroupsList({items: SDK.Store.getOwnState().groups.groups});
   },
 
   processGroups: function (groups) {

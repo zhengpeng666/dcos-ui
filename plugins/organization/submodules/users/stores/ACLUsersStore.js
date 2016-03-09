@@ -31,7 +31,7 @@ const ACLUsersStore = SDK.createStore({
 
   getUsers() {
     return new UsersList({
-      items: SDK.Store.getOwnState().users.list
+      items: SDK.Store.getOwnState().users.users
     });
   },
 

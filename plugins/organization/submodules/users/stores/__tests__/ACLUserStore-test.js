@@ -79,7 +79,7 @@ describe('ACLUserStore', function () {
 
     it('sets user', function () {
       ACLUserStore.setUser('foo', {bar: 'baz'});
-      expect(ACLUserStore.get('byId')).toEqual({foo: {bar: 'baz'}});
+      expect(ACLUserStore.get('userDetail')).toEqual({foo: {bar: 'baz'}});
     });
 
   });
