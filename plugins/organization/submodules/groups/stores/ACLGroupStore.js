@@ -121,8 +121,8 @@ let ACLGroupStore = SDK.createStore({
    */
   fetchGroupWithDetails: function (groupID) {
     let groupsFetching = this.get('groupsFetching');
-
     groupsFetching[groupID] = {group: false, users: false, permissions: false};
+
     SDK.dispatch({
       type: ACL_GROUP_SET_GROUPS_FETCHING,
       groupsFetching

@@ -12,6 +12,8 @@ import ACLGroupsActions from '../actions/ACLGroupsActions';
 
 import GroupsList from '../structs/GroupsList';
 
+let SDK = require('../../../SDK').getSDK();
+
 const ACLGroupsStore = SDK.createStore({
   storeID: 'groups',
 

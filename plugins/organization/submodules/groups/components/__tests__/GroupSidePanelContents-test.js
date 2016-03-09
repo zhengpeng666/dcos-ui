@@ -49,15 +49,13 @@ describe('GroupSidePanelContents', function () {
   beforeEach(function () {
     this.groupStoreGetGroup = ACLGroupStore.getGroup;
 
-    SDK.Store.getState = function () {
+    PluginTestUtils.addReducer(APPLICATION, function () {
       return {
-        [APPLICATION]: {
-          summary: {
-            statesProcessed: true
-          }
+        summary: {
+          statesProcessed: true
         }
       };
-    };
+    });
 
     ACLGroupStore.getGroup = function (groupID) {
       if (groupID === 'unicode') {
@@ -96,15 +94,13 @@ describe('GroupSidePanelContents', function () {
     });
 
     it('should show loading screen if still waiting on Store', function () {
-      SDK.Store.getState = function () {
+      PluginTestUtils.addReducer(APPLICATION, function () {
         return {
-          [APPLICATION]: {
-            summary: {
-              statesProcessed: false
-            }
+          summary: {
+            statesProcessed: false
           }
         };
-      };
+      });
       var groupID = 'unicode';
       this.instance = ReactDOM.render(
         <GroupSidePanelContents
