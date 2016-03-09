@@ -252,10 +252,9 @@ class BackendsTable extends React.Component {
   }
 
   render() {
-    let {state} = this;
     let backends = this.processBackends(this.props.backends);
 
-    if (state.searchString !== '') {
+    if (this.state.searchString !== '') {
       backends = StringUtil.filterByString(backends, 'ip',
         this.state.searchString);
     }
@@ -267,7 +266,7 @@ class BackendsTable extends React.Component {
         </h3>
         <div className="flex-box control-group">
           <FilterInputText
-            searchString={state.searchString}
+            searchString={this.state.searchString}
             handleFilterChange={this.handleSearchStringChange}
             inverseStyle={false} />
         </div>
