@@ -17,7 +17,8 @@
 
   "globals": {
     "jest": true,
-    "ActiveXObject": true
+    "ActiveXObject": true,
+    "Dygraph": true
   },
 
   "rules": {
