@@ -3,7 +3,6 @@ jest.dontMock('../UserGroupTable');
 jest.dontMock('../../../groups/stores/ACLGroupsStore');
 jest.dontMock('../../../groups/stores/ACLGroupStore');
 jest.dontMock('../../stores/ACLUserStore');
-jest.dontMock('../../../../storeConfig');
 
 import {
   REQUEST_ACL_GROUPS_ERROR,
@@ -20,8 +19,6 @@ import React from 'react';
 
 let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
-
-require('../../../../storeConfig').register();
 
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');

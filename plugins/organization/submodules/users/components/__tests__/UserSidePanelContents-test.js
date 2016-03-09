@@ -1,6 +1,5 @@
 jest.dontMock('../UserSidePanelContents');
 jest.dontMock('../../stores/ACLUserStore');
-jest.dontMock('../../../../storeConfig');
 
 import PluginTestUtils from 'PluginTestUtils';
 
@@ -23,8 +22,6 @@ PluginTestUtils.loadPluginsByName({
 
 let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
-
-require('../../../../storeConfig').register();
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
@@ -34,6 +31,9 @@ import {ACL_USER_DETAILS_FETCHED_ERROR} from '../../constants/EventTypes';
 
 var ACLUserStore = require('../../stores/ACLUserStore');
 var UserSidePanelContents = require('../UserSidePanelContents');
+var OrganizationReducer = require('../../../../Reducer');
+
+PluginTestUtils.addReducer('organization', OrganizationReducer);
 
 var User = require('../../structs/User');
 
@@ -51,15 +51,13 @@ describe('UserSidePanelContents', function () {
 
     this.container = document.createElement('div');
 
-    SDK.Store.getState = function () {
+    PluginTestUtils.addReducer(APPLICATION, function () {
       return {
-        [APPLICATION]: {
-          summary: {
-            statesProcessed: true
-          }
+        summary: {
+          statesProcessed: true
         }
       };
-    };
+    });
 
     ACLUserStore.getUser = function (userID) {
       if (userID === 'unicode') {
@@ -95,15 +93,13 @@ describe('UserSidePanelContents', function () {
     });
 
     it('should show loading screen if still waiting on Store', function () {
-      SDK.Store.getState = function () {
+      PluginTestUtils.addReducer(APPLICATION, function () {
         return {
-          [APPLICATION]: {
-            summary: {
-              statesProcessed: false
-            }
+          summary: {
+            statesProcessed: false
           }
         };
-      };
+      });
       var userID = 'unicode';
 
       var instance = ReactDOM.render(

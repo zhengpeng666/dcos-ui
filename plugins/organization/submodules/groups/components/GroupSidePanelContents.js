@@ -21,7 +21,6 @@ let SDK = require('../../../SDK').getSDK();
 
 let {RequestErrorMsg, SidePanelContents, StringUtil} = SDK.get([
   'RequestErrorMsg', 'SidePanelContents', 'StringUtil']);
-let {APPLICATION} = SDK.constants;
 
 class GroupSidePanelContents extends SidePanelContents {
   constructor() {
@@ -199,7 +198,7 @@ class GroupSidePanelContents extends SidePanelContents {
       return this.getErrorNotice();
     }
     if (group.get('gid') == null ||
-        !SDK.Store.getState()[APPLICATION].summary.statesProcessed) {
+        !SDK.Store.getAppState().summary.statesProcessed) {
       return this.getLoadingScreen();
     }
 

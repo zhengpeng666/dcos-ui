@@ -9,8 +9,8 @@ import {
 let SDK = require('../../SDK').getSDK();
 
 const initialState = {
-  list: [],
-  groups: {},
+  groups: [],
+  groupDetail: {},
   groupsFetching: {}
 };
 
@@ -21,10 +21,10 @@ module.exports = function (state = initialState, action) {
 
   switch (action.type) {
     case ACL_GROUPS_CHANGE:
-      return _.extend({}, state, {list: action.groups});
+      return _.extend({}, state, {groups: action.groups});
 
     case ACL_GROUP_SET_GROUPS:
-      return _.extend({}, state, {groups: action.groups});
+      return _.extend({}, state, {groupDetail: action.groups});
 
     case ACL_GROUP_SET_GROUPS_FETCHING:
       return _.extend({}, state, {groupsFetching: action.groupsFetching});

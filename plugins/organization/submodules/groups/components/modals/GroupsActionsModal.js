@@ -82,7 +82,7 @@ class GroupsActionsModal extends ActionsModal {
   }
 
   getDropdownItems() {
-    let items = ACLUsersStore.get('users').getItems().sort(
+    let items = ACLUsersStore.getUsers().getItems().sort(
       Util.getLocaleCompareSortFn('description')
     );
 

@@ -9,7 +9,6 @@ module.exports = function (PluginSDK) {
   let PluginHooks = require('./hooks');
   let OrganizationReducer = require('./Reducer');
   let UsersHooks = require('./submodules/users/hooks');
-  let StoreConfig = require('./storeConfig');
 
   // Set plugin's hooks
   PluginHooks.initialize();
@@ -17,9 +16,6 @@ module.exports = function (PluginSDK) {
   GroupsHooks.initialize();
   UsersHooks.initialize();
   DirectoriesHooks.initialize();
-
-   // Register our Stores
-  StoreConfig.register();
 
   return OrganizationReducer;
 };

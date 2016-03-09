@@ -22,7 +22,6 @@ let SDK = require('../../../SDK').getSDK();
 
 let {RequestErrorMsg, SidePanelContents, StringUtil} = SDK.get([
   'RequestErrorMsg', 'SidePanelContents', 'StringUtil']);
-let {APPLICATION} = SDK.constants;
 
 class UserSidePanelContents extends SidePanelContents {
   constructor() {
@@ -212,7 +211,7 @@ ${groupLabel}${remote}`
     }
 
     if (user.get('uid') == null ||
-      !SDK.Store.getState()[APPLICATION].summary.statesProcessed) {
+      !SDK.Store.getAppState().summary.statesProcessed) {
       return this.getLoadingScreen();
     }
 

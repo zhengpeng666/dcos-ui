@@ -7,7 +7,6 @@ import ACLGroupStore from '../stores/ACLGroupStore';
 import GroupSidePanelContents from './GroupSidePanelContents';
 
 let SDK = require('../../../SDK').getSDK();
-let {APPLICATION} = SDK.constants;
 
 const METHODS_TO_BIND = [
   'handleDeleteModalOpen',
@@ -95,7 +94,7 @@ class GroupSidePanel extends mixin(StoreMixin) {
   isOpen() {
     return (
       this.props.params.groupID != null
-      && SDK.Store.getState()[APPLICATION].summary.statesProcessed
+      && SDK.Store.getAppState().summary.statesProcessed
     );
   }
 

@@ -85,7 +85,7 @@ let ACLGroupStore = SDK.createStore({
   },
 
   getGroupRaw: function (groupID) {
-    return this.get('groups')[groupID];
+    return this.get('groupDetail')[groupID];
   },
 
   getGroup: function (groupID) {
@@ -93,7 +93,7 @@ let ACLGroupStore = SDK.createStore({
   },
 
   setGroup: function (groupID, group) {
-    let groups = this.get('groups');
+    let groups = this.get('groupDetail');
     groups[groupID] = group;
     SDK.dispatch({
       type: ACL_GROUP_SET_GROUPS,
@@ -121,8 +121,8 @@ let ACLGroupStore = SDK.createStore({
    */
   fetchGroupWithDetails: function (groupID) {
     let groupsFetching = this.get('groupsFetching');
-
     groupsFetching[groupID] = {group: false, users: false, permissions: false};
+
     SDK.dispatch({
       type: ACL_GROUP_SET_GROUPS_FETCHING,
       groupsFetching

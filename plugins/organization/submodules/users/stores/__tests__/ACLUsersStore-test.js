@@ -17,9 +17,11 @@ var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
 var UsersList = require('../../structs/UsersList');
 var {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
+var OrganizationReducer = require('../../../../Reducer');
+
+PluginTestUtils.addReducer('organization', OrganizationReducer);
 
 var usersFixture = require('../../../../../../tests/_fixtures/acl/users-unicode.json');
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 describe('ACLUsersStore', function () {
 
@@ -38,26 +40,26 @@ describe('ACLUsersStore', function () {
   it('should return an instance of UsersList', function () {
     Config.useFixtures = true;
     ACLUsersStore.fetchUsers();
-    var users = ACLUsersStore.get('users');
+    var users = ACLUsersStore.getUsers();
     expect(users instanceof UsersList).toBeTruthy();
   });
 
   it('should return all of the users it was given', function () {
     Config.useFixtures = true;
     ACLUsersStore.fetchUsers();
-    var users = ACLUsersStore.get('users').getItems();
+    var users = ACLUsersStore.getUsers().getItems();
     expect(users.length).toEqual(this.usersFixture.array.length);
   });
 
   describe('dispatcher', function () {
 
     it('stores users when event is dispatched', function () {
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_USERS_SUCCESS,
         data: [{gid: 'foo', bar: 'baz'}]
       });
 
-      var users = ACLUsersStore.get('users').getItems();
+      var users = ACLUsersStore.getUsers().getItems();
       expect(users[0].gid).toEqual('foo');
       expect(users[0].bar).toEqual('baz');
     });
@@ -65,7 +67,7 @@ describe('ACLUsersStore', function () {
     it('dispatches the correct event upon success', function () {
       var mockedFn = jest.genMockFunction();
       ACLUsersStore.addChangeListener(EventTypes.ACL_USERS_CHANGE, mockedFn);
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_USERS_SUCCESS,
         data: [{gid: 'foo', bar: 'baz'}]
       });
@@ -79,7 +81,7 @@ describe('ACLUsersStore', function () {
         EventTypes.ACL_USERS_REQUEST_ERROR,
         mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_USERS_ERROR,
         data: 'foo'
       });

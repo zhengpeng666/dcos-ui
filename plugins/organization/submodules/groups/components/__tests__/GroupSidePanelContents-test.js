@@ -1,6 +1,5 @@
 jest.dontMock('../GroupSidePanelContents');
 jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../../../storeConfig');
 
 /* eslint-disable no-unused-vars */
 var React = require('react');
@@ -29,8 +28,6 @@ PluginTestUtils.loadPluginsByName({
 let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 
-require('../../../../storeConfig').register();
-
 let ACLGroupStore = require('../../stores/ACLGroupStore');
 let EventTypes = require('../../constants/EventTypes');
 let GroupSidePanelContents = require('../GroupSidePanelContents');
@@ -52,15 +49,13 @@ describe('GroupSidePanelContents', function () {
   beforeEach(function () {
     this.groupStoreGetGroup = ACLGroupStore.getGroup;
 
-    SDK.Store.getState = function () {
+    PluginTestUtils.addReducer(APPLICATION, function () {
       return {
-        [APPLICATION]: {
-          summary: {
-            statesProcessed: true
-          }
+        summary: {
+          statesProcessed: true
         }
       };
-    };
+    });
 
     ACLGroupStore.getGroup = function (groupID) {
       if (groupID === 'unicode') {
@@ -99,15 +94,13 @@ describe('GroupSidePanelContents', function () {
     });
 
     it('should show loading screen if still waiting on Store', function () {
-      SDK.Store.getState = function () {
+      PluginTestUtils.addReducer(APPLICATION, function () {
         return {
-          [APPLICATION]: {
-            summary: {
-              statesProcessed: false
-            }
+          summary: {
+            statesProcessed: false
           }
         };
-      };
+      });
       var groupID = 'unicode';
       this.instance = ReactDOM.render(
         <GroupSidePanelContents

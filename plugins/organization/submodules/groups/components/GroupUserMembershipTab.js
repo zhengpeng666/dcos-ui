@@ -69,7 +69,7 @@ class GroupUserMembershipTable extends mixin(StoreMixin) {
   }
 
   getDropdownItems() {
-    let users = ACLUsersStore.get('users').getItems().sort(
+    let users = ACLUsersStore.getUsers().getItems().sort(
       Util.getLocaleCompareSortFn('description')
     );
     let groupDetails = ACLGroupStore.getGroup(this.props.groupID);

@@ -15,8 +15,6 @@ let ACLUsersActions = require('../ACLUsersActions');
 
 let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
-let AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-
 describe('ACLUsersActions', function () {
 
   describe('#fetch', function () {
@@ -28,9 +26,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USERS_SUCCESS);
       });
 
@@ -38,9 +35,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USERS_ERROR);
       });
 
@@ -66,9 +62,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USER_SUCCESS);
       });
 
@@ -76,9 +71,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the correct data when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual({bar: 'baz'});
       });
 
@@ -86,9 +80,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USER_ERROR);
       });
 
@@ -96,9 +89,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the correct data when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -106,9 +98,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the userID when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 
@@ -126,9 +117,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_GROUPS_SUCCESS);
       });
@@ -137,9 +127,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the correct data when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual({bar: 'baz'});
       });
 
@@ -147,9 +136,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the userID successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 
@@ -157,9 +145,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_USER_GROUPS_ERROR);
       });
 
@@ -167,9 +154,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the correct data when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 
@@ -177,9 +163,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the userID when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -197,9 +182,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_PERMISSIONS_SUCCESS);
       });
@@ -208,9 +192,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the correct data when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual({bar: 'baz'});
       });
 
@@ -218,9 +201,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the userID successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 
@@ -228,9 +210,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_PERMISSIONS_ERROR);
       });
@@ -239,9 +220,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the correct data when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 
@@ -249,9 +229,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches with the userID when unsucessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -281,9 +260,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_CREATE_SUCCESS);
       });
@@ -292,9 +270,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the userID when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 
@@ -302,9 +279,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_CREATE_ERROR);
       });
@@ -313,9 +289,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct message when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -323,9 +298,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the userID when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 
@@ -355,9 +329,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_UPDATE_SUCCESS);
       });
@@ -366,9 +339,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the userID when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 
@@ -376,9 +348,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_UPDATE_ERROR);
       });
@@ -387,9 +358,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct message when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -397,9 +367,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the userID when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 
@@ -429,9 +398,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_DELETE_SUCCESS);
       });
@@ -440,9 +408,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the userID when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 
@@ -450,9 +417,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.type)
           .toEqual(ActionTypes.REQUEST_ACL_USER_DELETE_ERROR);
       });
@@ -461,9 +427,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the correct message when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.data).toEqual('bar');
       });
 
@@ -471,9 +436,8 @@ describe('ACLUsersActions', function () {
     });
 
     it('dispatches the userID when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action.userID).toEqual('foo');
       });
 

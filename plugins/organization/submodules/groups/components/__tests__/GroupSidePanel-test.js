@@ -1,7 +1,6 @@
 jest.dontMock('../GroupSidePanel');
 jest.dontMock('../GroupSidePanelContents');
 jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../../../storeConfig');
 
 /*eslint-disable no-unused-vars*/
 import React from 'react';
@@ -23,8 +22,6 @@ PluginTestUtils.dontMock([
 let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 
-require('../../../../storeConfig').register();
-
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var GroupSidePanel = require('../GroupSidePanel');
 var GroupSidePanelContents = require('../GroupSidePanelContents');
@@ -35,15 +32,13 @@ describe('GroupSidePanel', function () {
   beforeEach(function () {
     this.groupStore = ACLGroupStore.getGroup;
 
-    SDK.Store.getState = function () {
+    PluginTestUtils.addReducer(APPLICATION, function () {
       return {
-        [APPLICATION]: {
-          summary: {
-            statesProcessed: true
-          }
+        summary: {
+          statesProcessed: true
         }
       };
-    };
+    });
 
     ACLGroupStore.getGroup = function () {
       return {

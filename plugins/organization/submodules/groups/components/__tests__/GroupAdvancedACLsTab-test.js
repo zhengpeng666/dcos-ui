@@ -1,6 +1,5 @@
 jest.dontMock('../GroupAdvancedACLsTab');
 jest.dontMock('../../stores/ACLGroupStore');
-jest.dontMock('../../../../storeConfig');
 jest.dontMock('../../../../../../tests/_fixtures/acl/group-with-details.json');
 
 /*eslint-disable no-unused-vars*/
@@ -19,7 +18,6 @@ import {
 PluginTestUtils.dontMock('RequestUtil');
 let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
-require('../../../../storeConfig').register();
 
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var Group = require('../../structs/Group');

@@ -2,7 +2,6 @@ jest.dontMock('../UserGroupTable');
 jest.dontMock('../../../groups/stores/ACLGroupStore');
 jest.dontMock('../../../groups/stores/ACLGroupsStore');
 jest.dontMock('../../stores/ACLUserStore');
-jest.dontMock('../../../../storeConfig');
 
 import PluginTestUtils from 'PluginTestUtils';
 
@@ -15,8 +14,6 @@ import React from 'react';
 let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 
-require('../../../../storeConfig').register();
-
 var ReactDOM = require('react-dom');
 var TestUtils = require('react-addons-test-utils');
 
@@ -28,7 +25,6 @@ import {
 var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
 var ACLUserStore = require('../../stores/ACLUserStore');
 var UserGroupTable = require('../UserGroupTable');
-
 var User = require('../../structs/User');
 
 let userDetailsFixture =
