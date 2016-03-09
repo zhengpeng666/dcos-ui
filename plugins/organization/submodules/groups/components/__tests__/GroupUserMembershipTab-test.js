@@ -97,7 +97,7 @@ describe('GroupUserMembershipTab', function () {
     });
 
     afterEach(function () {
-      ACLGroupsStore.get = this.usersStoreGet;
+      ACLGroupsStore.getGroup = this.groupStoreGetGroup;
       ACLGroupStore.addUser = this.groupStoreAddUser;
     });
 

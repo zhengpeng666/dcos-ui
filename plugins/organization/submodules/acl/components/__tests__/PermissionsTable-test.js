@@ -4,7 +4,7 @@ jest.dontMock('../../../../storeConfig');
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let SDK = PluginTestUtils.getSDK('authentication', {enabled: true});
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 
 var ReactComponents = require('reactjs-components');
@@ -29,8 +29,6 @@ var ACLStore = require('../../stores/ACLStore');
 var PermissionsTable = require('../PermissionsTable');
 
 require('../../../../storeConfig').register();
-
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 const userDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/user-with-details.json');
@@ -57,7 +55,7 @@ describe('PermissionsTable', function () {
   describe('#onAclStoreUserRevokeError', function () {
 
     it('updates state when an error event is emitted', function () {
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: REQUEST_ACL_USER_REVOKE_ACTION_ERROR,
         data: 'foo bar',
         groupID: 'baz',
@@ -74,7 +72,7 @@ describe('PermissionsTable', function () {
     it('gets called when a success event is emitted', function () {
       this.instance.onAclStoreUserRevokeSuccess = jest.genMockFunction();
 
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
         data: 'foo bar',
         groupID: 'baz',

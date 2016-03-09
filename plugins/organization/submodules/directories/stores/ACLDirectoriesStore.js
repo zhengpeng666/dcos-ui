@@ -1,5 +1,3 @@
-import {Store} from 'mesosphere-shared-reactjs';
-
 import {
   REQUEST_ACL_DIRECTORIES_SUCCESS,
   REQUEST_ACL_DIRECTORIES_ERROR,
@@ -24,34 +22,28 @@ import {
 
 import ACLDirectoriesActions from '../actions/ACLDirectoriesActions';
 
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
-
 let SDK = require('../../../SDK').getSDK();
 
-let {PluginGetSetMixin, List} = SDK.get(['PluginGetSetMixin', 'List']);
+let List = SDK.get('List');
 
-let {APP_STORE_CHANGE} = SDK.constants;
-
-let ACLDirectoriesStore = Store.createStore({
+let ACLDirectoriesStore = SDK.createStore({
   storeID: 'aclDirectories',
 
-  mixins: [PluginGetSetMixin],
-
-  onSet() {
-    SDK.dispatch({
-      type: APP_STORE_CHANGE,
-      storeID: this.storeID,
-      data: this.getSet_data
-    });
-  },
-
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
+  mixinEvents: {
+    events: {
+      fetchSuccess: ACL_DIRECTORIES_CHANGED,
+      fetchError: ACL_DIRECTORIES_ERROR,
+      addSuccess: ACL_DIRECTORY_ADD_SUCCESS,
+      addError: ACL_DIRECTORY_ADD_ERROR,
+      deleteSuccess: ACL_DIRECTORY_DELETE_SUCCESS,
+      deleteError: ACL_DIRECTORY_DELETE_ERROR,
+      testSuccess: ACL_DIRECTORY_TEST_SUCCESS,
+      testError: ACL_DIRECTORY_TEST_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
   },
 
   addDirectory: ACLDirectoriesActions.addDirectory,
@@ -63,51 +55,49 @@ let ACLDirectoriesStore = Store.createStore({
   fetchDirectories: ACLDirectoriesActions.fetchDirectories,
 
   processDirectoriesSuccess(directories) {
-    this.set({
-      directories: new List({items: directories})
+    SDK.dispatch({
+      type: ACL_DIRECTORIES_CHANGED,
+      directories
     });
     this.emit(ACL_DIRECTORIES_CHANGED);
   },
 
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    let source = payload.source;
-    if (source !== SERVER_ACTION) {
-      return false;
-    }
+  getDirectories() {
+    return new List({items: SDK.Store.getOwnState().directories.list});
+  }
+});
 
-    let {data, type} = payload.action;
+SDK.onDispatch(function (action) {
+  let {data, type} = action;
 
-    switch (type) {
-      // Get a list of external directories
-      case REQUEST_ACL_DIRECTORIES_SUCCESS:
-        ACLDirectoriesStore.processDirectoriesSuccess(data);
-        break;
-      case REQUEST_ACL_DIRECTORIES_ERROR:
-        ACLDirectoriesStore.emit(ACL_DIRECTORIES_ERROR, data);
-        break;
-      case REQUEST_ACL_DIRECTORY_ADD_SUCCESS:
-        ACLDirectoriesStore.emit(ACL_DIRECTORY_ADD_SUCCESS);
-        break;
-      case REQUEST_ACL_DIRECTORY_ADD_ERROR:
-        ACLDirectoriesStore.emit(ACL_DIRECTORY_ADD_ERROR, data);
-        break;
-      case REQUEST_ACL_DIRECTORY_DELETE_SUCCESS:
-        ACLDirectoriesStore.set({directories: null});
-        ACLDirectoriesStore.emit(ACL_DIRECTORY_DELETE_SUCCESS);
-        break;
-      case REQUEST_ACL_DIRECTORY_DELETE_ERROR:
-        ACLDirectoriesStore.emit(ACL_DIRECTORY_DELETE_ERROR, data);
-        break;
-      case REQUEST_ACL_DIRECTORY_TEST_SUCCESS:
-        ACLDirectoriesStore.emit(ACL_DIRECTORY_TEST_SUCCESS, data);
-        break;
-      case REQUEST_ACL_DIRECTORY_TEST_ERROR:
-        ACLDirectoriesStore.emit(ACL_DIRECTORY_TEST_ERROR, data);
-        break;
-    }
-
-    return true;
-  })
+  switch (type) {
+    // Get a list of external directories
+    case REQUEST_ACL_DIRECTORIES_SUCCESS:
+      ACLDirectoriesStore.processDirectoriesSuccess(data);
+      break;
+    case REQUEST_ACL_DIRECTORIES_ERROR:
+      ACLDirectoriesStore.emit(ACL_DIRECTORIES_ERROR, data);
+      break;
+    case REQUEST_ACL_DIRECTORY_ADD_SUCCESS:
+      ACLDirectoriesStore.emit(ACL_DIRECTORY_ADD_SUCCESS);
+      break;
+    case REQUEST_ACL_DIRECTORY_ADD_ERROR:
+      ACLDirectoriesStore.emit(ACL_DIRECTORY_ADD_ERROR, data);
+      break;
+    case REQUEST_ACL_DIRECTORY_DELETE_SUCCESS:
+      ACLDirectoriesStore.processDirectoriesSuccess([]);
+      ACLDirectoriesStore.emit(ACL_DIRECTORY_DELETE_SUCCESS);
+      break;
+    case REQUEST_ACL_DIRECTORY_DELETE_ERROR:
+      ACLDirectoriesStore.emit(ACL_DIRECTORY_DELETE_ERROR, data);
+      break;
+    case REQUEST_ACL_DIRECTORY_TEST_SUCCESS:
+      ACLDirectoriesStore.emit(ACL_DIRECTORY_TEST_SUCCESS, data);
+      break;
+    case REQUEST_ACL_DIRECTORY_TEST_ERROR:
+      ACLDirectoriesStore.emit(ACL_DIRECTORY_TEST_ERROR, data);
+      break;
+  }
 });
 
 module.exports = ACLDirectoriesStore;

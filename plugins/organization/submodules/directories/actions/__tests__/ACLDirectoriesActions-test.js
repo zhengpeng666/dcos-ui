@@ -10,8 +10,6 @@ let ActionTypes = require('../../constants/ActionTypes');
 
 let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
 
-let AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
-
 describe('ACLDirectoriesActions', function () {
 
   beforeEach(function () {
@@ -46,10 +44,10 @@ describe('ACLDirectoriesActions', function () {
     it('dispatches the correct action when successful', function () {
       ACLDirectoriesActions.fetchDirectories();
 
-      var id = AppDispatcher.register(function (payload) {
-        AppDispatcher.unregister(id);
-
-        expect(payload.action).toEqual({
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
+        expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_DIRECTORIES_SUCCESS,
           data: [{foo: 'bar'}]
         });
@@ -61,10 +59,10 @@ describe('ACLDirectoriesActions', function () {
     it('dispatches the correct action when unsuccessful', function () {
       ACLDirectoriesActions.fetchDirectories();
 
-      var id = AppDispatcher.register(function (payload) {
-        AppDispatcher.unregister(id);
-
-        expect(payload.action).toEqual({
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
+        expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_DIRECTORIES_ERROR,
           data: 'No LDAP configuration stored yet.'
         });
@@ -103,10 +101,10 @@ describe('ACLDirectoriesActions', function () {
     it('dispatches the correct action when successful', function () {
       ACLDirectoriesActions.addDirectory({port: 1});
 
-      var id = AppDispatcher.register(function (payload) {
-        AppDispatcher.unregister(id);
-
-        expect(payload.action).toEqual({
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
+        expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_DIRECTORY_ADD_SUCCESS
         });
       });
@@ -117,10 +115,10 @@ describe('ACLDirectoriesActions', function () {
     it('dispatches the correct action when unsuccessful', function () {
       ACLDirectoriesActions.addDirectory({port: 1});
 
-      var id = AppDispatcher.register(function (payload) {
-        AppDispatcher.unregister(id);
-
-        expect(payload.action).toEqual({
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
+        expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_DIRECTORY_ADD_ERROR,
           data: 'Foo'
         });
@@ -157,10 +155,10 @@ describe('ACLDirectoriesActions', function () {
     it('dispatches the correct action when successful', function () {
       ACLDirectoriesActions.deleteDirectory();
 
-      var id = AppDispatcher.register(function (payload) {
-        AppDispatcher.unregister(id);
-
-        expect(payload.action).toEqual({
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
+        expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_SUCCESS
         });
       });
@@ -171,10 +169,10 @@ describe('ACLDirectoriesActions', function () {
     it('dispatches the correct action when unsuccessful', function () {
       ACLDirectoriesActions.deleteDirectory();
 
-      var id = AppDispatcher.register(function (payload) {
-        AppDispatcher.unregister(id);
-
-        expect(payload.action).toEqual({
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
+        expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_ERROR,
           data: 'Foo'
         });
@@ -223,10 +221,10 @@ describe('ACLDirectoriesActions', function () {
     it('dispatches the correct action when successful', function () {
       ACLDirectoriesActions.testDirectoryConnection();
 
-      var id = AppDispatcher.register(function (payload) {
-        AppDispatcher.unregister(id);
-
-        expect(payload.action).toEqual({
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
+        expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_DIRECTORY_TEST_SUCCESS,
           data: 'foo'
         });
@@ -238,10 +236,10 @@ describe('ACLDirectoriesActions', function () {
     it('dispatches the correct action when unsuccessful', function () {
       ACLDirectoriesActions.testDirectoryConnection();
 
-      var id = AppDispatcher.register(function (payload) {
-        AppDispatcher.unregister(id);
-
-        expect(payload.action).toEqual({
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
+        expect(action).toEqual({
+          __origin: 'organization',
           type: ActionTypes.REQUEST_ACL_DIRECTORY_TEST_ERROR,
           data: 'Foo'
         });

@@ -9,22 +9,23 @@ let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 
 var ACLDirectoriesStore = require('../ACLDirectoriesStore');
+var OrganizationReducer = require('../../../../Reducer');
 var ActionTypes = require('../../constants/ActionTypes');
 var EventTypes = require('../../constants/EventTypes');
 
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
+PluginTestUtils.addReducer('organization', OrganizationReducer);
 
 describe('ACLDirectoriesStore dispatcher', function () {
 
   describe('fetch', function () {
 
     it('stores directories when event is dispatched', function () {
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_DIRECTORIES_SUCCESS,
         data: [{foo: 'bar'}]
       });
 
-      var directories = ACLDirectoriesStore.get('directories').getItems();
+      var directories = ACLDirectoriesStore.getDirectories().getItems();
       expect(directories[0].foo).toEqual('bar');
     });
 
@@ -33,7 +34,7 @@ describe('ACLDirectoriesStore dispatcher', function () {
       ACLDirectoriesStore.addChangeListener(
         EventTypes.ACL_DIRECTORIES_CHANGED, mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_DIRECTORIES_SUCCESS,
         data: [{foo: 'bar'}]
       });
@@ -47,7 +48,7 @@ describe('ACLDirectoriesStore dispatcher', function () {
         EventTypes.ACL_DIRECTORIES_ERROR,
         mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_DIRECTORIES_ERROR,
         message: 'foo'
       });
@@ -64,7 +65,7 @@ describe('ACLDirectoriesStore dispatcher', function () {
       ACLDirectoriesStore.addChangeListener(
         EventTypes.ACL_DIRECTORY_ADD_SUCCESS, mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_DIRECTORY_ADD_SUCCESS
       });
 
@@ -77,7 +78,7 @@ describe('ACLDirectoriesStore dispatcher', function () {
         EventTypes.ACL_DIRECTORY_ADD_ERROR,
         mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_DIRECTORY_ADD_ERROR,
         message: 'foo'
       });
@@ -90,14 +91,14 @@ describe('ACLDirectoriesStore dispatcher', function () {
   describe('delete', function () {
 
     it('removes stored directories after delete', function () {
-      ACLDirectoriesStore.set({directories: 'foo'});
-      expect(ACLDirectoriesStore.get('directories')).toEqual('foo');
+      ACLDirectoriesStore.processDirectoriesSuccess(['foo']);
+      expect(ACLDirectoriesStore.getDirectories().getItems()).toEqual(['foo']);
 
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_SUCCESS
       });
 
-      expect(ACLDirectoriesStore.get('directories')).toEqual(null);
+      expect(ACLDirectoriesStore.getDirectories().getItems()).toEqual([]);
     });
 
     it('dispatches the correct event upon success', function () {
@@ -105,7 +106,7 @@ describe('ACLDirectoriesStore dispatcher', function () {
       ACLDirectoriesStore.addChangeListener(
         EventTypes.ACL_DIRECTORY_DELETE_SUCCESS, mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_SUCCESS
       });
 
@@ -118,7 +119,7 @@ describe('ACLDirectoriesStore dispatcher', function () {
         EventTypes.ACL_DIRECTORY_DELETE_ERROR,
         mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_ACL_DIRECTORY_DELETE_ERROR,
         message: 'foo'
       });

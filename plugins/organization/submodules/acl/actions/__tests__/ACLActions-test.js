@@ -17,14 +17,12 @@ import {
 
 import PluginTestUtils from 'PluginTestUtils';
 
-let SDK = PluginTestUtils.getSDK('authentication', {enabled: true});
+let SDK = PluginTestUtils.getSDK('organization', {enabled: true});
 require('../../../../SDK').setSDK(SDK);
 
 let ACLActions = require('../ACLActions');
 
 let {RequestUtil, Config} = SDK.get(['Config', 'RequestUtil']);
-
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 
 describe('ACLActions', function () {
 
@@ -46,11 +44,11 @@ describe('ACLActions', function () {
 
     it('dispatches the correct action when successful', function () {
       ACLActions.fetchACLs('foo');
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
           type: REQUEST_ACL_RESOURCE_ACLS_SUCCESS,
+          __origin: 'organization',
           data: {bar: 'baz'},
           resourceType: 'foo'
         });
@@ -61,11 +59,11 @@ describe('ACLActions', function () {
 
     it('dispatches the correct action when unsuccessful', function () {
       ACLActions.fetchACLs('bar');
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action).toEqual({
           type: REQUEST_ACL_RESOURCE_ACLS_ERROR,
+          __origin: 'organization',
           data: 'bar',
           resourceType: 'bar'
         });
@@ -102,11 +100,11 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action)
           .toEqual({
+            __origin: 'organization',
             type: REQUEST_ACL_CREATE_SUCCESS,
             resourceID: 'some.resource'
           });
@@ -116,11 +114,11 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action)
           .toEqual({
+            __origin: 'organization',
             type: REQUEST_ACL_CREATE_ERROR,
             resourceID: 'some.resource',
             data: 'bar'
@@ -154,11 +152,11 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action)
           .toEqual({
+            __origin: 'organization',
             type: REQUEST_ACL_USER_GRANT_ACTION_SUCCESS,
             triple: {userID: 'foo', action: 'access', resourceID: 'bar'}
           });
@@ -168,11 +166,11 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action)
           .toEqual({
+            __origin: 'organization',
             type: REQUEST_ACL_USER_GRANT_ACTION_ERROR,
             data: 'bar',
             triple: {userID: 'foo', action: 'access', resourceID: 'bar'}
@@ -206,11 +204,11 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action)
           .toEqual({
+            __origin: 'organization',
             type: REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS,
             triple: {userID: 'foo', action: 'access', resourceID: 'bar'}
           });
@@ -220,11 +218,11 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action)
           .toEqual({
+            __origin: 'organization',
             type: REQUEST_ACL_USER_REVOKE_ACTION_ERROR,
             data: 'bar',
             triple: {userID: 'foo', action: 'access', resourceID: 'bar'}
@@ -258,11 +256,11 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action)
           .toEqual({
+            __origin: 'organization',
             type: REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS,
             triple: {groupID: 'foo', action: 'access', resourceID: 'bar'}
           });
@@ -272,11 +270,11 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action)
           .toEqual({
+            __origin: 'organization',
             type: REQUEST_ACL_GROUP_GRANT_ACTION_ERROR,
             data: 'bar',
             triple: {groupID: 'foo', action: 'access', resourceID: 'bar'}
@@ -310,11 +308,11 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action)
           .toEqual({
+            __origin: 'organization',
             type: REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS,
             triple: {groupID: 'foo', action: 'access', resourceID: 'bar'}
           });
@@ -324,11 +322,11 @@ describe('ACLActions', function () {
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      var unsubscribe = SDK.onDispatch(function (action) {
+        unsubscribe();
         expect(action)
           .toEqual({
+            __origin: 'organization',
             type: REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR,
             data: 'bar',
             triple: {groupID: 'foo', resourceID: 'bar', action: 'access'}

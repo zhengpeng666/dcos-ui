@@ -1,5 +1,4 @@
 import _ from 'underscore';
-import {Store} from 'mesosphere-shared-reactjs';
 
 import {
   REQUEST_ACL_GROUP_SUCCESS,
@@ -21,6 +20,8 @@ import {
 } from '../constants/ActionTypes';
 
 import {
+  ACL_GROUP_SET_GROUPS,
+  ACL_GROUP_SET_GROUPS_FETCHING,
   ACL_GROUP_DETAILS_FETCHED_SUCCESS,
   ACL_GROUP_DETAILS_FETCHED_ERROR,
   ACL_GROUP_DETAILS_GROUP_CHANGE,
@@ -44,43 +45,43 @@ import {
 import ACLGroupsActions from '../actions/ACLGroupsActions';
 import Group from '../structs/Group';
 
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
-
 let SDK = require('../../../SDK').getSDK();
-
-let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
-let {APP_STORE_CHANGE} = SDK.constants;
 
 /**
 * This store will keep track of groups and their details
 */
-let ACLGroupStore = Store.createStore({
+let ACLGroupStore = SDK.createStore({
   storeID: 'group',
 
-  mixins: [PluginGetSetMixin],
-
-  getSet_data: {
-    groups: {},
-    // A hash of groupIDs that we're fetching
-    // The value is a list of requests that have been received
-    groupsFetching: {}
+  mixinEvents: {
+    events: {
+      success: ACL_GROUP_DETAILS_GROUP_CHANGE,
+      error: ACL_GROUP_DETAILS_GROUP_ERROR,
+      addUserSuccess: ACL_GROUP_USERS_CHANGED,
+      addUserError: ACL_GROUP_ADD_USER_ERROR,
+      createSuccess: ACL_GROUP_CREATE_SUCCESS,
+      createError: ACL_GROUP_CREATE_ERROR,
+      updateError: ACL_GROUP_UPDATE_ERROR,
+      updateSuccess: ACL_GROUP_UPDATE_SUCCESS,
+      permissionsSuccess: ACL_GROUP_DETAILS_PERMISSIONS_CHANGE,
+      permissionsError: ACL_GROUP_DETAILS_PERMISSIONS_ERROR,
+      usersSuccess: ACL_GROUP_DETAILS_USERS_CHANGE,
+      usersError: ACL_GROUP_DETAILS_USERS_ERROR,
+      fetchedDetailsSuccess: ACL_GROUP_DETAILS_FETCHED_SUCCESS,
+      fetchedDetailsError: ACL_GROUP_DETAILS_FETCHED_ERROR,
+      deleteUserSuccess: ACL_GROUP_REMOVE_USER_SUCCESS,
+      deleteUserError: ACL_GROUP_REMOVE_USER_ERROR,
+      deleteSuccess: ACL_GROUP_DELETE_SUCCESS,
+      deleteError: ACL_GROUP_DELETE_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
   },
 
-  onSet() {
-    SDK.dispatch({
-      type: APP_STORE_CHANGE,
-      storeID: this.storeID,
-      data: this.getSet_data
-    });
-  },
-
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
+  get(prop) {
+    return SDK.Store.getOwnState().groups[prop];
   },
 
   getGroupRaw: function (groupID) {
@@ -94,7 +95,10 @@ let ACLGroupStore = Store.createStore({
   setGroup: function (groupID, group) {
     let groups = this.get('groups');
     groups[groupID] = group;
-    this.set(groups);
+    SDK.dispatch({
+      type: ACL_GROUP_SET_GROUPS,
+      groups
+    });
   },
 
   fetchGroup: ACLGroupsActions.fetchGroup,
@@ -119,7 +123,10 @@ let ACLGroupStore = Store.createStore({
     let groupsFetching = this.get('groupsFetching');
 
     groupsFetching[groupID] = {group: false, users: false, permissions: false};
-    this.set(groupsFetching);
+    SDK.dispatch({
+      type: ACL_GROUP_SET_GROUPS_FETCHING,
+      groupsFetching
+    });
 
     ACLGroupsActions.fetchGroup(groupID);
     ACLGroupsActions.fetchGroupPermissions(groupID);
@@ -150,7 +157,10 @@ let ACLGroupStore = Store.createStore({
 
     if (fetchedAll) {
       delete groupsFetching[groupID];
-      this.set(groupsFetching);
+      SDK.dispatch({
+        type: ACL_GROUP_SET_GROUPS_FETCHING,
+        groupsFetching
+      });
       this.emit(ACL_GROUP_DETAILS_FETCHED_SUCCESS, groupID);
     }
   },
@@ -168,7 +178,10 @@ let ACLGroupStore = Store.createStore({
     }
 
     delete groupsFetching[groupID];
-    this.set(groupsFetching);
+    SDK.dispatch({
+      type: ACL_GROUP_SET_GROUPS_FETCHING,
+      groupsFetching
+    });
     this.emit(ACL_GROUP_DETAILS_FETCHED_ERROR, groupID);
   },
 
@@ -246,112 +259,100 @@ let ACLGroupStore = Store.createStore({
       data,
       groupID);
     this.invalidateGroupWithDetailsFetch(groupID);
-  },
+  }
+});
 
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    let source = payload.source;
-    if (source !== SERVER_ACTION) {
-      return false;
-    }
-
-    let action = payload.action;
-
-    switch (action.type) {
-      // Get group details
-      case REQUEST_ACL_GROUP_SUCCESS:
-        ACLGroupStore.processGroup(action.data);
-        break;
-      case REQUEST_ACL_GROUP_ERROR:
-        ACLGroupStore.processGroupError(action.data, action.groupID);
-        break;
-      // Get ACL permissions of group
-      case REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS:
-        ACLGroupStore.processGroupPermissions(action.data, action.groupID);
-        break;
-      case REQUEST_ACL_GROUP_PERMISSIONS_ERROR:
-        ACLGroupStore.processGroupPermissionsError(
-          action.data,
-          action.groupID);
-        break;
-      // Get users members of group
-      case REQUEST_ACL_GROUP_USERS_SUCCESS:
-        ACLGroupStore.processGroupUsers(action.data, action.groupID);
-        break;
-      case REQUEST_ACL_GROUP_USERS_ERROR:
-        ACLGroupStore.processGroupUsersError(action.data, action.groupID);
-        break;
-      // Create group
-      case REQUEST_ACL_GROUP_CREATE_SUCCESS:
-        ACLGroupStore
-          .emit(ACL_GROUP_CREATE_SUCCESS, action.groupID);
-        break;
-      case REQUEST_ACL_GROUP_CREATE_ERROR:
-        ACLGroupStore.emit(
-          ACL_GROUP_CREATE_ERROR,
-          action.data,
-          action.groupID
-        );
-        break;
-      // Update group
-      case REQUEST_ACL_GROUP_UPDATE_SUCCESS:
-        ACLGroupStore
-          .emit(ACL_GROUP_UPDATE_SUCCESS, action.groupID);
-        break;
-      case REQUEST_ACL_GROUP_UPDATE_ERROR:
-        ACLGroupStore.emit(
-          ACL_GROUP_UPDATE_ERROR,
-          action.data,
-          action.groupID
-        );
-        break;
-      // Delete group
-      case REQUEST_ACL_GROUP_DELETE_SUCCESS:
-        ACLGroupStore
-          .emit(ACL_GROUP_DELETE_SUCCESS, action.groupID);
-        break;
-      case REQUEST_ACL_GROUP_DELETE_ERROR:
-        ACLGroupStore.emit(
-          ACL_GROUP_DELETE_ERROR,
-          action.data,
-          action.groupID
-        );
-        break;
-      // Add user to group
-      case REQUEST_ACL_GROUP_ADD_USER_SUCCESS:
-        ACLGroupStore.emit(
-          ACL_GROUP_USERS_CHANGED,
-          action.groupID,
-          action.userID
-        );
-        break;
-      case REQUEST_ACL_GROUP_ADD_USER_ERROR:
-        ACLGroupStore.emit(
-          ACL_GROUP_ADD_USER_ERROR,
-          action.data,
-          action.groupID,
-          action.userID
-        );
-        break;
-      // Remove user from group
-      case REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS:
-        ACLGroupStore.emit(
-          ACL_GROUP_REMOVE_USER_SUCCESS,
-          action.groupID,
-          action.userID
-        );
-        break;
-      case REQUEST_ACL_GROUP_REMOVE_USER_ERROR:
-        ACLGroupStore.emit(
-          ACL_GROUP_REMOVE_USER_ERROR,
-          action.data,
-          action.groupID,
-          action.userID
-        );
-        break;
-    }
-
-    return true;
-  })
+SDK.onDispatch(function (action) {
+  switch (action.type) {
+    // Get group details
+    case REQUEST_ACL_GROUP_SUCCESS:
+      ACLGroupStore.processGroup(action.data);
+      break;
+    case REQUEST_ACL_GROUP_ERROR:
+      ACLGroupStore.processGroupError(action.data, action.groupID);
+      break;
+    // Get ACL permissions of group
+    case REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS:
+      ACLGroupStore.processGroupPermissions(action.data, action.groupID);
+      break;
+    case REQUEST_ACL_GROUP_PERMISSIONS_ERROR:
+      ACLGroupStore.processGroupPermissionsError(
+        action.data,
+        action.groupID);
+      break;
+    // Get users members of group
+    case REQUEST_ACL_GROUP_USERS_SUCCESS:
+      ACLGroupStore.processGroupUsers(action.data, action.groupID);
+      break;
+    case REQUEST_ACL_GROUP_USERS_ERROR:
+      ACLGroupStore.processGroupUsersError(action.data, action.groupID);
+      break;
+    // Create group
+    case REQUEST_ACL_GROUP_CREATE_SUCCESS:
+      ACLGroupStore.emit(ACL_GROUP_CREATE_SUCCESS, action.groupID);
+      break;
+    case REQUEST_ACL_GROUP_CREATE_ERROR:
+      ACLGroupStore.emit(
+        ACL_GROUP_CREATE_ERROR,
+        action.data,
+        action.groupID
+      );
+      break;
+    // Update group
+    case REQUEST_ACL_GROUP_UPDATE_SUCCESS:
+      ACLGroupStore.emit(ACL_GROUP_UPDATE_SUCCESS, action.groupID);
+      break;
+    case REQUEST_ACL_GROUP_UPDATE_ERROR:
+      ACLGroupStore.emit(
+        ACL_GROUP_UPDATE_ERROR,
+        action.data,
+        action.groupID
+      );
+      break;
+    // Delete group
+    case REQUEST_ACL_GROUP_DELETE_SUCCESS:
+      ACLGroupStore.emit(ACL_GROUP_DELETE_SUCCESS, action.groupID);
+      break;
+    case REQUEST_ACL_GROUP_DELETE_ERROR:
+      ACLGroupStore.emit(
+        ACL_GROUP_DELETE_ERROR,
+        action.data,
+        action.groupID
+      );
+      break;
+    // Add user to group
+    case REQUEST_ACL_GROUP_ADD_USER_SUCCESS:
+      ACLGroupStore.emit(
+        ACL_GROUP_USERS_CHANGED,
+        action.groupID,
+        action.userID
+      );
+      break;
+    case REQUEST_ACL_GROUP_ADD_USER_ERROR:
+      ACLGroupStore.emit(
+        ACL_GROUP_ADD_USER_ERROR,
+        action.data,
+        action.groupID,
+        action.userID
+      );
+      break;
+    // Remove user from group
+    case REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS:
+      ACLGroupStore.emit(
+        ACL_GROUP_REMOVE_USER_SUCCESS,
+        action.groupID,
+        action.userID
+      );
+      break;
+    case REQUEST_ACL_GROUP_REMOVE_USER_ERROR:
+      ACLGroupStore.emit(
+        ACL_GROUP_REMOVE_USER_ERROR,
+        action.data,
+        action.groupID,
+        action.userID
+      );
+      break;
+  }
 });
 
 module.exports = ACLGroupStore;

@@ -2,8 +2,6 @@ import _ from 'underscore';
 
 import ActionTypes from '../constants/ActionTypes';
 
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-
 let SDK = require('../../../SDK').getSDK();
 
 let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
@@ -13,13 +11,13 @@ const ACLGroupsActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups`,
       success: function (response) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUPS_SUCCESS,
           data: response.array
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUPS_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr)
         });
@@ -31,13 +29,13 @@ const ACLGroupsActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}`,
       success: function (response) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
           data: response
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           groupID
@@ -50,14 +48,14 @@ const ACLGroupsActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}/permissions`,
       success: function (response) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
           data: response.array,
           groupID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           groupID
@@ -70,14 +68,14 @@ const ACLGroupsActions = {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}/users`,
       success: function (response) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
           data: response.array,
           groupID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           groupID
@@ -99,13 +97,13 @@ const ACLGroupsActions = {
       method: 'PUT',
       data,
       success: function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS,
           groupID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           groupID
@@ -120,13 +118,13 @@ const ACLGroupsActions = {
       method: 'PATCH',
       data: patchData,
       success: function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS,
           groupID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           groupID
@@ -140,13 +138,13 @@ const ACLGroupsActions = {
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}`,
       method: 'DELETE',
       success: function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS,
           groupID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           groupID
@@ -160,14 +158,14 @@ const ACLGroupsActions = {
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}/users/${userID}`,
       method: 'PUT',
       success: function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
           groupID,
           userID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           groupID,
@@ -182,14 +180,14 @@ const ACLGroupsActions = {
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/groups/${groupID}/users/${userID}`,
       method: 'DELETE',
       success: function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
           groupID,
           userID
         });
       },
       error: function (xhr) {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           groupID,

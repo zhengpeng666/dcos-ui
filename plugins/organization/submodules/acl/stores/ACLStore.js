@@ -1,5 +1,3 @@
-import {Store} from 'mesosphere-shared-reactjs';
-
 import {
   REQUEST_ACL_CREATE_SUCCESS,
   REQUEST_ACL_CREATE_ERROR,
@@ -33,37 +31,36 @@ import {
 import ACLActions from '../actions/ACLActions';
 import ACLList from '../structs/ACLList';
 
-import AppDispatcher from '../../../../../src/js/events/AppDispatcher';
-import {SERVER_ACTION} from '../../../../../src/js/constants/ActionTypes';
-
 let SDK = require('../../../SDK').getSDK();
 
-let PluginGetSetMixin = SDK.get('PluginGetSetMixin');
-let {APP_STORE_CHANGE} = SDK.constants;
-
-const ACLStore = Store.createStore({
+const ACLStore = SDK.createStore({
   storeID: 'acl',
 
-  mixins: [PluginGetSetMixin],
-
-  getSet_data: {
-    outstandingGrants: {}
+  mixinEvents: {
+    events: {
+      createSuccess: ACL_CREATE_SUCCESS,
+      createError: ACL_CREATE_ERROR,
+      fetchResourceSuccess: ACL_RESOURCE_ACLS_CHANGE,
+      fetchResourceError: ACL_RESOURCE_ACLS_ERROR,
+      userGrantSuccess: ACL_USER_GRANT_ACTION_CHANGE,
+      userGrantError: ACL_USER_GRANT_ACTION_ERROR,
+      userRevokeSuccess: ACL_USER_REVOKE_ACTION_CHANGE,
+      userRevokeError: ACL_USER_REVOKE_ACTION_ERROR,
+      groupGrantSuccess: ACL_GROUP_GRANT_ACTION_CHANGE,
+      groupGrantError: ACL_GROUP_GRANT_ACTION_ERROR,
+      groupRevokeSuccess: ACL_GROUP_REVOKE_ACTION_CHANGE,
+      groupRevokeError: ACL_GROUP_REVOKE_ACTION_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
   },
 
-  onSet() {
-    SDK.dispatch({
-      type: APP_STORE_CHANGE,
-      storeID: this.storeID,
-      data: this.getSet_data
-    });
-  },
+  outstandingGrants: {},
 
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
+  get(prop) {
+    return SDK.Store.getOwnState().acl[prop];
   },
 
   createACLForResource: ACLActions.createACLForResource,
@@ -91,18 +88,14 @@ const ACLStore = Store.createStore({
   },
 
   addOutstandingGrantRequest: function (resourceID, cb) {
-    let outstandingGrants = this.get('outstandingGrants');
-    if (!(resourceID in outstandingGrants)) {
-      outstandingGrants[resourceID] = [];
+    if (!(resourceID in this.outstandingGrants)) {
+      this.outstandingGrants[resourceID] = [];
     }
-    outstandingGrants[resourceID].push(cb);
-    this.set({outstandingGrants});
+    this.outstandingGrants[resourceID].push(cb);
   },
 
   removeAllOutstandingGrantRequests: function (resourceID) {
-    let outstandingGrants = this.get('outstandingGrants');
-    delete outstandingGrants[resourceID];
-    this.set({outstandingGrants});
+    delete this.outstandingGrants[resourceID];
   },
 
   safeGrantRequest: function (aclActionFn, subjectID, action, resourceID,
@@ -126,12 +119,11 @@ const ACLStore = Store.createStore({
   },
 
   processOutstandingGrants: function (resourceType) {
-    let outstandingGrants = this.get('outstandingGrants');
-    this.getACLs(resourceType).getItems().forEach(function (acl) {
+    this.getACLs(resourceType).getItems().forEach(acl => {
       let resourceID = acl.get('rid');
-      if (resourceID in outstandingGrants) {
+      if (resourceID in this.outstandingGrants) {
         // Run grant requests now that we have an ACL
-        outstandingGrants[resourceID].forEach(function (cb) {
+        this.outstandingGrants[resourceID].forEach(function (cb) {
           cb();
         });
         ACLStore.removeAllOutstandingGrantRequests(resourceID);
@@ -140,107 +132,101 @@ const ACLStore = Store.createStore({
   },
 
   processResourcesACLs: function (items = [], resourceType = 'allACLs') {
-    this.set({[resourceType]: items});
+    SDK.dispatch({
+      type: ACL_RESOURCE_ACLS_CHANGE,
+      data: {[resourceType]: items}
+    });
     this.emit(ACL_RESOURCE_ACLS_CHANGE);
     ACLStore.processOutstandingGrants(resourceType);
-  },
+  }
+});
 
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    let source = payload.source;
-    if (source !== SERVER_ACTION) {
-      return false;
-    }
-
-    let action = payload.action;
-
-    switch (action.type) {
-      // Create ACL for resource
-      case REQUEST_ACL_CREATE_SUCCESS:
-        ACLStore.fetchACLs();
-        ACLStore.emit(
-            ACL_CREATE_SUCCESS,
-            action.resourceID
-          );
-        break;
-      case REQUEST_ACL_CREATE_ERROR:
-        ACLStore.removeAllOutstandingGrantRequests(action.resourceID);
-        ACLStore.emit(
-            ACL_CREATE_ERROR,
-            action.data,
-            action.resourceID
-          );
-        break;
-      // Get ACLs for resource
-      case REQUEST_ACL_RESOURCE_ACLS_SUCCESS:
-        ACLStore.processResourcesACLs(action.data, action.resourceType);
-        break;
-      case REQUEST_ACL_RESOURCE_ACLS_ERROR:
-        ACLStore.emit(
-            ACL_RESOURCE_ACLS_ERROR,
-            action.data,
-            action.resourceType
-          );
-        break;
-      // Grant permission for user
-      case REQUEST_ACL_USER_GRANT_ACTION_SUCCESS:
-        ACLStore.emit(
-          ACL_USER_GRANT_ACTION_CHANGE,
-          action.triple
+SDK.onDispatch(function (action) {
+  switch (action.type) {
+    // Create ACL for resource
+    case REQUEST_ACL_CREATE_SUCCESS:
+      ACLStore.fetchACLs();
+      ACLStore.emit(
+          ACL_CREATE_SUCCESS,
+          action.resourceID
         );
-        break;
-      case REQUEST_ACL_USER_GRANT_ACTION_ERROR:
-        ACLStore.emit(
-          ACL_USER_GRANT_ACTION_ERROR,
+      break;
+    case REQUEST_ACL_CREATE_ERROR:
+      ACLStore.removeAllOutstandingGrantRequests(action.resourceID);
+      ACLStore.emit(
+          ACL_CREATE_ERROR,
           action.data,
-          action.triple
+          action.resourceID
         );
-        break;
-      // Revoke permission for user
-      case REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS:
-        ACLStore.emit(
-            ACL_USER_REVOKE_ACTION_CHANGE,
-            action.triple
-          );
-        break;
-      case REQUEST_ACL_USER_REVOKE_ACTION_ERROR:
-        ACLStore.emit(
-          ACL_USER_REVOKE_ACTION_ERROR,
+      break;
+    // Get ACLs for resource
+    case REQUEST_ACL_RESOURCE_ACLS_SUCCESS:
+      ACLStore.processResourcesACLs(action.data, action.resourceType);
+      break;
+    case REQUEST_ACL_RESOURCE_ACLS_ERROR:
+      ACLStore.emit(
+          ACL_RESOURCE_ACLS_ERROR,
           action.data,
+          action.resourceType
+        );
+      break;
+    // Grant permission for user
+    case REQUEST_ACL_USER_GRANT_ACTION_SUCCESS:
+      ACLStore.emit(
+        ACL_USER_GRANT_ACTION_CHANGE,
+        action.triple
+      );
+      break;
+    case REQUEST_ACL_USER_GRANT_ACTION_ERROR:
+      ACLStore.emit(
+        ACL_USER_GRANT_ACTION_ERROR,
+        action.data,
+        action.triple
+      );
+      break;
+    // Revoke permission for user
+    case REQUEST_ACL_USER_REVOKE_ACTION_SUCCESS:
+      ACLStore.emit(
+          ACL_USER_REVOKE_ACTION_CHANGE,
           action.triple
         );
-        break;
-      // Grant permission for group
-      case REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS:
-        ACLStore.emit(
-            ACL_GROUP_GRANT_ACTION_CHANGE,
-            action.triple
-          );
-        break;
-      case REQUEST_ACL_GROUP_GRANT_ACTION_ERROR:
-        ACLStore.emit(
-          ACL_GROUP_GRANT_ACTION_ERROR,
-          action.data,
+      break;
+    case REQUEST_ACL_USER_REVOKE_ACTION_ERROR:
+      ACLStore.emit(
+        ACL_USER_REVOKE_ACTION_ERROR,
+        action.data,
+        action.triple
+      );
+      break;
+    // Grant permission for group
+    case REQUEST_ACL_GROUP_GRANT_ACTION_SUCCESS:
+      ACLStore.emit(
+          ACL_GROUP_GRANT_ACTION_CHANGE,
           action.triple
         );
-        break;
-      // Revoke permission for group
-      case REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS:
-        ACLStore.emit(
-            ACL_GROUP_REVOKE_ACTION_CHANGE,
-            action.triple
-          );
-        break;
-      case REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR:
-        ACLStore.emit(
-          ACL_GROUP_REVOKE_ACTION_ERROR,
-          action.data,
+      break;
+    case REQUEST_ACL_GROUP_GRANT_ACTION_ERROR:
+      ACLStore.emit(
+        ACL_GROUP_GRANT_ACTION_ERROR,
+        action.data,
+        action.triple
+      );
+      break;
+    // Revoke permission for group
+    case REQUEST_ACL_GROUP_REVOKE_ACTION_SUCCESS:
+      ACLStore.emit(
+          ACL_GROUP_REVOKE_ACTION_CHANGE,
           action.triple
         );
-        break;
-    }
-
-    return true;
-  })
+      break;
+    case REQUEST_ACL_GROUP_REVOKE_ACTION_ERROR:
+      ACLStore.emit(
+        ACL_GROUP_REVOKE_ACTION_ERROR,
+        action.data,
+        action.triple
+      );
+      break;
+  }
 });
 
 module.exports = ACLStore;

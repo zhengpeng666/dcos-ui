@@ -25,13 +25,15 @@ var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
 var ACLGroupsStore = require('../../../groups/stores/ACLGroupsStore');
 var ACLUserStore = require('../../stores/ACLUserStore');
 var UserGroupMembershipTab = require('../UserGroupMembershipTab');
+var OrganizationReducer = require('../../../../Reducer');
+
+PluginTestUtils.addReducer('organization', OrganizationReducer);
 
 import {
   REQUEST_ACL_GROUPS_ERROR,
   REQUEST_ACL_GROUPS_SUCCESS
 } from '../../../groups/constants/ActionTypes';
 
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 var User = require('../../structs/User');
 
 let userDetailsFixture =
@@ -43,30 +45,28 @@ describe('UserGroupMembershipTab', function () {
   beforeEach(function () {
     require('../../../../SDK').setSDK(SDK);
     this.groupStoreAddUser = ACLGroupStore.addUser;
-    this.groupsStoreGet = ACLGroupsStore.get;
+    this.groupsStoreGet = ACLGroupsStore.getGroups;
     this.userStoreGetUser = ACLUserStore.getUser;
     this.container = document.createElement('div');
-    ACLGroupsStore.get = function (key) {
-      if (key === 'groups') {
-        return {
-          getItems: function () {
-            return [
-              {
-                description: 'foo',
-                gid: 'bar'
-              },
-              {
-                description: 'bar',
-                gid: 'baz'
-              },
-              {
-                description: 'baz',
-                gid: 'qux'
-              }
-            ];
-          }
-        };
-      }
+    ACLGroupsStore.getGroups = function () {
+      return {
+        getItems: function () {
+          return [
+            {
+              description: 'foo',
+              gid: 'bar'
+            },
+            {
+              description: 'bar',
+              gid: 'baz'
+            },
+            {
+              description: 'baz',
+              gid: 'qux'
+            }
+          ];
+        }
+      };
     };
 
     ACLGroupStore.addUser = jest.genMockFunction();
@@ -87,7 +87,7 @@ describe('UserGroupMembershipTab', function () {
 
   afterEach(function () {
     ACLGroupStore.addUser = this.groupStoreAddUser;
-    ACLGroupsStore.get = this.groupsStoreGet;
+    ACLGroupsStore.getGroups = this.groupsStoreGet;
     ACLUserStore.getUser = this.userStoreGetUser;
     ReactDOM.unmountComponentAtNode(this.container);
 
@@ -120,7 +120,7 @@ describe('UserGroupMembershipTab', function () {
   describe('#onGroupsStoreError', function () {
 
     it('sets state in response to failure', function () {
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: REQUEST_ACL_GROUPS_ERROR
       });
       expect(this.instance.state.requestGroupsError).toEqual(true);
@@ -132,7 +132,7 @@ describe('UserGroupMembershipTab', function () {
   describe('#onGroupsStoreSuccess', function () {
 
     it('sets state in resposne to failure', function () {
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: REQUEST_ACL_GROUPS_SUCCESS
       });
       expect(this.instance.state.requestGroupsError).toEqual(false);

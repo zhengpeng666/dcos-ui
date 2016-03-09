@@ -19,7 +19,6 @@ var ActionTypes = require('../../constants/ActionTypes');
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var GroupUserTable = require('../GroupUserTable');
 
-var AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
 var Group = require('../../structs/Group');
 
 const groupDetailsFixture =
@@ -57,7 +56,7 @@ describe('GroupUserTable', function () {
 
     it('updates state when an error event is emitted', function () {
       ACLGroupStore.deleteUser = function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
           data: 'foo bar',
           groupID: 'baz',
@@ -75,7 +74,7 @@ describe('GroupUserTable', function () {
 
     it('gets called when a success event is emitted', function () {
       ACLGroupStore.deleteUser = function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
           data: 'foo bar',
           groupID: 'baz',

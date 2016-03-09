@@ -96,7 +96,7 @@ class UsersActionsModal extends ActionsModal {
 
   getDropdownItems() {
     let itemID = 'gid';
-    let items = ACLGroupsStore.get('groups').getItems().sort(
+    let items = ACLGroupsStore.getGroups().getItems().sort(
       Util.getLocaleCompareSortFn('description')
     );
 

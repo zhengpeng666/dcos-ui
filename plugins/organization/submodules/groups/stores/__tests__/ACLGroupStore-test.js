@@ -12,22 +12,34 @@ let ACLGroupStore = require('../ACLGroupStore');
 let ActionTypes = require('../../constants/ActionTypes');
 let EventTypes = require('../../constants/EventTypes');
 let Group = require('../../structs/Group');
+var OrganizationReducer = require('../../../../Reducer');
 
-let AppDispatcher = require('../../../../../../src/js/events/AppDispatcher');
+PluginTestUtils.addReducer('organization', OrganizationReducer);
 
 describe('ACLGroupStore', function () {
 
   beforeEach(function () {
-    ACLGroupStore.set({
-      groups: {},
-      groupsFetching: {}
+    let groups = {};
+    let groupsFetching = {};
+
+    SDK.dispatch({
+      type: EventTypes.ACL_GROUP_SET_GROUPS,
+      groups
+    });
+    SDK.dispatch({
+      type: EventTypes.ACL_GROUP_SET_GROUPS_FETCHING,
+      groupsFetching
     });
   });
 
   describe('#getGroupRaw', function () {
 
     it('returns the group that was set', function () {
-      ACLGroupStore.set({groups: {foo: {bar: 'baz'}}});
+      let groups = {foo: {bar: 'baz'}};
+      SDK.dispatch({
+        type: EventTypes.ACL_GROUP_SET_GROUPS,
+        groups
+      });
       expect(ACLGroupStore.getGroupRaw('foo')).toEqual({bar: 'baz'});
     });
 
@@ -36,12 +48,20 @@ describe('ACLGroupStore', function () {
   describe('#getGroup', function () {
 
     it('returns an instance of Group', function () {
-      ACLGroupStore.set({groups: {foo: {bar: 'baz'}}});
+      let groups = {foo: {bar: 'baz'}};
+      SDK.dispatch({
+        type: EventTypes.ACL_GROUP_SET_GROUPS,
+        groups
+      });
       expect(ACLGroupStore.getGroup('foo') instanceof Group).toBeTruthy();
     });
 
     it('returns the correct group data', function () {
-      ACLGroupStore.set({groups: {foo: {bar: 'baz'}}});
+      let groups = {foo: {bar: 'baz'}};
+      SDK.dispatch({
+        type: EventTypes.ACL_GROUP_SET_GROUPS,
+        groups
+      });
       expect(ACLGroupStore.getGroup('foo').get()).toEqual({bar: 'baz'});
     });
 
@@ -89,7 +109,7 @@ describe('ACLGroupStore', function () {
     describe('group', function () {
 
       it('stores group when event is dispatched', function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
           data: {gid: 'foo', bar: 'baz'}
         });
@@ -106,7 +126,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_SUCCESS,
           data: {gid: 'foo'}
         });
@@ -120,7 +140,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_ERROR,
           groupID: 'foo'
         });
@@ -131,7 +151,7 @@ describe('ACLGroupStore', function () {
     describe('users', function () {
 
       it('stores users when event is dispatched', function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
           data: {bar: 'baz'},
           groupID: 'foo'
@@ -149,7 +169,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_USERS_SUCCESS,
           groupID: 'foo'
         });
@@ -163,7 +183,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_USERS_ERROR,
           groupID: 'foo'
         });
@@ -174,7 +194,7 @@ describe('ACLGroupStore', function () {
     describe('permissions', function () {
 
       it('stores permissions when event is dispatched', function () {
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
           data: {bar: 'baz'},
           groupID: 'foo'
@@ -192,7 +212,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_SUCCESS,
           groupID: 'foo'
         });
@@ -206,7 +226,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_PERMISSIONS_ERROR,
           groupID: 'foo',
           data: 'bar'
@@ -225,7 +245,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS
         });
       });
@@ -238,7 +258,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_CREATE_SUCCESS,
           groupID: 'foo'
         });
@@ -252,7 +272,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR
         });
       });
@@ -265,7 +285,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_CREATE_ERROR,
           groupID: 'foo',
           data: 'bar'
@@ -284,7 +304,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS
         });
       });
@@ -297,7 +317,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_SUCCESS,
           groupID: 'foo'
         });
@@ -311,7 +331,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR
         });
       });
@@ -324,7 +344,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
           groupID: 'foo',
           data: 'bar'
@@ -340,7 +360,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_UPDATE_ERROR,
           groupID: 'foo',
           data: 'bar'
@@ -359,7 +379,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS
         });
       });
@@ -372,7 +392,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_SUCCESS,
           groupID: 'foo'
         });
@@ -386,7 +406,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR
         });
       });
@@ -400,7 +420,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_DELETE_ERROR,
           groupID: 'foo',
           data: 'error'
@@ -418,7 +438,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_SUCCESS,
           groupID: 'foo',
           userID: 'bar'
@@ -432,7 +452,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_ADD_USER_ERROR,
           data: 'error',
           groupID: 'foo',
@@ -451,7 +471,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_SUCCESS,
           groupID: 'foo',
           userID: 'bar'
@@ -465,7 +485,7 @@ describe('ACLGroupStore', function () {
           }
         );
 
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_GROUP_REMOVE_USER_ERROR,
           data: 'error',
           groupID: 'foo',
