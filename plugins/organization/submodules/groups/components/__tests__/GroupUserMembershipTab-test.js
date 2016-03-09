@@ -26,7 +26,6 @@ var UsersList = require('../../../users/structs/UsersList');
 
 PluginTestUtils.addReducer('organization', OrganizationReducer);
 
-
 const groupDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/group-with-details.json');
 groupDetailsFixture.permissions = groupDetailsFixture.permissions.array;
@@ -80,8 +79,8 @@ describe('GroupUserMembershipTab', function () {
               description: 'baz',
               uid: 'qux'
             }
-          ];
-        }
+          ]
+        });
       };
 
       this.instance.setState({requestUsersSuccess: true});
