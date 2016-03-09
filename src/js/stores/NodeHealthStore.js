@@ -86,7 +86,7 @@ const NodeHealthStore = Store.createStore({
   },
 
   getUnits: function (nodeID) {
-    let units = this.get('unitsByUnitID')[nodeID] || [];
+    let units = this.get('unitsByNodeID')[nodeID] || [];
     return new HealthUnitsList({items: units});
   },
 
