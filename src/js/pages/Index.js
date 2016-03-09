@@ -42,26 +42,24 @@ var Index = React.createClass({
     };
   },
 
-  store_listeners: [
-    {
-      name: 'intercom',
-      events: ['change']
-    },
-    {
-      name: 'summary',
-      events: ['success', 'error'],
-      unmountWhen: function (store, event) {
-        return event === 'success';
-      },
-      listenAlways: false
-    }
-  ],
-
   componentWillMount: function () {
     HistoryStore.init();
     MesosSummaryStore.init();
     MetadataStore.init();
     SidebarStore.init();
+
+    this.store_listeners = [{
+        name: 'intercom',
+        events: ['change']
+      }, {
+        name: 'summary',
+        events: ['success', 'error'],
+        unmountWhen: function (store, event) {
+          return event === 'success';
+        },
+        listenAlways: false
+      }
+    ];
 
     let state = getSidebarState();
     state.metadataLoaded = false;

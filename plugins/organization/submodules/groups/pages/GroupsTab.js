@@ -9,8 +9,6 @@ import GroupFormModal from '../components/GroupFormModal';
 import GroupSidePanel from '../components/GroupSidePanel';
 import OrganizationTab from '../../../pages/OrganizationTab';
 
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
-
 const EXTERNAL_CHANGE_EVENTS = [
   'onGroupStoreCreateSuccess',
   'onGroupStoreDeleteSuccess',
@@ -25,6 +23,7 @@ const METHODS_TO_BIND = [
 ];
 
 let SDK = require('../../../SDK').getSDK();
+let {APPLICATION} = SDK.constants;
 
 class GroupsTab extends mixin(StoreMixin) {
   constructor() {
@@ -105,7 +104,7 @@ class GroupsTab extends mixin(StoreMixin) {
       );
     }
 
-    if (!MesosSummaryStore.get('statesProcessed') ||
+    if (!SDK.Store.getState()[APPLICATION].summary.statesProcessed ||
       !this.state.groupsStoreSuccess) {
       return this.getLoadingScreen();
     }

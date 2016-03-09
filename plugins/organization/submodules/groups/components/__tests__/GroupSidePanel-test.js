@@ -25,24 +25,24 @@ require('../../../../SDK').setSDK(SDK);
 
 require('../../../../storeConfig').register();
 
-var MesosSummaryActions = require('../../../../../../src/js/events/MesosSummaryActions');
-var MesosSummaryStore = require('../../../../../../src/js/stores/MesosSummaryStore');
-
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var GroupSidePanel = require('../GroupSidePanel');
 var GroupSidePanelContents = require('../GroupSidePanelContents');
 
+let {APPLICATION} = SDK.constants;
+
 describe('GroupSidePanel', function () {
   beforeEach(function () {
-    this.fetchSummary = MesosSummaryActions.fetchSummary;
     this.groupStore = ACLGroupStore.getGroup;
 
-    MesosSummaryActions.fetchSummary = function () {
-      return null;
-    };
-
-    MesosSummaryStore.get = function () {
-      return true;
+    SDK.Store.getState = function () {
+      return {
+        [APPLICATION]: {
+          summary: {
+            statesProcessed: true
+          }
+        }
+      };
     };
 
     ACLGroupStore.getGroup = function () {
@@ -52,12 +52,9 @@ describe('GroupSidePanel', function () {
         'description': 'group description'
       };
     };
-
-    MesosSummaryStore.init();
   });
 
   afterEach(function () {
-    MesosSummaryActions.fetchSummary = this.fetchSummary;
     ACLGroupStore.getGroup = this.groupStore;
   });
 

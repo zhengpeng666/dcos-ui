@@ -9,8 +9,6 @@ import OrganizationTab from '../../../pages/OrganizationTab';
 import UserFormModal from '../components/UserFormModal';
 import UserSidePanel from '../components/UserSidePanel';
 
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
-
 const EXTERNAL_CHANGE_EVENTS = [
   'onUserStoreCreateSuccess',
   'onUserStoreDeleteSuccess',
@@ -27,6 +25,7 @@ const METHODS_TO_BIND = [
 let SDK = require('../../../SDK').getSDK();
 
 let RequestErrorMsg = SDK.get('RequestErrorMsg');
+let {APPLICATION} = SDK.constants;
 
 class UsersTab extends mixin(StoreMixin) {
   constructor() {
@@ -110,7 +109,7 @@ class UsersTab extends mixin(StoreMixin) {
       );
     }
 
-    if (!MesosSummaryStore.get('statesProcessed') ||
+    if (!SDK.Store.getState()[APPLICATION].summary.statesProcessed ||
       !this.state.usersStoreSuccess) {
       return this.getLoadingScreen();
     }

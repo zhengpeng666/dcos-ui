@@ -8,8 +8,6 @@ import GroupUserMembershipTab from './GroupUserMembershipTab';
 import PermissionsView from '../../acl/components/PermissionsView';
 import GroupAdvancedACLsTab from './GroupAdvancedACLsTab';
 
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
-
 const EXTERNAL_CHANGE_EVENTS = [
   'onAclStoreGroupGrantSuccess',
   'onAclStoreGroupRevokeSuccess',
@@ -23,6 +21,7 @@ let SDK = require('../../../SDK').getSDK();
 
 let {RequestErrorMsg, SidePanelContents, StringUtil} = SDK.get([
   'RequestErrorMsg', 'SidePanelContents', 'StringUtil']);
+let {APPLICATION} = SDK.constants;
 
 class GroupSidePanelContents extends SidePanelContents {
   constructor() {
@@ -199,9 +198,8 @@ class GroupSidePanelContents extends SidePanelContents {
     if (this.state.fetchedDetailsError) {
       return this.getErrorNotice();
     }
-
     if (group.get('gid') == null ||
-        !MesosSummaryStore.get('statesProcessed')) {
+        !SDK.Store.getState()[APPLICATION].summary.statesProcessed) {
       return this.getLoadingScreen();
     }
 

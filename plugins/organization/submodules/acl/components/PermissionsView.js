@@ -8,9 +8,6 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 import ACLStore from '../stores/ACLStore';
 import PermissionsTable from './PermissionsTable';
 
-// TO REMOVE
-import MesosSummaryStore from '../../../../../src/js/stores/MesosSummaryStore';
-
 const METHODS_TO_BIND = [
   'handleResourceSelection',
   'onAclStoreFetchResourceError',
@@ -22,8 +19,8 @@ const NO_SERVICES_INSTALLED_ID = 'NO_SERVICES_INSTALLED';
 
 let SDK = require('../../../SDK').getSDK();
 
-let {RequestErrorMsg, StringUtil, Util, Item} = SDK.get([
-  'RequestErrorMsg', 'StringUtil', 'Util', 'Item']);
+let {RequestErrorMsg, StringUtil, Util, Item, CompositeState} = SDK.get([
+  'RequestErrorMsg', 'StringUtil', 'Util', 'Item', 'CompositeState']);
 
 class PermissionsView extends mixin(StoreMixin) {
   constructor() {
@@ -120,7 +117,7 @@ class PermissionsView extends mixin(StoreMixin) {
 
   getDropdownItems() {
     let permissions = this.props.permissions;
-    let services = MesosSummaryStore.getActiveServices().sort(
+    let services = CompositeState.getServiceList().getItems().sort(
       Util.getLocaleCompareSortFn('name')
     );
     let filteredResources = services.filter(function (resource) {

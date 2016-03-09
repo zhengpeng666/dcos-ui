@@ -2,7 +2,8 @@
 module.exports = {
   structs: {
     List: 'List',
-    Item: 'Item'
+    Item: 'Item',
+    CompositeState: 'CompositeState'
   },
   utils: {
     StringUtil: 'StringUtil',
