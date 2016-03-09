@@ -12,6 +12,9 @@ var ConfigDev = {
         banner: {
           enabled: false
         },
+        networking: {
+          enabled: true
+        },
         organization: {
           enabled: true
         },
