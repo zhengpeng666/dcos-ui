@@ -5,6 +5,11 @@ jest.dontMock('../../../groups/stores/ACLGroupStore');
 jest.dontMock('../../stores/ACLUserStore');
 jest.dontMock('../../../../storeConfig');
 
+import {
+  REQUEST_ACL_GROUPS_ERROR,
+  REQUEST_ACL_GROUPS_SUCCESS
+} from '../../../groups/constants/ActionTypes';
+
 import PluginTestUtils from 'PluginTestUtils';
 
 PluginTestUtils.dontMock('RequestUtil');
@@ -25,15 +30,11 @@ var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
 var ACLGroupsStore = require('../../../groups/stores/ACLGroupsStore');
 var ACLUserStore = require('../../stores/ACLUserStore');
 var User = require('../../structs/User');
+var GroupsList = require('../../../groups/structs/GroupsList');
 var UserGroupMembershipTab = require('../UserGroupMembershipTab');
 var OrganizationReducer = require('../../../../Reducer');
 
 PluginTestUtils.addReducer('organization', OrganizationReducer);
-
-import {
-  REQUEST_ACL_GROUPS_ERROR,
-  REQUEST_ACL_GROUPS_SUCCESS
-} from '../../../groups/constants/ActionTypes';
 
 let userDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/user-with-details.json');
@@ -48,24 +49,20 @@ describe('UserGroupMembershipTab', function () {
     this.userStoreGetUser = ACLUserStore.getUser;
     this.container = document.createElement('div');
     ACLGroupsStore.getGroups = function () {
-      return {
-        getItems: function () {
-          return [
-            {
-              description: 'foo',
-              gid: 'bar'
-            },
-            {
-              description: 'bar',
-              gid: 'baz'
-            },
-            {
-              description: 'baz',
-              gid: 'qux'
-            }
-          ];
+      return new GroupsList({items: [
+        {
+          description: 'foo',
+          gid: 'bar'
+        },
+        {
+          description: 'bar',
+          gid: 'baz'
+        },
+        {
+          description: 'baz',
+          gid: 'qux'
         }
-      };
+      ]});
     };
 
     ACLGroupStore.addUser = jest.genMockFunction();

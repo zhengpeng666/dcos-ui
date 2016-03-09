@@ -85,6 +85,7 @@ class UserGroupMembershipTab extends mixin(StoreMixin) {
     let groups = ACLGroupsStore.getGroups().getItems().sort(
       Util.getLocaleCompareSortFn('description')
     );
+
     let userDetails = ACLUserStore.getUser(this.props.userID);
     let userGroups = userDetails.getGroups().getItems();
     let filteredGroups = groups.filter(function (group) {
