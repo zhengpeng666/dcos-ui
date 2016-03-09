@@ -4,6 +4,7 @@ import {Store as fluxStore} from 'mesosphere-shared-reactjs';
 
 import {APPLICATION} from '../constants/PluginConstants';
 import {APP_STORE_CHANGE} from '../constants/EventTypes';
+import ActionsPubSub from './middleware/ActionsPubSub';
 import AppReducer from './AppReducer';
 import AppHooks from './AppHooks';
 import Config from '../config/Config';
@@ -13,7 +14,7 @@ import Loader from './Loader';
 import PluginModules from './PluginModules';
 
 const initialState = {};
-const middleware = [];
+const middleware = [ActionsPubSub.pub];
 const PLUGIN_ENV_CACHE = [];
 const REGISTERED_ACTIONS = {};
 const EXISTING_FLUX_STORES = {};
@@ -261,6 +262,7 @@ const getSDK = function (pluginID, config) {
     Store: StoreAPI,
     Hooks,
     pluginID,
+    onDispatch,
     constants
   });
 
@@ -330,6 +332,18 @@ const __addReducer = function (pluginID, reducer) {
   replaceStoreReducers();
 };
 
+/**
+ * Register a callback to be invoked for every dispatched action
+ * @param  {Function} callback - Function invoked with action as argument for all dispatched Actions.
+ * @returns {Function} - unsubscribe
+ */
+const onDispatch = function (callback) {
+  // Add ability to react to actions outside of a reducer.
+  // This will most likely be deprecated at some point but for now it gives
+  // us backwards compatibility with much of our existing dispatcher code
+  return ActionsPubSub.sub(callback);
+};
+
 // Subscribe to Store config change and call initialize with
 // new plugin configuration
 let unSubscribe = Store.subscribe(function () {
@@ -351,6 +365,7 @@ if (global.__DEV__) {
   ApplicationSDK.__getSDK = getSDK;
   ApplicationSDK.__addReducer = __addReducer;
 }
+
 // Add manual load method
 ApplicationSDK.initialize = initialize;
 

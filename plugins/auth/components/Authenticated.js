@@ -1,6 +1,8 @@
 import React from 'react';
 
 import ACLAuthStore from '../stores/ACLAuthStore';
+
+let SDK = require('../SDK').getSDK();
 /*
  * Exports a higher-order component that checks if user is logged in using the
  * ACLAuthStore. If the user is logged in, the component will render.
@@ -11,12 +13,7 @@ module.exports = (ComposedComponent) => {
 
     static willTransitionTo(transition) {
       if (!ACLAuthStore.isLoggedIn()) {
-
-        // Store the route we came from
-        ACLAuthStore.set({loginRedirectRoute: transition.path});
-
-        // Go to login page
-        transition.redirect('/login');
+        SDK.Hooks.doAction('redirectToLogin', transition);
       }
     }
 

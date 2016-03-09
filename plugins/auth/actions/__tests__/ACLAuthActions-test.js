@@ -2,7 +2,6 @@ jest.dontMock('../ACLAuthActions');
 
 import PluginTestUtils from 'PluginTestUtils';
 import ActionTypes from '../../constants/ActionTypes';
-import AppDispatcher from '../../../../src/js/events/AppDispatcher';
 import PluginSDK from '../../SDK';
 
 let SDK = PluginTestUtils.getSDK('authentication', {enabled: true});
@@ -30,20 +29,19 @@ describe('ACLAuthActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_ROLE_SUCCESS);
+        unsubscribe();
       });
 
       this.configuration.success();
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_ROLE_ERROR);
+        unsubscribe();
+
       });
 
       this.configuration.error({});
@@ -69,30 +67,27 @@ describe('ACLAuthActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_LOGIN_SUCCESS);
+        unsubscribe();
       });
 
       this.configuration.success();
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_LOGIN_ERROR);
+        unsubscribe();
       });
 
       this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
     it('dispatches the correct error when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
         expect(action.data).toEqual('bar');
+        unsubscribe();
       });
 
       this.configuration.error({responseJSON: {description: 'bar'}});
@@ -118,30 +113,27 @@ describe('ACLAuthActions', function () {
     });
 
     it('dispatches the correct action when successful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_LOGOUT_SUCCESS);
+        unsubscribe();
       });
 
       this.configuration.success();
     });
 
     it('dispatches the correct action when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
         expect(action.type).toEqual(ActionTypes.REQUEST_ACL_LOGOUT_ERROR);
+        unsubscribe();
       });
 
       this.configuration.error({responseJSON: {description: 'bar'}});
     });
 
     it('dispatches the correct error when unsuccessful', function () {
-      var id = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-        AppDispatcher.unregister(id);
+      let unsubscribe = SDK.onDispatch(function (action) {
         expect(action.data).toEqual('bar');
+        unsubscribe();
       });
 
       this.configuration.error({responseJSON: {description: 'bar'}});

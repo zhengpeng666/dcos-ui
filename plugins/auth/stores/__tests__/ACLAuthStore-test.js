@@ -1,11 +1,4 @@
-jest.dontMock('../ACLAuthStore');
-jest.dontMock('../../utils');
-jest.dontMock('../../actions/ACLAuthActions');
-jest.dontMock('../../constants/ACLUserRoles');
-
 import PluginTestUtils from 'PluginTestUtils';
-
-PluginTestUtils.dontMock('PluginGetSetMixin');
 
 var cookie = require('cookie');
 
@@ -16,10 +9,11 @@ let SDK = PluginTestUtils.getSDK('authentication', {enabled: true});
 require('../../SDK').setSDK(SDK);
 
 var ACLAuthStore = require('../ACLAuthStore');
+var AuthReducer = require('../../Reducer');
+
+PluginTestUtils.addReducer('authentication', AuthReducer);
 
 let RequestUtil = SDK.get('RequestUtil');
-
-var AppDispatcher = require('../../../../src/js/events/AppDispatcher');
 
 const USER_COOKIE_KEY = 'dcos-acs-info-cookie';
 
@@ -105,7 +99,10 @@ describe('ACLAuthStore', function () {
     });
 
     afterEach(function () {
-      ACLAuthStore.set({role: undefined});
+      SDK.dispatch({
+        type: EventTypes.ACL_AUTH_USER_ROLE_CHANGED,
+        role: undefined
+      });
     });
 
     it('should get the user', function () {
@@ -149,7 +146,7 @@ describe('ACLAuthStore', function () {
           EventTypes.ACL_AUTH_USER_LOGOUT_SUCCESS,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_LOGOUT_SUCCESS
         });
 
@@ -162,7 +159,7 @@ describe('ACLAuthStore', function () {
           EventTypes.ACL_AUTH_USER_LOGOUT_ERROR,
           mockedFn
         );
-        AppDispatcher.handleServerAction({
+        SDK.dispatch({
           type: ActionTypes.REQUEST_ACL_LOGOUT_ERROR
         });
 

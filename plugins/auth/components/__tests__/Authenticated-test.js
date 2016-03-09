@@ -16,6 +16,9 @@ require('../../SDK').setSDK(SDK);
 
 let Authenticated = require('../Authenticated');
 let ACLAuthStore = require('../../stores/ACLAuthStore');
+let AuthHooks = require('../../hooks');
+
+AuthHooks.initialize();
 
 class FakeComponent extends React.Component {
   render() {

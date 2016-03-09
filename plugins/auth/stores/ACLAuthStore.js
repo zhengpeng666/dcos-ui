@@ -1,5 +1,3 @@
-import {Store} from 'mesosphere-shared-reactjs';
-
 import {
   REQUEST_ACL_LOGIN_SUCCESS,
   REQUEST_ACL_LOGIN_ERROR,
@@ -21,31 +19,23 @@ import ACLAuthActions from '../actions/ACLAuthActions';
 import ACLUserRoles from '../constants/ACLUserRoles';
 import Utils from '../utils';
 
-import AppDispatcher from '../../../src/js/events/AppDispatcher';
-import {SERVER_ACTION} from '../../../src/js/constants/ActionTypes';
-
 let SDK = require('../SDK').getSDK();
 
-let ACLAuthStore = Store.createStore({
+let ACLAuthStore = SDK.createStore({
   storeID: 'auth',
 
-  mixins: [SDK.get('PluginGetSetMixin')],
-
-  onSet() {
-    let {APP_STORE_CHANGE} = SDK.constants;
-    SDK.dispatch({
-      type: APP_STORE_CHANGE,
-      storeID: this.storeID,
-      data: this.getSet_data
-    });
-  },
-
-  addChangeListener: function (eventName, callback) {
-    this.on(eventName, callback);
-  },
-
-  removeChangeListener: function (eventName, callback) {
-    this.removeListener(eventName, callback);
+  mixinEvents: {
+    events: {
+      success: ACL_AUTH_USER_LOGIN_CHANGED,
+      error: ACL_AUTH_USER_LOGIN_ERROR,
+      logoutSuccess: ACL_AUTH_USER_LOGOUT_SUCCESS,
+      logoutError: ACL_AUTH_USER_LOGOUT_ERROR,
+      roleChange: ACL_AUTH_USER_ROLE_CHANGED
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
   },
 
   login: ACLAuthActions.login,
@@ -53,6 +43,10 @@ let ACLAuthStore = Store.createStore({
   logout: ACLAuthActions.logout,
 
   fetchRole: ACLAuthActions.fetchRole,
+
+  get(prop) {
+    return SDK.Store.getOwnState()[prop];
+  },
 
   isLoggedIn: function () {
     return !!Utils.getUserMetadata();
@@ -83,7 +77,10 @@ let ACLAuthStore = Store.createStore({
   makeAdminRole() {
     let role = this.get('role');
     if (role !== ACLUserRoles.admin) {
-      this.set({role: ACLUserRoles.admin});
+      SDK.dispatch({
+        type: ACL_AUTH_USER_ROLE_CHANGED,
+        role: ACLUserRoles.admin
+      });
       this.emit(ACL_AUTH_USER_ROLE_CHANGED);
     }
   },
@@ -91,13 +88,19 @@ let ACLAuthStore = Store.createStore({
   makeDefaultRole() {
     let role = this.get('role');
     if (role !== ACLUserRoles.default) {
-      this.set({role: ACLUserRoles.default});
+      SDK.dispatch({
+        type: ACL_AUTH_USER_ROLE_CHANGED,
+        role: ACLUserRoles.default
+      });
       this.emit(ACL_AUTH_USER_ROLE_CHANGED);
     }
   },
 
   resetRole() {
-    this.set({role: undefined});
+    SDK.dispatch({
+        type: ACL_AUTH_USER_ROLE_CHANGED,
+        role: undefined
+      });
   },
 
   processLoginSuccess() {
@@ -119,41 +122,33 @@ let ACLAuthStore = Store.createStore({
     this.emit(ACL_AUTH_USER_LOGOUT_SUCCESS);
 
     SDK.Hooks.doAction('userLogoutSuccess');
-  },
+  }
+});
 
-  dispatcherIndex: AppDispatcher.register(function (payload) {
-    let source = payload.source;
-    if (source !== SERVER_ACTION) {
-      return false;
-    }
-
-    let action = payload.action;
-
-    switch (action.type) {
-      case REQUEST_ACL_LOGIN_SUCCESS:
-        ACLAuthStore.processLoginSuccess();
-        break;
-      case REQUEST_ACL_LOGIN_ERROR:
-        ACLAuthStore.emit(ACL_AUTH_USER_LOGIN_ERROR, action.data);
-        break;
-      case REQUEST_ACL_LOGOUT_SUCCESS:
-        ACLAuthStore.processLogoutSuccess();
-        break;
-      case REQUEST_ACL_LOGOUT_ERROR:
-        ACLAuthStore.emit(ACL_AUTH_USER_LOGOUT_ERROR, action.data);
-        break;
-      // Get role of current user
-      case REQUEST_ACL_ROLE_SUCCESS:
-        ACLAuthStore.makeAdminRole();
-        break;
-      // Get role of current user
-      case REQUEST_ACL_ROLE_ERROR:
-        ACLAuthStore.makeDefaultRole();
-        break;
-    }
-
-    return true;
-  })
+SDK.onDispatch(function (action) {
+  switch (action.type) {
+    case REQUEST_ACL_LOGIN_SUCCESS:
+      ACLAuthStore.processLoginSuccess();
+      break;
+    case REQUEST_ACL_LOGIN_ERROR:
+      ACLAuthStore.emit(ACL_AUTH_USER_LOGIN_ERROR, action.data);
+      break;
+    case REQUEST_ACL_LOGOUT_SUCCESS:
+      ACLAuthStore.processLogoutSuccess();
+      break;
+    case REQUEST_ACL_LOGOUT_ERROR:
+      ACLAuthStore.emit(ACL_AUTH_USER_LOGOUT_ERROR, action.data);
+      break;
+    // Get role of current user
+    case REQUEST_ACL_ROLE_SUCCESS:
+      ACLAuthStore.makeAdminRole();
+      break;
+    // Get role of current user
+    case REQUEST_ACL_ROLE_ERROR:
+      ACLAuthStore.makeDefaultRole();
+      break;
+  }
+  return true;
 });
 
 module.exports = ACLAuthStore;

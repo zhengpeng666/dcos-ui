@@ -1,9 +1,10 @@
 jest.dontMock('../LoginModal');
 jest.dontMock('../../actions/ACLAuthActions');
 jest.dontMock('../../stores/ACLAuthStore');
-jest.dontMock('../../storeConfig');
 
-var React = require('react');
+/*eslint-disable no-unused-vars*/
+import React from 'react';
+/*eslint-enable no-unused-vars*/
 var ReactDOM = require('react-dom');
 
 var MetadataStore = require('../../../../src/js/stores/MetadataStore');
@@ -25,10 +26,8 @@ let SDK = PluginTestUtils.getSDK('authentication', {enabled: true});
 
 require('../../SDK').setSDK(SDK);
 
-require('../../storeConfig').register();
-
-let LoginModal = require('../LoginModal');
 var ACLAuthStore = require('../../stores/ACLAuthStore');
+let LoginModal = require('../LoginModal');
 
 MetadataStore.set({dcosMetadata: {}});
 
