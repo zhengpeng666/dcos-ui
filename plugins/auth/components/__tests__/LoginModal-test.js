@@ -5,13 +5,7 @@ jest.dontMock('../../stores/ACLAuthStore');
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
-<<<<<<< 284e3ef8858a9a7335ede48674cf5c6723669ed0
-var ReactDOM = require('react-dom');
-
-var MetadataStore = require('../../../../src/js/stores/MetadataStore');
-=======
 import ReactDOM from 'react-dom';
->>>>>>> Decoupled MesosSummaryStore
 
 import PluginTestUtils from 'PluginTestUtils';
 
