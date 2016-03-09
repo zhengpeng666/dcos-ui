@@ -9,7 +9,6 @@ import ACLUserStore from '../stores/ACLUserStore';
 import UserSidePanelContents from './UserSidePanelContents';
 
 let SDK = require('../../../SDK').getSDK();
-let {APPLICATION} = SDK.constants;
 
 const METHODS_TO_BIND = [
   'handleDeleteModalOpen',
@@ -97,7 +96,7 @@ class UserSidePanel extends mixin(StoreMixin) {
   isOpen() {
     return (
       this.props.params.userID != null
-      && SDK.Store.getState()[APPLICATION].summary.statesProcessed
+      && SDK.Store.getAppState().summary.statesProcessed
     );
   }
 

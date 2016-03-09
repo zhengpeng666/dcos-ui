@@ -23,7 +23,6 @@ const METHODS_TO_BIND = [
 ];
 
 let SDK = require('../../../SDK').getSDK();
-let {APPLICATION} = SDK.constants;
 
 class GroupsTab extends mixin(StoreMixin) {
   constructor() {
@@ -104,7 +103,7 @@ class GroupsTab extends mixin(StoreMixin) {
       );
     }
 
-    if (!SDK.Store.getState()[APPLICATION].summary.statesProcessed ||
+    if (!SDK.Store.getAppState().summary.statesProcessed ||
       !this.state.groupsStoreSuccess) {
       return this.getLoadingScreen();
     }
