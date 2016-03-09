@@ -21,9 +21,9 @@ var TestUtils = require('react-addons-test-utils');
 var ACLGroupStore = require('../../stores/ACLGroupStore');
 var ACLGroupsStore = require('../../stores/ACLGroupsStore');
 var ACLUsersStore = require('../../../users/stores/ACLUsersStore');
-var GroupUserMembershipTab = require('../GroupUserMembershipTab');
-
 var Group = require('../../structs/Group');
+var GroupUserMembershipTab = require('../GroupUserMembershipTab');
+var UsersList = require('../../../users/structs/UsersList');
 
 const groupDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/group-with-details.json');
@@ -64,24 +64,22 @@ describe('GroupUserMembershipTab', function () {
       ACLGroupStore.addUser = jest.genMockFunction();
       ACLUsersStore.get = function (key) {
         if (key === 'users') {
-          return {
-            getItems: function () {
-              return [
-                {
-                  description: 'foo',
-                  uid: 'bar'
-                },
-                {
-                  description: 'bar',
-                  uid: 'baz'
-                },
-                {
-                  description: 'baz',
-                  uid: 'qux'
-                }
-              ];
-            }
-          };
+          return new UsersList({
+            items: [
+              {
+                description: 'foo',
+                uid: 'bar'
+              },
+              {
+                description: 'bar',
+                uid: 'baz'
+              },
+              {
+                description: 'baz',
+                uid: 'qux'
+              }
+            ]
+          });
         }
       };
 
@@ -108,7 +106,7 @@ describe('GroupUserMembershipTab', function () {
     it('should call #addUser with the proper arguments when selecting a user',
       function () {
       expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual('unicode');
-      expect(ACLGroupStore.addUser.mock.calls[0][1]).toEqual('baz');
+      expect(ACLGroupStore.addUser.mock.calls[0][1]).toEqual('qux');
     });
 
   });

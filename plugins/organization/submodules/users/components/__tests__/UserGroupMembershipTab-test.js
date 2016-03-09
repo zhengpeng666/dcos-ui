@@ -5,6 +5,11 @@ jest.dontMock('../../../groups/stores/ACLGroupStore');
 jest.dontMock('../../stores/ACLUserStore');
 jest.dontMock('../../../../storeConfig');
 
+import {
+  REQUEST_ACL_GROUPS_ERROR,
+  REQUEST_ACL_GROUPS_SUCCESS
+} from '../../../groups/constants/ActionTypes';
+
 import PluginTestUtils from 'PluginTestUtils';
 
 PluginTestUtils.dontMock('RequestUtil');
@@ -24,17 +29,12 @@ var TestUtils = require('react-addons-test-utils');
 var ACLGroupStore = require('../../../groups/stores/ACLGroupStore');
 var ACLGroupsStore = require('../../../groups/stores/ACLGroupsStore');
 var ACLUserStore = require('../../stores/ACLUserStore');
+var User = require('../../structs/User');
+var GroupsList = require('../../../groups/structs/GroupsList');
 var UserGroupMembershipTab = require('../UserGroupMembershipTab');
 var OrganizationReducer = require('../../../../Reducer');
 
 PluginTestUtils.addReducer('organization', OrganizationReducer);
-
-import {
-  REQUEST_ACL_GROUPS_ERROR,
-  REQUEST_ACL_GROUPS_SUCCESS
-} from '../../../groups/constants/ActionTypes';
-
-var User = require('../../structs/User');
 
 let userDetailsFixture =
   require('../../../../../../tests/_fixtures/acl/user-with-details.json');
@@ -49,24 +49,20 @@ describe('UserGroupMembershipTab', function () {
     this.userStoreGetUser = ACLUserStore.getUser;
     this.container = document.createElement('div');
     ACLGroupsStore.getGroups = function () {
-      return {
-        getItems: function () {
-          return [
-            {
-              description: 'foo',
-              gid: 'bar'
-            },
-            {
-              description: 'bar',
-              gid: 'baz'
-            },
-            {
-              description: 'baz',
-              gid: 'qux'
-            }
-          ];
+      return new GroupsList({items: [
+        {
+          description: 'foo',
+          gid: 'bar'
+        },
+        {
+          description: 'bar',
+          gid: 'baz'
+        },
+        {
+          description: 'baz',
+          gid: 'qux'
         }
-      };
+      ]});
     };
 
     ACLGroupStore.addUser = jest.genMockFunction();
@@ -111,7 +107,7 @@ describe('UserGroupMembershipTab', function () {
 
     it('should call #addUser with the proper arguments when selecting a group',
       function () {
-      expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual('baz');
+      expect(ACLGroupStore.addUser.mock.calls[0][0]).toEqual('qux');
       expect(ACLGroupStore.addUser.mock.calls[0][1]).toEqual('unicode');
     });
 
@@ -160,6 +156,7 @@ describe('UserGroupMembershipTab', function () {
         id: 'default-placeholder-group-id',
         name: 'Add Group',
         html: 'Add Group',
+        selectable: false,
         selectedHtml: 'Add Group'
       });
     });

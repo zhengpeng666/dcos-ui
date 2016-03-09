@@ -9,6 +9,9 @@ import ACLGroupStore from '../stores/ACLGroupStore';
 import ACLUsersStore from '../../users/stores/ACLUsersStore';
 import GroupUserTable from './GroupUserTable';
 
+const DEFAULT_ID = 'default-placeholder-user-id';
+const NO_USERS_AVAILABLE_ID = 'no-users-available';
+
 const METHODS_TO_BIND = [
   'onUserSelection'
 ];
@@ -69,22 +72,46 @@ class GroupUserMembershipTable extends mixin(StoreMixin) {
     let users = ACLUsersStore.get('users').getItems().sort(
       Util.getLocaleCompareSortFn('description')
     );
+    let groupDetails = ACLGroupStore.getGroup(this.props.groupID);
+    let groupUsers = groupDetails.getUsers().getItems();
+    let filteredUsers = users.filter(function (user) {
+      // Filter out any user which is already part of the group.
+      let uid = user.get('uid');
+      return !groupUsers.some(function (currentUser) {
+        return currentUser.get('uid') === uid;
+      });
+    });
 
     let defaultItem = {
       className: 'hidden',
       description: 'Add User',
-      uid: 'default-placeholder-user-id'
+      selectable: false,
+      uid: DEFAULT_ID
     };
-    let items = [defaultItem].concat(users);
+    let items = [defaultItem].concat(filteredUsers);
+
+    if (!filteredUsers || filteredUsers.length === 0) {
+      items.push({
+        description: 'No users to add.',
+        uid: NO_USERS_AVAILABLE_ID,
+        selectable: false
+      });
+    }
 
     return items.map(function (user) {
+      let selectable = true;
       let selectedHtml = user.description;
+
+      if (user.selectable != null) {
+        selectable = user.selectable;
+      }
 
       return {
         className: user.className || '',
         id: user.uid,
         name: selectedHtml,
         html: selectedHtml,
+        selectable,
         selectedHtml
       };
     });
