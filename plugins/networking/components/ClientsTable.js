@@ -2,11 +2,8 @@ import classNames from 'classnames';
 import React from 'react';
 import {Table} from 'reactjs-components';
 
-import CompositeState from '../../../src/js/structs/CompositeState';
-import FilterInputText from '../../../src/js/components/FilterInputText';
-import MesosStateStore from '../../../src/js/stores/MesosStateStore';
-import StringUtil from '../../../src/js/utils/StringUtil';
-import TableUtil from '../../../src/js/utils/TableUtil';
+let SDK = require('../SDK').getSDK();
+let {FilterInputText, StringUtil} = SDK.get(['FilterInputText', 'StringUtil']);
 
 const METHODS_TO_BIND = [
   'alignTableCellRight',
@@ -131,10 +128,6 @@ class ClientsTable extends React.Component {
 
   handleSearchStringChange(searchString) {
     this.setState({searchString});
-  }
-
-  hideColumnAtMini(prop) {
-    return COLUMNS_TO_HIDE_MINI.indexOf(prop) > -1;
   }
 
   processClients(clientList) {

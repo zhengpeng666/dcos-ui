@@ -8,21 +8,16 @@ let SDK = require('./SDK').getSDK();
 
 module.exports = {
 
-  routes: {
-    route: {
-      children: [
-        {
-          type: Route,
-          name: 'vip-detail-panel',
-          path: 'vip-detail/:vip/:protocol/:port'
-        },
-        {
-          type: Route,
-          name: 'backend-detail-panel',
-          path: 'backend-detail/:vip/:protocol/:port'
-        }
-      ]
-    }
+  filters: [
+    'NetworkingPageContent',
+    'NetworkingChildRoutes',
+    'NetworkingVIPTableLabel'
+  ],
+
+  initialize() {
+    this.filters.forEach(filter => {
+      SDK.Hooks.addFilter(filter, this[filter].bind(this));
+    });
   },
 
   NetworkingPageContent(content, props, openedPage) {
@@ -38,8 +33,13 @@ module.exports = {
   NetworkingChildRoutes(route) {
     route.children = [{
       type: Route,
-      name: 'network-panel',
+      name: 'vip-detail-panel',
       path: 'vip-detail/:vip/:protocol/:port'
+    },
+    {
+      type: Route,
+      name: 'backend-detail-panel',
+      path: 'backend-detail/:vip/:protocol/:port'
     }];
     return route;
   },

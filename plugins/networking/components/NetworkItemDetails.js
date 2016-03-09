@@ -1,6 +1,7 @@
 import React from 'react';
 
-import DescriptionList from '../../../src/js/components/DescriptionList';
+let SDK = require('../SDK').getSDK();
+let DescriptionList = SDK.get('DescriptionList');
 
 class NetworkItemDetails extends React.Component {
   render() {

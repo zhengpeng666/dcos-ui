@@ -5,14 +5,11 @@ const React = require('react');
 import BackendsTable from './BackendsTable';
 import NetworkingVIPsStore from '../stores/NetworkingVIPsStore';
 import NetworkItemDetails from './NetworkItemDetails';
-import RequestErrorMsg from '../../../src/js/components/RequestErrorMsg';
-import SidePanelContents from '../../../src/js/components/SidePanelContents';
-import StringUtil from '../../../src/js/utils/StringUtil';
 
 let SDK = require('../SDK').getSDK();
 
-let {SidePanelContents, RequestErrorMsg, DescriptionList} = SDK.get([
-  'SidePanelContents', 'RequestErrorMsg', 'DescriptionList'
+let {SidePanelContents, RequestErrorMsg} = SDK.get([
+  'SidePanelContents', 'RequestErrorMsg'
 ]);
 
 class VIPDetailSidePanelContents extends SidePanelContents {
@@ -120,9 +117,9 @@ class VIPDetailSidePanelContents extends SidePanelContents {
       let vipDetails = NetworkingVIPsStore.getVIPDetail(
         `${this.props.protocol}:${this.props.vip}:${this.props.port}`
       );
-      content = <BackendsTable backends={vipDetails.getBackends()}
+      content = (<BackendsTable backends={vipDetails.getBackends()}
         vipProtocol={this.props.protocol}
-        parentRouter={this.props.parentRouter} />;
+        parentRouter={this.props.parentRouter} />);
     }
 
     return (

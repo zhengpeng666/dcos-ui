@@ -1,15 +1,13 @@
 import _ from 'underscore';
-import {Confirm, SidePanel} from 'reactjs-components';
-import mixin from 'reactjs-mixin';
+import {SidePanel} from 'reactjs-components';
 import React from 'react';
 
 import BackendDetailSidePanelContents from './BackendDetailSidePanelContents';
-import HistoryStore from '../../../src/js/stores/HistoryStore';
-import MesosSummaryStore from '../../../src/js/stores/MesosSummaryStore';
-import StringUtil from '../../../src/js/utils/StringUtil';
 import VIPDetailSidePanelContents from './VIPDetailSidePanelContents';
 
 let SDK = require('../SDK').getSDK();
+
+let StringUtil = SDK.get('StringUtil');
 
 const METHODS_TO_BIND = [
   'handlePanelClose'
@@ -46,8 +44,7 @@ class NetworkSidePanel extends React.Component {
 
   getHeader() {
     let text = 'back';
-    let prevPage = HistoryStore.getHistoryAt(-1);
-
+    let prevPage = SDK.Hooks.applyFilter('getHistoryAt', null, -1);
     if (prevPage == null) {
       text = 'close';
     }
