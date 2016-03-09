@@ -3,11 +3,11 @@ import {
   NETWORKING_BACKEND_CONNECTIONS_REQUEST_ERROR
 } from '../constants/EventTypes';
 
-import {
-  REQUEST_NETWORKING_BACKEND_CONNECTIONS_SUCCESS,
-  REQUEST_NETWORKING_BACKEND_CONNECTIONS_ERROR
-} from '../constants/ActionTypes';
-
+import ActionTypes from '../constants/ActionTypes';
+import AppDispatcher from '../../../src/js/events/AppDispatcher';
+import BackendConnection from '../structs/BackendConnection';
+import EventTypes from '../constants/EventTypes';
+import PluginGetSetMixin from '../../../src/js/mixins/PluginGetSetMixin';
 import NetworkingActions from '../actions/NetworkingActions';
 
 let SDK = require('../SDK').getSDK();
@@ -31,6 +31,18 @@ let NetworkingBackendConnectionsStore = SDK.createStore({
   get(prop) {
     return SDK.Store.getOwnState()[prop];
   },
+
+  fetchVIPBackendConnections: NetworkingActions.fetchVIPBackendConnections,
+
+  getBackendConnections: function (vipString) {
+    let backendConnections = this.get('backendConnections')[vipString];
+
+    if (backendConnections) {
+      return new BackendConnection(backendConnections);
+    }
+
+    return null;
+   },
 
   processBackendConnections: function (vip, backendConnections) {
     let currentBackendConnections = this.get('backendConnections');

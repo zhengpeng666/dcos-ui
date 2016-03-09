@@ -8,16 +8,21 @@ let SDK = require('./SDK').getSDK();
 
 module.exports = {
 
-  filters: [
-    'NetworkingPageContent',
-    'NetworkingChildRoutes',
-    'NetworkingVIPTableLabel'
-  ],
-
-  initialize() {
-    this.filters.forEach(filter => {
-      SDK.Hooks.addFilter(filter, this[filter].bind(this));
-    });
+  routes: {
+    route: {
+      children: [
+        {
+          type: Route,
+          name: 'vip-detail-panel',
+          path: 'vip-detail/:vip/:protocol/:port'
+        },
+        {
+          type: Route,
+          name: 'backend-detail-panel',
+          path: 'backend-detail/:vip/:protocol/:port'
+        }
+      ]
+    }
   },
 
   NetworkingPageContent(content, props, openedPage) {
@@ -41,7 +46,7 @@ module.exports = {
 
   NetworkingVIPTableLabel(label, fullVIP) {
     return (
-      <Link to="network-panel" params={{
+      <Link to="vip-detail-panel" params={{
           protocol: fullVIP.protocol,
           vip: fullVIP.ip,
           port: fullVIP.port

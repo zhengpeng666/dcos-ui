@@ -1,6 +1,12 @@
-import {SidePanel} from 'reactjs-components';
+import _ from 'underscore';
+import {Confirm, SidePanel} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 import React from 'react';
 
+import BackendDetailSidePanelContents from './BackendDetailSidePanelContents';
+import HistoryStore from '../../../src/js/stores/HistoryStore';
+import MesosSummaryStore from '../../../src/js/stores/MesosSummaryStore';
+import StringUtil from '../../../src/js/utils/StringUtil';
 import VIPDetailSidePanelContents from './VIPDetailSidePanelContents';
 
 let SDK = require('../SDK').getSDK();
@@ -39,32 +45,59 @@ class NetworkSidePanel extends React.Component {
   }
 
   getHeader() {
+    let text = 'back';
+    let prevPage = HistoryStore.getHistoryAt(-1);
+
+    if (prevPage == null) {
+      text = 'close';
+    }
+
+    if (prevPage) {
+      let matchedRoutes = this.context.router.match(prevPage).routes;
+      prevPage = _.last(matchedRoutes).name;
+
+      if (this.props.openedPage === prevPage) {
+        text = 'close';
+      }
+    }
+
     return (
-      <div className="side-panel-header-container">
-        <div className="side-panel-header-actions
-          side-panel-header-actions-primary">
-          <span className="side-panel-header-action"
-            onClick={this.handlePanelClose}>
-            <i className={`icon icon-sprite
-              icon-sprite-small
-              icon-close
-              icon-sprite-small-white`}></i>
-            Close
-          </span>
-        </div>
+      <div className="side-panel-header-actions
+        side-panel-header-actions-primary">
+        <span className="side-panel-header-action"
+          onClick={this.handlePanelClose}>
+          <i className={`icon icon-sprite
+            icon-sprite-small
+            icon-${text}
+            icon-sprite-small-white`}></i>
+          {StringUtil.capitalize(text)}
+        </span>
       </div>
     );
   }
 
-  getContents(vip, port, protocol) {
+  getContents(props) {
     if (!this.isOpen()) {
       return null;
     }
 
-    return (
-      <VIPDetailSidePanelContents port={port} vip={vip} protocol={protocol}
-        parentRouter={this.context.router} />
-    );
+    let currentRoutes = this.context.router.getCurrentRoutes();
+    let activeRoute = currentRoutes[currentRoutes.length - 1].name;
+    let {vip, port, protocol} = props;
+
+    if (activeRoute === 'backend-detail-panel') {
+      return (
+        <BackendDetailSidePanelContents port={port} vip={vip}
+          protocol={protocol} parentRouter={this.context.router} />
+      );
+    } else if (activeRoute === 'vip-detail-panel') {
+      return (
+        <VIPDetailSidePanelContents port={port} vip={vip} protocol={protocol}
+          parentRouter={this.context.router} />
+      );
+    }
+
+    return null;
   }
 
   render() {
@@ -79,7 +112,7 @@ class NetworkSidePanel extends React.Component {
           bodyClass="side-panel-content flex-container-col"
           onClose={this.handlePanelClose}
           open={this.isOpen()}>
-          {this.getContents(vip, port, protocol)}
+          {this.getContents(this.props)}
         </SidePanel>
       </div>
     );

@@ -17,8 +17,10 @@ const COLUMNS_TO_HIDE_MINI = [
 ];
 
 const METHODS_TO_BIND = [
+  'alignTableCellRight',
+  'handleBackendClick',
   'handleSearchStringChange',
-  'alignTableCellRight'
+  'renderBackendName'
 ];
 
 const RIGHT_ALIGNED_TABLE_CELLS = [
@@ -160,6 +162,11 @@ class BackendsTable extends React.Component {
     };
   }
 
+  handleBackendClick(protocol, vip, port) {
+    this.props.parentRouter.transitionTo('backend-detail-panel',
+      {protocol, vip, port});
+  }
+
   handleSearchStringChange(searchString) {
     this.setState({searchString});
   }
@@ -195,7 +202,12 @@ class BackendsTable extends React.Component {
     return (
       <div>
         <div className="backends-table-ip-address emphasize">
-          {item.ip}:{item.port}
+          <a
+            className="emphasize clickable text-overflow"
+            onClick={this.handleBackendClick.bind(this, this.props.vipProtocol, item.ip, item.port)}
+            title={`${item.ip}:${item.port}`}>
+            {item.ip}:{item.port}
+          </a>
         </div>
         <div className="backends-table-task-details table-cell-details-secondary
           flex-box flex-box-align-vertical-center table-cell-flex-box
