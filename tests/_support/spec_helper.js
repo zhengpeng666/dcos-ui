@@ -47,6 +47,11 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
         url: /api\/v1\/ldap\/config/,
         response: ''
       })
+      .route({
+        status: 200,
+        url: /auth\/logout/,
+        response: ''
+      })
       .route(/api\/v1\/groups/, 'fx:acl/groups-unicode')
       .route(/groups\/olis/, 'fx:acl/group-unicode')
       .route(/groups\/olis\/users/, 'fx:acl/group-users')
@@ -208,10 +213,17 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
 Cypress.addParentCommand('visitUrl', function (options) {
   var callback = function () {};
 
-  if (options.logIn) {
+  if (options.logIn && !options.remoteLogIn) {
     callback = function (win) {
+      // {"uid":"joe","description":"Joe Doe"}
       win.document.cookie = 'dcos-acs-info-cookie=' +
         'eyJ1aWQiOiJqb2UiLCJkZXNjcmlwdGlvbiI6IkpvZSBEb2UifQ==';
+    };
+  } else if (options.logIn && options.remoteLogIn) {
+    callback = function (win) {
+      // {"uid":"joe","description":"Joe Doe","is_remote":true}
+      win.document.cookie = 'dcos-acs-info-cookie=' +
+        'eyJ1aWQiOiJqb2UiLCJkZXNjcmlwdGlvbiI6IkpvZSBEb2UiLCJpc19yZW1vdGUiOnRydWV9';
     };
   } else if (options.identify) {
     callback = function (win) {

@@ -100,11 +100,18 @@ class UserDropup extends React.Component {
 
   getUserButton(user, clickHandler) {
     let description;
+    let userLabel;
 
-    if (user) {
+    if (user && !user.is_remote) {
+      userLabel = user.description;
+    } else if (user && user.is_remote) {
+      userLabel = user.uid;
+    }
+
+    if (userLabel) {
       description = (
         <span className="user-description">
-          {user.description}
+          {userLabel}
         </span>
       );
     }

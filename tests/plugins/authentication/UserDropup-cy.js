@@ -8,16 +8,23 @@ describe('UserDropup [028]', function () {
           mesos: '1-task-healthy',
           acl: true,
           plugins: 'authentication-enabled'
-        })
-        .visitUrl({url: '/dashboard', logIn: true})
-        .get('.sidebar .user-dropdown.dropdown-toggle').as('sidebarButton');
+        });
     });
 
-    it('should show the user [02a]', function () {
+    it('should show the user\'s username when it is not a remote user [02a]',
+      function () {
       cy
-        .get("@sidebarButton")
-        .get('.user-description')
+        .visitUrl({url: '/dashboard', logIn: true, remoteLogIn: false})
+        .get('.sidebar .user-dropdown.dropdown-toggle .user-description')
         .should('contain', 'Joe Doe');
+    });
+
+    it('should display the user\'s username when it is a remote user',
+      function () {
+      cy
+        .visitUrl({url: '/dashboard', logIn: true, remoteLogIn: true})
+        .get('.sidebar .user-dropdown.dropdown-toggle .user-description')
+        .should('contain', 'joe');
     });
   });
 
@@ -30,7 +37,7 @@ describe('UserDropup [028]', function () {
           acl: true,
           plugins: 'authentication-enabled'
         })
-        .visitUrl({url: '/dashboard', logIn: true})
+        .visitUrl({url: '/dashboard', logIn: true, remoteLogIn: false})
         .get('.sidebar .open .user-dropdown.dropdown-toggle')
           .as('sidebarButton')
         .click()
@@ -55,7 +62,7 @@ describe('UserDropup [028]', function () {
         .get("@list").eq(1)
         .should('contain', 'Talk with us')
         .get("@list").eq(2)
-        .should('contain', 'Walkthrough')
+        .should('contain', 'Install CLI')
         .get("@list").eq(3)
         .should('contain', 'Sign Out');
     });
@@ -66,6 +73,7 @@ describe('UserDropup [028]', function () {
         .click();
       cy.hash().should('eq', '#/login');
     });
+
   });
 
 });
