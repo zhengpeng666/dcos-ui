@@ -131,7 +131,6 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
     let isRemote = AuthUtil.isSubjectRemote(subject);
     let itemName = this.props.itemName;
     let label = subject.get('description');
-    let nameColClassnames = 'column-small-12 column-large-12 column-x-large-12 text-overflow';
 
     if (isRemote) {
       label = subject.get(this.props.itemID);
@@ -145,10 +144,8 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
       </Link>
     );
 
-    let content = link;
-
     if (isRemote) {
-      content = (
+      return (
         <div className="row">
           <div className="column-small-9 column-large-9 column-x-large-10 text-overflow">
             {link}
@@ -164,9 +161,9 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
           </div>
         </div>
       );
+    } else {
+      return link;
     }
-
-    return content;
   }
 
   renderUsername(prop, subject) {
