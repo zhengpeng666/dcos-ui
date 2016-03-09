@@ -33,15 +33,20 @@ module.exports = {
   NetworkingChildRoutes(route) {
     route.children = [{
       type: Route,
-      name: 'network-panel',
+      name: 'vip-detail-panel',
       path: 'vip-detail/:vip/:protocol/:port'
+    },
+    {
+      type: Route,
+      name: 'backend-detail-panel',
+      path: 'backend-detail/:vip/:protocol/:port'
     }];
     return route;
   },
 
   NetworkingVIPTableLabel(label, fullVIP) {
     return (
-      <Link to="network-panel" params={{
+      <Link to="vip-detail-panel" params={{
           protocol: fullVIP.protocol,
           vip: fullVIP.ip,
           port: fullVIP.port

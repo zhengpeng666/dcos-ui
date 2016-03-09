@@ -50,8 +50,8 @@ class VIPsTable extends React.Component {
       successLastMinute: 'SUCCESSES',
       failLastMinute: 'FAILURES',
       failurePercent: 'FAILURE %',
-      applicationReachabilityPercent: 'APP REACHABILITY',
-      machineReachabilityPercent: 'MACHINE REACHABILITY',
+      applicationReachabilityPercent: 'APP REACH',
+      machineReachabilityPercent: 'IP REACH',
       p99Latency: '99TH% LATENCY'
     });
 

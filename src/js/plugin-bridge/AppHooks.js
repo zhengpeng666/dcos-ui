@@ -10,12 +10,19 @@ module.exports = {
     'goBack'
   ],
 
+  filters: [
+    'getHistoryAt'
+  ],
+
   initialize(SDK) {
     HistoryStore = require('../stores/HistoryStore');
     SidebarActions = require('../events/SidebarActions');
 
     this.actions.forEach(action => {
       SDK.Hooks.addAction(action, this[action].bind(this));
+    });
+    this.filters.forEach(filter => {
+      SDK.Hooks.addFilter(filter, this[filter].bind(this));
     });
   },
 
@@ -25,5 +32,9 @@ module.exports = {
 
   goBack(router) {
     HistoryStore.goBack(router);
+  },
+
+  getHistoryAt(index) {
+    return HistoryStore.getHistoryAt(index);
   }
 };

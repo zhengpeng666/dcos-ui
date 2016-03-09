@@ -11,6 +11,7 @@ let SDK = require('./SDK').getSDK();
 
 let initialState = {
   backendConnections: {},
+  nodeMemberships: [],
   vips: [],
   vipDetail: {}
 };

@@ -2,66 +2,64 @@
 const React = require('react');
 /*eslint-enable no-unused-vars*/
 
-import BackendsTable from './BackendsTable';
-import NetworkingVIPsStore from '../stores/NetworkingVIPsStore';
+import ClientsTable from './ClientsTable';
 import NetworkItemDetails from './NetworkItemDetails';
+import NetworkingBackendConnectionsStore from '../stores/NetworkingBackendConnectionsStore';
 
 let SDK = require('../SDK').getSDK();
+let {RequestErrorMsg, SidePanelContents} = SDK.get([
+  'RequestErrorMsg', 'SidePanelContents']);
 
-let {SidePanelContents, RequestErrorMsg} = SDK.get([
-  'SidePanelContents', 'RequestErrorMsg'
-]);
-
-class VIPDetailSidePanelContents extends SidePanelContents {
+class BackendDetailSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
     this.store_listeners = [
       {
-        name: 'networkingVIPs',
-        events: ['detailSuccess', 'detailError']
+        name: 'networkingBackendConnections',
+        events: ['success', 'error']
       }
     ];
 
     this.tabs_tabs = {
-      backends: 'Backends'
+      clients: 'Clients'
     };
 
     this.state = {currentTab: Object.keys(this.tabs_tabs).shift()};
 
     this.internalStorage_update({
-      vipDetailSuccess: false,
-      vipDetailErrorCount: 0
+      backendConnectionRequestSuccess: false,
+      backendConnectionRequestErrorCount: 0
     });
   }
 
   componentDidMount() {
     super.componentDidMount();
-    NetworkingVIPsStore.fetchVIPDetail(this.props.protocol, this.props.vip,
+    NetworkingBackendConnectionsStore.fetchVIPBackendConnections(this.props.protocol, this.props.vip,
       this.props.port);
   }
 
-  onNetworkingVIPsStoreDetailError() {
-    let vipDetailErrorCount = this.internalStorage_get().vipDetailErrorCount + 1;
-    this.internalStorage_update({vipDetailErrorCount});
+  onNetworkingBackendConnectionsStoreError() {
+    let backendConnectionRequestErrorCount = this.internalStorage_get().backendConnectionRequestErrorCount + 1;
+    this.internalStorage_update({backendConnectionRequestErrorCount});
     this.forceUpdate();
   }
 
-  onNetworkingVIPsStoreDetailSuccess() {
+  onNetworkingBackendConnectionsStoreSuccess() {
     this.internalStorage_update({
-      vipDetailSuccess: true,
-      vipDetailErrorCount: 0
+      backendConnectionRequestSuccess: true,
+      backendConnectionRequestErrorCount: 0
     });
     this.addDetailsTab();
     this.forceUpdate();
   }
 
   addDetailsTab() {
-    let vipDetails = NetworkingVIPsStore.getVIPDetail(
+    let backendDetails = NetworkingBackendConnectionsStore.getBackendConnections(
       `${this.props.protocol}:${this.props.vip}:${this.props.port}`
     );
 
-    if (vipDetails.details && Object.keys(vipDetails.details).length) {
+    if (backendDetails.details && Object.keys(backendDetails.details).length) {
       this.tabs_tabs.details = 'Details';
     }
   }
@@ -74,7 +72,7 @@ class VIPDetailSidePanelContents extends SidePanelContents {
         </h1>
         <div className="container-pod container-pod-short
           container-pod-super-short-top">
-          Virtual IP
+          Backend
         </div>
       </div>
     );
@@ -94,19 +92,19 @@ class VIPDetailSidePanelContents extends SidePanelContents {
   }
 
   hasError() {
-    let vipDetailErrorCount = this.internalStorage_get().vipDetailErrorCount;
-    return vipDetailErrorCount >= 3;
+    let backendConnectionRequestErrorCount = this.internalStorage_get().backendConnectionRequestErrorCount;
+    return backendConnectionRequestErrorCount >= 3;
   }
 
   isLoading() {
     let timeSinceMount = (Date.now() - this.mountedAt) / 1000;
-    let vipDetailSuccess = this.internalStorage_get().vipDetailSuccess;
+    let backendConnectionRequestSuccess = this.internalStorage_get().backendConnectionRequestSuccess;
 
     return !(timeSinceMount >= SidePanelContents.animationLengthSeconds)
-      || !vipDetailSuccess;
+      || !backendConnectionRequestSuccess;
   }
 
-  renderBackendsTabView() {
+  renderClientsTabView() {
     let content;
 
     if (this.hasError()) {
@@ -114,12 +112,15 @@ class VIPDetailSidePanelContents extends SidePanelContents {
     } else if (this.isLoading()) {
       content = this.getLoadingScreen();
     } else {
-      let vipDetails = NetworkingVIPsStore.getVIPDetail(
-        `${this.props.protocol}:${this.props.vip}:${this.props.port}`
+      let backendConnectionDetails = NetworkingBackendConnectionsStore
+        .getBackendConnections(
+          `${this.props.protocol}:${this.props.vip}:${this.props.port}`
+        );
+
+      content = (
+        <ClientsTable clients={backendConnectionDetails.getClients()}
+          parentRouter={this.props.parentRouter} />
       );
-      content = (<BackendsTable backends={vipDetails.getBackends()}
-        vipProtocol={this.props.protocol}
-        parentRouter={this.props.parentRouter} />);
     }
 
     return (
@@ -132,11 +133,12 @@ class VIPDetailSidePanelContents extends SidePanelContents {
   }
 
   renderDetailsTabView() {
-    let vipDetails = NetworkingVIPsStore.getVIPDetail(
-      `${this.props.protocol}:${this.props.vip}:${this.props.port}`
-    );
+    let backendDetails = NetworkingBackendConnectionsStore
+      .getBackendConnections(
+        `${this.props.protocol}:${this.props.vip}:${this.props.port}`
+      );
 
-    return <NetworkItemDetails details={vipDetails.details} />;
+    return <NetworkItemDetails details={backendDetails.details} />;
   }
 
   render() {
@@ -156,4 +158,4 @@ class VIPDetailSidePanelContents extends SidePanelContents {
   }
 }
 
-module.exports = VIPDetailSidePanelContents;
+module.exports = BackendDetailSidePanelContents;

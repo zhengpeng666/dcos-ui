@@ -8,6 +8,7 @@ import {
   REQUEST_NETWORKING_BACKEND_CONNECTIONS_ERROR
 } from '../constants/ActionTypes';
 
+import BackendConnection from '../structs/BackendConnection';
 import NetworkingActions from '../actions/NetworkingActions';
 
 let SDK = require('../SDK').getSDK();
@@ -30,6 +31,16 @@ let NetworkingBackendConnectionsStore = SDK.createStore({
 
   get(prop) {
     return SDK.Store.getOwnState()[prop];
+  },
+
+  getBackendConnections: function (vipString) {
+    let backendConnections = this.get('backendConnections')[vipString];
+
+    if (backendConnections) {
+      return new BackendConnection(backendConnections);
+    }
+
+    return null;
   },
 
   processBackendConnections: function (vip, backendConnections) {

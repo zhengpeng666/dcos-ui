@@ -9,10 +9,6 @@ import UsersTab from './pages/UsersTab';
 let SDK = require('../../SDK').getSDK();
 
 module.exports = {
-  configuration: {
-    enabled: false
-  },
-
   appendRoutes(route) {
     route.redirect = {
       type: Redirect,
