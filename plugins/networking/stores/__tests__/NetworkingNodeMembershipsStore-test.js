@@ -1,19 +1,22 @@
-jest.dontMock('../NetworkingNodeMembershipsStore');
-jest.dontMock('../../config/Config');
-jest.dontMock('../../events/AppDispatcher');
-jest.dontMock('../../events/NetworkingActions');
-jest.dontMock('../../mixins/GetSetMixin');
 jest.dontMock('../../../../tests/_fixtures/networking/networking-node-memberships.json');
 
 var _ = require('underscore');
 
+import PluginTestUtils from 'PluginTestUtils';
+
+let SDK = PluginTestUtils.getSDK('networking', {enabled: true});
+
+require('../../SDK').setSDK(SDK);
+
+let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
+
 var ActionTypes = require('../../constants/ActionTypes');
-var AppDispatcher = require('../../events/AppDispatcher');
-var Config = require('../../config/Config');
 var EventTypes = require('../../constants/EventTypes');
 var NetworkingNodeMembershipsStore = require('../NetworkingNodeMembershipsStore');
 var nodeMembershipsFixture = require('../../../../tests/_fixtures/networking/networking-node-memberships.json');
-var RequestUtil = require('../../utils/RequestUtil');
+var NetworkingReducer = require('../../Reducer');
+
+PluginTestUtils.addReducer('networking', NetworkingReducer);
 
 describe('NetworkingNodeMembershipsStore', function () {
 
@@ -44,7 +47,7 @@ describe('NetworkingNodeMembershipsStore', function () {
   describe('processNodeMemberships', function () {
 
     it('stores node memberships when event is dispatched', function () {
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_NETWORKING_NODE_MEMBERSHIPS_SUCCESS,
         data: [{foo: 'bar', baz: 'qux', quux: 'grault'}]
       });
@@ -63,7 +66,7 @@ describe('NetworkingNodeMembershipsStore', function () {
         EventTypes.NETWORKING_NODE_MEMBERSHIP_CHANGE,
         mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_NETWORKING_NODE_MEMBERSHIPS_SUCCESS,
         data: [{foo: 'bar', baz: 'qux', quux: 'grault'}]
       });
@@ -81,7 +84,7 @@ describe('NetworkingNodeMembershipsStore', function () {
         EventTypes.NETWORKING_NODE_MEMBERSHIP_REQUEST_ERROR,
         mockedFn
       );
-      AppDispatcher.handleServerAction({
+      SDK.dispatch({
         type: ActionTypes.REQUEST_NETWORKING_NODE_MEMBERSHIPS_ERROR,
         data: 'foo'
       });

@@ -84,14 +84,34 @@
   "backends": [
     {
       "ip": "10.10.11.12",
-      "port": 52342,
+      "port": 80,
       "machine_reachability_pct": 98,
-      "application_reachability_pct": 95,
+      "application_reachability_pct": 90,
       "framework_id": "afe04867ec7a3845145579a95f72eca7",
       "task_id": "b4b9b02e6f09a9bd760f388b67351e2b",
-      "p99_latency_ms": 30,
+      "p99_latency_ms": 3,
       "success_last_minute": 481,
-      "fail_last_minute": 3
+      "fail_last_minute": 1
+    }, {
+      "ip": "11.11.12.13",
+      "port": 3000,
+      "machine_reachability_pct": 95,
+      "application_reachability_pct": 99,
+      "framework_id": "afe04867ec7a3845145579a95f72eca7",
+      "task_id": "b4b9b02e6f09a9bd760f388b67351e2b",
+      "p99_latency_ms": 4,
+      "success_last_minute": 187,
+      "fail_last_minute": 19
+    }, {
+      "ip": "12.12.13.14",
+      "port": 81,
+      "machine_reachability_pct": 92,
+      "application_reachability_pct": 97,
+      "framework_id": "afe04867ec7a3845145579a95f72eca7",
+      "task_id": "b4b9b02e6f09a9bd760f388b67351e2b",
+      "p99_latency_ms": 1,
+      "success_last_minute": 516,
+      "fail_last_minute": 7
     }
   ],
   "backend_count": 127

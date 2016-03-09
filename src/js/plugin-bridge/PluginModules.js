@@ -33,7 +33,8 @@ module.exports = {
     ClusterHeader: 'ClusterHeader',
     AlertPanel: 'AlertPanel',
     DCOSLogo: 'DCOSLogo',
-    ClusterName: 'ClusterName'
+    ClusterName: 'ClusterName',
+    DescriptionList: 'DescriptionList'
   },
   config: {
     Config: 'Config'
