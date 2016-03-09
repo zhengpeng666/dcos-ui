@@ -5,8 +5,10 @@ var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var RouterLocation = Router.HashLocation;
 var Link = Router.Link;
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 var AlertPanel = require('../components/AlertPanel');
+import CompositeState from '../structs/CompositeState';
 import Config from '../config/Config';
 import EventTypes from '../constants/EventTypes';
 var FilterByService = require('../components/FilterByService');
@@ -24,7 +26,7 @@ var NODES_DISPLAY_LIMIT = 300;
 function getMesosHosts(state) {
   let states = MesosSummaryStore.get('states');
   let lastState = states.lastSuccessful();
-  let nodes = lastState.getNodesList();
+  let nodes = CompositeState.getNodesList();
   let filters = _.pick(state, 'searchString', 'byServiceFilter');
   let filteredNodes = nodes.filter({
     service: filters.byServiceFilter,
@@ -52,7 +54,14 @@ var NodesPage = React.createClass({
 
   displayName: 'NodesPage',
 
-  mixins: [InternalStorageMixin],
+  mixins: [InternalStorageMixin, StoreMixin],
+
+  store_listeners: [
+    {
+      name: 'nodeHealth',
+      events: ['success', 'error']
+    }
+  ],
 
   statics: {
     // Static life cycle method from react router, that will be called

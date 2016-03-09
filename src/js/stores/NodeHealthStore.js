@@ -23,6 +23,7 @@ import {
   HEALTH_NODES_ERROR,
 } from '../constants/EventTypes';
 import AppDispatcher from '../events/AppDispatcher';
+import CompositeState from '../structs/CompositeState';
 import Config from '../config/Config';
 import NodeHealthActions from '../events/NodeHealthActions';
 import HealthUnit from '../structs/HealthUnit';
@@ -105,6 +106,8 @@ const NodeHealthStore = Store.createStore({
   processNodes: function (nodes) {
     this.set({nodes});
 
+    CompositeState.addNodeHealth(nodes);
+
     this.emit(HEALTH_NODES_CHANGE);
   },
 
@@ -157,7 +160,7 @@ const NodeHealthStore = Store.createStore({
         NodeHealthStore.emit(HEALTH_NODE_ERROR, data, action.nodeID);
         break;
       case REQUEST_HEALTH_NODE_UNITS_SUCCESS:
-        NodeHealthStore.processNodes(data, action.nodeID);
+        NodeHealthStore.processUnits(data, action.nodeID);
         break;
       case REQUEST_HEALTH_NODE_UNITS_ERROR:
         NodeHealthStore.emit(HEALTH_NODE_UNITS_ERROR, data, action.nodeID);

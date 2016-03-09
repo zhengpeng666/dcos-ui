@@ -87,7 +87,7 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
         <p>
           {unitSummary.summary}
         </p>
-        <a href={unitSummary.documentation_url}>
+        <a href={unitSummary.documentation_url} target="_blank">
           View Documentation
         </a>
         <span className="h4">Output</span>

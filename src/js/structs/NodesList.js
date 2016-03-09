@@ -37,9 +37,14 @@ module.exports = class NodesList extends List {
         hosts = MesosSummaryUtil.filterHostsByService(hosts, filters.service);
       }
 
-      // Marathon & Component Health APIs
+      // Marathon APIs
       if (filters.name) {
         hosts = StringUtil.filterByString(hosts, 'hostname', filters.name);
+      }
+
+      // Component Health APIs
+      if (filters.ip) {
+        hosts = StringUtil.filterByString(hosts, 'host_ip', filters.ip);
       }
 
       // Component Health API

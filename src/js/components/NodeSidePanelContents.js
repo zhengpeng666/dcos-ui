@@ -1,12 +1,15 @@
 /*eslint-disable no-unused-vars*/
-const React = require('react');
+import React from 'react';
 /*eslint-enable no-unused-vars*/
 
+import CompositeState from '../structs/CompositeState';
 import DateUtil from '../utils/DateUtil';
 import DescriptionList from './DescriptionList';
-import SidePanelContents from './SidePanelContents';
+import HealthTab from '../components/HealthTab';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import MesosStateStore from '../stores/MesosStateStore';
+import NodeHealthStore from '../stores/NodeHealthStore';
+import SidePanelContents from './SidePanelContents';
 import StringUtil from '../utils/StringUtil';
 import TaskView from './TaskView';
 
@@ -14,14 +17,31 @@ class NodeSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
+    this.internalStorage_set({renderTable: false});
+
     this.store_listeners = [
       {name: 'summary', events: ['success']},
-      {name: 'state', events: ['success']}
+      {name: 'state', events: ['success']},
+      {name: 'nodeHealth', events: ['nodeSuccess', 'nodeError', 'unitsSuccess', 'unitsError']}
     ];
+
+    this.tabs_tabs = {
+      tasks: 'Tasks',
+      health: 'Health',
+      details: 'Details'
+    };
 
     this.state = {
       currentTab: Object.keys(this.tabs_tabs).shift()
     };
+  }
+
+  componentDidMount() {
+    super.componentDidMount(...arguments);
+
+    NodeHealthStore.fetchNodeUnits(this.getNode().hostname);
+
+    this.internalStorage_update({renderTable: true});
   }
 
   getBasicInfo(node) {
@@ -36,6 +56,27 @@ class NodeSidePanelContents extends SidePanelContents {
         <div>
           {`${activeTasksCount} Active ${activeTasksSubHeader}`}
         </div>
+      </div>
+    );
+  }
+
+  getNode() {
+    let node = CompositeState.getNodesList().filter(
+      {ids: [this.props.itemID]}
+    ).last();
+
+    return node;
+  }
+
+  renderHealthTabView() {
+    let units = NodeHealthStore.getUnits(this.getNode().hostname);
+
+    return (
+      <div className="side-panel-tab-content side-panel-section container container-fluid container-pod container-pod-short container-fluid flex-container-col flush-bottom flex-grow">
+        <HealthTab
+          node={this.getNode()}
+          units={units}
+          parentRouter={this.props.parentRouter} />
       </div>
     );
   }
@@ -89,9 +130,7 @@ class NodeSidePanelContents extends SidePanelContents {
   }
 
   render() {
-    let nodeID = this.props.itemID;
-    let last = MesosSummaryStore.get('states').lastSuccessful();
-    let node = last.getNodesList().filter({ids: [nodeID]}).last();
+    let node = this.getNode();
 
     if (node == null) {
       return this.getNotFound('node');

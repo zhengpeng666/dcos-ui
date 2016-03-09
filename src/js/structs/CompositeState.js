@@ -1,5 +1,6 @@
 import _ from 'underscore';
 
+import NodesList from './NodesList';
 import ServicesList from './ServicesList';
 
 let mergeData = function (newData, data) {
@@ -59,6 +60,23 @@ class CompositeState {
     });
   }
 
+  addNodeHealth(data) {
+    let oldData = this.data.slaves || [];
+
+    let newData = oldData.map(function (oldDatum) {
+      let matchedNode = _.find(data, function (healthNode) {
+        return healthNode.host_ip === oldDatum.hostname;
+      });
+
+      if (matchedNode) {
+        return _.extend({}, oldDatum, matchedNode);
+      }
+      return oldDatum;
+    });
+
+    this.data.slaves = newData;
+  }
+
   addState(data) {
     this.data = mergeData(data, this.data);
   }
@@ -71,6 +89,10 @@ class CompositeState {
     return new ServicesList({
       items: this.data.frameworks
     });
+  }
+
+  getNodesList() {
+    return new NodesList({items: this.data.slaves});
   }
 }
 

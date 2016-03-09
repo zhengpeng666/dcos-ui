@@ -5,9 +5,11 @@ var React = require('react');
 var HostTableHeaderLabels = require('../constants/HostTableHeaderLabels');
 var ResourceTableUtil = require('../utils/ResourceTableUtil');
 var ProgressBar = require('./charts/ProgressBar');
+import StringUtil from '../utils/StringUtil';
 import {Table} from 'reactjs-components';
 import TableUtil from '../utils/TableUtil';
 var TooltipMixin = require('../mixins/TooltipMixin');
+import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 var HostTable = React.createClass({
 
@@ -65,6 +67,16 @@ var HostTable = React.createClass({
     );
   },
 
+  renderHealth: function (prop, node) {
+    let health = node.getHealth();
+
+    return (
+      <span className={health.classNames}>
+        {StringUtil.capitalize(health.title)}
+      </span>
+    );
+  },
+
   renderStats: function (prop, node) {
     var colorMapping = {
       cpus: 1,
@@ -101,6 +113,18 @@ var HostTable = React.createClass({
         sortable: true,
         sortFunction: propSortFunction,
         heading
+      },
+      {
+        className,
+        headerClassName: className,
+        prop: 'health',
+        render: this.renderHealth,
+        sortable: true,
+        sortFunction: ResourceTableUtil.getStatSortFunction(
+          'description',
+          UnitHealthUtil.getHealthSorting
+        ),
+        heading: ResourceTableUtil.renderHeading({health: 'HEALTH'})
       },
       {
         className,
@@ -145,6 +169,7 @@ var HostTable = React.createClass({
     return (
       <colgroup>
         <col />
+        <col style={{width: '100px'}} />
         <col style={{width: '110px'}} />
         <col className="hidden-mini" style={{width: '135px'}} />
         <col className="hidden-mini" style={{width: '135px'}} />
