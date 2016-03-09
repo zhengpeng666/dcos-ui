@@ -1,5 +1,7 @@
 import Backend from './Backend';
-import List from '../../../src/js/structs/List';
+let SDK = require('../SDK').getSDK();
+
+let List = SDK.get('List');
 
 module.exports = class BackendList extends List {
   constructor() {

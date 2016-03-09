@@ -2,9 +2,9 @@ import classNames from 'classnames';
 import React from 'react';
 import {Table} from 'reactjs-components';
 
-import CompositeState from '../../../src/js/structs/CompositeState';
-
 let SDK = require('../SDK').getSDK();
+
+let CompositeState = SDK.get('CompositeState');
 
 let {StringUtil, FilterInputText} = SDK.get([
   'StringUtil', 'FilterInputText'
@@ -64,7 +64,7 @@ class BackendsTable extends React.Component {
   }
 
   getColumns() {
-    let className = this.getTableCellClassNameFn();
+    let className = this.getTableCellClassName();
     let heading = this.renderHeading({
       ip: 'BACKEND NAME',
       successLastMinute: 'SUCCESSES',
@@ -85,7 +85,7 @@ class BackendsTable extends React.Component {
         className,
         headerClassName: className,
         prop: 'successLastMinute',
-        render: this.getFailSuccessRenderFn('success'),
+        render: this.getFailSuccessRender('success'),
         sortable: true,
         heading
       },
@@ -93,7 +93,7 @@ class BackendsTable extends React.Component {
         className,
         headerClassName: className,
         prop: 'failLastMinute',
-        render: this.getFailSuccessRenderFn('fail'),
+        render: this.getFailSuccessRender('fail'),
         sortable: true,
         heading
       },
@@ -118,7 +118,7 @@ class BackendsTable extends React.Component {
     );
   }
 
-  getFailSuccessRenderFn(type) {
+  getFailSuccessRender(type) {
     let classes = classNames({
       'text-danger': type === 'fail',
       'text-success': type === 'success'
@@ -147,7 +147,7 @@ class BackendsTable extends React.Component {
     );
   }
 
-  getTableCellClassNameFn() {
+  getTableCellClassName() {
     let {alignTableCellRight, hideColumnAtMini} = this;
 
     return function (prop, sortBy, row) {

@@ -1,5 +1,7 @@
 import BackendList from './BackendList';
-import Item from '../../../src/js/structs/Item';
+let SDK = require('../SDK').getSDK();
+
+let Item = SDK.get('Item');
 
 module.exports = class VIPDetail extends Item {
   getBackends() {

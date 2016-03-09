@@ -1,8 +1,6 @@
 import {SidePanel} from 'reactjs-components';
 import React from 'react';
 
-import HistoryStore from '../../../src/js/stores/HistoryStore';
-import MesosSummaryStore from '../../../src/js/stores/MesosSummaryStore';
 import VIPDetailSidePanelContents from './VIPDetailSidePanelContents';
 
 let SDK = require('../SDK').getSDK();
@@ -32,11 +30,12 @@ class NetworkSidePanel extends React.Component {
       return;
     }
 
-    HistoryStore.goBack(router);
+    SDK.Hooks.doAction('goBack', router);
   }
 
   isOpen() {
-    return this.props.vip != null && MesosSummaryStore.get('statesProcessed');
+    return this.props.vip != null && SDK.Store.getAppState()
+    .summary.statesProcessed;
   }
 
   getHeader() {
