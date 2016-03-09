@@ -54,7 +54,7 @@ describe('NetworkPage', function () {
 
       expect(Object.keys(vipSummaries[0])).toEqual([
         'fullVIP', 'vip', 'successLastMinute', 'failLastMinute',
-        'failurePerecent', 'applicationReachabilityPercent',
+        'failurePercent', 'applicationReachabilityPercent',
         'machineReachabilityPercent', 'p99Latency'
       ]);
     });

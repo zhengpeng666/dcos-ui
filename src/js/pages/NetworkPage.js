@@ -135,7 +135,7 @@ class NetworkPage extends mixin(StoreMixin) {
         vip: vipSummary.getVIPString(),
         successLastMinute: vipSummary.getSuccessLastMinute(),
         failLastMinute: vipSummary.getFailLastMinute(),
-        failurePerecent: vipSummary.getFailPercent(),
+        failurePercent: vipSummary.getFailPercent(),
         applicationReachabilityPercent: vipSummary.getApplicationReachabilityPercent(),
         machineReachabilityPercent: vipSummary.getMachineReachabilityPercent(),
         p99Latency: vipSummary.getP99Latency()

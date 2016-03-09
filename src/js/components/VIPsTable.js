@@ -24,7 +24,7 @@ const COLUMNS_TO_HIDE_MINI = [
 const RIGHT_ALIGNED_TABLE_CELLS = [
   'successLastMinute',
   'failLastMinute',
-  'failurePerecent',
+  'failurePercent',
   'applicationReachabilityPercent',
   'machineReachabilityPercent',
   'p99Latency'
@@ -49,7 +49,7 @@ class VIPsTable extends React.Component {
       vip: 'VIRTUAL IP',
       successLastMinute: 'SUCCESSES',
       failLastMinute: 'FAILURES',
-      failurePerecent: 'FAILURE %',
+      failurePercent: 'FAILURE %',
       applicationReachabilityPercent: 'APP REACHABILITY',
       machineReachabilityPercent: 'MACHINE REACHABILITY',
       p99Latency: '99TH% LATENCY'
@@ -83,7 +83,7 @@ class VIPsTable extends React.Component {
       {
         className,
         headerClassName: className,
-        prop: 'failurePerecent',
+        prop: 'failurePercent',
         render: this.renderPercentage,
         sortable: true,
         heading
@@ -222,7 +222,7 @@ VIPsTable.propTypes = {
       vip: React.PropTypes.string,
       successLastMinute: React.PropTypes.number,
       failLastMinute: React.PropTypes.number,
-      failurePerecent: React.PropTypes.number,
+      failurePercent: React.PropTypes.number,
       applicationReachabilityPercent: React.PropTypes.number,
       machineReachabilityPercent: React.PropTypes.number,
       p99Latency: React.PropTypes.number

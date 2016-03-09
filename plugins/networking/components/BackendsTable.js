@@ -11,7 +11,7 @@ let {StringUtil, FilterInputText} = SDK.get([
 ]);
 
 const COLUMNS_TO_HIDE_MINI = [
-  'failurePerecent',
+  'failurePercent',
   'applicationReachabilityPercent',
   'machineReachabilityPercent'
 ];

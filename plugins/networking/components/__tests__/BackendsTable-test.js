@@ -58,7 +58,7 @@ describe('BackendsTable', function () {
 
   describe('#hideColumnAtMini', function () {
     it('should return true for the specified column props', function () {
-      var hiddenColumnsAtMini = ['failurePerecent',
+      var hiddenColumnsAtMini = ['failurePercent',
         'applicationReachabilityPercent', 'machineReachabilityPercent'];
 
       let hideColumnAtMini = this.instance.hideColumnAtMini;
