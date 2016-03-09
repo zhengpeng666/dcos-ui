@@ -51,15 +51,13 @@ describe('UserSidePanelContents', function () {
 
     this.container = document.createElement('div');
 
-    SDK.Store.getState = function () {
+    PluginTestUtils.addReducer(APPLICATION, function () {
       return {
-        [APPLICATION]: {
-          summary: {
-            statesProcessed: true
-          }
+        summary: {
+          statesProcessed: true
         }
       };
-    };
+    });
 
     ACLUserStore.getUser = function (userID) {
       if (userID === 'unicode') {
@@ -95,15 +93,13 @@ describe('UserSidePanelContents', function () {
     });
 
     it('should show loading screen if still waiting on Store', function () {
-      SDK.Store.getState = function () {
+      PluginTestUtils.addReducer(APPLICATION, function () {
         return {
-          [APPLICATION]: {
-            summary: {
-              statesProcessed: false
-            }
+          summary: {
+            statesProcessed: false
           }
         };
-      };
+      });
       var userID = 'unicode';
 
       var instance = ReactDOM.render(

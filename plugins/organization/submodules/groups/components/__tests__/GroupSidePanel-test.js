@@ -32,15 +32,13 @@ describe('GroupSidePanel', function () {
   beforeEach(function () {
     this.groupStore = ACLGroupStore.getGroup;
 
-    SDK.Store.getState = function () {
+    PluginTestUtils.addReducer(APPLICATION, function () {
       return {
-        [APPLICATION]: {
-          summary: {
-            statesProcessed: true
-          }
+        summary: {
+          statesProcessed: true
         }
       };
-    };
+    });
 
     ACLGroupStore.getGroup = function () {
       return {

@@ -28,15 +28,13 @@ describe('UserSidePanel', function () {
 
     this.container = document.createElement('div');
 
-    SDK.Store.getState = function () {
+    PluginTestUtils.addReducer(APPLICATION, function () {
       return {
-        [APPLICATION]: {
-          summary: {
-            statesProcessed: true
-          }
+        summary: {
+          statesProcessed: true
         }
       };
-    };
+    });
 
     ACLUserStore.getUser = function () {
       return {
