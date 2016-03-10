@@ -2,13 +2,13 @@ var config = require('./.build.config');
 var path = require('path');
 var webpack = require('webpack');
 
-var webpackDevtool = 'source-map';
+var webpackDevtool = '#source-map';
 var webpackWatch = false;
 if (process.env.NODE_ENV === 'development' ||
   process.env.NODE_ENV === 'testing') {
   // eval-source-map is the same thing as source-map,
   // except with caching. Don't use in production.
-  webpackDevtool = 'eval-source-map';
+  webpackDevtool = '#eval-source-map';
   webpackWatch = true;
 }
 
