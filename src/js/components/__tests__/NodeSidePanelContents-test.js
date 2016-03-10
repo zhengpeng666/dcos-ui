@@ -21,6 +21,7 @@ var TestUtils = require('react-addons-test-utils');
 var MesosStateStore = require('../../stores/MesosStateStore');
 var MesosSummaryActions = require('../../events/MesosSummaryActions');
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
+var Node = require('../../structs/Node');
 var NodeSidePanelContents = require('../NodeSidePanelContents');
 
 describe('NodeSidePanelContents', function () {
@@ -86,6 +87,20 @@ describe('NodeSidePanelContents', function () {
     MesosStateStore.removeAllListeners();
     MesosSummaryStore.removeAllListeners();
     ReactDOM.unmountComponentAtNode(this.container);
+  });
+
+  describe('#getNode', function () {
+
+    it('should return an instance of Node', function () {
+      var instance = ReactDOM.render(
+        <NodeSidePanelContents itemID="existingNode" />,
+        this.container
+      );
+
+      var node = instance.getNode();
+      expect(node instanceof Node).toEqual(true);
+    });
+
   });
 
   describe('#renderDetailsTabView', function () {

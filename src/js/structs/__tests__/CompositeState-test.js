@@ -1,4 +1,5 @@
 var CompositeState = require('../CompositeState');
+var NodesList = require('../NodesList');
 
 describe('CompositeState', function () {
 
@@ -37,28 +38,29 @@ describe('CompositeState', function () {
 
     it('adds marathon metadata to an existing framework, matching by id',
       function () {
-      CompositeState.addState({
-        frameworks: [{
-          id: 'foo-id',
-          name: 'foo',
-          bar: 'baz'
-        }]
-      });
+        CompositeState.addState({
+          frameworks: [{
+            id: 'foo-id',
+            name: 'foo',
+            bar: 'baz'
+          }]
+        });
 
-      CompositeState.addMarathon({
-        foo: {
-          qux: 'quux',
-          corge: 'grault'
-        }
-      });
+        CompositeState.addMarathon({
+          foo: {
+            qux: 'quux',
+            corge: 'grault'
+          }
+        });
 
-      expect(CompositeState.data.frameworks[0]._meta).toEqual({
-        marathon: {
-          qux: 'quux',
-          corge: 'grault'
-        }
-      });
-    });
+        expect(CompositeState.data.frameworks[0]._meta).toEqual({
+          marathon: {
+            qux: 'quux',
+            corge: 'grault'
+          }
+        });
+      }
+    );
 
     it('replaced old marathon data with new marathon data', function () {
       CompositeState.addState({
@@ -108,6 +110,53 @@ describe('CompositeState', function () {
 
       expect(CompositeState.data.frameworks[0]._meta).toBeUndefined();
     });
+
+  });
+
+  describe('#addNodeHealth', function () {
+
+    beforeEach(function () {
+      CompositeState.addState({
+        slaves: [{
+          id: 'foo-id',
+          hostname: 'foo'
+        }]
+      });
+    });
+
+    it('merges raw node health data into existing slave data',
+      function () {
+        CompositeState.addNodeHealth([
+          {
+            host_ip: 'foo',
+            health: 100
+          }
+        ]);
+
+        expect(CompositeState.data.slaves[0].health).toEqual(100);
+        expect(CompositeState.data.slaves[0].hostname).toEqual('foo');
+      }
+    );
+
+    it('replaces old health status with new health status',
+      function () {
+        CompositeState.addNodeHealth([
+          {
+            host_ip: 'foo',
+            health: 5
+          }
+        ]);
+
+        CompositeState.addNodeHealth([
+          {
+            host_ip: 'foo',
+            health: 6
+          }
+        ]);
+
+        expect(CompositeState.data.slaves[0].health).toEqual(6);
+      }
+    );
 
   });
 
@@ -299,4 +348,50 @@ describe('CompositeState', function () {
 
   });
 
+  describe('#getNodesList', function () {
+
+    beforeEach(function () {
+      CompositeState.addState({
+        slaves: [{
+          id: 'foo-id',
+          hostname: 'foo'
+        },
+        {
+          id: 'qq-id',
+          hostname: 'qq'
+        }]
+      });
+    });
+
+    it('returns the current slaves', function () {
+
+      var expectedResult = {
+        list: [
+          {
+            id: 'foo-id',
+            hostname: 'foo',
+            _itemData: { id: 'foo-id', hostname: 'foo' }
+          },
+          {
+            id: 'qq-id',
+            hostname: 'qq',
+            _itemData: { id: 'qq-id', hostname: 'qq' }
+          }
+        ],
+        filterProperties: []
+      };
+
+      var nodesList = CompositeState.getNodesList();
+
+      expect(nodesList).toEqual(expectedResult);
+
+    });
+
+    it('returns an instance of NodesList', function () {
+      var nodesList = CompositeState.getNodesList();
+
+      expect(nodesList instanceof NodesList).toEqual(true);
+    });
+
+  });
 });
