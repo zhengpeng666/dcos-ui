@@ -5,11 +5,14 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
+import ImageViewerModal from '../../components/modals/ImageViewerModal';
 import InstallPackageModal from '../../components/modals/InstallPackageModal';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
 import StringUtil from '../../utils/StringUtil';
 
 const METHODS_TO_BIND = [
+  'getMediaItem',
+  'handleImageViewerClose',
   'handleInstallModalClose'
 ];
 
@@ -20,7 +23,8 @@ class PackageDetailTab extends mixin(StoreMixin) {
     this.state = {
       hasError: 0,
       openInstallModal: false,
-      isLoading: true
+      isLoading: true,
+      selectedImage: null
     };
 
     this.store_listeners = [{
@@ -53,6 +57,28 @@ class PackageDetailTab extends mixin(StoreMixin) {
 
   onCosmosPackagesStoreDescriptionSuccess() {
     this.setState({hasError: false, isLoading: false});
+  }
+
+  handleImageViewerClose() {
+    this.setState({selectedImage: null});
+  }
+
+  handleImageViewerOpen(selectedImage) {
+    this.setState({selectedImage});
+  }
+
+  handleImageViewerLeftClick(screenshots) {
+    let {selectedImage} = this.state;
+    if (--selectedImage < 0) {
+      selectedImage = screenshots.length - 1;
+    }
+    this.setState({selectedImage});
+  }
+
+  handleImageViewerRightClick(screenshots) {
+    let {selectedImage} = this.state;
+    // Add before the modulus operator and use modulus as a circular buffer
+    this.setState({selectedImage: ++selectedImage % screenshots.length});
   }
 
   handleInstallModalClose() {
@@ -133,11 +159,14 @@ class PackageDetailTab extends mixin(StoreMixin) {
     );
   }
 
-  getMediaItem(label, value, key) {
+  getMediaItem(label, value, index) {
     return (
-      <div className="media-object-item media-object-item-fill" key={key}>
+      <div
+        className="media-object-item media-object-item-fill"
+        key={index}>
         <div
-          className="media-object-item-fill-image image-rounded-corners"
+          className="media-object-item-fill-image image-rounded-corners clickable"
+          onClick={this.handleImageViewerOpen.bind(this, index)}
           style={{backgroundImage: `url(${value})`}} />
       </div>
     );
@@ -190,6 +219,8 @@ class PackageDetailTab extends mixin(StoreMixin) {
       return this.getLoadingScreen();
     }
 
+    let screenshots = cosmosPackage.getScreenshots();
+
     let packageDetails = cosmosPackage.get('package');
     let definition = [
       {
@@ -216,10 +247,11 @@ class PackageDetailTab extends mixin(StoreMixin) {
       {
         label: 'Media',
         type: 'media',
-        value: this.mapScreenshots(cosmosPackage.getScreenshots())
+        value: this.mapScreenshots(screenshots)
       }
     ];
 
+    let {selectedImage} = this.state;
     return (
       <div>
         <div className="container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-inverse flush-top">
@@ -252,6 +284,13 @@ class PackageDetailTab extends mixin(StoreMixin) {
           packageName={packageDetails.name}
           packageVersion={packageDetails.version}
           onClose={this.handleInstallModalClose}/>
+        <ImageViewerModal
+          onLeftClick={this.handleImageViewerLeftClick.bind(this, screenshots)}
+          onRightClick={this.handleImageViewerRightClick.bind(this, screenshots)}
+          images={screenshots}
+          open={selectedImage != null}
+          onClose={this.handleImageViewerClose}
+          selectedImage={selectedImage} />
       </div>
     );
   }
