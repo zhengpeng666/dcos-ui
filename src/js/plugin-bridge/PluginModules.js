@@ -12,6 +12,7 @@ module.exports = {
     ResourceTableUtil: 'ResourceTableUtil',
     TableUtil: 'TableUtil',
     LocalStorageUtil: 'LocalStorageUtil',
+    Units: 'Units',
     Util: 'Util',
     StoreMixinConfig: 'StoreMixinConfig'
   },
@@ -34,7 +35,8 @@ module.exports = {
     AlertPanel: 'AlertPanel',
     DCOSLogo: 'DCOSLogo',
     ClusterName: 'ClusterName',
-    DescriptionList: 'DescriptionList'
+    DescriptionList: 'DescriptionList',
+    Chart: 'charts/Chart'
   },
   config: {
     Config: 'Config'

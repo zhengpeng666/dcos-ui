@@ -1,4 +1,13 @@
-import ActionTypes from '../constants/ActionTypes';
+import {
+  REQUEST_NETWORKING_BACKEND_CONNECTIONS_ERROR,
+  REQUEST_NETWORKING_BACKEND_CONNECTIONS_SUCCESS,
+  REQUEST_NETWORKING_NODE_MEMBERSHIPS_ERROR,
+  REQUEST_NETWORKING_NODE_MEMBERSHIPS_SUCCESS,
+  REQUEST_NETWORKING_VIP_DETAIL_ERROR,
+  REQUEST_NETWORKING_VIP_DETAIL_SUCCESS,
+  REQUEST_NETWORKING_VIPS_ERROR,
+  REQUEST_NETWORKING_VIPS_SUCCESS
+} from '../constants/ActionTypes';
 
 let SDK = require('../SDK').getSDK();
 let {RequestUtil, Config} = SDK.get(['RequestUtil', 'Config']);
@@ -10,13 +19,13 @@ let NetworkingActions = {
       url: `${Config.rootUrl}${Config.networkingAPIPrefix}/vips`,
       success: function (response) {
         SDK.dispatch({
-          type: ActionTypes.REQUEST_NETWORKING_VIPS_SUCCESS,
+          type: REQUEST_NETWORKING_VIPS_SUCCESS,
           data: response.array
         });
       },
       error: function (xhr) {
         SDK.dispatch({
-          type: ActionTypes.REQUEST_NETWORKING_VIPS_ERROR,
+          type: REQUEST_NETWORKING_VIPS_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr)
         });
       }
@@ -28,14 +37,14 @@ let NetworkingActions = {
       url: `${Config.rootUrl}${Config.networkingAPIPrefix}/${vip}/${protocol}/${port}`,
       success: function (response) {
         SDK.dispatch({
-          type: ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_SUCCESS,
+          type: REQUEST_NETWORKING_VIP_DETAIL_SUCCESS,
           data: response,
           vip: `${protocol}:${vip}:${port}`
         });
       },
       error: function (xhr) {
         SDK.dispatch({
-          type: ActionTypes.REQUEST_NETWORKING_VIP_DETAIL_ERROR,
+          type: REQUEST_NETWORKING_VIP_DETAIL_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           vip: `${protocol}:${vip}:${port}`
         });
@@ -48,14 +57,14 @@ let NetworkingActions = {
       url: `${Config.rootUrl}${Config.networkingAPIPrefix}/backend-connections/${vip}/${protocol}/${port}`,
       success: function (response) {
         SDK.dispatch({
-          type: ActionTypes.REQUEST_NETWORKING_BACKEND_CONNECTIONS_SUCCESS,
+          type: REQUEST_NETWORKING_BACKEND_CONNECTIONS_SUCCESS,
           data: response,
           vip: `${protocol}:${vip}:${port}`
         });
       },
       error: function (xhr) {
         SDK.dispatch({
-          type: ActionTypes.REQUEST_NETWORKING_BACKEND_CONNECTIONS_ERROR,
+          type: REQUEST_NETWORKING_BACKEND_CONNECTIONS_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
           vip: `${protocol}:${vip}:${port}`
         });
@@ -68,13 +77,13 @@ let NetworkingActions = {
       url: `${Config.rootUrl}${Config.networkingAPIPrefix}/membership`,
       success: function (response) {
         SDK.dispatch({
-          type: ActionTypes.REQUEST_NETWORKING_NODE_MEMBERSHIPS_SUCCESS,
+          type: REQUEST_NETWORKING_NODE_MEMBERSHIPS_SUCCESS,
           data: response.array
         });
       },
       error: function (xhr) {
         SDK.dispatch({
-          type: ActionTypes.REQUEST_NETWORKING_NODE_MEMBERSHIPS_ERROR,
+          type: REQUEST_NETWORKING_NODE_MEMBERSHIPS_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr)
         });
       }
