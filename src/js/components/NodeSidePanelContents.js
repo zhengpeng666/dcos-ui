@@ -39,7 +39,11 @@ class NodeSidePanelContents extends SidePanelContents {
   componentDidMount() {
     super.componentDidMount(...arguments);
 
-    NodeHealthStore.fetchNodeUnits(this.getNode().hostname);
+    let node = this.getNode();
+
+    if (node) {
+      NodeHealthStore.fetchNodeUnits(node.hostname);
+    }
 
     this.internalStorage_update({renderTable: true});
   }
