@@ -92,6 +92,7 @@ class VIPsTable extends React.Component {
         className,
         headerClassName: className,
         prop: 'applicationReachabilityPercent',
+        render: this.renderPercentage,
         sortable: true,
         heading
       },
@@ -99,6 +100,7 @@ class VIPsTable extends React.Component {
         className,
         headerClassName: className,
         prop: 'machineReachabilityPercent',
+        render: this.renderPercentage,
         sortable: true,
         heading
       },
@@ -107,6 +109,7 @@ class VIPsTable extends React.Component {
         headerClassName: className,
         prop: 'p99Latency',
         sortable: true,
+        render: this.renderMilliseconds,
         heading
       }
     ];
@@ -180,6 +183,10 @@ class VIPsTable extends React.Component {
         </span>
       );
     };
+  }
+
+  renderMilliseconds(prop, item) {
+    return `${item[prop]}ms`;
   }
 
   renderPercentage(prop, item) {

@@ -34,6 +34,10 @@ describe('VIPSummary', function () {
       );
     });
 
+    it('returns 0 when the datum is undefined', function () {
+      expect(new VIPSummary({}).getApplicationReachabilityPercent()).toEqual(0);
+    });
+
   });
 
   describe('#getFailLastMinute', function () {
@@ -46,6 +50,10 @@ describe('VIPSummary', function () {
       expect(this.vipSummary.getFailLastMinute()).toEqual(
         Number(this.vipSummaryFixture.fail_last_minute)
       );
+    });
+
+    it('returns 0 when the datum is undefined', function () {
+      expect(new VIPSummary({}).getFailLastMinute()).toEqual(0);
     });
 
   });
@@ -80,6 +88,10 @@ describe('VIPSummary', function () {
       );
     });
 
+    it('returns 0 when the datum is undefined', function () {
+      expect(new VIPSummary({}).getMachineReachabilityPercent()).toEqual(0);
+    });
+
   });
 
   describe('#getP99Latency', function () {
@@ -97,6 +109,10 @@ describe('VIPSummary', function () {
       );
     });
 
+    it('returns 0 when the datum is undefined', function () {
+      expect(new VIPSummary({}).getP99Latency()).toEqual(0);
+    });
+
   });
 
   describe('#getSuccessLastMinute', function () {
@@ -109,6 +125,10 @@ describe('VIPSummary', function () {
       expect(this.vipSummary.getSuccessLastMinute()).toEqual(
         Number(this.vipSummaryFixture.success_last_minute)
       );
+    });
+
+    it('returns 0 when the datum is undefined', function () {
+      expect(new VIPSummary({}).getSuccessLastMinute()).toEqual(0);
     });
 
   });

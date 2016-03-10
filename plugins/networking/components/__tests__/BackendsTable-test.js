@@ -83,11 +83,11 @@ describe('BackendsTable', function () {
       });
   });
 
-  describe('#renderPercentage', function () {
+  describe('#renderMilliseconds', function () {
     it('should return the specified key\'s value from an object with the ' +
-      'percent symbol appended', function () {
-      let percentage = this.instance.renderPercentage('foo', {foo: 'bar'});
-      expect(percentage).toEqual('bar%');
+      'string \'ms\' appended', function () {
+      let percentage = this.instance.renderMilliseconds('foo', {foo: '100'});
+      expect(percentage).toEqual('100ms');
     });
   });
 });

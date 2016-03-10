@@ -30,6 +30,10 @@ describe('Backend', function () {
         .toEqual(this.backendFixture.application_reachability_pct);
     });
 
+    it('returns 0 when the datum is undefined', function () {
+      expect(new Backend({}).getApplicationReachabilityPercent()).toEqual(0);
+    });
+
   });
 
   describe('#getFailLastMinute', function () {
@@ -41,6 +45,10 @@ describe('Backend', function () {
     it('returns the value it was given', function () {
       expect(this.backend.getFailLastMinute())
         .toEqual(this.backendFixture.fail_last_minute);
+    });
+
+    it('returns 0 when the datum is undefined', function () {
+      expect(new Backend({}).getFailLastMinute()).toEqual(0);
     });
 
   });
@@ -89,6 +97,10 @@ describe('Backend', function () {
         .toEqual(this.backendFixture.machine_reachability_pct);
     });
 
+    it('returns 0 when the datum is undefined', function () {
+      expect(new Backend({}).getMachineReachabilityPercent()).toEqual(0);
+    });
+
   });
 
   describe('#getP99Latency', function () {
@@ -100,6 +112,10 @@ describe('Backend', function () {
     it('returns the value it was given', function () {
       expect(this.backend.getP99Latency())
         .toEqual(this.backendFixture.p99_latency_ms);
+    });
+
+    it('returns 0 when the datum is undefined', function () {
+      expect(new Backend({}).getP99Latency()).toEqual(0);
     });
 
   });
@@ -114,6 +130,10 @@ describe('Backend', function () {
       expect(this.backend.getPort()).toEqual(this.backendFixture.port);
     });
 
+    it('returns 0 when the datum is undefined', function () {
+      expect(new Backend({}).getPort()).toEqual(0);
+    });
+
   });
 
   describe('#getSuccessLastMinute', function () {
@@ -125,6 +145,10 @@ describe('Backend', function () {
     it('returns the value it was given', function () {
       expect(this.backend.getSuccessLastMinute())
         .toEqual(this.backendFixture.success_last_minute);
+    });
+
+    it('returns 0 when the datum is undefined', function () {
+      expect(new Backend({}).getSuccessLastMinute()).toEqual(0);
     });
 
   });
