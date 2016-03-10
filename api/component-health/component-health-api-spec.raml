@@ -214,18 +214,18 @@ schemas:
                       "output": "Here are some journald logs, log log log.",
                       "help": "Mesos Dns Service failed to start on host ip-10.0.0.1. Please see `systemctl -u mesos-dns.service` for more information"
                     }
-# This is possibly just a 301 -> /nodes, lets disucss.
+
 /report:
   displayName: Health Report
   get:
-    description: Get a full report of units' health.
+    description: Get a full report of units health and nodes health.
     responses:
       200:
         description: Successful response.
-        headers:
-          Content-Disposition:
-            type: string
-            required: true
+        body:
+          application/json:
             example: |
-              Content-Disposition:
-              attachment; filename="report.txt"
+              {
+                "nodes": {},
+                "units": {}
+              }

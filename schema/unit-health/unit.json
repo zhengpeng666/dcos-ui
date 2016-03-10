@@ -3,35 +3,35 @@
   "id": "http://schema.dcos/health/unit",
   "type": "object",
   "properties": {
-    "unit_id": {
+    "id": {
       "title": "Unit ID",
       "type": "string",
       "pattern": "^[\\w]+$"
     },
-    "unit_title": {
+    "description": {
       "title": "Unit Name",
       "type": "string"
     },
-    "unit_health": {
+    "health": {
       "title": "Node Health Status",
       "type": "integer",
       "minimum": 0,
       "maximum": 3
     },
-    "unit_output": {
+    "output": {
       "title": "Unit Output",
       "description": "Log output.",
       "type": "string"
     },
-    "unit_help": {
+    "help": {
       "title": "Help Information",
       "description": "Steps a user can take if more information than the unit output is needed.",
       "type": "string"
     }
   },
   "required": [
-    "unit_id",
-    "unit_title",
-    "unit_health"
+    "id",
+    "description",
+    "health"
   ]
 }
