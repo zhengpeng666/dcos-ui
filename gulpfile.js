@@ -13,6 +13,7 @@ var imagemin = require('gulp-imagemin');
 var less = require('gulp-less');
 var minifyCSS = require('gulp-cssnano');
 var mkdirp = require('mkdirp');
+var path = require('path');
 var replace = require('gulp-replace');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
@@ -36,6 +37,21 @@ function browserSyncReload() {
     browserSync.reload();
   }
 }
+// Watches for delete in external plugins directory and deletes counterpart in
+// DCOS-UI directory
+function deletePluginFile(event) {
+  if (event.type === 'deleted') {
+    var filePathFromPlugins = path.relative(
+      path.resolve(appConfig.externalPluginsDirectory), event.path);
+
+    var destFilePath = path.resolve(
+      config.dirs.pluginsTmp, filePathFromPlugins);
+
+    del.sync(destFilePath);
+    webpackFn(browserSyncReload);
+  }
+}
+
 // Make temp plugins directory if doesn't exist
 mkdirp(config.dirs.pluginsTmp, function () {
   console.log('Created ' + config.dirs.pluginsTmp);
@@ -156,7 +172,8 @@ gulp.task('watch', function () {
   gulp.watch(config.files.srcHTML, ['html']);
   gulp.watch(config.dirs.srcCSS + '/**/*.less', ['less']);
   gulp.watch(config.dirs.srcImg + '/**/*.*', ['images']);
-  gulp.watch(pluginsGlob, ['copy:changed-external-plugins']);
+  var watcher = gulp.watch(pluginsGlob, ['copy:changed-external-plugins']);
+  watcher.on('change', deletePluginFile);
   // Why aren't we watching any JS files? Because we use webpack's
   // internal watch, which is faster due to insane caching.
 });
@@ -168,8 +185,7 @@ gulp.task('global-js', function () {
   .pipe(gulp.dest(config.dirs.dist));
 });
 
-// Use webpack to compile jsx into js.
-gulp.task('webpack', ['copy:external-plugins'], function (callback) {
+function webpackFn(callback) {
   var isFirstRun = true;
 
   webpack(webpackConfig, function (err, stats) {
@@ -188,14 +204,19 @@ gulp.task('webpack', ['copy:external-plugins'], function (callback) {
     if (isFirstRun) {
       // This runs on initial gulp webpack load.
       isFirstRun = false;
-      callback();
+      if (callback) {
+        callback();
+      }
     } else {
       // This runs after webpack's internal watch rebuild.
       eslintFn();
       replaceJsStringsFn();
     }
   });
-});
+}
+
+// Use webpack to compile jsx into js.
+gulp.task('webpack', ['copy:external-plugins'], webpackFn);
 
 gulp.task('default', ['webpack', 'global-js', 'eslint', 'replace-js-strings', 'less', 'images', 'html']);
 
