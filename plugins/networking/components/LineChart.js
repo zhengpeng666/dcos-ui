@@ -35,7 +35,6 @@ class LineChart extends React.Component {
     }
 
     this.graph = new Dygraph(el, this.getGraphData(), options);
-    this.attachListenersToGraph(this.graph);
   }
 
   componentDidUpdate(prevProps) {
@@ -46,20 +45,6 @@ class LineChart extends React.Component {
     if (prevProps.width !== props.width || prevProps.height !== props.height) {
       this.graph.resize(this.props.width, this.props.height);
     }
-  }
-
-  attachListenersToGraph(graph) {
-    var onclick = function() {
-      if (graph.isSeriesLocked()) {
-        graph.clearSelection();
-      } else {
-        graph.setSelection(
-          graph.getSelection(), graph.getHighlightSeries(), true
-        );
-      }
-    };
-
-    graph.updateOptions({clickCallback: onclick}, true);
   }
 
   hasYAxisFormatter(options) {
@@ -136,7 +121,11 @@ LineChart.defaultProps = {
     legend: 'follow',
     labelsDivWidth: 125,
     strokeWidth: 1.5,
-    yAxisLabelWidth: 35
+    axes: {
+      y: {
+        axisLabelWidth: 35
+      }
+    }
   }
 };
 

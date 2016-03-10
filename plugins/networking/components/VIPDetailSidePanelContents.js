@@ -9,8 +9,6 @@ import NetworkItemDetails from './NetworkItemDetails';
 
 let SDK = require('../SDK').getSDK();
 
-let {SidePanelContents, RequestErrorMsg} = SDK.get([
-  'SidePanelContents', 'RequestErrorMsg'
 let {Chart, SidePanelContents, RequestErrorMsg} = SDK.get([
   'Chart', 'SidePanelContents', 'RequestErrorMsg'
 ]);
@@ -42,12 +40,14 @@ class VIPDetailSidePanelContents extends SidePanelContents {
   }
 
   componentWillUpdate() {
+    super.componentWillUpdate(...arguments);
     NetworkingVIPsStore.startFetchVIPDetail(
       this.props.protocol, this.props.vip, this.props.port
     );
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount(...arguments);
     NetworkingVIPsStore.stopFetchVIPDetail();
   }
 
@@ -137,17 +137,17 @@ class VIPDetailSidePanelContents extends SidePanelContents {
         x: {
           axisLabelFormatter: formatter,
           valueFormatter: formatter,
-          gridLinePattern: [4,4]
+          gridLinePattern: [4,4],
+          // Max of 4 chars (-60m) and each character is 10px in length
+          axisLabelWidth: 4 * 10
         },
         y: {
-          gridLinePattern: [4,4]
+          gridLinePattern: 55,
+          axisLabelWidth: 4 * 10
         }
       },
       colors: ['#27C97B', '#F33745'],
       labels: ['Minutes ago', 'Successes', 'Failures'],
-      // Max of 4 chars (-60m) and each character is 10px in length
-      xAxisLabelWidth: 4 * 10,
-      yAxisLabelWidth: 55,
       ylabel: '# of Request'
     };
 
