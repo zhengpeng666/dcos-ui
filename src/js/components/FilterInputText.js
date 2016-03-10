@@ -1,6 +1,5 @@
 var classNames = require('classnames');
 var React = require('react');
-import ReactDOM from 'react-dom';
 
 var FilterInputText = React.createClass({
 
@@ -29,7 +28,7 @@ var FilterInputText = React.createClass({
 
   componentDidUpdate: function () {
     if (this.state.focus) {
-      ReactDOM.findDOMNode(this.refs.filterInput).focus();
+      this.refs.filterInput.focus();
     }
   },
 
@@ -54,9 +53,9 @@ var FilterInputText = React.createClass({
     });
   },
 
-  renderClearIcon: function (focus, props) {
+  renderClearIcon: function (props) {
 
-    if (props.searchString.length > 0) {
+    if (props.searchString) {
 
       var clearIconClasses = classNames({
         'icon icon-sprite icon-sprite-mini icon-close': true,
@@ -117,7 +116,7 @@ var FilterInputText = React.createClass({
             value={props.searchString}
             onChange={this.handleChange}
             ref="filterInput" />
-          {this.renderClearIcon(focus, props)}
+          {this.renderClearIcon(props)}
         </div>
       </div>
     );
