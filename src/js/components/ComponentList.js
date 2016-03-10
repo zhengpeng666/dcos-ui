@@ -82,7 +82,7 @@ class ComponentList extends React.Component {
     let content = this.getComponentListContent(visibleUnits);
 
     return (
-      <div className="component-list-component">
+      <div className="service-list-component">
         <List
           className="list list-unstyled flush"
           content={content}
