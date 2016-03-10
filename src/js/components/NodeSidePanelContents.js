@@ -17,8 +17,6 @@ class NodeSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
-    this.internalStorage_set({renderTable: false});
-
     this.store_listeners = [
       {name: 'summary', events: ['success']},
       {name: 'state', events: ['success']},
@@ -44,8 +42,6 @@ class NodeSidePanelContents extends SidePanelContents {
     if (node) {
       NodeHealthStore.fetchNodeUnits(node.hostname);
     }
-
-    this.internalStorage_update({renderTable: true});
   }
 
   getBasicInfo(node) {
