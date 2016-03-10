@@ -43,7 +43,7 @@ class LineChart extends React.Component {
     this.graph.updateOptions({file: this.getGraphData()});
 
     if (prevProps.width !== props.width || prevProps.height !== props.height) {
-      this.graph.resize(this.props.width, this.props.height);
+      this.graph.resize(props.width, props.height);
     }
   }
 
@@ -56,7 +56,7 @@ class LineChart extends React.Component {
   getMaxLengthForSet(set) {
     let longestValue = 1;
     set.forEach(function(value) {
-      let valueString = new String(value);
+      let valueString = value.toString();
       if (valueString.length > longestValue) {
         longestValue = valueString.length;
       }
@@ -70,7 +70,7 @@ class LineChart extends React.Component {
   }
 
   /**
-   * Will take in an array of labels and array of of lines
+   * Will take in an array of labels and array of lines
    * with their datapoints and will get the data ready for dygraphs
    * For example: (['a', 'b'], [[1, 2], [3, 4]]) will return:
    * [['a', 1, 3], ['b', 2, 4]]

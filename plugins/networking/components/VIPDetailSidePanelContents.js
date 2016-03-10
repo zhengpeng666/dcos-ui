@@ -148,7 +148,7 @@ class VIPDetailSidePanelContents extends SidePanelContents {
       },
       colors: ['#27C97B', '#F33745'],
       labels: ['Minutes ago', 'Successes', 'Failures'],
-      ylabel: '# of Request'
+      ylabel: '# of Requests'
     };
 
     return (
