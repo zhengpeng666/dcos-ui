@@ -5,6 +5,7 @@ import React from 'react';
 import RequestErrorMsg from './RequestErrorMsg';
 import SidePanelContents from './SidePanelContents';
 import UnitHealthStore from '../stores/UnitHealthStore';
+import UnitSummaries from '../constants/UnitSummaries';
 
 module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
 
@@ -77,11 +78,18 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
     );
   }
 
-  getNodeInfo(node) {
+  getNodeInfo(node, unit) {
+    let unitSummary = UnitSummaries[unit.get('id')] || {};
+
     return (
       <div className="flex-container-col flex-grow">
         <span className="h4">Summary</span>
-        <p>This is a component summary, a placeholder.</p>
+        <p>
+          {unitSummary.summary}
+        </p>
+        <a href={unitSummary.documentation_url}>
+          View Documentation
+        </a>
         <span className="h4">Output</span>
         <pre className="flex-grow flush-bottom">
           {node.get('output')}
@@ -105,7 +113,7 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
         <div className="side-panel-tab-content side-panel-section container
           container-fluid container-pod container-pod-short container-fluid
           flex-container-col flex-grow">
-          {this.getNodeInfo(node)}
+          {this.getNodeInfo(node, unit)}
         </div>
       </div>
     );

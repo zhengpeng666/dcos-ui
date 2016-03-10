@@ -31,7 +31,7 @@ import GetSetMixin from '../mixins/GetSetMixin';
 import Node from '../structs/Node';
 import NodesList from '../structs/NodesList';
 
-var requestInterval = null;
+let requestInterval = null;
 
 function startPolling() {
   if (requestInterval == null) {
