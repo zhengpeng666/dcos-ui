@@ -1,7 +1,9 @@
 var _ = require('underscore');
-var React = require('react');
 import {Link} from 'react-router';
+import React from 'react';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+import ComponentList from '../components/ComponentList';
 import Config from '../config/Config';
 import EventTypes from '../constants/EventTypes';
 var HealthSorting = require('../constants/HealthSorting');
@@ -14,9 +16,11 @@ var Panel = require('../components/Panel');
 var ResourceTimeSeriesChart = require('../components/charts/ResourceTimeSeriesChart');
 var TaskFailureTimeSeriesChart = require('../components/charts/TaskFailureTimeSeriesChart');
 var ServiceList = require('../components/ServiceList');
+import StringUtil from '../utils/StringUtil';
 var TasksChart = require('../components/charts/TasksChart');
 var SidebarActions = require('../events/SidebarActions');
 import SidePanels from '../components/SidePanels';
+import UnitHealthStore from '../stores/UnitHealthStore';
 
 function getMesosState() {
   let states = MesosSummaryStore.get('states');
@@ -41,7 +45,14 @@ var DashboardPage = React.createClass({
 
   displayName: 'DashboardPage',
 
-  mixins: [InternalStorageMixin],
+  mixins: [InternalStorageMixin, StoreMixin],
+
+  store_listeners: [
+    {
+      name: 'unitHealth',
+      events: ['success', 'error']
+    }
+  ],
 
   statics: {
     routeConfig: {
@@ -65,6 +76,7 @@ var DashboardPage = React.createClass({
 
   getDefaultProps: function () {
     return {
+      componentsListLength: 5,
       servicesListLength: 5
     };
   },
@@ -149,6 +161,26 @@ var DashboardPage = React.createClass({
     });
 
     return _.first(sortedServices, this.props.servicesListLength);
+  },
+
+  getUnits: function () {
+    return UnitHealthStore.getUnits();
+  },
+
+  getViewAllComponentsButton: function () {
+    var componentCount = this.getUnits().getItems().length;
+    if (!componentCount) {
+      return null;
+    }
+
+    var componentCountWord = StringUtil.pluralize('Component', componentCount);
+
+    return (
+      <Link to="settings-system-units"
+        className="button button-wide button-inverse more-button">
+        {`View all ${componentCount} ${componentCountWord} >`}
+      </Link>
+    );
   },
 
   getViewAllServicesBtn: function () {
@@ -242,6 +274,17 @@ var DashboardPage = React.createClass({
               heading={this.getHeading('Tasks')}
               headingClass="panel-header panel-header-bottom-border inverse short">
               <TasksChart tasks={data.services.sumTaskStates()} />
+            </Panel>
+          </div>
+          <div className="grid-item column-small-6 column-large-4 column-x-large-3">
+            <Panel
+              className="panel dashboard-panel"
+              heading={this.getHeading('Component Health')}
+              headingClass="panel-header panel-header-bottom-border inverse short">
+              <ComponentList
+                displayCount={this.props.componentsListLength}
+                units={this.getUnits()} />
+              {this.getViewAllComponentsButton()}
             </Panel>
           </div>
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">
