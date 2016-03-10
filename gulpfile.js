@@ -131,8 +131,10 @@ gulp.task('watch', function () {
 });
 
 gulp.task('global-js', function () {
-  return gulp.src(config.dirs.src + '/js/vendor/dygraph-combined.js')
-    .pipe(gulp.dest(config.dirs.dist));
+  return gulp.src([
+    config.dirs.src + '/js/vendor/dygraph-combined.js'
+  ])
+  .pipe(gulp.dest(config.dirs.dist));
 });
 
 // Use webpack to compile jsx into js.

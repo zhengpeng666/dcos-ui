@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import Maths from './Maths';
 
 const Units = {
@@ -47,6 +48,53 @@ const Units = {
     }
 
     return filesize + ' ' + units[unitIndex];
+  },
+
+  contractNumber: function (amount, options) {
+    if (amount == null) {
+      return amount;
+    }
+
+    options = _.extend({
+      decimalPlaces: 2
+    }, options);
+
+    if (amount > 1) {
+      let precision = Math.pow(10, options.decimalPlaces);
+      amount = Math.round(amount * precision) / precision;
+    }
+
+    if (amount < 5000) {
+      return '' + amount;
+    }
+
+    if ((amount >= 5000 && amount < 10000) ||
+      (amount >= 1000000 && amount < 9999999)) {
+      options.decimalPlaces = 1;
+    } else if ((amount >= 10000 && amount < 1000000) || (amount >= 10000000)) {
+      options.decimalPlaces = 0;
+    }
+
+    let suffixes = ['K', 'M', 'B', 'T'];
+
+    let suffix = '';
+
+    if (amount >= 999999999999999) {
+      return '> 999T';
+    }
+
+    while (amount >= 1000) {
+      amount /= 1000;
+      amount = amount.toFixed(options.decimalPlaces);
+      amount = parseFloat(amount, 10);
+      suffix = suffixes.shift();
+    }
+
+    if (amount % 1 === 0) {
+      amount = amount.toFixed(0);
+    }
+
+    return amount + suffix;
   }
 };
 

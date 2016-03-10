@@ -16,6 +16,8 @@ import NetworkingActions from '../actions/NetworkingActions';
 import VIPDetail from '../structs/VIPDetail';
 
 let SDK = require('../SDK').getSDK();
+let fetchVIPDetailInterval = null;
+const VIPDetailLoadInterval = 1000 * 60; // Once a minute
 
 let NetworkingVIPsStore = SDK.createStore({
   storeID: 'networkingVIPs',
@@ -33,9 +35,24 @@ let NetworkingVIPsStore = SDK.createStore({
     listenAlways: true
   },
 
-  fetchVIPs: NetworkingActions.fetchVIPs,
+  startFetchVIPDetail: function (protocol, vip, port) {
+    if (fetchVIPDetailInterval) {
+      return;
+    }
 
-  fetchVIPDetail: NetworkingActions.fetchVIPDetail,
+    NetworkingActions.fetchVIPDetail(protocol, vip, port);
+    fetchVIPDetailInterval = global.setInterval(function () {
+      NetworkingActions.fetchVIPDetail(protocol, vip, port);
+    }, VIPDetailLoadInterval);
+  },
+
+  stopFetchVIPDetail: function () {
+    if (fetchVIPDetailInterval) {
+      global.clearInterval(fetchVIPDetailInterval);
+    }
+  },
+
+  fetchVIPs: NetworkingActions.fetchVIPs,
 
   get(prop) {
     return SDK.Store.getOwnState()[prop];

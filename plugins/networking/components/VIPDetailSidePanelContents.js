@@ -3,6 +3,7 @@ const React = require('react');
 /*eslint-enable no-unused-vars*/
 
 import BackendsTable from './BackendsTable';
+import LineChart from './LineChart';
 import NetworkingVIPsStore from '../stores/NetworkingVIPsStore';
 import NetworkItemDetails from './NetworkItemDetails';
 
@@ -10,7 +11,12 @@ let SDK = require('../SDK').getSDK();
 
 let {SidePanelContents, RequestErrorMsg} = SDK.get([
   'SidePanelContents', 'RequestErrorMsg'
+let {Chart, SidePanelContents, RequestErrorMsg} = SDK.get([
+  'Chart', 'SidePanelContents', 'RequestErrorMsg'
 ]);
+
+// number to fit design of width vs. height ratio
+const WIDTH_HEIGHT_RATIO = 3.5;
 
 class VIPDetailSidePanelContents extends SidePanelContents {
   constructor() {
@@ -35,16 +41,19 @@ class VIPDetailSidePanelContents extends SidePanelContents {
     });
   }
 
-  componentDidMount() {
-    super.componentDidMount();
-    NetworkingVIPsStore.fetchVIPDetail(this.props.protocol, this.props.vip,
-      this.props.port);
+  componentWillUpdate() {
+    NetworkingVIPsStore.startFetchVIPDetail(
+      this.props.protocol, this.props.vip, this.props.port
+    );
+  }
+
+  componentWillUnmount() {
+    NetworkingVIPsStore.stopFetchVIPDetail();
   }
 
   onNetworkingVIPsStoreDetailError() {
     let vipDetailErrorCount = this.internalStorage_get().vipDetailErrorCount + 1;
     this.internalStorage_update({vipDetailErrorCount});
-    this.forceUpdate();
   }
 
   onNetworkingVIPsStoreDetailSuccess() {
@@ -53,7 +62,6 @@ class VIPDetailSidePanelContents extends SidePanelContents {
       vipDetailErrorCount: 0
     });
     this.addDetailsTab();
-    this.forceUpdate();
   }
 
   addDetailsTab() {
@@ -106,8 +114,59 @@ class VIPDetailSidePanelContents extends SidePanelContents {
       || !vipDetailSuccess;
   }
 
+  getChart(vipDetails) {
+    let chartData = [
+      vipDetails.getRequestSuccesses(),
+      vipDetails.getRequestFailures()
+    ];
+    let labels = [];
+    for (var i = 60; i >= 0; i--) {
+      labels.push(i);
+    }
+
+    let formatter = function (x) {
+      if (x === 0) {
+        return 0;
+      }
+
+      return `-${x}m`;
+    };
+
+    let chartOptions = {
+      axes: {
+        x: {
+          axisLabelFormatter: formatter,
+          valueFormatter: formatter,
+          gridLinePattern: [4,4]
+        },
+        y: {
+          gridLinePattern: [4,4]
+        }
+      },
+      colors: ['#27C97B', '#F33745'],
+      labels: ['Minutes ago', 'Successes', 'Failures'],
+      // Max of 4 chars (-60m) and each character is 10px in length
+      xAxisLabelWidth: 4 * 10,
+      yAxisLabelWidth: 55,
+      ylabel: '# of Request'
+    };
+
+    return (
+      <div className="container-pod">
+        <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}
+          delayRender={true}>
+          <LineChart
+            data={chartData}
+            labels={labels}
+            chartOptions={chartOptions} />
+        </Chart>
+      </div>
+    );
+  }
+
   renderBackendsTabView() {
     let content;
+    let chart;
 
     if (this.hasError()) {
       content = <RequestErrorMsg />;
@@ -117,6 +176,8 @@ class VIPDetailSidePanelContents extends SidePanelContents {
       let vipDetails = NetworkingVIPsStore.getVIPDetail(
         `${this.props.protocol}:${this.props.vip}:${this.props.port}`
       );
+
+      chart = this.getChart(vipDetails);
       content = (<BackendsTable backends={vipDetails.getBackends()}
         vipProtocol={this.props.protocol}
         parentRouter={this.props.parentRouter} />);
@@ -126,6 +187,7 @@ class VIPDetailSidePanelContents extends SidePanelContents {
       <div className="side-panel-tab-content side-panel-section container
         container-fluid container-pod container-pod-short flex-container-col
         flex-grow">
+        {chart}
         {content}
       </div>
     );

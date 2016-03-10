@@ -245,3 +245,33 @@
 .side-panel .chart {
   flex-direction: row;
 }
+
+.dygraph-chart {
+
+  .dygraph-axis-label {
+
+    color: color-lighten(@neutral, 40);
+
+    &.dygraph-axis-label-y {
+
+      padding-right: 5px;
+
+    }
+
+  }
+
+  .dygraph-legend {
+
+    background-color: #3a3c47 !important;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 4px;
+    pointer-events: none;
+
+    .highlight {
+      background-color: transparent;
+    }
+
+  }
+
+}

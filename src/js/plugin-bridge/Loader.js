@@ -8,6 +8,7 @@ const requireStructs = require.context('../structs', false);
 const requireUtils = require.context('../utils', false);
 const requireMixins = require.context('../mixins', false);
 const requireComponents = require.context('../components', false);
+const requireCharts = require.context('../components/charts', false);
 const requireIcons = require.context('../components/icons', false);
 const requireModals = require.context('../components/modals', false);
 
@@ -45,6 +46,8 @@ function removeDir(dirs, atIndex) {
 function pluckComponent(path) {
   let dirs = path.split('/');
   switch (dirs[1]) {
+    case 'charts':
+      return requireCharts(removeDir(dirs, 1));
     case 'icons':
       return requireIcons(removeDir(dirs, 1));
     case 'modals':
