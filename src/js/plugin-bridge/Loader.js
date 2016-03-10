@@ -2,7 +2,7 @@
 // webpack will try to be smart and auto create the contexts,
 // doubling the built output
 const requirePlugin = require.context('../../../plugins', true, /index/);
-const requireExternalPlugin = require.context('../../../.plugins', true, /index/);
+const requireExternalPlugin = require.context('../../../.external_plugins', true, /index/);
 const requireConfig = require.context('../config', false);
 const requireEvents = require.context('../events', false);
 const requireStructs = require.context('../structs', false);

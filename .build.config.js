@@ -1,7 +1,7 @@
 var srcFolder = "./src";
 var distFolder = "./dist";
 var pluginsFolder = "./plugins";
-var externalPluginsTmpFolder = "./.plugins";
+var externalPluginsTmpFolder = "./.external_plugins";
 
 var dirs = {
   src: srcFolder,

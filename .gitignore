@@ -10,3 +10,4 @@ serve
 tmp/
 *.orig
 .plugins/
+.external_plugins/

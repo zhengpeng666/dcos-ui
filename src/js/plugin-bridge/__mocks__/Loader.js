@@ -14,7 +14,7 @@ try {
 }
 
 try {
-  externalPluginsList = require('../../../../.plugins/index');
+  externalPluginsList = require('../../../../.external_plugins/index');
 } catch(err) {
   externalPluginsList = {};
 }
@@ -51,7 +51,7 @@ function __requireModule(dir, name) {
     return require('../../../../plugins/' + name);
   }
   if (dir === 'externalPlugin') {
-    return require('../../../../.plugins/' + name);
+    return require('../../../../.external_plugins/' + name);
   }
   return require(`../../${dir}/${name}`);
 }
