@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import classNames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -7,8 +8,16 @@ let SDK = require('../SDK').getSDK();
 let Units = SDK.get('Units');
 
 class LineChart extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      disabledSeries: {}
+    };
+  }
+
   componentDidMount() {
-    let el = ReactDOM.findDOMNode(this);
+    let el = this.refs.chart;
     let options = _.extend({
         height: this.props.height,
         width: this.props.width
@@ -37,6 +46,27 @@ class LineChart extends React.Component {
     this.graph = new Dygraph(el, this.getGraphData(), options);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.height !== this.props.height ||
+      nextProps.width !== this.props.width) {
+      return true;
+    }
+
+    if (!_.isEqual(nextProps.labels, this.props.labels)) {
+      return true;
+    }
+
+    if (!_.isEqual(nextProps.data, this.props.data)) {
+      return true;
+    }
+
+    if (!_.isEqual(nextState.disabledSeries, this.state.disabledSeries)) {
+      return true;
+    }
+
+    return false;
+  }
+
   componentDidUpdate(prevProps) {
     let props = this.props;
 
@@ -45,6 +75,22 @@ class LineChart extends React.Component {
     if (prevProps.width !== props.width || prevProps.height !== props.height) {
       this.graph.resize(props.width, props.height);
     }
+  }
+
+  handleLabelToggle(seriesID) {
+    let visibleSeries = this.graph.visibility();
+    let isEnabled = visibleSeries[seriesID];
+    let disabledSeries = _.clone(this.state.disabledSeries);
+
+    if (isEnabled) {
+      disabledSeries[seriesID] = isEnabled;
+      this.graph.setVisibility(seriesID, !isEnabled);
+    } else {
+      delete disabledSeries[seriesID];
+      this.graph.setVisibility(seriesID, !isEnabled);
+    }
+
+    this.setState({disabledSeries});
   }
 
   hasYAxisFormatter(options) {
@@ -90,11 +136,58 @@ class LineChart extends React.Component {
     });
   }
 
-  render() {
-    let height = `${this.props.height}px`;
-    let width = `${this.props.width}px`;
+  getLegend() {
+    let labels = this.props.chartOptions.labels;
+
+    if (!labels) {
+      return null;
+    }
+
+    let labelsHTML = labels.map((label, i) => {
+      // The first index is the label for X, we don't want it.
+      if (i === 0) {
+        return null;
+      }
+
+      // From here on, the indexes start at 0
+      let index = i - 1;
+      let style = {
+        // -1 because we don't have a color for x
+        backgroundColor: this.props.chartOptions.colors[index]
+      };
+
+      let classes = classNames({
+        clickable: true,
+        disabled: this.state.disabledSeries[index]
+      });
+
+      return (
+        <span
+          className={classes}
+          key={i}
+          onClick={this.handleLabelToggle.bind(this, index)}>
+          <span className="dot success" style={style}></span>
+          {label}
+        </span>
+      );
+    });
+
+    // Pop off the first element
+    labelsHTML.shift()
+
     return (
-      <div className="dygraph-chart" height={height} width={width}></div>
+      <div className="graph-legend">
+        {labelsHTML}
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div className="dygraph-chart-wrapper">
+        <div ref="chart" className="dygraph-chart"></div>
+        {this.getLegend()}
+      </div>
     );
   }
 }
@@ -120,6 +213,7 @@ LineChart.defaultProps = {
     labelsSeparateLines: true,
     legend: 'follow',
     labelsDivWidth: 125,
+    showLegend: true,
     strokeWidth: 1.5,
     axes: {
       y: {

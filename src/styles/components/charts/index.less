@@ -246,6 +246,49 @@
   flex-direction: row;
 }
 
+.dygraph-chart-wrapper {
+
+  .dot {
+
+    display: inline-block;
+    margin-right: 6px;
+
+  }
+
+  .graph-legend {
+
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+
+    > span {
+
+      margin-left: 10px;
+
+      &.disabled {
+
+        opacity: 0.7;
+
+      }
+
+      &:hover {
+
+        color: color-lighten(@black, 40);
+
+      }
+
+      &:first {
+
+        margin-left: 0px;
+
+      }
+
+    }
+
+  }
+
+}
+
 .dygraph-chart {
 
   .dygraph-axis-label {
