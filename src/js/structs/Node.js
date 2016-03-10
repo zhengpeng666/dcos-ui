@@ -25,6 +25,10 @@ class Node extends Item {
     return UnitHealthUtil.getHealth(this.get('health'));
   }
 
+  getOutput() {
+    return this.get('output') || 'N/A';
+  }
+
 }
 
 module.exports = Node;

@@ -94,6 +94,10 @@ const UnitHealthStore = Store.createStore({
     return new Node(this.get('nodesByID')[nodeID] || []);
   },
 
+  getDownloadURL: function () {
+    return `${Config.rootUrl}${Config.unitHealthAPIPrefix}\/report`;
+  },
+
   fetchUnits: UnitHealthActions.fetchUnits,
 
   fetchUnit: UnitHealthActions.fetchUnit,

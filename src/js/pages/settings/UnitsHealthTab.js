@@ -7,7 +7,6 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 import {Table} from 'reactjs-components';
 
-import Config from '../../config/Config';
 import FilterHeadline from '../../components/FilterHeadline';
 import FilterButtons from '../../components/FilterButtons';
 import FilterInputText from '../../components/FilterInputText';
@@ -63,9 +62,6 @@ class UnitsHealthTab extends mixin(StoreMixin) {
         <Link to="settings-system-units-unit-nodes-panel"
           params={{unitID: unit.get('id')}}
           className="headline">
-          <span className="icon icon-small icon-image-container icon-app-container">
-            <img src="./img/services/icon-service-default-small@2x.png" />
-          </span>
           {unit.getTitle()}
         </Link>
       </div>
@@ -191,7 +187,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
               </div>
               <div className="media-object media-object-item media-object-inline media-object-item-align-right">
                 <div className="media-object-item">
-                  <a href={`${Config.rootUrl}${Config.unitHealthAPIPrefix}\/report`}
+                  <a href={UnitHealthStore.getDownloadURL()}
                     className="button button-primary">
                     Download Snapshot
                   </a>

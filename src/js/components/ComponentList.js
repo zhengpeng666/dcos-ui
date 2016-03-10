@@ -98,6 +98,7 @@ ComponentList.defaultProps = {
 
 ComponentList.propTypes = {
   displayCount: React.PropTypes.number,
+  // Required object of type HealthUnitsList.
   units: React.PropTypes.object.isRequired
 };
 
