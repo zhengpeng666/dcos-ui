@@ -79,6 +79,18 @@ components/tables.less
 
           }
 
+          .button {
+
+            &.button-link {
+
+              height: @body-text-line-height;
+              line-height: @body-text-line-height;
+              padding: 0;
+
+            }
+
+          }
+
         }
 
       }
@@ -98,6 +110,22 @@ components/tables.less
               border-top-left-radius: 0;
 
             }
+
+          }
+
+        }
+
+        .table-display-on-row-hover {
+
+          display: none;
+
+        }
+
+        &:hover {
+
+          .table-display-on-row-hover {
+
+            display: block;
 
           }
 
@@ -279,12 +307,39 @@ components/tables.less
               --------------------------------------------------------------------------------
               ----------------------------------------------------------------------------- */
 
+              .table-display-on-row-hover {
+
+                display: none;
+
+              }
+
+              &:hover {
+
+                .table-display-on-row-hover {
+
+                  display: block;
+
+                }
+
+              }
+
               > th,
               > td {
 
                 .icon {
 
                   margin-right: @base-spacing-unit-screen-small * 0.25;
+
+                }
+
+                .button {
+
+                  &.button-link {
+
+                    height: @body-text-line-height * @body-text-line-height-scale-screen-small;
+                    line-height: @body-text-line-height * @body-text-line-height-scale-screen-small;
+
+                  }
 
                 }
 
@@ -372,6 +427,17 @@ components/tables.less
 
                 }
 
+                .button {
+
+                  &.button-link {
+
+                    height: @body-text-line-height * @body-text-line-height-scale-screen-medium;
+                    line-height: @body-text-line-height * @body-text-line-height-scale-screen-medium;
+
+                  }
+
+                }
+
               }
 
             }
@@ -453,6 +519,17 @@ components/tables.less
                 .icon {
 
                   margin-right: @base-spacing-unit-screen-large * 0.15;
+
+                }
+
+                .button {
+
+                  &.button-link {
+
+                    height: @body-text-line-height * @body-text-line-height-scale-screen-large;
+                    line-height: @body-text-line-height * @body-text-line-height-scale-screen-large;
+
+                  }
 
                 }
 
