@@ -4,6 +4,7 @@ var browserSync = require('browser-sync');
 var colorLighten = require('less-color-lighten');
 var changed = require('gulp-changed');
 var connect = require('gulp-connect');
+var debug = require('gulp-debug');
 var del = require('del');
 var eslint = require('gulp-eslint');
 var gulp = require('gulp');
@@ -25,14 +26,12 @@ var webpackConfig = require('./.webpack.config');
 
 var development = process.env.NODE_ENV === 'development';
 var devBuild = development || (process.env.NODE_ENV === 'testing');
-var appConfig;
+var appConfig = require('./src/js/config/Config');
 
 if (devBuild) {
   try {
     appConfig = require('./src/js/config/Config.dev');
-  } catch (err) {
-    appConfig = require('./src/js/config/Config');
-  }
+  } catch (err) {}
 }
 var pluginsGlob = appConfig.externalPluginsDirectory + '/**/*.*';
 
@@ -101,8 +100,13 @@ gulp.task('connect:server', function () {
 
 // Create a function so we can use it inside of webpack's watch function.
 function eslintFn() {
-  return gulp.src([config.dirs.srcJS + '/**/*.?(js|jsx)', '!**/__tests__/**/*'])
+  return gulp.src([
+      config.dirs.pluginsTmp + '/**/*.?(js|jsx)',
+      config.dirs.srcJS + '/**/*.?(js|jsx)',
+      '!**/__tests__/**/*'
+    ])
     .pipe(eslint())
+    .pipe(debug())
     .pipe(eslint.formatEach('stylish', process.stderr));
 }
 gulp.task('eslint', eslintFn);
