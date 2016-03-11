@@ -8,25 +8,25 @@
       "type": "string",
       "pattern": "^[\\w\\.]+$"
     },
-    "node_role": {
+    "role": {
       "title": "Node Type",
       "type": "string",
       "enum": ["master", "agent", "unknown"]
     },
-    "node_health": {
+    "health": {
       "title": "Node health status",
       "type": "integer",
       "minimum": 0,
       "maximum": 3
     },
-    "unit_output": {
+    "help": {
       "title": "Node health check output",
       "type": "string"
     }
   },
   "required": [
     "host_ip",
-    "node_role",
-    "node_health"
+    "role",
+    "health"
   ]
 }
