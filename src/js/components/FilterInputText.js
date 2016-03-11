@@ -58,7 +58,7 @@ var FilterInputText = React.createClass({
     if (props.searchString) {
 
       var clearIconClasses = classNames({
-        'icon icon-sprite icon-sprite-mini icon-close': true,
+        'clickable icon icon-sprite icon-sprite-mini icon-close': true,
         'icon-sprite-mini-white': props.inverseStyle
       });
 
