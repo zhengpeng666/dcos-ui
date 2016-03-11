@@ -1,6 +1,8 @@
 import {Dropdown} from 'reactjs-components';
+import mixin from 'reactjs-mixin';
 import React from 'react';
 
+import InternalStorageMixin from '../mixins/InternalStorageMixin';
 import UnitHealthStatus from '../constants/UnitHealthStatus';
 
 const DEFAULT_ITEM = {
@@ -9,10 +11,13 @@ const DEFAULT_ITEM = {
   selectedHtml: 'All Health Checks'
 };
 
-class UnitHealthDropdown extends React.Component {
+class UnitHealthDropdown extends mixin(InternalStorageMixin) {
+
+  componentWillMount() {
+    this.internalStorage_set({dropdownItems: this.getDropdownItems()});
+  }
 
   getDropdownItems() {
-
     let items = Object.keys(UnitHealthStatus).map(function (health) {
       return {
         id: health,
@@ -22,7 +27,6 @@ class UnitHealthDropdown extends React.Component {
     });
 
     items.unshift(DEFAULT_ITEM);
-
     return items;
   }
 
@@ -33,7 +37,7 @@ class UnitHealthDropdown extends React.Component {
         dropdownMenuClassName="dropdown-menu"
         dropdownMenuListClassName="dropdown-menu-list"
         initialID={this.props.initialID}
-        items={this.getDropdownItems()}
+        items={this.internalStorage_get().dropdownItems}
         onItemSelection={this.props.onHealthSelection}
         transition={true}
         wrapperClassName="dropdown" />
