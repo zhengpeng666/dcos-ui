@@ -134,7 +134,7 @@ class NodeSidePanelContents extends SidePanelContents {
   render() {
     let node = this.internalStorage_get().node;
 
-    if (node == null) {
+    if (!node) {
       return this.getNotFound('node');
     }
 

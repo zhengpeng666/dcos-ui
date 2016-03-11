@@ -91,14 +91,16 @@ describe('NodeSidePanelContents', function () {
 
   describe('#getNode', function () {
 
-    it('should return an instance of Node', function () {
+    it('should store an instance of Node', function () {
       var instance = ReactDOM.render(
         <NodeSidePanelContents itemID="existingNode" />,
         this.container
       );
 
-      var node = instance.getNode();
+      instance.getNode();
+      var node = instance.internalStorage_get().node;
       expect(node instanceof Node).toEqual(true);
+      instance = null;
     });
 
   });
@@ -126,15 +128,4 @@ describe('NodeSidePanelContents', function () {
     });
   });
 
-  describe('#render', function () {
-    it('should show error if node is not to be found', function () {
-      var instance = ReactDOM.render(
-        <NodeSidePanelContents itemID="nonExistent" />,
-        this.container
-      );
-
-      var headline = TestUtils.findRenderedDOMComponentWithTag(instance, 'h3');
-      expect(ReactDOM.findDOMNode(headline).textContent).toBe('Error finding node');
-    });
-  });
 });
