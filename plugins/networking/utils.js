@@ -1,6 +1,17 @@
 const DEFAULT_INTERVAL_LENGTH = 1000 * 60; // One minute
 const DEFAULT_MAX_INTERVALS = 60;
 
+/**
+ * Processes an array of timestamp objects and returns a nested array that is
+ * ready for our LineChart to display.
+ * @constructor
+ * @param {array} dataSets - An array of objects, each in the shape of:
+ * {timestamp: val, timestamp2: val, timestamp3: val}
+ * @param {object} options - Specify the length of time between intervals and
+ * the number of intervals to return. Keys for the options are maxIntervals
+ * and intervalLength.
+ * @returns {array} - In the shape of: [[val, val, val], [val, val, val], ...]
+ */
 let Utils = {
   normalizeTimeSeriesData: function(dataSets, options = {}) {
     const INTERVAL_LENGTH = options.intervalLength || DEFAULT_INTERVAL_LENGTH;
