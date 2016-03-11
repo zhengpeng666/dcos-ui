@@ -134,7 +134,7 @@ class ServiceSidePanelContents extends SidePanelContents {
     return (
       <div className="side-panel-content-header-actions container-pod container-pod-short flush-top">
         <div className="button-collection flush-bottom">
-          <a className="button button-large button-primary"
+          <a className="button button-primary"
             onClick={this.handleOpenServiceButtonClick}>
             Open Service
           </a>
@@ -253,7 +253,7 @@ class ServiceSidePanelContents extends SidePanelContents {
       <div className="flex-container-col">
         <div className="container container-fluid container-pod
           container-pod-divider-bottom container-pod-divider-bottom-align-right
-          container-pod-divider-inverse container-pod-short-top flush-bottom
+          container-pod-short-top flush-bottom
           side-panel-content-header side-panel-section">
           {this.getBasicInfo()}
           <div className="side-panel-content-header-charts container-pod container-pod-short">

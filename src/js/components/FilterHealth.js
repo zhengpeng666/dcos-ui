@@ -9,8 +9,7 @@ var buttonMap = _.pick(
   HealthLabels,
   'ALL',
   'HEALTHY',
-  'UNHEALTHY',
-  'NA'
+  'UNHEALTHY'
 );
 
 var FilterHealth = React.createClass({
@@ -62,8 +61,7 @@ var FilterHealth = React.createClass({
       var dotClassSet = classNames({
         'dot': _.contains([
           HealthTypes.UNHEALTHY,
-          HealthTypes.HEALTHY,
-          HealthTypes.NA], health),
+          HealthTypes.HEALTHY], health),
         'danger': HealthTypes.UNHEALTHY === health,
         'success': HealthTypes.HEALTHY === health
       });
