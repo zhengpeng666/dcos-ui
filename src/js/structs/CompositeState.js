@@ -3,6 +3,10 @@ import _ from 'underscore';
 import NodesList from './NodesList';
 import ServicesList from './ServicesList';
 
+const BLANK_NODE = {
+  health: 3
+};
+
 let mergeData = function (newData, data) {
   Object.keys(newData).forEach(function (key) {
     if (_.isArray(newData[key])) {
@@ -62,16 +66,16 @@ class CompositeState {
 
   addNodeHealth(data) {
     let oldData = this.data.slaves || [];
+    let dataByIP = {};
+
+    data.forEach(function (datum) {
+      dataByIP[datum.host_ip] = datum;
+    });
 
     let newData = oldData.map(function (oldDatum) {
-      let matchedNode = _.find(data, function (healthNode) {
-        return healthNode.host_ip === oldDatum.hostname;
-      });
+      let matchedNode = dataByIP[oldDatum.hostname] || BLANK_NODE;
 
-      if (matchedNode) {
-        return _.extend({}, oldDatum, matchedNode);
-      }
-      return oldDatum;
+      return _.extend({}, oldDatum, matchedNode);
     });
 
     this.data.slaves = newData;
