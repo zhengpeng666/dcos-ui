@@ -31,7 +31,7 @@ if (devBuild) {
   try {
     appConfig = require('./src/js/config/Config.dev');
   } catch (err) {
-    console.debug('No Dev config');
+    // no-op
   }
 }
 var pluginsGlob = appConfig.externalPluginsDirectory + '/**/*.*';
