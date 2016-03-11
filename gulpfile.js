@@ -4,7 +4,6 @@ var browserSync = require('browser-sync');
 var colorLighten = require('less-color-lighten');
 var changed = require('gulp-changed');
 var connect = require('gulp-connect');
-var debug = require('gulp-debug');
 var del = require('del');
 var eslint = require('gulp-eslint');
 var gulp = require('gulp');
@@ -31,7 +30,9 @@ var appConfig = require('./src/js/config/Config');
 if (devBuild) {
   try {
     appConfig = require('./src/js/config/Config.dev');
-  } catch (err) {}
+  } catch (err) {
+    console.debug('No Dev config');
+  }
 }
 var pluginsGlob = appConfig.externalPluginsDirectory + '/**/*.*';
 
@@ -106,7 +107,6 @@ function eslintFn() {
       '!**/__tests__/**/*'
     ])
     .pipe(eslint())
-    .pipe(debug())
     .pipe(eslint.formatEach('stylish', process.stderr));
 }
 gulp.task('eslint', eslintFn);
