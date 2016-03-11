@@ -103,7 +103,7 @@ class BackendsTable extends React.Component {
         className,
         headerClassName: className,
         prop: 'p99Latency',
-        render: this.renderPercentage,
+        render: this.renderMilliseconds,
         sortable: true,
         heading
       }
@@ -259,8 +259,8 @@ class BackendsTable extends React.Component {
     };
   }
 
-  renderPercentage(prop, item) {
-    return `${item[prop]}%`;
+  renderMilliseconds(prop, item) {
+    return `${item[prop]}ms`;
   }
 
   render() {
