@@ -196,10 +196,18 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
 
   if (configuration.componentHealth) {
     cy
-      .route(/api\/v1\/system\/health\/units/, 'fx:unit-health/units')
-      .route(/api\/v1\/system\/health\/units\/mesos_dns_service/, 'fx:unit-health/unit')
-      .route(/api\/v1\/system\/health\/units\/mesos_dns_service\/nodes/, 'fx:unit-health/unit-nodes')
-      .route(/api\/v1\/system\/health\/units\/mesos_dns_service\/nodes\/ip-10-10-0-236/, 'fx:unit-health/unit-node');
+      .route(/system\/health\/v1\/units/, 'fx:unit-health/units')
+      .route(/system\/health\/v1\/units\/mesos_dns_service/, 'fx:unit-health/unit')
+      .route(/system\/health\/v1\/units\/mesos_dns_service\/nodes/, 'fx:unit-health/unit-nodes')
+      .route(/system\/health\/v1\/units\/mesos_dns_service\/nodes\/167\.114\.218\.155/, 'fx:unit-health/unit-node');
+  }
+
+  if (configuration.nodeHealth) {
+    cy
+      .route(/system\/health\/v1\/nodes/, 'fx:unit-health/nodes')
+      .route(/system\/health\/v1\/nodes\/172\.17\.8\.101/, 'fx:unit-health/node')
+      .route(/system\/health\/v1\/nodes\/(.*)\/units/, 'fx:unit-health/node-units')
+      .route(/system\/health\/v1\/nodes\/172\.17\.8\.101\/nodes\/REPLACE/, 'fx:unit-health/node-unit');
   }
 
   // The app won't load until plugins are loaded
