@@ -79,15 +79,15 @@ components/tables.less
 
           }
 
-        }
+          .button {
 
-        .button {
+            &.button-link {
 
-          &.button-link {
+              height: @body-text-line-height;
+              line-height: @body-text-line-height;
+              padding: 0;
 
-            height: @body-text-line-height;
-            line-height: @body-text-line-height;
-            padding: 0;
+            }
 
           }
 
@@ -110,6 +110,22 @@ components/tables.less
               border-top-left-radius: 0;
 
             }
+
+          }
+
+        }
+
+        .table-display-on-row-hover {
+
+          display: none;
+
+        }
+
+        &:hover {
+
+          .table-display-on-row-hover {
+
+            display: block;
 
           }
 
@@ -320,8 +336,8 @@ components/tables.less
 
                   &.button-link {
 
-                    height: @body-text-line-height-scale-screen-small;
-                    line-height: @body-text-line-height-scale-screen-small;
+                    height: @body-text-line-height * @body-text-line-height-scale-screen-small;
+                    line-height: @body-text-line-height * @body-text-line-height-scale-screen-small;
 
                   }
 
@@ -415,8 +431,8 @@ components/tables.less
 
                   &.button-link {
 
-                    height: @body-text-line-height-scale-screen-medium;
-                    line-height: @body-text-line-height-scale-screen-medium;
+                    height: @body-text-line-height * @body-text-line-height-scale-screen-medium;
+                    line-height: @body-text-line-height * @body-text-line-height-scale-screen-medium;
 
                   }
 
@@ -510,8 +526,8 @@ components/tables.less
 
                   &.button-link {
 
-                    height: @body-text-line-height-scale-screen-large;
-                    line-height: @body-text-line-height-scale-screen-large;
+                    height: @body-text-line-height * @body-text-line-height-scale-screen-large;
+                    line-height: @body-text-line-height * @body-text-line-height-scale-screen-large;
 
                   }
 
