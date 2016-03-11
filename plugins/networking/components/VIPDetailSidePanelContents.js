@@ -145,6 +145,7 @@ class VIPDetailSidePanelContents extends SidePanelContents {
           delayRender={true}>
           <LineChart
             data={data}
+            key={this.state.selectedDropdownItem}
             labels={labels}
             chartOptions={chartOptions} />
         </Chart>
