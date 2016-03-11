@@ -15,6 +15,7 @@ var minifyCSS = require('gulp-cssnano');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var replace = require('gulp-replace');
+var runSequence = require('run-sequence');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var webpack = require('webpack');
@@ -34,7 +35,9 @@ if (devBuild) {
     // no-op
   }
 }
-var pluginsGlob = appConfig.externalPluginsDirectory + '/**/*.*';
+var pluginsGlob = [
+  appConfig.externalPluginsDirectory + '/**/*.*'
+];
 
 function browserSyncReload() {
   if (development) {
@@ -67,13 +70,13 @@ gulp.task('clean:external-plugins', function () {
 });
 // Copy over all
 gulp.task('copy:external-plugins', ['clean:external-plugins'], function () {
-  return gulp.src([pluginsGlob])
+  return gulp.src(pluginsGlob)
     .pipe(gulp.dest(config.dirs.pluginsTmp));
 });
 
 // Copy over changed files
 gulp.task('copy:changed-external-plugins', function () {
-  return gulp.src([pluginsGlob])
+  return gulp.src(pluginsGlob)
     .pipe(changed(config.dirs.pluginsTmp))
     .pipe(gulp.dest(config.dirs.pluginsTmp));
 });
@@ -174,7 +177,7 @@ function replaceJsStringsFn() {
     .pipe(gulp.dest(config.dirs.distJS))
     .on('end', browserSyncReload);
 }
-gulp.task('replace-js-strings', ['webpack'], replaceJsStringsFn);
+gulp.task('replace-js-strings', replaceJsStringsFn);
 
 gulp.task('watch', function () {
   gulp.watch(config.files.srcHTML, ['html']);
@@ -209,25 +212,45 @@ function webpackFn(callback) {
       timing: true
     }));
 
-    if (callback && firstRun) {
+    if (firstRun) {
       firstRun = false;
-      callback();
+      if (callback) {
+        callback();
+      }
+    } else {
+      // This runs after webpack's internal watch rebuild.
+      replaceJsStringsFn();
     }
-
-    // This runs after webpack's internal watch rebuild.
     eslintFn();
-    replaceJsStringsFn();
-
   });
 }
+gulp.task('default', function (callback) {
+  runSequence(
+    'copy:external-plugins',
+    ['global-js', 'replace-js-strings', 'less', 'images', 'html'],
+    'webpack',
+    'eslint',
+    callback);
+});
 
+gulp.task('livereload', function (callback) {
+  runSequence(
+    'default',
+    'browsersync',
+    'watch',
+    callback
+  );
+});
+
+gulp.task('dist', function (callback) {
+  runSequence(
+    'default',
+    'minify-css',
+    'minify-js',
+    callback
+  );
+});
 // Use webpack to compile jsx into js.
-gulp.task('webpack', ['copy:external-plugins'], webpackFn);
-
-gulp.task('default', ['webpack', 'global-js', 'eslint', 'replace-js-strings', 'less', 'images', 'html']);
-
-gulp.task('dist', ['default', 'minify-css', 'minify-js']);
+gulp.task('webpack', webpackFn);
 
 gulp.task('serve', ['default', 'connect:server', 'watch']);
-
-gulp.task('livereload', ['default', 'browsersync', 'watch']);
