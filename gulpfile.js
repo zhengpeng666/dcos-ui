@@ -19,16 +19,20 @@ var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var webpack = require('webpack');
 
-var appConfig = require('./src/js/config/Config');
 var config = require('./.build.config');
 var packageInfo = require('./package');
 var webpackConfig = require('./.webpack.config');
 
 var development = process.env.NODE_ENV === 'development';
 var devBuild = development || (process.env.NODE_ENV === 'testing');
+var appConfig;
 
 if (devBuild) {
-  appConfig = require('./src/js/config/Config.dev');
+  try {
+    appConfig = require('./src/js/config/Config.dev');
+  } catch (err) {
+    appConfig = require('./src/js/config/Config');
+  }
 }
 var pluginsGlob = appConfig.externalPluginsDirectory + '/**/*.*';
 
