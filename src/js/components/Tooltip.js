@@ -10,7 +10,7 @@ let Tooltip = React.createClass({
 
   propTypes: {
     behavior: React.PropTypes.string,
-    content: React.PropTypes.string,
+    content: React.PropTypes.node,
     contentClass: React.PropTypes.string,
     iconClass: React.PropTypes.string,
     tipPlace: React.PropTypes.string

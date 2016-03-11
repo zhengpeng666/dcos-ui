@@ -110,7 +110,7 @@ class NetworkPage extends mixin(StoreMixin) {
         <FilterHeadline
           inverseStyle={true}
           onReset={this.resetFilter}
-          name="Virual IPs"
+          name="Virtual IPs"
           currentLength={filteredVIPSummaries.length}
           totalLength={vipSummaries.length} />
         <ul className="list list-unstyled list-inline flush-bottom">

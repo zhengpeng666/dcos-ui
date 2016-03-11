@@ -440,6 +440,27 @@ Icon (huge)
 
       }
 
+      /* Icon: Failed */
+
+      &.icon-information {
+
+        background-position: floor(-@icon-sprite-mini-variant-black-offset-horizontal) -(floor(@icon-mini-height) * 10);
+        transform: rotate(180deg);
+
+        &.icon-sprite-mini-white {
+
+          background-position: floor(-@icon-sprite-mini-variant-white-offset-horizontal) -(floor(@icon-mini-height) * 10);
+
+        }
+
+        &.icon-sprite-mini-color {
+
+          background-position: floor(-@icon-sprite-mini-variant-color-offset-horizontal) -(floor(@icon-mini-height) * 10);
+
+        }
+
+      }
+
       /* Icon: Lost */
 
       &.icon-lost {

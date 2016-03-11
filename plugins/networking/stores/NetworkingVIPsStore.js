@@ -49,6 +49,7 @@ let NetworkingVIPsStore = SDK.createStore({
   stopFetchVIPDetail: function () {
     if (fetchVIPDetailInterval) {
       global.clearInterval(fetchVIPDetailInterval);
+      fetchVIPDetailInterval = null;
     }
   },
 

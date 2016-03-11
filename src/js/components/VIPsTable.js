@@ -14,11 +14,19 @@ const COLUMNS_TO_HIDE_MEDIUM = [
   'failLastMinute'
 ];
 
-const COLUMNS_TO_HIDE_MINI = [
+const COLUMNS_TO_HIDE_SMALL = [
   'successLastMinute',
   'failLastMinute',
   'applicationReachabilityPercent',
   'machineReachabilityPercent'
+];
+
+const COLUMNS_TO_HIDE_MINI = [
+  'successLastMinute',
+  'failLastMinute',
+  'applicationReachabilityPercent',
+  'machineReachabilityPercent',
+  'failurePercent'
 ];
 
 const RIGHT_ALIGNED_TABLE_CELLS = [
@@ -49,10 +57,10 @@ class VIPsTable extends React.Component {
       vip: 'VIRTUAL IP',
       successLastMinute: 'SUCCESSES',
       failLastMinute: 'FAILURES',
-      failurePercent: 'FAILURE %',
-      applicationReachabilityPercent: 'APP REACH',
-      machineReachabilityPercent: 'IP REACH',
-      p99Latency: '99TH% LATENCY'
+      failurePercent: 'FAILURE\u00a0%',
+      applicationReachabilityPercent: 'APP\u00a0REACH',
+      machineReachabilityPercent: 'IP\u00a0REACH',
+      p99Latency: 'P99\u00a0LATENCY'
     });
 
     return [
@@ -121,7 +129,7 @@ class VIPsTable extends React.Component {
     return classNames({
       'text-align-right': alignTableCellRight(prop),
       'hidden-medium': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MEDIUM),
-      'hidden-small': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MINI),
+      'hidden-small': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_SMALL),
       'hidden-mini': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MINI),
       'highlight': prop === sortBy.prop,
       'clickable': row == null
@@ -131,13 +139,13 @@ class VIPsTable extends React.Component {
   getColGroup() {
     return (
       <colgroup>
-        <col style={{width: '20%'}} />
+        <col style={{minWidth: '25%', width: '25%'}} />
         <col className="hidden-mini" />
         <col className="hidden-mini" />
         <col />
         <col className="hidden-mini hidden-small hidden-medium" />
         <col className="hidden-mini hidden-small hidden-medium" />
-        <col />
+        <col className="hidden-mini" />
       </colgroup>
     );
   }
