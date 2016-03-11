@@ -23,7 +23,8 @@ var SidebarActions = require('../events/SidebarActions');
 import SidePanels from '../components/SidePanels';
 import StringUtil from '../utils/StringUtil';
 
-var NODES_DISPLAY_LIMIT = 300;
+const NODES_DISPLAY_LIMIT = 300;
+const HEALTH_FILTER_BUTTONS = ['all', 'healthy', 'unhealthy'];
 
 function getMesosHosts(state) {
   let states = MesosSummaryStore.get('states');
@@ -265,8 +266,8 @@ var NodesPage = React.createClass({
               <div className="media-object-item media-object-align-top">
                 <FilterButtons
                   renderButtonContent={this.getButtonContent}
-                  filters={['all', 'healthy', 'unhealthy']}
-                  filterByKey={'title'}
+                  filters={HEALTH_FILTER_BUTTONS}
+                  filterByKey="title"
                   onFilterChange={this.handleHealthFilterChange}
                   itemList={nodesHealth}
                   selectedFilter={state.healthFilter} />

@@ -112,9 +112,9 @@ class SidePanels extends mixin(StoreMixin) {
     if (unitID != null && unitNodeID != null) {
       return (
         <UnitNodeSidePanelContents
-        itemID={unitID}
-        params={this.props.params}
-        parentRouter={this.context.router} />
+          itemID={unitID}
+          params={this.props.params}
+          parentRouter={this.context.router} />
       );
     }
 

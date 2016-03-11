@@ -37,7 +37,8 @@ class NodeSidePanelContents extends SidePanelContents {
   componentDidMount() {
     super.componentDidMount(...arguments);
 
-    let node = this.getNode();
+    this.getNode();
+    let node = this.internalStorage_get().node;
 
     if (node) {
       NodeHealthStore.fetchNodeUnits(node.hostname);
@@ -65,16 +66,17 @@ class NodeSidePanelContents extends SidePanelContents {
       {ids: [this.props.itemID]}
     ).last();
 
-    return node;
+    this.internalStorage_update({node});
   }
 
   renderHealthTabView() {
-    let units = NodeHealthStore.getUnits(this.getNode().hostname);
+    let node = this.internalStorage_get().node;
+    let units = NodeHealthStore.getUnits(node.hostname);
 
     return (
       <div className="side-panel-tab-content side-panel-section container container-fluid container-pod container-pod-short container-fluid flex-container-col flush-bottom flex-grow">
         <HealthTab
-          node={this.getNode()}
+          node={node}
           units={units}
           parentRouter={this.props.parentRouter} />
       </div>
@@ -130,7 +132,7 @@ class NodeSidePanelContents extends SidePanelContents {
   }
 
   render() {
-    let node = this.getNode();
+    let node = this.internalStorage_get().node;
 
     if (node == null) {
       return this.getNotFound('node');

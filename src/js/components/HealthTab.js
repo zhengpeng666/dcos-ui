@@ -30,7 +30,7 @@ class HealthTab extends React.Component {
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
-    }, this);
+    });
   }
 
   handleHealthSelection(selectedHealth) {
@@ -108,7 +108,7 @@ class HealthTab extends React.Component {
     let router = this.props.parentRouter;
     let healthCheckName = `${unit.getTitle()} Health Check`;
     let currentPath = router.getCurrentRoutes();
-    let path = `${currentPath[currentPath.length - 1].name}-health`;
+    let path = `${_.last(currentPath).name}-health`;
     let params = _.clone(router.getCurrentParams());
 
     params.unitNodeID = this.props.node.get('host_ip');
@@ -140,7 +140,7 @@ class HealthTab extends React.Component {
         <ul className="list list-unstyled list-inline flush-bottom">
           <li>
             <FilterInputText
-              searchString={this.state.searchString}
+              searchString={searchString}
               handleFilterChange={this.handleSearchStringChange}
               inverseStyle={false} />
           </li>
