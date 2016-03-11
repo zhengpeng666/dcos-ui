@@ -6,7 +6,8 @@ var ConfigDev = {
   stateLoadDelay: 500,
   stateRefresh: 2000,
   useFixtures: false,
-  useUIConfigFixtures: false
+  useUIConfigFixtures: false,
+  externalPluginsDirectory: '../dcos-ui-plugins-private'
 };
 
 module.exports = ConfigDev;

@@ -12,17 +12,6 @@ if (process.env.NODE_ENV === 'development' ||
   webpackWatch = true;
 }
 
-var pluginsList = {};
-try {
-  pluginsList = require('./plugins/index');
-} catch (err) {
-  console.warn('Could not find an index file in plugins directory listing available plugins');
-}
-
-var pluginEntryPoints = Object.keys(pluginsList).map(function (pluginID) {
-  return path.resolve(__dirname, 'plugins', pluginsList[pluginID]);
-});
-
 var vendors = [
   'classnames',
   'cookie',
@@ -53,7 +42,7 @@ var vendors = [
 module.exports = {
   devtool: webpackDevtool,
   entry: {
-    index: [config.files.srcJS].concat(pluginEntryPoints),
+    index: [config.files.srcJS],
     vendor: vendors
   },
   output: {
