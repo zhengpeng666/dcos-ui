@@ -190,7 +190,7 @@ gulp.task('global-js', function () {
 });
 
 function webpackFn(callback) {
-  var isFirstRun = true;
+  var firstRun = true;
 
   webpack(webpackConfig, function (err, stats) {
     if (err) {
@@ -205,17 +205,15 @@ function webpackFn(callback) {
       timing: true
     }));
 
-    if (isFirstRun) {
-      // This runs on initial gulp webpack load.
-      isFirstRun = false;
-      if (callback) {
-        callback();
-      }
-    } else {
-      // This runs after webpack's internal watch rebuild.
-      eslintFn();
-      replaceJsStringsFn();
+    if (callback && firstRun) {
+      firstRun = false;
+      callback();
     }
+
+    // This runs after webpack's internal watch rebuild.
+    eslintFn();
+    replaceJsStringsFn();
+
   });
 }
 
