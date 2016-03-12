@@ -37,8 +37,8 @@ class NodeSidePanelContents extends SidePanelContents {
   componentDidMount() {
     super.componentDidMount(...arguments);
 
-    this.getNode();
-    let node = this.internalStorage_get().node;
+    let node = this.getNode();
+    this.internalStorage_update({node});
 
     if (node) {
       NodeHealthStore.fetchNodeUnits(node.hostname);
@@ -62,11 +62,9 @@ class NodeSidePanelContents extends SidePanelContents {
   }
 
   getNode() {
-    let node = CompositeState.getNodesList().filter(
+    return CompositeState.getNodesList().filter(
       {ids: [this.props.itemID]}
     ).last();
-
-    this.internalStorage_update({node});
   }
 
   renderHealthTabView() {

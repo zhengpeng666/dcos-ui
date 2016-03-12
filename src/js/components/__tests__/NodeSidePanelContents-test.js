@@ -97,8 +97,7 @@ describe('NodeSidePanelContents', function () {
         this.container
       );
 
-      instance.getNode();
-      var node = instance.internalStorage_get().node;
+      var node = instance.getNode();
       expect(node instanceof Node).toEqual(true);
       instance = null;
     });

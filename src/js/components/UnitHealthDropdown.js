@@ -12,7 +12,6 @@ const DEFAULT_ITEM = {
 };
 
 class UnitHealthDropdown extends mixin(InternalStorageMixin) {
-
   componentWillMount() {
     this.internalStorage_set({dropdownItems: this.getDropdownItems()});
   }

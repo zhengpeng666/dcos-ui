@@ -19,7 +19,6 @@ const METHODS_TO_BIND = [
 ];
 
 class HealthTab extends React.Component {
-
   constructor() {
     super();
 
