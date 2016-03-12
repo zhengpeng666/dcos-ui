@@ -9,8 +9,8 @@ import NetworkItemDetails from './NetworkItemDetails';
 import NetworkingBackendConnectionsStore from '../stores/NetworkingBackendConnectionsStore';
 
 let SDK = require('../SDK').getSDK();
-let {RequestErrorMsg, SidePanelContents, Tooltip} = SDK.get([
-  'RequestErrorMsg', 'SidePanelContents', 'Tooltip']);
+let {RequestErrorMsg, SidePanelContents, StringUtil, Tooltip} = SDK.get([
+  'RequestErrorMsg', 'SidePanelContents', 'StringUtil', 'Tooltip']);
 
 const METHODS_TO_BIND = ['handleBackendDetailDropdownChange'];
 
@@ -112,14 +112,14 @@ class BackendDetailSidePanelContents extends SidePanelContents {
     ];
   }
 
-  getDropdownItemSelectedHtml(label, backendCount) {
+  getDropdownItemSelectedHtml(label, clientCount) {
     return (
       <span className="dropdown-toggle-label text-align-left">
         <span className="dropdown-toggle-label-primary">
           {label} per Minute
         </span>
         <span className="dropdown-toggle-label-secondary mute">
-          {backendCount} Total Backends
+          {clientCount} Total {`${StringUtil.pluralize('Client', clientCount)}`}
         </span>
       </span>
     );

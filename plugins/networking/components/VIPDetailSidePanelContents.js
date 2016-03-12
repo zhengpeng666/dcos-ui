@@ -10,8 +10,8 @@ import NetworkItemChart from './NetworkItemChart';
 
 let SDK = require('../SDK').getSDK();
 
-let {SidePanelContents, RequestErrorMsg, Tooltip} = SDK.get([
-  'SidePanelContents', 'RequestErrorMsg', 'Tooltip'
+let {SidePanelContents, RequestErrorMsg, StringUtil, Tooltip} = SDK.get([
+  'SidePanelContents', 'RequestErrorMsg', 'StringUtil', 'Tooltip'
 ]);
 
 const METHODS_TO_BIND = ['handleVIPDetailDropdownChange'];
@@ -125,7 +125,7 @@ class VIPDetailSidePanelContents extends SidePanelContents {
           {label} per Minute
         </span>
         <span className="dropdown-toggle-label-secondary mute">
-          {backendCount} Total Backends
+          {backendCount} Total {`${StringUtil.pluralize('Backend', backendCount)}`}
         </span>
       </span>
     );
