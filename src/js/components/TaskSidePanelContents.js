@@ -4,13 +4,15 @@ import classNames from 'classnames';
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import DescriptionList from '../components/DescriptionList';
+import DescriptionList from './DescriptionList';
 import MesosStateStore from '../stores/MesosStateStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import ResourceTypes from '../constants/ResourceTypes';
+import RequestErrorMsg from './RequestErrorMsg';
 import SidePanelContents from './SidePanelContents';
-import TaskDebugView from '../components/TaskDebugView';
+import TaskDebugView from './TaskDebugView';
 import TaskDirectoryView from './TaskDirectoryView';
+import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 import TaskStates from '../constants/TaskStates';
 import TaskUtil from '../utils/TaskUtil';
 import Units from '../utils/Units';
@@ -21,7 +23,12 @@ const TABS = {
   debug: 'Log Viewer'
 };
 
-module.exports = class TaskSidePanelContents extends SidePanelContents {
+const METHODS_TO_BIND = [
+  'onTaskDirectoryStoreError',
+  'onTaskDirectoryStoreSuccess'
+];
+
+class TaskSidePanelContents extends SidePanelContents {
   constructor() {
     super(...arguments);
 
@@ -29,27 +36,73 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
 
     this.state = {
       currentTab: Object.keys(this.tabs_tabs).shift(),
+      directory: null,
       expandClass: 'large',
-      showExpandButton: false
+      showExpandButton: false,
+      selectedLogFile: null,
+      taskDirectoryErrorCount: 0
     };
 
     this.store_listeners = [
-      {name: 'state', events: ['success']},
-      {name: 'summary', events: ['success']}
+      {name: 'state', events: ['success'], listenAlways: false},
+      {name: 'summary', events: ['success'], listenAlways: false},
+      {name: 'taskDirectory', events: ['error', 'success']}
     ];
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
   }
 
-  componentWillMount() {
-    // If the task is 'completed', we do not show the 'Files' tab.
-    if (this.props.itemID) {
-      let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+  componentDidMount() {
+    super.componentDidMount(...arguments);
+    this.store_removeEventListenerForStoreID('summary', 'success');
+  }
 
-      if (task == null) {
-        return;
-      }
+  onStateStoreSuccess() {
+    let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+    TaskDirectoryStore.getDirectory(task);
+  }
 
-      this.tabs_tabs = _.clone(TABS);
+  onTaskDirectoryStoreError() {
+    this.setState({
+      taskDirectoryErrorCount: this.state.taskDirectoryErrorCount + 1
+    });
+  }
+
+  onTaskDirectoryStoreSuccess() {
+    this.setState({
+      directory: TaskDirectoryStore.get('directory'),
+      taskDirectoryErrorCount: 0
+    });
+  }
+
+  hasLoadingError() {
+    return this.state.taskDirectoryErrorCount >= 3;
+  }
+
+  getLoadingScreen() {
+    let screen = (
+      <div className="row">
+        <div className="ball-scale">
+          <div />
+        </div>
+      </div>
+    );
+
+    if (this.hasLoadingError()) {
+      screen = <RequestErrorMsg />;
     }
+
+    return (
+      <div className="container container-fluid container-pod text-align-center vertical-center inverse">
+        {screen}
+      </div>
+    );
+  }
+
+  handleOpenLogClick(selectedLogFile) {
+    this.setState({selectedLogFile, currentTab: 'debug'});
   }
 
   getResources(task) {
@@ -183,39 +236,42 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
   }
 
   renderFilesTabView() {
-    let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+    let {state, props} = this;
+    let task = MesosStateStore.getTaskFromTaskID(props.itemID);
+    if (!state.directory || !task) {
+      return this.getLoadingScreen();
+    }
 
     return (
       <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow">
-        <TaskDirectoryView task={task} />
+        <TaskDirectoryView
+          directory={state.directory}
+          task={task}
+          onOpenLogClick={this.handleOpenLogClick.bind(this)} />
       </div>
     );
   }
 
   renderLogViewerTabView() {
-    let task = MesosStateStore.getTaskFromTaskID(this.props.itemID);
+    let {state, props} = this;
+    let task = MesosStateStore.getTaskFromTaskID(props.itemID);
+    if (!state.directory || !task) {
+      return this.getLoadingScreen();
+    }
 
     return (
       <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow">
         <TaskDebugView
+          selectedLogFile={state.selectedLogFile}
           showExpandButton={this.showExpandButton}
+          directory={state.directory}
           task={task} />
       </div>
     );
   }
 
-  tabs_handleTabClick(nextTab) {
-    let {currentTab} = this.state;
-
-    // Removing unnecessary listeners from debug tab
-    if (currentTab !== 'debug' && nextTab === 'debug') {
-      this.store_removeListeners();
-    }
-
-    // Re-adding listeners when navigating away from debug tab
-    if (currentTab === 'debug' && nextTab !== 'debug') {
-      this.store_addListeners();
-    }
+  tabs_handleTabClick() {
+    this.setState({selectedLogFile: null});
 
     // Only call super after we are done removing/adding listeners
     super.tabs_handleTabClick(...arguments);
@@ -252,4 +308,6 @@ module.exports = class TaskSidePanelContents extends SidePanelContents {
       </div>
     );
   }
-};
+}
+
+module.exports = TaskSidePanelContents;
