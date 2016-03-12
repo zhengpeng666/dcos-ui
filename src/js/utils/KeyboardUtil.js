@@ -1,7 +1,7 @@
 const KeyboardUtil = {
   keyCodes: {
-    left: 37,
-    right: 39
+    leftArrow: 37,
+    rightArrow: 39
   }
 };
 

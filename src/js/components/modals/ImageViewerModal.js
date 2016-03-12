@@ -1,5 +1,5 @@
-import React from 'react';
 import {Modal} from 'reactjs-components';
+import React from 'react';
 
 import IconBack from '../icons/IconBack';
 import {keyCodes} from '../../utils/KeyboardUtil';
@@ -34,13 +34,13 @@ class ImageViewerModal extends React.Component {
     if (event.defaultPrevented) {
       return; // Should do nothing if the key event was already consumed.
     }
+
     let {props} = this;
-    console.log(event.keyCode);
-    if (event.keyCode === keyCodes.left) {
+    if (event.keyCode === keyCodes.leftArrow) {
       props.onLeftClick();
     }
 
-    if (event.keyCode === keyCodes.right) {
+    if (event.keyCode === keyCodes.rightArrow) {
       props.onRightClick();
     }
 
