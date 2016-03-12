@@ -222,6 +222,18 @@ describe('Units', function () {
       })).toEqual('1');
     });
 
+    it('forces the default fixed precision when forceFixedPrecision is true',
+      function() {
+      return expect(Units.contractNumber(1.000, {forceFixedPrecision: true}))
+        .toEqual('1.00');
+    });
+
+    it('forces a defined precision when forceFixedPrecision is true',
+      function() {
+      return expect(Units.contractNumber(1,
+        {forceFixedPrecision: true, decimalPlaces: 3})).toEqual('1.000');
+    });
+
     it('should return a string given an input string', function() {
       return expect(Units.contractNumber('foobar')).toEqual('foobar');
     });

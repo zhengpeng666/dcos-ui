@@ -100,7 +100,7 @@ class LineChart extends React.Component {
 
     if (!this.hasYAxisFormatter(this.props.chartOptions)) {
       let formatter = function (y) {
-        return Units.contractNumber(y);
+        return Units.contractNumber(y, {forceFixedPrecision: true});
       };
 
       if (!options.axes) {

@@ -62,7 +62,9 @@ const Units = {
     if (amount > 1) {
       let precision = Math.pow(10, options.decimalPlaces);
       amount = Math.round(amount * precision) / precision;
-    } else {
+    }
+
+    if (options.forceFixedPrecision && typeof amount === 'number') {
       amount = amount.toFixed(options.decimalPlaces);
     }
 
