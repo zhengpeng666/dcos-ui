@@ -61,7 +61,7 @@ class ComponentList extends React.Component {
 
   getErrorMessage() {
     return (
-      <div className="flex-box flex-box-align-vertical-center">
+      <div className="component-list-component">
         <div className="vertical-center">
           <h3 className="flush-top inverse text-align-center">Components Not Found</h3>
           <p className="inverse flush text-align-center">An error has occurred.</p>
@@ -82,7 +82,7 @@ class ComponentList extends React.Component {
     let content = this.getComponentListContent(visibleUnits);
 
     return (
-      <div className="service-list-component">
+      <div className="component-list-component">
         <List
           className="list list-unstyled flush"
           content={content}

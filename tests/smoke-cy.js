@@ -18,7 +18,7 @@ describe('DCOS UI [00j]', function() {
     });
 
     it('has six panels [00m]', function() {
-      cy.get('#application').find('.panel').should('to.have.length', 6);
+      cy.get('#application').find('.panel').should('to.have.length', 7);
     });
 
   });
