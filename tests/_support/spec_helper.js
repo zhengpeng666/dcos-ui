@@ -196,7 +196,7 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
 
   if (configuration.componentHealth) {
     cy
-      .route(/system\/health\/v1\/units/, 'fx:unit-health/units')
+      .route(/system\/health\/v1\/components/, 'fx:unit-health/units')
       .route(/system\/health\/v1\/units\/mesos_dns_service/, 'fx:unit-health/unit')
       .route(/system\/health\/v1\/units\/mesos_dns_service\/nodes/, 'fx:unit-health/unit-nodes')
       .route(/system\/health\/v1\/units\/mesos_dns_service\/nodes\/167\.114\.218\.155/, 'fx:unit-health/unit-node');
@@ -206,7 +206,7 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
     cy
       .route(/system\/health\/v1\/nodes/, 'fx:unit-health/nodes')
       .route(/system\/health\/v1\/nodes\/172\.17\.8\.101/, 'fx:unit-health/node')
-      .route(/system\/health\/v1\/nodes\/(.*)\/units/, 'fx:unit-health/node-units')
+      .route(/system\/health\/v1\/nodes\/(.*)\/components/, 'fx:unit-health/node-units')
       .route(/system\/health\/v1\/nodes\/172\.17\.8\.101\/nodes\/REPLACE/, 'fx:unit-health/node-unit');
   }
 

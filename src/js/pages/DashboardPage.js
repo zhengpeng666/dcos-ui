@@ -178,7 +178,7 @@ var DashboardPage = React.createClass({
     return (
       <Link to="settings-system-units"
         className="button button-wide button-inverse more-button">
-        {`View all ${componentCount} ${componentCountWord} >`}
+        {`View all ${componentCount} ${componentCountWord}`}
       </Link>
     );
   },
@@ -194,7 +194,7 @@ var DashboardPage = React.createClass({
     if (servicesCount > this.props.servicesListLength) {
       textContent += servicesCount + ' ';
     }
-    textContent += 'Services >';
+    textContent += 'Services';
 
     return (
       <Link to="services"
