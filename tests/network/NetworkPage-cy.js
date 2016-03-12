@@ -79,18 +79,18 @@ describe('Network Page [0hy]', function () {
 
     it('opens the side panel when users click on the ip address [0i7]',
       function () {
-        cy
-          .get('.table tbody a').first().click();
+      cy
+        .get('.table tbody a').first().click();
 
-        cy
-          .get('.side-panel-large').should(function ($sidePanel) {
-            expect($sidePanel.length).to.equal(1);
-          });
+      cy
+        .get('.side-panel-large').should(function ($sidePanel) {
+          expect($sidePanel.length).to.equal(1);
+        });
     });
 
     describe('VIPDetailSidePanelContents [0if]', function () {
 
-      describe('Dropdown', function () {
+      describe('NetworkItemDetails', function () {
 
         beforeEach(function () {
           cy.get('.side-panel-content').as('sidePanel');
@@ -167,6 +167,7 @@ describe('Network Page [0hy]', function () {
               expect($legendElements.length).to.equal(5);
             });
         });
+
       });
 
       describe('BackendsTable [0i0]', function () {
