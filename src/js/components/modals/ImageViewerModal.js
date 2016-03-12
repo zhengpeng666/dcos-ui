@@ -14,7 +14,9 @@ class ImageViewerModal extends React.Component {
       this[method] = this[method].bind(this);
     });
 
-    global.window.addEventListener('keydown', this.handleKeyPress, true);
+    if (this.props.open) {
+      global.window.addEventListener('keydown', this.handleKeyPress, true);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
