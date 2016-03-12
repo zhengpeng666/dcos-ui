@@ -62,11 +62,11 @@ class SidePanels extends mixin(StoreMixin) {
     let {unitID, unitNodeID, nodeID, serviceName, taskID} = itemIDs;
 
     return (
+      (unitNodeID != null && unitID != null) ||
       nodeID != null ||
       serviceName != null ||
       taskID != null ||
-      unitID != null ||
-      (unitNodeID != null && unitID != null)
+      unitID != null
     ) && MesosSummaryStore.get('statesProcessed');
   }
 
@@ -109,6 +109,15 @@ class SidePanels extends mixin(StoreMixin) {
 
     let {unitID, unitNodeID, nodeID, serviceName, taskID} = itemIDs;
 
+    if (unitID != null && unitNodeID != null) {
+      return (
+        <UnitNodeSidePanelContents
+          itemID={unitID}
+          params={this.props.params}
+          parentRouter={this.context.router} />
+      );
+    }
+
     if (nodeID != null) {
       return (
         <NodeSidePanelContents
@@ -130,15 +139,6 @@ class SidePanels extends mixin(StoreMixin) {
       return (
         <ServiceSidePanelContents
           itemID={serviceName}
-          parentRouter={this.context.router} />
-      );
-    }
-
-    if (unitID != null && unitNodeID != null) {
-      return (
-        <UnitNodeSidePanelContents
-          itemID={unitID}
-          params={this.props.params}
           parentRouter={this.context.router} />
       );
     }

@@ -1,4 +1,5 @@
 var HostTableHeaderLabels = {
+  health: 'HEALTH',
   cpus: 'CPU',
   disk: 'DISK',
   hostname: 'HOSTNAME',

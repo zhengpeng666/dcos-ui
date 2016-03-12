@@ -5,10 +5,13 @@ var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var RouterLocation = Router.HashLocation;
 var Link = Router.Link;
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 var AlertPanel = require('../components/AlertPanel');
+import CompositeState from '../structs/CompositeState';
 import Config from '../config/Config';
 import EventTypes from '../constants/EventTypes';
+import FilterButtons from '../components/FilterButtons';
 var FilterByService = require('../components/FilterByService');
 var FilterInputText = require('../components/FilterInputText');
 var FilterHeadline = require('../components/FilterHeadline');
@@ -18,17 +21,21 @@ var Page = require('../components/Page');
 var ResourceBarChart = require('../components/charts/ResourceBarChart');
 var SidebarActions = require('../events/SidebarActions');
 import SidePanels from '../components/SidePanels';
+import StringUtil from '../utils/StringUtil';
 
-var NODES_DISPLAY_LIMIT = 300;
+const NODES_DISPLAY_LIMIT = 300;
+const HEALTH_FILTER_BUTTONS = ['all', 'healthy', 'unhealthy'];
 
 function getMesosHosts(state) {
   let states = MesosSummaryStore.get('states');
   let lastState = states.lastSuccessful();
-  let nodes = lastState.getNodesList();
-  let filters = _.pick(state, 'searchString', 'byServiceFilter');
+  let nodes = CompositeState.getNodesList();
+
+  let {byServiceFilter, healthFilter, searchString} = state;
   let filteredNodes = nodes.filter({
-    service: filters.byServiceFilter,
-    name: filters.searchString
+    service: byServiceFilter,
+    name: searchString,
+    health: healthFilter
   }).getItems();
   let nodeIDs = _.pluck(filteredNodes, 'id');
 
@@ -44,15 +51,23 @@ function getMesosHosts(state) {
 }
 
 var DEFAULT_FILTER_OPTIONS = {
-  searchString: '',
-  byServiceFilter: null
+  byServiceFilter: null,
+  healthFilter: 'all',
+  searchString: ''
 };
 
 var NodesPage = React.createClass({
 
   displayName: 'NodesPage',
 
-  mixins: [InternalStorageMixin],
+  mixins: [InternalStorageMixin, StoreMixin],
+
+  store_listeners: [
+    {
+      name: 'nodeHealth',
+      events: ['success', 'error']
+    }
+  ],
 
   statics: {
     // Static life cycle method from react router, that will be called
@@ -150,10 +165,30 @@ var NodesPage = React.createClass({
     this.setState({byServiceFilter: byServiceFilter});
   },
 
+  handleHealthFilterChange: function (healthFilter) {
+    this.setState({healthFilter});
+  },
+
   onResourceSelectionChange: function (selectedResource) {
     if (this.state.selectedResource !== selectedResource) {
       this.setState({selectedResource: selectedResource});
     }
+  },
+
+  getButtonContent: function (filterName, count) {
+    let dotClassSet = classNames({
+      'dot': filterName !== 'all',
+      'danger': filterName === 'unhealthy',
+      'success': filterName === 'healthy'
+    });
+
+    return (
+      <span className="button-align-content">
+        <span className={dotClassSet}></span>
+        <span className="label">{StringUtil.capitalize(filterName)}</span>
+        <span className="badge">{count || 0}</span>
+      </span>
+    );
   },
 
   getFilterInputText: function () {
@@ -198,6 +233,11 @@ var NodesPage = React.createClass({
     var nodesList = _.first(data.nodes, NODES_DISPLAY_LIMIT);
     var currentPage = 'nodes-grid';
     var onNodesList = /\/nodes\/list\/?/i.test(RouterLocation.getCurrentPath());
+    let nodesHealth = CompositeState.getNodesList().getItems().map(
+      function (node) {
+        return node.getHealth();
+      }
+    );
 
     if (onNodesList) {
       currentPage = 'nodes-list';
@@ -219,23 +259,40 @@ var NodesPage = React.createClass({
           name="Nodes"
           currentLength={nodesList.length}
           totalLength={data.totalNodes} />
-        <ul className="list list-unstyled list-inline flush-bottom">
-          <li>
-            <div className="form-group">
-              <FilterByService
-                byServiceFilter={state.byServiceFilter}
-                services={data.services}
-                totalHostsCount={data.totalNodes}
-                handleFilterChange={this.handleByServiceFilterChange} />
+
+        <div className="media-object-spacing-wrapper media-object-spacing-narrow">
+          <div className="media-object media-object-wrap-reverse">
+            <div className="media-object media-object-item media-object-inline media-object-wrap">
+              <div className="media-object-item media-object-align-top">
+                <FilterButtons
+                  renderButtonContent={this.getButtonContent}
+                  filters={HEALTH_FILTER_BUTTONS}
+                  filterByKey="title"
+                  onFilterChange={this.handleHealthFilterChange}
+                  itemList={nodesHealth}
+                  selectedFilter={state.healthFilter} />
+              </div>
+              <div className="media-object-item media-object-align-top">
+                <div className="form-group">
+                  <FilterByService
+                    byServiceFilter={state.byServiceFilter}
+                    services={data.services}
+                    totalHostsCount={data.totalNodes}
+                    handleFilterChange={this.handleByServiceFilterChange} />
+                </div>
+              </div>
+              <div className="media-object-item media-object-align-top">
+                {this.getFilterInputText()}
+              </div>
             </div>
-          </li>
-          <li>
-            {this.getFilterInputText()}
-          </li>
-          <li className="list-item-aligned-right">
-            {this.getViewTypeRadioButtons(this.resetFilter)}
-          </li>
-        </ul>
+            <div className="media-object media-object-item media-object-inline media-object-item-align-right">
+              <div className="media-object-item">
+                {this.getViewTypeRadioButtons(this.resetFilter)}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <RouteHandler
           selectedResource={this.state.selectedResource}
           hosts={nodesList}

@@ -160,9 +160,9 @@ class TaskView extends React.Component {
 
     return (
       <div className="flex-container-col flex-grow">
-        <h3 className="text-align-left flush-top">
+        <span className="h4 text-align-left flush-top">
           {this.getHeaderText(tasks)}
-        </h3>
+        </span>
         <div className="flex-box control-group">
           <FilterInputText
             searchString={state.searchString}

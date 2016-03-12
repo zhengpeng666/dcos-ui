@@ -1,4 +1,3 @@
-import {Dropdown} from 'reactjs-components';
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 /*eslint-enable no-unused-vars*/
@@ -7,12 +6,12 @@ import FilterHeadline from '../components/FilterHeadline';
 import FilterInputText from '../components/FilterInputText';
 import RequestErrorMsg from './RequestErrorMsg';
 import SidePanelContents from './SidePanelContents';
+import UnitHealthDropdown from '../components/UnitHealthDropdown';
 import UnitHealthNodesTable from '../components/UnitHealthNodesTable';
-import UnitHealthStatus from '../constants/UnitHealthStatus';
 import UnitHealthStore from '../stores/UnitHealthStore';
 
 const METHODS_TO_BIND = [
-  'handleItemSelection',
+  'handleHealthSelection',
   'handleSearchStringChange',
   'resetFilter'
 ];
@@ -49,7 +48,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
     this.internalStorage_update({renderTable: true});
   }
 
-  handleItemSelection(selectedHealth) {
+  handleHealthSelection(selectedHealth) {
     this.setState({healthFilter: selectedHealth.id});
   }
 
@@ -79,28 +78,6 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
         </div>
       </div>
     );
-  }
-
-  getDropdownItems() {
-    let defaultItem = {
-      id: 'all',
-      html: 'All Health Checks',
-      selectedHtml: 'All Health Checks',
-      className: 'hidden',
-      selectable: false
-    };
-
-    let items = Object.keys(UnitHealthStatus).map(function (health) {
-      return {
-        id: health,
-        html: UnitHealthStatus[health].title,
-        selectedHtml: UnitHealthStatus[health].title
-      };
-    });
-
-    items.unshift(defaultItem);
-
-    return items;
   }
 
   getErrorNotice() {
@@ -144,7 +121,7 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
   }
 
   getVisibleData(data, searchString, healthFilter) {
-    return data.filter({name: searchString, health: healthFilter}).getItems();
+    return data.filter({ip: searchString, health: healthFilter}).getItems();
   }
 
   resetFilter() {
@@ -187,15 +164,9 @@ module.exports = class UnitHealthSidePanelContents extends SidePanelContents {
                   inverseStyle={false} />
               </li>
               <li>
-                <Dropdown
-                  buttonClassName="button dropdown-toggle"
-                  dropdownMenuClassName="dropdown-menu"
-                  dropdownMenuListClassName="dropdown-menu-list"
-                  initialID={'all'}
-                  items={this.getDropdownItems()}
-                  onItemSelection={this.handleItemSelection}
-                  transition={true}
-                  wrapperClassName="dropdown" />
+                <UnitHealthDropdown
+                  initialID="all"
+                  onHealthSelection={this.handleHealthSelection} />
               </li>
             </ul>
             {this.getNodesTable(renderTable, unit, visibleData)}

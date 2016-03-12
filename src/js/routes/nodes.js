@@ -21,7 +21,14 @@ let nodesRoutes = {
         {
           type: Route,
           name: 'nodes-list-panel',
-          path: 'node-detail/:nodeID'
+          path: 'node-detail/:nodeID/?',
+          children: [
+            {
+              type: Route,
+              name: 'nodes-list-panel-health',
+              path: ':unitNodeID/:unitID'
+            }
+          ]
         },
         {
           type: Route,
@@ -39,7 +46,14 @@ let nodesRoutes = {
         {
           type: Route,
           name: 'nodes-grid-panel',
-          path: 'node-detail/:nodeID'
+          path: 'node-detail/:nodeID/?',
+          children: [
+            {
+              type: Route,
+              name: 'nodes-grid-panel-health',
+              path: ':unitNodeID/:unitID'
+            }
+          ]
         },
         {
           type: Route,

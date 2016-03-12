@@ -55,6 +55,19 @@ describe('NodesList', function () {
 
     it('filters by service', function () {
       let items = [
+        {host_ip: 'foo', framework_ids: [1, 2]},
+        {host_ip: 'bar', framework_ids: [3]},
+        {host_ip: 'baz', framework_ids: [2]}
+      ];
+      let list = new NodesList({items});
+      let filteredList = list.filter({service: 2}).getItems();
+      expect(filteredList.length).toEqual(2);
+      expect(filteredList[0].get('host_ip')).toEqual('foo');
+      expect(filteredList[1].get('host_ip')).toEqual('baz');
+    });
+
+    it('filters by service', function () {
+      let items = [
         {hostname: 'foo', framework_ids: [1, 2]},
         {hostname: 'bar', framework_ids: [3]},
         {hostname: 'baz', framework_ids: [2]}

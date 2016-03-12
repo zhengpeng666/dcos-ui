@@ -52,8 +52,8 @@ var Bar = React.createClass({
 
   render: function () {
     var props = this.props;
-    var posY = props.posY;
-    var rectWidth = props.rectWidth;
+    var posY = props.posY || 0;
+    var rectWidth = props.rectWidth || 0;
 
     return (
       <g className="bar"
@@ -68,7 +68,7 @@ var Bar = React.createClass({
             shape-rendering={props.shapeRendering}
             className={props.colorClass}
             y={posY}
-            height={props.rectHeight}
+            height={props.rectHeight || 0}
             width={rectWidth - props.margin} />
       </g>
     );

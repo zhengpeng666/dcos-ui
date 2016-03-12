@@ -21,6 +21,7 @@ var TestUtils = require('react-addons-test-utils');
 var MesosStateStore = require('../../stores/MesosStateStore');
 var MesosSummaryActions = require('../../events/MesosSummaryActions');
 var MesosSummaryStore = require('../../stores/MesosSummaryStore');
+var Node = require('../../structs/Node');
 var NodeSidePanelContents = require('../NodeSidePanelContents');
 
 describe('NodeSidePanelContents', function () {
@@ -88,6 +89,21 @@ describe('NodeSidePanelContents', function () {
     ReactDOM.unmountComponentAtNode(this.container);
   });
 
+  describe('#getNode', function () {
+
+    it('should store an instance of Node', function () {
+      var instance = ReactDOM.render(
+        <NodeSidePanelContents itemID="existingNode" />,
+        this.container
+      );
+
+      var node = instance.getNode();
+      expect(node instanceof Node).toEqual(true);
+      instance = null;
+    });
+
+  });
+
   describe('#renderDetailsTabView', function () {
 
     it('should return null if node does not exist', function () {
@@ -111,15 +127,4 @@ describe('NodeSidePanelContents', function () {
     });
   });
 
-  describe('#render', function () {
-    it('should show error if node is not to be found', function () {
-      var instance = ReactDOM.render(
-        <NodeSidePanelContents itemID="nonExistent" />,
-        this.container
-      );
-
-      var headline = TestUtils.findRenderedDOMComponentWithTag(instance, 'h3');
-      expect(ReactDOM.findDOMNode(headline).textContent).toBe('Error finding node');
-    });
-  });
 });
