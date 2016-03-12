@@ -27,6 +27,16 @@ describe('ComponentsList [10b]', function() {
       .visitUrl({url: '/dashboard', identify: true, fakeAnalytics: true});
     });
 
+    it('shows an acceptable number of components [10f]', function() {
+      cy.get('.component-list-component').within(function () {
+        cy.get('li').should(function ($components) {
+          expect($components.length)
+            .to.be.at.least(1)
+            .and.to.be.lte(5);
+        });
+      });
+    });
+
     it('navigates to unit health page [10c]', function() {
       cy.get('.more-button').contains('Components').click();
       cy.hash().should('match', /system\/units/);
