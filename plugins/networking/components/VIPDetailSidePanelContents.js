@@ -4,21 +4,15 @@ const React = require('react');
 /*eslint-enable no-unused-vars*/
 
 import BackendsTable from './BackendsTable';
-import LineChart from './LineChart';
 import NetworkingVIPsStore from '../stores/NetworkingVIPsStore';
 import NetworkItemDetails from './NetworkItemDetails';
-import utils from '../utils';
+import NetworkItemChart from './NetworkItemChart';
 
 let SDK = require('../SDK').getSDK();
 
-let {Chart, SidePanelContents, RequestErrorMsg, Tooltip} = SDK.get([
-  'Chart', 'SidePanelContents', 'RequestErrorMsg', 'Tooltip'
+let {SidePanelContents, RequestErrorMsg, Tooltip} = SDK.get([
+  'SidePanelContents', 'RequestErrorMsg', 'Tooltip'
 ]);
-
-// number to fit design of width vs. height ratio
-const WIDTH_HEIGHT_RATIO = 3.5;
-// number of data points to fill the graph with
-const TIMESERIES_DATA_POINTS = 60;
 
 const METHODS_TO_BIND = ['handleVIPDetailDropdownChange'];
 
@@ -101,136 +95,6 @@ class VIPDetailSidePanelContents extends SidePanelContents {
     );
   }
 
-  getChart(vipDetails) {
-    let colors = this.getChartColors();
-    let data = this.getChartData(vipDetails);
-    let dataLabels = this.getChartDataLabels();
-    let yAxisLabel = this.getChartYAxisLabel();
-
-    let labels = [];
-    for (var i = TIMESERIES_DATA_POINTS; i >= 0; i--) {
-      labels.push(i);
-    }
-
-    let formatter = function (x) {
-      if (x === 0) {
-        return 0;
-      }
-
-      return `-${x}m`;
-    };
-
-    let chartOptions = {
-      axes: {
-        x: {
-          axisLabelFormatter: formatter,
-          valueFormatter: formatter,
-          gridLinePattern: [4,4],
-          // Max of 4 chars (-60m) and each character is 10px in length
-          axisLabelWidth: 4 * 10
-        },
-        y: {
-          gridLinePattern: 55,
-          axisLabelWidth: 4 * 10
-        }
-      },
-      colors: colors,
-      labels: dataLabels,
-      ylabel: yAxisLabel
-    };
-
-    return (
-      <div className="container-pod container-pod-short">
-        <Chart calcHeight={function (w) { return w / WIDTH_HEIGHT_RATIO; }}
-          delayRender={true}>
-          <LineChart
-            data={data}
-            key={this.state.selectedDropdownItem}
-            labels={labels}
-            chartOptions={chartOptions} />
-        </Chart>
-      </div>
-    );
-  }
-
-  getChartColors() {
-    if (this.state.selectedDropdownItem === 'success') {
-      return ['#27c97b', '#f34e3d'];
-    } else if (this.state.selectedDropdownItem === 'app-reachability' ||
-      this.state.selectedDropdownItem === 'machine-reachability') {
-      return ['#27c97b', '#f34e3d', '#16cbff', '#fedc39', '#7f33de'];
-    }
-  }
-
-  getChartData(vipDetails) {
-    let normalizedData;
-
-    if (this.state.selectedDropdownItem === 'success') {
-      normalizedData = utils.normalizeTimeSeriesData(
-        [vipDetails.getRequestSuccesses(), vipDetails.getRequestFailures()],
-        {maxIntervals: TIMESERIES_DATA_POINTS}
-      );
-    } else if (this.state.selectedDropdownItem === 'app-reachability') {
-      normalizedData = utils.normalizeTimeSeriesData(
-        [
-          vipDetails.getApplicationReachability50(),
-          vipDetails.getApplicationReachability75(),
-          vipDetails.getApplicationReachability90(),
-          vipDetails.getApplicationReachability95(),
-          vipDetails.getApplicationReachability99()
-        ],
-        {maxIntervals: TIMESERIES_DATA_POINTS}
-      );
-    } else if (this.state.selectedDropdownItem === 'machine-reachability') {
-      normalizedData = utils.normalizeTimeSeriesData(
-        [
-          vipDetails.getMachineReachability50(),
-          vipDetails.getMachineReachability75(),
-          vipDetails.getMachineReachability90(),
-          vipDetails.getMachineReachability95(),
-          vipDetails.getMachineReachability99()
-        ],
-        {maxIntervals: TIMESERIES_DATA_POINTS}
-      );
-    }
-
-    return normalizedData;
-  }
-
-  getChartDataLabels() {
-    if (this.state.selectedDropdownItem === 'success') {
-      return ['Minutes ago', 'Successes', 'Failures'];
-    } else if (this.state.selectedDropdownItem === 'app-reachability') {
-      return [
-        'Minutes ago',
-        'App Reachability 50',
-        'App Reachability 75',
-        'App Reachability 90',
-        'App Reachability 95',
-        'App Reachability 99'
-      ];
-    } else if (this.state.selectedDropdownItem === 'machine-reachability') {
-      return [
-        'Minutes ago',
-        'IP Reachability 50',
-        'IP Reachability 75',
-        'IP Reachability 90',
-        'IP Reachability 95',
-        'IP Reachability 99'
-      ];
-    }
-  }
-
-  getChartYAxisLabel() {
-    if (this.state.selectedDropdownItem === 'success') {
-      return 'Requests';
-    } else if (this.state.selectedDropdownItem === 'app-reachability') {
-      return 'App Reachability';
-    } else if (this.state.selectedDropdownItem === 'machine-reachability') {
-      return 'IP Reachability';
-    }
-  }
-
   getDropdownItems(backendCount) {
     return [
       {
@@ -291,7 +155,7 @@ class VIPDetailSidePanelContents extends SidePanelContents {
             onItemSelection={this.handleVIPDetailDropdownChange}
             transition={true}
             transitionName="dropdown-menu"
-            wrapperClassName="dropdown" />
+            wrapperClassName="dropdown dropdown-chart-details" />
         </div>
         <div className="column-3 text-align-right">
           <Tooltip iconClass="icon icon-sprite icon-sprite-mini
@@ -347,7 +211,10 @@ class VIPDetailSidePanelContents extends SidePanelContents {
       );
       let backends = vipDetails.getBackends();
 
-      chart = this.getChart(vipDetails);
+      chart = (
+        <NetworkItemChart chartData={vipDetails}
+          selectedData={this.state.selectedDropdownItem} />
+      );
       content = this.getSidePanelContent(backends);
       vipDetailsHeading = this.getSidePanelHeading(backends);
     }
@@ -355,7 +222,7 @@ class VIPDetailSidePanelContents extends SidePanelContents {
     return (
       <div className="side-panel-tab-content side-panel-section container
         container-fluid container-pod container-pod-short flex-container-col
-        flex-grow">
+        flex-grow no-overflow-horizontal">
         {vipDetailsHeading}
         {chart}
         {content}
