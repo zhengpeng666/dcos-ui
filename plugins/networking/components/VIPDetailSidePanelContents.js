@@ -222,7 +222,7 @@ class VIPDetailSidePanelContents extends SidePanelContents {
     return (
       <div className="side-panel-tab-content side-panel-section container
         container-fluid container-pod container-pod-short flex-container-col
-        flex-grow no-overflow-horizontal">
+        flex-grow">
         {vipDetailsHeading}
         {chart}
         {content}

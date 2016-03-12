@@ -60,23 +60,15 @@ class NetworkItemChart extends React.Component {
   getChartDataLabels() {
     if (this.props.selectedData === 'success') {
       return ['Minutes ago', 'Successes', 'Failures'];
-    } else if (this.props.selectedData === 'app-reachability') {
+    } else if (this.props.selectedData === 'app-reachability'
+      || this.props.selectedData === 'machine-reachability') {
       return [
         'Minutes ago',
-        'App Reachability 50',
-        'App Reachability 75',
-        'App Reachability 90',
-        'App Reachability 95',
-        'App Reachability 99'
-      ];
-    } else if (this.props.selectedData === 'machine-reachability') {
-      return [
-        'Minutes ago',
-        'IP Reachability 50',
-        'IP Reachability 75',
-        'IP Reachability 90',
-        'IP Reachability 95',
-        'IP Reachability 99'
+        'P50',
+        'P75',
+        'P90',
+        'P95',
+        'P99'
       ];
     }
   }

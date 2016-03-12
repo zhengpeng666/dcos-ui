@@ -78,9 +78,8 @@ class ClientsTable extends React.Component {
   getColGroup() {
     return (
       <colgroup>
-        <col style={{width: '35%'}} />
-        <col className="hidden-mini" />
-        <col className="hidden-mini" />
+        <col style={{width: '50%'}} />
+        <col />
       </colgroup>
     );
   }
