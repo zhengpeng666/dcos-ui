@@ -1,4 +1,4 @@
-describe('Nodes Page [0fa]', function() {
+describe('Node Health Tab [0fa]', function() {
 
   beforeEach(function () {
     cy.configureCluster({
