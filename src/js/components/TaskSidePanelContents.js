@@ -81,22 +81,22 @@ class TaskSidePanelContents extends SidePanelContents {
     return this.state.taskDirectoryErrorCount >= 3;
   }
 
-  getLoadingScreen() {
-    let screen = (
-      <div className="row">
-        <div className="ball-scale">
-          <div />
-        </div>
-      </div>
-    );
-
-    if (this.hasLoadingError()) {
-      screen = <RequestErrorMsg />;
-    }
-
+  getErrorScreen() {
     return (
       <div className="container container-fluid container-pod text-align-center vertical-center inverse">
-        {screen}
+        <RequestErrorMsg />
+      </div>
+    );
+  }
+
+  getLoadingScreen() {
+    return (
+      <div className="container container-fluid container-pod text-align-center vertical-center inverse">
+        <div className="row">
+          <div className="ball-scale">
+            <div />
+          </div>
+        </div>
       </div>
     );
   }
@@ -238,6 +238,9 @@ class TaskSidePanelContents extends SidePanelContents {
   renderFilesTabView() {
     let {state, props} = this;
     let task = MesosStateStore.getTaskFromTaskID(props.itemID);
+    if (this.hasLoadingError()) {
+      this.getErrorScreen();
+    }
     if (!state.directory || !task) {
       return this.getLoadingScreen();
     }
@@ -255,6 +258,9 @@ class TaskSidePanelContents extends SidePanelContents {
   renderLogViewerTabView() {
     let {state, props} = this;
     let task = MesosStateStore.getTaskFromTaskID(props.itemID);
+    if (this.hasLoadingError()) {
+      this.getErrorScreen();
+    }
     if (!state.directory || !task) {
       return this.getLoadingScreen();
     }
