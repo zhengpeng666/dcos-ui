@@ -28,13 +28,6 @@ var development = process.env.NODE_ENV === 'development';
 var devBuild = development || (process.env.NODE_ENV === 'testing');
 var appConfig = require('./src/js/config/Config');
 
-if (devBuild) {
-  try {
-    appConfig = require('./src/js/config/Config.dev');
-  } catch (err) {
-    // no-op
-  }
-}
 var pluginsGlob = [
   appConfig.externalPluginsDirectory + '/**/*.*'
 ];
