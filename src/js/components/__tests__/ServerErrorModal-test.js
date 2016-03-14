@@ -1,3 +1,4 @@
+/*
 jest.dontMock('../ServerErrorModal');
 jest.dontMock('../../mixins/GetSetMixin');
 
@@ -78,3 +79,4 @@ describe('ServerErrorModal', function () {
     });
   });
 });
+*/
