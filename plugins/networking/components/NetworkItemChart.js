@@ -5,7 +5,7 @@ import utils from '../utils';
 
 let SDK = require('../SDK').getSDK();
 
-let {Chart} = SDK.get(['Chart']);
+let Chart = SDK.get('Chart');
 
 // Number to fit design of width vs. height ratio.
 const WIDTH_HEIGHT_RATIO = 3.5;
@@ -74,12 +74,16 @@ class NetworkItemChart extends React.Component {
   }
 
   getChartYAxisLabel() {
-    if (this.props.selectedData === 'success') {
-      return 'Requests';
-    } else if (this.props.selectedData === 'app-reachability') {
-      return 'App Reachability';
-    } else if (this.props.selectedData === 'machine-reachability') {
-      return 'IP Reachability';
+    switch (this.props.selectedData) {
+      case 'success':
+        return 'Requests';
+        break;
+      case 'app-reachability':
+        return 'App Reachability';
+        break;
+      case 'machine-reachability':
+        return 'IP Reachability';
+        break;
     }
   }
 
@@ -98,7 +102,7 @@ class NetworkItemChart extends React.Component {
     let yAxisLabel = this.getChartYAxisLabel();
 
     let labels = [];
-    for (var i = TIMESERIES_DATA_POINTS; i >= 0; i--) {
+    for (let i = TIMESERIES_DATA_POINTS; i >= 0; i--) {
       labels.push(i);
     }
 
@@ -116,7 +120,7 @@ class NetworkItemChart extends React.Component {
           axisLabelWidth: 4 * 10
         }
       },
-      colors: colors,
+      colors,
       labels: dataLabels,
       ylabel: yAxisLabel
     };
