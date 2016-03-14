@@ -4,15 +4,15 @@
   ],
   "groups": [
     {
-      "rid": "service.marathon",
+      "rid": "dcos:adminrouter:service:marathon",
       "description": "Marathon",
-      "aclurl": "/acls/service.marathon",
+      "aclurl": "/acls/dcos:adminrouter:service:marathon",
       "gid": "ölis",
       "membershipurl": "/groups/quis/users/quis",
       "actions": [
         {
           "name": "access",
-          "url": "/acls/service.marathon/groups/quis/access"
+          "url": "/acls/dcos:adminrouter:service:marathon/groups/quis/access"
         }
       ]
     }

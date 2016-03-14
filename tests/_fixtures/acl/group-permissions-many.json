@@ -1,25 +1,25 @@
 {
   "array": [
     {
-      "rid": "service.marathon",
+      "rid": "dcos:adminrouter:service:marathon",
       "description": "Marathon",
-      "aclurl": "/acls/service.marathon",
+      "aclurl": "/acls/dcos:adminrouter:service:marathon",
       "actions": [
         {
           "name": "Read",
-          "url": "/acls/service.marathon/groups/olis/access"
+          "url": "/acls/dcos:adminrouter:service:marathon/groups/olis/access"
         },
         {
           "name": "Write",
-          "url": "/acls/service.marathon/groups/olis/access"
+          "url": "/acls/dcos:adminrouter:service:marathon/groups/olis/access"
         },
         {
           "name": "Update",
-          "url": "/acls/service.marathon/groups/olis/access"
+          "url": "/acls/dcos:adminrouter:service:marathon/groups/olis/access"
         },
         {
           "name": "Delete",
-          "url": "/acls/service.marathon/groups/olis/access"
+          "url": "/acls/dcos:adminrouter:service:marathon/groups/olis/access"
         }
       ]
     },
@@ -30,7 +30,7 @@
       "actions": [
         {
           "name": "access",
-          "url": "/acls/service.marathon/groups/olis/access"
+          "url": "/acls/dcos:adminrouter:service:marathon/groups/olis/access"
         }
       ]
     }
