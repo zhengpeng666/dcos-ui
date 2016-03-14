@@ -9,17 +9,17 @@ const METHODS_TO_BIND = [
   'getColumnClassname'
 ];
 
-const COLUMNS_TO_HIDE_MEDIUM = [
-  'successLastMinute',
-  'failLastMinute'
-];
+// const COLUMNS_TO_HIDE_MEDIUM = [
+//   'successLastMinute',
+//   'failLastMinute'
+// ];
 
-const COLUMNS_TO_HIDE_SMALL = [
-  'successLastMinute',
-  'failLastMinute',
-  'applicationReachabilityPercent',
-  'machineReachabilityPercent'
-];
+// const COLUMNS_TO_HIDE_SMALL = [
+//   'successLastMinute',
+//   'failLastMinute',
+//   'applicationReachabilityPercent',
+//   'machineReachabilityPercent'
+// ];
 
 const COLUMNS_TO_HIDE_MINI = [
   'successLastMinute',
