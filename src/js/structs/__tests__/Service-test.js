@@ -23,17 +23,18 @@ describe('Service', function () {
 
     it('returns the correct resource id when there is no name', function () {
       let service = new Service();
-      expect(service.getResourceID()).toEqual('service.');
+      expect(service.getResourceID()).toEqual('dcos:adminrouter:service:');
     });
 
     it('returns the correct resource id when there is a name', function () {
       let service = new Service({name: 'foo'});
-      expect(service.getResourceID()).toEqual('service.foo');
+      expect(service.getResourceID()).toEqual('dcos:adminrouter:service:foo');
     });
 
     it('returns the correct resource id when name is complex', function () {
-      let service = new Service({name: 'foo adsf #139A103 )(%[]AD[a.-#2'});
-      expect(service.getResourceID()).toEqual('service.fooadsf139A103ADa2');
+      let service = new Service({name: 'foo-adsf-2'});
+      expect(service.getResourceID())
+        .toEqual('dcos:adminrouter:service:foo-adsf-2');
     });
 
   });

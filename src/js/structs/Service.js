@@ -1,7 +1,7 @@
 import HealthStatus from '../constants/HealthStatus';
 import Item from './Item';
 
-const RID_PREFIX = 'service.';
+const RID_PREFIX = 'dcos:adminrouter:service:';
 
 module.exports = class Service extends Item {
   getHealth() {
@@ -14,7 +14,7 @@ module.exports = class Service extends Item {
 
   getResourceID() {
     // strip non-alphanumeric chars from name for safety
-    return RID_PREFIX + (this.get('name') || '').replace(/\W+/g, '');
+    return RID_PREFIX + (this.get('name') || '').replace(/[^a-zA-Z0-9-]/g, '');
   }
 
   getNodeIDs() {

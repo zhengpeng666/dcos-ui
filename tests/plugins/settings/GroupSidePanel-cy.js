@@ -101,7 +101,7 @@ describe('Group Details Sidepanel [02k]', function () {
 
       it('display resource names [0mw]', function () {
         cy.get('@rows').should('have.length', 3);
-        cy.get('@rows').eq(1).find('td').contains('service.marathon');
+        cy.get('@rows').eq(1).find('td').contains('dcos:adminrouter:service:marathon');
       });
 
     });
@@ -186,12 +186,12 @@ describe('Group Details Sidepanel [02k]', function () {
         });
 
         cy.get('.side-panel form')
-          .find('input[name=resource]').type('service.marathon');
+          .find('input[name=resource]').type('dcos:adminrouter:service:marathon');
         cy.get('.side-panel form')
           .find('input[name=action]').type('access');
         cy.get('.side-panel button').contains('Add Rule').click();
         cy.get('@rows').should('have.length', 3);
-        cy.get('@rows').eq(1).contains('service.marathon');
+        cy.get('@rows').eq(1).contains('dcos:adminrouter:service:marathon');
         cy.get('@rows').eq(1).contains('access');
       });
 

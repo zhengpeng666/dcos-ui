@@ -1,9 +1,9 @@
 {
   "array": [
     {
-      "rid": "service.marathon",
-      "url": "/acls/service.marathon",
-      "description": "Marathon"
+      "rid": "dcos:adminrouter:service:marathon",
+      "url": "/acls/dcos:adminrouter:service:marathon",
+      "description": "marthon service"
     },
     {
       "rid": "06c3ea63-3cef-4f37-9a85-1fa5a989034f",

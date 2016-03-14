@@ -134,7 +134,7 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
       .route(/users\/quis\/permissions/, 'fx:acl/user-permissions-empty')
       .route(/groups\/olis\/permissions/, 'fx:acl/group-permissions-empty')
       .route({
-        url: /acls\/service\.marathon/,
+        url: /acls\/dcos:adminrouter:service:marathon/,
         method: 'PUT',
         status: 200,
         response: ''
@@ -253,6 +253,5 @@ Cypress.addParentCommand('visitUrl', function (options) {
   }
 
   var url = 'http://localhost:4200/#' + options.url;
-  cy.visit(url, {onBeforeLoad: callback})
-  .wait(2000);
+  cy.visit(url, {onBeforeLoad: callback});
 });
