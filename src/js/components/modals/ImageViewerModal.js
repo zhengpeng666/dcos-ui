@@ -22,7 +22,7 @@ class ImageViewerModal extends React.Component {
   componentWillReceiveProps(nextProps) {
     let {props} = this;
     if (props.open && !nextProps.open) {
-      // closes
+      // Closes
       global.window.removeEventListener('keydown', this.handleKeyPress, true);
     }
 
