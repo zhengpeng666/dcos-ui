@@ -193,34 +193,6 @@ describe('PackageDetailTab', function () {
 
   });
 
-  describe('#mapScreenshots', function () {
-
-    it('returns empty array for null', function () {
-      expect(this.instance.mapScreenshots(null)).toEqual([]);
-    });
-
-    it('returns array for undefined', function () {
-      expect(this.instance.mapScreenshots(undefined)).toEqual([]);
-    });
-
-    it('returns array for empty array', function () {
-      expect(this.instance.mapScreenshots([])).toEqual([]);
-    });
-
-    it('returns all entries of array', function () {
-      var screenshots = this.instance.mapScreenshots(['foo', 'baz', 'quux']);
-
-      expect(screenshots.length).toEqual(3);
-    });
-
-    it('returns all entries even with undefined values', function () {
-      var screenshots = this.instance.mapScreenshots(['foo', null, 'bar']);
-
-      expect(screenshots.length).toEqual(3);
-    });
-
-  });
-
   describe('#render', function () {
 
     it('should call getErrorScreen when error occured', function () {
