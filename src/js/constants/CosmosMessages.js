@@ -14,12 +14,7 @@ const CosmosMessages = {
   PackageAlreadyInstalled: {
     header: 'Name Already Exists',
     getMessage: function (packageName = 'this package') {
-      return (
-        <span>
-          {`You have an instance of ${packageName} running using the same name. Please change the name and try again.`}
-          {repositoryLink}
-        </span>
-      );
+      return `You have an instance of ${packageName} running using the same name. Please change the name and try again.`;
     }
   },
   InvalidRepositoryUri: {
