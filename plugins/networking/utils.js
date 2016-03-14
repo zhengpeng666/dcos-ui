@@ -60,13 +60,11 @@ let Utils = {
     }
 
     // Check if the most recent timestamp is greater than the interval length.
-    let arrayAction;
+    // By default we fill in zeroes at end of array.
+    let arrayAction = 'push';
     if (timestamps[timestamps.length - 1] > currentTime - INTERVAL_LENGTH) {
-      // Need to fill in zeroes at beginning of array.
+      // Fill in zeroes at beginning of array.
       arrayAction = 'unshift';
-    } else {
-      // Need to fill in zeroes at end of array.
-      arrayAction = 'push';
     }
 
     for (let i = timestamps.length; i < MAX_INTERVALS; i++) {
