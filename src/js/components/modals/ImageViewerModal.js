@@ -93,7 +93,7 @@ class ImageViewerModal extends React.Component {
         onClose={props.onClose}
         open={props.open}
         showCloseButton={true}
-        showFooter={true}
+        showFooter={props.images && props.images.length > 1}
         showHeader={true}>
         {this.getSelectedImage()}
       </Modal>
@@ -106,7 +106,7 @@ ImageViewerModal.defaultProps = {
 };
 
 ImageViewerModal.propTypes = {
-  images: React.PropTypes.array,
+  images: React.PropTypes.arrayOf(React.PropTypes.string),
   onLeftClick: React.PropTypes.func.isRequired,
   onRightClick: React.PropTypes.func.isRequired,
   onClose: React.PropTypes.func.isRequired
