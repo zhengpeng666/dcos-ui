@@ -44,7 +44,7 @@ class ImageViewer extends React.Component {
   }
 
   getImages(images) {
-    return images.map(function (imageUrl, index) {
+    return images.map((imageUrl, index) => {
       return (
         <div className="media-object-item media-object-item-fill" key={index}>
           <div
@@ -53,7 +53,7 @@ class ImageViewer extends React.Component {
             style={{backgroundImage: `url(${imageUrl})`}} />
         </div>
       );
-    }, this);
+    });
   }
 
   render() {

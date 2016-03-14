@@ -21,8 +21,7 @@ class PackageDetailTab extends mixin(StoreMixin) {
     this.state = {
       hasError: 0,
       openInstallModal: false,
-      isLoading: true,
-      selectedImage: null
+      isLoading: true
     };
 
     this.store_listeners = [{
