@@ -82,10 +82,12 @@ let Utils = {
 
       // If we find any value that is not null, then we don't need to replace
       // the null values with 0.
-      normalizedDataSets[dataSetIndex].forEach(function (datum) {
+      normalizedDataSets[dataSetIndex].some(function (datum) {
         if (datum != null) {
           allValuesNull = false;
+          return true;
         }
+        return false;
       });
 
       // If we found only null values, then we need to replace all of the null
