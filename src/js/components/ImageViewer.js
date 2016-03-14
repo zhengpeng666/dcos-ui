@@ -8,9 +8,8 @@ const METHODS_TO_BIND = [
 ];
 
 class ImageViewer extends React.Component {
-
   constructor() {
-    super();
+    super(...arguments);
 
     this.state = {selectedImage: null};
 
