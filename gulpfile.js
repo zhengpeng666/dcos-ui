@@ -238,7 +238,7 @@ gulp.task('livereload', function (callback) {
 gulp.task('dist', function (callback) {
   runSequence(
     'default',
-    'minify-css',
+    // 'minify-css',
     'minify-js',
     callback
   );
