@@ -87,12 +87,14 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
         <p>
           {unitSummary.summary}
         </p>
-        <a href={unitSummary.documentation_url} target="_blank">
-          View Documentation
-        </a>
+        <p>
+          <a href={unitSummary.documentation_url} target="_blank">
+            View Documentation
+          </a>
+        </p>
         <span className="h4">Output</span>
         <pre className="flex-grow flush-bottom">
-          {node.get('output')}
+          {node.getOutput()}
         </pre>
       </div>
     );

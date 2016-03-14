@@ -15,7 +15,7 @@ let RouteFactory = {
           {
             type: Route,
             name: 'settings-system-units',
-            path: 'units/?',
+            path: 'components/?',
             handler: UnitsHealthTab,
             children: [
               {

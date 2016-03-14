@@ -46,18 +46,32 @@ class NodeSidePanelContents extends SidePanelContents {
   }
 
   getBasicInfo(node) {
-    let activeTasksCount = node.sumTaskTypesByState('active');
-    let activeTasksSubHeader = StringUtil.pluralize('Task', activeTasksCount);
-
     return (
       <div className="side-panel-content-header">
         <h1 className="side-panel-content-header-label flush">
           {node.hostname}
         </h1>
-        <div>
-          {`${activeTasksCount} Active ${activeTasksSubHeader}`}
-        </div>
+        {this.getSubHeader(node)}
       </div>
+    );
+  }
+
+  getSubHeader(node) {
+    let activeTasksCount = node.sumTaskTypesByState('active');
+    let activeTasksSubHeader = StringUtil.pluralize('Task', activeTasksCount);
+    let healthStatus = node.getHealth();
+
+    return (
+      <ul className="list-inline flush-bottom">
+        <li>
+          <span className={healthStatus.classNames}>
+            {healthStatus.title}
+          </span>
+        </li>
+        <li>
+          {`${activeTasksCount} Active ${activeTasksSubHeader}`}
+        </li>
+      </ul>
     );
   }
 

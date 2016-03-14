@@ -70,7 +70,7 @@ describe('Units Tab [0e2]', function () {
           componentHealth: true
         })
         .visitUrl(
-          {url: '/settings/system/units/mesos_dns_service/', identify: true}
+          {url: '/settings/system/components/mesos_dns_service/', identify: true}
         );
     });
 
@@ -111,7 +111,7 @@ describe('Units Tab [0e2]', function () {
           componentHealth: true
         })
         .visitUrl(
-          {url: '/settings/system/units/mesos_dns_service/nodes/ip-10-10-0-236', identify: true}
+          {url: '/settings/system/components/mesos_dns_service/nodes/ip-10-10-0-236', identify: true}
         );
     });
 
