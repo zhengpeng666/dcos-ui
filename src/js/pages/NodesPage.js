@@ -62,13 +62,6 @@ var NodesPage = React.createClass({
 
   mixins: [InternalStorageMixin, StoreMixin],
 
-  store_listeners: [
-    {
-      name: 'nodeHealth',
-      events: ['success', 'error']
-    }
-  ],
-
   statics: {
     // Static life cycle method from react router, that will be called
     // 'when a handler is about to render', i.e. on route change:
@@ -94,6 +87,13 @@ var NodesPage = React.createClass({
       openNodePanel: false,
       openTaskPanel: false
     });
+
+    this.store_listeners = [
+      {
+        name: 'nodeHealth',
+        events: ['success', 'error']
+      }
+    ];
   },
 
   componentDidMount: function () {
