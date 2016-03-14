@@ -7,18 +7,25 @@ let SDK = require('../SDK').getSDK();
 
 let {Chart} = SDK.get(['Chart']);
 
-// number to fit design of width vs. height ratio
+// Number to fit design of width vs. height ratio.
 const WIDTH_HEIGHT_RATIO = 3.5;
-// number of data points to fill the graph with
+// Number of data points to fill the graph with.
 const TIMESERIES_DATA_POINTS = 60;
+
+const SUCCESS_DATASET_COLORS = ['#27c97b', '#f34e3d'];
+const SUCCESS_DATASET_LABELS = ['Minutes ago', 'Successes', 'Failures'];
+const REACHABILITY_DATASET_COLORS = ['#27c97b', '#f34e3d', '#16cbff', '#fedc39',
+  '#7f33de'];
+const REACHABILITY_DATASET_LABELS = ['Minutes ago', 'P50', 'P75', 'P90', 'P95',
+  'P99'];
 
 class NetworkItemChart extends React.Component {
   getChartColors() {
     if (this.props.selectedData === 'success') {
-      return ['#27c97b', '#f34e3d'];
+      return SUCCESS_DATASET_COLORS;
     } else if (this.props.selectedData === 'app-reachability' ||
       this.props.selectedData === 'machine-reachability') {
-      return ['#27c97b', '#f34e3d', '#16cbff', '#fedc39', '#7f33de'];
+      return REACHABILITY_DATASET_COLORS;
     }
   }
 
@@ -59,17 +66,10 @@ class NetworkItemChart extends React.Component {
 
   getChartDataLabels() {
     if (this.props.selectedData === 'success') {
-      return ['Minutes ago', 'Successes', 'Failures'];
+      return SUCCESS_DATASET_LABELS;
     } else if (this.props.selectedData === 'app-reachability'
       || this.props.selectedData === 'machine-reachability') {
-      return [
-        'Minutes ago',
-        'P50',
-        'P75',
-        'P90',
-        'P95',
-        'P99'
-      ];
+      return REACHABILITY_DATASET_LABELS;
     }
   }
 
@@ -83,6 +83,14 @@ class NetworkItemChart extends React.Component {
     }
   }
 
+  labelFormatter(x) {
+    if (x === 0) {
+      return 0;
+    }
+
+    return `-${x}m`;
+  }
+
   render() {
     let colors = this.getChartColors();
     let data = this.getChartData(this.props.chartData);
@@ -94,19 +102,11 @@ class NetworkItemChart extends React.Component {
       labels.push(i);
     }
 
-    let formatter = function (x) {
-      if (x === 0) {
-        return 0;
-      }
-
-      return `-${x}m`;
-    };
-
     let chartOptions = {
       axes: {
         x: {
-          axisLabelFormatter: formatter,
-          valueFormatter: formatter,
+          axisLabelFormatter: this.labelFormatter,
+          valueFormatter: this.labelFormatter,
           gridLinePattern: [4,4],
           // Max of 4 chars (-60m) and each character is 10px in length
           axisLabelWidth: 4 * 10

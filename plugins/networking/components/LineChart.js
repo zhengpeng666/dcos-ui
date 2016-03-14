@@ -99,10 +99,6 @@ class LineChart extends React.Component {
     );
 
     if (!this.hasYAxisFormatter(this.props.chartOptions)) {
-      let formatter = function (y) {
-        return Units.contractNumber(y, {forceFixedPrecision: true});
-      };
-
       if (!options.axes) {
         options.axes = {};
       }
@@ -111,8 +107,8 @@ class LineChart extends React.Component {
         options.axes.y = {};
       }
 
-      options.axes.y.axisLabelFormatter = formatter;
-      options.axes.y.valueFormatter = formatter;
+      options.axes.y.axisLabelFormatter = this.labelFormatter;
+      options.axes.y.valueFormatter = this.labelFormatter;
     }
 
     return options;
@@ -187,6 +183,10 @@ class LineChart extends React.Component {
         {labelsHTML}
       </div>
     );
+  }
+
+  labelFormatter(y) {
+    return Units.contractNumber(y, {forceFixedPrecision: true});
   }
 
   render() {

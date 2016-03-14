@@ -16,8 +16,8 @@ let Utils = {
   normalizeTimeSeriesData: function(dataSets, options = {}) {
     const INTERVAL_LENGTH = options.intervalLength || DEFAULT_INTERVAL_LENGTH;
     const MAX_INTERVALS = options.maxIntervals || DEFAULT_MAX_INTERVALS;
-    let dataSetsToCheckForNullValues = [];
     let currentTime = Date.now();
+    let dataSetsToCheckForNullValues = [];
     let normalizedDataSets = [];
     let timestamps = [];
 
@@ -40,7 +40,7 @@ let Utils = {
 
     // For each timestamp, loop through the datasets and create the normalized
     // data array.
-    timestamps.forEach(function (timestamp, timestampIndex) {
+    timestamps.forEach(function (timestamp) {
       dataSets.forEach(function (dataSet, dataSetIndex) {
         // If the timestamp value is undefined, we need to check the entire
         // array for null values.
