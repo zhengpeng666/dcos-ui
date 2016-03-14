@@ -206,44 +206,53 @@ class MesosLogView extends mixin(StoreMixin) {
     return ReactDOM.findDOMNode(logContainer);
   }
 
+  getEmptyDirectoryScreen() {
+    return (
+      <div className="flex-grow vertical-center">
+        <h3 className="text-align-center flush-top">
+          This directory does not contain any logs.
+        </h3>
+        <p className="text-align-center flush-bottom">
+          Go back to your&nbsp;
+          <a
+            className="clickable"
+            onClick={this.handleGoToWorkingDirectory}>
+            working directory
+          </a>
+        </p>
+      </div>
+    );
+  }
+
+  getEmptyLogScreen() {
+    let {logName} = this.props;
+    // Append space if logName is defined
+    logName = logName && (logName + ' ');
+
+    return (
+      <div className="flex-grow vertical-center">
+        <h3 className="text-align-center flush-top">
+          {`${logName} Log is Currently Empty`}
+        </h3>
+        <p className="text-align-center flush-bottom">
+          Please try again later.
+        </p>
+      </div>
+    );
+  }
+
   getErrorScreen() {
     return <RequestErrorMsg />;
   }
 
   getLog() {
     let {props, state} = this;
-    let fullLog = state.fullLog;
     if (!props.logName) {
-      return (
-        <div className="flex-grow vertical-center">
-          <h3 className="text-align-center flush-top">
-            This directory does not contain any logs.
-          </h3>
-          <p className="text-align-center flush-bottom">
-            Go back to your&nbsp;
-            <a
-              className="clickable"
-              onClick={this.handleGoToWorkingDirectory}>
-              working directory
-            </a>
-          </p>
-        </div>
-      );
+      return this.getEmptyDirectoryScreen();
     }
+    let fullLog = state.fullLog;
     if (fullLog === '') {
-      // Append space if logName is defined
-      let logName = props.logName && (props.logName + ' ');
-
-      return (
-        <div className="flex-grow vertical-center">
-          <h3 className="text-align-center flush-top">
-            {`${logName} Log is Currently Empty`}
-          </h3>
-          <p className="text-align-center flush-bottom">
-            Please try again later.
-          </p>
-        </div>
-      );
+      return this.getEmptyLogScreen();
     }
 
     return (
