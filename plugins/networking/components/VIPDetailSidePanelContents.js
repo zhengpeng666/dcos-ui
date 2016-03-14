@@ -216,7 +216,7 @@ class VIPDetailSidePanelContents extends SidePanelContents {
           selectedData={this.state.selectedDropdownItem} />
       );
       content = this.getSidePanelContent(backends);
-      vipDetailsHeading = this.getSidePanelHeading(backends);
+      // vipDetailsHeading = this.getSidePanelHeading(backends);
     }
 
     return (
