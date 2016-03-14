@@ -208,7 +208,7 @@ class BackendDetailSidePanelContents extends SidePanelContents {
           selectedData={this.state.selectedDropdownItem} />
       );
       content = this.getSidePanelContent(clients);
-      backendDetailsHeading = this.getSidePanelHeading(clients);
+      // backendDetailsHeading = this.getSidePanelHeading(clients);
     }
 
     return (

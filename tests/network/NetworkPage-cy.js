@@ -115,58 +115,58 @@ describe('Network Page [0hy]', function () {
               expect($secondaryLabel[0].textContent).to.equal('3 Total Backends');
             });
         });
+        
+        // it('updates the y-axis when changing the dataset', function () {
+        //   cy
+        //     .get('@chart')
+        //     .get('.dygraph-ylabel')
+        //     .should(function ($yLabel) {
+        //       expect($yLabel[0].textContent).to.equal('Requests');
+        //     });
+        //
+        //   cy
+        //     .get('@dropdownToggle')
+        //     .click();
+        //
+        //   cy
+        //     .get('@dropdown')
+        //     .get('.dropdown-menu-list li')
+        //     .contains('Application Reachability')
+        //     .click();
+        //
+        //   cy
+        //     .get('@chart')
+        //     .get('.dygraph-ylabel')
+        //     .should(function ($yLabel) {
+        //       expect($yLabel[0].textContent).to.equal('App Reachability');
+        //     });
+        // });
 
-        it('updates the y-axis when changing the dataset', function () {
-          cy
-            .get('@chart')
-            .get('.dygraph-ylabel')
-            .should(function ($yLabel) {
-              expect($yLabel[0].textContent).to.equal('Requests');
-            });
-
-          cy
-            .get('@dropdownToggle')
-            .click();
-
-          cy
-            .get('@dropdown')
-            .get('.dropdown-menu-list li')
-            .contains('Application Reachability')
-            .click();
-
-          cy
-            .get('@chart')
-            .get('.dygraph-ylabel')
-            .should(function ($yLabel) {
-              expect($yLabel[0].textContent).to.equal('App Reachability');
-            });
-        });
-
-        it('updates the x-axis labels when changing the dataset', function () {
-          cy
-            .get('@chart')
-            .get('.graph-legend > span')
-            .as('legendItems')
-            .should(function ($legendElements) {
-              expect($legendElements.length).to.equal(2);
-            });
-
-          cy
-            .get('@dropdownToggle')
-            .click();
-
-          cy
-            .get('@dropdown')
-            .get('.dropdown-menu-list li')
-            .contains('IP Reachability')
-            .click();
-
-          cy
-            .get('@legendItems')
-            .should(function ($legendElements) {
-              expect($legendElements.length).to.equal(5);
-            });
-        });
+        // it('updates the x-axis labels when changing the dataset', function () {
+        //   cy
+        //     .get('@chart')
+        //     .get('.graph-legend > span')
+        //     .as('legendItems')
+        //     .should(function ($legendElements) {
+        //       expect($legendElements.length).to.equal(2);
+        //     });
+        //
+        //   cy
+        //     .get('@dropdownToggle')
+        //     .click();
+        //
+        //   cy
+        //     .get('@dropdown')
+        //     .get('.dropdown-menu-list li')
+        //     .contains('IP Reachability')
+        //     .click();
+        //
+        //   cy
+        //     .get('@legendItems')
+        //     .should(function ($legendElements) {
+        //       expect($legendElements.length).to.equal(5);
+        //     });
+        // });
 
       });
 

@@ -23,10 +23,10 @@ const COLUMNS_TO_HIDE_SMALL = [
 
 const COLUMNS_TO_HIDE_MINI = [
   'successLastMinute',
-  'failLastMinute',
-  'applicationReachabilityPercent',
-  'machineReachabilityPercent',
-  'failurePercent'
+  'failLastMinute'
+  // 'applicationReachabilityPercent',
+  // 'machineReachabilityPercent',
+  // 'failurePercent'
 ];
 
 const RIGHT_ALIGNED_TABLE_CELLS = [
@@ -96,22 +96,22 @@ class VIPsTable extends React.Component {
         sortable: true,
         heading
       },
-      {
-        className,
-        headerClassName: className,
-        prop: 'applicationReachabilityPercent',
-        render: this.renderPercentage,
-        sortable: true,
-        heading
-      },
-      {
-        className,
-        headerClassName: className,
-        prop: 'machineReachabilityPercent',
-        render: this.renderPercentage,
-        sortable: true,
-        heading
-      },
+      // {
+      //   className,
+      //   headerClassName: className,
+      //   prop: 'applicationReachabilityPercent',
+      //   render: this.renderPercentage,
+      //   sortable: true,
+      //   heading
+      // },
+      // {
+      //   className,
+      //   headerClassName: className,
+      //   prop: 'machineReachabilityPercent',
+      //   render: this.renderPercentage,
+      //   sortable: true,
+      //   heading
+      // },
       {
         className,
         headerClassName: className,
@@ -128,8 +128,8 @@ class VIPsTable extends React.Component {
 
     return classNames({
       'text-align-right': alignTableCellRight(prop),
-      'hidden-medium': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MEDIUM),
-      'hidden-small': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_SMALL),
+      // 'hidden-medium': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MEDIUM),
+      // 'hidden-small': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_SMALL),
       'hidden-mini': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MINI),
       'highlight': prop === sortBy.prop,
       'clickable': row == null
@@ -143,9 +143,9 @@ class VIPsTable extends React.Component {
         <col className="hidden-mini" />
         <col className="hidden-mini" />
         <col />
-        <col className="hidden-mini hidden-small hidden-medium" />
-        <col className="hidden-mini hidden-small hidden-medium" />
-        <col className="hidden-mini" />
+        <col />
+        <col />
+        <col />
       </colgroup>
     );
   }
