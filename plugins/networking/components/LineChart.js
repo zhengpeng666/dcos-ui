@@ -18,32 +18,20 @@ class LineChart extends React.Component {
 
   componentDidMount() {
     let el = this.refs.chart;
-    let options = _.extend({
-        height: this.props.height,
-        width: this.props.width
-      },
-      LineChart.defaultProps.chartOptions,
-      this.props.chartOptions
-    );
-
-    if (!this.hasYAxisFormatter(this.props.chartOptions)) {
-      let formatter = function (y) {
-        return Units.contractNumber(y);
-      };
-
-      if (!options.axes) {
-        options.axes = {};
-      }
-
-      if (!options.axes.y) {
-        options.axes.y = {};
-      }
-
-      options.axes.y.axisLabelFormatter = formatter;
-      options.axes.y.valueFormatter = formatter;
-    }
+    let options = this.getOptions();
 
     this.graph = new Dygraph(el, this.getGraphData(), options);
+  }
+
+  componentDidUpdate(prevProps) {
+    let props = this.props;
+    let options = _.extend(this.getOptions(), {file: this.getGraphData()});
+
+    this.graph.updateOptions(options);
+
+    if (prevProps.width !== props.width || prevProps.height !== props.height) {
+      this.graph.resize(props.width, props.height);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -65,16 +53,6 @@ class LineChart extends React.Component {
     }
 
     return false;
-  }
-
-  componentDidUpdate(prevProps) {
-    let props = this.props;
-
-    this.graph.updateOptions({file: this.getGraphData()});
-
-    if (prevProps.width !== props.width || prevProps.height !== props.height) {
-      this.graph.resize(props.width, props.height);
-    }
   }
 
   handleLabelToggle(seriesID) {
@@ -109,6 +87,31 @@ class LineChart extends React.Component {
     });
 
     return longestValue;
+  }
+
+  getOptions() {
+    let options = _.extend({
+        height: this.props.height,
+        width: this.props.width
+      },
+      LineChart.defaultProps.chartOptions,
+      this.props.chartOptions
+    );
+
+    if (!this.hasYAxisFormatter(this.props.chartOptions)) {
+      if (!options.axes) {
+        options.axes = {};
+      }
+
+      if (!options.axes.y) {
+        options.axes.y = {};
+      }
+
+      options.axes.y.axisLabelFormatter = this.labelFormatter;
+      options.axes.y.valueFormatter = this.labelFormatter;
+    }
+
+    return options;
   }
 
   getGraphData() {
@@ -182,9 +185,14 @@ class LineChart extends React.Component {
     );
   }
 
+  labelFormatter(y) {
+    return Units.contractNumber(y, {forceFixedPrecision: true});
+  }
+
   render() {
     return (
       <div className="dygraph-chart-wrapper">
+        <div id="dygraph-hover-label" className="dygraph-hover-label"></div>
         <div ref="chart" className="dygraph-chart"></div>
         {this.getLegend()}
       </div>
@@ -206,15 +214,18 @@ LineChart.defaultProps = {
     axisLineColor: '#CBCED1',
     gridLineColor: '#CBCED1',
     highlightSeriesOpts: {
-      strokeWidth: 1.5,
+      strokeWidth: 1.75,
       strokeBorderWidth: 0.5,
       highlightCircleSize: 3
     },
+    labelsDiv: 'dygraph-hover-label',
+    labelsDivStyles: {},
     labelsSeparateLines: true,
     legend: 'follow',
-    labelsDivWidth: 125,
+    labelsDivWidth: 200,
     showLegend: true,
-    strokeWidth: 1.5,
+    showLabelsOnHighlight: true,
+    strokeWidth: 1.25,
     axes: {
       y: {
         axisLabelWidth: 35

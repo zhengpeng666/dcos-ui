@@ -78,7 +78,7 @@ describe('BackendsTable', function () {
 
         expect(Object.keys(this.processedBackends[0])).toEqual([
           'ip', 'port', 'successLastMinute', 'failLastMinute', 'p99Latency',
-          'taskID', 'frameworkID'
+          'taskID', 'frameworkID', 'machineReachability', 'appReachability'
         ]);
       });
   });

@@ -26,7 +26,9 @@ const METHODS_TO_BIND = [
 const RIGHT_ALIGNED_TABLE_CELLS = [
   'successLastMinute',
   'failLastMinute',
-  'p99Latency'
+  'p99Latency',
+  'appReachability',
+  'machineReachability'
 ];
 
 class BackendsTable extends React.Component {
@@ -60,7 +62,6 @@ class BackendsTable extends React.Component {
         containerSelector=".gm-scroll-view"
         data={backends}
         idAttribute="vip"
-
         sortBy={{prop: 'ip', order: 'desc'}} />
     );
   }
@@ -71,10 +72,12 @@ class BackendsTable extends React.Component {
       ip: 'BACKEND NAME',
       successLastMinute: 'SUCCESSES',
       failLastMinute: 'FAILURES',
-      p99Latency: '99TH% LATENCY'
+      p99Latency: 'P99 LATENCY',
+      appReachability: 'APPLICATION REACHABILITY',
+      machineReachability: 'IP REACHABILITY'
     });
 
-    return [
+    let columns = [
       {
         className,
         headerClassName: className,
@@ -82,8 +85,11 @@ class BackendsTable extends React.Component {
         render: this.renderBackendName,
         sortable: true,
         heading
-      },
-      {
+      }
+    ];
+
+    if (this.props.displayedData === 'success') {
+      columns = columns.concat([{
         className,
         headerClassName: className,
         prop: 'successLastMinute',
@@ -106,8 +112,28 @@ class BackendsTable extends React.Component {
         render: this.renderMilliseconds,
         sortable: true,
         heading
-      }
-    ];
+      }]);
+    } else if (this.props.displayedData === 'app-reachability') {
+      columns.push({
+        className,
+        headerClassName: className,
+        prop: 'appReachability',
+        render: this.renderPercent,
+        sortable: true,
+        heading
+      });
+    } else if (this.props.displayedData === 'machine-reachability') {
+      columns.push({
+        className,
+        headerClassName: className,
+        prop: 'machineReachability',
+        render: this.renderPercent,
+        sortable: true,
+        heading
+      });
+    }
+
+    return columns;
   }
 
   getColGroup() {
@@ -184,7 +210,9 @@ class BackendsTable extends React.Component {
         failLastMinute: backend.getFailLastMinute(),
         p99Latency: backend.getP99Latency(),
         taskID: backend.getTaskID(),
-        frameworkID: backend.getFrameworkID()
+        frameworkID: backend.getFrameworkID(),
+        machineReachability: backend.getMachineReachabilityPercent(),
+        appReachability: backend.getApplicationReachabilityPercent()
       };
     });
   }
@@ -261,6 +289,10 @@ class BackendsTable extends React.Component {
 
   renderMilliseconds(prop, item) {
     return `${item[prop]}ms`;
+  }
+
+  renderPercent(prop, item) {
+    return `${item[prop]}%`;
   }
 
   render() {

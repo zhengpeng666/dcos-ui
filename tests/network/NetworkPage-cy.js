@@ -79,16 +79,96 @@ describe('Network Page [0hy]', function () {
 
     it('opens the side panel when users click on the ip address [0i7]',
       function () {
-        cy
-          .get('.table tbody a').first().click();
+      cy
+        .get('.table tbody a').first().click();
 
-        cy
-          .get('.side-panel-large').should(function ($sidePanel) {
-            expect($sidePanel.length).to.equal(1);
-          });
+      cy
+        .get('.side-panel-large').should(function ($sidePanel) {
+          expect($sidePanel.length).to.equal(1);
+        });
     });
 
     describe('VIPDetailSidePanelContents [0if]', function () {
+
+      describe('NetworkItemDetails', function () {
+
+        beforeEach(function () {
+          cy.get('.side-panel-content').as('sidePanel');
+          cy.get('@sidePanel').get('.dropdown').as('dropdown');
+          cy.get('@dropdown').get('.dropdown-toggle').as('dropdownToggle');
+          cy.get('@sidePanel').get('.dygraph-chart-wrapper').as('chart');
+
+          cy.get('@dropdownToggle').click();
+
+          cy
+            .get('@dropdown')
+            .get('.dropdown-menu-list li')
+            .contains('Successes and Failures')
+            .click();
+        });
+
+        it('displays the correct number of backends', function () {
+          cy
+            .get('@dropdownToggle')
+            .get('.dropdown-toggle-label-secondary')
+            .should(function ($secondaryLabel) {
+              expect($secondaryLabel[0].textContent).to.equal('3 Total Backends');
+            });
+        });
+
+        it('updates the y-axis when changing the dataset', function () {
+          cy
+            .get('@chart')
+            .get('.dygraph-ylabel')
+            .should(function ($yLabel) {
+              expect($yLabel[0].textContent).to.equal('Requests');
+            });
+
+          cy
+            .get('@dropdownToggle')
+            .click();
+
+          cy
+            .get('@dropdown')
+            .get('.dropdown-menu-list li')
+            .contains('Application Reachability')
+            .click();
+
+          cy
+            .get('@chart')
+            .get('.dygraph-ylabel')
+            .should(function ($yLabel) {
+              expect($yLabel[0].textContent).to.equal('App Reachability');
+            });
+        });
+
+        it('updates the x-axis labels when changing the dataset', function () {
+          cy
+            .get('@chart')
+            .get('.graph-legend > span')
+            .as('legendItems')
+            .should(function ($legendElements) {
+              expect($legendElements.length).to.equal(2);
+            });
+
+          cy
+            .get('@dropdownToggle')
+            .click();
+
+          cy
+            .get('@dropdown')
+            .get('.dropdown-menu-list li')
+            .contains('IP Reachability')
+            .click();
+
+          cy
+            .get('@legendItems')
+            .should(function ($legendElements) {
+              expect($legendElements.length).to.equal(5);
+            });
+        });
+
+      });
 
       describe('BackendsTable [0i0]', function () {
 

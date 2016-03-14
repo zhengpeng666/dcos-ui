@@ -106,7 +106,7 @@ class NetworkSidePanel extends React.Component {
           header={this.getHeader(vip, port, protocol)}
           headerContainerClass="container container-fluid container-fluid-narrow
             container-pod container-pod-short"
-          bodyClass="side-panel-content flex-container-col"
+          bodyClass="no-overflow-horizontal side-panel-content flex-container-col"
           onClose={this.handlePanelClose}
           open={this.isOpen()}>
           {this.getContents(this.props)}

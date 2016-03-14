@@ -246,12 +246,41 @@
   flex-direction: row;
 }
 
+.dropdown-chart-details {
+
+  position: relative;
+  // This nasty z-index is needed to cover the z-index on flex-container-col.
+  // When that gets fixed, we can adjust this as needed.
+  z-index: 2020;
+
+}
+
 .dygraph-chart-wrapper {
 
   .dot {
 
     display: inline-block;
     margin-right: 6px;
+
+  }
+
+  .dygraph-label,
+  .graph-legend {
+
+    font-size: @body-text-font-size;
+
+  }
+
+  .dygraph-axis-label {
+
+    color: color-lighten(@neutral, 40);
+    font-size: @body-text-font-size * 0.75;
+
+    &.dygraph-axis-label-y {
+
+      padding-right: 5px;
+
+    }
 
   }
 
@@ -277,7 +306,7 @@
 
       }
 
-      &:first-child {
+      &:first {
 
         margin-left: 0px;
 
@@ -291,28 +320,52 @@
 
 .dygraph-chart {
 
-  .dygraph-axis-label {
+  position: relative;
+  z-index: 2010;
 
-    color: color-lighten(@neutral, 40);
+  .dygraph-hover-label {
 
-    &.dygraph-axis-label-y {
+    background-color: #171A22;
+    border: 1px solid #000;
+    border-radius: 4px;
+    color: #9B9FA8;
+    font-size: @body-text-font-size * 0.9;
+    padding: 6px 8px;
+    pointer-events: none;
+    position: absolute;
+    width: 200px;
+    z-index: 100;
 
-      padding-right: 5px;
+    .highlight {
+
+      background-color: transparent;
 
     }
 
-  }
+    span {
 
-  .dygraph-legend {
+      color: #fff;
 
-    background-color: #3a3c47 !important;
-    color: #fff;
-    border: 1px solid #000;
-    padding: 4px;
-    pointer-events: none;
+      b {
 
-    .highlight {
-      background-color: transparent;
+        span {
+
+          &:before {
+
+            background-color: currentColor;
+            border-radius: 8px;
+            content: '';
+            display: inline-block;
+            height: 8px;
+            margin-right: 4px;
+            width: 8px;
+
+          }
+
+        }
+
+      }
+
     }
 
   }

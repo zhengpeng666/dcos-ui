@@ -1,14 +1,18 @@
+import {Dropdown} from 'reactjs-components';
 /*eslint-disable no-unused-vars*/
 const React = require('react');
 /*eslint-enable no-unused-vars*/
 
 import ClientsTable from './ClientsTable';
+import NetworkItemChart from './NetworkItemChart';
 import NetworkItemDetails from './NetworkItemDetails';
 import NetworkingBackendConnectionsStore from '../stores/NetworkingBackendConnectionsStore';
 
 let SDK = require('../SDK').getSDK();
-let {RequestErrorMsg, SidePanelContents} = SDK.get([
-  'RequestErrorMsg', 'SidePanelContents']);
+let {RequestErrorMsg, SidePanelContents, StringUtil, Tooltip} = SDK.get([
+  'RequestErrorMsg', 'SidePanelContents', 'StringUtil', 'Tooltip']);
+
+const METHODS_TO_BIND = ['handleBackendDetailDropdownChange'];
 
 class BackendDetailSidePanelContents extends SidePanelContents {
   constructor() {
@@ -25,11 +29,18 @@ class BackendDetailSidePanelContents extends SidePanelContents {
       clients: 'Clients'
     };
 
-    this.state = {currentTab: Object.keys(this.tabs_tabs).shift()};
+    this.state = {
+      currentTab: Object.keys(this.tabs_tabs).shift(),
+      selectedDropdownItem: 'success'
+    };
 
     this.internalStorage_update({
       backendConnectionRequestSuccess: false,
       backendConnectionRequestErrorCount: 0
+    });
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
     });
   }
 
@@ -78,6 +89,42 @@ class BackendDetailSidePanelContents extends SidePanelContents {
     );
   }
 
+  getDropdownItems(backendCount) {
+    return [
+      {
+        html: 'Successes and Failures',
+        selectedHtml: this.getDropdownItemSelectedHtml('Successes and Failures',
+          backendCount),
+        id: 'success'
+      },
+      {
+        html: 'Application Reachability',
+        selectedHtml: this.getDropdownItemSelectedHtml(
+          'Application Reachability Percentage', backendCount),
+        id: 'app-reachability'
+      },
+      {
+        html: 'IP Reachability',
+        selectedHtml: this.getDropdownItemSelectedHtml(
+          'IP Reachability Percentage', backendCount),
+        id: 'machine-reachability'
+      }
+    ];
+  }
+
+  getDropdownItemSelectedHtml(label, clientCount) {
+    return (
+      <span className="dropdown-toggle-label text-align-left">
+        <span className="dropdown-toggle-label-primary">
+          {label} per Minute
+        </span>
+        <span className="dropdown-toggle-label-secondary mute">
+          {clientCount} Total {`${StringUtil.pluralize('Client', clientCount)}`}
+        </span>
+      </span>
+    );
+  }
+
   getLoadingScreen() {
     return (
       <div className="container container-fluid container-pod text-align-center
@@ -89,6 +136,42 @@ class BackendDetailSidePanelContents extends SidePanelContents {
         </div>
       </div>
     );
+  }
+
+  getSidePanelContent(clients) {
+    return (
+      <ClientsTable clients={clients} parentRouter={this.props.parentRouter} />
+    );
+  }
+
+  getSidePanelHeading(clients) {
+    return (
+      <div className="vip-details-heading row row-flex">
+        <div className="column-9">
+          <Dropdown
+            buttonClassName="button dropdown-toggle
+              dropdown-toggle-transparent dropdown-toggle-caret-align-top"
+            dropdownMenuClassName="dropdown-menu"
+            dropdownMenuListClassName="dropdown-menu-list"
+            dropdownMenuListItemClassName="clickable"
+            initialID="success"
+            items={this.getDropdownItems(clients.getItems().length)}
+            onItemSelection={this.handleBackendDetailDropdownChange}
+            transition={true}
+            transitionName="dropdown-menu"
+            wrapperClassName="dropdown dropdown-chart-details" />
+        </div>
+        <div className="column-3 text-align-right">
+          <Tooltip iconClass="icon icon-sprite icon-sprite-mini
+            icon-information" behavior="show-tip" tipPlace="top-left"
+            content="Lorem ipsum dolor sit amet." />
+        </div>
+      </div>
+    );
+  }
+
+  handleBackendDetailDropdownChange(item) {
+    this.setState({selectedDropdownItem: item.id});
   }
 
   hasError() {
@@ -105,6 +188,8 @@ class BackendDetailSidePanelContents extends SidePanelContents {
   }
 
   renderClientsTabView() {
+    let backendDetailsHeading;
+    let chart;
     let content;
 
     if (this.hasError()) {
@@ -116,17 +201,22 @@ class BackendDetailSidePanelContents extends SidePanelContents {
         .getBackendConnections(
           `${this.props.protocol}:${this.props.vip}:${this.props.port}`
         );
+      let clients = backendConnectionDetails.getClients();
 
-      content = (
-        <ClientsTable clients={backendConnectionDetails.getClients()}
-          parentRouter={this.props.parentRouter} />
+      chart = (
+        <NetworkItemChart chartData={backendConnectionDetails}
+          selectedData={this.state.selectedDropdownItem} />
       );
+      content = this.getSidePanelContent(clients);
+      backendDetailsHeading = this.getSidePanelHeading(clients);
     }
 
     return (
       <div className="side-panel-tab-content side-panel-section container
         container-fluid container-pod container-pod-short flex-container-col
         flex-grow">
+        {backendDetailsHeading}
+        {chart}
         {content}
       </div>
     );

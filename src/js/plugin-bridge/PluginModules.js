@@ -36,7 +36,8 @@ module.exports = {
     DCOSLogo: 'DCOSLogo',
     ClusterName: 'ClusterName',
     DescriptionList: 'DescriptionList',
-    Chart: 'charts/Chart'
+    Chart: 'charts/Chart',
+    Tooltip: 'Tooltip'
   },
   config: {
     Config: 'Config'
