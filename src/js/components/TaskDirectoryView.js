@@ -1,42 +1,9 @@
-import mixin from 'reactjs-mixin';
 import React from 'react';
-import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import RequestErrorMsg from './RequestErrorMsg';
 import TaskDirectoryTable from './TaskDirectoryTable';
 import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 
-const METHODS_TO_BIND = ['onTaskDirectoryStoreError'];
-
-class TaskDirectoryView extends mixin(StoreMixin) {
-  constructor() {
-    super();
-
-    this.state = {
-      taskDirectoryErrorCount: 0
-    };
-
-    this.store_listeners = [{
-      name: 'taskDirectory',
-      events: ['success', 'error']
-    }];
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentDidMount() {
-    super.componentDidMount(...arguments);
-    TaskDirectoryStore.getDirectory(this.props.task);
-  }
-
-  onTaskDirectoryStoreError() {
-    this.setState({
-      taskDirectoryErrorCount: this.state.taskDirectoryErrorCount + 1
-    });
-  }
-
+class TaskDirectoryView extends React.Component {
   handleFileClick(path) {
     TaskDirectoryStore.addPath(this.props.task, path);
   }
@@ -45,33 +12,12 @@ class TaskDirectoryView extends mixin(StoreMixin) {
     TaskDirectoryStore.setPath(this.props.task, path);
   }
 
-  hasLoadingError() {
-    return this.state.taskDirectoryErrorCount >= 3;
-  }
-
-  getLoadingScreen() {
-    if (this.hasLoadingError()) {
-      return <RequestErrorMsg />;
-    }
-
-    return (
-      <div className="container container-fluid container-pod text-align-center vertical-center
-        inverse">
-        <div className="row">
-          <div className="ball-scale">
-            <div />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   getBreadcrumbs() {
     let innerPath = TaskDirectoryStore.get('innerPath').split('/');
     let onClickPath = '';
 
-    let crumbs = innerPath.map((file, i) => {
-      let textValue = file;
+    let crumbs = innerPath.map((directoryItem, index) => {
+      let textValue = directoryItem;
       let icon = (
         <i
           className="
@@ -84,26 +30,26 @@ class TaskDirectoryView extends mixin(StoreMixin) {
       );
 
       // First breadcrumb is always 'Working Directory'.
-      if (i === 0) {
+      if (index === 0) {
         textValue = 'Working Directory';
         icon = null;
       } else {
         // Build the path that the user goes to if clicked.
-        onClickPath += ('/' + file);
+        onClickPath += ('/' + directoryItem);
       }
 
       // Last breadcrumb. Don't make it a link.
-      if (i === innerPath.length - 1) {
+      if (index === innerPath.length - 1) {
         return (
-          <span key={i}>
+          <span key={index}>
             {icon}
-            <span className="crumb" key={i}>{textValue}</span>
+            <span className="crumb" key={index}>{textValue}</span>
           </span>
         );
       }
 
       return (
-        <span key={i}>
+        <span key={index}>
           {icon}
           <a
             className="crumb clickable"
@@ -120,11 +66,7 @@ class TaskDirectoryView extends mixin(StoreMixin) {
   }
 
   render() {
-    let directory = TaskDirectoryStore.get('directory');
-
-    if (directory == null) {
-      return this.getLoadingScreen();
-    }
+    let {props} = this;
 
     return (
       <div className="side-panel-section flex-container-col flex-grow">
@@ -132,15 +74,17 @@ class TaskDirectoryView extends mixin(StoreMixin) {
           {this.getBreadcrumbs()}
         </div>
         <TaskDirectoryTable
-          files={directory.getItems()}
+          files={props.directory.getItems()}
           onFileClick={this.handleFileClick.bind(this)}
-          nodeID={this.props.task.slave_id} />
+          onOpenLogClick={props.onOpenLogClick}
+          nodeID={props.task.slave_id} />
       </div>
     );
   }
 }
 
 TaskDirectoryView.propTypes = {
+  directory: React.PropTypes.object,
   task: React.PropTypes.object
 };
 

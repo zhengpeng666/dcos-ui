@@ -1,44 +1,19 @@
 import classNames from 'classnames';
-import mixin from 'reactjs-mixin';
+import {Dropdown} from 'reactjs-components';
 import React from 'react';
-import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import FilterInputText from './FilterInputText';
 import IconDownload from './icons/IconDownload';
 import MesosLogView from './MesosLogView';
-import RequestErrorMsg from './RequestErrorMsg';
 import TaskDirectoryActions from '../events/TaskDirectoryActions';
-import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 
-const LOG_VIEWS = [
-  {name: 'stdout', displayName: 'Output'},
-  {name: 'stderr', displayName: 'Error'}
-];
+const METHODS_TO_BIND = ['handleSearchStringChange'];
 
-const METHODS_TO_BIND = [
-  'handleSearchStringChange',
-  'onTaskDirectoryStoreError',
-  'onTaskDirectoryStoreSuccess'
-];
-
-class TaskDebugView extends mixin(StoreMixin) {
+class TaskDebugView extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      currentView: 0,
-      taskDirectoryErrorCount: 0
-    };
-
-    this.store_listeners = [{
-      events: ['success', 'error'],
-      name: 'taskDirectory',
-      suppressUpdate: true,
-      unmountWhen: () => {
-        return this.state.directory != null;
-      },
-      listenAlways: false
-    }];
+    this.state = {currentFile: null};
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
@@ -46,17 +21,10 @@ class TaskDebugView extends mixin(StoreMixin) {
 
   }
 
-  componentWillMount() {
-    super.componentWillMount(...arguments);
-
-    this.props.showExpandButton(true);
-    TaskDirectoryStore.getDirectory(this.props.task);
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     let {props, state} = this;
-    let directory = state.directory;
-    let nextDirectory = nextState.directory;
+    let directory = props.directory;
+    let nextDirectory = nextProps.directory;
     let task = state.task;
     let nextTask = nextState.task;
 
@@ -65,9 +33,7 @@ class TaskDebugView extends mixin(StoreMixin) {
       (props.task !== nextProps.task) ||
       (task && nextTask && task.slave_id !== nextTask.slave_id) ||
       // Check current view
-      (state.currentView !== nextState.currentView) ||
-      // Check taskDirectoryErrorCount
-      (state.taskDirectoryErrorCount !== nextState.taskDirectoryErrorCount) ||
+      (state.currentFile !== nextState.currentFile) ||
       // Check searchString
       (state.searchString !== nextState.searchString) ||
       // Check directory
@@ -76,83 +42,132 @@ class TaskDebugView extends mixin(StoreMixin) {
     );
   }
 
-  onTaskDirectoryStoreError() {
-    this.setState({
-      taskDirectoryErrorCount: this.state.taskDirectoryErrorCount + 1
-    });
-  }
-
-  onTaskDirectoryStoreSuccess() {
-    if (this.state.directory == null) {
-      this.setState({
-        directory: TaskDirectoryStore.get('directory'),
-        taskDirectoryErrorCount: 0
-      });
-    }
-  }
-
   handleSearchStringChange(searchString) {
     this.setState({searchString});
   }
 
-  handleViewChange(index) {
-    this.setState({currentView: index});
+  handleViewChange(currentFile) {
+    this.setState({currentFile});
   }
 
-  hasLoadingError() {
-    return this.state.taskDirectoryErrorCount >= 3;
-  }
-
-  getErrorScreen() {
-    return <RequestErrorMsg />;
-  }
-
-  getLogView(logName, filePath, nodeID) {
+  getLogView(logName, filePath, task) {
     let {state} = this;
 
     return (
       <MesosLogView
         filePath={filePath}
         highlightText={state.searchString}
-        slaveID={nodeID}
+        task={task}
         logName={logName} />
     );
   }
 
-  getSelectionButtons() {
-    let currentView = this.state.currentView;
+  getLogFiles() {
+    let {directory} = this.props;
+    let logViews = [];
+    if (!directory) {
+      return logViews;
+    }
 
-    return LOG_VIEWS.map((view, index) => {
+    directory.getItems().forEach((item) => {
+      if (!item.isLogFile()) {
+        return;
+      }
+
+      logViews.push(item);
+    });
+
+    return logViews;
+  }
+
+  getLogSelectionAsButtons(logFiles, selectedName) {
+    let buttons = logFiles.map((item, index) => {
+      let name = item.getName();
+
       let classes = classNames({
         'button button-stroke': true,
-        'active': index === currentView
+        'active': name === selectedName
       });
 
       return (
         <button
           className={classes}
           key={index}
-          onClick={this.handleViewChange.bind(this, index)}>
-          {view.displayName}
+          onClick={this.handleViewChange.bind(this, item)}>
+          {item.getDisplayName()}
         </button>
       );
     });
+
+    return (
+      <div className="button-group">
+        {buttons}
+      </div>
+    );
+  }
+
+  onItemSelection(obj) {
+    this.handleViewChange(obj.value);
+  }
+
+  getItemHtml(displayName) {
+    return (
+      <span className="flush dropdown-header">{displayName}</span>
+    );
+  }
+
+  getDropdownItems(logFiles) {
+    return logFiles.map(function (item) {
+      let displayName = item.getDisplayName();
+      let selectedHtml = this.getItemHtml(displayName);
+      let dropdownHtml = (<a>{selectedHtml}</a>);
+
+      return {
+        id: item.getName(),
+        name: displayName,
+        html: dropdownHtml,
+        selectedHtml,
+        value: item
+      };
+    }, this);
+  }
+
+  getSelectedFile() {
+    let {props, state} = this;
+    return state.currentFile ||
+      props.selectedLogFile || this.getLogFiles()[0];
+  }
+
+  getSelectionComponent() {
+    let selectedLogFile = this.getSelectedFile();
+    let selectedName = selectedLogFile && selectedLogFile.getName();
+    let logFiles = this.getLogFiles();
+    if (logFiles.length < 4) {
+      return this.getLogSelectionAsButtons(logFiles, selectedName);
+    }
+
+    return (
+      <Dropdown
+        buttonClassName="button dropdown-toggle"
+        dropdownMenuClassName="dropdown-menu"
+        dropdownMenuListClassName="dropdown-menu-list"
+        dropdownMenuListItemClassName="clickable"
+        initialID={selectedName}
+        items={this.getDropdownItems(logFiles)}
+        onItemSelection={this.onItemSelection.bind(this)}
+        transition={true}
+        transitionName="dropdown-menu"
+        wrapperClassName="dropdown form-group" />
+      );
   }
 
   render() {
-    if (this.hasLoadingError()) {
-      return this.getErrorScreen();
-    }
+    let task = this.props.task;
 
-    let {props, state} = this;
-    let currentView = LOG_VIEWS[state.currentView];
-    let directory = state.directory;
-    let nodeID = props.task.slave_id;
-
-    // Only try to find file if directory exists
-    let directoryItem = directory && directory.findFile(currentView.name);
     // Only try to get path if file exists
-    let filePath = directoryItem && directoryItem.get('path');
+    let selectedLogFile = this.getSelectedFile();
+    let selectedName = selectedLogFile && selectedLogFile.getName();
+    let filePath = selectedLogFile && selectedLogFile.get('path');
 
     return (
       <div className="flex-container-col flex-grow">
@@ -160,26 +175,26 @@ class TaskDebugView extends mixin(StoreMixin) {
           <FilterInputText
             className="flex-grow"
             placeholder="Search"
-            searchString={state.searchString}
+            searchString={this.state.searchString}
             handleFilterChange={this.handleSearchStringChange}
             inverseStyle={false} />
-          <div className="button-group">
-            {this.getSelectionButtons()}
-          </div>
+            {this.getSelectionComponent(selectedLogFile)}
           <a
             className="button button-stroke"
             disabled={!filePath}
-            href={TaskDirectoryActions.getDownloadURL(nodeID, filePath)}>
+            href={TaskDirectoryActions.getDownloadURL(task.slave_id, filePath)}>
             <IconDownload />
           </a>
         </div>
-        {this.getLogView(currentView.displayName, filePath, nodeID)}
+        {this.getLogView(selectedName, filePath, task)}
       </div>
     );
   }
 }
 
 TaskDebugView.propTypes = {
+  directory: React.PropTypes.object,
+  selectedLogFile: React.PropTypes.object,
   showExpandButton: React.PropTypes.func,
   task: React.PropTypes.object
 };

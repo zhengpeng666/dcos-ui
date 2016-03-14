@@ -20,6 +20,8 @@ class TaskDirectoryTable extends React.Component {
 
   renderHeadline(prop, directoryItem) {
     let label;
+    let {nodeID} = this.props;
+    let filePath = directoryItem.get('path');
     let value = directoryItem.getName();
 
     if (directoryItem.isDirectory()) {
@@ -34,10 +36,7 @@ class TaskDirectoryTable extends React.Component {
       label = (
         <a
           className="emphasize"
-          href={TaskDirectoryActions.getDownloadURL(
-            this.props.nodeID,
-            directoryItem.get('path')
-          )}>
+          href={TaskDirectoryActions.getDownloadURL(nodeID, filePath)}>
           {value}
         </a>
       );
@@ -49,6 +48,18 @@ class TaskDirectoryTable extends React.Component {
       'icon-directory': directoryItem.isDirectory()
     });
 
+    let openLogView;
+    if (directoryItem.isLogFile()) {
+      openLogView = (
+        <div
+          className="table-cell-icon table-cell-icon-mini table-display-on-row-hover fade-in-on-hover clickable"
+          onClick={this.props.onOpenLogClick.bind(this, directoryItem, this.props.directoryPath)}>
+          <i
+            className="icon icon-sprite icon-sprite-mini icon-search icon-align-right" />
+        </div>
+      );
+    }
+
     return (
       <div className="flex-box flex-box-align-vertical-center table-cell-flex-box">
         <div className="table-cell-icon table-cell-icon-mini">
@@ -57,6 +68,7 @@ class TaskDirectoryTable extends React.Component {
         <span title={value} className="table-cell-value text-overflow">
           {label}
         </span>
+        {openLogView}
       </div>
     );
   }
@@ -182,12 +194,9 @@ class TaskDirectoryTable extends React.Component {
   render() {
     return (
       <Table
-        className="table
-          table-borderless-outer
-          table-borderless-inner-columns
-          flush-bottom"
-        columns={this.getColumns()}
+        className="table table-borderless-outer table-borderless-inner-columns flush-bottom"
         colGroup={this.getColGroup()}
+        columns={this.getColumns()}
         containerSelector=".gm-scroll-view"
         data={this.props.files}
         sortBy={{prop: 'path', order: 'desc'}}
@@ -196,12 +205,15 @@ class TaskDirectoryTable extends React.Component {
   }
 }
 
-TaskDirectoryTable.propTypes = {
-  files: React.PropTypes.array
+TaskDirectoryTable.defaultProps = {
+  onOpenLogClick: function () {},
+  files: []
 };
 
-TaskDirectoryTable.defaultProps = {
-  files: []
+TaskDirectoryTable.propTypes = {
+  directoryPath: React.PropTypes.string,
+  onOpenLogClick: React.PropTypes.func,
+  files: React.PropTypes.array
 };
 
 module.exports = TaskDirectoryTable;

@@ -28,7 +28,10 @@ describe('MesosLogView', function () {
 
     this.container = document.createElement('div');
     this.instance = ReactDOM.render(
-      <MesosLogView filePath="/some/file/path" slaveID="foo" />,
+      <MesosLogView
+        filePath="/some/file/path"
+        logName="bar"
+        task={{slave_id: 'foo'}} />,
       this.container
     );
 
@@ -61,22 +64,42 @@ describe('MesosLogView', function () {
   describe('#componentWillReceiveProps', function () {
 
     it('should call startTailing when new path is provided', function () {
-      this.instance.componentWillReceiveProps({filePath: '/other/file/path'});
+      this.instance.componentWillReceiveProps(
+        {
+          filePath: '/other/file/path',
+          task: {slave_id: 'foo'}
+        }
+      );
       expect(MesosLogStore.startTailing.callCount).toEqual(2);
     });
 
     it('should call stopTailing when new path is provided', function () {
-      this.instance.componentWillReceiveProps({filePath: '/other/file/path'});
+      this.instance.componentWillReceiveProps(
+        {
+          filePath: '/other/file/path',
+          task: {slave_id: 'foo'}
+        }
+      );
       expect(MesosLogStore.stopTailing.callCount).toEqual(1);
     });
 
     it('shouldn\'t call startTailing when same path is provided', function () {
-      this.instance.componentWillReceiveProps({filePath: '/some/file/path'});
+      this.instance.componentWillReceiveProps(
+        {
+          filePath: '/some/file/path',
+          task: {slave_id: 'foo'}
+        }
+      );
       expect(MesosLogStore.startTailing.callCount).toEqual(1);
     });
 
     it('shouldn\'t call stopTailing when same path is provided', function () {
-      this.instance.componentWillReceiveProps({filePath: '/some/file/path'});
+      this.instance.componentWillReceiveProps(
+        {
+          filePath: '/some/file/path',
+          task: {slave_id: 'foo'}
+        }
+      );
       expect(MesosLogStore.stopTailing.callCount).toEqual(0);
     });
 
@@ -249,17 +272,13 @@ describe('MesosLogView', function () {
       expect(this.instance.getLoadingScreen).not.toHaveBeenCalled();
     });
 
-    it('should call getLoadingScreen when filePath is undefined', function () {
-      var instance = ReactDOM.render(
-        <MesosLogView slaveID="foo" />,
+    it('shows empty directory screen when logName is empty', function () {
+      this.instance = ReactDOM.render(
+        <MesosLogView filePath="/some/file/path" task={{slave_id: 'foo'}} />,
         this.container
       );
-      instance.state.fullLog = null;
-
-      instance.getLoadingScreen = jasmine.createSpy('getLoadingScreen');
-      instance.render();
-
-      expect(instance.getLoadingScreen).toHaveBeenCalled();
+      var result = this.container.querySelector('a.clickable');
+      expect(result.textContent).toEqual('working directory');
     });
 
   });

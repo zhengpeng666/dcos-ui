@@ -8,10 +8,12 @@ import DOMUtils from '../utils/DOMUtils';
 import Highlight from './Highlight';
 import MesosLogStore from '../stores/MesosLogStore';
 import RequestErrorMsg from './RequestErrorMsg';
+import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 import Util from '../utils/Util';
 
 const METHODS_TO_BIND = [
   'handleGoToBottom',
+  'handleGoToWorkingDirectory',
   'handleLogContainerScroll',
   'onMesosLogStoreError',
   'onMesosLogStoreSuccess'
@@ -46,7 +48,7 @@ class MesosLogView extends mixin(StoreMixin) {
     super.componentDidMount(...arguments);
     let {props} = this;
     if (props.filePath) {
-      MesosLogStore.startTailing(props.slaveID, props.filePath);
+      MesosLogStore.startTailing(props.task.slave_id, props.filePath);
     }
   }
 
@@ -63,7 +65,7 @@ class MesosLogView extends mixin(StoreMixin) {
       MesosLogStore.stopTailing(props.filePath);
     }
     if (nextProps.filePath) {
-      MesosLogStore.startTailing(nextProps.slaveID, nextProps.filePath);
+      MesosLogStore.startTailing(nextProps.task.slave_id, nextProps.filePath);
     }
   }
 
@@ -96,8 +98,8 @@ class MesosLogView extends mixin(StoreMixin) {
       (props.highlightText !== nextProps.highlightText) ||
       // Check filePath
       (props.filePath !== nextProps.filePath) ||
-      // Check slaveID
-      (props.slaveID !== nextProps.slaveID) ||
+      // Check task
+      (props.task !== nextProps.task) ||
       // Check hasLoadingError
       (state.hasLoadingError !== nextState.hasLoadingError) ||
       // Check fullLog
@@ -127,6 +129,10 @@ class MesosLogView extends mixin(StoreMixin) {
     DOMUtils.scrollTo(
       logContainerNode, 3000, logContainerNode.scrollHeight - height
     );
+  }
+
+  handleGoToWorkingDirectory() {
+    TaskDirectoryStore.setPath(this.props.task, '');
   }
 
   onMesosLogStoreError(path) {
@@ -176,7 +182,7 @@ class MesosLogView extends mixin(StoreMixin) {
     let distanceFromTop = DOMUtils.getDistanceFromTop(container);
     if (distanceFromTop < 2000) {
       let {props} = this;
-      MesosLogStore.getPreviousLogs(props.slaveID, props.filePath);
+      MesosLogStore.getPreviousLogs(props.task.slave_id, props.filePath);
     }
   }
 
@@ -200,27 +206,53 @@ class MesosLogView extends mixin(StoreMixin) {
     return ReactDOM.findDOMNode(logContainer);
   }
 
+  getEmptyDirectoryScreen() {
+    return (
+      <div className="flex-grow vertical-center">
+        <h3 className="text-align-center flush-top">
+          This directory does not contain any logs.
+        </h3>
+        <p className="text-align-center flush-bottom">
+          Go back to your&nbsp;
+          <a
+            className="clickable"
+            onClick={this.handleGoToWorkingDirectory}>
+            working directory
+          </a>
+        </p>
+      </div>
+    );
+  }
+
+  getEmptyLogScreen() {
+    let {logName} = this.props;
+    // Append space if logName is defined
+    logName = logName && (logName + ' ');
+
+    return (
+      <div className="flex-grow vertical-center">
+        <h3 className="text-align-center flush-top">
+          {`${logName} Log is Currently Empty`}
+        </h3>
+        <p className="text-align-center flush-bottom">
+          Please try again later.
+        </p>
+      </div>
+    );
+  }
+
   getErrorScreen() {
     return <RequestErrorMsg />;
   }
 
   getLog() {
     let {props, state} = this;
+    if (!props.logName) {
+      return this.getEmptyDirectoryScreen();
+    }
     let fullLog = state.fullLog;
     if (fullLog === '') {
-      // Append space if logName is defined
-      let logName = props.logName && (props.logName + ' ');
-
-      return (
-        <div className="flex-grow vertical-center">
-          <h3 className="text-align-center flush-top">
-            {`${logName} Log is Currently Empty`}
-          </h3>
-          <p className="text-align-center flush-bottom">
-            Please try again later.
-          </p>
-        </div>
-      );
+      return this.getEmptyLogScreen();
     }
 
     return (
@@ -267,11 +299,13 @@ class MesosLogView extends mixin(StoreMixin) {
   }
 
   render() {
-    if (this.state.hasLoadingError >= 3) {
+    let {props, state} = this;
+
+    if (state.hasLoadingError >= 3) {
       return this.getErrorScreen();
     }
 
-    if (this.state.fullLog == null || !this.props.filePath) {
+    if (props.filePath && props.logName && state.fullLog == null) {
       return this.getLoadingScreen();
     }
 
@@ -300,7 +334,7 @@ MesosLogView.propTypes = {
   filePath: React.PropTypes.string,
   highlightText: React.PropTypes.string,
   logName: React.PropTypes.string,
-  slaveID: React.PropTypes.string.isRequired
+  task: React.PropTypes.object.isRequired
 };
 
 module.exports = MesosLogView;
