@@ -112,15 +112,14 @@ class SettingsPage extends mixin(TabsMixin) {
     );
   }
 }
+SettingsPage.contextTypes = {
+  router: React.PropTypes.func
+};
 
 SettingsPage.routeConfig = {
   label: 'Settings',
   icon: 'settings',
   matches: /^\/settings/
-};
-
-SettingsPage.contextTypes = {
-  router: React.PropTypes.func
 };
 
 SettingsPage.willTransitionTo = function () {
