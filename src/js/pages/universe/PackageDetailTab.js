@@ -5,6 +5,7 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
+import ImageViewer from '../../components/ImageViewer';
 import InstallPackageModal from '../../components/modals/InstallPackageModal';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
 import StringUtil from '../../utils/StringUtil';
@@ -85,17 +86,6 @@ class PackageDetailTab extends mixin(StoreMixin) {
         content = this.getItems(value, this.getSubItem);
       }
 
-      // Render media items
-      if (type === 'media') {
-        content = (
-          <div className="media-object-spacing-wrapper">
-            <div className="media-object flex-box flex-box-wrap" key={index}>
-              {this.getItems(value, this.getMediaItem)}
-            </div>
-          </div>
-        );
-      }
-
       items.push(renderItem(label, content, index));
     });
 
@@ -133,16 +123,6 @@ class PackageDetailTab extends mixin(StoreMixin) {
     );
   }
 
-  getMediaItem(label, value, key) {
-    return (
-      <div className="media-object-item media-object-item-fill" key={key}>
-        <div
-          className="media-object-item-fill-image image-rounded-corners"
-          style={{backgroundImage: `url(${value})`}} />
-      </div>
-    );
-  }
-
   getSubItem(label, value, key) {
     let content = value;
 
@@ -171,13 +151,6 @@ class PackageDetailTab extends mixin(StoreMixin) {
     });
   }
 
-  mapScreenshots(screenshots) {
-    screenshots = screenshots || [];
-    return screenshots.map(function (screenshot) {
-      return {value: screenshot};
-    });
-  }
-
   render() {
     let {props, state} = this;
 
@@ -194,11 +167,11 @@ class PackageDetailTab extends mixin(StoreMixin) {
     let definition = [
       {
         label: 'Description',
-        value: <div dangerouslySetInnerHTML={StringUtil.parseMarkdown(packageDetails.description)} />
+        value: packageDetails.description && <div dangerouslySetInnerHTML={StringUtil.parseMarkdown(packageDetails.description)} />
       },
       {
         label: 'Pre-Install Notes',
-        value: <div dangerouslySetInnerHTML={StringUtil.parseMarkdown(packageDetails.preInstallNotes)} />
+        value: packageDetails.preInstallNotes && <div dangerouslySetInnerHTML={StringUtil.parseMarkdown(packageDetails.preInstallNotes)} />
       },
       {
         label: 'Information',
@@ -212,11 +185,6 @@ class PackageDetailTab extends mixin(StoreMixin) {
         label: 'Licenses',
         type: 'subItems',
         value: this.mapLicenses(packageDetails.licenses)
-      },
-      {
-        label: 'Media',
-        type: 'media',
-        value: this.mapScreenshots(cosmosPackage.getScreenshots())
       }
     ];
 
@@ -246,6 +214,7 @@ class PackageDetailTab extends mixin(StoreMixin) {
         </div>
         <div className="container-pod container-pod-short">
           {this.getItems(definition, this.getItem)}
+          <ImageViewer images={cosmosPackage.getScreenshots()} />
         </div>
         <InstallPackageModal
           open={state.openInstallModal}

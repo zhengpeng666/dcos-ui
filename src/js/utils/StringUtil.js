@@ -59,6 +59,10 @@ const StringUtil = {
   },
 
   parseMarkdown(text) {
+    if (!text) {
+      return null;
+    }
+
     let __html = marked(
       // Remove any tabs, that will create code blocks
       text.replace('\t', ' '),

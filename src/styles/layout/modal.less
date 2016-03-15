@@ -31,6 +31,67 @@
     width: @modal-width-narrow;
   }
 
+  &.modal-image-viewer {
+    background: transparent;
+    width: 100%;
+
+    .modal-content {
+      background: transparent;
+      border-radius: 0;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    .modal-footer {
+      border-radius: 0;
+      padding: 0;
+    }
+
+    .fill-image {
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+
+    .arrow-container {
+      background: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0) 75%);
+      color: rgba(255, 255, 255, 0.6);
+      display: block;
+      height: 100%;
+      left: -25%;
+      position: absolute;
+      top: 0;
+      width: 50%;
+
+      &:hover {
+        color: rgba(255, 255, 255, 1.0);
+      }
+
+      .arrow {
+        left: 50%;
+        position: absolute;
+        top: 50%;
+      }
+
+      &.forward {
+        background: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0) 75%);
+        left: auto;
+        right: -25%;
+
+        .arrow {
+          left: auto;
+          right: 50%;
+        }
+      }
+    }
+
+  }
+
   .modal-header {
     border-radius: @modal-border-radius @modal-border-radius 0px 0px;
 
@@ -140,6 +201,23 @@
 
 
 & when (@screen-mini-enabled) {
+  @media (max-width: @screen-small) {
+    // Use max-width so we don't need to reset to default styles
+    .modal {
+     &.modal-image-viewer {
+        right: 0;
+        left: 0;
+      }
+
+      .modal-close {
+        display: none;
+      }
+    }
+  }
+}
+
+
+& when (@screen-mini-enabled) {
   @media (min-width: @screen-mini) {
     .modal.modal-large {
       width: 500px;
@@ -166,6 +244,31 @@
         .modal-content {
           pre {
             max-height: 500px;
+          }
+        }
+      }
+
+      &.modal-image-viewer {
+        max-height: 80%;
+        max-width: 80%;
+        min-width: @modal-width-screen-small;
+        width: auto;
+
+        .arrow-container {
+          background: none;
+
+          .arrow {
+            left: auto;
+            right: calc(~"50% + 2 * @{base-spacing-unit-screen-small}");
+          }
+
+          &.forward {
+            background: none;
+
+            .arrow {
+              left: calc(~"50% + 2 * @{base-spacing-unit-screen-small}");
+              right: auto;
+            }
           }
         }
       }
