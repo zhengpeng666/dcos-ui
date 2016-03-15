@@ -24,7 +24,7 @@ class DescriptionList extends React.Component {
       // Check whether we are trying to render an object that is not a
       // React component
       if (typeof value === 'object' && !Array.isArray(value) &&
-        value !== null && !(value instanceof React.constructor)) {
+        value !== null && !React.isValidElement(value)) {
 
         return (
           <DescriptionList hash={value} key={index} headline={key} />
