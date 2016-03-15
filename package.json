@@ -89,7 +89,7 @@
   "scripts": {
     "clean": "rm -rf build",
     "prebuild-ee": "./scripts/validate-tests",
-    "build-ee": "npm run clean && NODE_ENV='production' ./node_modules/.bin/gulp dist",
+    "build-ee": "npm run clean && npm test && NODE_ENV='production' ./node_modules/.bin/gulp dist",
     "dist": "npm run build-ee",
     "prebuild-ce": "./scripts/validate-tests",
     "build-ce": "npm run clean && npm test && NODE_ENV='production' ./node_modules/.bin/gulp dist",
