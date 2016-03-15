@@ -11,7 +11,7 @@ var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
 var imagemin = require('gulp-imagemin');
 var less = require('gulp-less');
-var minifyCSS = require('gulp-cssnano');
+var csso = require('gulp-csso');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var replace = require('gulp-replace');
@@ -144,7 +144,7 @@ gulp.task('less', function () {
 
 gulp.task('minify-css', ['less'], function () {
   return gulp.src(config.files.distCSS)
-    .pipe(minifyCSS())
+    .pipe(csso())
     .pipe(gulp.dest(config.dirs.distCSS));
 });
 
@@ -238,7 +238,7 @@ gulp.task('livereload', function (callback) {
 gulp.task('dist', function (callback) {
   runSequence(
     'default',
-    // 'minify-css',
+    'minify-css',
     'minify-js',
     callback
   );
