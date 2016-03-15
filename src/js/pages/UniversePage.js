@@ -5,6 +5,7 @@ import React from 'react';
 import {RouteHandler} from 'react-router';
 
 import Page from '../components/Page';
+import SidebarActions from '../events/SidebarActions';
 import TabsMixin from '../mixins/TabsMixin';
 
 class UniversePage extends mixin(TabsMixin) {
@@ -13,6 +14,10 @@ class UniversePage extends mixin(TabsMixin) {
 
     this.tabs_tabs = {};
     this.state = {};
+  }
+
+  willTransitionTo() {
+    SidebarActions.close();
   }
 
   componentWillMount() {
@@ -73,6 +78,10 @@ UniversePage.routeConfig = {
   label: 'Universe',
   icon: 'universe',
   matches: /^\/universe/
+};
+
+UniversePage.willTransitionTo = function () {
+  SidebarActions.close();
 };
 
 module.exports = UniversePage;

@@ -6,6 +6,7 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {Hooks} from 'PluginSDK';
 import Page from '../components/Page';
+import SidebarActions from '../events/SidebarActions';
 import TabsUtil from '../utils/TabsUtil';
 import TabsMixin from '../mixins/TabsMixin';
 
@@ -112,14 +113,18 @@ class SettingsPage extends mixin(TabsMixin) {
   }
 }
 
-SettingsPage.contextTypes = {
-  router: React.PropTypes.func
-};
-
 SettingsPage.routeConfig = {
   label: 'Settings',
   icon: 'settings',
   matches: /^\/settings/
+};
+
+SettingsPage.contextTypes = {
+  router: React.PropTypes.func
+};
+
+SettingsPage.willTransitionTo = function () {
+  SidebarActions.close();
 };
 
 module.exports = SettingsPage;
