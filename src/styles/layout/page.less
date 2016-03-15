@@ -114,6 +114,23 @@
   }
 }
 
+/* Screen Size: Small (@screen-mini) and above */
+& when (@screen-mini-enabled) {
+  @media (min-width: @screen-mini) {
+
+    /* Page */
+    .page {
+      /* Page Header */
+      .page-header {
+        /* Page Header Navigation */
+        .page-header-navigation {
+          margin-bottom: -@container-pod-short-padding-vertical-screen-mini;
+        }
+      }
+    }
+  }
+}
+
 /* Screen Size: Small (@screen-small) and above */
 & when (@screen-small-enabled) {
   @media (min-width: @screen-small) {
