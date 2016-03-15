@@ -1,4 +1,3 @@
-/*
 jest.dontMock('../ServerErrorModal');
 jest.dontMock('../../mixins/GetSetMixin');
 
@@ -9,11 +8,6 @@ PluginTestUtils.dontMock([
   'MesosStateStore',
   'MesosSummaryStore'
 ]);
-
-PluginTestUtils.loadPluginsByName({
-  authentication: {enabled: true},
-  organization: {enabled: true}
-});
 
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -79,4 +73,3 @@ describe('ServerErrorModal', function () {
     });
   });
 });
-*/
