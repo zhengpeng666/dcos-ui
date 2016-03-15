@@ -21,13 +21,17 @@ class DescriptionList extends React.Component {
     return Object.keys(hash).map(function (key, index) {
       let value = hash[key];
 
-      if (typeof value === 'object' && value !== null) {
+      // Check whether we are trying to render an object that is not a
+      // React component
+      if (typeof value === 'object' && !Array.isArray(value) &&
+        value !== null && !(value instanceof React.constructor)) {
+
         return (
           <DescriptionList hash={value} key={index} headline={key} />
         );
       }
 
-      if (typeof value !== 'string' && value != null) {
+      if (typeof value === 'boolean') {
         value = value.toString();
       }
 
