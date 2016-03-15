@@ -19,7 +19,7 @@ var ConfigDev = {
         organization: {
           enabled: true
         },
-        overview: {
+        'overview-detail': {
           enabled: true
         },
         tracking: {

@@ -1,31 +1,31 @@
 import {Route, Redirect} from 'react-router';
 
 import {Hooks} from 'PluginSDK';
-import RepositoriesTab from '../../pages/settings/RepositoriesTab';
-import SettingsPage from '../../pages/SettingsPage';
-import UnitsHealthTab from '../../pages/settings/UnitsHealthTab';
+import RepositoriesTab from '../../pages/system/RepositoriesTab';
+import SystemPage from '../../pages/SystemPage';
+import UnitsHealthTab from '../../pages/system/UnitsHealthTab';
 
 let RouteFactory = {
 
-  getSystemRoutes() {
+  getOverviewRoutes() {
     // Return filtered Routes
     return this.getFilteredRoutes(
-      Hooks.applyFilter('SystemRoutes', {
+      Hooks.applyFilter('OverviewRoutes', {
         routes: [
           {
             type: Route,
-            name: 'settings-system-units',
+            name: 'system-overview-units',
             path: 'components/?',
             handler: UnitsHealthTab,
             children: [
               {
                 type: Route,
-                name: 'settings-system-units-unit-nodes-panel',
+                name: 'system-overview-units-unit-nodes-panel',
                 path: ':unitID/?',
                 children: [
                   {
                     type: Route,
-                    name: 'settings-system-units-unit-nodes-node-panel',
+                    name: 'system-overview-units-unit-nodes-node-panel',
                     path: 'nodes/:unitNodeID'
                   }
                 ]
@@ -33,44 +33,44 @@ let RouteFactory = {
               {
                 type: Redirect,
                 from: ':unitID/?',
-                to: 'settings-system-units-unit-nodes-panel'
+                to: 'system-overview-units-unit-nodes-panel'
               }
             ]
           },
           {
             type: Route,
-            name: 'settings-system-repositories',
+            name: 'system-overview-repositories',
             path: 'repositories/?',
             handler: RepositoriesTab
           }
         ],
         redirect: {
           type: Redirect,
-          from: '/settings/system/?',
-          to: 'settings-system-units'
+          from: '/system/overview/?',
+          to: 'system-overview-units'
         }
       })
     );
   },
 
-  getSettingsRoutes() {
-    let systemRoute = {
+  getSystemRoutes() {
+    let overviewRoute = {
       type: Route,
-      name: 'settings-system',
-      path: 'system/?'
+      name: 'system-overview',
+      path: 'overview/?'
     };
-    // Get children from settings Route
-    systemRoute.children = RouteFactory.getSystemRoutes();
+    // Get children for Overview
+    overviewRoute.children = RouteFactory.getOverviewRoutes();
 
     // Return filtered Routes
     return this.getFilteredRoutes(
       // Pass in Object so Plugins can mutate routes and the default redirect
-      Hooks.applyFilter('SettingsRoutes', {
-        routes: [systemRoute],
+      Hooks.applyFilter('SystemRoutes', {
+        routes: [overviewRoute],
         redirect: {
           type: Redirect,
-          from: '/settings/?',
-          to: 'settings-system'
+          from: '/system/?',
+          to: 'system-overview'
         }
       })
     );
@@ -83,13 +83,13 @@ let RouteFactory = {
 
   getRoutes() {
 
-    let childRoutes = this.getSettingsRoutes();
+    let childRoutes = this.getSystemRoutes();
 
     return {
       type: Route,
-      name: 'settings',
-      path: 'settings/?',
-      handler: SettingsPage,
+      name: 'system',
+      path: 'system/?',
+      handler: SystemPage,
       children: childRoutes
     };
   }

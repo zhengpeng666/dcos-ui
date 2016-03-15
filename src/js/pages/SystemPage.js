@@ -11,36 +11,36 @@ import TabsUtil from '../utils/TabsUtil';
 import TabsMixin from '../mixins/TabsMixin';
 
 // Default Tabs
-let DEFAULT_SETTINGS_TABS = {
-  'settings-system': {
-    content: 'System',
-    priority: 10
+let DEFAULT_SERVICES_TABS = {
+  'system-overview': {
+    content: 'Overview',
+    priority: 30
   }
 };
 
 let DEFAULT_TABS_TABS = {
-  'settings-system-units': {
+  'system-overview-units': {
     content: 'Components',
     priority: 20
   },
-  'settings-system-repositories': {
+  'system-overview-repositories': {
     content: 'Repositories',
     priority: 10
   }
 };
 
-let SETTINGS_TABS;
+let SYSTEM_TABS;
 
-class SettingsPage extends mixin(TabsMixin) {
+class SystemPage extends mixin(TabsMixin) {
   constructor() {
     super();
 
     // Get top level tabs
-    SETTINGS_TABS = TabsUtil.sortTabs(
-      Hooks.applyFilter('SettingsTabs', DEFAULT_SETTINGS_TABS)
+    SYSTEM_TABS = TabsUtil.sortTabs(
+      Hooks.applyFilter('SystemTabs', DEFAULT_SERVICES_TABS)
     );
     // Add filter to register default Component Tab
-    Hooks.addFilter('settings-system-tabs', function (tabs) {
+    Hooks.addFilter('system-overview-tabs', function (tabs) {
       return _.extend(tabs, DEFAULT_TABS_TABS);
     });
 
@@ -74,7 +74,7 @@ class SettingsPage extends mixin(TabsMixin) {
       <Link
         to={tab}
         className="tab-item-label h1 page-header-title inverse flush">
-        {SETTINGS_TABS[tab]}
+        {SYSTEM_TABS[tab]}
       </Link>
     );
   }
@@ -86,7 +86,7 @@ class SettingsPage extends mixin(TabsMixin) {
     return (
       <ul className="tabs list-inline list-unstyled">
         {TabsUtil.getTabs(
-          SETTINGS_TABS,
+          SYSTEM_TABS,
           currentRoute,
           this.getRoutedItem
         )}
@@ -113,18 +113,18 @@ class SettingsPage extends mixin(TabsMixin) {
   }
 }
 
-SettingsPage.contextTypes = {
+SystemPage.contextTypes = {
   router: React.PropTypes.func
 };
 
-SettingsPage.routeConfig = {
-  label: 'Settings',
-  icon: 'settings',
-  matches: /^\/settings/
+SystemPage.routeConfig = {
+  label: 'System',
+  icon: 'system',
+  matches: /^\/system/
 };
 
-SettingsPage.willTransitionTo = function () {
+SystemPage.willTransitionTo = function () {
   SidebarActions.close();
 };
 
-module.exports = SettingsPage;
+module.exports = SystemPage;

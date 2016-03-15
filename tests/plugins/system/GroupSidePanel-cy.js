@@ -7,7 +7,7 @@ describe('Group Details Sidepanel [02k]', function () {
         acl: true,
         plugins: 'organization-enabled'
       })
-      .visitUrl({url: '/settings/organization/groups/olis', identify: true});
+      .visitUrl({url: '/system/organization/groups/olis', identify: true});
     });
 
     it('displays the correct group [040]', function () {
@@ -68,7 +68,7 @@ describe('Group Details Sidepanel [02k]', function () {
           groupNoPermissions: true,
           plugins: 'organization-enabled'
         })
-      .visitUrl({url: '/settings/organization/groups/olis', identify: true});
+      .visitUrl({url: '/system/organization/groups/olis', identify: true});
 
         cy.get('.side-panel .tabs .tab-item-label')
           .contains('Advanced ACLs')
@@ -91,7 +91,7 @@ describe('Group Details Sidepanel [02k]', function () {
           acl: true,
           plugins: 'organization-enabled'
         })
-      .visitUrl({url: '/settings/organization/groups/olis', identify: true});
+      .visitUrl({url: '/system/organization/groups/olis', identify: true});
 
         cy.get('.side-panel .tabs .tab-item-label')
           .contains('Advanced ACLs')
@@ -115,7 +115,7 @@ describe('Group Details Sidepanel [02k]', function () {
           groupManyPermissions: true,
           plugins: 'organization-enabled'
         })
-      .visitUrl({url: '/settings/organization/groups/olis', identify: true});
+      .visitUrl({url: '/system/organization/groups/olis', identify: true});
 
         cy.get('.side-panel .tabs .tab-item-label')
           .contains('Advanced ACLs')
@@ -139,7 +139,7 @@ describe('Group Details Sidepanel [02k]', function () {
           groupManyPermissions: true,
           plugins: 'organization-enabled'
         })
-      .visitUrl({url: '/settings/organization/groups/olis', identify: true});
+      .visitUrl({url: '/system/organization/groups/olis', identify: true});
 
         cy.get('.side-panel .tabs .tab-item-label')
           .contains('Advanced ACLs')
@@ -171,7 +171,7 @@ describe('Group Details Sidepanel [02k]', function () {
           groupNoPermissions: true,
           plugins: 'organization-enabled'
         })
-      .visitUrl({url: '/settings/organization/groups/olis', identify: true});
+      .visitUrl({url: '/system/organization/groups/olis', identify: true});
 
         cy.get('.side-panel .tabs .tab-item-label')
           .contains('Advanced ACLs')

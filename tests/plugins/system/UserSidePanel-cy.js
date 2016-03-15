@@ -8,7 +8,7 @@ describe('User Details Sidepanel [02k]', function () {
         acl: true,
         plugins: 'organization-enabled'
       })
-      .visitUrl({url: '/settings/organization/users/quis', identify: true});
+      .visitUrl({url: '/system/organization/users/quis', identify: true});
     });
 
     it('displays the correct user [05w]', function () {
@@ -87,7 +87,7 @@ describe('User Details Sidepanel [02k]', function () {
           .find('.side-panel-header-action')
           .click();
         cy.get('.modal .button-danger').click();
-        cy.url().should('contain', '/settings/organization/users');
+        cy.url().should('contain', '/system/organization/users');
       });
 
       it('shows error when request to delete user fails [044]', function () {
@@ -241,7 +241,7 @@ describe('User Details Sidepanel [02k]', function () {
           userNoPermissions: true,
           plugins: 'organization-enabled'
         })
-        .visitUrl({url: '/settings/organization/users/quis', identify: true});
+        .visitUrl({url: '/system/organization/users/quis', identify: true});
 
         cy.get('.side-panel .tabs .tab-item-label')
           .contains('Advanced ACLs')
@@ -264,7 +264,7 @@ describe('User Details Sidepanel [02k]', function () {
           acl: true,
           plugins: 'organization-enabled'
         })
-        .visitUrl({url: '/settings/organization/users/quis', identify: true});
+        .visitUrl({url: '/system/organization/users/quis', identify: true});
 
         cy.get('.side-panel .tabs .tab-item-label')
           .contains('Advanced ACLs')
@@ -288,7 +288,7 @@ describe('User Details Sidepanel [02k]', function () {
           userManyPermissions: true,
           plugins: 'organization-enabled'
         })
-        .visitUrl({url: '/settings/organization/users/quis', identify: true});
+        .visitUrl({url: '/system/organization/users/quis', identify: true});
 
         cy.get('.side-panel .tabs .tab-item-label')
           .contains('Advanced ACLs')
@@ -313,7 +313,7 @@ describe('User Details Sidepanel [02k]', function () {
           userManyPermissions: true,
           plugins: 'organization-enabled'
         })
-        .visitUrl({url: '/settings/organization/users/quis', identify: true});
+        .visitUrl({url: '/system/organization/users/quis', identify: true});
 
         cy.get('.side-panel .tabs .tab-item-label')
           .contains('Advanced ACLs')
@@ -344,7 +344,7 @@ describe('User Details Sidepanel [02k]', function () {
           aclCreate: true,
           plugins: 'organization-enabled'
         })
-        .visitUrl({url: '/settings/organization/users/quis', identify: true});
+        .visitUrl({url: '/system/organization/users/quis', identify: true});
 
         cy.get('.side-panel .tabs .tab-item-label')
           .contains('Advanced ACLs')
@@ -383,7 +383,7 @@ describe('User Details Sidepanel [02k]', function () {
         aclCreate: true,
         plugins: 'organization-enabled'
       })
-      .visitUrl({url: '/settings/organization/users/quis', identify: true});
+      .visitUrl({url: '/system/organization/users/quis', identify: true});
     });
 
     it('should have an empty table [08g]', function () {

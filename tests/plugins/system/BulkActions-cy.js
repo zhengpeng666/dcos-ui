@@ -1,4 +1,4 @@
-describe('Settings Page [04x]', function () {
+describe('System Page [04x]', function () {
 
   context('Bulk Groups Actions [04y]', function () {
 
@@ -9,7 +9,7 @@ describe('Settings Page [04x]', function () {
         plugins: 'organization-enabled'
       })
       .route(/api\/v1\/groups/, 'fx:acl/groups-unicode-truncated')
-      .visitUrl({url: '/settings/organization/groups/', identify: true});
+      .visitUrl({url: '/system/organization/groups/', identify: true});
 
       cy.get('tbody .checkbox').as('checkboxes');
       cy.get('tbody .checkbox input').as('checkboxesState');
@@ -90,7 +90,7 @@ describe('Settings Page [04x]', function () {
         plugins: 'organization-enabled'
       })
       .route(/api\/v1\/users/, 'fx:acl/users-unicode-truncated')
-      .visitUrl({url: '/settings/organization/users/', identify: true});
+      .visitUrl({url: '/system/organization/users/', identify: true});
 
       cy.get('tbody .checkbox').as('checkboxes');
       cy.get('tbody .checkbox input').as('checkboxesState');

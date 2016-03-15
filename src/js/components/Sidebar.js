@@ -15,7 +15,7 @@ var MetadataStore = require('../stores/MetadataStore');
 var SidebarActions = require('../events/SidebarActions');
 var TooltipMixin = require('../mixins/TooltipMixin');
 
-let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'network', 'universe', 'settings'];
+let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'network', 'universe', 'system'];
 
 let {Hooks} = PluginSDK;
 
@@ -80,7 +80,6 @@ var Sidebar = React.createClass({
 
     return _.map(menuItems, function (routeKey) {
       var route = this.context.router.namedRoutes[routeKey];
-
       // Figure out if current route is active
       var isActive = route.handler.routeConfig.matches.test(currentPath);
       var iconClasses = {

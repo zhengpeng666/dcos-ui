@@ -9,7 +9,7 @@ describe('Units Tab [0e2]', function () {
           plugins: 'organization-enabled',
           componentHealth: true
         })
-        .visitUrl({url: '/settings/system/units', identify: true});
+        .visitUrl({url: '/system/overview/units', identify: true});
 
       cy.get('.units-health-table-header').within(function () {
         cy.get('.form-control input[type=\'text\']').as('filterTextbox');
@@ -70,7 +70,7 @@ describe('Units Tab [0e2]', function () {
           componentHealth: true
         })
         .visitUrl(
-          {url: '/settings/system/components/mesos_dns_service/', identify: true}
+          {url: '/system/overview/components/mesos_dns_service/', identify: true}
         );
     });
 
@@ -111,7 +111,7 @@ describe('Units Tab [0e2]', function () {
           componentHealth: true
         })
         .visitUrl(
-          {url: '/settings/system/components/mesos_dns_service/nodes/ip-10-10-0-236', identify: true}
+          {url: '/system/overview/components/mesos_dns_service/nodes/ip-10-10-0-236', identify: true}
         );
     });
 
