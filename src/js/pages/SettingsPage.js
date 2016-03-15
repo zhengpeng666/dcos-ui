@@ -112,6 +112,7 @@ class SettingsPage extends mixin(TabsMixin) {
     );
   }
 }
+
 SettingsPage.contextTypes = {
   router: React.PropTypes.func
 };
