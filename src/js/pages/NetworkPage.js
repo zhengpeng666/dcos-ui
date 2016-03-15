@@ -108,20 +108,29 @@ class NetworkPage extends mixin(StoreMixin) {
 
     return (
       <div>
-        <FilterHeadline
-          inverseStyle={true}
-          onReset={this.resetFilter}
-          name="Virtual IPs"
-          currentLength={filteredVIPSummaries.length}
-          totalLength={vipSummaries.length} />
-        <ul className="list list-unstyled list-inline flush-bottom">
-          <li>
-            <FilterInputText
-              searchString={this.state.searchString}
-              handleFilterChange={this.handleSearchStringChange}
-              inverseStyle={true} />
-          </li>
-        </ul>
+        <div className="row row-flex row-flex-align-vertical-bottom">
+          <div className="column-6">
+            <FilterHeadline
+              inverseStyle={true}
+              onReset={this.resetFilter}
+              name="Virtual IPs"
+              currentLength={filteredVIPSummaries.length}
+              totalLength={vipSummaries.length} />
+            <ul className="list list-unstyled list-inline flush-bottom">
+              <li>
+                <FilterInputText
+                  searchString={this.state.searchString}
+                  handleFilterChange={this.handleSearchStringChange}
+                  inverseStyle={true} />
+              </li>
+            </ul>
+          </div>
+          <div className="column-6 text-align-right text-super-muted inverse">
+            <div className="form-group">
+              All stats are for the past minute
+            </div>
+          </div>
+        </div>
         <VIPsTable vips={filteredVIPSummaries} />
       </div>
     );

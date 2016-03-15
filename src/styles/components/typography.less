@@ -68,6 +68,13 @@ components/typography.less
     color: @text-muted-color;
   }
 
+  .text-super-muted {
+
+    &.inverse {
+      color: color-lighten(@neutral, 10);  
+    }
+  }
+
   .text-color-0,
   .text-color-0.inverse {
     color: @purple;
