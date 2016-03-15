@@ -10,7 +10,7 @@ To install, run, and contribute to DCOS-UI on your local machine you will need t
 
 * [DCOS Image](#dcos-image)
 * [DCOS UI Proxy](#dcos-ui-proxy) (Optional)
-* [DCOS UI](#dcos-ui)
+* [DCOS UI](#dcos-ui-1)
 
 ### DCOS UI Proxy
 
