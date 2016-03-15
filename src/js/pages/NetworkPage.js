@@ -9,6 +9,7 @@ import FilterInputText from '../components/FilterInputText';
 import {Hooks} from 'PluginSDK';
 import NetworkingVIPSummariesStore from '../stores/NetworkingVIPSummariesStore';
 import Page from '../components/Page';
+import SidebarActions from '../events/SidebarActions';
 import RequestErrorMsg from '../components/RequestErrorMsg';
 import VIPsTable from '../components/VIPsTable';
 
@@ -184,6 +185,10 @@ NetworkPage.routeConfig = {
   label: 'Network',
   icon: 'network',
   matches: /^\/network/
+};
+
+NetworkPage.willTransitionTo = function () {
+  SidebarActions.close();
 };
 
 module.exports = NetworkPage;
