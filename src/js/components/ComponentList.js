@@ -22,7 +22,7 @@ class ComponentList extends React.Component {
           {
             className: null,
             content: (
-              <Link to="settings-system-units-unit-nodes-panel"
+              <Link to="dashboard-units-unit-nodes-panel"
                 params={{unitID: unit.get('id')}}
                 className="h4 inverse flush-top flush-bottom clickable">
                 {unit.getTitle()}
