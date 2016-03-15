@@ -47,13 +47,6 @@ var DashboardPage = React.createClass({
 
   mixins: [InternalStorageMixin, StoreMixin],
 
-  store_listeners: [
-    {
-      name: 'unitHealth',
-      events: ['success', 'error']
-    }
-  ],
-
   statics: {
     routeConfig: {
       label: 'Dashboard',
@@ -82,6 +75,13 @@ var DashboardPage = React.createClass({
   },
 
   componentWillMount: function () {
+    this.store_listeners = [
+      {
+        name: 'unitHealth',
+        events: ['success', 'error']
+      }
+    ];
+
     this.internalStorage_set({
       openServicePanel: false,
       openTaskPanel: false
