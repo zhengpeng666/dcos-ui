@@ -16,10 +16,6 @@ class UniversePage extends mixin(TabsMixin) {
     this.state = {};
   }
 
-  willTransitionTo() {
-    SidebarActions.close();
-  }
-
   componentWillMount() {
     this.updateCurrentTab();
   }
