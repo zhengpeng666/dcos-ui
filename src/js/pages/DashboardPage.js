@@ -185,7 +185,7 @@ var DashboardPage = React.createClass({
 
   getViewAllServicesBtn: function () {
     var data = this.internalStorage_get();
-    var servicesCount = data.services.length;
+    let servicesCount = data.services.getItems().length;
     if (!servicesCount) {
       return null;
     }
