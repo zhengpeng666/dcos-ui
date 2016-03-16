@@ -2,9 +2,15 @@ import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
 
 import DescriptionList from './DescriptionList';
+import GeminiUtil from '../utils/GeminiUtil';
 import IconDownload from './icons/IconDownload';
 
 class ReviewConfig extends React.Component {
+  componentDidMount() {
+    setTimeout(() => {
+      GeminiUtil.updateWithRef(this.refs.gemini);
+    });
+  }
 
   getHeader() {
     let {
@@ -113,7 +119,7 @@ class ReviewConfig extends React.Component {
     return (
       <div className={this.props.className}>
         {this.getHeader()}
-        <GeminiScrollbar className="modal-content" autoshow={true}>
+        <GeminiScrollbar ref="gemini" className="modal-content" autoshow={true}>
           <div className="modal-content-inner container container-pod container-pod-short flush-top flush-bottom flex-grow">
             {this.getDefinitionReview()}
           </div>
