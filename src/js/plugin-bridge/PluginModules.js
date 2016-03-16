@@ -1,5 +1,8 @@
 // Modules to paths
 module.exports = {
+  constants: {
+    ServiceConstants: 'ServiceConstants'
+  },
   structs: {
     List: 'List',
     Item: 'Item',
