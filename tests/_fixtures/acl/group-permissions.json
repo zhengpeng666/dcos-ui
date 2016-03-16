@@ -6,8 +6,8 @@
       "aclurl": "/acls/dcos:adminrouter:service:marathon",
       "actions": [
         {
-          "name": "access",
-          "url": "/acls/dcos:adminrouter:service:marathon/groups/olis/access"
+          "name": "full",
+          "url": "/acls/dcos:adminrouter:service:marathon/groups/olis/full"
         }
       ]
     }
