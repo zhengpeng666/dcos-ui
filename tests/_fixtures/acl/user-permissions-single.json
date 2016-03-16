@@ -1,6 +1,6 @@
 {
   "direct": [
-    
+
   ],
   "groups": [
     {
@@ -11,8 +11,8 @@
       "membershipurl": "/groups/quis/users/quis",
       "actions": [
         {
-          "name": "access",
-          "url": "/acls/dcos:adminrouter:service:marathon/groups/quis/access"
+          "name": "full",
+          "url": "/acls/dcos:adminrouter:service:marathon/groups/quis/full"
         }
       ]
     }

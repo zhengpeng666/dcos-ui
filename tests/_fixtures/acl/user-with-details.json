@@ -31,8 +31,8 @@
         "aclurl": "/acls/dcos:adminrouter:service:marathon",
         "actions": [
           {
-            "name": "access",
-            "url": "/acls/dcos:adminrouter:service:marathon/users/quis/access"
+            "name": "full",
+            "url": "/acls/dcos:adminrouter:service:marathon/users/quis/full"
           }
         ]
       }
@@ -46,8 +46,8 @@
         "membershipurl": "/groups/quis/users/quis",
         "actions": [
           {
-            "name": "access",
-            "url": "/acls/dcos:adminrouter:service:marathon/groups/quis/access"
+            "name": "full",
+            "url": "/acls/dcos:adminrouter:service:marathon/groups/quis/full"
           }
         ]
       }
