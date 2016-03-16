@@ -1,4 +1,4 @@
-describe('System Page [0dw]', function () {
+describe('Overview Page [0dw]', function () {
 
   context('Components tab [0e0]', function () {
 
@@ -7,7 +7,7 @@ describe('System Page [0dw]', function () {
         mesos: '1-task-healthy',
         plugins: 'organization-enabled'
       })
-      .visitUrl({url: '/settings/system', identify: true});
+      .visitUrl({url: '/system/overview', identify: true});
     });
 
     it('goes to Component Health page when Component tab clicked [0dz]',

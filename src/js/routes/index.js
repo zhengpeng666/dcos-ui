@@ -5,7 +5,7 @@ import {Hooks} from 'PluginSDK';
 import Index from '../pages/Index';
 import nodes from './nodes';
 import NotFoundPage from '../pages/NotFoundPage';
-import Settings from './factories/settings';
+import System from './factories/system';
 import Networking from './factories/networking';
 import services from './services';
 import universe from './universe';
@@ -29,7 +29,7 @@ let applicationRoutes = [
 ];
 
 // Modules that produce routes
-let routeFactories = [Settings, Networking];
+let routeFactories = [System, Networking];
 
 function getApplicationRoutes() {
   let routes = applicationRoutes.slice();

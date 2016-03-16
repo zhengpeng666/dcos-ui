@@ -5,7 +5,7 @@ import React from 'react';
 const repositoryLink = (
   <span>
     {` You can do that on the `}
-    <a href="/#/settings/system/repositories/">Repositories Settings</a>
+    <a href="/#/system/overview/repositories/">Repositories Settings</a>
     {` page, uninstall it, and add the correct URL.`}
   </span>
 );

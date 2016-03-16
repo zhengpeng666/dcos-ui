@@ -176,7 +176,7 @@ var DashboardPage = React.createClass({
     var componentCountWord = StringUtil.pluralize('Component', componentCount);
 
     return (
-      <Link to="settings-system-units"
+      <Link to="system-overview-units"
         className="button button-wide button-inverse more-button">
         {`View all ${componentCount} ${componentCountWord}`}
       </Link>

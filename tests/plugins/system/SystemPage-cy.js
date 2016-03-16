@@ -1,4 +1,4 @@
-describe('Settings Page [05k]', function () {
+describe('System Page [05k]', function () {
 
   context('Groups Tab [05l]', function () {
 
@@ -8,7 +8,7 @@ describe('Settings Page [05k]', function () {
         acl: true,
         plugins: 'organization-enabled'
       })
-      .visitUrl({url: '/settings/organization/groups/', identify: true});
+      .visitUrl({url: '/system/organization/groups/', identify: true});
     });
 
     it('routes to the group page [05p]', function () {
@@ -86,7 +86,7 @@ describe('Settings Page [05k]', function () {
         acl: true,
         plugins: 'organization-enabled'
       })
-      .visitUrl({url: '/settings/organization/users/', identify: true});
+      .visitUrl({url: '/system/organization/users/', identify: true});
     });
 
     it('routes to the user page [05x]', function () {

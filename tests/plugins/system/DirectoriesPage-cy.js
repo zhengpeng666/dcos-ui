@@ -8,9 +8,9 @@ describe('Directories Page [02l]', function () {
     })
     .visitUrl({url: '/', logIn: true});
 
-    cy.get('.sidebar-menu').contains('Settings').click();
+    cy.get('.sidebar-menu').contains('System').click();
     cy.get('.tabs').contains('External Directory').click();
-    cy.hash().should('match', /settings\/organization\/directories/);
+    cy.hash().should('match', /system\/organization\/directories/);
   });
 
   var addDirectoryBtnText = '+ Add Directory';
@@ -23,12 +23,12 @@ describe('Directories Page [02l]', function () {
         acl: true,
         plugins: 'organization-enabled'
       })
-      .visitUrl({url: '/settings/organization/directories', logIn: true});
+      .visitUrl({url: '/system/organization/directories', logIn: true});
 
       cy.get('.page-content .button-success').as('addDirectoryBtn');
     });
 
-    it('displays the add directory button [02n]', function() {
+    it('displays the add directory button [02n]', function () {
       cy.get('@addDirectoryBtn')
         .should(function ($button) {
           expect($button[0].textContent).to.equal(addDirectoryBtnText);
@@ -101,7 +101,7 @@ describe('Directories Page [02l]', function () {
         plugins: 'organization-enabled',
         singleLDAP: true
       })
-      .visitUrl({url: '/settings/organization/directories', logIn: true});
+      .visitUrl({url: '/system/organization/directories', logIn: true});
     });
 
     it('doesn\'t display the add button', function () {
@@ -148,7 +148,7 @@ describe('Directories Page [02l]', function () {
         plugins: 'organization-enabled',
         singleLDAP: true
       })
-      .visitUrl({url: '/settings/organization/directories', logIn: true});
+      .visitUrl({url: '/system/organization/directories', logIn: true});
 
       cy.get('.page-content button').contains('Test Connection').click();
     });

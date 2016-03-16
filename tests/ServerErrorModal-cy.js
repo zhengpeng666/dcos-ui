@@ -16,7 +16,7 @@ describe('ServerErrorModal [01n]', function () {
       status: 422,
       response: {error: 'There was an error.'}
     })
-    .visitUrl({url: '/settings/organization/groups/olis', identify: true})
+    .visitUrl({url: '/system/organization/groups/olis', identify: true})
     .get('.side-panel .side-panel-content-header-label .form-element-inline-text')
     .click();
 
@@ -32,7 +32,7 @@ describe('ServerErrorModal [01n]', function () {
       status: 422,
       response: {error: 'There was an error.'}
     })
-    .visit('http://localhost:4200/#/settings/organization/users/quis')
+    .visit('http://localhost:4200/#/system/organization/users/quis')
     .get('.side-panel .side-panel-content-header-label .form-element-inline-text')
     .click();
 
@@ -48,7 +48,7 @@ describe('ServerErrorModal [01n]', function () {
       status: 422,
       response: {error: 'There was an error.'}
     })
-    .visit('http://localhost:4200/#/settings/organization/groups/olis')
+    .visit('http://localhost:4200/#/system/organization/groups/olis')
     .get('.tabs .tab-item')
     .contains('Members')
     .click();
