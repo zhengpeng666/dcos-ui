@@ -2,9 +2,16 @@ import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
 
 import DescriptionList from './DescriptionList';
+import GeminiUtil from '../utils/GeminiUtil';
 import IconDownload from './icons/IconDownload';
 
 class ReviewConfig extends React.Component {
+  componentDidMount() {
+    // Timeout necessary due to modal content height updates on did mount
+    setTimeout(() => {
+      GeminiUtil.updateWithRef(this.refs.gemini);
+    });
+  }
 
   getHeader() {
     let {
@@ -14,7 +21,15 @@ class ReviewConfig extends React.Component {
       packageType,
       packageVersion
     } = this.props;
-    let parsedConfig = encodeURIComponent(JSON.stringify(configuration));
+    let fileName = 'config.json';
+    let configString = JSON.stringify(configuration, null, 2);
+    let ieDownloadConfig = function () {
+      // Download if on IE
+      if (global.navigator.msSaveOrOpenBlob) {
+        let blob = new Blob([configString], {type: 'application/json'});
+        global.navigator.msSaveOrOpenBlob(blob, fileName);
+      }
+    };
 
     return (
       <div className="modal-header modal-header-bottom-border modal-header-white flex-no-shrink">
@@ -41,8 +56,9 @@ class ReviewConfig extends React.Component {
           <div className="column-8 text-align-right">
             <a
               className="button button-stroke button-rounded"
-              download="config.json"
-              href={`data:text/json;charset=utf-8,${parsedConfig}`}>
+              onClick={ieDownloadConfig}
+              download={fileName}
+              href={`data:attachment/json;content-disposition=attachment;filename=${fileName};charset=utf-8,${encodeURIComponent(configString)}`}>
               <IconDownload /> Download config.json
             </a>
           </div>
@@ -104,7 +120,7 @@ class ReviewConfig extends React.Component {
     return (
       <div className={this.props.className}>
         {this.getHeader()}
-        <GeminiScrollbar className="modal-content" autoshow={true}>
+        <GeminiScrollbar ref="gemini" className="modal-content" autoshow={true}>
           <div className="modal-content-inner container container-pod container-pod-short flush-top flush-bottom flex-grow">
             {this.getDefinitionReview()}
           </div>

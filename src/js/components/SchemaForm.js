@@ -4,6 +4,7 @@ import {Form} from 'reactjs-components';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
 
+import GeminiUtil from '../utils/GeminiUtil';
 import SideTabs from './SideTabs';
 import SchemaFormUtil from '../utils/SchemaFormUtil';
 import SchemaUtil from '../utils/SchemaUtil';
@@ -68,16 +69,12 @@ class SchemaForm extends React.Component {
       this.setState({useGemini: true});
     }
 
+    // Timeout necessary due to modal content height updates on did mount
     setTimeout(() => {
       let {geminiTabs, geminiForms} = this.refs;
 
-      if (geminiTabs) {
-        geminiTabs.scrollbar.update();
-      }
-
-      if (geminiForms) {
-        geminiForms.scrollbar.update();
-      }
+      GeminiUtil.updateWithRef(geminiTabs);
+      GeminiUtil.updateWithRef(geminiForms);
     });
   }
 
