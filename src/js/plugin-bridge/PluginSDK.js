@@ -368,7 +368,6 @@ let unSubscribe = Store.subscribe(function () {
   if (configStore && configStore.config && configStore.config.uiConfiguration) {
     // unsubscribe once we have the config
     unSubscribe();
-    console.log(configStore.config.uiConfiguration.plugins);
     initialize(configStore.config.uiConfiguration.plugins);
   }
 });
