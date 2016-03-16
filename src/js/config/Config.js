@@ -1,4 +1,8 @@
 /* eslint no-redeclare: 0 */
+var _ = require('underscore');
+var ConfigDev = require('./Config.dev.js');
+var ConfigTest = require('./Config.test.js');
+
 var Config = {
   analyticsKey: '@@ANALYTICS_KEY',
   acsAPIPrefix: '/acs/api/v1',
@@ -23,17 +27,11 @@ Config.getRefreshRate = function () {
 
 // @@ENV gets replaced by Broccoli
 if (Config.environment === 'development') {
-  var _ = require('underscore');
-  var ConfigDev = require('./Config.dev.js');
-
   Config.analyticsKey = ''; // Safeguard from developers logging to prod
   Config = _.extend(Config, ConfigDev);
 } else if (Config.environment === 'testing') {
-  var _ = require('underscore');
-  var ConfigDev = require('./Config.test.js');
-
   Config.analyticsKey = ''; // Safeguard from developers logging to prod
-  Config = _.extend(Config, ConfigDev);
+  Config = _.extend(Config, ConfigTest);
 } else if (Config.environment === 'production') {
   Config.useFixtures = false;
 }

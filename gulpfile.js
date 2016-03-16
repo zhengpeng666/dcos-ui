@@ -6,6 +6,7 @@ var changed = require('gulp-changed');
 var connect = require('gulp-connect');
 var del = require('del');
 var eslint = require('gulp-eslint');
+var fs = require('fs');
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
@@ -52,15 +53,21 @@ function deletePluginFile(event) {
   }
 }
 
-// Make temp plugins directory if doesn't exist
-mkdirp(config.dirs.pluginsTmp, function () {
-  console.log('Created ' + config.dirs.pluginsTmp);
-});
+function ensurePluginDirectoryExists() {
+  // Make temp plugins directory if doesn't exist
+  if (!fs.existsSync(config.dirs.pluginsTmp)) {
+    mkdirp(config.dirs.pluginsTmp, function () {
+      console.log('Created ' + config.dirs.pluginsTmp);
+    });
+  }
+}
+gulp.task('create:external-plugins', ensurePluginDirectoryExists);
 
 // Clean out plugins in destination folder
 gulp.task('clean:external-plugins', function () {
   return del([config.dirs.pluginsTmp + '/**/*']);
 });
+
 // Copy over all
 gulp.task('copy:external-plugins', ['clean:external-plugins'], function () {
   return gulp.src(pluginsGlob)
@@ -219,6 +226,7 @@ function webpackFn(callback) {
 }
 gulp.task('default', function (callback) {
   runSequence(
+    'create:external-plugins',
     'copy:external-plugins',
     ['global-js', 'replace-js-strings', 'less', 'images', 'html'],
     'webpack',
