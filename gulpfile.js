@@ -1,3 +1,9 @@
+var fs = require('fs');
+// Make sure we have a Config.dev so we don't error on Config loading
+var configFilePath = './src/js/config/Config.dev.js';
+if (!fs.existsSync(configFilePath)) {
+  fs.writeFileSync(configFilePath, 'module.exports = {};', 'utf8');
+}
 // dependencies
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync');
@@ -6,7 +12,6 @@ var changed = require('gulp-changed');
 var connect = require('gulp-connect');
 var del = require('del');
 var eslint = require('gulp-eslint');
-var fs = require('fs');
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
