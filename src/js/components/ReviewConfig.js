@@ -14,7 +14,15 @@ class ReviewConfig extends React.Component {
       packageType,
       packageVersion
     } = this.props;
-    let parsedConfig = encodeURIComponent(JSON.stringify(configuration));
+    let fileName = 'config.json';
+    let configString = JSON.stringify(configuration, null, 2);
+    let ieDownloadConfig = function () {
+      // Download if on IE
+      if (global.window.navigator.msSaveOrOpenBlob) {
+        let blob = new Blob([configString], {type: 'application/json'});
+        global.window.navigator.msSaveOrOpenBlob(blob, fileName);
+      }
+    };
 
     return (
       <div className="modal-header modal-header-bottom-border modal-header-white flex-no-shrink">
@@ -41,8 +49,9 @@ class ReviewConfig extends React.Component {
           <div className="column-8 text-align-right">
             <a
               className="button button-stroke button-rounded"
-              download="config.json"
-              href={`data:text/json;charset=utf-8,${parsedConfig}`}>
+              onClick={ieDownloadConfig}
+              download={fileName}
+              href={`data:attachment/json;content-disposition=attachment;filename=${fileName};charset=utf-8,${encodeURIComponent(configString)}`}>
               <IconDownload /> Download config.json
             </a>
           </div>
