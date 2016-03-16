@@ -25,9 +25,9 @@ class ReviewConfig extends React.Component {
     let configString = JSON.stringify(configuration, null, 2);
     let ieDownloadConfig = function () {
       // Download if on IE
-      if (global.window.navigator.msSaveOrOpenBlob) {
+      if (global.navigator.msSaveOrOpenBlob) {
         let blob = new Blob([configString], {type: 'application/json'});
-        global.window.navigator.msSaveOrOpenBlob(blob, fileName);
+        global.navigator.msSaveOrOpenBlob(blob, fileName);
       }
     };
 
