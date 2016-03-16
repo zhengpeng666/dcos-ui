@@ -7,6 +7,7 @@ import IconDownload from './icons/IconDownload';
 
 class ReviewConfig extends React.Component {
   componentDidMount() {
+    // Timeout necessary due to modal content height updates on did mount
     setTimeout(() => {
       GeminiUtil.updateWithRef(this.refs.gemini);
     });

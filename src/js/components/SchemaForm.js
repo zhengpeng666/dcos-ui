@@ -69,6 +69,7 @@ class SchemaForm extends React.Component {
       this.setState({useGemini: true});
     }
 
+    // Timeout necessary due to modal content height updates on did mount
     setTimeout(() => {
       let {geminiTabs, geminiForms} = this.refs;
 
