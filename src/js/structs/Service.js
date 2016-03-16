@@ -1,7 +1,9 @@
+import {
+  ROUTE_ACCESS_PREFIX,
+  SERVICE_ID_VALID_CHARACTERS
+} from '../constants/ServiceConstants';
 import HealthStatus from '../constants/HealthStatus';
 import Item from './Item';
-
-const RID_PREFIX = 'dcos:adminrouter:service:';
 
 module.exports = class Service extends Item {
   getHealth() {
@@ -13,8 +15,9 @@ module.exports = class Service extends Item {
   }
 
   getResourceID() {
+    let regexp = new RegExp(`[^${SERVICE_ID_VALID_CHARACTERS}]`, 'g');
     // strip non-alphanumeric chars from name for safety
-    return RID_PREFIX + (this.get('name') || '').replace(/[^a-zA-Z0-9-]/g, '');
+    return ROUTE_ACCESS_PREFIX + (this.get('name') || '').replace(regexp, '');
   }
 
   getNodeIDs() {

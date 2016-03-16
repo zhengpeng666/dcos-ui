@@ -8,6 +8,7 @@ const requireEvents = require.context('../events', false);
 const requireStructs = require.context('../structs', false);
 const requireUtils = require.context('../utils', false);
 const requireMixins = require.context('../mixins', false);
+const requireConstants = require.context('../constants', false);
 const requireComponents = require.context('../components', false);
 const requireCharts = require.context('../components/charts', false);
 const requireIcons = require.context('../components/icons', false);
@@ -80,6 +81,8 @@ function requireModule(dir, name) {
   switch (dir) {
     case 'config':
       return requireConfig(path);
+    case 'constants':
+      return requireConstants(path);
     case 'events':
       return requireEvents(path);
     case 'structs':

@@ -188,11 +188,11 @@ describe('Group Details Sidepanel [02k]', function () {
         cy.get('.side-panel form')
           .find('input[name=resource]').type('dcos:adminrouter:service:marathon');
         cy.get('.side-panel form')
-          .find('input[name=action]').type('access');
+          .find('input[name=action]').type('full');
         cy.get('.side-panel button').contains('Add Rule').click();
         cy.get('@rows').should('have.length', 3);
         cy.get('@rows').eq(1).contains('dcos:adminrouter:service:marathon');
-        cy.get('@rows').eq(1).contains('access');
+        cy.get('@rows').eq(1).contains('full');
       });
 
     });
