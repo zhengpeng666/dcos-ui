@@ -66,7 +66,7 @@ function ensurePluginDirectoryExists() {
     });
   }
 }
-gulp.task('create:external-plugins', ensurePluginDirectoryExists);
+ensurePluginDirectoryExists();
 
 // Clean out plugins in destination folder
 gulp.task('clean:external-plugins', function () {
@@ -231,7 +231,6 @@ function webpackFn(callback) {
 }
 gulp.task('default', function (callback) {
   runSequence(
-    'create:external-plugins',
     'copy:external-plugins',
     ['global-js', 'replace-js-strings', 'less', 'images', 'html'],
     'webpack',
