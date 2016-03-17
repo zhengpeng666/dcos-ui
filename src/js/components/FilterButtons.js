@@ -49,7 +49,7 @@ class FilterButtons extends React.Component {
 
   render() {
     return (
-      <div className="panel-options-left button-group">
+      <div className="panel-options-left button-group flush-bottom">
         {this.getFilterButtons()}
       </div>
     );
