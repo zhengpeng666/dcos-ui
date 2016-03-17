@@ -100,6 +100,7 @@ class ActionsModal extends mixin(StoreMixin) {
   getActionsModalContents() {
     let {actionText, itemType, selectedItems} = this.props;
     let selectedItemsString = '';
+    let actionContent = '';
 
     if (selectedItems.length === 1) {
       selectedItemsString = selectedItems[0].description;
@@ -123,12 +124,22 @@ class ActionsModal extends mixin(StoreMixin) {
         let overflow = selectedItems.length - ITEMS_DISPLAYED;
         selectedItemsString += `and ${overflow} others `;
       }
+      if (actionText.phraseFirst) {
+        selectedItemsString = selectedItemsString.slice(
+          0, selectedItemsString.length - 1
+        );
+      }
+    }
+    if (actionText.phraseFirst) {
+      actionContent = `${actionText.actionPhrase} ${selectedItemsString}.`;
+    } else {
+      actionContent = `${selectedItemsString} ${actionText.actionPhrase}.`;
     }
 
     return (
       <div className="container-pod container-pod-short text-align-center">
         <h3 className="flush-top">{actionText.title}</h3>
-        <p>{`${selectedItemsString} ${actionText.actionPhrase}.`}</p>
+        <p>{actionContent}</p>
         {this.getDropdown(itemType)}
         {this.getErrorMessage(this.state.validationError)}
       </div>
@@ -183,6 +194,7 @@ class ActionsModal extends mixin(StoreMixin) {
 
   render() {
     let action = this.props.action;
+    let props = this.props;
     if (action === null) {
       return null;
     }
@@ -198,7 +210,8 @@ class ActionsModal extends mixin(StoreMixin) {
         leftButtonCallback={this.handleButtonCancel}
         rightButtonCallback={this.handleButtonConfirm}
         rightButtonText={StringUtil.capitalize(action)}
-        useGemini={false}>
+        useGemini={false}
+        {...props}>
         {this.getActionsModalContents()}
       </Confirm>
     );
