@@ -83,18 +83,18 @@ let ServiceList = React.createClass({
       return {
         content: [
           {
-            className: null,
+            className: 'text-overflow',
             content: (
               <a key="title"
                 onClick={this.handleServiceClick.bind(this, service.name)}
-                className="h4 inverse flush-top flush-bottom clickable">
+                className="h4 inverse flush-top flush-bottom clickable text-overflow">
                 {service.name}
               </a>
             ),
             tag: 'span'
           },
           {
-            className: null,
+            className: 'service-list-component-health-label',
             content: (
               <div key="health" className={classSet} {...attributes}>
                 {healthLabel}
@@ -109,7 +109,7 @@ let ServiceList = React.createClass({
 
   getNoServicesMessage: function () {
     return (
-      <div className="vertical-center">
+      <div className="container container-pod-fluid">
         <h3 className="flush-top inverse text-align-center">No Services Running</h3>
         <p className="inverse flush text-align-center">Use the DCOS command line tools to find and install services.</p>
       </div>
@@ -122,7 +122,7 @@ let ServiceList = React.createClass({
     return (
       <div className="service-list-component">
         <List
-          className="list list-unstyled flush"
+          className="list list-unstyled"
           content={this.getServices(props.services, props.healthProcessed)}
           transition={false} />
       </div>
