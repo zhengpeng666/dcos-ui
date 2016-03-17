@@ -49,7 +49,7 @@ class UniversePage extends mixin(TabsMixin) {
     return (
       <ul className="tabs list-inline list-unstyled">
         <li className="tab-item-label h1 page-header-title inverse flush">
-          DCOS Universe
+          Universe
         </li>
       </ul>
     );
