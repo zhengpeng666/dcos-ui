@@ -13,9 +13,17 @@
   /* Page Header */
   .page-header {
     .clearfix();
+    background-color: @page-header-background-color;
 
-    /* Page Header Context */
+    .page-header-navigation {
+
+      .container-pod {
+        padding-top: 0;
+      }
+    }
+
     .page-header-context {
+
       width: 100%;
       .tabs {
         li {
@@ -75,7 +83,6 @@
     /* Page Header Navigation */
     .page-header-navigation {
       clear: both;
-      margin-bottom: -@container-pod-short-padding-vertical;
     }
   }
 }
@@ -118,13 +125,12 @@
 & when (@screen-mini-enabled) {
   @media (min-width: @screen-mini) {
 
-    /* Page */
     .page {
-      /* Page Header */
+
       .page-header {
-        /* Page Header Navigation */
+
         .page-header-navigation {
-          margin-bottom: -@container-pod-short-padding-vertical-screen-mini;
+
         }
       }
     }
@@ -146,14 +152,15 @@
       /* Page Header */
       .page-header {
         .page-header-context {
-          .page-header-sidebar-toggle {
-            display: none;
-          }
+          display: none;
         }
 
         /* Page Header Navigation */
         .page-header-navigation {
-          margin-bottom: -@container-pod-short-padding-vertical-screen-small;
+
+          .container-pod {
+            padding-top: @container-pod-short-padding-vertical;
+          }
         }
       }
     }
@@ -173,7 +180,10 @@
 
         /* Page Header Navigation */
         .page-header-navigation {
-          margin-bottom: -@container-pod-short-padding-vertical-screen-medium;
+
+          .container-pod {
+            padding-top: @container-pod-short-padding-vertical;
+          }
         }
       }
     }
@@ -193,7 +203,10 @@
 
         /* Page Header Navigation */
         .page-header-navigation {
-          margin-bottom: -@container-pod-short-padding-vertical-screen-large;
+
+          .container-pod {
+            padding-top: @container-pod-short-padding-vertical;
+          }
         }
       }
     }

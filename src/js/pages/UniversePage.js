@@ -45,20 +45,10 @@ class UniversePage extends mixin(TabsMixin) {
     );
   }
 
-  getTitle() {
-    return (
-      <ul className="tabs list-inline list-unstyled">
-        <li className="tab-item-label h1 page-header-title inverse flush">
-          Universe
-        </li>
-      </ul>
-    );
-  }
-
   render() {
     return (
       <Page
-        title={this.getTitle()}
+        title="Universe"
         navigation={this.getNavigation()}>
         <RouteHandler />
       </Page>

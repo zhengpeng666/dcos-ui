@@ -73,18 +73,18 @@ class SystemPage extends mixin(TabsMixin) {
     return (
       <Link
         to={tab}
-        className="tab-item-label h1 page-header-title inverse flush">
+        className="tab-item-label inverse flush">
         {SYSTEM_TABS[tab]}
       </Link>
     );
   }
 
-  getTitle() {
+  getNavigation() {
     let routes = this.context.router.getCurrentRoutes();
     let currentRoute = routes[routes.length - 2].name;
 
     return (
-      <ul className="tabs list-inline list-unstyled">
+      <ul className="tabs list-inline flush-bottom inverse">
         {TabsUtil.getTabs(
           SYSTEM_TABS,
           currentRoute,
@@ -94,7 +94,7 @@ class SystemPage extends mixin(TabsMixin) {
     );
   }
 
-  getNavigation() {
+  getSubNavigation() {
     return (
       <ul className="tabs list-inline flush-bottom inverse">
         {this.tabs_getRoutedTabs()}
@@ -105,8 +105,13 @@ class SystemPage extends mixin(TabsMixin) {
   render() {
     return (
       <Page
-        title={this.getTitle()}
+        title="System"
         navigation={this.getNavigation()}>
+        <div className="container-pod container-pod-short flush-top">
+          <div className="container-pod container-pod-divider-bottom container-pod-divider-inverse container-pod-divider-bottom-align-right flush-top flush-bottom">
+            {this.getSubNavigation()}
+          </div>
+        </div>
         <RouteHandler currentTab={this.state.currentTab} />
       </Page>
     );
