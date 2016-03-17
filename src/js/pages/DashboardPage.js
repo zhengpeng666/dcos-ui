@@ -259,7 +259,7 @@ var DashboardPage = React.createClass({
           </div>
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel
-              className="panel dashboard-panel"
+              className="panel dashboard-panel dashboard-panel-list"
               heading={this.getHeading('Services Health')}
               headingClass="panel-header panel-header-bottom-border inverse short">
               <ServiceList
@@ -278,7 +278,7 @@ var DashboardPage = React.createClass({
           </div>
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel
-              className="panel dashboard-panel"
+              className="panel dashboard-panel dashboard-panel-list"
               heading={this.getHeading('Component Health')}
               headingClass="panel-header panel-header-bottom-border inverse short">
               <ComponentList
