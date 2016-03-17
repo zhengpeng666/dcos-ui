@@ -32,10 +32,10 @@ var webpackConfig = require('./.webpack.config');
 
 var development = process.env.NODE_ENV === 'development';
 var devBuild = development || (process.env.NODE_ENV === 'testing');
-var appConfig = require('./src/js/config/Config');
+var externalPluginsDirectory = '../dcos-ui-plugins-private';
 
 var pluginsGlob = [
-  appConfig.externalPluginsDirectory + '/**/*.*'
+  externalPluginsDirectory + '/**/*.*'
 ];
 
 function browserSyncReload() {
@@ -48,7 +48,7 @@ function browserSyncReload() {
 function deletePluginFile(event) {
   if (event.type === 'deleted') {
     var filePathFromPlugins = path.relative(
-      path.resolve(appConfig.externalPluginsDirectory), event.path);
+      path.resolve(externalPluginsDirectory), event.path);
 
     var destFilePath = path.resolve(
       config.dirs.pluginsTmp, filePathFromPlugins);
@@ -232,8 +232,9 @@ function webpackFn(callback) {
 gulp.task('default', function (callback) {
   runSequence(
     'copy:external-plugins',
-    ['global-js', 'replace-js-strings', 'less', 'images', 'html'],
+    ['global-js', 'less', 'images', 'html'],
     'webpack',
+    'replace-js-strings',
     'eslint',
     callback);
 });

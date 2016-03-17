@@ -10,7 +10,6 @@ var Config = {
   cosmosAPIPrefix: '/package',
   delayAfterErrorCount: 5,
   environment: '@@ENV',
-  externalPluginsDirectory: '../dcos-ui-plugins-private',
   historyLength: 31,
   historyServer: '',
   rootUrl: '',
