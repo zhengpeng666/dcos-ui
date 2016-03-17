@@ -196,6 +196,7 @@ var ServicesPage = React.createClass({
           </li>
           <li>
             <FilterInputText
+              className="flush-bottom"
               searchString={state.searchString}
               handleFilterChange={this.handleSearchStringChange}
               inverseStyle={true} />

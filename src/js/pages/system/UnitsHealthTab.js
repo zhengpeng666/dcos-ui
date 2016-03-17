@@ -152,7 +152,9 @@ class UnitsHealthTab extends mixin(StoreMixin) {
     let dataItems = data.getItems();
     let {healthFilter, searchString} = this.state;
     let visibleData = this.getVisibleData(data, searchString, healthFilter);
-    let pluralizedItemName = StringUtil.pluralize('Unit', dataItems.length);
+    let pluralizedItemName = StringUtil.pluralize(
+      'Component', dataItems.length
+    );
     let dataHealth = dataItems.map(function (unit) {
       return unit.getHealth();
     });
@@ -180,6 +182,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
                 </div>
                 <div className="media-object-item media-object-align-top">
                   <FilterInputText
+                    className="flush-bottom"
                     searchString={searchString}
                     handleFilterChange={this.handleSearchStringChange}
                     inverseStyle={true} />

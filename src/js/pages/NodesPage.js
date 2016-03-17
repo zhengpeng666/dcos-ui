@@ -200,9 +200,10 @@ var NodesPage = React.createClass({
 
     return (
       <FilterInputText
-          searchString={this.state.searchString}
-          handleFilterChange={this.handleSearchStringChange}
-          inverseStyle={true} />
+        className="flush-bottom"
+        searchString={this.state.searchString}
+        handleFilterChange={this.handleSearchStringChange}
+        inverseStyle={true} />
     );
   },
 
@@ -220,7 +221,7 @@ var NodesPage = React.createClass({
     }, buttonClasses));
 
     return (
-      <div className="button-group">
+      <div className="button-group flush-bottom">
         <Link className={listClassSet} onClick={resetFilter} to="nodes-list">List</Link>
         <Link className={gridClassSet} onClick={resetFilter} to="nodes-grid">Grid</Link>
       </div>
@@ -273,7 +274,7 @@ var NodesPage = React.createClass({
                   selectedFilter={state.healthFilter} />
               </div>
               <div className="media-object-item media-object-align-top">
-                <div className="form-group">
+                <div className="form-group flush-bottom">
                   <FilterByService
                     byServiceFilter={state.byServiceFilter}
                     services={data.services}
