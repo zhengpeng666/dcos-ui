@@ -310,7 +310,7 @@ class MesosLogView extends mixin(StoreMixin) {
     }
 
     return (
-      <div className="log-view flex-grow flex-container-col">
+      <div className="log-view flex-grow flex-shrink flex-container-col">
         {this.getLog()}
         <ReactCSSTransitionGroup
           transitionAppear={true}

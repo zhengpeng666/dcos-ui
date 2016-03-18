@@ -170,7 +170,7 @@ class TaskDebugView extends React.Component {
     let filePath = selectedLogFile && selectedLogFile.get('path');
 
     return (
-      <div className="flex-container-col flex-grow">
+      <div className="flex-container-col flex-grow flex-shrink">
         <div className="control-group form-group flex-no-shrink flex-align-right flush-bottom">
           <FilterInputText
             className="flex-grow"
