@@ -84,7 +84,8 @@
     "run-sequence": "1.1.5",
     "source-map-loader": "0.1.3",
     "transform-loader": "0.2.3",
-    "webpack": "1.10.1"
+    "webpack": "1.10.1",
+    "webpack-notifier": "1.3.0"
   },
   "scripts": {
     "clean": "rm -rf build",
@@ -94,8 +95,10 @@
     "prebuild-ce": "./scripts/validate-tests",
     "build-ce": "npm run clean && npm test && NODE_ENV='production' ./node_modules/.bin/gulp dist",
     "serve": "NODE_ENV='development' ./node_modules/.bin/gulp serve",
+    "serve-notify": "export NOTIFY=true && npm run serve",
     "testing": "NODE_ENV='testing' ./node_modules/.bin/gulp serve",
     "livereload": "NODE_ENV='development' ./node_modules/.bin/gulp livereload",
+    "livereload-notify": "export NOTIFY=true && npm run livereload",
     "test": "./node_modules/.bin/gulp copy:external-plugins && ./node_modules/.bin/gulp eslint && jest"
   },
   "jest-webpack-alias": {

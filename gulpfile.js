@@ -25,6 +25,7 @@ var runSequence = require('run-sequence');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var webpack = require('webpack');
+var WebpackNotifierPlugin = require('webpack-notifier');
 
 var config = require('./.build.config');
 var packageInfo = require('./package');
@@ -203,6 +204,13 @@ gulp.task('global-js', function () {
 
 function webpackFn(callback) {
   var firstRun = true;
+
+  if (process.env.NOTIFY === 'true') {
+    webpackConfig.plugins.push(new WebpackNotifierPlugin({
+      alwaysNotify: true,
+      title: 'DCOS UI - ' + packageInfo.version
+    }));
+  }
 
   webpack(webpackConfig, function (err, stats) {
     if (err) {
