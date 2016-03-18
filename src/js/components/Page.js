@@ -62,10 +62,8 @@ var Page = React.createClass({
   getPageHeader: function (title, navigation) {
     return (
       <div className="page-header">
-        <div className="">
-          {this.getTitle(title)}
-          {this.getNavigation(navigation, title)}
-        </div>
+        {this.getTitle(title)}
+        {this.getNavigation(navigation, title)}
       </div>
     );
   },
