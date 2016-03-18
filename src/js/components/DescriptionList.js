@@ -16,7 +16,7 @@ class DescriptionList extends React.Component {
   }
 
   getItems() {
-    let {hash} = this.props;
+    let {hash, dtClassName, ddClassName} = this.props;
 
     return Object.keys(hash).map(function (key, index) {
       let value = hash[key];
@@ -37,8 +37,8 @@ class DescriptionList extends React.Component {
 
       return (
         <dl key={index} className="flex-box row">
-          <dt className="column-3 emphasize">{key}</dt>
-          <dd className="column-9">{value}</dd>
+          <dt className={dtClassName}>{key}</dt>
+          <dd className={ddClassName}>{value}</dd>
         </dl>
       );
     });
@@ -61,11 +61,15 @@ class DescriptionList extends React.Component {
 
 DescriptionList.defaultProps = {
   className: '',
+  ddClassName: 'column-9',
+  dtClassName: 'column-3 emphasize',
   key: ''
 };
 
 DescriptionList.propTypes = {
   className: React.PropTypes.string,
+  ddClassName: React.PropTypes.string,
+  dtClassName: React.PropTypes.string,
   headline: React.PropTypes.node,
   hash: React.PropTypes.object,
   key: React.PropTypes.string
