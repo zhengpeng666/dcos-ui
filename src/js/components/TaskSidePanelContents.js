@@ -266,7 +266,7 @@ class TaskSidePanelContents extends SidePanelContents {
     }
 
     return (
-      <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow">
+      <div className="container container-fluid container-pod container-pod-short flex-container-col flex-grow flex-shrink">
         <TaskDebugView
           selectedLogFile={state.selectedLogFile}
           showExpandButton={this.showExpandButton}
