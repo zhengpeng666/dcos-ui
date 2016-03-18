@@ -1,33 +1,45 @@
-/* Page */
+@page-header-font-size: @body-text-font-size * 1.4;
+
 .page {
-  position: relative;
   display: flex;
   flex: 1;
-  top: 0px;
-  left: 0px;
   height: 100%;
-  width: 100%;
+  left: 0px;
   overflow: hidden;
-  .transition(e('left 0.3s ease, margin-left 0.3s ease'));
+  position: relative;
+  top: 0px;
+  transition: left 0.3s ease-in-out, margin-left 0.3s ease-in-out;
+  width: 100%;
 
-  /* Page Header */
   .page-header {
     .clearfix();
     background-color: @page-header-background-color;
 
     .page-header-navigation {
+      font-size: @page-header-font-size;
 
       .container-pod {
-        padding-top: 0;
+        padding-top: @base-spacing-unit * 1/3;
+      }
+
+      .tab-item {
+        padding-bottom: @container-pod-short-padding-vertical * 1/2;
+
+        &:after {
+          bottom: 0;
+        }
       }
     }
 
     .page-header-context {
-
       width: 100%;
+
       .tabs {
+
         li {
+
           &.active {
+
             &:after {
               .opacity(0.0);
             }
@@ -141,25 +153,23 @@
 & when (@screen-small-enabled) {
   @media (min-width: @screen-small) {
 
-    /* Page */
     .page {
-      margin-left: (2 * (@base-spacing-unit-screen-small * 0.5)) + @icon-medium-width;;
-      .transition(none);
-      position: relative;
       height: 100%;
+      margin-left: (2 * (@base-spacing-unit-screen-small * 0.5)) + @icon-medium-width;
+      position: relative;
+      transition: none;
       width: auto;
 
-      /* Page Header */
       .page-header {
+
         .page-header-context {
           display: none;
         }
 
-        /* Page Header Navigation */
         .page-header-navigation {
 
           .container-pod {
-            padding-top: @container-pod-short-padding-vertical;
+            padding-top: @container-pod-short-padding-vertical * 2;
           }
         }
       }
@@ -171,18 +181,15 @@
 & when (@screen-medium-enabled) {
   @media (min-width: @screen-medium) {
 
-    /* Page */
     .page {
       margin-left: 250px;
 
-      /* Page Header */
       .page-header {
 
-        /* Page Header Navigation */
         .page-header-navigation {
 
           .container-pod {
-            padding-top: @container-pod-short-padding-vertical;
+            padding-top: @container-pod-short-padding-vertical * 2;
           }
         }
       }
@@ -194,18 +201,15 @@
 & when (@screen-large-enabled) {
   @media (min-width: @screen-large) {
 
-    /* Page */
     .page {
       margin-left: 300px;
 
-      /* Page Header */
       .page-header {
 
-        /* Page Header Navigation */
         .page-header-navigation {
 
           .container-pod {
-            padding-top: @container-pod-short-padding-vertical;
+            padding-top: @container-pod-short-padding-vertical * 2;
           }
         }
       }
