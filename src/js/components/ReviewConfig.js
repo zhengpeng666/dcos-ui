@@ -112,7 +112,11 @@ class ReviewConfig extends React.Component {
 
   renderDescriptionList(hash, key) {
     return (
-      <DescriptionList hash={hash} key={key} />
+      <DescriptionList
+        hash={hash}
+        key={key}
+        ddClassName="column-6"
+        dtClassName="column-6 emphasize"/>
     );
   }
 
