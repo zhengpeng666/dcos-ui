@@ -9,6 +9,7 @@ var Config = {
   networkingAPIPrefix: '/networking/api/v1',
   cosmosAPIPrefix: '/package',
   delayAfterErrorCount: 5,
+  dcosDocsURL: 'http://docs.mesosphere.com',
   environment: '@@ENV',
   historyLength: 31,
   historyServer: '',

@@ -2,6 +2,7 @@
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
+import {dcosDocsURL} from '../config/Config';
 import RequestErrorMsg from './RequestErrorMsg';
 import SidePanelContents from './SidePanelContents';
 import UnitHealthStore from '../stores/UnitHealthStore';
@@ -80,6 +81,11 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
 
   getNodeInfo(node, unit) {
     let unitSummary = UnitSummaries[unit.get('id')] || {};
+    let unitDocsURL = unitSummary.documentation_url;
+
+    if (!unitDocsURL) {
+      unitDocsURL = dcosDocsURL;
+    }
 
     return (
       <div className="flex-container-col flex-grow">
@@ -88,7 +94,7 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
           {unitSummary.summary}
         </p>
         <p>
-          <a href={unitSummary.documentation_url} target="_blank">
+          <a href={unitDocsURL} target="_blank">
             View Documentation
           </a>
         </p>
