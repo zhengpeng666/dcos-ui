@@ -52,7 +52,7 @@ function stopPolling() {
 
 const NodeHealthStore = Store.createStore({
 
-  storeID: 'unitHealth',
+  storeID: 'nodeHealth',
 
   mixins: [GetSetMixin],
 

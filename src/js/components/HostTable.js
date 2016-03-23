@@ -1,8 +1,10 @@
 var classNames = require('classnames');
 import {Link} from 'react-router';
 var React = require('react');
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 var HostTableHeaderLabels = require('../constants/HostTableHeaderLabels');
+var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var ResourceTableUtil = require('../utils/ResourceTableUtil');
 var ProgressBar = require('./charts/ProgressBar');
 import StringUtil from '../utils/StringUtil';
@@ -15,7 +17,7 @@ var HostTable = React.createClass({
 
   displayName: 'HostTable',
 
-  mixins: [TooltipMixin],
+  mixins: [InternalStorageMixin, TooltipMixin, StoreMixin],
 
   statics: {
     routeConfig: {
@@ -33,6 +35,27 @@ var HostTable = React.createClass({
     return {
       hosts: []
     };
+  },
+
+  componentWillMount: function () {
+    this.internalStorage_set({
+      nodeHealthRequestReceived: false
+    });
+
+    this.store_listeners = [
+      {
+        name: 'nodeHealth',
+        events: ['success'],
+        listenAlways: false
+      }
+    ];
+  },
+
+  onNodeHealthStoreSuccess: function () {
+    this.internalStorage_set({
+      nodeHealthRequestReceived: true
+    });
+    this.forceUpdate();
   },
 
   renderHeadline: function (prop, node) {
@@ -68,6 +91,18 @@ var HostTable = React.createClass({
   },
 
   renderHealth: function (prop, node) {
+    let requestReceived = this.internalStorage_get().nodeHealthRequestReceived;
+
+    if (!requestReceived) {
+      return (
+        <div className="loader-small ball-beat">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      );
+    }
+
     let health = node.getHealth();
 
     return (

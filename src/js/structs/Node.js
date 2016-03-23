@@ -26,7 +26,11 @@ class Node extends Item {
   }
 
   getOutput() {
-    return this.get('output') || 'N/A';
+    if (typeof this.get('output') === undefined) {
+      return 'N/A';
+    }
+
+    return this.get('output') || 'OK';
   }
 
 }
