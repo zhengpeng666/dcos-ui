@@ -9,7 +9,6 @@ var ChartMixin = require('../../mixins/ChartMixin');
 var InternalStorageMixin = require('../../mixins/InternalStorageMixin');
 var VisibilityUtil = require('../../utils/VisibilityUtil');
 
-
 var BarChart = React.createClass({
 
   displayName: 'BarChart',
