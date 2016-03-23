@@ -45,7 +45,7 @@ var Page = React.createClass({
 
     return (
       <div className="page-header-navigation">
-        <div className="container container-fluid container-pod container-pod-short flush-bottom page-header-navigation-flush-top-mini">
+        <div className="container container-fluid container-pod container-pod-short flush-bottom">
           {this.props.navigation}
         </div>
       </div>
