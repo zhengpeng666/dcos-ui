@@ -39,7 +39,7 @@ var HostTable = React.createClass({
 
   componentWillMount: function () {
     this.internalStorage_set({
-      nodeHealthRequestReceived: false
+      nodeHealthResponseReceived: false
     });
 
     this.store_listeners = [
@@ -53,7 +53,7 @@ var HostTable = React.createClass({
 
   onNodeHealthStoreSuccess: function () {
     this.internalStorage_set({
-      nodeHealthRequestReceived: true
+      nodeHealthResponseReceived: true
     });
     this.forceUpdate();
   },
@@ -91,7 +91,7 @@ var HostTable = React.createClass({
   },
 
   renderHealth: function (prop, node) {
-    let requestReceived = this.internalStorage_get().nodeHealthRequestReceived;
+    let requestReceived = this.internalStorage_get().nodeHealthResponseReceived;
 
     if (!requestReceived) {
       return (
