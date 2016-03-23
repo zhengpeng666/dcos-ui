@@ -19,7 +19,7 @@ let visibility = (function () {
 
   // Find first stateKey available on document
   Object.keys().some(function (stateKey) {
-    if (stateKey in document) {
+    if (stateKey in global.document) {
       eventKey = keys[stateKey];
       return true;
     }
@@ -28,11 +28,11 @@ let visibility = (function () {
 
   return {
     addEventListener(callback) {
-      document.addEventListener(eventKey, callback);
+      global.document.addEventListener(eventKey, callback);
     },
 
     getVisibility() {
-      return !document[stateKey];
+      return !global.document[stateKey];
     }
   }
 })();
