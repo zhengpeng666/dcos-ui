@@ -7,7 +7,7 @@ const VisibilityUtil = {
 };
 
 // Use visibility API to check if current tab is active or not
-let vis = (function () {
+let visibility = (function () {
   let stateKey;
   let eventKey;
   let keys = {
@@ -17,24 +17,32 @@ let vis = (function () {
     msHidden: 'msvisibilitychange'
   };
 
-  for (stateKey in keys) {
+  // Find first stateKey available on document
+  Object.keys().some(function (stateKey) {
     if (stateKey in document) {
-        eventKey = keys[stateKey];
-        break;
+      eventKey = keys[stateKey];
+      return true;
     }
-  }
-  return function(callback) {
-    if (callback) {
+    return false;
+  });
+
+  return {
+    addEventListener(callback) {
       document.addEventListener(eventKey, callback);
+    },
+
+    getVisibility() {
+      return !document[stateKey];
     }
-    return !document[stateKey];
   }
 })();
 
 // Listen for visibility change events
-vis(function () {
+visibility.addEventListener(function () {
+  // We need setTimeout because browser hasn't yet given us the execution
+  // context.
   setTimeout(function () {
-    isTabVisible = vis();
+    isTabVisible = visibility.getVisibility();
   }, 0);
 });
 
