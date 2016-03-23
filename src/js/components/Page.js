@@ -1,4 +1,3 @@
-var _ = require('underscore');
 var classNames = require('classnames');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var React = require('react');
@@ -13,11 +12,12 @@ var Page = React.createClass({
   mixins: [InternalStorageMixin],
 
   propTypes: {
-    title: React.PropTypes.oneOfType([
+    className: React.PropTypes.string,
+    navigation: React.PropTypes.oneOfType([
       React.PropTypes.object,
       React.PropTypes.string
     ]),
-    navigation: React.PropTypes.oneOfType([
+    title: React.PropTypes.oneOfType([
       React.PropTypes.object,
       React.PropTypes.string
     ])
@@ -30,61 +30,65 @@ var Page = React.createClass({
     this.forceUpdate();
   },
 
-  getNavigation: function () {
-    let navigation = this.props.navigation;
+  getChildren: function () {
+    var data = this.internalStorage_get();
+    if (data.rendered === true) {
+      return this.props.children;
+    }
+
+    return null;
+  },
+
+  getNavigation: function (navigation) {
     if (!navigation) {
       return null;
     }
 
     return (
       <div className="page-header-navigation">
-        {this.props.navigation}
+        <div className="container container-fluid container-pod container-pod-short flush-bottom">
+          {navigation}
+        </div>
       </div>
     );
   },
 
-  getChildren: function () {
-    var data = this.internalStorage_get();
-    if (data.rendered === true) {
-      return this.props.children;
-    }
-    return null;
+  getPageHeader: function (title, navigation) {
+    return (
+      <div className="page-header">
+        {this.getTitle(title)}
+        {this.getNavigation(navigation, title)}
+      </div>
+    );
   },
 
-  getTitle: function () {
-    if (_.isObject(this.props.title)) {
-      return this.props.title;
-    } else {
-      return (
-        <h1 className="page-header-title inverse flush">
-          {this.props.title}
-        </h1>
-      );
+  getTitle: function (title) {
+    if (!title) {
+      return null;
+    } else if (React.isValidElement(title)) {
+      return title;
     }
+
+    return (
+      <div className="page-header-context">
+        <div className="container container-fluid container-pod container-pod-short">
+          <h1 className="page-header-title inverse flush">
+            <SidebarToggle />
+            {title}
+          </h1>
+        </div>
+      </div>
+    );
   },
 
   render: function () {
-    var classes = {
-      'page': true,
-      'flex-container-col': true
-    };
-    if (this.props.className) {
-      classes[this.props.className] = true;
-    }
+    let {className, navigation, title} = this.props;
 
-    var classSet = classNames(classes);
+    let classSet = classNames('page flex-container-col', className);
 
     return (
       <div className={classSet}>
-        <div className="page-header">
-          <div className="container container-fluid container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-inverse container-pod-divider-bottom-align-right">
-            <div className="page-header-context">
-              <SidebarToggle />
-              {this.getTitle()}
-            </div>
-            {this.getNavigation()}
-          </div>
-        </div>
+        {this.getPageHeader(title, navigation)}
         <GeminiScrollbar autoshow={true} className="page-content container-scrollable inverse">
           <div className="flex-container-col container container-fluid container-pod container-pod-short-top">
             {this.getChildren()}
