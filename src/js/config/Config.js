@@ -17,6 +17,7 @@ var Config = {
   fullProductName: 'DC/OS',
   productName: 'DC/OS',
   productHomepageURI: 'https://dcos.io',
+  setInactiveAfter: 30000,
   rootUrl: '',
   stateLoadDelay: 1000,
   slackChannel: 'https://dcos-community.slack.com/messages/general/',
