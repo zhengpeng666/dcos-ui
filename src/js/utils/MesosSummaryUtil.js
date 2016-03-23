@@ -118,6 +118,10 @@ const MesosSummaryUtil = {
     var timeNow = Date.now() - timeStep;
 
     return _.map(data, function (datum, i) {
+      if (datum.date == null) {
+        return datum;
+      }
+
       var timeDelta = (-length + i) * timeStep;
       datum.date = timeNow + timeDelta;
       return datum;
