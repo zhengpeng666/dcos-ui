@@ -35,6 +35,7 @@ var Page = React.createClass({
     if (data.rendered === true) {
       return this.props.children;
     }
+
     return null;
   },
 
@@ -46,7 +47,7 @@ var Page = React.createClass({
     return (
       <div className="page-header-navigation">
         <div className="container container-fluid container-pod container-pod-short flush-bottom">
-          {this.props.navigation}
+          {navigation}
         </div>
       </div>
     );
@@ -66,28 +67,24 @@ var Page = React.createClass({
       return null;
     } else if (React.isValidElement(title)) {
       return title;
-    } else {
-      return (
-        <div className="page-header-context">
-          <div className="container container-fluid container-pod container-pod-short">
-            <h1 className="page-header-title inverse flush">
-              <SidebarToggle />
-              {title}
-            </h1>
-          </div>
-        </div>
-      );
     }
+
+    return (
+      <div className="page-header-context">
+        <div className="container container-fluid container-pod container-pod-short">
+          <h1 className="page-header-title inverse flush">
+            <SidebarToggle />
+            {title}
+          </h1>
+        </div>
+      </div>
+    );
   },
 
   render: function () {
     let {className, navigation, title} = this.props;
 
-    let classSet = classNames({
-      'page': true,
-      'flex-container-col': true,
-      [className]: className
-    });
+    let classSet = classNames('page flex-container-col', className);
 
     return (
       <div className={classSet}>
