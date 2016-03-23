@@ -1,4 +1,3 @@
-var _ = require('underscore');
 var classNames = require('classnames');
 var GeminiScrollbar = require('react-gemini-scrollbar');
 var React = require('react');
@@ -39,20 +38,14 @@ var Page = React.createClass({
     return null;
   },
 
-  getNavigation: function (navigation, title) {
+  getNavigation: function (navigation) {
     if (!navigation) {
       return null;
     }
 
-    let classSet = classNames({
-      'container container-fluid': true,
-      'container-pod container-pod-short flush-bottom': true,
-      'page-header-navigation-flush-top-mini': false
-    });
-
     return (
       <div className="page-header-navigation">
-        <div className={classSet}>
+        <div className="container container-fluid container-pod container-pod-short flush-bottom page-header-navigation-flush-top-mini">
           {this.props.navigation}
         </div>
       </div>
@@ -71,7 +64,7 @@ var Page = React.createClass({
   getTitle: function (title) {
     if (!title) {
       return null;
-    } else if (_.isObject(title)) {
+    } else if (React.isValidElement(title)) {
       return title;
     } else {
       return (
@@ -90,7 +83,7 @@ var Page = React.createClass({
   render: function () {
     let {className, navigation, title} = this.props;
 
-    var classSet = classNames({
+    let classSet = classNames({
       'page': true,
       'flex-container-col': true,
       [className]: className
