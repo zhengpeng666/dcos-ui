@@ -169,7 +169,6 @@ class TaskDirectoryTable extends React.Component {
         sortFunction: statSortFunction
       },
       {
-        cacheCell: true,
         prop: 'mtime',
         render: this.renderDate,
         sortFunction: statSortFunction

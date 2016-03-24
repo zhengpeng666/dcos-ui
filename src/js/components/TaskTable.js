@@ -44,9 +44,8 @@ class TaskTable extends React.Component {
     return [
       {
         className,
-        cacheCell: true,
-        heading,
         headerClassName: className,
+        heading,
         prop: 'name',
         render: this.renderHeadline,
         sortable: true,
@@ -54,36 +53,38 @@ class TaskTable extends React.Component {
       },
       {
         className,
-        cacheCell: true,
-        heading,
         headerClassName: className,
+        heading,
         prop: 'updated',
         render: ResourceTableUtil.renderUpdated,
         sortable: true,
         sortFunction: propSortFunction
       },
       {
+        cacheCell: true,
         className,
-        heading,
         headerClassName: className,
+        heading,
         prop: 'state',
         render: this.renderState,
         sortable: true,
         sortFunction: propSortFunction
       },
       {
+        cacheCell: true,
         className,
-        heading,
         headerClassName: className,
+        heading,
         prop: 'cpus',
         render: this.renderStats,
         sortable: true,
         sortFunction: statSortFunction
       },
       {
+        cacheCell: true,
         className,
-        heading,
         headerClassName: className,
+        heading,
         prop: 'mem',
         render: this.renderStats,
         sortable: true,

@@ -108,7 +108,6 @@ class UnitsHealthTab extends mixin(StoreMixin) {
 
     return [
       {
-        cacheCell: true,
         className: classNameFn,
         headerClassName: classNameFn,
         prop: 'id',
