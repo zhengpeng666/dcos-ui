@@ -90,7 +90,7 @@ class PackagesTable extends mixin(StoreMixin) {
     let getClassName = this.getClassName;
     let heading = ResourceTableUtil.renderHeading(PackagesTableHeaderLabels);
     let sortFunction = ResourceTableUtil
-      .getStatSortFunction('name', function (cosmosPackage, prop) {
+      .getStatSortFunction('appId', function (cosmosPackage, prop) {
         return cosmosPackage.get('packageDefinition')[prop];
       });
 
@@ -103,7 +103,7 @@ class PackagesTable extends mixin(StoreMixin) {
         render: this.getHeadline,
         sortable: true,
         sortFunction: ResourceTableUtil
-          .getStatSortFunction('name', function (cosmosPackage) {
+          .getStatSortFunction('appId', function (cosmosPackage) {
             return cosmosPackage.get('appId');
           })
       },

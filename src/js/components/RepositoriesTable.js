@@ -86,7 +86,7 @@ class RepositoriesTable extends mixin(StoreMixin) {
     let heading = ResourceTableUtil
       .renderHeading(RepositoriesTableHeaderLabels);
     let sortFunction = ResourceTableUtil
-      .getStatSortFunction('name', function (repository, prop) {
+      .getStatSortFunction('uri', function (repository, prop) {
         return repository.get(prop);
       });
 
@@ -106,8 +106,7 @@ class RepositoriesTable extends mixin(StoreMixin) {
         heading,
         prop: 'uri',
         render: this.getUri,
-        sortable: true,
-        sortFunction
+        sortable: true
       },
       {
         className: getClassName,

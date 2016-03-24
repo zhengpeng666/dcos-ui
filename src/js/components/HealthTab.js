@@ -76,8 +76,7 @@ class HealthTab extends React.Component {
         heading: headings,
         prop: 'id',
         render: this.renderUnitHealthCheck,
-        sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('id')
+        sortable: true
       }
     ];
   }

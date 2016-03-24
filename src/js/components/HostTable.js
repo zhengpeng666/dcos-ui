@@ -146,7 +146,6 @@ var HostTable = React.createClass({
         prop: 'hostname',
         render: this.renderHeadline,
         sortable: true,
-        sortFunction: propSortFunction,
         heading
       },
       {

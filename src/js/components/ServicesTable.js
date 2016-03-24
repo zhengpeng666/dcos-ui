@@ -125,9 +125,9 @@ var ServicesTable = React.createClass({
   getColumns: function () {
     let className = ResourceTableUtil.getClassName;
     let heading = ResourceTableUtil.renderHeading(ServiceTableHeaderLabels);
-    let propSortFunction = ResourceTableUtil.getPropSortFunction('name');
+    let propSortFunction = ResourceTableUtil.getPropSortFunction('id');
     let statSortFunction = ResourceTableUtil.getStatSortFunction(
-      'name',
+      'id',
       function (service, resource) {
         return service.getUsageStats(resource).value;
       }

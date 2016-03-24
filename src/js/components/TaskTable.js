@@ -33,9 +33,9 @@ class TaskTable extends React.Component {
   getColumns() {
     var className = ResourceTableUtil.getClassName;
     var heading = ResourceTableUtil.renderHeading(TaskTableHeaderLabels);
-    let propSortFunction = ResourceTableUtil.getPropSortFunction('name');
+    let propSortFunction = ResourceTableUtil.getPropSortFunction('id');
     let statSortFunction = ResourceTableUtil.getStatSortFunction(
-      'name',
+      'id',
       function (task, resource) {
         return task.resources[resource];
       }
