@@ -44,7 +44,7 @@ class TaskTable extends React.Component {
     return [
       {
         className,
-        dontCache: true,
+        cacheCell: true,
         heading,
         headerClassName: className,
         prop: 'name',
@@ -54,7 +54,7 @@ class TaskTable extends React.Component {
       },
       {
         className,
-        dontCache: true,
+        cacheCell: true,
         heading,
         headerClassName: className,
         prop: 'updated',

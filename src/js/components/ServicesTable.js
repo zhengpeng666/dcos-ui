@@ -145,7 +145,7 @@ var ServicesTable = React.createClass({
       },
       {
         className,
-        dontCache: true,
+        cacheCell: true,
         headerClassName: className,
         prop: 'health',
         render: this.renderHealth,
