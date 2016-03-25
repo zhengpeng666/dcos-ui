@@ -86,7 +86,7 @@ const UnitHealthStore = Store.createStore({
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
 
-    if (this.shouldPoll()) {
+    if (!this.shouldPoll()) {
       stopPolling();
     }
   },
