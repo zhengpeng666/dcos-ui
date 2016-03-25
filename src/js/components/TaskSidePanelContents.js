@@ -213,6 +213,11 @@ class TaskSidePanelContents extends SidePanelContents {
       Node: `${node.hostname} (${node.id})`
     };
 
+    let sandBoxPath = TaskDirectoryStore.get('sandBoxPath');
+    if (sandBoxPath) {
+      headerValueMapping['Sandbox Path'] = sandBoxPath;
+    }
+
     let labelMapping = {};
 
     if (task.labels) {
