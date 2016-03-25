@@ -166,6 +166,7 @@ var NodesPage = React.createClass({
   },
 
   handleHealthFilterChange: function (healthFilter) {
+    this.internalStorage_update(getMesosHosts({healthFilter}));
     this.setState({healthFilter});
   },
 
