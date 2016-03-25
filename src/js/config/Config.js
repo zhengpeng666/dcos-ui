@@ -13,6 +13,7 @@ var Config = {
   environment: '@@ENV',
   historyLength: 31,
   historyServer: '',
+  setInactiveAfter: 30000,
   rootUrl: '',
   stateLoadDelay: 3000,
   stateRefresh: 2000,
