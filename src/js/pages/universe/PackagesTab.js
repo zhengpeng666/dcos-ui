@@ -89,7 +89,7 @@ class PackagesTab extends mixin(StoreMixin) {
 
   getButton(cosmosPackage) {
     let promotedTag = null;
-    if (cosmosPackage.promoted) {
+    if (cosmosPackage.isPromoted()) {
       promotedTag = (
         <p className="text-align-center flush-bottom" key="promotedTag">
           Promoted
