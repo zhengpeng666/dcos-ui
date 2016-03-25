@@ -215,8 +215,7 @@ var ServicesTable = React.createClass({
           data={this.props.services.slice()}
           itemHeight={TableUtil.getRowHeight()}
           containerSelector=".gm-scroll-view"
-          sortBy={{prop: 'name', order: 'desc'}}
-          transition={false} />
+          sortBy={{prop: 'name', order: 'desc'}} />
       </div>
     );
   }

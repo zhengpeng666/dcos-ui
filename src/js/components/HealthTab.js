@@ -155,7 +155,6 @@ class HealthTab extends React.Component {
           colGroup={this.getColGroup()}
           containerSelector=".gm-scroll-view"
           data={visibleData}
-          idAttribute="id"
           itemHeight={TableUtil.getRowHeight()}
           sortBy={{prop: 'health', order: 'desc'}}
           />

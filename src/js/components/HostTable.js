@@ -230,8 +230,7 @@ var HostTable = React.createClass({
         data={this.props.hosts.slice()}
         itemHeight={TableUtil.getRowHeight()}
         sortBy={{ prop: 'health', order: 'desc' }}
-        buildRowOptions={this.getRowAttributes}
-        transition={false} />
+        buildRowOptions={this.getRowAttributes} />
     );
   }
 });
