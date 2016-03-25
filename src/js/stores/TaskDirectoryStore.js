@@ -86,8 +86,8 @@ var TaskDirectoryStore = Store.createStore({
     this.emit(EventTypes.TASK_DIRECTORY_ERROR);
   },
 
-  processStateSuccess: function (directory) {
-    this.set({directory: new TaskDirectory({items: directory})});
+  processStateSuccess: function (directory, sandBoxPath) {
+    this.set({directory: new TaskDirectory({items: directory}), sandBoxPath});
     this.emit(EventTypes.TASK_DIRECTORY_CHANGE);
   },
 
@@ -99,7 +99,7 @@ var TaskDirectoryStore = Store.createStore({
     var action = payload.action;
     switch (action.type) {
       case ActionTypes.REQUEST_TASK_DIRECTORY_SUCCESS:
-        TaskDirectoryStore.processStateSuccess(action.data);
+        TaskDirectoryStore.processStateSuccess(action.data, action.sandBoxPath);
         break;
       case ActionTypes.REQUEST_TASK_DIRECTORY_ERROR:
         TaskDirectoryStore.processStateError();

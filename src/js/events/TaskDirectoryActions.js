@@ -108,7 +108,8 @@ var TaskDirectoryActions = {
       success: function (directory) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.REQUEST_TASK_DIRECTORY_SUCCESS,
-          data: directory
+          data: directory,
+          sandBoxPath: innerPath
         });
       },
       error: function (xhr) {
