@@ -19,6 +19,10 @@ class UniversePackage extends Item {
       'images.screenshots'
     );
   }
+
+  isPromoted() {
+    return this.get('promoted');
+  }
 }
 
 module.exports = UniversePackage;

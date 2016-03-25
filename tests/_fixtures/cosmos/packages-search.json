@@ -12,6 +12,7 @@
           "icon-large": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-large.png"
         }
       },
+      "promoted": true,
       "tags": [
         "arangodb",
         "NoSQL",
