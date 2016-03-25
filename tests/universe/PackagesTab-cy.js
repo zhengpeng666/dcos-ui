@@ -81,4 +81,19 @@ describe('Packages Tab', function () {
       .get('.page-content p.inverse.text-align-center')
       .should('contain', 'We have been notified of the issue, but would love to know more. Talk with us using Intercom. You can also join us on our Slack channel or send us an email at support@mesosphere.com.');
   });
+
+  context('promoted packages', function () {
+    beforeEach(function () {
+      cy.visitUrl({url: '/universe'});
+      cy.get('.grid-item').as('gridItems');
+    });
+
+    it('should have the first package as promoted', function () {
+      cy.get('@gridItems').should(function ($gridItems) {
+        expect($gridItems.first()).to.contain('Promoted');
+        expect($gridItems.last()).to.not.contain('Promoted');
+      });
+    });
+  });
+
 });

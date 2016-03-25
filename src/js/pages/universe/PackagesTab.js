@@ -88,13 +88,25 @@ class PackagesTab extends mixin(StoreMixin) {
   }
 
   getButton(cosmosPackage) {
-    return (
-      <button
-        className="button button-success"
-        onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
-        Install Package
-      </button>
-    );
+    let promotedTag = null;
+    if (cosmosPackage.promoted) {
+      promotedTag = (
+        <p className="text-align-center flush-bottom" key="promotedTag">
+          Promoted
+        </p>
+      );
+    }
+
+    return [
+      <p key="installButton">
+        <button
+          className="button button-success"
+          onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
+          Install Package
+        </button>
+      </p>,
+      promotedTag
+    ];
   }
 
   getIcon(cosmosPackage) {
