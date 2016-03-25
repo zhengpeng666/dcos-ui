@@ -353,7 +353,7 @@ Sidebar
     .sidebar-footer-image {
 
       display: block;
-      background-image: url("@{path-images}/layout/sidebar/sidebar-logo.png");
+      background-image: url("@{path-images}/layout/sidebar/sidebar-logo.png?@{cache-buster}");
       .background-size(100% 100%);
       width: @sidebar-footer-image-source-width * @sidebar-footer-image-scale;
       height: @sidebar-footer-image-source-height * @sidebar-footer-image-scale;
@@ -1193,7 +1193,7 @@ Sidebar Open
 
         .sidebar-footer-image {
 
-          background-image: url("@{path-images}/layout/sidebar/sidebar-logo@2x.png");
+          background-image: url("@{path-images}/layout/sidebar/sidebar-logo@2x.png?@{cache-buster}");
 
         }
 
