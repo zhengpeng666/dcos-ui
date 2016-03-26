@@ -5,13 +5,17 @@ import AppDispatcher from '../events/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
 import Config from '../config/Config';
-import EventTypes from '../constants/EventTypes';
+import {
+  MARATHON_APPS_CHANGE,
+  MARATHON_APPS_ERROR,
+  VISIBILITY_CHANGE
+} from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import HealthStatus from '../constants/HealthStatus';
 import MarathonActions from '../events/MarathonActions';
 import ServiceImages from '../constants/ServiceImages';
 import ServiceUtil from '../utils/ServiceUtil';
-import VisibilityUtil from '../utils/VisibilityUtil';
+import VisibilityStore from './VisibilityStore';
 
 var requestInterval = null;
 
@@ -31,7 +35,8 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange(isInactive) {
+function handleInactiveChange() {
+  let isInactive = VisibilityStore.get('isInactive');
   if (isInactive) {
     stopPolling();
   }
@@ -41,7 +46,7 @@ function handleInactiveChange(isInactive) {
   }
 }
 
-VisibilityUtil.addInactiveListener(handleInactiveChange);
+VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
 
 var MarathonStore = Store.createStore({
   storeID: 'marathon',
@@ -69,7 +74,7 @@ var MarathonStore = Store.createStore({
   },
 
   shouldPoll: function () {
-    return !_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE));
+    return !_.isEmpty(this.listeners(MARATHON_APPS_CHANGE));
   },
 
   hasProcessedApps: function () {
@@ -203,11 +208,11 @@ var MarathonStore = Store.createStore({
 
     CompositeState.addMarathon(apps);
 
-    this.emit(EventTypes.MARATHON_APPS_CHANGE, this.get('apps'));
+    this.emit(MARATHON_APPS_CHANGE, this.get('apps'));
   },
 
   processMarathonAppsError: function () {
-    this.emit(EventTypes.MARATHON_APPS_ERROR);
+    this.emit(MARATHON_APPS_ERROR);
   },
 
   parseMetadata: function (b64Data) {

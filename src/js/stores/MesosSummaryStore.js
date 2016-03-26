@@ -5,14 +5,18 @@ import AppDispatcher from '../events/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
 import Config from '../config/Config';
-import EventTypes from '../constants/EventTypes';
+import {
+  MESOS_SUMMARY_CHANGE,
+  MESOS_SUMMARY_REQUEST_ERROR,
+  VISIBILITY_CHANGE
+} from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import MesosSummaryUtil from '../utils/MesosSummaryUtil';
 import MesosSummaryActions from '../events/MesosSummaryActions';
 import SummaryList from '../structs/SummaryList';
 import StateSummary from '../structs/StateSummary';
 import TimeScales from '../constants/TimeScales';
-import VisibilityUtil from '../utils/VisibilityUtil';
+import VisibilityStore from './VisibilityStore';
 
 var requestInterval = null;
 
@@ -38,7 +42,8 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange(isInactive) {
+function handleInactiveChange() {
+  let isInactive = VisibilityStore.get('isInactive');
   if (isInactive) {
     MesosSummaryStore.terminate();
   } else {
@@ -46,7 +51,7 @@ function handleInactiveChange(isInactive) {
   }
 }
 
-VisibilityUtil.addInactiveListener(handleInactiveChange);
+VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
 
 var MesosSummaryStore = Store.createStore({
   storeID: 'summary',
@@ -128,7 +133,7 @@ var MesosSummaryStore = Store.createStore({
 
   updateStateProcessed: function () {
     this.set({statesProcessed: true});
-    this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
+    this.emit(MESOS_SUMMARY_CHANGE);
   },
 
   notifySummaryProcessed: function () {
@@ -137,7 +142,7 @@ var MesosSummaryStore = Store.createStore({
     if (this.get('statesProcessed') ||
         this.get('loading') != null ||
         initCalledAt == null) {
-      this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
+      this.emit(MESOS_SUMMARY_CHANGE);
       return;
     }
 
@@ -199,7 +204,7 @@ var MesosSummaryStore = Store.createStore({
     this.setFailureRate(states.last(), prevState);
 
     if (!options.silent) {
-      this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
+      this.emit(MESOS_SUMMARY_REQUEST_ERROR);
     }
   },
 

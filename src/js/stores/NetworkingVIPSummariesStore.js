@@ -4,11 +4,15 @@ import {Store} from 'mesosphere-shared-reactjs';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../events/AppDispatcher';
 import Config from '../config/Config';
-import EventTypes from '../constants/EventTypes';
+import {
+  NETWORKING_VIP_SUMMARIES_CHANGE,
+  NETWORKING_VIP_SUMMARIES_ERROR,
+  VISIBILITY_CHANGE
+} from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import NetworkingActions from '../events/NetworkingActions';
 import VIPSummaryList from '../structs/VIPSummaryList';
-import VisibilityUtil from '../utils/VisibilityUtil';
+import VisibilityStore from './VisibilityStore';
 
 let requestInterval = null;
 
@@ -28,7 +32,8 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange(isInactive) {
+function handleInactiveChange() {
+  let isInactive = VisibilityStore.get('isInactive');
   if (isInactive) {
     stopPolling();
   }
@@ -38,7 +43,7 @@ function handleInactiveChange(isInactive) {
   }
 }
 
-VisibilityUtil.addInactiveListener(handleInactiveChange);
+VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
 
 let NetworkingVIPSummariesStore = Store.createStore({
   storeID: 'networkingVIPSummaries',
@@ -63,8 +68,7 @@ let NetworkingVIPSummariesStore = Store.createStore({
   },
 
   shouldPoll: function () {
-    return !_.isEmpty(this.listeners(
-      EventTypes.NETWORKING_VIP_SUMMARIES_CHANGE));
+    return !_.isEmpty(this.listeners(NETWORKING_VIP_SUMMARIES_CHANGE));
   },
 
   fetchVIPSummaries: NetworkingActions.fetchVIPSummaries,
@@ -75,11 +79,11 @@ let NetworkingVIPSummariesStore = Store.createStore({
 
   processVIPSummaries: function (vipSummaries) {
     this.set({vipSummaries});
-    this.emit(EventTypes.NETWORKING_VIP_SUMMARIES_CHANGE);
+    this.emit(NETWORKING_VIP_SUMMARIES_CHANGE);
   },
 
   processVIPSummariesError: function (error) {
-    this.emit(EventTypes.NETWORKING_VIP_SUMMARIES_ERROR, error);
+    this.emit(NETWORKING_VIP_SUMMARIES_ERROR, error);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {

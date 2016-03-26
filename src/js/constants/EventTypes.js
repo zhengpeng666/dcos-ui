@@ -58,7 +58,8 @@ let EventTypes = {};
   'SHOW_VERSIONS_SUCCESS',
   'SIDEBAR_CHANGE',
   'TASK_DIRECTORY_CHANGE',
-  'TASK_DIRECTORY_ERROR'
+  'TASK_DIRECTORY_ERROR',
+  'VISIBILITY_CHANGE'
 ].forEach(function (eventType) {
   EventTypes[eventType] = eventType;
 });
