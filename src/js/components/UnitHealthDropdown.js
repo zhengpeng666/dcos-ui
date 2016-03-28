@@ -18,7 +18,7 @@ class UnitHealthDropdown extends mixin(InternalStorageMixin) {
 
   getDropdownItems() {
     let keys = Object.keys(UnitHealthStatus).filter(function (key) {
-      return (key !== 'NA');
+      return (key !== 'NA' && key !== 'WARN');
     });
 
     let items = keys.map(function (key) {
