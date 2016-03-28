@@ -188,6 +188,11 @@ var MesosSummaryStore = Store.createStore({
   },
 
   processBulkState: function (data) {
+    // BUG: Will remove once we confirm the source of error
+    if (!Array.isArray(data)) {
+      console.warn(`${data} is not an Array.`);
+      return;
+    }
     // Multiply Config.stateRefresh in order to use larger time slices
     data = MesosSummaryUtil.addTimestampsToData(data, Config.getRefreshRate());
     _.each(data, function (datum) {
