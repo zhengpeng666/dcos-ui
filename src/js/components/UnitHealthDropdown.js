@@ -17,11 +17,15 @@ class UnitHealthDropdown extends mixin(InternalStorageMixin) {
   }
 
   getDropdownItems() {
-    let items = Object.keys(UnitHealthStatus).map(function (health) {
+    let keys = Object.keys(UnitHealthStatus).filter(function (key) {
+      return (key !== 'NA');
+    });
+
+    let items = keys.map(function (key) {
       return {
-        id: health,
-        html: UnitHealthStatus[health].title,
-        selectedHtml: UnitHealthStatus[health].title
+        id: key,
+        html: UnitHealthStatus[key].title,
+        selectedHtml: UnitHealthStatus[key].title
       };
     });
 
