@@ -19,7 +19,7 @@ module.exports = class VIPSummary extends Item {
   }
 
   getP99Latency() {
-    return Number(this.get('p99_latency_ms') || 0);
+    return Number(Number(this.get('p99_latency_ms') || 0).toFixed(2));
   }
 
   getSuccessLastMinute() {
