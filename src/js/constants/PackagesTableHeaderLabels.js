@@ -1,5 +1,5 @@
 const PackagesTableHeaderLabels = {
-  name: 'PACKAGE NAME',
+  appId: 'PACKAGE NAME',
   version: 'VERSION'
 };
 

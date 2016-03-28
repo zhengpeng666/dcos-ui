@@ -125,13 +125,7 @@ var ServicesTable = React.createClass({
   getColumns: function () {
     let className = ResourceTableUtil.getClassName;
     let heading = ResourceTableUtil.renderHeading(ServiceTableHeaderLabels);
-    let propSortFunction = ResourceTableUtil.getPropSortFunction('id');
-    let statSortFunction = ResourceTableUtil.getStatSortFunction(
-      'id',
-      function (service, resource) {
-        return service.getUsageStats(resource).value;
-      }
-    );
+    let sortFunction = ResourceTableUtil.getSortFunction('id');
 
     return [
       {
@@ -140,7 +134,7 @@ var ServicesTable = React.createClass({
         prop: 'name',
         render: this.renderHeadline,
         sortable: true,
-        sortFunction: propSortFunction,
+        sortFunction,
         heading
       },
       {
@@ -149,7 +143,7 @@ var ServicesTable = React.createClass({
         prop: 'health',
         render: this.renderHealth,
         sortable: true,
-        sortFunction: propSortFunction,
+        sortFunction,
         heading
       },
       {
@@ -158,7 +152,7 @@ var ServicesTable = React.createClass({
         prop: 'TASK_RUNNING',
         render: ResourceTableUtil.renderTask,
         sortable: true,
-        sortFunction: propSortFunction,
+        sortFunction,
         heading
       },
       {
@@ -167,7 +161,7 @@ var ServicesTable = React.createClass({
         prop: 'cpus',
         render: this.renderStats,
         sortable: true,
-        sortFunction: statSortFunction,
+        sortFunction,
         heading
       },
       {
@@ -176,7 +170,7 @@ var ServicesTable = React.createClass({
         prop: 'mem',
         render: this.renderStats,
         sortable: true,
-        sortFunction: statSortFunction,
+        sortFunction,
         heading
       },
       {
@@ -185,7 +179,7 @@ var ServicesTable = React.createClass({
         prop: 'disk',
         render: this.renderStats,
         sortable: true,
-        sortFunction: statSortFunction,
+        sortFunction,
         heading
       }
     ];

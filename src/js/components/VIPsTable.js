@@ -4,7 +4,6 @@ import {Table} from 'reactjs-components';
 
 import {Hooks} from 'PluginSDK';
 import TableUtil from '../utils/TableUtil';
-import ResourceTableUtil from '../utils/ResourceTableUtil';
 
 const METHODS_TO_BIND = [
   'getColumnClassname'
@@ -48,7 +47,7 @@ class VIPsTable extends React.Component {
       machineReachabilityPercent: 'IP\u00a0REACH',
       p99Latency: 'P99\u00a0LATENCY'
     });
-    let sortFunction = ResourceTableUtil.getPropSortFunction('vip');
+    let sortFunction = TableUtil.getSortFunction('vip');
 
     return [
       {

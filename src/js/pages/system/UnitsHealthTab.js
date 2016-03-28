@@ -105,27 +105,26 @@ class UnitsHealthTab extends mixin(StoreMixin) {
 
   getColumns() {
     let classNameFn = ResourceTableUtil.getClassName;
+    let sortFunction = UnitHealthUtil.getHealthSortFunction;
 
     return [
       {
         className: classNameFn,
         headerClassName: classNameFn,
+        heading: ResourceTableUtil.renderHeading({id: 'NAME'}),
         prop: 'id',
         render: this.renderUnit,
         sortable: true,
-        heading: ResourceTableUtil.renderHeading({id: 'NAME'})
+        sortFunction
       },
       {
         className: classNameFn,
         headerClassName: classNameFn,
+        heading: ResourceTableUtil.renderHeading({health: 'HEALTH'}),
         prop: 'health',
         render: this.renderHealth,
         sortable: true,
-        sortFunction: ResourceTableUtil.getStatSortFunction(
-          'id',
-          UnitHealthUtil.getHealthSorting
-        ),
-        heading: ResourceTableUtil.renderHeading({health: 'HEALTH'})
+        sortFunction
       }
     ];
   }

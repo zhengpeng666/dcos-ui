@@ -40,6 +40,16 @@ class UnitHealthNodesTable extends React.Component {
       role: 'ROLE'
     });
 
+    let sortFunction = TableUtil.getSortFunction('host_ip',
+      function (node, prop) {
+        if (prop === 'health') {
+          return UnitHealthUtil.getHealthSorting(node);
+        }
+
+        return node.get(prop);
+      }
+    );
+
     return [
       {
         className: classNameFn,
@@ -48,10 +58,7 @@ class UnitHealthNodesTable extends React.Component {
         prop: 'health',
         render: this.renderHealth,
         sortable: true,
-        sortFunction: ResourceTableUtil.getStatSortFunction(
-          'host_ip',
-          UnitHealthUtil.getHealthSorting
-        )
+        sortFunction
       },
       {
         className: classNameFn,
@@ -60,7 +67,7 @@ class UnitHealthNodesTable extends React.Component {
         prop: 'host_ip',
         render: this.renderNode,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('role')
+        sortFunction: sortFunction
       },
       {
         className: classNameFn,
@@ -69,7 +76,7 @@ class UnitHealthNodesTable extends React.Component {
         prop: 'role',
         render: this.renderNodeRole,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('host_ip')
+        sortFunction: sortFunction
       }
     ];
   }

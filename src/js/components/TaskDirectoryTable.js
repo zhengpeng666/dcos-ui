@@ -5,6 +5,7 @@ import {Table} from 'reactjs-components';
 
 import DateUtil from '../utils/DateUtil';
 import ResourceTableUtil from '../utils/ResourceTableUtil';
+import TableUtil from '../utils/TableUtil';
 import TaskDirectoryHeaderLabels from '../constants/TaskDirectoryHeaderLabels';
 import TaskDirectoryActions from '../events/TaskDirectoryActions';
 import Units from '../utils/Units';
@@ -100,7 +101,7 @@ class TaskDirectoryTable extends React.Component {
     });
   }
 
-  getDirectorySortFunction(baseProp, sortFunc) {
+  getDirectorySortFunction(baseProp) {
     return function (prop, order) {
       return function (a, b) {
         let aIsDirectory = a.isDirectory();
@@ -122,7 +123,12 @@ class TaskDirectoryTable extends React.Component {
           return 1;
         }
 
-        return sortFunc(prop)(a, b);
+        return TableUtil.compareValues(
+          a.get(prop),
+          b.get(prop),
+          a.get(baseProp),
+          b.get(baseProp)
+        );
       };
     };
   }
@@ -130,16 +136,7 @@ class TaskDirectoryTable extends React.Component {
   getColumns() {
     let className = this.getClassName;
     let heading = ResourceTableUtil.renderHeading(TaskDirectoryHeaderLabels);
-    let propSortFunction = ResourceTableUtil.getPropSortFunction('path');
-    let statSortFunction = ResourceTableUtil.getStatSortFunction(
-      'path',
-      function (directoryItem, resource) {
-        return directoryItem.get(resource);
-      }
-    );
-
-    propSortFunction = this.getDirectorySortFunction('path', propSortFunction);
-    statSortFunction = this.getDirectorySortFunction('path', statSortFunction);
+    let sortFunction = this.getDirectorySortFunction('path');
 
     let defaultColumnSettings = {
       className,
@@ -147,7 +144,7 @@ class TaskDirectoryTable extends React.Component {
       headerClassName: className,
       render: null,
       sortable: true,
-      sortFunction: propSortFunction
+      sortFunction
     };
 
     return [
@@ -166,12 +163,12 @@ class TaskDirectoryTable extends React.Component {
       {
         prop: 'size',
         render: this.renderStats,
-        sortFunction: statSortFunction
+        sortFunction
       },
       {
         prop: 'mtime',
         render: this.renderDate,
-        sortFunction: statSortFunction
+        sortFunction
       }
     ].map(function (columnSetting) {
       return _.extend({}, defaultColumnSettings, columnSetting);

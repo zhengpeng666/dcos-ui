@@ -38,9 +38,9 @@ describe('ResourceTableUtil', function () {
     MarathonStore.getServiceHealth = this.getServiceHealth;
   });
 
-  describe('#getPropSortFunction', function () {
+  describe('#getSortFunction', function () {
     beforeEach(function () {
-      this.sortFunction = ResourceTableUtil.getPropSortFunction('name');
+      this.sortFunction = ResourceTableUtil.getSortFunction('name');
     });
 
     it('should return a function', function () {
@@ -49,45 +49,34 @@ describe('ResourceTableUtil', function () {
 
     it('should compare the most recent timestamps when prop is updated',
       function () {
-        var sortPropFunction = this.sortFunction('updated');
-        expect(sortPropFunction(this.foo, this.bar))
+        var sortFunction = this.sortFunction('updated');
+        expect(sortFunction(this.foo, this.bar))
           .toEqual(2 - 4);
       }
     );
 
     it('should compare baseProp values', function () {
-      var sortPropFunction = this.sortFunction('name');
+      var sortFunction = this.sortFunction('name');
 
       // 'foo' > 'bar' will equal true and compareValues returns 1
-      expect(sortPropFunction(this.foo, this.bar)).toEqual(1);
+      expect(sortFunction(this.foo, this.bar)).toEqual(1);
     });
 
     it('should compare the health correctly', function () {
-      var sortPropFunction = this.sortFunction('health');
-      expect(sortPropFunction(this.foo, this.bar)).toEqual(-1);
+      var sortFunction = this.sortFunction('health');
+      expect(sortFunction(this.foo, this.bar)).toEqual(-1);
     });
 
     it('should use the baseProp if health is the same', function () {
       var prevHealth = this.bar.health.key;
       this.bar.health.key = this.foo.health.key;
-      var sortPropFunction = this.sortFunction('health');
+      var sortFunction = this.sortFunction('health');
 
       // Will compare with names now: 'foo' > 'bar' which will return 1
-      expect(sortPropFunction(this.foo, this.bar)).toEqual(1);
+      expect(sortFunction(this.foo, this.bar)).toEqual(1);
 
       // Set it back to original health
       this.bar.health.key = prevHealth;
-    });
-  });
-
-  describe('#getStatSortFunction', function () {
-    beforeEach(function () {
-      this.sortFunction = ResourceTableUtil.getStatSortFunction(
-        'name',
-        function (obj, prop) {
-          return obj.resources[prop];
-        }
-      );
     });
 
     it('should return a function', function () {
@@ -95,13 +84,13 @@ describe('ResourceTableUtil', function () {
     });
 
     it('should compare resource values', function () {
-      var sortPropFunction = this.sortFunction('cpus');
-      expect(sortPropFunction(this.foo, this.bar)).toEqual(100 - 5);
+      var sortFunction = this.sortFunction('cpus');
+      expect(sortFunction(this.foo, this.bar)).toEqual(100 - 5);
     });
 
     it('should compare last resource values', function () {
-      var sortPropFunction = this.sortFunction('mem');
-      expect(sortPropFunction(this.foo, this.bar)).toEqual(3 - 1);
+      var sortFunction = this.sortFunction('mem');
+      expect(sortFunction(this.foo, this.bar)).toEqual(3 - 1);
     });
   });
 });

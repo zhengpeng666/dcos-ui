@@ -25,6 +25,46 @@ var TableUtil = {
     });
 
     return rowHeight || defaultRowSize;
+  },
+
+  compareValues: function (a, b, aTieBreaker, bTieBreaker) {
+    if (a === b || a == null || b == null) {
+      a = aTieBreaker;
+      b = bTieBreaker;
+    }
+
+    if (a > b) {
+      return 1;
+    }
+    if (a < b) {
+      return -1;
+    }
+
+    return 0;
+  },
+
+  /**
+   * High order function that will provide another high order function to get
+   * sort function for tables.
+   * @param  {String} tieBreakerProp property to break ties with
+   * @param  {Function} getProperty function that takes an item and a
+   * property string and returns a value
+   *
+   * @return {Function} A high order function that will, given a property
+   * string and a sort order ('asc' or 'desc'), return a comparator function
+   * between two items
+   */
+  getSortFunction: function (tieBreakerProp, getProperty) {
+    return function (prop, order) {
+      return function (a, b) {
+        return TableUtil.compareValues(
+          getProperty(a, prop, order),
+          getProperty(b, prop, order),
+          getProperty(a, tieBreakerProp, order),
+          getProperty(b, tieBreakerProp, order)
+        );
+      };
+    };
   }
 };
 
