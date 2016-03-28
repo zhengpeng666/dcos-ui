@@ -1,4 +1,4 @@
-import SavedStateStore from '../stores/SavedStateStore';
+let savedStates = {};
 
 let SaveStateMixin = {
   componentWillMount() {
@@ -6,7 +6,7 @@ let SaveStateMixin = {
       return;
     }
 
-    let savedState = SavedStateStore.getState(this.savedState_key);
+    let savedState = savedStates[this.savedState_key];
     if (savedState != null) {
       this.setState(savedState);
     }
@@ -17,7 +17,7 @@ let SaveStateMixin = {
       return;
     }
 
-    SavedStateStore.addState(this.savedState_key, this.state);
+    savedStates[this.savedState_key] = this.state;
   }
 };
 
