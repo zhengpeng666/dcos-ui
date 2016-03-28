@@ -59,7 +59,7 @@ const MesosSummaryUtil = {
     var keys = Object.keys(newMesosStatusesMap);
     // Ignore the first difference, since the first number of accumulated failed
     // tasks will be will consist the base case for calulating the difference
-    if (prevMesosStatusesMap != null && keys.length) {
+    if (prevMesosStatusesMap != null) {
       keys.forEach(function (key) {
         diff[key] = newMesosStatusesMap[key] - prevMesosStatusesMap[key];
       });

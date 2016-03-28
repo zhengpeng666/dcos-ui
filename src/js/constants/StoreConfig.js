@@ -56,7 +56,9 @@ import {
   MESOS_LOG_REQUEST_ERROR,
 
   TASK_DIRECTORY_CHANGE,
-  TASK_DIRECTORY_ERROR
+  TASK_DIRECTORY_ERROR,
+
+  VISIBILITY_CHANGE
 } from './EventTypes';
 import HistoryStore from '../stores/HistoryStore';
 import MarathonStore from '../stores/MarathonStore';
@@ -68,6 +70,7 @@ import NetworkingVIPSummariesStore from '../stores/NetworkingVIPSummariesStore';
 import NodeHealthStore from '../stores/NodeHealthStore';
 import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 import UnitHealthStore from '../stores/UnitHealthStore';
+import VisibilityStore from '../stores/VisibilityStore';
 
 const ListenersDescription = {
 
@@ -242,8 +245,18 @@ const ListenersDescription = {
       return true;
     },
     listenAlways: true
-  }
+  },
 
+  visibility: {
+    store: VisibilityStore,
+    events: {
+      change: VISIBILITY_CHANGE
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  }
 };
 
 module.exports = ListenersDescription;
