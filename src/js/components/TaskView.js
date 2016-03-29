@@ -1,5 +1,4 @@
 import _ from 'underscore';
-import mixin from 'reactjs-mixin';
 import React from 'react';
 
 import EventTypes from '../constants/EventTypes';
@@ -7,10 +6,10 @@ import FilterByTaskState from './FilterByTaskState';
 import FilterInputText from './FilterInputText';
 import MesosStateStore from '../stores/MesosStateStore';
 import RequestErrorMsg from './RequestErrorMsg';
-import SaveStateMixin from '../mixins/SaveStateMixin';
-import TaskTable from './TaskTable';
+import SaveStateUtil from '../utils/SaveStateUtil';
 import StringUtil from '../utils/StringUtil';
 import TaskStates from '../constants/TaskStates';
+import TaskTable from './TaskTable';
 
 const METHODS_TO_BIND = [
   'handleSearchStringChange',
@@ -18,7 +17,7 @@ const METHODS_TO_BIND = [
   'onMesosStateRequestError'
 ];
 
-class TaskView extends mixin(SaveStateMixin) {
+class TaskView extends React.Component {
   constructor() {
     super();
 
@@ -36,7 +35,7 @@ class TaskView extends mixin(SaveStateMixin) {
   componentWillMount() {
     let location = global.window.location.hash;
     this.savedState_key = `taskView${location}`;
-    super.componentWillMount();
+    SaveStateUtil.getSavedState(this);
 
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_REQUEST_ERROR,
@@ -45,7 +44,7 @@ class TaskView extends mixin(SaveStateMixin) {
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
+    SaveStateUtil.setSavedState(this);
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_REQUEST_ERROR,
       this.onMesosStateRequestError
