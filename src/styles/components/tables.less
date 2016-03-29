@@ -109,7 +109,7 @@ components/tables.less
 
         .table-display-on-row-hover {
 
-          display: none;
+          visibility: hidden;
 
         }
 
@@ -117,7 +117,7 @@ components/tables.less
 
           .table-display-on-row-hover {
 
-            display: block;
+            visibility: visible;
 
           }
 
@@ -145,19 +145,7 @@ components/tables.less
 
         }
 
-        .table-display-on-row-hover {
-
-          display: none;
-
-        }
-
         &:hover {
-
-          .table-display-on-row-hover {
-
-            display: block;
-
-          }
 
           .button {
 
@@ -417,22 +405,6 @@ components/tables.less
 
               --------------------------------------------------------------------------------
               ----------------------------------------------------------------------------- */
-
-              .table-display-on-row-hover {
-
-                display: none;
-
-              }
-
-              &:hover {
-
-                .table-display-on-row-hover {
-
-                  display: block;
-
-                }
-
-              }
 
               > th,
               > td {
