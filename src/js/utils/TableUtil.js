@@ -1,3 +1,11 @@
+function toLowerCaseIfString(item) {
+  if (typeof item === 'string') {
+    return item.toLowerCase();
+  }
+
+  return item;
+}
+
 var TableUtil = {
   /**
    * WARNING: When removing/modifiying this function be aware of comments/sizes
@@ -28,6 +36,10 @@ var TableUtil = {
   },
 
   compareValues: function (a, b, aTieBreaker, bTieBreaker) {
+    a = toLowerCaseIfString(a);
+    b = toLowerCaseIfString(b);
+    aTieBreaker = toLowerCaseIfString(aTieBreaker);
+    bTieBreaker = toLowerCaseIfString(bTieBreaker);
     if (a === b || a == null || b == null) {
       a = aTieBreaker;
       b = bTieBreaker;
