@@ -83,7 +83,7 @@ class PackagesTable extends mixin(StoreMixin) {
   getClassName(prop, sortBy, row) {
     return classNames({
       'highlight': prop === sortBy.prop,
-      'clickable': prop !== 'uninstall' && row == null // this is a header
+      'clickable': prop === 'appId' && row == null // this is a header
     });
   }
 
@@ -117,8 +117,7 @@ class PackagesTable extends mixin(StoreMixin) {
         render: function (prop, cosmosPackage) {
           return cosmosPackage.get('packageDefinition')[prop];
         },
-        sortable: true,
-        sortFunction
+        sortable: false
       },
       {
         className: getClassName,
