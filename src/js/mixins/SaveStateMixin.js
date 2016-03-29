@@ -1,4 +1,4 @@
-let savedStates = {};
+import UserSettingsStore from '../stores/UserSettingsStore';
 
 let SaveStateMixin = {
   componentWillMount() {
@@ -6,7 +6,7 @@ let SaveStateMixin = {
       return;
     }
 
-    let savedState = savedStates[this.savedState_key];
+    let savedState = UserSettingsStore.getSavedState(this.savedState_key);
     if (savedState != null) {
       this.setState(savedState);
     }
@@ -17,7 +17,7 @@ let SaveStateMixin = {
       return;
     }
 
-    savedStates[this.savedState_key] = this.state;
+    UserSettingsStore.setSavedState(this.savedState_key, this.state);
   }
 };
 
