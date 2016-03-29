@@ -36,29 +36,40 @@ var ResourceTableUtil = {
       }
 
       if (prop === 'health') {
-        return HealthSorting[MarathonStore.getServiceHealth(item.name).key];
+        return HealthSorting[
+          MarathonStore.getServiceHealth(item.get('name')).key
+        ];
       }
 
       if (prop === 'cpus' || prop === 'mem' || prop === 'disk') {
+        // This is necessary for tasks, since they are not structs
+        let value = item[prop];
+
+        if (!value && item.get) {
+          value = item.get(prop);
+        }
+
         if (item.getUsageStats) {
-          return item.getUsageStats(prop).value;
+          value = item.getUsageStats(prop).value;
         }
 
         if (Util.findNestedPropertyInObject(item, `resources.${prop}`)) {
-          return item.resources[prop];
+          value = item.resources[prop];
         }
 
-        let value = item.get ? item.get(prop) : item[prop];
-
-        if (_.isArray(value)) {
-          console.log(value);
+        if (Array.isArray(value)) {
           return _.last(value).value;
         }
 
         return value;
       }
 
-      return item.get ? item.get(prop) : item[prop];
+      // This is necessary for tasks, since they are not structs
+      if (!item.get) {
+        return item[prop];
+      }
+
+      return item.get(prop);
     });
   },
 
