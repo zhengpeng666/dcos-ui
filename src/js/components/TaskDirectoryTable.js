@@ -195,7 +195,7 @@ class TaskDirectoryTable extends React.Component {
         columns={this.getColumns()}
         containerSelector=".gm-scroll-view"
         data={this.props.files}
-        sortBy={{prop: 'path', order: 'desc'}} />
+        sortBy={{prop: 'path', order: 'asc'}} />
     );
   }
 }

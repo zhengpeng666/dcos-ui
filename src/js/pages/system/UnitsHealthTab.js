@@ -205,7 +205,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
             containerSelector=".gm-scroll-view"
             data={visibleData}
             itemHeight={TableUtil.getRowHeight()}
-            sortBy={{prop: 'health', order: 'desc'}}
+            sortBy={{prop: 'health', order: 'asc'}}
             />
         </div>
         <SidePanels

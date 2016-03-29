@@ -132,7 +132,7 @@ class UnitHealthNodesTable extends React.Component {
         containerSelector=".gm-scroll-view"
         data={this.props.nodes}
         itemHeight={TableUtil.getRowHeight()}
-        sortBy={{prop: 'health', order: 'desc'}}
+        sortBy={{prop: 'health', order: 'asc'}}
         />
     );
   }

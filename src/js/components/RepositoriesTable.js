@@ -190,7 +190,7 @@ class RepositoriesTable extends mixin(StoreMixin) {
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
           data={this.props.repositories.getItems().slice()}
-          sortBy={{prop: 'name', order: 'desc'}} />
+          sortBy={{prop: 'name', order: 'asc'}} />
         <Confirm
           closeByBackdropClick={true}
           disabled={this.state.pendingRequest}

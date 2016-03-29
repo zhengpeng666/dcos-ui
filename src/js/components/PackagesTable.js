@@ -212,7 +212,7 @@ class PackagesTable extends mixin(StoreMixin) {
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
           data={this.props.packages.getItems().slice()}
-          sortBy={{prop: 'appId', order: 'desc'}} />
+          sortBy={{prop: 'appId', order: 'asc'}} />
         <Confirm
           closeByBackdropClick={true}
           disabled={this.state.pendingRequest}

@@ -191,7 +191,7 @@ class VIPsTable extends React.Component {
         containerSelector=".gm-scroll-view"
         data={this.props.vips}
         itemHeight={TableUtil.getRowHeight()}
-        sortBy={{prop: 'vip', order: 'desc'}} />
+        sortBy={{prop: 'vip', order: 'asc'}} />
     );
   }
 }
