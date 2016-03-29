@@ -67,7 +67,7 @@ class UnitHealthNodesTable extends React.Component {
         prop: 'host_ip',
         render: this.renderNode,
         sortable: true,
-        sortFunction: sortFunction
+        sortFunction
       },
       {
         className: classNameFn,
@@ -76,7 +76,7 @@ class UnitHealthNodesTable extends React.Component {
         prop: 'role',
         render: this.renderNodeRole,
         sortable: true,
-        sortFunction: sortFunction
+        sortFunction
       }
     ];
   }
