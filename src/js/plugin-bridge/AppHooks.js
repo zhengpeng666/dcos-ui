@@ -3,6 +3,7 @@
 // and HistoryStore imports PluginSDK via GetSetMixin.
 let HistoryStore;
 let SidebarActions;
+let UserStore;
 
 module.exports = {
   actions: [
@@ -17,6 +18,7 @@ module.exports = {
   initialize(SDK) {
     HistoryStore = require('../stores/HistoryStore');
     SidebarActions = require('../events/SidebarActions');
+    UserStore = require('../stores/UserStore');
 
     this.actions.forEach(action => {
       SDK.Hooks.addAction(action, this[action].bind(this));
@@ -28,6 +30,10 @@ module.exports = {
 
   closeSidebar() {
     SidebarActions.close();
+  },
+
+  fetchUsers() {
+    UserStore.fetchUsers();
   },
 
   goBack(router) {

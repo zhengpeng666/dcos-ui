@@ -58,6 +58,14 @@ import {
   TASK_DIRECTORY_CHANGE,
   TASK_DIRECTORY_ERROR,
 
+  USER_CREATE_ERROR,
+  USER_CREATE_SUCCESS,
+  USER_DELETE_ERROR,
+  USER_DELETE_SUCCESS,
+
+  USERS_CHANGE,
+  USERS_REQUEST_ERROR,
+
   VISIBILITY_CHANGE
 } from './EventTypes';
 import HistoryStore from '../stores/HistoryStore';
@@ -70,6 +78,8 @@ import NetworkingVIPSummariesStore from '../stores/NetworkingVIPSummariesStore';
 import NodeHealthStore from '../stores/NodeHealthStore';
 import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 import UnitHealthStore from '../stores/UnitHealthStore';
+import UserStore from '../stores/UserStore';
+import UsersStore from '../stores/UsersStore';
 import VisibilityStore from '../stores/VisibilityStore';
 
 const ListenersDescription = {
@@ -240,6 +250,32 @@ const ListenersDescription = {
     events: {
       success: TASK_DIRECTORY_CHANGE,
       error: TASK_DIRECTORY_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
+  'user': {
+    store: UserStore,
+    events: {
+      createSuccess: USER_CREATE_SUCCESS,
+      createError: USER_CREATE_ERROR,
+      deleteSuccess: USER_DELETE_SUCCESS,
+      deleteError: USER_DELETE_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
+
+  'users': {
+    store: UsersStore,
+    events: {
+      success: USERS_CHANGE,
+      error: USERS_REQUEST_ERROR
     },
     unmountWhen: function () {
       return true;

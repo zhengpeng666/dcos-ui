@@ -40,7 +40,8 @@ module.exports = {
     ClusterName: 'ClusterName',
     DescriptionList: 'DescriptionList',
     Chart: 'charts/Chart',
-    Tooltip: 'Tooltip'
+    Tooltip: 'Tooltip',
+    UsersActionsModal: 'modals/UsersActionsModal'
   },
   config: {
     Config: 'Config'

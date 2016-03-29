@@ -4,6 +4,7 @@ import {Hooks} from 'PluginSDK';
 import RepositoriesTab from '../../pages/system/RepositoriesTab';
 import SystemPage from '../../pages/SystemPage';
 import UnitsHealthTab from '../../pages/system/UnitsHealthTab';
+import UsersTab from '../../pages/system/UsersTab';
 
 let RouteFactory = {
 
@@ -53,6 +54,26 @@ let RouteFactory = {
     );
   },
 
+  getOrganizationRoutes() {
+    // Return filtered Routes
+    return this.getFilteredRoutes(
+      Hooks.applyFilter('organizationRoutes', {
+        routes: [{
+          type: Route,
+          name: 'system-organization-users',
+          path: 'users/?',
+          handler: UsersTab,
+          children: []
+        }],
+        redirect: {
+          type: Redirect,
+          from: '/system/organization/?',
+          to: 'system-organization-users'
+        }
+      })
+    );
+  },
+
   getSystemRoutes() {
     let overviewRoute = {
       type: Route,
@@ -62,11 +83,20 @@ let RouteFactory = {
     // Get children for Overview
     overviewRoute.children = RouteFactory.getOverviewRoutes();
 
+    let organizationRoute = {
+        type: Route,
+        name: 'system-organization',
+        path: 'organization/?'
+    };
+
+    // Get children for Overview
+    organizationRoute.children = RouteFactory.getOrganizationRoutes();
+
     // Return filtered Routes
     return this.getFilteredRoutes(
       // Pass in Object so Plugins can mutate routes and the default redirect
-      Hooks.applyFilter('SystemRoutes', {
-        routes: [overviewRoute],
+      Hooks.applyFilter('systemRoutes', {
+        routes: [overviewRoute, organizationRoute],
         redirect: {
           type: Redirect,
           from: '/system/?',
