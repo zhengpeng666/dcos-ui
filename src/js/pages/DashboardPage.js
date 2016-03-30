@@ -259,7 +259,7 @@ var DashboardPage = React.createClass({
           </div>
           <div className="grid-item column-small-6 column-large-4 column-x-large-3">
             <Panel
-              className="panel dashboard-panel dashboard-panel-list"
+              className="panel dashboard-panel dashboard-panel-list allow-overflow"
               heading={this.getHeading('Services Health')}
               headingClass="panel-header panel-header-bottom-border inverse short">
               <ServiceList

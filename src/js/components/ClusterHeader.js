@@ -3,16 +3,15 @@ import Clipboard from 'clipboard';
 import browserInfo from 'browser-info';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Tooltip} from 'reactjs-components';
 
 import ClusterName from './ClusterName';
 import DCOSLogo from './DCOSLogo';
+import {Hooks} from 'PluginSDK';
 import MetadataStore from '../stores/MetadataStore';
-import TooltipMixin from '../mixins/TooltipMixin';
 
 var ClusterHeader = React.createClass({
   displayName: 'ClusterHeader',
-
-  mixins: [TooltipMixin],
 
   getDefaultProps: function () {
     return {
@@ -20,13 +19,22 @@ var ClusterHeader = React.createClass({
     };
   },
 
+  getInitialState: function () {
+    return {
+      hasCopiedToClipboard: false
+    };
+  },
+
   componentDidMount() {
     if (this.refs.copyButton) {
-      this.clipboard = new Clipboard(this.refs.copyButton, {
-        text: () => {
-          return this.getPublicIP();
+      this.clipboard = new Clipboard(ReactDOM.findDOMNode(this.refs.copyButton),
+        {
+          text: () => {
+            return this.getPublicIP();
+          }
         }
-      });
+      );
+
       this.clipboard.on('success', this.handleCopy);
     }
   },
@@ -36,39 +44,28 @@ var ClusterHeader = React.createClass({
   },
 
   handleCopy() {
-    this.tip_updateTipContent(
-      ReactDOM.findDOMNode(this.refs.copyButton), 'Copied!'
-    );
-  },
-
-  handleMouseOverCopyIcon() {
-    var el = ReactDOM.findDOMNode(this.refs.copyButton);
-    this.tip_showTip(el);
-  },
-
-  handleMouseOutCopyIcon() {
-    this.tip_hideTip(ReactDOM.findDOMNode(this.refs.copyButton));
+    this.setState({hasCopiedToClipboard: true});
   },
 
   getFlashButton() {
-    let clipboard = null;
+    let clipboardIcon = null;
+    let tooltipContent = "Copy to clipboard";
 
     if (this.props.useClipboard) {
-      clipboard = (
+      clipboardIcon = (
         <i className="icon icon-sprite icon-sprite-mini icon-clipboard icon-sprite-mini-color clickable" />
       );
     }
 
+    if (this.state.hasCopiedToClipboard) {
+      tooltipContent = 'Copied!';
+    }
+
     if (!/safari/i.test(browserInfo().name)) {
       return (
-        <div data-behavior="show-tip"
-          data-tip-place="bottom"
-          data-tip-content="Copy to clipboard"
-          onMouseOver={this.handleMouseOverCopyIcon}
-          onMouseOut={this.handleMouseOutCopyIcon}
-          ref="copyButton">
-          {clipboard}
-        </div>
+        <Tooltip position="bottom" content={tooltipContent} ref="copyButton">
+          {clipboardIcon}
+        </Tooltip>
       );
     }
 

@@ -4,6 +4,7 @@ var GeminiScrollbar = require('react-gemini-scrollbar');
 var Link = require('react-router').Link;
 var React = require('react');
 var State = require('react-router').State;
+import {Tooltip} from 'reactjs-components';
 
 import ClusterHeader from './ClusterHeader';
 var EventTypes = require('../constants/EventTypes');
@@ -13,7 +14,6 @@ var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var MetadataStore = require('../stores/MetadataStore');
 var SidebarActions = require('../events/SidebarActions');
-var TooltipMixin = require('../mixins/TooltipMixin');
 
 let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'network', 'universe', 'system'];
 
@@ -23,7 +23,7 @@ var Sidebar = React.createClass({
 
   displayName: 'Sidebar',
 
-  mixins: [State, InternalStorageMixin, TooltipMixin],
+  mixins: [State, InternalStorageMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -123,23 +123,18 @@ var Sidebar = React.createClass({
   getFooter() {
     let defaultButtonSet = [
       (
-        <a key="button-docs" className="button button-link"
-          href="http://docs.mesosphere.com/"
-          target="_blank"
-          data-behavior="show-tip"
-          data-tip-place="top-right"
-          data-tip-content="Documentation">
-            <i className="icon icon-sprite icon-documents icon-sprite-medium clickable"></i>
-        </a>
+        <Tooltip content="Documentation" key="button-docs" elementTag="a"
+          href="http://docs.mesosphere.com/" target="_blank"
+          wrapperClassName="button button-link tooltip-wrapper">
+          <i className="icon icon-sprite icon-documents icon-sprite-medium clickable"></i>
+        </Tooltip>
       ),
       (
-        <a key="button-tour" className="button button-link"
-          data-behavior="show-tip"
-          data-tip-place="top-left"
-          data-tip-content="Install CLI and Take Tour"
-          onClick={this.handleStartTour}>
-            <i className="icon icon-sprite icon-tour icon-sprite-medium clickable"></i>
-        </a>
+        <Tooltip anchor="end" content="Install CLI and Take Tour"
+          key="button-tour" elementTag="a" onClick={this.handleStartTour}
+          wrapperClassName="button button-link tooltip-wrapper">
+          <i className="icon icon-sprite icon-tour icon-sprite-medium clickable"></i>
+        </Tooltip>
       )
     ];
 

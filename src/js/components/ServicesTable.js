@@ -1,6 +1,6 @@
-var _ = require('underscore');
 import {Link} from 'react-router';
 var React = require('react');
+import {Tooltip} from 'reactjs-components';
 
 import Cluster from '../utils/Cluster';
 var EventTypes = require('../constants/EventTypes');
@@ -11,14 +11,11 @@ var ResourceTableUtil = require('../utils/ResourceTableUtil');
 var ServiceTableHeaderLabels = require('../constants/ServiceTableHeaderLabels');
 import {Table} from 'reactjs-components';
 import TableUtil from '../utils/TableUtil';
-var TooltipMixin = require('../mixins/TooltipMixin');
 var Units = require('../utils/Units');
 
 var ServicesTable = React.createClass({
 
   displayName: 'ServicesTable',
-
-  mixins: [TooltipMixin],
 
   propTypes: {
     services: React.PropTypes.array.isRequired,
@@ -102,16 +99,13 @@ var ServicesTable = React.createClass({
       );
     }
 
-    let attributes = {};
-    attributes['data-behavior'] = 'show-tip';
-    attributes['data-tip-content'] = HealthTypesDescription[appHealth.key];
-
-    return React.createElement(
-      'span',
-      _.extend({className: appHealth.classNames}, attributes),
-      HealthLabels[appHealth.key]
+    return (
+      <Tooltip content={HealthTypesDescription[appHealth.key]}>
+        <span className={appHealth.classNames}>
+          {HealthLabels[appHealth.key]}
+        </span>
+      </Tooltip>
     );
-
   },
 
   renderStats: function (prop, service) {

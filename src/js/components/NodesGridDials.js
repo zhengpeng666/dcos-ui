@@ -1,10 +1,10 @@
 var _ = require('underscore');
 var React = require('react');
+import {Tooltip} from 'reactjs-components';
 
 var Chart = require('./charts/Chart');
 var DialChart = require('./charts/DialChart');
 var ResourceTypes = require('../constants/ResourceTypes');
-var TooltipMixin = require('../mixins/TooltipMixin');
 
 var colors = {
   error: 2,
@@ -27,8 +27,6 @@ var NodesGridDials = React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
-
-  mixins: [TooltipMixin],
 
   handleDialClick: function (nodeID) {
     // Using handler, since Link in arrays cannot get router context
@@ -148,14 +146,19 @@ var NodesGridDials = React.createClass({
   getDials: function () {
     return _.map(this.props.hosts, function (node) {
       var config = this.getDialConfig(node);
-      var tooltipProps = {};
+      let description = (
+        <div className="description">
+          {config.description}
+        </div>
+      );
 
       if (!node.isActive()) {
-        tooltipProps = {
-          'data-behavior': 'show-tip',
-          'data-tip-place': 'top',
-          'data-tip-content': 'Connection to node lost'
-        };
+        description = (
+          <Tooltip content="Connection to node lost"
+            wrapperClassName="tooltip-wrapper text-align-center description">
+            {config.description}
+          </Tooltip>
+        );
       }
 
       return (
@@ -165,10 +168,8 @@ var NodesGridDials = React.createClass({
           <div className="chart">
             <Chart calcHeight={function (w) { return w; }}>
               <DialChart data={config.data}
-                  value="percentage">
-                <div {...tooltipProps} className="description">
-                  {config.description}
-                </div>
+                value="percentage">
+                {description}
               </DialChart>
             </Chart>
           </div>

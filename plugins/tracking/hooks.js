@@ -3,6 +3,7 @@ import classNames from 'classnames';
 /* eslint-disable no-unused-vars */
 import React from 'react';
 /* eslint-enable no-unused-vars */
+import {Tooltip} from 'reactjs-components';
 
 import Actions from './actions/Actions';
 import IntercomStore from './stores/IntercomStore';
@@ -142,12 +143,11 @@ module.exports = {
     });
 
     let intercomButton = (
-      <a key="button-intercom" className="button button-link"
-        data-behavior="show-tip"
-        data-tip-content="Talk with us"
-        onClick={this.handleToggleIntercom.bind(this)}>
+      <Tooltip content="Talk with us" key="button-intercom" elementTag="a"
+        onClick={this.handleToggleIntercom.bind(this)}
+        wrapperClassName="button button-link tooltip-wrapper">
         <i className={chatIconClassSet}></i>
-      </a>
+      </Tooltip>
     );
 
     value.splice(1, 0, intercomButton);

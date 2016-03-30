@@ -1,10 +1,12 @@
-.tooltip {
-  z-index: 99999;
-}
+@tooltip-background-color: #3a3c47;
 
-// This property is necessary for the tooltip to render consistently when
-// multiple mouseover events are fired. For some reason, without this
-// property, the tooltip renders inconsistently.
-.disable-pointer-events {
-  pointer-events: none;
+.tooltip {
+  background: @tooltip-background-color;
+  border-radius: 2px;
+  color: @white;
+  padding: .8em 1em;
+
+  &:after {
+    border-color: @tooltip-background-color;
+  }
 }

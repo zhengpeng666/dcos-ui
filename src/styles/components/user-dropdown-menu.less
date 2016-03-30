@@ -147,6 +147,21 @@
   padding: 0;
 }
 
+// Disable the tooltip behavior for the user dropdown menu.
+.user-dropdown-menu,
+.sidebar-footer-user-dropdown {
+
+  .tooltip-wrapper {
+    font-size: inherit;
+    height: auto;
+    text-align: left;
+
+    .tooltip {
+      display: none;
+    }
+  }
+}
+
 & when (@screen-small-enabled) {
   @media (min-width: @screen-small) {
     .user-dropdown {
