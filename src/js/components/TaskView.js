@@ -6,10 +6,10 @@ import FilterByTaskState from './FilterByTaskState';
 import FilterInputText from './FilterInputText';
 import MesosStateStore from '../stores/MesosStateStore';
 import RequestErrorMsg from './RequestErrorMsg';
-import SaveStateUtil from '../utils/SaveStateUtil';
 import StringUtil from '../utils/StringUtil';
 import TaskStates from '../constants/TaskStates';
 import TaskTable from './TaskTable';
+import UserSettingsStore from '../stores/UserSettingsStore';
 
 const METHODS_TO_BIND = [
   'handleSearchStringChange',
@@ -18,6 +18,11 @@ const METHODS_TO_BIND = [
 ];
 
 class TaskView extends React.Component {
+  get savedStateKey() {
+    let location = global.window.location.hash;
+    return `taskView${location}`;
+  }
+
   constructor() {
     super();
 
@@ -33,9 +38,8 @@ class TaskView extends React.Component {
   }
 
   componentWillMount() {
-    let location = global.window.location.hash;
-    this.savedState_key = `taskView${location}`;
-    SaveStateUtil.getSavedState(this);
+    let savedState = UserSettingsStore.getSavedState(this.savedStateKey);
+    this.setState(savedState);
 
     MesosStateStore.addChangeListener(
       EventTypes.MESOS_STATE_REQUEST_ERROR,
@@ -44,7 +48,8 @@ class TaskView extends React.Component {
   }
 
   componentWillUnmount() {
-    SaveStateUtil.setSavedState(this);
+    UserSettingsStore.setSavedState(this.savedStateKey, this.state);
+
     MesosStateStore.removeChangeListener(
       EventTypes.MESOS_STATE_REQUEST_ERROR,
       this.onMesosStateRequestError
@@ -77,6 +82,7 @@ class TaskView extends React.Component {
   hasLoadingError() {
     return this.state.mesosStateErrorCount >= 3;
   }
+
 
   getStatusCounts(tasks) {
     let statusCount = {active: 0, completed: 0};

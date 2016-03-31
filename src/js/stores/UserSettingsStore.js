@@ -35,14 +35,14 @@ const UserSettingsStore = Store.createStore({
   getSavedState: function (key) {
     let localStorageObject = getLocalStorageObject();
     if (localStorageObject == null) {
-      return null;
+      return {};
     }
 
     if (localStorageObject[SAVED_STATE_KEY]) {
-      return localStorageObject[SAVED_STATE_KEY][key];
+      return localStorageObject[SAVED_STATE_KEY][key] || {};
     }
 
-    return null;
+    return {};
   }
 });
 
