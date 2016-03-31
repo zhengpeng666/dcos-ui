@@ -3,9 +3,8 @@ import _ from 'underscore';
 import React from 'react';
 /* eslint-enable no-unused-vars */
 
-import UserStore from '../../stores/UserStore';
-
 import ActionsModal from './ActionsModal';
+import UserStore from '../../stores/UserStore';
 
 class UsersActionsModal extends ActionsModal {
   constructor() {
