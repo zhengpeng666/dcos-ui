@@ -12,7 +12,9 @@ import Units from '../utils/Units';
 
 const METHODS_TO_BIND = [
   'handleTaskClick',
-  'renderHeadline'
+  'renderHeadline',
+  'renderState',
+  'renderStats'
 ];
 
 class TaskTable extends React.Component {
@@ -28,6 +30,14 @@ class TaskTable extends React.Component {
     let linkTo = this.getTaskPanelRoute();
 
     this.props.parentRouter.transitionTo(linkTo, {taskID});
+  }
+
+  getStatValue(task, prop) {
+    return task.resources[prop];
+  }
+
+  getStateValue(task, prop) {
+    return TaskStates[task[prop]].displayName;
   }
 
   getColumns() {
@@ -57,6 +67,7 @@ class TaskTable extends React.Component {
       {
         cacheCell: true,
         className,
+        getValue: this.getStateValue,
         headerClassName: className,
         heading,
         prop: 'state',
@@ -67,6 +78,7 @@ class TaskTable extends React.Component {
       {
         cacheCell: true,
         className,
+        getValue: this.getStatValue,
         headerClassName: className,
         heading,
         prop: 'cpus',
@@ -77,6 +89,7 @@ class TaskTable extends React.Component {
       {
         cacheCell: true,
         className,
+        getValue: this.getStatValue,
         headerClassName: className,
         heading,
         prop: 'mem',
@@ -141,7 +154,7 @@ class TaskTable extends React.Component {
   renderStats(prop, task) {
     return (
       <span>
-        {Units.formatResource(prop, task.resources[prop])}
+        {Units.formatResource(prop, this.getStatValue(task, prop))}
       </span>
     );
   }
@@ -158,7 +171,7 @@ class TaskTable extends React.Component {
           {statusIcon}
         </div>
         <span className={statusLabelClasses}>
-          {TaskStates[task[prop]].displayName}
+          {this.getStateValue(task, prop)}
         </span>
       </div>
     );
