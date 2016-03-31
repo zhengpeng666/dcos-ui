@@ -1,4 +1,5 @@
 import mixin from 'reactjs-mixin';
+import {Hooks} from 'PluginSDK';
 /* eslint-disable no-unused-vars */
 import React from 'react';
 /* eslint-enable no-unused-vars */
@@ -24,7 +25,8 @@ class UserFormModal extends mixin(StoreMixin) {
     this.store_listeners = [
       {
         name: 'user',
-        events: ['createSuccess', 'createError']
+        events: ['createSuccess', 'createError'],
+        suppressUpdate: true
       }
     ];
 
@@ -53,56 +55,55 @@ class UserFormModal extends mixin(StoreMixin) {
     UserStore.addUser(model);
   }
 
-  getNewUserFormDefinition() {
-    return [
+  getButtonDefinition() {
+    return Hooks.applyFilter('userFormModalButtonDefinition', [
       {
-        fieldType: 'text',
-        name: 'description',
-        placeholder: 'Full Name',
-        required: true,
-        showError: false,
-        showLabel: false,
-        writeType: 'input',
-        validation: function () { return true; },
-        value: ''
+        text: 'Cancel',
+        className: 'button button-medium',
+        isClose: true
       },
       {
-        fieldType: 'text',
-        name: 'uid',
-        placeholder: 'Username',
-        required: true,
-        showError: false,
-        showLabel: false,
-        writeType: 'input',
-        validation: function () { return true; },
-        value: ''
-      },
-      {
-        fieldType: 'password',
-        name: 'password',
-        placeholder: 'Password',
-        required: true,
-        showError: this.state.errorMsg,
-        showLabel: false,
-        writeType: 'input',
-        validation: function () { return true; },
-        value: ''
+        text: 'Add User',
+        className: 'button button-success button-medium',
+        isSubmit: true
       }
-    ];
+    ]);
+  }
+
+  getNewUserFormDefinition() {
+    let {props, state} = this;
+
+    return Hooks.applyFilter('userFormModalDefinition', [{
+      fieldType: 'text',
+      name: 'uid',
+      placeholder: 'Email',
+      required: true,
+      showError: state.errorMsg,
+      showLabel: false,
+      writeType: 'input',
+      validation: function () { return true; },
+      value: ''
+    }], props, state);
+  }
+
+  getHeader() {
+    return Hooks.applyFilter('userFormModalHeader', (
+      <h2 className="modal-header-title text-align-center flush-top">
+        Add User to Cluster
+      </h2>
+    ));
   }
 
   render() {
     return (
       <FormModal
+        buttonDefinition={this.getButtonDefinition()}
         definition={this.getNewUserFormDefinition()}
         disabled={this.state.disableNewUser}
         onClose={this.props.onClose}
         onSubmit={this.handleNewUserSubmit}
-        open={this.props.open}
-        titleText="Create New User">
-        <h2 className="modal-header-title text-align-center flush-top">
-          Create New User
-        </h2>
+        open={this.props.open}>
+        {this.getHeader()}
       </FormModal>
     );
   }

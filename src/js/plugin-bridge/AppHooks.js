@@ -8,6 +8,8 @@ let UserStore;
 module.exports = {
   actions: [
     'closeSidebar',
+    'deleteUser',
+    'fetchUsers',
     'goBack'
   ],
 
@@ -30,6 +32,10 @@ module.exports = {
 
   closeSidebar() {
     SidebarActions.close();
+  },
+
+  deleteUser(userID) {
+    UserStore.deleteUser(userID);
   },
 
   fetchUsers() {

@@ -10,10 +10,9 @@ import OrganizationTab from './OrganizationTab';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
 import UserFormModal from '../../components/modals/UserFormModal';
 
-const EXTERNAL_CHANGE_EVENTS = [
+const USERS_CHANGE_EVENTS = [
   'onUserStoreCreateSuccess',
-  'onUserStoreDeleteSuccess',
-  'onUserStoreUpdateSuccess'
+  'onUserStoreDeleteSuccess'
 ];
 
 const METHODS_TO_BIND = [
@@ -27,10 +26,14 @@ class UsersTab extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
-    this.store_listeners = Hooks.applyFilter('userTabStoreListeners', [
+    this.store_listeners = Hooks.applyFilter('usersTabStoreListeners', [
       {name: 'marathon', events: ['success']},
-      {name: 'user', events: ['createSuccess', 'deleteSuccess']},
-      {name: 'users', events: ['success', 'error']}
+      {
+        name: 'user',
+        events: ['createSuccess', 'deleteSuccess'],
+        suppressUpdate: true
+      },
+      {name: 'users', events: ['success', 'error'], suppressUpdate: true}
     ]);
 
     this.state = {
@@ -39,9 +42,11 @@ class UsersTab extends mixin(StoreMixin) {
       usersStoreSuccess: false
     };
 
-    EXTERNAL_CHANGE_EVENTS.forEach((event) => {
-      this[event] = this.onUsersChange;
-    });
+    Hooks.applyFilter('usersTabChangeEvents', USERS_CHANGE_EVENTS).forEach(
+      (event) => {
+        this[event] = this.onUsersChange;
+      }
+    );
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);

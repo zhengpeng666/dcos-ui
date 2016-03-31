@@ -25,6 +25,8 @@ import UsersActions from '../events/UsersActions';
 const UserStore = Store.createStore({
   storeID: 'user',
 
+  fetchUsers: UsersActions.fetch,
+
   addUser: UsersActions.addUser,
 
   deleteUser: UsersActions.deleteUser,
