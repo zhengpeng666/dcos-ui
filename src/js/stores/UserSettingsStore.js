@@ -3,7 +3,6 @@ import {Store} from 'mesosphere-shared-reactjs';
 import LocalStorageUtil from '../utils/LocalStorageUtil';
 
 const LOCAL_STORAGE_KEY = 'dcosUserSettings';
-const SAVED_STATE_KEY = 'savedStates';
 
 function getLocalStorageObject() {
   let localStorageObject = LocalStorageUtil.get(LOCAL_STORAGE_KEY);
@@ -17,32 +16,23 @@ function getLocalStorageObject() {
 const UserSettingsStore = Store.createStore({
   storeID: 'userSettings',
 
-  setSavedState: function (key, value) {
+  getKey: function (key) {
     let localStorageObject = getLocalStorageObject();
-
     if (localStorageObject == null) {
-      localStorageObject = {[SAVED_STATE_KEY]: {}};
+      return null;
     }
 
-    if (localStorageObject[SAVED_STATE_KEY] == null) {
-      localStorageObject[SAVED_STATE_KEY] = {};
-    }
-
-    localStorageObject[SAVED_STATE_KEY][key] = value;
-    LocalStorageUtil.set(LOCAL_STORAGE_KEY, JSON.stringify(localStorageObject));
+    return localStorageObject[key];
   },
 
-  getSavedState: function (key) {
+  setKey: function (key, value) {
     let localStorageObject = getLocalStorageObject();
     if (localStorageObject == null) {
-      return {};
+      localStorageObject = {};
     }
 
-    if (localStorageObject[SAVED_STATE_KEY]) {
-      return localStorageObject[SAVED_STATE_KEY][key] || {};
-    }
-
-    return {};
+    localStorageObject[key] = value;
+    LocalStorageUtil.set(LOCAL_STORAGE_KEY, JSON.stringify(localStorageObject));
   }
 });
 
