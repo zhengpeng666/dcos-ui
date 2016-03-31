@@ -14,7 +14,8 @@ class UsersActionsModal extends ActionsModal {
     this.store_listeners = [
       {
         name: 'user',
-        events: ['deleteError', 'deleteSuccess']
+        events: ['deleteError', 'deleteSuccess'],
+        suppressUpdate: true
       }
     ];
 
