@@ -40,6 +40,8 @@ const UsersActions = {
       userID = data.description.replace(/\s+/g, '').toLowerCase();
     }
 
+    userID = encodeURIComponent(userID);
+
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
       method: 'PUT',
@@ -61,6 +63,7 @@ const UsersActions = {
   },
 
   deleteUser: function (userID) {
+    userID = encodeURIComponent(userID);
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${userID}`,
       method: 'DELETE',
