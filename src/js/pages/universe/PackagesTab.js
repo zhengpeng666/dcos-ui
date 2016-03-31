@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
 import React from 'react';
@@ -24,8 +23,7 @@ class PackagesTab extends mixin(StoreMixin) {
     this.state = {
       errorMessage: false,
       installModalPackage: null,
-      isLoading: true,
-      sortProp: 'name'
+      isLoading: true
     };
 
     this.store_listeners = [
@@ -130,13 +128,11 @@ class PackagesTab extends mixin(StoreMixin) {
   }
 
   getPackages() {
-    let {searchString, sortProp} = this.state;
+    let {searchString} = this.state;
     let packages = CosmosPackagesStore.getAvailablePackages()
       .filterItems(searchString);
 
-    return _.sortBy(packages.getItems(), function (cosmosPackage) {
-      return cosmosPackage.get(sortProp);
-    }).map((cosmosPackage, index) => {
+    return packages.getItems().map((cosmosPackage, index) => {
       return (
         <div
           className="grid-item column-mini-6 column-medium-4 column-large-3"
