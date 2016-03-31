@@ -13,7 +13,7 @@ import List from '../structs/List';
 
 const METHODS_TO_BIND = [
   'getHeadline',
-  'getUninstallButton',
+  'getRemoveButton',
   'handleOpenConfirm',
   'handleDeleteCancel',
   'handleDeleteRepository'
@@ -24,8 +24,8 @@ class RepositoriesTable extends mixin(StoreMixin) {
     super();
 
     this.state = {
-      repositoryToUninstall: null,
-      repositoryUninstallError: null,
+      repositoryToRemove: null,
+      repositoryRemoveError: null,
       pendingRequest: false
     };
 
@@ -44,31 +44,31 @@ class RepositoriesTable extends mixin(StoreMixin) {
   }
 
   onCosmosPackagesStoreRepositoryDeleteError(error) {
-    this.setState({repositoryUninstallError: error, pendingRequest: false});
+    this.setState({repositoryRemoveError: error, pendingRequest: false});
   }
 
   onCosmosPackagesStoreRepositoryDeleteSuccess() {
     this.setState({
-      repositoryToUninstall: null,
-      repositoryUninstallError: null,
+      repositoryToRemove: null,
+      repositoryRemoveError: null,
       pendingRequest: false
     });
     CosmosPackagesStore.fetchRepositories();
   }
 
-  handleOpenConfirm(repositoryToUninstall) {
-    this.setState({repositoryToUninstall});
+  handleOpenConfirm(repositoryToRemove) {
+    this.setState({repositoryToRemove});
   }
 
   handleDeleteCancel() {
-    this.setState({repositoryToUninstall: null});
+    this.setState({repositoryToRemove: null});
   }
 
   handleDeleteRepository() {
-    let {repositoryToUninstall} = this.state;
+    let {repositoryToRemove} = this.state;
     CosmosPackagesStore.deleteRepository(
-      repositoryToUninstall.get('name'),
-      repositoryToUninstall.get('url')
+      repositoryToRemove.get('name'),
+      repositoryToRemove.get('url')
     );
 
     this.setState({pendingRequest: true});
@@ -113,8 +113,8 @@ class RepositoriesTable extends mixin(StoreMixin) {
         className: getClassName,
         headerClassName: getClassName,
         heading: function () {},
-        prop: 'uninstall',
-        render: this.getUninstallButton,
+        prop: 'removed',
+        render: this.getRemoveButton,
         sortable: false
       }
     ];
@@ -144,30 +144,30 @@ class RepositoriesTable extends mixin(StoreMixin) {
     );
   }
 
-  getUninstallButton(prop, repositoryToUninstall) {
+  getRemoveButton(prop, repositoryToRemove) {
     return (
       <div className="flex-align-right">
         <a
           className="button button-link button-danger table-display-on-row-hover"
-          onClick={this.handleOpenConfirm.bind(this, repositoryToUninstall)}>
-          Uninstall
+          onClick={this.handleOpenConfirm.bind(this, repositoryToRemove)}>
+          Remove
         </a>
       </div>
     );
   }
 
-  getUninstallModalContent() {
-    let {repositoryUninstallError, repositoryToUninstall} = this.state;
+  getRemoveModalContent() {
+    let {repositoryRemoveError, repositoryToRemove} = this.state;
     let repositoryLabel = 'This repository';
-    if (repositoryToUninstall) {
-      repositoryLabel = repositoryToUninstall.get('name');
+    if (repositoryToRemove && repositoryToRemove.get('name')) {
+      repositoryLabel = repositoryToRemove.get('name');
     }
 
     let error = null;
 
-    if (repositoryUninstallError != null) {
+    if (repositoryRemoveError != null) {
       error = (
-        <p className="text-error-state">{repositoryUninstallError}</p>
+        <p className="text-error-state">{repositoryRemoveError}</p>
       );
     }
 
@@ -175,7 +175,7 @@ class RepositoriesTable extends mixin(StoreMixin) {
       <div className="container-pod container-pod-short text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
         <p>
-          {`${repositoryLabel} repository will be uninstalled from DCOS. You will not be able to install any packages belonging to that repository anymore.`}
+          {`${repositoryLabel} repository will be removeded from DCOS. You will not be able to install any packages belonging to that repository anymore.`}
         </p>
         {error}
       </div>
@@ -196,13 +196,13 @@ class RepositoriesTable extends mixin(StoreMixin) {
           disabled={this.state.pendingRequest}
           footerContainerClass="container container-pod container-pod-short
             container-pod-fluid flush-top flush-bottom"
-          open={!!this.state.repositoryToUninstall}
+          open={!!this.state.repositoryToRemove}
           onClose={this.handleDeleteCancel}
           leftButtonCallback={this.handleDeleteCancel}
           rightButtonCallback={this.handleDeleteRepository}
           rightButtonClassName="button button-danger"
-          rightButtonText="Uninstall">
-          {this.getUninstallModalContent()}
+          rightButtonText="Remove Repository">
+          {this.getRemoveModalContent()}
         </Confirm>
       </div>
     );
