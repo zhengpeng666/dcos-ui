@@ -78,19 +78,18 @@ let RouteFactory = {
     let overviewRoute = {
       type: Route,
       name: 'system-overview',
-      path: 'overview/?'
+      path: 'overview/?',
+      // Get children for Overview
+      children: RouteFactory.getOverviewRoutes()
     };
-    // Get children for Overview
-    overviewRoute.children = RouteFactory.getOverviewRoutes();
 
     let organizationRoute = {
         type: Route,
         name: 'system-organization',
-        path: 'organization/?'
+        path: 'organization/?',
+        // Get children for Overview
+        children: RouteFactory.getOrganizationRoutes()
     };
-
-    // Get children for Overview
-    organizationRoute.children = RouteFactory.getOrganizationRoutes();
 
     // Return filtered Routes
     return this.getFilteredRoutes(
