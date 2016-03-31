@@ -25,8 +25,8 @@ class ActionsModal extends mixin(StoreMixin) {
 
     this.state = {
       pendingRequest: false,
-      requestErrorCount: null,
-      requestsRemaining: null,
+      requestErrors: [],
+      requestsRemaining: 0,
       selectedItem: null,
       validationError: null
     };
@@ -46,22 +46,19 @@ class ActionsModal extends mixin(StoreMixin) {
 
   componentWillUpdate(nextProps, nextState) {
     super.componentWillUpdate(...arguments);
-
-    if (nextState.requestsRemaining === 0) {
+    let {requestsRemaining, requestErrors} = nextState;
+    if (requestsRemaining === 0 && !requestErrors.length) {
       this.handleButtonCancel();
     }
   }
 
   componentDidUpdate() {
     super.componentDidUpdate(...arguments);
-    let state = this.state;
+    let {requestsRemaining} = this.state;
 
-    // We've accounted for all our errors/successes, no longer pending.
-    if ((state.requestErrorCount > 0) &&
-    (state.requestsRemaining === state.requestErrorCount)) {
+    if (requestsRemaining === 0) {
       this.setState({
         pendingRequest: false,
-        requestErrorCount: null,
         requestsRemaining: this.props.selectedItems.length
       });
     }
@@ -70,8 +67,8 @@ class ActionsModal extends mixin(StoreMixin) {
   handleButtonCancel() {
     this.setState({
       pendingRequest: false,
-      requestErrorCount: null,
-      requestsRemaining: null,
+      requestErrors: [],
+      requestsRemaining: 0,
       selectedItem: null,
       validationError: null
     });
@@ -80,14 +77,18 @@ class ActionsModal extends mixin(StoreMixin) {
 
   handleItemSelection(item) {
     this.setState({
-      validationError: null,
-      selectedItem: item
+      requestErrors: [],
+      selectedItem: item,
+      validationError: null
     });
   }
 
-  onActionError() {
+  onActionError(error) {
+    this.state.requestErrors.push(error);
+
     this.setState({
-      requestErrorCount: this.state.requestErrorCount + 1
+      requestErrors: this.state.requestErrors,
+      requestsRemaining: this.state.requestsRemaining - 1
     });
   }
 
@@ -99,9 +100,10 @@ class ActionsModal extends mixin(StoreMixin) {
 
   getActionsModalContents() {
     let {actionText, itemType, selectedItems} = this.props;
+    let {requestErrors, validationError} = this.state;
+
     let selectedItemsString = '';
     let actionContent = '';
-
     if (selectedItems.length === 1) {
       selectedItemsString = selectedItems[0].description;
     } else {
@@ -141,7 +143,8 @@ class ActionsModal extends mixin(StoreMixin) {
         <h3 className="flush-top">{actionText.title}</h3>
         <p>{actionContent}</p>
         {this.getDropdown(itemType)}
-        {this.getErrorMessage(this.state.validationError)}
+        {this.getErrorMessage(validationError)}
+        {this.getRequestErrorMessage(requestErrors)}
       </div>
     );
   }
@@ -178,7 +181,8 @@ class ActionsModal extends mixin(StoreMixin) {
 
   getRequestErrorMessage(errors) {
     if (errors.length > 0) {
-      let errorMessages = errors.map(function (error, index) {
+      // Only show 5 first errors
+      let errorMessages = errors.slice(0, 5).map(function (error, index) {
         return (
           <p className="text-error-state" key={index}>{error}</p>
         );

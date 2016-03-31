@@ -20,12 +20,12 @@ class UsersActionsModal extends ActionsModal {
 
   }
 
-  onUserStoreDeleteError(validationError) {
-    this.setState({validationError, pendingRequest: false});
+  onUserStoreDeleteError(requestError) {
+    this.onActionError(requestError);
   }
 
   onUserStoreDeleteSuccess() {
-    this.setState({validationError: null, pendingRequest: false});
+    this.onActionSuccess();
   }
 
   handleButtonConfirm() {
@@ -36,7 +36,7 @@ class UsersActionsModal extends ActionsModal {
       UserStore.deleteUser(userID);
     });
 
-    this.setState({pendingRequest: true});
+    this.setState({pendingRequest: true, requestErrors: []});
   }
 }
 
