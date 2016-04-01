@@ -3,6 +3,9 @@ module.exports = {
   constants: {
     ServiceConstants: 'ServiceConstants'
   },
+  stores: {
+    UsersStore: 'UsersStore'
+  },
   structs: {
     List: 'List',
     Item: 'Item',

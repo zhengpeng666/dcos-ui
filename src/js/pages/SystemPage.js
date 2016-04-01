@@ -15,10 +15,14 @@ let DEFAULT_SERVICES_TABS = {
   'system-overview': {
     content: 'Overview',
     priority: 30
+  },
+  'system-organization': {
+    content: 'Organization',
+    priority: 20
   }
 };
 
-let DEFAULT_TABS_TABS = {
+let DEFAULT_OVERVIEW_TABS = {
   'system-overview-units': {
     content: 'Components',
     priority: 20
@@ -26,6 +30,13 @@ let DEFAULT_TABS_TABS = {
   'system-overview-repositories': {
     content: 'Repositories',
     priority: 10
+  }
+};
+
+let DEFAULT_ORGANIZATION_TABS = {
+  'system-organization-users': {
+    content: 'Users',
+    priority: 50
   }
 };
 
@@ -39,9 +50,13 @@ class SystemPage extends mixin(TabsMixin) {
     SYSTEM_TABS = TabsUtil.sortTabs(
       Hooks.applyFilter('SystemTabs', DEFAULT_SERVICES_TABS)
     );
-    // Add filter to register default Component Tab
+    // Add filter to register default tab for Overview Tab
     Hooks.addFilter('system-overview-tabs', function (tabs) {
-      return _.extend(tabs, DEFAULT_TABS_TABS);
+      return _.extend(tabs, DEFAULT_OVERVIEW_TABS);
+    });
+    // Add filter to register default tab for Organization Tab
+    Hooks.addFilter('system-organization-tabs', function (tabs) {
+      return _.extend(tabs, DEFAULT_ORGANIZATION_TABS);
     });
 
     this.tabs_tabs = {};
