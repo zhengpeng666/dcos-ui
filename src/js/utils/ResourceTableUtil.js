@@ -4,11 +4,11 @@ const classNames = require('classnames');
 const React = require('react');
 /*eslint-enable no-unused-vars*/
 
-import Util from '../utils/Util';
 import DateUtil from '../utils/DateUtil';
 const HealthSorting = require('../constants/HealthSorting');
 const MarathonStore = require('../stores/MarathonStore');
 import TableUtil from '../utils/TableUtil';
+import Util from '../utils/Util';
 
 function leftAlignCaret(prop) {
   return _.contains(['cpus', 'mem', 'disk', 'size', 'mtime'], prop);
