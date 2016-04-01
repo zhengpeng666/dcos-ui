@@ -176,14 +176,15 @@ class SchemaForm extends React.Component {
       <label>
         <span className="media-object-spacing-wrapper
           media-object-spacing-narrow">
-          <Tooltip content={description} wrapperClassName="tooltip-wrapper
-            media-object">
+          <div className="media-object">
             <span className="media-object-item">
               {label}
             </span>
-            <i className="icon icon-sprite icon-sprite-mini icon-error
-              media-object-item" />
-          </Tooltip>
+            <Tooltip content={description} wrapperClassName="tooltip-wrapper
+              media-object-item">
+              <i className="icon icon-sprite icon-sprite-mini icon-error" />
+            </Tooltip>
+          </div>
         </span>
       </label>
     );

@@ -87,6 +87,12 @@ components/media-objects.less
 
       }
 
+      &:last-child {
+
+        padding-right: 0;
+
+      }
+
     }
 
     &.media-object-align-top {
@@ -152,6 +158,22 @@ components/media-objects.less
 
   }
 
+  &,
+  &.media-object-spacing-narrow,
+  &.media-object-spacing-wide {
+
+    .media-object-item {
+
+      &:last-child {
+
+        padding-right: 0;
+
+      }
+
+    }
+
+  }
+
 }
 
 & when (@media-object-enabled) and (@screen-mini-enabled) {
@@ -178,7 +200,6 @@ components/media-objects.less
 
       }
 
-
       &.media-object-spacing-narrow {
 
           margin-bottom: -@base-spacing-unit-screen-mini * 1/4;
@@ -202,6 +223,22 @@ components/media-objects.less
 
           padding-bottom: @base-spacing-unit-screen-mini * 3/4;
           padding-right: @base-spacing-unit-screen-mini * 3/4;
+
+        }
+
+      }
+
+      &,
+      &.media-object-spacing-narrow,
+      &.media-object-spacing-wide {
+
+        .media-object-item {
+
+          &:last-child {
+
+            padding-right: 0;
+
+          }
 
         }
 
@@ -242,7 +279,6 @@ components/media-objects.less
 
       }
 
-
       &.media-object-spacing-narrow {
 
           margin-bottom: -@base-spacing-unit-screen-small * 1/4;
@@ -266,6 +302,22 @@ components/media-objects.less
 
           padding-bottom: @base-spacing-unit-screen-small * 3/4;
           padding-right: @base-spacing-unit-screen-small * 3/4;
+
+        }
+
+      }
+
+      &,
+      &.media-object-spacing-narrow,
+      &.media-object-spacing-wide {
+
+        .media-object-item {
+
+          &:last-child {
+
+            padding-right: 0;
+
+          }
 
         }
 
@@ -307,7 +359,6 @@ components/media-objects.less
 
       }
 
-
       &.media-object-spacing-narrow {
 
           margin-bottom: -@base-spacing-unit-screen-medium * 1/4;
@@ -331,6 +382,22 @@ components/media-objects.less
 
           padding-bottom: @base-spacing-unit-screen-medium * 3/4;
           padding-right: @base-spacing-unit-screen-medium * 3/4;
+
+        }
+
+      }
+
+      &,
+      &.media-object-spacing-narrow,
+      &.media-object-spacing-wide {
+
+        .media-object-item {
+
+          &:last-child {
+
+            padding-right: 0;
+
+          }
 
         }
 
@@ -371,7 +438,6 @@ components/media-objects.less
 
       }
 
-
       &.media-object-spacing-narrow {
 
           margin-bottom: -@base-spacing-unit-screen-large * 1/4;
@@ -395,6 +461,22 @@ components/media-objects.less
 
           padding-bottom: @base-spacing-unit-screen-large * 3/4;
           padding-right: @base-spacing-unit-screen-large * 3/4;
+
+        }
+
+      }
+
+      &,
+      &.media-object-spacing-narrow,
+      &.media-object-spacing-wide {
+
+        .media-object-item {
+
+          &:last-child {
+
+            padding-right: 0;
+
+          }
 
         }
 
