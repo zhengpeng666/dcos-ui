@@ -12,7 +12,9 @@ import Units from '../utils/Units';
 
 const METHODS_TO_BIND = [
   'handleTaskClick',
-  'renderHeadline'
+  'renderHeadline',
+  'renderState',
+  'renderStats'
 ];
 
 class TaskTable extends React.Component {
@@ -30,64 +32,70 @@ class TaskTable extends React.Component {
     this.props.parentRouter.transitionTo(linkTo, {taskID});
   }
 
+  getStatValue(task, prop) {
+    return task.resources[prop];
+  }
+
+  getStateValue(task, prop) {
+    return TaskStates[task[prop]].displayName;
+  }
+
   getColumns() {
     var className = ResourceTableUtil.getClassName;
     var heading = ResourceTableUtil.renderHeading(TaskTableHeaderLabels);
-    let propSortFunction = ResourceTableUtil.getPropSortFunction('name');
-    let statSortFunction = ResourceTableUtil.getStatSortFunction(
-      'name',
-      function (task, resource) {
-        return task.resources[resource];
-      }
-    );
+    let sortFunction = ResourceTableUtil.getSortFunction('id');
 
     return [
       {
         className,
-        dontCache: true,
-        heading,
         headerClassName: className,
+        heading,
         prop: 'name',
         render: this.renderHeadline,
         sortable: true,
-        sortFunction: propSortFunction
+        sortFunction
       },
       {
         className,
-        dontCache: true,
-        heading,
         headerClassName: className,
+        heading,
         prop: 'updated',
         render: ResourceTableUtil.renderUpdated,
         sortable: true,
-        sortFunction: propSortFunction
+        sortFunction
       },
       {
+        cacheCell: true,
         className,
-        heading,
+        getValue: this.getStateValue,
         headerClassName: className,
+        heading,
         prop: 'state',
         render: this.renderState,
         sortable: true,
-        sortFunction: propSortFunction
+        sortFunction
       },
       {
+        cacheCell: true,
         className,
-        heading,
+        getValue: this.getStatValue,
         headerClassName: className,
+        heading,
         prop: 'cpus',
         render: this.renderStats,
         sortable: true,
-        sortFunction: statSortFunction
+        sortFunction
       },
       {
+        cacheCell: true,
         className,
-        heading,
+        getValue: this.getStatValue,
         headerClassName: className,
+        heading,
         prop: 'mem',
         render: this.renderStats,
         sortable: true,
-        sortFunction: statSortFunction
+        sortFunction
       }
     ];
   }
@@ -146,7 +154,7 @@ class TaskTable extends React.Component {
   renderStats(prop, task) {
     return (
       <span>
-        {Units.formatResource(prop, task.resources[prop])}
+        {Units.formatResource(prop, this.getStatValue(task, prop))}
       </span>
     );
   }
@@ -163,7 +171,7 @@ class TaskTable extends React.Component {
           {statusIcon}
         </div>
         <span className={statusLabelClasses}>
-          {TaskStates[task[prop]].displayName}
+          {this.getStateValue(task, prop)}
         </span>
       </div>
     );
@@ -181,7 +189,7 @@ class TaskTable extends React.Component {
         containerSelector=".gm-scroll-view"
         data={this.props.tasks.slice()}
         itemHeight={TableUtil.getRowHeight()}
-        sortBy={{prop: 'name', order: 'desc'}} />
+        sortBy={{prop: 'updated', order: 'asc'}} />
     );
   }
 }

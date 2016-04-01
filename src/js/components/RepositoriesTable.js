@@ -7,9 +7,10 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
+import List from '../structs/List';
 import RepositoriesTableHeaderLabels from '../constants/RepositoriesTableHeaderLabels';
 import ResourceTableUtil from '../utils/ResourceTableUtil';
-import List from '../structs/List';
+import TableUtil from '../utils/TableUtil';
 
 const METHODS_TO_BIND = [
   'getHeadline',
@@ -85,10 +86,9 @@ class RepositoriesTable extends mixin(StoreMixin) {
     let getClassName = this.getClassName;
     let heading = ResourceTableUtil
       .renderHeading(RepositoriesTableHeaderLabels);
-    let sortFunction = ResourceTableUtil
-      .getStatSortFunction('name', function (repository, prop) {
-        return repository.get(prop);
-      });
+    let sortFunction = TableUtil.getSortFunction('uri', function (item, prop) {
+      return item.get(prop);
+    });
 
     return [
       {
@@ -190,7 +190,7 @@ class RepositoriesTable extends mixin(StoreMixin) {
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
           data={this.props.repositories.getItems().slice()}
-          sortBy={{prop: 'name', order: 'desc'}} />
+          sortBy={{prop: 'name', order: 'asc'}} />
         <Confirm
           closeByBackdropClick={true}
           disabled={this.state.pendingRequest}

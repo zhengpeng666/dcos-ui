@@ -10,6 +10,7 @@ import CosmosMessages from '../constants/CosmosMessages';
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import PackagesTableHeaderLabels from '../constants/PackagesTableHeaderLabels';
 import ResourceTableUtil from '../utils/ResourceTableUtil';
+import TableUtil from '../utils/TableUtil';
 import UniversePackagesList from '../structs/UniversePackagesList';
 
 const METHODS_TO_BIND = [
@@ -82,15 +83,19 @@ class PackagesTable extends mixin(StoreMixin) {
   getClassName(prop, sortBy, row) {
     return classNames({
       'highlight': prop === sortBy.prop,
-      'clickable': row == null // this is a header
+      'clickable': prop === 'appId' && row == null // this is a header
     });
   }
 
   getColumns() {
     let getClassName = this.getClassName;
     let heading = ResourceTableUtil.renderHeading(PackagesTableHeaderLabels);
-    let sortFunction = ResourceTableUtil
-      .getStatSortFunction('name', function (cosmosPackage, prop) {
+    let sortFunction = TableUtil
+      .getSortFunction('appId', function (cosmosPackage, prop) {
+        if (prop === 'appId') {
+          return cosmosPackage.get('appId');
+        }
+
         return cosmosPackage.get('packageDefinition')[prop];
       });
 
@@ -99,13 +104,10 @@ class PackagesTable extends mixin(StoreMixin) {
         className: getClassName,
         headerClassName: getClassName,
         heading,
-        prop: 'name',
+        prop: 'appId',
         render: this.getHeadline,
         sortable: true,
-        sortFunction: ResourceTableUtil
-          .getStatSortFunction('name', function (cosmosPackage) {
-            return cosmosPackage.get('appId');
-          })
+        sortFunction
       },
       {
         className: getClassName,
@@ -115,8 +117,7 @@ class PackagesTable extends mixin(StoreMixin) {
         render: function (prop, cosmosPackage) {
           return cosmosPackage.get('packageDefinition')[prop];
         },
-        sortable: true,
-        sortFunction
+        sortable: false
       },
       {
         className: getClassName,
@@ -151,7 +152,7 @@ class PackagesTable extends mixin(StoreMixin) {
         <span className="icon icon-small icon-image-container icon-app-container">
           <img src={packageImages['icon-small']} />
         </span>
-        <span className="text-overflow">
+        <span className="headline text-overflow">
           {name}
         </span>
       </div>
@@ -211,7 +212,7 @@ class PackagesTable extends mixin(StoreMixin) {
           columns={this.getColumns()}
           colGroup={this.getColGroup()}
           data={this.props.packages.getItems().slice()}
-          sortBy={{prop: 'name', order: 'desc'}} />
+          sortBy={{prop: 'appId', order: 'asc'}} />
         <Confirm
           closeByBackdropClick={true}
           disabled={this.state.pendingRequest}

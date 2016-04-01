@@ -3,7 +3,6 @@ import {Link} from 'react-router';
 import {List} from 'reactjs-components';
 import React from 'react';
 
-import ResourceTableUtil from '../utils/ResourceTableUtil';
 import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 class ComponentList extends React.Component {
@@ -45,12 +44,9 @@ class ComponentList extends React.Component {
   }
 
   getVisibleComponents(units, displayCount) {
-    let sortFunction = ResourceTableUtil.getStatSortFunction(
-      'id',
-      UnitHealthUtil.getHealthSorting
-    )();
+    let sortFunction = UnitHealthUtil.getHealthSortFunction;
 
-    units = units.sort(sortFunction);
+    units = units.sort(sortFunction('health'));
 
     if (units.length > displayCount) {
       return units.slice(0, displayCount);

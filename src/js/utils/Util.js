@@ -55,12 +55,12 @@ const Util = {
    * @return {*}                   The value of the found property or null
    */
   findNestedPropertyInObject: function (obj, propertyPath) {
-    if (!propertyPath || !obj) {
+    if (propertyPath == null || obj == null) {
       return null;
     }
 
     return propertyPath.split('.').reduce(function (current, nextProp) {
-      if (!current) {
+      if (current == null) {
         return current;
       }
 

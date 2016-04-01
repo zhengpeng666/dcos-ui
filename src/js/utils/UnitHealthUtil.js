@@ -2,9 +2,19 @@ import _ from 'underscore';
 
 import HealthSorting from '../constants/HealthSorting';
 import UnitHealthStatus from '../constants/UnitHealthStatus';
+import TableUtil from '../utils/TableUtil';
 import Util from '../utils/Util';
 
 const UnitHealthUtil = {
+  getHealthSortFunction: function (...args) {
+    return TableUtil.getSortFunction('id', function (item, prop) {
+      if (prop === 'health') {
+        return UnitHealthUtil.getHealthSorting(item);
+      }
+
+      return item.get(prop);
+    })(...args);
+  },
 
   // Gets the HealthSorting weight of a Node or HealthUnit
   getHealthSorting(item) {

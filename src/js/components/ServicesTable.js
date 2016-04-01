@@ -125,13 +125,7 @@ var ServicesTable = React.createClass({
   getColumns: function () {
     let className = ResourceTableUtil.getClassName;
     let heading = ResourceTableUtil.renderHeading(ServiceTableHeaderLabels);
-    let propSortFunction = ResourceTableUtil.getPropSortFunction('name');
-    let statSortFunction = ResourceTableUtil.getStatSortFunction(
-      'name',
-      function (service, resource) {
-        return service.getUsageStats(resource).value;
-      }
-    );
+    let sortFunction = ResourceTableUtil.getSortFunction('id');
 
     return [
       {
@@ -140,17 +134,16 @@ var ServicesTable = React.createClass({
         prop: 'name',
         render: this.renderHeadline,
         sortable: true,
-        sortFunction: propSortFunction,
+        sortFunction,
         heading
       },
       {
         className,
-        dontCache: true,
         headerClassName: className,
         prop: 'health',
         render: this.renderHealth,
         sortable: true,
-        sortFunction: propSortFunction,
+        sortFunction,
         heading
       },
       {
@@ -159,7 +152,7 @@ var ServicesTable = React.createClass({
         prop: 'TASK_RUNNING',
         render: ResourceTableUtil.renderTask,
         sortable: true,
-        sortFunction: propSortFunction,
+        sortFunction,
         heading
       },
       {
@@ -168,7 +161,7 @@ var ServicesTable = React.createClass({
         prop: 'cpus',
         render: this.renderStats,
         sortable: true,
-        sortFunction: statSortFunction,
+        sortFunction,
         heading
       },
       {
@@ -177,7 +170,7 @@ var ServicesTable = React.createClass({
         prop: 'mem',
         render: this.renderStats,
         sortable: true,
-        sortFunction: statSortFunction,
+        sortFunction,
         heading
       },
       {
@@ -186,7 +179,7 @@ var ServicesTable = React.createClass({
         prop: 'disk',
         render: this.renderStats,
         sortable: true,
-        sortFunction: statSortFunction,
+        sortFunction,
         heading
       }
     ];
@@ -216,8 +209,7 @@ var ServicesTable = React.createClass({
           data={this.props.services.slice()}
           itemHeight={TableUtil.getRowHeight()}
           containerSelector=".gm-scroll-view"
-          sortBy={{prop: 'name', order: 'desc'}}
-          transition={false} />
+          sortBy={{prop: 'name', order: 'asc'}} />
       </div>
     );
   }

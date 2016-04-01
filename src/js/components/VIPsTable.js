@@ -9,24 +9,9 @@ const METHODS_TO_BIND = [
   'getColumnClassname'
 ];
 
-// const COLUMNS_TO_HIDE_MEDIUM = [
-//   'successLastMinute',
-//   'failLastMinute'
-// ];
-
-// const COLUMNS_TO_HIDE_SMALL = [
-//   'successLastMinute',
-//   'failLastMinute',
-//   'applicationReachabilityPercent',
-//   'machineReachabilityPercent'
-// ];
-
 const COLUMNS_TO_HIDE_MINI = [
   'successLastMinute',
   'failLastMinute'
-  // 'applicationReachabilityPercent',
-  // 'machineReachabilityPercent',
-  // 'failurePercent'
 ];
 
 const RIGHT_ALIGNED_TABLE_CELLS = [
@@ -62,6 +47,7 @@ class VIPsTable extends React.Component {
       machineReachabilityPercent: 'IP\u00a0REACH',
       p99Latency: 'P99\u00a0LATENCY'
     });
+    let sortFunction = TableUtil.getSortFunction('vip');
 
     return [
       {
@@ -78,7 +64,8 @@ class VIPsTable extends React.Component {
         prop: 'successLastMinute',
         render: this.getFailSuccessRenderFn('success'),
         sortable: true,
-        heading
+        heading,
+        sortFunction
       },
       {
         className,
@@ -86,7 +73,8 @@ class VIPsTable extends React.Component {
         prop: 'failLastMinute',
         render: this.getFailSuccessRenderFn('fail'),
         sortable: true,
-        heading
+        heading,
+        sortFunction
       },
       {
         className,
@@ -94,31 +82,17 @@ class VIPsTable extends React.Component {
         prop: 'failurePercent',
         render: this.renderPercentage,
         sortable: true,
-        heading
+        heading,
+        sortFunction
       },
-      // {
-      //   className,
-      //   headerClassName: className,
-      //   prop: 'applicationReachabilityPercent',
-      //   render: this.renderPercentage,
-      //   sortable: true,
-      //   heading
-      // },
-      // {
-      //   className,
-      //   headerClassName: className,
-      //   prop: 'machineReachabilityPercent',
-      //   render: this.renderPercentage,
-      //   sortable: true,
-      //   heading
-      // },
       {
         className,
         headerClassName: className,
         prop: 'p99Latency',
         sortable: true,
         render: this.renderMilliseconds,
-        heading
+        heading,
+        sortFunction
       }
     ];
   }
@@ -128,8 +102,6 @@ class VIPsTable extends React.Component {
 
     return classNames({
       'text-align-right': alignTableCellRight(prop),
-      // 'hidden-medium': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MEDIUM),
-      // 'hidden-small': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_SMALL),
       'hidden-mini': hideColumnAtScreenSize(prop, COLUMNS_TO_HIDE_MINI),
       'highlight': prop === sortBy.prop,
       'clickable': row == null
@@ -142,8 +114,6 @@ class VIPsTable extends React.Component {
         <col style={{minWidth: '25%', width: '25%'}} />
         <col className="hidden-mini" />
         <col className="hidden-mini" />
-        <col />
-        <col />
         <col />
         <col />
       </colgroup>
@@ -220,9 +190,8 @@ class VIPsTable extends React.Component {
         colGroup={this.getColGroup()}
         containerSelector=".gm-scroll-view"
         data={this.props.vips}
-        idAttribute="vip"
         itemHeight={TableUtil.getRowHeight()}
-        sortBy={{prop: 'vip', order: 'desc'}} />
+        sortBy={{prop: 'vip', order: 'asc'}} />
     );
   }
 }

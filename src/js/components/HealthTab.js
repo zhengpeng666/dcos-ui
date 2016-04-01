@@ -56,6 +56,7 @@ class HealthTab extends React.Component {
       id: 'HEALTH CHECK NAME',
       role: 'ROLE'
     });
+    let sortFunction = UnitHealthUtil.getHealthSortFunction;
 
     return [
       {
@@ -65,10 +66,7 @@ class HealthTab extends React.Component {
         prop: 'health',
         render: this.renderHealth,
         sortable: true,
-        sortFunction: ResourceTableUtil.getStatSortFunction(
-          'id',
-          UnitHealthUtil.getHealthSorting
-        )
+        sortFunction
       },
       {
         className: classNameFn,
@@ -77,7 +75,7 @@ class HealthTab extends React.Component {
         prop: 'id',
         render: this.renderUnitHealthCheck,
         sortable: true,
-        sortFunction: ResourceTableUtil.getPropSortFunction('id')
+        sortFunction
       }
     ];
   }
@@ -156,9 +154,8 @@ class HealthTab extends React.Component {
           colGroup={this.getColGroup()}
           containerSelector=".gm-scroll-view"
           data={visibleData}
-          idAttribute="id"
           itemHeight={TableUtil.getRowHeight()}
-          sortBy={{prop: 'health', order: 'desc'}}
+          sortBy={{prop: 'health', order: 'asc'}}
           />
       </div>
     );

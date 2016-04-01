@@ -7,27 +7,11 @@ const React = require('react');
 import DateUtil from '../utils/DateUtil';
 const HealthSorting = require('../constants/HealthSorting');
 const MarathonStore = require('../stores/MarathonStore');
+import TableUtil from '../utils/TableUtil';
+import Util from '../utils/Util';
 
 function leftAlignCaret(prop) {
   return _.contains(['cpus', 'mem', 'disk', 'size', 'mtime'], prop);
-}
-
-function compareValues(a, b) {
-  if (a > b) {
-    return 1;
-  } else if (a < b) {
-    return -1;
-  } else {
-    return 0;
-  }
-}
-
-function compareFunction(a, b, tieBreakerProp, aValue, bValue) {
-  if (aValue === bValue) {
-    return compareValues(a[tieBreakerProp], b[tieBreakerProp]);
-  }
-
-  return aValue - bValue;
 }
 
 function getUpdatedTimestamp(model) {
@@ -45,52 +29,48 @@ var ResourceTableUtil = {
     });
   },
 
-  getStatSortFunction: function (baseProp, getResource) {
-    return function (prop) {
-      return function (a, b) {
-        let aValue = getResource(a, prop);
-        let bValue = getResource(b, prop);
+  getSortFunction: function (tieBreakerProp) {
+    return TableUtil.getSortFunction(tieBreakerProp, function (item, prop) {
+      if (prop === 'updated') {
+        return getUpdatedTimestamp(item) || 0;
+      }
 
-        if (_.isArray(aValue)) {
-          aValue = _.last(aValue).value;
-          bValue = _.last(bValue).value;
+      if (prop === 'health') {
+        return HealthSorting[
+          MarathonStore.getServiceHealth(item.get('name')).key
+        ];
+      }
+
+      if (prop === 'cpus' || prop === 'mem' || prop === 'disk') {
+        // This is necessary for tasks, since they are not structs
+        let value = item[prop];
+
+        if (!value && item.get) {
+          value = item.get(prop);
         }
 
-        return compareFunction(a, b, baseProp, aValue, bValue);
-      };
-    };
-  },
-
-  getPropSortFunction: function (baseProp) {
-    return function (prop) {
-      return function (a, b) {
-        let aValue = a[prop];
-        let bValue = b[prop];
-
-        if (prop === 'updated') {
-          aValue = getUpdatedTimestamp(a) || 0;
-          bValue = getUpdatedTimestamp(b) || 0;
+        if (item.getUsageStats) {
+          value = item.getUsageStats(prop).value;
         }
 
-        if (prop === 'health') {
-          let aHealth = MarathonStore.getServiceHealth(a.name);
-          let bHealth = MarathonStore.getServiceHealth(b.name);
-          aValue = HealthSorting[aHealth.key];
-          bValue = HealthSorting[bHealth.key];
+        if (Util.findNestedPropertyInObject(item, `resources.${prop}`)) {
+          value = item.resources[prop];
         }
 
-        if (_.isNumber(aValue)) {
-          return compareFunction(a, b, baseProp, aValue, bValue);
+        if (Array.isArray(value)) {
+          return _.last(value).value;
         }
 
-        aValue = aValue.toString().toLowerCase() + '-' +
-          a[baseProp].toLowerCase();
-        bValue = bValue.toString().toLowerCase() + '-' +
-          b[baseProp].toLowerCase();
+        return value;
+      }
 
-        return compareValues(aValue, bValue);
-      };
-    };
+      // This is necessary for tasks, since they are not structs
+      if (!item.get) {
+        return item[prop];
+      }
+
+      return item.get(prop);
+    });
   },
 
   renderHeading: function (config) {
