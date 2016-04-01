@@ -52,7 +52,7 @@ const UserStore = Store.createStore({
         break;
       case REQUEST_USER_CREATE_ERROR:
         UserStore.emit(
-          USER_CREATE_ERROR, action.data, action.userID
+          USER_CREATE_ERROR, action.data, action.userID, action.xhr
         );
         break;
       // Delete user
