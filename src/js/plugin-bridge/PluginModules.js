@@ -14,6 +14,7 @@ module.exports = {
     CompositeState: 'CompositeState'
   },
   utils: {
+    CookieUtils: 'CookieUtils',
     StringUtil: 'StringUtil',
     RequestUtil: 'RequestUtil',
     DOMUtils: 'DOMUtils',
