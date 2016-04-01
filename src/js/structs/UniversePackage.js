@@ -20,8 +20,8 @@ class UniversePackage extends Item {
     );
   }
 
-  isPromoted() {
-    return this.get('promoted');
+  isSelected() {
+    return this.get('selected');
   }
 }
 

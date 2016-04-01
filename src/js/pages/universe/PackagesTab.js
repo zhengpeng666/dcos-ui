@@ -88,11 +88,11 @@ class PackagesTab extends mixin(StoreMixin) {
   }
 
   getButton(cosmosPackage) {
-    let promotedTag = null;
-    if (cosmosPackage.isPromoted()) {
-      promotedTag = (
-        <p className="text-align-center flush-bottom" key="promotedTag">
-          Promoted
+    let selectedTag = null;
+    if (cosmosPackage.isSelected()) {
+      selectedTag = (
+        <p className="text-align-center flush-bottom" key="selectedTag">
+          Selected
         </p>
       );
     }
@@ -105,7 +105,7 @@ class PackagesTab extends mixin(StoreMixin) {
           Install Package
         </button>
       </p>,
-      promotedTag
+      selectedTag
     ];
   }
 
