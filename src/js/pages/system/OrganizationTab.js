@@ -217,6 +217,12 @@ class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
         prop: 'uid',
         render: this.renderUsername,
         sortable: true,
+        sortFunction: TableUtil.getSortFunction(
+          this.props.itemID,
+          function (item, prop) {
+            return item.get(prop);
+          }
+        ),
         heading: ResourceTableUtil.renderHeading({uid: 'USERNAME'})
       }
     ];
