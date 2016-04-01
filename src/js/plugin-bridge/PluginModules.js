@@ -4,7 +4,8 @@ module.exports = {
     ServiceConstants: 'ServiceConstants'
   },
   stores: {
-    UsersStore: 'UsersStore'
+    UsersStore: 'UsersStore',
+    UserStore: 'UserStore'
   },
   structs: {
     List: 'List',
