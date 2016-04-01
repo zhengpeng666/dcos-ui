@@ -4,7 +4,9 @@ jest.dontMock('../Util');
 var Util = require('../Util');
 
 describe('Util', function () {
+
   describe('#mapObject', function () {
+
     var obj = {a: 1, b: 2};
 
     it('should map objects', function () {
@@ -24,6 +26,7 @@ describe('Util', function () {
   });
 
   describe('#findLastIndex', function () {
+
     it('should return -1 if empty array', function () {
       var array = [];
       var index = Util.findLastIndex(array, function (obj) {
@@ -55,6 +58,7 @@ describe('Util', function () {
   });
 
   describe('#isArray', function () {
+
     it('should return true if passed an array', function () {
       var result = Util.isArray([]);
 
@@ -108,6 +112,7 @@ describe('Util', function () {
 
       expect(result).toEqual(false);
     });
+
   });
 
   describe('#findNestedPropertyInObject', function () {
@@ -163,6 +168,7 @@ describe('Util', function () {
   });
 
   describe('#throttleScroll', function () {
+
     beforeEach(function () {
       this.func = jest.genMockFunction();
       this.throttled = Util.throttleScroll(
@@ -192,5 +198,43 @@ describe('Util', function () {
       // wait is over.
       expect(func.mock.calls.length).toBe(2);
     });
+
   });
+
+  describe('#debounce', function () {
+
+    beforeEach(function () {
+      this.func = jest.genMockFunction();
+      this.debounced = Util.debounce(
+        this.func, 200
+      ).bind(this, {nativeEvent: {}});
+    });
+
+    it('calls the function', function () {
+      this.debounced();
+      jest.runAllTimers();
+
+      expect(this.func.mock.calls.length).toBe(1);
+    });
+
+    it('it calls the function only once after consecutive calls', function () {
+      this.debounced();
+      this.debounced();
+      this.debounced();
+      jest.runAllTimers();
+
+      expect(this.func.mock.calls.length).toBe(1);
+    });
+
+    it('calls function with final arguments', function () {
+      this.debounced('foo');
+      this.debounced('bar');
+      this.debounced('baz');
+      jest.runAllTimers();
+
+      expect(this.func.mock.calls[0][1]).toBe('baz');
+    });
+
+  });
+
 });

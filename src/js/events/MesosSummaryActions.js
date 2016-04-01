@@ -1,7 +1,6 @@
 import ActionTypes from '../constants/ActionTypes';
 var AppDispatcher = require('./AppDispatcher');
 var Config = require('../config/Config');
-import {Hooks} from 'PluginSDK';
 var RequestUtil = require('../utils/RequestUtil');
 var _historyServiceOnline = true;
 
@@ -12,15 +11,6 @@ function getStateUrl(timeScale) {
   } else {
     return `${Config.rootUrl}/mesos/master/state-summary`;
   }
-}
-
-function registerServerError(message, type) {
-  _historyServiceOnline = false;
-  Hooks.doAction('log', {
-    eventID: 'Server error',
-    type: type,
-    error: message
-  });
 }
 
 var MesosSummaryActions = {
@@ -51,7 +41,8 @@ var MesosSummaryActions = {
             resolve();
           },
           error: function (e) {
-            registerServerError(e.message, errorAction);
+            _historyServiceOnline = false;
+
             AppDispatcher.handleServerAction({
               type: errorAction,
               data: e.message

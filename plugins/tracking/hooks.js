@@ -51,6 +51,10 @@ module.exports = {
       SDK.Hooks.addAction(action, this[action].bind(this));
     });
     this.configure(SDK.config);
+
+    if (this.isEnabled()) {
+      Actions.initialize();
+    }
   },
 
   configure: function (configuration) {

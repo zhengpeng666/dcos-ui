@@ -5,6 +5,10 @@ import PluginTestUtils from 'PluginTestUtils';
 let SDK = PluginTestUtils.getSDK('tracking', {enabled: true});
 require('../../SDK').setSDK(SDK);
 
+PluginTestUtils.dontMock([
+  'Util'
+]);
+
 var _ = require('underscore');
 var Actions = require('../Actions');
 
@@ -29,19 +33,19 @@ describe('Actions', function () {
     });
 
     it('calls analytics#track', function () {
-      Actions.setClusterID('a');
+      Actions.setCustomerID('a');
       Actions.log({eventID: 'foo'});
       expect(global.analytics.track.calls.length).toEqual(1);
     });
 
     it('calls analytics#track with correct eventID', function () {
-      Actions.setClusterID('a');
+      Actions.setCustomerID('a');
       Actions.log({});
       expect(global.analytics.track.calls[0].args[0]).toEqual('dcos-ui');
     });
 
     it('calls analytics#track with correct log', function () {
-      Actions.setClusterID('a');
+      Actions.setCustomerID('a');
       Actions.log({eventID: 'foo'});
 
       var args = global.analytics.track.calls[0].args[1];
@@ -56,10 +60,10 @@ describe('Actions', function () {
 
   });
 
-  describe('#setClusterID', function () {
+  describe('#setCustomerID', function () {
 
     beforeEach(function () {
-      Actions.setClusterID(null);
+      Actions.setCustomerID(null);
       spyOn(global.analytics, 'track');
     });
 
@@ -68,17 +72,17 @@ describe('Actions', function () {
       expect(global.analytics.track).not.toHaveBeenCalled();
     });
 
-    it('sets the clusterID', function () {
-      Actions.setClusterID('foo');
-      expect(Actions.clusterID).toEqual('foo');
+    it('sets the customerID', function () {
+      Actions.setCustomerID('foo');
+      expect(Actions.customerID).toEqual('foo');
     });
 
-    it('runs queued logs when clusterID is set', function () {
+    it('runs queued logs when customerID is set', function () {
       Actions.log('foo');
       Actions.log('bar');
       Actions.log('baz');
       spyOn(Actions, 'log');
-      Actions.setClusterID('qux');
+      Actions.setCustomerID('qux');
       expect(Actions.log.calls.length).toEqual(3);
       ['foo', 'bar', 'baz'].forEach(function (log, i) {
         expect(Actions.log.calls[i].args[0]).toEqual(log);
