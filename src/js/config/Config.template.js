@@ -9,6 +9,12 @@ var ConfigDev = {
         authentication: {
           enabled: true
         },
+        // Enable oauth OR authentication
+        oauth: {
+          enabled: false,
+          clientID: 'IBcqrIBD0yMz0xjZCSvZz2BKc3zr43Dw',
+          authLocation: 'https://opendcos.auth0.com'
+        },
         banner: {
           enabled: false
         },
@@ -25,6 +31,9 @@ var ConfigDev = {
           enabled: true
         }
       }
+    },
+    clusterConfiguration: {
+      firstUser: true
     }
   },
   useFixtures: false,

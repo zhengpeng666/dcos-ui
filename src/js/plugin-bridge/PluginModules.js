@@ -4,6 +4,7 @@ module.exports = {
     ServiceConstants: 'ServiceConstants'
   },
   stores: {
+    AuthStore: 'AuthStore',
     UsersStore: 'UsersStore',
     UserStore: 'UserStore'
   },
@@ -29,6 +30,8 @@ module.exports = {
     TabsMixin: 'TabsMixin'
   },
   components: {
+    Authenticated: 'Authenticated',
+    AccessDeniedPage: 'AccessDeniedPage',
     SidePanelContents: 'SidePanelContents',
     RequestErrorMsg: 'RequestErrorMsg',
     IconInfo: 'icons/IconInfo',
