@@ -66,6 +66,12 @@ describe('UsersActions', function () {
       expect(this.configuration.url).toEqual(Config.acsAPIPrefix + '/users/foo');
     });
 
+    it('encodes characters for URL', function () {
+      UsersActions.addUser({uid: 'foo@email.com'});
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + '/users/foo%40email.com');
+    });
+
     it('uses PUT for the request method', function () {
       expect(this.configuration.method).toEqual('PUT');
     });
@@ -138,6 +144,12 @@ describe('UsersActions', function () {
 
     it('fetches data from the correct URL', function () {
       expect(this.configuration.url).toEqual(Config.acsAPIPrefix + '/users/foo');
+    });
+
+    it('encodes characters for URL', function () {
+      UsersActions.deleteUser('foo@email.com');
+      this.configuration = RequestUtil.json.mostRecentCall.args[0];
+      expect(this.configuration.url).toEqual(Config.acsAPIPrefix + '/users/foo%40email.com');
     });
 
     it('uses DELETE for the request method', function () {
