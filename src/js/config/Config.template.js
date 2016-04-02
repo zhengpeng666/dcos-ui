@@ -7,7 +7,12 @@ var ConfigDev = {
     uiConfiguration: {
       plugins: {
         authentication: {
-          enabled: true
+          enabled: false
+        },
+        oauth: {
+          enabled: true,
+          clientID: 'IBcqrIBD0yMz0xjZCSvZz2BKc3zr43Dw',
+          authLocation: 'https://opendcos.auth0.com'
         },
         // Enable oauth OR authentication
         oauth: {
