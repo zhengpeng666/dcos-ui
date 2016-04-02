@@ -5,7 +5,7 @@ let SDK = require('../SDK').getSDK();
 let AuthStore = SDK.get('AuthStore');
 
 let METHODS_TO_BIND = [
-  'onMessage'
+  'onMessageReceived'
 ];
 
 module.exports = class LoginPage extends React.Component {
@@ -14,14 +14,14 @@ module.exports = class LoginPage extends React.Component {
       this[method] = this[method].bind(this);
     }, this);
 
-    window.addEventListener('message', this.onMessage);
+    window.addEventListener('message', this.onMessageReceived);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('message', this.onMessage);
+    window.removeEventListener('message', this.onMessageReceived);
   }
 
-  onMessage(event) {
+  onMessageReceived(event) {
     if (event.origin !== SDK.config.authLocation) {
       return;
     }
