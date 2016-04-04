@@ -1,4 +1,4 @@
-describe.only('Organization Page', function () {
+describe('Organization Page', function () {
 
   context('Components tab [0e0]', function () {
 
@@ -8,7 +8,8 @@ describe.only('Organization Page', function () {
           mesos: '1-task-healthy',
           acl: true,
           plugins: 'organization-enabled',
-          LDAPUserCreate: 'error'
+          LDAPUserCreate: 'error',
+          singleLDAP: true
         })
         .visitUrl({url: '/system/organization', identify: true, logIn: true});
         cy.get('button').contains('Add User').click();
@@ -31,7 +32,8 @@ describe.only('Organization Page', function () {
           mesos: '1-task-healthy',
           acl: true,
           plugins: 'organization-enabled',
-          LDAPUserCreate: 'success'
+          LDAPUserCreate: 'success',
+          singleLDAP: true
         })
         .visitUrl({url: '/system/organization', identify: true, logIn: true});
         cy.get('button').contains('Add User').click();
@@ -44,6 +46,26 @@ describe.only('Organization Page', function () {
         cy.get('@LDAPForm').within(function () {
           cy.get('.button').contains('+ Add').click();
           cy.get('p.text-success').contains('User \'kennytran\' added');
+        });
+      });
+    });
+
+    context('no LDAP configured', function () {
+
+      beforeEach(function () {
+        cy.configureCluster({
+          mesos: '1-task-healthy',
+          acl: true,
+          plugins: 'organization-enabled',
+          LDAPUserCreate: 'success'
+        })
+        .visitUrl({url: '/system/organization', identify: true, logIn: true});
+      });
+
+      it('does not contain \'Import LDAP User\'', function () {
+        cy.get('.users-table-header a.button').contains('New User').click();
+        cy.get('li').contains('Import LDAP User').should(function ($button) {
+          expect($button.length).to.equal(0);
         });
       });
     });
