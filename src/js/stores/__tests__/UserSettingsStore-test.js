@@ -22,6 +22,11 @@ describe('UserSettingsStore', function () {
       var result = UserSettingsStore.getKey('hello');
       expect(result).toEqual('there');
     });
+
+    it('returns undefined if key doesn\'t exist', function () {
+      var result = UserSettingsStore.getKey('doesNotExist');
+      expect(result).toEqual(undefined);
+    });
   });
 
   describe('setKey', function () {
