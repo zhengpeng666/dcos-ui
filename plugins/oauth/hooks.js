@@ -24,7 +24,8 @@ module.exports = {
 
   filters: [
     'sidebarFooter',
-    'applicationRoutes'
+    'applicationRoutes',
+    'serverErrorModalListeners'
   ],
 
   initialize() {
@@ -89,6 +90,15 @@ module.exports = {
     return (
       <UserDropup items={buttonSet} />
     );
+  },
+
+  serverErrorModalListeners(listeners) {
+    listeners.push({
+      name: 'auth',
+      events: ['logoutError']
+    });
+
+    return listeners;
   },
 
   applicationRoutes(routes) {

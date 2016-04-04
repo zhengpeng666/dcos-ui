@@ -25,16 +25,6 @@ import CookieUtils from '../utils/CookieUtils';
 import GetSetMixin from '../mixins/GetSetMixin';
 import {Hooks} from 'PluginSDK';
 
-// TODO - move to Plugin. Plugins responsibility to register this if it needs it
-Hooks.addFilter('serverErrorModalListeners', function (listeners) {
-  listeners.push({
-    name: 'auth',
-    events: ['logoutError']
-  });
-
-  return listeners;
-});
-
 let AuthStore = Store.createStore({
   storeID: 'auth',
 
@@ -106,8 +96,8 @@ let AuthStore = Store.createStore({
 
   resetRole() {
     this.set({
-        role: undefined
-      });
+      role: undefined
+    });
   },
 
   processLoginSuccess() {
