@@ -77,9 +77,7 @@ class UsersTab extends mixin(StoreMixin) {
   }
 
   handleNewUserClick() {
-    let nextState = {openNewUserModal: true};
-    nextState = Hooks.applyFilter('newUserClick', nextState, ...arguments);
-    this.setState(nextState);
+    this.setState({openNewUserModal: true});
   }
 
   handleNewUserClose() {
