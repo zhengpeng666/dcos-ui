@@ -1,4 +1,6 @@
 import React from 'react';
+import mixin from 'reactjs-mixin';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 let SDK = require('../SDK').getSDK();
 
@@ -8,16 +10,34 @@ let METHODS_TO_BIND = [
   'onMessageReceived'
 ];
 
-module.exports = class LoginPage extends React.Component {
+class LoginPage extends mixin(StoreMixin) {
   componentWillMount() {
-    METHODS_TO_BIND.forEach(function (method) {
+    super.componentWillMount();
+
+    let router = this.context.router;
+
+    if (AuthStore.getUser()) {
+      router.transitionTo('/');
+    }
+
+    this.store_listeners = [
+      {
+        name: 'auth',
+        events: ['success', 'error'],
+        suppressUpdate: true
+      }
+    ];
+
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
-    }, this);
+    });
 
     window.addEventListener('message', this.onMessageReceived);
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount();
+
     window.removeEventListener('message', this.onMessageReceived);
   }
 
@@ -33,9 +53,30 @@ module.exports = class LoginPage extends React.Component {
         AuthStore.login({id_token: data.token});
         break;
       case 'error':
-        global.location.href = '#/access-denied';
+        this.navigateToAccessDenied();
         break;
     }
+  }
+
+  onAuthStoreSuccess() {
+    let router = this.context.router;
+    let loginRedirectRoute = AuthStore.get('loginRedirectRoute');
+
+    if (loginRedirectRoute) {
+      router.transitionTo(loginRedirectRoute);
+    } else {
+      router.transitionTo('/');
+    }
+  }
+
+  onAuthStoreError() {
+    this.navigateToAccessDenied();
+  }
+
+  navigateToAccessDenied() {
+    let router = this.context.router;
+
+    router.transitionTo('/access-denied');
   }
 
   render() {
@@ -44,7 +85,7 @@ module.exports = class LoginPage extends React.Component {
       .config.config.clusterConfiguration.firstUser;
 
     let client = SDK.config.clientID;
-    // TODO - get clusterID
+    // TODO - DCOS-5909 Get real cluster_id and send to auth0
     let cluster_id = 'foo';
 
     location += `/login?firstUser=${firstUser}&cluster_id=${cluster_id}
@@ -52,7 +93,7 @@ module.exports = class LoginPage extends React.Component {
 
     return (
       <div
-        className="iframe-wrapper"
+        className="page-container"
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -66,4 +107,11 @@ module.exports = class LoginPage extends React.Component {
       </div>
     );
   }
+}
+
+LoginPage.contextTypes = {
+  router: React.PropTypes.func
 };
+
+module.exports = LoginPage;
+

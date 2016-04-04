@@ -32,7 +32,6 @@ module.exports = {
     'installCLIModalCLIInstallURL',
     'installCLIModalCLIInstallScript',
     'installCLIModalFooter',
-    'openIdentifyModal',
     'applicationHasIdentity',
     'isIntercomOpen'
   ],
@@ -112,16 +111,6 @@ module.exports = {
 
   receivedUserEmail: function (email) {
     LocalStorageUtil.set('email', email);
-  },
-
-  openIdentifyModal: function (value) {
-    // If plugin is disabled then always return false
-    if (this.isEnabled() !== true) {
-      return false;
-    }
-
-    // Else just pass the value along
-    return value;
   },
 
   applicationHasIdentity: function () {

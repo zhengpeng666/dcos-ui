@@ -40,7 +40,6 @@ class UserDropup extends React.Component {
 
   handleDropdownClose() {
     let open = this.state.open;
-    // Only close if we are open
     if (open) {
       window.removeEventListener('resize', this.handleDropdownClose);
       this.setState({open: false});

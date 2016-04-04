@@ -52,7 +52,6 @@ module.exports = {
   },
 
   redirectToLogin(transition) {
-    // Go to login page
     transition.redirect('/login');
   },
 
@@ -66,7 +65,7 @@ module.exports = {
     let onLoginPage = /login/.test(location);
 
     // Unauthorized
-    if (xhr.status === 401 && !onLoginPage) {
+    if (xhr.status === 401 && !onLoginPage && !onAccessDeniedPage) {
       global.document.cookie = CookieUtils.emptyCookieWithExpiry(new Date(1970));
       global.location.href = '#/login';
     }

@@ -63,21 +63,6 @@ describe('TrackingHooks', function () {
       });
     });
 
-    describe('#openIdentifyModal', function () {
-      it('returns the value given to it if plugin enabled', function () {
-        TrackingHooks.initialize();
-        var result = SDK.Hooks.applyFilter('openIdentifyModal', 'hello');
-        expect(result).toEqual('hello');
-      });
-
-      it('returns false if plugin disabled', function () {
-        TrackingHooks.initialize();
-        TrackingHooks.configure({enabled: false});
-        var result = SDK.Hooks.applyFilter('openIdentifyModal', 'hello');
-        expect(result).toEqual(false);
-      });
-    });
-
     describe('#sidebarFooterButtonSet', function () {
       it('returns the value given to it if plugin enabled', function () {
         TrackingHooks.initialize();
