@@ -95,7 +95,7 @@ const StringUtil = {
         }
         word = replace[word] || this.capitalize(word.toLowerCase().trim());
         return `${title} ${word}`;
-      }, '');
+      }, '').trim();
     }
 
     let splitID = id.reduce(function (accumulated, element) {

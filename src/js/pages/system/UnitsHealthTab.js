@@ -111,8 +111,8 @@ class UnitsHealthTab extends mixin(StoreMixin) {
       {
         className: classNameFn,
         headerClassName: classNameFn,
-        heading: ResourceTableUtil.renderHeading({id: 'NAME'}),
-        prop: 'id',
+        heading: ResourceTableUtil.renderHeading({name: 'NAME'}),
+        prop: 'name',
         render: this.renderUnit,
         sortable: true,
         sortFunction

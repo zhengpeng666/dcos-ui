@@ -12,6 +12,10 @@ const UnitHealthUtil = {
         return UnitHealthUtil.getHealthSorting(item);
       }
 
+      if (prop === 'id' || prop === 'name') {
+        return item.getTitle();
+      }
+
       return item.get(prop);
     })(...args);
   },

@@ -1,5 +1,5 @@
 {
   "id": "dcos-mesos-dns.service",
   "health": 1,
-  "description": "Mesos DNS"
+  "name": "Mesos DNS"
 }
