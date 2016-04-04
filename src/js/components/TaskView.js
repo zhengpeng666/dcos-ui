@@ -79,7 +79,6 @@ class TaskView extends mixin(SaveStateMixin) {
     return this.state.mesosStateErrorCount >= 3;
   }
 
-
   getStatusCounts(tasks) {
     let statusCount = {active: 0, completed: 0};
 

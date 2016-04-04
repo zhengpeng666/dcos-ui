@@ -1,4 +1,3 @@
-import SaveStateUtil from '../utils/SaveStateUtil';
 import UserSettingsStore from '../stores/UserSettingsStore';
 
 const SAVED_STATE_KEY = 'savedStates';
@@ -11,18 +10,21 @@ const SaveStateMixin = {
     }
 
     let savedStates = UserSettingsStore.getKey(SAVED_STATE_KEY);
-    let savedState = SaveStateUtil.getSavedState(key, savedStates);
+
+    let savedState = savedStates[key];
+    if (savedState == null) {
+      return;
+    }
+
     this.setState(savedState);
   },
 
   componentWillUnmount() {
     let {saveState_key, state} = this;
     let savedStates = UserSettingsStore.getKey(SAVED_STATE_KEY);
-    let statesToSave = SaveStateUtil.setSavedState(
-      saveState_key, state, savedStates
-    );
+    savedStates[saveState_key] = state;
 
-    UserSettingsStore.setKey(SAVED_STATE_KEY, statesToSave);
+    UserSettingsStore.setKey(SAVED_STATE_KEY, savedStates);
   }
 };
 
