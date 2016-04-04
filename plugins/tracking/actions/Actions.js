@@ -35,7 +35,7 @@ var Actions = {
 
     RouterLocation.addChangeListener(Util.debounce(function (data) {
       Actions.setActivePage(data.path);
-    }), 200);
+    }, 200));
   },
 
   setCustomerID: function (customerID) {
