@@ -15,7 +15,7 @@ describe('Packages Tab', function () {
         status: 400,
         response: {type: 'InvalidRepositoryUri', name: 'Invalid'}
       })
-      .visitUrl({url: '/universe'});
+      .visitUrl({url: '/universe', logIn: true});
 
     cy
       .get('.page-content p.inverse.text-align-center')
@@ -30,7 +30,7 @@ describe('Packages Tab', function () {
         status: 400,
         response: {type: 'IndexNotFound', name: 'Invalid'}
       })
-      .visitUrl({url: '/universe'});
+      .visitUrl({url: '/universe', logIn: true});
 
     cy
       .get('.page-content p.inverse.text-align-center')
@@ -45,7 +45,7 @@ describe('Packages Tab', function () {
         status: 400,
         response: {type: 'PackageFileMissing', name: 'Invalid'}
       })
-      .visitUrl({url: '/universe'});
+      .visitUrl({url: '/universe', logIn: true});
 
     cy
       .get('.page-content p.inverse.text-align-center')
@@ -60,7 +60,7 @@ describe('Packages Tab', function () {
         status: 400,
         response: {type: 'PackageFileMissing'}
       })
-      .visitUrl({url: '/universe'});
+      .visitUrl({url: '/universe', logIn: true});
 
     cy
       .get('.page-content p.inverse.text-align-center')
@@ -75,23 +75,41 @@ describe('Packages Tab', function () {
         status: 400,
         response: {message: 'Some other error'}
       })
-      .visitUrl({url: '/universe'});
+      .visitUrl({url: '/universe', logIn: true});
 
     cy
       .get('.page-content p.inverse.text-align-center')
       .should('contain', 'We have been notified of the issue, but would love to know more. Talk with us using Intercom. You can also join us on our Slack channel or send us an email at support@mesosphere.com.');
   });
 
+  context('searching', function () {
+    beforeEach(function () {
+      cy.visitUrl({url: '/universe', logIn: true});
+      cy.get('input').type('cass');
+    });
+
+    it('should hide selected panels', function () {
+      cy.get('.panel').should(function ($panels) {
+        expect($panels.length).to.equal(0);
+      });
+    });
+
+    it('should should only cassandra in table', function () {
+      cy.get('tr').should(function ($rows) {
+        expect($rows.length).to.equal(4);
+      });
+    });
+  });
+
   context('selected packages', function () {
     beforeEach(function () {
-      cy.visitUrl({url: '/universe'});
-      cy.get('.grid-item').as('gridItems');
+      cy.visitUrl({url: '/universe', logIn: true});
+      cy.get('.panel').as('panels');
     });
 
     it('should have the first package as selected', function () {
-      cy.get('@gridItems').should(function ($gridItems) {
-        expect($gridItems.first()).to.contain('Selected');
-        expect($gridItems.last()).to.not.contain('Selected');
+      cy.get('@panels').should(function ($panels) {
+        expect($panels.length).to.equal(1);
       });
     });
   });
