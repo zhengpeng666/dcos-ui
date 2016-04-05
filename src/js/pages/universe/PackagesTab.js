@@ -173,10 +173,6 @@ class PackagesTab extends mixin(StoreMixin) {
     let packageName, packageVersion;
     let packages = CosmosPackagesStore.getAvailablePackages();
 
-    let nonSelectedPackages = packages.getItems().filter(function (universePackage) {
-      return !universePackage.isSelected();
-    });
-
     let selectedPackages = packages.getItems().filter(function (universePackage) {
       return universePackage.isSelected();
     });
@@ -211,7 +207,7 @@ class PackagesTab extends mixin(StoreMixin) {
         {this.getBorderedTitle('All Packages', false)}
         <NonSelectedPackagesTable
           onDeploy={this.handleInstallModalOpen.bind(this)}
-          packages={new UniversePackagesList({items: nonSelectedPackages})}
+          packages={packages}
           router={this.context.router} />
         <InstallPackageModal
           open={!!state.installModalPackage}
