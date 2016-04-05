@@ -59,9 +59,8 @@ const MesosSummaryUtil = {
     var keys = Object.keys(newMesosStatusesMap);
     // Ignore the first difference, since the first number of accumulated failed
     // tasks will be will consist the base case for calulating the difference
-    if (prevMesosStatusesMap != null) {
+    if (prevMesosStatusesMap != null && keys.length) {
       keys.forEach(function (key) {
-        console.log(key, newMesosStatusesMap[key], prevMesosStatusesMap[key])
         diff[key] = newMesosStatusesMap[key] - prevMesosStatusesMap[key];
       });
 
@@ -77,7 +76,6 @@ const MesosSummaryUtil = {
     if (state.isSnapshotSuccessful()) {
       rate = (failed / (failed + successful)) * 100 | 0;
     }
-    console.log(rate, failed, successful)
 
     return {
       date: state.getSnapshotDate(),
@@ -118,10 +116,6 @@ const MesosSummaryUtil = {
   addTimestampsToData: function (data, timeStep) {
     var length = data.length;
     var timeNow = Date.now() - timeStep;
-
-    if (!Array.isArray(data)) {
-      throw new Error(`${data} is not an array`);
-    }
 
     return _.map(data, function (datum, i) {
       var timeDelta = (-length + i) * timeStep;

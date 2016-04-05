@@ -53,7 +53,7 @@ var MesosSummaryStore = Store.createStore({
 
   mixins: [GetSetMixin],
 
-  init: function () {
+  init: function (forceRefresh) {
 
     if (this.get('initCalledAt') != null) {
       return;
