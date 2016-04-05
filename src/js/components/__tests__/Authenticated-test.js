@@ -1,6 +1,6 @@
 jest.dontMock('../Authenticated');
 jest.dontMock('../../stores/AuthStore');
-jest.dontMock('../../actions/AuthActions');
+jest.dontMock('../../events/AuthActions');
 
 import React from 'react';
 import ReactDOM from 'react-dom';

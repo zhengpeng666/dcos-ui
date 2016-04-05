@@ -3,19 +3,39 @@ import React from 'react';
 /*eslint-enable no-unused-vars*/
 import {Route} from 'react-router';
 
+import {
+  CONFIG_LOADED,
+  CONFIG_ERROR
+} from './constants/EventTypes';
+
 import LoginPage from './components/LoginPage';
 import UserDropup from './components/UserDropup';
 
 let SDK = require('./SDK').getSDK();
 
-let {CookieUtils, Authenticated, AccessDeniedPage} = SDK.get(['CookieUtils',
-  'Authenticated', 'AccessDeniedPage']);
+let {CookieUtils, Authenticated, AccessDeniedPage, ConfigStore} = SDK.get([
+  'CookieUtils', 'Authenticated', 'AccessDeniedPage', 'ConfigStore']);
+
+// DCOS-5935 Build mixin for non-react components to listen to store events
+const CONFIG_STORE_LISTENERS = [CONFIG_LOADED, CONFIG_ERROR];
+
+function reloadConfigStore(callback) {
+  let handler = function () {
+    CONFIG_STORE_LISTENERS.forEach(event => {
+      ConfigStore.removeChangeListener(event, handler);
+    });
+
+    callback();
+  };
+
+  CONFIG_STORE_LISTENERS.forEach(event => {
+    ConfigStore.addChangeListener(event, handler);
+  });
+
+  ConfigStore.fetchConfig();
+}
 
 module.exports = {
-  configuration: {
-    enabled: false
-  },
-
   actions: [
     'AJAXRequestError',
     'userLogoutSuccess',
@@ -35,20 +55,6 @@ module.exports = {
     this.actions.forEach(action => {
       SDK.Hooks.addAction(action, this[action].bind(this));
     });
-    this.configure(SDK.config);
-  },
-
-  configure(configuration) {
-    // Only merge keys that have a non-null value
-    Object.keys(configuration).forEach((key) => {
-      if (configuration[key] != null) {
-        this.configuration[key] = configuration[key];
-      }
-    });
-  },
-
-  isEnabled() {
-    return this.configuration.enabled;
   },
 
   redirectToLogin(transition) {
@@ -77,10 +83,6 @@ module.exports = {
   },
 
   sidebarFooter(value, defaultButtonSet) {
-    if (this.isEnabled() !== true) {
-      return value;
-    }
-
     let buttonSet = defaultButtonSet;
     if (value && value.props.children) {
       buttonSet = value.props.children;
@@ -101,35 +103,38 @@ module.exports = {
   },
 
   applicationRoutes(routes) {
-    if (this.isEnabled() === true) {
+    // Override handler of index to be 'authenticated'
+    routes[0].children.forEach(function (child) {
+      if (child.id === 'index') {
+        child.handler = new Authenticated(child.handler);
+      }
+    });
 
-      // Override handler of index to be 'authenticated'
-      routes[0].children.forEach(function (child) {
-        if (child.id === 'index') {
-          child.handler = new Authenticated(child.handler);
-        }
-      });
-
-      // Add access denied and login pages
-      routes[0].children.unshift(
-        {
-          type: Route,
-          name: 'access-denied',
-          path: 'access-denied',
-          handler: AccessDeniedPage
-        },
-        {
-          handler: LoginPage,
-          name: 'login',
-          path: 'login',
-          type: Route
-        }
-      );
-    }
+    // Add access denied and login pages
+    routes[0].children.unshift(
+      {
+        type: Route,
+        name: 'access-denied',
+        path: 'access-denied',
+        handler: AccessDeniedPage
+      },
+      {
+        handler: LoginPage,
+        name: 'login',
+        path: 'login',
+        type: Route
+      }
+    );
     return routes;
   },
 
   userLogoutSuccess() {
+    // Reload configuration because we need to get 'firstUser' which is
+    // dynamically set based on number of users
+    reloadConfigStore(this.navigateToLogin);
+  },
+
+  navigateToLogin() {
     window.location.href = '#/login';
   }
 };

@@ -31,13 +31,6 @@ class UserDropup extends React.Component {
     });
   }
 
-  componentWillMount() {
-    if (!AuthStore.hasRole()) {
-      let user = AuthStore.getUser();
-      AuthStore.fetchRole(user.uid);
-    }
-  }
-
   handleDropdownClose() {
     let open = this.state.open;
     if (open) {

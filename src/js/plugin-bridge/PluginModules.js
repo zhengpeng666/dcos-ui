@@ -5,6 +5,7 @@ module.exports = {
   },
   stores: {
     AuthStore: 'AuthStore',
+    ConfigStore: 'ConfigStore',
     UsersStore: 'UsersStore',
     UserStore: 'UserStore'
   },

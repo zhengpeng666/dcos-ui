@@ -92,12 +92,7 @@ class LoginPage extends mixin(StoreMixin) {
       &client=${client}`;
 
     return (
-      <div
-        className="page-container"
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100vh'}}>
+      <div className="iframe-page-container">
         <iframe
           width="100%"
           height="100%"

@@ -1,5 +1,5 @@
 jest.dontMock('../AuthStore');
-jest.dontMock('../../actions/AuthActions');
+jest.dontMock('../../events/AuthActions');
 jest.dontMock('../../mixins/GetSetMixin');
 
 var cookie = require('cookie');
@@ -100,30 +100,6 @@ describe('AuthStore', function () {
     it('should get the user', function () {
       expect(AuthStore.getUser())
         .toEqual({uid: 'joe', description: 'Joe Doe'});
-    });
-
-  });
-
-  describe('#isAdmin', function () {
-
-    afterEach(function () {
-      AuthStore.resetRole();
-    });
-
-    it('should return false before processing role', function () {
-      expect(AuthStore.isAdmin()).toEqual(false);
-    });
-
-    it('should return true after success', function () {
-      AuthStore.makeAdminRole();
-
-      expect(AuthStore.isAdmin()).toEqual(true);
-    });
-
-    it('should return false after error', function () {
-      AuthStore.makeDefaultRole();
-
-      expect(AuthStore.isAdmin()).toEqual(false);
     });
 
   });

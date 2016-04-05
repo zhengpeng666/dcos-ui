@@ -4,7 +4,6 @@ import {
   AUTH_USER_LOGIN_ERROR,
   AUTH_USER_LOGOUT_SUCCESS,
   AUTH_USER_LOGOUT_ERROR,
-  AUTH_USER_ROLE_CHANGED,
 
   COSMOS_SEARCH_CHANGE,
   COSMOS_SEARCH_ERROR,
@@ -93,8 +92,7 @@ const ListenersDescription = {
       success: AUTH_USER_LOGIN_CHANGED,
       error: AUTH_USER_LOGIN_ERROR,
       logoutSuccess: AUTH_USER_LOGOUT_SUCCESS,
-      logoutError: AUTH_USER_LOGOUT_ERROR,
-      roleChange: AUTH_USER_ROLE_CHANGED
+      logoutError: AUTH_USER_LOGOUT_ERROR
     },
     unmountWhen: function () {
       return true;

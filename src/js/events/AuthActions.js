@@ -4,9 +4,7 @@ import {
   REQUEST_LOGIN_SUCCESS,
   REQUEST_LOGIN_ERROR,
   REQUEST_LOGOUT_SUCCESS,
-  REQUEST_LOGOUT_ERROR,
-  REQUEST_ROLE_SUCCESS,
-  REQUEST_ROLE_ERROR
+  REQUEST_LOGOUT_ERROR
 } from '../constants/ActionTypes';
 
 import AppDispatcher from '../events/AppDispatcher';
@@ -15,29 +13,13 @@ import Config from '../config/Config';
 import RequestUtil from '../utils/RequestUtil';
 
 const AuthActions = {
-  fetchRole: function (uid) {
-    RequestUtil.json({
-      url: `${Config.rootUrl}${Config.acsAPIPrefix}/users/${uid}`,
-      success: function () {
-        AppDispatcher.handleServerAction({
-          type: REQUEST_ROLE_SUCCESS
-        });
-      },
-      error: function (xhr) {
-        AppDispatcher.handleServerAction({
-          type: REQUEST_ROLE_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr)
-        });
-      }
-    });
-  },
-
   login: function (credentials) {
     RequestUtil.json({
       url: `${Config.rootUrl}${Config.acsAPIPrefix}/auth/login`,
       method: 'POST',
       data: credentials,
       success: function () {
+        // Overrides for integration testing
         if (Config.environment === 'testing') {
           global.document.cookie =
             cookie.serialize(AuthConstants.userCookieKey,
