@@ -4,15 +4,10 @@ import {Store} from 'mesosphere-shared-reactjs';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../events/AppDispatcher';
 import Config from '../config/Config';
-import {
-  NETWORKING_VIP_SUMMARIES_CHANGE,
-  NETWORKING_VIP_SUMMARIES_ERROR,
-  VISIBILITY_CHANGE
-} from '../constants/EventTypes';
+import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import NetworkingActions from '../events/NetworkingActions';
 import VIPSummaryList from '../structs/VIPSummaryList';
-import VisibilityStore from './VisibilityStore';
 
 let requestInterval = null;
 
@@ -32,19 +27,6 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange() {
-  let isInactive = VisibilityStore.get('isInactive');
-  if (isInactive) {
-    stopPolling();
-  }
-
-  if (!isInactive && NetworkingVIPSummariesStore.shouldPoll()) {
-    startPolling();
-  }
-}
-
-VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
-
 let NetworkingVIPSummariesStore = Store.createStore({
   storeID: 'networkingVIPSummaries',
 
@@ -62,13 +44,9 @@ let NetworkingVIPSummariesStore = Store.createStore({
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
 
-    if (!this.shouldPoll()) {
+    if (_.isEmpty(this.listeners(EventTypes.NETWORKING_VIP_SUMMARIES_CHANGE))) {
       stopPolling();
     }
-  },
-
-  shouldPoll: function () {
-    return !_.isEmpty(this.listeners(NETWORKING_VIP_SUMMARIES_CHANGE));
   },
 
   fetchVIPSummaries: NetworkingActions.fetchVIPSummaries,
@@ -79,11 +57,11 @@ let NetworkingVIPSummariesStore = Store.createStore({
 
   processVIPSummaries: function (vipSummaries) {
     this.set({vipSummaries});
-    this.emit(NETWORKING_VIP_SUMMARIES_CHANGE);
+    this.emit(EventTypes.NETWORKING_VIP_SUMMARIES_CHANGE);
   },
 
   processVIPSummariesError: function (error) {
-    this.emit(NETWORKING_VIP_SUMMARIES_ERROR, error);
+    this.emit(EventTypes.NETWORKING_VIP_SUMMARIES_ERROR, error);
   },
 
   dispatcherIndex: AppDispatcher.register(function (payload) {

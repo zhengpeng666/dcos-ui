@@ -55,9 +55,9 @@ var BarChart = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps) {
-    return (this.props.height !== nextProps.height ||
+    return this.props.height !== nextProps.height ||
       this.props.width !== nextProps.width ||
-      !_.isEqual(this.props.data, nextProps.data));
+      !_.isEqual(this.props.data, nextProps.data);
   },
 
   componentWillMount: function () {

@@ -64,9 +64,7 @@ import {
   USER_DELETE_SUCCESS,
 
   USERS_CHANGE,
-  USERS_REQUEST_ERROR,
-
-  VISIBILITY_CHANGE
+  USERS_REQUEST_ERROR
 } from './EventTypes';
 import HistoryStore from '../stores/HistoryStore';
 import MarathonStore from '../stores/MarathonStore';
@@ -80,7 +78,6 @@ import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 import UnitHealthStore from '../stores/UnitHealthStore';
 import UserStore from '../stores/UserStore';
 import UsersStore from '../stores/UsersStore';
-import VisibilityStore from '../stores/VisibilityStore';
 
 const ListenersDescription = {
 
@@ -281,18 +278,8 @@ const ListenersDescription = {
       return true;
     },
     listenAlways: true
-  },
-
-  visibility: {
-    store: VisibilityStore,
-    events: {
-      change: VISIBILITY_CHANGE
-    },
-    unmountWhen: function () {
-      return true;
-    },
-    listenAlways: true
   }
+
 };
 
 module.exports = ListenersDescription;

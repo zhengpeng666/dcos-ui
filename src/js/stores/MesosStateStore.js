@@ -1,19 +1,14 @@
-import _ from 'underscore';
+var _ = require('underscore');
 import {Store} from 'mesosphere-shared-reactjs';
 
-import AppDispatcher from '../events/AppDispatcher';
+var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
-import Config from '../config/Config';
-import {
-  MESOS_STATE_CHANGE,
-  MESOS_STATE_REQUEST_ERROR,
-  VISIBILITY_CHANGE
-} from '../constants/EventTypes';
-import GetSetMixin from '../mixins/GetSetMixin';
-import MesosStateActions from '../events/MesosStateActions';
-import MesosStateUtil from '../utils/MesosStateUtil';
-import VisibilityStore from './VisibilityStore';
+var Config = require('../config/Config');
+import EventTypes from '../constants/EventTypes';
+var GetSetMixin = require('../mixins/GetSetMixin');
+var MesosStateActions = require('../events/MesosStateActions');
+var MesosStateUtil = require('../utils/MesosStateUtil');
 
 var requestInterval = null;
 
@@ -33,19 +28,6 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange() {
-  let isInactive = VisibilityStore.get('isInactive');
-  if (isInactive) {
-    stopPolling();
-  }
-
-  if (!isInactive && MesosStateStore.shouldPoll()) {
-    startPolling();
-  }
-}
-
-VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
-
 var MesosStateStore = Store.createStore({
   storeID: 'state',
 
@@ -57,22 +39,15 @@ var MesosStateStore = Store.createStore({
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
-
-    if (this.shouldPoll()) {
-      startPolling();
-    }
+    startPolling();
   },
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
 
-    if (!this.shouldPoll()) {
+    if (_.isEmpty(this.listeners(EventTypes.MESOS_STATE_CHANGE))) {
       stopPolling();
     }
-  },
-
-  shouldPoll: function () {
-    return !_.isEmpty(this.listeners(MESOS_STATE_CHANGE));
   },
 
   getHostResourcesByFramework: function (filter) {
@@ -167,11 +142,11 @@ var MesosStateStore = Store.createStore({
   processStateSuccess: function (lastMesosState) {
     CompositeState.addState(lastMesosState);
     this.set({lastMesosState});
-    this.emit(MESOS_STATE_CHANGE);
+    this.emit(EventTypes.MESOS_STATE_CHANGE);
   },
 
   processStateError: function () {
-    this.emit(MESOS_STATE_REQUEST_ERROR);
+    this.emit(EventTypes.MESOS_STATE_REQUEST_ERROR);
   },
 
   processOngoingRequest: function () {

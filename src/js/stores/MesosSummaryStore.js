@@ -1,22 +1,17 @@
-import _ from 'underscore';
+var _ = require('underscore');
 import {Store} from 'mesosphere-shared-reactjs';
 
-import AppDispatcher from '../events/AppDispatcher';
+var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
-import Config from '../config/Config';
-import {
-  MESOS_SUMMARY_CHANGE,
-  MESOS_SUMMARY_REQUEST_ERROR,
-  VISIBILITY_CHANGE
-} from '../constants/EventTypes';
-import GetSetMixin from '../mixins/GetSetMixin';
-import MesosSummaryUtil from '../utils/MesosSummaryUtil';
-import MesosSummaryActions from '../events/MesosSummaryActions';
+var Config = require('../config/Config');
+import EventTypes from '../constants/EventTypes';
+var GetSetMixin = require('../mixins/GetSetMixin');
+var MesosSummaryUtil = require('../utils/MesosSummaryUtil');
+var MesosSummaryActions = require('../events/MesosSummaryActions');
 import SummaryList from '../structs/SummaryList';
 import StateSummary from '../structs/StateSummary';
-import TimeScales from '../constants/TimeScales';
-import VisibilityStore from './VisibilityStore';
+var TimeScales = require('../constants/TimeScales');
 
 var requestInterval = null;
 
@@ -42,23 +37,13 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange() {
-  let isInactive = VisibilityStore.get('isInactive');
-  if (isInactive) {
-    MesosSummaryStore.terminate();
-  } else {
-    MesosSummaryStore.init();
-  }
-}
-
-VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
-
 var MesosSummaryStore = Store.createStore({
   storeID: 'summary',
 
   mixins: [GetSetMixin],
 
   init: function () {
+
     if (this.get('initCalledAt') != null) {
       return;
     }
@@ -79,11 +64,6 @@ var MesosSummaryStore = Store.createStore({
     });
 
     startPolling();
-  },
-
-  terminate: function () {
-    stopPolling();
-    this.set({initCalledAt: null});
   },
 
   unmount: function () {
@@ -133,7 +113,7 @@ var MesosSummaryStore = Store.createStore({
 
   updateStateProcessed: function () {
     this.set({statesProcessed: true});
-    this.emit(MESOS_SUMMARY_CHANGE);
+    this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
   },
 
   notifySummaryProcessed: function () {
@@ -142,7 +122,7 @@ var MesosSummaryStore = Store.createStore({
     if (this.get('statesProcessed') ||
         this.get('loading') != null ||
         initCalledAt == null) {
-      this.emit(MESOS_SUMMARY_CHANGE);
+      this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
       return;
     }
 
@@ -209,7 +189,7 @@ var MesosSummaryStore = Store.createStore({
     this.setFailureRate(states.last(), prevState);
 
     if (!options.silent) {
-      this.emit(MESOS_SUMMARY_REQUEST_ERROR);
+      this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
     }
   },
 

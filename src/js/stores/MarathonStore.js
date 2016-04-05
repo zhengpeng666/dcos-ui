@@ -1,21 +1,16 @@
-import _ from 'underscore';
+var _ = require('underscore');
 import {Store} from 'mesosphere-shared-reactjs';
 
-import AppDispatcher from '../events/AppDispatcher';
+var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
-import Config from '../config/Config';
-import {
-  MARATHON_APPS_CHANGE,
-  MARATHON_APPS_ERROR,
-  VISIBILITY_CHANGE
-} from '../constants/EventTypes';
-import GetSetMixin from '../mixins/GetSetMixin';
-import HealthStatus from '../constants/HealthStatus';
-import MarathonActions from '../events/MarathonActions';
-import ServiceImages from '../constants/ServiceImages';
+var Config = require('../config/Config');
+import EventTypes from '../constants/EventTypes';
+var GetSetMixin = require('../mixins/GetSetMixin');
+var HealthStatus = require('../constants/HealthStatus');
+var MarathonActions = require('../events/MarathonActions');
+var ServiceImages = require('../constants/ServiceImages');
 import ServiceUtil from '../utils/ServiceUtil';
-import VisibilityStore from './VisibilityStore';
 
 var requestInterval = null;
 
@@ -35,19 +30,6 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange() {
-  let isInactive = VisibilityStore.get('isInactive');
-  if (isInactive) {
-    stopPolling();
-  }
-
-  if (!isInactive && MarathonStore.shouldPoll()) {
-    startPolling();
-  }
-}
-
-VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
-
 var MarathonStore = Store.createStore({
   storeID: 'marathon',
 
@@ -60,7 +42,7 @@ var MarathonStore = Store.createStore({
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
 
-    if (this.shouldPoll()) {
+    if (eventName === EventTypes.MARATHON_APPS_CHANGE) {
       startPolling();
     }
   },
@@ -68,13 +50,9 @@ var MarathonStore = Store.createStore({
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
 
-    if (!this.shouldPoll()) {
+    if (_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE))) {
       stopPolling();
     }
-  },
-
-  shouldPoll: function () {
-    return !_.isEmpty(this.listeners(MARATHON_APPS_CHANGE));
   },
 
   hasProcessedApps: function () {
@@ -208,11 +186,11 @@ var MarathonStore = Store.createStore({
 
     CompositeState.addMarathon(apps);
 
-    this.emit(MARATHON_APPS_CHANGE, this.get('apps'));
+    this.emit(EventTypes.MARATHON_APPS_CHANGE, this.get('apps'));
   },
 
   processMarathonAppsError: function () {
-    this.emit(MARATHON_APPS_ERROR);
+    this.emit(EventTypes.MARATHON_APPS_ERROR);
   },
 
   parseMetadata: function (b64Data) {
