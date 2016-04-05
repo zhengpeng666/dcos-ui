@@ -7,8 +7,6 @@ var ReactDOM = require('react-dom');
 var Bar = require('./Bar');
 var ChartMixin = require('../../mixins/ChartMixin');
 var InternalStorageMixin = require('../../mixins/InternalStorageMixin');
-var VisibilityUtil = require('../../utils/VisibilityUtil');
-
 
 var BarChart = React.createClass({
 
@@ -57,9 +55,9 @@ var BarChart = React.createClass({
   },
 
   shouldComponentUpdate: function (nextProps) {
-    return (this.props.height !== nextProps.height ||
+    return this.props.height !== nextProps.height ||
       this.props.width !== nextProps.width ||
-      !_.isEqual(this.props.data, nextProps.data)) && VisibilityUtil.isTabVisible();
+      !_.isEqual(this.props.data, nextProps.data);
   },
 
   componentWillMount: function () {
