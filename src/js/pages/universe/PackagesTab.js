@@ -180,7 +180,7 @@ class PackagesTab extends mixin(StoreMixin) {
       let foundPackagesLength = packages.getItems().length;
       let packagesWord = StringUtil.pluralize('package', foundPackagesLength);
 
-      title = `${packages.getItems().length} ${packagesWord} found.`;
+      title = `${packages.getItems().length} ${packagesWord} found`;
     }
 
     return (
@@ -211,12 +211,10 @@ class PackagesTab extends mixin(StoreMixin) {
 
     let packageName, packageVersion;
     let packages = CosmosPackagesStore.getAvailablePackages();
-    let {
-      selectedPackages, nonSelectedPackages
-    } = packages.getSelectedAndNonSelectedPackages();
+    let splitPackages = packages.getSelectedAndNonSelectedPackages();
 
-    let tablePackages = nonSelectedPackages;
-    let gridPackages = selectedPackages;
+    let tablePackages = splitPackages.nonSelectedPackages;
+    let gridPackages = splitPackages.selectedPackages;
 
     if (state.searchString) {
       tablePackages = packages.filterItems(state.searchString);

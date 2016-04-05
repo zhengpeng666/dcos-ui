@@ -95,7 +95,7 @@ class DisplayPackagesTable extends React.Component {
   render() {
     return (
       <Table
-        className="table no-header inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
+        className="table table-hover no-header inverse table-borderless-outer table-borderless-inner-columns flush-bottom"
         columns={this.getColumns()}
         colGroup={this.getColGroup()}
         data={this.props.packages.getItems().slice()} />
