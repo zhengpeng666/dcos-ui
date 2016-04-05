@@ -1,13 +1,12 @@
 const _ = require('underscore');
 import classNames from 'classnames';
-import {List} from 'reactjs-components';
+import {List, Tooltip} from 'reactjs-components';
 const React = require('react');
 
 const HealthLabels = require('../constants/HealthLabels');
 const HealthStatus = require('../constants/HealthStatus');
 const HealthTypesDescription = require('../constants/HealthTypesDescription');
 const MarathonStore = require('../stores/MarathonStore');
-const TooltipMixin = require('../mixins/TooltipMixin');
 
 let ServiceList = React.createClass({
 
@@ -17,8 +16,6 @@ let ServiceList = React.createClass({
     services: React.PropTypes.array.isRequired,
     healthProcessed: React.PropTypes.bool.isRequired
   },
-
-  mixins: [TooltipMixin],
 
   contextTypes: {
     router: React.PropTypes.func
@@ -44,23 +41,20 @@ let ServiceList = React.createClass({
   getServices: function (services, healthProcessed) {
     return _.map(services, function (service) {
       let appHealth = MarathonStore.getServiceHealth(service.name);
-      let attributes = {};
       let state = HealthStatus.NA;
+      let tooltipContent;
 
       if (appHealth != null) {
         state = HealthStatus[appHealth.key];
 
-        attributes['data-behavior'] = 'show-tip';
-        attributes['data-tip-place'] = 'top-left';
-
         if (appHealth.key === HealthStatus.HEALTHY.key) {
-          attributes['data-tip-content'] = HealthTypesDescription.HEALTHY;
+          tooltipContent = HealthTypesDescription.HEALTHY;
         } else if (appHealth.key === HealthStatus.UNHEALTHY.key) {
-          attributes['data-tip-content'] = HealthTypesDescription.UNHEALTHY;
+          tooltipContent = HealthTypesDescription.UNHEALTHY;
         } else if (appHealth.key === HealthStatus.IDLE.key) {
-          attributes['data-tip-content'] = HealthTypesDescription.IDLE;
+          tooltipContent = HealthTypesDescription.IDLE;
         } else if (appHealth.key === HealthStatus.NA.key) {
-          attributes['data-tip-content'] = HealthTypesDescription.NA;
+          tooltipContent = HealthTypesDescription.NA;
         }
       }
 
@@ -76,7 +70,7 @@ let ServiceList = React.createClass({
       }
 
       let classSet = classNames(
-        'h4 inverse flush-top flush-bottom text-align-right',
+        'tooltip-wrapper h4 inverse flush-top flush-bottom',
         state.classNames
       );
 
@@ -94,11 +88,12 @@ let ServiceList = React.createClass({
             tag: 'span'
           },
           {
-            className: 'service-list-component-health-label',
+            className: 'service-list-component-health-label text-align-right',
             content: (
-              <div key="health" className={classSet} {...attributes}>
+              <Tooltip anchor="end" content={tooltipContent} key="health"
+                wrapperClassName={classSet}>
                 {healthLabel}
-              </div>
+              </Tooltip>
             ),
             tag: 'div'
           }

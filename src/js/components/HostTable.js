@@ -2,6 +2,7 @@ var classNames = require('classnames');
 import {Link} from 'react-router';
 var React = require('react');
 import {StoreMixin} from 'mesosphere-shared-reactjs';
+import {Tooltip} from 'reactjs-components';
 
 var HostTableHeaderLabels = require('../constants/HostTableHeaderLabels');
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
@@ -10,14 +11,13 @@ var ProgressBar = require('./charts/ProgressBar');
 import StringUtil from '../utils/StringUtil';
 import {Table} from 'reactjs-components';
 import TableUtil from '../utils/TableUtil';
-var TooltipMixin = require('../mixins/TooltipMixin');
 import UnitHealthUtil from '../utils/UnitHealthUtil';
 
 var HostTable = React.createClass({
 
   displayName: 'HostTable',
 
-  mixins: [InternalStorageMixin, TooltipMixin, StoreMixin],
+  mixins: [InternalStorageMixin, StoreMixin],
 
   statics: {
     routeConfig: {
@@ -59,34 +59,23 @@ var HostTable = React.createClass({
   },
 
   renderHeadline: function (prop, node) {
-    let icon = null;
-    let toolTip = {};
+    let headline = node.get(prop);
 
     if (!node.isActive()) {
-      icon = <i className="icon icon-mini icon-mini-white icon-alert disable-pointer-events" />;
-      toolTip = {
-        'data-behavior': 'show-tip',
-        'data-tip-place': 'top',
-        'data-tip-content': 'Connection to node lost'
-      };
+      headline = (
+        <Tooltip acnhor="start" content="Connection to node lost">
+          <i className="icon icon-sprite icon-sprite-mini icon-sprite-mini-white
+            icon-alert" />
+          {headline}
+        </Tooltip>
+      );
     }
 
-    // Anything nested in elements hosting a tooltip needs to have
-    // 'disable-pointer-events' in order for the tip to render correctly.
     return (
-      <div>
-        <Link params={{nodeID: node.get('id')}}
-          to="nodes-list-panel"
-          {...toolTip}>
-          {icon}
-        </Link>
-        <Link className="headline emphasize"
-          params={{nodeID: node.get('id')}}
-          to="nodes-list-panel"
-          {...toolTip}>
-          {node.get(prop)}
-        </Link>
-      </div>
+      <Link className="headline emphasize" params={{nodeID: node.get('id')}}
+        to="nodes-list-panel">
+        {headline}
+      </Link>
     );
   },
 

@@ -26,8 +26,7 @@ module.exports = {
   mixins: {
     PluginGetSetMixin: 'PluginGetSetMixin',
     InternalStorageMixin: 'InternalStorageMixin',
-    TabsMixin: 'TabsMixin',
-    TooltipMixin: 'TooltipMixin'
+    TabsMixin: 'TabsMixin'
   },
   components: {
     SidePanelContents: 'SidePanelContents',
@@ -43,8 +42,7 @@ module.exports = {
     DCOSLogo: 'DCOSLogo',
     ClusterName: 'ClusterName',
     DescriptionList: 'DescriptionList',
-    Chart: 'charts/Chart',
-    Tooltip: 'Tooltip'
+    Chart: 'charts/Chart'
   },
   config: {
     Config: 'Config'

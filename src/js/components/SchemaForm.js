@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import classNames from 'classnames';
-import {Form} from 'reactjs-components';
+import {Form, Tooltip} from 'reactjs-components';
 import GeminiScrollbar from 'react-gemini-scrollbar';
 import React from 'react';
 
@@ -8,7 +8,6 @@ import GeminiUtil from '../utils/GeminiUtil';
 import SideTabs from './SideTabs';
 import SchemaFormUtil from '../utils/SchemaFormUtil';
 import SchemaUtil from '../utils/SchemaUtil';
-import Tooltip from './Tooltip';
 
 const METHODS_TO_BIND = [
   'getTriggerSubmit', 'validateForm', 'handleFormChange', 'handleTabClick',
@@ -175,15 +174,17 @@ class SchemaForm extends React.Component {
   getLabel(description, label) {
     return (
       <label>
-        <span className="media-object-spacing-wrapper media-object-spacing-narrow">
-          <Tooltip
-            content={description}
-            contentClass="media-object"
-            iconClass="icon icon-sprite icon-sprite-mini icon-error media-object-item">
+        <span className="media-object-spacing-wrapper
+          media-object-spacing-narrow">
+          <div className="media-object">
             <span className="media-object-item">
               {label}
             </span>
-          </Tooltip>
+            <Tooltip content={description} wrapperClassName="tooltip-wrapper
+              media-object-item">
+              <i className="icon icon-sprite icon-sprite-mini icon-error" />
+            </Tooltip>
+          </div>
         </span>
       </label>
     );

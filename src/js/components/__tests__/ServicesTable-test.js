@@ -70,7 +70,7 @@ describe('ServicesTable', function () {
         );
         // because we get health from MarathonStore and MarathonStore hasn't
         // been added to CompositeState, health will return as NA
-        expect(ReactDOM.findDOMNode(healthlabel).innerHTML).toEqual(HealthLabels.NA);
+        expect(ReactDOM.findDOMNode(healthlabel).children[0].textContent).toEqual(HealthLabels.NA);
       }, this);
     });
 
