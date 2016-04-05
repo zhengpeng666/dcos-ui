@@ -111,9 +111,11 @@ class InstallPackageModal extends
   onCosmosPackagesStoreDescriptionSuccess() {
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
     let {name} = cosmosPackage.get('package');
+    let config = cosmosPackage.get('config');
     let appId = Util.findNestedPropertyInObject(
-      cosmosPackage.get('config'),
-      `properties.${name}.properties.framework-name.default`
+      config, `properties.service.properties.name.default`
+    ) || Util.findNestedPropertyInObject(
+      config, `properties.${name}.properties.framework-name.default`
     ) || `${name}-default`;
 
     // Store appId from package
