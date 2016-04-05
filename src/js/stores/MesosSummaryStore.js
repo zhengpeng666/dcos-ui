@@ -40,9 +40,9 @@ function stopPolling() {
 
 function handleInactiveChange(isInactive) {
   if (isInactive) {
-    MesosSummaryStore.terminate();
+    stopPolling();
   } else {
-    MesosSummaryStore.init();
+    MesosSummaryStore.init(true);
   }
 }
 
@@ -55,7 +55,7 @@ var MesosSummaryStore = Store.createStore({
 
   init: function (forceRefresh) {
 
-    if (this.get('initCalledAt') != null) {
+    if (this.get('initCalledAt') != null && !forceRefresh) {
       return;
     }
 
@@ -75,11 +75,6 @@ var MesosSummaryStore = Store.createStore({
     });
 
     startPolling();
-  },
-
-  terminate: function () {
-    stopPolling();
-    this.set({initCalledAt: null});
   },
 
   unmount: function () {
