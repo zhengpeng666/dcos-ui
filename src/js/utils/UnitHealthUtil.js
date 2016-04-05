@@ -22,7 +22,7 @@ const UnitHealthUtil = {
 
   // Gets the HealthSorting weight of a Node or HealthUnit
   getHealthSorting(item) {
-    return HealthSorting[item.getHealth().title.toUpperCase()];
+    return item.getHealth().value;
   },
 
   /**
