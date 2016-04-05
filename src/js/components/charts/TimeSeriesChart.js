@@ -11,6 +11,7 @@ var Maths = require('../../utils/Maths');
 var TimeSeriesArea = require('./TimeSeriesArea');
 var TimeSeriesMouseOver = require('./TimeSeriesMouseOver');
 var ValueTypes = require('../../constants/ValueTypes');
+var VisibilityUtil = require('../../utils/VisibilityUtil');
 
 var TimeSeriesChart = React.createClass({
 
@@ -94,7 +95,7 @@ var TimeSeriesChart = React.createClass({
     var prevY = _.pluck(prevVal, props.y);
     var nextY = _.pluck(nextVal, props.y);
 
-    return !_.isEqual(prevY, nextY);
+    return !_.isEqual(prevY, nextY) && VisibilityUtil.isTabVisible();
   },
 
   componentDidUpdate: function () {

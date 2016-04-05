@@ -31,7 +31,6 @@ import HealthUnitsList from '../structs/HealthUnitsList';
 import GetSetMixin from '../mixins/GetSetMixin';
 import Node from '../structs/Node';
 import NodesList from '../structs/NodesList';
-import VisibilityUtil from '../utils/VisibilityUtil';
 
 let requestInterval = null;
 
@@ -51,18 +50,6 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange(isInactive) {
-  if (isInactive) {
-    stopPolling();
-  }
-
-  if (!isInactive && NodeHealthStore.shouldPoll()) {
-    startPolling();
-  }
-}
-
-VisibilityUtil.addInactiveListener(handleInactiveChange);
-
 const NodeHealthStore = Store.createStore({
 
   storeID: 'nodeHealth',
@@ -78,21 +65,15 @@ const NodeHealthStore = Store.createStore({
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
-    if (this.shouldPoll()) {
-      startPolling();
-    }
+    startPolling();
   },
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
 
-    if (!this.shouldPoll()) {
+    if (_.isEmpty(this.listeners(HEALTH_NODES_CHANGE))) {
       stopPolling();
     }
-  },
-
-  shouldPoll: function () {
-    return !_.isEmpty(this.listeners(HEALTH_NODES_CHANGE));
   },
 
   getNodes: function () {

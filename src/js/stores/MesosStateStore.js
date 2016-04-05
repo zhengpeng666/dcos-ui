@@ -1,15 +1,14 @@
-import _ from 'underscore';
+var _ = require('underscore');
 import {Store} from 'mesosphere-shared-reactjs';
 
-import AppDispatcher from '../events/AppDispatcher';
+var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
-import Config from '../config/Config';
+var Config = require('../config/Config');
 import EventTypes from '../constants/EventTypes';
-import GetSetMixin from '../mixins/GetSetMixin';
-import MesosStateActions from '../events/MesosStateActions';
-import MesosStateUtil from '../utils/MesosStateUtil';
-import VisibilityUtil from '../utils/VisibilityUtil';
+var GetSetMixin = require('../mixins/GetSetMixin');
+var MesosStateActions = require('../events/MesosStateActions');
+var MesosStateUtil = require('../utils/MesosStateUtil');
 
 var requestInterval = null;
 
@@ -29,18 +28,6 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange(isInactive) {
-  if (isInactive) {
-    stopPolling();
-  }
-
-  if (!isInactive && MesosStateStore.shouldPoll()) {
-    startPolling();
-  }
-}
-
-VisibilityUtil.addInactiveListener(handleInactiveChange);
-
 var MesosStateStore = Store.createStore({
   storeID: 'state',
 
@@ -52,22 +39,15 @@ var MesosStateStore = Store.createStore({
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
-
-    if (this.shouldPoll()) {
-      startPolling();
-    }
+    startPolling();
   },
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
 
-    if (!this.shouldPoll()) {
+    if (_.isEmpty(this.listeners(EventTypes.MESOS_STATE_CHANGE))) {
       stopPolling();
     }
-  },
-
-  shouldPoll: function () {
-    return !_.isEmpty(this.listeners(EventTypes.MESOS_STATE_CHANGE));
   },
 
   getHostResourcesByFramework: function (filter) {

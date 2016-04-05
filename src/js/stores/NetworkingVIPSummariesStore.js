@@ -8,7 +8,6 @@ import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import NetworkingActions from '../events/NetworkingActions';
 import VIPSummaryList from '../structs/VIPSummaryList';
-import VisibilityUtil from '../utils/VisibilityUtil';
 
 let requestInterval = null;
 
@@ -28,18 +27,6 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange(isInactive) {
-  if (isInactive) {
-    stopPolling();
-  }
-
-  if (!isInactive && NetworkingVIPSummariesStore.shouldPoll()) {
-    startPolling();
-  }
-}
-
-VisibilityUtil.addInactiveListener(handleInactiveChange);
-
 let NetworkingVIPSummariesStore = Store.createStore({
   storeID: 'networkingVIPSummaries',
 
@@ -57,14 +44,9 @@ let NetworkingVIPSummariesStore = Store.createStore({
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
 
-    if (!this.shouldPoll()) {
+    if (_.isEmpty(this.listeners(EventTypes.NETWORKING_VIP_SUMMARIES_CHANGE))) {
       stopPolling();
     }
-  },
-
-  shouldPoll: function () {
-    return !_.isEmpty(this.listeners(
-      EventTypes.NETWORKING_VIP_SUMMARIES_CHANGE));
   },
 
   fetchVIPSummaries: NetworkingActions.fetchVIPSummaries,

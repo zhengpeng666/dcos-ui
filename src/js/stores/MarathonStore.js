@@ -1,17 +1,16 @@
-import _ from 'underscore';
+var _ = require('underscore');
 import {Store} from 'mesosphere-shared-reactjs';
 
-import AppDispatcher from '../events/AppDispatcher';
+var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
-import Config from '../config/Config';
+var Config = require('../config/Config');
 import EventTypes from '../constants/EventTypes';
-import GetSetMixin from '../mixins/GetSetMixin';
-import HealthStatus from '../constants/HealthStatus';
-import MarathonActions from '../events/MarathonActions';
-import ServiceImages from '../constants/ServiceImages';
+var GetSetMixin = require('../mixins/GetSetMixin');
+var HealthStatus = require('../constants/HealthStatus');
+var MarathonActions = require('../events/MarathonActions');
+var ServiceImages = require('../constants/ServiceImages');
 import ServiceUtil from '../utils/ServiceUtil';
-import VisibilityUtil from '../utils/VisibilityUtil';
 
 var requestInterval = null;
 
@@ -31,18 +30,6 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange(isInactive) {
-  if (isInactive) {
-    stopPolling();
-  }
-
-  if (!isInactive && MarathonStore.shouldPoll()) {
-    startPolling();
-  }
-}
-
-VisibilityUtil.addInactiveListener(handleInactiveChange);
-
 var MarathonStore = Store.createStore({
   storeID: 'marathon',
 
@@ -55,7 +42,7 @@ var MarathonStore = Store.createStore({
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
 
-    if (this.shouldPoll()) {
+    if (eventName === EventTypes.MARATHON_APPS_CHANGE) {
       startPolling();
     }
   },
@@ -63,13 +50,9 @@ var MarathonStore = Store.createStore({
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
 
-    if (!this.shouldPoll()) {
+    if (_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE))) {
       stopPolling();
     }
-  },
-
-  shouldPoll: function () {
-    return !_.isEmpty(this.listeners(EventTypes.MARATHON_APPS_CHANGE));
   },
 
   hasProcessedApps: function () {

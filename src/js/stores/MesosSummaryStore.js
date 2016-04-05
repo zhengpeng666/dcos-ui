@@ -1,18 +1,17 @@
-import _ from 'underscore';
+var _ = require('underscore');
 import {Store} from 'mesosphere-shared-reactjs';
 
-import AppDispatcher from '../events/AppDispatcher';
+var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
-import Config from '../config/Config';
+var Config = require('../config/Config');
 import EventTypes from '../constants/EventTypes';
-import GetSetMixin from '../mixins/GetSetMixin';
-import MesosSummaryUtil from '../utils/MesosSummaryUtil';
-import MesosSummaryActions from '../events/MesosSummaryActions';
+var GetSetMixin = require('../mixins/GetSetMixin');
+var MesosSummaryUtil = require('../utils/MesosSummaryUtil');
+var MesosSummaryActions = require('../events/MesosSummaryActions');
 import SummaryList from '../structs/SummaryList';
 import StateSummary from '../structs/StateSummary';
-import TimeScales from '../constants/TimeScales';
-import VisibilityUtil from '../utils/VisibilityUtil';
+var TimeScales = require('../constants/TimeScales');
 
 var requestInterval = null;
 
@@ -38,24 +37,14 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange(isInactive) {
-  if (isInactive) {
-    stopPolling();
-  } else {
-    MesosSummaryStore.init(true);
-  }
-}
-
-VisibilityUtil.addInactiveListener(handleInactiveChange);
-
 var MesosSummaryStore = Store.createStore({
   storeID: 'summary',
 
   mixins: [GetSetMixin],
 
-  init: function (forceRefresh) {
+  init: function () {
 
-    if (this.get('initCalledAt') != null && !forceRefresh) {
+    if (this.get('initCalledAt') != null) {
       return;
     }
 
