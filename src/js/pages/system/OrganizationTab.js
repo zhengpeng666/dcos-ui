@@ -12,7 +12,6 @@ import InternalStorageMixin from '../../mixins/InternalStorageMixin';
 import ResourceTableUtil from '../../utils/ResourceTableUtil';
 import StringUtil from '../../utils/StringUtil';
 import TableUtil from '../../utils/TableUtil';
-import TooltipMixin from '../../mixins/TooltipMixin';
 import UsersActionsModal from '../../components/modals/UsersActionsModal';
 
 const METHODS_TO_BIND = [
@@ -26,13 +25,10 @@ const METHODS_TO_BIND = [
   'renderFullName',
   'renderHeadingCheckbox',
   'renderUsername',
-  'resetFilter',
-  // Must bind these due to TooltipMixin legacy code
-  'tip_handleContainerMouseMove',
-  'tip_handleMouseLeave'
+  'resetFilter'
 ];
 
-class OrganizationTab extends mixin(InternalStorageMixin, TooltipMixin) {
+class OrganizationTab extends mixin(InternalStorageMixin) {
   constructor() {
     super(arguments);
 

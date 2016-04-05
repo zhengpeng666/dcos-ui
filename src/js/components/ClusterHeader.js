@@ -7,7 +7,6 @@ import {Tooltip} from 'reactjs-components';
 
 import ClusterName from './ClusterName';
 import DCOSLogo from './DCOSLogo';
-import {Hooks} from 'PluginSDK';
 import MetadataStore from '../stores/MetadataStore';
 
 var ClusterHeader = React.createClass({
@@ -47,13 +46,19 @@ var ClusterHeader = React.createClass({
     this.setState({hasCopiedToClipboard: true});
   },
 
+  handleCopyIconMouseEnter() {
+    this.setState({hasCopiedToClipboard: false});
+  },
+
   getFlashButton() {
     let clipboardIcon = null;
-    let tooltipContent = "Copy to clipboard";
+    let tooltipContent = 'Copy to clipboard';
 
     if (this.props.useClipboard) {
       clipboardIcon = (
-        <i className="icon icon-sprite icon-sprite-mini icon-clipboard icon-sprite-mini-color clickable" />
+        <i className="icon icon-sprite icon-sprite-mini icon-clipboard
+          icon-sprite-mini-color clickable"
+          onMouseEnter={this.handleCopyIconMouseEnter} />
       );
     }
 
