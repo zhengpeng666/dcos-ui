@@ -56,7 +56,8 @@ const UsersActions = {
         AppDispatcher.handleServerAction({
           type: REQUEST_USER_CREATE_ERROR,
           data: RequestUtil.getErrorFromXHR(xhr),
-          userID
+          userID,
+          xhr
         });
       }
     });

@@ -71,6 +71,21 @@ describe('UserStore', function () {
         });
       });
 
+      it('emits success event with the xhr', function () {
+        UserStore.addChangeListener(
+          EventTypes.USER_CREATE_ERROR,
+          function (errorMsg, userID, xhr) {
+            expect(xhr).toEqual({foo: 'bar'});
+          }
+        );
+
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REQUEST_USER_CREATE_ERROR,
+          userID: 'foo',
+          xhr: {foo: 'bar'}
+        });
+      });
+
     });
 
     describe('delete', function () {

@@ -19,7 +19,8 @@ class UserFormModal extends mixin(StoreMixin) {
 
     this.state = {
       disableNewUser: false,
-      errorMsg: false
+      errorMsg: false,
+      errorCode: null
     };
 
     this.store_listeners = [
@@ -38,15 +39,17 @@ class UserFormModal extends mixin(StoreMixin) {
   onUserStoreCreateSuccess() {
     this.setState({
       disableNewUser: false,
-      errorMsg: false
+      errorMsg: false,
+      errorCode: null
     });
     this.props.onClose();
   }
 
-  onUserStoreCreateError(errorMsg) {
+  onUserStoreCreateError(errorMsg, userID, xhr) {
     this.setState({
       disableNewUser: false,
-      errorMsg
+      errorMsg,
+      errorCode: xhr.status
     });
   }
 
