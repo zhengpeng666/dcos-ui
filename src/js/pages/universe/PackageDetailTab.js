@@ -151,6 +151,16 @@ class PackageDetailTab extends mixin(StoreMixin) {
     });
   }
 
+  getSelectedBadge(cosmosPackage) {
+    if (cosmosPackage.selected) {
+      return (
+        <span style={{marginLeft: '10px'}}>Selected</span>
+      );
+    }
+
+    return null;
+  }
+
   render() {
     let {props, state} = this;
 
@@ -208,6 +218,7 @@ class PackageDetailTab extends mixin(StoreMixin) {
                   onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
                   Install Package
                 </button>
+                {this.getSelectedBadge(packageDetails)}
               </div>
             </div>
           </div>

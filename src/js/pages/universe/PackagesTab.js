@@ -8,8 +8,10 @@ import CosmosMessages from '../../constants/CosmosMessages';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
 import FilterInputText from '../../components/FilterInputText';
 import InstallPackageModal from '../../components/modals/InstallPackageModal';
+import NonSelectedPackagesTable from '../../components/NonSelectedPackagesTable';
 import Panel from '../../components/Panel';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
+import UniversePackagesList from '../../structs/UniversePackagesList';
 
 const METHODS_TO_BIND = [
   'handleInstallModalClose',
@@ -127,10 +129,9 @@ class PackagesTab extends mixin(StoreMixin) {
     );
   }
 
-  getPackages() {
+  getPackages(packages) {
     let {searchString} = this.state;
-    let packages = CosmosPackagesStore.getAvailablePackages()
-      .filterItems(searchString);
+    packages = new UniversePackagesList({items: packages}).filterItems(searchString);
 
     return packages.getItems().map((cosmosPackage, index) => {
       return (
@@ -156,9 +157,29 @@ class PackagesTab extends mixin(StoreMixin) {
     });
   }
 
+  getBorderedTitle(title, hasMarginBottom) {
+    let styles = {borderBottom: '1px solid #404040', paddingBottom: '15px'};
+    if (!hasMarginBottom) {
+      styles.marginBottom = '0';
+    }
+
+    return (
+      <h4 style={styles} className="inverse">{title}</h4>
+    );
+  }
+
   render() {
     let {state} = this;
     let packageName, packageVersion;
+    let packages = CosmosPackagesStore.getAvailablePackages();
+
+    let nonSelectedPackages = packages.getItems().filter(function (universePackage) {
+      return !universePackage.isSelected();
+    });
+
+    let selectedPackages = packages.getItems().filter(function (universePackage) {
+      return universePackage.isSelected();
+    });
 
     if (state.installModalPackage) {
       packageName = state.installModalPackage.get('name');
@@ -183,9 +204,15 @@ class PackagesTab extends mixin(StoreMixin) {
             handleFilterChange={this.handleSearchStringChange}
             inverseStyle={true} />
         </div>
+        {this.getBorderedTitle('Promoted Packages', true)}
         <div className="grid row">
-          {this.getPackages()}
+          {this.getPackages(selectedPackages)}
         </div>
+        {this.getBorderedTitle('All Packages', false)}
+        <NonSelectedPackagesTable
+          onDeploy={this.handleInstallModalOpen.bind(this)}
+          packages={new UniversePackagesList({items: nonSelectedPackages})}
+          router={this.context.router} />
         <InstallPackageModal
           open={!!state.installModalPackage}
           packageName={packageName}
