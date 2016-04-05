@@ -7,14 +7,14 @@ const VisibilityUtil = {
 };
 
 // Use visibility API to check if current tab is active or not
-let vis = (function () {
+let vis = (function(){
   let stateKey;
   let eventKey;
   let keys = {
-    hidden: 'visibilitychange',
-    webkitHidden: 'webkitvisibilitychange',
-    mozHidden: 'mozvisibilitychange',
-    msHidden: 'msvisibilitychange'
+    hidden: "visibilitychange",
+    webkitHidden: "webkitvisibilitychange",
+    mozHidden: "mozvisibilitychange",
+    msHidden: "msvisibilitychange"
   };
 
   for (stateKey in keys) {
@@ -23,10 +23,8 @@ let vis = (function () {
         break;
     }
   }
-  return function(callback) {
-    if (callback) {
-      document.addEventListener(eventKey, callback);
-    }
+  return function(c) {
+    if (c) document.addEventListener(eventKey, c);
     return !document[stateKey];
   }
 })();
