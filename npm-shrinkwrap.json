@@ -26815,9 +26815,9 @@
       }
     },
     "reactjs-components": {
-      "version": "0.14.0-beta.16",
-      "from": "reactjs-components@0.14.0-beta.16",
-      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.14.0-beta.16.tgz"
+      "version": "0.14.0-beta.17",
+      "from": "reactjs-components@0.14.0-beta.17",
+      "resolved": "https://registry.npmjs.org/reactjs-components/-/reactjs-components-0.14.0-beta.17.tgz"
     },
     "reactjs-mixin": {
       "version": "0.0.2",
