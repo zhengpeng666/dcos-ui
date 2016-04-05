@@ -7,7 +7,6 @@ import ReactDOM from 'react-dom';
 import ClusterName from './ClusterName';
 import DCOSLogo from './DCOSLogo';
 import MetadataStore from '../stores/MetadataStore';
-import {Hooks} from 'PluginSDK';
 import TooltipMixin from '../mixins/TooltipMixin';
 
 var ClusterHeader = React.createClass({
@@ -40,7 +39,6 @@ var ClusterHeader = React.createClass({
     this.tip_updateTipContent(
       ReactDOM.findDOMNode(this.refs.copyButton), 'Copied!'
     );
-    Hooks.doAction('log', {eventID: 'Copied hostname from sidebar'});
   },
 
   handleMouseOverCopyIcon() {

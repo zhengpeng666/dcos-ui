@@ -96,26 +96,6 @@ describe('Mesos State Actions', function () {
         expect(RequestUtil.json.mostRecentCall.args[0].url).toContain('http://mesosserver/mesos/master/state-summary');
       });
 
-      it('registers history server errors with analytics', function () {
-        let mockFn = jest.genMockFunction();
-        Hooks.addAction('log', mockFn);
-        MesosSummaryActions.fetchSummary(TimeScales.MINUTE);
-        expect(mockFn.mock.calls.length).toEqual(1);
-        expect(mockFn.mock.calls[0][0].eventID).toEqual('Server error');
-        expect(mockFn.mock.calls[0][0].type).toEqual(ActionTypes.REQUEST_MESOS_HISTORY_ERROR);
-        expect(mockFn.mock.calls[0][0].error).toEqual('Guru Meditation');
-      });
-
-      it('registers mesos server errors with analytics', function () {
-        let mockFn = jest.genMockFunction();
-        Hooks.addAction('log', mockFn);
-        MesosSummaryActions.fetchSummary();
-        expect(mockFn.mock.calls.length).toEqual(1);
-        expect(mockFn.mock.calls[0][0].eventID).toEqual('Server error');
-        expect(mockFn.mock.calls[0][0].type).toEqual(ActionTypes.REQUEST_MESOS_SUMMARY_ERROR);
-        expect(mockFn.mock.calls[0][0].error).toEqual('Guru Meditation');
-      });
-
     });
 
   });

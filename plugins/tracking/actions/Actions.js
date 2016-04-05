@@ -3,19 +3,14 @@ var md5 = require('md5');
 var RouterLocation = require('react-router').HashLocation;
 
 let SDK = require('../SDK').getSDK();
-let Config = SDK.get('Config');
+let {Config, Util} = SDK.get(['Config', 'Util']);
 
 var Actions = {
-  /**
-   * A hash of active components
-   */
-  components: {},
-
   activePage: '',
 
   previousFakePageLog: '',
 
-  clusterID: null,
+  customerID: null,
 
   logQueue: [],
 
@@ -38,13 +33,13 @@ var Actions = {
 
     this.setActivePage(this.getActivePage());
 
-    RouterLocation.addChangeListener(function (data) {
+    RouterLocation.addChangeListener(Util.debounce(function (data) {
       Actions.setActivePage(data.path);
-    });
+    }, 200));
   },
 
-  setClusterID: function (clusterID) {
-    this.clusterID = clusterID;
+  setCustomerID: function (customerID) {
+    this.customerID = customerID;
 
     if (this.logQueue.length) {
       this.logQueue.forEach((log) => {
@@ -82,7 +77,7 @@ var Actions = {
     }
 
     this.activePage = path;
-    global.analytics.page({path: path});
+    global.analytics.page({path});
   },
 
   getActivePage: function () {
@@ -113,7 +108,7 @@ var Actions = {
       return;
     }
 
-    if (this.clusterID == null) {
+    if (this.customerID == null) {
       this.logQueue.push(anything);
       return;
     }
@@ -123,7 +118,7 @@ var Actions = {
       appVersion: Config.version,
       eventID: '',
       date: Date.now(),
-      CLUSTER_ID: this.clusterID,
+      CUSTOMER_ID: this.customerID,
       page: this.activePage,
       stintID: this.stintID,
       version: '@@VERSION'
@@ -188,20 +183,6 @@ var Actions = {
     messages.forEach(function (eventID) {
       this.log({eventID});
     }, this);
-  },
-
-  registerComponent: function (component) {
-    this.components[component.id] = component;
-  },
-
-  deregisterComponent: function (componentID) {
-    if (this.components[componentID]) {
-      delete this.components[componentID];
-    }
-  },
-
-  getComponent: function (componentID) {
-    return this.components[componentID];
   }
 
 };

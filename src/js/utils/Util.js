@@ -104,6 +104,28 @@ const Util = {
   },
 
   /**
+   * Will wait until a certain amount of time has elapsed
+   * before calling the given function.
+   *
+   * @param  {Function} func A callback function to be called
+   * @param  {Number} wait How long to wait before callback is called
+   * @return {Function} A function
+   */
+  debounce: function (func, wait) {
+    let timeoutID = null;
+
+    return function (...args) {
+      if (timeoutID) {
+        global.clearTimeout(timeoutID);
+      }
+
+      timeoutID = global.setTimeout(function () {
+        func.apply(null, args);
+      }, wait);
+    };
+  },
+
+  /**
    * @param {Array}    array - An array to search in.
    * @param {Function} func  - Function testing each array element.
    * @return {anything}      - Returns first array element that passes

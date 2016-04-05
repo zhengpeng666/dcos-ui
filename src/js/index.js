@@ -1,5 +1,3 @@
-import overrides from './overrides';
-overrides.override();
 import PluginSDK from 'PluginSDK';
 
 PluginSDK.Hooks.addAction('pluginsConfigured', function () {
