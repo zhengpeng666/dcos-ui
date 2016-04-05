@@ -29,12 +29,22 @@ class UniversePackagesList extends List {
     });
   }
 
-  getSelectedPackages() {
-    let selectedPackages = this.getItems().filter(function (universePackage) {
-      return universePackage.isSelected();
+  getSelectedAndNonSelectedPackages() {
+    let selectedPackages = [];
+    let nonSelectedPackages = [];
+
+    this.getItems().forEach(function (universePackage) {
+      if (universePackage.isSelected()) {
+        selectedPackages.push(universePackage);
+      } else {
+        nonSelectedPackages.push(universePackage);
+      }
     });
 
-    return new this.constructor({items: selectedPackages});
+    return {
+      selectedPackages: new this.constructor({items: selectedPackages}),
+      nonSelectedPackages: new this.constructor({items: nonSelectedPackages})
+    };
   }
 }
 

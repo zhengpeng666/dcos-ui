@@ -91,7 +91,7 @@ class PackagesTab extends mixin(StoreMixin) {
       <button
         className="button button-success"
         onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
-        Deploy Package
+        Install Package
       </button>
     );
   }
@@ -159,7 +159,9 @@ class PackagesTab extends mixin(StoreMixin) {
     let {state} = this;
     let packageName, packageVersion;
     let packages = CosmosPackagesStore.getAvailablePackages();
-    let selectedPackages = packages.getSelectedPackages();
+    let {
+      selectedPackages, nonSelectedPackages
+    } = packages.getSelectedAndNonSelectedPackages();
 
     if (state.installModalPackage) {
       packageName = state.installModalPackage.get('name');
@@ -192,7 +194,7 @@ class PackagesTab extends mixin(StoreMixin) {
         <DisplayPackagesTable
           onDeploy={this.handleInstallModalOpen.bind(this)}
           onDetailOpen={this.handleDetailOpen.bind(this)}
-          packages={packages} />
+          packages={nonSelectedPackages} />
         <InstallPackageModal
           open={!!state.installModalPackage}
           packageName={packageName}

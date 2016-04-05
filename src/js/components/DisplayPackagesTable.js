@@ -67,7 +67,9 @@ class DisplayPackagesTable extends React.Component {
             <h2 className="inverse flush">
               {name}
             </h2>
-            <p style={{marginTop: '5px', opacity: '0.5', marginBottom: '8px'}}>{cosmosPackage.get('currentVersion')}</p>
+            <p style={{marginTop: '5px', opacity: '0.5', marginBottom: '8px'}}>
+              {cosmosPackage.get('currentVersion')}
+            </p>
           </div>
         </div>
       </div>
@@ -84,7 +86,7 @@ class DisplayPackagesTable extends React.Component {
         <button
           className="button button-success"
           onClick={this.props.onDeploy.bind(this, packageToDeploy)}>
-          Deploy
+          Install
         </button>
       </div>
     );
