@@ -2,7 +2,6 @@ let isTabVisible = true;
 
 const VisibilityUtil = {
   isTabVisible() {
-
     return isTabVisible;
   }
 };
@@ -19,14 +18,11 @@ let visibility = (function () {
   };
 
   // Find first stateKey available on document
-  Object.keys(keys).some(function (key) {
-    if (key in global.document) {
-      stateKey = key;
-      eventKey = keys[key];
-
+  Object.keys().some(function (stateKey) {
+    if (stateKey in global.document) {
+      eventKey = keys[stateKey];
       return true;
     }
-
     return false;
   });
 
@@ -36,7 +32,6 @@ let visibility = (function () {
     },
 
     getVisibility() {
-
       return !global.document[stateKey];
     }
   }
