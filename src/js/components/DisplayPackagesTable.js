@@ -1,67 +1,34 @@
-import classNames from 'classnames';
 import {Table} from 'reactjs-components';
-import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
 import React from 'react';
 /* eslint-enable no-unused-vars */
-import {StoreMixin} from 'mesosphere-shared-reactjs';
-
-import TableUtil from '../utils/TableUtil';
-import UniversePackagesList from '../structs/UniversePackagesList';
 
 const METHODS_TO_BIND = [
   'getDeployButton',
   'getHeadline'
 ];
 
-class NonSelectedPackagesTable extends mixin(StoreMixin) {
+class DisplayPackagesTable extends React.Component {
   constructor() {
     super();
-
-    this.state = {
-    };
-
-    this.store_listeners = [
-    ];
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  getClassName(prop, sortBy, row) {
-    return classNames({
-      'highlight': prop === sortBy.prop,
-      'clickable': prop === 'appId' && row == null // this is a header
-    });
-  }
-
   getColumns() {
-    let getClassName = this.getClassName;
     let heading = this.getHeader;
-    let sortFunction = TableUtil
-      .getSortFunction('appId', function (cosmosPackage, prop) {
-        if (prop === 'appId') {
-          return cosmosPackage.get('appId');
-        }
-
-        return cosmosPackage.get('packageDefinition')[prop];
-      });
 
     return [
       {
-        className: getClassName,
-        headerClassName: getClassName,
         heading,
         prop: 'name',
         render: this.getHeadline,
-        sortable: false,
-        sortFunction
+        sortable: false
       },
       {
-        className: getClassName,
-        headerClassName: getClassName,
-        heading: function () {},
+        heading,
         prop: 'deploy',
         render: this.getDeployButton,
         sortable: false
@@ -88,7 +55,8 @@ class NonSelectedPackagesTable extends mixin(StoreMixin) {
     }
 
     return (
-      <div className="media-object-spacing-wrapper clickable" onClick={this.handleDetailOpen.bind(this, cosmosPackage)}>
+      <div className="media-object-spacing-wrapper clickable"
+        onClick={this.props.onDetailOpen.bind(this, cosmosPackage)}>
         <div className="media-object media-object-align-middle">
           <div className="media-object-item">
             <div className="icon icon-large icon-image-container icon-app-container">
@@ -122,15 +90,6 @@ class NonSelectedPackagesTable extends mixin(StoreMixin) {
     );
   }
 
-  handleDetailOpen(cosmosPackage, event) {
-    event.stopPropagation();
-    this.props.router.transitionTo(
-      'universe-packages-detail',
-      {packageName: cosmosPackage.get('name')},
-      {version: cosmosPackage.get('currentVersion')}
-    );
-  }
-
   render() {
     return (
       <Table
@@ -142,12 +101,15 @@ class NonSelectedPackagesTable extends mixin(StoreMixin) {
   }
 }
 
-NonSelectedPackagesTable.defaultProps = {
-  packages: new UniversePackagesList()
+DisplayPackagesTable.defaultProps = {
+  onDeploy: function () {},
+  onDetailOpen: function () {}
 };
 
-NonSelectedPackagesTable.propTypes = {
+DisplayPackagesTable.propTypes = {
+  onDeploy: React.PropTypes.func,
+  onDetailOpen: React.PropTypes.func,
   packages: React.PropTypes.object.isRequired
 };
 
-module.exports = NonSelectedPackagesTable;
+module.exports = DisplayPackagesTable;

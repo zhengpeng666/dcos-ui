@@ -8,10 +8,9 @@ import CosmosMessages from '../../constants/CosmosMessages';
 import CosmosPackagesStore from '../../stores/CosmosPackagesStore';
 import FilterInputText from '../../components/FilterInputText';
 import InstallPackageModal from '../../components/modals/InstallPackageModal';
-import NonSelectedPackagesTable from '../../components/NonSelectedPackagesTable';
+import DisplayPackagesTable from '../../components/DisplayPackagesTable';
 import Panel from '../../components/Panel';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
-import UniversePackagesList from '../../structs/UniversePackagesList';
 
 const METHODS_TO_BIND = [
   'handleInstallModalClose',
@@ -88,25 +87,13 @@ class PackagesTab extends mixin(StoreMixin) {
   }
 
   getButton(cosmosPackage) {
-    let selectedTag = null;
-    if (cosmosPackage.isSelected()) {
-      selectedTag = (
-        <p className="text-align-center flush-bottom" key="selectedTag">
-          Selected
-        </p>
-      );
-    }
-
-    return [
-      <p key="installButton">
-        <button
-          className="button button-success"
-          onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
-          Install Package
-        </button>
-      </p>,
-      selectedTag
-    ];
+    return (
+      <button
+        className="button button-success"
+        onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
+        Deploy Package
+      </button>
+    );
   }
 
   getIcon(cosmosPackage) {
@@ -129,9 +116,9 @@ class PackagesTab extends mixin(StoreMixin) {
     );
   }
 
-  getPackages(packages) {
+  getSelectedPackages(packages) {
     let {searchString} = this.state;
-    packages = new UniversePackagesList({items: packages}).filterItems(searchString);
+    packages = packages.filterItems(searchString);
 
     return packages.getItems().map((cosmosPackage, index) => {
       return (
@@ -172,10 +159,7 @@ class PackagesTab extends mixin(StoreMixin) {
     let {state} = this;
     let packageName, packageVersion;
     let packages = CosmosPackagesStore.getAvailablePackages();
-
-    let selectedPackages = packages.getItems().filter(function (universePackage) {
-      return universePackage.isSelected();
-    });
+    let selectedPackages = packages.getSelectedPackages();
 
     if (state.installModalPackage) {
       packageName = state.installModalPackage.get('name');
@@ -200,15 +184,15 @@ class PackagesTab extends mixin(StoreMixin) {
             handleFilterChange={this.handleSearchStringChange}
             inverseStyle={true} />
         </div>
-        {this.getBorderedTitle('Promoted Packages', true)}
+        {this.getBorderedTitle('Selected Packages', true)}
         <div className="grid row">
-          {this.getPackages(selectedPackages)}
+          {this.getSelectedPackages(selectedPackages)}
         </div>
-        {this.getBorderedTitle('All Packages', false)}
-        <NonSelectedPackagesTable
+        {this.getBorderedTitle('Community Packages', false)}
+        <DisplayPackagesTable
           onDeploy={this.handleInstallModalOpen.bind(this)}
-          packages={packages}
-          router={this.context.router} />
+          onDetailOpen={this.handleDetailOpen.bind(this)}
+          packages={packages} />
         <InstallPackageModal
           open={!!state.installModalPackage}
           packageName={packageName}
