@@ -5,15 +5,11 @@ import AppDispatcher from '../events/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
 import Config from '../config/Config';
-import {
-  MESOS_STATE_CHANGE,
-  MESOS_STATE_REQUEST_ERROR,
-  VISIBILITY_CHANGE
-} from '../constants/EventTypes';
+import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import MesosStateActions from '../events/MesosStateActions';
 import MesosStateUtil from '../utils/MesosStateUtil';
-import VisibilityStore from './VisibilityStore';
+import VisibilityUtil from '../utils/VisibilityUtil';
 
 var requestInterval = null;
 
@@ -33,8 +29,7 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange() {
-  let isInactive = VisibilityStore.get('isInactive');
+function handleInactiveChange(isInactive) {
   if (isInactive) {
     stopPolling();
   }
@@ -44,7 +39,7 @@ function handleInactiveChange() {
   }
 }
 
-VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
+VisibilityUtil.addInactiveListener(handleInactiveChange);
 
 var MesosStateStore = Store.createStore({
   storeID: 'state',
@@ -72,7 +67,7 @@ var MesosStateStore = Store.createStore({
   },
 
   shouldPoll: function () {
-    return !_.isEmpty(this.listeners(MESOS_STATE_CHANGE));
+    return !_.isEmpty(this.listeners(EventTypes.MESOS_STATE_CHANGE));
   },
 
   getHostResourcesByFramework: function (filter) {
@@ -167,11 +162,11 @@ var MesosStateStore = Store.createStore({
   processStateSuccess: function (lastMesosState) {
     CompositeState.addState(lastMesosState);
     this.set({lastMesosState});
-    this.emit(MESOS_STATE_CHANGE);
+    this.emit(EventTypes.MESOS_STATE_CHANGE);
   },
 
   processStateError: function () {
-    this.emit(MESOS_STATE_REQUEST_ERROR);
+    this.emit(EventTypes.MESOS_STATE_REQUEST_ERROR);
   },
 
   processOngoingRequest: function () {

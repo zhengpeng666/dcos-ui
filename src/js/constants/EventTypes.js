@@ -64,8 +64,7 @@ let EventTypes = {};
   'USER_DELETE_ERROR',
   'USER_DELETE_SUCCESS',
   'USERS_CHANGE',
-  'USERS_REQUEST_ERROR',
-  'VISIBILITY_CHANGE'
+  'USERS_REQUEST_ERROR'
 ].forEach(function (eventType) {
   EventTypes[eventType] = eventType;
 });

@@ -5,18 +5,14 @@ import AppDispatcher from '../events/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
 import Config from '../config/Config';
-import {
-  MESOS_SUMMARY_CHANGE,
-  MESOS_SUMMARY_REQUEST_ERROR,
-  VISIBILITY_CHANGE
-} from '../constants/EventTypes';
+import EventTypes from '../constants/EventTypes';
 import GetSetMixin from '../mixins/GetSetMixin';
 import MesosSummaryUtil from '../utils/MesosSummaryUtil';
 import MesosSummaryActions from '../events/MesosSummaryActions';
 import SummaryList from '../structs/SummaryList';
 import StateSummary from '../structs/StateSummary';
 import TimeScales from '../constants/TimeScales';
-import VisibilityStore from './VisibilityStore';
+import VisibilityUtil from '../utils/VisibilityUtil';
 
 var requestInterval = null;
 
@@ -42,8 +38,7 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange() {
-  let isInactive = VisibilityStore.get('isInactive');
+function handleInactiveChange(isInactive) {
   if (isInactive) {
     MesosSummaryStore.terminate();
   } else {
@@ -51,7 +46,7 @@ function handleInactiveChange() {
   }
 }
 
-VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
+VisibilityUtil.addInactiveListener(handleInactiveChange);
 
 var MesosSummaryStore = Store.createStore({
   storeID: 'summary',
@@ -133,7 +128,7 @@ var MesosSummaryStore = Store.createStore({
 
   updateStateProcessed: function () {
     this.set({statesProcessed: true});
-    this.emit(MESOS_SUMMARY_CHANGE);
+    this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
   },
 
   notifySummaryProcessed: function () {
@@ -142,7 +137,7 @@ var MesosSummaryStore = Store.createStore({
     if (this.get('statesProcessed') ||
         this.get('loading') != null ||
         initCalledAt == null) {
-      this.emit(MESOS_SUMMARY_CHANGE);
+      this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
       return;
     }
 
@@ -209,7 +204,7 @@ var MesosSummaryStore = Store.createStore({
     this.setFailureRate(states.last(), prevState);
 
     if (!options.silent) {
-      this.emit(MESOS_SUMMARY_REQUEST_ERROR);
+      this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
     }
   },
 

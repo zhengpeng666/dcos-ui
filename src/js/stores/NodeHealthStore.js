@@ -21,7 +21,6 @@ import {
   HEALTH_NODE_UNIT_SUCCESS,
   HEALTH_NODES_CHANGE,
   HEALTH_NODES_ERROR,
-  VISIBILITY_CHANGE
 } from '../constants/EventTypes';
 import AppDispatcher from '../events/AppDispatcher';
 import CompositeState from '../structs/CompositeState';
@@ -32,7 +31,7 @@ import HealthUnitsList from '../structs/HealthUnitsList';
 import GetSetMixin from '../mixins/GetSetMixin';
 import Node from '../structs/Node';
 import NodesList from '../structs/NodesList';
-import VisibilityStore from './VisibilityStore';
+import VisibilityUtil from '../utils/VisibilityUtil';
 
 let requestInterval = null;
 
@@ -52,8 +51,7 @@ function stopPolling() {
   }
 }
 
-function handleInactiveChange() {
-  let isInactive = VisibilityStore.get('isInactive');
+function handleInactiveChange(isInactive) {
   if (isInactive) {
     stopPolling();
   }
@@ -63,7 +61,7 @@ function handleInactiveChange() {
   }
 }
 
-VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
+VisibilityUtil.addInactiveListener(handleInactiveChange);
 
 const NodeHealthStore = Store.createStore({
 
