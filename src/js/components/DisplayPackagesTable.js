@@ -55,7 +55,7 @@ class DisplayPackagesTable extends React.Component {
     }
 
     return (
-      <div className="media-object-spacing-wrapper clickable"
+      <div className="media-object-spacing-wrapper media-object-spacing-narrow clickable"
         onClick={this.props.onDetailOpen.bind(this, cosmosPackage)}>
         <div className="media-object media-object-align-middle">
           <div className="media-object-item">
@@ -67,7 +67,7 @@ class DisplayPackagesTable extends React.Component {
             <h2 className="inverse flush">
               {name}
             </h2>
-            <p style={{marginTop: '5px', opacity: '0.5', marginBottom: '8px'}}>
+            <p className="flush-bottom">
               {cosmosPackage.get('currentVersion')}
             </p>
           </div>

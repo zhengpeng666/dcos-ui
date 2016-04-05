@@ -147,14 +147,11 @@ class PackagesTab extends mixin(StoreMixin) {
     });
   }
 
-  getBorderedTitle(title, hasMarginBottom) {
-    let styles = {borderBottom: '1px solid #404040', paddingBottom: '15px'};
-    if (!hasMarginBottom) {
-      styles.marginBottom = '0';
-    }
-
+  getBorderedTitle(title) {
     return (
-      <h4 style={styles} className="inverse">{title}</h4>
+      <div className="container-pod container-pod-divider-bottom container-pod-divider-inverse flush-bottom flush-top">
+        <h4 className="inverse">{title}</h4>
+      </div>
     );
   }
 
@@ -166,8 +163,10 @@ class PackagesTab extends mixin(StoreMixin) {
     return (
       <div>
         {this.getBorderedTitle('Selected Packages', true)}
-        <div className="grid row">
-          {this.getSelectedPackages(packages)}
+        <div className="container-pod container-pod-short">
+          <div className="grid row">
+            {this.getSelectedPackages(packages)}
+          </div>
         </div>
       </div>
     );
