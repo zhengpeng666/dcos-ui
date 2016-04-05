@@ -41,4 +41,25 @@ describe('UniversePackage', function () {
 
   });
 
+  describe('#getSelectedAndNonSelectedPackages', function () {
+    beforeEach(function () {
+      this.packages = [
+        {name: 'isSelected', selected: true},
+        {name: 'isNotSelected', selected: false},
+        {name: 'isNotSelected2', selected: false}
+      ];
+      this.packagesList = new UniversePackage({items: this.packages});
+    });
+
+    it('returns the correct number of selected packages', function () {
+      var result = this.packagesList.getSelectedAndNonSelectedPackages();
+      expect(result.selectedPackages.getItems().length).toEqual(1);
+    });
+
+    it('returns the correct number of non-selected packages', function () {
+      var result = this.packagesList.getSelectedAndNonSelectedPackages();
+      expect(result.nonSelectedPackages.getItems().length).toEqual(2);
+    });
+  });
+
 });
