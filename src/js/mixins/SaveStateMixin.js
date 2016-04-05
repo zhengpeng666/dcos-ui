@@ -10,20 +10,21 @@ const SaveStateMixin = {
     }
 
     let savedStates = UserSettingsStore.getKey(SAVED_STATE_KEY);
-
-    let savedState = savedStates[key];
-    if (savedState == null) {
+    if (savedStates == null || savedStates[key] == null) {
       return;
     }
 
-    this.setState(savedState);
+    this.setState(savedStates[key]);
   },
 
   componentWillUnmount() {
     let {saveState_key, state} = this;
     let savedStates = UserSettingsStore.getKey(SAVED_STATE_KEY);
-    savedStates[saveState_key] = state;
+    if (savedStates == null) {
+      savedStates = {};
+    }
 
+    savedStates[saveState_key] = state;
     UserSettingsStore.setKey(SAVED_STATE_KEY, savedStates);
   }
 };
