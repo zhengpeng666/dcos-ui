@@ -123,7 +123,7 @@ class UsersTab extends mixin(StoreMixin) {
         itemID="uid"
         itemName="user"
         handleNewItemClick={this.handleNewUserClick} />,
-        this.props
+        this
     );
   }
 

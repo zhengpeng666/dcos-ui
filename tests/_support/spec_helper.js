@@ -128,6 +128,26 @@ Cypress.addParentCommand('configureCluster', function (configuration) {
     });
   }
 
+  if (configuration.LDAPUserCreate) {
+    if (configuration.LDAPUserCreate === 'success') {
+      cy.route({
+        method: 'POST',
+        status: 200,
+        url: /acs\/api\/v1\/ldap\/importuser/,
+        response: {}
+      });
+    }
+
+    if (configuration.LDAPUserCreate === 'error') {
+      cy.route({
+        method: 'POST',
+        status: 400,
+        url: /acs\/api\/v1\/ldap\/importuser/,
+        response: {description: 'No LDAP Configured'}
+      })
+    }
+  }
+
   if (configuration.aclCreate) {
     cy
       .route(/acls(\?type=.*?)?/, 'fx:acl/acls_empty')
