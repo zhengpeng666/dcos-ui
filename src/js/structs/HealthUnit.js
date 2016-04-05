@@ -12,6 +12,15 @@ class HealthUnit extends Item {
   }
 
   getTitle() {
+    let title = this.get('name');
+    if (!title) {
+      title = this.getPrettyPrintID();
+    }
+
+    return title;
+  }
+
+  getPrettyPrintID() {
     let id = this.get('id') || '';
     let prefixIndex = id.indexOf(ID_PREFIX);
 
