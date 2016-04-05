@@ -42,7 +42,7 @@ var VisibilityStore = Store.createStore({
 
   mixins: [GetSetMixin],
 
-  init() {
+  init: function () {
     this.set({
       isTabVisible: true,
       isInactive: false
@@ -60,7 +60,7 @@ var VisibilityStore = Store.createStore({
     return this;
   },
 
-  removeChangeListener(eventName, callback) {
+  removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
   },
 
