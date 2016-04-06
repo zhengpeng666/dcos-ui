@@ -161,7 +161,7 @@ class PackagesTab extends mixin(StoreMixin) {
     }
 
     return (
-      <div>
+      <div className="clearfix">
         {this.getBorderedTitle('Selected Packages', true)}
         <div className="container-pod container-pod-short">
           <div className="grid row">
