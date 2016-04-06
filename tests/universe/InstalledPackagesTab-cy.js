@@ -6,7 +6,7 @@ describe('Installed Packages Tab', function () {
         mesos: '1-task-healthy',
         universePackages: true
       })
-      .visitUrl({url: '/universe/installed'});
+      .visitUrl({url: '/packages/installed'});
   });
 
   it('activates the correct tab', function () {
