@@ -41,4 +41,34 @@ describe('UniversePackage', function () {
 
   });
 
+  describe('#isSelected', function () {
+    it('returns true if package is selected', function () {
+      var pkg = new UniversePackage({'selected': true});
+      expect(pkg.isSelected()).toEqual(true);
+    });
+
+    it('returns false if package is not selected', function () {
+      var pkg = new UniversePackage({'selected': false});
+      expect(pkg.isSelected()).toEqual(false);
+    });
+
+    it('looks for package if selected is nested and returns true', function () {
+      var pkg = new UniversePackage({
+        'package': {
+          selected: true
+        }
+      });
+      expect(pkg.isSelected()).toEqual(true);
+    });
+
+    it('looks for package and returns false', function () {
+      var pkg = new UniversePackage({
+        'package': {
+          selected: false
+        }
+      });
+      expect(pkg.isSelected()).toEqual(false);
+    });
+  });
+
 });

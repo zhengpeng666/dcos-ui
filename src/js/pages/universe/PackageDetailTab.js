@@ -151,6 +151,14 @@ class PackageDetailTab extends mixin(StoreMixin) {
     });
   }
 
+  getSelectedBadge(cosmosPackage) {
+    if (cosmosPackage.isSelected()) {
+      return <span>Selected</span>;
+    }
+
+    return null;
+  }
+
   render() {
     let {props, state} = this;
 
@@ -203,11 +211,20 @@ class PackageDetailTab extends mixin(StoreMixin) {
                   {packageDetails.name}
                 </h1>
                 <p>{packageDetails.version}</p>
-                <button
-                  className="button button-success"
-                  onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
-                  Install Package
-                </button>
+                <div className="media-object-spacing-wrapper media-object-spacing-narrow">
+                  <div className="media-object media-object-align-middle">
+                    <div className="media-object-item">
+                      <button
+                        className="button button-success"
+                        onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
+                        Install Package
+                      </button>
+                    </div>
+                    <div className="media-object-item">
+                      {this.getSelectedBadge(cosmosPackage)}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
