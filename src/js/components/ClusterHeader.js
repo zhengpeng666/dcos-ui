@@ -39,7 +39,9 @@ var ClusterHeader = React.createClass({
   },
 
   componentWillUnmount() {
-    this.clipboard.destroy();
+    if (this.clipboard) {
+      this.clipboard.destroy();
+    }
   },
 
   handleCopy() {
