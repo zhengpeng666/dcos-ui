@@ -249,9 +249,7 @@
 .dropdown-chart-details {
 
   position: relative;
-  // This nasty z-index is needed to cover the z-index on flex-container-col.
-  // When that gets fixed, we can adjust this as needed.
-  z-index: 2020;
+  z-index: @z-index-dropdown-chart-details;
 
 }
 
@@ -327,7 +325,7 @@
 .dygraph-chart {
 
   position: relative;
-  z-index: 2010;
+  z-index: @z-index-dygraph-chart;
 
   .dygraph-hover-label {
 
@@ -340,7 +338,7 @@
     pointer-events: none;
     position: absolute;
     width: 200px;
-    z-index: 100;
+    z-index: @z-index-dygraph-hover-label;
 
     .highlight {
 
