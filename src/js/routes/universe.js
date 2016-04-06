@@ -19,8 +19,8 @@ let universeRoutes = {
     },
     {
       type: Route,
-      name: 'packages-installed-packages',
-      path: 'installed-packages?',
+      name: 'packages-installed',
+      path: 'installed?',
       handler: InstalledPackagesTab
     },
     {
