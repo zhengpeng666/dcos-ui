@@ -131,10 +131,10 @@ module.exports = {
   userLogoutSuccess() {
     // Reload configuration because we need to get 'firstUser' which is
     // dynamically set based on number of users
-    reloadConfigStore(this.navigateToLogin);
+    reloadConfigStore(this.navigateToLoginPage);
   },
 
-  navigateToLogin() {
+  navigateToLoginPage() {
     window.location.href = '#/login';
   }
 };

@@ -96,13 +96,15 @@ class UserDropup extends React.Component {
     let description;
     let userLabel;
 
-    if (user && !user.is_remote) {
+    if (user != null) {
       userLabel = user.description;
-    } else if (user && user.is_remote) {
-      userLabel = user.uid;
+
+      if (user.is_remote) {
+        userLabel = user.uid;
+      }
     }
 
-    if (userLabel) {
+    if (userLabel != null) {
       description = (
         <span className="user-description">
           {userLabel}
@@ -149,7 +151,7 @@ class UserDropup extends React.Component {
 
   render() {
     let user = AuthStore.getUser();
-    if (!user) {
+    if (user == null) {
       return null;
     }
 

@@ -45,7 +45,7 @@ let AuthStore = Store.createStore({
   getUser: function () {
     let userCode = CookieUtils.getUserMetadata();
 
-    if (!userCode) {
+    if (userCode == null) {
       return null;
     }
 
@@ -61,7 +61,6 @@ let AuthStore = Store.createStore({
   },
 
   processLogoutSuccess: function () {
-    // Set the cookie to an empty string.
     global.document.cookie = CookieUtils.emptyCookieWithExpiry(new Date(1970));
 
     this.emit(AUTH_USER_LOGOUT_SUCCESS);
