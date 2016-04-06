@@ -63,7 +63,7 @@ class NetworkPage extends mixin(StoreMixin) {
         iconClassName="icon icon-sprite icon-sprite-jumbo
           icon-sprite-jumbo-white icon-services flush-top">
         <p className="flush">
-          Use the DCOS command line tools to create VIPs.
+          Check out the <a href="https://docs.mesosphere.com/administration/service-discovery/virtual-ip-addresses/" target="_blank">networking documentation</a> for ways to create VIPs.
         </p>
       </AlertPanel>
     );
