@@ -48,7 +48,7 @@ class UniversePage extends mixin(TabsMixin) {
   render() {
     return (
       <Page
-        title="Universe"
+        title="Packages"
         navigation={this.getNavigation()}>
         <RouteHandler />
       </Page>
