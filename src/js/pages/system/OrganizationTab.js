@@ -143,7 +143,7 @@ class OrganizationTab extends mixin(InternalStorageMixin) {
           disabled,
           value: checked,
           fieldType: 'checkbox',
-          labelClass: 'inverse',
+          labelClass: 'form-row-element form-element-checkbox inverse',
           name: rowID,
           showLabel: false
         }]}
@@ -176,7 +176,7 @@ class OrganizationTab extends mixin(InternalStorageMixin) {
             value: checked,
             fieldType: 'checkbox',
             indeterminate,
-            labelClass: 'inverse',
+            labelClass: 'form-row-element form-element-checkbox inverse',
             name: 'headingCheckbox',
             showLabel: false
           }
