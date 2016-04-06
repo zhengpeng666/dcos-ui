@@ -195,6 +195,8 @@ class PackagesTab extends mixin(StoreMixin) {
 
   render() {
     let {state} = this;
+    let packageName, packageVersion;
+
     if (state.errorMessage) {
       return this.getErrorScreen();
     }
@@ -208,7 +210,6 @@ class PackagesTab extends mixin(StoreMixin) {
       packageVersion = state.installModalPackage.get('currentVersion');
     }
 
-    let packageName, packageVersion;
     let packages = CosmosPackagesStore.getAvailablePackages();
     let splitPackages = packages.getSelectedAndNonSelectedPackages();
 
