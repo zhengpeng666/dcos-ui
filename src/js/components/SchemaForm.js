@@ -164,7 +164,7 @@ class SchemaForm extends React.Component {
   getSubHeader(name) {
     return (
       <div key={name} className="row">
-        <div className="h5 column-12">
+        <div className="h5 column-12 form-row-element flush-bottom">
           {name}
         </div>
       </div>
@@ -216,9 +216,9 @@ class SchemaForm extends React.Component {
 
   getHeader(title, description) {
     return (
-      <div key={title} className="column-12">
+      <div key={title} className="column-12 form-row-element">
         <h3 className="form-header flush-bottom">{title}</h3>
-        <p>{description}</p>
+        <p className="flush-bottom">{description}</p>
       </div>
     );
   }
