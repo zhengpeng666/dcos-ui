@@ -4,8 +4,8 @@ import React from 'react';
 import {Route} from 'react-router';
 
 import {
-  CONFIG_LOADED,
-  CONFIG_ERROR
+  CONFIG_ERROR,
+  CONFIG_LOADED
 } from './constants/EventTypes';
 
 import LoginPage from './components/LoginPage';
@@ -13,8 +13,8 @@ import UserDropup from './components/UserDropup';
 
 let SDK = require('./SDK').getSDK();
 
-let {CookieUtils, Authenticated, AccessDeniedPage, ConfigStore} = SDK.get([
-  'CookieUtils', 'Authenticated', 'AccessDeniedPage', 'ConfigStore']);
+let {AccessDeniedPage, Authenticated, ConfigStore, CookieUtils} = SDK.get([
+  'AccessDeniedPage', 'Authenticated', 'ConfigStore', 'CookieUtils']);
 
 // DCOS-5935 Build mixin for non-react components to listen to store events
 const CONFIG_STORE_LISTENERS = [CONFIG_LOADED, CONFIG_ERROR];

@@ -14,10 +14,8 @@ class LoginPage extends mixin(StoreMixin) {
   componentWillMount() {
     super.componentWillMount();
 
-    let router = this.context.router;
-
     if (AuthStore.getUser()) {
-      router.transitionTo('/');
+      this.context.router.transitionTo('/');
     }
 
     this.store_listeners = [
