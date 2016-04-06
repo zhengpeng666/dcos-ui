@@ -55,7 +55,7 @@ class DisplayPackagesTable extends React.Component {
     }
 
     return (
-      <div className="media-object-spacing-wrapper media-object-spacing-narrow clickable"
+      <div className="media-object-spacing-wrapper media-object-spacing-super-narrow clickable"
         onClick={this.props.onDetailOpen.bind(this, cosmosPackage)}>
         <div className="media-object media-object-align-middle">
           <div className="media-object-item">

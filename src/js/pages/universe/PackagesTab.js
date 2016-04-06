@@ -130,9 +130,9 @@ class PackagesTab extends mixin(StoreMixin) {
           key={index}>
           <Panel
             className="panel clickable"
-            contentClass="panel-content horizontal-center"
+            contentClass="panel-content panel-content-short-bottom panel-content-tall-top horizontal-center"
             footer={this.getButton(cosmosPackage)}
-            footerClass="panel-footer horizontal-center panel-footer-no-top-border flush-top"
+            footerClass="panel-footer panel-footer-tall-bottom horizontal-center panel-footer-no-top-border flush-top"
             onClick={this.handleDetailOpen.bind(this, cosmosPackage)}>
             {this.getIcon(cosmosPackage)}
             <div className="h2 inverse short">
