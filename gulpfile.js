@@ -45,7 +45,7 @@ function browserSyncReload() {
   }
 }
 // Watches for delete in external plugins directory and deletes counterpart in
-// DCOS-UI directory
+// DC/OS-UI directory
 function deletePluginFile(event) {
   if (event.type === 'deleted') {
     var filePathFromPlugins = path.relative(
@@ -208,7 +208,7 @@ function webpackFn(callback) {
   if (process.env.NOTIFY === 'true') {
     webpackConfig.plugins.push(new WebpackNotifierPlugin({
       alwaysNotify: true,
-      title: 'DCOS UI - ' + packageInfo.version
+      title: 'DC/OS UI - ' + packageInfo.version
     }));
   }
 

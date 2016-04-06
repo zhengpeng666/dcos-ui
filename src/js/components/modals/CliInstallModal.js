@@ -46,7 +46,7 @@ var CliInstructionsModal = React.createClass({
       );
       requirements = (
         <p>
-          Install the DCOS command-line interface (CLI) tool on your local system by following <a href="https://docs.mesosphere.com/administration/introcli/cli/#windows" target="_blank">these instructions</a>. You must install the CLI to administer your DCOS cluster. {appendText}
+          Install the DC/OS command-line interface (CLI) tool on your local system by following <a href="https://docs.mesosphere.com/administration/introcli/cli/#windows" target="_blank">these instructions</a>. You must install the CLI to administer your DC/OS cluster. {appendText}
         </p>
       );
     } else {

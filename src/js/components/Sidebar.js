@@ -171,7 +171,7 @@ var Sidebar = React.createClass({
             <p className="text-align-center flush-top flush-bottom mute small">
               <span className="clickable" onClick={this.handleVersionClick}>
                 <span className="company-name small">Mesosphere </span>
-                <span className="app-name small">DCOS {this.getVersion()}</span>
+                <span className="app-name small">DC/OS {this.getVersion()}</span>
               </span>
             </p>
           </div>

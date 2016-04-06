@@ -46,7 +46,7 @@ var IdentifyModal = React.createClass({
       <div className="button-collection button-collection-align-horizontal-center flush-bottom">
         <button className="button button-primary button-large button-wide-below-screen-mini"
             onClick={this.handleSubmit}>
-          Try Mesosphere DCOS
+          Try Mesosphere DC/OS
         </button>
       </div>
     );
@@ -87,7 +87,7 @@ var IdentifyModal = React.createClass({
         showFooter={true}
         subHeader={this.getSubHeader()}
         titleClass="modal-header-title text-align-center flush-top"
-        titleText="Mesosphere DCOS">
+        titleText="Mesosphere DC/OS">
         <form className="flush-bottom"
           onSubmit={this.handleSubmit}>
           <div className={emailClassSet}>

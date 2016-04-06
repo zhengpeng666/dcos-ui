@@ -106,7 +106,7 @@ let ServiceList = React.createClass({
     return (
       <div className="container container-pod-fluid">
         <h3 className="flush-top inverse text-align-center">No Services Running</h3>
-        <p className="inverse flush text-align-center">Use the DCOS command line tools to find and install services.</p>
+        <p className="inverse flush text-align-center">Use the DC/OS command line tools to find and install services.</p>
       </div>
     );
   },

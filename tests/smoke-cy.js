@@ -1,4 +1,4 @@
-describe('DCOS UI [00j]', function() {
+describe('DC/OS UI [00j]', function() {
 
   beforeEach(function() {
     cy.configureCluster({
