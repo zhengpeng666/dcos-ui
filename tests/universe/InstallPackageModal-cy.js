@@ -6,7 +6,7 @@ describe('Install Package Modal', function () {
         mesos: '1-task-healthy',
         universePackages: true
       })
-      .visitUrl({url: '/universe'})
+      .visitUrl({url: '/packages'})
       .get('.page-content .button.button-success')
       .eq(0)
       .click();

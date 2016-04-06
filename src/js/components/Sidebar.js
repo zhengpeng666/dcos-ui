@@ -15,7 +15,7 @@ var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var MetadataStore = require('../stores/MetadataStore');
 var SidebarActions = require('../events/SidebarActions');
 
-let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'network', 'universe', 'system'];
+let defaultMenuItems = ['dashboard', 'services', 'nodes-list', 'network', 'packages', 'system'];
 
 let {Hooks} = PluginSDK;
 
