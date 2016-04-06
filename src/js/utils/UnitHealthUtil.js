@@ -1,6 +1,5 @@
 import _ from 'underscore';
 
-import HealthSorting from '../constants/HealthSorting';
 import UnitHealthStatus from '../constants/UnitHealthStatus';
 import TableUtil from '../utils/TableUtil';
 import Util from '../utils/Util';
