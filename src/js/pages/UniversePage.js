@@ -30,8 +30,8 @@ class UniversePage extends mixin(TabsMixin) {
 
     // Universe Tabs
     this.tabs_tabs = {
-      'universe-packages': 'Packages',
-      'universe-installed-packages': 'Installed'
+      'packages-packages': 'Packages',
+      'packages-installed-packages': 'Installed'
     };
 
     this.setState({currentTab});
@@ -61,9 +61,9 @@ UniversePage.contextTypes = {
 };
 
 UniversePage.routeConfig = {
-  label: 'Universe',
+  label: 'Packages',
   icon: 'universe',
-  matches: /^\/universe/
+  matches: /^\/packages/
 };
 
 UniversePage.willTransitionTo = function () {
