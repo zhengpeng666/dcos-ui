@@ -4,6 +4,8 @@ module.exports = {
     ServiceConstants: 'ServiceConstants'
   },
   stores: {
+    AuthStore: 'AuthStore',
+    ConfigStore: 'ConfigStore',
     UsersStore: 'UsersStore',
     UserStore: 'UserStore'
   },
@@ -13,6 +15,7 @@ module.exports = {
     CompositeState: 'CompositeState'
   },
   utils: {
+    CookieUtils: 'CookieUtils',
     StringUtil: 'StringUtil',
     RequestUtil: 'RequestUtil',
     DOMUtils: 'DOMUtils',
@@ -29,6 +32,8 @@ module.exports = {
     TabsMixin: 'TabsMixin'
   },
   components: {
+    Authenticated: 'Authenticated',
+    AccessDeniedPage: 'AccessDeniedPage',
     SidePanelContents: 'SidePanelContents',
     RequestErrorMsg: 'RequestErrorMsg',
     IconInfo: 'icons/IconInfo',

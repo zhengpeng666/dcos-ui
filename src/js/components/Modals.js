@@ -6,8 +6,6 @@ var ErrorModal = require('./modals/ErrorModal');
 import EventTypes from '../constants/EventTypes';
 import {Hooks} from 'PluginSDK';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
-import IdentifyModal from './modals/IdentifyModal';
-var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var SidebarStore = require('../stores/SidebarStore');
 var VersionsModal = require('./modals/VersionsModal');
 
@@ -123,28 +121,6 @@ var Modals = React.createClass({
     });
   },
 
-  getIdentifyModal: function (hasIdentity) {
-    let statesReady = MesosSummaryStore.get('statesProcessed');
-    let isOpen = Hooks.applyFilter(
-      'openIdentifyModal',
-      (!hasIdentity && statesReady)
-    );
-
-    if (isOpen) {
-      Hooks.doAction('logFakePageView', {
-        title: 'Signup Modal',
-        path: '/v/beta-signup-modal-form',
-        referrer: 'https://mesosphere.com/'
-      });
-    }
-
-    return (
-      <IdentifyModal
-        onLogin={this.onLogin}
-        open={isOpen} />
-    );
-  },
-
   getCliModalOptions: function () {
     return {
       onClose: function () {
@@ -257,7 +233,6 @@ var Modals = React.createClass({
 
     return (
       <div>
-        {this.getIdentifyModal(this.state.hasIdentity)}
         {this.getCliInstallModal(showCliModal)}
         {this.getVersionsModal(this.state.showingVersionsModal)}
         {this.getErrorModal(this.state.showErrorModal)}

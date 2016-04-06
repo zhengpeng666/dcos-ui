@@ -1,5 +1,10 @@
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import {
+  AUTH_USER_LOGIN_CHANGED,
+  AUTH_USER_LOGIN_ERROR,
+  AUTH_USER_LOGOUT_SUCCESS,
+  AUTH_USER_LOGOUT_ERROR,
+
   COSMOS_SEARCH_CHANGE,
   COSMOS_SEARCH_ERROR,
   COSMOS_LIST_CHANGE,
@@ -66,6 +71,7 @@ import {
   USERS_CHANGE,
   USERS_REQUEST_ERROR
 } from './EventTypes';
+import AuthStore from '../stores/AuthStore';
 import HistoryStore from '../stores/HistoryStore';
 import MarathonStore from '../stores/MarathonStore';
 import MesosLogStore from '../stores/MesosLogStore';
@@ -80,6 +86,19 @@ import UserStore from '../stores/UserStore';
 import UsersStore from '../stores/UsersStore';
 
 const ListenersDescription = {
+  auth: {
+    store: AuthStore,
+    events: {
+      success: AUTH_USER_LOGIN_CHANGED,
+      error: AUTH_USER_LOGIN_ERROR,
+      logoutSuccess: AUTH_USER_LOGOUT_SUCCESS,
+      logoutError: AUTH_USER_LOGOUT_ERROR
+    },
+    unmountWhen: function () {
+      return true;
+    },
+    listenAlways: true
+  },
 
   unitHealth: {
     store: UnitHealthStore,
