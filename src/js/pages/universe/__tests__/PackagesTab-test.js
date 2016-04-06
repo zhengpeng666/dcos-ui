@@ -94,11 +94,12 @@ describe('PackagesTab', function () {
 
   });
 
-  describe('#getPackages', function () {
+  describe('#getSelectedPackages', function () {
 
     beforeEach(function () {
       this.CosmosPackagesStoreGetAvailablePackages =
         CosmosPackagesStore.getAvailablePackages;
+      this.packages = CosmosPackagesStore.getAvailablePackages();
     });
 
     afterEach(function () {
@@ -107,7 +108,7 @@ describe('PackagesTab', function () {
     });
 
     it('should return packages', function () {
-      expect(this.instance.getPackages().length).toEqual(4);
+      expect(this.instance.getSelectedPackages(this.packages).length).toEqual(4);
     });
 
     it('shouldn\'t return packages', function () {
@@ -115,7 +116,8 @@ describe('PackagesTab', function () {
         return new UniversePackagesList();
       };
 
-      expect(this.instance.getPackages().length).toEqual(0);
+      let packages = CosmosPackagesStore.getAvailablePackages();
+      expect(this.instance.getSelectedPackages(packages).length).toEqual(0);
     });
 
   });

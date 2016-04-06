@@ -28,6 +28,24 @@ class UniversePackagesList extends List {
       }
     });
   }
+
+  getSelectedAndNonSelectedPackages() {
+    let selectedPackages = [];
+    let nonSelectedPackages = [];
+
+    this.getItems().forEach(function (universePackage) {
+      if (universePackage.isSelected()) {
+        selectedPackages.push(universePackage);
+      } else {
+        nonSelectedPackages.push(universePackage);
+      }
+    });
+
+    return {
+      selectedPackages: new this.constructor({items: selectedPackages}),
+      nonSelectedPackages: new this.constructor({items: nonSelectedPackages})
+    };
+  }
 }
 
 module.exports = UniversePackagesList;
