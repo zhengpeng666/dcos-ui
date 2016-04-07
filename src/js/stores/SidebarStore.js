@@ -52,9 +52,6 @@ var SidebarStore = Store.createStore({
       case ActionTypes.REQUEST_CLI_INSTRUCTIONS:
         SidebarStore.emitChange(EventTypes.SHOW_CLI_INSTRUCTIONS);
         break;
-      case ActionTypes.REQUEST_TOUR_START:
-        SidebarStore.emitChange(EventTypes.SHOW_TOUR);
-        break;
       case ActionTypes.REQUEST_VERSIONS_SUCCESS:
         SidebarStore.set({versions: action.data});
         SidebarStore.emitChange(EventTypes.SHOW_VERSIONS_SUCCESS);

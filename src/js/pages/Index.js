@@ -214,7 +214,6 @@ var Index = React.createClass({
 
     return (
       <div>
-        <a id="start-tour"></a>
         <div id="canvas" className={classSet}>
           {this.getScreenOverlays(showLoadingScreen, showErrorScreen)}
           <Sidebar />

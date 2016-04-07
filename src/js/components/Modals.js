@@ -31,10 +31,8 @@ var Modals = React.createClass({
     var props = this.props;
 
     return {
-      hasIdentity: false,
       modalErrorMsg: props.modalErrorMsg,
       showingCliModal: false,
-      showingTourModal: false,
       showingVersionsModal: false,
       showErrorModal: props.showErrorModal
     };
@@ -47,19 +45,9 @@ var Modals = React.createClass({
     });
   },
 
-  componentWillMount: function () {
-    this.setState({
-      hasIdentity: Hooks.applyFilter('applicationHasIdentity', true)
-    });
-  },
-
   componentDidMount: function () {
     SidebarStore.addChangeListener(
       EventTypes.SHOW_CLI_INSTRUCTIONS, this.handleShowCli
-    );
-
-    SidebarStore.addChangeListener(
-      EventTypes.SHOW_TOUR, this.handleTourStart
     );
 
     SidebarStore.addChangeListener(
@@ -74,10 +62,6 @@ var Modals = React.createClass({
   componentWillUnmount: function () {
     SidebarStore.removeChangeListener(
       EventTypes.SHOW_CLI_INSTRUCTIONS, this.handleShowCli
-    );
-
-    SidebarStore.removeChangeListener(
-      EventTypes.SHOW_TOUR, this.handleTourStart
     );
 
     SidebarStore.removeChangeListener(
@@ -108,42 +92,16 @@ var Modals = React.createClass({
     this.setState({showingCliModal: true});
   },
 
-  handleTourStart: function () {
-    this.setState({showingTourModal: true});
-  },
-
-  onLogin: function (email) {
-    Hooks.doAction('receivedUserEmail', email);
-
-    this.setState({
-      hasIdentity: true,
-      showingTourModal: false
-    });
-  },
-
   getCliModalOptions: function () {
-    return {
-      onClose: function () {
-          this.setState({showingCliModal: false});
-        }.bind(this),
-      title: 'Install the DCOS CLI',
-      showFooter: false
-    };
-  },
-
-  getTourModalOptions: function () {
     var onClose = function () {
-      this.setState({showingTourModal: false});
+      this.setState({showingCliModal: false});
     }.bind(this);
 
     let OS = browserInfo().os;
     let subHeaderContent = '';
 
     if (OS !== 'Windows') {
-      let appendText = Hooks.applyFilter(
-        'installCLIModalAppendInstructions', ''
-      );
-      subHeaderContent = `Install the DCOS command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal. ${appendText}`;
+      subHeaderContent = `Install the DCOS command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal.`;
     }
 
     return {
@@ -151,15 +109,15 @@ var Modals = React.createClass({
       title: 'Welcome to the Mesosphere DCOS',
       subHeaderContent,
       showFooter: true,
-      footer: Hooks.applyFilter('installCLIModalFooter', (
-        <div className="tour-start-modal-footer">
+      footer: (
+        <div>
           <div className="row text-align-center">
             <button className="button button-primary button-medium" onClick={onClose}>
               Close
             </button>
           </div>
         </div>
-      ), onClose)
+      )
     };
   },
 
@@ -180,14 +138,6 @@ var Modals = React.createClass({
       });
 
       options = this.getCliModalOptions();
-    } else if (this.state.showingTourModal) {
-      Hooks.doAction('logFakePageView', {
-        title: 'Tour prompt',
-        path: '/v/tour-prompt',
-        referrer: 'https://mesosphere.com/'
-      });
-
-      options = this.getTourModalOptions();
     }
 
     return (
@@ -228,8 +178,7 @@ var Modals = React.createClass({
   },
 
   render: function () {
-    var showCliModal = this.state.showingCliModal ||
-      this.state.showingTourModal;
+    var showCliModal = this.state.showingCliModal;
 
     return (
       <div>

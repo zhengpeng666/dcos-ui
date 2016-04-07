@@ -66,10 +66,10 @@ var CliInstructionsModal = React.createClass({
       );
       let cliInstallScriptUrl = Hooks.applyFilter(
         'installCLIModalCLIInstallURL',
-        'https://downloads.mesosphere.com/dcos-cli/install.sh'
+        'https://downloads.mesosphere.com/dcos-cli/install-optout.sh'
       );
       let cliInstallOutputScript = Hooks.applyFilter(
-        'installCLIModalCLIInstallScript', './install.sh'
+        'installCLIModalCLIInstallScript', './install-optout.sh'
       );
       cliSnippet = `mkdir -p dcos && cd dcos && \n  curl -O ${cliInstallScriptUrl} && \n  bash ${cliInstallOutputScript} . http://${hostname} && \n  source ./bin/env-setup`;
     }
