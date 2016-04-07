@@ -31,7 +31,7 @@ module.exports = class AccessDeniedPage extends React.Component {
 
   render() {
     return (
-      <div className="flex-container-col">
+      <div className="flex-container-col fill-height">
         <div className="page-content container-scrollable inverse">
           <div className="container container-fluid container-pod
             flex-container-col">
