@@ -60,9 +60,9 @@ var Sidebar = React.createClass({
     this.forceUpdate();
   },
 
-  handleStartTour: function () {
+  handleInstallCLI: function () {
     SidebarActions.close();
-    SidebarActions.startTour();
+    SidebarActions.openCliInstructions();
   },
 
   handleVersionClick: function () {
@@ -130,10 +130,10 @@ var Sidebar = React.createClass({
         </Tooltip>
       ),
       (
-        <Tooltip anchor="end" content="Install CLI and Take Tour"
-          key="button-tour" elementTag="a" onClick={this.handleStartTour}
+        <Tooltip anchor="end" content="Install CLI"
+          key="button-cli" elementTag="a" onClick={this.handleInstallCLI}
           wrapperClassName="button button-link tooltip-wrapper">
-          <i className="icon icon-sprite icon-tour icon-sprite-medium clickable"></i>
+          <i className="icon icon-sprite icon-cli icon-sprite-medium clickable"></i>
         </Tooltip>
       )
     ];
