@@ -1,6 +1,5 @@
 jest.dontMock('../index');
 jest.dontMock('../hooks');
-jest.dontMock('../stores/IntercomStore');
 
 import PluginTestUtils from 'PluginTestUtils';
 

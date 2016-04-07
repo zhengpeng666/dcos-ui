@@ -29,15 +29,6 @@ var Sidebar = React.createClass({
     router: React.PropTypes.func
   },
 
-  componentWillMount() {
-    this.store_listeners = [{
-      name: 'intercom',
-      events: [
-        'change'
-      ]
-    }];
-  },
-
   componentDidMount: function () {
     this.internalStorage_update({
       mesosInfo: MesosSummaryStore.get('states').lastSuccessful()
