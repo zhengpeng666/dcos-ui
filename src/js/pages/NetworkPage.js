@@ -129,7 +129,7 @@ class NetworkPage extends mixin(StoreMixin) {
           </div>
           <div className="column-6 text-align-right text-super-muted inverse">
             <div className="form-group">
-              Showing VIPs Active in the Last Hour
+              Showing past-minute stats for VIPs active in the last hour
             </div>
           </div>
         </div>
