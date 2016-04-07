@@ -13,6 +13,8 @@ import SidebarActions from '../events/SidebarActions';
 import RequestErrorMsg from '../components/RequestErrorMsg';
 import VIPsTable from '../components/VIPsTable';
 
+const VIP_DOCS_LINK = 'https://docs.mesosphere.com/administration/service-discovery/virtual-ip-addresses';
+
 const METHODS_TO_BIND = [
   'handleSearchStringChange',
   'onNetworkingVIPSummariesStoreError',
@@ -63,7 +65,7 @@ class NetworkPage extends mixin(StoreMixin) {
         iconClassName="icon icon-sprite icon-sprite-jumbo
           icon-sprite-jumbo-white icon-services flush-top">
         <p className="flush">
-          Check out the <a href="https://docs.mesosphere.com/administration/service-discovery/virtual-ip-addresses/" target="_blank">networking documentation</a> for ways to create VIPs.
+          No virtual addresses used in the last hour. Check out the <a href={VIP_DOCS_LINK} target="_blank">networking documentation</a> for ways to create VIPs.
         </p>
       </AlertPanel>
     );
@@ -127,7 +129,7 @@ class NetworkPage extends mixin(StoreMixin) {
           </div>
           <div className="column-6 text-align-right text-super-muted inverse">
             <div className="form-group">
-              All stats are for the past minute
+              Showing VIPs Active in the Last Hour
             </div>
           </div>
         </div>
