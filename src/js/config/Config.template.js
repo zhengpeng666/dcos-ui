@@ -35,7 +35,7 @@ var ConfigDev = {
     },
     clusterConfiguration: {
       firstUser: true,
-      id: '2960b051-2b31-4ae6-8ed6-9461720eed6e'
+      id: 'ui-fixture-cluster-id'
     }
   },
   useFixtures: false,
