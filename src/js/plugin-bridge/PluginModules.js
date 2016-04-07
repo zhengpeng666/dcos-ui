@@ -4,6 +4,9 @@ module.exports = {
     HTTPStatusCodes: 'HTTPStatusCodes',
     ServiceConstants: 'ServiceConstants'
   },
+  events: {
+    SidebarActions: 'SidebarActions'
+  },
   stores: {
     AuthStore: 'AuthStore',
     ConfigStore: 'ConfigStore',
@@ -28,7 +31,6 @@ module.exports = {
     StoreMixinConfig: 'StoreMixinConfig'
   },
   mixins: {
-    PluginGetSetMixin: 'PluginGetSetMixin',
     InternalStorageMixin: 'InternalStorageMixin',
     TabsMixin: 'TabsMixin'
   },
@@ -48,7 +50,8 @@ module.exports = {
     DCOSLogo: 'DCOSLogo',
     ClusterName: 'ClusterName',
     DescriptionList: 'DescriptionList',
-    Chart: 'charts/Chart'
+    Chart: 'charts/Chart',
+    Page: 'Page'
   },
   config: {
     Config: 'Config'

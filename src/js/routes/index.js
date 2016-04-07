@@ -6,7 +6,6 @@ import Index from '../pages/Index';
 import nodes from './nodes';
 import NotFoundPage from '../pages/NotFoundPage';
 import System from './factories/system';
-import Networking from './factories/networking';
 import services from './services';
 import universe from './universe';
 
@@ -29,7 +28,7 @@ let applicationRoutes = [
 ];
 
 // Modules that produce routes
-let routeFactories = [System, Networking];
+let routeFactories = [System];
 
 function getApplicationRoutes() {
   let routes = applicationRoutes.slice();
