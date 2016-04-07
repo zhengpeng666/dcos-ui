@@ -19,6 +19,9 @@ var ConfigDev = {
         banner: {
           enabled: false
         },
+        'external-links': {
+          enabled: false
+        },
         networking: {
           enabled: true
         },

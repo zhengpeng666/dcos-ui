@@ -2,11 +2,11 @@
   "description": "Apache Cassandra running on Apache Mesos",
   "framework": true,
   "images": {
-    "icon-large": "https://downloads.mesosphere.com/cassandra-mesos/assets/cassandra-large.png",
-    "icon-medium": "https://downloads.mesosphere.com/cassandra-mesos/assets/cassandra-medium.png",
-    "icon-small": "https://downloads.mesosphere.com/cassandra-mesos/assets/cassandra-small.png"
+    "icon-large": "https://downloads.dcos.io/cassandra-mesos/assets/cassandra-large.png",
+    "icon-medium": "https://downloads.dcos.io/cassandra-mesos/assets/cassandra-medium.png",
+    "icon-small": "https://downloads.dcos.io/cassandra-mesos/assets/cassandra-small.png"
   },
-  "maintainer": "support@mesosphere.com",
+  "maintainer": "help@dcos.io",
   "name": "cassandra",
   "scm": "https://github.com/mesosphere/cassandra-mesos.git",
   "tags": [

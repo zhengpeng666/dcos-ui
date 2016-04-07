@@ -7,7 +7,7 @@
           "packagingVersion": "2.0",
           "name": "marathon",
           "version": "0.11.1",
-          "maintainer": "support@mesosphere.io",
+          "maintainer": "help@dcos.io",
           "description": "A cluster-wide init and control system for services in cgroups or Docker containers.",
           "tags": [
             "init",
@@ -36,9 +36,9 @@
             }
           },
           "images": {
-            "icon-small": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-small.png",
-            "icon-medium": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-medium.png",
-            "icon-large": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-large.png",
+            "icon-small": "https://downloads.dcos.io/marathon/assets/icon-service-marathon-small.png",
+            "icon-medium": "https://downloads.dcos.io/marathon/assets/icon-service-marathon-medium.png",
+            "icon-large": "https://downloads.dcos.io/marathon/assets/icon-service-marathon-large.png",
             "screenshots": null
           }
         }
@@ -51,7 +51,7 @@
           "packagingVersion": "2.0",
           "name": "arangodb",
           "version": "0.3.5",
-          "maintainer": "support@mesosphere.io",
+          "maintainer": "help@dcos.io",
           "description": "A distributed free and open-source database with a flexible data model for documents, graphs, and key-values. Build high performance applications using a convenient SQL-like query language or JavaScript extensions.",
           "tags": [
             "arangodb",

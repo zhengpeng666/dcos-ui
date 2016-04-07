@@ -131,7 +131,7 @@ class PackageDetailTab extends mixin(StoreMixin) {
     }
 
     if (StringUtil.isUrl(value)) {
-      content = <a key={key} href={value}>{value}</a>;
+      content = <a key={key} href={value} target="_blank">{value}</a>;
     }
 
     return (

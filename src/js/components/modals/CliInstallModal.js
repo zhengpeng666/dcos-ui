@@ -5,6 +5,8 @@ var React = require('react');
 
 import {Hooks} from 'PluginSDK';
 
+import Config from '../../config/Config';
+
 var CliInstructionsModal = React.createClass({
 
   displayName: 'CliInstructionsModal',
@@ -46,7 +48,7 @@ var CliInstructionsModal = React.createClass({
       );
       requirements = (
         <p>
-          Install the DC/OS command-line interface (CLI) tool on your local system by following <a href="https://docs.mesosphere.com/administration/introcli/cli/#windows" target="_blank">these instructions</a>. You must install the CLI to administer your DC/OS cluster. {appendText}
+          Install the DC/OS command-line interface (CLI) tool on your local system by following <a href={`${Config.documentationURI}/administration/introcli/cli/#windows`} target="_blank">these instructions</a>. You must install the CLI to administer your DCOS cluster. {appendText}
         </p>
       );
     } else {
@@ -66,7 +68,7 @@ var CliInstructionsModal = React.createClass({
       );
       let cliInstallScriptUrl = Hooks.applyFilter(
         'installCLIModalCLIInstallURL',
-        'https://downloads.mesosphere.com/dcos-cli/install-optout.sh'
+        `${Config.downloadsURI}/dcos-cli/install-optout.sh`
       );
       let cliInstallOutputScript = Hooks.applyFilter(
         'installCLIModalCLIInstallScript', './install-optout.sh'

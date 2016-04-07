@@ -7,9 +7,9 @@
     "packageName": "Marathon",
     "resources": {
       "images": {
-      "icon-small": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-small.png",
-      "icon-medium": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-medium.png",
-      "icon-large": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-large.png"
+      "icon-small": "https://downloads.dcos.io/marathon/assets/icon-service-marathon-small.png",
+      "icon-medium": "https://downloads.dcos.io/marathon/assets/icon-service-marathon-medium.png",
+      "icon-large": "https://downloads.dcos.io/marathon/assets/icon-service-marathon-large.png"
       }
     },
     "tags": [
@@ -29,9 +29,9 @@
     "packageName": "arangodb",
     "resources": {
       "images": {
-      "icon-small": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-small.png",
-      "icon-medium": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-medium.png",
-      "icon-large": "https://downloads.mesosphere.com/marathon/assets/icon-service-marathon-large.png"
+      "icon-small": "https://downloads.dcos.io/marathon/assets/icon-service-marathon-small.png",
+      "icon-medium": "https://downloads.dcos.io/marathon/assets/icon-service-marathon-medium.png",
+      "icon-large": "https://downloads.dcos.io/marathon/assets/icon-service-marathon-large.png"
       }
     },
     "tags": [

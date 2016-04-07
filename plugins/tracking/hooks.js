@@ -47,7 +47,7 @@ module.exports = {
   },
 
   installCLIModalCLIInstallURL: function (value) {
-    return 'https://downloads.mesosphere.com/dcos-cli/install.sh';
+    return `${Config.downloadsURI}/dcos-cli/install.sh`;
   },
 
   installCLIModalCLIInstallScript: function (value) {

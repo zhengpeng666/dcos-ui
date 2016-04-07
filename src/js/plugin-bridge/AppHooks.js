@@ -7,7 +7,8 @@ let SidebarActions;
 module.exports = {
   actions: [
     'closeSidebar',
-    'goBack'
+    'goBack',
+    'pluginsConfigured'
   ],
 
   filters: [
@@ -24,6 +25,8 @@ module.exports = {
     this.filters.forEach(filter => {
       SDK.Hooks.addFilter(filter, this[filter].bind(this));
     });
+
+    this.SDK = SDK;
   },
 
   closeSidebar() {
@@ -36,5 +39,10 @@ module.exports = {
 
   getHistoryAt(index) {
     return HistoryStore.getHistoryAt(index);
+  },
+
+  pluginsConfigured() {
+    // Filter the Application's configuration
+    this.SDK.Hooks.applyFilter('applicationConfiguration', this.SDK.config);
   }
 };
