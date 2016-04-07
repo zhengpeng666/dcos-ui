@@ -9,7 +9,6 @@ require('../SDK').setSDK(SDK);
 var _ = require('underscore');
 
 var TrackingHooks = require('../hooks');
-var TrackingReducer = require('../Reducer');
 var DOMUtils = SDK.get('DOMUtils');
 
 describe('TrackingHooks', function () {
