@@ -177,6 +177,17 @@ let SchemaUtil = {
     });
 
     return jsonDocument;
+  },
+
+  validateSchema: function (schema) {
+    try {
+      SchemaUtil.definitionToJSONDocument(
+        SchemaUtil.schemaToMultipleDefinition(schema)
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 };
 
