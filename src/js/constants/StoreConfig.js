@@ -50,9 +50,6 @@ import {
   MARATHON_APPS_CHANGE,
   MARATHON_APPS_ERROR,
 
-  NETWORKING_VIP_SUMMARIES_CHANGE,
-  NETWORKING_VIP_SUMMARIES_ERROR,
-
   METADATA_CHANGE,
 
   DCOS_METADATA_CHANGE,
@@ -78,7 +75,6 @@ import MesosLogStore from '../stores/MesosLogStore';
 import MesosStateStore from '../stores/MesosStateStore';
 import MesosSummaryStore from '../stores/MesosSummaryStore';
 import MetadataStore from '../stores/MetadataStore';
-import NetworkingVIPSummariesStore from '../stores/NetworkingVIPSummariesStore';
 import NodeHealthStore from '../stores/NodeHealthStore';
 import TaskDirectoryStore from '../stores/TaskDirectoryStore';
 import UnitHealthStore from '../stores/UnitHealthStore';
@@ -173,18 +169,6 @@ const ListenersDescription = {
       return true;
     },
     listenAlways: false
-  },
-
-  networkingVIPSummaries: {
-    store: NetworkingVIPSummariesStore,
-    events: {
-      success: NETWORKING_VIP_SUMMARIES_CHANGE,
-      error: NETWORKING_VIP_SUMMARIES_ERROR
-    },
-    unmountWhen: function () {
-      return true;
-    },
-    listenAlways: true
   },
 
   summary: {
