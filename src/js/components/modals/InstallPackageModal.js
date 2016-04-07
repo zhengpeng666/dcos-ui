@@ -191,7 +191,7 @@ class InstallPackageModal extends
       name: 'appId',
       value: this.internalStorage_get().appId,
       required: true,
-      sharedClass: 'form-element-inline h2 short',
+      sharedClass: 'form-element-inline h2 short flush-bottom',
       inputClass: 'form-control text-align-center',
       helpBlockClass: 'form-help-block text-align-center',
       showLabel: false,
@@ -307,7 +307,7 @@ class InstallPackageModal extends
       return this.getInstallErrorScreen();
     }
 
-    let buttonText = 'Install';
+    let buttonText = 'Install Package';
 
     if (pendingRequest) {
       buttonText = 'Installing...';
@@ -316,12 +316,12 @@ class InstallPackageModal extends
     return (
       <div>
         <div className="modal-content">
-          <div className="modal-content-inner container container-pod container-pod-short horizontal-center">
+          <div className="modal-content-inner modal-content-inner-tall horizontal-center">
             <div className="icon icon-jumbo icon-image-container icon-app-container">
               <img src={cosmosPackage.getIcons()['icon-large']} />
             </div>
             <Form definition={this.getAppIdFormDefinition()}
-                onSubmit={this.handleChangeAppId} />
+              onSubmit={this.handleChangeAppId} />
             <p className="flush-bottom">{`${name} ${version}`}</p>
             {error}
           </div>
@@ -337,7 +337,7 @@ class InstallPackageModal extends
               </button>
               <button
                 disabled={!cosmosPackage || pendingRequest || descriptionError}
-                className="button button-success flush-bottom button-wide"
+                className="button button-success flush-bottom button-wide flush"
                 onClick={this.handleInstallPackage.bind(this, true)}>
                 {buttonText}
               </button>

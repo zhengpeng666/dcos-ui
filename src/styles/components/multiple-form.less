@@ -157,8 +157,8 @@ base/forms.less
 
       .column-12.form-row-element {
         padding-bottom: @base-spacing-unit * 2/3;
-        padding-left: @base-spacing-unit * 2/3;
-        padding-right: @base-spacing-unit * 2/3;
+        padding-left: @base-spacing-unit;
+        padding-right: @base-spacing-unit;
       }
 
       &-left-column {
@@ -174,5 +174,13 @@ base/forms.less
       }
     }
 
+  }
+}
+
+& when (@screen-mini-enabled) {
+  @media (max-width: @screen-mini) {
+    .multiple-form-modal .multiple-form .column-12.form-row-element {
+      padding-left: @base-spacing-unit * 4/3;
+    }
   }
 }

@@ -109,10 +109,36 @@ Badge
 }
 
 
+.badge-container.badge-primary .badge {
+
+  background-color: @purple;
+  color: color-lighten(@white, 40);
+
+}
+
 
 .table .dot {
 
   display: inline-block;
   margin-right: @base-spacing-unit * 0.25;
+
+}
+
+
+.badge-container.selected-badge{
+
+  align-items: center;
+  margin-top: @base-spacing-unit * 0.25;
+
+  > *:last-child {
+    margin-left: @base-spacing-unit * 0.5;
+  }
+
+  .badge {
+
+    flex-grow: 0;
+    padding: (@base-spacing-unit * 0.15) (@base-spacing-unit) (@base-spacing-unit * 0.15) (@base-spacing-unit);
+
+  }
 
 }

@@ -103,7 +103,7 @@ class PackageDetailTab extends mixin(StoreMixin) {
 
     return (
       <div
-        className="container-pod container-pod-short-bottom flush-top"
+        className="container-pod container-pod-super-short-bottom flush-top"
         key={key}>
         <h5 className="inverse flush-top">{label}</h5>
         {value}
@@ -151,12 +151,23 @@ class PackageDetailTab extends mixin(StoreMixin) {
     });
   }
 
-  getSelectedBadge(cosmosPackage) {
+  getSelectedBadge(cosmosPackage, version) {
+    let versionTag = (
+      <span>{version}</span>
+    );
+
     if (cosmosPackage.isSelected()) {
-      return <span>Selected</span>;
+      return (
+        <span className="badge-container badge-primary selected-badge">
+          <span className="badge flush">
+            Selected
+          </span>
+          {versionTag}
+        </span>
+      );
     }
 
-    return null;
+    return versionTag;
   }
 
   render() {
@@ -199,7 +210,7 @@ class PackageDetailTab extends mixin(StoreMixin) {
     return (
       <div>
         <div className="container-pod container-pod-short-bottom container-pod-divider-bottom container-pod-divider-inverse flush-top">
-          <div className="media-object-spacing-wrapper">
+          <div className="media-object-spacing-wrapper media-object-spacing-narrow">
             <div className="media-object media-object-align-middle">
               <div className="media-object-item">
                 <div className="icon icon-huge icon-image-container icon-app-container">
@@ -210,21 +221,12 @@ class PackageDetailTab extends mixin(StoreMixin) {
                 <h1 className="inverse flush">
                   {packageDetails.name}
                 </h1>
-                <p>{packageDetails.version}</p>
-                <div className="media-object-spacing-wrapper media-object-spacing-narrow">
-                  <div className="media-object media-object-align-middle">
-                    <div className="media-object-item">
-                      <button
-                        className="button button-success"
-                        onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
-                        Install Package
-                      </button>
-                    </div>
-                    <div className="media-object-item">
-                      {this.getSelectedBadge(cosmosPackage)}
-                    </div>
-                  </div>
-                </div>
+                <p>{this.getSelectedBadge(cosmosPackage, packageDetails.version)}</p>
+                <button
+                  className="button button-success"
+                  onClick={this.handleInstallModalOpen.bind(this, cosmosPackage)}>
+                  Install Package
+                </button>
               </div>
             </div>
           </div>
