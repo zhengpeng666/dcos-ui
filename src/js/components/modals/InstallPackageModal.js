@@ -29,7 +29,6 @@ class InstallPackageModal extends
 
     this.tabs_tabs = {
       defaultInstall: 'DefaultInstall',
-      reviewDefaultConfig: 'ReviewDefaultConfig',
       advancedInstall: 'AdvancedInstall',
       reviewAdvancedConfig: 'ReviewAdvancedConfig',
       packageInstalled: 'PackageInstalled'
@@ -330,12 +329,6 @@ class InstallPackageModal extends
           <div className="container">
             <div className="button-collection horizontal-center flush-bottom">
               <button
-                disabled={!cosmosPackage || pendingRequest}
-                className="button button-small button-stroke button-rounded"
-                onClick={this.handleChangeTab.bind(this, 'reviewDefaultConfig')}>
-                View Configuration Details
-              </button>
-              <button
                 disabled={!cosmosPackage || pendingRequest || descriptionError}
                 className="button button-success flush-bottom button-wide flush"
                 onClick={this.handleInstallPackage.bind(this, true)}>
@@ -346,35 +339,6 @@ class InstallPackageModal extends
                 className="button flush-bottom button-link button-primary clickable"
                 onClick={this.handleChangeTab.bind(this, 'advancedInstall')}>
                 Advanced Installation
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  renderReviewDefaultConfigTabView() {
-    let cosmosPackage = CosmosPackagesStore.getPackageDetails();
-
-    let {name, version} = cosmosPackage.get('package');
-    let {appId, configuration} = this.getAppIdAndConfiguration();
-
-    return (
-      <div>
-        <ReviewConfig
-          packageIcon={cosmosPackage.getIcons()['icon-small']}
-          packageType={name}
-          packageName={appId}
-          packageVersion={version}
-          configuration={configuration} />
-        <div className="modal-footer">
-          <div className="container">
-            <div className="button-collection flush-bottom">
-              <button
-                className="button button-large flush"
-                onClick={this.handleChangeTab.bind(this, 'defaultInstall')}>
-                Back
               </button>
             </div>
           </div>
@@ -522,7 +486,7 @@ class InstallPackageModal extends
 
     let isAdvanced = currentTab === 'advancedInstall' ||
       currentTab === 'reviewAdvancedConfig';
-    let isReviewing = isAdvanced || currentTab === 'reviewDefaultConfig';
+    let isReviewing = isAdvanced;
 
     let backdropClasses = classNames({
       'modal-backdrop': true,
