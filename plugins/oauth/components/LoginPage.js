@@ -79,15 +79,13 @@ class LoginPage extends mixin(StoreMixin) {
 
   render() {
     let location = SDK.config.authLocation;
-    let firstUser = SDK.Store.getAppState()
-      .config.config.clusterConfiguration.firstUser;
-
+    let {firstUser, id} = SDK.Store.getAppState()
+      .config.config.clusterConfiguration;
     let client = SDK.config.clientID;
-    // TODO - DCOS-5909 Get real cluster_id and send to auth0
-    let cluster_id = 'foo';
 
-    location += `/login?firstUser=${firstUser}&cluster_id=${cluster_id}
-      &client=${client}`;
+    id = encodeURIComponent(id);
+
+    location += `/login?firstUser=${firstUser}&cluster_id=${id}&client=${client}`;
 
     return (
       <div className="iframe-page-container">
