@@ -13,7 +13,8 @@ var ConfigDev = {
         oauth: {
           enabled: false,
           clientID: 'IBcqrIBD0yMz0xjZCSvZz2BKc3zr43Dw',
-          authLocation: 'https://opendcos.auth0.com'
+          authLocation: 'https://opendcos.auth0.com/login',
+          authHost: 'https://opendcos.auth0.com'
         },
         banner: {
           enabled: false

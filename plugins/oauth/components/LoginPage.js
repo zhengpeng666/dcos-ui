@@ -40,7 +40,7 @@ class LoginPage extends mixin(StoreMixin) {
   }
 
   onMessageReceived(event) {
-    if (event.origin !== SDK.config.authLocation) {
+    if (event.origin !== SDK.config.authHost) {
       return;
     }
 
@@ -85,7 +85,7 @@ class LoginPage extends mixin(StoreMixin) {
 
     id = encodeURIComponent(id);
 
-    location += `/login?firstUser=${firstUser}&cluster_id=${id}&client=${client}`;
+    location += `?firstUser=${firstUser}&cluster_id=${id}&client=${client}`;
 
     return (
       <div className="iframe-page-container">
