@@ -180,7 +180,7 @@ var Index = React.createClass({
     }
 
     return (
-      <div className="container container-pod vertical-center">
+      <div className="application-loading-screen container container-pod vertical-center">
         {this.getErrorScreen(showErrorScreen)}
         {this.getLoadingScreen(showLoadingScreen)}
       </div>
@@ -217,8 +217,12 @@ var Index = React.createClass({
         <a id="start-tour"></a>
         <div id="canvas" className={classSet}>
           {this.getScreenOverlays(showLoadingScreen, showErrorScreen)}
-          <Sidebar />
-          <RouteHandler />
+          <div className="application-wrapper flex-container-col flex-shrink">
+            <div className="application-content flex-container-row flex-shrink">
+              <Sidebar />
+              <RouteHandler />
+            </div>
+          </div>
         </div>
         <Modals
           showErrorModal={this.state.showErrorModal}
