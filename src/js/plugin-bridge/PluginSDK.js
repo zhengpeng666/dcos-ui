@@ -197,14 +197,14 @@ const getActionsAPI = function (SDK) {
  */
 const createPluginStore = function (definition) {
   // Extend with event handling to reduce boilerplate.
-  definition = _.extend({}, definition, {
+  definition = _.extend({}, {
     addChangeListener: function (eventName, callback) {
       this.on(eventName, callback);
     },
     removeChangeListener: function (eventName, callback) {
       this.removeListener(eventName, callback);
     }
-  });
+  }, definition);
 
   if (definition.mixinEvents) {
     if (!definition.storeID) {
