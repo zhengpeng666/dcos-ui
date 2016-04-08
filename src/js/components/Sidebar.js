@@ -8,6 +8,7 @@ import {Tooltip} from 'reactjs-components';
 
 import ClusterHeader from './ClusterHeader';
 var EventTypes = require('../constants/EventTypes');
+import IconDCOSLogoMark from './icons/IconDCOSLogoMark';
 import PluginSDK from 'PluginSDK';
 
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
@@ -158,7 +159,9 @@ var Sidebar = React.createClass({
         </GeminiScrollbar>
         <div className="sidebar-footer">
           <div className="container container-fluid container-pod container-pod-short logo-container">
-            <div className="sidebar-footer-image" />
+            <div className="sidebar-footer-image">
+              <IconDCOSLogoMark />
+            </div>
             <p className="text-align-center flush-top flush-bottom mute small">
               <span className="clickable" onClick={this.handleVersionClick}>
                 <span className="company-name small">Mesosphere </span>
