@@ -1,16 +1,18 @@
 var React = require('react');
 
+import Config from '../config/Config';
+
 function getDefaultMessage() {
   let slackLink = (
     <a
-      href="https://mesosphere.slack.com/messages/dcos-eap-public"
+      href={Config.slackChannel}
       target="_blank">
       Slack channel
     </a>
   );
   let supportLink = (
-    <a href="mailto:support@mesosphere.com">
-      support@mesosphere.com
+    <a href={`mailto:${Config.supportEmail}`}>
+      {Config.supportEmail}
     </a>
   );
 

@@ -28,7 +28,7 @@ describe('Package Detail Tab', function () {
       .get('@information').eq(2)
       .should('contain', 'SCM: https://github.com/mesosphere/marathon.git')
       .get('@information').eq(3)
-      .should('contain', 'Maintainer: support@mesosphere.io')
+      .should('contain', 'Maintainer: help@dcos.io')
       .get('@information').eq(4)
       .should('contain', 'Apache License Version 2.0: https://github.com/mesosphere/marathon/blob/master/LICENSE');
   });

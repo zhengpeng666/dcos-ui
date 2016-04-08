@@ -255,7 +255,7 @@ Cypress.addParentCommand('visitUrl', function (options) {
     };
   } else if (options.identify) {
     callback = function (win) {
-      win.localStorage.setItem('email', 'ui-bot@mesosphere.com');
+      win.localStorage.setItem('email', 'ui-bot@dcos.io');
     };
   }
 

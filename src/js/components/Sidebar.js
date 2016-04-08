@@ -7,6 +7,7 @@ var State = require('react-router').State;
 import {Tooltip} from 'reactjs-components';
 
 import ClusterHeader from './ClusterHeader';
+import Config from '../config/Config';
 var EventTypes = require('../constants/EventTypes');
 import IconDCOSLogoMark from './icons/IconDCOSLogoMark';
 import PluginSDK from 'PluginSDK';
@@ -116,7 +117,7 @@ var Sidebar = React.createClass({
     let defaultButtonSet = [
       (
         <Tooltip content="Documentation" key="button-docs" elementTag="a"
-          href="http://docs.mesosphere.com/" target="_blank"
+          href={`${Config.documentationURI}/`} target="_blank"
           wrapperClassName="button button-link tooltip-wrapper">
           <i className="icon icon-sprite icon-documents icon-sprite-medium clickable"></i>
         </Tooltip>
@@ -160,7 +161,9 @@ var Sidebar = React.createClass({
         <div className="sidebar-footer">
           <div className="container container-fluid container-pod container-pod-short logo-container">
             <div className="sidebar-footer-image">
-              <IconDCOSLogoMark />
+              <a href={Config.productHomepageURI} target="_blank">
+                <IconDCOSLogoMark />
+              </a>
             </div>
             <p className="text-align-center flush-top flush-bottom mute small">
               <span className="clickable" onClick={this.handleVersionClick}>

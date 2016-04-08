@@ -188,7 +188,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
               <div className="media-object media-object-item media-object-inline media-object-item-align-right">
                 <div className="media-object-item">
                   <a href={UnitHealthStore.getDownloadURL()}
-                    className="button button-primary">
+                    className="button button-primary" target="_blank">
                     Download Snapshot
                   </a>
                 </div>

@@ -2,7 +2,7 @@
 import React from 'react';
 /*eslint-enable no-unused-vars*/
 
-import {dcosDocsURL} from '../config/Config';
+import {documentationURI} from '../config/Config';
 import RequestErrorMsg from './RequestErrorMsg';
 import SidePanelContents from './SidePanelContents';
 import UnitHealthStore from '../stores/UnitHealthStore';
@@ -84,7 +84,7 @@ module.exports = class UnitNodeSidePanelContents extends SidePanelContents {
     let unitDocsURL = unitSummary.documentation_url;
 
     if (!unitDocsURL) {
-      unitDocsURL = dcosDocsURL;
+      unitDocsURL = documentationURI;
     }
 
     return (

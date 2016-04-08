@@ -2,6 +2,7 @@ import React from 'react';
 
 import AuthStore from '../stores/AuthStore';
 import AlertPanel from './AlertPanel';
+import Config from '../config/Config';
 
 const METHODS_TO_BIND = [
   'handleUserLogout'
@@ -45,7 +46,7 @@ module.exports = class AccessDeniedPage extends React.Component {
                 Please contact your DC/OS administrator.
               </p>
               <p>
-                See the <a href="https://docs.mesosphere.com/administration/security-and-authentication/">Security and Authentication</a> documentation for more information.
+                See the <a href={`${Config.documentationURI}/administration/security-and-authentication/`} target="_blank">Security and Authentication</a> documentation for more information.
               </p>
             </AlertPanel>
           </div>
