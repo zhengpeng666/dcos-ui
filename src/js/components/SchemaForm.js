@@ -181,7 +181,8 @@ class SchemaForm extends React.Component {
               {label}
             </span>
             <Tooltip content={description} wrapperClassName="tooltip-wrapper
-              media-object-item">
+              media-object-item" wrapText={true} maxWidth={300}
+              scrollContainer=".gm-scroll-view">
               <i className="icon icon-sprite icon-sprite-mini icon-error" />
             </Tooltip>
           </div>

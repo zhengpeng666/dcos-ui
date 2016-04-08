@@ -63,7 +63,7 @@ var HostTable = React.createClass({
 
     if (!node.isActive()) {
       headline = (
-        <Tooltip acnhor="start" content="Connection to node lost">
+        <Tooltip anchor="start" content="Connection to node lost">
           <i className="icon icon-sprite icon-sprite-mini icon-sprite-mini-white
             icon-alert" />
           {headline}
