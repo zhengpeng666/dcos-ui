@@ -42,7 +42,7 @@ module.exports = class AccessDeniedPage extends React.Component {
               title="Access Denied">
               <p>
                 You do not have access to this service. <br />
-                Please contact your DCOS administrator.
+                Please contact your DC/OS administrator.
               </p>
               <p>
                 See the <a href="https://docs.mesosphere.com/administration/security-and-authentication/">Security and Authentication</a> documentation for more information.

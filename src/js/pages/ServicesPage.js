@@ -219,7 +219,7 @@ var ServicesPage = React.createClass({
         iconClassName="icon icon-sprite icon-sprite-jumbo
           icon-sprite-jumbo-white icon-services flush-top">
         <p className="flush">
-          Use the DCOS command line tools to find and install services.
+          Use the DC/OS command line tools to find and install services.
         </p>
       </AlertPanel>
     );

@@ -181,7 +181,7 @@ class RepositoriesTable extends mixin(StoreMixin) {
       <div className="container-pod container-pod-short text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
         <p>
-          {`${repositoryLabel} repository will be removed from DCOS. You will not be able to install any packages belonging to that repository anymore.`}
+          {`${repositoryLabel} repository will be removed from DC/OS. You will not be able to install any packages belonging to that repository anymore.`}
         </p>
         {error}
       </div>

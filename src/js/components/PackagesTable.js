@@ -197,7 +197,7 @@ class PackagesTable extends mixin(StoreMixin) {
       <div className="container-pod container-pod-short text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
         <p>
-          {`${packageLabel} will be uninstalled from DCOS. All tasks belonging to this package will be killed.`}
+          {`${packageLabel} will be uninstalled from DC/OS. All tasks belonging to this package will be killed.`}
         </p>
         {this.getErrorMessage()}
       </div>

@@ -1,14 +1,14 @@
 /* eslint-disable */
 module.exports.schema = {
   "additionalProperties" : false,
-  "description" : "Marathon DCOS Service properties",
+  "description" : "Marathon DC/OS Service properties",
   "properties" : {
     "application" : {
       "additionalProperties" : false,
       "description" : "Marathon app configuration properties.",
       "properties" : {
         "id" : {
-          "description" : "The ID of this Marathon application inside DCOS base Marathon.",
+          "description" : "The ID of this Marathon application inside DC/OS base Marathon.",
           "type" : "string"
         },
         "cpus" : {
@@ -1429,7 +1429,7 @@ module.exports.schema2 = {
               "default":"RAC1"
             },
             "external-dcs":{
-              "description":"Name and URL for another instance of Cassandra DCOS Service",
+              "description":"Name and URL for another instance of Cassandra DC/OS Service",
               "type":"array",
               "additionalProperties":false,
               "items":{

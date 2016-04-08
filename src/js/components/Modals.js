@@ -82,7 +82,7 @@ var Modals = React.createClass({
       showErrorModal: true,
       modalErrorMsg: (
         <p className="text-align-center flush-bottom">
-          We are unable to retreive the version DCOS versions. Please try again.
+          We are unable to retreive the version DC/OS versions. Please try again.
         </p>
       )
     });
@@ -101,12 +101,12 @@ var Modals = React.createClass({
     let subHeaderContent = '';
 
     if (OS !== 'Windows') {
-      subHeaderContent = `Install the DCOS command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal.`;
+      subHeaderContent = `Install the DC/OS command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal.`;
     }
 
     return {
       onClose,
-      title: 'Welcome to the Mesosphere DCOS',
+      title: 'Welcome to the Mesosphere DC/OS',
       subHeaderContent,
       showFooter: true,
       footer: (
