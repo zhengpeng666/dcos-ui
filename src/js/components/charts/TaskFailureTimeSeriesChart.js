@@ -55,7 +55,6 @@ var TaskFailureTimeSeriesChart = React.createClass({
           currentValue={this.getLatestPercent(props.data)}
           subHeading="Current Failure Rate" />
         {this.getChart(props)}
-        <div className="timeseries-selector" />
       </div>
     );
   }
