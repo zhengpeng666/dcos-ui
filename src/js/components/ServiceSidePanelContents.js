@@ -212,9 +212,7 @@ class ServiceSidePanelContents extends SidePanelContents {
       marathonService.snapshot == null ||
       service != null && service.name === 'marathon') {
       return (
-        <div className="container container-fluid container-pod container-pod-short">
-          <h4 className="text-align-center">No information available.</h4>
-        </div>
+        <h4 className="text-align-center">No information available.</h4>
       );
     }
 
