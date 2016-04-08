@@ -1,14 +1,8 @@
 import PluginSDK from 'PluginSDK';
 
-PluginSDK.Hooks.addAction('pluginsConfigured', function () {
-  PluginSDK.Hooks.doAction('log', {eventID: 'Stint started.'});
-});
-global.addEventListener('beforeunload', function () {
-  PluginSDK.Hooks.doAction('log', {eventID: 'Stint ended.'});
-});
-
 import _ from 'underscore';
 import React from 'react';
+import {Provider} from 'react-redux';
 import ReactDOM from 'react-dom';
 import Router from 'react-router';
 

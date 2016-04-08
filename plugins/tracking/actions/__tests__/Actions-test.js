@@ -19,7 +19,7 @@ global.analytics = {
 };
 
 var DCOS_METADATA = {
-  'CLUSTER_ID': 'cluster',
+  'clusterId': 'cluster',
   'dcos-image-commit': 'commit',
   'bootstrap-id': 'bootstrap'
 };
@@ -40,29 +40,24 @@ describe('Actions', function () {
 
     it('calls analytics#track', function () {
       Actions.setDcosMetadata(DCOS_METADATA);
-      Actions.log({eventID: 'foo'});
+      Actions.log('foo');
       expect(global.analytics.track.calls.length).toEqual(1);
     });
 
     it('calls analytics#track with correct eventID', function () {
       Actions.setDcosMetadata(DCOS_METADATA);
-      Actions.log({});
-      expect(global.analytics.track.calls[0].args[0]).toEqual('dcos-ui');
+      Actions.log('baz');
+      expect(global.analytics.track.calls[0].args[0]).toEqual('baz');
     });
 
     it('calls analytics#track with correct log', function () {
       Actions.setDcosMetadata(DCOS_METADATA);
-      Actions.log({eventID: 'foo'});
+      Actions.log('foo');
 
       var args = global.analytics.track.calls[0].args[1];
       expect(args.appVersion).toBeDefined();
-      expect(args.date).toBeDefined();
-      expect(args.eventID).toEqual('foo');
-      expect(args.duration).toBeDefined();
-      expect(args.page).toBeDefined();
-      expect(args.stintID).toBeDefined();
       expect(args.version).toBeDefined();
-      expect(args.CLUSTER_ID).toBeDefined();
+      expect(args.clusterId).toBeDefined();
       expect(args['dcos-image-commit']).toBeDefined();
       expect(args['bootstrap-id']).toBeDefined();
     });

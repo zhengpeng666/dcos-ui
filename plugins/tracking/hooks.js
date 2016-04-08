@@ -54,9 +54,7 @@ module.exports = {
   },
 
   userLogoutSuccess: function () {
-    Actions.log({
-      eventID: 'Logged out'
-    });
+    Actions.log('dcos_logout');
   }
 
 };

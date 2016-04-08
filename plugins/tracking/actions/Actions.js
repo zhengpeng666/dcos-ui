@@ -30,19 +30,29 @@ var Actions = {
     this.start();
   },
 
+  metadataLoaded: function () {
+    return (SDK.Store.getAppState().metadata &&
+      SDK.Store.getAppState().metadata.dcosMetadata &&
+      SDK.Store.getAppState().metadata.metadata &&
+      SDK.Store.getAppState().metadata.metadata.CLUSTER_ID);
+  },
+
   listenForDcosMetadata: function () {
-    if (!(SDK.Store.getAppState().metadata &&
-      SDK.Store.getAppState().metadata.dcosMetadata)) {
+    if (!this.metadataLoaded()) {
       let unSubscribe = SDK.Store.subscribe(() => {
-        if (SDK.Store.getAppState().metadata &&
-          SDK.Store.getAppState().metadata.dcosMetadata) {
+        if (this.metadataLoaded()) {
           unSubscribe();
-          this.setDcosMetadata(SDK.Store.getAppState().metadata.dcosMetadata);
+          this.setDcosMetadata(this.mergeMetaData());
         }
       });
     } else {
-      this.setDcosMetadata(SDK.Store.getAppState().metadata.dcosMetadata);
+      this.setDcosMetadata(this.mergeMetaData());
     }
+  },
+
+  mergeMetaData: function () {
+    return _.extend({}, SDK.Store.getAppState().metadata.dcosMetadata,
+      {clusterId: SDK.Store.getAppState().metadata.metadata.CLUSTER_ID});
   },
 
   setDcosMetadata: function (metadata) {
@@ -131,6 +141,13 @@ var Actions = {
     return this.stintID;
   },
 
+  getLogData: function () {
+    return _.extend({
+      appVersion: Config.version,
+      version: '@@VERSION'
+    }, this.dcosMetadata);
+  },
+
   identify: function (uid) {
     if (!this.canLog()) {
       // Try again
@@ -141,11 +158,9 @@ var Actions = {
       return;
     }
 
-    global.analytics.identify(uid, this.dcosMetadata);
+    global.analytics.identify(uid, this.getLogData());
 
-    this.log({
-      eventID: 'Logged in'
-    });
+    this.log('dcos_login');
   },
 
   logPage: function (path) {
@@ -154,54 +169,24 @@ var Actions = {
       return;
     }
 
-    let data = _.extend({}, this.dcosMetadata, {path});
+    let data = _.extend(this.getLogData(), {path});
     global.analytics.page(data);
   },
 
   /**
    * Logs arbitriary data
-   * @param  {Object} anything
+   * @param  {String} eventID
    */
-  log: function (anything) {
+  log: function (eventID) {
     if (!this.canLog()) {
-      this.logQueue.push(anything);
+      this.logQueue.push(eventID);
       return;
     }
 
     // Populates with basic data that all logs need
-    var log = _.extend({
-      appVersion: Config.version,
-      eventID: '',
-      date: Date.now(),
-      page: this.activePage,
-      stintID: this.stintID,
-      version: '@@VERSION'
-    }, this.dcosMetadata, anything);
+    var log = this.getLogData();
 
-    log = this.prepareLog(log);
-
-    global.analytics.track('dcos-ui', log);
-  },
-
-  /**
-   * Normalizes and prepares log object
-   *
-   * @param {Object} log
-   * @return {Object} Formatted log
-   */
-  prepareLog: function (log) {
-    // If the eventID is an array then prepend the current page
-    // this assumes that we want a unique eventID for the log
-    if (_.isArray(log.eventID)) {
-      log.eventID.unshift(this.activePage.replace(/^\//, ''));
-      log.eventID = log.eventID.join('.');
-    }
-
-    // Calculate the time since the last event
-    log.duration = log.date - this.lastLogDate;
-    this.lastLogDate = log.date;
-
-    return log;
+    global.analytics.track(eventID, log);
   }
 
 };
