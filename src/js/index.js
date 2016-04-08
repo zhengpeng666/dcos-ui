@@ -11,7 +11,6 @@ import _ from 'underscore';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Router from 'react-router';
-import {Provider} from 'react-redux';
 
 require('./utils/MomentJSConfig');
 require('./utils/ReactSVG');

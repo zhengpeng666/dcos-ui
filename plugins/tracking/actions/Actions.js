@@ -10,9 +10,11 @@ var Actions = {
 
   previousFakePageLog: '',
 
-  customerID: null,
+  dcosMetadata: null,
 
   logQueue: [],
+
+  pageQueue: [],
 
   actions: [
     'log',
@@ -23,7 +25,32 @@ var Actions = {
     this.actions.forEach(action => {
       SDK.Hooks.addAction(action, this[action].bind(this));
     });
+
+    this.listenForDcosMetadata();
     this.start();
+  },
+
+  listenForDcosMetadata: function () {
+    if (!(SDK.Store.getAppState().metadata &&
+      SDK.Store.getAppState().metadata.dcosMetadata)) {
+      let unSubscribe = SDK.Store.subscribe(() => {
+        if (SDK.Store.getAppState().metadata &&
+          SDK.Store.getAppState().metadata.dcosMetadata) {
+          unSubscribe();
+          this.setDcosMetadata(SDK.Store.getAppState().metadata.dcosMetadata);
+        }
+      });
+    } else {
+      this.setDcosMetadata(SDK.Store.getAppState().metadata.dcosMetadata);
+    }
+  },
+
+  setDcosMetadata: function (metadata) {
+    this.dcosMetadata = metadata;
+
+    if (this.canLog()) {
+      this.drainQueue();
+    }
   },
 
   start: function () {
@@ -36,26 +63,41 @@ var Actions = {
     RouterLocation.addChangeListener(Util.debounce(function (data) {
       Actions.setActivePage(data.path);
     }, 200));
-  },
 
-  setCustomerID: function (customerID) {
-    this.customerID = customerID;
-
-    if (this.logQueue.length) {
-      this.logQueue.forEach((log) => {
-        this.log(log);
-      });
-
-      this.logQueue = [];
-    }
+    // Poll to deplete queue
+    let checkAnalyticsReady = () => {
+      setTimeout(() => {
+        if (!this.canLog()) {
+          checkAnalyticsReady();
+        } else {
+          this.drainQueue();
+        }
+      }, 200);
+    };
+    checkAnalyticsReady();
   },
 
   canLog: function () {
-    return !!(global.analytics && global.analytics.initialized);
+    return !!(global.analytics
+      && global.analytics.initialized
+      && this.dcosMetadata != null);
+  },
+
+  drainQueue: function () {
+    this.logQueue.forEach(log => {
+      this.log(log);
+    });
+    this.logQueue = [];
+
+    this.pageQueue.forEach(path => {
+      this.logPage(path);
+    });
+    this.pageQueue = [];
   },
 
   logFakePageView: function (fakePageLog) {
-    if (this.canLog() === false) {
+    if (!this.canLog()) {
+      this.logQueue.push(fakePageLog);
       return;
     }
 
@@ -63,12 +105,13 @@ var Actions = {
       return;
     }
 
-    global.analytics.page(fakePageLog);
+    this.logPage(fakePageLog);
     this.previousFakePageLog = fakePageLog;
   },
 
   setActivePage: function (path) {
-    if (this.canLog() === false) {
+    if (!this.canLog()) {
+      this.pageQueue.push(path);
       return;
     }
 
@@ -77,7 +120,7 @@ var Actions = {
     }
 
     this.activePage = path;
-    global.analytics.page({path});
+    this.logPage(path);
   },
 
   getActivePage: function () {
@@ -88,15 +131,31 @@ var Actions = {
     return this.stintID;
   },
 
-  identify: function () {
-    if (this.canLog() === false) {
+  identify: function (uid) {
+    if (!this.canLog()) {
+      // Try again
+      setTimeout(() => {
+        this.identify(uid);
+      }, 500);
+
       return;
     }
 
-    global.analytics.identify.apply(global.analytics, arguments);
+    global.analytics.identify(uid, this.dcosMetadata);
+
     this.log({
       eventID: 'Logged in'
     });
+  },
+
+  logPage: function (path) {
+    if (!this.canLog()) {
+      this.pageQueue.push(path);
+      return;
+    }
+
+    let data = _.extend({}, this.dcosMetadata, {path});
+    global.analytics.page(data);
   },
 
   /**
@@ -104,11 +163,7 @@ var Actions = {
    * @param  {Object} anything
    */
   log: function (anything) {
-    if (this.canLog() === false) {
-      return;
-    }
-
-    if (this.customerID == null) {
+    if (!this.canLog()) {
       this.logQueue.push(anything);
       return;
     }
@@ -118,11 +173,10 @@ var Actions = {
       appVersion: Config.version,
       eventID: '',
       date: Date.now(),
-      CUSTOMER_ID: this.customerID,
       page: this.activePage,
       stintID: this.stintID,
       version: '@@VERSION'
-    }, anything);
+    }, this.dcosMetadata, anything);
 
     log = this.prepareLog(log);
 
@@ -136,13 +190,6 @@ var Actions = {
    * @return {Object} Formatted log
    */
   prepareLog: function (log) {
-    // Create a unique event id if we have enough properties
-    // to consider this even unique
-    if (log.data && log.componentID) {
-      var id = log.page + log.componentID + JSON.stringify(log.data);
-      log.uniqueEventID = md5(id);
-    }
-
     // If the eventID is an array then prepend the current page
     // this assumes that we want a unique eventID for the log
     if (_.isArray(log.eventID)) {
@@ -155,34 +202,6 @@ var Actions = {
     this.lastLogDate = log.date;
 
     return log;
-  },
-
-  /**
-   * Logs a replayable action
-   * Replayable actions are possible by watching state changes
-   *
-   * @param  {Array} eventID
-   * @param  {Object} data
-   * @param  {Number} componentID
-   */
-  logAction: function (eventID, data, componentID) {
-    this.log({replayable: true, eventID, componentID, data});
-  },
-
-  /**
-   * Will log the first message with all the data to replay
-   * Will log subsequent messages without data to replay
-   *
-   * @param  {Array} messages
-   * @param  {Object} data
-   * @param  {Number} componentID
-   */
-  logBatchAction: function (messages, data, componentID) {
-    this.logAction(messages.shift(), data, componentID);
-
-    messages.forEach(function (eventID) {
-      this.log({eventID});
-    }, this);
   }
 
 };
