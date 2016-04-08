@@ -12,13 +12,6 @@ var ConfigDev = {
         authentication: {
           enabled: ee
         },
-        // Enable oauth OR authentication
-        oauth: {
-          enabled: false,
-          clientID: 'IBcqrIBD0yMz0xjZCSvZz2BKc3zr43Dw',
-          authLocation: 'https://opendcos.auth0.com/login',
-          authHost: 'https://opendcos.auth0.com'
-        },
         banner: {
           enabled: false
         },
@@ -27,6 +20,12 @@ var ConfigDev = {
         },
         networking: {
           enabled: ee
+        },
+        oauth: {
+          enabled: false,
+          clientID: 'IBcqrIBD0yMz0xjZCSvZz2BKc3zr43Dw',
+          authLocation: 'https://dcos.auth0.com/login',
+          authHost: 'https://dcos.auth0.com'
         },
         organization: {
           enabled: ee
