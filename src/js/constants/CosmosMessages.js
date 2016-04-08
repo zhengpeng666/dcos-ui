@@ -17,7 +17,18 @@ const CosmosMessages = {
       return `You have an instance of ${packageName} running using the same name. Please change the name and try again.`;
     }
   },
-  InvalidRepositoryUri: {
+  RepositoryUriSyntax: {
+    header: 'Issue with registered repositories',
+    getMessage: function (repository = 'a repository') {
+      return (
+        <span>
+          {`The URL for ${repository} (repository) is not valid, or its host did not resolve. You might need to change the URL of ${repository}.`}
+          {repositoryLink}
+        </span>
+      );
+    }
+  },
+  RepositoryUriConnection: {
     header: 'Issue with registered repositories',
     getMessage: function (repository = 'a repository') {
       return (
