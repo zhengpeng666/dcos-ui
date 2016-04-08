@@ -26,6 +26,14 @@
   "command": null,
   "config": {
     "properties": {
+      "service": {
+        "properties": {
+          "name": {
+            "default": "marathon-user",
+            "type": "object"
+          }
+        }
+      },
       "marathon": {
         "additionalProperties": false,
         "description": "Marathon specific configuration properties",
