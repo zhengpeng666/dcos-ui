@@ -74,7 +74,6 @@ var HostTimeSeriesChart = React.createClass({
           subHeading={'Connected Nodes'}
           y="slavesCount" />
         {this.getChart(props)}
-        <div className="timeseries-selector" />
       </div>
     );
   }

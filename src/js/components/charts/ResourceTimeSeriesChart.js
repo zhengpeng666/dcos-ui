@@ -68,7 +68,6 @@ var ResourceTimeSeriesChart = React.createClass({
           currentValue={percentage}
           subHeading={this.getHeadline(usedValue, totalValue)} />
         {this.getChart()}
-        <div className="timeseries-selector" />
       </div>
     );
   }

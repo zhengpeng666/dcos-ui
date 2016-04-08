@@ -4,6 +4,7 @@
   transform: translateZ(0);
 
   .chart-chart {
+    position: relative;
     flex-grow: 1;
   }
 
@@ -176,7 +177,9 @@
   }
 
   .timeseries-chart {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 0;
 
     .moving-elements {
       position: absolute;
@@ -184,11 +187,6 @@
       top: 0;
       transform: translateZ(0);
     }
-  }
-
-  .timeseries-selector {
-    // Placeholder so that the chart does not expand too much
-    height: @base-spacing-unit * 2;
   }
 
   & when (@typography-enabled) {

@@ -24,7 +24,6 @@ var Chart = React.createClass({
   },
 
   componentWillMount: function () {
-    this.updateWidth = _.throttle(this.updateWidth, 500);
     this.internalStorage_set({width: null});
   },
 
