@@ -123,7 +123,7 @@ var Sidebar = React.createClass({
         </Tooltip>
       ),
       (
-        <Tooltip anchor="end" content="Install CLI"
+        <Tooltip content="Install CLI"
           key="button-cli" elementTag="a" onClick={this.handleInstallCLI}
           wrapperClassName="button button-link tooltip-wrapper">
           <i className="icon icon-sprite icon-cli icon-sprite-medium clickable"></i>
