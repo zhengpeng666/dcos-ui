@@ -301,7 +301,7 @@ class TaskSidePanelContents extends SidePanelContents {
 
     let node = MesosStateStore.getNodeFromID(task.slave_id);
     let panelClasses = classNames({
-      'side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom flex-no-shrink': true,
+      'side-panel-section side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom': true,
       'container-pod-short': this.state.currentTab === 'debug'
     });
 
