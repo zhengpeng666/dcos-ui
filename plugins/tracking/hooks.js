@@ -2,8 +2,6 @@
 import React from 'react';
 /* eslint-enable no-unused-vars */
 
-import {AUTH_USER_LOGIN_CHANGED} from './constants/EventTypes';
-
 import Actions from './actions/Actions';
 
 let SDK = require('./SDK').getSDK();
@@ -19,6 +17,7 @@ module.exports = {
 
   actions: [
     'pluginsConfigured',
+    'processLoginSuccess',
     'userLogoutSuccess'
   ],
 
@@ -32,10 +31,6 @@ module.exports = {
 
     Actions.initialize();
 
-    AuthStore.addChangeListener(AUTH_USER_LOGIN_CHANGED, function () {
-      Actions.identify(AuthStore.getUser().uid);
-    });
-
     if (AuthStore.getUser()) {
       Actions.identify(AuthStore.getUser().uid);
     }
@@ -43,6 +38,10 @@ module.exports = {
 
   pluginsConfigured: function () {
     DOMUtils.appendScript(document.head, segmentScript);
+  },
+
+  processLoginSuccess: function () {
+    Actions.identify(AuthStore.getUser().uid);
   },
 
   installCLIModalCLIInstallURL: function () {

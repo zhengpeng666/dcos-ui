@@ -57,6 +57,7 @@ let AuthStore = Store.createStore({
   },
 
   processLoginSuccess() {
+    Hooks.doAction('processLoginSuccess');
     this.emit(AUTH_USER_LOGIN_CHANGED);
   },
 
