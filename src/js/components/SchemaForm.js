@@ -164,7 +164,7 @@ class SchemaForm extends React.Component {
   getSubHeader(name) {
     return (
       <div key={name} className="row">
-        <div className="h5 column-12 form-row-element flush-bottom">
+        <div className="h5 column-12 form-row-element flush-bottom flush-top">
           {name}
         </div>
       </div>
@@ -197,9 +197,9 @@ class SchemaForm extends React.Component {
       <div className="media-object-spacing-wrapper media-object-spacing-narrow flush">
         <div className="media-object media-object-align-middle">
           <div className="media-object-item">
-            <img
-              className="icon icon-sprite icon-sprite-medium icon-sprite-medium-color icon-image-container icon-app-container"
-              src={packageIcon} />
+            <div className="icon icon-sprite icon-sprite-medium icon-sprite-medium-color icon-image-container icon-app-container">
+              <img src={packageIcon} />
+            </div>
           </div>
           <div className="media-object-item">
             <h4 className="flush-top flush-bottom text-color-neutral">
