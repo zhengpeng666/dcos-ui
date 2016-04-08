@@ -1,12 +1,9 @@
 import _ from 'underscore';
-import classNames from 'classnames';
 /* eslint-disable no-unused-vars */
 import React from 'react';
 /* eslint-enable no-unused-vars */
-import {Tooltip} from 'reactjs-components';
 
 import Actions from './actions/Actions';
-import IntercomStore from './stores/IntercomStore';
 
 let SDK = require('./SDK').getSDK();
 let {Config, DOMUtils} = SDK.get(['Config', 'DOMUtils']);
@@ -21,16 +18,12 @@ module.exports = {
   },
 
   filters: [
-    'sidebarFooterButtonSet',
     'installCLIModalCLIInstallURL',
-    'installCLIModalCLIInstallScript',
-    'isIntercomOpen'
+    'installCLIModalCLIInstallScript'
   ],
 
   actions: [
-    'pluginsConfigured',
-    'openIntercom',
-    'closeIntercom'
+    'pluginsConfigured'
   ],
 
   initialize: function () {
@@ -49,52 +42,8 @@ module.exports = {
     this.configuration = _.extend(this.configuration, configuration);
   },
 
-  isIntercomOpen: function () {
-    return IntercomStore.isOpen();
-  },
-
-  openIntercom: function () {
-    IntercomStore.openIntercom();
-  },
-
-  closeIntercom: function () {
-    IntercomStore.closeIntercom();
-  },
-
-  handleToggleIntercom: function () {
-    if (IntercomStore.isOpen()) {
-      this.closeIntercom();
-    } else {
-      this.openIntercom();
-      SDK.Hooks.doAction('closeSidebar');
-    }
-  },
-
   pluginsConfigured: function () {
     DOMUtils.appendScript(document.head, segmentScript);
-  },
-
-  sidebarFooterButtonSet: function (value) {
-    var chatIconClassSet = classNames({
-      'clickable': true,
-      'icon': true,
-      'icon-sprite': true,
-      'icon-chat': true,
-      'icon-sprite-medium': true,
-      'icon-sprite-medium-color': IntercomStore.isOpen()
-    });
-
-    let intercomButton = (
-      <Tooltip content="Talk with us" key="button-intercom" elementTag="a"
-        onClick={this.handleToggleIntercom.bind(this)}
-        wrapperClassName="button button-link tooltip-wrapper">
-        <i className={chatIconClassSet}></i>
-      </Tooltip>
-    );
-
-    value.splice(1, 0, intercomButton);
-
-    return value;
   },
 
   installCLIModalCLIInstallURL: function (value) {

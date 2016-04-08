@@ -10,7 +10,6 @@ import ConfigStore from '../stores/ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import HistoryStore from '../stores/HistoryStore';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
-import PluginSDK from 'PluginSDK';
 var MetadataStore = require('../stores/MetadataStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
 var Modals = require('../components/Modals');
@@ -34,7 +33,6 @@ var Index = React.createClass({
 
   getInitialState: function () {
     return {
-      showIntercom: PluginSDK.Hooks.applyFilter('isIntercomOpen', false),
       mesosSummaryErrorCount: 0,
       showErrorModal: false,
       modalErrorMsg: '',
@@ -49,9 +47,6 @@ var Index = React.createClass({
     SidebarStore.init();
 
     this.store_listeners = [{
-        name: 'intercom',
-        events: ['change']
-      }, {
         name: 'summary',
         events: ['success', 'error'],
         unmountWhen: function (store, event) {
@@ -120,24 +115,6 @@ var Index = React.createClass({
     }
   },
 
-  onIntercomStoreChange: function () {
-    var intercom = global.Intercom;
-    if (intercom != null) {
-      this.setState({
-        showIntercom: PluginSDK.Hooks.applyFilter('isIntercomOpen', false)
-      });
-    } else {
-      this.setState({
-        showErrorModal: true,
-        modalErrorMsg: (
-          <p className="text-align-center flush-bottom">
-            We are unable to communicate with Intercom.io. It is possible that you have a browser plugin or extension that is blocking communication. If so, please disable it and try again.
-          </p>
-        )
-      });
-    }
-  },
-
   onSummaryStoreSuccess: function () {
     let prevStatesProcessed = this.internalStorage_get().statesProcessed;
 
@@ -187,17 +164,6 @@ var Index = React.createClass({
     );
   },
 
-  renderIntercom: function () {
-    var intercom = global.Intercom;
-    if (intercom != null) {
-      if (this.state.showIntercom) {
-        intercom('show');
-      } else {
-        intercom('hide');
-      }
-    }
-  },
-
   render: function () {
     var data = this.internalStorage_get();
     let showErrorScreen =
@@ -209,8 +175,6 @@ var Index = React.createClass({
     var classSet = classNames({
       'canvas-sidebar-open': data.isOpen
     });
-
-    this.renderIntercom();
 
     return (
       <div>

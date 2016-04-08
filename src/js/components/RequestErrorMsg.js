@@ -1,15 +1,6 @@
 var React = require('react');
 
-import PluginSDK from 'PluginSDK';
-
-function openIntercom() {
-  PluginSDK.Hooks.doAction('openIntercom');
-}
-
 function getDefaultMessage() {
-  let intercomLink = (
-    <a className="clickable" onClick={openIntercom}>Intercom</a>
-  );
   let slackLink = (
     <a
       href="https://mesosphere.slack.com/messages/dcos-eap-public"
@@ -25,7 +16,7 @@ function getDefaultMessage() {
 
   return (
     <p className="inverse text-align-center flush-bottom">
-      We have been notified of the issue, but would love to know more. Talk with us using {intercomLink}. You can also join us on our {slackLink} or send us an email at {supportLink}.
+      We have been notified of the issue, but would love to know more. You can also join us on our {slackLink} or send us an email at {supportLink}.
     </p>
   );
 }

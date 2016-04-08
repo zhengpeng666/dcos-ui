@@ -79,7 +79,7 @@ describe('Packages Tab', function () {
 
     cy
       .get('.page-content p.inverse.text-align-center')
-      .should('contain', 'We have been notified of the issue, but would love to know more. Talk with us using Intercom. You can also join us on our Slack channel or send us an email at support@mesosphere.com.');
+      .should('contain', 'We have been notified of the issue, but would love to know more. You can also join us on our Slack channel or send us an email at support@mesosphere.com.');
   });
 
   context('searching', function () {
