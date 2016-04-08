@@ -21,6 +21,7 @@ Sidebar Variables
 --------------------------------------------------------------------------------
 ----------------------------------------------------------------------------- */
 
+@sidebar-footer-image-source-height:                                            75px;
 @sidebar-footer-image-source-width:                                             46px;
 @sidebar-footer-image-scale:                                                    1.0;
 @sidebar-footer-image-scale-screen-small:                                       1.0;
@@ -353,12 +354,16 @@ Sidebar
       margin: 0 auto @base-spacing-unit * 1/4 auto;
       opacity: 0.1;
       text-align: center;
+      height: @sidebar-footer-image-source-height;
       width: @sidebar-footer-image-source-width;
 
+      svg {
+        height: @sidebar-footer-image-source-height;
+        width: @sidebar-footer-image-source-width;
+      }
+
       a {
-
         color: @body-text-color;
-
       }
 
     }

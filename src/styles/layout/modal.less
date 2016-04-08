@@ -133,15 +133,15 @@
   .modal-footer {
     background-color: @modal-footer-background-color;
     border-radius: 0px 0px @modal-border-radius @modal-border-radius;
+  }
 
-    .sub-footer {
-      bottom: @base-spacing-unit * -2;
-      font-size: @body-text-font-size * 9/10;
-      left: 50%;
-      position: absolute;
-      transform: translateX(-50%);
-      width: 100%;
-    }
+  .sub-footer {
+    bottom: @base-spacing-unit * -2;
+    font-size: @body-text-font-size * 9/10;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 100%;
   }
 
   .form-row-element {
@@ -173,6 +173,16 @@
 
   &.login-modal {
 
+    .modal-content {
+      height: auto;
+      overflow: visible;
+      position: relative;
+
+      .container {
+        width: 100%;
+      }
+    }
+
     .modal-header {
       background: transparent;
       height: 144px;
@@ -184,12 +194,10 @@
     }
 
     .dcos-logo {
-      height: 226px;
       left: 50%;
       position: absolute;
-      top: -73px;
+      top: -55px;
       transform: translateX(-50%);
-      width: 200px;
     }
 
     .modal-body {
