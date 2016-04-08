@@ -1,6 +1,5 @@
 import React from 'react';
 
-import AnimatedLogo from '../components/AnimatedLogo';
 import IconDCOSLogoMark from '../components/icons/IconDCOSLogoMark';
 import {PLUGINS_CONFIGURED} from '../constants/EventTypes';
 import {Hooks} from 'PluginSDK';
