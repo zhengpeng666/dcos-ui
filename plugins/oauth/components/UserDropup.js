@@ -13,7 +13,6 @@ const METHODS_TO_BIND = [
 
 const MENU_ITEMS = {
   'button-docs': 'Documentation',
-  'button-intercom': 'Talk with us',
   'button-cli': 'Install CLI',
   'button-sign-out': 'Sign Out'
 };
