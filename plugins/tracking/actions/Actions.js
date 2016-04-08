@@ -31,10 +31,11 @@ var Actions = {
   },
 
   metadataLoaded: function () {
-    return (SDK.Store.getAppState().metadata &&
-      SDK.Store.getAppState().metadata.dcosMetadata &&
-      SDK.Store.getAppState().metadata.metadata &&
-      SDK.Store.getAppState().metadata.metadata.CLUSTER_ID);
+    let metadata = SDK.Store.getAppState().metadata;
+    return (metadata &&
+      metadata.dcosMetadata &&
+      metadata.metadata &&
+      metadata.metadata.CLUSTER_ID);
   },
 
   listenForDcosMetadata: function () {
