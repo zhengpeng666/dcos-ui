@@ -65,6 +65,33 @@ describe('InstallPackageModal', function () {
       expect(result.textContent).toEqual('marathon-user');
     });
 
+    it('should find the default service ID', function () {
+      var modifiedPackageDescribeFixture = _.clone(packageDescribeFixture);
+      modifiedPackageDescribeFixture.config.properties.service = {
+        properties: {name: {default: 'foo-bar'}}
+      };
+      RequestUtil.json = function (handlers) {
+        handlers.success(modifiedPackageDescribeFixture);
+      };
+
+      this.container = document.createElement('div');
+      this.instance = ReactDOM.render(
+        <InstallPackageModal
+          open={true}
+          packageName="marathon"
+          packageVersion="0.11.1"
+          onClose={function () {}} />,
+        this.container
+      );
+      var node = ReactDOM.findDOMNode(ReactDOM.render(
+        this.instance.getModalContents(),
+        this.container
+      ));
+      var result = node.querySelector('form .form-element-inline-text');
+      expect(result.textContent).toEqual('foo-bar');
+      delete modifiedPackageDescribeFixture.config.properties.service;
+    });
+
     it('should display default package appId', function () {
       var modifiedPackageDescribeFixture = _.clone(packageDescribeFixture);
       modifiedPackageDescribeFixture.config.properties

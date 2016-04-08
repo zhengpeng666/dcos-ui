@@ -119,9 +119,9 @@ class InstallPackageModal extends
     }
 
     let {name} = cosmosPackage.get('package');
+    let config = cosmosPackage.get('config');
     let appId = Util.findNestedPropertyInObject(
-      cosmosPackage.get('config'),
-      `properties.${name}.properties.framework-name.default`
+      config, `properties.service.properties.name.default`
     ) || `${name}-default`;
 
     // Store appId from package
@@ -239,12 +239,14 @@ class InstallPackageModal extends
     }
 
     let advancedName =
-      Util.findNestedPropertyInObject(configuration, `${name}.framework-name`);
+      Util.findNestedPropertyInObject(configuration, 'service.name');
 
     // Copy appId to framework name when using default install and
     // name option is available
     if (advancedName && !isAdvancedInstall && appId) {
-      configuration[name]['framework-name'] = appId;
+      if (configuration.service && configuration.service.hasOwnProperty('name')) {
+        configuration.service.name = appId;
+      }
     }
 
     // Copy framework name to appId when using advanced install and
