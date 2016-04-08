@@ -235,6 +235,19 @@ class OrganizationTab extends mixin(InternalStorageMixin) {
     // Get first Action to set as initially selected option in dropdown.
     initialID = Object.keys(actionPhrases)[0] || null;
 
+    let dropdownItems = this.getActionsDropdownItems(actionPhrases);
+    if (dropdownItems.length === 1) {
+      return (
+        <li>
+          <button
+            className="button button-inverse"
+            onClick={this.handleActionSelection.bind(this, dropdownItems[0])}>
+            {dropdownItems[0].html}
+          </button>
+        </li>
+      );
+    }
+
     return (
       <li>
         <Dropdown
@@ -243,7 +256,7 @@ class OrganizationTab extends mixin(InternalStorageMixin) {
           dropdownMenuListClassName="dropdown-menu-list"
           dropdownMenuListItemClassName="clickable"
           initialID={initialID}
-          items={this.getActionsDropdownItems(actionPhrases)}
+          items={dropdownItems}
           onItemSelection={this.handleActionSelection}
           transition={true}
           transitionName="dropdown-menu"
