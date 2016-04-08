@@ -48,7 +48,7 @@ class LoginPage extends mixin(StoreMixin) {
 
     switch (data.type) {
       case 'token':
-        AuthStore.login({id_token: data.token});
+        AuthStore.login({token: data.token});
         break;
       case 'error':
         this.navigateToAccessDenied();
@@ -78,14 +78,10 @@ class LoginPage extends mixin(StoreMixin) {
   }
 
   render() {
-    let location = SDK.config.authLocation;
-    let {firstUser, id} = SDK.Store.getAppState()
-      .config.config.clusterConfiguration;
-    let client = SDK.config.clientID;
+    let firstUser = SDK.Store.getAppState()
+      .config.config.clusterConfiguration.firstUser;
 
-    id = encodeURIComponent(id);
-
-    location += `?firstUser=${firstUser}&cluster_id=${id}&client=${client}`;
+    let location = `/login?firstUser=${firstUser}`;
 
     return (
       <div className="iframe-page-container">
