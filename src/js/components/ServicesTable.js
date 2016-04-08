@@ -6,6 +6,7 @@ import Cluster from '../utils/Cluster';
 var EventTypes = require('../constants/EventTypes');
 var HealthLabels = require('../constants/HealthLabels');
 var HealthTypesDescription = require('../constants/HealthTypesDescription');
+import IconNewWindow from './icons/IconNewWindow';
 var MarathonStore = require('../stores/MarathonStore');
 var ResourceTableUtil = require('../utils/ResourceTableUtil');
 var ServiceTableHeaderLabels = require('../constants/ServiceTableHeaderLabels');
@@ -79,8 +80,8 @@ var ServicesTable = React.createClass({
           target="_blank"
           title="Open in a new window"
           >
-          <i className="icon icon-align-right icon-margin-wide icon-sprite
-            icon-sprite-small icon-new-window icon-sprite-small-white"></i>
+          <IconNewWindow className="icon icon-new-window icon-align-right
+            icon-margin-wide" />
         </a>
       </div>
     );
