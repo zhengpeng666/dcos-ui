@@ -27,6 +27,15 @@ class UniversePackage extends Item {
 
     return this.get('selected');
   }
+
+  getMaintainer() {
+    if (this.get('package')
+      && this.get('package').hasOwnProperty('maintainer')) {
+      return this.get('package').maintainer;
+    }
+
+    return null;
+  }
 }
 
 module.exports = UniversePackage;

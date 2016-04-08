@@ -466,11 +466,38 @@ class InstallPackageModal extends
     );
   }
 
-  getIncorrectSchemaWarning() {
+  getIncorrectSchemaWarning(cosmosPackage) {
+    let errorText = 'The schema for this package is not properly configured. ' +
+      'If you are the package owner, please check your configuration.';
+
+    let maintainer = cosmosPackage.getMaintainer();
+    if (maintainer) {
+      errorText = (
+        <span>
+          {`${errorText} Or you may contact the maintainer: `}
+          <a href={`mailto:${maintainer}`}>{maintainer}</a>
+        </span>
+      );
+    }
+
     return (
-      <div className="modal-content text-align-center">
-        <div className="modal-content-inner">
-          <h3>This package's schema is not formatted correctly.</h3>
+      <div className="modal-content">
+        <div className="modal-content-inner container container-pod container-pod-short horizontal-center">
+          <h4 className="text-danger">Invalid Configuration</h4>
+          <p className="text-align-center">
+            {errorText}
+          </p>
+        </div>
+        <div className="modal-footer">
+          <div className="container">
+            <div className="button-collection horizontal-center flush-bottom">
+              <button
+                className="button flush-bottom button-wide"
+                onClick={this.handleModalClose}>
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -478,13 +505,13 @@ class InstallPackageModal extends
 
   getModalContents() {
     let {currentTab, schemaIncorrect} = this.state;
-
-    if (schemaIncorrect) {
-      return this.getIncorrectSchemaWarning();
-    }
-
     let {isLoading} = this.internalStorage_get();
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
+
+    if (schemaIncorrect) {
+      return this.getIncorrectSchemaWarning(cosmosPackage);
+    }
+
     if (isLoading || !cosmosPackage) {
       return this.getLoadingScreen();
     }

@@ -71,4 +71,20 @@ describe('UniversePackage', function () {
     });
   });
 
+  describe('#getMaintainer', function () {
+    it('returns correct value', function () {
+      var pkg = new UniversePackage({package: {maintainer: 'hellothere'}});
+      expect(pkg.getMaintainer()).toEqual('hellothere');
+    });
+
+    it('returns null if there is no maintainer info', function () {
+      var pkg = new UniversePackage({package: {}});
+      expect(pkg.getMaintainer()).toEqual(null);
+    });
+
+    it('does not error even if there is no package property', function () {
+      var pkg = new UniversePackage({fake: {}});
+      expect(pkg.getMaintainer()).toEqual(null);
+    });
+  });
 });
