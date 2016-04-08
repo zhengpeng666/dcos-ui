@@ -162,37 +162,6 @@ describe('InstallPackageModal', function () {
       expect(TestUtils.isDOMComponent(result)).toEqual(false);
     });
 
-    it('shouldn\'t display install error after reviewing config', function () {
-      RequestUtil.json = function (handlers) {
-        handlers.error({responseJSON: {type: 'PackageAlreadyInstalled'}});
-      };
-      // Fire install error
-      this.instance.handleInstallPackage(
-        new UniversePackage({package: {name: 'marathon', version: '0.11.1'}})
-      );
-      // Change appId
-      this.instance.handleChangeTab('reviewDefaultConfig');
-
-      var node = ReactDOM.findDOMNode(ReactDOM.render(
-        this.instance.getModalContents(),
-        this.container
-      ));
-      var result = node.querySelector('h4.text-danger');
-      expect(TestUtils.isDOMComponent(result)).toEqual(false);
-    });
-
-    it('should show review config when review button is clicked', function () {
-      // Change to review state
-      this.instance.handleChangeTab('reviewDefaultConfig');
-
-      var node = ReactDOM.findDOMNode(ReactDOM.render(
-        this.instance.getModalContents(),
-        this.container
-      ));
-      var result = node.querySelector('.review-config');
-      expect(TestUtils.isDOMComponent(result)).toEqual(true);
-    });
-
   });
 
 });
