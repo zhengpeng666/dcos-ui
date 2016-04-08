@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AnimatedLogo from '../components/AnimatedLogo';
+import IconDCOSLogoMark from '../components/icons/IconDCOSLogoMark';
 import {PLUGINS_CONFIGURED} from '../constants/EventTypes';
 import {Hooks} from 'PluginSDK';
 
@@ -32,8 +32,8 @@ export default class ApplicationLoader extends React.Component {
   render() {
     return (
       <div id="canvas">
-        <div className="container container-pod vertical-center">
-          <AnimatedLogo speed={500} scale={0.16} />
+        <div className="application-loading-indicator container container-pod vertical-center">
+          <IconDCOSLogoMark />
         </div>
       </div>
     );

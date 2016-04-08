@@ -14,7 +14,7 @@ var Config = {
   historyLength: 31,
   historyServer: '',
   rootUrl: '',
-  stateLoadDelay: 3000,
+  stateLoadDelay: 1000,
   stateRefresh: 2000,
   tailRefresh: 10000,
   unitHealthAPIPrefix: '/system/health/v1',
