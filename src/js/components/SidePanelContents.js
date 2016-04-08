@@ -92,7 +92,7 @@ class SidePanelContents extends
         container-pod
         container-pod-super-short
         flush-top">
-        <div className="media-object-spacing-wrapper">
+        <div className="media-object-spacing-wrapper media-object-offset">
           <div className="media-object media-object-align-middle">
             <div className="media-object-item">
               <i className={resourceIconClasses}></i>

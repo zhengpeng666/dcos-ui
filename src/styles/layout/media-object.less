@@ -85,6 +85,18 @@ components/media-objects.less
 
         }
 
+        & > .media-object-item {
+
+          &:last-child {
+
+            // This overrides all of the specificity applied by the classes
+            // below.
+            padding-right: 0 !important;
+
+          }
+
+        }
+
       }
 
       &:last-child {
