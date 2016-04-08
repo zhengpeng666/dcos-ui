@@ -1,4 +1,7 @@
 // Configuration overrides
+
+var ee = true;
+
 var ConfigDev = {
   analyticsKey: '39uhSEOoRHMw6cMR6st9tYXDbAL3JSaP',
   rootUrl: 'http://dcos.local',
@@ -7,7 +10,7 @@ var ConfigDev = {
     uiConfiguration: {
       plugins: {
         authentication: {
-          enabled: false
+          enabled: ee
         },
         // Enable oauth OR authentication
         oauth: {
@@ -20,19 +23,19 @@ var ConfigDev = {
           enabled: false
         },
         'external-links': {
-          enabled: false
+          enabled: ee
         },
         networking: {
-          enabled: true
+          enabled: ee
         },
         organization: {
-          enabled: true
+          enabled: ee
         },
         'overview-detail': {
           enabled: true
         },
         tracking: {
-          enabled: true
+          enabled: ee
         }
       }
     },
