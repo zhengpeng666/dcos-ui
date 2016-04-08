@@ -4,11 +4,11 @@ var React = require('react');
 var RouteHandler = require('react-router').RouteHandler;
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-var AnimatedLogo = require('../components/AnimatedLogo');
 var Config = require('../config/Config');
 import ConfigStore from '../stores/ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import HistoryStore from '../stores/HistoryStore';
+import IconDCOSLogoMark from '../components/icons/IconDCOSLogoMark';
 var InternalStorageMixin = require('../mixins/InternalStorageMixin');
 var MetadataStore = require('../stores/MetadataStore');
 var MesosSummaryStore = require('../stores/MesosSummaryStore');
@@ -140,7 +140,11 @@ var Index = React.createClass({
       return null;
     }
 
-    return <AnimatedLogo speed={500} scale={0.16} />;
+    return (
+      <div className="application-loading-indicator container container-pod vertical-center">
+        <IconDCOSLogoMark />
+      </div>
+    );
   },
 
   getErrorScreen: function (showErrorScreen) {

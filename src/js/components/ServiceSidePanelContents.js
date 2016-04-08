@@ -213,7 +213,7 @@ class ServiceSidePanelContents extends SidePanelContents {
       service != null && service.name === 'marathon') {
       return (
         <div className="container container-fluid container-pod container-pod-short">
-          <h2 className="flush-top">No information available.</h2>
+          <h4 className="text-align-center">No information available.</h4>
         </div>
       );
     }
