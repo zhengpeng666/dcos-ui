@@ -506,7 +506,7 @@ class InstallPackageModal extends
     return (
       <div className="modal-content text-align-center">
         <div className="modal-content-inner">
-          <h3>This package's schema is not configured correctly.</h3>
+          <h3>This package's schema is not formatted correctly.</h3>
         </div>
       </div>
     );
