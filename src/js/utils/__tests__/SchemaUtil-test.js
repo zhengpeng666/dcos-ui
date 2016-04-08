@@ -163,4 +163,32 @@ describe('SchemaUtil', function () {
       expect(result.application.Nested.CPU).toEqual('CPU Value');
     });
   });
+
+  describe('#validateSchema', function () {
+    it('should return false for an invalid schema', function () {
+      var result = SchemaUtil.validateSchema({random: 'properties'});
+      expect(result).toEqual(false);
+    });
+
+    it('should return true for valid schema', function () {
+      var schema = {
+        properties: {
+          application: {
+            description: 'This is a description',
+            properties: {
+              id: {
+                properties: {
+                  name: {
+                    type: 'string'
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+      var result = SchemaUtil.validateSchema(schema);
+      expect(result).toEqual(true);
+    });
+  });
 });

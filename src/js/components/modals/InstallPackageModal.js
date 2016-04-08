@@ -19,7 +19,8 @@ const METHODS_TO_BIND = [
   'handleChangeAppId',
   'handleChangeTab',
   'handleInstallPackage',
-  'handleAdvancedFormChange'
+  'handleAdvancedFormChange',
+  'handleModalClose'
 ];
 
 class InstallPackageModal extends
@@ -43,7 +44,10 @@ class InstallPackageModal extends
       isLoading: true,
       pendingRequest: false
     });
-    this.state = {currentTab: 'defaultInstall'};
+    this.state = {
+      currentTab: 'defaultInstall',
+      schemaIncorrect: false
+    };
 
     this.store_listeners = [{
       name: 'cosmosPackages',
@@ -110,6 +114,11 @@ class InstallPackageModal extends
 
   onCosmosPackagesStoreDescriptionSuccess() {
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
+    if (!SchemaUtil.validateSchema(cosmosPackage.get('config'))) {
+      this.setState({schemaIncorrect: true});
+      return;
+    }
+
     let {name} = cosmosPackage.get('package');
     let appId = Util.findNestedPropertyInObject(
       cosmosPackage.get('config'),
@@ -122,7 +131,7 @@ class InstallPackageModal extends
       hasError: false,
       isLoading: false
     });
-    this.forceUpdate();
+    this.setState({schemaIncorrect: false});
   }
 
   onCosmosPackagesStoreInstallError(installError) {
@@ -179,6 +188,11 @@ class InstallPackageModal extends
     CosmosPackagesStore.installPackage(name, version, appId, configuration);
     this.internalStorage_update({pendingRequest: true});
     this.forceUpdate();
+  }
+
+  handleModalClose() {
+    this.setState({schemaIncorrect: false});
+    this.props.onClose();
   }
 
   getAdvancedSubmit(triggerSubmit) {
@@ -488,8 +502,23 @@ class InstallPackageModal extends
     );
   }
 
+  getIncorrectSchemaWarning() {
+    return (
+      <div className="modal-content text-align-center">
+        <div className="modal-content-inner">
+          <h3>This package's schema is not formatted correctly.</h3>
+        </div>
+      </div>
+    );
+  }
+
   getModalContents() {
-    let {currentTab} = this.state;
+    let {currentTab, schemaIncorrect} = this.state;
+
+    if (schemaIncorrect) {
+      return this.getIncorrectSchemaWarning();
+    }
+
     let {isLoading} = this.internalStorage_get();
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
     if (isLoading || !cosmosPackage) {
@@ -547,7 +576,7 @@ class InstallPackageModal extends
         maxHeightPercentage={1}
         modalClass={modalClasses}
         modalWrapperClass={modalWrapperClasses}
-        onClose={props.onClose}
+        onClose={this.handleModalClose}
         open={props.open}
         showCloseButton={false}
         showFooter={false}>
