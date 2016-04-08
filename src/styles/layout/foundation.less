@@ -29,6 +29,16 @@ body,
 
 }
 
+.application-loading-screen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: @z-index-application-loading-screen;
+  background-color: @body-background-color;
+}
+
 ::selection {
 
   background: color-lighten(@purple, 0);
@@ -133,6 +143,14 @@ Flex Container Column
   display: flex;
   flex: 1 0 auto;
   flex-direction: column;
+
+}
+
+.flex-container-row {
+
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: row;
 
 }
 
