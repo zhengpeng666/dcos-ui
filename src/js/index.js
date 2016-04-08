@@ -8,8 +8,8 @@ global.addEventListener('beforeunload', function () {
 });
 
 import _ from 'underscore';
-import {Provider} from 'react-redux';
 import React from 'react';
+import {Provider} from 'react-redux';
 import ReactDOM from 'react-dom';
 import Router from 'react-router';
 
