@@ -134,11 +134,13 @@
     background-color: @modal-footer-background-color;
     border-radius: 0px 0px @modal-border-radius @modal-border-radius;
 
-    .mesosphere-footer-logo {
-      bottom: -71px;
+    .sub-footer {
+      bottom: @base-spacing-unit * -2;
+      font-size: @body-text-font-size * 9/10;
       left: 50%;
       position: absolute;
       transform: translateX(-50%);
+      width: 100%;
     }
   }
 
@@ -167,6 +169,36 @@
 
   .allow-overflow {
     overflow: visible;
+  }
+
+  &.login-modal {
+
+    .modal-header {
+      background: transparent;
+      height: 144px;
+      padding: 0;
+
+      .container {
+        padding: 0;
+      }
+    }
+
+    .dcos-logo {
+      height: 226px;
+      left: 50%;
+      position: absolute;
+      top: -73px;
+      transform: translateX(-50%);
+      width: 200px;
+    }
+
+    .modal-body {
+      padding-top: @base-spacing-unit * 2/3;
+    }
+
+    .login-modal-heading {
+      color: @neutral;
+    }
   }
 }
 

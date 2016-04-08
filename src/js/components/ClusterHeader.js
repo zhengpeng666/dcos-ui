@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 import {Tooltip} from 'reactjs-components';
 
 import ClusterName from './ClusterName';
-import DCOSLogo from './DCOSLogo';
 import MetadataStore from '../stores/MetadataStore';
 
 var ClusterHeader = React.createClass({
@@ -110,9 +109,6 @@ var ClusterHeader = React.createClass({
   render() {
     return (
       <div className="container container-fluid container-fluid-narrow container-pod container-pod-short">
-        <div className="sidebar-header-image">
-          <DCOSLogo />
-        </div>
         <ClusterName />
         {this.getHostName()}
       </div>

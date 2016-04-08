@@ -22,7 +22,6 @@ Sidebar Variables
 ----------------------------------------------------------------------------- */
 
 @sidebar-footer-image-source-width:                                             46px;
-@sidebar-footer-image-source-height:                                            33px;
 @sidebar-footer-image-scale:                                                    1.0;
 @sidebar-footer-image-scale-screen-small:                                       1.0;
 @sidebar-footer-image-scale-screen-medium:                                      1.0;
@@ -351,22 +350,14 @@ Sidebar
     ----------------------------------------------------------------------------- */
 
     .sidebar-footer-image {
-
-      display: block;
-      background-image: url("@{path-images}/layout/sidebar/sidebar-logo.png?@{cache-buster}");
-      .background-size(100% 100%);
-      width: @sidebar-footer-image-source-width * @sidebar-footer-image-scale;
-      height: @sidebar-footer-image-source-height * @sidebar-footer-image-scale;
-      margin: 0 auto;
-      margin-bottom: @base-spacing-unit * 0.15;
-      .opacity(0.10);
-
+      margin: 0 auto @base-spacing-unit * 1/4 auto;
+      opacity: 0.1;
+      text-align: center;
+      width: @sidebar-footer-image-source-width;
     }
 
     p {
-
-      .opacity(0.5);
-
+      opacity: 0.5;
     }
 
     /* -----------------------------------------------------------------------------
@@ -747,8 +738,6 @@ Sidebar Open
 
         .sidebar-footer-image {
 
-          width: @sidebar-footer-image-source-width * @sidebar-footer-image-scale-screen-small;
-          height: @sidebar-footer-image-source-height * @sidebar-footer-image-scale-screen-small;
           margin-bottom: @base-spacing-unit-screen-small * 0.15;
 
         }
@@ -954,8 +943,6 @@ Sidebar Open
 
         .sidebar-footer-image {
 
-          width: @sidebar-footer-image-source-width * @sidebar-footer-image-scale-screen-medium;
-          height: @sidebar-footer-image-source-height * @sidebar-footer-image-scale-screen-medium;
           margin-bottom: @base-spacing-unit-screen-medium * 0.15;
 
         }
@@ -1140,8 +1127,6 @@ Sidebar Open
 
         .sidebar-footer-image {
 
-          width: @sidebar-footer-image-source-width * @sidebar-footer-image-scale-screen-large;
-          height: @sidebar-footer-image-source-height * @sidebar-footer-image-scale-screen-large;
           margin-bottom: @base-spacing-unit-screen-large * 0.15;
 
         }
@@ -1174,32 +1159,6 @@ Sidebar Open
   ----------------------------------------------------------------------------- */
 
   @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-
-    /* -----------------------------------------------------------------------------
-    --------------------------------------------------------------------------------
-
-    Sidebar
-
-    --------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------- */
-
-    .sidebar {
-
-      /* -----------------------------------------------------------------------------
-      Sidebar Footer
-      ----------------------------------------------------------------------------- */
-
-      .sidebar-footer {
-
-        .sidebar-footer-image {
-
-          background-image: url("@{path-images}/layout/sidebar/sidebar-logo@2x.png?@{cache-buster}");
-
-        }
-
-      }
-
-    }
 
   }
 

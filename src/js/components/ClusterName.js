@@ -31,8 +31,8 @@ class ClusterName extends mixin(StoreMixin) {
 
     return (
       <h3
-        className="sidebar-header-label flush-top text-align-center
-          text-overflow flush-bottom"
+        className="sidebar-header-label text-align-center
+          text-overflow flush"
         title={clusterName}>
         {clusterName}
       </h3>
