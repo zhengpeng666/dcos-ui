@@ -14,7 +14,7 @@ class IconNewWindow extends React.Component {
       </svg>
     );
   }
-};
+}
 
 IconNewWindow.defaultProps = {
   className: 'icon icon-new-window'
