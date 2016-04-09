@@ -37,6 +37,17 @@ class ServiceSidePanelContents extends SidePanelContents {
     }, this);
   }
 
+  onStateStoreSuccess() {
+    let serviceName = this.props.itemID;
+    let service = MesosStateStore.getServiceFromName(serviceName);
+    let tabs = this.tabs_tabs;
+
+    if (service && service.name === 'marathon' && tabs && tabs.details) {
+      delete this.tabs_tabs.details;
+      this.forceUpdate();
+    }
+  }
+
   handleOpenServiceButtonClick() {
     this.props.parentRouter.transitionTo(
       'service-ui',
