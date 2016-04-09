@@ -9,7 +9,7 @@ var RequestUtil = {
       options.url += '?_timestamp=' + Date.now();
     }
 
-    json(options, ...args);
+    return json(options, ...args);
   },
 
   debounceOnError: function (interval, promiseFn, options) {
