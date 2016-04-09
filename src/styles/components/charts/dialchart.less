@@ -27,6 +27,7 @@
   justify-content: space-around;
 
   .nodes-grid-dials-item {
+    height: ceil(@base-spacing-unit * 3.33);
     margin-right: ceil(@base-spacing-unit * 0.3333);
     margin-bottom: ceil(@base-spacing-unit * 0.3333);
     width: ceil(@base-spacing-unit * 3.33);
@@ -99,12 +100,9 @@
         font-size: 11px;
       }
 
-      // The pointer-events property is necessary for the tooltip to render
-      // consistently when multiple mouseover events are fired. For some
-      // reason, without this property, the tooltip renders inconsistently.
       .error {
-        margin-bottom: @base-spacing-unit * 0.5 !important;
-        pointer-events: none;
+        position: relative;
+        top: -2px;
       }
     }
   }

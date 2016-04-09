@@ -136,7 +136,7 @@ var NodesGridDials = React.createClass({
         data: this.getInactiveSliceData(),
         description: (
           <span className="error">
-            <i className="icon icon-medium icon-medium-white icon-alert"/>
+            <i className="icon icon-sprite icon-sprite-medium icon-sprite-medium-white icon-alert" />
           </span>
         )
       };
