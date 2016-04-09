@@ -99,7 +99,7 @@ class PackagesTab extends mixin(StoreMixin) {
 
   getIcon(cosmosPackage) {
     return (
-      <div className="icon icon-jumbo icon-image-container icon-app-container">
+      <div className="icon icon-jumbo icon-image-container icon-app-container icon-default-gray">
         <img src={cosmosPackage.getIcons()['icon-medium']} />
       </div>
     );
