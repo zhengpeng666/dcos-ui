@@ -7,32 +7,32 @@ import UniversePage from '../pages/UniversePage';
 
 let universeRoutes = {
   type: Route,
-  name: 'packages',
-  path: 'packages/?',
+  name: 'universe',
+  path: 'universe/?',
   handler: UniversePage,
   children: [
     {
       type: Route,
-      name: 'packages-packages',
-      path: '?',
+      name: 'universe-packages',
+      path: 'packages/?',
       handler: PackagesTab
     },
     {
       type: Route,
-      name: 'packages-installed',
-      path: 'installed?',
-      handler: InstalledPackagesTab
-    },
-    {
-      type: Route,
-      name: 'packages-packages-detail',
-      path: ':packageName?:packageVersion?',
+      name: 'universe-packages-detail',
+      path: 'packages/:packageName?:packageVersion?',
       handler: PackageDetailTab
     },
     {
+      type: Route,
+      name: 'universe-installed-packages',
+      path: 'installed-packages?',
+      handler: InstalledPackagesTab
+    },
+    {
       type: Redirect,
-      from: '/packages/?',
-      to: 'packages-packages'
+      from: '/universe/?',
+      to: 'universe-packages'
     }
   ]
 };

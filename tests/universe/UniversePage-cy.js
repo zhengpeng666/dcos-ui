@@ -13,24 +13,24 @@ describe('Universe Page', function () {
       .get('.sidebar-menu-item')
       .contains('Universe')
       .click();
-    cy.hash().should('match', /packages/);
+    cy.hash().should('match', /universe\/packages/);
   });
 
   it('goes to Packages tab when tab is clicked', function () {
     cy
-      .visitUrl({url: '/packages'})
+      .visitUrl({url: '/universe'})
       .get('.tab-item-label')
       .contains('Packages')
       .click();
-    cy.hash().should('match', /packages/);
+    cy.hash().should('match', /universe\/packages/);
   });
 
   it('goes to the Packages Details tab when panel is clicked', function () {
     cy
-      .visitUrl({url: '/packages'})
+      .visitUrl({url: '/universe'})
       .get('.h2.inverse')
       .contains('arangodb')
       .click();
-    cy.hash().should('match', /packages\/arangodb/);
+    cy.hash().should('match', /universe\/packages\/arangodb/);
   });
 });

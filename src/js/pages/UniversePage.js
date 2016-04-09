@@ -30,8 +30,8 @@ class UniversePage extends mixin(TabsMixin) {
 
     // Universe Tabs
     this.tabs_tabs = {
-      'packages-packages': 'Packages',
-      'packages-installed': 'Installed'
+      'universe-packages': 'Packages',
+      'universe-installed-packages': 'Installed'
     };
 
     this.setState({currentTab});
@@ -48,7 +48,7 @@ class UniversePage extends mixin(TabsMixin) {
   render() {
     return (
       <Page
-        title="Packages"
+        title="Universe"
         navigation={this.getNavigation()}>
         <RouteHandler />
       </Page>
@@ -61,9 +61,9 @@ UniversePage.contextTypes = {
 };
 
 UniversePage.routeConfig = {
-  label: 'Packages',
+  label: 'Universe',
   icon: 'universe',
-  matches: /^\/packages/
+  matches: /^\/universe/
 };
 
 UniversePage.willTransitionTo = function () {
