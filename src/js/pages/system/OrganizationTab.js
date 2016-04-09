@@ -202,12 +202,12 @@ class OrganizationTab extends mixin(InternalStorageMixin) {
   }
 
   getColumns() {
-    let {className} = this;
+    let {getClassName} = this;
 
     return [
       {
-        className,
-        headerClassName: className,
+        className: getClassName,
+        headerClassName: getClassName,
         prop: 'selected',
         render: this.renderCheckbox,
         sortable: false,
@@ -215,8 +215,8 @@ class OrganizationTab extends mixin(InternalStorageMixin) {
       },
       {
         cacheCell: true,
-        className,
-        headerClassName: className,
+        className: getClassName,
+        headerClassName: getClassName,
         prop: 'uid',
         render: this.renderUsername,
         sortable: true,
