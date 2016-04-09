@@ -119,8 +119,7 @@ describe('ServiceSidePanelContents', function () {
           this.container
         );
         var detailsInstance = ReactDOM.render(instance.renderDetailsTabView(), this.container);
-        var node = ReactDOM.findDOMNode(detailsInstance);
-        var info = node.querySelector('h4');
+        var info = ReactDOM.findDOMNode(detailsInstance);
 
         expect(info.textContent)
           .toEqual('No information available.');

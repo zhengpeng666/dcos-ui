@@ -212,9 +212,7 @@ class ServiceSidePanelContents extends SidePanelContents {
       marathonService.snapshot == null ||
       service != null && service.name === 'marathon') {
       return (
-        <div className="container container-fluid container-pod container-pod-short">
-          <h4 className="text-align-center">No information available.</h4>
-        </div>
+        <h4 className="text-align-center">No information available.</h4>
       );
     }
 
@@ -251,10 +249,7 @@ class ServiceSidePanelContents extends SidePanelContents {
 
     return (
       <div className="flex-container-col">
-        <div className="container container-fluid container-pod
-          container-pod-divider-bottom container-pod-divider-bottom-align-right
-          container-pod-short-top flush-bottom
-          side-panel-content-header side-panel-section">
+        <div className="side-panel-section side-panel-content-header container container-pod container-fluid container-pod-divider-bottom container-pod-divider-bottom-align-right flush-bottom">
           {this.getBasicInfo()}
           <div className="side-panel-content-header-charts container-pod container-pod-short">
             <div className="row">
