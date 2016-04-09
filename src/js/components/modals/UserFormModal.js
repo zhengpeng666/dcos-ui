@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import mixin from 'reactjs-mixin';
 import {Hooks} from 'PluginSDK';
 /* eslint-disable no-unused-vars */
@@ -5,6 +6,7 @@ import React from 'react';
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+import AuthStore from '../../stores/AuthStore';
 import UserStore from '../../stores/UserStore';
 import FormModal from '../FormModal';
 
@@ -55,7 +57,10 @@ class UserFormModal extends mixin(StoreMixin) {
 
   handleNewUserSubmit(model) {
     this.setState({disableNewUser: true});
-    UserStore.addUser(model);
+    UserStore.addUser(_.extend({}, model, {
+      creator_uid: AuthStore.getUser().uid,
+      cluster_url: `${window.location.protocol}//${window.location.hostname}`
+    }));
   }
 
   getButtonDefinition() {
