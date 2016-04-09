@@ -15,7 +15,7 @@ describe('Packages Tab', function () {
         status: 400,
         response: {type: 'InvalidRepositoryUri', name: 'Invalid'}
       })
-      .visitUrl({url: '/packages', logIn: true});
+      .visitUrl({url: '/universe', logIn: true});
 
     cy
       .get('.page-content p.inverse.text-align-center')
@@ -30,7 +30,7 @@ describe('Packages Tab', function () {
         status: 400,
         response: {type: 'IndexNotFound', name: 'Invalid'}
       })
-      .visitUrl({url: '/packages', logIn: true});
+      .visitUrl({url: '/universe', logIn: true});
 
     cy
       .get('.page-content p.inverse.text-align-center')
@@ -45,7 +45,7 @@ describe('Packages Tab', function () {
         status: 400,
         response: {type: 'PackageFileMissing', name: 'Invalid'}
       })
-      .visitUrl({url: '/packages', logIn: true});
+      .visitUrl({url: '/universe', logIn: true});
 
     cy
       .get('.page-content p.inverse.text-align-center')
@@ -60,7 +60,7 @@ describe('Packages Tab', function () {
         status: 400,
         response: {type: 'PackageFileMissing'}
       })
-      .visitUrl({url: '/packages', logIn: true});
+      .visitUrl({url: '/universe', logIn: true});
 
     cy
       .get('.page-content p.inverse.text-align-center')
@@ -75,7 +75,7 @@ describe('Packages Tab', function () {
         status: 400,
         response: {message: 'Some other error'}
       })
-      .visitUrl({url: '/packages', logIn: true});
+      .visitUrl({url: '/universe', logIn: true});
 
     cy
       .get('.page-content p.inverse.text-align-center')
@@ -84,7 +84,7 @@ describe('Packages Tab', function () {
 
   context('searching', function () {
     beforeEach(function () {
-      cy.visitUrl({url: '/packages', logIn: true});
+      cy.visitUrl({url: '/universe', logIn: true});
       cy.get('input').type('cass');
     });
 
@@ -103,7 +103,7 @@ describe('Packages Tab', function () {
 
   context('selected packages', function () {
     beforeEach(function () {
-      cy.visitUrl({url: '/packages', logIn: true});
+      cy.visitUrl({url: '/universe', logIn: true});
       cy.get('.panel').as('panels');
     });
 
