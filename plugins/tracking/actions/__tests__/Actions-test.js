@@ -18,6 +18,12 @@ global.analytics = {
   track: _.noop
 };
 
+var DCOS_METADATA = {
+  'clusterId': 'cluster',
+  'dcos-image-commit': 'commit',
+  'bootstrap-id': 'bootstrap'
+};
+
 describe('Actions', function () {
 
   Actions.initialize();
@@ -33,122 +39,58 @@ describe('Actions', function () {
     });
 
     it('calls analytics#track', function () {
-      Actions.setCustomerID('a');
-      Actions.log({eventID: 'foo'});
+      Actions.setDcosMetadata(DCOS_METADATA);
+      Actions.log('foo');
       expect(global.analytics.track.calls.length).toEqual(1);
     });
 
     it('calls analytics#track with correct eventID', function () {
-      Actions.setCustomerID('a');
-      Actions.log({});
-      expect(global.analytics.track.calls[0].args[0]).toEqual('dcos-ui');
+      Actions.setDcosMetadata(DCOS_METADATA);
+      Actions.log('baz');
+      expect(global.analytics.track.calls[0].args[0]).toEqual('baz');
     });
 
     it('calls analytics#track with correct log', function () {
-      Actions.setCustomerID('a');
-      Actions.log({eventID: 'foo'});
+      Actions.setDcosMetadata(DCOS_METADATA);
+      Actions.log('foo');
 
       var args = global.analytics.track.calls[0].args[1];
       expect(args.appVersion).toBeDefined();
-      expect(args.date).toBeDefined();
-      expect(args.eventID).toEqual('foo');
-      expect(args.duration).toBeDefined();
-      expect(args.page).toBeDefined();
-      expect(args.stintID).toBeDefined();
       expect(args.version).toBeDefined();
+      expect(args.clusterId).toBeDefined();
+      expect(args['dcos-image-commit']).toBeDefined();
+      expect(args['bootstrap-id']).toBeDefined();
     });
 
   });
 
-  describe('#setCustomerID', function () {
+  describe('#setDcosMetadata', function () {
 
     beforeEach(function () {
-      Actions.setCustomerID(null);
+      Actions.dcosMetadata = null;
       spyOn(global.analytics, 'track');
     });
 
-    it('doesn\'t track any logs when there\'s no cluster ID', function () {
+    it('doesn\'t track any logs when there\'s no metadata', function () {
       Actions.log('Test');
       expect(global.analytics.track).not.toHaveBeenCalled();
     });
 
-    it('sets the customerID', function () {
-      Actions.setCustomerID('foo');
-      expect(Actions.customerID).toEqual('foo');
+    it('sets the dcosMetadata', function () {
+      Actions.setDcosMetadata(DCOS_METADATA);
+      expect(Actions.dcosMetadata).toEqual(DCOS_METADATA);
     });
 
-    it('runs queued logs when customerID is set', function () {
+    it('runs queued logs when metadata is set', function () {
       Actions.log('foo');
       Actions.log('bar');
       Actions.log('baz');
       spyOn(Actions, 'log');
-      Actions.setCustomerID('qux');
+      Actions.setDcosMetadata(DCOS_METADATA);
       expect(Actions.log.calls.length).toEqual(3);
       ['foo', 'bar', 'baz'].forEach(function (log, i) {
         expect(Actions.log.calls[i].args[0]).toEqual(log);
       });
-    });
-
-  });
-
-  describe('#prepareLog', function () {
-
-    beforeEach(function () {
-      Actions.activePage = '/services';
-
-      this.log = {
-        date: Date.now()
-      };
-    });
-
-    it('does not create unique event id', function () {
-      var log = Actions.prepareLog(this.log);
-
-      expect(log.uniqueEventID).not.toBeDefined();
-    });
-
-    it('creates a unique event id', function () {
-      var log = Actions.prepareLog(_.extend(this.log, {
-        data: {foo: 'bar'},
-        componentID: 'Baz'
-      }));
-
-      expect(log.uniqueEventID).toBeDefined();
-    });
-
-    it('flattens a eventID of type array', function () {
-      var log = Actions.prepareLog(_.extend(this.log, {
-        eventID: ['foo', 'bar']
-      }));
-
-      expect(_.isArray(log.eventID)).toBe(false);
-    });
-
-    it('adds page to eventID when eventID is array', function () {
-      var log = Actions.prepareLog(_.extend(this.log, {
-        eventID: ['foo', 'bar']
-      }));
-
-      expect(log.eventID).toBe('services.foo.bar');
-    });
-
-    it('does not add a page to non Array eventIDs', function () {
-      var log = Actions.prepareLog(_.extend(this.log, {
-        eventID: 'foo'
-      }));
-
-      expect(log.eventID).toBe('foo');
-    });
-
-    it('sets the duration since last log', function () {
-      var delta = 123456;
-
-      Actions.lastLogDate = this.log.date;
-      this.log.date += delta;
-
-      var log = Actions.prepareLog(this.log);
-
-      expect(log.duration).toBe(delta);
     });
 
   });
