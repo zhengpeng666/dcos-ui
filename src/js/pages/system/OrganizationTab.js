@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import classNames from 'classnames';
 import {Dropdown, Form, Table} from 'reactjs-components';
 import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
@@ -194,13 +195,19 @@ class OrganizationTab extends mixin(InternalStorageMixin) {
     );
   }
 
+  getClassName(prop, sortBy, row) {
+    return classNames({
+      'clickable': row == null // this is a header
+    });
+  }
+
   getColumns() {
-    let className = ResourceTableUtil.getClassName;
+    let {getClassName} = this;
 
     return [
       {
-        className,
-        headerClassName: className,
+        className: getClassName,
+        headerClassName: getClassName,
         prop: 'selected',
         render: this.renderCheckbox,
         sortable: false,
@@ -208,8 +215,8 @@ class OrganizationTab extends mixin(InternalStorageMixin) {
       },
       {
         cacheCell: true,
-        className,
-        headerClassName: className,
+        className: getClassName,
+        headerClassName: getClassName,
         prop: 'uid',
         render: this.renderUsername,
         sortable: true,
