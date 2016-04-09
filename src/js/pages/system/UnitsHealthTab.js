@@ -165,7 +165,7 @@ class UnitsHealthTab extends mixin(StoreMixin) {
             name={pluralizedItemName}
             currentLength={visibleData.length}
             totalLength={dataItems.length} />
-          <div className="media-object-spacing-wrapper media-object-spacing-narrow">
+          <div className="media-object-spacing-wrapper media-object-spacing-narrow media-object-offset">
             <div className="media-object media-object-wrap-reverse">
               <div className="media-object media-object-item media-object-inline media-object-wrap">
                 <div className="media-object-item media-object-align-top">

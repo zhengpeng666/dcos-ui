@@ -262,7 +262,7 @@ var NodesPage = React.createClass({
           currentLength={nodesList.length}
           totalLength={data.totalNodes} />
 
-        <div className="media-object-spacing-wrapper media-object-spacing-narrow">
+        <div className="media-object-spacing-wrapper media-object-spacing-narrow media-object-offset">
           <div className="media-object media-object-wrap-reverse">
             <div className="media-object media-object-item media-object-inline media-object-wrap">
               <div className="media-object-item media-object-align-top">
@@ -287,7 +287,7 @@ var NodesPage = React.createClass({
                 {this.getFilterInputText()}
               </div>
             </div>
-            <div className="media-object media-object-item media-object-inline media-object-item-align-right">
+            <div className="media-object media-object-item media-object-inline media-object-item-align-right media-object-offset">
               <div className="media-object-item">
                 {this.getViewTypeRadioButtons(this.resetFilter)}
               </div>

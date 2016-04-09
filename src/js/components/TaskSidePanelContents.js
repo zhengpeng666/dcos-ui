@@ -131,7 +131,7 @@ class TaskSidePanelContents extends SidePanelContents {
           container-pod
           container-pod-super-short
           flush-top">
-          <div className="media-object-spacing-wrapper media-object-spacing-narrow">
+          <div className="media-object-spacing-wrapper media-object-spacing-narrow media-object-offset">
             <div className="media-object media-object-align-middle">
               <div className="media-object-item">
                 <i className={resourceIconClasses}></i>
@@ -167,7 +167,7 @@ class TaskSidePanelContents extends SidePanelContents {
           <h1 className="side-panel-content-header-label flush">
             {task.name}
           </h1>
-          <div className="media-object-spacing-wrapper media-object-spacing-narrow">
+          <div className="media-object-spacing-wrapper media-object-spacing-narrow media-object-offset">
             <div className="media-object media-object-align-middle">
               <div className="media-object-item">
                 {statusIcon}

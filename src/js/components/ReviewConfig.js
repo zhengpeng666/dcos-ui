@@ -35,7 +35,7 @@ class ReviewConfig extends React.Component {
       <div className="modal-header modal-header-padding-narrow modal-header-bottom-border modal-header-white flex-no-shrink">
         <div className="row">
           <div className="column-4">
-            <div className="media-object-spacing-wrapper media-object-spacing-narrow">
+            <div className="media-object-spacing-wrapper media-object-spacing-narrow media-object-offset">
               <div className="media-object media-object-align-middle">
                 <div className="media-object-item">
                   <div className="icon icon-sprite icon-sprite-medium icon-sprite-medium-color icon-image-container icon-app-container icon-default-gray">
