@@ -2,9 +2,9 @@ import PluginSDK from 'PluginSDK';
 
 import _ from 'underscore';
 import React from 'react';
-import {Provider} from 'react-redux';
 import ReactDOM from 'react-dom';
 import Router from 'react-router';
+import {Provider} from 'react-redux';
 
 require('./utils/MomentJSConfig');
 require('./utils/ReactSVG');
