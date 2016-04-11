@@ -2,6 +2,7 @@ var browserInfo = require('browser-info');
 var React = require('react');
 
 var CliInstallModal = require('./modals/CliInstallModal');
+import Config from '../config/Config';
 var ErrorModal = require('./modals/ErrorModal');
 import EventTypes from '../constants/EventTypes';
 import {Hooks} from 'PluginSDK';
@@ -82,7 +83,7 @@ var Modals = React.createClass({
       showErrorModal: true,
       modalErrorMsg: (
         <p className="text-align-center flush-bottom">
-          We are unable to retreive the version DC/OS versions. Please try again.
+          We are unable to retreive the version {Config.productName} versions. Please try again.
         </p>
       )
     });
@@ -101,12 +102,12 @@ var Modals = React.createClass({
     let subHeaderContent = '';
 
     if (OS !== 'Windows') {
-      subHeaderContent = `Install the DC/OS command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal.`;
+      subHeaderContent = `Install the ${Config.productName} command-line interface (CLI) tool on your local system by copying and pasting the code snippet below into your terminal.`;
     }
 
     return {
       onClose,
-      title: 'Welcome to the Mesosphere DC/OS',
+      title: `Welcome to ${Config.productName}`,
       subHeaderContent,
       showFooter: true,
       footer: (

@@ -6,6 +6,7 @@ import React from 'react';
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+import Config from '../config/Config';
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
 import List from '../structs/List';
 import RepositoriesTableHeaderLabels from '../constants/RepositoriesTableHeaderLabels';
@@ -181,7 +182,7 @@ class RepositoriesTable extends mixin(StoreMixin) {
       <div className="container-pod container-pod-short text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
         <p>
-          {`Repository (${repositoryLabel}) will be removed from DC/OS. You will not be able to install any packages belonging to that repository anymore.`}
+          {`Repository (${repositoryLabel}) will be removed from ${Config.productName}. You will not be able to install any packages belonging to that repository anymore.`}
         </p>
         {error}
       </div>

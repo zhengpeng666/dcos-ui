@@ -2,6 +2,8 @@ var React = require('react');
 
 import {Modal} from 'reactjs-components';
 
+import Config from '../../config/Config';
+
 var VersionsModal = React.createClass({
 
   displayName: 'VersionsModal',
@@ -36,7 +38,7 @@ var VersionsModal = React.createClass({
         size="large"
         titleClass="modal-header-title text-align-center flush-top
           flush-bottom"
-        titleText="DC/OS Info">
+        titleText={`${Config.productName} Info`}>
         {this.getContent()}
       </Modal>
     );

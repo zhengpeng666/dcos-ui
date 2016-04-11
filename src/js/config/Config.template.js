@@ -15,6 +15,9 @@ var ConfigDev = {
         banner: {
           enabled: false
         },
+        branding: {
+          enabled: false
+        },
         'external-links': {
           enabled: ee
         },

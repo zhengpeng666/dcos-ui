@@ -1,8 +1,9 @@
 var classNames = require('classnames');
+import {Modal} from 'reactjs-components';
 var React = require('react');
 
+import Config from '../../config/Config';
 var InternalStorageMixin = require('../../mixins/InternalStorageMixin');
-import {Modal} from 'reactjs-components';
 var Validator = require('../../utils/Validator');
 
 var IdentifyModal = React.createClass({
@@ -46,7 +47,7 @@ var IdentifyModal = React.createClass({
       <div className="button-collection button-collection-align-horizontal-center flush-bottom">
         <button className="button button-primary button-large button-wide-below-screen-mini"
             onClick={this.handleSubmit}>
-          Try Mesosphere DC/OS
+          Try {Config.productName}
         </button>
       </div>
     );
@@ -87,7 +88,7 @@ var IdentifyModal = React.createClass({
         showFooter={true}
         subHeader={this.getSubHeader()}
         titleClass="modal-header-title text-align-center flush-top"
-        titleText="Mesosphere DC/OS">
+        titleText={Config.productName}>
         <form className="flush-bottom"
           onSubmit={this.handleSubmit}>
           <div className={emailClassSet}>
