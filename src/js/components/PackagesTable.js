@@ -8,6 +8,7 @@ import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import CosmosMessages from '../constants/CosmosMessages';
 import CosmosPackagesStore from '../stores/CosmosPackagesStore';
+import Config from '../config/Config';
 import PackagesTableHeaderLabels from '../constants/PackagesTableHeaderLabels';
 import ResourceTableUtil from '../utils/ResourceTableUtil';
 import TableUtil from '../utils/TableUtil';
@@ -197,7 +198,7 @@ class PackagesTable extends mixin(StoreMixin) {
       <div className="container-pod container-pod-short text-align-center">
         <h3 className="flush-top">Are you sure?</h3>
         <p>
-          {`${packageLabel} will be uninstalled from DC/OS. All tasks belonging to this package will be killed.`}
+          {`${packageLabel} will be uninstalled from ${Config.productName}. All tasks belonging to this package will be killed.`}
         </p>
         {this.getErrorMessage()}
       </div>

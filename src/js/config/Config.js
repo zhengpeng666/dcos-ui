@@ -14,6 +14,8 @@ var Config = {
   environment: '@@ENV',
   historyLength: 31,
   historyServer: '',
+  fullProductName: 'DC/OS',
+  productName: 'DC/OS',
   productHomepageURI: 'https://dcos.io',
   rootUrl: '',
   stateLoadDelay: 1000,
