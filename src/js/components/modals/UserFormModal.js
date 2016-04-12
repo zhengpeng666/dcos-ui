@@ -57,10 +57,14 @@ class UserFormModal extends mixin(StoreMixin) {
 
   handleNewUserSubmit(model) {
     this.setState({disableNewUser: true});
-    UserStore.addUser(_.extend({}, model, {
-      creator_uid: AuthStore.getUser().uid,
-      cluster_url: `${window.location.protocol}//${window.location.hostname}`
-    }));
+
+    let userModelObject = Hooks.applyFilter('userModelObject', _.extend(
+      {}, model, {
+        creator_uid: AuthStore.getUser().uid,
+        cluster_url: `${window.location.protocol}//${window.location.hostname}`
+      }
+    ));
+    UserStore.addUser(userModelObject);
   }
 
   getButtonDefinition() {
