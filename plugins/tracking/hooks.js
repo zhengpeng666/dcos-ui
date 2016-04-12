@@ -12,7 +12,8 @@ let segmentScript = `!function(){var analytics=window.analytics=window.analytics
 module.exports = {
   filters: [
     'installCLIModalCLIInstallURL',
-    'installCLIModalCLIInstallScript'
+    'installCLIModalCLIInstallScript',
+    'userFormModalFooter'
   ],
 
   actions: [
@@ -59,6 +60,10 @@ module.exports = {
 
   userLogoutSuccess: function () {
     Actions.log('dcos_logout');
+  },
+
+  userFormModalFooter: function () {
+    return null;
   }
 
 };
