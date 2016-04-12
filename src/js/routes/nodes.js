@@ -26,14 +26,14 @@ let nodesRoutes = {
             {
               type: Route,
               name: 'nodes-list-panel-health',
-              path: ':unitNodeID/:unitID'
+              path: ':unitNodeID/:unitID/?'
             }
           ]
         },
         {
           type: Route,
           name: 'nodes-list-task-panel',
-          path: 'task-detail/:taskID'
+          path: 'task-detail/:taskID/?'
         }
       ]
     },
@@ -51,14 +51,14 @@ let nodesRoutes = {
             {
               type: Route,
               name: 'nodes-grid-panel-health',
-              path: ':unitNodeID/:unitID'
+              path: ':unitNodeID/:unitID/?'
             }
           ]
         },
         {
           type: Route,
           name: 'nodes-grid-task-panel',
-          path: 'task-detail/:taskID'
+          path: 'task-detail/:taskID/?'
         }
       ]
     },

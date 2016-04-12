@@ -64,7 +64,7 @@ function onApplicationLoad() {
         appRoutes.getRoutes()
       );
 
-      Router.run(builtRoutes[0], function (Handler, state) {
+      let router = Router.run(builtRoutes[0], function (Handler, state) {
         Config.setOverrides(state.query);
         ReactDOM.render(
           (<Provider store={PluginSDK.Store}>
@@ -72,6 +72,8 @@ function onApplicationLoad() {
           </Provider>),
           domElement);
       });
+
+      PluginSDK.Hooks.doAction('applicationRouter', router);
     });
   }
 

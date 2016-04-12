@@ -18,7 +18,8 @@ module.exports = {
   actions: [
     'pluginsConfigured',
     'processLoginSuccess',
-    'userLogoutSuccess'
+    'userLogoutSuccess',
+    'applicationRouter'
   ],
 
   initialize: function () {
@@ -50,6 +51,10 @@ module.exports = {
 
   installCLIModalCLIInstallScript: function () {
     return './install.sh';
+  },
+
+  applicationRouter: function (applicationRouter) {
+    Actions.setApplicationRouter(applicationRouter);
   },
 
   userLogoutSuccess: function () {

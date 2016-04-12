@@ -13,18 +13,18 @@ let servicesRoutes = {
     {
       type: Route,
       name: 'service-ui',
-      path: 'ui/:serviceName',
+      path: 'ui/:serviceName/?',
       handler: ServiceOverlay
     },
     {
       type: Route,
       name: 'services-panel',
-      path: 'service-detail/:serviceName'
+      path: 'service-detail/:serviceName/?'
     },
     {
       type: Route,
       name: 'services-task-panel',
-      path: 'task-detail/:taskID'
+      path: 'task-detail/:taskID/?'
     }
   ]
 };

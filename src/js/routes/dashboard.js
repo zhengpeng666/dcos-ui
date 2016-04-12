@@ -12,12 +12,12 @@ let dashboardRoutes = {
     {
       type: Route,
       name: 'dashboard-panel',
-      path: 'service-detail/:serviceName'
+      path: 'service-detail/:serviceName/?'
     },
     {
       type: Route,
       name: 'dashboard-task-panel',
-      path: 'task-detail/:taskID'
+      path: 'task-detail/:taskID/?'
     },
     {
       type: Route,
@@ -27,7 +27,7 @@ let dashboardRoutes = {
         {
           type: Route,
           name: 'dashboard-units-unit-nodes-node-panel',
-          path: 'nodes/:unitNodeID'
+          path: 'nodes/:unitNodeID/?'
         }
       ]
     }
