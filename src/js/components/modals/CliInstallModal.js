@@ -48,7 +48,7 @@ var CliInstructionsModal = React.createClass({
       );
       requirements = (
         <p>
-          Install the {Config.productName} command-line interface (CLI) tool on your local system by following <a href={`${Config.documentationURI}/administration/introcli/cli/#windows`} target="_blank">these instructions</a>. You must install the CLI to administer your DCOS cluster. {appendText}
+          Install the {Config.productName} command-line interface (CLI) tool on your local system by following <a href={`${Config.documentationURI}/usage/cli/install/#windows`} target="_blank">these instructions</a>. You must install the CLI to administer your DCOS cluster. {appendText}
         </p>
       );
     } else {
