@@ -234,16 +234,16 @@ class InstallPackageModal extends
       configuration = advancedConfiguration;
     }
 
-    let advancedName =
-      Util.findNestedPropertyInObject(configuration, 'service.name');
-
-    // Copy appId to framework name when using default install
+    // Copy appId to service name when using default install
     if (!isAdvancedInstall) {
       configuration = {[name]: {}, service: {name: appId}};
     }
 
-    // Copy framework name to appId when using advanced install and
-    // name option is available
+    let advancedName =
+      Util.findNestedPropertyInObject(configuration, 'service.name');
+
+    // Copy service name to appId when using advanced install and
+    // name is set
     if (isAdvancedInstall && advancedName) {
       appId = advancedName;
     }
