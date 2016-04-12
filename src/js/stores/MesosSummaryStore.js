@@ -11,7 +11,6 @@ import {
   VISIBILITY_CHANGE
 } from '../constants/EventTypes';
 var GetSetMixin = require('../mixins/GetSetMixin');
-import {Hooks} from 'PluginSDK';
 var MesosSummaryUtil = require('../utils/MesosSummaryUtil');
 var MesosSummaryActions = require('../events/MesosSummaryActions');
 import SummaryList from '../structs/SummaryList';
@@ -22,7 +21,7 @@ import VisibilityStore from './VisibilityStore';
 var requestInterval = null;
 
 function startPolling() {
-  if (requestInterval == null) {
+  if (requestInterval == null && MesosSummaryStore.shouldPoll()) {
     // Should always retrieve bulk summary when polling starts
     MesosSummaryActions.fetchSummary(TimeScales.MINUTE);
     requestInterval = setInterval(
@@ -48,9 +47,6 @@ function handleInactiveChange() {
 }
 
 VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
-Hooks.addAction('userLogoutSuccess', function () {
-  stopPolling();
-});
 
 var MesosSummaryStore = Store.createStore({
   storeID: 'summary',
@@ -62,11 +58,10 @@ var MesosSummaryStore = Store.createStore({
       return;
     }
 
-    this.setInitialValues();
-
     this.set({
       initCalledAt: Date.now(), // log when we started calling
       loading: null,
+      states: this.getInitialStates(),
       prevMesosStatusesMap: {},
       statesProcessed: false,
       taskFailureRate: MesosSummaryUtil.getInitialTaskFailureRates()
@@ -75,20 +70,21 @@ var MesosSummaryStore = Store.createStore({
     startPolling();
   },
 
-  setInitialValues: function () {
+  getInitialStates: function () {
     let initialStates = MesosSummaryUtil.getInitialStates();
-    let list = new SummaryList({maxLength: Config.historyLength});
+    let states = new SummaryList({maxLength: Config.historyLength});
     _.clone(initialStates).forEach(state => {
-      list.addSnapshot(state, state.date);
+      states.addSnapshot(state, state.date);
     });
-    this.set({states: list});
+
+    return states;
   },
 
   unmount: function () {
     this.set({
       initCalledAt: null,
       loading: null,
-      states: [],
+      states: this.getInitialStates(),
       prevMesosStatusesMap: {},
       statesProcessed: false,
       taskFailureRate: []
@@ -99,10 +95,20 @@ var MesosSummaryStore = Store.createStore({
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
+
+    startPolling();
   },
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
+
+    if (!this.shouldPoll()) {
+      stopPolling();
+    }
+  },
+
+  shouldPoll: function () {
+    return !_.isEmpty(this.listeners(MESOS_SUMMARY_CHANGE));
   },
 
   getActiveServices: function () {
