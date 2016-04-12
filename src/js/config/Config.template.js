@@ -26,8 +26,6 @@ var ConfigDev = {
         },
         oauth: {
           enabled: false,
-          clientID: 'IBcqrIBD0yMz0xjZCSvZz2BKc3zr43Dw',
-          authLocation: 'https://dcos.auth0.com/login',
           authHost: 'https://dcos.auth0.com'
         },
         organization: {
