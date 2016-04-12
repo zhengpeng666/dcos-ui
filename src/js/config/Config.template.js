@@ -1,6 +1,6 @@
 // Configuration overrides
 
-var ee = true;
+var enterprise = true;
 
 var ConfigDev = {
   analyticsKey: '39uhSEOoRHMw6cMR6st9tYXDbAL3JSaP',
@@ -10,19 +10,19 @@ var ConfigDev = {
     uiConfiguration: {
       plugins: {
         authentication: {
-          enabled: ee
+          enabled: enterprise
         },
         banner: {
           enabled: false
         },
         branding: {
-          enabled: false
+          enabled: enterprise
         },
         'external-links': {
-          enabled: ee
+          enabled: enterprise
         },
         networking: {
-          enabled: ee
+          enabled: enterprise
         },
         oauth: {
           enabled: false,
@@ -31,13 +31,13 @@ var ConfigDev = {
           authHost: 'https://dcos.auth0.com'
         },
         organization: {
-          enabled: ee
+          enabled: enterprise
         },
         'overview-detail': {
           enabled: true
         },
         tracking: {
-          enabled: ee
+          enabled: true
         }
       }
     },

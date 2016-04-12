@@ -27,7 +27,7 @@ let RouteFactory = {
                   {
                     type: Route,
                     name: 'system-overview-units-unit-nodes-node-panel',
-                    path: 'nodes/:unitNodeID'
+                    path: 'nodes/:unitNodeID/?'
                   }
                 ]
               },

@@ -6,11 +6,11 @@ let SDK = require('../SDK').getSDK();
 let {Config, Util} = SDK.get(['Config', 'Util']);
 
 var Actions = {
-  activePage: '',
-
   previousFakePageLog: '',
 
   dcosMetadata: null,
+
+  applicationRouter: null,
 
   logQueue: [],
 
@@ -64,12 +64,20 @@ var Actions = {
     }
   },
 
+  setApplicationRouter: function (applicationRouter) {
+    this.applicationRouter = applicationRouter;
+
+    if (this.canLog()) {
+      this.drainQueue();
+    }
+  },
+
   start: function () {
     this.createdAt = Date.now();
     this.lastLogDate = this.createdAt;
     this.stintID = md5(`session_${this.createdAt}`);
 
-    this.setActivePage(this.getActivePage());
+    this.setActivePage(RouterLocation.getCurrentPath());
 
     RouterLocation.addChangeListener(Util.debounce(function (data) {
       Actions.setActivePage(data.path);
@@ -91,7 +99,8 @@ var Actions = {
   canLog: function () {
     return !!(global.analytics
       && global.analytics.initialized
-      && this.dcosMetadata != null);
+      && this.dcosMetadata != null
+      && this.applicationRouter != null);
   },
 
   drainQueue: function () {
@@ -121,21 +130,16 @@ var Actions = {
   },
 
   setActivePage: function (path) {
+    if (path[path.length - 1] === '/') {
+      path = path.substring(0, path.length - 1);
+    }
+
     if (!this.canLog()) {
       this.pageQueue.push(path);
       return;
     }
 
-    if (path[path.length - 1] === '/') {
-      path = path.substring(0, path.length - 1);
-    }
-
-    this.activePage = path;
     this.logPage(path);
-  },
-
-  getActivePage: function () {
-    return RouterLocation.getCurrentPath();
   },
 
   getStintID: function () {
@@ -159,7 +163,14 @@ var Actions = {
       return;
     }
 
-    global.analytics.identify(uid, this.getLogData());
+    if (!SDK.Hooks.applyFilter('shouldIdentifyLoggedInUser', true)) {
+      return;
+    }
+
+    let traits = _.extend(this.getLogData(), {email: uid});
+    global.analytics.identify(
+      uid, traits, this.getAnonymizingKeys()
+    );
 
     this.log('dcos_login');
   },
@@ -170,8 +181,25 @@ var Actions = {
       return;
     }
 
-    let data = _.extend(this.getLogData(), {path});
-    global.analytics.page(data);
+    let match = this.applicationRouter.match(path);
+    let route = match.routes[match.routes.length - 1];
+    let pathMatcher = route.path;
+
+    if (route.paramNames && route.paramNames.length) {
+      route.paramNames.forEach(function (param) {
+        pathMatcher = pathMatcher.replace(`:${param}?`, `[${param}]`);
+        pathMatcher = pathMatcher.replace(`:${param}`, `[${param}]`);
+      });
+    }
+
+    // Replaces '/?/' and '/?' with '/'
+    path = pathMatcher.replace(/\/\?\/?/g, '/');
+
+    global.analytics.page(_.extend(
+      this.getLogData(),
+      this.getAnonymizingKeys().page,
+      {path}
+    ));
   },
 
   /**
@@ -187,7 +215,19 @@ var Actions = {
     // Populates with basic data that all logs need
     var log = this.getLogData();
 
-    global.analytics.track(eventID, log);
+    global.analytics.track(eventID, log, this.getAnonymizingKeys());
+  },
+
+  getAnonymizingKeys: function () {
+    return {
+      page: {
+        // Anonymize
+        referrer: '',
+        url: '',
+        path: '',
+        title: ''
+      }
+    };
   }
 
 };
