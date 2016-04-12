@@ -10,6 +10,8 @@ import AuthStore from '../../stores/AuthStore';
 import UserStore from '../../stores/UserStore';
 import FormModal from '../FormModal';
 
+const TELEMETRY_NOTIFICATION = 'Because telemetry is disabled you must manually notify users of ACL changes.';
+
 const METHODS_TO_BIND = [
   'handleNewUserSubmit',
   'onUserStoreCreateSuccess'
@@ -106,6 +108,12 @@ class UserFormModal extends mixin(StoreMixin) {
     ));
   }
 
+  getFooter() {
+    return Hooks.applyFilter('userFormModalFooter', (
+      <p className="flush-bottom"><strong>Important:</strong> {TELEMETRY_NOTIFICATION}</p>
+    ));
+  }
+
   render() {
     return (
       <FormModal
@@ -114,7 +122,8 @@ class UserFormModal extends mixin(StoreMixin) {
         disabled={this.state.disableNewUser}
         onClose={this.props.onClose}
         onSubmit={this.handleNewUserSubmit}
-        open={this.props.open}>
+        open={this.props.open}
+        contentFooter={this.getFooter()}>
         {this.getHeader()}
       </FormModal>
     );

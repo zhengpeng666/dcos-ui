@@ -98,17 +98,27 @@ class FormModal extends React.Component {
     );
   }
 
+  getClassName(hasContentFooter) {
+    if (hasContentFooter) {
+      return 'form';
+    }
+
+    return 'form flush-bottom';
+  }
+
   getContent() {
     return (
       <div ref="form-wrapper"
         className="container container-pod flush-top flush-bottom">
         {this.props.children}
         <Form
+          className={this.getClassName(!!this.props.contentFooter)}
           definition={this.props.definition}
           triggerSubmit={this.getTriggerSubmit}
           onSubmit={this.props.onSubmit}
           onChange={this.props.onChange}
           onError={this.handleError} />
+        {this.props.contentFooter}
       </div>
     );
   }
@@ -158,6 +168,7 @@ FormModal.defaultProps = {
 FormModal.propTypes = {
   buttonDefinition: React.PropTypes.array,
   children: React.PropTypes.node,
+  contentFooter: React.PropTypes.node,
   definition: React.PropTypes.array,
   disabled: React.PropTypes.bool,
   extraFooterContent: React.PropTypes.node,
