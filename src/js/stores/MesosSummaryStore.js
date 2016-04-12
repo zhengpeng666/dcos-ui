@@ -5,25 +5,26 @@ var AppDispatcher = require('../events/AppDispatcher');
 import ActionTypes from '../constants/ActionTypes';
 import CompositeState from '../structs/CompositeState';
 var Config = require('../config/Config');
-import EventTypes from '../constants/EventTypes';
+import {
+  MESOS_SUMMARY_CHANGE,
+  MESOS_SUMMARY_REQUEST_ERROR,
+  VISIBILITY_CHANGE
+} from '../constants/EventTypes';
 var GetSetMixin = require('../mixins/GetSetMixin');
+import {Hooks} from 'PluginSDK';
 var MesosSummaryUtil = require('../utils/MesosSummaryUtil');
 var MesosSummaryActions = require('../events/MesosSummaryActions');
 import SummaryList from '../structs/SummaryList';
 import StateSummary from '../structs/StateSummary';
 var TimeScales = require('../constants/TimeScales');
+import VisibilityStore from './VisibilityStore';
 
 var requestInterval = null;
 
 function startPolling() {
   if (requestInterval == null) {
-    var timeScale;
-
-    if (!MesosSummaryStore.get('statesProcessed')) {
-      timeScale = TimeScales.MINUTE;
-    }
-
-    MesosSummaryActions.fetchSummary(timeScale);
+    // Should always retrieve bulk summary when polling starts
+    MesosSummaryActions.fetchSummary(TimeScales.MINUTE);
     requestInterval = setInterval(
       MesosSummaryActions.fetchSummary, Config.getRefreshRate()
     );
@@ -37,33 +38,50 @@ function stopPolling() {
   }
 }
 
+function handleInactiveChange() {
+  let isInactive = VisibilityStore.get('isInactive');
+  if (isInactive) {
+    stopPolling();
+  } else {
+    startPolling();
+  }
+}
+
+VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
+Hooks.addAction('userLogoutSuccess', function () {
+  stopPolling();
+});
+
 var MesosSummaryStore = Store.createStore({
   storeID: 'summary',
 
   mixins: [GetSetMixin],
 
   init: function () {
-
     if (this.get('initCalledAt') != null) {
       return;
     }
 
-    let initialStates = MesosSummaryUtil.getInitialStates();
-    let list = new SummaryList({maxLength: Config.historyLength});
-    _.clone(initialStates).forEach(state => {
-      list.addSnapshot(state, state.date);
-    });
+    this.setInitialValues();
 
     this.set({
       initCalledAt: Date.now(), // log when we started calling
       loading: null,
-      states: list,
       prevMesosStatusesMap: {},
       statesProcessed: false,
       taskFailureRate: MesosSummaryUtil.getInitialTaskFailureRates()
     });
 
     startPolling();
+  },
+
+  setInitialValues: function () {
+    let initialStates = MesosSummaryUtil.getInitialStates();
+    let list = new SummaryList({maxLength: Config.historyLength});
+    _.clone(initialStates).forEach(state => {
+      list.addSnapshot(state, state.date);
+    });
+    this.set({states: list});
   },
 
   unmount: function () {
@@ -113,7 +131,7 @@ var MesosSummaryStore = Store.createStore({
 
   updateStateProcessed: function () {
     this.set({statesProcessed: true});
-    this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
+    this.emit(MESOS_SUMMARY_CHANGE);
   },
 
   notifySummaryProcessed: function () {
@@ -122,7 +140,7 @@ var MesosSummaryStore = Store.createStore({
     if (this.get('statesProcessed') ||
         this.get('loading') != null ||
         initCalledAt == null) {
-      this.emit(EventTypes.MESOS_SUMMARY_CHANGE);
+      this.emit(MESOS_SUMMARY_CHANGE);
       return;
     }
 
@@ -168,10 +186,8 @@ var MesosSummaryStore = Store.createStore({
   },
 
   processBulkState: function (data) {
-    // BUG: Will remove once we confirm the source of error
     if (!Array.isArray(data)) {
-      console.warn(`${data} is not an Array.`);
-      return;
+      return MesosSummaryActions.fetchSummary(TimeScales.MINUTE);
     }
     // Multiply Config.stateRefresh in order to use larger time slices
     data = MesosSummaryUtil.addTimestampsToData(data, Config.getRefreshRate());
@@ -189,7 +205,7 @@ var MesosSummaryStore = Store.createStore({
     this.setFailureRate(states.last(), prevState);
 
     if (!options.silent) {
-      this.emit(EventTypes.MESOS_SUMMARY_REQUEST_ERROR);
+      this.emit(MESOS_SUMMARY_REQUEST_ERROR);
     }
   },
 

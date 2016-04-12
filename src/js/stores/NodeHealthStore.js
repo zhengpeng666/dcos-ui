@@ -21,6 +21,7 @@ import {
   HEALTH_NODE_UNIT_SUCCESS,
   HEALTH_NODES_CHANGE,
   HEALTH_NODES_ERROR,
+  VISIBILITY_CHANGE
 } from '../constants/EventTypes';
 import AppDispatcher from '../events/AppDispatcher';
 import CompositeState from '../structs/CompositeState';
@@ -31,6 +32,7 @@ import HealthUnitsList from '../structs/HealthUnitsList';
 import GetSetMixin from '../mixins/GetSetMixin';
 import Node from '../structs/Node';
 import NodesList from '../structs/NodesList';
+import VisibilityStore from './VisibilityStore';
 
 let requestInterval = null;
 
@@ -50,6 +52,19 @@ function stopPolling() {
   }
 }
 
+function handleInactiveChange() {
+  let isInactive = VisibilityStore.get('isInactive');
+  if (isInactive) {
+    stopPolling();
+  }
+
+  if (!isInactive && NodeHealthStore.shouldPoll()) {
+    startPolling();
+  }
+}
+
+VisibilityStore.addChangeListener(VISIBILITY_CHANGE, handleInactiveChange);
+
 const NodeHealthStore = Store.createStore({
 
   storeID: 'nodeHealth',
@@ -65,15 +80,21 @@ const NodeHealthStore = Store.createStore({
 
   addChangeListener: function (eventName, callback) {
     this.on(eventName, callback);
-    startPolling();
+    if (this.shouldPoll()) {
+      startPolling();
+    }
   },
 
   removeChangeListener: function (eventName, callback) {
     this.removeListener(eventName, callback);
 
-    if (_.isEmpty(this.listeners(HEALTH_NODES_CHANGE))) {
+    if (!this.shouldPoll()) {
       stopPolling();
     }
+  },
+
+  shouldPoll: function () {
+    return !_.isEmpty(this.listeners(HEALTH_NODES_CHANGE));
   },
 
   getNodes: function () {
