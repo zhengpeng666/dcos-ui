@@ -84,8 +84,7 @@ var VisibilityStore = Store.createStore({
 
     if (!this.get('isInactive') && !this.timeOut && !this.get('isTabVisible')) {
       this.timeOut = setTimeout(() => {
-        let isInactive = true;
-        this.set({isInactive});
+        this.set({isInactive: true});
         this.emit(VISIBILITY_CHANGE);
 
       }, Config.setInactiveAfter || 0);
@@ -97,8 +96,7 @@ var VisibilityStore = Store.createStore({
         this.timeOut = null;
       }
 
-      let isInactive = false;
-      this.set({isInactive});
+      this.set({isInactive: false});
       this.emit(VISIBILITY_CHANGE);
     }
   }
