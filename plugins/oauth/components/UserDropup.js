@@ -134,14 +134,11 @@ class UserDropup extends React.Component {
     ]);
 
     return items.map((item) => {
-      // Override classes and tooltip, and monkeypatch the onClick to close
-      // the dropdown
+      // Override handlers for the tooltip.
       let props = {
-        className: '',
-        'data-behavior': '',
-        'data-tip-content': '',
-        'data-tip-place': '',
-        onClick: this.handleMenuItemClick.bind(this, item.props.onClick)
+        onClick: this.handleMenuItemClick.bind(this, item.props.onClick),
+        onMouseEnter: null,
+        onMouseLeave: null
       };
 
       return React.cloneElement(item, props, MENU_ITEMS[item.key]);
