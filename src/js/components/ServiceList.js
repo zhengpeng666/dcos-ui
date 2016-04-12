@@ -92,7 +92,7 @@ let ServiceList = React.createClass({
             className: 'service-list-component-health-label text-align-right',
             content: (
               <Tooltip anchor="end" content={tooltipContent} key="health"
-                wrapperClassName={classSet} wrapText={true} maxWidth={300}>
+                wrapperClassName={classSet} wrapText={true} width={200}>
                 {healthLabel}
               </Tooltip>
             ),
