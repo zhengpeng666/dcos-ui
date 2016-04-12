@@ -11,9 +11,9 @@ import {
   VISIBILITY_CHANGE
 } from '../constants/EventTypes';
 var GetSetMixin = require('../mixins/GetSetMixin');
+import {Hooks} from 'PluginSDK';
 var MesosSummaryUtil = require('../utils/MesosSummaryUtil');
 var MesosSummaryActions = require('../events/MesosSummaryActions');
-import {Hooks} from 'PluginSDK';
 import SummaryList from '../structs/SummaryList';
 import StateSummary from '../structs/StateSummary';
 var TimeScales = require('../constants/TimeScales');
