@@ -3,11 +3,11 @@ import Config from '../config/Config';
 const UnitSummaries = {
   'dcos-marathon.service': {
     summary: `The ${Config.productName} Marathon instance starts and monitors ${Config.productName} applications and services.`,
-    documentation_url: `${Config.documentationURI}/administration/dcosarchitecture/components/`
+    documentation_url: `${Config.documentationURI}/overview/components/`
   },
   'dcos-mesos-dns.service': {
     summary: `Mesos DNS provides service discovery within the cluster.`,
-    documentation_url: `${Config.documentationURI}/administration/dcosarchitecture/components/`
+    documentation_url: `${Config.documentationURI}/overview/components/`
   },
   'dcos-mesos-master.service': {
     summary: `The Mesos master process orchestrates agent tasks.`,
