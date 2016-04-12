@@ -180,10 +180,11 @@ class InstallPackageModal extends
     this.tabs_handleTabClick(currentTab);
   }
 
-  handleInstallPackage(isDefaultInstall) {
+  handleInstallPackage() {
     let {name, version} = CosmosPackagesStore
       .getPackageDetails().get('package');
-    let {appId, configuration} = this.getAppIdAndConfiguration(isDefaultInstall);
+    let {appId, configuration} = this.getAppIdAndConfiguration();
+
     CosmosPackagesStore.installPackage(name, version, appId, configuration);
     this.internalStorage_update({pendingRequest: true});
     this.forceUpdate();
@@ -216,7 +217,7 @@ class InstallPackageModal extends
     }];
   }
 
-  getAppIdAndConfiguration(isDefaultInstall) {
+  getAppIdAndConfiguration() {
     let {advancedConfiguration, appId} = this.internalStorage_get();
     let {currentTab} = this.state;
     let cosmosPackage = CosmosPackagesStore.getPackageDetails();
@@ -229,29 +230,21 @@ class InstallPackageModal extends
       SchemaUtil.schemaToMultipleDefinition(cosmosPackage.get('config'))
     );
 
-    // Rely on default configurations
-    if (isDefaultInstall) {
-      configuration = {[name]: {}};
-    }
-
     if (isAdvancedInstall && advancedConfiguration) {
       configuration = advancedConfiguration;
+    }
+
+    // Copy appId to service name when using default install
+    if (!isAdvancedInstall) {
+      configuration = {[name]: {}, service: {name: appId}};
     }
 
     let advancedName =
       Util.findNestedPropertyInObject(configuration, 'service.name');
 
-    // Copy appId to framework name when using default install and
-    // name option is available
-    if (advancedName && !isAdvancedInstall && appId) {
-      if (configuration.service && configuration.service.hasOwnProperty('name')) {
-        configuration.service.name = appId;
-      }
-    }
-
-    // Copy framework name to appId when using advanced install and
-    // name option is available
-    if (advancedName && isAdvancedInstall) {
+    // Copy service name to appId when using advanced install and
+    // name is set
+    if (isAdvancedInstall && advancedName) {
       appId = advancedName;
     }
 
@@ -347,7 +340,7 @@ class InstallPackageModal extends
               <button
                 disabled={!cosmosPackage || pendingRequest || descriptionError}
                 className="button button-success flush-bottom button-wide flush"
-                onClick={this.handleInstallPackage.bind(this, true)}>
+                onClick={this.handleInstallPackage}>
                 {buttonText}
               </button>
               <button
