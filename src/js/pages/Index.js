@@ -47,14 +47,13 @@ var Index = React.createClass({
     SidebarStore.init();
 
     this.store_listeners = [{
-        name: 'summary',
-        events: ['success', 'error'],
-        unmountWhen: function (store, event) {
-          return event === 'success';
-        },
-        listenAlways: false
-      }
-    ];
+      name: 'summary',
+      events: ['success', 'error'],
+      unmountWhen: function (store, event) {
+        return event === 'success';
+      },
+      listenAlways: false
+    }];
 
     let state = getSidebarState();
     state.metadataLoaded = false;
