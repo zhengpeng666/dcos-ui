@@ -181,19 +181,26 @@ var Actions = {
       return;
     }
 
-    let match = this.applicationRouter.match(path);
-    let route = match.routes[match.routes.length - 1];
-    let pathMatcher = route.path;
+    let pathIsString = typeof path === 'string';
+    let match = pathIsString && this.applicationRouter.match(path);
+    if (match) {
+      let route = match.routes[match.routes.length - 1];
+      let pathMatcher = route.path;
 
-    if (route.paramNames && route.paramNames.length) {
-      route.paramNames.forEach(function (param) {
-        pathMatcher = pathMatcher.replace(`:${param}?`, `[${param}]`);
-        pathMatcher = pathMatcher.replace(`:${param}`, `[${param}]`);
-      });
+      if (route.paramNames && route.paramNames.length) {
+        route.paramNames.forEach(function (param) {
+          pathMatcher = pathMatcher.replace(`:${param}?`, `[${param}]`);
+          pathMatcher = pathMatcher.replace(`:${param}`, `[${param}]`);
+        });
+      }
+
+      // Replaces '/?/' and '/?' with '/'
+      path = pathMatcher.replace(/\/\?\/?/g, '/');
+    } else {
+      if (pathIsString) {
+        path = '/unknown';
+      }
     }
-
-    // Replaces '/?/' and '/?' with '/'
-    path = pathMatcher.replace(/\/\?\/?/g, '/');
 
     global.analytics.page(_.extend(
       this.getLogData(),
