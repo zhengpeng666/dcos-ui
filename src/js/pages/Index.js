@@ -46,13 +46,12 @@ var Index = React.createClass({
     MetadataStore.init();
     SidebarStore.init();
 
+    // We want to always request the summary endpoint. This will ensure that
+    // our charts always have data to render.
     this.store_listeners = [{
       name: 'summary',
       events: ['success', 'error'],
-      unmountWhen: function (store, event) {
-        return event === 'success';
-      },
-      listenAlways: false
+      suppressUpdate: true
     }];
 
     let state = getSidebarState();
