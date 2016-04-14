@@ -80,7 +80,7 @@ let AuthStore = Store.createStore({
         AuthStore.processLoginSuccess();
         break;
       case REQUEST_LOGIN_ERROR:
-        AuthStore.emit(AUTH_USER_LOGIN_ERROR, action.data);
+        AuthStore.emit(AUTH_USER_LOGIN_ERROR, action.data, action.xhr);
         break;
       case REQUEST_LOGOUT_SUCCESS:
         AuthStore.processLogoutSuccess();
