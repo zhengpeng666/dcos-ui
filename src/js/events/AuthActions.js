@@ -34,7 +34,8 @@ const AuthActions = {
       error: function (xhr) {
         AppDispatcher.handleServerAction({
           type: REQUEST_LOGIN_ERROR,
-          data: RequestUtil.getErrorFromXHR(xhr)
+          data: RequestUtil.getErrorFromXHR(xhr),
+          xhr
         });
       }
     });

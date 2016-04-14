@@ -1,12 +1,14 @@
 import React from 'react';
 import mixin from 'reactjs-mixin';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
+import {Modal} from 'reactjs-components';
 
 let SDK = require('../SDK').getSDK();
 
-let AuthStore = SDK.get('AuthStore');
+let {AuthStore, Config} = SDK.get(['AuthStore', 'Config']);
 
 let METHODS_TO_BIND = [
+  'handleModalClose',
   'onMessageReceived'
 ];
 
@@ -25,6 +27,10 @@ class LoginPage extends mixin(StoreMixin) {
         suppressUpdate: true
       }
     ];
+
+    this.state = {
+      showClusterError: false
+    };
 
     METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
@@ -67,8 +73,16 @@ class LoginPage extends mixin(StoreMixin) {
     }
   }
 
-  onAuthStoreError() {
-    this.navigateToAccessDenied();
+  onAuthStoreError(message, xhr) {
+    if (xhr.status >= 400 && xhr.status < 500) {
+      this.navigateToAccessDenied();
+    } else {
+      this.setState({showClusterError: true});
+    }
+  }
+
+  handleModalClose() {
+    this.setState({showClusterError: false});
   }
 
   navigateToAccessDenied() {
@@ -84,13 +98,29 @@ class LoginPage extends mixin(StoreMixin) {
     let location = `/login?firstUser=${firstUser}`;
 
     return (
-      <div className="iframe-page-container">
-        <iframe
-          width="100%"
-          height="100%"
-          frameBorder="0"
-          id="oauth-iframe"
-          src={location} />
+      <div>
+        <div className="iframe-page-container">
+          <iframe
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            id="oauth-iframe"
+            src={location} />
+        </div>
+        <Modal
+          maxHeightPercentage={0.9}
+          onClose={this.handleModalClose}
+          open={this.state.showClusterError}
+          showCloseButton={true}
+          showHeader={false}
+          showFooter={false}>
+          <p className="text-align-center">
+            Unable to login to your DC/OS cluster. Clusters must be connected to the internet.
+          </p>
+          <p className="flush-bottom text-align-center">
+            Please contact your system administrator or see the <a href={`${Config.documentationURI}/administration/installing/`} target="_blank">documentation.</a>
+          </p>
+        </Modal>
       </div>
     );
   }
