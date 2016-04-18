@@ -1,62 +1,37 @@
-# DCOS UI [![Velocity](http://velocity.mesosphere.com/service/velocity/buildStatus/icon?job=dcos-ui-master)](http://velocity.mesosphere.com/service/velocity/view/DCOS%20UI/job/dcos-ui-master/)
+# DC/OS UI [![Velocity](http://velocity.mesosphere.com/service/velocity/buildStatus/icon?job=dcos-ui-master)](http://velocity.mesosphere.com/service/velocity/view/DCOS%20UI/job/dcos-ui-master/)
 
 ## Requirements
 
 Node 4.x (and above) is **required**. We suggest using [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n) to keep multiple Node versions on your system.
 
-## Local Setup
 
-To install, run, and contribute to DCOS-UI on your local machine you will need to setup 3 different environments (listed below).  The DCOS UI is the actual application code that runs as a standalone server.  The DCOS UI Proxy is a simple Vagrant Machine that connects requests from your local DCOS UI Application Server to a DCOS Cluster (local or remote).  Optionally, you may also run a DCOS Image, also a simple Vagrant Machine, to act as a local install of the DCOS.
+## DC/OS Installation Instructions:
+- Follow the instructions [here](https://github.com/dcos/dcos-vagrant) to install a local cluster.
+- In your dcos-vagrant repo from the previous step, run `vagrant ssh m1`.
+- Open `nginx.conf` for adminrouter with `sudo vi /opt/mesosphere/active/adminrouter/nginx/conf/nginx.conf`
+- Comment out `root /opt/mesosphere/active/dcos-ui/usr;`
+  by changing the line to `# root /opt/mesosphere/active/dcos-ui/usr;`
 
-* [DCOS Image](#dcos-image)
-* [DCOS UI Proxy](#dcos-ui-proxy) (Optional)
-* [DCOS UI](#dcos-ui-1)
+- Right below the commented out line, add
+  ```
+  location ~ ^/(?!service|mesos).*\.(js|css|html|png|jpg|gif|jpeg|swf|map)$ {
+    expires -1;
+    add_header Cache-Control "no-store";
+    proxy_pass http://10.0.2.2:4200;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+  }
+  ```
+- Save and quit vi
+- Restart adminrouter with `sudo service dcos-adminrouter restart`. Your cluster is now prepped for local development.
+- [Start](#user-content-dcos-ui-1) your local development server for DC/OS.
+- Navigate to http://dcos.local.
 
-### DCOS UI Proxy
+**NOTE:** http://dcos.local will only resolve if both your DC/OS UI Server and DC/OS Cluster are operational and running.
 
-This is a simple Vagrant machine which acts as a proxy between your local DCOS UI Application Server and an active DCOS Cluster. Since the assets for the DCOS UI Application needs to make requests to endpoints located on the local DCOS Image (or a remote DCOS Cluster) which resides on a different domain, this will normally cause CORS problems due to browser security policies. This vagrant machine solves this problem by proxying both requests through the same domain.
-Pick one of the options below:
+## DC/OS UI
 
-##### Remote DCOS Cluster
-
-The instructions in the following section ([DCOS Image](#dcos-image)) have you setup a local DCOS Cluster in a virtual machine on your computer.  If you would like to instead have your local DCOS UI Application work of a remote DCOS Cluster, you will need to modify the DCOS UI Proxy you setup and ran in the steps above.  Follow these simple steps:
-
-1. Navigate to the directory in which you installed and are running your DCOS UI Proxy
-2. `vagrant ssh`
-3. `sudo vi /etc/nginx/sites-enabled/dcos-ui`
-4. Change the `proxy_pass` address in the now open text file to the address of the remote DCOS Cluster.  Be sure to comment-out or remove any other `proxy_pass` definitions.
-5. Save the configuration file (e.g. `:wq`)
-6. `sudo service nginx restart`
-
-##### Installation Instructions:
-
-1. Download the latest `dcos-ui` file from the Mesosphere Google Drive in the directory `Engineering/Frontend/Vagrant Machines`
-3. `vagrant box add dcos-ui file:///PATH/dcos-ui` (replace PATH with the path to the dcos-ui file you just downloaded)
-4. `mkdir vagrant-dcos-ui && cd vagrant-dcos-ui`
-5. `vagrant init dcos-ui`
-6. `vagrant up`
-7. Create an entry in your `/etc/hosts` (e.g. `sudo nano /etc/hosts` to open and edit) file for `192.168.50.5 dcos.local`.
-6. Navigate http://dcos.local
-
-**NOTE:** `http://dcos.local` will only resolve if both your DCOS UI Server and DCOS Image/Cluster are operational and running.
-
-### DCOS Image
-
-The DCOS Image will create a virtual machine on your computer. This machine will contain a small version of a DCOS cluster. In short, it'll have a Mesos Master, Slave, and Marathon along with other packages that are needed for DCOS to operate.
-
-**NOTE:** You can skip this step if your DCOS UI Proxy (see [DCOS UI Proxy](#dcos-ui-proxy) above) is pointing to a remote DCOS Cluster.
-
-##### Installation Instructions:
-
-1. `mkdir vagrant-dcos-image && cd vagrant-dcos-image`
-2. `curl https://downloads.dcos.io/dcos/testing/continuous/make_dcos_vagrant.sh > make_dcos_vagrant.sh`
-3. `chmod +x make_dcos_vagrant.sh`
-4. `./make_dcos_vagrant.sh`
-5. `vagrant up`
-
-### DCOS UI
-
-This repository contains the DCOS UI application. The application gathers data from endpoints located on the DCOS Image.
+This repository contains the DC/OS UI application.
 
 ##### Installation Instructions:
 
@@ -80,7 +55,7 @@ This repository contains the DCOS UI application. The application gathers data f
   npm run serve
   ```
 
-After install all development dependencies and configuring your local environment (steps 1-4 above), you can run test by running `npm test`.  You can build assets, without actually running the DCOS UI server by running `npm run dist`.  If you are actively developing, you may want to run `npm run livereload` to avoid having to refresh your browser with every change.
+After installing all development dependencies and configuring your local environment (steps 1-4 above), you can run test by running `npm test`.  You can build assets, without actually running the DC/OS UI server by running `npm run dist`.  If you are actively developing, you may want to run `npm run livereload` to avoid having to refresh your browser with every change.
 
 ## Adding npm Package Dependencies
 
@@ -160,7 +135,7 @@ Think of a `sum` function. When called as `sum(1)` we may expect a return value 
 
 ### Integration tests
 
-We want to guarantee that our project DCOS UI works as it should within DCOS as a product. To do this we want our integration tests to run against a DCOS cluster. For example we want to test that when an slave fails in a cluster, the UI visually shows this slave failure. A different example is validating that when a new service is installed on a cluster it will show up in the services page.
+We want to guarantee that our project DC/OS UI works as it should within DC/OS as a product. To do this we want our integration tests to run against a DC/OS cluster. For example we want to test that when an slave fails in a cluster, the UI visually shows this slave failure. A different example is validating that when a new service is installed on a cluster it will show up in the services page.
 
 ##### Setup Instructions:
 
