@@ -52,7 +52,7 @@ var Actions = {
   },
 
   mergeMetaData: function () {
-    return _.extend({}, SDK.Store.getAppState().metadata.dcosMetadata,
+    return Object.assign({}, SDK.Store.getAppState().metadata.dcosMetadata,
       {clusterId: SDK.Store.getAppState().metadata.metadata.CLUSTER_ID});
   },
 

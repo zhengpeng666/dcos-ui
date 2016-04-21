@@ -1,5 +1,3 @@
-import _ from 'underscore';
-
 import NodesList from './NodesList';
 import ServicesList from './ServicesList';
 
@@ -9,9 +7,9 @@ const BLANK_NODE = {
 
 let mergeData = function (newData, data) {
   Object.keys(newData).forEach(function (key) {
-    if (_.isArray(newData[key])) {
+    if (Array.isArray(newData[key])) {
       data[key] = mergeMesosArrays(newData, data, key);
-    } else if (_.isObject(newData[key]) && data[key]) {
+    } else if ((typeof (newData[key]) === 'object') && data[key]) {
       // We need to recurse over any nested objects.
       data[key] = mergeData(newData[key], data[key]);
     } else {
@@ -34,12 +32,25 @@ let mergeMesosArrays = function (newData, data, key) {
 };
 
 let mergeObjectsById = function (newData, data) {
+  if (!data) {
+    return newData;
+  }
+
   // Merge the incoming data with the old data.
   return newData.map(function (newDatum) {
-    let oldDatum = _.findWhere(data, {id: newDatum.id});
+    let oldDatum = {};
+
+    for (let i = 0; i < data.length; i++) {
+      let datum = data[i];
+
+      if (datum.id === newDatum.id) {
+        oldDatum = datum;
+        break;
+      }
+    }
 
     // These objects don't need to be deeply merged.
-    return _.extend({}, oldDatum, newDatum);
+    return Object.assign({}, oldDatum, newDatum);
   });
 };
 
@@ -57,7 +68,7 @@ class CompositeState {
       // Marathon data merged by service name because Marathon doesn't know id.
       // See MarathonStore.processMarathonApps
       if (data[service.name]) {
-        service._meta = _.extend({}, service._meta, {
+        service._meta = Object.assign({}, service._meta, {
           marathon: data[service.name]
         });
       }
@@ -75,7 +86,7 @@ class CompositeState {
     let newData = oldData.map(function (oldDatum) {
       let matchedNode = dataByIP[oldDatum.hostname] || BLANK_NODE;
 
-      return _.extend({}, oldDatum, matchedNode);
+      return Object.assign({}, oldDatum, matchedNode);
     });
 
     this.data.slaves = newData;

@@ -1,5 +1,3 @@
-import _ from 'underscore';
-
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from './AppDispatcher';
 import Config from '../config/Config';
@@ -8,13 +6,21 @@ import MesosStateStore from '../stores/MesosStateStore';
 import RequestUtil from '../utils/RequestUtil';
 
 function findWithID(stateObject, listProps, id) {
-  let idCondition = {id};
-  let searchItem;
+  let stateObjectFound;
   let length = listProps.length;
   for (let i = 0; i < length; i++) {
-    searchItem = _.findWhere(stateObject[listProps[i]], idCondition);
-    if (searchItem) {
-      return searchItem;
+    let tasks = stateObject[listProps[i]];
+
+    for (let j = 0; j < tasks.length; j++) {
+      let task = tasks[j];
+
+      if (task.id === id) {
+        stateObjectFound = task;
+      }
+    }
+
+    if (stateObjectFound) {
+      return stateObjectFound;
     }
   }
 
