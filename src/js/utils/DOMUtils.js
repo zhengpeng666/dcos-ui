@@ -129,7 +129,7 @@ var DOMUtils = {
     );
 
     // We need to also use #contains because the elAtPoint may be a child.
-    return el === elAtPoint || el.contains(elAtPoint);
+    return (el === elAtPoint || el.contains(elAtPoint)) || elAtPoint == null;
   },
 
   getDistanceFromTopOfParent: function (el) {
