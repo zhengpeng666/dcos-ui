@@ -4,12 +4,19 @@ import React from 'react';
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+import Breadcrumb from '../../components/Breadcrumb';
 import {documentationURI} from '../../config/Config';
 import PageHeader from '../../components/PageHeader';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
 import serviceDefaultURI from '../../../img/services/icon-service-default-medium@2x.png';
+import StringUtil from '../../utils/StringUtil';
 import UnitHealthStore from '../../stores/UnitHealthStore';
 import UnitSummaries from '../../constants/UnitSummaries';
+
+const METHODS_TO_BIND = [
+  'buildCrumb',
+  'crumbCustomParams'
+];
 
 class UnitsHealthNodeDetail extends mixin(StoreMixin) {
 
@@ -22,6 +29,10 @@ class UnitsHealthNodeDetail extends mixin(StoreMixin) {
         events: ['unitSuccess', 'unitError', 'nodeSuccess', 'nodeError']
       }
     ];
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
   }
 
   componentDidMount() {
@@ -41,24 +52,11 @@ class UnitsHealthNodeDetail extends mixin(StoreMixin) {
     );
   }
 
-  getSubTitle(unit, node) {
-    let healthStatus = node.getHealth();
-
-    return (
-      <ul className="list-inline flush-bottom">
-        <li>
-          <span className={healthStatus.classNames}>
-            {healthStatus.title}
-          </span>
-        </li>
-        <li>
-          {node.get('host_ip')}
-        </li>
-      </ul>
-    );
+  getNode() {
+    return UnitHealthStore.getNode(this.props.params.unitNodeID);
   }
 
-  getNodeInfo(node, unit) {
+  getNodeInfo(unit, node) {
     let unitSummary = UnitSummaries[unit.get('id')] || {};
     let unitDocsURL = unitSummary.getDocumentationURI &&
       unitSummary.getDocumentationURI();
@@ -86,21 +84,61 @@ class UnitsHealthNodeDetail extends mixin(StoreMixin) {
     );
   }
 
+  getSubTitle(unit, node) {
+    let healthStatus = node.getHealth();
+
+    return (
+      <ul className="list-inline flush-bottom">
+        <li>
+          <span className={healthStatus.classNames}>
+            {healthStatus.title}
+          </span>
+        </li>
+        <li>
+          {node.get('host_ip')}
+        </li>
+      </ul>
+    );
+  }
+
+  getUnit() {
+    return UnitHealthStore.getUnit(this.props.params.unitID);
+  }
+
+  buildCrumb(label, route, routeParams, labelIsParam, customParams) {
+    if (labelIsParam) {
+      label = customParams[label];
+    } else {
+      label = StringUtil.idToTitle([label], ['-']);
+    }
+
+    return [{label, route}];
+  }
+
+  crumbCustomParams(unit) {
+    return {
+      unitNodeID: `${unit.getTitle()} Health Check`,
+      unitID: unit.getTitle()
+    };
+  }
+
   render() {
-    let {unitID, unitNodeID} = this.props.params;
-    let node = UnitHealthStore.getNode(unitNodeID);
-    let unit = UnitHealthStore.getUnit(unitID);
+    let node = this.getNode();
+    let unit = this.getUnit();
     let serviceIcon = <img src={serviceDefaultURI} />;
 
     return (
       <div className="flex-container-col">
+        <Breadcrumb
+          buildCrumb={this.buildCrumb}
+          buildCrumbCustomParams={this.crumbCustomParams(unit)} />
         <PageHeader
           icon={serviceIcon}
           iconClassName="icon-app-container"
           subTitle={this.getSubTitle(unit, node)}
           title={`${unit.getTitle()} Health Check`} />
         <div className="flex-container-col flex-grow no-overflow">
-          {this.getNodeInfo(node, unit)}
+          {this.getNodeInfo(unit, node)}
         </div>
       </div>
     );

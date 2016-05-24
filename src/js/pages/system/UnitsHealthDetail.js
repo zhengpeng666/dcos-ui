@@ -4,16 +4,20 @@ import React from 'react';
 /* eslint-enable no-unused-vars */
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
+import Breadcrumb from '../../components/Breadcrumb';
 import FilterBar from '../../components/FilterBar';
 import FilterHeadline from '../../components/FilterHeadline';
 import FilterInputText from '../../components/FilterInputText';
 import PageHeader from '../../components/PageHeader';
 import RequestErrorMsg from '../../components/RequestErrorMsg';
+import StringUtil from '../../utils/StringUtil';
 import UnitHealthDropdown from '../../components/UnitHealthDropdown';
 import UnitHealthNodesTable from '../../components/UnitHealthNodesTable';
 import UnitHealthStore from '../../stores/UnitHealthStore';
 
 const METHODS_TO_BIND = [
+  'buildCrumb',
+  'crumbCustomParams',
   'handleHealthSelection',
   'handleSearchStringChange',
   'resetFilter'
@@ -93,6 +97,20 @@ class UnitsHealthDetail extends mixin(StoreMixin) {
     return data.filter({ip: searchString, health: healthFilter}).getItems();
   }
 
+  buildCrumb(label, route, routeParams, labelIsParam, customParams) {
+    if (labelIsParam) {
+      label = customParams[label];
+    } else {
+      label = StringUtil.idToTitle([label], ['-']);
+    }
+
+    return [{label, route}];
+  }
+
+  crumbCustomParams() {
+    return {unitID: this.getUnit().getTitle()}
+  }
+
   resetFilter() {
     this.setState({
       searchString: '',
@@ -109,6 +127,9 @@ class UnitsHealthDetail extends mixin(StoreMixin) {
 
     return (
       <div className="flex-container-col">
+        <Breadcrumb
+          buildCrumb={this.buildCrumb}
+          buildCrumbCustomParams={this.crumbCustomParams()} />
         <PageHeader
           icon={<img src="./img/services/icon-service-default-medium@2x.png" />}
           iconClassName="icon-app-container"
