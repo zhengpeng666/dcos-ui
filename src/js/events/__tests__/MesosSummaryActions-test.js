@@ -6,8 +6,11 @@ jest.dontMock('../../constants/TimeScales');
 
 jest.setMock('react-router', {
   HashLocation: {
-    getCurrentPath: function () { return '/foo'; },
-    addChangeListener: function () {}
+    getCurrentPath: function () {
+      return '/foo';
+    },
+    addChangeListener: function () {
+    }
   }
 });
 
@@ -42,6 +45,15 @@ describe('Mesos State Actions', function () {
       MesosSummaryActions.fetchSummary();
       expect(RequestUtil.json).toHaveBeenCalled();
       expect(RequestUtil.json.calls.mostRecent().args[0].url).toEqual('http://historyserver/dcos-history-service/history/last');
+    });
+
+    it('creates a placeholder summery', function () {
+      spyOn(AppDispatcher, 'handleServerAction');
+      MesosSummaryActions.fetchSummary(undefined, true);
+      expect(AppDispatcher.handleServerAction).toHaveBeenCalledWith({
+        type: 'REQUEST_SUMMARY_PLACEHOLDER',
+        data: {successful: false}
+      });
     });
 
     it('fetches a whole minute when instructed', function () {

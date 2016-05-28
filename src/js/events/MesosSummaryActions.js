@@ -5,7 +5,8 @@ import {
   REQUEST_MESOS_HISTORY_ONGOING,
   REQUEST_SUMMARY_SUCCESS,
   REQUEST_SUMMARY_ERROR,
-  REQUEST_SUMMARY_ONGOING
+  REQUEST_SUMMARY_ONGOING,
+  REQUEST_SUMMARY_PLACEHOLDER
 } from '../constants/ActionTypes';
 var AppDispatcher = require('./AppDispatcher');
 var Config = require('../config/Config');
@@ -84,12 +85,25 @@ var MesosSummaryActions = {
     Config.getRefreshRate(),
     function (resolve, reject) {
 
-      return function (timeScale) {
+      return function (timeScale, placeholder = false) {
+        if (placeholder) {
+          AppDispatcher.handleServerAction({
+            type: REQUEST_SUMMARY_PLACEHOLDER,
+            data: {successful: false}
+          });
+          resolve();
+
+          return;
+        }
+
         if (!_historyServiceOnline) {
           requestFromMesos(resolve, reject);
-        } else {
-          requestFromHistoryServer(resolve, reject, timeScale);
+
+          return;
         }
+
+        requestFromHistoryServer(resolve, reject, timeScale);
+
       };
     },
     {delayAfterCount: Config.delayAfterErrorCount}
