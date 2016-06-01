@@ -1,7 +1,6 @@
 // Modules to paths
 module.exports = {
   constants: {
-    EventTypes: 'EventTypes',
     FrameworkConstants: 'FrameworkConstants',
     HTTPStatusCodes: 'HTTPStatusCodes'
   },
