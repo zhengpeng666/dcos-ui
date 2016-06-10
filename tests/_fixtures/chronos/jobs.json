@@ -7,16 +7,18 @@
       "project": "metronome",
       "stage": "test"
     },
-    "schedule": [{
-      "id": "every-once-in-a-while",
-      "description": "lorem ipsum",
-      "cron": "0 1 6 9 *",
-      "timezone": "America/Chicago",
-      "startingDeadlineSeconds": 60,
-      "concurrencyPolicy": "allow",
-      "enabled": true,
-      "nextRunAt": "1990-01-02T00:00:00Z"
-    }],
+    "schedule": [
+      {
+        "id": "every-once-in-a-while",
+        "description": "lorem ipsum",
+        "cron": "0 1 6 9 *",
+        "timezone": "America/Chicago",
+        "startingDeadlineSeconds": 60,
+        "concurrencyPolicy": "allow",
+        "enabled": true,
+        "nextRunAt": "1990-01-02T00:00:00Z"
+      }
+    ],
     "run": {
       "cpus": 1,
       "mem": 1,
@@ -38,9 +40,9 @@
           }
         ]
       },
-      "cmd": "/bar",
+      "cmd": "./bar",
       "args": [
-        
+
       ],
       "user": "marathon",
       "env": {
@@ -91,14 +93,16 @@
       "project": "metronome",
       "stage": "test"
     },
-    "schedule": {
-      "schedule": "0 19 6 9 *",
-      "timezone": "America/Chicago",
-      "startingDeadlineSeconds": 60,
-      "concurrencyPolicy": "allow",
-      "enabled": true,
-      "nextRunAt": "1990-01-02T00:00:00Z"
-    },
+    "schedules": [
+      {
+        "schedule": "0 19 6 9 *",
+        "timezone": "America/Chicago",
+        "startingDeadlineSeconds": 60,
+        "concurrencyPolicy": "allow",
+        "enabled": true,
+        "nextRunAt": "1990-01-02T00:00:00Z"
+      }
+    ],
     "run": {
       "cpus": 1,
       "mem": 1,
@@ -120,9 +124,9 @@
           }
         ]
       },
-      "cmd": "/foo",
+      "cmd": "./foo",
       "args": [
-        
+
       ],
       "user": "marathon",
       "env": {
@@ -180,14 +184,16 @@
       "project": "metronome",
       "stage": "test"
     },
-    "schedule": {
-      "schedule": "0 1 6 9 *",
-      "timezone": "America/Chicago",
-      "startingDeadlineSeconds": 60,
-      "concurrencyPolicy": "allow",
-      "enabled": true,
-      "nextRunAt": "1990-01-02T00:00:00Z"
-    },
+    "schedules": [
+      {
+        "schedule": "0 1 6 9 *",
+        "timezone": "America/Chicago",
+        "startingDeadlineSeconds": 60,
+        "concurrencyPolicy": "allow",
+        "enabled": true,
+        "nextRunAt": "1990-01-02T00:00:00Z"
+      }
+    ],
     "run": {
       "cpus": 1,
       "mem": 1,
@@ -209,9 +215,9 @@
           }
         ]
       },
-      "cmd": "/alpha",
+      "cmd": "./alpha",
       "args": [
-        
+
       ],
       "user": "marathon",
       "env": {
@@ -262,14 +268,16 @@
       "project": "metronome",
       "stage": "test"
     },
-    "schedule": {
-      "schedule": "0 19 6 9 *",
-      "timezone": "America/Chicago",
-      "startingDeadlineSeconds": 60,
-      "concurrencyPolicy": "allow",
-      "enabled": true,
-      "nextRunAt": "1990-01-02T00:00:00Z"
-    },
+    "schedules": [
+      {
+        "schedule": "0 19 6 9 *",
+        "timezone": "America/Chicago",
+        "startingDeadlineSeconds": 60,
+        "concurrencyPolicy": "allow",
+        "enabled": true,
+        "nextRunAt": "1990-01-02T00:00:00Z"
+      }
+    ],
     "run": {
       "cpus": 1,
       "mem": 1,
@@ -291,9 +299,9 @@
           }
         ]
       },
-      "cmd": "/beta",
+      "cmd": "./beta",
       "args": [
-        
+
       ],
       "user": "marathon",
       "env": {
@@ -341,6 +349,79 @@
           }
         ]
       }
+    ]
+  },
+  {
+    "id": "baz",
+    "description": "Baz Description",
+    "labels": {
+      "name": "baz",
+      "project": "metronome",
+      "stage": "test"
+    },
+    "schedules": [
+      {
+        "schedule": "0 19 6 9 *",
+        "timezone": "America/Chicago",
+        "startingDeadlineSeconds": 60,
+        "concurrencyPolicy": "allow",
+        "enabled": true,
+        "nextRunAt": "1990-01-02T00:00:00Z"
+      }
+    ],
+    "run": {
+      "cpus": 1,
+      "mem": 1,
+      "disk": 1,
+      "artifacts": [
+        {
+          "url": "https://baz.com/archive.zip",
+          "executable": false,
+          "extract": true,
+          "cache": true
+        }
+      ],
+      "placement": {
+        "constraints": [
+          {
+            "attr": "hostname",
+            "op": "LIKE",
+            "value": ".*PROD.*"
+          }
+        ]
+      },
+      "cmd": "./baz",
+      "args": [
+
+      ],
+      "user": "marathon",
+      "env": {
+        "DRY_RUN": "false",
+        "ZK": "zk://master.mesos:2181/marathon"
+      },
+      "docker": {
+        "image": "mesosphere/baz"
+      },
+      "volumes": [
+        {
+          "containerPath": "logs",
+          "hostPath": "var/log/mesosphere/baz",
+          "mode": "RW"
+        }
+      ],
+      "restart": {
+        "restart": "never",
+        "activeDeadlineSeconds": 120
+      }
+    },
+    "status": {
+      "successCount": 1,
+      "failureCount": 1,
+      "lastSuccessAt": "1990-01-02T00:00:00Z",
+      "lastFailureAt": "1991-03-01T00:10:15.957Z"
+    },
+    "activeRuns": [
+
     ]
   }
 ]
