@@ -223,7 +223,7 @@ describe('Job', function () {
       expect(job.getLastRunStatus().status).toEqual('Success');
     });
 
-    it('returns success if lastFailureAt is undefiend', function () {
+    it('returns success if lastSuccessAt is undefiend', function () {
       let job = new Job({
         id: 'test.job',
         status: {
