@@ -14,16 +14,20 @@ import TaskStates from '../../../constants/TaskStates';
 import InternalStorageMixin from '../../../mixins/InternalStorageMixin';
 import TabsMixin from '../../../mixins/TabsMixin';
 
-const SERVICES_TABS = {
-  'services-task-details-tab': 'Details',
-  'services-task-details-files': 'Files',
-  'services-task-details-logs': 'Logs'
+const JOBS_TABS = {
+  'jobs-task-details-tab': 'Details'
 };
 
 const NODES_TABS = {
   'nodes-task-details-tab': 'Details',
   'nodes-task-details-files': 'Files',
   'nodes-task-details-logs': 'Logs'
+};
+
+const SERVICES_TABS = {
+  'services-task-details-tab': 'Details',
+  'services-task-details-files': 'Files',
+  'services-task-details-logs': 'Logs'
 };
 
 const METHODS_TO_BIND = [
@@ -58,9 +62,15 @@ class TaskDetail extends mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
   componentWillMount() {
     super.componentWillMount(...arguments);
     this.tabs_tabs = Object.assign({}, SERVICES_TABS);
+
     if (this.props.params.nodeID != null) {
       this.tabs_tabs = Object.assign({}, NODES_TABS);
     }
+
+    if (this.props.params.id != null) {
+      this.tabs_tabs = Object.assign({}, JOBS_TABS);
+    }
+
     this.updateCurrentTab();
   }
 
@@ -195,6 +205,10 @@ class TaskDetail extends mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
     }
 
     let task = MesosStateStore.getTaskFromTaskID(this.props.params.taskID);
+
+    if (task == null) {
+
+    }
 
     if (task == null) {
       return this.getNotFound('task', this.props.params.taskID);
