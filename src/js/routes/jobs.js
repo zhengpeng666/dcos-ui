@@ -2,6 +2,7 @@ import {Route} from 'react-router';
 
 import JobsPage from '../pages/JobsPage';
 import JobsTab from '../pages/jobs/JobsTab';
+import TaskDetail from '../pages/services/task-details/TaskDetail';
 
 let jobsRoutes = {
   type: Route,
@@ -16,7 +17,15 @@ let jobsRoutes = {
         {
           type: Route,
           name: 'jobs-detail',
-          path: ':id/?'
+          path: ':id/?',
+          children: [
+            {
+              type: Route,
+              name: 'jobs-task-details-tab',
+              handler: TaskDetail,
+              path: ':taskID/?'
+            }
+          ]
         }
       ]
     }

@@ -122,4 +122,28 @@ module.exports = class Job extends Item {
 
     return 'completed';
   }
+
+  getTaskByID(id) {
+    let activeRunsList = this.getActiveRuns();
+
+    if (!activeRunsList) {
+      return null;
+    }
+
+    let longestRun = activeRunsList.getLongestRunningActiveRun();
+
+    if (!longestRun) {
+      return null;
+    }
+
+    let taskList = longestRun.getTasks();
+
+    if (!taskList) {
+      return null;
+    }
+
+    return taskList.findItem(function (task) {
+      return task.id === id;
+    });
+  }
 };

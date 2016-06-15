@@ -1,5 +1,6 @@
 import mixin from 'reactjs-mixin';
 import React from 'react';
+import {RouteHandler} from 'react-router';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import AlertPanel from '../../components/AlertPanel';
@@ -10,6 +11,7 @@ import JobsTable from './JobsTable';
 import JobFilterTypes from '../../constants/JobFilterTypes';
 import JobSearchFilter from '../../components/JobSearchFilter'
 import JobTree from '../../structs/JobTree';
+import Job from '../../structs/Job';
 import QueryParamsMixin from '../../mixins/QueryParamsMixin';
 import SaveStateMixin from '../../mixins/SaveStateMixin';
 import JobFormModal from '../../components/modals/JobFormModal';
@@ -184,18 +186,26 @@ class JobsTab extends mixin(StoreMixin, QueryParamsMixin, SaveStateMixin) {
       return this.getJobTreeView(item);
     }
 
-    // Render empty panel
-    return (
-      <AlertPanel
-        title="No Jobs Created"
-        footer={this.getAlertPanelFooter()}
-        iconClassName="icon icon-sprite icon-sprite-jumbo
+    if (this.props.params.taskID) {
+      return (
+        <RouteHandler />
+      );
+    }
+
+    if (item instanceof Job) {
+      // Render empty panel
+      return (
+        <AlertPanel
+          title="No Jobs Created"
+          footer={this.getAlertPanelFooter()}
+          iconClassName="icon icon-sprite icon-sprite-jumbo
           icon-sprite-jumbo-white icon-jobs flush-top">
-        <p className="flush-bottom">
-          Jobs aren't available yet.
-        </p>
-      </AlertPanel>
-    );
+          <p className="flush-bottom">
+            Jobs aren't available yet.
+          </p>
+        </AlertPanel>
+      );
+    }
   }
 
   render() {
