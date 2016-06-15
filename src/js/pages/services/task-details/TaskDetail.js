@@ -14,22 +14,6 @@ import TaskStates from '../../../constants/TaskStates';
 import InternalStorageMixin from '../../../mixins/InternalStorageMixin';
 import TabsMixin from '../../../mixins/TabsMixin';
 
-const JOBS_TABS = {
-  'jobs-task-details-tab': 'Details'
-};
-
-const NODES_TABS = {
-  'nodes-task-details-tab': 'Details',
-  'nodes-task-details-files': 'Files',
-  'nodes-task-details-logs': 'Logs'
-};
-
-const SERVICES_TABS = {
-  'services-task-details-tab': 'Details',
-  'services-task-details-files': 'Files',
-  'services-task-details-logs': 'Logs'
-};
-
 const METHODS_TO_BIND = [
   'onTaskDirectoryStoreError',
   'onTaskDirectoryStoreSuccess'
@@ -43,9 +27,8 @@ class TaskDetail extends mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
 
     this.state = {
       directory: null,
-      expandClass: 'large',
       selectedLogFile: null,
-      taskDirectoryErrorCount: 0
+      errorCount: 0
     };
 
     this.store_listeners = [
@@ -61,16 +44,6 @@ class TaskDetail extends mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
 
   componentWillMount() {
     super.componentWillMount(...arguments);
-    this.tabs_tabs = Object.assign({}, SERVICES_TABS);
-
-    if (this.props.params.nodeID != null) {
-      this.tabs_tabs = Object.assign({}, NODES_TABS);
-    }
-
-    if (this.props.params.id != null) {
-      this.tabs_tabs = Object.assign({}, JOBS_TABS);
-    }
-
     this.updateCurrentTab();
   }
 
@@ -88,25 +61,24 @@ class TaskDetail extends mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
   }
 
   onStateStoreSuccess() {
-    let task = MesosStateStore.getTaskFromTaskID(this.props.params.taskID);
-    TaskDirectoryStore.getDirectory(task);
+    TaskDirectoryStore.getDirectory(this.getTask());
   }
 
   onTaskDirectoryStoreError() {
     this.setState({
-      taskDirectoryErrorCount: this.state.taskDirectoryErrorCount + 1
+      errorCount: this.state.errorCount + 1
     });
   }
 
   onTaskDirectoryStoreSuccess() {
     this.setState({
       directory: TaskDirectoryStore.get('directory'),
-      taskDirectoryErrorCount: 0
+      errorCount: 0
     });
   }
 
   hasLoadingError() {
-    return this.state.taskDirectoryErrorCount >= 3;
+    return this.state.errorCount >= 3;
   }
 
   getErrorScreen() {
@@ -133,32 +105,6 @@ class TaskDetail extends mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
     this.setState({selectedLogFile, currentTab: 'debug'});
   }
 
-  getBasicInfo() {
-    let task = MesosStateStore.getTaskFromTaskID(this.props.params.taskID);
-    if (task == null) {
-      return null;
-    }
-
-    let taskIcon = (
-      <img src={task.getImages()['icon-large']} />
-    );
-
-    let tabs = (
-      <ul className="tabs list-inline flush-bottom container-pod container-pod-short-top inverse">
-        {this.tabs_getRoutedTabs({params: this.props.params})}
-      </ul>
-    );
-
-    return (
-      <PageHeader
-        icon={taskIcon}
-        iconClassName="icon-app-container"
-        subTitle={TaskStates[task.state].displayName}
-        navigationTabs={tabs}
-        title={task.getName()} />
-    );
-  }
-
   tabs_handleTabClick() {
     this.setState({selectedLogFile: null});
 
@@ -166,27 +112,27 @@ class TaskDetail extends mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
     super.tabs_handleTabClick(...arguments);
   }
 
-  getNotFound(item, itemID) {
+  getNotFound() {
     return (
       <div className="container container-fluid container-pod text-align-center">
         <h3 className="flush-top text-align-center">
-          {`Error finding ${item}`}
+          Error finding task
         </h3>
         <p className="flush">
-          {`Did not find a ${item} with id "${itemID}"`}
+          {`Did not find a task with ID "${this.props.params.taskID}"`}
         </p>
       </div>
     );
   }
 
-  getSubView() {
-    let task = MesosStateStore.getTaskFromTaskID(this.props.params.taskID);
+  getSubView(task) {
     let {directory, selectedLogFile} = this.state;
+
     if (this.hasLoadingError()) {
       this.getErrorScreen();
     }
 
-    if (!directory || !task) {
+    if (!this.isSubviewReady) {
       return this.getLoadingScreen();
     }
 
@@ -199,26 +145,64 @@ class TaskDetail extends mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
     );
   }
 
+  getTask() {
+    return MesosStateStore.getTaskFromTaskID(this.props.params.taskID);
+  };
+
+  getTaskActionButtons() {
+    return [];
+  }
+
+  getTaskIcon(task) {
+    return <img src={task.getImages()['icon-large']} />;
+  }
+
+  getTaskName(task) {
+    return task.getName();
+  }
+
+  getTaskSubtitle(task) {
+    return TaskStates[task.state].displayName;
+  }
+
+  getTaskTabs() {
+    return (
+      <ul className="tabs list-inline flush-bottom container-pod container-pod-short-top inverse">
+        {this.tabs_getRoutedTabs({params: this.props.params})}
+      </ul>
+    );
+  }
+
+  isPageReady() {
+    return MesosStateStore.get('lastMesosState').slaves != null;
+  }
+
+  isSubviewReady(task) {
+    return this.state.directory && task;
+  }
+
   render() {
-    if (MesosStateStore.get('lastMesosState').slaves == null) {
+    if (!this.isPageReady()) {
       return null;
     }
 
-    let task = MesosStateStore.getTaskFromTaskID(this.props.params.taskID);
+    let task = this.getTask();
 
     if (task == null) {
-
-    }
-
-    if (task == null) {
-      return this.getNotFound('task', this.props.params.taskID);
+      return this.getNotFound();
     }
 
     return (
       <div className="flex-container-col flex-grow flex-shrink container-pod container-pod-divider-bottom-align-right container-pod-short-top flush-bottom flush-top">
         <Breadcrumbs />
-        {this.getBasicInfo()}
-        {this.getSubView()}
+        <PageHeader
+          actionButtons={this.getTaskActionButtons()}
+          icon={this.getTaskIcon(task)}
+          iconClassName="icon-app-container"
+          subTitle={this.getTaskSubtitle(task)}
+          navigationTabs={this.getTaskTabs()}
+          title={this.getTaskName(task)} />
+        {this.getSubView(task)}
       </div>
     );
   }
