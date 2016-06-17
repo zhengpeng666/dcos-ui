@@ -14,6 +14,18 @@ import TaskStates from '../../../constants/TaskStates';
 import InternalStorageMixin from '../../../mixins/InternalStorageMixin';
 import TabsMixin from '../../../mixins/TabsMixin';
 
+const SERVICES_TABS = {
+  'services-task-details-tab': 'Details',
+  'services-task-details-files': 'Files',
+  'services-task-details-logs': 'Logs'
+};
+
+const NODES_TABS = {
+  'nodes-task-details-tab': 'Details',
+  'nodes-task-details-files': 'Files',
+  'nodes-task-details-logs': 'Logs'
+};
+
 const METHODS_TO_BIND = [
   'onTaskDirectoryStoreError',
   'onTaskDirectoryStoreSuccess'
@@ -44,6 +56,10 @@ class TaskDetail extends mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
 
   componentWillMount() {
     super.componentWillMount(...arguments);
+    this.tabs_tabs = Object.assign({}, SERVICES_TABS);
+    if (this.props.params.nodeID != null) {
+      this.tabs_tabs = Object.assign({}, NODES_TABS);
+    }
     this.updateCurrentTab();
   }
 
@@ -61,7 +77,8 @@ class TaskDetail extends mixin(InternalStorageMixin, TabsMixin, StoreMixin) {
   }
 
   onStateStoreSuccess() {
-    TaskDirectoryStore.getDirectory(this.getTask());
+    let task = MesosStateStore.getTaskFromTaskID(this.props.params.taskID);
+    TaskDirectoryStore.getDirectory(task);
   }
 
   onTaskDirectoryStoreError() {
