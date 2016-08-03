@@ -1,7 +1,5 @@
 import classNames from 'classnames';
-import mixin from 'reactjs-mixin';
 import React from 'react';
-import {StoreMixin} from 'mesosphere-shared-reactjs';
 import {Tooltip} from 'reactjs-components';
 
 import defaultServiceImage from '../../img/services/icon-service-default-small@2x.png';
@@ -9,11 +7,16 @@ import FormUtil from '../utils/FormUtil';
 import GeminiUtil from '../utils/GeminiUtil';
 import Icon from './Icon';
 import Image from './Image';
-import InternalStorageMixin from '../mixins/InternalStorageMixin';
 import SchemaFormUtil from '../utils/SchemaFormUtil';
 import SchemaUtil from '../utils/SchemaUtil';
 import TabForm from './TabForm';
 import Util from '../utils/Util';
+
+/**
+ * Import "decorator" mix-ins
+ */
+import StoreMixin from '../mixins/StoreMixin';
+import InternalStorageMixin from '../mixins/NewInternalStorageMixin';
 
 const METHODS_TO_BIND = [
   'getAddNewRowButton',
@@ -25,7 +28,7 @@ const METHODS_TO_BIND = [
   'validateForm'
 ];
 
-class SchemaForm extends mixin(StoreMixin, InternalStorageMixin) {
+class SchemaForm extends InternalStorageMixin(StoreMixin(React.Component)) {
   constructor() {
     super();
 
@@ -68,7 +71,7 @@ class SchemaForm extends mixin(StoreMixin, InternalStorageMixin) {
   }
 
   componentDidUpdate() {
-    super.componentDidUpdate(...arguments);
+    // super.componentDidUpdate(...arguments);
 
     // Timeout necessary due to modal content height updates on did mount
     setTimeout(() => {
@@ -396,4 +399,5 @@ SchemaForm.propTypes = {
   packageVersion: React.PropTypes.string
 };
 
+window.SchemaForm = SchemaForm;
 module.exports = SchemaForm;
