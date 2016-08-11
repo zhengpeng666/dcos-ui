@@ -6,6 +6,7 @@ import React from 'react';
 import DeploymentsTab from '../pages/services/DeploymentsTab';
 import ServicesPage from '../pages/ServicesPage';
 import ServicesTab from '../pages/services/ServicesTab';
+import ServicesPod from '../pages/services/ServicesPod';
 import TaskDetail from '../pages/task-details/TaskDetail';
 import TaskDetailsTab from '../pages/task-details/TaskDetailsTab';
 import TaskFilesTab from '../pages/task-details/TaskFilesTab';
@@ -14,20 +15,22 @@ import TaskDetailBreadcrumb from '../pages/nodes/breadcrumbs/TaskDetailBreadcrum
 import VolumeDetail from '../components/VolumeDetail';
 import VolumeTable from '../components/VolumeTable';
 
-function buildServiceCrumbs(router) {
-  let {id} = router.getCurrentParams();
-  id = decodeURIComponent(id).replace(/^\//, '');
-  let ids = id.split('/');
-  let aggregateIDs = '';
+function buildServiceCrumbsTo(routeTo) {
+  return function (router) {
+    let {id} = router.getCurrentParams();
+    id = decodeURIComponent(id).replace(/^\//, '');
+    let ids = id.split('/');
+    let aggregateIDs = '';
 
-  return ids.map(function (id) {
-    aggregateIDs += encodeURIComponent(`/${id}`);
+    return ids.map(function (id) {
+      aggregateIDs += encodeURIComponent(`/${id}`);
 
-    return {
-      label: id,
-      route: {to: 'services-detail', params: {id: aggregateIDs}}
-    };
-  });
+      return {
+        label: id,
+        route: {to: routeTo, params: {id: aggregateIDs}}
+      };
+    });
+  };
 }
 
 let serviceRoutes = {
@@ -56,6 +59,18 @@ let serviceRoutes = {
     },
     {
       type: Route,
+      name: 'services-pod',
+      path: 'pod/:id/?',
+      handler: ServicesPod,
+      buildBreadCrumb: function () {
+        return {
+          parentCrumb: 'services-page',
+          getCrumbs: buildServiceCrumbsTo('services-pod')
+        };
+      }
+    },
+    {
+      type: Route,
       handler: ServicesTab,
       children: [
         {
@@ -65,7 +80,7 @@ let serviceRoutes = {
           buildBreadCrumb: function () {
             return {
               parentCrumb: 'services-page',
-              getCrumbs: buildServiceCrumbs
+              getCrumbs: buildServiceCrumbsTo('services-detail')
             };
           },
           children: [
