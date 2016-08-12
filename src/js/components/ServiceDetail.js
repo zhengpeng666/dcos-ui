@@ -8,25 +8,26 @@ import InternalStorageMixin from '../mixins/InternalStorageMixin';
 import MarathonStore from '../stores/MarathonStore';
 import Service from '../structs/Service';
 import ServiceActionItem from '../constants/ServiceActionItem';
+import ServiceDestroyModal from './modals/ServiceDestroyModal';
 import ServiceDetailConfigurationTab from './ServiceDetailConfigurationTab';
 import ServiceDetailDebugTab from './ServiceDetailDebugTab';
 import ServiceDetailTaskTab from './ServiceDetailTaskTab';
 import ServiceFormModal from './modals/ServiceFormModal';
+import ServiceSuspendModal from './modals/ServiceSuspendModal';
 import ServiceInfo from './ServiceInfo';
 import ServiceScaleFormModal from './modals/ServiceScaleFormModal';
 import TabsMixin from '../mixins/TabsMixin';
 import VolumeTable from './VolumeTable';
 
 const METHODS_TO_BIND = [
+  'closeDialog',
   'onActionsItemSelection',
-  'onAcceptDestroyConfirmDialog',
   'onAcceptRestartConfirmDialog',
-  'onAcceptSuspendConfirmDialog',
-  'closeDialog'
+  'onServiceDestroyModalClose',
+  'onServiceSuspendModalClose'
 ];
 
 class ServiceDetail extends mixin(InternalStorageMixin, StoreMixin, TabsMixin) {
-
   constructor() {
     super(...arguments);
 
@@ -39,18 +40,14 @@ class ServiceDetail extends mixin(InternalStorageMixin, StoreMixin, TabsMixin) {
     this.state = {
       currentTab: Object.keys(this.tabs_tabs).shift(),
       disabledDialog: null,
-      serviceActionDialog: null,
-      errorMsg: null
+      errorMsg: null,
+      serviceActionDialog: null
     };
 
     this.store_listeners = [
       {
         name: 'marathon',
         events: [
-          'serviceDeleteError',
-          'serviceDeleteSuccess',
-          'serviceEditError',
-          'serviceEditSuccess',
           'serviceRestartError',
           'serviceRestartSuccess'
         ]
@@ -76,12 +73,6 @@ class ServiceDetail extends mixin(InternalStorageMixin, StoreMixin, TabsMixin) {
     this.setState({serviceActionDialog: item.id});
   }
 
-  onAcceptDestroyConfirmDialog() {
-    this.setState({disabledDialog: ServiceActionItem.DESTROY}, () => {
-      MarathonStore.deleteService(this.props.service.id);
-    });
-  }
-
   onAcceptRestartConfirmDialog() {
     this.setState({disabledDialog: ServiceActionItem.RESTART}, () => {
       MarathonStore.restartService(
@@ -90,36 +81,13 @@ class ServiceDetail extends mixin(InternalStorageMixin, StoreMixin, TabsMixin) {
     });
   }
 
-  onAcceptSuspendConfirmDialog() {
-    this.setState({disabledDialog: ServiceActionItem.SUSPEND}, () => {
-      MarathonStore.editService({
-        id: this.props.service.id,
-        instances: 0
-      }, this.shouldForceUpdate(this.state.errorMsg));
-    });
-  }
-
-  onMarathonStoreServiceDeleteSuccess() {
+  onServiceDestroyModalClose() {
     this.closeDialog();
     this.context.router.transitionTo('services-page');
   }
 
-  onMarathonStoreServiceDeleteError({message:errorMsg}) {
-    this.setState({
-      disabledDialog: null,
-      errorMsg
-    });
-  }
-
-  onMarathonStoreServiceEditSuccess() {
+  onServiceSuspendModalClose() {
     this.closeDialog();
-  }
-
-  onMarathonStoreServiceEditError({message:errorMsg}) {
-    this.setState({
-      disabledDialog: null,
-      errorMsg
-    });
   }
 
   onMarathonStoreServiceRestartSuccess() {
@@ -141,29 +109,6 @@ class ServiceDetail extends mixin(InternalStorageMixin, StoreMixin, TabsMixin) {
     });
   }
 
-  getDestroyConfirmDialog() {
-    const {service} = this.props;
-    const {state} = this;
-
-    return (
-      <Confirm
-        disabled={state.disabledDialog === ServiceActionItem.DESTROY}
-        open={state.serviceActionDialog === ServiceActionItem.DESTROY}
-        onClose={this.closeDialog}
-        leftButtonText="Cancel"
-        leftButtonCallback={this.closeDialog}
-        rightButtonText="Destroy Service"
-        rightButtonClassName="button button-danger"
-        rightButtonCallback={this.onAcceptDestroyConfirmDialog}>
-        <div className="container-pod flush-top container-pod-short-bottom">
-          <h2 className="text-danger text-align-center flush-top">Destroy Service</h2>
-          <p>Destroying <span className="emphasize">{service.getId()}</span> is irreversible. Are you sure you want to continue?</p>
-          {this.getErrorMessage()}
-        </div>
-      </Confirm>
-    );
-  }
-
   getRestartConfirmDialog() {
     const {service} = this.props;
     const {state} = this;
@@ -183,29 +128,6 @@ class ServiceDetail extends mixin(InternalStorageMixin, StoreMixin, TabsMixin) {
           <p>
             Are you sure you want to restart <span className="emphasize">{service.getId()}</span>?
           </p>
-          {this.getErrorMessage()}
-        </div>
-      </Confirm>
-    );
-  }
-
-  getSuspendConfirmDialog() {
-    const {service} = this.props;
-    const {state} = this;
-
-    return (
-      <Confirm
-        disabled={state.disabledDialog === ServiceActionItem.SUSPEND}
-        open={state.serviceActionDialog === ServiceActionItem.SUSPEND}
-        onClose={this.closeDialog}
-        leftButtonText="Cancel"
-        leftButtonCallback={this.closeDialog}
-        rightButtonText="Suspend Service"
-        rightButtonClassName="button button-primary"
-        rightButtonCallback={this.onAcceptSuspendConfirmDialog}>
-        <div className="container-pod flush-top container-pod-short-bottom">
-          <h2 className="text-align-center flush-top">Suspend Service</h2>
-          <p>Are you sure you want to suspend {service.getId()} by scaling to 0 instances?</p>
           {this.getErrorMessage()}
         </div>
       </Confirm>
@@ -284,6 +206,7 @@ class ServiceDetail extends mixin(InternalStorageMixin, StoreMixin, TabsMixin) {
 
   render() {
     const {service} = this.props;
+    let {serviceActionDialog} = this.state;
 
     return (
       <div className="flex-container-col">
@@ -298,13 +221,19 @@ class ServiceDetail extends mixin(InternalStorageMixin, StoreMixin, TabsMixin) {
           {this.tabs_getTabView()}
         </div>
         <ServiceFormModal isEdit={true}
-          open={this.state.serviceActionDialog === ServiceActionItem.EDIT}
+          open={serviceActionDialog === ServiceActionItem.EDIT}
           service={service}
           onClose={this.closeDialog} />
-        {this.getDestroyConfirmDialog()}
+        <ServiceDestroyModal
+          onClose={this.onServiceDestroyModalClose}
+          open={serviceActionDialog === ServiceActionItem.DESTROY}
+          service={service} />
         {this.getRestartConfirmDialog()}
         {this.getServiceScaleFormModal()}
-        {this.getSuspendConfirmDialog()}
+        <ServiceSuspendModal
+          onClose={this.onServiceSuspendModalClose}
+          open={serviceActionDialog === ServiceActionItem.SUSPEND}
+          service={service} />
       </div>
 
     );
