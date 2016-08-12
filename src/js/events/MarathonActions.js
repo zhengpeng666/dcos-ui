@@ -223,9 +223,11 @@ module.exports = {
           url: url,
           data: embed,
           success: function (response) {
+            let data = MarathonUtil.parseGroups(response);
+            console.log('Groups:', data);
             AppDispatcher.handleServerAction({
               type: REQUEST_MARATHON_GROUPS_SUCCESS,
-              data: MarathonUtil.parseGroups(response)
+              data: data
             });
             resolve();
           },

@@ -1,9 +1,9 @@
 import ContainerStatus from './ContainerStatus';
 import DataObject from './primitive/DataObject';
 import List from './primitive/List';
-import ResourceSpec from './ResourceSpec';
+import PodInstanceStatus from './PodInstanceStatus';
 
-class PodInstanceStatus extends DataObject {
+class PodStatus extends DataObject {
 
   constructor() {
     super(...arguments);
@@ -11,20 +11,13 @@ class PodInstanceStatus extends DataObject {
     // Create accessors to the following object properties, exposed as object
     // properties in the instance with the given `as` name:
 
-    this.createAccessorFor('instanceID')
-      .as('id');
-
-    this.createAccessorFor('resources')
-      .wrappedWith(ResourceSpec)
-      .as('resources');
-
-    this.createAccessorFor('containers')
+    this.createAccessorFor('instances')
       .wrapArrayItemsWith(ContainerStatus)
       .wrappedWith(List)
-      .as('containers');
+      .as('instances');
 
   }
 
 }
 
-module.exports = PodInstanceStatus;
+module.exports = PodStatus;

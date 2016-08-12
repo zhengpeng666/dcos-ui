@@ -1,61 +1,31 @@
 import DataObject from './DataObject';
-import Item from './Item';
-import StringUtil from '../utils/StringUtil';
+import StringUtil from '../../utils/StringUtil';
 
-/**
- * Cast an item to the List's type, if specified.
- *
- * Note that cast must be bound to the List's context in order to access
- * its `type` property.
- *
- * @param {Object} item
- * @access private
- * @memberOf List
- * @return {Object} item, cast if list is typed.
- */
-function cast(item) {
-  let Type = this.constructor.type;
-  if (Type != null && !(item instanceof Type)) {
-    return new Type(item);
-  }
-  return item;
-}
-
-module.exports = class List extends DataObject {
+module.exports = class List {
 
   /**
    * List
-   * @param {Object} options Options object
-   * @param {Array} options.items
+   * @param {Array} list - List items
    * @param {{propertyName:(null|function)}} [options.filterProperties]
    * @property {Class} type - the type of list items
    * @constructor
    * @struct
    */
   constructor(list, options = {}) {
-    super();
-
-    if (list) {
-      if (!Array.isArray(options.items)) {
-        throw new Error('Expected an array.');
-      }
-      if (this.constructor.type != null) {
-        this.__data = options.items.map(cast.bind(this));
-      } else {
-        this.__data = options.items;
-      }
-
+    if (!Array.isArray(list)) {
+      throw new Error('Expected an array.');
     }
 
+    this.list = list;
     this.filterProperties = options.filterProperties || {};
   }
 
   add(item) {
-    this.__data.push(cast.call(this, item));
+    this.list.push(item);
   }
 
   getItems() {
-    return this.__data;
+    return this.list;
   }
 
   getFilterProperties() {
@@ -63,7 +33,7 @@ module.exports = class List extends DataObject {
   }
 
   last() {
-    return this.__data[this.__data.length - 1];
+    return this.list[this.list.length - 1];
   }
 
   /**
@@ -105,7 +75,7 @@ module.exports = class List extends DataObject {
 
           // Use default getter if item is an instanceof Item.
           // This is the regular way of getting a property on an item
-          if (item instanceof Item) {
+          if (item instanceof DataObject) {
             return item.get(prop) || '';
           }
 

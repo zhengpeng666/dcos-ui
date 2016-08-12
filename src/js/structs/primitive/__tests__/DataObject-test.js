@@ -8,6 +8,15 @@ class CustomClass extends DataObject {
   }
 }
 
+class CustomArray {
+  constructor(arrayRef) {
+    this.arrayRef = arrayRef;
+  }
+  push() {
+    this.arrayRef.push(...arguments);
+  }
+}
+
 describe('DataObject', function () {
 
   describe('#createAccessorFor', function () {
@@ -109,6 +118,40 @@ describe('DataObject', function () {
 
       item.ref.push( ref );
 
+      expect(data.ref[1] instanceof CustomClass).toBeFalsy();
+      expect(data.ref[1].a).toEqual(3);
+      expect(data.ref[1].b).toEqual(4);
+    });
+
+    it('should properly return arrays of managed classes, wrapped with list management', function () {
+      let data = { 'ref': [{ 'a': 1, 'b': 2 }] };
+      let item = new DataObject(data);
+
+      item.createAccessorFor('ref')
+        .wrapArrayItemsWith(CustomClass)
+        .wrappedWith(CustomArray)
+        .as('ref');
+
+      expect(data.ref instanceof CustomArray).toBeFalsy();
+      expect(data.ref[1] instanceof CustomClass).toBeFalsy();
+    });
+
+    it('should properly receive updates from wrapping class of array elements', function () {
+      let data = { 'ref': [{ 'a': 1, 'b': 2 }] };
+      let item = new DataObject(data);
+
+      item.createAccessorFor('ref')
+        .wrapArrayItemsWith(CustomClass)
+        .wrappedWith(CustomArray)
+        .as('ref');
+
+      let ref = new CustomClass();
+      ref.a = 3;
+      ref.b = 4;
+
+      item.ref.push( ref );
+
+      expect(data.ref instanceof CustomArray).toBeFalsy();
       expect(data.ref[1] instanceof CustomClass).toBeFalsy();
       expect(data.ref[1].a).toEqual(3);
       expect(data.ref[1].b).toEqual(4);

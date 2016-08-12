@@ -171,9 +171,6 @@ class DataObject {
           }));
         };
 
-        // Monitor changes to the wrapping objects
-        listenForArrayChanges(objects, update);
-
         return {
 
           /**
@@ -186,6 +183,14 @@ class DataObject {
            * @param {string} alias - The property in the object to alias with
            */
           as: (alias) => {
+
+            // Monitor changes to the array
+            listenForArrayChanges(objects, update);
+
+            // Return always the object that we manage internally
+            // and if the user assigns a new value, manage the new
+            // value the user gave.
+
             Object.defineProperty(this, alias, {
               configurable: false,
               enumerable: true,
@@ -214,6 +219,10 @@ class DataObject {
            * Use this function to also wrap the array of converted objects
            * with a secondary management class.
            *
+           * IMPORTANT: You should NEVER destroy the array passed as an argument,
+           *            since that's the only means of communication with the
+           *            data object class.
+           *
            * @param {class} ClassDefinition - The class definition to wrap the array with
            * @returns {object} - Returns an object with an `as` function to specify the alias
            */
@@ -223,11 +232,14 @@ class DataObject {
             // we will return on the property getter.
             let managementObject = new ClassDefinition(objects, ...constructorArgs);
 
+            // Monitor changes to the objects array in order to update
+            // the actual values in the `__data` object.
+            listenForArrayChanges(objects, update);
+
             return {
               as: (alias) => {
                 Object.defineProperty(this, alias, {
                   configurable: false,
-                  writable: false,
                   enumerable: true,
                   get: () => {
                     return managementObject;
