@@ -138,13 +138,118 @@ class DataObject {
       },
 
       /**
+       * Use this function to transparently wrap the individual array items,
+       * in case the values are in array format, with the given class.
+       *
+       * @param {class} ArrayClassDefinition - The class definition to wrap with
+       * @returns {object} - Returns an object with an `as` function to specify the alias
+       */
+      wrapArrayItemsWith: (ArrayClassDefinition, ...arrayConstructorArgs) => {
+
+        // Get value at this math and make sure it's an array
+        let value = this.get(path);
+        if (!value) {
+          value = [];
+        }
+        if (!Array.isArray(value)) {
+          value = [value];
+        }
+
+        // Generate the initial array by mapping the current values
+        let objects = value.map(function (data) {
+          return new ArrayClassDefinition(data, ...arrayConstructorArgs);
+        });
+
+        // Helper function to call in order to update values
+        let update = (array) => {
+          this.set(path, array.map(function (value) {
+            if (value instanceof ArrayClassDefinition) {
+              return value.__data;
+            } else {
+              console.warn('Refused to update array item in property', path, 'because it\'s not of type managed class type!');
+            }
+          }));
+        };
+
+        // Monitor changes to the wrapping objects
+        listenForArrayChanges(objects, update);
+
+        return {
+
+          /**
+           * Use this function to just return the array of mapped items as-is
+           * without any further management on the array level.
+           *
+           * If you also want to wrap the array with a management class, use
+           * the `wrappedWith` function.
+           *
+           * @param {string} alias - The property in the object to alias with
+           */
+          as: (alias) => {
+            Object.defineProperty(this, alias, {
+              configurable: false,
+              enumerable: true,
+              get: () => {
+                return objects;
+              },
+              set: (value) => {
+                if (!value) {
+                  value = [];
+                }
+                if (!Array.isArray(value)) {
+                  value = [value];
+                }
+
+                // Copy given array and listen for changes
+                objects = array.slice();
+                listenForArrayChanges(objects, update);
+
+                // Also update properties
+                update(objects);
+              }
+            });
+          },
+
+          /**
+           * Use this function to also wrap the array of converted objects
+           * with a secondary management class.
+           *
+           * @param {class} ClassDefinition - The class definition to wrap the array with
+           * @returns {object} - Returns an object with an `as` function to specify the alias
+           */
+          wrappedWith: (ClassDefinition, ...constructorArgs) => {
+
+            // Create a single instance of management object that
+            // we will return on the property getter.
+            let managementObject = new ClassDefinition(objects, ...constructorArgs);
+
+            return {
+              as: (alias) => {
+                Object.defineProperty(this, alias, {
+                  configurable: false,
+                  writable: false,
+                  enumerable: true,
+                  get: () => {
+                    return managementObject;
+                  }
+                });
+
+              }
+            };
+          }
+
+        };
+
+      },
+
+      /**
        * Use this function to transparently wrap the data being read/written
        * with the given class definition.
        *
        * @param {class} ClassDefinition - The class definition to wrap with
        * @returns {object} - Returns an object with an `as` function to specify the alias
        */
-      withClass: (ClassDefinition) => {
+      wrappedWith: (ClassDefinition, ...constructorArgs) => {
 
         // Some obvious validations
         if (!(ClassDefinition.prototype instanceof DataObject)) {
@@ -158,7 +263,7 @@ class DataObject {
               configurable: false,
               enumerable: true,
               get: () => {
-                return new ClassDefinition(this.get(path));
+                return new ClassDefinition(this.get(path), ...constructorArgs);
               },
               set: (value) => {
                 if (value instanceof ClassDefinition) {
@@ -168,73 +273,6 @@ class DataObject {
                 }
               }
             });
-          },
-
-          /**
-           * Enable array manager on the given property
-           *
-           * This function optimizes array access for transparently translating array items
-           * from their management classes to raw data.
-           *
-           * @returns {object} - Returns an object with an `as` function to specify the alias
-           */
-          andArrayManagement: () => {
-
-            // Get value at this math and make sure it's an array
-            let value = this.get(path);
-            if (!value) {
-              value = [];
-            }
-            if (!Array.isArray(value)) {
-              value = [value];
-            }
-
-            // Map it to wrapping objects
-            let objects = value.map(function (data) {
-              return new ClassDefinition(data);
-            });
-
-            // Helper function to call in order to update values
-            let update = (array) => {
-              this.set(path, array.map(function (value) {
-                if (value instanceof ClassDefinition) {
-                  return value.__data;
-                } else {
-                  console.warn('Refused to update array item in property', path, 'because it\'s not of type managed class type!');
-                }
-              }));
-            };
-
-            // Monitor changes to the wrapping objects
-            listenForArrayChanges(objects, update);
-
-            return {
-              as: (alias) => {
-                Object.defineProperty(this, alias, {
-                  configurable: false,
-                  enumerable: true,
-                  get: () => {
-                    return objects;
-                  },
-                  set: (value) => {
-                    if (!value) {
-                      value = [];
-                    }
-                    if (!Array.isArray(value)) {
-                      value = [value];
-                    }
-
-                    // Copy given array and listen for changes
-                    objects = array.slice();
-                    listenForArrayChanges(objects, update);
-
-                    // Also update properties
-                    update(objects);
-                  }
-                });
-              }
-            };
-
           }
 
         };

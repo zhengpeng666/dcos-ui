@@ -13,12 +13,12 @@ class PodInstanceStatus extends DataObject {
       .as('id');
 
     this.createAccessorFor('resources')
-      .withClass(ResourceSpec)
+      .wrappedWith(ResourceSpec)
       .as('resources');
 
     this.createAccessorFor('containers')
-      .withClass(ContainerStatus)
-      .andArrayManagement()
+      .wrapArrayItemsWith(Blah)
+      .wrappedWith(List)
       .as('containers');
 
   }

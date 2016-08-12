@@ -44,7 +44,7 @@ describe('DataObject', function () {
       let data = { 'primitive': 123, 'ref': { 'a': 1, 'b': 2 } };
       let item = new DataObject(data);
 
-      item.createAccessorFor('ref').withClass(CustomClass).as('ref');
+      item.createAccessorFor('ref').wrappedWith(CustomClass).as('ref');
 
       expect(item.ref instanceof CustomClass).toBeTruthy();
       expect(item.ref.a).toEqual(1);
@@ -55,7 +55,7 @@ describe('DataObject', function () {
       let data = { 'primitive': 123, 'ref': { 'a': 1, 'b': 2 } };
       let item = new DataObject(data);
 
-      item.createAccessorFor('ref').withClass(CustomClass).as('ref');
+      item.createAccessorFor('ref').wrappedWith(CustomClass).as('ref');
 
       let ref = new CustomClass();
       ref.a = 2;
@@ -70,7 +70,7 @@ describe('DataObject', function () {
       let data = { 'primitive': 123, 'ref': { 'a': 1, 'b': 2 } };
       let item = new DataObject(data);
 
-      item.createAccessorFor('ref').withClass(CustomClass).as('ref');
+      item.createAccessorFor('ref').wrappedWith(CustomClass).as('ref');
       let ref = item.ref;
 
       ref.a = 2;
@@ -84,7 +84,7 @@ describe('DataObject', function () {
       let data = { 'ref': [{ 'a': 1, 'b': 2 }, { 'a': 3, 'b': 4 }] };
       let item = new DataObject(data);
 
-      item.createAccessorFor('ref').withClass(CustomClass).andArrayManagement().as('ref');
+      item.createAccessorFor('ref').wrapArrayItemsWith(CustomClass).as('ref');
 
       expect(Array.isArray(item.ref)).toBeTruthy();
 
@@ -101,7 +101,7 @@ describe('DataObject', function () {
       let data = { 'ref': [{ 'a': 1, 'b': 2 }] };
       let item = new DataObject(data);
 
-      item.createAccessorFor('ref').withClass(CustomClass).andArrayManagement().as('ref');
+      item.createAccessorFor('ref').wrapArrayItemsWith(CustomClass).as('ref');
 
       let ref = new CustomClass();
       ref.a = 3;
