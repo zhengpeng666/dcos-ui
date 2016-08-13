@@ -113,7 +113,7 @@ class PodDetail extends React.Component {
             </Tab>
 
             <Tab label="Configuration">
-              <div>TODO: Add content</div>
+              <div>TODO: Add content to configuration</div>
             </Tab>
 
             <Tab label="Debug">
@@ -124,7 +124,7 @@ class PodDetail extends React.Component {
             </Tab>
 
             <Tab label="Volumes">
-              <div>TODO: Add content</div>
+              <div>TODO: Add content to volumes</div>
             </Tab>
 
           </TabView>

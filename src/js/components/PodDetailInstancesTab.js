@@ -1,5 +1,8 @@
 import React from 'react';
 
+import PodTableFilters from './PodTableFilters';
+import PodTable from './PodTable';
+
 const METHODS_TO_BIND = [
 ];
 
@@ -18,9 +21,11 @@ class PodDetailInstancesTab extends React.Component {
   }
 
   render() {
+    let rules = {};
     return (
       <div>
-        Here are some tab contents for pod <strong>{this.props.pod.id}</strong>
+        <PodTableFilters filters={rules} />
+        <PodTable pod={this.props.pod} filters={rules} />
       </div>
     );
   }
