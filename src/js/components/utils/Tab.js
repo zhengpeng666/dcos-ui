@@ -68,7 +68,9 @@ class Tab extends React.Component {
   }
 
   render() {
-    return this.props.children;
+    return (
+        <div className="tab-view-tab">{this.props.children}</div>
+      );
   }
 };
 
