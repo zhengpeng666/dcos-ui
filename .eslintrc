@@ -60,7 +60,6 @@
     }],
 
     // Airbnb overwrites
-    "jsx-quotes": ["error", "prefer-double"],
     "arrow-parens": ["error", "always"],
     "object-shorthand": "off",
     "no-var": "off",
