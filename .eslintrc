@@ -36,10 +36,11 @@
     "eqeqeq": ["error", "smart"],
     "quotes": ["error", "single"],
     "indent": ["error", 2, {"SwitchCase": 1}],
-    "camelcase": ["off", {"properties": "never"}],
+    "camelcase": [0, {"properties": "never"}],
     // "camelcase": ["error", {"properties": "always"}], This causes errors with mixin properties
     "strict": ["error", "never"], // <-- fix
     "no-mixed-spaces-and-tabs": "error",
+    "no-new": "off",
     "no-trailing-spaces": ["error", { "skipBlankLines": false }],
     "no-underscore-dangle": "off",
     "no-unused-vars": ["error", {"args": "after-used", "argsIgnorePattern": "PluginSDK"}],
