@@ -31,6 +31,10 @@ module.exports = class ServiceTree extends Tree {
       this.id = options.id;
     }
 
+    if (options.isUserOwner) {
+      this._isUserOwner = options.isUserOwner;
+    }
+
     // Converts items into instances of ServiceTree, Application or Framework
     // based on their properties.
     this.list = this.list.map((item) => {
@@ -54,6 +58,10 @@ module.exports = class ServiceTree extends Tree {
         return new Application(item);
       }
     });
+  }
+
+  isUserOwner() {
+    return !!this._isUserOwner;
   }
 
   getDeployments() {

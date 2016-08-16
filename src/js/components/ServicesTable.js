@@ -235,12 +235,18 @@ var ServicesTable = React.createClass({
 
   getImage: function (service) {
     if (service instanceof ServiceTree) {
+      let folderIconID = 'folder-users';
+
+      if (service.isUserOwner()) {
+        folderIconID = 'folder';
+      }
+
       // Get serviceTree image/icon
       return (
         <Icon
           className="icon-margin-right"
           color="grey"
-          id="folder"
+          id={folderIconID}
           size="small"
           family="small" />
       );

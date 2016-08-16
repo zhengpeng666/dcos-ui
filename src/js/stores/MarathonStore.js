@@ -309,8 +309,9 @@ class MarathonStore extends GetSetBaseStore {
     return MarathonActions.changeService(...arguments);
   }
 
-  createGroup() {
-    return MarathonActions.createGroup(...arguments);
+  createGroup(data) {
+    MarathonStoreInstance.updatePayloadID(data);
+    return MarathonActions.createGroup(data);
   }
 
   deleteGroup() {
@@ -321,8 +322,26 @@ class MarathonStore extends GetSetBaseStore {
     return MarathonActions.editGroup(...arguments);
   }
 
-  createService() {
+  createService(definition) {
+    MarathonStoreInstance.updatePayloadID(definition);
     return MarathonActions.createService(...arguments);
+  }
+
+  updatePayloadID(payload) {
+    // Check if the id prefix already exists
+    // otherwise drop this app in the users' folder
+    let groups = this.get('groups');
+    let segments = payload.id.replace(/^\/+/, '').split('/');
+    let firstSegment = segments[0];
+    let found = groups.getItems().find(function (item) {
+      return item.getId().match(firstSegment);
+    });
+
+    // If not found, prepend user folder
+    if (!found || found.isUserOwner()) {
+      let path = this.getUserFolderPath();
+      payload.id = path + '/' + payload.id.replace(/^\/+/, '');
+    }
   }
 
   deleteService() {
@@ -445,6 +464,10 @@ class MarathonStore extends GetSetBaseStore {
     this.emit(MARATHON_INSTANCE_INFO_SUCCESS);
   }
 
+  getUserFolderPath() {
+    return `/users/${AuthStore.getUser().uid}`;
+  }
+
   pluckMatchingFolder(group, folderID) {
     let items = group.items;
 
@@ -456,6 +479,8 @@ class MarathonStore extends GetSetBaseStore {
   }
 
   recursiveRemoveID(group, idToRemove) {
+    group.originalID = group.id;
+    group.isUserOwner = true;
     group.id = group.id.replace(idToRemove, '');
 
     if (group.items) {
@@ -465,8 +490,19 @@ class MarathonStore extends GetSetBaseStore {
           this.recursiveRemoveID(item, idToRemove);
         } else {
           item.originalID = item.id;
+          item.isUserOwner = true;
           item.id = item.id.replace(idToRemove, '');
         }
+      });
+    }
+  }
+
+  walk(group, callback) {
+    callback(group);
+
+    if (group.items) {
+      group.items.forEach((item) => {
+        this.walk(item, callback);
       });
     }
   }
@@ -475,11 +511,34 @@ class MarathonStore extends GetSetBaseStore {
     if (
       !PluginSDK.Hooks.applyFilter('hasCapability', false, 'dcos:superuser')
     ) {
-      let usersGroup = this.pluckMatchingFolder(data, '/users');
+      // // Add hasPermission to services where acls exist
+      // let aclIDPrefix = 'dcos:service:marathon:marathon:services:';
+      // let permissions = Object.keys(
+      //   PluginSDK.Hooks.applyFilter('getUserPermissions')
+      // ).filter(function (permission) {
+      //   return permission.match(aclIDPrefix);
+      // }).map(function (permission) {
+      //   return permission.replace(aclIDPrefix, '');
+      // });
+      // // Walk the tree
+      // this.walk(data, function (item) {
+      //   if (permissions.indexOf(item.id) !== -1) {
+      //     item.hasPermission = true;
+      //   }
+      // });
 
+      // if (data.items) {
+      //   for (var i = 0; i < data.items.length; i++) {
+      //     if (!data.items[i].hasPermission) {
+      //       data.items[i]
+      //     }
+      //   }
+      // }
+
+      // Mangle user's folder
+      let usersGroup = this.pluckMatchingFolder(data, '/users');
       if (usersGroup) {
-        let user = AuthStore.getUser();
-        let userFolderPath = `/users/${user.uid}`;
+        let userFolderPath = this.getUserFolderPath();
         let userFolderGroup = this.pluckMatchingFolder(
           usersGroup, userFolderPath
         );
@@ -603,4 +662,6 @@ class MarathonStore extends GetSetBaseStore {
   }
 }
 
-module.exports = new MarathonStore();
+let MarathonStoreInstance = new MarathonStore();
+
+module.exports = MarathonStoreInstance;
