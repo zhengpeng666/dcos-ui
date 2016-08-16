@@ -33,6 +33,7 @@
   "extends": "airbnb",
 
   "rules": {
+    "arrow-parens": ["error", "always"],
     "eqeqeq": ["error", "smart"],
     "quotes": ["error", "single"],
     "indent": ["error", 2, {"SwitchCase": 1}],
@@ -60,7 +61,6 @@
     }],
 
     // Airbnb overwrites
-    "arrow-parens": ["error", "always"],
     "object-shorthand": "off",
     "no-var": "off",
     "arrow-body-style": "off",
