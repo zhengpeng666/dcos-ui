@@ -24,9 +24,10 @@ class ClipboardTrigger extends React.Component {
   }
 
   componentDidMount() {
-    if (this.copyButton) {
+    if (this._toolTip) {
+      console.log(this._toolTip);
       this.clipboard = new Clipboard(
-        this.copyButton,
+        this._toolTip,
         {text: () => { return this.props.copyText; }}
       );
 
@@ -73,7 +74,7 @@ class ClipboardTrigger extends React.Component {
       <Tooltip
         content={text}
         position="bottom"
-        ref={(ref) => { this.copyButton = ref; }}>
+        ref={(ref) => { this._toolTip = ref; }}>
         {clipboardIcon}
       </Tooltip>
     );
