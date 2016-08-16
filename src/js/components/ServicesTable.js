@@ -240,16 +240,18 @@ var ServicesTable = React.createClass({
     );
     if (service instanceof ServiceTree) {
       let folderIconID = 'folder-users';
+      let folderIconColor = 'green';
 
       if (service.userIsOwner() || isSuperUser) {
         folderIconID = 'folder';
+        folderIconColor = 'gray';
       }
 
       // Get serviceTree image/icon
       return (
         <Icon
           className="icon-margin-right"
-          color="grey"
+          color={folderIconColor}
           id={folderIconID}
           size="small"
           family="small" />
@@ -275,6 +277,12 @@ var ServicesTable = React.createClass({
           className="table-cell-icon"
           params={{id}}>
           {this.getImage(service)}
+          <Icon
+            className="icon-margin-right hidden"
+            color="green"
+            id="folder-users"
+            size="small"
+            family="small" />
         </Link>
         <span className="flex-shrink flex-grow text-overflow">
           {this.getServiceLink(service)}

@@ -551,7 +551,7 @@ class MarathonStore extends GetSetBaseStore {
       // Pluck users' folder for handling later
       let usersGroup = this.pluckMatchingFolder(data, '/users');
 
-      // Add hasPermission to services where acls exist
+      // Map and filter user permissions
       let aclIDPrefix = 'dcos:service:marathon:marathon:services:';
       let permissions = Object.keys(
         PluginSDK.Hooks.applyFilter('getUserPermissions')
@@ -582,6 +582,22 @@ class MarathonStore extends GetSetBaseStore {
           // Here is where we modify paths
           this.recursiveRemoveID(userFolderGroup, userFolderPath);
           data.items = data.items.concat(userFolderGroup.items);
+        }
+
+        // Show the rest of the shared items
+        let fakeDataWrapper = {id: '/', items: [usersGroup]};
+        // Walk the tree
+        this.walk(fakeDataWrapper, function (item) {
+          if (permissions.indexOf(item.id) !== -1) {
+            item.hasPermission = true;
+          }
+        });
+        this.walkBackwards(fakeDataWrapper, function (group) {
+          return !!group.hasPermission;
+        });
+
+        if (fakeDataWrapper.items.length) {
+          data.items = data.items.concat(fakeDataWrapper.items);
         }
       }
     }
