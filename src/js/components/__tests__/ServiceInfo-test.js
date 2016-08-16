@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 jest.dontMock('../CollapsingString');
 jest.dontMock('../PageHeader');
 jest.dontMock('../ServiceInfo');

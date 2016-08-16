@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 const d3 = require('d3');
 /* eslint-disable no-unused-vars */
 const React = require('react');

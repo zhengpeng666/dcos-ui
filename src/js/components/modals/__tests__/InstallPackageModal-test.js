@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 jest.dontMock('../InstallPackageModal');
 jest.dontMock('../../CosmosErrorMessage');
 jest.dontMock('../../ReviewConfig');

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 jest.dontMock('../jobs/JobsTab');
 jest.dontMock('../../mixins/InternalStorageMixin');
 jest.dontMock('../../mixins/SaveStateMixin');

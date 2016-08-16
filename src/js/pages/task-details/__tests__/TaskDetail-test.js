@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 jest.dontMock('../TaskFilesTab');
 jest.dontMock('../TaskDetail');
 jest.dontMock('../../../mixins/GetSetMixin');

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 jest.dontMock('../PackagesTab');
 jest.dontMock('../../../components/SchemaForm');
 jest.dontMock('../../../components/Panel');

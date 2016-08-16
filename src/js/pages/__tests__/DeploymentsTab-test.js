@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 jest.unmock('moment');
 jest.unmock('../../components/CollapsingString');
 jest.unmock('../services/DeploymentsTab');

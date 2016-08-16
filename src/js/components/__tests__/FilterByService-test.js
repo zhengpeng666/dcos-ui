@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 jest.dontMock('../FilterByService');
 jest.dontMock('../../mixins/GetSetMixin');
 jest.dontMock('./fixtures/MockFrameworks');

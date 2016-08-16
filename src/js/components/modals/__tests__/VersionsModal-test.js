@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 jest.dontMock('../../../utils/DOMUtils');
 jest.dontMock('../../../utils/JestUtil');
 jest.dontMock('../VersionsModal');

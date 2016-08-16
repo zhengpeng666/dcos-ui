@@ -1,3 +1,4 @@
+/* eslint-disable react/no-find-dom-node */
 jest.dontMock('../PageHeader');
 /* eslint-disable no-unused-vars */
 const React = require('react');
