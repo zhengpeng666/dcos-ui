@@ -507,11 +507,20 @@ class MarathonStore extends GetSetBaseStore {
     }
   }
 
+  walkBackwards(group, callback) {
+    groups.items.forEach((item) => {
+      if (item.items) {
+        this.walkBackwards(item);
+      }
+      callback(item);
+    });
+  }
+
   processMarathonGroups(data) {
     if (
       !PluginSDK.Hooks.applyFilter('hasCapability', false, 'dcos:superuser')
     ) {
-      // // Add hasPermission to services where acls exist
+      // Add hasPermission to services where acls exist
       // let aclIDPrefix = 'dcos:service:marathon:marathon:services:';
       // let permissions = Object.keys(
       //   PluginSDK.Hooks.applyFilter('getUserPermissions')
@@ -529,8 +538,10 @@ class MarathonStore extends GetSetBaseStore {
 
       // if (data.items) {
       //   for (var i = 0; i < data.items.length; i++) {
-      //     if (!data.items[i].hasPermission) {
-      //       data.items[i]
+      //     let item = data.items[i];
+      //     if (!item.hasPermission) {
+      //       let plucked = data.items.splice(i, 1);
+      //       data.items.push(plucked.items);
       //     }
       //   }
       // }

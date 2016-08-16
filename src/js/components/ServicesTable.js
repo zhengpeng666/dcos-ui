@@ -10,6 +10,7 @@ import Icon from './Icon';
 import MarathonStore from '../stores/MarathonStore';
 import NestedServiceLinks from '../components/NestedServiceLinks';
 import ResourceTableUtil from '../utils/ResourceTableUtil';
+import PluginSDK from 'PluginSDK';
 import Service from '../structs/Service';
 import ServiceActionItem from '../constants/ServiceActionItem';
 import ServiceDestroyModal from './modals/ServiceDestroyModal';
@@ -234,10 +235,13 @@ var ServicesTable = React.createClass({
   },
 
   getImage: function (service) {
+    let isSuperUser = PluginSDK.Hooks.applyFilter(
+      'hasCapability', false, 'dcos:superuser'
+    );
     if (service instanceof ServiceTree) {
       let folderIconID = 'folder-users';
 
-      if (service.isUserOwner()) {
+      if (service.isUserOwner() || isSuperUser) {
         folderIconID = 'folder';
       }
 
