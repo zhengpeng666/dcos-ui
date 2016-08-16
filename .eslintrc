@@ -33,11 +33,13 @@
   "extends": "airbnb",
 
   "rules": {
+    "arrow-parens": ["error", "always"],
     "eqeqeq": ["error", "smart"],
     "quotes": ["error", "single"],
     "indent": ["error", 2, {"SwitchCase": 1}],
     "camelcase": [0, {"properties": "never"}],
     // "camelcase": ["error", {"properties": "always"}], This causes errors with mixin properties
+    "comma-dangle": ["error", "never"],
     "strict": ["error", "never"], // <-- fix
     "no-mixed-spaces-and-tabs": "error",
     "no-new": "off",
