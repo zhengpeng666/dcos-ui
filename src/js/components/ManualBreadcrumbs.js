@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import DeepEqual from 'deep-equal';
 import React, {PropTypes} from 'react';
-import ReactDOM from 'react-dom';
 
 import BreadcrumbSegmentLink from './BreadcrumbSegmentLink';
 import Icon from './Icon';
@@ -75,7 +74,7 @@ class ManualBreadcrumbs extends React.Component {
   }
 
   getAvailableWidth() {
-    return ReactDOM.findDOMNode(this).offsetWidth;
+    return this.manualBreadcrumbs.offsetWidth;
   }
 
   getWidthFromExpandedItem(item) {
@@ -91,7 +90,7 @@ class ManualBreadcrumbs extends React.Component {
 
   getExpandedWidth() {
     // array/splat casts NodeList to array
-    let listItems = [...ReactDOM.findDOMNode(this).children]
+    let listItems = [...this.manualBreadcrumbs.children]
       .filter(function (_, index) {
         // Filter out even nodes containing '>'
         return index % 2 === 0;
@@ -114,7 +113,7 @@ class ManualBreadcrumbs extends React.Component {
   }
 
   getLastItemWidth() {
-    let lastItem = ReactDOM.findDOMNode(this).lastChild;
+    let lastItem = this.manualBreadcrumbs.lastChild;
 
     if (!lastItem || !lastItem.firstChild) {
       return LAST_ITEM_OFFSET;
@@ -184,7 +183,7 @@ class ManualBreadcrumbs extends React.Component {
     );
 
     return (
-      <ol className={classSet}>
+      <ol ref={(ref) => { this.manualBreadcrumbs = ref; }} className={classSet}>
         {this.renderCrumbs(this.props.crumbs)}
       </ol>
     );

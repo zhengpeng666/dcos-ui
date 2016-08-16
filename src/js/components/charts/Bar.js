@@ -1,6 +1,5 @@
 import d3 from 'd3';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 var Bar = React.createClass({
 
@@ -26,7 +25,7 @@ var Bar = React.createClass({
 
     // here we reset the position of the bar to what it was before the animation started
     // the bar is reset right before we update the bar to the new value
-    let el = ReactDOM.findDOMNode(this);
+    let el = this.bar;
     d3.select(el).interrupt()
       .transition()
       .duration(0)
@@ -41,7 +40,7 @@ var Bar = React.createClass({
     if (!props.transitionDelay && !props.transitionDuration) {
       return;
     }
-    let el = ReactDOM.findDOMNode(this);
+    let el = this.bar;
     d3.select(el).interrupt()
       .transition()
         .delay(props.transitionDelay)
@@ -58,8 +57,10 @@ var Bar = React.createClass({
     var rectWidth = props.rectWidth || 0;
 
     return (
-      <g className="bar"
-          transform={'translate(' + [props.posX, 0] + ')'}>
+      <g
+        className="bar"
+        ref={(ref) => { this.bar = ref; }}
+        transform={'translate(' + [props.posX, 0] + ')'}>
         <line
             className={props.lineClass}
             x1={0}

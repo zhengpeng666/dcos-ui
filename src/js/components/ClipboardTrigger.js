@@ -1,7 +1,6 @@
 import browserInfo from 'browser-info';
 import Clipboard from 'clipboard';
 import React, {PropTypes} from 'react';
-import ReactDOM from 'react-dom';
 import {Tooltip} from 'reactjs-components';
 
 import Icon from './Icon';
@@ -25,13 +24,10 @@ class ClipboardTrigger extends React.Component {
   }
 
   componentDidMount() {
-    if (this.refs.copyButton) {
-      this.clipboard = new Clipboard(ReactDOM.findDOMNode(this.refs.copyButton),
-        {
-          text: () => {
-            return this.props.copyText;
-          }
-        }
+    if (this.copyButton) {
+      this.clipboard = new Clipboard(
+        this.copyButton,
+        {text: () => { return this.props.copyText; }}
       );
 
       this.clipboard.on('success', this.handleCopy);
@@ -74,7 +70,10 @@ class ClipboardTrigger extends React.Component {
     }
 
     return (
-      <Tooltip position="bottom" content={text} ref="copyButton">
+      <Tooltip
+        content={text}
+        position="bottom"
+        ref={(ref) => { this.copyButton = ref; }}>
         {clipboardIcon}
       </Tooltip>
     );

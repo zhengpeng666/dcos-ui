@@ -1,6 +1,5 @@
 import d3 from 'd3';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import DialSlice from './DialSlice';
 import InternalStorageMixin from '../../mixins/InternalStorageMixin';
@@ -106,7 +105,7 @@ var DialChart = React.createClass({
   getSlice(props) {
     var data = this.internalStorage_get();
     var normalizedData = this.getNormalizedData(props.slices, props.data);
-    return d3.select(ReactDOM.findDOMNode(this)).selectAll('path')
+    return d3.select(this.dialChart).selectAll('path')
       .data(data.pie(normalizedData));
   },
 
@@ -153,7 +152,11 @@ var DialChart = React.createClass({
 
   render() {
     return (
-      <div className="chart-dialchart" height={this.props.height} width={this.props.width}>
+      <div
+        className="chart-dialchart"
+        height={this.props.height}
+        ref={(ref) => { this.dialChart = ref; }}
+        width={this.props.width}>
         <svg height={this.props.height} width={this.props.width}>
           <g transform={this.getPosition()} className="slices">
             {this.getWedges()}

@@ -1,7 +1,6 @@
 import mixin from 'reactjs-mixin';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import ReactDOM from 'react-dom';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import DOMUtils from '../utils/DOMUtils';
@@ -152,7 +151,7 @@ class MesosLogView extends mixin(StoreMixin) {
   }
 
   handleWindowResize() {
-    this.checkIfAwayFromBottom(this.refs.logContainer);
+    this.checkIfAwayFromBottom(this.logContainer);
   }
 
   onMesosLogStoreError(path) {
@@ -173,7 +172,7 @@ class MesosLogView extends mixin(StoreMixin) {
       return;
     }
 
-    let logContainer = ReactDOM.findDOMNode(this.refs.logContainer);
+    let logContainer = this.logContainer;
     let previousScrollTop;
     let previousScrollHeight;
 
@@ -195,7 +194,7 @@ class MesosLogView extends mixin(StoreMixin) {
   }
 
   setScrollTop(scrollTop) {
-    ReactDOM.findDOMNode(this.refs.logContainer).scrollTop = scrollTop;
+    this.logContainer.scrollTop = scrollTop;
   }
 
   checkIfCloseToTop(container) {
@@ -234,12 +233,12 @@ class MesosLogView extends mixin(StoreMixin) {
   }
 
   getLogContainerNode() {
-    let logContainer = this.refs.logContainer;
+    let logContainer = this.logContainer;
     if (!logContainer) {
       return null;
     }
 
-    return ReactDOM.findDOMNode(logContainer);
+    return logContainer;
   }
 
   getEmptyDirectoryScreen() {
@@ -287,7 +286,7 @@ class MesosLogView extends mixin(StoreMixin) {
     return (
       <pre
         className="flex-grow flush-bottom inverse prettyprint"
-        ref="logContainer"
+        ref={(ref) => { this.logContainer = ref; }}
         onScroll={this.handleLogContainerScroll}>
         <Highlight
           matchClass="highlight"

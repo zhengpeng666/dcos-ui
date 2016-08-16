@@ -1,6 +1,5 @@
 import classNames from 'classnames/dedupe';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import Util from '../utils/Util';
 
@@ -32,8 +31,7 @@ class Image extends React.Component {
 
     // Try again if a new url was provided
     if (newSrc) {
-      let image = ReactDOM.findDOMNode(this);
-      image.src = newSrc;
+      this.image.src = newSrc;
       this.setState({imageErrorCount: 0});
     }
   }
@@ -58,6 +56,7 @@ class Image extends React.Component {
 
     return (
       <img
+        ref={(ref) => { this.image = ref; }}
         className={classes}
         onError={this.onImageError}
         {...Util.omit(props, ['className'])} />

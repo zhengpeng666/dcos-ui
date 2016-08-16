@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 const PropTypes = React.PropTypes;
 
@@ -14,7 +13,7 @@ class Rect extends React.Component {
 
   transitionRect(props) {
     let {transitionDuration, transform} = props;
-    let el = ReactDOM.findDOMNode(this);
+    let el = this.rect;
 
     d3.select(el)
       .transition()
@@ -28,6 +27,7 @@ class Rect extends React.Component {
 
     return (
       <rect
+        ref={(ref) => { this.rect = ref; }}
         width={width}
         height={height}
         x={x}

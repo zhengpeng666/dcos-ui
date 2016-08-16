@@ -1,6 +1,5 @@
 import DeepEqual from 'deep-equal';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import DOMUtils from '../utils/DOMUtils';
 
@@ -52,7 +51,7 @@ class CollapsingString extends React.Component {
 
   getParentWidth() {
     let parent = null;
-    let node = ReactDOM.findDOMNode(this);
+    let node = this.collapsingString;
 
     if (node == null) {
       return 0;
@@ -134,7 +133,10 @@ class CollapsingString extends React.Component {
     }
 
     return (
-      <div className={this.props.wrapperClassName} title={fullString}>
+      <div
+        className={this.props.wrapperClassName}
+        ref={(ref) => { this.collapsingString = ref; }}
+        title={fullString}>
         <span className={this.props.fullStringClassName} ref="fullString">
           {fullString}
         </span>

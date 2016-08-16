@@ -1,6 +1,5 @@
 import d3 from 'd3';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 var TimeSeriesArea = React.createClass({
 
@@ -17,7 +16,7 @@ var TimeSeriesArea = React.createClass({
   componentDidMount() {
     var props = this.props;
 
-    d3.select(ReactDOM.findDOMNode(this))
+    d3.select(this.timeSeriesArea)
       .transition()
       .duration(props.transitionTime)
       .ease('linear')
@@ -25,7 +24,7 @@ var TimeSeriesArea = React.createClass({
   },
 
   componentWillReceiveProps(props) {
-    d3.select(ReactDOM.findDOMNode(this)).interrupt()
+    d3.select(this.timeSeriesArea).interrupt()
       .attr('transform', null)
       .transition()
       .duration(props.transitionTime)
@@ -37,7 +36,7 @@ var TimeSeriesArea = React.createClass({
     var className = this.props.className;
 
     return (
-      <g>
+      <g ref={(ref) => { this.timeSeriesArea = ref; }}>
         <path className={'area ' + className} d={this.props.path} />
         <path className={'line ' + className} d={this.props.line} />
       </g>

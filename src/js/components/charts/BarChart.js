@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import d3 from 'd3';
 import deepEqual from 'deep-equal';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import Bar from './Bar';
 import ChartMixin from '../../mixins/ChartMixin';
@@ -113,7 +112,7 @@ var BarChart = React.createClass({
 
   createClipPath() {
     var data = this.internalStorage_get();
-    var el = ReactDOM.findDOMNode(this);
+    var el = this.barChart;
 
     d3.select(el)
       .append('defs')
@@ -195,7 +194,7 @@ var BarChart = React.createClass({
         .ticks(xTicks)
         .tickFormat(this.formatXAxis)
         .orient('bottom');
-      d3.select(this.refs.xAxis).interrupt()
+      d3.select(this.xAxis).interrupt()
         .attr('class', xAxisClass)
         .call(xAxis);
     }
@@ -209,11 +208,11 @@ var BarChart = React.createClass({
       .ticks(props.ticksY)
       .tickFormat(this.formatYAxis(props.ticksY, props.maxY))
       .orient('left');
-    d3.select(this.refs.yAxis)
+    d3.select(this.yAxis)
       .attr('class', yAxisClass)
       .call(yAxis);
 
-    d3.select(this.refs.yGrid)
+    d3.select(this.yGrid)
       .attr('class', 'grid y')
       .call(
         d3.svg.axis().scale(yScale)
@@ -227,7 +226,7 @@ var BarChart = React.createClass({
     if (props.xGridLines != null) {
       xGridLines = props.xGridLines;
     }
-    d3.select(this.refs.xGrid)
+    d3.select(this.xGrid)
       .attr('class', 'grid x')
       .call(
         d3.svg.axis().scale(xScale)
@@ -262,7 +261,7 @@ var BarChart = React.createClass({
     // the axis is reset right before we update the bar to the new value/position
     // prevents subsequent animations from animating from 0
     if (data.rectWidth) {
-      d3.select(this.refs.xAxis).interrupt()
+      d3.select(this.xAxis).interrupt()
         .transition().delay(0)
         .attr('transform', 'translate(' + [0, props.height] + ')');
     }
@@ -341,18 +340,20 @@ var BarChart = React.createClass({
     });
 
     return (
-      <svg height={props.height + margin.bottom}
-          width={props.width}
-          className="barchart"
-          ref="barchart">
+      <svg
+        height={props.height + margin.bottom}
+        width={props.width}
+        className="barchart"
+        ref={(ref) => { this.barChart = ref; }}>
         <g transform={'translate(' + [margin.left, margin.bottom / 2] + ')'}>
           <g className="y axis" ref="yAxis" />
-          <g className="x axis"
+          <g
+            className="x axis"
             transform={'translate(' + [0, props.height] + ')'}
-            ref="xAxis"/>
+            ref={(ref) => { this.xAxis = ref; }} />
           <g className={gridClassSet} clipPath={clipPath}>
-            <g ref="yGrid" />
-            <g ref="xGrid" />
+            <g ref={(ref) => { this.yGrid = ref; }} />
+            <g ref={(ref) => { this.xGrid = ref; }} />
             {this.getBarList()}
           </g>
         </g>

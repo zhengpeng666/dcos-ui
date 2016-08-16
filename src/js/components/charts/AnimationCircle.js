@@ -1,6 +1,5 @@
 import d3 from 'd3';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 var AnitmationCircle = React.createClass({
 
@@ -29,12 +28,12 @@ var AnitmationCircle = React.createClass({
   },
 
   componentDidMount() {
-    d3.select(ReactDOM.findDOMNode(this))
+    d3.select(this.circle)
       .attr('transform', 'translate(' + this.props.position + ')');
   },
 
   componentWillReceiveProps(nextProps) {
-    let node = ReactDOM.findDOMNode(this);
+    let node = this.circle;
 
     // Handle first position to not animate into position
     // We need this because we get 0-data for graphs on the first render
@@ -60,7 +59,12 @@ var AnitmationCircle = React.createClass({
     var className = props.className;
 
     return (
-      <circle className={className} r={radius} cx={props.cx} cy={props.cy} />
+      <circle
+        className={className}
+        cx={props.cx}
+        cy={props.cy}
+        r={radius}
+        ref={(ref) => { this.circle = ref; }} />
     );
   }
 });

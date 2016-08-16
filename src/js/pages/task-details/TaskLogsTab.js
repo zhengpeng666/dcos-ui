@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import {Dropdown, Tooltip} from 'reactjs-components';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import DirectoryItem from '../../structs/DirectoryItem';
 import FilterBar from '../../components/FilterBar';
@@ -34,7 +33,7 @@ class TaskLogsTab extends React.Component {
   }
 
   componentDidMount() {
-    let filterInput = ReactDOM.findDOMNode(this.refs.filterInput);
+    let filterInput = this.filterInput;
 
     if (filterInput) {
       filterInput.addEventListener('keydown', this.handleKeyDown);
@@ -57,7 +56,7 @@ class TaskLogsTab extends React.Component {
   }
 
   componentWillUnmount() {
-    let filterInput = ReactDOM.findDOMNode(this.refs.filterInput);
+    let filterInput = this.filterInput;
 
     if (filterInput) {
       filterInput.removeEventListener('keydown', this.handleKeyDown);
@@ -311,7 +310,7 @@ class TaskLogsTab extends React.Component {
           leftChildrenClass="filter-bar-left filter-bar-search-container flex-no-wrap flex-grow flex-shrink"
           rightAlignLastNChildren={2}>
           <FilterInputText
-            ref="filterInput"
+            ref={(ref) => { this.filterInput = ref; }}
             className="flex-grow flex-box flush-bottom"
             placeholder="Search"
             searchString={this.state.searchString}

@@ -1,7 +1,6 @@
 import d3 from 'd3';
 import deepEqual from 'deep-equal';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import AnimationCircle from './AnimationCircle';
 import ChartMixin from '../../mixins/ChartMixin';
@@ -391,7 +390,7 @@ var TimeSeriesChart = React.createClass({
     var margin = props.margin;
 
     return function () {
-      var el = ReactDOM.findDOMNode(this);
+      var el = this.timeSeriesChart;
       var elPosition = el.getBoundingClientRect();
 
       return {
@@ -404,13 +403,13 @@ var TimeSeriesChart = React.createClass({
   },
 
   addMouseHandler(handleMouseMove, handleMouseOut) {
-    var el = ReactDOM.findDOMNode(this);
+    var el = this.timeSeriesChart;
     el.addEventListener('mousemove', handleMouseMove);
     el.addEventListener('mouseout', handleMouseOut);
   },
 
   removeMouseHandler(handleMouseMove, handleMouseOut) {
-    var el = ReactDOM.findDOMNode(this);
+    var el = this.timeSeriesChart;
     el.removeEventListener('mousemove', handleMouseMove);
     el.removeEventListener('mouseout', handleMouseOut);
   },
@@ -430,7 +429,9 @@ var TimeSeriesChart = React.createClass({
     var unsuccessfulBlocks = this.createUnsuccessfulBlocks(props.data[0].values, xTimeScale);
 
     return (
-      <div className="timeseries-chart">
+      <div
+        className="timeseries-chart"
+        ref={(ref) => { this.timeSeriesChart = ref; }}>
         <svg height={props.height} width={props.width}>
           <g transform={'translate(' + margin.left + ',' + margin.top + ')'}>
             <ChartStripes

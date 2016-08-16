@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import DOMUtils from '../../utils/DOMUtils';
@@ -49,7 +48,7 @@ var Chart = React.createClass({
   },
 
   shouldComponentUpdate() {
-    return DOMUtils.isElementOnTop(ReactDOM.findDOMNode(this));
+    return DOMUtils.isElementOnTop(this.chart);
   },
 
   componentWillUnmount() {
@@ -64,7 +63,7 @@ var Chart = React.createClass({
     if (!this.isMounted()) {
       return;
     }
-    var node = ReactDOM.findDOMNode(this);
+    var node = this.chart;
     var dimensions = DOMUtils.getComputedDimensions(node);
     var data = this.internalStorage_get();
 
@@ -107,7 +106,7 @@ var Chart = React.createClass({
     // at the moment, 'chart' is used to inject the chart colour palette.
     // we should reclaim it as the rightful className of <Chart />
     return (
-      <div className="chart-chart">
+      <div className="chart-chart" ref={(ref) => { this.chart = ref; }}>
         {this.getChildren()}
       </div>
     );
