@@ -20,7 +20,7 @@ describe('DescriptionList', function () {
   it('should return null if hash is not passed', function () {
     var instance = ReactDOM.render(<DescriptionList />, this.container);
 
-    var result = ReactDOM.findDOMNode(instance);
+    var result = TestUtils.scryRenderedDOMComponentsWithTag(instance, 'dl')[0];
     expect(TestUtils.isDOMComponent(result)).toEqual(false);
   });
 
@@ -30,7 +30,7 @@ describe('DescriptionList', function () {
       this.container
     );
 
-    var result = ReactDOM.findDOMNode(instance);
+    var result = TestUtils.scryRenderedDOMComponentsWithTag(instance, 'dl')[0];
     expect(TestUtils.isDOMComponent(result)).toEqual(false);
   });
 
@@ -40,7 +40,7 @@ describe('DescriptionList', function () {
       this.container
     );
 
-    var result = ReactDOM.findDOMNode(instance);
+    var result = TestUtils.scryRenderedDOMComponentsWithTag(instance, 'dl')[0];
     expect(TestUtils.isDOMComponent(result)).toEqual(false);
   });
 
@@ -50,7 +50,7 @@ describe('DescriptionList', function () {
       this.container
     );
 
-    var result = ReactDOM.findDOMNode(instance);
+    var result = TestUtils.scryRenderedDOMComponentsWithTag(instance, 'dl')[0];
     expect(TestUtils.isDOMComponent(result)).toEqual(false);
   });
 
@@ -60,7 +60,7 @@ describe('DescriptionList', function () {
       this.container
     );
 
-    var result = ReactDOM.findDOMNode(instance);
+    var result = TestUtils.scryRenderedDOMComponentsWithTag(instance, 'dl')[0];
     expect(TestUtils.isDOMComponent(result)).toEqual(true);
   });
 
@@ -70,8 +70,7 @@ describe('DescriptionList', function () {
       this.container
     );
 
-    var node = ReactDOM.findDOMNode(instance);
-    var headline = node.querySelector('h5');
+    var headline = TestUtils.findRenderedDOMComponentWithTag(instance, 'h5');
 
     expect(headline.textContent).toEqual('baz');
   });

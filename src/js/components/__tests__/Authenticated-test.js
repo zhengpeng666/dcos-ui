@@ -63,7 +63,7 @@ describe('Authenticated', function () {
     var renderedComponent = ReactDOM.render(<this.instance />, this.container);
     var component =
       TestUtils.findRenderedDOMComponentWithTag(renderedComponent, 'div');
-    expect(ReactDOM.findDOMNode(component).textContent).toBe('fakeComponent');
+    expect(component.textContent).toBe('fakeComponent');
   });
 
 });

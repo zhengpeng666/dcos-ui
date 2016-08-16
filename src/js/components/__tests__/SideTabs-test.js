@@ -3,6 +3,7 @@ jest.dontMock('../SideTabs');
 const React = require('react');
 /* eslint-enable no-unused-vars */
 const ReactDOM = require('react-dom');
+const TestUtils = require('react-addons-test-utils');
 
 const SideTabs = require('../SideTabs');
 
@@ -24,14 +25,18 @@ describe('SideTabs', function () {
     });
 
     it('returns a list item for each tab', function () {
-      var node = ReactDOM.findDOMNode(this.instance);
-      var items = node.querySelectorAll('li');
+      var items = TestUtils.scryRenderedDOMComponentsWithTag(
+        this.instance,
+        'li'
+      );
       expect(items.length).toEqual(this.tabs.length);
     });
 
     it('renders the selected tab with the \'selected\' class', function () {
-      var node = ReactDOM.findDOMNode(this.instance);
-      var selectedTab = node.querySelector('.selected');
+      var selectedTab = TestUtils.findRenderedDOMComponentWithClass(
+        this.instance,
+        'selected'
+      );
 
       expect(selectedTab.textContent).toEqual('Application');
     });

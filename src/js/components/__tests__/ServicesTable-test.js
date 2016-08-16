@@ -43,7 +43,7 @@ describe('ServicesTable', function () {
         this.container
       );
 
-      expect(ReactDOM.findDOMNode(cpusCell).textContent).toEqual('1');
+      expect(cpusCell.textContent).toEqual('1');
     });
 
     it('should render resources/stats mem property', function () {
@@ -52,7 +52,7 @@ describe('ServicesTable', function () {
         this.container
       );
 
-      expect(ReactDOM.findDOMNode(memCell).textContent).toEqual('2 GiB');
+      expect(memCell.textContent).toEqual('2 GiB');
 
     });
 
@@ -62,7 +62,7 @@ describe('ServicesTable', function () {
         this.container
       );
 
-      expect(ReactDOM.findDOMNode(disksCell).textContent).toEqual('0 B');
+      expect(disksCell.textContent).toEqual('0 B');
     });
 
   });

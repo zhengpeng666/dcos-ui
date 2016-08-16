@@ -34,8 +34,10 @@ describe('ClickToSelect', function () {
   });
 
   it('sets selection when node is clicked', function () {
-    var node = ReactDOM.findDOMNode(this.instance);
-    var element = node.querySelector('span');
+    var element = TestUtils.scryRenderedDOMComponentsWithTag(
+      this.instance,
+      'span'
+    )[0];
 
     TestUtils.Simulate.click(element);
 

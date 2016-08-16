@@ -148,10 +148,11 @@ describe('ServicesTab', function () {
         this.container
       );
 
-      var node = ReactDOM.findDOMNode(instance);
-      expect(
-        node.querySelector('.ball-scale')
-      ).toBeDefined();
+      var node = TestUtils.findRenderedDOMComponentWithClass(
+        instance,
+        'ball-scale'
+      );
+      expect(node).toBeDefined();
     });
 
     it('renders correct empty panel', function () {

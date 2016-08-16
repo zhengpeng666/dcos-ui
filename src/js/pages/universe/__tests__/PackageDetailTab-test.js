@@ -45,8 +45,10 @@ describe('PackageDetailTab', function () {
     });
 
     it('should call handler when install button is clicked', function () {
-      var installButton = ReactDOM.findDOMNode(this.instance)
-        .querySelector('.button.button-success');
+      var installButton = TestUtils.findRenderedDOMComponentWithClass(
+        this.instance,
+        'button-success'
+      );
       TestUtils.Simulate.click(installButton);
 
       expect(this.instance.handleInstallModalOpen).toHaveBeenCalled();

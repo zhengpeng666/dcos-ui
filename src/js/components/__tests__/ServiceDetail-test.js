@@ -49,7 +49,6 @@ describe('ServiceDetail', function () {
     );
     this.instance =
       TestUtils.findRenderedComponentWithType(this.wrapper, ServiceDetail);
-    this.node = ReactDOM.findDOMNode(this.instance);
   });
 
   afterEach(function () {
@@ -59,7 +58,11 @@ describe('ServiceDetail', function () {
   describe('#render', function () {
 
     it('renders service info name', function () {
-      expect(this.node.querySelector('.h1 .collapsing-string-full-string').textContent).toEqual('test');
+      var node = TestUtils.scryRenderedDOMComponentsWithClass(
+        this.instance,
+        'collapsing-string-full-string'
+      )[0];
+      expect(node.textContent).toEqual('test');
     });
 
   });
