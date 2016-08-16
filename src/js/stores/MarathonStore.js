@@ -33,6 +33,7 @@ import {
   SERVER_ACTION
 } from '../constants/ActionTypes';
 import AppDispatcher from '../events/AppDispatcher';
+import AuthStore from '../stores/AuthStore';
 import CompositeState from '../structs/CompositeState';
 import Config from '../config/Config';
 import DeploymentsList from '../structs/DeploymentsList';
@@ -444,7 +445,53 @@ class MarathonStore extends GetSetBaseStore {
     this.emit(MARATHON_INSTANCE_INFO_SUCCESS);
   }
 
+  pluckMatchingFolder(group, folderID) {
+    let items = group.items;
+
+    for (var i = items.length - 1; i >= 0; i--) {
+      if (items[i].items && items[i].id === folderID) {
+        return items.splice(i, 1)[0];
+      }
+    }
+  }
+
+  recursiveRemoveID(group, idToRemove) {
+    group.id = group.id.replace(idToRemove, '');
+
+    if (group.items) {
+      group.items.forEach((item) => {
+        // If it's a group
+        if (item.items) {
+          this.recursiveRemoveID(item, idToRemove);
+        } else {
+          item.originalID = item.id;
+          item.id = item.id.replace(idToRemove, '');
+        }
+      });
+    }
+  }
+
   processMarathonGroups(data) {
+    if (
+      !PluginSDK.Hooks.applyFilter('hasCapability', false, 'dcos:superuser')
+    ) {
+      let usersGroup = this.pluckMatchingFolder(data, '/users');
+
+      if (usersGroup) {
+        let user = AuthStore.getUser();
+        let userFolderPath = `/users/${user.uid}`;
+        let userFolderGroup = this.pluckMatchingFolder(
+          usersGroup, userFolderPath
+        );
+
+        if (userFolderGroup) {
+          // Here is where we modify paths
+          this.recursiveRemoveID(userFolderGroup, userFolderPath);
+          data.items = data.items.concat(userFolderGroup.items);
+        }
+      }
+    }
+
     let groups = new ServiceTree(data);
 
     let apps = groups.reduceItems(function (map, item) {
