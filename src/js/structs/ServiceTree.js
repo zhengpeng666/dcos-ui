@@ -32,7 +32,7 @@ module.exports = class ServiceTree extends Tree {
     }
 
     if (options.isUserOwner) {
-      this._isUserOwner = options.isUserOwner;
+      this.isUserOwner = options.isUserOwner;
     }
 
     // Converts items into instances of ServiceTree, Application or Framework
@@ -60,8 +60,8 @@ module.exports = class ServiceTree extends Tree {
     });
   }
 
-  isUserOwner() {
-    return !!this._isUserOwner;
+  userIsOwner() {
+    return !!this.isUserOwner;
   }
 
   getDeployments() {

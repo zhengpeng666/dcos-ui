@@ -69,6 +69,51 @@ describe('MarathonStore', function () {
 
   });
 
+  describe('#walkBackwards', function () {
+
+    fit('works', function () {
+      var item = {
+        id: 'a',
+        items: [
+          {
+            id: 'b',
+            items: [
+              {
+                id: 'c',
+                items: [
+                  {
+                    id: 'myApp'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      };
+
+      function callback(item) {
+        return item.id === 'a' || item.id === 'c';
+      }
+
+      MarathonStore.walkBackwards(item, callback);
+      console.log(JSON.stringify(item, null, ' '));
+      expect(item).toEqual({
+        id: 'a',
+        items: [
+          {
+            id: 'c',
+            items: [
+              {
+                id: 'myApp'
+              }
+            ]
+          }
+        ]
+      });
+    });
+
+  });
+
   describe('#getServiceHealth', function () {
 
     it('returns NA when health is not available', function () {

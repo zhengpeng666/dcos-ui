@@ -328,6 +328,10 @@ class MarathonStore extends GetSetBaseStore {
   }
 
   updatePayloadID(payload) {
+    if (PluginSDK.Hooks.applyFilter('hasCapability', false, 'dcos:superuser')) {
+      return;
+    }
+
     // Check if the id prefix already exists
     // otherwise drop this app in the users' folder
     let groups = this.get('groups');
@@ -478,19 +482,25 @@ class MarathonStore extends GetSetBaseStore {
     }
   }
 
-  recursiveRemoveID(group, idToRemove) {
+  recursiveRemoveID(group, idToRemove, setIsUserOwner=true) {
+    if (setIsUserOwner) {
+      group.isUserOwner = true;
+    }
+
     group.originalID = group.id;
-    group.isUserOwner = true;
     group.id = group.id.replace(idToRemove, '');
 
     if (group.items) {
       group.items.forEach((item) => {
         // If it's a group
         if (item.items) {
-          this.recursiveRemoveID(item, idToRemove);
+          this.recursiveRemoveID(item, idToRemove, setIsUserOwner);
         } else {
+          if (setIsUserOwner) {
+            group.isUserOwner = true;
+          }
+
           item.originalID = item.id;
-          item.isUserOwner = true;
           item.id = item.id.replace(idToRemove, '');
         }
       });
@@ -508,46 +518,60 @@ class MarathonStore extends GetSetBaseStore {
   }
 
   walkBackwards(group, callback) {
-    groups.items.forEach((item) => {
-      if (item.items) {
-        this.walkBackwards(item);
+    if (group.items) {
+      let indexesToRemove = [];
+
+      for (var index = group.items.length - 1; index >= 0; index--) {
+        let childItem = group.items[index];
+        if (!this.walkBackwards(childItem, callback)) {
+          this.recursiveRemoveID(
+            childItem, childItem.id.match(/\/?\w*$/)[0], false
+          );
+          group.items = group.items.concat(childItem.items);
+          indexesToRemove.push(index);
+        }
       }
-      callback(item);
-    });
+
+      indexesToRemove.forEach(function (index) {
+        group.items.splice(index, 1);
+      });
+
+      // Check if we have access to this group
+      return callback(group);
+    }
+
+    // This will be hit when group is not a group
+    return true;
   }
 
   processMarathonGroups(data) {
     if (
       !PluginSDK.Hooks.applyFilter('hasCapability', false, 'dcos:superuser')
     ) {
-      // Add hasPermission to services where acls exist
-      // let aclIDPrefix = 'dcos:service:marathon:marathon:services:';
-      // let permissions = Object.keys(
-      //   PluginSDK.Hooks.applyFilter('getUserPermissions')
-      // ).filter(function (permission) {
-      //   return permission.match(aclIDPrefix);
-      // }).map(function (permission) {
-      //   return permission.replace(aclIDPrefix, '');
-      // });
-      // // Walk the tree
-      // this.walk(data, function (item) {
-      //   if (permissions.indexOf(item.id) !== -1) {
-      //     item.hasPermission = true;
-      //   }
-      // });
+      // Pluck users' folder for handling later
+      let usersGroup = this.pluckMatchingFolder(data, '/users');
 
-      // if (data.items) {
-      //   for (var i = 0; i < data.items.length; i++) {
-      //     let item = data.items[i];
-      //     if (!item.hasPermission) {
-      //       let plucked = data.items.splice(i, 1);
-      //       data.items.push(plucked.items);
-      //     }
-      //   }
-      // }
+      // Add hasPermission to services where acls exist
+      let aclIDPrefix = 'dcos:service:marathon:marathon:services:';
+      let permissions = Object.keys(
+        PluginSDK.Hooks.applyFilter('getUserPermissions')
+      ).filter(function (permission) {
+        return permission.match(aclIDPrefix);
+      }).map(function (permission) {
+        return permission.replace(aclIDPrefix, '');
+      });
+      // Walk the tree
+      this.walk(data, function (item) {
+        if (permissions.indexOf(item.id) !== -1) {
+          item.hasPermission = true;
+        }
+      });
+
+      this.walkBackwards(data, function (group) {
+        return !!group.hasPermission;
+      });
 
       // Mangle user's folder
-      let usersGroup = this.pluckMatchingFolder(data, '/users');
       if (usersGroup) {
         let userFolderPath = this.getUserFolderPath();
         let userFolderGroup = this.pluckMatchingFolder(

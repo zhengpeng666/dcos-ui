@@ -241,7 +241,7 @@ var ServicesTable = React.createClass({
     if (service instanceof ServiceTree) {
       let folderIconID = 'folder-users';
 
-      if (service.isUserOwner() || isSuperUser) {
+      if (service.userIsOwner() || isSuperUser) {
         folderIconID = 'folder';
       }
 
