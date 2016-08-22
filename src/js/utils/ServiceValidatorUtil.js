@@ -1,3 +1,5 @@
+import Result from '../structs/Result';
+
 const ServiceValidatorUtil = {
   isValidServiceID(serviceID) {
     if (typeof serviceID !== 'string' || serviceID === '') {
@@ -11,12 +13,12 @@ const ServiceValidatorUtil = {
       '*([a-z0-9]|[a-z0-9][a-z0-9-]*[a-z0-9])$'
     );
 
-    return serviceID.split('/').every(function (segment, index) {
+    return Result.expectTrue(serviceID.split('/').every(function (segment, index) {
 
       return (index === 0 && (segment == null || segment === '')) ||
         segment === '.' || segment === '..' ||
         serviceIDSegmentPattern.test(segment);
-    });
+    }));
   }
 };
 

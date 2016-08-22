@@ -1,9 +1,10 @@
+import Result from '../structs/Result';
 import ValidatorUtil from './ValidatorUtil';
 
 const NetworkValidatorUtil = {
   isValidPort(value) {
-    return ValidatorUtil.isInteger(value) &&
-      ValidatorUtil.isNumberInRange(value, {max: 65535});
+    return Result.expectTrue(ValidatorUtil.isInteger(value) &&
+      ValidatorUtil.isNumberInRange(value, {max: 65535}));
   }
 };
 
