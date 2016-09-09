@@ -1,0 +1,152 @@
+# The cluster
+type Cluster {
+  # Id for Service
+  id: String
+  meta: ClusterMeta
+
+  # Services in the cluster
+  services(after: String, first: Int, before: String, last: Int): ServiceConnection
+}
+
+# The cluster's metadata
+type ClusterMeta {
+  # ID for Cluster
+  id: String
+}
+
+# A Service deployment
+type Deployment {
+  # Id for Deployment
+  id: String
+
+  # Version for Deployment
+  version: String
+
+  # Current Step of Deployment
+  currentStep: Int
+}
+
+# A connection to a list of items.
+type DeploymentConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [DeploymentEdge]
+}
+
+# An edge in a connection.
+type DeploymentEdge {
+  # The item at the end of the edge
+  node: Deployment
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+type Query {
+  cluster: Cluster
+  service(id: String): Service
+}
+
+# A Service in the cluster
+type Service {
+  # Id for Service
+  id: String
+
+  # Tasks that I have
+  tasks(after: String, first: Int, before: String, last: Int): TaskConnection
+
+  # Args for Service
+  args: [String]
+
+  # Run Command for Service
+  cmd: String
+
+  # CPU allocation for Service
+  cpus: Int
+
+  # Constraints for Service
+  constraints: [String]
+
+  # Number of active deployments for Service
+  deploymentsCount: Int
+
+  # Deployments for Service
+  deployments(after: String, first: Int, before: String, last: Int): DeploymentConnection
+
+  # Disk allocation for Service
+  disk: Int
+
+  # Executor for Service
+  executor: String
+
+  # Available shit that might not be mapped to this schema yet
+  unMappedFields: [String]
+}
+
+# A connection to a list of items.
+type ServiceConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [ServiceEdge]
+}
+
+# An edge in a connection.
+type ServiceEdge {
+  # The item at the end of the edge
+  node: Service
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# A Service's task
+type Task {
+  # Id for Task
+  id: String
+
+  # Tasks's name
+  name: String
+
+  # Tasks's hostname (from Node in Mesos)
+  hostname: String
+
+  # Tasks's state
+  state: String
+}
+
+# A connection to a list of items.
+type TaskConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [TaskEdge]
+}
+
+# An edge in a connection.
+type TaskEdge {
+  # The item at the end of the edge
+  node: Task
+
+  # A cursor for use in pagination
+  cursor: String!
+}

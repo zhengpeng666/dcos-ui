@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+import Relay from 'react-relay';
 import {Link, RouteHandler} from 'react-router';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
@@ -234,7 +235,24 @@ var ServicesTab = React.createClass({
 
     // Render service detail
     if (item instanceof Service) {
-      return (<ServiceDetail service={item} />);
+      let serviceDetailRoute = {
+        queries: {
+          service: () => Relay.QL`
+            query {
+              service(id: $serviceID)
+            }
+          `
+        },
+        params: {
+          serviceID: item.getId()
+        },
+        name: 'ServiceDetailRoute'
+      };
+      return (
+        <Relay.RootContainer
+          Component={ServiceDetail}
+          route={serviceDetailRoute} />
+      );
     }
 
     // Render service table or empty service table if only id is available

@@ -88,6 +88,9 @@ module.exports = Object.assign({}, webpackConfig, {
           presets: [
             'babel-preset-es2015',
             'babel-preset-react'
+          ].map(require.resolve),
+          plugins: [
+            '../server/scripts/babelRelayPlugin'
           ].map(require.resolve)
         })
       },

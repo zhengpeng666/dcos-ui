@@ -1,5 +1,6 @@
 import mixin from 'reactjs-mixin';
 import React from 'react';
+import Relay from 'react-relay';
 
 import Breadcrumbs from './Breadcrumbs';
 import InternalStorageMixin from '../mixins/InternalStorageMixin';
@@ -76,6 +77,7 @@ class ServiceDetail extends mixin(InternalStorageMixin, TabsMixin) {
   }
 
   checkForVolumes() {
+    return;
     // Add the Volumes tab if it isn't already there and the service has
     // at least one volume.
     if (this.tabs_tabs.volumes == null && !!this.props.service
@@ -115,6 +117,8 @@ class ServiceDetail extends mixin(InternalStorageMixin, TabsMixin) {
   render() {
     const {service} = this.props;
     let {serviceActionDialog} = this.state;
+    // Haven't mapped all schema attributes and subcomponents still expect instance of Service struct.
+    service = new Service(service);
 
     return (
       <div className="flex-container-col">
@@ -156,7 +160,19 @@ ServiceDetail.contextTypes = {
 };
 
 ServiceDetail.propTypes = {
-  service: React.PropTypes.instanceOf(Service)
+  service: React.PropTypes.object
 };
 
-module.exports = ServiceDetail;
+module.exports = Relay.createContainer(ServiceDetail, {
+  // For each of the props that depend on server data, we define a corresponding
+  // key in `fragments`. Here, the component expects server data to populate the
+  // `service` prop, so we'll specify the fragment from above as `fragments.service`.
+  fragments: {
+    service: () => Relay.QL`
+      fragment on Service {
+        id
+        username
+      }
+    `
+  }
+});
