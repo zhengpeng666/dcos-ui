@@ -6,10 +6,12 @@ import Breadcrumbs from './Breadcrumbs';
 import Pod from '../structs/Pod';
 import PodActionItem from '../constants/PodActionItem';
 import PodHeader from './PodHeader';
+import ServiceFormModal from './modals/ServiceFormModal';
 import TabsMixin from '../mixins/TabsMixin';
 
 const METHODS_TO_BIND = [
-  'handleAction'
+  'handleAction',
+  'handleCloseDialog'
 ];
 
 class PodDetail extends mixin(TabsMixin) {
@@ -23,7 +25,8 @@ class PodDetail extends mixin(TabsMixin) {
     };
 
     this.state = {
-      currentTab: Object.keys(this.tabs_tabs).shift()
+      currentTab: Object.keys(this.tabs_tabs).shift(),
+      currentActionDialog: null
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -38,13 +41,21 @@ class PodDetail extends mixin(TabsMixin) {
         break;
 
       case PodActionItem.EDIT:
-        console.debug('Edit');
+        this.setState({
+          currentActionDialog: PodActionItem.EDIT
+        });
         break;
 
       case PodActionItem.DESTROY:
         console.debug('Destroy');
         break;
     }
+  }
+
+  handleCloseDialog() {
+    this.setState({
+      currentActionDialog: null
+    });
   }
 
   renderConfigurationTabView() {
@@ -75,6 +86,7 @@ class PodDetail extends mixin(TabsMixin) {
   }
 
   render() {
+    const {currentActionDialog} = this.state;
     const {pod} = this.props;
 
     return (
@@ -92,9 +104,16 @@ class PodDetail extends mixin(TabsMixin) {
           <PodHeader
             onAction={this.handleAction}
             pod={pod}
-            tabs={this.tabs_getUnroutedTabs()} />
+            tabs={this.tabs_getUnroutedTabs()}
+            />
           {this.tabs_getTabView()}
         </div>
+        <ServiceFormModal
+          isEdit={true}
+          open={currentActionDialog === PodActionItem.EDIT}
+          service={pod}
+          onClose={this.handleCloseDialog}
+          />
       </div>
 
     );
