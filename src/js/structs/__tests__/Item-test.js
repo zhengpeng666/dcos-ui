@@ -31,4 +31,68 @@ describe('Item', function () {
 
   });
 
+  describe('#getPruned', function () {
+
+    it('returns properly pruned undefined & null values', function () {
+      let item = new Item({
+        a: true,
+        b: false,
+        c: 0,
+        d: null,
+        e: undefined
+      });
+      expect(item.getPruned()).toEqual({
+        a: true,
+        b: false,
+        c: 0
+      });
+    });
+
+    it('returns properly pruned custom values', function () {
+      let item = new Item({
+        a: true,
+        b: false,
+        c: 0,
+        d: null,
+        e: undefined
+      });
+      expect(item.getPruned(null, [true, false])).toEqual({
+        c: 0,
+        d: null,
+        e: undefined
+      });
+    });
+
+    it('returns properly pruned children', function () {
+      let item = new Item({
+        a: {
+          b: [
+            null,
+            undefined,
+            {
+              d: null,
+              e: false,
+              f: 0,
+              g: {
+                h: null
+              }
+            }
+          ],
+          c: null
+        }
+      });
+      expect(item.getPruned()).toEqual({
+        a: {
+          b: [
+            {
+              e: false,
+              f: 0,
+              g: { }
+            }
+          ]
+        }
+      });
+    });
+  });
+
 });
