@@ -33,7 +33,7 @@ var Sidebar = React.createClass({
   },
 
   getInitialState() {
-    return {sidebarExpanded: true};
+    return {sidebarExpanded: true, expandedItems: []};
   },
 
   componentDidMount() {
@@ -117,11 +117,12 @@ var Sidebar = React.createClass({
       });
   },
 
-  getGroupSubmenu({children = []}, {currentPath, isParentActive}) {
+  getGroupSubmenu({children = []}, {route, currentPath, isParentActive}) {
     let submenu = null;
     let isChildActive = false;
+    let hasVisibleChildren = this.hasVisibleChildren(route);
 
-    if (isParentActive) {
+    if (this.state.expandedItems.includes(route.name)) {
       let menuItems = children.reduce(function (childRoutes, currentChild) {
         if (currentChild.isInSidebar) {
           let routeLabel = currentChild.name;
@@ -155,7 +156,7 @@ var Sidebar = React.createClass({
       }
     }
 
-    return {submenu, isChildActive};
+    return {submenu, hasVisibleChildren, isChildActive};
   },
 
   getMenuGroupsFromChildren(appRoutes) {
@@ -183,6 +184,16 @@ var Sidebar = React.createClass({
     }, []);
   },
 
+  hasVisibleChildren(route) {
+    if (route.children && route.children.length !== 0) {
+      return route.children.some((child) => {
+        return child.isInSidebar;
+      });
+    }
+
+    return false;
+  },
+
   getNavigationGroup(group, currentPath) {
     let groupMenuItems = group.routes.map((route, index) => {
       let icon = React.cloneElement(
@@ -192,9 +203,10 @@ var Sidebar = React.createClass({
       let hasChildren = route.children && route.children.length !== 0;
       let notificationCount = NotificationStore.getNotificationCount(route.name);
       let isParentActive = route.handler.routeConfig.matches.test(currentPath);
-      let {isChildActive, submenu} = this.getGroupSubmenu(route, {
+      let {isChildActive, submenu, hasVisibleChildren} = this.getGroupSubmenu(route, {
         currentPath,
-        isParentActive
+        isParentActive,
+        route
       });
       let sidebarText = (
         <span className="sidebar-menu-item-label">
@@ -213,15 +225,38 @@ var Sidebar = React.createClass({
         );
       }
 
+      let clickHandler = null;
+      let link = null;
+
+      if (hasVisibleChildren) {
+        clickHandler = () => {
+          let {expandedItems} = this.state;
+          let expandedItemIndex = expandedItems.indexOf(route.name);
+
+          if (expandedItemIndex === -1) {
+            expandedItems.push(route.name);
+          } else {
+            expandedItems.splice(expandedItemIndex, 1);
+          }
+
+          this.setState({expandedItems});
+        };
+        link = <a className="clickable" onClick={clickHandler}>{icon}{sidebarText}</a>;
+      } else {
+        link = <Link to={route.name}>{icon}{sidebarText}</Link>;
+      }
+
       let itemClassSet = classNames({
         'sidebar-menu-item': true,
-        selected: isParentActive && !isChildActive,
-        open: isParentActive && hasChildren
+        selected: isParentActive && !isChildActive && !hasVisibleChildren,
+        expandable: hasVisibleChildren,
+        expanded: hasVisibleChildren && submenu != null
+        // open: isParentActive && hasChildren
       });
 
       return (
         <li className={itemClassSet} key={index}>
-          <Link to={route.name}>{icon}{sidebarText}</Link>
+          {link}
           {submenu}
         </li>
       );
