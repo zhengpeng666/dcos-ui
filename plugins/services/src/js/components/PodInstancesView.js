@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FilterHeadline from './FilterHeadline';
+import FilterHeadline from '../../../../../src/js/components/FilterHeadline';
 import Pod from '../structs/Pod';
 import PodInstancesTable from './PodInstancesTable';
 import PodInstanceStatus from '../constants/PodInstanceStatus';
