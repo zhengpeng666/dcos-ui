@@ -13,6 +13,11 @@ var AlertPanel = React.createClass({
 
   propTypes: {
     title: React.PropTypes.string,
+    titleClassName: React.PropTypes.oneOfType([
+      React.PropTypes.array,
+      React.PropTypes.object,
+      React.PropTypes.string
+    ]),
     icon: React.PropTypes.node,
     iconClassName: React.PropTypes.string
   },
@@ -27,8 +32,10 @@ var AlertPanel = React.createClass({
   },
 
   getTitle() {
+    let classes = classNames('flush-bottom', this.props.titleClassName);
+
     return (
-      <h3 className="flush" key="heading">
+      <h3 className={classes} key="heading">
         {this.props.title}
       </h3>
     );

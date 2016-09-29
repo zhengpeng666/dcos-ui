@@ -37,7 +37,8 @@ module.exports = class AccessDeniedPage extends React.Component {
         <div className="page-body-content flex flex-direction-top-to-bottom flex-item-grow-1 horizontal-center vertical-center">
           <AlertPanel
             footer={this.getFooter()}
-            title="Access Denied">
+            title="Access Denied"
+            titleClassName="flush-top">
             <p>
               You do not have access to this service. <br />
               Please contact your {Config.productName} administrator.
