@@ -113,17 +113,19 @@ let ResourceBarChart = React.createClass({
 
   render() {
     return (
-      <div className="chart panel">
-        <div className="panel-cell panel-header panel-cell-borderless text-align-center">
-          <div className="panel-options button-group">
-            {this.getModeButtons()}
+      <div className="pod flush-top flush-right flush-left">
+        <div className="chart panel">
+          <div className="panel-cell panel-header panel-cell-borderless text-align-center">
+            <div className="panel-options button-group">
+              {this.getModeButtons()}
+            </div>
+            <div>
+              {this.getHeadline(this.props.selectedResource)}
+            </div>
           </div>
-          <div>
-            {this.getHeadline(this.props.selectedResource)}
+          <div className="panel-cell panel-content" ref="panelContent">
+            {this.getBarChart()}
           </div>
-        </div>
-        <div className="panel-cell panel-content" ref="panelContent">
-          {this.getBarChart()}
         </div>
       </div>
     );
