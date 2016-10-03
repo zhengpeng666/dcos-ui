@@ -114,7 +114,7 @@ let ResourceBarChart = React.createClass({
   render() {
     return (
       <div className="chart panel">
-        <div className="panel-header panel-header-large no-border flush-bottom">
+        <div className="panel-cell panel-header panel-cell-borderless text-align-center">
           <div className="panel-options button-group">
             {this.getModeButtons()}
           </div>
@@ -122,7 +122,7 @@ let ResourceBarChart = React.createClass({
             {this.getHeadline(this.props.selectedResource)}
           </div>
         </div>
-        <div className="panel-content" ref="panelContent">
+        <div className="panel-cell panel-content" ref="panelContent">
           {this.getBarChart()}
         </div>
       </div>
