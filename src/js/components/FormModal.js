@@ -91,7 +91,7 @@ class FormModal extends React.Component {
 
   getFooter() {
     return (
-      <div className="button-collection text-align-center flush">
+      <div className="button-collection text-align-center flush-bottom">
         {this.getButtons()}
         {this.props.extraFooterContent}
       </div>
