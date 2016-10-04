@@ -1,5 +1,13 @@
 & when (@modal-enabled) {
 
+  .modal {
+    z-index: @z-index-modal-container;
+  }
+
+  .modal-backdrop {
+    z-index: @z-index-modal-backdrop;
+  }
+
   .modal-close {
     appearance: none;
     background: transparent;
