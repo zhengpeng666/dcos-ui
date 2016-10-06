@@ -129,7 +129,7 @@ class DeploymentsTab extends mixin(StoreMixin) {
 
       return (
         <dd key={`service_${id}`}>
-          <Link to="services-detail" params={{id}} className="deployment-service-name">
+          <Link to="services-page" params={{id}} className="deployment-service-name">
             <span className="icon icon-small icon-image-container icon-app-container deployment-service-icon">
               <img src={image} />
             </span>

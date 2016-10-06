@@ -181,8 +181,8 @@ module.exports = class ServiceTree extends Tree {
             }
 
             let hasLabel = serviceLabels.some(function (serviceLabel) {
-              return serviceLabel.key === label[0] &&
-                serviceLabel.value === label[1];
+              return serviceLabel.key === label.key &&
+                serviceLabel.value === label.value;
             });
 
             if (hasLabel) {

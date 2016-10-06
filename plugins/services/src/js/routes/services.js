@@ -26,7 +26,7 @@ function buildServiceCrumbs(router) {
 
     return {
       label: id,
-      route: {to: 'services-detail', params: {id: aggregateIDs}}
+      route: {to: 'services-page', params: {id: aggregateIDs}}
     };
   });
 }
@@ -34,8 +34,8 @@ function buildServiceCrumbs(router) {
 let serviceRoutes = {
   type: Route,
   name: 'services-page',
-  handler: ServicesContainer,
   path: '/services/:id?',
+  handler: ServicesContainer,
   category: 'root',
   isInSidebar: true,
   buildBreadCrumb() {

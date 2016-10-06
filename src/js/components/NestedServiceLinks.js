@@ -10,7 +10,7 @@ class NestedServiceLinks extends React.Component {
     return (
       <div key={key} className="table-cell-value">
         <div className={classes}>
-          <Link to="services-detail"
+          <Link to="services-page"
               params={params}
               title={label}>
             {label}
@@ -79,7 +79,7 @@ class NestedServiceLinks extends React.Component {
     } else {
       label = this.getServicePathParts().pop();
       params = {id: encodeURIComponent(serviceID)};
-      routeName = 'services-detail';
+      routeName = 'services-page';
     }
 
     return (

@@ -1,64 +1,38 @@
 import mixin from 'reactjs-mixin';
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, {PropTypes} from 'react';
 /* eslint-enable no-unused-vars */
 
 import FilterInputText from '../../../../../src/js/components/FilterInputText';
 import QueryParamsMixin from '../../../../../src/js/mixins/QueryParamsMixin';
 import ServiceFilterTypes from '../constants/ServiceFilterTypes';
 
-const METHODS_TO_BIND = ['setSearchString'];
+class ServiceSearchFilter extends React.Component {
 
-class ServiceSearchFilter extends mixin(QueryParamsMixin) {
-  constructor() {
-    super();
-
-    this.state = {
-      searchString: ''
-    };
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentDidMount() {
-    this.updateFilterStatus();
-  }
-
-  componentWillReceiveProps() {
-    this.updateFilterStatus();
+  shouldComponentUpdate(nextProps) {
+    return nextProps.filters.searchString !== this.props.filters.searchString;
   }
 
   setSearchString(filterValue) {
-    this.setQueryParam(ServiceFilterTypes.TEXT, filterValue);
-    this.props.handleFilterChange(filterValue, ServiceFilterTypes.TEXT);
-  }
-
-  updateFilterStatus() {
-    let {state} = this;
-    let searchString =
-      this.getQueryParamObject()[ServiceFilterTypes.TEXT] || '';
-
-    if (searchString !== state.searchString) {
-      this.setState({searchString},
-        this.props.handleFilterChange.bind(null, searchString, ServiceFilterTypes.TEXT));
-    }
+    this.props.handleFilterChange(ServiceFilterTypes.TEXT, filterValue);
   }
 
   render() {
+    const searchString = this.props.filters[ServiceFilterTypes.TEXT] || '';
+
     return (
       <FilterInputText
         className="flush-bottom"
-        handleFilterChange={this.setSearchString}
+        handleFilterChange={(value) => { this.setSearchString(value); }}
         placeholder="Search"
-        searchString={this.state.searchString} />
+        searchString={searchString} />
     );
   }
 };
 
 ServiceSearchFilter.propTypes = {
-  handleFilterChange: React.PropTypes.func.isRequired
+  filters: PropTypes.object,
+  handleFilterChange: PropTypes.func.isRequired
 };
 
 module.exports = ServiceSearchFilter;

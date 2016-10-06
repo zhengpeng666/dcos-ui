@@ -33,3 +33,5 @@ embed child routes/handlers (i.e. tier 2 navigation such as taskList, debug, etc
 
 TODO:
 * Services Icon shouldn't live in DCOS
+* Add SaveState Mixin/Util to service filtering
+* Move QueryMixin methods to Util

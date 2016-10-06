@@ -149,7 +149,7 @@ var ServicesTable = React.createClass({
     }
 
     return (
-      <Link to="services-detail"
+      <Link to="services-page"
         className="table-cell-emphasized"
         params={{id}}>
         <span className="text-overflow">
@@ -187,7 +187,7 @@ var ServicesTable = React.createClass({
     return (
       <div className="service-table-heading flex-box
         flex-box-align-vertical-center table-cell-flex-box">
-        <Link to="services-detail"
+        <Link to="services-page"
           className="table-cell-icon"
           params={{id}}>
           {this.getImage(service)}
