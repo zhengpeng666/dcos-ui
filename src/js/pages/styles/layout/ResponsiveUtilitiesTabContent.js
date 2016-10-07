@@ -155,7 +155,7 @@ class ResponsiveUtilitiesTabContent extends React.Component {
             </thead>
             <tbody>
               <tr>
-                <td><code>.hidden-mini-down</code></td>
+                <td><code>.hidden-small-down-down</code></td>
                 <td className="is-hidden">Hidden</td>
                 <td className="is-visible">Visible</td>
                 <td className="is-visible">Visible</td>
@@ -195,7 +195,7 @@ class ResponsiveUtilitiesTabContent extends React.Component {
                 <td className="is-hidden">Hidden</td>
               </tr>
               <tr>
-                <td><code>.hidden-mini-up</code></td>
+                <td><code>.hidden-small-down-up</code></td>
                 <td className="is-hidden">Hidden</td>
                 <td className="is-hidden">Hidden</td>
                 <td className="is-hidden">Hidden</td>
