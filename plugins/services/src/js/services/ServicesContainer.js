@@ -101,6 +101,7 @@ const INTEGER_QUERY_ARRAYS = [
 const METHODS_TO_BIND = [
   'handleServerAction',
   'handleFilterChange',
+  'clearFilters',
   'createGroup',
   'revertDeployment',
   'deleteGroup',
@@ -158,7 +159,7 @@ class ServicesContainer extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const nextFilters = this.filtersFromQuery(nextProps.query);
-    console.log(nextProps.query);
+
     return !deepEqual(nextState, this.state)
       || !deepEqual(nextProps, this.props)
       || !deepEqual(nextFilters, nextState.filters);
@@ -166,25 +167,38 @@ class ServicesContainer extends React.Component {
 
   filtersFromQuery(query) {
     return Object.keys(query).reduce(function (memo, filterKey) {
-        const value = query[filterKey];
+      const value = query[filterKey];
 
-        const mapToInts = INTEGER_QUERY_ARRAYS.includes(filterKey)
-          && Array.isArray(value);
+      const mapToInts = INTEGER_QUERY_ARRAYS.includes(filterKey)
+        && Array.isArray(value);
 
-        if (value != null && value.length > 0) {
-          if (mapToInts) {
-            // Our ServiceTree filtering and SidebarFilter components
-            // expect Arrays of Int's
-            memo[filterKey] = value.map(function (val) {
-              return parseInt(val, 10);
-            });
-          } else {
-            memo[filterKey] = value;
-          }
+      if (value != null && value.length > 0) {
+        if (mapToInts) {
+          // Our ServiceTree filtering and SidebarFilter components
+          // expect Arrays of Int's
+          memo[filterKey] = value.map(function (val) {
+            return parseInt(val, 10);
+          });
+        } else {
+          memo[filterKey] = value;
         }
+      }
 
-        return memo;
-      }, {});
+      if (filterKey === 'filterLabels') {
+        try {
+          memo[filterKey] = value.map(function (label) {
+            const [key, val] = label.split(';');
+
+            return {key, value: val};
+          });
+        } catch (e) {
+          // Delete so filters cannot be tempted to use in a broken state
+          delete memo[filterKey];
+        }
+      }
+
+      return memo;
+    }, {});
   }
 
   propsToState(props) {
@@ -462,10 +476,21 @@ class ServicesContainer extends React.Component {
     this.setState({filters}, this.setQueryParams);
   }
 
+  clearFilters() {
+    this.setState({filters: {}}, this.setQueryParams);
+  }
+
   setQueryParams() {
     const {router} = this.context;
+    let filters = Object.assign({}, this.state.filters);
+    // Transform labels filter so it is easily decoded again
+    if (filters.filterLabels) {
+      filters.filterLabels = filters.filterLabels.map(function (label) {
+        return `${label.key};${label.value}`;
+      });
+    }
 
-    router.transitionTo(router.getCurrentPathname(), {}, this.state.filters);
+    router.transitionTo(router.getCurrentPathname(), {}, filters);
   }
 
   getActions() {
@@ -532,6 +557,7 @@ class ServicesContainer extends React.Component {
         <ServiceTreeView
           actions={this.getActions()}
           actionErrors={this.state.actionErrors}
+          clearFilters={this.clearFilters}
           handleFilterChange={this.handleFilterChange}
           serviceTree={item}
           services={services}

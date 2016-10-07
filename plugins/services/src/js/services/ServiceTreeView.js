@@ -18,8 +18,8 @@ import FilterBar from '../../../../../src/js/components/FilterBar';
 import FilterHeadline from '../../../../../src/js/components/FilterHeadline';
 
 const METHODS_TO_BIND = [
-  'resetFilter',
-  'handleModal'
+  'toggleGroupModal',
+  'toggleServiceModal'
 ];
 
 class ServiceTreeView extends React.Component {
@@ -37,17 +37,16 @@ class ServiceTreeView extends React.Component {
     });
   }
 
-  resetFilter() {
-    // Nuke Query Params
+  toggleGroupModal() {
+    this.setState({
+      isServiceGroupFormModalShown: !this.state.isServiceGroupFormModalShown
+    });
   }
 
-  handleModal(id, open) {
-    debugger;
-    let modalStates = {
-      isServiceFormModalShown: SERVICE_FORM_MODAL === id && open,
-      isServiceGroupFormModalShown: SERVICE_GROUP_FORM_MODAL === id && open
-    };
-    this.setState(modalStates);
+  toggleServiceModal() {
+    this.setState({
+      isServiceFormModalShown: !this.state.isServiceFormModalShown
+    });
   }
 
   getHeadline() {
@@ -59,7 +58,7 @@ class ServiceTreeView extends React.Component {
           <li className="h4 inverse">
             Showing results for "{services.filters.searchString}"
           </li>
-          <li className="h4 clickable" onClick={this.resetFilter}>
+          <li className="h4 clickable" onClick={this.props.clearFilters}>
             <a className="small">
               (Clear)
             </a>
@@ -72,7 +71,7 @@ class ServiceTreeView extends React.Component {
       return (
         <FilterHeadline
           className="breadcrumb-style-headline"
-          onReset={this.resetFilter}
+          onReset={this.props.clearFilters}
           name="Service"
           currentLength={services.filtered.length}
           totalLength={services.all.length} />
@@ -101,10 +100,10 @@ class ServiceTreeView extends React.Component {
         <ServiceGroupFormModal
           open={this.state.isServiceGroupFormModalShown}
           parentGroupId={serviceTree.getId()}
-          onClose={this.handleModal.bind(SERVICE_GROUP_FORM_MODAL, false)}/>
+          onClose={this.toggleGroupModal}/>
         <ServiceFormModal open={this.state.isServiceFormModalShown}
           service={new Application({id: baseId})}
-          onClose={this.handleModal.bind(SERVICE_FORM_MODAL, false)}/>
+          onClose={this.toggleServiceModal}/>
       </div>
     );
   }
@@ -126,11 +125,11 @@ class ServiceTreeView extends React.Component {
               handleFilterChange={this.props.handleFilterChange}
               filters={services.filters || {}} />
             <button className="button button-stroke button-inverse"
-              onClick={this.handleModal.bind(SERVICE_GROUP_FORM_MODAL, true)}>
+              onClick={this.toggleGroupModal}>
               Create Group
             </button>
             <button className="button button-success"
-              onClick={this.handleModal.bind(SERVICE_FORM_MODAL, true)}>
+              onClick={this.toggleServiceModal}>
               Deploy Service
             </button>
           </FilterBar>
@@ -150,8 +149,8 @@ class ServiceTreeView extends React.Component {
     } else {
       content = (
         <EmptyServiceTree
-          onCreateGroup={this.handleModal.bind(SERVICE_GROUP_FORM_MODAL, true)}
-          onCreateService={this.handleModal.bind(SERVICE_FORM_MODAL, true)} />
+          onCreateGroup={this.toggleGroupModal}
+          onCreateService={this.toggleServiceModal} />
       );
     }
 
@@ -186,6 +185,7 @@ const servicesPropTypes = PropTypes.shape({
 ServiceTreeView.propTypes = {
   actionErrors: PropTypes.object,
   actions: actionPropTypes,
+  clearFilters: PropTypes.func.isRequired,
   pendingActions: PropTypes.object,
   serviceTree: PropTypes.instanceOf(ServiceTree),
   services: servicesPropTypes

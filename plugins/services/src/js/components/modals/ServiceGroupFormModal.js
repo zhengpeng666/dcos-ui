@@ -5,13 +5,10 @@ import React from 'react';
 import {StoreMixin} from 'mesosphere-shared-reactjs';
 
 import FormModal from '../../../../../../src/js/components/FormModal';
-import MarathonStore from '../../stores/MarathonStore';
 import ServiceValidatorUtil from '../../utils/ServiceValidatorUtil';
 
 const METHODS_TO_BIND = [
   'handleNewGroupSubmit',
-  'onMarathonStoreGroupCreateSuccess',
-  'onMarathonStoreGroupCreateError',
   'resetState'
 ];
 
@@ -28,7 +25,7 @@ const buttonDefinition = [
   }
 ];
 
-class ServiceGroupFormModal extends mixin(StoreMixin) {
+class ServiceGroupFormModal extends React.Component {
   constructor() {
     super();
 
@@ -36,14 +33,6 @@ class ServiceGroupFormModal extends mixin(StoreMixin) {
       disableNewGroup: false,
       errorMsg: null
     };
-
-    this.store_listeners = [
-      {
-        name: 'marathon',
-        events: ['groupCreateSuccess', 'groupCreateError'],
-        suppressUpdate: true
-      }
-    ];
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
@@ -72,8 +61,7 @@ class ServiceGroupFormModal extends mixin(StoreMixin) {
   handleNewGroupSubmit(model) {
     let {parentGroupId} = this.props;
 
-    this.setState({disableNewGroup: true});
-    MarathonStore.createGroup(Object.assign({}, model,
+    this.props.createGroup(Object.assign({}, model,
       {id: `${parentGroupId}/${model.id}`})
     );
   }
@@ -133,7 +121,10 @@ class ServiceGroupFormModal extends mixin(StoreMixin) {
 }
 
 ServiceGroupFormModal.propTypes = {
-  parentGroupId: React.PropTypes.string
+  actionErrors: React.PropTypes.object.isRequired,
+  createGroup: React.PropTypes.func.isRequired,
+  parentGroupId: React.PropTypes.string,
+  pendingActions: React.PropTypes.object.isRequired
 };
 
 module.exports = ServiceGroupFormModal;
