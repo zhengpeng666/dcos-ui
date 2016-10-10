@@ -9,6 +9,7 @@ import ServicesContainer from '../services/ServicesContainer';
 import TaskDetail from '../pages/task-details/TaskDetail';
 import TaskDetailsTab from '../pages/task-details/TaskDetailsTab';
 import TaskFilesTab from '../pages/task-details/TaskFilesTab';
+import TaskLogsTab from '../pages/task-details/TaskLogsTab';
 import TaskFileViewer from '../pages/task-details/TaskFileViewer';
 import TaskDetailBreadcrumb from '../pages/nodes/breadcrumbs/TaskDetailBreadcrumb';
 import VolumeDetail from '../components/VolumeDetail';
@@ -158,6 +159,21 @@ let serviceRoutes = [
                         dontScroll: true,
                         isTab: true,
                         path: 'view(/:filePath(/:innerPath))',
+                        title: 'Files',
+                        type: Route,
+                        buildBreadCrumb() {
+                          return {
+                            parentCrumb: '/services/overview/:id/tasks/:taskID',
+                            getCrumbs() { return []; }
+                          };
+                        }
+                      },
+                      {
+                        component: TaskLogsTab,
+                        hideHeaderNavigation: true,
+                        dontScroll: true,
+                        isTab: true,
+                        path: 'logs(/:fileName)',
                         title: 'Logs',
                         type: Route,
                         buildBreadCrumb() {
