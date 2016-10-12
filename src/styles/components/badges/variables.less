@@ -4,8 +4,10 @@
  * Badge Styles
  */
 
-@badge-background-color:                                                        @button-primary-active-background-color;
-@badge-background-color-inverse:                                                rgba(255, 255, 255, 0.05);
+@badge-background-color:                                                        color-lighten(@neutral, 70);
+@badge-foreground-color:                                                        @neutral;
+@badge-background-color-inverse:                                                @white;
+@badge-foreground-color-inverse:                                                @neutral;
 
 // We round these values to prevent non-integers, which prevents proper vertical
 // centering in flex elements.

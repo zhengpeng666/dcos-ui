@@ -6,13 +6,20 @@ import {
   REQUEST_CLI_INSTRUCTIONS,
   REQUEST_VERSIONS_SUCCESS,
   REQUEST_VERSIONS_ERROR,
-  REQUEST_SIDEBAR_WIDTH_CHANGE
+  REQUEST_SIDEBAR_WIDTH_CHANGE,
+  TOGGLE_DOCKED_SIDEBAR
 } from '../constants/ActionTypes';
 import Config from '../config/Config';
 
 import AppDispatcher from './AppDispatcher';
 
 module.exports = {
+
+  toggleDockedSidebar() {
+    AppDispatcher.handleSidebarAction({
+      type: TOGGLE_DOCKED_SIDEBAR
+    });
+  },
 
   open() {
     AppDispatcher.handleSidebarAction({

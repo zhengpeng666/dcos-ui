@@ -15,6 +15,8 @@ import MetadataStore from '../stores/MetadataStore';
 import NotificationStore from '../stores/NotificationStore';
 import SaveStateMixin from '../mixins/SaveStateMixin';
 import SidebarActions from '../events/SidebarActions';
+import SidebarStore from '../stores/SidebarStore';
+import ToggleButton from './ToggleButton';
 
 let {Hooks} = PluginSDK;
 
@@ -33,7 +35,7 @@ var Sidebar = React.createClass({
   },
 
   getInitialState() {
-    return {sidebarExpanded: true};
+    return {sidebarExpanded: true, isSidebarDocked: true};
   },
 
   componentDidMount() {
@@ -56,6 +58,14 @@ var Sidebar = React.createClass({
     );
 
     global.window.removeEventListener('keydown', this.handleKeyPress, true);
+  },
+
+  componentDidUpdate() {
+    if (SidebarStore.get('isOpen')) {
+      window.addEventListener('click', SidebarActions.close);
+    } else {
+      window.removeEventListener('click', SidebarActions.close);
+    }
   },
 
   onDCOSMetadataChange() {
@@ -268,6 +278,11 @@ var Sidebar = React.createClass({
     return Hooks.applyFilter('sidebarFooter', footer, defaultButtonSet);
   },
 
+  handleToggleChange() {
+    SidebarActions.toggleDockedSidebar();
+    this.setState({isSidebarDocked: SidebarStore.get('isDocked')});
+  },
+
   render() {
     let sidebarClasses = classNames('sidebar flex flex-direction-top-to-bottom',
       'flex-item-shrink-0', {
@@ -285,6 +300,12 @@ var Sidebar = React.createClass({
           className="navigation flex-item-grow-1 flex-item-shrink-1 gm-scrollbar-container-flex">
           <div className="navigation-inner pod pod-short pod-narrow">
             {this.getNavigationSections()}
+          </div>
+          <div className="sidebar-toggle pod pod-narrow">
+            <ToggleButton onChange={this.handleToggleChange}
+              checked={this.state.isSidebarDocked}>
+              Dock
+            </ToggleButton>
           </div>
         </GeminiScrollbar>
         <div className="hide footer">

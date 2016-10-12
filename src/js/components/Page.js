@@ -34,7 +34,7 @@ var Page = React.createClass({
     this.store_listeners = [
       {
         name: 'sidebar',
-        events: ['widthChange']
+        events: ['stateChange', 'widthChange']
       }
     ];
   },

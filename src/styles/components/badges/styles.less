@@ -3,7 +3,7 @@
   .badge {
     background-color: @badge-background-color;
     border-radius: ceil(@badge-height);
-    color: @body-background-color;
+    color: @badge-foreground-color;
     font-size: 80%;
     height: @badge-height;
     line-height: @badge-height;
@@ -19,6 +19,7 @@
 
     &.inverse {
       background-color: @badge-background-color-inverse;
+      color: @badge-foreground-color-inverse;
     }
   }
 

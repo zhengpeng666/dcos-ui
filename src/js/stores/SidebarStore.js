@@ -7,7 +7,8 @@ import {
   REQUEST_SIDEBAR_WIDTH_CHANGE,
   REQUEST_VERSIONS_ERROR,
   REQUEST_VERSIONS_SUCCESS,
-  SIDEBAR_ACTION
+  SIDEBAR_ACTION,
+  TOGGLE_DOCKED_SIDEBAR
 } from '../constants/ActionTypes';
 import {
   SHOW_CLI_INSTRUCTIONS,
@@ -27,6 +28,7 @@ class SidebarStore extends GetSetBaseStore {
       store: this,
       storeID: this.storeID,
       events: {
+        stateChange: SIDEBAR_CHANGE,
         widthChange: SIDEBAR_WIDTH_CHANGE
       },
       unmountWhen() {
@@ -44,6 +46,14 @@ class SidebarStore extends GetSetBaseStore {
       var action = payload.action;
 
       switch (action.type) {
+        case TOGGLE_DOCKED_SIDEBAR:
+          var isDocked = !this.get('isDocked');
+
+          if (isDocked !== this.get('isDocked')) {
+            this.set({isDocked});
+            this.emitChange(SIDEBAR_CHANGE);
+          }
+          break;
         case REQUEST_SIDEBAR_CLOSE:
         case REQUEST_SIDEBAR_OPEN:
           var oldIsOpen = this.get('isOpen');
@@ -76,6 +86,7 @@ class SidebarStore extends GetSetBaseStore {
 
   init() {
     this.set({
+      isDocked: true,
       isOpen: false,
       versions: {}
     });

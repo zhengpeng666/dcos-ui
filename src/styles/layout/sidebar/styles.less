@@ -5,15 +5,43 @@
   // Sidebar
   .sidebar {
     background: @sidebar-background-color;
+    flex-basis: @sidebar-width;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    transform: translateX(-100%);
+    transition: transform 0.25s;
+    width: @sidebar-width;
+    z-index: 1000;
+
+    .sidebar-open & {
+      transform: none;
+    }
+
+    .toggle-button {
+
+      & + span {
+
+        &:before {
+          background: color-lighten(@neutral, 10);
+          border: none;
+        }
+      }
+    }
+  }
+
+  .sidebar-toggle {
+    display: none;
   }
 
   // TODO: Fix this positioning.
   // Navigation
-  .navigation {
-    left: -100%;
-    position: fixed;
-    width: 100%;
-  }
+  // .navigation {
+  //   left: -100%;
+  //   position: fixed;
+  //   width: 100%;
+  // }
 
   // Sidebar Section
   .sidebar-section {
@@ -208,6 +236,18 @@
 
     & when (@sidebar-enabled) and (@sidebar-screen-small-enabled) {
 
+      .sidebar-toggle {
+        display: block;
+      }
+
+      .sidebar {
+
+        .sidebar-docked & {
+          position: static;
+          transform: none;
+        }
+      }
+
       // Sidebar Section
       .sidebar-section {
         .element-spacing(sidebar-section, null, screen-small);
@@ -272,14 +312,15 @@
       // Sidebar
       .sidebar {
         flex-basis: @sidebar-width;
+        width: @sidebar-width;
       }
 
       // Navigation
-      .navigation {
-        left: auto;
-        position: relative;
-        width: auto;
-      }
+      // .navigation {
+      //   left: auto;
+      //   position: relative;
+      //   width: auto;
+      // }
 
       // Sidebar Section
       .sidebar-section {
@@ -345,6 +386,7 @@
       // Sidebar
       .sidebar {
         flex-basis: @sidebar-width-screen-large;
+        width: @sidebar-width-screen-large;
       }
 
       // Sidebar Section

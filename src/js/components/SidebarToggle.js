@@ -44,6 +44,7 @@ var SidebarToggle = React.createClass({
     var data = this.internalStorage_get();
 
     e.preventDefault();
+    e.stopPropagation();
 
     if (data.isOpen) {
       SidebarActions.close();
@@ -56,8 +57,7 @@ var SidebarToggle = React.createClass({
   render() {
     return (
       <div className="page-navigation-sidebar-toggle" onClick={this.onClick}>
-        <span className="page-navigation-sidebar-toggle-icon icon icon-white
-          icon-margin-right icon-margin-right-wide icon-small" />
+        <div className="icon icon-small" />
         <span className="page-navigation-sidebar-toggle-label">
           Show/Hide Sidebar
         </span>

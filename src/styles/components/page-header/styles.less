@@ -26,7 +26,50 @@
   }
 
   .page-navigation-sidebar-toggle {
-    display: none;
+    display: inline-block;
+    margin-right: @base-spacing-unit * 1/2;
+    position: relative;
+    vertical-align: middle;
+
+    .icon {
+      cursor: pointer;
+      opacity: 0.5;
+      position: relative;
+      transition: opacity 0.25s;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &:after,
+      &:before {
+        border-color: color-lighten(@neutral, 50);
+        border-style: solid;
+        border-width: 0 0 2px;
+        content: '';
+        left: 0;
+        position: absolute;
+        top: 5px;
+        width: 100%;
+      }
+
+      &:after {
+        border-top-width: 2px;
+        bottom: 3px;
+        height: 9px;
+        top: auto;
+      }
+    }
+
+    & + .page-header-title {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+
+  .page-navigation-sidebar-toggle-label {
+    position: absolute;
+    visibility: hidden;
   }
 
   .page-header-heading {
@@ -97,6 +140,13 @@
 & when (@page-header-enabled) and (@layout-screen-small-enabled) {
 
   @media (min-width: @layout-screen-small-min-width) {
+
+    .page-navigation-sidebar-toggle {
+
+      .sidebar-docked & {
+        display: none;
+      }
+    }
 
     .page-header-breadcrumbs {
 
