@@ -67,7 +67,7 @@ const POD_VISUAL_STATE = {
   UNREACHABLE: {
     dotClassName: 'dot inactive danger',
     textClassName: '',
-    displayName: 'Dropped'
+    displayName: 'Unreachable'
   },
 
   NA: {

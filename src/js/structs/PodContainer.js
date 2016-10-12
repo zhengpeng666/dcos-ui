@@ -1,40 +1,49 @@
 import Item from './Item';
-import PodContainerStatus from '../constants/PodContainerStatus';
+import PodVisualState from '../constants/PodVisualState';
 import PodContainerState from '../constants/PodContainerState';
 
 module.exports = class PodContainer extends Item {
   getContainerStatus() {
     switch (this.get('status')) {
+      case PodContainerState.DROPPED:
+        return PodVisualState.DROPPED;
+      case PodContainerState.ERROR:
+        return PodVisualState.ERROR;
+      case PodContainerState.FAILED:
+        return PodVisualState.FAILED;
+      case PodContainerState.FINISHED:
+        return PodVisualState.FINISHED;
+      case PodContainerState.GONE:
+      case PodContainerState.GONE_BY_OPERATOR:
+        return PodVisualState.GONE;
+      case PodContainerState.KILLED:
+        return PodVisualState.KILLED;
+      case PodContainerState.KILLING:
+        return PodVisualState.KILLING;
+      case PodContainerState.LOST:
+        return PodVisualState.LOST;
+
       case PodContainerState.RUNNING:
         if (this.hasHealthChecks()) {
           if (this.isHealthy()) {
-            return PodContainerStatus.HEALTHY;
+            return PodVisualState.HEALTHY;
           } else {
-            return PodContainerStatus.UNHEALTHY;
+            return PodVisualState.UNHEALTHY;
           }
         } else {
-          return PodContainerStatus.RUNNING;
+          return PodVisualState.RUNNING;
         }
+
       case PodContainerState.STAGING:
-        return PodContainerStatus.STAGING;
+        return PodVisualState.STAGING;
       case PodContainerState.STARTING:
-        return PodContainerStatus.STARTING;
-      case PodContainerState.STARTED:
-        return PodContainerStatus.STARTED;
-      case PodContainerState.KILLING:
-        return PodContainerStatus.KILLING;
-      case PodContainerState.FINISHED:
-        return PodContainerStatus.FINISHED;
-      case PodContainerState.KILLED:
-        return PodContainerStatus.KILLED;
-      case PodContainerState.FAILED:
-        return PodContainerStatus.FAILED;
-      case PodContainerState.LOST:
-        return PodContainerStatus.LOST;
-      case PodContainerState.ERROR:
-        return PodContainerStatus.ERROR;
+        return PodVisualState.STARTING;
+      case PodContainerState.UNREACHABLE:
+        return PodVisualState.UNREACHABLE;
+
+      case PodContainerState.UNKNOWN:
       default:
-        return PodContainerStatus.NA;
+        return PodVisualState.NA;
     }
   }
 
