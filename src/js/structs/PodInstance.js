@@ -1,7 +1,9 @@
 import Item from './Item';
 import PodContainer from './PodContainer';
+import PodContainerState from '../constants/PodContainerState';
 import PodInstanceStatus from '../constants/PodInstanceStatus';
 import PodInstanceState from '../constants/PodInstanceState';
+import PodVisualState from '../constants/PodVisualState';
 import StringUtil from '../utils/StringUtil';
 
 module.exports = class PodInstance extends Item {
@@ -27,30 +29,33 @@ module.exports = class PodInstance extends Item {
   getInstanceStatus() {
     switch (this.get('status')) {
       case PodInstanceState.PENDING:
-        return PodInstanceStatus.STAGED;
+        return PodVisualState.STAGED;
 
       case PodInstanceState.STAGING:
-        return PodInstanceStatus.STAGED;
+        return PodVisualState.STAGED;
 
       case PodInstanceState.STABLE:
         if (this.hasHealthChecks()) {
           if (this.isHealthy()) {
-            return PodInstanceStatus.HEALTHY;
+            return PodVisualState.HEALTHY;
           } else {
-            return PodInstanceStatus.UNHEALTHY;
+            return PodVisualState.UNHEALTHY;
           }
         } else {
-          return PodInstanceStatus.RUNNING;
+          return PodVisualState.RUNNING;
         }
 
       case PodInstanceState.DEGRADED:
-        return PodInstanceStatus.UNHEALTHY;
+        if (this.hasContainerInStatus(PodContainerState.ERROR)) {
+
+        }
+        return PodVisualState.UNHEALTHY;
 
       case PodInstanceState.TERMINAL:
-        return PodInstanceStatus.KILLED;
+        return PodVisualState.KILLED;
 
       default:
-        return Object.assign(Object.create(PodInstanceStatus.NA), {
+        return Object.assign(Object.create(PodVisualState.NA), {
           displayName: StringUtil.capitalize(this.get('status').toLowerCase())
         });
     }
@@ -73,6 +78,18 @@ module.exports = class PodInstance extends Item {
       gpus: 0,
       disk: 0
     }, resources);
+  }
+
+  hasContainerInStatus(status) {
+    return this.getContainers().some(function (container) {
+      return container.get('status') === status;
+    });
+  }
+
+  hasAllContainersInStatus(status) {
+    return this.getContainers().every(function (container) {
+      return container.get('status') === status;
+    });
   }
 
   hasHealthChecks() {
