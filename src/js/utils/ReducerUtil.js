@@ -58,5 +58,14 @@ module.exports = {
 
       return state;
     };
+  },
+
+  simpleReducer(needle, defaultState = '') {
+    return function (state = defaultState, {path, type, value}) {
+      if (type === 'SET' && path.join() === needle) {
+        return value;
+      }
+      return state;
+    };
   }
 };
