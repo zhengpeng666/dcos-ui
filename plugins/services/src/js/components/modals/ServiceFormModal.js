@@ -9,6 +9,7 @@ import 'brace/mode/json';
 import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
 
+import FormController from '../FormController';
 import Config from '../../../../../../src/js/config/Config';
 import Icon from '../../../../../../src/js/components/Icon';
 import PodSpec from '../../structs/PodSpec';
@@ -417,6 +418,10 @@ class ServiceFormModal extends React.Component {
   }
 
   getModalContents() {
+    return (
+        <FormController />
+    );
+
     const {
       defaultTab,
       jsonMode,

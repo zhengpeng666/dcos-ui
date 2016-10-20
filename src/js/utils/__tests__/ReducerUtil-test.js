@@ -158,6 +158,48 @@ describe('ReducerUtil', function () {
         }
       );
     });
+    it('test', function () {
+      let state = {
+        id: '/abc',
+        container: {
+          docker: {
+            id: 'nginx'
+          }
+        },
+        cmd: 'sleep 100'
+      };
+
+      let errorReducer = ReducerUtil.combineReducers({
+        id: function(state = null) {
+          if (/\/.*/g.test(state)) {
+            return null;
+          }
+          return 'Error';
+        },
+        docker: ReducerUtil.combineReducers({
+          type: function(state) {
+            if (state == null) {
+              return 'ERROR';
+            }
+          },
+          container: ReducerUtil.combineReducers({
+            id: function(state) {
+              if (state == null) {
+                return 'ERROR';
+              }
+            }
+          })
+        }),
+        cmd: function(state = null) {
+          if (state != null) {
+            return null;
+          }
+          return 'Error';
+        }
+      });
+
+      console.log(errorReducer(state));
+    });
   });
 });
 
