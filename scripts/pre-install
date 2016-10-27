@@ -6,6 +6,6 @@ SCRIPT_PATH="$(dirname "$0")/$(dirname "$(readlink "$0")")"
 source ${SCRIPT_PATH}/utils/git
 
 # Validate node and npm version and install git hooks
-${SCRIPT_PATH}/validate-engine-versions && install_hooks "pre-commit"
+${SCRIPT_PATH}/validate-engine-versions && install_hooks "pre-commit pre-push"
 
 exit 0
