@@ -5,12 +5,7 @@ describe('Service Form Modal', function () {
         mesos: '1-empty-group',
         nodeHealth: true
       });
-      cy.visitUrl({url: '/services'});
-    });
-
-    it('has the right active navigation entry', function () {
-      cy.get('.page-navigation-list .menu-tabbed-item.active')
-        .should('to.have.text', 'Services');
+      cy.visitUrl({url: '/services/overview'});
     });
 
     it('Opens the right modal on click', function () {
@@ -45,7 +40,7 @@ describe('Service Form Modal', function () {
         .contains('Deploy Service')
         .click();
 
-      cy.get('.sidebar-menu-item.clickable')
+      cy.get('.multiple-form-modal-sidebar-menu-item.clickable')
         .contains('Container Settings')
         .click();
 
@@ -75,11 +70,11 @@ describe('Service Form Modal', function () {
         mesos: '1-empty-group',
         nodeHealth: true
       });
-      cy.visitUrl({url: '/services/%2Fservices/'});
+      cy.visitUrl({url: '/services/overview/%2Fservices'});
     });
 
     it('Opens the right modal on click', function () {
-      cy.get('.filter-bar .button')
+      cy.get('.page-body-content .button')
         .contains('Deploy Service')
         .click();
 
@@ -87,7 +82,7 @@ describe('Service Form Modal', function () {
     });
 
     it('contains the right group id in the modal', function () {
-      cy.get('.filter-bar .button')
+      cy.get('.page-body-content .button')
         .contains('Deploy Service')
         .click();
 
@@ -97,7 +92,7 @@ describe('Service Form Modal', function () {
     });
 
     it('contains the right JSON in the JSON editor', function () {
-      cy.get('.filter-bar .button')
+      cy.get('.page-body-content .button')
         .contains('Deploy Service')
         .click();
 
@@ -115,7 +110,7 @@ describe('Service Form Modal', function () {
         mesos: '1-empty-group',
         nodeHealth: true
       });
-      cy.visitUrl({url: '/services'});
+      cy.visitUrl({url: '/services/overview'});
     });
 
     it('contains right cpus default value', function () {
