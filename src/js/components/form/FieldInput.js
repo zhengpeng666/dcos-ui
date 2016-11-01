@@ -10,14 +10,14 @@ class FieldInput extends React.Component {
   }
 
   getErrorMsg() {
-    let {helpBlockClass, error} = this.props;
+    let {error, errorClass, helpBlockClass} = this.props;
 
     if (!error) {
       return null;
     }
 
     return (
-      <span className={classNames(helpBlockClass)}>
+      <span className={classNames(helpBlockClass, errorClass)}>
         {error}
       </span>
     );
@@ -86,6 +86,7 @@ class FieldInput extends React.Component {
 
 FieldInput.defaultProps = {
   className: 'form-control',
+  errorClass: 'text-danger',
   formGroupClass: 'form-group',
   helpBlockClass: 'small flush-bottom',
   onChange() {},
@@ -113,6 +114,7 @@ FieldInput.propTypes = {
   error: React.PropTypes.node,
 
   // Classes
+  errorClass: classPropType,
   formGroupClass: classPropType,
   // Class to be toggled, can be overridden by formGroupClass
   formGroupErrorClass: React.PropTypes.string,
