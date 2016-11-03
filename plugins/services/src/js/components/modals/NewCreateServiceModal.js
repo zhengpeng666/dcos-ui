@@ -6,6 +6,7 @@ import FullScreenModalHeaderActions from '../../../../../../src/js/components/mo
 import FullScreenModalHeaderTitle from '../../../../../../src/js/components/modals/FullScreenModalHeaderTitle';
 import NewCreateServiceModalServicePicker from './NewCreateServiceModalServicePicker';
 import NewCreateServiceModalForm from './NewCreateServiceModalForm';
+import NewCreateServiceReview from './NewCreateServiceReview';
 import ToggleButton from '../../../../../../src/js/components/ToggleButton';
 import Util from '../../../../../../src/js/utils/Util';
 
@@ -32,6 +33,7 @@ class NewServiceFormModal extends React.Component {
 
   handleServiceSelection() {
     this.setState({
+      reviewConfigActive: false,
       servicePickerActive: false,
       serviceFormActive: true
     });
@@ -56,6 +58,13 @@ class NewServiceFormModal extends React.Component {
       return (
         <NewCreateServiceModalServicePicker
           onServiceSelect={this.handleServiceSelection} />
+      );
+    }
+
+    if (this.state.reviewConfigActive) {
+      // TODO: Pass in the actual app definition.
+      return (
+        <NewCreateServiceReview />
       );
     }
 
@@ -85,7 +94,7 @@ class NewServiceFormModal extends React.Component {
       },
       {
         className: 'button-primary flush-vertical',
-        clickHandler: () => console.log('Review...'),
+        clickHandler: () => this.setState({reviewConfigActive: true}),
         label: 'Review & Run'
       }
     ];
