@@ -22,13 +22,7 @@ class LogBuffer extends List {
   constructor(options = {}) {
     super(...arguments);
 
-    this.configuration = Object.assign({}, DEFAULT_OPTIONS);
-
-    Object.keys(DEFAULT_OPTIONS).forEach((key) => {
-      if (Object.prototype.hasOwnProperty.call(options, key)) {
-        this.configuration[key] = options[key];
-      }
-    });
+    this.configuration = Object.assign({}, DEFAULT_OPTIONS, options);
   }
 
   // Public API
@@ -103,7 +97,7 @@ class LogBuffer extends List {
   getFullLog() {
     return this.getItems().map(function (item) {
       return item.get('data');
-    }).join('');
+    }).join('\n');
   }
 
   getStart() {

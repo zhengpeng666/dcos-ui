@@ -1,44 +1,89 @@
+import deepEqual from 'deep-equal';
+import mixin from 'reactjs-mixin';
 import React from 'react';
+import {StoreMixin} from 'mesosphere-shared-reactjs';
 
-import SystemLogActions from '../../../../../../src/js/events/SystemLogActions';
+import LogView from '../../components/LogView';
+import SystemLogStore from '../../../../../../src/js/stores/SystemLogStore';
 
-class TaskLogsTab extends React.Component {
+const METHODS_TO_BIND = [
+  'handleAtBottomChange',
+  'handleFetchPreviousLog'
+];
+
+class TaskLogsTab extends mixin(StoreMixin) {
   constructor() {
     super(...arguments);
 
-    this.state = {
-      events: []
-    };
+    this.store_listeners = [
+      {
+        name: 'systemLog',
+        events: ['success', 'error'],
+        suppressUpdate: true
+      }
+    ];
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
   }
 
   componentWillMount() {
-    let subscriptionID = SystemLogActions.subscribe(this.props.task.slave_id, {
-      limit: -11,
-      success: this.getData.bind(this)
+    let subscriptionID = SystemLogStore.startTailing(this.props.task.slave_id, {
+      limit: 0,
+      skip_prev: 11,
+      params: {_TRANSPORT: 'syslog'}
     });
 
     this.setState({subscriptionID});
   }
 
-  componentWillUnmount() {
-    SystemLogActions.unsubscribe(this.state.subscriptionID);
+  shouldComponentUpdate(nextProps, nextState) {
+    return !deepEqual(this.props, nextProps) ||
+      !deepEqual(this.state, nextState);
   }
 
-  getData(data) {
-    this.state.events.push(data.fields.MESSAGE);
+  componentWillUnmount() {
+    SystemLogStore.stopTailing(this.state.subscriptionID);
+  }
+
+  handleFetchPreviousLog() {
+    let {subscriptionID} = this.state;
+    SystemLogStore.fetchLogRange(this.props.task.slave_id, {
+      limit: 10,
+      skip_prev: 11,
+      params: {_TRANSPORT: 'syslog'},
+      subscriptionID
+    });
+  }
+
+  handleHasLoadedTop() {
+    return SystemLogStore.hasLoadedTop();
+  }
+
+  handleAtBottomChange(isAtBottom) {
+    let {subscriptionID} = this.state;
+    if (isAtBottom) {
+      SystemLogStore.startTailing(this.props.task.slave_id, {
+        limit: 0,
+        skip_prev: 11,
+        params: {_TRANSPORT: 'syslog'},
+        subscriptionID
+      });
+    } else {
+      SystemLogStore.stopTailing(this.state.subscriptionID);
+    }
   }
 
   render() {
     return (
-      <div>
-        {this.state.events}
-      </div>
+      <LogView
+        fullLog={SystemLogStore.getFullLog(this.state.subscriptionID)}
+        fetchPreviousLogs={this.handleFetchPreviousLog}
+        onAtBottomChange={this.handleAtBottomChange}
+        hasLoadedTop={this.handleHasLoadedTop} />
     );
   }
 }
-
-TaskLogsTab.propTypes = {
-  task: React.PropTypes.object.isRequired
-};
 
 module.exports = TaskLogsTab;
