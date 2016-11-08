@@ -16,6 +16,16 @@ import NotificationStore from '../stores/NotificationStore';
 import SaveStateMixin from '../mixins/SaveStateMixin';
 import SidebarActions from '../events/SidebarActions';
 
+let defaultMenuItems = [
+  '/dashboard',
+  '/services',
+  '/jobs',
+  '/network',
+  '/nodes',
+  '/universe',
+  '/system'
+];
+
 let {Hooks} = PluginSDK;
 
 var Sidebar = React.createClass({
@@ -88,12 +98,19 @@ var Sidebar = React.createClass({
   },
 
   getNavigationSections() {
+    const menuItems = Hooks
+      .applyFilter('sidebarNavigation', defaultMenuItems)
+      .reduce((routesMap, path) => routesMap.set(path, true), new Map());
+
     let indexRoute = this.props.routes
       .find(function (route) {
         return route.id === 'index';
       });
 
-    return this.getMenuGroupsFromChildren(indexRoute.childRoutes)
+    const routes = indexRoute.childRoutes
+      .filter((route) => menuItems.has(`/${route.path}`));
+
+    return this.getMenuGroupsFromChildren(routes)
       .map((group, index) => {
         let heading = null;
 
