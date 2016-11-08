@@ -21,8 +21,25 @@ class ServiceRestartModal extends ServiceActionModal {
       }
     ];
 
-    this.onMarathonStoreServiceRestartError = this.onError;
     this.onMarathonStoreServiceRestartSuccess = this.closeDialog;
+  }
+
+  onMarathonStoreServiceRestartError({message:errorMsg = '', details}) {
+    let hasDetails = details && details.length !== 0;
+
+    if (hasDetails) {
+      this.setState({
+        errorMsg: details.reduce(function (memo, error) {
+          if (error != null && Array.isArray(error.errors)) {
+            return `${memo} ${error.errors.join(' ')}`;
+          }
+        }, '')
+      });
+
+      return;
+    }
+
+    this.onError(errorMsg);
   }
 
   handleConfirmClick() {
