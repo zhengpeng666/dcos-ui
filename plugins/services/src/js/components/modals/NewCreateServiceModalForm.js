@@ -125,7 +125,13 @@ class NewCreateServiceModalForm extends React.Component {
       AppValidators.App
     ]);
 
-    let errors = DataValidatorUtil.errorArrayToMap( errorList );
+    // [Case F2] Update errors only on the current field
+    let path = event.target.getAttribute('name').split('.');
+    let errors = DataValidatorUtil.updateOnlyMapPath(
+      this.state.errors,
+      DataValidatorUtil.errorArrayToMap( errorList ),
+      path
+    );
 
     // Create new jsonValue
     let jsonValue = JSON.stringify(appConfig, null, 2);
@@ -136,8 +142,8 @@ class NewCreateServiceModalForm extends React.Component {
     let {batch, appConfig} = this.state;
 
     let value = event.target.value;
-    let path = event.target.getAttribute('name');
-    batch.add(new Transaction(path.split('.'), value));
+    let path = event.target.getAttribute('name').split('.');
+    batch.add(new Transaction(path, value));
     let newState = {batch};
 
     // Only update the jsonValue if we have a valid value
@@ -148,6 +154,12 @@ class NewCreateServiceModalForm extends React.Component {
         2
       );
     }
+
+    // [Case F1] Reset errors only on the current field
+    newState.errors = DataValidatorUtil.resetOnlyMapPath(
+      this.state.errors,
+      path
+    );
 
     this.setState(newState);
   }
