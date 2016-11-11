@@ -1,4 +1,3 @@
-import Ace from 'react-ace';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -6,8 +5,10 @@ import AppValidators from '../../../../../../src/resources/raml/marathon/v2/type
 import Batch from '../../../../../../src/js/structs/Batch';
 import {combineParsers} from '../../../../../../src/js/utils/ParserUtil';
 import {combineReducers} from '../../../../../../src/js/utils/ReducerUtil';
+import DataValidatorUtil from '../../../../../../src/js/utils/DataValidatorUtil';
 import JSONConfigReducers from '../../reducers/JSONConfigReducers';
 import JSONParserReducers from '../../reducers/JSONParserReducers';
+import JSONEditor from '../../../../../../src/js/components/JSONEditor';
 import ServiceFormSection from '../forms/ServiceFormSection';
 import EnvironmentFormSection from '../forms/EnvironmentFormSection';
 import TabButton from '../../../../../../src/js/components/TabButton';
@@ -17,7 +18,6 @@ import TabView from '../../../../../../src/js/components/TabView';
 import TabViewList from '../../../../../../src/js/components/TabViewList';
 import Transaction from '../../../../../../src/js/structs/Transaction';
 import TransactionTypes from '../../../../../../src/js/constants/TransactionTypes';
-import DataValidatorUtil from '../../../../../../src/js/utils/DataValidatorUtil';
 
 const METHODS_TO_BIND = [
   'handleFormChange',
@@ -214,9 +214,8 @@ class NewCreateServiceModalForm extends React.Component {
         </div>
         <div className={jsonEditorPlaceholderClasses} />
         <div className={jsonEditorClasses}>
-          <Ace
+          <JSONEditor
             editorProps={{$blockScrolling: true}}
-            mode="json"
             onBlur={this.handleJSONBlur}
             onChange={this.handleJSONChange}
             showGutter={true}
