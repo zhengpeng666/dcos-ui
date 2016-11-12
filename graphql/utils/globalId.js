@@ -4,7 +4,13 @@
  * @param  {string} id   resource's unique id
  * @return {string}      globally unique ID
  */
-export const toGlobalId = (type, id) => [type, id].join(':');
+export const toGlobalId = (type, id) => {
+  if (!type || !id || typeof id !== 'string') {
+    throw Error(`Invalid arguments for toGlobalId [${type}, ${id}]`);
+  }
+
+  return [type, id].join(':');
+};
 
 /**
  * Deconstructs a globally unique ID to a schema type and resource ID
@@ -13,6 +19,10 @@ export const toGlobalId = (type, id) => [type, id].join(':');
  */
 export const fromGlobalId = (globalId) => {
   const delimiterPos = globalId.indexOf(':');
+
+  if (delimiterPos < 0) {
+    throw Error(`${globalId} is not a valid globalId`);
+  }
 
   return {
     type: globalId.substring(0, delimiterPos),

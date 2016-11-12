@@ -1,6 +1,6 @@
 import TaskStates from '../../plugins/services/src/js/constants/TaskStates';
 
-function getTaskHealthFromMesos(task) {
+export function getTaskHealthFromMesos(task) {
   if (task.statuses == null) {
     return null;
   }
@@ -22,7 +22,7 @@ function getTaskHealthFromMesos(task) {
   return null;
 }
 
-function getTaskHealthFromMarathon(task) {
+export function getTaskHealthFromMarathon(task) {
   const {healthCheckResults} = task;
 
   if (healthCheckResults != null && healthCheckResults.length > 0) {

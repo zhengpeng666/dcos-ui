@@ -5,34 +5,24 @@ const ServiceUtil = {
 
   getHealth(service) {
     const {
-      tasksHealthy,
-      tasksUnhealthy,
-      tasksRunning
+      healthy,
+      unhealthy,
+      running
     } = this.getTasksSummary(service);
 
-    if (tasksUnhealthy > 0) {
+    if (unhealthy > 0) {
       return HealthStatus.UNHEALTHY;
     }
 
-    if (tasksRunning > 0 && tasksHealthy === tasksRunning) {
+    if (running > 0 && healthy === running) {
       return HealthStatus.HEALTHY;
     }
 
-    if (service.healthChecks && tasksRunning === 0) {
+    if (service.healthChecks && running === 0) {
       return HealthStatus.IDLE;
     }
 
     return HealthStatus.NA;
-  },
-
-  getStatus(service) {
-    const status = this.getServiceStatus(service);
-
-    if (status.displayName == null) {
-      return null;
-    }
-
-    return status.displayName;
   },
 
   getServiceStatus(service) {
