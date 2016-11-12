@@ -47,6 +47,10 @@ const PREFIX = 'cursor:';
  * a connection object for use in GraphQL. It uses array offsets as pagination,
  * so pagination will only work if the array is static. Relies on server data
  * maintaining order.
+ *
+ * @param {array | promise} data array of items or promise that resolves array of items
+ * @param {object} args query arguments
+ * @return {object | promise} connection data
  */
 export function Paginate(data, args) {
   if (!Array.isArray(data) && typeof data.then === 'function') {
@@ -58,7 +62,7 @@ export function Paginate(data, args) {
     args,
     {
       sliceStart: 0,
-      arrayLength: data.length,
+      arrayLength: data.length
     }
   );
 }
@@ -66,15 +70,19 @@ export function Paginate(data, args) {
 /**
  * A version of `connectionFromArray` that takes a promised array, and returns a
  * promised connection.
+ *
+ * @param  {promise} dataPromise promise resolving an array
+ * @param  {object} args        query arguments
+ * @return {object}             connection object with edges
  */
 export function connectionFromPromisedArray(dataPromise, args) {
-  return dataPromise.then(data => {
+  return dataPromise.then((data) => {
     return connectionFromArraySlice(
       data,
       args,
       {
         sliceStart: 0,
-        arrayLength: data.length,
+        arrayLength: data.length
       }
     );
   });
@@ -88,6 +96,11 @@ export function connectionFromPromisedArray(dataPromise, args) {
  * cases where you know the cardinality of the connection, consider it too large
  * to materialize the entire array, and instead wish pass in a slice of the
  * total result large enough to cover the range specified in `args`.
+ *
+ * @param  {array} arraySlice array to paginate
+ * @param  {object} args       query arguments
+ * @param  {object} meta       slice data
+ * @return {object}            contains edges and metadata about pagination state
  */
 export function connectionFromArraySlice(arraySlice, args, meta) {
   const {after, before, first, last} = args;
@@ -135,7 +148,7 @@ export function connectionFromArraySlice(arraySlice, args, meta) {
 
   const edges = slice.map((value, index) => ({
     cursor: offsetToCursor(startOffset + index),
-    node: value,
+    node: value
   }));
 
   const firstEdge = edges[0];
@@ -148,16 +161,16 @@ export function connectionFromArraySlice(arraySlice, args, meta) {
     pageInfo: {
       startCursor: firstEdge ? firstEdge.cursor : null,
       endCursor: lastEdge ? lastEdge.cursor : null,
-      hasPreviousPage:
-        typeof last === 'number' ? startOffset > lowerBound : false,
-      hasNextPage:
-        typeof first === 'number' ? endOffset < upperBound : false,
-    },
+      hasPreviousPage: typeof last === 'number' ? startOffset > lowerBound : false,
+      hasNextPage: typeof first === 'number' ? endOffset < upperBound : false
+    }
   };
 }
 
 /**
  * Creates the cursor string from an offset.
+ * @param  {int} offset position in array
+ * @return {string}        cursor
  */
 export function offsetToCursor(offset) {
   return PREFIX + offset;
@@ -165,6 +178,8 @@ export function offsetToCursor(offset) {
 
 /**
  * Rederives the offset from the cursor string.
+ * @param  {string} cursor cursor for object
+ * @return {int}        position of cursor in array
  */
 export function cursorToOffset(cursor) {
   return parseInt(cursor.substring(PREFIX.length), 10);
@@ -172,6 +187,9 @@ export function cursorToOffset(cursor) {
 
 /**
  * Return the cursor associated with an object in an array.
+ * @param  {array} data   array of items
+ * @param  {object} object item to locate in array
+ * @return {string}        cursor as defined by where item is located in array
  */
 export function cursorForObjectInConnection(data, object) {
   const offset = data.indexOf(object);
@@ -186,6 +204,9 @@ export function cursorForObjectInConnection(data, object) {
  * Given an optional cursor and a default offset, returns the offset
  * to use; if the cursor contains a valid offset, that will be used,
  * otherwise it will be the default.
+ * @param  {string} cursor        cursor to decompose
+ * @param  {int} defaultOffset default cursor position if cursor is invalid
+ * @return {int}               cursor position
  */
 export function getOffsetWithDefault(cursor, defaultOffset) {
   if (typeof cursor !== 'string') {

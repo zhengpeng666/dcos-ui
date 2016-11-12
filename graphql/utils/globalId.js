@@ -28,4 +28,4 @@ export const fromGlobalId = (globalId) => {
     type: globalId.substring(0, delimiterPos),
     id: globalId.substring(delimiterPos + 1)
   };
-}
+};
